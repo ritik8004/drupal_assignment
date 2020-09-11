@@ -781,8 +781,8 @@ class CartController {
       // in order to complete the payment.
       $response = [
         'success' => TRUE,
-        'redirectUrl' => $result['redirectUrl'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
-        'isAbsoluteUrl' => !empty($result['redirectUrl']) ? TRUE : FALSE,
+        'redirectUrl' => $result['redirect_url'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
+        'isAbsoluteUrl' => $result['redirect_url'] ? TRUE : FALSE,
       ];
 
       return new JsonResponse($response);

@@ -14,6 +14,7 @@ use Doctrine\DBAL\Connection;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
 use Drupal\alshaya_master\Helper\SortUtility;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
 
@@ -140,6 +141,13 @@ class Cart {
   protected $connection;
 
   /**
+   * RequestStack Object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -170,6 +178,8 @@ class Cart {
    *   Logger service.
    * @param \Doctrine\DBAL\Connection $connection
    *   Database connection.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   RequestStack Object.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -185,7 +195,8 @@ class Cart {
     Drupal $drupal,
     Orders $orders,
     LoggerInterface $logger,
-    Connection $connection
+    Connection $connection,
+    RequestStack $requestStack
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -201,6 +212,7 @@ class Cart {
     $this->orders = $orders;
     $this->logger = $logger;
     $this->connection = $connection;
+    $this->request = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -745,13 +757,16 @@ class Cart {
       'additional_data' => $data['additional_data'],
     ];
 
-    // @todo add method to process data.
-
-
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
     if ($expire > 0) {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
+
+    // Add success and fail redirect url to additional data.
+    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
+    $langcode = $this->request->query->get('lang');
+    $update['payment']['additional_data']['successUrl'] = $host . 'success/' . $langcode;
+    $update['payment']['additional_data']['failUrl'] = $host . 'error/' . $langcode;
 
     $old_cart = $this->getCart();
     $cart = $this->updateCart($update);
@@ -1145,8 +1160,6 @@ class Cart {
    *
    * @param array $data
    *   Post data.
-   * @param bool $getPaymentRedirection
-   *   Flag to get redirect url from magento.
    *
    * @return array
    *   Status.
@@ -1205,10 +1218,13 @@ class Cart {
         'timeout' => $checkout_settings['place_order_timeout'],
       ];
 
-      // @todo this is only for testing purpose remove this.
-      $result = '{"redirect_url": "https://sbapi.ckotech.co/knet-external/redirect/tok_igeckhphjiku3cgikcydfamiw4/pay"}';
-      return json_decode($result, TRUE);
-
+      // @todo This is only for testing purpose remove this.
+      // @todo Process result json after magento place order.
+      $responseJson = '{"redirect_url": "https://sbapi.ckotech.co/knet-external/redirect/tok_igeckhphjiku3cgikcydfamiw4/pay"}';
+      $result = json_decode($responseJson, TRUE);
+      if ($result['redirect_url']) {
+        return $result;
+      }
 
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
@@ -1226,7 +1242,6 @@ class Cart {
         '@order_id' => $order_id,
       ]);
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
-
     }
     catch (\Exception $e) {
       // Handle checkout.com 2D exception.
