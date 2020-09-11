@@ -29,6 +29,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
       | mobile                        | {mobile}      |
@@ -82,6 +83,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
       | mobile                        | {mobile}      |
@@ -135,6 +137,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
       | mobile                        | {mobile}      |
