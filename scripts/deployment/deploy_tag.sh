@@ -42,12 +42,12 @@ then
   base_uri = ".factory.alshaya.com"
 else
   env_suffix=`echo $AH_SITE_ENVIRONMENT | sed -e "s/[0-9]*^*//"`
-  base_uri = "-${env_suffix}.factory.alshaya.com"
+  base_uri="-${env_suffix}.factory.alshaya.com"
 fi
 
 log_message()
 {
-
+  message=$1
   echo "$message. Date `date`, Tag $tag, Stack $stack" | tee -a ${log_file}
   echo
 }
@@ -60,13 +60,13 @@ log_message "Base URI: $base_uri"
 
 log_message "Starting deployment in mode $mode"
 
-backup_directory="~/$AH_SITE_ENVIRONMENT/backup/pre-$tag"
-directory="~/$AH_SITE_ENVIRONMENT/repo"
+backup_directory="${HOME}/${AH_SITE_ENVIRONMENT}/backup/pre-$tag"
+directory="${HOME}/${AH_SITE_ENVIRONMENT}/repo"
 
 # Create folder and clone if not available
 if [ ! -d "$directory/$stack" ]
 then
-  log_message "Repo directory not available, creating and cloning"
+  log_message "Repo directory $directory not available, creating and cloning"
 
   mkdir -p $directory
   cd $directory
@@ -135,12 +135,16 @@ then
 fi
 
 # Force the push to avoid issues with previous commit history.
-git push origin $branch &>> ${log_file}
+git push origin $branch -f &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to deploy code, aborting"
   exit
 fi
+
+# Sleep for 60 seconds before saying it is done.
+# Code deployment to servers post git push takes time.
+sleep 60
 
 log_message "Code deployment finished"
 
@@ -148,8 +152,8 @@ if [ "$mode" = "updb" ]
 then
   for site in `drush --root=$docroot acsf-tools-list | grep -v " "`
   do
-    drush --root=$docroot -l "${site}${base_uri}" cc drush &>> ${log_file}
-    drush --root=$docroot -l "${site}${base_uri}" updb &>> ${log_file}
+    drush --root=$docroot -l "${site}${base_uri}" cc drush -y &>> ${log_file}
+    drush --root=$docroot -l "${site}${base_uri}" updb -y &>> ${log_file}
     if [ $? -ne 0 ]
     then
       log_message "$site: UPDB FAILED, site kept offline still, please check logs"
