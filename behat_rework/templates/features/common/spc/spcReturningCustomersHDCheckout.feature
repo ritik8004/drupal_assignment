@@ -29,6 +29,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
       | mobile                        | {mobile}      |
@@ -72,7 +73,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I should see "{cc_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-    
+
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -115,6 +116,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
       | mobile                        | {mobile}      |
@@ -163,7 +165,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I should see "{language_cc_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-    
+
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -207,6 +209,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
       | mobile                        | {mobile}      |
