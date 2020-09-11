@@ -34,7 +34,8 @@ fi
 stack=`whoami`
 repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
 
-docroot="/var/www/html/$AH_SITE_NAME/docroot"
+server_root="/var/www/html/$AH_SITE_NAME"
+docroot="${server_root}/docroot"
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
 
 if [[ "$AH_SITE_ENVIRONMENT" == *"live"* ]]
@@ -42,12 +43,12 @@ then
   base_uri = ".factory.alshaya.com"
 else
   env_suffix=`echo $AH_SITE_ENVIRONMENT | sed -e "s/[0-9]*^*//"`
-  base_uri = "-${env_suffix}.factory.alshaya.com"
+  base_uri="-${env_suffix}.factory.alshaya.com"
 fi
 
 log_message()
 {
-
+  message=$1
   echo "$message. Date `date`, Tag $tag, Stack $stack" | tee -a ${log_file}
   echo
 }
@@ -60,13 +61,13 @@ log_message "Base URI: $base_uri"
 
 log_message "Starting deployment in mode $mode"
 
-backup_directory="~/$AH_SITE_ENVIRONMENT/backup/pre-$tag"
-directory="~/$AH_SITE_ENVIRONMENT/repo"
+backup_directory="${HOME}/${AH_SITE_ENVIRONMENT}/backup/pre-$tag"
+directory="${HOME}/${AH_SITE_ENVIRONMENT}/repo"
 
 # Create folder and clone if not available
 if [ ! -d "$directory/$stack" ]
 then
-  log_message "Repo directory not available, creating and cloning"
+  log_message "Repo directory $directory not available, creating and cloning"
 
   mkdir -p $directory
   cd $directory
@@ -90,7 +91,7 @@ fi
 cd "$directory/$stack"
 
 # Fetch all tags.
-git fetch origin --tags
+git fetch origin --tags &>> ${log_file}
 
 # Validate if tag exists.
 if [ ! $(git tag -l "$tag") ]; then
@@ -99,7 +100,8 @@ if [ ! $(git tag -l "$tag") ]; then
 fi
 
 # Checkout deployment branch used for deployment.
-git checkout $branch
+git reset --hard &>> ${log_file}
+git checkout $branch &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to checkout branch $branch, aborting"
@@ -107,7 +109,7 @@ then
 fi
 
 # Reset the code to match the tag.
-git reset --hard $tag
+git reset --hard $tag &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to reset to tag, aborting"
@@ -142,14 +144,23 @@ then
   exit
 fi
 
+# Wait for code to be available on server before moving forward.
+deployment_identifier=$(cat "$server_root/deployment_identifier")
+while [ "${deployment_identifier}" != "${tag}" ]
+do
+  log_message "Waiting for code to be deployed on server"
+  sleep 5
+  deployment_identifier=$(cat "$server_root/deployment_identifier")
+done
+
 log_message "Code deployment finished"
 
 if [ "$mode" = "updb" ]
 then
   for site in `drush --root=$docroot acsf-tools-list | grep -v " "`
   do
-    drush --root=$docroot -l "${site}${base_uri}" cc drush &>> ${log_file}
-    drush --root=$docroot -l "${site}${base_uri}" updb &>> ${log_file}
+    drush --root=$docroot -l "${site}${base_uri}" cc drush -y &>> ${log_file}
+    drush --root=$docroot -l "${site}${base_uri}" updb -y &>> ${log_file}
     if [ $? -ne 0 ]
     then
       log_message "$site: UPDB FAILED, site kept offline still, please check logs"
