@@ -75,9 +75,11 @@ export const smoothScrollToCurrentDate = () => {
   if(element !== undefined && element !== null && window.innerWidth < 768) {
     let elementLeftOffset = element.offsetLeft;
     let elementTopOffset = element.offsetTop;
+    // Calculating right offset of the element for Arabic.
+    let scrollRight = elementParent.offsetWidth - element.offsetWidth - elementLeftOffset;
     elementParent.scrollBy({
       top: elementTopOffset,
-      left: elementLeftOffset,
+      left: (drupalSettings.path.currentLanguage === 'en') ? elementLeftOffset : -scrollRight,
       behavior: 'smooth',
     });
   }  
