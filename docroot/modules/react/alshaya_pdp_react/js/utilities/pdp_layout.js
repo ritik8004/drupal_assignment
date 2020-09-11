@@ -61,8 +61,8 @@ export const triggerAddToCart = (
 
   // If there any error we throw from middleware.
   if (response.data.error === true) {
-    const errorMessage = <p>{response.data.error_message}</p>;
-    ReactDOM.render(errorMessage, document.getElementById('add-to-cart-error'));
+    const errorMessage = response.data.error_message;
+    ReactDOM.render(<p>{response.data.error_message}</p>, document.getElementById('add-to-cart-error'));
     if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
       cartBtn.classList.remove('magv2-add-to-basket-loader');
       cartBtn.innerHTML = Drupal.t('Add To Bag');
@@ -70,12 +70,27 @@ export const triggerAddToCart = (
     if (response.data.error_code === '400') {
       Drupal.alshayaSpc.clearCartData();
     }
+
+    // Process required data and trigger add to cart failure event.
     const form = document.getElementsByClassName('sku-base-form')[0];
+    const elements = document.querySelectorAll('.cart-form-attribute');
+    const selectedOptions = [];
+    // Get the key-value pair of selected option name and value.
+    elements.forEach((element) => {
+      const configLabel = element.getAttribute('data-attribute-name');
+      const configValue = element.querySelector('ul li.active').getAttribute('data-attribute-label');
+      const option = `${configLabel}: ${configValue}`;
+      selectedOptions.push(option);
+    });
+    productData.options = selectedOptions;
+    // Prepare the event.
     const cartNotification = new CustomEvent('product-add-to-cart-failed', {
       detail: {
         productData,
+        message: errorMessage,
       },
     });
+    // Dispatch event so that handlers can process it.
     form.dispatchEvent(cartNotification);
   } else if (response.data.cart_id) {
     if (response.data.response_message.status === 'success'

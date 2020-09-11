@@ -132,13 +132,8 @@ const productRecommendationsSuffix = 'pr-';
         // For new pdp layout, we get the required data in the event object.
         if ($('body').hasClass('new-pdp-magazine-layout')) {
           // Get selected attributes.
-          $('.cart-form-attribute', $(this)).each(function() {
-            var configLabel = $(this).attr('data-attribute-name');
-            var configValue = $('ul li.active', $(this)).attr('data-attribute-label');
-            var attribute = configLabel + ': ' + configValue;
-            attributes.push(attribute);
-          });
-          errorMessage = $('#add-to-cart-error', $(this)).text();
+          attributes = e.detail.productData.options;
+          errorMessage = e.detail.message;
         }
         else {
           // Get selected attributes.
