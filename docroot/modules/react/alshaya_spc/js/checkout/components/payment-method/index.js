@@ -55,28 +55,6 @@ export default class PaymentMethod extends React.Component {
       return false;
     }
 
-    if (method.code === 'qpay') {
-      showFullScreenLoader();
-
-      // Build absolute redirect urls for success and failure.
-      const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
-      const { origin } = window.location;
-      const { baseUrl, pathPrefix } = drupalSettings.path;
-      const middlewarebaseUrl = `${origin}${baseUrl}${middlewareUrl}`;
-      const paymentData = {
-        payment: {
-          method: 'qpay',
-          additional_data: {
-            successUrl: `${middlewarebaseUrl}/payment/success/${pathPrefix}`,
-            failUrl: `${middlewarebaseUrl}/payment/error/${pathPrefix}`,
-          },
-        },
-      };
-
-      this.finalisePayment(paymentData);
-      return false;
-    }
-
     return true;
   };
 

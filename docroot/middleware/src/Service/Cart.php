@@ -745,6 +745,9 @@ class Cart {
       'additional_data' => $data['additional_data'],
     ];
 
+    // @todo add method to process data.
+
+
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
     if ($expire > 0) {
       $this->cache->set('payment_method', $expire, $data['method']);
@@ -1148,7 +1151,7 @@ class Cart {
    * @return array
    *   Status.
    */
-  public function placeOrder(array $data, $getPaymentRedirection = FALSE) {
+  public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
 
@@ -1202,17 +1205,17 @@ class Cart {
         'timeout' => $checkout_settings['place_order_timeout'],
       ];
 
+      // @todo this is only for testing purpose remove this.
+      $result = '{"redirect_url": "https://sbapi.ckotech.co/knet-external/redirect/tok_igeckhphjiku3cgikcydfamiw4/pay"}';
+      return json_decode($result, TRUE);
+
+
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, $request_options);
 
       if (!empty($lock)) {
         $lock->release();
-      }
-
-      // If true then send back info to redirect user to bank page.
-      if ($getPaymentRedirection) {
-        return json_decode($result);
       }
 
       // If false then process order info.

@@ -76,7 +76,7 @@ payment.cybersource_payment_finalise:
 payment.payment_success:
   path: /payment/success/{langcode}
   controller: App\Controller\PaymentController::handlePaymentSuccess
-  methods: POST
+  methods: GET
 
 payment.payment_error:
   path: /payment/error/{langcode}

@@ -774,28 +774,15 @@ class CartController {
       return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
-    switch ($request_content['data']['paymentMethod']['method']) {
-      case 'qpay':
-        $result = $this->cart->placeOrder($request_content['data'], TRUE);
-        if ($result->redirect_url) {
-          $response = [
-            'success' => TRUE,
-            'redirectUrl' => $result->redirect_url,
-            'absolute' => TRUE,
-          ];
-          return new JsonResponse($response);
-        }
-
-        break;
-
-      default:
-        $result = $this->cart->placeOrder($request_content['data']);
-    }
+    $result = $this->cart->placeOrder($request_content['data']);
 
     if (!isset($result['error'])) {
+      // If redirectUrl is set, it means we need to redirect user to that url
+      // in order to complete the payment.
       $response = [
         'success' => TRUE,
-        'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
+        'redirectUrl' => $result['redirectUrl'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
+        'isAbsoluteUrl' => !empty($result['redirectUrl']) ? TRUE : FALSE,
       ];
 
       return new JsonResponse($response);

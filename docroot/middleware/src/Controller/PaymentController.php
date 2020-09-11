@@ -96,20 +96,27 @@ class PaymentController {
   }
 
   /**
-   * Qpay success callback.
+   * Payment success callback.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect response on success.
    */
   public function handlePaymentSuccess(Request $request) {
     // Add success message in logs.
-    $this->logger->notice('Order placed successfully.');
-    $order_id = $request->request->get('order_id');
+    $order_id = $request->query->get('order_id');
+    $cart = $this->cart->getCart();
+    $payment_method = $this->cart->getPaymentMethodSetOnCart();
+    $this->logger->notice('Order placed successfully for Cart: @cart Payment Method: @payment_method Order-Id: @order_id', [
+      '@cart' => json_encode($cart),
+      '@payment_method' => $payment_method,
+      '@order_id' => $order_id,
+    ]);
     $langcode = $request->get('langcode');
+    // In case of error, we redirect to cart page.
     $redirect = new RedirectResponse('/' . $langcode . '/cart', 302);
+
     try {
       // Post processing on success which involves cleaning cache and session.
-      $payment_method = $this->cart->getPaymentMethodSetOnCart();
       $order = $this->cart->processPostOrderPlaced($order_id, $payment_method);
       // Redirect user to confirmation page.
       $redirect->setTargetUrl('/' . $langcode . '/checkout/confirmation?id=' . $order['secure_order_id']);
@@ -118,8 +125,10 @@ class PaymentController {
     catch (\Exception $e) {
       // If any error/exception encountered while order was placed from
       // magento side, we redirect to cart page.
-      $this->logger->error('Error while doing post processing for Qpay order for cart id: @cart_id.', [
-        '@cart_id' => 111,
+      $this->logger->error('Error while order post processing. Cart: @cart Payment Method: @payment_method Order-Id: @order_id', [
+        '@cart' => json_encode($cart),
+        '@payment_method' => $payment_method,
+        '@order_id' => $order_id,
       ]);
     }
 
@@ -127,38 +136,30 @@ class PaymentController {
   }
 
   /**
-   * Qpay failure callback.
+   * Payment failure callback.
    *
-   * Qpay failure callback that will be called from MDC.
+   * Failure callback that will be called from MDC.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   Redirect response on failure.
    */
   public function handlePaymentFail(Request $request) {
-    $this->logger->error('Payment failed for cart: @cart_id', [
-      '@cart_id' => $this->cart->getCartId(),
+    $this->logger->error('Payment failed for Cart: @cart Payment Method: @payment_method', [
+      '@cart' => json_encode($this->cart->getCart()),
+      '@payment_method' => $this->cart->getPaymentMethodSetOnCart(),
     ]);
 
     $langcode = $request->get('langcode');
     $message = $request->query->get('message');
-    $response = new RedirectResponse('/' . $langcode . '/checkout?error=true&message=' . $message, 302);
+    $response = new RedirectResponse('/' . $langcode . '/checkout' . $message, 302);
 
     $payment_data = [
       'status' => self::PAYMENT_FAILED_VALUE,
       'payment_method' => $this->cart->getPaymentMethodSetOnCart(),
+      'status' => self::PAYMENT_DECLINED_VALUE,
     ];
 
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
-
-    try {
-      // Call cancel reservation stock api.
-      $this->cart->cancelCartReservation('Payment failed for cart: ' . $this->cart->getCartId());
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error while calling cancel reservation api. Error: @message', [
-        '@message' => $e->getMessage(),
-      ]);
-    }
 
     return $response;
   }

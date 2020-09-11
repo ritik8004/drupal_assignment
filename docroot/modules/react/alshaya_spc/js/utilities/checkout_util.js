@@ -110,16 +110,13 @@ export const placeOrder = (paymentMethod) => {
     .then(
       (response) => {
         if (response.data.error === undefined) {
-          // Remove cart info from storage.
-          removeCartFromStorage();
-
-          // Check absolute url.
-          if (response.data.absolute !== undefined && response.data.absolute) {
+          // If url is absolute, then redirect to the external payment page.
+          if (response.data.isAbsoluteUrl !== undefined && response.data.isAbsoluteUrl) {
             window.location.href = response.data.redirectUrl;
-          } else {
-            window.location = Drupal.url(response.data.redirectUrl);
+            return;
           }
 
+          window.location = Drupal.url(response.data.redirectUrl);
           return;
         }
 
