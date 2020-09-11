@@ -7,7 +7,7 @@ default:
             contexts:
                 - Alshaya\BehatContexts\FeatureContext:
                       parameters:
-                          ajax_waittime : 60
+                          ajax_waittime : 100
                 - Drupal\DrupalExtension\Context\MinkContext
                 - Drupal\DrupalExtension\Context\DrupalContext
                 - Drupal\DrupalExtension\Context\MessageContext
