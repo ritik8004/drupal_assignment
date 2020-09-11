@@ -414,3 +414,8 @@ shop-by-brand:
       css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css: {}
   dependencies:
     - alshaya_white_label/plp_search_js
+
+sub-brand-logo:
+  css:
+    theme:
+      css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}

@@ -313,4 +313,36 @@ class AlshayaMasterCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Enable maintenance mode and memorise it is done via script.
+   *
+   * @command alshaya_master:enable-maintenance
+   *
+   * @aliases alshaya-enable-maintenance
+   */
+  public function enableMaintenance() {
+    if (!($this->state->get('system.maintenance_mode'))) {
+      $this->state->set('alshaya.maintenance_mode', TRUE);
+      $this->state->set('system.maintenance_mode', TRUE);
+
+      $this->logger()->warning('Enabled maintenance mode via alshaya-enable-maintenance command');
+    }
+  }
+
+  /**
+   * Disable maintenance mode only if it was done via script.
+   *
+   * @command alshaya_master:disable-maintenance
+   *
+   * @aliases alshaya-disable-maintenance
+   */
+  public function disableMaintenance() {
+    if ($this->state->get('alshaya.maintenance_mode')) {
+      $this->state->set('alshaya.maintenance_mode', FALSE);
+      $this->state->set('system.maintenance_mode', FALSE);
+
+      $this->logger()->warning('Disabled maintenance mode via alshaya-disable-maintenance command');
+    }
+  }
+
 }

@@ -431,7 +431,10 @@ function alshaya_master_get_custom_logo($type, $theme = NULL, $lang = NULL) {
     $cache[$theme][$type] = [];
     $config = \Drupal::configFactory()->get('alshaya_master.theme.' . $theme . '.' . $lang);
     if ($cache[$theme][$type]['logo_path'] = $config->get($type . '_logo_path')) {
-      $cache[$theme][$type]['logo_url'] = file_url_transform_relative(file_create_url($config->get($type . '_logo_path')));
+      $logo_url = file_create_url($config->get($type . '_logo_path'));
+      $cache[$theme][$type]['logo_url'] = ($type === 'email')
+        ? $logo_url
+        : file_url_transform_relative($logo_url);
     }
   }
 
@@ -479,12 +482,26 @@ function alshaya_master_back_to_top_admin_prevent_alter(&$is_admin) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_master_form_system_site_information_settings_alter(&$form, FormStateInterface $form_state) {
-  $disable_message = \Drupal::configFactory()->getEditable('alshaya_master.settings')->get('js_disable_message');
+  $settings = \Drupal::configFactory()->getEditable('alshaya_master.settings');
   $form['js_disable_message'] = [
     '#type' => 'textarea',
     '#title' => t('Disabled js message'),
     '#description' => t('Message to be shown when JS is disabled on site'),
-    '#default_value' => $disable_message,
+    '#default_value' => $settings->get('js_disable_message'),
+  ];
+
+  $form['sub_brand_logo_img'] = [
+    '#type' => 'textfield',
+    '#title' => t('Sub brand logo image'),
+    '#description' => t('Path of the logo image for header. The same filename with PNG extension will be used for print confirmation page. Example - /themes/custom/transac/alshaya_american_eagle/aerie.svg. In order to this work, Both sub brabd logo image and link needs to be configured.'),
+    '#default_value' => $settings->get('sub_brand_logo_img'),
+  ];
+
+  $form['sub_brand_logo_link'] = [
+    '#type' => 'textfield',
+    '#title' => t('Sub brand logo link'),
+    '#description' => t('Link where the sub brand logo will redirect on click. This should be absolute url like "https://google.com".'),
+    '#default_value' => $settings->get('sub_brand_logo_link'),
   ];
 
   $form['#submit'][] = '_alshaya_admin_site_information_submit';
@@ -497,6 +514,8 @@ function _alshaya_admin_site_information_submit($form, FormStateInterface $form_
   $disable_message = $form_state->getValue('js_disable_message');
   \Drupal::configFactory()->getEditable('alshaya_master.settings')
     ->set('js_disable_message', $disable_message)
+    ->set('sub_brand_logo_img', $form_state->getValue('sub_brand_logo_img'))
+    ->set('sub_brand_logo_link', $form_state->getValue('sub_brand_logo_link'))
     ->save();
 }
 
@@ -924,4 +943,25 @@ function alshaya_master_acquia_search_get_list_of_possible_cores_alter(&$possibl
   }
 
   array_unshift($possible_core_ids, $core_service['identifier'] . '.' . $ah_env . '.' . $acsf_site_code);
+}
+
+/**
+ * Get sub brand logo and images.
+ *
+ * @return array
+ *   Sub brand logo and link.
+ */
+function _alshaya_master_get_subbrand_logo_image_link() {
+  $data = [];
+  $settings = \Drupal::config('alshaya_master.settings');
+  $sub_brand_logo_img = $settings->get('sub_brand_logo_img');
+  $sub_brand_logo_link = $settings->get('sub_brand_logo_link');
+  if ($sub_brand_logo_img && $sub_brand_logo_link) {
+    $data['sub_brand_logo_img'] = $sub_brand_logo_img;
+    $data['sub_brand_logo_link'] = $sub_brand_logo_link;
+    $data['sub_brand_logo_title'] = t('Sub brand logo title');
+    $data['sub_brand_logo_alt'] = t('Sub brand logo alt');
+  }
+
+  return $data;
 }

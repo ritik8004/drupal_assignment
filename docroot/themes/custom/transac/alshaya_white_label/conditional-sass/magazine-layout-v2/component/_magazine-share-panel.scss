@@ -48,6 +48,10 @@
         margin-#{$right}: 0.4375rem;
       }
 
+      @include breakpoint($desktop) {
+        margin-bottom: 0.625rem;
+      }
+
       &::before {
         background: none;
         color: $magv2-share-icons-default-color;

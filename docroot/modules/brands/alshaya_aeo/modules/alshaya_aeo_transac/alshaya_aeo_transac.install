@@ -10,6 +10,16 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Install metatag translations.
+ */
+function alshaya_aeo_transac_update_8004() {
+
+  _alshaya_aeo_transac_save_metatag_translations();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update sort orders for size facet to match order in Magento.
  */
 function alshaya_aeo_transac_update_8003() {
@@ -134,6 +144,57 @@ function alshaya_aeo_transac_install() {
     ],
     'Gender' => [
       'ar' => 'الجنس',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
+  // Install metatag translations.
+  _alshaya_aeo_transac_save_metatag_translations();
+}
+
+/**
+ * Get translations of metatag.
+ */
+function _alshaya_aeo_transac_save_metatag_translations() {
+  $strings = [
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => ' - [current-date:html_year] Sale',
+      'ar' => '  - عروض [current-date:html_year]',
+    ],
+    'alshaya_seo_sale_text_before_cod' => [
+      'en' => '. Compare the latest [current-date:html_year] - [term:name] - packages at the best prices.',
+      'ar' => '. مقارنة - [term:name] - المجموعات الأكثر سعرا.',
+    ],
+    'alshaya_seo_sale_sno_suffix' => [
+      'en' => '- [term:name] -',
+      'ar' => '- [term:name] -',
+    ],
+    'alshaya_seo_sno_suffix' => [
+      'en' => '- [term:name] -',
+      'ar' => '- [term:name] -',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Get exclusive and delightful [current-date:html_year] sale and offers',
+      'ar' => 'احصل على عروض [current-date:html_year] على المنتجات الحصرية',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop exclusive and delightful [term:name] products',
+      'ar' => 'شراء المنتجات الحصرية [term:name]',
+    ],
+    'alshaya_seo_sale_keywords' => [
+      'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale',
+      'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale',
+    ],
+    'alshaya_seo_keywords' => [
+      'en' => 'Shop [term:name] Products Online, Shop [term:name] Online, Shop [term:name] Products in [alshaya_seo:country], Shop [term:name] Collection, [alshaya_seo:term_cities]',
+      'ar' => 'تسوق منتجات [term:name] اون لاين, تسوق مستلزمات [term:name] اون لاين, اشتري مستلزمات [term:name] من [alshaya_seo:brand_name], [alshaya_seo:term_cities], تسوق منتجات [term:name] اون لاين [alshaya_seo:country]',
+    ],
+    'Collection Online' => [
+      'en' => 'Products Online',
+    ],
+    'Collection for @parent Online' => [
+      'en' => 'Products for @parent Online',
     ],
   ];
 

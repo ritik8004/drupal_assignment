@@ -72,6 +72,15 @@ export const triggerAddToCart = (
     if (response.data.error_code === '400') {
       Drupal.alshayaSpc.clearCartData();
     }
+    const cartData = Drupal.alshayaSpc.getCartData();
+    const form = document.getElementsByClassName('sku-base-form')[0];
+    const cartNotification = new CustomEvent('product-add-to-cart-failed', {
+      detail: {
+        productData,
+        cartData,
+      },
+    });
+    form.dispatchEvent(cartNotification);
   } else if (response.data.cart_id) {
     if (response.data.response_message.status === 'success'
         && (typeof response.data.items[productData.variant] !== 'undefined'
@@ -172,7 +181,8 @@ export const triggerAddToCart = (
 
 export const getProductValues = (skuItemCode, variant, setVariant) => {
   let brandLogo; let brandLogoAlt; let
-    brandLogoTitle = null;
+    brandLogoTitle; let freeGiftImage;
+  let freeGiftTitle; let freeGiftPromoCode = null;
   let configurableCombinations = '';
 
   const { productInfo } = drupalSettings;
@@ -195,6 +205,13 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
         ? productInfo[skuItemCode].brandLogo.alt : null;
       brandLogoTitle = productInfo[skuItemCode].brandLogo.title
         ? productInfo[skuItemCode].brandLogo.title : null;
+    }
+    if (productInfo[skuItemCode].freeGiftPromotion['#free_sku_code']) {
+      freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#sku_image']
+        ? productInfo[skuItemCode].freeGiftPromotion['#sku_image'] : null;
+      freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion['#free_sku_title']
+        ? productInfo[skuItemCode].freeGiftPromotion['#free_sku_title'] : null;
+      freeGiftPromoCode = productInfo[skuItemCode].freeGiftPromotion['#promo_code'];
     }
     title = productInfo[skuItemCode].cart_title;
     priceRaw = productInfo[skuItemCode].priceRaw;
@@ -247,6 +264,9 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     stockQty,
     firstChild,
     promotions,
+    freeGiftImage,
+    freeGiftTitle,
+    freeGiftPromoCode,
   };
 };
 

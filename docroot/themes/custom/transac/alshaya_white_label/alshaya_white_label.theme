@@ -62,6 +62,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('body-sidebars-none');
   }
 
+  $sub_brand_logo = _alshaya_master_get_subbrand_logo_image_link();
+  // If both sub brand logo image and link available.
+  if (!empty($sub_brand_logo)) {
+    $variables['attributes']['class'][] = 'sub-brand-logo';
+  }
+
   // Alias path class.
   $alias_class = preg_replace("/\//", '-', $alias);
   if (!empty($alias_class) && strpos($alias_class, 'node') !== 0) {
@@ -311,6 +317,15 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $variables['#attached']['drupalSettings']['checkoutFeatureStatus'] = $checkout_feature_status;
   $variables['#attached']['drupalSettings']['cartMaxQty'] = $cart_max_qty;
   $variables['#attached']['drupalSettings']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
+  $sub_brand_logo = _alshaya_master_get_subbrand_logo_image_link();
+  // If both sub brand logo image and link available.
+  if (!empty($sub_brand_logo)) {
+    $variables['sub_brand_logo_img'] = $sub_brand_logo['sub_brand_logo_img'];
+    $variables['sub_brand_logo_link'] = $sub_brand_logo['sub_brand_logo_link'];
+    $variables['sub_brand_logo_title'] = $sub_brand_logo['sub_brand_logo_title'];
+    $variables['sub_brand_logo_alt'] = $sub_brand_logo['sub_brand_logo_alt'];
+    $variables['#attached']['library'][] = 'alshaya_white_label/sub-brand-logo';
+  }
 }
 
 /**
@@ -357,6 +372,18 @@ function alshaya_white_label_preprocess_block(&$variables) {
   if (isset($variables['elements'], $variables['elements']['#id']) && $variables['elements']['#id'] === 'branding') {
     $mobile_logo = alshaya_master_get_mobile_logo();
     $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
+  }
+
+  // Sub brand logo.
+  if ($variables['plugin_id'] === 'system_branding_block') {
+    $sub_brand_logo = _alshaya_master_get_subbrand_logo_image_link();
+    // If both sub brand logo image and link available.
+    if (!empty($sub_brand_logo)) {
+      $variables['sub_brand_logo_img'] = $sub_brand_logo['sub_brand_logo_img'];
+      $variables['sub_brand_logo_link'] = $sub_brand_logo['sub_brand_logo_link'];
+      $variables['sub_brand_logo_title'] = $sub_brand_logo['sub_brand_logo_title'];
+      $variables['sub_brand_logo_alt'] = $sub_brand_logo['sub_brand_logo_alt'];
+    }
   }
 
   $listing_pages_plugin_id = [

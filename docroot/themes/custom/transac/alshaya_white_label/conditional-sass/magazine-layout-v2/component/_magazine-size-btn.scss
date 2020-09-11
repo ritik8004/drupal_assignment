@@ -16,7 +16,7 @@
   padding-#{$right}: 2rem;
 
   .ie & {
-    vertical-align: unset;
+    vertical-align: inherit;
   }
 
   @include breakpoint($only-mobile) {
