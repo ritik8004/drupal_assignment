@@ -774,7 +774,23 @@ class CartController {
       return new JsonResponse($this->utility->getErrorResponse('Invalid request', '500'));
     }
 
-    $result = $this->cart->placeOrder($request_content['data']);
+    switch ($request_content['data']['paymentMethod']['method']) {
+      case 'qpay':
+        $result = $this->cart->placeOrder($request_content['data'], TRUE);
+        if ($result->redirect_url) {
+          $response = [
+            'success' => TRUE,
+            'redirectUrl' => $result->redirect_url,
+            'absolute' => TRUE,
+          ];
+          return new JsonResponse($response);
+        }
+
+        break;
+
+      default:
+        $result = $this->cart->placeOrder($request_content['data']);
+    }
 
     if (!isset($result['error'])) {
       $response = [

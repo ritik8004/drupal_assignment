@@ -1142,11 +1142,13 @@ class Cart {
    *
    * @param array $data
    *   Post data.
+   * @param bool $getPaymentRedirection
+   *   Flag to get redirect url from magento.
    *
    * @return array
    *   Status.
    */
-  public function placeOrder(array $data) {
+  public function placeOrder(array $data, $getPaymentRedirection = FALSE) {
     $url = sprintf('carts/%d/order', $this->getCartId());
     $cart = $this->getCart();
 
@@ -1208,14 +1210,20 @@ class Cart {
         $lock->release();
       }
 
+      // If true then send back info to redirect user to bank page.
+      if ($getPaymentRedirection) {
+        return json_decode($result);
+      }
+
+      // If false then process order info.
       $order_id = (int) str_replace('"', '', $result);
 
       $this->logger->notice('Order placed successfully. Cart: @cart Orderid: @order_id', [
         '@cart' => json_encode($cart),
         '@order_id' => $order_id,
       ]);
-
       return $this->processPostOrderPlaced($order_id, $data['paymentMethod']['method']);
+
     }
     catch (\Exception $e) {
       // Handle checkout.com 2D exception.
@@ -1277,7 +1285,7 @@ class Cart {
    * @return array
    *   Final status array.
    */
-  private function processPostOrderPlaced(int $order_id, string $payment_method) {
+  public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
     $email = $this->getCartCustomerEmail();
 

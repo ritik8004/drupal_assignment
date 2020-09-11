@@ -113,7 +113,13 @@ export const placeOrder = (paymentMethod) => {
           // Remove cart info from storage.
           removeCartFromStorage();
 
-          window.location = Drupal.url(response.data.redirectUrl);
+          // Check absolute url.
+          if (response.data.absolute !== undefined && response.data.absolute) {
+            window.location.href = response.data.redirectUrl;
+          } else {
+            window.location = Drupal.url(response.data.redirectUrl);
+          }
+
           return;
         }
 
