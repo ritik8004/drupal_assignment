@@ -40,7 +40,7 @@ function alshaya_vs_gtm_list_name_alter(&$listName) {
       $listName = 'SRP|' . $super_cat_name;
     }
   }
-  elseif (empty($listName) &&  \Drupal::service('path.matcher')->isFrontPage()) {
+  elseif (empty($listName) && \Drupal::service('path.matcher')->isFrontPage()) {
     // We maintain the same format here as for the other list names.
     // We require this for the product carousels in the homepage.
     $listName = AlshayaGtmManager::LIST_GTM_MAPPING['alshaya_master.home'] . '|' . $super_cat_name;
