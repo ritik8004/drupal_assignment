@@ -34,7 +34,8 @@ fi
 stack=`whoami`
 repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
 
-docroot="/var/www/html/$AH_SITE_NAME/docroot"
+server_root="/var/www/html/$AH_SITE_NAME"
+docroot="${server_root}/docroot"
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
 
 if [[ "$AH_SITE_ENVIRONMENT" == *"live"* ]]
@@ -90,7 +91,7 @@ fi
 cd "$directory/$stack"
 
 # Fetch all tags.
-git fetch origin --tags
+git fetch origin --tags &>> ${log_file}
 
 # Validate if tag exists.
 if [ ! $(git tag -l "$tag") ]; then
@@ -99,7 +100,8 @@ if [ ! $(git tag -l "$tag") ]; then
 fi
 
 # Checkout deployment branch used for deployment.
-git checkout $branch
+git reset --hard &>> ${log_file}
+git checkout $branch &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to checkout branch $branch, aborting"
@@ -107,7 +109,7 @@ then
 fi
 
 # Reset the code to match the tag.
-git reset --hard $tag
+git reset --hard $tag &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to reset to tag, aborting"
@@ -135,16 +137,21 @@ then
 fi
 
 # Force the push to avoid issues with previous commit history.
-git push origin $branch -f &>> ${log_file}
+git push origin $branch &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to deploy code, aborting"
   exit
 fi
 
-# Sleep for 60 seconds before saying it is done.
-# Code deployment to servers post git push takes time.
-sleep 60
+# Wait for code to be available on server before moving forward.
+deployment_identifier=$(cat "$server_root/deployment_identifier")
+while [ "${deployment_identifier}" != "${tag}" ]
+do
+  log_message "Waiting for code to be deployed on server"
+  sleep 5
+  deployment_identifier=$(cat "$server_root/deployment_identifier")
+done
 
 log_message "Code deployment finished"
 
