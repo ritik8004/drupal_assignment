@@ -163,8 +163,10 @@
         // Product click handler expects attributes to have 'gtm-' prefix so we
         // send it that way.
         const position = Drupal.alshayaSeoSpc.getRecommendationsPosition(element);
-        for (const [index, value] of Object.entries(elementGtmAttributes)) {
-          element.setAttribute('gtm-' + index, value);
+        const attribute_keys = Object.keys(elementGtmAttributes);
+        var i;
+        for (i=0; i<attribute_keys.length; i++) {
+          element.setAttribute('gtm-' + attribute_keys[i], elementGtmAttributes[attribute_keys[i]]);
         }
         Drupal.alshaya_seo_gtm_push_product_clicks($(element), drupalSettings.gtm.currency, listName, position);
       });
