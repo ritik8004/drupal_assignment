@@ -8,6 +8,35 @@
 /**
  * Implements hook_update_N().
  *
+ * [5.7.0] To fix the footer block title issue for PB/WE/PBK sites.
+ */
+function alshaya_furnitures_update_8002() {
+  // Update label for about brand block.
+  \Drupal::configFactory()->getEditable('block.block.aboutbrand')
+    ->set('settings.label', 'Why West Elm?')
+    ->save();
+
+  // Update label translation for about brand block.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.aboutbrand')
+    ->set('settings.label', 'لماذا وست إلم؟')
+    ->save();
+
+  // Update label for help block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_help')
+    ->set('region', 'footer_primary')
+    ->set('settings.label', 'Customer care')
+    ->save();
+
+  // Update label for newsletters block.
+  \Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
+    ->set('settings.label', 'Connect with us')
+    ->set('settings.label_display', 'visible')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.4.0] We have originally changed the field attributes for PBK.
  * In the process we have changed configurations in alshaya_furnitures which
  * will impact PB and WE. So we update the configs here so that code for all
@@ -16,4 +45,31 @@
 function alshaya_furnitures_update_8001() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_furnitures_install() {
+  // Update label for about brand block.
+  \Drupal::configFactory()->getEditable('block.block.aboutbrand')
+    ->set('settings.label', 'Why West Elm?')
+    ->save();
+
+  // Update label translation for about brand block.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.aboutbrand')
+    ->set('settings.label', 'لماذا وست إلم؟')
+    ->save();
+
+  // Update label for help block.
+  \Drupal::configFactory()->getEditable('block.block.alshaya_help')
+    ->set('region', 'footer_primary')
+    ->set('settings.label', 'Customer care')
+    ->save();
+
+  // Update label for newsletters block.
+  \Drupal::configFactory()->getEditable('block.block.alshayanewslettersubscription')
+    ->set('settings.label', 'Connect with us')
+    ->set('settings.label_display', 'visible')
+    ->save();
 }
