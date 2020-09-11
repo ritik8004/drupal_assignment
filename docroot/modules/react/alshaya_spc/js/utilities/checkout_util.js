@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {
-  removeCartFromStorage,
   getStorageInfo,
   getInfoFromStorage,
 } from './storage';
