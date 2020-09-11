@@ -12,7 +12,7 @@ function alshaya_aura_theme() {
   $theme = [
     'aura_rewards_header' => [
       'variables' => [
-        'learn_more' => '',
+        'learn_more_link' => '',
       ],
     ],
   ];

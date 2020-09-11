@@ -65,7 +65,7 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
   public function build() {
     return [
       '#theme' => 'aura_rewards_header',
-      '#learn_more' => $this->configFactory->get('alshaya_aura.settings')->get('aura_rewards_header_learn_more_link.value'),
+      '#learn_more_link' => $this->configFactory->get('alshaya_aura.settings')->get('aura_rewards_header_learn_more_link'),
     ];
   }
 

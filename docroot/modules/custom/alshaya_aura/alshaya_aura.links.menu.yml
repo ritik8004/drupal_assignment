@@ -1,4 +1,4 @@
-alshaya_aura.alshaya_aura.settings:
+alshaya_aura.aura_loyalty_config:
   route_name: alshaya_aura.aura_loyalty_config
   title: 'Alshaya AURA settings'
   description: 'Configure Alshaya AURA settings.'

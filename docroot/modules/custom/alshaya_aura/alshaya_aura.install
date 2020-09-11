@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_aura module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_aura_install() {
+  \Drupal::service('alshaya_config.manager')->updateConfigs(['block.block.aurarewardsheader'], 'alshaya_aura', 'optional');
+}

@@ -29,11 +29,10 @@ class AlshayaAuraSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['alshaya_aura']['aura_rewards_header_learn_more_link'] = [
-      '#type' => 'text_format',
-      '#format' => 'rich_text',
-      '#title' => $this->t('AURA Rewards Header Learn More'),
+      '#type' => 'textfield',
+      '#title' => $this->t('AURA Rewards Header Learn More Link'),
       '#description' => $this->t('Learn More link to be added in AURA Rewards popup in header.'),
-      '#default_value' => $this->config('alshaya_aura.settings')->get('aura_rewards_header_learn_more_link.value'),
+      '#default_value' => $this->config('alshaya_aura.settings')->get('aura_rewards_header_learn_more_link'),
     ];
 
     return parent::buildForm($form, $form_state);
