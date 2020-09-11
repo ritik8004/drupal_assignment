@@ -1234,7 +1234,6 @@ class Cart {
         $lock->release();
       }
 
-      // If false then process order info.
       $order_id = (int) str_replace('"', '', $result);
 
       $this->logger->notice('Order placed successfully. Cart: @cart Orderid: @order_id', [
