@@ -70,12 +70,10 @@ export const triggerAddToCart = (
     if (response.data.error_code === '400') {
       Drupal.alshayaSpc.clearCartData();
     }
-    const cartData = Drupal.alshayaSpc.getCartData();
     const form = document.getElementsByClassName('sku-base-form')[0];
     const cartNotification = new CustomEvent('product-add-to-cart-failed', {
       detail: {
         productData,
-        cartData,
       },
     });
     form.dispatchEvent(cartNotification);
