@@ -12,7 +12,6 @@ class ConfigurableProductForm extends React.Component {
       nextCode: null,
       nextValues: null,
       attributeAvailable: false,
-
     };
 
     this.button = createRef();
@@ -20,10 +19,11 @@ class ConfigurableProductForm extends React.Component {
 
   componentDidMount() {
     this.handleLoad();
+    const { context } = this.props;
 
     // Condition to check if add to cart
     // button is available.
-    if (document.getElementById('add-to-cart-main')) {
+    if (document.getElementById(`add-to-cart-${context}`)) {
       window.addEventListener('load', () => {
         this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
 
@@ -31,7 +31,10 @@ class ConfigurableProductForm extends React.Component {
       });
 
       window.addEventListener('scroll', () => {
-        const buttonOffset = this.button.current.getAttribute('data-top-offset');
+        let buttonOffset = null;
+        if (!(this.button.current === null)) {
+          buttonOffset = this.button.current.getAttribute('data-top-offset');
+        }
 
         if (buttonOffset === null) {
           return;
@@ -131,19 +134,25 @@ class ConfigurableProductForm extends React.Component {
   }
 
   openModal = () => {
-    document.querySelector('body').classList.add('overlay-select');
+    const { context } = this.props;
+    if (context === 'main') {
+      document.querySelector('body').classList.add('overlay-select');
+    } else {
+      document.querySelector('body').classList.add('overlay-related-select');
+    }
   };
 
   buttonLabel = (attr) => {
-    const sizeElem = document.querySelector(`#${attr}`).querySelectorAll('.active')[0];
+    const { context } = this.props;
+    const sizeElem = document.querySelector(`#pdp-add-to-cart-form-${context} #${attr}`).querySelectorAll('.active')[0];
     let label = '';
     if (sizeElem !== undefined) {
-      const size = document.querySelector(`#${attr}`).querySelectorAll('.active')[0].innerText;
+      const size = document.querySelector(`#pdp-add-to-cart-form-${context} #${attr}`).querySelectorAll('.active')[0].innerText;
       let group = '';
       label = size;
       // Check if size group is available.
-      if (document.querySelector('.group-anchor-links')) {
-        group = document.querySelector('.group-anchor-links').querySelectorAll('.active')[0].innerText;
+      if (document.querySelector(`#pdp-add-to-cart-form-${context} .group-anchor-links`)) {
+        group = document.querySelector(`#pdp-add-to-cart-form-${context} .group-anchor-links`).querySelectorAll('.active')[0].innerText;
         label = `${group}, ${size}`;
         return label;
       }
@@ -153,7 +162,15 @@ class ConfigurableProductForm extends React.Component {
 
   render() {
     const {
-      configurableCombinations, skuCode, productInfo, pdpRefresh, pdpLabelRefresh,
+      configurableCombinations,
+      skuCode,
+      productInfo,
+      pdpRefresh,
+      pdpLabelRefresh,
+      stockQty,
+      firstChild,
+      context,
+      closeModal,
     } = this.props;
     const { checkoutFeatureStatus } = drupalSettings;
 
@@ -163,16 +180,16 @@ class ConfigurableProductForm extends React.Component {
     const {
       nextCode, nextValues, variant, attributeAvailable,
     } = this.state;
-    const variantSelected = variant || drupalSettings.configurableCombinations[skuCode].firstChild;
+    const variantSelected = variant || firstChild;
 
     const cartUnavailability = (
       <CartUnavailability />
     );
 
-    const stockQty = productInfo[skuCode].variants[variantSelected].stock.qty;
+    const id = `add-to-cart-${context}`;
 
     return (
-      <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
+      <form action="#" className="sku-base-form" method="post" id={`pdp-add-to-cart-form-${context}`} parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
         <div id="add-to-cart-error" className="error" />
         {Object.keys(configurables).map((key) => (
           <div className={`cart-form-attribute ${key}`} key={key}>
@@ -191,6 +208,7 @@ class ConfigurableProductForm extends React.Component {
               refreshConfigurables={this.refreshConfigurables}
               selectedValues={this.selectedValues}
               pdpRefresh={pdpRefresh}
+              context={context}
             />
           </div>
         ))}
@@ -221,9 +239,18 @@ class ConfigurableProductForm extends React.Component {
             <div className="magv2-add-to-basket-container" ref={this.button}>
               <button
                 className="magv2-button"
-                id="add-to-cart-main"
+                id={`add-to-cart-${context}`}
                 type="submit"
-                onClick={(e) => addToCartConfigurable(e, 'add-to-cart-main', configurableCombinations, skuCode, productInfo, pdpLabelRefresh)}
+                onClick={(e) => addToCartConfigurable(
+                  e,
+                  id,
+                  configurableCombinations,
+                  skuCode,
+                  productInfo,
+                  pdpLabelRefresh,
+                  context,
+                  closeModal,
+                )}
               >
                 {Drupal.t('Add To Bag')}
               </button>

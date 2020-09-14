@@ -55,6 +55,8 @@ export const triggerAddToCart = (
   skuCode,
   addToCartBtn,
   pdpLabelRefresh,
+  context,
+  closeModal,
 ) => {
   const productData = productDataValue;
   const cartBtn = addToCartBtn;
@@ -88,12 +90,14 @@ export const triggerAddToCart = (
     }
 
     let configurables = [];
-    let productUrl = productInfo[skuCode].url;
-    let price = productInfo[skuCode].priceRaw;
+    let productUrl = (context === 'main') ? productInfo[skuCode].url : productInfo[skuCode].link;
+    let price = (context === 'main') ? productInfo[skuCode].priceRaw : productInfo[skuCode].final_price;
+
     let promotions = productInfo[skuCode].promotionsRaw;
     let productDataSKU = productData.sku;
     let parentSKU = productData.parentSku;
-    let { maxSaleQty } = productData;
+
+    let maxSaleQty = (context === 'main') ? productData.maxSaleQty : productData.max_sale_qty;
     let maxSaleQtyParent = productData.max_sale_qty_parent;
     const gtmAttributes = productInfo[skuCode].gtm_attributes;
     let options = [];
@@ -104,10 +108,10 @@ export const triggerAddToCart = (
       price = productVariantInfo.priceRaw;
       parentSKU = productVariantInfo.parent_sku;
       promotions = productVariantInfo.promotionsRaw;
-      configurables = productVariantInfo.configurableOptions;
-      maxSaleQty = productVariantInfo.maxSaleQty;
+      configurables = (context === 'main') ? productVariantInfo.configurableOptions : productVariantInfo.configurable_values;
+      maxSaleQty = (context === 'main') ? productVariantInfo.maxSaleQty : productVariantInfo.max_sale_qty;
       maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
-      options = productVariantInfo.configurableOptions;
+      options = (context === 'main') ? productVariantInfo.configurableOptions : productVariantInfo.configurable_values;
 
       if (productVariantInfo.url !== undefined) {
         const langcode = document.getElementsByTagName('html')[0].getAttribute('lang');
@@ -157,6 +161,11 @@ export const triggerAddToCart = (
 
     const { addToCartNotificationTime } = drupalSettings;
 
+    // Close CS/US modal on add to cart success.
+    if (context === 'related') {
+      closeModal();
+    }
+
     // Removing the success button after 2 seconds.
     setTimeout(() => {
       if (cartBtn.classList.contains('magv2-add-to-basket-success')) {
@@ -179,10 +188,15 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
   const { productInfo } = drupalSettings;
   const { variants } = productInfo[skuItemCode];
   const { stockStatus } = productInfo[skuItemCode];
+  const { productLabels } = drupalSettings;
   let title = '';
   let priceRaw = '';
   let finalPrice = '';
   let pdpGallery = '';
+  let labels = '';
+  let stockQty = '';
+  let firstChild = '';
+  let promotions = '';
   if (skuItemCode) {
     if (productInfo[skuItemCode].brandLogo) {
       brandLogo = productInfo[skuItemCode].brandLogo.logo
@@ -192,7 +206,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       brandLogoTitle = productInfo[skuItemCode].brandLogo.title
         ? productInfo[skuItemCode].brandLogo.title : null;
     }
-    if (productInfo[skuItemCode].freeGiftPromotion['#free_sku_code']) {
+    if (productInfo[skuItemCode].freeGiftPromotion !== undefined) {
       freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#sku_image']
         ? productInfo[skuItemCode].freeGiftPromotion['#sku_image'] : null;
       freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion['#free_sku_title']
@@ -203,6 +217,10 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     priceRaw = productInfo[skuItemCode].priceRaw;
     finalPrice = productInfo[skuItemCode].finalPrice;
     pdpGallery = productInfo[skuItemCode].rawGallery;
+    labels = productLabels[skuItemCode];
+    stockQty = productInfo[skuItemCode].stockQty;
+    firstChild = skuItemCode;
+    promotions = productInfo[skuItemCode].promotionsRaw;
     if (productInfo[skuItemCode].type === 'configurable') {
       configurableCombinations = drupalSettings.configurableCombinations;
       if (Object.keys(variants).length > 0) {
@@ -213,6 +231,10 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           priceRaw = productInfo[skuItemCode].variants[variant].priceRaw;
           finalPrice = productInfo[skuItemCode].variants[variant].finalPrice;
           pdpGallery = productInfo[skuItemCode].variants[variant].rawGallery;
+          labels = productLabels[variant];
+          stockQty = productInfo[skuItemCode].variants[variant].stock.qty;
+          firstChild = configurableCombinations[skuItemCode].firstChild;
+          promotions = productInfo[skuItemCode].variants[variant].promotionsRaw;
         }
       }
     }
@@ -238,6 +260,10 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     configurableCombinations,
     relatedProducts,
     stockStatus,
+    labels,
+    stockQty,
+    firstChild,
+    promotions,
     freeGiftImage,
     freeGiftTitle,
     freeGiftPromoCode,
@@ -269,6 +295,8 @@ export const addToCartConfigurable = (
   skuCode,
   productInfo,
   pdpLabelRefresh,
+  context,
+  closeModal,
 ) => {
   e.preventDefault();
   // Adding add to cart loading.
@@ -280,7 +308,7 @@ export const addToCartConfigurable = (
   Object.keys(attributes).forEach((key) => {
     const option = {
       option_id: attributes[key].attribute_id,
-      option_value: document.querySelector(`#${key}`).querySelectorAll('.active')[0].value,
+      option_value: document.querySelector(`#pdp-add-to-cart-form-${context} #${key}`).querySelectorAll('.active')[0].value,
     };
 
     // Skipping the psudo attributes.
@@ -290,7 +318,7 @@ export const addToCartConfigurable = (
     }
   });
 
-  const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
+  const variantSelected = document.getElementById(`pdp-add-to-cart-form-${context}`).getAttribute('variantselected');
   const parentSKU = productInfo[skuCode].variants[variantSelected].parent_sku;
   const getPost = getPostData(skuCode, variantSelected, parentSKU);
 
@@ -298,7 +326,9 @@ export const addToCartConfigurable = (
   const productData = getPost[1];
 
   postData.options = options;
-  productData.product_name = productInfo[skuCode].variants[variantSelected].cart_title;
+  productData.product_name = (context === 'main')
+    ? productInfo[skuCode].variants[variantSelected].cart_title
+    : productInfo[skuCode].variants[variantSelected].title;
   productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
   const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
 
@@ -312,6 +342,8 @@ export const addToCartConfigurable = (
         skuCode,
         addToCartBtn,
         pdpLabelRefresh,
+        context,
+        closeModal,
       );
     },
   )
@@ -323,13 +355,21 @@ export const addToCartConfigurable = (
 /**
  * Add to cart on click event for simple products.
  */
-export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh) => {
+export const addToCartSimple = (
+  e,
+  id,
+  skuCode,
+  productInfo,
+  pdpLabelRefresh,
+  context,
+  closeModal,
+) => {
   e.preventDefault();
   // Adding add to cart loading.
   const addToCartBtn = document.getElementById(id);
   addToCartBtn.classList.toggle('magv2-add-to-basket-loader');
 
-  const variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
+  const variantSelected = document.getElementById(`pdp-add-to-cart-form-${context}`).getAttribute('variantselected');
   const options = [];
 
   const getPost = getPostData(skuCode, variantSelected, skuCode);
@@ -338,7 +378,7 @@ export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh) =>
   const productData = getPost[1];
   postData.options = options;
 
-  productData.product_name = productInfo[skuCode].cart_title;
+  productData.product_name = (context === 'main') ? productInfo[skuCode].cart_title : productInfo[skuCode].title;
   productData.image = productInfo[skuCode].cart_image;
 
   const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
@@ -353,6 +393,8 @@ export const addToCartSimple = (e, id, skuCode, productInfo, pdpLabelRefresh) =>
         skuCode,
         addToCartBtn,
         pdpLabelRefresh,
+        context,
+        closeModal,
       );
     },
   )

@@ -21,7 +21,10 @@ class SimpleProductForm extends React.Component {
       });
 
       window.addEventListener('scroll', () => {
-        const buttonOffset = this.button.current.getAttribute('data-top-offset');
+        let buttonOffset = null;
+        if (!(this.button.current === null)) {
+          buttonOffset = this.button.current.getAttribute('data-top-offset');
+        }
 
         if (buttonOffset === null) {
           return;
@@ -44,10 +47,12 @@ class SimpleProductForm extends React.Component {
   }
 
   render() {
-    const { skuCode, productInfo, pdpLabelRefresh } = this.props;
+    const {
+      skuCode, productInfo, pdpLabelRefresh, stockQty, context, closeModal,
+    } = this.props;
     const { checkoutFeatureStatus } = drupalSettings;
     const variantSelected = skuCode;
-    const { stockQty } = productInfo[variantSelected];
+    const id = `add-to-cart-${context}`;
 
     return (
       <form action="#" className="sku-base-form" method="post" id="pdp-add-to-cart-form" parentsku={skuCode} variantselected={variantSelected}>
@@ -68,7 +73,15 @@ class SimpleProductForm extends React.Component {
                 className="magv2-button"
                 id="add-to-cart-main"
                 type="submit"
-                onClick={(e) => addToCartSimple(e, 'add-to-cart-main', skuCode, productInfo, pdpLabelRefresh)}
+                onClick={(e) => addToCartSimple(
+                  e,
+                  id,
+                  skuCode,
+                  productInfo,
+                  pdpLabelRefresh,
+                  context,
+                  closeModal,
+                )}
               >
                 {Drupal.t('Add To Bag')}
               </button>

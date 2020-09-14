@@ -19,6 +19,7 @@ const DescriptionContent = (props) => {
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}
             shortDetail="true"
+            animateTitlePrice={false}
           />
         </div>
         <div className="magv2-desc-popup-content-wrapper">

@@ -5,25 +5,22 @@ import PdpSectionText from '../utilities/pdp-section-text';
 import DescriptionContent from '../pdp-desc-popup-content';
 
 const PpdDescription = (props) => {
-  const openModal = () => {
-    document.querySelector('body').classList.add('desc-overlay');
-  };
+  const {
+    pdpShortDesc, pdpDescription, skuCode, finalPrice,
+    pdpProductPrice, title, getPanelData, removePanelData,
+  } = props;
 
   const closeModal = () => {
     document.querySelector('body').classList.remove('desc-overlay');
+    removePanelData();
   };
 
-  const {
-    pdpShortDesc, pdpDescription, skuCode, finalPrice, pdpProductPrice, title,
-  } = props;
-
-  return (
-    <div className="magv2-pdp-description-wrapper card fadeInUp" style={{ animationDelay: '0.8s' }}>
-      <PdpSectionTitle>{Drupal.t('product details')}</PdpSectionTitle>
-      <PdpSectionText className="short-desc">{parse(pdpShortDesc)}</PdpSectionText>
-      <div className="magv2-desc-readmore-link" onClick={() => openModal()}>
-        {Drupal.t('Read more')}
-      </div>
+  const openModal = () => {
+    // to make sure that markup is present in DOM.
+    setTimeout(() => {
+      document.querySelector('body').classList.add('desc-overlay');
+    }, 150);
+    return (
       <DescriptionContent
         closeModal={closeModal}
         title={title}
@@ -32,6 +29,16 @@ const PpdDescription = (props) => {
         skuCode={skuCode}
         pdpDescription={pdpDescription}
       />
+    );
+  };
+
+  return (
+    <div className="magv2-pdp-description-wrapper card fadeInUp" style={{ animationDelay: '0.8s' }}>
+      <PdpSectionTitle>{Drupal.t('product details')}</PdpSectionTitle>
+      <PdpSectionText className="short-desc">{parse(pdpShortDesc)}</PdpSectionText>
+      <div className="magv2-desc-readmore-link" onClick={() => getPanelData(openModal())}>
+        {Drupal.t('Read more')}
+      </div>
     </div>
   );
 };

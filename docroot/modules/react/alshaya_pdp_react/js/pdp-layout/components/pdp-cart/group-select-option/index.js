@@ -6,11 +6,18 @@ import SizeGuide from '../size-guide';
 const GroupSelectOption = ({
   groupSelect, configurables,
   groupName, code, nextCode, nextValues, handleLiClick,
-  selected, key, closeModal,
+  selected, key, closeModal, context,
 }) => (
   <div className="magv2-select-popup-container">
     <div className="magv2-select-popup-wrapper">
       <div className="magv2-select-popup-header-wrapper">
+        {(context === 'related')
+          ? (
+            <a className="back" onClick={(e) => closeModal(e)}>
+              &times;
+            </a>
+          )
+          : null}
         <a className="close" onClick={(e) => closeModal(e)}>
           &times;
         </a>

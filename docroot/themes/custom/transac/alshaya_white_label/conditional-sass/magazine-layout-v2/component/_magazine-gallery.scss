@@ -101,37 +101,35 @@
   }
 
   .magazine__gallery--container-mobile {
-    @include breakpoint($only-mobile) {
-      .slick-dots {
-        bottom: 1.125rem;
+    .slick-dots {
+      bottom: 1.125rem;
 
-        li {
-          border: none;
+      li {
+        border: none;
+
+        button {
+          &::before {
+            color: $magv2-slick-dots;
+            opacity: 1;
+          }
+        }
+
+        &.slick-active {
+          background: transparent !important;
 
           button {
             &::before {
-              color: $magv2-slick-dots;
+              color: $magv2-slick-dots-active;
               opacity: 1;
-            }
-          }
-
-          &.slick-active {
-            background: transparent !important;
-
-            button {
-              &::before {
-                color: $magv2-slick-dots-active;
-                opacity: 1;
-              }
             }
           }
         }
       }
+    }
 
-      .slick-slider {
-        margin-#{$right}: -1.25rem;
-        margin-#{$left}: -1.25rem;
-      }
+    .slick-slider {
+      margin-#{$right}: -1.25rem;
+      margin-#{$left}: -1.25rem;
     }
   }
 
@@ -150,12 +148,45 @@
         margin: 0 auto;
       }
 
-      @include breakpoint($upto-desktop) {
-        .fullscreen-slider-wrapper {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
+      .fullscreen-slider-wrapper--mini {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .slick-slider {
+          .slick-next,
+          .slick-prev {
+            bottom: -0.3125rem;
+            top: auto;
+            width: auto;
+
+            &::before {
+              background: none !important;
+            }
+          }
+
+          .slick-prev {
+            @include icon(chevron#{$left}) {
+              font-size: 3rem;
+              height: 3rem;
+              width: 3rem;
+            }
+          }
+
+          .slick-next {
+            @include icon(chevron#{$right}) {
+              font-size: 3rem;
+              height: 3rem;
+              width: 3rem;
+            }
+          }
+
+          .slick-dots {
+            bottom: 1.875rem;
+            top: auto;
+            width: auto;
+          }
         }
       }
     }
@@ -202,16 +233,6 @@
           bottom: unset;
         }
 
-        @include breakpoint($upto-desktop) {
-          bottom: -0.3125rem;
-          top: auto;
-          width: auto;
-
-          &::before {
-            background: none !important;
-          }
-        }
-
         &::before {
           background: $magv2-gallery-slider-bg;
           color: $magv2-slider-icon-bg;
@@ -241,12 +262,6 @@
             width: 5.25rem;
             font-size: 3rem;
           }
-
-          @include breakpoint($upto-desktop) {
-            font-size: 3rem;
-            height: 3rem;
-            width: 3rem;
-          }
         }
       }
 
@@ -267,12 +282,6 @@
             width: 5.25rem;
             font-size: 3rem;
           }
-
-          @include breakpoint($upto-desktop) {
-            font-size: 3rem;
-            height: 3rem;
-            width: 3rem;
-          }
         }
       }
 
@@ -281,12 +290,6 @@
         bottom: 3.375rem;
         left: 50%;
         transform: translate(-50%, 0);
-
-        @include breakpoint($upto-desktop) {
-          bottom: 1.875rem;
-          top: auto;
-          width: auto;
-        }
 
         li {
           border: none;

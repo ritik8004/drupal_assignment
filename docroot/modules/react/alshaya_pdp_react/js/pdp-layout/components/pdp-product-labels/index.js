@@ -1,17 +1,7 @@
 import React from 'react';
 
 const PdpProductLabels = (props) => {
-  const { productLabels } = drupalSettings;
-  const { configurableCombinations } = drupalSettings;
-  const { skuCode } = props;
-  let variantSelected = skuCode;
-  let labels = productLabels[skuCode];
-
-  // For configurable products.
-  if (document.getElementById('pdp-add-to-cart-form') && configurableCombinations) {
-    variantSelected = document.getElementById('pdp-add-to-cart-form').getAttribute('variantselected');
-    labels = productLabels[variantSelected];
-  }
+  const { labels, skuCode, variantSelected } = props;
 
   if (!(labels && Array.isArray(labels) && labels.length)) return null;
 
@@ -49,7 +39,7 @@ const PdpProductLabels = (props) => {
 };
 
 const PdpProductLabel = (props) => {
-  const { bifercatedLabels, directionKey } = props;
+  const { bifercatedLabels, directionKey, context } = props;
   return (
     <>
       {
@@ -57,7 +47,7 @@ const PdpProductLabel = (props) => {
           // BE to provide and add a unique key here.
           <div className={`labels ${labelItem.position}`}>
             <img
-              src={labelItem.image.url || ''}
+              src={(context === 'main') ? labelItem.image.url : labelItem.image}
               alt={labelItem.image.alt || ''}
               title={labelItem.image.title || ''}
             />

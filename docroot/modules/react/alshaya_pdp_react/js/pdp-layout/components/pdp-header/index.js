@@ -16,6 +16,7 @@ export default class PdpHeader extends React.PureComponent {
       skuCode,
       productInfo,
       configurableCombinations,
+      context,
     } = this.props;
 
     const { checkoutFeatureStatus } = drupalSettings;
@@ -41,6 +42,7 @@ export default class PdpHeader extends React.PureComponent {
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}
             shortDetail="true"
+            animateTitlePrice
           />
           <div id="block-alshayareactcartminicartblock" dataBlockPluginId="alshaya_react_mini_cart" className="block block-alshaya-spc block-alshaya-react-mini-cart">
             <div id="mini-cart-wrapper">
@@ -59,6 +61,7 @@ export default class PdpHeader extends React.PureComponent {
             brandLogoTitle={brandLogoTitle}
             finalPrice={finalPrice}
             pdpProductPrice={pdpProductPrice}
+            animateTitlePrice
           />
           {(checkoutFeatureStatus === 'enabled') ? (
             <div id="sticky-header-btn">
@@ -68,7 +71,7 @@ export default class PdpHeader extends React.PureComponent {
                     className="magv2-button"
                     type="submit"
                     id="add-to-cart-sticky"
-                    onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo)}
+                    onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo, context)}
                   >
                     {Drupal.t('Add To Bag')}
                   </button>
@@ -77,7 +80,7 @@ export default class PdpHeader extends React.PureComponent {
                     className="magv2-button"
                     type="submit"
                     id="add-to-cart-sticky"
-                    onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo)}
+                    onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo, context)}
                   >
                     {Drupal.t('Add To Bag')}
                   </button>
