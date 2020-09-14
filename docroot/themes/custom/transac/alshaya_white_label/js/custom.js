@@ -301,7 +301,7 @@
       });
 
       $(document, context).on('click', function(e) {
-        const displayState = $('.aura-header-popup-wrapper').css('display');
+        var displayState = $('.aura-header-popup-wrapper').css('display');
 
         if (displayState !== 'none') {
           if (!($(e.target).closest('.aura-header-popup-wrapper').length)) {
