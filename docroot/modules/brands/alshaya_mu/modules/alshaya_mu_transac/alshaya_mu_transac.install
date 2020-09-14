@@ -10,7 +10,7 @@
  *
  * [5.7.0] Add field for new attribute `white_glove_delivery`.
  */
-function alshaya_mu_transac_update_8004() {
+function alshaya_mu_transac_update_8003() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
