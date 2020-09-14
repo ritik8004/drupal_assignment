@@ -915,7 +915,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   TRUE if category is L1.
    */
   public function isCategoryL1(TermInterface $category) {
-    $depth = (int) $category->get('depth_level')->getString();
+    $depth = (int) taxonomy_term_depth_get_by_tid($category->id());
     return $depth === $this->getL1DepthLevel();
   }
 
