@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\Core\Url;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -362,7 +363,7 @@ class ProductResource extends ResourceBase {
 
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
 
-    $data['promotions'] = [];
+    $data['promotions'] = $this->getPromotions($sku);
     $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
     if ($promo_label) {
       $data['promotions'][] = [
@@ -421,14 +422,6 @@ class ProductResource extends ResourceBase {
     // Allow other modules to alter light product data.
     $type = 'full';
     $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
-
-    if (!empty($data['promotions'])) {
-      $promo_nodes = array_column($data['promotions'], 'promo_node');
-      array_walk($promo_nodes, function (&$nid) {
-        $nid = 'node:' . $nid;
-      });
-      $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $promo_nodes);
-    }
 
     return $data;
   }
@@ -580,6 +573,36 @@ class ProductResource extends ResourceBase {
     }
 
     return $combinations;
+  }
+
+  /**
+   * Wrapper function get promotions.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Promotions.
+   */
+  private function getPromotions(SKUInterface $sku): array {
+    $promotions = [];
+    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
+    foreach ($promotions_data as $nid => $promotion) {
+      $this->cache['tags'][] = 'node:' . $nid;
+
+      if (isset($promotion['type']) && $promotion['type'] === 'free_gift') {
+        continue;
+      }
+
+      $promotions[] = [
+        'text' => $promotion['text'],
+        'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+          '',
+          Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString(TRUE)->getGeneratedUrl()),
+        'promo_node' => $nid,
+      ];
+    }
+    return $promotions;
   }
 
   /**

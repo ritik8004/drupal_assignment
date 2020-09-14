@@ -362,6 +362,7 @@ function alshaya_acm_promotion_sku_variant_info_alter(array &$variant, SKUInterf
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
   $variant['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($child, 'api');
+  $variant['freeGiftPromotion'] = $promoLabelManager->getPromotionLabelForProductDetail($child, 'free_gift');
 }
 
 /**
@@ -371,11 +372,14 @@ function alshaya_acm_promotion_sku_product_info_alter(array &$product_info, SKUI
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
   $product_info['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'api');
+  $product_info['freeGiftPromotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift');
 }
 
 /**
  * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
 function alshaya_acm_promotion_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
-  $data['promotions'] = \Drupal::service('alshaya_acm_promotion.label_manager')->getPromotionLabelForProductDetail($sku, 'api');
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+  $data['freeGiftPromotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift');
 }
