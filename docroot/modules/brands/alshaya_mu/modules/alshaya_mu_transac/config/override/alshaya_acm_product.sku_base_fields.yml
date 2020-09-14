@@ -71,3 +71,6 @@ fields:
   p_weight:
     label: 'Piece Weight'
     type: 'string'
+  white_glove_delivery:
+    label: 'White Glove Delivery'
+    type: 'string'
