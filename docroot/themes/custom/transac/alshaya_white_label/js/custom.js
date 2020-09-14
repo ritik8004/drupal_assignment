@@ -294,13 +294,13 @@
 
   Drupal.behaviors.auraHeaderPopup = {
     attach: function (context) {
-      $('.aura-header-link a', context).on('click', function(e) {
+      $('.aura-header-link a', context).on('click', function (e) {
         e.preventDefault();
         $('.aura-header-popup-wrapper').toggle();
         e.stopPropagation();
       });
 
-      $(document, context).on('click', function(e) {
+      $(document, context).on('click', function (e) {
         var displayState = $('.aura-header-popup-wrapper').css('display');
 
         if (displayState !== 'none') {
