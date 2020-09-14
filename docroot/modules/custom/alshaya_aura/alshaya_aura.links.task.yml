@@ -1,0 +1,4 @@
+alshaya_aura.aura_loyalty_config:
+  route_name: alshaya_aura.aura_loyalty_config
+  title: 'Alshaya AURA Configurations'
+  base_route: alshaya_aura.aura_loyalty_config

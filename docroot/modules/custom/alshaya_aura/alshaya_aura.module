@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Contains alshaya_aura.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_aura_theme() {
+  $theme = [
+    'aura_rewards_header' => [
+      'variables' => [
+        'learn_more_link' => '',
+      ],
+    ],
+  ];
+
+  return $theme;
+}
