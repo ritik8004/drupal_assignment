@@ -10,6 +10,21 @@
  *
  * Adding arabic translations for the LHN.
  */
+function alshaya_super_category_update_8006() {
+  $strings = [
+    'Brands' => [
+      'ar' => 'العلامات التجارية',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding arabic translations for the LHN.
+ */
 function alshaya_super_category_update_8005() {
   $strings = [
     'Brands/Category' => [
@@ -90,6 +105,9 @@ function alshaya_super_category_install() {
   $strings = [
     'Brands/Category' => [
       'ar' => 'الماركات/الفئة',
+    ],
+    'Brands' => [
+      'ar' => 'العلامات التجارية',
     ],
   ];
 
