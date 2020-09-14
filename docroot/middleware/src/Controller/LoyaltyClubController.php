@@ -43,7 +43,7 @@ class LoyaltyClubController {
   protected $utility;
 
   /**
-   * Aura constructor.
+   * LoyaltyClubController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
    *   Magento API wrapper service.
@@ -69,8 +69,8 @@ class LoyaltyClubController {
   /**
    * Returns the loyalty points related data for the current user.
    *
-   * @return array
-   *   The loyalty points related data for the current user.
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   The loyalty points related data for the current user or error message.
    */
   public function getCustomerPoints() {
     $customer_id = $this->drupal->getSessionCustomerInfo()['customer_id'];
@@ -80,8 +80,8 @@ class LoyaltyClubController {
       return new JsonResponse($this->utility->getErrorResponse('No user in session', Response::HTTP_NOT_FOUND));
     }
 
-    $endpoint = '/customers/apc-points-balance/' . $customer_id;
     try {
+      $endpoint = sprintf('/customers/apc-points-balance/%s', $customer_id);
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
 
       return new JsonResponse([
@@ -91,7 +91,7 @@ class LoyaltyClubController {
       ]);
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to fetch loyalty points for user with customer id @customer_id', [
+      $this->logger->notice('Error while trying to fetch loyalty points for user with customer id @customer_id.', [
         '@customer_id' => $customer_id,
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
