@@ -1,4 +1,4 @@
-@javascript @smoke
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
 Feature: Test the My Account functionality
 
   Background:

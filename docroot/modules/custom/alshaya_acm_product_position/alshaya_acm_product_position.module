@@ -185,6 +185,7 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
   $plp_forms = [
     'views-exposed-form-alshaya-product-list-block-1',
     'views-exposed-form-alshaya-product-list-block-2',
+    'views-exposed-form-alshaya-product-list-block-3',
   ];
 
   if (isset($form['#id']) && in_array($form['#id'], $plp_forms)) {

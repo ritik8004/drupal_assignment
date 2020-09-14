@@ -1,4 +1,4 @@
-@javascript @madaPayment @auth @clickCollect @bbwsaprod
+@javascript @madaPayment @auth @clickCollect @vssapprod @vssaprod @vssapprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticated User
 
   Background:
@@ -31,6 +31,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {store_area} |
@@ -84,6 +85,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
@@ -133,6 +135,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
@@ -180,6 +183,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {store_area} |
@@ -230,6 +234,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {language_store_area} |
@@ -280,6 +285,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for the page to load
     Then I add the store details with:
       | edit-store-location | {language_store_area} |

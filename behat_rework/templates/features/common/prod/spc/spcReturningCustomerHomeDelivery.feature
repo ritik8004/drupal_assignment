@@ -31,8 +31,10 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -41,7 +43,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -78,8 +79,10 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -88,7 +91,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
@@ -123,8 +125,10 @@ Feature: SPC Checkout Home Delivery COD for returning customer
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -133,7 +137,6 @@ Feature: SPC Checkout Home Delivery COD for returning customer
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element

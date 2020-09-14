@@ -8,7 +8,6 @@ variables:
   size_filter: ''
   filters: 'جميع اختياراتك'
   promotional_filter: ''
-  spc_basket_page: '/shop-baby-clothing/baby-newborn-18-months/'
   create_account: 'تسجيل مستخدم جديد'
   sign_in: 'تسجيل الدخول'
   find_store: 'البحث عن محلاتنا'

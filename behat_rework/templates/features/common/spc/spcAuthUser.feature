@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth
+@javascript @account @smoke @auth @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
 Feature: Test the My Account functionality
 
   Background:
@@ -26,6 +26,8 @@ Feature: Test the My Account functionality
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
     Then I select "{city_option}" from "field_address[0][address][area_parent]" address
+    And I wait 2 seconds
+    Then I select "{governorate}" from "field_address[0][address][area_parent]" address
     And I wait 2 seconds
     Then I select "{area_option}" from "field_address[0][address][administrative_area]" address
     When I scroll to the ".country-field-wrapper" element

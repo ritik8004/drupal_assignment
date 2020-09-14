@@ -1,4 +1,4 @@
-@javascript @smoke @mcsaprod @mcaeprod @mckwprod @bbwaeprod @bbwsaprod @bbwkwprod
+@javascript @smoke @mcsaprod @mcsapprod @mcaeprod @mcaepprod @mckwprod @mckwpprod @bbwaeprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @mcaepprod @hmkwpprod @vssaprod @vssapprod @vsaeprod @vsaepprod @pbaeprod @pbaepprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcaeprod @mcaepprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmaeprod @hmaepprod @flaeprod @flaepprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: Test the My Account functionality
 
   Background:
@@ -14,7 +14,7 @@ Feature: Test the My Account functionality
     And the element "#block-page-title .c-page-title" should exist
     And the element "#block-userrecentorders" should exist
     And the element "#block-userrecentorders .subtitle" should exist
-    And the element "#block-userrecentorders table.recent__orders--list" should exist
+    And the element "#block-userrecentorders .no--orders" should exist
 
   Scenario: As an authenticated user, I should be able to see all the sections after logging in
     Then I should see the link "my account" in "#block-alshayamyaccountlinks .my-account-nav" section
