@@ -99,6 +99,7 @@
 
       // Calculate l2 height
       if ($(this).hasClass('has-child')) {
+        activeMenu.parents(menuLevel2).css('height', 'auto');
         Drupal.setInlineMenuHeight(activeMenu, menuLevel3);
       }
     });
