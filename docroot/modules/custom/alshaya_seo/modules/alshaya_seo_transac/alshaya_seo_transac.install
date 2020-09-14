@@ -216,26 +216,12 @@ function alshaya_seo_transac_update_8401() {
  * Implements hook_install().
  */
 function alshaya_seo_transac_install() {
+  \Drupal::configFactory()
+    ->getEditable('simple_sitemap.variants.default_hreflang')
+    ->delete();
+
   // Install metatag transalations.
   _alshaya_seo_transac_save_metatag_translations();
-
-  // Configure default variant.
-  _alshaya_seo_transac_configure_default_variant();
-
-  $configure_default_variants = [
-    'simple_sitemap.bundle_settings.default.node.acq_product',
-    'simple_sitemap.bundle_settings.default.taxonomy_term.acq_product_category',
-  ];
-
-  alshaya_config_install_configs($configure_default_variants, 'alshaya_seo_transac');
-
-  $configure_default_variants = [
-    'simple_sitemap.bundle_settings.default.node.advanced_page',
-    'simple_sitemap.bundle_settings.default.node.department_page',
-    'simple_sitemap.bundle_settings.default.node.store',
-  ];
-
-  alshaya_config_install_configs($configure_default_variants, 'alshaya_seo');
 
   // Set default value for twitter cards creator.
   $config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
@@ -245,6 +231,7 @@ function alshaya_seo_transac_install() {
       $config->set($key, $value);
     }
   }
+
   $config->save();
 }
 
@@ -289,12 +276,14 @@ function _alshaya_seo_transac_save_metatag_translations() {
  * Wrapper function to configure default variant.
  */
 function _alshaya_seo_transac_configure_default_variant() {
-  $variants = \Drupal::service('simple_sitemap.generator')->getSitemapManager()->getSitemapVariants();
+  /** @var \Drupal\simple_sitemap\Simplesitemap $sitemap_generator */
+  $sitemap_generator = \Drupal::service('simple_sitemap.generator');
+  $variants = $sitemap_generator->getSitemapManager()->getSitemapVariants();
   if ($variants['default']['type'] !== 'alshaya_hreflang') {
     $variants['default']['type'] = 'alshaya_hreflang';
     // @see alshaya_seo_transac_update_8411()
     $variants['default']['weight'] = 999999;
-    \Drupal::service('simple_sitemap.generator')->getSitemapManager()->addSitemapVariant('default', $variants['default']);
+    $sitemap_generator->getSitemapManager()->addSitemapVariant('default', $variants['default']);
   }
 
   // Set the default variant again.
