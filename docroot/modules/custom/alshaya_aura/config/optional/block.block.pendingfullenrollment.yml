@@ -1,0 +1,40 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_aura
+    - system
+    - user
+  theme:
+    - alshaya_white_label
+id: pendingfullenrollment
+theme: alshaya_white_label
+region: content
+weight: -75
+provider: null
+plugin: pending_full_enrollment
+settings:
+  id: pending_full_enrollment
+  label: 'Pending Full Enrollment'
+  provider: alshaya_aura
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: '/user/*'
+    negate: false
+    context_mapping: {  }
+  aura_status_condition:
+    id: aura_status_condition
+    status:
+      linked_not_verified: linked_not_verified
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+  user_role:
+    id: user_role
+    roles:
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
