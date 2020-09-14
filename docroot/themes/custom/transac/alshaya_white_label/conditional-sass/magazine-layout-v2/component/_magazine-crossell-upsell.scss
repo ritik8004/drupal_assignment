@@ -299,15 +299,15 @@
         &.top-left,
         &.top-right {
           position: absolute;
-          top: 1.1875rem;
+          top: 0.75rem;
         }
 
         &.top-left {
-          #{$left}: 1.25rem;
+          #{$left}: 0.9375rem;
         }
 
         &.top-right {
-          #{$right}: 1.25rem;
+          #{$right}: 0.9375rem;
         }
 
         &.bottom-left,
@@ -322,6 +322,7 @@
 
         &.bottom-right {
           justify-content: flex-end;
+          padding-#{$right}: 0;
         }
 
         img {
