@@ -106,7 +106,7 @@ export const triggerAddToCart = (
     let productUrl = (context === 'main') ? productInfo[skuCode].url : productInfo[skuCode].link;
     let price = (context === 'main') ? productInfo[skuCode].priceRaw : productInfo[skuCode].final_price;
 
-    let promotions = productInfo[skuCode].promotionsRaw;
+    const promotions = productInfo[skuCode].promotionsRaw;
     let productDataSKU = productData.sku;
     let parentSKU = productData.parentSku;
 
@@ -120,7 +120,6 @@ export const triggerAddToCart = (
       productDataSKU = productData.variant;
       price = productVariantInfo.priceRaw;
       parentSKU = productVariantInfo.parent_sku;
-      promotions = productVariantInfo.promotionsRaw;
       configurables = (context === 'main') ? productVariantInfo.configurableOptions : productVariantInfo.configurable_values;
       maxSaleQty = (context === 'main') ? productVariantInfo.maxSaleQty : productVariantInfo.max_sale_qty;
       maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
