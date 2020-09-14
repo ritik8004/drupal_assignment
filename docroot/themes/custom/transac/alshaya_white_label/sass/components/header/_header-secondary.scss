@@ -472,7 +472,7 @@ body {
         right: calc(100% - 1.5625rem);
         top: calc(100% + 0.3125rem);
 
-        &:before {
+        &::before {
           content: "";
           color: $border-color;
           font-size: 1.313rem;
@@ -505,6 +505,7 @@ body {
             }
           }
         }
+
         .aura-popup-footer {
           a {
             font-size: 0.875rem;
