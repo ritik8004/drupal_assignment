@@ -15,6 +15,15 @@ use Drupal\facets\Entity\Facet;
  * [5.7.0] Update metatag translations.
  */
 function alshaya_bp_transac_update_8007() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'metatag.metatag_defaults.node__advanced_page',
+      'metatag.metatag_defaults.node__acq_product',
+    ],
+    'alshaya_seo_transac'
+  );
   _alshaya_bp_transac_save_metatag_translations();
 }
 
