@@ -36,10 +36,10 @@ fields:
     type: 'string'
   short_description1:
     label: 'Short Description 1'
-    type: 'string'
+    type: 'text_long'
   short_description2:
     label: 'Short Description 2'
-    type: 'string'
+    type: 'text_long'
   spec_en:
     label: 'Spec En'
     type: 'string'
