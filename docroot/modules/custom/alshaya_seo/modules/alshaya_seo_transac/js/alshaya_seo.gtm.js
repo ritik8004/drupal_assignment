@@ -124,21 +124,12 @@ const productRecommendationsSuffix = 'pr-';
       });
 
       // Push GTM event on add to cart failure.
-      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productInfo) {
-        var sku = productInfo.parentSku;
-        var errorMessage = $('.errors-container .error', $(this)).text();
-        // Get selected attributes.
-        var attributes = [];
-        $('#configurable_ajax select', $(this)).each(function() {
-          var configLabel = $(this).attr('data-default-title');
-          var configValue = $('option:selected', $(this)).text();
-          var attribute = configLabel + ': ' + configValue;
-          attributes.push(attribute);
-        });
+      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e) {
+        const sku = (e.detail.productData.parentSku !== 'undefined') ? e.detail.productData.parentSku : null;
         // Set Event label.
         var label = 'Update cart failed for Product [' + sku + '] ';
-        label = label + attributes.join(', ');
-        Drupal.logJavascriptError(label, errorMessage, GTM_CONSTANTS.CART_ERRORS);
+        label = label + e.detail.productData.options.join(', ');
+        Drupal.logJavascriptError(label, e.detail.message, GTM_CONSTANTS.CART_ERRORS);
       });
 
       // Global variables & selectors.

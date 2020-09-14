@@ -109,8 +109,27 @@
                   var cleaned_sku = $(form).attr('data-cleaned-sku');
                   // Showing the error message.
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
-                  // Trigger the failed event for other listeners.
-                  $(form).trigger('product-add-to-cart-failed', [productData, response]);
+
+                  // Process required data and trigger add to cart failure event.
+                  const selectedOptions = [];
+                  // Get the key-value pair of selected option name and value.
+                  document.querySelectorAll('#configurable_ajax select').forEach(element => {
+                    const configLabel = element.getAttribute('data-default-title');
+                    const configValue = element.querySelector('option:selected').innerHTML;
+                    const option = `${configLabel}: ${configValue}`;
+                    selectedOptions.push(option);
+                  });
+                  productData.options = selectedOptions;
+                  // Prepare the event.
+                  const cartNotification = new CustomEvent('product-add-to-cart-failed', {
+                    bubbles: true,
+                    detail: {
+                      productData,
+                      message: response.error_message,
+                    },
+                  });
+                  // Dispatch event so that handlers can process it.
+                  form[0].dispatchEvent(cartNotification);
                 }
                 else if (response.cart_id) {
                   if (response.response_message.status === 'success'
