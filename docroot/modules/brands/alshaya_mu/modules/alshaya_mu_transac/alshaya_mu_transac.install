@@ -8,6 +8,29 @@
 /**
  * Implements hook_update_N().
  *
+ * [5.7.0] Add field for new attribute `white_glove_delivery`.
+ * Update type for attributes `short_description1`, `short_description2`.
+ */
+function alshaya_mu_transac_update_8003() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'alshaya_acm_product.sku_base_fields',
+      'alshaya_acm_product.pdp_modal_links',
+    ],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->resetBaseFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.6.0] Update acquia search facet configuration.
  */
 function alshaya_mu_transac_update_8002() {
