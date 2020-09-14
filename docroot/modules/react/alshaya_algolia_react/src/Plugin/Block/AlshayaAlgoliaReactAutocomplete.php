@@ -334,7 +334,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       $filter_facets['super_category'] = [
         'identifier' => 'super_category',
         'name' => $this->t('Super Category'),
-        'label' => $this->t('Brand'),
+        'label' => $this->t('Brands'),
         'widget' => [
           'type' => 'menu',
         ],
