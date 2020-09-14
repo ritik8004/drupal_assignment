@@ -312,6 +312,10 @@ body[class^="super-category"] {
           }
         }
       }
+
+      @include breakpoint($desktop) {
+        margin-top: 0 !important;
+      }
     }
 
     @include breakpoint($only-mobile) {
