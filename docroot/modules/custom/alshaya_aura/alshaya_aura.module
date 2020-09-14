@@ -15,7 +15,7 @@ function alshaya_aura_theme() {
         'learn_more_link' => '',
       ],
     ],
-    'pending_full_enrollment' => [
+    'aura_pending_enrollment' => [
       'variables' => [],
     ],
   ];

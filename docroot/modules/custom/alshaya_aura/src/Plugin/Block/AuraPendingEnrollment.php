@@ -7,14 +7,14 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides `Pending Full Enrollment` block.
+ * Provides `AURA Pending Enrollment` block.
  *
  * @Block(
- *   id = "pending_full_enrollment",
- *   admin_label = @Translation("Pending Full Enrollment")
+ *   id = "aura_pending_enrollment",
+ *   admin_label = @Translation("AURA Pending Enrollment")
  * )
  */
-class PendingFullEnrollment extends BlockBase implements ContainerFactoryPluginInterface {
+class AuraPendingEnrollment extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}
@@ -34,7 +34,7 @@ class PendingFullEnrollment extends BlockBase implements ContainerFactoryPluginI
    */
   public function build() {
     return [
-      '#theme' => 'pending_full_enrollment',
+      '#theme' => 'aura_pending_enrollment',
     ];
   }
 

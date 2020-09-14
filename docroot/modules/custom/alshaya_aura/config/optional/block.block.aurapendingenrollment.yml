@@ -7,15 +7,15 @@ dependencies:
     - user
   theme:
     - alshaya_white_label
-id: pendingfullenrollment
+id: aurapendingenrollment
 theme: alshaya_white_label
 region: content
 weight: -75
 provider: null
-plugin: pending_full_enrollment
+plugin: aura_pending_enrollment
 settings:
-  id: pending_full_enrollment
-  label: 'Pending Full Enrollment'
+  id: aura_pending_enrollment
+  label: 'AURA Pending Enrollment'
   provider: alshaya_aura
   label_display: '0'
 visibility:
