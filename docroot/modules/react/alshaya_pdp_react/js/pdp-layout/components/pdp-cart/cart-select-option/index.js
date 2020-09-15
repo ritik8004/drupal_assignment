@@ -85,6 +85,13 @@ class CartSelectOption extends React.Component {
         const variantUrl = variantInfo.url[currentLanguage];
         if (window.location.pathname !== variantUrl) {
           window.history.replaceState(variantInfo, variantInfo.title, variantUrl);
+          // Language switcher.
+          let i;
+          const langSwitcherElem = document.querySelectorAll('.language-switcher-language-url .language-link');
+          for (i = 0; i < langSwitcherElem.length; i++) {
+            const hrefLang = langSwitcherElem[i].getAttribute('hreflang');
+            langSwitcherElem[i].setAttribute('href', variantInfo.url[hrefLang]);
+          }
         }
       }
     }
