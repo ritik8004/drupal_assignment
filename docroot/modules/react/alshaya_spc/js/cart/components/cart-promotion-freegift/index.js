@@ -22,7 +22,7 @@ const CartPromotionFreeGift = ({ promo, couponCode }) => {
             <a
               className="use-ajax"
               data-dialog-type="modal"
-              href={Drupal.url(promo.promo_web_url)}
+              href={promo.promo_web_url}
             >
               {promo.promo_title}
             </a>
