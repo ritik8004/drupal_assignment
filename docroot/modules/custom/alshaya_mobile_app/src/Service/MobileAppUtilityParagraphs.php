@@ -356,6 +356,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
               'field_promo_theme' => [
                 'label' => 'theme',
               ] + $default_values,
+              'field_description' => [
+                'label' => 'description',
+              ] + $default_values,
             ],
           ],
         ],

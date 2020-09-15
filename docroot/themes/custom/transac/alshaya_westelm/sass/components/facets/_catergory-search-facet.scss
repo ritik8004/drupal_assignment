@@ -1,0 +1,13 @@
+.c-sidebar-first .c-facet__blocks {
+  .block-facet-blockcategory-facet-search {
+    .facet-item {
+      &.is-active:not(.facet-item--expanded):not(.sale-item) {
+        span {
+          html[lang=ar] & {
+            font-family: $we-bold;
+          }
+        }
+      }
+    }
+  }
+}

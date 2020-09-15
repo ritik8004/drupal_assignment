@@ -216,11 +216,13 @@ function alshaya_seo_transac_update_8401() {
  * Implements hook_install().
  */
 function alshaya_seo_transac_install() {
+  \Drupal::configFactory()
+    ->getEditable('simple_sitemap.variants.default_hreflang')
+    ->delete();
+
   // Install metatag transalations.
   _alshaya_seo_transac_save_metatag_translations();
 
-  // Configure default variant.
-  _alshaya_seo_transac_configure_default_variant();
   // Set default value for twitter cards creator.
   $config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.global');
   $metatag_defaults_settings = Settings::get('metatag.metatag_defaults.global');
@@ -229,6 +231,7 @@ function alshaya_seo_transac_install() {
       $config->set($key, $value);
     }
   }
+
   $config->save();
 }
 
@@ -273,11 +276,14 @@ function _alshaya_seo_transac_save_metatag_translations() {
  * Wrapper function to configure default variant.
  */
 function _alshaya_seo_transac_configure_default_variant() {
-  $variants = \Drupal::service('simple_sitemap.generator')->getSitemapManager()->getSitemapVariants();
+  /** @var \Drupal\simple_sitemap\Simplesitemap $sitemap_generator */
+  $sitemap_generator = \Drupal::service('simple_sitemap.generator');
+  $variants = $sitemap_generator->getSitemapManager()->getSitemapVariants();
   if ($variants['default']['type'] !== 'alshaya_hreflang') {
     $variants['default']['type'] = 'alshaya_hreflang';
-    $variants['default']['weight'] = -1;
-    \Drupal::service('simple_sitemap.generator')->getSitemapManager()->addSitemapVariant('default', $variants['default']);
+    // @see alshaya_seo_transac_update_8411()
+    $variants['default']['weight'] = 999999;
+    $sitemap_generator->getSitemapManager()->addSitemapVariant('default', $variants['default']);
   }
 
   // Set the default variant again.

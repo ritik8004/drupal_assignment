@@ -89,7 +89,41 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'short_description':
         $this->processShortDescription($event);
         break;
+
+      case 'collection_labels':
+        $this->processCollectionLabels($event);
+        break;
     }
+  }
+
+  /**
+   * Get collection labels from sku.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processCollectionLabels(ProductInfoRequestedEvent $event) {
+    $sku = $event->getSku();
+    $context = $event->getContext();
+    $config = $this->configFactory->get('alshaya_hm.label_order.settings');
+    $collection_attributes = $config->get($context);
+    $labels = [];
+
+    foreach ($collection_attributes as $attribute) {
+      if ($attribute_value = $sku->get($attribute)->getString()) {
+        $labels[] = [
+          'content' => $attribute_value,
+          'class' => $attribute,
+        ];
+
+        if ($context === 'plp') {
+          // In plp we only display a single label.
+          break;
+        }
+      }
+    }
+
+    $event->setValue($labels);
   }
 
   /**
@@ -132,8 +166,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       return $static[$sku_entity->language()->getId()][$sku_entity->getSku()];
     }
 
-    $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
-
     $description_value = '';
     if ($body = $sku_entity->get('attr_description')->getValue()) {
       $description_value = '<div class="description-first">';
@@ -142,84 +174,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $description_value .= '<div class="description-details">';
-    if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
-      $concepts_markup = [
-        '#theme' => 'product_concept_markup',
-        '#title' => $this->t('concept', [], ['langcode' => $sku_entity->language()->getId()]),
-        '#concepts' => $concepts,
-      ];
-      $description_value .= $this->renderer->renderPlain($concepts_markup);
-    }
-
-    // Render the wrapper div for composition always so that the same can be
-    // filled with data on variant selection.
-    // Prepare the description variable.
-    $composition = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
-
-    if (!empty($composition)) {
-      $composition_markup = [
-        '#theme' => 'product_composition_markup',
-        '#title' => $this->t('composition', [], ['langcode' => $sku_entity->language()->getId()]),
-        '#composition' => ['#markup' => $composition],
-      ];
-      $description_value .= $this->renderer->renderPlain($composition_markup);
-    }
-
-    $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
-    $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
-    if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
-      $description_value .= '<div class="care-instructions-wrapper">';
-      $description_value .= '<div class="care-instructions-label">' . $this->t('care instructions', [], ['langcode' => $sku_entity->language()->getId()]) . '</div>';
-      if (!empty($washing_instructions)) {
-        $description_value .= '<div class="care-instructions-value washing-instructions">' . $washing_instructions . '</div>';
-      }
-      if (!empty($dry_cleaning_instructions)) {
-        $description_value .= '<div class="care-instructions-value dry-cleaning-instructions">' . $dry_cleaning_instructions . '</div>';
-      }
-      $description_value .= '</div>';
-    }
-
-    if ($title_name = $sku_entity->get('attr_title_name')->getString()) {
-      $title_name_markup = [
-        '#theme' => 'product_title_name_markup',
-        '#title' => $this->t('TITLE NAME'),
-        '#title_name' => $title_name,
-      ];
-      $description_value .= $this->renderer->renderPlain($title_name_markup);
-    }
-
-    if ($article_description = $sku_entity->get('attr_article_description')->getString()) {
-      $article_description_markup = [
-        '#theme' => 'product_article_description_markup',
-        '#title' => $this->t('ARTICLE DESCRIPTION'),
-        '#article_description' => ['#markup' => $article_description],
-      ];
-      $description_value .= $this->renderer->renderPlain($article_description_markup);
-    }
-
-    // Render SKU id for magazine layou on PDP.
-    if (!empty($sku_entity->getSku())) {
-      $item_code = [
-        '#theme' => 'product_item_code_markup',
-        '#title' => $this->t('ART NO'),
-        '#item_code' => $sku_entity->getSku(),
-      ];
-      $description_value .= $this->renderer->renderPlain($item_code);
-    }
-
-    // Render the wrapper div for article warning always so that the same
-    // can be filled with data on variant selection.
-    $warning = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
-
-    if (!empty($warning)) {
-      $warning_markup = [
-        '#theme' => 'product_article_warning_markup',
-        '#title' => $this->t('safety warning', [], ['langcode' => $sku_entity->language()->getId()]),
-        '#warning' => ['#markup' => $warning],
-      ];
-      $description_value .= $this->renderer->renderPlain($warning_markup);
-    }
-
+    $description_value .= $this->displayAttributesOnMain($sku_entity);
     $description_value .= '</div>';
 
     $description['value'] = [
@@ -269,90 +224,15 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       $prod_description[] = $specifications;
     }
 
-    // To display detailed description in overlay section.
-    $product_details = [];
-    if ($function = $sku_entity->get('attr_function')->getValue()) {
-      $product_details[] = ['label' => $this->t('FUNCTION'), 'data' => $function];
+    $product_details = $this->displayAttributesOnOverlay($sku_entity);
+    if (!empty($product_details)) {
+      $details_overlay_markup = [
+        '#theme' => 'pdp_additional_attribute_overlay',
+        '#properties' => $product_details,
+      ];
+
+      $prod_description[] = $details_overlay_markup;
     }
-
-    if ($age_group = $sku_entity->get('attr_age_group')->getValue()) {
-      $product_details[] = ['label' => $this->t('AGE GROUP'), 'data' => $age_group];
-    }
-
-    if ($style = $sku_entity->get('attr_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('STYLE'), 'data' => $style];
-    }
-
-    if ($clothing_style = $sku_entity->get('attr_clothing_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('CLOTHING STYLE'), 'data' => $clothing_style];
-    }
-
-    if ($collar_style = $sku_entity->get('attr_collar_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('COLLAR STYLE'), 'data' => $collar_style];
-    }
-
-    if ($neckline_style = $sku_entity->get('attr_neckline_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('NECKLINE STYLE'), 'data' => $neckline_style];
-    }
-
-    if ($accessories_style = $sku_entity->get('attr_accessories_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('ACCESSORIES STYLE'), 'data' => $accessories_style];
-    }
-
-    if ($footwear_style = $sku_entity->get('attr_footwear_style')->getValue()) {
-      $product_details[] = ['label' => $this->t('FOOTWEAR STYLE'), 'data' => $footwear_style];
-    }
-
-    if ($fit = $sku_entity->get('attr_fit')->getValue()) {
-      $product_details[] = ['label' => $this->t('FIT'), 'data' => $fit];
-    }
-
-    if ($descriptive_length = $sku_entity->get('attr_descriptive_length')->getValue()) {
-      $product_details[] = ['label' => $this->t('DESCRIPTIVE LENGTH'), 'data' => $descriptive_length];
-    }
-
-    if ($garment_length = $sku_entity->get('attr_garment_length')->getValue()) {
-      $product_details[] = ['label' => $this->t('GARMENT LENGTH'), 'data' => $garment_length];
-    }
-
-    if ($sleeve_length = $sku_entity->get('attr_sleeve_length')->getValue()) {
-      $product_details[] = ['label' => $this->t('SLEEVE LENGTH'), 'data' => $sleeve_length];
-    }
-
-    if ($waist_rise = $sku_entity->get('attr_waist_rise')->getValue()) {
-      $product_details[] = ['label' => $this->t('WAIST RISE'), 'data' => $waist_rise];
-    }
-
-    if ($heel_height = $sku_entity->get('attr_heel_height')->getValue()) {
-      $product_details[] = ['label' => $this->t('HEEL HEIGHT'), 'data' => $heel_height];
-    }
-
-    if ($measurements_in_cm = $sku_entity->get('attr_measurements_in_cm')->getValue()) {
-      $product_details[] = ['label' => $this->t('MEASURMENTS IN CM'), 'data' => $measurements_in_cm];
-    }
-
-    if ($fragrance_name = $sku_entity->get('attr_fragrance_name')->getValue()) {
-      $product_details[] = ['label' => $this->t('FRAGRANCE NAME'), 'data' => $fragrance_name];
-    }
-
-    if ($textual_print = $sku_entity->get('attr_textual_print')->getValue()) {
-      $product_details[] = ['label' => $this->t('TEXTUAL PRINT'), 'data' => $textual_print];
-    }
-
-    if ($article_license_company = $sku_entity->get('attr_article_license_company')->getValue()) {
-      $product_details[] = ['label' => $this->t('LICENSE COMPANY'), 'data' => $article_license_company];
-    }
-
-    if ($article_license_item = $sku_entity->get('attr_article_license_item')->getValue()) {
-      $product_details[] = ['label' => $this->t('Lisence Item'), 'data' => $article_license_item];
-    }
-
-    $details_overlay_markup = [
-      '#theme' => 'pdp_additional_attribute_overlay',
-      '#properties' => $product_details,
-    ];
-
-    $prod_description[] = $details_overlay_markup;
 
     // Add all variables to $build in the sequence in
     // which they should be displayed.
@@ -377,6 +257,138 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     $static[$sku_entity->language()->getId()][$sku_entity->getSku()] = $return;
     return $return;
+  }
+
+  /**
+   * Prepare description array for given sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   The sku entity.
+   *
+   * @return array
+   *   Return array of values for attributes to show in main section.
+   */
+  private function displayAttributesOnMain(SKU $sku_entity) {
+    $description_value = '';
+    if ($title_name = $sku_entity->get('attr_title_name')->getString()) {
+      $title_name_markup = [
+        '#theme' => 'product_title_name_markup',
+        '#title' => $this->t('TITLE NAME'),
+        '#title_name' => $title_name,
+      ];
+      $description_value .= $this->renderer->renderPlain($title_name_markup);
+    }
+
+    $list_of_attributes = [
+      'attr_fit' => 'FIT',
+      'attr_article_description' => 'ARTICLE DESCRIPTION',
+    ];
+
+    $properties = [];
+    foreach ($list_of_attributes as $key => $title) {
+      if ($value = $sku_entity->get($key)->getValue()) {
+        $properties[] = [
+          'title' => $this->t('@title', ['@title' => $title]),
+          'data' => $value,
+        ];
+      }
+    }
+
+    if (!empty($properties)) {
+      $pdp_main_attributes_markup = [
+        '#theme' => 'pdp_main_attributes_markup',
+        '#properties' => $properties,
+      ];
+      $description_value .= $this->renderer->renderPlain($pdp_main_attributes_markup);
+    }
+
+    $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
+    // Render the wrapper div for article warning always so that the same
+    // can be filled with data on variant selection.
+    $warning = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_article_warning', $search_direction);
+
+    if (!empty($warning)) {
+      $warning_markup = [
+        '#theme' => 'product_article_warning_markup',
+        '#title' => $this->t('safety warning', [], ['langcode' => $sku_entity->language()->getId()]),
+        '#warning' => ['#markup' => $warning],
+      ];
+      $description_value .= $this->renderer->renderPlain($warning_markup);
+    }
+
+    // Render SKU id for magazine layou on PDP.
+    if (!empty($sku_entity->getSku())) {
+      $item_code = [
+        '#theme' => 'product_item_code_markup',
+        '#title' => $this->t('ART NO'),
+        '#item_code' => $sku_entity->getSku(),
+      ];
+      $description_value .= $this->renderer->renderPlain($item_code);
+    }
+
+    return $description_value;
+  }
+
+  /**
+   * Prepare descriptions for given sku.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
+   *   The sku entity.
+   *
+   * @return array
+   *   Return array of values for attributes to show in overlay section.
+   */
+  private function displayAttributesOnOverlay(SKU $sku_entity) {
+    $product_details = [];
+    $list_of_attributes = [
+      'attr_product_designer_collection' => 'DESIGNER COLLECTION',
+      'attr_concept' => 'CONCEPT',
+      'attr_product_collection' => 'COLLECTION',
+      'attr_product_environment' => 'ENVIRONMENT',
+      'attr_product_quality' => 'QUALITY',
+      'attr_product_feature' => 'FEATURE',
+      'attr_function' => 'FUNCTION',
+      'attr_washing_instructions' => 'WASHING INSTRUCTION',
+      'attr_dry_cleaning_instructions' => 'DRY CLEAN INSTRUCTION',
+      'attr_style' => 'STYLE',
+      'attr_clothing_style' => 'CLOTHING STYLE',
+      'attr_collar_style' => 'COLLAR STYLE',
+      'attr_neckline_style' => 'NECKLINE STYLE',
+      'attr_accessories_style' => 'ACCESSORIES STYLE',
+      'attr_footwear_style' => 'FOOTWEAR STYLE',
+      'attr_fit' => 'FIT',
+      'attr_descriptive_length' => 'DESCRIPTIVE LENGTH',
+      'attr_garment_length' => 'GARMENT LENGTH',
+      'attr_sleeve_length' => 'SLEEVE LENGTH',
+      'attr_waist_rise' => 'WAIST RISE',
+      'attr_heel_height' => 'HEEL HEIGHT',
+      'attr_measurements_in_cm' => 'MEASURMENTS IN CM',
+      'attr_color_name' => 'COLOR NAME',
+      'attr_fragrance_name' => 'FRAGRANCE NAME',
+      'attr_article_fragrance_description' => 'FRAGRANCE DESCRIPTION',
+      'attr_article_pattern' => 'PATTERN',
+      'attr_article_visual_description' => 'VISUAL DESCRIPTION',
+      'attr_textual_print' => 'TEXTUAL PRINT',
+      'attr_article_license_company' => 'LICENSE COMPANY',
+      'attr_article_license_item' => 'LICENSE ITEM',
+    ];
+
+    foreach ($list_of_attributes as $key => $title) {
+      if ($attr_val = $sku_entity->get($key)->getValue()) {
+        $product_details[] = [
+          'label' => $this->t('@title', ['@title' => $title]),
+          'data' => $attr_val,
+        ];
+      }
+    }
+
+    $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
+    $composition = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
+    if (!empty($composition)) {
+      $product_details[] = ['label' => $this->t('COMPOSITION'), 'composition' => ['#markup' => $composition]];
+    }
+
+    return $product_details;
   }
 
 }

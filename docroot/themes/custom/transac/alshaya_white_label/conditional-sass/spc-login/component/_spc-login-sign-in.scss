@@ -514,6 +514,10 @@
 
   @include breakpoint($upto-desktop) {
     margin: 0;
+
+    html[lang=ar] & {
+      margin-top: 0;
+    }
   }
 
   .site-brand-wrapper {
@@ -527,8 +531,10 @@
       height: 3.25rem;
     }
 
-    @include breakpoint($only-tablet) {
-      height: 4.5rem;
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        height: auto;
+      }
     }
   }
 
@@ -536,6 +542,13 @@
     a {
       @include breakpoint($only-mobile) {
         margin: 0;
+      }
+
+      @include breakpoint($desktop) {
+        html[lang=ar] & {
+          height: auto;
+          margin: 0.5rem 0;
+        }
       }
     }
   }

@@ -1,0 +1,7 @@
+content:
+  field_select_pdp_layout:
+    type: options_select
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }

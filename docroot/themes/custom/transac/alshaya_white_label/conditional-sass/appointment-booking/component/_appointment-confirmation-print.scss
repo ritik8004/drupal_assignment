@@ -61,3 +61,34 @@
     }
   }
 }
+
+@media print {
+  img {
+    display: none;
+  }
+
+  .appointment-confirmation-print-content {
+    .appointment-confirmation-print-header {
+      img {
+        display: block;
+      }
+    }
+
+    .appointment-confirmation-print-body {
+      .confirmation-item {
+        display: table-row;
+
+        label {
+          display: table-cell;
+          padding-top: 1.875rem;
+          padding-#{$right}: 0.625rem;
+          min-width: 10.3125rem;
+        }
+
+        span {
+          display: table-cell;
+        }
+      }
+    }
+  }
+}

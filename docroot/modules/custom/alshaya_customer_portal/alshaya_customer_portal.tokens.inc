@@ -45,7 +45,6 @@ function alshaya_customer_portal_tokens($type, $tokens, array $data, array $opti
             if ($user->isAuthenticated()) {
               // Fetch user details to create SSO link.
               $bubbleable_metadata->addCacheableDependency($user);
-              $bubbleable_metadata->addCacheableDependency($config);
               $bubbleable_metadata->addCacheContexts(['user']);
               $encrypted_string = $customer_portal_helper->getEncryptedDataForCustomerPortal($user);
               $sso_url = $config->get('logged_in_url') . $encrypted_string;
@@ -53,6 +52,7 @@ function alshaya_customer_portal_tokens($type, $tokens, array $data, array $opti
             else {
               $sso_url = $config->get('anonymous_url');
             }
+            $bubbleable_metadata->addCacheableDependency($config);
             $replacements[$original] = $sso_url;
           }
           break;

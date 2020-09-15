@@ -85,6 +85,7 @@
         var parentSKU = response.parent_sku !== null
           ? response.parent_sku
           : response.sku;
+
         var data = Drupal.alshayaSpc.storeProductData({
           id: response.id,
           sku: response.sku,

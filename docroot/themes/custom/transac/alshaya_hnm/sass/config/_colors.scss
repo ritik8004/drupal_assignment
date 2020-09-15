@@ -74,6 +74,8 @@ $hnm-pink: #f9f1ef;
 $light_grey: #d0d0d0;
 $_tooltip_blue: #007aff;
 $black: $hnm-black-three;
+$tropical_green: #007b5f;
+$mariner: #283d5a;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -336,6 +338,7 @@ $header_toggle_sign_active_tab_bg: $_grey_12;
 $header_toggle_sign_inactive_tab_bg: $white-five;
 $header_branding_shadow: $grey5;
 $highlights_subtitle_hover: $link-hover;
+$mm-level-title: $hnm-black-three;
 
 // PLP
 $plp_swatch_more_link: $hnm-black-three;
@@ -361,6 +364,9 @@ $selected_facet_text: $gray44;
 $plp_facet_count_number: $gray44;
 $plp_filter_active_item: $light_orange;
 $plp_tile_product_text: $hnm-black-three;
+$collection_label_environment: $tropical_green;
+$collection_label_collection: $mariner;
+$collection_label_default: $hnm-black-three;
 
 // PLP All filter colors
 $plp_all_filter_title: $hnm-black-three;
@@ -692,6 +698,7 @@ $algolia-react-highlighted-bg: $venetian_red;
 $algolia-react-highlighted-text: $white-five;
 $algolia-react-autocomplete: $hnm-black-three;
 $algolia-search-bar-background: $default_background_color;
+$algolia-react-search-result-page-bg: transparent;
 
 // Payment cards.
 $payment_card_text: $grey10;

@@ -6,6 +6,21 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Adds store finder country settings.
+ */
+function alshaya_appointment_update_8002() {
+  $configs = [
+    'alshaya_appointment.settings',
+  ];
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs($configs, 'alshaya_appointment', 'install');
+}
+
+/**
  * Implements hook_update().
  */
 function alshaya_appointment_update_8001() {
@@ -14,6 +29,13 @@ function alshaya_appointment_update_8001() {
   if ($translations = _alshaya_appointment_translations()) {
     alshaya_i18n_save_translations($translations);
   }
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_appointment.settings'],
+    'alshaya_appointment'
+  );
 }
 
 /**

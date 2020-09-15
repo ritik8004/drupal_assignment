@@ -151,8 +151,8 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
   // Changing breadcrumb for advance pages.
   if ($route_match->getRouteName() == 'entity.node.canonical'
       && $route_match->getParameter('node')->bundle() == 'advanced_page') {
-
     $breadcrumb_links[] = Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>');
+
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
 
@@ -172,11 +172,37 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
       }
     }
 
-    $breadcrumb = new Breadcrumb();
-    // This breadcrumb builder is based on a route parameter, and hence it
-    // depends on the 'route' cache context.
-    $breadcrumb->addCacheContexts(['route']);
-    $breadcrumb->setLinks($breadcrumb_links);
+    // Setting breadcrumb links for advanced pages.
+    $breadcrumb = _alshaya_bp_transac_set_breadcrumb_links($breadcrumb_links);
+  }
+
+  // Changing breadcrumb for category terms.
+  if ($route_match->getRouteName() == 'entity.taxonomy_term.canonical'
+      && $route_match->getParameter('taxonomy_term')->bundle() == 'acq_product_category') {
+    $breadcrumb_links[] = Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>');
+
+    $taxonomy_term = $route_match->getParameter('taxonomy_term');
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+    // Get all parents of category.
+    $tid = $taxonomy_term->id();
+    $parents = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($tid);
+
+    // Excluding L1 category term from breadcrumb link.
+    // Current structure for breacrumb is Home > L2 > L3 > L4.
+    // Refer CORE-23454 for more info.
+    array_pop($parents);
+
+    foreach ($parents as $term) {
+      $term = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : NULL;
+      $category_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
+    }
+
+    if (!empty($category_links)) {
+      $breadcrumb_links = array_merge($breadcrumb_links, array_reverse($category_links));
+      // Setting breadcrumb links for category term pages.
+      $breadcrumb = _alshaya_bp_transac_set_breadcrumb_links($breadcrumb_links);
+    }
   }
 }
 
@@ -195,4 +221,16 @@ function alshaya_bp_transac_sku_product_info_alter(array &$data, SKUInterface $s
   if (!empty($grouping_attribute) && $grouping_attribute_with_swatch) {
     $data['grouping_attribute_with_swatch'] = $grouping_attribute_with_swatch;
   }
+}
+
+/**
+ * Set breadcrumb links after altering links.
+ */
+function _alshaya_bp_transac_set_breadcrumb_links($breadcrumb_links) {
+  $breadcrumb = new Breadcrumb();
+  // This breadcrumb builder is based on a route parameter, and hence it
+  // depends on the 'route' cache context.
+  $breadcrumb->addCacheContexts(['route']);
+  $breadcrumb->setLinks($breadcrumb_links);
+  return $breadcrumb;
 }

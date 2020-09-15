@@ -64,3 +64,23 @@ export const smoothScrollToAddressField = (element, contactField = false) => {
     behavior: 'smooth',
   });
 };
+
+/**
+ * Smooth Scroll to active date in the mini calendar for mobile.
+ */
+export const smoothScrollToCurrentDate = () => {
+  let element = document.querySelector('.daypicker-mobile .date-item.active');
+  let elementParent = document.querySelector('.daypicker-mobile .calendar-wrapper');
+
+  if(element !== undefined && element !== null && window.innerWidth < 768) {
+    let elementLeftOffset = element.offsetLeft;
+    let elementTopOffset = element.offsetTop;
+    // Calculating right offset of the element for Arabic.
+    let scrollRight = elementParent.offsetWidth - element.offsetWidth - elementLeftOffset;
+    elementParent.scrollBy({
+      top: elementTopOffset,
+      left: (drupalSettings.path.currentLanguage === 'en') ? elementLeftOffset : -scrollRight,
+      behavior: 'smooth',
+    });
+  }  
+};

@@ -915,7 +915,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   TRUE if category is L1.
    */
   public function isCategoryL1(TermInterface $category) {
-    $depth = (int) $category->get('depth_level')->getString();
+    $depth = (int) taxonomy_term_depth_get_by_tid($category->id());
     return $depth === $this->getL1DepthLevel();
   }
 
@@ -1027,6 +1027,43 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     $this->cache->set($cid, $sub_categories, Cache::PERMANENT, $cache_tags);
     return $sub_categories;
+  }
+
+  /**
+   * Get all the parents from given term object.
+   *
+   * @param object $term
+   *   The term object.
+   *
+   * @return array|\Drupal\taxonomy\TermInterface[]
+   *   Returns the array of all parents.
+   */
+  public function getAllParents($term) {
+    $parents = [];
+    // If term is of 'acq_product_category' vocabulary.
+    if ($term instanceof TermInterface && $term->bundle() === self::VOCABULARY_ID) {
+      // Get all parents of the given term.
+      $parents = array_reverse($this->termStorage->loadAllParents($term->id()));
+    }
+
+    return $parents;
+  }
+
+  /**
+   * Wrapper function to get child terms of a given category.
+   *
+   * @param int $parent
+   *   Parent tid for which children needs to fetch.
+   *
+   * @return array
+   *   Categories array with tid as key and name as value.
+   *
+   * @throws \Exception
+   */
+  public function getChildTermIds(int $parent = 0) {
+    $l1Terms = $this->termStorage->loadTree('acq_product_category', $parent, 1);
+
+    return $l1Terms ? array_column($l1Terms, 'name', 'tid') : [];
   }
 
 }

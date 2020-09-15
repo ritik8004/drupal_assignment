@@ -18,11 +18,6 @@
   }
 
   .c-content__region {
-    @include breakpoint($desktop) {
-      width: 100%;
-      float: none;
-    }
-
     .sticky-filter-wrapper {
       .c-collapse-item {
         .c-collapse__title {
@@ -54,6 +49,22 @@
       .filter__foot {
         .button {
           text-transform: capitalize;
+        }
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  body.ie[class^="super-category"] {
+    #alshaya-algolia-search {
+      .block-facet-blockcategory-facet-search {
+        .c-accordion__title.active + ul {
+          .facet-item__value {
+            &::after {
+              padding-right: 0.625rem;
+            }
+          }
         }
       }
     }

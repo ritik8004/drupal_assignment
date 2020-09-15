@@ -1,0 +1,10 @@
+plp:
+  - attr_product_designer_collection
+  - attr_product_collection
+  - attr_product_environment
+  - attr_product_quality
+pdp:
+  - attr_product_designer_collection
+  - attr_product_collection
+  - attr_product_environment
+  - attr_product_quality
