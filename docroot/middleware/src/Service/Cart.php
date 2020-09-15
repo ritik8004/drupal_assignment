@@ -1218,17 +1218,12 @@ class Cart {
         'timeout' => $checkout_settings['place_order_timeout'],
       ];
 
-      // @todo This is only for testing purpose remove this.
-      // @todo Process result json after magento place order.
-      $responseJson = '{"redirect_url": "https://sbapi.ckotech.co/knet-external/redirect/tok_igeckhphjiku3cgikcydfamiw4/pay"}';
-      $result = json_decode($responseJson, TRUE);
-      if ($result['redirect_url']) {
-        return $result;
-      }
-
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, $request_options);
+      if ($result['redirect_url']) {
+        return $result;
+      }
 
       if (!empty($lock)) {
         $lock->release();

@@ -102,18 +102,34 @@ class PaymentController {
    *   Redirect response on success.
    */
   public function handlePaymentSuccess(Request $request) {
-    // Add success message in logs.
     $order_id = $request->query->get('order_id');
-    $cart = $this->cart->getCart();
-    $payment_method = $this->cart->getPaymentMethodSetOnCart();
-    $this->logger->notice('Order placed successfully for Cart: @cart Payment Method: @payment_method Order-Id: @order_id', [
-      '@cart' => json_encode($cart),
-      '@payment_method' => $payment_method,
-      '@order_id' => $order_id,
-    ]);
     $langcode = $request->get('langcode');
     // In case of error, we redirect to cart page.
     $redirect = new RedirectResponse('/' . $langcode . '/cart', 302);
+
+    // If order id is not available in request.
+    if (!$order_id) {
+      $this->logger->error('User trying to access success url directly. Order-Id is not available in request.');
+      return $redirect;
+    }
+
+    // If Cart is not available in session.
+    $cart_id = $this->cart->getCartId();
+    if (!$cart_id) {
+      $this->logger->error('User trying to access success url directly. Cart is not available for the user.');
+      return $redirect;
+    }
+
+    $cart = $this->cart->getCart();
+    $payment_method = $this->cart->getPaymentMethodSetOnCart();
+    // If Payment-method is not selected by user.
+    if (!$payment_method) {
+      $this->logger->error('User trying to access success url directly. Payment method is not set on cart. Order-Id: @order_id Cart: @cart', [
+        '@order_id' => $order_id,
+        '@cart' => json_encode($cart),
+      ]);
+      return $redirect;
+    }
 
     try {
       // Post processing on success which involves cleaning cache and session.
@@ -121,6 +137,11 @@ class PaymentController {
       // Redirect user to confirmation page.
       $redirect->setTargetUrl('/' . $langcode . '/checkout/confirmation?id=' . $order['secure_order_id']);
       $redirect->headers->setCookie(CookieHelper::create('middleware_order_placed', 1, strtotime('+1 year')));
+      $this->logger->notice('Order placed successfully for Cart: @cart Payment Method: @payment_method Order-Id: @order_id', [
+        '@cart' => json_encode($cart),
+        '@payment_method' => $payment_method,
+        '@order_id' => $order_id,
+      ]);
     }
     catch (\Exception $e) {
       // If any error/exception encountered while order was placed from
@@ -144,18 +165,37 @@ class PaymentController {
    *   Redirect response on failure.
    */
   public function handlePaymentFail(Request $request) {
+    $langcode = $request->get('langcode');
+    // In case of error, we redirect to cart page.
+    $redirect = new RedirectResponse('/' . $langcode . '/cart', 302);
+
+    // If Cart is not available in session.
+    $cart_id = $this->cart->getCartId();
+    if (!$cart_id) {
+      $this->logger->error('User trying to access fail url directly. Cart is not available for the user.');
+      return $redirect;
+    }
+
+    $cart = $this->cart->getCart();
+    $payment_method = $this->cart->getPaymentMethodSetOnCart();
+    // If Payment-method is not selected by user.
+    if (!$payment_method) {
+      $this->logger->error('User trying to access fail url directly. Payment method is not set on cart. Cart: @cart', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $redirect;
+    }
+
     $this->logger->error('Payment failed for Cart: @cart Payment Method: @payment_method', [
       '@cart' => json_encode($this->cart->getCart()),
-      '@payment_method' => $this->cart->getPaymentMethodSetOnCart(),
+      '@payment_method' => $payment_method,
     ]);
 
-    $langcode = $request->get('langcode');
-    $message = $request->query->get('message');
-    $response = new RedirectResponse('/' . $langcode . '/checkout' . $message, 302);
+    $response = new RedirectResponse('/' . $langcode . '/checkout', 302);
 
     $payment_data = [
       'status' => self::PAYMENT_FAILED_VALUE,
-      'payment_method' => $this->cart->getPaymentMethodSetOnCart(),
+      'payment_method' => $payment_method,
       'status' => self::PAYMENT_DECLINED_VALUE,
     ];
 

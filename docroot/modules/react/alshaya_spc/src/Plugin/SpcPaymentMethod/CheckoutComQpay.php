@@ -8,10 +8,10 @@ use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
  * Qpay payment method for SPC.
  *
  * @AlshayaSpcPaymentMethod(
- *   id = "qpay",
- *   label = @Translation("Qpay"),
+ *   id = "checkout_com_upapi_qpay",
+ *   label = @Translation("Qpay (Checkout.com)"),
  *   hasForm = false
  * )
  */
-class Qpay extends AlshayaSpcPaymentMethodPluginBase {
+class CheckoutComQpay extends AlshayaSpcPaymentMethodPluginBase {
 }
