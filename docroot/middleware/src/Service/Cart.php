@@ -1220,6 +1220,10 @@ class Cart {
 
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
+      $this->logger->notice('Place order initiated for Cart: @cart Data: @data', [
+        '@cart' => json_encode($cart),
+        '@data' => json_encode($data),
+      ]);
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, $request_options);
       if ($result['redirect_url']) {
         return $result;
