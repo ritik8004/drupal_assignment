@@ -481,14 +481,15 @@ class ProductResource extends ResourceBase {
             $data['configurableCombinations'][$data['sku']]['configurables'][$key]['alternates'] = $alternates;
             $combinations = $this->skuManager->getConfigurableCombinations($sku);
             foreach ($configurable['values'] as $value => $label) {
-              foreach ($combinations['attribute_sku'][$key][$value] ?? [] as $child_sku_code) {
+              $value_id = $label['value_id'];
+              foreach ($combinations['attribute_sku'][$key][$value_id] ?? [] as $child_sku_code) {
                 $child_sku = SKU::loadFromSku($child_sku_code, $sku->language()->getId());
 
                 if (!($child_sku instanceof SKU)) {
                   continue;
                 }
 
-                $size_values[$value] = $this->getAlternativeValues($alternates, $child_sku);
+                $size_values[$value_id] = $this->getAlternativeValues($alternates, $child_sku);
               }
 
             }
