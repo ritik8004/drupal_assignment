@@ -77,10 +77,9 @@ export default class Appointment extends React.Component {
     }
     this.state.appointmentRender = false;
 
-    // Trigger GTM event.
-    const { appointmentStep, appointmentId } = this.state;
-
-    if (appointmentId === undefined) {
+    const { appointmentStep } = this.state;
+    // Trigger GTM event but not on edit page.
+    if (!appointment) {
       dispatchCustomEvent('appointmentBookingSteps', {
         stepValue: appointmentStep,
       });
