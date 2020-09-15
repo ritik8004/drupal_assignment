@@ -4,10 +4,12 @@
 
     .toggle-buttons-wrapper {
       text-align: center;
+      max-width: 20.9375rem;
+      margin: 0 auto;
 
       .stores-list-view,
       .stores-map-view {
-        width: 10rem;
+        width: calc(50% - 0.46875rem);
         border: 1px solid $appointment-store-toggle-bg-active;
         color: $appointment-store-toggle-bg-active;
         height: 2.25rem;
