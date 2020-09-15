@@ -549,7 +549,7 @@ class AlshayaApiCommands extends DrushCommands {
       $mdata = $mskus[$sku] ?? [];
 
       // We will check in status if not available now in Magento.
-      if (empty($mdata)) {
+      if (empty($mdata) || $mdata['type_id'] !== 'simple') {
         continue;
       }
 
@@ -568,12 +568,30 @@ class AlshayaApiCommands extends DrushCommands {
         $message .= 'MDC final price:' . $m_final_price;
         $this->logMessage($message, $options['verbose'] ?? FALSE);
 
-        $to_sync[] = $sku;
+        $to_sync[$sku] = $mdata;
       }
     }
 
     if (empty($to_sync)) {
       $this->logger()->notice('No price difference found.');
+      return;
+    }
+
+    // Sync?
+    $confirmation = dt('Do you want to update product prices directly? Count: @count', [
+      '@count' => count($to_sync),
+    ]);
+
+    if ($this->io()->confirm($confirmation)) {
+      foreach ($to_sync as $sku => $mdata) {
+        $sku_entity = SKU::loadFromSku($sku);
+        if ($sku_entity instanceof SKU) {
+          $sku_entity->get('price')->setValue($mdata['price']);
+          $sku_entity->get('final_price')->setValue($mdata['final_price']);
+          $sku_entity->save();
+        }
+      }
+
       return;
     }
 
@@ -584,7 +602,7 @@ class AlshayaApiCommands extends DrushCommands {
 
     if ($this->io()->confirm($confirmation)) {
       $this->requestSync(
-        $to_sync,
+        array_keys($to_sync),
         $this->configFactory->get('acq_commerce.store')->get('store_id'),
         'en',
         $options['page_size']
