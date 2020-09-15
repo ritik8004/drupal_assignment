@@ -18,7 +18,22 @@ function alshaya_aura_theme() {
     'aura_pending_enrollment' => [
       'variables' => [],
     ],
+    'loyalty_club' => [
+      'variables' => [],
+    ],
   ];
 
   return $theme;
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_aura_alshaya_my_account_links_alter(array &$links) {
+  // Add My Loyalty Club link.
+  $links['alshaya_loyalty_club'] = [
+    'text' => t('My Loyalty Club'),
+    'route' => 'alshaya_aura.loyalty_club',
+    'weight' => 11,
+  ];
 }

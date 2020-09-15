@@ -5,3 +5,15 @@ alshaya_aura.aura_loyalty_config:
     _title: 'Alshaya AURA Configurations'
   requirements:
     _permission: 'administer site configuration'
+
+alshaya_aura.loyalty_club:
+  path: '/user/{user}/loyalty-club'
+  defaults:
+    _controller: '\Drupal\alshaya_aura\Controller\AlshayaLoyaltyController::loyaltyClub'
+    _title_callback: '\Drupal\alshaya_aura\Controller\AlshayaLoyaltyController::getLoyaltyClubTitle'
+  requirements:
+    _entity_access: 'user.update'
+  options:
+    parameters:
+      user:
+        type: entity:user

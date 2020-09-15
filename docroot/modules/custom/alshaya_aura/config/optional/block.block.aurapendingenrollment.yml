@@ -3,7 +3,6 @@ status: true
 dependencies:
   module:
     - alshaya_aura
-    - system
     - user
   theme:
     - alshaya_white_label
@@ -19,11 +18,6 @@ settings:
   provider: alshaya_aura
   label_display: '0'
 visibility:
-  request_path:
-    id: request_path
-    pages: '/user/*'
-    negate: false
-    context_mapping: {  }
   aura_status_condition:
     id: aura_status_condition
     status:
