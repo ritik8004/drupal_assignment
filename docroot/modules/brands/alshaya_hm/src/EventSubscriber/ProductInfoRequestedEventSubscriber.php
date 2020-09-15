@@ -376,7 +376,8 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     foreach ($list_of_attributes as $key => $title) {
       if ($attr_val = $sku_entity->get($key)->getValue()) {
         $product_details[] = [
-          'label' => $this->t('@title', ['@title' => $title]),
+          // @codingStandardsIgnoreLine
+          'label' => $this->t($title, ['context' => 'hm_additional_attributes']),
           'data' => $attr_val,
         ];
       }
