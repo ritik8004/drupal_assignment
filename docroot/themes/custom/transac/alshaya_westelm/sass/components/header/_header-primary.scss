@@ -214,14 +214,6 @@ header {
 }
 
 body {
-  @include breakpoint($only-tablet) {
-    margin-top: 9rem;
-
-    html[lang=ar] & {
-      margin-top: 8rem;
-    }
-  }
-
   @include breakpoint($only-mobile) {
     margin-top: 3.6875rem;
   }
