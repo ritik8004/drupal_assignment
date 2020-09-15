@@ -446,44 +446,62 @@ body {
 }
 
 .region__menu-secondary {
-  display: flex;
-  justify-content: center;
-
   .block-aura-rewards-header {
+    @include breakpoint($desktop) {
+      display: inline-block;
+    }
+
     .aura-rewards-wrapper {
       position: relative;
       font-size: initial;
+
+      @include breakpoint($upto-desktop) {
+        background-color: $mobile-aura-link-bg;
+      }
 
       ul {
         font-size: initial;
       }
 
+      .aura-header-link {
+        a {
+          @include breakpoint($upto-desktop) {
+            position: relative;
+            margin: 0 0.625rem;
+          }
+        }
+      }
+
       .aura-header-popup-wrapper {
         display: none;
-        position: absolute;
-        width: 100%;
-        min-width: 16.875rem;
-        // height: 137px;
-        border-radius: 2.5px;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
-        border: 2px solid $border-color;
         background: $popup-bg;
         padding: 5px 13px 7px;
-        right: calc(100% - 1.5625rem);
-        top: calc(100% + 0.3125rem);
+
+        @include breakpoint($desktop) {
+          position: absolute;
+          width: 100%;
+          min-width: 16.875rem;
+          border-radius: 2.5px;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+          border: 2px solid $aura-border-color;
+          #{$right}: calc(100% - 1.5625rem);
+          top: calc(100% + 0.3125rem);
+        }
 
         &::before {
-          content: "";
-          color: $border-color;
-          font-size: 1.313rem;
-          cursor: pointer;
-          pointer-events: none;
-          position: absolute;
-          top: -0.4325rem;
-          right: 0.5rem;
-          border-bottom: 0.3125rem solid $border-color;
-          border-right: 0.3125rem solid transparent;
-          border-left: 0.3125rem solid transparent;
+          @include breakpoint($desktop) {
+            content: "";
+            color: $aura-border-color;
+            font-size: 1.313rem;
+            cursor: pointer;
+            pointer-events: none;
+            position: absolute;
+            top: -0.4325rem;
+            #{$right}: 0.5rem;
+            border-bottom: 0.3125rem solid $aura-border-color;
+            border-right: 0.3125rem solid transparent;
+            border-left: 0.3125rem solid transparent;
+          }
         }
 
         .aura-popup-header {
@@ -502,6 +520,11 @@ body {
               text-align: left;
               margin-bottom: 0.875rem;
               color: $benefits-text;
+
+              @include breakpoint($upto-desktop) {
+                margin-left: 0;
+                margin-right: 0;
+              }
             }
           }
         }
