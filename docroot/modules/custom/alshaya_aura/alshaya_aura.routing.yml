@@ -6,7 +6,7 @@ alshaya_aura.aura_loyalty_config:
   requirements:
     _permission: 'administer site configuration'
 
-alshaya_aura.loyalty_club:
+alshaya_aura.my_loyalty_club:
   path: '/user/{user}/loyalty-club'
   defaults:
     _controller: '\Drupal\alshaya_aura\Controller\AlshayaLoyaltyController::loyaltyClub'
@@ -17,3 +17,11 @@ alshaya_aura.loyalty_club:
     parameters:
       user:
         type: entity:user
+
+alshaya_aura.loyalty_club:
+  path: '/loyalty-club'
+  defaults:
+    _controller: '\Drupal\alshaya_aura\Controller\AlshayaLoyaltyController::loyaltyClub'
+    _title_callback: '\Drupal\alshaya_aura\Controller\AlshayaLoyaltyController::getLoyaltyClubTitle'
+  requirements:
+    _permission: 'access content'
