@@ -5,6 +5,7 @@ namespace Drupal\alshaya_api\Commands;
 use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Database\Connection;
@@ -100,6 +101,13 @@ class AlshayaApiCommands extends DrushCommands {
   protected $drupalData;
 
   /**
+   * Stock Manager.
+   *
+   * @var \Drupal\acq_sku\StockManager
+   */
+  protected $stockManager;
+
+  /**
    * AlshayaApiCommands constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
@@ -122,6 +130,8 @@ class AlshayaApiCommands extends DrushCommands {
    *   Database lock service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
+   * @param \Drupal\acq_sku\StockManager $stock_manager
+   *   Stock Manager.
    */
   public function __construct(LanguageManagerInterface $languageManager,
                               AlshayaApiWrapper $alshayaApiWrapper,
@@ -132,7 +142,8 @@ class AlshayaApiCommands extends DrushCommands {
                               Connection $connection,
                               EntityTypeManagerInterface $entityTypeManager,
                               LockBackendInterface $lock,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              StockManager $stock_manager) {
     $this->languageManager = $languageManager;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->skuManager = $skuManager;
@@ -143,6 +154,7 @@ class AlshayaApiCommands extends DrushCommands {
     $this->entityTypeManager = $entityTypeManager;
     $this->lock = $lock;
     $this->configFactory = $config_factory;
+    $this->stockManager = $stock_manager;
     parent::__construct();
   }
 
@@ -401,6 +413,7 @@ class AlshayaApiCommands extends DrushCommands {
    */
   public function sanityCheckStock(array $options = ['page_size' => 3]) {
     $to_sync = [];
+    $to_update = [];
 
     $dskus = $this->getDataFromDrupal();
     $mskus = $this->getDataFromMagento();
@@ -426,6 +439,8 @@ class AlshayaApiCommands extends DrushCommands {
         $message .= 'MDC stock:' . $mdata['qty'];
         $this->logMessage($message, $options['verbose'] ?? FALSE);
 
+        $to_update[$sku] = $mdata;
+
         $to_sync['stock_quantity'][] = $sku;
         continue;
       }
@@ -438,6 +453,8 @@ class AlshayaApiCommands extends DrushCommands {
         $message .= 'Drupal stock status:' . $data['status'] . ' | ';
         $message .= 'MDC stock status:' . $mdata['stock_status'];
         $this->logMessage($message, $options['verbose'] ?? FALSE);
+
+        $to_update[$sku] = $mdata;
 
         $to_sync['stock_status'][] = $sku;
         continue;
@@ -460,13 +477,33 @@ class AlshayaApiCommands extends DrushCommands {
         $message .= 'MDC max sale quantity:' . $mdata['max_sale_qty'];
         $this->logMessage($message, $options['verbose'] ?? FALSE);
 
+        $to_update[$sku] = $mdata;
+
         $to_sync['stock_max_sale_qty'][] = $sku;
         continue;
       }
     }
 
-    if (empty($to_sync)) {
+    if (empty($to_update)) {
       $this->logger()->notice('No stock difference found.');
+      return;
+    }
+
+    $confirmation = dt('Do you want to update stock status in database directly? Count: @count', [
+      '@count' => count($to_update),
+    ]);
+
+    if ($this->io()->confirm($confirmation)) {
+      foreach ($to_update as $sku => $mdata) {
+        $this->stockManager->updateStock(
+          $sku,
+          (float) $mdata['qty'],
+          (bool) $mdata['stock_status'],
+          (float) $mdata['max_sale_qty'],
+          (bool) $mdata['use_config_max_sale_qty']
+        );
+      }
+
       return;
     }
 
