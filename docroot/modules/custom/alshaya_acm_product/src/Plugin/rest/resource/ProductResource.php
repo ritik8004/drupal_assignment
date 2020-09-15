@@ -589,6 +589,11 @@ class ProductResource extends ResourceBase {
     $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
     foreach ($promotions_data as $nid => $promotion) {
       $this->cache['tags'][] = 'node:' . $nid;
+
+      if (isset($promotion['type']) && $promotion['type'] === 'free_gift') {
+        continue;
+      }
+
       $promotions[] = [
         'text' => $promotion['text'],
         'promo_web_url' => str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',

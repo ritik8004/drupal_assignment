@@ -1,12 +1,5 @@
 import React from 'react';
-
-const applyCode = (e) => {
-  const codeValue = e.target.innerHTML;
-  if (codeValue !== undefined) {
-    document.getElementById('promo-code').value = codeValue;
-    document.getElementById('promo-action-button').click();
-  }
-};
+import { applyCode } from '../../../utilities/checkout_util';
 
 const DynamicPromotionCode = (props) => {
   const { code, label } = props;
