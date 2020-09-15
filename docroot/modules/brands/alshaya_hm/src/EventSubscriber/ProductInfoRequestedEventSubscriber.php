@@ -280,15 +280,15 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $list_of_attributes = [
-      'attr_fit' => 'FIT',
-      'attr_article_description' => 'ARTICLE DESCRIPTION',
+      'attr_fit' => $this->t('FIT'),
+      'attr_article_description' => $this->t('ARTICLE DESCRIPTION'),
     ];
 
     $properties = [];
     foreach ($list_of_attributes as $key => $title) {
       if ($value = $sku_entity->get($key)->getValue()) {
         $properties[] = [
-          'title' => $this->t('@title', ['@title' => $title]),
+          'title' => $title,
           'data' => $value,
         ];
       }
@@ -341,43 +341,42 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private function displayAttributesOnOverlay(SKU $sku_entity) {
     $product_details = [];
     $list_of_attributes = [
-      'attr_product_designer_collection' => 'DESIGNER COLLECTION',
-      'attr_concept' => 'CONCEPT',
-      'attr_product_collection' => 'COLLECTION',
-      'attr_product_environment' => 'ENVIRONMENT',
-      'attr_product_quality' => 'QUALITY',
-      'attr_product_feature' => 'FEATURE',
-      'attr_function' => 'FUNCTION',
-      'attr_washing_instructions' => 'WASHING INSTRUCTION',
-      'attr_dry_cleaning_instructions' => 'DRY CLEAN INSTRUCTION',
-      'attr_style' => 'STYLE',
-      'attr_clothing_style' => 'CLOTHING STYLE',
-      'attr_collar_style' => 'COLLAR STYLE',
-      'attr_neckline_style' => 'NECKLINE STYLE',
-      'attr_accessories_style' => 'ACCESSORIES STYLE',
-      'attr_footwear_style' => 'FOOTWEAR STYLE',
-      'attr_fit' => 'FIT',
-      'attr_descriptive_length' => 'DESCRIPTIVE LENGTH',
-      'attr_garment_length' => 'GARMENT LENGTH',
-      'attr_sleeve_length' => 'SLEEVE LENGTH',
-      'attr_waist_rise' => 'WAIST RISE',
-      'attr_heel_height' => 'HEEL HEIGHT',
-      'attr_measurements_in_cm' => 'MEASURMENTS IN CM',
-      'attr_color_name' => 'COLOR NAME',
-      'attr_fragrance_name' => 'FRAGRANCE NAME',
-      'attr_article_fragrance_description' => 'FRAGRANCE DESCRIPTION',
-      'attr_article_pattern' => 'PATTERN',
-      'attr_article_visual_description' => 'VISUAL DESCRIPTION',
-      'attr_textual_print' => 'TEXTUAL PRINT',
-      'attr_article_license_company' => 'LICENSE COMPANY',
-      'attr_article_license_item' => 'LICENSE ITEM',
+      'attr_product_designer_collection' => $this->t('DESIGNER COLLECTION'),
+      'attr_concept' => $this->t('CONCEPT'),
+      'attr_product_collection' => $this->t('COLLECTION'),
+      'attr_product_environment' => $this->t('ENVIRONMENT'),
+      'attr_product_quality' => $this->t('QUALITY'),
+      'attr_product_feature' => $this->t('FEATURE'),
+      'attr_function' => $this->t('FUNCTION'),
+      'attr_washing_instructions' => $this->t('WASHING INSTRUCTION'),
+      'attr_dry_cleaning_instructions' => $this->t('DRY CLEAN INSTRUCTION'),
+      'attr_style' => $this->t('STYLE'),
+      'attr_clothing_style' => $this->t('CLOTHING STYLE'),
+      'attr_collar_style' => $this->t('COLLAR STYLE'),
+      'attr_neckline_style' => $this->t('NECKLINE STYLE'),
+      'attr_accessories_style' => $this->t('ACCESSORIES STYLE'),
+      'attr_footwear_style' => $this->t('FOOTWEAR STYLE'),
+      'attr_fit' => $this->t('FIT'),
+      'attr_descriptive_length' => $this->t('DESCRIPTIVE LENGTH'),
+      'attr_garment_length' => $this->t('GARMENT LENGTH'),
+      'attr_sleeve_length' => $this->t('SLEEVE LENGTH'),
+      'attr_waist_rise' => $this->t('WAIST RISE'),
+      'attr_heel_height' => $this->t('HEEL HEIGHT'),
+      'attr_measurements_in_cm' => $this->t('MEASURMENTS IN CM'),
+      'attr_color_name' => $this->t('COLOR NAME'),
+      'attr_fragrance_name' => $this->t('FRAGRANCE NAME'),
+      'attr_article_fragrance_description' => $this->t('FRAGRANCE DESCRIPTION'),
+      'attr_article_pattern' => $this->t('PATTERN'),
+      'attr_article_visual_description' => $this->t('VISUAL DESCRIPTION'),
+      'attr_textual_print' => $this->t('TEXTUAL PRINT'),
+      'attr_article_license_company' => $this->t('LICENSE COMPANY'),
+      'attr_article_license_item' => $this->t('LICENSE ITEM'),
     ];
 
     foreach ($list_of_attributes as $key => $title) {
       if ($attr_val = $sku_entity->get($key)->getValue()) {
         $product_details[] = [
-          // @codingStandardsIgnoreLine
-          'label' => $this->t($title, ['context' => 'hm_additional_attributes']),
+          'label' => $title,
           'data' => $attr_val,
         ];
       }
