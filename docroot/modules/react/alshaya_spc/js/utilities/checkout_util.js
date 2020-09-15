@@ -544,3 +544,11 @@ export function validateCvv(cvv) {
   const cvvLength = cvv.toString().length;
   return [3, 4].includes(cvvLength) && !Number.isNaN(cvv);
 }
+
+export const applyCode = (e) => {
+  const codeValue = e.target.innerHTML;
+  if (codeValue !== undefined) {
+    document.getElementById('promo-code').value = codeValue.trim();
+    document.getElementById('promo-action-button').click();
+  }
+};
