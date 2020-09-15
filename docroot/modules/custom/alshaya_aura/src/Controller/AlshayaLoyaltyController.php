@@ -16,7 +16,7 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function loyaltyClub() {
     return [
-      '#theme' => 'loyalty_club',
+      '#theme' => 'my_loyalty_club',
     ];
   }
 
