@@ -180,7 +180,7 @@ const PdpLayout = () => {
             />
           ) : outOfStock}
           <PdpDescription
-            skuCode={skuItemCode}
+            skuCode={skuMainCode}
             pdpDescription={description}
             pdpShortDesc={shortDesc}
             title={title}

@@ -66,6 +66,7 @@ class CartSelectOption extends React.Component {
       refreshConfigurables,
       pdpRefresh,
       productInfo,
+      context,
     } = this.props;
     const selectedValuesArray = selectedValues();
     let selectedCombination = '';
@@ -73,9 +74,27 @@ class CartSelectOption extends React.Component {
       selectedCombination += `${key}|${selectedValuesArray[key]}||`;
     });
     const variantSelected = configurableCombinations[skuCode].byAttribute[selectedCombination];
-    const parentSkuSelected = productInfo[skuCode].variants[variantSelected].parent_sku
+    const parentSkuSelected = (productInfo[skuCode].variants[variantSelected] !== undefined)
       ? productInfo[skuCode].variants[variantSelected].parent_sku
       : skuCode;
+
+    if (context === 'main') {
+      const { currentLanguage } = drupalSettings.path;
+      const variantInfo = productInfo[skuCode].variants[variantSelected];
+      if (variantInfo !== undefined) {
+        const variantUrl = variantInfo.url[currentLanguage];
+        if (window.location.pathname !== variantUrl) {
+          window.history.replaceState(variantInfo, variantInfo.title, variantUrl);
+          // Language switcher.
+          let i;
+          const langSwitcherElem = document.querySelectorAll('.language-switcher-language-url .language-link');
+          for (i = 0; i < langSwitcherElem.length; i++) {
+            const hrefLang = langSwitcherElem[i].getAttribute('hreflang');
+            langSwitcherElem[i].setAttribute('href', variantInfo.url[hrefLang]);
+          }
+        }
+      }
+    }
 
     // Refresh the PDP page on new variant selection.
     pdpRefresh(variantSelected, parentSkuSelected);

@@ -117,13 +117,13 @@ class ConfigurableProductForm extends React.Component {
   }
 
   selectedValues = () => {
-    const { configurableCombinations, skuCode } = this.props;
+    const { configurableCombinations, skuCode, context } = this.props;
     const attributes = configurableCombinations[skuCode].configurables;
     const selectedValues = [];
     Object.keys(attributes).map((id) => {
-      const elem = document.querySelector(`#${id}`).querySelectorAll('.active')[0];
+      const elem = document.querySelector(`#pdp-add-to-cart-form-${context} #${id}`).querySelectorAll('.active')[0];
       if (elem !== undefined) {
-        const selectedVal = document.querySelector(`#${id}`).querySelectorAll('.active')[0].value;
+        const selectedVal = document.querySelector(`#pdp-add-to-cart-form-${context} #${id}`).querySelectorAll('.active')[0].value;
         if (selectedVal !== '' && selectedVal !== null && typeof selectedVal !== 'undefined') {
           selectedValues[id] = selectedVal;
         }
