@@ -111,7 +111,7 @@ class CheckoutComPaymentController extends PaymentController {
     Utility $utility,
     SystemSettings $settings
   ) {
-    parent::__construct($logger, $settings);
+    parent::__construct($logger, $settings, $cart);
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->checkoutComApi = $checkout_com_api;
