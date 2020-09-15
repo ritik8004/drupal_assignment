@@ -234,14 +234,15 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['configurables'][$key]['alternates'] = $alternates;
           $combinations = $this->skuManager->getConfigurableCombinations($sku_entity);
           foreach ($configurable['values'] as $value => $label) {
-            foreach ($combinations['attribute_sku'][$key][$value] ?? [] as $child_sku_code) {
+            $value_id = $label['value_id'];
+            foreach ($combinations['attribute_sku'][$key][$value_id] ?? [] as $child_sku_code) {
               $child_sku = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
 
               if (!($child_sku instanceof SKU)) {
                 continue;
               }
 
-              $values[$value] = $this->getAlternativeValues($alternates, $child_sku);
+              $values[$value_id] = $this->getAlternativeValues($alternates, $child_sku);
               $this->getProductLabels($child_sku_code, $child_sku, $vars);
 
             }
