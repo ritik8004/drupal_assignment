@@ -9,7 +9,7 @@ use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
  *
  * @AlshayaSpcPaymentMethod(
  *   id = "checkout_com_upapi_knet",
- *   label = @Translation("Knet (Checkout.com)"),
+ *   label = @Translation("K-NET (Checkout.com)"),
  *   hasForm = false
  * )
  */

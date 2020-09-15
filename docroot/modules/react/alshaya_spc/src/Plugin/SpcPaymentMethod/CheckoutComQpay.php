@@ -9,7 +9,7 @@ use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
  *
  * @AlshayaSpcPaymentMethod(
  *   id = "checkout_com_upapi_qpay",
- *   label = @Translation("Qpay (Checkout.com)"),
+ *   label = @Translation("Q-PAY"),
  *   hasForm = false
  * )
  */
