@@ -10,8 +10,12 @@
     attach: function (context) {
       Drupal.alshayaPromotions.initializeDynamicPromotions(context);
       // Update promotion label on product-add-to-cart-success.
-      $('.sku-base-form', context).once('js-process-promo-label').on('product-add-to-cart-success', function (event, productData, cartData) {
-        Drupal.alshayaPromotions.refreshDynamicLabels(productData.sku, cartData);
+      $('.sku-base-form', context).once('js-process-promo-label').on('product-add-to-cart-success', function (event) {
+        var productData = event.detail.productData;
+        var cartData = event.detail.cartData;
+        if (productData && cartData) {
+          Drupal.alshayaPromotions.refreshDynamicLabels(productData.sku, cartData);
+        }
       });
     }
   };

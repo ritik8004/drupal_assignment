@@ -69,3 +69,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
+
+  alshaya_white_label/magazine-layout-v2:
+    css:
+      theme:
+        css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css

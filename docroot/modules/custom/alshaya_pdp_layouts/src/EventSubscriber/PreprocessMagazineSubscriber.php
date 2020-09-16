@@ -22,12 +22,12 @@ class PreprocessMagazineSubscriber implements EventSubscriberInterface {
   private $skuManager;
 
   /**
-   * PreprocessMagazineSubscriber constructor.
+   * PreprocessMagazineSubscriber setManager method.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
    */
-  public function __construct(SkuManager $sku_manager) {
+  public function setManager(SkuManager $sku_manager) {
     $this->skuManager = $sku_manager;
   }
 

@@ -8,12 +8,12 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('../fonts/alshaya-icons.eot?1ajdhm');
+  src: url('../fonts/alshaya-icons.eot?2ajdhm');
   src:
-    url('../fonts/alshaya-icons.eot?1ajdhm#iefix') format('embedded-opentype'),
-    url('../fonts/alshaya-icons.ttf?1ajdhm') format('truetype'),
-    url('../fonts/alshaya-icons.woff?1ajdhm') format('woff'),
-    url('../fonts/alshaya-icons.svg?1ajdhm#alshaya-icons') format('svg');
+    url('../fonts/alshaya-icons.eot?2ajdhm#iefix') format('embedded-opentype'),
+    url('../fonts/alshaya-icons.ttf?2ajdhm') format('truetype'),
+    url('../fonts/alshaya-icons.woff?2ajdhm') format('woff'),
+    url('../fonts/alshaya-icons.svg?2ajdhm#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -202,7 +202,15 @@ $icons: (
   edit-input: "\e93f",
   arrow-left: "\e940",
   arrow-right: "\e941",
-  bin: "\e9ac"
+  bin: "\e9ac",
+  new-facebook-default: "\e942",
+  new-facebook-hover: "\e943",
+  new-instagram-default: "\e944",
+  new-instagram-hover: "\e945",
+  new-twitter-default: "\e946",
+  new-twitter-hover: "\e947",
+  new-whatsapp-default: "\e948",
+  new-whatsapp-hover: "\e949"
 );
 
 @mixin iconbase() {
