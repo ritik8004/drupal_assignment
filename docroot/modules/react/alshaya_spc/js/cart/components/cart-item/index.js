@@ -171,7 +171,6 @@ export default class CartItem extends React.Component {
         freeItem,
         stock,
         finalPrice,
-        price,
         in_stock: inStock,
         error_msg: itemErrorMsg,
       },
@@ -190,6 +189,7 @@ export default class CartItem extends React.Component {
         freeGiftPromotion,
         title,
         url,
+        price,
         maxSaleQty,
       },
     } = this.state;
