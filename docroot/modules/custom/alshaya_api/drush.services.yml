@@ -13,5 +13,6 @@ services:
       - '@lock'
       - '@config.factory'
       - '@acq_sku.stock_manager'
+      - '@alshaya_acm_product_category.mapping_manager'
     tags:
       - { name: drush.command }
