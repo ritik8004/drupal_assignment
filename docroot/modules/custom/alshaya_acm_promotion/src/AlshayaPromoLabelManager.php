@@ -600,7 +600,14 @@ class AlshayaPromoLabelManager {
       return $apiPromotions;
     }
     elseif ($view_mode === 'free_gift') {
+      if (empty($free_gift_promotions)) {
+        return [];
+      }
+
       $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions);
+      if ($free_promotion) {
+        return [];
+      }
 
       $coupon = $free_promotion['#promo_code'] ?? '';
       $coupon = is_array($coupon)
