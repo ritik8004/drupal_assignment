@@ -600,8 +600,6 @@ class AlshayaPromoLabelManager {
       return $apiPromotions;
     }
     elseif ($view_mode === 'free_gift') {
-      $free_promotion = [];
-
       if (empty($free_gift_promotions)) {
         return [];
       }
