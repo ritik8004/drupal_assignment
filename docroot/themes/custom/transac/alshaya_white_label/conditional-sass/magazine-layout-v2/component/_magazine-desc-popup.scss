@@ -1,0 +1,138 @@
+.magv2 {
+  &-desc {
+    &-popup {
+      &-container {
+        .magv2-pdp-price-container {
+          &.has-special-price {
+            flex-direction: row;
+            justify-content: center;
+
+            .magv2-pdp-final-price-wrapper {
+              padding-#{$left}: 0;
+            }
+          }
+        }
+      }
+
+      &-header-wrapper {
+        padding: 0.6875rem 1.875rem;
+
+        .magv2-compact-detail-wrapper {
+          .magv2-pdp-brand-logo {
+            display: none;
+          }
+        }
+      }
+
+      &-content-wrapper {
+        padding: 1.25rem 1.875rem 0;
+        background-color: $magv2-desc-popup-content-bg;
+
+        &::before {
+          content: '';
+          display: block;
+          border-top: 0.625rem solid $magv2-desc-popup-grey-border;
+          margin: -1.25rem -1.875rem 0;
+        }
+
+        > div {
+          &:first-child {
+            margin-top: 1.25rem;
+          }
+        }
+
+        ul {
+          padding-#{$left}: 1.25rem;
+        }
+      }
+
+      &-description-wrapper {
+        .desc-label-text-wrapper {
+          margin-bottom: 1.875rem;
+        }
+      }
+
+      &-pdp-item-code {
+        &-attribute {
+          margin-bottom: 1.875rem;
+        }
+
+        &-value {
+          padding-#{$left}: 0.3125rem;
+        }
+      }
+    }
+  }
+
+  &-compact-detail-wrapper {
+    .magv2-pdp {
+      &-price-wrapper,
+      &-final-price-wrapper {
+        font-size: 0.875rem;
+        line-height: normal;
+        padding: 0 0.25rem;
+      }
+
+      &-price-wrapper {
+        color: $magv2-price;
+        font-family: $alshaya-bold;
+      }
+
+      &-final-price-wrapper {
+        color: $magv2-special-price;
+        font-family: $alshaya-bold;
+      }
+
+      &-price-amount,
+      &-final-price-amount {
+        padding-#{$left}: 0.1875rem;
+      }
+
+      &-price-container {
+        text-align: center;
+      }
+
+      &-title {
+        font-size: 0.875rem;
+        line-height: normal;
+        margin: 0 auto 0.1875rem;
+        color: $magv2-text;
+        text-align: center;
+        max-width: 11.3125rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      &-price-container {
+        &.has-special-price {
+          .magv2-pdp-discount-percentage {
+            border-radius: 0.125rem;
+            border: solid 0.063rem $magv2-discount-percentage;
+            background-color: $magv2-discount-background;
+            font-size: 0.875rem;
+            margin-#{$left}: 0.3125rem;
+            padding: 0.125rem 0.375rem;
+            font-family: $alshaya-thin;
+          }
+
+          .magv2-pdp {
+            &-price-wrapper {
+              color: $magv2-price-strike;
+              text-decoration: line-through;
+              font-family: $alshaya-thin;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+body.desc-overlay {
+  .magv2-desc-popup-container {
+    transition: transform 400ms cubic-bezier(0, 0, 0.2, 1), opacity 0ms cubic-bezier(0, 0, 0.2, 1);
+    transform: translateX(0) !important;
+    opacity: 1;
+  }
+}

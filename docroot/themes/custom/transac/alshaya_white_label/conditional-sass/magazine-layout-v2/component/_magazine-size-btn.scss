@@ -1,0 +1,56 @@
+.magv2-size-btn-wrapper {
+  display: inline-block;
+  width: 60%;
+  background: white;
+  vertical-align: bottom;
+  border: 0.063rem solid $warm-grey-two;
+  line-height: 3.125rem;
+  padding-#{$left}: 1.25rem;
+  position: relative;
+  cursor: pointer;
+  color: $magv2-size-btn-text;
+  font-size: 1.125rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-#{$right}: 2rem;
+
+  .ie & {
+    vertical-align: inherit;
+  }
+
+  @include breakpoint($only-mobile) {
+    width: calc(50% - 0.625rem);
+    margin-top: 0.625rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    width: calc(50% - -0.938rem);
+    padding-#{$left}: 0.625rem;
+  }
+
+  @include breakpoint($desktop) {
+    width: calc(100% - 10.625rem);
+  }
+
+  @include icon(chevrondown, after) {
+    font-size: 1.5rem;
+    position: absolute;
+    #{$right}: 0.625rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include breakpoint($desktop) {
+      font-size: 2rem;
+    }
+  }
+}
+
+.magv2-size-btn-wrapper + .magv2-qty-wrapper {
+  margin-#{$left}: 1.25rem;
+
+  @include breakpoint($only-tablet) {
+    width: calc(50% - 1.563rem);
+    margin-#{$left}: 0.625rem;
+  }
+}
