@@ -1,1 +1,48 @@
-// Placeholder.
+.spc-aura-cart-rewards-block {
+  position: relative;
+  margin-bottom: 2.5rem;
+
+  .block-content {
+    background-image: $aura-block-bg-desktop;
+    border-radius: 0.625rem;
+    padding: 1.25rem;
+    display: flex;
+
+    .spc-aura-points-to-earn {
+      color: $aura-normal-text;
+      padding-#{$right}: 1.25rem;
+
+      .spc-aura-highlight {
+        color: $aura-highlight;
+        font-family: $alshaya-bold;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      flex-direction: column;
+      background-image: $aura-block-bg-mobile;
+      margin: 0 1.25rem;
+
+      .spc-aura-points-to-earn {
+        padding-#{$right}: 0;
+        padding-bottom: 1.25rem;
+      }
+    }
+
+    .spc-join-aura-link {
+      min-width: 10rem;
+      height: 2.875rem;
+      border-radius: 1.75rem;
+      border-style: solid;
+      border-width: 2px;
+      background-image: $aura-join-link;
+      background-origin: border-box;
+      background-clip: content-box, border-box;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-color: transparent;
+    }
+  }
+}

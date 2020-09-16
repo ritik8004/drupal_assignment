@@ -3,7 +3,7 @@ import SectionTitle from '../../../utilities/section-title';
 import PointsToEarnMessage from '../utilities/points-to-earn';
 import ConditionalView from '../../../common/components/conditional-view';
 
-class AuraRewards extends React.Component {
+class AuraCartRewards extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,7 +36,7 @@ class AuraRewards extends React.Component {
     }
 
     return (
-      <div className="spc-aura-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <SectionTitle>{sectionTitle}</SectionTitle>
         <div className="block-content">
           <PointsToEarnMessage points={points} />
@@ -47,7 +47,7 @@ class AuraRewards extends React.Component {
                   href="#"
                   className="spc-join-aura-link"
                 >
-                  {Drupal.t('JOIN AURA CLUB')}
+                  {Drupal.t('Sign up now')}
                 </a>
               </div>
             </div>
@@ -58,4 +58,4 @@ class AuraRewards extends React.Component {
   }
 }
 
-export default AuraRewards;
+export default AuraCartRewards;
