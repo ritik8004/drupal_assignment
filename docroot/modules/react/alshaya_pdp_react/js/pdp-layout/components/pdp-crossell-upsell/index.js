@@ -99,6 +99,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
           {Object.keys(products).map((sku) => (
             <PdpCrossellUpsellImage
               key={products[sku].gallery.mediumurl}
+              keyId={products[sku].gallery.mediumurl}
               imageUrl={products[sku].gallery.mediumurl}
               alt={products[sku].gallery.label}
               title={products[sku].title}
