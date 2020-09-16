@@ -23,6 +23,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
+import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout/aura-checkout-container';
 
 window.fetchStore = 'idle';
 
@@ -220,6 +221,10 @@ export default class Checkout extends React.Component {
             <ClicknCollectContextProvider cart={cart}>
               <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
             </ClicknCollectContextProvider>
+
+            {drupalSettings.aura && drupalSettings.aura.enabled
+              ? <AuraCheckoutContainer />
+              : null}
 
             <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={cart} />
 

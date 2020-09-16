@@ -39,8 +39,8 @@ function alshaya_aura_alshaya_my_account_links_alter(array &$links) {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
+ * Implements hook_page_attachments().
  */
-function alshaya_aura_preprocess_page(&$variables) {
-  $variables['#attached']['drupalSettings']['aura']['enabled'] = 1;
+function alshaya_aura_page_attachments(array &$page) {
+  $page['#attached']['drupalSettings']['aura']['enabled'] = 1;
 }
