@@ -38,7 +38,7 @@ export default class AppointmentCalendar extends React.Component {
     this.setState({
       week,
       previousDisabled: false,
-      setOpenDate: new Date(date),
+      setOpenDate: new Date(nextDate),
     });
   }
 
@@ -47,7 +47,7 @@ export default class AppointmentCalendar extends React.Component {
     const week = this.getWeekDates(new Date(prevDate), 'prev');
     this.setState({
       week,
-      setOpenDate: new Date(date),
+      setOpenDate: new Date(prevDate),
     });
   }
 
