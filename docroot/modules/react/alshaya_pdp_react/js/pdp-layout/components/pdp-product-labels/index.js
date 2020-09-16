@@ -1,8 +1,8 @@
 import React from 'react';
 
-const PdpProductLabels = (props) => {
-  const { labels, skuCode, variantSelected } = props;
-
+const PdpProductLabels = ({
+  labels, skuCode, variantSelected, context,
+}) => {
   if (!(labels && Array.isArray(labels) && labels.length)) return null;
 
   const bifercatedLabels = labels.reduce((aggregator, item) => {
@@ -26,7 +26,11 @@ const PdpProductLabels = (props) => {
             {
               bifercatedLabelsList.map((key) => (
                 <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-label-container`}>
-                  <PdpProductLabel bifercatedLabels={bifercatedLabels} directionKey={key} />
+                  <PdpProductLabel
+                    bifercatedLabels={bifercatedLabels}
+                    directionKey={key}
+                    context={context}
+                  />
                 </div>
               ))
             }
@@ -38,11 +42,11 @@ const PdpProductLabels = (props) => {
   return null;
 };
 
-const PdpProductLabel = (props) => {
-  const { bifercatedLabels, directionKey, context } = props;
-  return (
-    <>
-      {
+const PdpProductLabel = ({
+  bifercatedLabels, directionKey, context,
+}) => (
+  <>
+    {
         bifercatedLabels[directionKey].map((labelItem) => (
           // BE to provide and add a unique key here.
           <div className={`labels ${labelItem.position}`}>
@@ -54,8 +58,7 @@ const PdpProductLabel = (props) => {
           </div>
         ))
       }
-    </>
-  );
-};
+  </>
+);
 
 export default PdpProductLabels;
