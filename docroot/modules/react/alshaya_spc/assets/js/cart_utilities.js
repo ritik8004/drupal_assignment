@@ -1,6 +1,7 @@
 (function ($, Drupal) {
   'use strict';
 
+  var getProductDataRequests = {};
   Drupal.alshayaSpc = Drupal.alshayaSpc || {};
 
   Drupal.alshayaSpc.clearCartData = function () {
@@ -41,8 +42,7 @@
     return $.param(data);
   };
 
-  Drupal.alshayaSpc.getProductData = function (sku, callback, extraData) {
-    extraData = extraData || {};
+  Drupal.alshayaSpc.getLocalStorageProductData = function(sku, callback, extraData) {
     var langcode = $('html').attr('lang');
     var key = ['product', langcode, sku].join(':');
 
@@ -59,15 +59,55 @@
     var currentTime = new Date().getTime();
     if (data !== null && data.created - currentTime < expireTime) {
       callback(data, extraData);
+      return true;
+    }
+    return false;
+  }
+
+  Drupal.alshayaSpc.getProductData = function (sku, callback, extraData) {
+    extraData = extraData || {};
+
+    // If we can get data successfully from local storage we don't want to
+    // make api request.
+    if (Drupal.alshayaSpc.getLocalStorageProductData(sku, callback, extraData)) {
       return;
     }
 
-    var apiResponse = null;
+    // If api request is already strated, Store the request, callback and
+    // extraData info in an object, to trigger callback function call on
+    // success of api request.
+    if (getProductDataRequests[sku] && getProductDataRequests[sku]['api'] === 'requested') {
+      getProductDataRequests[sku]['callbacks'][callback] = {
+        callback: callback,
+        extraData: extraData,
+      };
+      return;
+    }
+
+    // Before we make api request, store the request, callback and extraData
+    // info in an object, to avoid making duplicate api request for same sku.
+    // and trigger callback function call on success of api request.
+    if (!getProductDataRequests[sku]) {
+      getProductDataRequests[sku] = {
+        'api': 'requested',
+        'callbacks': {},
+      }
+      getProductDataRequests[sku]['callbacks'][callback] = {
+        callback: callback,
+        extraData: extraData,
+      };
+    }
+
     $.ajax({
       url: Drupal.url('rest/v1/product/' + sku) + '?context=cart',
       type: 'GET',
       dataType: 'json',
+      beforeSend: function(xmlhttprequest, options) {
+        options.requestOrigin = 'getProductData';
+        return options;
+      },
       success: function (response) {
+        getProductDataRequests[sku]['api'] = 'finished';
         var image = '';
         if (response.extra_data !== undefined
           && response.extra_data['cart_image'] !== undefined
@@ -102,8 +142,6 @@
           isNonRefundable: Drupal.alshayaSpc.getAttributeVal(response.attributes, 'non_refundable_products'),
           gtmAttributes: response.gtm_attributes,
         });
-
-        callback(data, extraData);
       }
     });
   };
@@ -174,6 +212,31 @@
     }
     return groupingOptions;
   };
+
+  Drupal.behaviors.spcCartUtilities = {
+    attach: function(context) {
+      // Ajax success to trigger callbacks once api request from
+      // Drupal.alshayaSpc.getProductData finished.
+      $(document).once('getProductData-success').ajaxSuccess(function( event, xhr, settings ) {
+        if (settings.requestOrigin !== 'getProductData') {
+          return;
+        }
+
+        if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+          var data = xhr.responseJSON;
+          if (Object.keys(getProductDataRequests[data.sku]['callbacks']).length > 0) {
+            for (var key in getProductDataRequests[data.sku]['callbacks']) {
+              var callbackObj = getProductDataRequests[data.sku]['callbacks'][key];
+              Drupal.alshayaSpc.getLocalStorageProductData(data.sku, callbackObj.callback, callbackObj.extraData);
+            }
+            // Delete the object for the sku, as we don't need this data on the
+            // page any more.
+            delete getProductDataRequests[data.sku];
+          }
+        }
+      });
+    }
+  }
 
 })(jQuery, Drupal);
 
