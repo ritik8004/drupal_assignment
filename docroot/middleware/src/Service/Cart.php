@@ -14,6 +14,7 @@ use Doctrine\DBAL\Connection;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
 use Drupal\alshaya_master\Helper\SortUtility;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
 
@@ -140,6 +141,13 @@ class Cart {
   protected $connection;
 
   /**
+   * RequestStack Object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -170,6 +178,8 @@ class Cart {
    *   Logger service.
    * @param \Doctrine\DBAL\Connection $connection
    *   Database connection.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   RequestStack Object.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -185,7 +195,8 @@ class Cart {
     Drupal $drupal,
     Orders $orders,
     LoggerInterface $logger,
-    Connection $connection
+    Connection $connection,
+    RequestStack $requestStack
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -201,6 +212,7 @@ class Cart {
     $this->orders = $orders;
     $this->logger = $logger;
     $this->connection = $connection;
+    $this->request = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -750,6 +762,12 @@ class Cart {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
 
+    // Add success and fail redirect url to additional data.
+    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
+    $langcode = $this->request->query->get('lang');
+    $update['payment']['additional_data']['successUrl'] = $host . 'success/' . $langcode;
+    $update['payment']['additional_data']['failUrl'] = $host . 'error/' . $langcode;
+
     $old_cart = $this->getCart();
     $cart = $this->updateCart($update);
     if (isset($cart['error_code'])) {
@@ -1202,10 +1220,18 @@ class Cart {
 
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
+      $this->logger->notice('Place order initiated for Cart: @cart Data: @data', [
+        '@cart' => json_encode($cart),
+        '@data' => json_encode($data),
+      ]);
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, $request_options);
 
       if (!empty($lock)) {
         $lock->release();
+      }
+
+      if (!empty($result['redirect_url'])) {
+        return $result;
       }
 
       $order_id = (int) str_replace('"', '', $result);
@@ -1277,7 +1303,7 @@ class Cart {
    * @return array
    *   Final status array.
    */
-  private function processPostOrderPlaced(int $order_id, string $payment_method) {
+  public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
     $email = $this->getCartCustomerEmail();
 

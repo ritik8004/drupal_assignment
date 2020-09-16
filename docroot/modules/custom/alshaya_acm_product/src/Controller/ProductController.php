@@ -19,6 +19,11 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Cache\CacheableMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\alshaya_acm_product\SkuImagesManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\image\ImageStyleInterface;
+use Drupal\Core\Extension\ModuleHandler;
 
 /**
  * Class ProductController.
@@ -50,13 +55,29 @@ class ProductController extends ControllerBase {
   protected $acmConfig;
 
   /**
+   * The SKU Image Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImageManager;
+
+  /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  protected $moduleHandler;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('request_stack'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_acm_product.sku_images_manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -69,11 +90,23 @@ class ProductController extends ControllerBase {
    *   The request stack service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_image_manager
+   *   The SKU Image Manager.
+   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
+   *   The Module Handler service.
    */
-  public function __construct(SkuManager $sku_manager, RequestStack $request_stack, ConfigFactoryInterface $config_factory) {
+  public function __construct(
+      SkuManager $sku_manager,
+      RequestStack $request_stack,
+      ConfigFactoryInterface $config_factory,
+      SkuImagesManager $sku_image_manager,
+      ModuleHandler $module_handler
+    ) {
     $this->skuManager = $sku_manager;
     $this->request = $request_stack->getCurrentRequest();
     $this->acmConfig = $config_factory->get('alshaya_acm.settings');
+    $this->skuImageManager = $sku_image_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -257,6 +290,13 @@ class ProductController extends ControllerBase {
       }
 
       if (!empty($data)) {
+        // Getting the json response
+        // for new PDP layout.
+        if ($this->request->query->get('type') == 'json') {
+          $related_products = $this->getRelatedProductsJson($related_skus, $data);
+          $this->moduleHandler->alter('alshaya_acm_product_recommended_products_data', $type, $related_products);
+          return new JsonResponse($related_products);
+        }
         $build['related'] = [
           '#theme' => 'products_horizontal_slider',
           '#data' => $related_skus,
@@ -270,8 +310,57 @@ class ProductController extends ControllerBase {
 
     // Add cache metadata.
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray($build));
-
     return $response;
+  }
+
+  /**
+   * Get related products.
+   *
+   * @param array $related_skus
+   *   Related SKUs array.
+   * @param array $data
+   *   Data array.
+   *
+   * @return array
+   *   Related products data.
+   */
+  public function getRelatedProductsJson(array $related_skus, array $data) {
+    foreach ($related_skus as $related_sku => $value) {
+      $related_sku_entity = SKU::loadFromSku($related_sku);
+      if ($related_sku_entity instanceof SKUInterface) {
+        $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
+
+        if (!empty($sku_media['drupal_uri'])) {
+          $image_style = ImageStyle::load('product_zoom_medium_606x504');
+          if ($image_style instanceof ImageStyleInterface) {
+            $image = $image_style->buildUrl($sku_media['drupal_uri']);
+          }
+        }
+        $priceHelper = _alshaya_acm_product_get_price_helper();
+        $related_sku_price = $priceHelper->getPriceBlockForSku($related_sku_entity, []);
+        $price = $related_sku_price['#price']['#price'];
+        $final_price = isset($related_sku_price['#final_price']) ? $related_sku_price['#final_price']['#price'] : $price;
+        $title = $related_sku_entity->label();
+        $related_products['products'][$related_sku]['gallery']['mediumurl'] = $image;
+        $related_products['products'][$related_sku]['finalPrice'] = $final_price;
+        $related_products['products'][$related_sku]['priceRaw'] = $price;
+        $related_products['products'][$related_sku]['title'] = $title;
+        $related_products['products'][$related_sku]['productLabels'] = $this->skuManager->getLabelsData($related_sku_entity, 'pdp');
+        $related_products['products'][$related_sku]['promotions'] = $this->skuManager->getPromotions($related_sku_entity);
+        $related_products['section_title'] = render($data['section_title']);
+        $node = $this->skuManager->getDisplayNode($related_sku_entity);
+        if (!($node instanceof NodeInterface)) {
+          throw new NotFoundHttpException();
+        }
+        $link = $node
+          ? $node->toUrl('canonical', ['absolute' => TRUE])
+            ->toString(TRUE)
+            ->getGeneratedUrl()
+          : '';
+        $related_products['products'][$related_sku]['productUrl'] = $link;
+      }
+    }
+    return $related_products;
   }
 
 }

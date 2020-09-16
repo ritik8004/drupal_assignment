@@ -10,6 +10,39 @@
       }
     }
   }
+
+  .spc-promotions {
+    &.free-gift-container {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        position: static;
+        margin: 0;
+      }
+
+      .free-gift-promo {
+        .gift-message {
+          font-size: 0.75rem;
+          line-height: 1rem;
+
+          .coupon-code {
+            padding-#{$left}: 0.3125rem;
+            margin-#{$right}: 0.3125rem;
+            color: $spc-cart-free-gift-coupon-code;
+            font-family: $alshaya-bold;
+          }
+
+          .free-gift-title {
+            padding-#{$left}: 0.3125rem;
+
+            a.use-ajax {
+              color: $spc-cart-free-gifts-link;
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .spc-mobile-cart-preview {

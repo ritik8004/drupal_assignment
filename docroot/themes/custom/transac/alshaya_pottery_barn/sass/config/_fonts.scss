@@ -1,3 +1,5 @@
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn/fonts';
+
 @import url('https://fonts.googleapis.com/css?family=Cairo:300,400,600,700|Open+Sans:300,400,600,700&subset=arabic');
 
 // Define Fonts
@@ -6,12 +8,103 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('../fonts/alshaya-icons.eot?1ajdhm');
+  src: url('../fonts/alshaya-icons.eot?2ajdhm');
   src:
-    url('../fonts/alshaya-icons.eot?1ajdhm#iefix') format('embedded-opentype'),
-    url('../fonts/alshaya-icons.ttf?1ajdhm') format('truetype'),
-    url('../fonts/alshaya-icons.woff?1ajdhm') format('woff'),
-    url('../fonts/alshaya-icons.svg?1ajdhm#alshaya-icons') format('svg');
+    url('../fonts/alshaya-icons.eot?2ajdhm#iefix') format('embedded-opentype'),
+    url('../fonts/alshaya-icons.ttf?2ajdhm') format('truetype'),
+    url('../fonts/alshaya-icons.woff?2ajdhm') format('woff'),
+    url('../fonts/alshaya-icons.svg?2ajdhm#alshaya-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// DY fonts.
+@font-face {
+  font-family: "Montserrat-Bold";
+  src: url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat-Medium";
+  src: url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat-Regular";
+  src: url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat-SemiBold";
+  src: url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NunitoSans-Regular";
+  src: url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SweetSansPro-Medium";
+  src: url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -109,7 +202,15 @@ $icons: (
   edit-input: "\e93f",
   arrow-left: "\e940",
   arrow-right: "\e941",
-  bin: "\e9ac"
+  bin: "\e9ac",
+  new-facebook-default: "\e942",
+  new-facebook-hover: "\e943",
+  new-instagram-default: "\e944",
+  new-instagram-hover: "\e945",
+  new-twitter-default: "\e946",
+  new-twitter-hover: "\e947",
+  new-whatsapp-default: "\e948",
+  new-whatsapp-hover: "\e949"
 );
 
 @mixin iconbase() {

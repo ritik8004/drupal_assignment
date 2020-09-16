@@ -66,3 +66,9 @@ services:
       - '@entity_type.manager'
       - '@config.factory'
       - '@cache.product_category_tree'
+
+  alshaya_acm_product_category.mapping_manager:
+    class: Drupal\alshaya_acm_product_category\Service\ProductCategoryMappingManager
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@acq_sku.category_repo'

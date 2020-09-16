@@ -73,3 +73,17 @@ payment.cybersource_payment_finalise:
     controller: App\Controller\CyberSourcePaymentController::finaliseCybersource
     methods: POST
 
+payment.payment_success:
+  path: /payment/success/{langcode}
+  controller: App\Controller\PaymentController::handlePaymentSuccess
+  methods: GET
+
+payment.payment_error:
+  path: /payment/error/{langcode}
+  controller: App\Controller\PaymentController::handlePaymentFail
+  methods: GET
+
+loyalty_club.get_customer_points:
+    path: /get/loyalty-club/get-customer-points
+    controller: App\Controller\LoyaltyClubController::getCustomerPoints
+    methods: GET

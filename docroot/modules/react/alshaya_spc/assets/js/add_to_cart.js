@@ -109,8 +109,27 @@
                   var cleaned_sku = $(form).attr('data-cleaned-sku');
                   // Showing the error message.
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
-                  // Trigger the failed event for other listeners.
-                  $(form).trigger('product-add-to-cart-failed', [productData, response]);
+
+                  // Process required data and trigger add to cart failure event.
+                  const selectedOptions = [];
+                  // Get the key-value pair of selected option name and value.
+                  document.querySelectorAll('#configurable_ajax select').forEach(element => {
+                    const configLabel = element.getAttribute('data-default-title');
+                    const configValue = element.querySelector('option:selected').innerHTML;
+                    const option = `${configLabel}: ${configValue}`;
+                    selectedOptions.push(option);
+                  });
+                  productData.options = selectedOptions;
+                  // Prepare the event.
+                  const cartNotification = new CustomEvent('product-add-to-cart-failed', {
+                    bubbles: true,
+                    detail: {
+                      productData,
+                      message: response.error_message,
+                    },
+                  });
+                  // Dispatch event so that handlers can process it.
+                  form[0].dispatchEvent(cartNotification);
                 }
                 else if (response.cart_id) {
                   if (response.response_message.status === 'success'
@@ -124,13 +143,20 @@
                   $('.error-container-' + cleaned_sku).html('');
 
                   // Trigger the success event for other listeners.
-                  $(form).trigger('product-add-to-cart-success', [productData, response]);
+                  var cartNotification = jQuery.Event('product-add-to-cart-success', {
+                    detail: {
+                      productData: productData,
+                      cartData: cart_data,
+                    }
+                  });
+                  $(form).trigger(cartNotification);
 
                   var productInfo = drupalSettings.productInfo[productData.parentSku];
                   var options = [];
                   var productUrl = productInfo.url;
                   var price = productInfo.priceRaw;
                   var promotions = productInfo.promotionsRaw;
+                  var freeGiftPromotion = productInfo.freeGiftPromotion;
                   var productDataSKU = productData.sku;
                   var parentSKU = productData.sku;
                   var maxSaleQty = productData.maxSaleQty;
@@ -144,6 +170,7 @@
                     price = productVariantInfo.priceRaw;
                     parentSKU = productVariantInfo.parent_sku;
                     promotions = productVariantInfo.promotionsRaw;
+                    freeGiftPromotion = productVariantInfo.freeGiftPromotion || freeGiftPromotion;
                     options = productVariantInfo.configurableOptions;
                     maxSaleQty = productVariantInfo.maxSaleQty;
                     maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
@@ -159,6 +186,7 @@
                     price = productVariantInfo.priceRaw;
                     parentSKU = productVariantInfo.parent_sku;
                     promotions = productVariantInfo.promotionsRaw;
+                    freeGiftPromotion = productVariantInfo.freeGiftPromotion || freeGiftPromotion;
                     if (productVariantInfo.grouping_options !== undefined
                       && productVariantInfo.grouping_options.length > 0) {
                       options = productVariantInfo.grouping_options;
@@ -182,6 +210,7 @@
                     price: price,
                     options: options,
                     promotions: promotions,
+                    freeGiftPromotion: freeGiftPromotion,
                     maxSaleQty: maxSaleQty,
                     maxSaleQtyParent: maxSaleQtyParent,
                     gtmAttributes: gtmAttributes,

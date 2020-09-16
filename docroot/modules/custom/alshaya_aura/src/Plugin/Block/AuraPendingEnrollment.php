@@ -76,7 +76,7 @@ class AuraPendingEnrollment extends BlockBase implements ContainerFactoryPluginI
     $route_name = $this->routeMatch->getRouteName();
 
     // Show Pending enrollment block only on accounts and loyalty club page.
-    return AccessResult::allowedIf(in_array($route_name, ['entity.user.canonical', 'alshaya_aura.my_loyalty_club']));
+    return AccessResult::allowedIf(in_array($route_name, ['entity.user.canonical', 'alshaya_aura.loyalty_club']));
   }
 
 }

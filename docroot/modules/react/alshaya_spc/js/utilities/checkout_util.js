@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {
-  removeCartFromStorage,
   getStorageInfo,
   getInfoFromStorage,
 } from './storage';
@@ -110,8 +109,11 @@ export const placeOrder = (paymentMethod) => {
     .then(
       (response) => {
         if (response.data.error === undefined) {
-          // Remove cart info from storage.
-          removeCartFromStorage();
+          // If url is absolute, then redirect to the external payment page.
+          if (response.data.isAbsoluteUrl !== undefined && response.data.isAbsoluteUrl) {
+            window.location.href = response.data.redirectUrl;
+            return;
+          }
 
           window.location = Drupal.url(response.data.redirectUrl);
           return;
@@ -544,3 +546,11 @@ export function validateCvv(cvv) {
   const cvvLength = cvv.toString().length;
   return [3, 4].includes(cvvLength) && !Number.isNaN(cvv);
 }
+
+export const applyCode = (e) => {
+  const codeValue = e.target.innerHTML;
+  if (codeValue !== undefined) {
+    document.getElementById('promo-code').value = codeValue.trim();
+    document.getElementById('promo-action-button').click();
+  }
+};

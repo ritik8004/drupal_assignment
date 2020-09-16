@@ -18,6 +18,8 @@ import CartItemFree from '../cart-item-free';
 import { getStorageInfo } from '../../../utilities/storage';
 import { isQtyLimitReached } from '../../../utilities/checkout_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
+import CartPromotionFreeGift from '../cart-promotion-freegift';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class CartItem extends React.Component {
   constructor(props) {
@@ -169,13 +171,13 @@ export default class CartItem extends React.Component {
         freeItem,
         stock,
         finalPrice,
-        price,
         in_stock: inStock,
         error_msg: itemErrorMsg,
       },
       qtyLimit: currentQtyLimit,
       animationOffset,
       productPromotion,
+      couponCode,
     } = this.props;
 
     const {
@@ -184,8 +186,10 @@ export default class CartItem extends React.Component {
         image,
         options,
         promotions,
+        freeGiftPromotion,
         title,
         url,
+        price,
         maxSaleQty,
       },
     } = this.state;
@@ -258,8 +262,17 @@ export default class CartItem extends React.Component {
             </div>
           </div>
         </div>
-        <div className="spc-promotions">
-          {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} link />)}
+        <div className="spc-promotions free-gift-container">
+          {promotions.map((promo) => <CartPromotion key={`${sku}-${promo.text}`} promo={promo} sku={sku} couponCode={couponCode} link />)}
+
+          <ConditionalView condition={freeGiftPromotion !== null}>
+            <CartPromotionFreeGift
+              key={`${sku}-free-gift`}
+              promo={freeGiftPromotion}
+              sku={sku}
+              couponCode={couponCode}
+            />
+          </ConditionalView>
         </div>
         <Notifications>
           <CartItemOOS type="warning" inStock={inStock} />

@@ -1,0 +1,78 @@
+.group-option-wrapper,
+.non-group-option-wrapper {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 7.9375rem;
+    }
+
+    li {
+      background: $spc-cnc-store-item-bg;
+      border-bottom: 0.0625rem solid $spc-checkout-sidebar-bg;
+
+      .magv2-select-list-wrapper {
+        cursor: pointer;
+        padding-#{$right}: 1.25rem;
+        display: block;
+        font-size: 0.875rem;
+        color: $magv2-size-options;
+        position: relative;
+
+        @include icon(radio-empty, before) {
+          position: absolute;
+          #{$left}: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 3.4375rem;
+          width: 3.75rem;
+          text-align: center;
+          color: $spc-checkout-radio-empty;
+          pointer-events: none;
+        }
+
+        .magv2-select-list-name {
+          width: 100%;
+          padding-#{$left}: 3.75rem;
+          height: 3.125rem;
+          display: inline-flex;
+          align-items: center;
+
+          html[lang=ar] & {
+            line-height: normal;
+          }
+
+          @include breakpoint($only-mobile) {
+            width: calc(100% - 2.5rem);
+          }
+        }
+      }
+
+      &.active {
+        .magv2-select-list-wrapper {
+          @include icon(radio-filled, before) {
+            color: $magv2-size-radio-filled;
+          }
+        }
+      }
+
+      &:hover {
+        background: rgba(51, 51, 51, 0.06);
+      }
+
+      &.disabled {
+        pointer-events: none;
+
+        .magv2-select-list-wrapper {
+          color: $magv2-size-option-disabled;
+
+          &::before {
+            color: $magv2-size-option-disabled;
+          }
+        }
+      }
+    }
+  }
+}
