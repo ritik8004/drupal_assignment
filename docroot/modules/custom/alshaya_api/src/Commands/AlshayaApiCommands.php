@@ -5,7 +5,9 @@ namespace Drupal\alshaya_api\Commands;
 use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\StockManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_acm_product_category\Service\ProductCategoryMappingManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -100,6 +102,20 @@ class AlshayaApiCommands extends DrushCommands {
   protected $drupalData;
 
   /**
+   * Stock Manager.
+   *
+   * @var \Drupal\acq_sku\StockManager
+   */
+  protected $stockManager;
+
+  /**
+   * Product Category Mapping Manager.
+   *
+   * @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryMappingManager
+   */
+  protected $categoryMappingManager;
+
+  /**
    * AlshayaApiCommands constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
@@ -122,6 +138,10 @@ class AlshayaApiCommands extends DrushCommands {
    *   Database lock service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
+   * @param \Drupal\acq_sku\StockManager $stock_manager
+   *   Stock Manager.
+   * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryMappingManager $category_mapping_manager
+   *   Product Category Mapping Manager.
    */
   public function __construct(LanguageManagerInterface $languageManager,
                               AlshayaApiWrapper $alshayaApiWrapper,
@@ -132,7 +152,9 @@ class AlshayaApiCommands extends DrushCommands {
                               Connection $connection,
                               EntityTypeManagerInterface $entityTypeManager,
                               LockBackendInterface $lock,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              StockManager $stock_manager,
+                              ProductCategoryMappingManager $category_mapping_manager) {
     $this->languageManager = $languageManager;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->skuManager = $skuManager;
@@ -143,6 +165,9 @@ class AlshayaApiCommands extends DrushCommands {
     $this->entityTypeManager = $entityTypeManager;
     $this->lock = $lock;
     $this->configFactory = $config_factory;
+    $this->stockManager = $stock_manager;
+    $this->categoryMappingManager = $category_mapping_manager;
+
     parent::__construct();
   }
 
@@ -297,6 +322,8 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage drush alshaya-api-sanity-check-cats --page_size=2
    */
   public function sanityCheckCategoryMappings(array $options = ['page_size' => 3]) {
+    $verbose = $options['verbose'] ?? FALSE;
+
     $to_sync = [];
 
     // MDC categories those needs to be ignored while checking for the category
@@ -309,67 +336,78 @@ class AlshayaApiCommands extends DrushCommands {
     $mskus = $this->getDataFromMagento();
 
     $result = $this->connection->query('SELECT field_skus_value, field_commerce_id_value FROM node__field_skus
-    LEFT JOIN node__field_category ON node__field_skus.entity_id = node__field_category.entity_id
-    LEFT JOIN taxonomy_term__field_commerce_id ON node__field_category.field_category_target_id = taxonomy_term__field_commerce_id.entity_id
-    WHERE field_commerce_id_value IS NOT NULL')->fetchAll();
+    LEFT JOIN node__field_category_original category
+      ON node__field_skus.entity_id = category.entity_id
+    LEFT JOIN taxonomy_term__field_commerce_id 
+      ON category.field_category_original_target_id = taxonomy_term__field_commerce_id.entity_id')->fetchAll();
 
     $dskus = [];
     foreach ($result as $row) {
       $dskus[$row->field_skus_value]['category_ids'][] = $row->field_commerce_id_value;
     }
 
-    foreach ($mskus as $data) {
-      foreach ($data as $sku => $row) {
-        $message = '';
+    foreach ($mskus as $sku => $row) {
+      $message = '';
 
-        // For whatever reason, we might not have the product in Drupal.
-        // Skip category mis match for it.
-        if (empty($dskus[$sku])) {
-          continue;
-        }
+      // For whatever reason, we might not have the product in Drupal.
+      // Skip category mis match for it.
+      if (empty($dskus[$sku])) {
+        continue;
+      }
 
-        $mids = explode(',', $row['category_ids']);
-        $dids = $dskus[$sku]['category_ids'];
+      $mids = explode(',', $row['category_ids'] ?? '');
+      $dids = $dskus[$sku]['category_ids'] ?? [];
 
-        $mids = array_filter($mids, function ($a) use ($skip_cats) {
-          return !empty($a) && !(in_array($a, $skip_cats));
-        });
+      $mids = array_filter($mids, function ($a) use ($skip_cats) {
+        return !empty($a) && !(in_array($a, $skip_cats));
+      });
 
-        $dids = array_filter($dids);
+      $dids = array_filter($dids);
 
-        // Skip if both are empty.
-        if (empty($mids) && empty($dids)) {
-          continue;
-        }
-        // Sync if either is empty.
-        elseif (empty($mids) || empty($dids)) {
-          $message = dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
-            '@sku' => $sku,
-            '@magento' => implode(',', $mids),
-            '@drupal' => implode(',', $dids),
-          ]);
+      // Skip if both are empty.
+      if (empty($mids) && empty($dids)) {
+        continue;
+      }
+      // Sync if either is empty.
+      elseif (empty($mids) || empty($dids)) {
+        $message = dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
+          '@sku' => $sku,
+          '@magento' => implode(',', $mids),
+          '@drupal' => implode(',', $dids),
+        ]);
 
-          $to_sync[$sku] = $sku;
-        }
-        // Sync if either of them have additional values or difference.
-        elseif (array_diff($mids, $dids) || array_diff($dids, $mids)) {
-          $message = dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
-            '@sku' => $sku,
-            '@magento' => implode(',', $mids),
-            '@drupal' => implode(',', $dids),
-          ]);
+        $to_sync[$sku] = $mids;
+      }
+      // Sync if either of them have additional values or difference.
+      elseif (array_diff($mids, $dids) || array_diff($dids, $mids)) {
+        $message = dt('SKU: @sku, Magento IDs: @magento, Drupal IDs: @drupal', [
+          '@sku' => $sku,
+          '@magento' => implode(',', $mids),
+          '@drupal' => implode(',', $dids),
+        ]);
 
-          $to_sync[$sku] = $sku;
-        }
+        $to_sync[$sku] = $mids;
+      }
 
-        if ($message) {
-          $this->logMessage($message, $options['verbose'] ?? FALSE);
-        }
+      if ($message) {
+        $this->logMessage($message, $verbose);
       }
     }
 
     if (empty($to_sync)) {
       $this->logger()->notice('No category mapping diff found.');
+      return;
+    }
+
+    $confirmation = dt('Do you want to update product category mappings directly? Count: @count', [
+      '@count' => count($to_sync),
+    ]);
+
+    if ($verbose && $this->io()->confirm($confirmation)) {
+      foreach ($to_sync as $sku => $mids) {
+        $this->categoryMappingManager->mapCategoriesToProduct($sku, $mids);
+      }
+
       return;
     }
 
@@ -379,7 +417,7 @@ class AlshayaApiCommands extends DrushCommands {
 
     if ($this->io()->confirm($confirmation)) {
       $this->requestSync(
-        $to_sync,
+        array_keys($to_sync),
         $this->configFactory->get('acq_commerce.store')->get('store_id'),
         'en',
         $options['page_size']
@@ -400,7 +438,10 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage drush alshaya-api-sanity-check-stock --page_size=2
    */
   public function sanityCheckStock(array $options = ['page_size' => 3]) {
+    $verbose = $options['verbose'] ?? FALSE;
+
     $to_sync = [];
+    $to_update = [];
 
     $dskus = $this->getDataFromDrupal();
     $mskus = $this->getDataFromMagento();
@@ -424,7 +465,9 @@ class AlshayaApiCommands extends DrushCommands {
         $message = $sku . ' | ';
         $message .= 'Drupal stock:' . $data['quantity'] . ' | ';
         $message .= 'MDC stock:' . $mdata['qty'];
-        $this->logMessage($message, $options['verbose'] ?? FALSE);
+        $this->logMessage($message, $verbose);
+
+        $to_update[$sku] = $mdata;
 
         $to_sync['stock_quantity'][] = $sku;
         continue;
@@ -437,7 +480,9 @@ class AlshayaApiCommands extends DrushCommands {
         $message = $sku . ' | ';
         $message .= 'Drupal stock status:' . $data['status'] . ' | ';
         $message .= 'MDC stock status:' . $mdata['stock_status'];
-        $this->logMessage($message, $options['verbose'] ?? FALSE);
+        $this->logMessage($message, $verbose);
+
+        $to_update[$sku] = $mdata;
 
         $to_sync['stock_status'][] = $sku;
         continue;
@@ -458,15 +503,35 @@ class AlshayaApiCommands extends DrushCommands {
         $message = $sku . ' | ';
         $message .= 'Drupal max sale quantity:' . $data['max_sale_qty'] . ' | ';
         $message .= 'MDC max sale quantity:' . $mdata['max_sale_qty'];
-        $this->logMessage($message, $options['verbose'] ?? FALSE);
+        $this->logMessage($message, $verbose);
+
+        $to_update[$sku] = $mdata;
 
         $to_sync['stock_max_sale_qty'][] = $sku;
         continue;
       }
     }
 
-    if (empty($to_sync)) {
+    if (empty($to_update)) {
       $this->logger()->notice('No stock difference found.');
+      return;
+    }
+
+    $confirmation = dt('Do you want to update stock status in database directly? Count: @count', [
+      '@count' => count($to_update),
+    ]);
+
+    if ($verbose && $this->io()->confirm($confirmation)) {
+      foreach ($to_update as $sku => $mdata) {
+        $this->stockManager->updateStock(
+          $sku,
+          (float) $mdata['qty'],
+          (bool) $mdata['stock_status'],
+          (float) $mdata['max_sale_qty'],
+          (bool) $mdata['use_config_max_sale_qty']
+        );
+      }
+
       return;
     }
 
@@ -501,6 +566,7 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage drush alshaya-api-sanity-check-price --page_size=2
    */
   public function sanityCheckPrice(array $options = ['page_size' => 3]) {
+    $verbose = $options['verbose'] ?? FALSE;
     $to_sync = [];
 
     $dskus = $this->getDataFromDrupal();
@@ -512,7 +578,7 @@ class AlshayaApiCommands extends DrushCommands {
       $mdata = $mskus[$sku] ?? [];
 
       // We will check in status if not available now in Magento.
-      if (empty($mdata)) {
+      if (empty($mdata) || $mdata['type_id'] !== 'simple') {
         continue;
       }
 
@@ -529,14 +595,32 @@ class AlshayaApiCommands extends DrushCommands {
         $message .= 'MDC price:' . $m_price . ' | ';
         $message .= 'Drupal final price:' . $d_final_price . ' | ';
         $message .= 'MDC final price:' . $m_final_price;
-        $this->logMessage($message, $options['verbose'] ?? FALSE);
+        $this->logMessage($message, $verbose);
 
-        $to_sync[] = $sku;
+        $to_sync[$sku] = $mdata;
       }
     }
 
     if (empty($to_sync)) {
       $this->logger()->notice('No price difference found.');
+      return;
+    }
+
+    // Sync?
+    $confirmation = dt('Do you want to update product prices directly? Count: @count', [
+      '@count' => count($to_sync),
+    ]);
+
+    if ($verbose && $this->io()->confirm($confirmation)) {
+      foreach ($to_sync as $sku => $mdata) {
+        $sku_entity = SKU::loadFromSku($sku);
+        if ($sku_entity instanceof SKU) {
+          $sku_entity->get('price')->setValue($mdata['price']);
+          $sku_entity->get('final_price')->setValue($mdata['final_price']);
+          $sku_entity->save();
+        }
+      }
+
       return;
     }
 
@@ -547,7 +631,7 @@ class AlshayaApiCommands extends DrushCommands {
 
     if ($this->io()->confirm($confirmation)) {
       $this->requestSync(
-        $to_sync,
+        array_keys($to_sync),
         $this->configFactory->get('acq_commerce.store')->get('store_id'),
         'en',
         $options['page_size']
