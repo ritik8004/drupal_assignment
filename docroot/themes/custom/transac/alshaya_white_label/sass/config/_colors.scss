@@ -33,7 +33,6 @@ $marine-blue: #003773;
 $grey-shade: #c1c1c1;
 $grey-light: #777;
 $grey-light-two: #f3f3f3;
-$magenta: #8e227c;
 // Mothercare
 $warm-grey-two: #dadada;
 $black: #333;
@@ -148,6 +147,13 @@ $extreme-blush: #e62075;
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
 $aura-gradient-2: linear-gradient(129deg, rgba(252, 190, 123, 0.1) -100%, rgba(251, 170, 105, 0.1) -35%, rgba(240, 54, 137, 0.1) 40%, rgba(152, 34, 163, 0.1) 111%);
 $aura-gradient-3: linear-gradient(to bottom, #fff, #fff), linear-gradient(106deg, #e71e6e 16%, #662483 85%);
+$aura-blue: #263166;
+$aura-pink: #e62075;
+$aura-purple: #7a2682;
+$aura-darkblue: #1e2a54;
+$aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
+$aura-purpleTwo: #772583;
+$aura-gradient-mobile: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1535,3 +1541,12 @@ $aura-block-bg-mobile: $aura-gradient-2;
 $aura-normal-text: $purple-glory;
 $aura-highlight: $extreme-blush;
 $aura-join-link: $aura-gradient-3;
+$title-blue: $aura-blue;
+$title-pink: $extreme-blush;
+$join-aura-link-bg: $aura-gradient-radial;
+$benefits-text: $aura-darkblue;;
+$join-aura-link: $white-five;
+$learn-more-link: $aura-purpleTwo;
+$mobile-aura-link-bg: $white-three;
+$aura-block-bg-desktop: $white-five;
+$aura-block-bg-mobile: $aura-gradient-mobile;

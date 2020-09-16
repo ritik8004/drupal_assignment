@@ -294,21 +294,23 @@
 
   Drupal.behaviors.auraHeaderPopup = {
     attach: function (context) {
-      $('.aura-header-link a', context).on('click', function (e) {
-        e.preventDefault();
-        $('.aura-header-popup-wrapper').toggle();
-        e.stopPropagation();
-      });
+      if ($(window).width() > 1024) {
+        $('.aura-header-link a', context).on('click', function (e) {
+          e.preventDefault();
+          $('.aura-header-popup-wrapper').toggle();
+          e.stopPropagation();
+        });
 
-      $(document, context).on('click', function (e) {
-        var displayState = $('.aura-header-popup-wrapper').css('display');
+        $(document, context).on('click', function (e) {
+          var displayState = $('.aura-header-popup-wrapper').css('display');
 
-        if (displayState !== 'none') {
-          if (!($(e.target).closest('.aura-header-popup-wrapper').length)) {
-            $('.aura-header-popup-wrapper').hide();
+          if (displayState !== 'none') {
+            if (!($(e.target).closest('.aura-header-popup-wrapper').length)) {
+              $('.aura-header-popup-wrapper').hide();
+            }
           }
-        }
-      });
+        });
+      }
     }
   };
 })(jQuery, Drupal, drupalSettings);
