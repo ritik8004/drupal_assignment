@@ -218,7 +218,9 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
             />
-            <AuraCartContainer animationDelay="0.4s" />
+            {drupalSettings.aura && drupalSettings.aura.enabled
+              ? <AuraCartContainer animationDelay="0.4s" />
+              : null}
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}
