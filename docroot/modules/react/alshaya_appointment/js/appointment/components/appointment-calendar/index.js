@@ -240,6 +240,8 @@ export default class AppointmentCalendar extends React.Component {
                 openToDate={setOpenDate}
                 useWeekdaysShort
                 onMonthChange={this.handleMonthChange}
+                disabledKeyboardNavigation
+                maxDate={moment().add('6', 'months').toDate()}
               />
             </div>
           </Swipeable>
