@@ -1225,12 +1225,13 @@ class Cart {
         '@data' => json_encode($data),
       ]);
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, $request_options);
-      if ($result['redirect_url']) {
-        return $result;
-      }
 
       if (!empty($lock)) {
         $lock->release();
+      }
+
+      if (!empty($result['redirect_url'])) {
+        return $result;
       }
 
       $order_id = (int) str_replace('"', '', $result);
