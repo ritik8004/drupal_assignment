@@ -60,7 +60,7 @@
     };
 
     Drupal.setL2MenuHeight = function (activeMenu, currentMenuLevel2Height, parentHeight, childHeight) {
-      var menuLevel2Height = Math.max(currentMenuLevel2Height, parentHeight, childHeight) + 15;
+      var menuLevel2Height = Math.max(currentMenuLevel2Height, parentHeight, childHeight) + 8;
       activeMenu.parents(menuLevel2).css('height', menuLevel2Height + 'px');
     };
 
