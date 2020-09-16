@@ -17,6 +17,7 @@ import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
+import AuraCartContainer from '../../../aura-loyalty/components/aura-rewards/aura-cart-container';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -217,6 +218,7 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
             />
+            <AuraCartContainer animationDelay="0.4s" />
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}
