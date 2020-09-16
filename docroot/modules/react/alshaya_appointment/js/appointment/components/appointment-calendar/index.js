@@ -102,6 +102,7 @@ export default class AppointmentCalendar extends React.Component {
     dateChanged(new Date(date));
     this.setState({
       selectDate: new Date(date),
+      setOpenDate: new Date(date),
     });
   };
 
