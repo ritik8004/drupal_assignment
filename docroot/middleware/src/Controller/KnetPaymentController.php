@@ -95,7 +95,7 @@ class KnetPaymentController extends PaymentController {
     SessionStorage $session,
     SystemSettings $settings
   ) {
-    parent::__construct($logger, $settings);
+    parent::__construct($logger, $settings, $cart);
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->knetHelper = $knet_helper;

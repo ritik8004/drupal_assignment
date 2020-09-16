@@ -106,7 +106,11 @@ if (file_exists('/var/www/site-php')) {
   $env = $site_settings['env'];
   $role = $site_settings['conf']['acsf_db_name'];
 
-  $_acsf_include_file = "/var/www/site-php/{$site_settings['site']}.{$site_settings['env']}/D8-{$site_settings['env']}-{$site_settings['conf']['acsf_db_name']}-settings.inc";
+  $drupal_version = 8;
+  if (version_compare(\Drupal::VERSION, '9', '>=')) {
+    $drupal_version = 9;
+  }
+  $_acsf_include_file = "/var/www/site-php/{$site_settings['site']}.{$site_settings['env']}/D{$drupal_version}-{$site_settings['env']}-{$site_settings['conf']['acsf_db_name']}-settings.inc";
   if (file_exists($_acsf_include_file)) {
     // Acquia rules disallow 'include/require' with dynamic arguments.
     // phpcs:disable

@@ -920,6 +920,7 @@ class SkuManager {
 
         case 'free_gift':
           $promos[$promotion_node->id()] = [];
+          $promos[$promotion_node->id()]['type'] = 'free_gift';
           $promos[$promotion_node->id()]['text'] = $promotion_text;
           $promos[$promotion_node->id()]['description'] = $description;
           $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getValue();
@@ -937,6 +938,7 @@ class SkuManager {
 
         default:
           $promos[$promotion_node->id()] = [
+            'type' => 'generic',
             'text' => $promotion_text,
             'description' => $description,
             'discount_type' => $discount_type,
