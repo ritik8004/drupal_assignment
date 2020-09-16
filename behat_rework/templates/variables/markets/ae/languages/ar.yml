@@ -73,4 +73,5 @@ variables:
   billing_text: 'Billing address:'
   language_cc_payment_type: 'Credit / Debit Card'
   cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
-
+  store_area: 'دبي'
+  language_store_area: 'Dubai - United Arab Emirates'

@@ -1827,8 +1827,8 @@ class FeatureContext extends CustomMinkContext
   public function iPriceCurrencyMatches($cart_promotional = NULL)
   {
     $page = $this->getSession()->getPage();
-    if ($page->find('css', '#block-content .acq-content-product .content__title_wrapper .has--special--price')) {
-      $product_price = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-amount')->getHtml();
+    if ($page->find('css', '#block-content .acq-content-product div.content__title_wrapper .price-block .has--special--price')) {
+      $product_price = $page->find('css', '#block-content .acq-content-product div.content__title_wrapper .price-block .special--price .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
       $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-currency')->getHtml();
     }

@@ -205,7 +205,11 @@ export default class Cart extends React.Component {
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
             <DeliveryInOnlyCity />
-            <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />
+            <CartItems
+              dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
+              items={items}
+              couponCode={couponCode}
+            />
           </div>
           <div className="spc-sidebar">
             <CartPromoBlock

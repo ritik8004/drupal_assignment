@@ -268,7 +268,7 @@
 
           menuBackdrop.height(maxHeight);
           menuLevel2.each(function () {
-            $(this).height(maxHeight);
+            $(this).height(maxHeight + 20);
             if (!$('.block-alshaya-main-menu').hasClass('megamenu-inline-layout')) {
               $(this).css('max-height', 'calc(100vh - ' + calcMaxHeight + 'px)');
             }

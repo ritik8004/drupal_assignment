@@ -112,15 +112,16 @@ function alshaya_acm_promotion_acq_promotion_data_alter(&$promotion) {
   // @Todo: remove it when we using v2 for all.
   $extension_key = $middleware_version == 'v2' ? 'extension' : 'extension_attributes';
 
-  // Extract free gift skus & remove them from list of products to be processed
-  // for this promotion.
+  // Remove the free gift skus from products list.
   foreach ($promotion['products'] as $key => $product) {
-    if (!empty($product[$extension_key])
-      && !empty($product[$extension_key]['ampromo_cart_sku'])
-      && ($product[$extension_key]['ampromo_cart_sku'])) {
-      $promotion['free_gift_products'][] = $product['product_sku'];
+    if (isset($product[$extension_key], $product[$extension_key]['ampromo_cart_sku'])) {
       unset($promotion['products'][$key]);
     }
+  }
+
+  // Read free gift skus from promo_skus key in extension_attributes.
+  if (isset($promotion[$extension_key]['promo_skus']) && !empty($promotion[$extension_key]['promo_skus'])) {
+    $promotion['free_gift_products'] = array_map('trim', explode(',', $promotion[$extension_key]['promo_skus']));
   }
 }
 
@@ -361,6 +362,7 @@ function alshaya_acm_promotion_sku_variant_info_alter(array &$variant, SKUInterf
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
   $variant['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($child, 'api');
+  $variant['freeGiftPromotion'] = $promoLabelManager->getPromotionLabelForProductDetail($child, 'free_gift');
 }
 
 /**
@@ -370,4 +372,14 @@ function alshaya_acm_promotion_sku_product_info_alter(array &$product_info, SKUI
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
   $product_info['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'api');
+  $product_info['freeGiftPromotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift');
+}
+
+/**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_acm_promotion_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+  $data['freeGiftPromotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift');
 }

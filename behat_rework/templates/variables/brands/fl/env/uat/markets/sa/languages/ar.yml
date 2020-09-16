@@ -1,10 +1,10 @@
 variables:
   url_base_uri: 'https://flsa2-uat.factory.alshaya.com/ar/'
-  language_collection_filter: 'Collection'
+  language_collection_filter: ''
   language_sort_filter: 'sort by'
   language_price_filter: 'Price'
   language_brand_filter: ''
-  language_color_filter: 'Color'
+  language_color_filter: ''
   language_size_filter: 'Size'
   language_filters: ''
   language_promotional_filter: ''

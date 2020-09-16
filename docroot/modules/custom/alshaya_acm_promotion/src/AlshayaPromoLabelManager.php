@@ -31,6 +31,7 @@ class AlshayaPromoLabelManager {
     'groupn_fixdisc',
     'groupn_disc',
     'ampromo_cart',
+    'ampromo_items',
   ];
   const ALSHAYA_PROMOTIONS_STATIC_PROMO = 0;
   const ALSHAYA_PROMOTIONS_DYNAMIC_PROMO = 1;
@@ -517,6 +518,7 @@ class AlshayaPromoLabelManager {
           break;
 
         case 'ampromo_cart':
+        case 'ampromo_items':
           foreach ($promotion_data['condition']['conditions'][0]['conditions'] ?? [] as $condition) {
             if ($condition['attribute'] === 'quote_item_qty') {
               $condition_value = $condition['value'];
@@ -588,6 +590,7 @@ class AlshayaPromoLabelManager {
         );
 
         $apiPromotions[] = [
+          'type' => 'generic',
           'text' => $promotion['text'],
           'promo_web_url' => $url,
           'promo_node' => $nid,
@@ -595,6 +598,31 @@ class AlshayaPromoLabelManager {
       }
 
       return $apiPromotions;
+    }
+    elseif ($view_mode === 'free_gift') {
+      if (empty($free_gift_promotions)) {
+        return [];
+      }
+
+      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions);
+      if ($free_promotion) {
+        return [];
+      }
+
+      $coupon = $free_promotion['#promo_code'] ?? '';
+      $coupon = is_array($coupon)
+        ? $coupon[0]['value']
+        : $coupon;
+
+      $free_promotion += [
+        'coupon' => $coupon,
+        'promo_title' => $free_promotion['#free_sku_title_raw'] ?? $this->renderer->renderPlain($free_promotion['#title']),
+        'promo_web_url' => $free_promotion['#promo_url']->toString(TRUE)->getGeneratedUrl(),
+      ];
+
+      unset($free_promotion['#promo_url']);
+
+      return $free_promotion;
     }
 
     if (!empty($generic_promotions)) {
@@ -605,21 +633,7 @@ class AlshayaPromoLabelManager {
 
     // Process free gift promotions only for full view mode.
     if (in_array($view_mode, ['full']) && !empty($free_gift_promotions)) {
-      // For free gift promotions, the promo needs to be rendered in a
-      // different way.
-      foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
-        $free_skus = $this->promoManager->getFreeGiftSkuEntitiesByPromotionId((int) $promotion_id);
-
-        // No free gift available for the promotion, return early.
-        if (empty($free_skus)) {
-          continue;
-        }
-
-        $build['free_gift_promotions'] = $this->getFreeGiftDisplay($promotion_id, $free_gift_promotion, $free_skus);
-
-        // We support displaying only one free gift promotion for now.
-        break;
-      }
+      $build['free_gift_promotions'] = $this->getFreeGiftPromotionData($free_gift_promotions);
     }
 
     // If promotions are eligible for dynamic promo label.
@@ -683,8 +697,7 @@ class AlshayaPromoLabelManager {
       $free_gift_promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU
       && count($free_skus) > 1
     ) {
-      $link = Link::createFromRoute(
-        $free_gift_promotion['text'],
+      $url = Url::fromRoute(
         'alshaya_acm_promotion.free_gifts_list',
         [
           'node' => $promotion_id,
@@ -698,7 +711,9 @@ class AlshayaPromoLabelManager {
             'data-dialog-options' => '{"width":"auto"}',
           ],
         ]
-      )->toString();
+      );
+
+      $link = Link::fromTextAndUrl($free_gift_promotion['text'], $url)->toString();
 
       $message = $this->t('One item of choice from @link with this product', [
         '@link' => $link,
@@ -728,6 +743,8 @@ class AlshayaPromoLabelManager {
           '#type' => 'markup',
           '#markup' => $free_gift_box_title ?? $this->t('Free Gift'),
         ],
+        '#promo_url' => $url,
+        '#promo_code' => $coupon,
         '#image' => $free_sku_image ?? NULL,
       ];
 
@@ -743,21 +760,23 @@ class AlshayaPromoLabelManager {
     else {
       $free_sku_entity = reset($free_skus);
 
+      $url = Url::fromRoute(
+        'alshaya_acm_promotion.free_gift_modal',
+        [
+          'acq_sku' => $free_sku_entity->id(),
+          'js' => 'nojs',
+        ],
+        [
+          'query' => [
+            'promotion_id' => $promotion_id,
+            'coupon' => $coupon,
+          ],
+        ]
+      );
+
       $free_sku_title = $free_sku_image = [
         '#type' => 'link',
-        '#url' => Url::fromRoute(
-          'alshaya_acm_promotion.free_gift_modal',
-          [
-            'acq_sku' => $free_sku_entity->id(),
-            'js' => 'nojs',
-          ],
-          [
-            'query' => [
-              'promotion_id' => $promotion_id,
-              'coupon' => $coupon,
-            ],
-          ]
-        ),
+        '#url' => $url,
         '#attributes' => [
           'class' => ["use-ajax"],
           'data-dialog-type' => "modal",
@@ -774,6 +793,8 @@ class AlshayaPromoLabelManager {
         '#free_sku_entity_id' => $free_sku_entity->id(),
         '#free_sku_code' => $free_sku_entity->getSku(),
         '#free_sku_title' => $free_sku_title,
+        '#free_sku_title_raw' => $free_sku_entity->get('name')->getString(),
+        '#promo_url' => $url,
         '#promo_title' => $free_gift_promotion['text'],
         '#promo_code' => $free_gift_promotion['coupon_code'],
       ];
@@ -813,6 +834,35 @@ class AlshayaPromoLabelManager {
     // Remove extra spaces from beginning/end/middle of string which
     // appear due to removal of html tags.
     return preg_replace(['/^\s+/', '/\s+$/', '/\s+/u'], ['', '', ' '], $amount);
+  }
+
+  /**
+   * Get free gift promotion data from available promotions.
+   *
+   * @param array $free_gift_promotions
+   *   Free Gift promotions.
+   *
+   * @return array
+   *   Promotion data for first available free gift promotion.
+   */
+  private function getFreeGiftPromotionData(array $free_gift_promotions) {
+    // For free gift promotions, the promo needs to be rendered in a
+    // different way.
+    foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
+      $free_skus = $this->promoManager->getFreeGiftSkuEntitiesByPromotionId((int) $promotion_id);
+
+      // No free gift available for the promotion, return early.
+      if (empty($free_skus)) {
+        continue;
+      }
+
+      $data = $this->getFreeGiftDisplay($promotion_id, $free_gift_promotion, $free_skus);
+
+      // We support displaying only one free gift promotion for now.
+      break;
+    }
+
+    return $data ?? [];
   }
 
 }

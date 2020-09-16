@@ -151,7 +151,7 @@ class APIWrapper {
 
     $address = ($type == 'shipping')
       ? $cart['shipping']['address']
-      : $cart['billing_address'];
+      : $cart['cart']['billing_address'];
 
     return [
       'addressLine1' => reset($address['street']),
@@ -351,6 +351,9 @@ class APIWrapper {
       $params = array_merge($params, $payment_data);
     }
 
+    $params['udf4'] = (string) $cart['cart']['id'];
+    $params['udf5'] = $cart['shipping']['address']['telephone'];
+
     // Set parameters required for 3d secure payment.
     $params['chargeMode'] = self::VERIFY_3DSECURE;
     // Capture payment immediately, values 0 to 168 (0 to 7 days).
@@ -368,8 +371,8 @@ class APIWrapper {
     $params['trackId'] = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
     $params['products'] = $this->getCartItems($cart['cart']['items']);
-    $params['billingDetails'] = $this->getAddressDetails($cart['cart'], 'billing');
-    $params['shippingDetails'] = $this->getAddressDetails($cart['cart'], 'shipping');
+    $params['billingDetails'] = $this->getAddressDetails($cart, 'billing');
+    $params['shippingDetails'] = $this->getAddressDetails($cart, 'shipping');
 
     $this->logInfo('checkout.com: for cart: @cart_id api 3d request parameters are: @request_param', [
       '@cart_id' => $cart['cart']['id'],

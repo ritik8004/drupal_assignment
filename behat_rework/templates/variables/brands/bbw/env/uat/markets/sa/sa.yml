@@ -1,0 +1,6 @@
+variables:
+  url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
+  product_listing_page_url: "/shop-gifts/shop-type/"
+  spc_product_listing_page: '/shop-gifts/shop-type/'
+  spc_basket_page: '/shop-gifts/shop-type/'
+  governorate: ''

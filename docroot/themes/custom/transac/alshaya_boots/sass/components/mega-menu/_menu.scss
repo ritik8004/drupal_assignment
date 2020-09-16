@@ -6,7 +6,11 @@
   .block-alshaya-main-menu {
     ul.menu--one__list {
       display: inline-block !important;
-      margin-top: -0.3125rem;
+      margin-top: -0.1875rem;
+
+      html[lang=ar] & {
+        margin-top: -0.0625rem;
+      }
 
       .menu-backdrop {
         padding-top: 0;
@@ -15,7 +19,7 @@
 
     li.menu--one__list-item {
       text-transform: none;
-      height: 2.625rem;
+      height: 2.6875rem;
       letter-spacing: 0.5px;
 
       .menu__link {
@@ -38,7 +42,7 @@
       }
 
       ul.menu--two__list {
-        margin-top: 0.125rem;
+        margin-top: 0;
       }
 
       &:hover {
@@ -53,10 +57,6 @@
             height: 0.1875rem;
           }
         }
-
-        ul.menu--two__list {
-          margin-top: 0.125rem;
-        }
       }
 
       .menu--one__link {
@@ -66,6 +66,10 @@
         border-bottom: 0;
         height: 2.625rem;
         padding: 0.625rem 1.25rem;
+
+        html[lang=ar] & {
+          height: 2.4375rem;
+        }
 
         &.active {
           color: $mm_l1_link;
