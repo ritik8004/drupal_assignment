@@ -38,7 +38,7 @@ export default class AppointmentCalendar extends React.Component {
     this.setState({
       week,
       previousDisabled: false,
-      setOpenDate: new Date(date),
+      setOpenDate: new Date(nextDate),
     });
   }
 
@@ -47,7 +47,7 @@ export default class AppointmentCalendar extends React.Component {
     const week = this.getWeekDates(new Date(prevDate), 'prev');
     this.setState({
       week,
-      setOpenDate: new Date(date),
+      setOpenDate: new Date(prevDate),
     });
   }
 
@@ -102,6 +102,7 @@ export default class AppointmentCalendar extends React.Component {
     dateChanged(new Date(date));
     this.setState({
       selectDate: new Date(date),
+      setOpenDate: new Date(date),
     });
   };
 
@@ -240,6 +241,8 @@ export default class AppointmentCalendar extends React.Component {
                 openToDate={setOpenDate}
                 useWeekdaysShort
                 onMonthChange={this.handleMonthChange}
+                disabledKeyboardNavigation
+                maxDate={moment().add('6', 'months').toDate()}
               />
             </div>
           </Swipeable>
