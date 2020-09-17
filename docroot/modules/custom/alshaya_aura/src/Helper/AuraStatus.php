@@ -27,7 +27,7 @@ final class AuraStatus {
   const APC_LINKED_NOT_VERIFIED = 3;
 
   /**
-   * Not linked and no data in MDC.
+   * Not linked and No data in MDC.
    */
   const APC_NOT_LINKED_NOT_U = 4;
 
