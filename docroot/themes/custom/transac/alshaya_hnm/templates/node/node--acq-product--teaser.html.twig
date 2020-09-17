@@ -10,7 +10,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
 <article{{ attributes }} {{ gtm_attributes }}>
   {% if modal_link %}
-    <a class="use-ajax above-mobile-block" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'code': node.id, 'js': 'nojs'}) }}">
+    <a class="use-ajax above-mobile-block" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.product_modal', {'node': node.id, 'js': 'nojs'}) }}">
   {% else %}
     <a class="above-mobile-block product-link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">
   {% endif %}

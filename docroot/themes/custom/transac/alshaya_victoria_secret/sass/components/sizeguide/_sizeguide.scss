@@ -22,22 +22,23 @@
   }
 }
 
-.path--cart .ui-dialog,
-.nodetype--acq_product .ui-dialog,
-.sizeguide-modal-overlay .ui-dialog,
-.dynamic-yield-recommendations.ui-dialog {
-  #drupal-modal {
-    overflow-y: auto;
+.path--cart,
+.nodetype--acq_product,
+.sizeguide-modal-overlay {
+  .ui-dialog {
+    #drupal-modal {
+      overflow-y: auto;
 
-    .full-prod-link {
-      margin-bottom: 0;
-      padding-top: 0.65rem;
-      padding-bottom: 0.45rem;
-    }
+      .full-prod-link {
+        margin-bottom: 0;
+        padding-top: 0.65rem;
+        padding-bottom: 0.45rem;
+      }
 
-    #lightSlider {
-      @include breakpoint($desktop) {
-        height: 31rem;
+      #lightSlider {
+        @include breakpoint($desktop) {
+          height: 31rem;
+        }
       }
     }
   }
