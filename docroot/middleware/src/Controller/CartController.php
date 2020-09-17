@@ -504,6 +504,18 @@ class CartController {
           }
           $options = $request_content['options'];
         }
+        elseif ($action == CartActions::CART_REMOVE_ITEM) {
+          // If it is free gift with coupon, remove coupon too.
+          $item = $this->cart->getCartItem($request_content['sku']);
+
+          if (empty($item['price'])
+            && !empty($item['extension_attributes'])
+            && !empty($item['extension_attributes']['promo_rule_id'])
+            && !empty($this->cart->getCoupon())) {
+            $this->cart->applyRemovePromo('', CartActions::CART_REMOVE_COUPON);
+          }
+        }
+
         $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], $action, $options);
         break;
 

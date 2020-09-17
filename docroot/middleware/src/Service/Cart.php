@@ -236,6 +236,47 @@ class Cart {
   }
 
   /**
+   * Wrapper function to get coupon applied in cart.
+   *
+   * @return string
+   *   Coupon code or empty string.
+   */
+  public function getCoupon() {
+    $cart = $this->getCart();
+
+    if (empty($cart) || empty($cart['totals'])) {
+      return '';
+    }
+
+    return $cart['totals']['coupon_code'] ?? '';
+  }
+
+  /**
+   * Wrapper function to get specific cart item.
+   *
+   * @param string $sku
+   *   SKU.
+   *
+   * @return array|null
+   *   Cart item array or NULL if item not found.
+   */
+  public function getCartItem(string $sku) {
+    $cart = $this->getCart();
+
+    if (empty($cart) || empty($cart['cart']) || empty($cart['cart']['items'])) {
+      return NULL;
+    }
+
+    foreach ($cart['cart']['items'] ?? [] as $item) {
+      if ($item['sku'] === $sku) {
+        return $item;
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
    * Get cart by cart id.
    *
    * @param bool $force
@@ -382,6 +423,16 @@ class Cart {
    */
   public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = []) {
     $option_data = [];
+
+    if ($action == CartActions::CART_REMOVE_ITEM) {
+      $item = $this->getCartItem($sku);
+
+      // Do nothing if item no longer available.
+      if (empty($item)) {
+        return $this->getCart();
+      }
+    }
+
     // If options data available.
     if (!empty($options)) {
       foreach ($options as &$op) {
