@@ -2,7 +2,7 @@
   position: relative;
   margin-bottom: 2.5rem;
 
-  .block-content {
+  .block-content.guest-user {
     background-image: $aura-block-bg-desktop;
     border-radius: 0.625rem;
     padding: 1.25rem;
@@ -24,8 +24,8 @@
       margin: 0 1.25rem;
 
       .spc-aura-points-to-earn {
-        padding-#{$right}: 0;
-        padding-bottom: 1.25rem;
+        text-align: center;
+        padding: 0 1.25rem 1.25rem;
       }
     }
 

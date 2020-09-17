@@ -38,9 +38,9 @@ class AuraCartRewards extends React.Component {
     return (
       <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <SectionTitle>{sectionTitle}</SectionTitle>
-        <div className="block-content">
-          <PointsToEarnMessage points={points} />
-          <ConditionalView condition={uid < 1}>
+        <ConditionalView condition={uid < 1}>
+          <div className="block-content guest-user">
+            <PointsToEarnMessage points={points} />
             <div className="actions">
               <div className="spc-join-aura-link-wrapper submit">
                 <a
@@ -51,8 +51,8 @@ class AuraCartRewards extends React.Component {
                 </a>
               </div>
             </div>
-          </ConditionalView>
-        </div>
+          </div>
+        </ConditionalView>
       </div>
     );
   }
