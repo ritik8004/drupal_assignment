@@ -4,8 +4,8 @@ import LoyaltyClubBenefits from './loyalty-club-benefits';
 
 const LoyaltyClub = () => (
   <>
-    <LoyaltyClubBlock/>
-    <LoyaltyClubBenefits/>
+    <LoyaltyClubBlock />
+    <LoyaltyClubBenefits />
   </>
 );
 

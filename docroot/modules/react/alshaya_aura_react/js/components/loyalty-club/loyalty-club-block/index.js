@@ -7,14 +7,15 @@ const LoyaltyClubBlock = () => {
   if (typeof drupalSettings.alshaya_aura !== 'undefined'
     && typeof drupalSettings.alshaya_aura.user_details !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.alshaya_aura.user_details, 'loyaltyStatus')) {
-    let loyaltyStatus = drupalSettings.alshaya_aura.user_details.loyaltyStatus;
+    let { loyaltyStatus } = drupalSettings.alshaya_aura.user_details;
+    loyaltyStatus = parseInt(loyaltyStatus, 10);
 
-    if (loyaltyStatus == 0) {
-      return <CardNotLinkedNoData/>;
-    } else if (loyaltyStatus == 1) {
-      return <CardNotLinkedMdcData/>;
-    } else if (loyaltyStatus == 3) {
-      return <PendingFullEnrollment/>;
+    if (loyaltyStatus === 0) {
+      return <CardNotLinkedNoData />;
+    } if (loyaltyStatus === 1) {
+      return <CardNotLinkedMdcData />;
+    } if (loyaltyStatus === 3) {
+      return <PendingFullEnrollment />;
     }
   }
 

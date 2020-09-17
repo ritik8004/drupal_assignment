@@ -4,7 +4,7 @@ export default class CardNotLinkedMdcData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      card_number: '',
+      cardNumber: '',
     };
   }
 
@@ -13,7 +13,7 @@ export default class CardNotLinkedMdcData extends React.Component {
   }
 
   render() {
-    const { card_number } = this.state;
+    const { cardNumber } = this.state;
 
     return (
       <div className="aura-card-not-linked-mdc-data-wrapper">
@@ -26,7 +26,7 @@ export default class CardNotLinkedMdcData extends React.Component {
           </div>
           <div className="card-number">
             <span>
-              { card_number }
+              { cardNumber }
             </span>
             <a href="">
               { Drupal.t('Not You?')}
