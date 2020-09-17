@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Contains alshaya_aura_react.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_aura_react_theme() {
+  $theme = [
+    'my_loyalty_club' => [
+      'variables' => [],
+    ],
+  ];
+
+  return $theme;
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
+  // Add My Loyalty Club link.
+  $links['alshaya_loyalty_club'] = [
+    'text' => t('My Loyalty Club'),
+    'route' => 'alshaya_aura_react.my_loyalty_club',
+    'weight' => 11,
+  ];
+}

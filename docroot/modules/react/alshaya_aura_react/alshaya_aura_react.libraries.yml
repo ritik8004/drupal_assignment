@@ -1,0 +1,5 @@
+alshaya_aura_loyalty_club:
+  js:
+    dist/loyalty_club.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

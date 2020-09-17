@@ -1,0 +1,7 @@
+name: Alshaya AURA React
+type: module
+description: 'Implements AURA loyalty feature.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_react:alshaya_react
