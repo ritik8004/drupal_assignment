@@ -321,6 +321,33 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           'google_tag.container.primary' => [
             'container_id' => 'GTM-NHZ6KSS',
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => '0VZKNNY9PK',
+            'write_api_key' => '7e61a686834a4dd288e590008212a123',
+            'search_api_key' => '9bfc987b54a4200a28ff91ddeb5fb27d',
+          ],
+        ],
+      ],
+    ],
+    'we' => [
+      'default' => [
+        'default' => [
+          'algolia_sandbox.settings' => [
+            'app_id' => 'W4M368LMN4',
+            'write_api_key' => '488027fdb499b2e711f58d169b5c2200',
+            'search_api_key' => 'e8d102a1ed17ed7529cfa005db6e8b4a',
+          ],
+        ],
+      ],
+    ],
+    'aeo' => [
+      'default' => [
+        'default' => [
+          'algolia_sandbox.settings' => [
+            'app_id' => 'JUO1UFS42Z',
+            'write_api_key' => '49c687275158f614123556ff0afaaaa6',
+            'search_api_key' => '6f5db46bc6cfa0a1e0768acf62e7a74d',
+          ],
         ],
       ],
     ],
@@ -338,6 +365,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'dynamic_yield.settings' => [
               'section_id' => '9877013',
             ],
+          ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'HAXEDKQC1A',
+            'write_api_key' => '777c5fe45cecfb1e899bfe19f7d50fae',
+            'search_api_key' => 'fe50afcd32a68ed75e7ab7c4aa04c6fd',
           ],
         ],
       ],
