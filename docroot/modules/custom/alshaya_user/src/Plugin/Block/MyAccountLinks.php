@@ -325,11 +325,6 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
     }
 
     $build = [];
-    $build['my_account_title'] = [
-      '#markup' => '<h3 class="my-account-title">' . $this->t('Welcome, @name', [
-        '@name' => $this->userInfo->getName(),
-      ]) . '</h3>',
-    ];
 
     $build['my_account_mobile_title'] = [
       '#markup' => '<h3 class="my-account-mobile-title1">' . $this->t('my account') . '</h3><h4 class="my-account-mobile-title2">' . $this->t('logged in as @name', [

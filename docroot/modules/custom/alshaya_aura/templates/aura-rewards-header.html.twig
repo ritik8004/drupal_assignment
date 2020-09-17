@@ -1,34 +1,10 @@
-{{ attach_library('alshaya_aura/aura_header_library') }}
-{{ attach_library('alshaya_white_label/aura-loyalty-global') }}
-
 <div class="aura-rewards-wrapper">
-  <div class="aura-header-link">
-    <a href="">
+  <div class="aura-header-link hidden">
+    <a href="#">
       {{- 'AURA'|t -}}
     </a>
   </div>
-  <div class="aura-header-popup-wrapper">
-    <div class="aura-popup-header">
-      <div class="title title--one">
-        {{- 'Bespoke rewards.'|t -}}
-      </div>
-      <div class="title title--two">
-        {{- 'Bespoke lifestyles.'|t -}}
-      </div>
-    </div>
-    <div class="aura-popup-sub-header">
-      <h3>{{ 'Say hello to Aura'|t }}</h3>
-    </div>
-    <div class="aura-popup-body">
-      <p>{{ 'Good things come to those with taste. Say hello to Aura, a lifestyle program that inclulges your taste for refined brands and experiences'|t }}</p>
-    </div>
-    <div class="aura-popup-footer">
-      <a href="{{ url('user.login') }}" class="join-aura">
-        {{- 'Sign up now'|t -}}
-      </a>
-      <a href="{{ learn_more_link }}" class="learn-more">
-        {{- 'Learn More'|t -}}
-      </a>
-    </div>
-  </div>
+  {% include "@alshaya_aura/aura-rewards-header-popup.html.twig" %}
+  {% include "@alshaya_aura/aura-rewards-header-authenticated.html.twig" %}
 </div>
+

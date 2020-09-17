@@ -31,4 +31,28 @@ final class AuraStatus {
    */
   const APC_NOT_LINKED_NOT_U = 4;
 
+  /**
+   * Return all the constant values in the class.
+   *
+   * @return array
+   *   The constant values in the class.
+   */
+  public static function getAllAuraStatus() {
+    $reflection_class = new \ReflectionClass(__CLASS__);
+    return $reflection_class->getConstants();
+  }
+
+  /**
+   * Get the values of statuses which are linked.
+   *
+   * @return array
+   *   Returns those statuses which indicate linked status.
+   */
+  public static function getLinkedLoyaltyStatuses() {
+    return [
+      self::APC_LINKED_NOT_VERIFIED,
+      self::APC_LINKED_VERIFIED,
+    ];
+  }
+
 }
