@@ -22,7 +22,7 @@ const PdpProductLabels = ({
     return (
       <>
         <div className="product-labels">
-          <div className="labels-container" dataSku={variantSelected} dataMainSku={skuCode}>
+          <div className="labels-container" datasku={variantSelected} datamainsku={skuCode}>
             {
               bifercatedLabelsList.map((key) => (
                 <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-label-container`}>
@@ -49,7 +49,7 @@ const PdpProductLabel = ({
     {
         bifercatedLabels[directionKey].map((labelItem) => (
           // BE to provide and add a unique key here.
-          <div className={`labels ${labelItem.position}`}>
+          <div className={`labels ${labelItem.position}`} key={labelItem}>
             <img
               src={(context === 'main') ? labelItem.image.url : labelItem.image}
               alt={labelItem.image.alt || ''}

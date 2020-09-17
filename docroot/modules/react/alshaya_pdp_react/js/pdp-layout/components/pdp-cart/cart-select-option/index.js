@@ -169,6 +169,7 @@ class CartSelectOption extends React.Component {
       <div className="non-grouped-attr">
         <NonGroupSelectOption
           key={attributeKey}
+          keyId={attributeKey}
           attributeKey={attributeKey}
           handleSelectionChanged={this.handleSelectionChanged}
           configurables={configurables}
@@ -187,6 +188,7 @@ class CartSelectOption extends React.Component {
       <div className="grouped-attr">
         <GroupSelectOption
           key={attributeKey}
+          keyId={attributeKey}
           groupSelect={this.groupSelect}
           handleSelectionChanged={this.handleSelectionChanged}
           configurables={configurables}
