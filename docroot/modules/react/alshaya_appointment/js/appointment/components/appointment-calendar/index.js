@@ -236,7 +236,7 @@ export default class AppointmentCalendar extends React.Component {
                 selected={selectDate}
                 inline
                 minDate={moment().add('1', 'day').toDate()}
-                onChange={(date) => this.datePickerChanged(date)}
+                onSelect={(date) => this.datePickerChanged(date)}
                 locale={(drupalSettings.path.currentLanguage !== 'en') ? 'ar' : 'en'}
                 openToDate={setOpenDate}
                 useWeekdaysShort
