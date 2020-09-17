@@ -1,0 +1,18 @@
+.spc-aura-points-expiry-item {
+  padding: 0.875rem 1.25rem 0.875rem 3.625rem;
+  background: $aura-expiry-item-bg;
+  border-radius: 0.625rem;
+  color: $aura-expiry-item-txt;
+  position: relative;
+
+  @include icon('warning') {
+    width: 27px;
+    height: 25px;
+    display: inline-flex;
+    font-size: 26px;
+    position: absolute;
+    #{$left}: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
