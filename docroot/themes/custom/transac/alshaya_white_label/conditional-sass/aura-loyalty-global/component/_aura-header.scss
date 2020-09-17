@@ -1,0 +1,138 @@
+body.aura-header-open .header--wrapper {
+  z-index: 7;
+}
+
+.block-aura-rewards-header {
+  text-transform: initial;
+  font-family: $aura-bold;
+
+  @include breakpoint($desktop) {
+    display: inline-block;
+  }
+
+  .aura-rewards-wrapper {
+    position: relative;
+    font-size: initial;
+
+    @include breakpoint($upto-desktop) {
+      background-color: $mobile-aura-link-bg;
+    }
+
+    ul {
+      font-size: initial;
+    }
+
+    .aura-header-link {
+      a {
+        @include breakpoint($upto-desktop) {
+          display: none;
+        }
+      }
+    }
+
+    .aura-header-popup-wrapper {
+      background: $aura-block-bg-mobile;
+      padding: 1.25rem;
+
+      @include breakpoint($desktop) {
+        display: none;
+        position: absolute;
+        width: 100%;
+        min-width: 19.6875rem;
+        padding: 1.875rem;
+        border-radius: 0.625rem;
+        box-shadow: 0 0.125rem 1.25rem 0 rgba(0, 0, 0, 0.24);
+        #{$left}: 50%;
+        top: calc(100% + 0.3125rem);
+        transform: translateX(-50%);
+        background: $aura-block-bg-desktop;
+
+        html[lang='ar'] & {
+          transform: translateX(50%);
+        }
+      }
+
+      .aura-popup-header {
+        .title {
+          font-size: 1.4375rem;
+          text-align: #{$left};
+
+          @include breakpoint($desktop) {
+            font-size: 1.875rem;
+          }
+
+          &--one {
+            color: $title-blue;
+          }
+
+          &--two {
+            color: $title-pink;
+          }
+        }
+      }
+
+      .aura-popup-sub-header {
+        h3 {
+          color: $aura-purple;
+          font-size: 1.125rem;
+          margin: 0.5rem 0 0.75rem;
+          text-align: #{$left};
+
+          @include breakpoint($desktop) {
+            font-size: 1.4375rem;
+            margin: 0.625rem 0;
+          }
+        }
+      }
+
+      .aura-popup-body {
+        margin-bottom: 0.75rem;
+        text-align: #{$left};
+
+        @include breakpoint($desktop) {
+          margin-bottom: 1.875rem;
+        }
+
+        p {
+          color: $benefits-text;
+          font-size: 0.8125rem;
+          line-height: 1.1875rem;
+          font-family: $aura-regular;
+
+          @include breakpoint($desktop) {
+            font-size: 0.9375rem;
+            line-height: 1.4375rem;
+          }
+        }
+      }
+
+      .aura-popup-footer {
+        text-align: center;
+
+        a {
+          font-size: 1rem;
+          border-radius: 1.75rem;
+          font-family: $aura-regular;
+        }
+
+        .join-aura {
+          background: $join-aura-link-bg;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0.3125rem 1.75rem;
+          height: 2.875rem;
+          color: $join-aura-link;
+          margin-bottom: 1.5625rem;
+          letter-spacing: 0.0443rem;
+          font-family: $aura-bold;
+        }
+
+        .learn-more {
+          color: $learn-more-link;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

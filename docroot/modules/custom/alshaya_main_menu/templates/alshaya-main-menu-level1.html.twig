@@ -19,6 +19,12 @@
         {{ _self.getlevel1items(level1,level1) }}
       {% endfor %}
     {% endif %}
+
+    {% if aura_rewards_header %}
+      <div class="no--desktop">
+        {{ aura_rewards_header }}
+      </div>
+    {% endif %}
   </ul>
 </div>
 

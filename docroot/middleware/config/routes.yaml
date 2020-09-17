@@ -87,3 +87,8 @@ loyalty_club.get_customer_points:
     path: /get/loyalty-club/get-customer-points
     controller: App\Controller\LoyaltyClubController::getCustomerPoints
     methods: GET
+
+loyalty_club.get_product_points:
+    path: /post/loyalty-club/get-product-points
+    controller: App\Controller\LoyaltyClubController::getProductPoints
+    methods: POST

@@ -201,6 +201,7 @@ const PdpLayout = () => {
           {Object.keys(relatedProducts).map((type) => (
             <PdpRelatedProducts
               key={relatedProducts[type]}
+              keyId={relatedProducts[type]}
               type={relatedProducts[type]}
               skuItemCode={skuItemCode}
               getPanelData={getPanelData}
@@ -209,7 +210,7 @@ const PdpLayout = () => {
           ))}
         </div>
       ) : null}
-      <PpdPanel panelContent={panelContent} />
+      <PpdPanel panelContent={panelContent} skuItemCode={skuItemCode} />
     </>
   ) : emptyRes;
 };

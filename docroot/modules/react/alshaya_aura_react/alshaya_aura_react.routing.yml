@@ -1,0 +1,11 @@
+alshaya_aura_react.my_loyalty_club:
+  path: '/user/{user}/loyalty-club'
+  defaults:
+    _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::loyaltyClub'
+    _title_callback: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::getLoyaltyClubTitle'
+  requirements:
+    _entity_access: 'user.update'
+  options:
+    parameters:
+      user:
+        type: entity:user
