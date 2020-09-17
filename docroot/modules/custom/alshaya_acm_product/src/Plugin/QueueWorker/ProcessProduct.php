@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Plugin\QueueWorker;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
+use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
@@ -68,6 +69,13 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   protected $cacheTagsInvalidator;
 
   /**
+   * Product Processed Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductProcessedManager
+   */
+  protected $productProcessedManager;
+
+  /**
    * Works on a single queue item.
    *
    * @param mixed $sku
@@ -129,16 +137,24 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     foreach ($node->getTranslationLanguages() as $language) {
       $translation = SKU::loadFromSku($entity->getSku(), $language->getId());
 
-      // Download product images for product.
-      $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
-
-      // Download product images for all the variants of the product.
       foreach ($variants as $variant) {
         $variant_sku = SKU::loadFromSku($variant, $language->getId(), FALSE);
         if ($variant_sku instanceof SKU) {
+          // Download product images for all the variants of the product.
           $this->imagesManager->getProductMedia($variant_sku, 'pdp', TRUE);
+          $this->imagesManager->getProductMedia($variant_sku, 'pdp', FALSE);
+
+          // Mark the variant as processed now.
+          $this->productProcessedManager->markProductProcessed($variant_sku->getSku());
         }
       }
+
+      // Download product images for product and warm up caches.
+      $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
+      $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
+
+      // Mark the product as processed now.
+      $this->productProcessedManager->markProductProcessed($translation->getSku());
 
       // Trigger event for other modules to take action.
       // For instance alshaya_search_api to index items.
@@ -168,6 +184,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    *   Event Dispatcher.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator
    *   Cache Tags Invalidator.
+   * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
+   *   Product Processed Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -175,12 +193,14 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager,
                               EventDispatcherInterface $dispatcher,
-                              CacheTagsInvalidatorInterface $cache_tags_invalidator) {
+                              CacheTagsInvalidatorInterface $cache_tags_invalidator,
+                              ProductProcessedManager $product_processed_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->skuManager = $sku_manager;
     $this->imagesManager = $sku_images_manager;
     $this->dispatcher = $dispatcher;
     $this->cacheTagsInvalidator = $cache_tags_invalidator;
+    $this->productProcessedManager = $product_processed_manager;
   }
 
   /**
@@ -206,7 +226,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('event_dispatcher'),
-      $container->get('cache_tags.invalidator')
+      $container->get('cache_tags.invalidator'),
+      $container->get('alshaya_acm_product.product_processed_manager')
     );
   }
 
