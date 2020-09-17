@@ -25,9 +25,7 @@ const AvailableSelectOptions = ({
       key={attr}
       value={attr}
       id={`value${attr}`}
-      className={`magv2-select-list-item disabled ${((selected !== undefined
-        && String(selected) === String(attr)))
-        ? 'active' : 'in-active'}`}
+      className="magv2-select-list-item disabled"
     >
       <span onClick={(e) => handleLiClick(e, code)} className="magv2-select-list-wrapper">
         <span className="magv2-select-list-name">{value}</span>
