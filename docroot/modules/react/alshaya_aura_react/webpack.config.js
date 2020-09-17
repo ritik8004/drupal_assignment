@@ -3,11 +3,11 @@ var buildPath = '/modules/react/alshaya_aura_react/dist/';
 
 var config = {
   entry: {
-    loyalty_club: './js/loyalty_club',
+    loyalty_club: './js/my-loyalty-club',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
+    filename: '[name].bundle.js',
     publicPath: buildPath,
     chunkFilename: "[id].chunk.[chunkhash].js",
   },

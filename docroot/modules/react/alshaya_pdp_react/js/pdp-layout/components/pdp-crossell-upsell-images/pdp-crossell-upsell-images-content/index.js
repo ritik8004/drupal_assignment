@@ -22,7 +22,7 @@ const PdpCrossellUpsellImageContent = ({
     {productLabels ? (
       <div className="product-labels">
         {Object.keys(productLabels).map((key) => (
-          <div className={`labels ${productLabels[key].position}`}>
+          <div className={`labels ${productLabels[key].position}`} key={productLabels[key].position}>
             <img
               src={productLabels[key].image.url}
               alt={productLabels[key].image.alt}

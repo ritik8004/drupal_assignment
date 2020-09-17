@@ -7,18 +7,28 @@ namespace Drupal\alshaya_aura\Helper;
  */
 final class AuraStatus {
   /**
-   * AURA Status of linked and verified user.
+   * No Linking and No data in MDC.
    */
-  const AURA_LINKED_VERIFIED = 'linked_verified';
+  const APC_NOT_LINKED_NO_DATA = 0;
 
   /**
-   * AURA Status of linked but not verified user.
+   * No Linking but Data in MDC.
    */
-  const AURA_LINKED_NOT_VERIFIED = 'linked_not_verified';
+  const APC_NOT_LINKED_MDC_DATA = 1;
 
   /**
-   * AURA Status of not linked user.
+   * LINKED and VERIFIED Customers.
    */
-  const AURA_NOT_LINKED = 'not_linked';
+  const APC_LINKED_VERIFIED = 2;
+
+  /**
+   * LINKED but not Verified Customers.
+   */
+  const APC_LINKED_NOT_VERIFIED = 3;
+
+  /**
+   * Not linked and no data in MDC.
+   */
+  const APC_NOT_LINKED_NOT_U = 4;
 
 }

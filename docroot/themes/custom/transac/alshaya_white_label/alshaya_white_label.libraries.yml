@@ -419,3 +419,8 @@ sub-brand-logo:
   css:
     theme:
       css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}
+
+aura-loyalty:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty/aura-loyalty.ltr.css: {}

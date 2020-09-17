@@ -1,8 +1,8 @@
 import React from 'react';
 
-const PdpProductLabels = (props) => {
-  const { labels, skuCode, variantSelected } = props;
-
+const PdpProductLabels = ({
+  labels, skuCode, variantSelected, context,
+}) => {
   if (!(labels && Array.isArray(labels) && labels.length)) return null;
 
   const bifercatedLabels = labels.reduce((aggregator, item) => {
@@ -22,11 +22,15 @@ const PdpProductLabels = (props) => {
     return (
       <>
         <div className="product-labels">
-          <div className="labels-container" dataSku={variantSelected} dataMainSku={skuCode}>
+          <div className="labels-container" datasku={variantSelected} datamainsku={skuCode}>
             {
               bifercatedLabelsList.map((key) => (
                 <div className={`labels-container__inner labels-container__inner--${key}`} key={`${key}-label-container`}>
-                  <PdpProductLabel bifercatedLabels={bifercatedLabels} directionKey={key} />
+                  <PdpProductLabel
+                    bifercatedLabels={bifercatedLabels}
+                    directionKey={key}
+                    context={context}
+                  />
                 </div>
               ))
             }
@@ -38,14 +42,14 @@ const PdpProductLabels = (props) => {
   return null;
 };
 
-const PdpProductLabel = (props) => {
-  const { bifercatedLabels, directionKey, context } = props;
-  return (
-    <>
-      {
+const PdpProductLabel = ({
+  bifercatedLabels, directionKey, context,
+}) => (
+  <>
+    {
         bifercatedLabels[directionKey].map((labelItem) => (
           // BE to provide and add a unique key here.
-          <div className={`labels ${labelItem.position}`}>
+          <div className={`labels ${labelItem.position}`} key={labelItem}>
             <img
               src={(context === 'main') ? labelItem.image.url : labelItem.image}
               alt={labelItem.image.alt || ''}
@@ -54,8 +58,7 @@ const PdpProductLabel = (props) => {
           </div>
         ))
       }
-    </>
-  );
-};
+  </>
+);
 
 export default PdpProductLabels;

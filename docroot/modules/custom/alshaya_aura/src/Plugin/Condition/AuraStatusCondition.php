@@ -86,9 +86,11 @@ class AuraStatusCondition extends ConditionPluginBase {
    */
   public function getAllAuraStatus() {
     $all_aura_status = [
-      AuraStatus::AURA_LINKED_VERIFIED => $this->t('Linked Verified'),
-      AuraStatus::AURA_LINKED_NOT_VERIFIED => $this->t('Linked Not Verified'),
-      AuraStatus::AURA_NOT_LINKED => $this->t('Not Linked'),
+      AuraStatus::APC_NOT_LINKED_NO_DATA => $this->t('Not Linked No Data'),
+      AuraStatus::APC_NOT_LINKED_MDC_DATA => $this->t('Not Linked MDC Data'),
+      AuraStatus::APC_LINKED_VERIFIED => $this->t('Linked Verified'),
+      AuraStatus::APC_LINKED_NOT_VERIFIED => $this->t('Linked Not Verified'),
+      AuraStatus::APC_NOT_LINKED_NOT_U => $this->t('Not Linked Not You'),
     ];
 
     return $all_aura_status;
