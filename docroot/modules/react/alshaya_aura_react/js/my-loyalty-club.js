@@ -4,5 +4,5 @@ import LoyaltyClub from './components/loyalty-club';
 
 ReactDOM.render(
   <LoyaltyClub />,
-  document.querySelector('#loyalty-club'),
+  document.querySelector('#my-loyalty-club'),
 );

@@ -16,9 +16,20 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function loyaltyClub() {
     $cache_tags = [];
+    $userDetails = [];
+    $uid = $this->currentUser()->id();
+    $user = $this->entityTypeManager()->getStorage('user')->load($uid);
+
+    if (!empty($user)) {
+      $userDetails = [
+        'id' => $uid,
+        'email' => $this->currentUser()->getEmail(),
+        'loyaltyStatus' => $user->get('field_aura_loyalty_status')->getString(),
+      ];
+    }
 
     $settings['alshaya_aura'] = [
-      'user_details' => $this->getUserDetails(),
+      'user_details' => $userDetails,
     ];
 
     return [
@@ -40,31 +51,6 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function getLoyaltyClubTitle() {
     return $this->t('My Loyalty Club');
-  }
-
-  /**
-   * Get user details.
-   *
-   * @return array
-   *   Array of user details.
-   */
-  private function getUserDetails() {
-    $userDetails = [];
-    $uid = $this->currentUser()->id();
-
-    if (!$this->currentUser()->isAuthenticated()) {
-      $userDetails = ['id' => $uid];
-      return $userDetails;
-    }
-
-    $user = $this->entityTypeManager()->getStorage('user')->load($uid);
-    $userDetails = [
-      'id' => $uid,
-      'email' => $this->currentUser()->getEmail(),
-      'loyaltyStatus' => $user->get('field_aura_loyalty_status')->getString(),
-    ];
-
-    return $userDetails;
   }
 
 }
