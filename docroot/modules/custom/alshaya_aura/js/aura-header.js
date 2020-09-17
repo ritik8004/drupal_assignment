@@ -9,13 +9,14 @@
   Drupal.behaviors.auraHeaderPopup = {
     attach: function (context) {
       if ($(window).width() > 1024) {
-        $('.logged-out .aura-header-link a', context).on('click', function (e) {
+        $('.logged-out .aura-header-link a', context).once().on('click', function (e) {
           e.preventDefault();
           $('.logged-out .aura-header-popup-wrapper').toggle();
+          $('body.logged-out').toggleClass('aura-header-open');
           e.stopPropagation();
         });
 
-        $(document, context).on('click', function (e) {
+        $(document, context).once().on('click', function (e) {
           var displayState = $('.logged-out .aura-header-popup-wrapper').css('display');
 
           if (displayState !== 'none') {
