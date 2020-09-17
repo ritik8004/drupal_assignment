@@ -20,7 +20,7 @@
       {% endfor %}
     {% endif %}
 
-    {% if aura_rewards_header %}
+    {% if not_logged_in == '0' and aura_rewards_header %}
       <div class="no--desktop">
         {{ aura_rewards_header }}
       </div>
