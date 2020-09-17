@@ -3,7 +3,7 @@
   margin-bottom: 2.5rem;
 
   .block-content.guest-user {
-    background-image: $aura-block-bg-desktop;
+    background-image: $aura-spc-block-bg-desktop;
     border-radius: 0.625rem;
     padding: 1.25rem;
     display: flex;
@@ -59,6 +59,10 @@
       > span:first-child {
         width: 62%;
       }
+    }
+
+    @include breakpoint($only-mobile) {
+      margin: 0 1.25rem;
     }
   }
 
