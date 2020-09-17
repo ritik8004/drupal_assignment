@@ -1,8 +1,12 @@
 import React from 'react';
+import LoyaltyClubBlock from './loyalty-club-block';
 import LoyaltyClubBenefits from './loyalty-club-benefits';
 
 const LoyaltyClub = () => (
-  <LoyaltyClubBenefits />
+  <>
+    <LoyaltyClubBlock />
+    <LoyaltyClubBenefits />
+  </>
 );
 
 export default LoyaltyClub;

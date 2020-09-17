@@ -27,6 +27,7 @@ class AlshayaCustomHook extends BltTasks {
       'react/alshaya_spc/js',
       'react/alshaya_pdp_react/js',
       'react/alshaya_appointment/js',
+      'react/alshaya_aura_react/js',
     ];
     foreach ($files as $file) {
       foreach ($patterns as $pattern) {
