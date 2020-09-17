@@ -55,6 +55,5 @@ function alshaya_aura_preprocess_alshaya_main_menu_level1(array &$variables) {
   $block_content = \Drupal::entityTypeManager()
     ->getViewBuilder('block')
     ->view($block);
-  $variables['testing'] = 'Alshaya Aura';
   $variables['aura_rewards_header'] = $block_content;
 }
