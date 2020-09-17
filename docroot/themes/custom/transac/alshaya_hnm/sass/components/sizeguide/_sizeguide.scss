@@ -47,8 +47,7 @@
 
 // Size Guide modal popup theming
 .path--cart .ui-dialog,
-.nodetype--acq_product .ui-dialog,
-.dynamic-yield-recommendations.ui-dialog {
+.nodetype--acq_product .ui-dialog {
   @include breakpoint($tablet) {
     padding: calc((100vh - 39rem) / 2) calc((100vw - 45rem) / 2);
   }
