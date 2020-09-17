@@ -46,6 +46,10 @@ body.aura-header-open .header--wrapper {
         top: calc(100% + 0.3125rem);
         transform: translateX(-50%);
         background: $aura-block-bg-desktop;
+
+        html[lang='ar'] & {
+          transform: translateX(50%);
+        }
       }
 
       .aura-popup-header {
