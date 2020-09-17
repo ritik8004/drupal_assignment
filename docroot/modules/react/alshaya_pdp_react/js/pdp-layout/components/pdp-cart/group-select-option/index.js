@@ -6,7 +6,7 @@ import SizeGuide from '../size-guide';
 const GroupSelectOption = ({
   groupSelect, configurables,
   groupName, code, nextCode, nextValues, handleLiClick,
-  selected, key, closeModal, context,
+  selected, keyId, closeModal, context,
 }) => (
   <div className="magv2-select-popup-container">
     <div className="magv2-select-popup-wrapper">
@@ -21,11 +21,11 @@ const GroupSelectOption = ({
         <a className="close" onClick={(e) => closeModal(e)}>
           &times;
         </a>
-        <label htmlFor={key}>{configurables.label}</label>
+        <label htmlFor={keyId}>{configurables.label}</label>
       </div>
       <div className="magv2-select-popup-content-wrapper">
         <div className="group-anchor-wrapper">
-          <label htmlFor={key}>{configurables.label}</label>
+          <label htmlFor={keyId}>{configurables.label}</label>
           <div className="group-anchor-links">
             {Object.keys(configurables.alternates).map((alternate) => (
               <a
