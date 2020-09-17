@@ -27,7 +27,7 @@ class PdpRelatedProducts extends React.Component {
 
   render() {
     const {
-      type, skuItemCode, getPanelData, removePanelData,
+      type, skuItemCode, getPanelData, removePanelData, keyId,
     } = this.props;
     const device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
     const url = Drupal.url(`related-products/${skuItemCode}/${type}/${device}?type=json&cacheable=1`);
@@ -41,6 +41,7 @@ class PdpRelatedProducts extends React.Component {
         sectionTitle={sectionTitle}
         getPanelData={getPanelData}
         removePanelData={removePanelData}
+        key={keyId}
       />
     ) : null;
   }

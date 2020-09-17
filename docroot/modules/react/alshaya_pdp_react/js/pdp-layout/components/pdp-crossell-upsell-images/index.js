@@ -15,6 +15,7 @@ const PdpCrossellUpsellImage = ({
   getPanelData,
   relatedSku,
   gtmAttributes,
+  keyId,
 }) => (
   <>
     <ConditionalView condition={window.innerWidth < 768}>
@@ -29,6 +30,8 @@ const PdpCrossellUpsellImage = ({
           finalPrice={finalPrice}
           productLabels={productLabels}
           productPromotions={productPromotions}
+          key={keyId}
+          keyId={keyId}
         />
       </a>
     </ConditionalView>
@@ -45,6 +48,8 @@ const PdpCrossellUpsellImage = ({
           finalPrice={finalPrice}
           productLabels={productLabels}
           productPromotions={productPromotions}
+          key={keyId}
+          keyId={keyId}
         />
       </a>
     </ConditionalView>
