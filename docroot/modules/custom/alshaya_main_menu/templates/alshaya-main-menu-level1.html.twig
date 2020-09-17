@@ -20,9 +20,11 @@
       {% endfor %}
     {% endif %}
 
-    {# <div class="no--desktop">
-      {{ drupal_block('aurarewardsheader') }}
-    </div> #}
+    {% if aura_rewards_header %}
+      <div class="no--desktop">
+        {{ aura_rewards_header }}
+      </div>
+    {% endif %}
   </ul>
 </div>
 

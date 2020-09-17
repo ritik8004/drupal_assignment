@@ -5,6 +5,8 @@
  * Contains alshaya_aura.module.
  */
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_theme().
  */
@@ -43,4 +45,16 @@ function alshaya_aura_alshaya_my_account_links_alter(array &$links) {
  */
 function alshaya_aura_page_attachments(array &$page) {
   $page['#attached']['drupalSettings']['aura']['enabled'] = 1;
+}
+
+/**
+ * Implements hook_preprocess_alshaya_main_menu_level1() for menu template.
+ */
+function alshaya_aura_preprocess_alshaya_main_menu_level1(array &$variables) {
+  $block = Block::load('aurarewardsheader');
+  $block_content = \Drupal::entityTypeManager()
+    ->getViewBuilder('block')
+    ->view($block);
+  $variables['testing'] = 'Alshaya Aura';
+  $variables['aura_rewards_header'] = $block_content;
 }

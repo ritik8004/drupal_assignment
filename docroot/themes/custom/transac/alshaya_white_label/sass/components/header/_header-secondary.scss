@@ -531,6 +531,7 @@ body {
         @include breakpoint($desktop) {
           margin-bottom: 1.875rem;
         }
+
         p {
           color: $benefits-text;
           font-size: 0.8125rem;
