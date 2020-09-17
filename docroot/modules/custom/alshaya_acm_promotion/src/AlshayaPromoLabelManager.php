@@ -605,7 +605,7 @@ class AlshayaPromoLabelManager {
       }
 
       $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions);
-      if ($free_promotion) {
+      if (empty($free_promotion)) {
         return [];
       }
 
