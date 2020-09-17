@@ -218,10 +218,12 @@
       // Ajax success to trigger callbacks once api request from
       // Drupal.alshayaSpc.getProductData finished.
       $(document).once('getProductData-success').ajaxSuccess(function( event, xhr, settings ) {
-        if (settings.requestOrigin !== 'getProductData') {
+        if (!settings.hasOwnProperty('requestOrigin') || settings.requestOrigin !== 'getProductData') {
           return;
         }
 
+        // Check if the xhr status is successful.
+        // ref: docroot/libraries/jqueryvalidate/lib/jquery.form.js:623
         if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
           var data = xhr.responseJSON;
           if (Object.keys(getProductDataRequests[data.sku]['callbacks']).length > 0) {
