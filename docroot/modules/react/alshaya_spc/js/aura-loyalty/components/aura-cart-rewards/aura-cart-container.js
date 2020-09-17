@@ -1,11 +1,11 @@
 import React from 'react';
 import Loading from '../../../utilities/loading';
 
-const AuraRewards = React.lazy(() => (import(/* webpackChunkName: 'aura-cart' */ '.')));
+const AuraCartRewards = React.lazy(() => import(/* webpackChunkName: 'aura-cart' */ './index'));
 
 const AuraCartContainer = () => (
   <React.Suspense fallback={<Loading />}>
-    <AuraRewards />
+    <AuraCartRewards />
   </React.Suspense>
 );
 

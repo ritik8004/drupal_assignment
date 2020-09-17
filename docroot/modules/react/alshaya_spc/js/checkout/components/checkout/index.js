@@ -23,7 +23,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
-import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout/aura-checkout-container';
+import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
 
 window.fetchStore = 'idle';
 
