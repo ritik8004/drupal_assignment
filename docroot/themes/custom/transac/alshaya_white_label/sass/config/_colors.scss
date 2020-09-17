@@ -152,7 +152,6 @@ $aura-purple: #7a2682;
 $aura-darkblue: #1e2a54;
 $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 $aura-purpleTwo: #772583;
-$aura-gradient-mobile: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1548,4 +1547,4 @@ $join-aura-link: $white-five;
 $learn-more-link: $aura-purpleTwo;
 $mobile-aura-link-bg: $white-three;
 $aura-block-bg-desktop: $white-five;
-$aura-block-bg-mobile: $aura-gradient-mobile;
+$aura-block-bg-mobile: $aura-gradient-1;
