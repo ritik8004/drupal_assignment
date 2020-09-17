@@ -3,8 +3,10 @@
     <p class="non-refundable--text">
       {{ text }}
     </p>
-    <p class="tooltip">
-      {{ tooltip }}
-    </p>
+    {% if tooltip %}
+      <p class="tooltip">
+        {{ tooltip }}
+      </p>
+    {% endif %}
   </div>
 </div>
