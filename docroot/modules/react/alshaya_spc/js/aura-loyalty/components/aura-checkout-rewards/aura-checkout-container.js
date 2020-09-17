@@ -1,11 +1,11 @@
 import React from 'react';
 import Loading from '../../../utilities/loading';
 
-const AuraRedemption = React.lazy(() => import(/* webpackChunkName: 'aura-checkout' */ '.'));
+const AuraCheckoutRedeem = React.lazy(() => import(/* webpackChunkName: 'aura-checkout' */ './index'));
 
 const AuraCheckoutContainer = () => (
   <React.Suspense fallback={<Loading />}>
-    <AuraRedemption />
+    <AuraCheckoutRedeem />
   </React.Suspense>
 );
 
