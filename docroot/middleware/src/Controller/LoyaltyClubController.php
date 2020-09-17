@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Service\Cart;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -43,6 +45,13 @@ class LoyaltyClubController {
   protected $utility;
 
   /**
+   * Service for cart interaction.
+   *
+   * @var \App\Service\Cart
+   */
+  protected $cart;
+
+  /**
    * LoyaltyClubController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -53,17 +62,21 @@ class LoyaltyClubController {
    *   Drupal service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Cart $cart
+   *   Cart service.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
     Drupal $drupal,
-    Utility $utility
+    Utility $utility,
+    Cart $cart
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->drupal = $drupal;
     $this->utility = $utility;
+    $this->cart = $cart;
   }
 
   /**
@@ -96,6 +109,45 @@ class LoyaltyClubController {
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
     }
+  }
+
+  /**
+   * Returns the loyalty points related data for a product.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response having the key 'apcPoints' for points.
+   */
+  public function getProductPoints(Request $request) {
+    // Expecting 'items' array in the request body with each item having
+    // 'sku', 'quantity'(int) and 'price'(int).
+    $items = $request->request->get('items');
+    if (empty($items)) {
+      return new JsonResponse($this->utility->getErrorResponse('No items found in the request body.', Response::HTTP_NOT_FOUND));
+    }
+
+    $cart = $this->cart->getCart();
+    if (empty($cart)) {
+      return new JsonResponse($this->utility->getErrorResponse('Cart not found for the user.', Response::HTTP_NOT_FOUND));
+    }
+
+    // Hard coded return value for now since MDC not available.
+    return new JsonResponse(['apcPoints' => '2000']);
+
+    // $user_identifier_number = 10;
+    // $endpoint = sprintf('/apc/%s/sales', $user_identifier_number);
+    // try {
+    // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+    // return new JsonResponse($response['apcPoints']);
+    // }
+    // catch (\Exception $e) {
+    // $customer_id = $this->drupal->getSessionCustomerInfo()['customer_id'];
+    // $this->logger->notice('Error while trying to fetch product points for
+    // user with customer id @customer_id.', [
+    // '@customer_id' => $customer_id,
+    // ]);
+    // return new JsonResponse('Error while trying to fetch product points',
+    // Response::HTTP_INTERNAL_SERVER_ERROR);
+    // }
   }
 
 }
