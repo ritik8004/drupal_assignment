@@ -31,9 +31,36 @@ export default class CartPromoBlock extends React.Component {
     document.addEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
   }
 
+  componentDidUpdate(prevProps) {
+    const { coupon_code: couponCode } = this.props;
+    const { coupon_code: prevCouponCode } = prevProps;
+
+    if (couponCode !== prevCouponCode) {
+      this.refreshState(couponCode);
+    }
+  }
+
   componentWillUnmount() {
     document.removeEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
   }
+
+  refreshState = (couponCode) => {
+    if (couponCode.length > 0) {
+      this.setState({
+        promoApplied: true,
+        buttonText: Drupal.t('applied'),
+        disabled: true,
+      });
+    } else {
+      this.setState({
+        promoApplied: false,
+        buttonText: Drupal.t('apply'),
+        disabled: false,
+      });
+    }
+
+    document.getElementById('promo-code').value = couponCode;
+  };
 
   /**
    * Handle error of invalid promo.
