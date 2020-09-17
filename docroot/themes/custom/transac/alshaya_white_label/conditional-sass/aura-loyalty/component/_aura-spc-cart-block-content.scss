@@ -45,4 +45,28 @@
       border-color: transparent;
     }
   }
+
+  .block-content.registered-user-linked {
+    .spc-aura-points-to-earn {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+
+      .spc-aura-highlight {
+        color: $aura-cart-points;
+      }
+
+      > span:first-child {
+        width: 62%;
+      }
+    }
+  }
+
+  .block-content {
+    .actions {
+      > div:not(:last-child) {
+        margin-bottom: 0.625rem;
+      }
+    }
+  }
 }
