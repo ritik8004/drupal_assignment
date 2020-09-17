@@ -17,7 +17,7 @@ import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
-import AuraCartRewards from '../../../aura-loyalty/components/aura-cart-rewards';
+import AuraCartContainer from '../../../aura-loyalty/components/aura-rewards/aura-cart-container';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -206,7 +206,11 @@ export default class Cart extends React.Component {
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
             </SectionTitle>
             <DeliveryInOnlyCity />
-            <CartItems dynamicPromoLabelsProduct={dynamicPromoLabelsProduct} items={items} />
+            <CartItems
+              dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
+              items={items}
+              couponCode={couponCode}
+            />
           </div>
           <div className="spc-sidebar">
             <CartPromoBlock
@@ -214,7 +218,9 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
             />
-            <AuraCartRewards animationDelay="0.4s" />
+            {drupalSettings.aura && drupalSettings.aura.enabled
+              ? <AuraCartContainer animationDelay="0.4s" />
+              : null}
             <OrderSummaryBlock
               totals={totals}
               in_stock={inStock}

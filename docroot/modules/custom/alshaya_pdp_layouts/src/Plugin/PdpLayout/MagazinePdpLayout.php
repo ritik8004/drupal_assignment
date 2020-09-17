@@ -29,4 +29,11 @@ class MagazinePdpLayout extends PdpLayoutBase {
     $variables['#attached']['drupalSettings']['color_swatches_hover'] = TRUE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCotextFromPdpLayout($context, $pdp_layout) {
+    return $context . '-' . $pdp_layout;
+  }
+
 }

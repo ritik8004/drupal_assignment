@@ -1,0 +1,15 @@
+.magv2 {
+  &-pdp-section-text {
+    &,
+    * {
+      font-size: 1rem;
+      line-height: 1.75rem;
+      color: $magv2-text;
+    }
+
+    &.dark {
+      font-family: $alshaya-bold;
+      color: $magv2-section-title-color;
+    }
+  }
+}

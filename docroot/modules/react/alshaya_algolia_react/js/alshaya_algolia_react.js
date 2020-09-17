@@ -171,7 +171,7 @@
           }
         }
         else {
-          if (!$(this).parent().parent().hasClass('filter__inner') && !drupalSettings.superCategory) {
+          if (!$(this).parent().parent().hasClass('filter__inner') && !$(this).parents().hasClass('c-sidebar-first')) {
             $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
             $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
           }

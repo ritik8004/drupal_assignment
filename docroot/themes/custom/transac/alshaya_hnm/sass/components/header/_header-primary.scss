@@ -735,12 +735,50 @@ header {
       > ul {
         > div.menu__links__wrapper {
           background: $default_background_color;
+
+          .back--link {
+            color: $mm-level-title;
+            font-size: 1.25rem;
+
+            .menu__back {
+              position: relative;
+              margin-#{$right}: 1rem;
+
+              &::after {
+                content: ' ';
+                background: url(../imgs/icons/forward-arrow.svg) center #{$right}/100% no-repeat;
+                display: block;
+                height: 100%;
+                position: absolute;
+                #{$left}: 0;
+                top: 0;
+                width: 1rem;
+                transform: rotate(180deg);
+              }
+            }
+          }
+        }
+
+        .menu--three__list-item {
+          a {
+            color: $mm_l3_link;
+
+            &::after {
+              content: '';
+            }
+          }
         }
       }
 
       .menu--one__link {
         position: relative;
 
+        &:hover {
+          color: $default-anchor-link-hover;
+        }
+      }
+
+      .menu__in {
         &::after {
           content: ' ';
           background: url('../imgs/icons/forward-arrow.svg') center #{$right}/100% no-repeat;
@@ -748,16 +786,13 @@ header {
           height: 100%;
           position: absolute;
           #{$right}: 1.25rem;
-          top: 0;
-          width: 16px;
+          top: -0.5rem;
+          width: 1rem;
 
           html[lang=ar] & {
             transform: rotate(180deg);
+            top: 0;
           }
-        }
-
-        &:hover {
-          color: $default-anchor-link-hover;
         }
       }
     }

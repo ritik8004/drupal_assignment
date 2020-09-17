@@ -1,3 +1,50 @@
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_pottery_barn_kids/fonts';
+//DY fonts.
+@font-face {
+  font-family: "Realist-Medium";
+  src: url("#{$base_theme_fonts_directory_path}/Realist-Medium.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Realist-Medium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Medium.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Medium.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Medium.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Medium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Realist-Regular";
+  src: url("#{$base_theme_fonts_directory_path}/Realist-Regular.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Realist-Regular.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Regular.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Regular.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Regular.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Regular.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Realist-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Realist-SemiLight";
+  src: url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Realist-SemiLight.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 // Icon font Variable
 $alshaya-icons: 'alshaya-icons';
 
@@ -73,7 +120,15 @@ $icons: (
   arrow-right: "\e941",
   bin: "\e9ac",
   triangle-down: "\e9ad",
-  triangle-down-narrow: "\e9ae"
+  triangle-down-narrow: "\e9ae",
+  new-facebook-default: "\e942",
+  new-facebook-hover: "\e943",
+  new-instagram-default: "\e944",
+  new-instagram-hover: "\e945",
+  new-twitter-default: "\e946",
+  new-twitter-hover: "\e947",
+  new-whatsapp-default: "\e948",
+  new-whatsapp-hover: "\e949"
 );
 
 @mixin iconbase() {

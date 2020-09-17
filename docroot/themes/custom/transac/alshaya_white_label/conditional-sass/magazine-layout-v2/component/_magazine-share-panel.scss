@@ -1,0 +1,162 @@
+.magv2-pdp-share-wrapper {
+  .magv2-pdp-section-title {
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '';
+      background: url('#{$base_theme_img_directory_path}/icons/new-pdp-share-icon.svg') center center no-repeat;
+      width: 3.125rem;
+      height: 3.125rem;
+      margin-#{$right}: 0.625rem;
+    }
+  }
+
+  .pdp-share-panel {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.625rem 1.25rem 2.1875rem;
+  }
+
+  .magv2-share-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .sharethis-wrapper {
+    text-align: #{$left};
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-bottom: 0;
+    }
+
+    > span {
+      margin: 0;
+      margin-#{$right}: 1.6875rem;
+      width: 1.25rem;
+      height: 1.25rem;
+
+      @include breakpoint($only-tablet) {
+        width: 2rem;
+        height: 2rem;
+        margin-#{$right}: 0.4375rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-bottom: 0.625rem;
+      }
+
+      &::before {
+        background: none;
+        color: $magv2-share-icons-default-color;
+        width: auto;
+        height: auto;
+        font-size: 1.25rem;
+        float: none;
+      }
+
+      &:hover {
+        &::before {
+          background: none;
+          width: auto;
+          height: auto;
+          opacity: 1;
+          font-size: 1.25rem;
+        }
+      }
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+
+    .st_facebook_custom {
+      @include icon(new-facebook-default, before);
+
+      &:hover {
+        @include icon(new-facebook-hover, before) {
+          color: $magv2-fb;
+        }
+      }
+    }
+
+    .st_twitter_custom {
+      @include icon(new-twitter-default, before);
+
+      &:hover {
+        @include icon(new-twitter-hover, before) {
+          color: $magv2-twitter;
+        }
+      }
+    }
+
+    .st_whatsapp_custom {
+      display: inline-block;
+
+      @include icon(new-whatsapp-default, before);
+
+      &:hover {
+        @include icon(new-whatsapp-hover, before) {
+          color: $magv2-whatsapp;
+        }
+      }
+    }
+
+    .st_instagram_custom {
+      @include icon(new-instagram-default, before) {
+        padding-#{$left}: 0.0625rem;
+      }
+
+      &:hover {
+        @include icon(new-instagram-hover, before) {
+          background: radial-gradient(circle at 33% 100%, #fed373 4%, #f15245 30%, #d92e7f 62%, #9b36b7 85%, #515ecf);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: $magv2-insta-fallback;
+        }
+      }
+    }
+
+    .st_pinterest_custom {
+      &::before {
+        background: url('#{$base_theme_img_directory_path}/social-icons/new-pdp-pintrest-default.svg') no-repeat center;
+      }
+
+      &:hover {
+        &::before {
+          background: url("#{$base_theme_img_directory_path}/social-icons/pdp/ic-pinterestselect.png") no-repeat center;
+          background-size: cover;
+        }
+      }
+    }
+  }
+
+  button {
+    font-size: 0.75rem;
+    width: 6.5rem;
+    border: 0.075rem solid $magv2-share-btn;
+    border-radius: 0.125rem;
+    background-color: $magv2-share-btn-txt;
+    color: $magv2-share-btn;
+    padding: 0.25rem 0.1875rem;
+    flex-shrink: 0;
+    font-family: $alshaya-bold;
+    transition: all 0.3s ease-in-out;
+
+    @include breakpoint($desktop) {
+      height: 1.5rem;
+    }
+
+    &:hover,
+    &.copied {
+      background: $magv2-share-btn;
+      color: $magv2-share-btn-txt;
+    }
+  }
+}

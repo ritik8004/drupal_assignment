@@ -7,7 +7,14 @@
 
 /**
  * Implements hook_install().
+ *
+ * Move AURA blocks to current theme.
  */
 function alshaya_aura_install() {
-  \Drupal::service('alshaya_config.manager')->updateConfigs(['block.block.aurarewardsheader'], 'alshaya_aura', 'optional');
+  $configs = [
+    'block.block.aurarewardsheader',
+    'block.block.aurapendingenrollment',
+  ];
+
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura', 'optional');
 }

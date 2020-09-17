@@ -65,14 +65,9 @@ function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles
       DATETIME_STORAGE_TIMEZONE
     );
 
-    // Delete the user if already available so we can create again.
+    // Re-use if user exists.
     $admin_user = user_load_by_mail('user3+admin@example.com');
-    if ($admin_user instanceof UserInterface) {
-      // Set expiration to not-expired.
-      $admin_user->set('field_last_password_reset', $date);
-      $admin_user->set('field_password_expiration', '0');
-    }
-    else {
+    if (!($admin_user instanceof UserInterface)) {
       // Create default administrator user.
       $admin_user = User::create();
       $admin_user->enforceIsNew();
@@ -81,18 +76,16 @@ function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles
       $admin_user->addRole('administrator');
     }
 
+    // Set expiration to not-expired.
+    $admin_user->set('field_last_password_reset', $date);
+    $admin_user->set('field_password_expiration', '0');
     $admin_user->setPassword('AlShAyAU1admin');
     $admin_user->activate();
     $admin_user->save();
 
-    // Delete the user if already available so we can create again.
+    // Re-use if user exists.
     $webmaster_user = user_load_by_mail('user3+webmaster@example.com');
-    if ($webmaster_user instanceof UserInterface) {
-      // Set expiration to not-expired.
-      $webmaster_user->set('field_last_password_reset', $date);
-      $webmaster_user->set('field_password_expiration', '0');
-    }
-    else {
+    if (!($webmaster_user instanceof UserInterface)) {
       // Create default webmaster user.
       $webmaster_user = User::create();
       $webmaster_user->enforceIsNew();
@@ -101,6 +94,9 @@ function alshaya_master_acsf_staging_scrub_admin_roles_alter(array &$admin_roles
       $webmaster_user->addRole('webmaster');
     }
 
+    // Set expiration to not-expired.
+    $webmaster_user->set('field_last_password_reset', $date);
+    $webmaster_user->set('field_password_expiration', '0');
     $webmaster_user->setPassword('AlShAyAU1webmaster');
     $webmaster_user->activate();
     $webmaster_user->save();

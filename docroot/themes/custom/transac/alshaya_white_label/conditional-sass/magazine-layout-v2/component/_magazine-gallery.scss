@@ -1,0 +1,359 @@
+.nodetype--acq_product {
+  .page-wrapper {
+    @include breakpoint($tablet) {
+      background-color: $magv2-pdp-bg;
+      padding-bottom: 2rem;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .region__content {
+      margin: 0 !important;
+    }
+  }
+}
+
+.magv2-pdp-gallery {
+  @include breakpoint($tablet) {
+    padding-top: 2rem;
+  }
+
+  .magazine__gallery--container-desktop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      grid-gap: 0.5rem;
+    }
+
+    .ie & {
+      display: block;
+
+      .magv2-pdp-image {
+        margin-bottom: 1.25rem;
+        display: block;
+
+        &:nth-child(2n +1) {
+          width: calc(50% - 0.5rem);
+          float: $left;
+        }
+
+        &:nth-child(2n) {
+          width: calc(50% - 0.5rem);
+          float: $right;
+        }
+
+        &:only-child {
+          float: none;
+        }
+
+        img {
+          display: block;
+        }
+      }
+    }
+
+    .magv2-pdp-image {
+      position: relative;
+      display: inline-flex;
+      cursor: pointer;
+      background: $magv2-gallery-bg;
+
+      @include breakpoint($desktop) {
+        min-height: 30.375rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        min-height: 13.75rem;
+      }
+
+      &:only-child {
+        width: 47%;
+        margin: 0 auto;
+        grid-column: 1/-1;
+      }
+    }
+
+    figure {
+      margin: 0;
+
+      &.magazine-image-zoomed {
+        overflow: hidden;
+
+        .magazine-image-zoom-placeholder {
+          z-index: 1;
+        }
+      }
+
+      .magazine-image-zoom-placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-repeat: no-repeat;
+        z-index: -1;
+        background-size: cover;
+      }
+    }
+  }
+
+  .magazine__gallery--container-mobile {
+    .slick-dots {
+      bottom: 1.125rem;
+
+      li {
+        border: none;
+
+        button {
+          &::before {
+            color: $magv2-slick-dots;
+            opacity: 1;
+          }
+        }
+
+        &.slick-active {
+          background: transparent !important;
+
+          button {
+            &::before {
+              color: $magv2-slick-dots-active;
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+
+    .slick-slider {
+      margin-#{$right}: -1.25rem;
+      margin-#{$left}: -1.25rem;
+    }
+  }
+
+  .popup-overlay {
+    background: $magv2-gallery-popup-bg !important;
+
+    .popup-content {
+      background: none !important;
+      border: none !important;
+      padding: 0 !important;
+      height: 100vh !important;
+      width: 100vw !important;
+      overflow-y: auto;
+
+      img {
+        margin: 0 auto;
+      }
+
+      .fullscreen-slider-wrapper--mini {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .slick-slider {
+          .slick-next,
+          .slick-prev {
+            bottom: -0.3125rem;
+            top: auto;
+            width: auto;
+
+            &::before {
+              background: none !important;
+            }
+          }
+
+          .slick-prev {
+            @include icon(chevron#{$left}) {
+              font-size: 3rem;
+              height: 3rem;
+              width: 3rem;
+            }
+          }
+
+          .slick-next {
+            @include icon(chevron#{$right}) {
+              font-size: 3rem;
+              height: 3rem;
+              width: 3rem;
+            }
+          }
+
+          .slick-dots {
+            bottom: 1.875rem;
+            top: auto;
+            width: auto;
+          }
+        }
+      }
+    }
+
+    .close {
+      position: absolute;
+      #{$right}: 0;
+      top: 1.5rem;
+
+      @include breakpoint($tablet) {
+        top: 4rem;
+      }
+
+      @include icon(close, before) {
+        font-size: 2.875rem;
+        position: fixed;
+        top: 1.75rem;
+        #{$right}: 1.75rem;
+        background: $magv2-gallery-popup-cross-bg;
+        border-radius: 50%;
+        color: $magv2-gallery-popup-cross;
+        cursor: pointer;
+        opacity: 0.6;
+        z-index: 9;
+
+        @include breakpoint($tablet) {
+          top: 3.75rem;
+          #{$right}: 3.75rem;
+        }
+      }
+    }
+
+    .slick-slider {
+      .slick-next,
+      .slick-prev {
+        position: fixed;
+        bottom: 3.65rem;
+
+        @include breakpoint($desktop) {
+          top: 50%;
+          transform: translateY(-50%);
+          border-radius: 50%;
+          opacity: 0.6;
+          bottom: unset;
+        }
+
+        &::before {
+          background: $magv2-gallery-slider-bg;
+          color: $magv2-slider-icon-bg;
+          opacity: 1;
+        }
+      }
+
+      .slick-prev {
+        #{$left}: 0.5rem;
+        #{$right}: auto;
+        height: 3rem;
+        width: 3rem;
+
+        @include breakpoint($tablet) {
+          #{$left}: 1.25rem;
+        }
+
+        @include breakpoint($desktop) {
+          #{$left}: 3.75rem;
+          height: 5.25rem;
+          width: 5.25rem;
+        }
+
+        @include icon(chevron#{$left}) {
+          @include breakpoint($desktop) {
+            height: 5.25rem;
+            width: 5.25rem;
+            font-size: 3rem;
+          }
+        }
+      }
+
+      .slick-next {
+        #{$right}: 0.5rem;
+        height: 3rem;
+        width: 3rem;
+
+        @include breakpoint($desktop) {
+          #{$right}: 3.75rem;
+          height: 5.25rem;
+          width: 5.25rem;
+        }
+
+        @include icon(chevron#{$right}) {
+          @include breakpoint($desktop) {
+            height: 5.25rem;
+            width: 5.25rem;
+            font-size: 3rem;
+          }
+        }
+      }
+
+      .slick-dots {
+        position: fixed !important;
+        bottom: 3.375rem;
+        left: 50%;
+        transform: translate(-50%, 0);
+
+        li {
+          border: none;
+
+          button {
+            &::before {
+              opacity: 0.1;
+            }
+          }
+
+          &.slick-active {
+            background: transparent !important;
+
+            button {
+              &::before {
+                color: $magv2-slick-dots-active;
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+
+      .magv2-pdp-image {
+        cursor: auto;
+      }
+    }
+  }
+}
+
+html[lang="ar"] {
+  .magv2-pdp-gallery {
+    .popup-overlay {
+      .slick-slider {
+        .slick-prev {
+          width: auto;
+        }
+      }
+    }
+  }
+
+  .magazine__gallery--container-mobile {
+    .slick-dots {
+      padding: 0;
+    }
+  }
+}
+
+.ie {
+  .magazine__gallery--container {
+    display: block;
+
+    .magv2-pdp-image {
+      margin-bottom: 1.5rem;
+
+      &:nth-child(2n+1) {
+        width: calc(50% - 0.75rem);
+        float: #{$left};
+      }
+
+      &:nth-child(2n) {
+        width: calc(50% - 0.75rem);
+        float: #{$right};
+      }
+    }
+  }
+}

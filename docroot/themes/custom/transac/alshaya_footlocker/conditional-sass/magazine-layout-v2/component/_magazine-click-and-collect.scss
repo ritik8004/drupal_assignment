@@ -1,0 +1,19 @@
+.magv2-pdp-click-and-collect-wrapper {
+  .magv2-pdp-section-title {
+    text-transform: capitalize;
+  }
+
+  .click-collect-detail,
+  .instore-title {
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  .store {
+    &-name,
+    &-address {
+      text-transform: capitalize;
+    }
+  }
+}

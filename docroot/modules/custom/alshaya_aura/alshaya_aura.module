@@ -15,7 +15,32 @@ function alshaya_aura_theme() {
         'learn_more_link' => '',
       ],
     ],
+    'aura_pending_enrollment' => [
+      'variables' => [],
+    ],
+    'my_loyalty_club' => [
+      'variables' => [],
+    ],
   ];
 
   return $theme;
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_aura_alshaya_my_account_links_alter(array &$links) {
+  // Add My Loyalty Club link.
+  $links['alshaya_loyalty_club'] = [
+    'text' => t('My Loyalty Club'),
+    'route' => 'alshaya_aura.loyalty_club',
+    'weight' => 11,
+  ];
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_aura_page_attachments(array &$page) {
+  $page['#attached']['drupalSettings']['aura']['enabled'] = 1;
 }

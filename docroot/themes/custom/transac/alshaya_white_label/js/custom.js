@@ -175,6 +175,19 @@
         modalClasses('size-guide', 'sizeguide-modal-overlay');
       });
 
+      // To bind ajax for dynamic component which in our case is size-guide link inside related products panel.
+      $(document).once('drupal-ajax').on('click', '#pdp-add-to-cart-form-related .size-guide-link', function (e) {
+        var url = $(this).attr('href');
+        Drupal.ajax({
+          url: url,
+          event: 'click',
+          dialogType: $(this).data('dialog-type'),
+          dialog: $(this).data('dialog-options')
+        }).execute();
+        modalClasses('size-guide', 'sizeguide-modal-overlay');
+        e.preventDefault();
+      });
+
       var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay'];
 
       $(document).on('keyup', function (evt) {
