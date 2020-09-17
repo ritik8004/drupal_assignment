@@ -1,7 +1,0 @@
-name: Alshaya Dynamic Yield
-type: module
-description: Alshaya sepcific implementation of Dynamic Yield is done here.
-package: Custom
-core: 8.x
-dependencies:
-  - dynamic_yield:dynamic_yield

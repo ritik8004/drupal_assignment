@@ -1,5 +1,5 @@
 alshaya_acm_product.product_modal:
-  path: '/product-quick-view/{code}/{js}'
+  path: '/product-quick-view/{node}/{js}'
   defaults:
     _title_callback: '\Drupal\alshaya_acm_product\Controller\ProductController::modalTitle'
     _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::modalView'
