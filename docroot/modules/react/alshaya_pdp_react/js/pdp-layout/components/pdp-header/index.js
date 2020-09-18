@@ -40,7 +40,7 @@ export default class PdpHeader extends React.PureComponent {
     return (
       <div className="magv2-header-wrapper">
         <ConditionalView condition={window.innerWidth < 768}>
-          <a className="back-button" onClick={(e) => backArrow(e)} />
+          <a className="back-button" href="#" onClick={(e) => backArrow(e)} />
           <PdpInfo
             title={title}
             finalPrice={finalPrice}
