@@ -81,7 +81,7 @@ variables:
   store_area: 'Cairo'
   language_area_option: 'القاهرة'
   language_city_option: 'القاهرة'
-  cs_payment_type: 'Credit Card / Debit Card'
+  cs_payment_type: 'Credit Card/Debit Card'
   language_cs_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   cnc_delivery_type: 'Click and Collect'
   language_cnc_delivery_type: 'Click and Collect'
