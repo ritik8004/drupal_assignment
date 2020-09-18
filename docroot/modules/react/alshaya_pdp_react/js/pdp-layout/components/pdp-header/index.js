@@ -16,6 +16,7 @@ export default class PdpHeader extends React.PureComponent {
       skuCode,
       productInfo,
       configurableCombinations,
+      pdpLabelRefresh,
       context,
     } = this.props;
 
@@ -75,7 +76,7 @@ export default class PdpHeader extends React.PureComponent {
                     className="magv2-button"
                     type="submit"
                     id="add-to-cart-sticky"
-                    onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo, context)}
+                    onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo, pdpLabelRefresh, context, null)}
                   >
                     {Drupal.t('Add To Bag')}
                   </button>
@@ -84,7 +85,7 @@ export default class PdpHeader extends React.PureComponent {
                     className="magv2-button"
                     type="submit"
                     id="add-to-cart-sticky"
-                    onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo, context)}
+                    onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo, pdpLabelRefresh, context, null)}
                   >
                     {Drupal.t('Add To Bag')}
                   </button>
