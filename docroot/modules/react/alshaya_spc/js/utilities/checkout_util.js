@@ -94,6 +94,7 @@ export const removeFullScreenLoader = () => {
  */
 export const placeOrder = (paymentMethod) => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
+  const langcode = drupalSettings.path.currentLanguage;
 
   showFullScreenLoader();
   controlPlaceOrderCTA('disable');
@@ -104,7 +105,7 @@ export const placeOrder = (paymentMethod) => {
     },
   };
   return axios
-    .post(`${middlewareUrl}/cart/place-order`, {
+    .post(`${middlewareUrl}/cart/place-order?lang=${langcode}`, {
       data,
     })
     .then(
