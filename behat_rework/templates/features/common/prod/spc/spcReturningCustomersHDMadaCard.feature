@@ -1,4 +1,4 @@
-@javascript @returnUser @madaPayment @homeDelivery @mcsaprod @mcsapprod @mckwprod @mckwpprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @hmkwpprod @vssaprod @vssapprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmsaprod @hmsapprod @flsaprod @flsapprod
+@javascript @returnUser @madaPayment @bbwaepprod @homeDelivery @flaeprod @hmaeprod @pbaeprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @hmkwpprod @vssaprod @vssapprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: SPC Checkout Home Delivery CC for Returning Customers
 
   Background:

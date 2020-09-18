@@ -1,4 +1,4 @@
-@javascript @auth @cybersourcePayment @homeDelivery @mcaeprod @mcaepprod @bbwaeprod @bbwaepprod @mcaepprod @vsaeprod @vsaepprod @pbaeprod @pbaepprod @mcaeprod @mcaepprod @hmaeprod @hmaepprod @flaeprod @flaepprod
+@javascript @auth @cybersourcePayment @homeDelivery @mcaeprod @mcaepprod @bbwaeprod @mcaepprod @vsaeprod @vsaepprod  @pbaepprod @mcaeprod @mcaepprod  @hmaepprod  @flaepprod
 Feature: SPC Checkout Home Delivery using CyberSource Payment Method for Authenticated user
 
   Background:
