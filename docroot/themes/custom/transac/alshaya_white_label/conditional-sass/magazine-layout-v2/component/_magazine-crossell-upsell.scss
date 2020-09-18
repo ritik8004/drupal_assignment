@@ -126,7 +126,7 @@
         margin: 0;
       }
 
-      // For slick slide we will not use rtl and slick react doesn't support it 
+      // For slick slide we will not use rtl and slick react doesn't support it
       // and it will break the design if we used it in SASS variable.
       .slick-slide {
         display: flex !important;
@@ -344,7 +344,7 @@
 }
 
 .slider-nav {
-  padding-top: 0.9375rem;
+  padding-top: 1.25rem;
   display: flex;
   align-items: center;
 
