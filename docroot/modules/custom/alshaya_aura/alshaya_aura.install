@@ -13,7 +13,6 @@
 function alshaya_aura_install() {
   $configs = [
     'block.block.aurarewardsheader',
-    'block.block.aurapendingenrollment',
   ];
 
   \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura', 'optional');

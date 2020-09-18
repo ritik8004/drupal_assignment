@@ -5,9 +5,9 @@ import CardNotLinkedNoData from './card-not-linked-no-data';
 
 const LoyaltyClubBlock = () => {
   if (typeof drupalSettings.alshaya_aura !== 'undefined'
-    && typeof drupalSettings.alshaya_aura.user_details !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.alshaya_aura.user_details, 'loyaltyStatus')) {
-    let { loyaltyStatus } = drupalSettings.alshaya_aura.user_details;
+    && typeof drupalSettings.aura.user_details !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'loyaltyStatus')) {
+    let { loyaltyStatus } = drupalSettings.aura.user_details;
     loyaltyStatus = parseInt(loyaltyStatus, 10);
 
     if (loyaltyStatus === 0) {
