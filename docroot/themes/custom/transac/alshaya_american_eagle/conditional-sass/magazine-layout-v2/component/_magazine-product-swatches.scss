@@ -4,5 +4,9 @@
       padding-#{$right}: 0.3125rem;
       padding-#{$left}: 0;
     }
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0.3125rem;
+    }
   }
 }
