@@ -140,6 +140,7 @@ services:
   alshaya_acm_product.acq_sku_validate_event:
     class: Drupal\alshaya_acm_product\EventSubscriber\AlshayaAcmProductAcqSkuValidateEventSubscriber
     arguments:
+      - '@alshaya_acm_product.product_processed_manager'
       - '@logger.factory'
     tags:
       - { name: event_subscriber }

@@ -5,10 +5,12 @@ namespace Drupal\alshaya_acm_product\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\file\FileInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -874,6 +876,56 @@ class AlshayaAcmProductCommands extends DrushCommands {
           // Download files again for skus.
           $sku_data->getMedia();
         }
+      }
+    }
+  }
+
+  /**
+   * Delete disabled products not modified in last X days.
+   *
+   * @command alshaya_acm_product:remove-disabled-products
+   *
+   * @aliases remove-disabled-products
+   *
+   * @usage remove-disabled-products
+   *   Checks and delete products that are disabled and not modified
+   *   since last X (default 7) days.
+   */
+  public function removeDisabledProducts() {
+    // We expect this in days.
+    $not_modified_since = Settings::get('remove_disabled_products_not_modified_since_last_x_days', 7);
+    if (empty($not_modified_since)) {
+      $this->logger()->notice(dt('Not processing remove-disabled-products as setting remove_disabled_products_not_modified_since_last_x_days set to @value', [
+        '@value' => serialize($not_modified_since),
+      ]));
+
+      return;
+    }
+
+    $query = $this->connection->select('acq_sku_field_data', 'asfd');
+    $query->leftJoin(
+      ProductProcessedManager::TABLE_NAME,
+      'processed',
+      'processed.sku = asfd.sku AND asfd.default_langcode = 1'
+    );
+    $query->addField('asfd', 'sku');
+    $query->condition('default_langcode', 1);
+    $query->isNull('processed.sku');
+
+    // Find only those products which are not modified since last X days.
+    $query->condition('changed', strtotime("-${not_modified_since} day"), '<');
+
+    $skus = $query->execute()->fetchCol();
+
+    foreach ($skus as $sku) {
+      $sku_entity = SKU::loadFromSku($sku);
+      if ($sku_entity instanceof SKUInterface) {
+        $this->logger()->notice(dt('Deleting SKU @sku not modified since @changed', [
+          '@sku' => $sku,
+          '@changed' => $sku_entity->getChangedTime(),
+        ]));
+
+        $sku_entity->delete();
       }
     }
   }
