@@ -26,6 +26,13 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   protected $queueUtility;
 
   /**
+   * Product Processed Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductProcessedManager
+   */
+  protected $productProcessedManager;
+
+  /**
    * ProductUpdatedEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_acm_product\Service\ProductQueueUtility $queue_utility
