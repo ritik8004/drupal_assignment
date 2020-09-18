@@ -1,0 +1,8 @@
+.non-groupped-attr {
+  .select-attribute {
+    li {
+      padding-#{$right}: 0.3125rem;
+      padding-#{$left}: 0;
+    }
+  }
+}
