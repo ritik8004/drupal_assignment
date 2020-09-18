@@ -1,0 +1,11 @@
+.nodetype--acq_product {
+  .free-gift-promo-wrapper {
+    &.free-gift-promo-list {
+      .free-gift-wrapper {
+        @include breakpoint($only-mobile) {
+          text-align: $left;
+        }
+      }
+    }
+  }
+}
