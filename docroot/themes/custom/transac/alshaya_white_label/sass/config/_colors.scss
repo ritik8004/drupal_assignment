@@ -148,15 +148,19 @@ $dried-urban: #efc06e;
 $blue-sweet-potato: #840091;
 $ancient-dark-moss: #533500;
 $musical-silk: #91147e;
-$aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
-$aura-gradient-2: linear-gradient(129deg, rgba(252, 190, 123, 0.1) -100%, rgba(251, 170, 105, 0.1) -35%, rgba(240, 54, 137, 0.1) 40%, rgba(152, 34, 163, 0.1) 111%);
-$aura-gradient-3: linear-gradient(to bottom, #fff, #fff), linear-gradient(106deg, #e71e6e 16%, #662483 85%);
 $aura-blue: #263166;
 $aura-purple: #7a2682;
 $aura-darkblue: #1e2a54;
-$aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 $aura-purpleTwo: #772583;
+$night-blue: #140247;
+
+// Aura Graidents.
+$aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
+$aura-gradient-2: linear-gradient(129deg, rgba(252, 190, 123, 0.1) -100%, rgba(251, 170, 105, 0.1) -35%, rgba(240, 54, 137, 0.1) 40%, rgba(152, 34, 163, 0.1) 111%);
+$aura-gradient-3: linear-gradient(to bottom, #fff, #fff), linear-gradient(106deg, #e71e6e 16%, #662483 85%);
 $aura-gradient-4: linear-gradient(105deg, rgba(239, 192, 110, 0.1) -10%, rgba(227, 28, 121, 0.1) 47%, rgba(119, 37, 131, 0.1) 101%);
+$aura-gradient-5: linear-gradient(122deg, rgba(239, 192, 110, 0.1) -15%, rgba(227, 28, 121, 0.1) 46%, rgba(119, 37, 131, 0.1) 104%);
+$aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1558,3 +1562,5 @@ $aura-promotion-item-txt: $blue-sweet-potato;
 $aura-promotion-item-bg: $aura-gradient-4;
 $aura-expiry-item-txt: $ancient-dark-moss;
 $aura-expiry-item-bg: $dried-urban;
+$aura-spc-cart-block-pending-enrollment: $aura-gradient-5;
+$aura-spc-pending-enrollment-text: $night-blue;
