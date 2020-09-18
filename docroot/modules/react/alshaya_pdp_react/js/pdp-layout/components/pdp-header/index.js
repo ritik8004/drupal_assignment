@@ -31,12 +31,16 @@ export default class PdpHeader extends React.PureComponent {
       backArrow = previousLink;
     }
 
+    backArrow = (e) => {
+      e.preventDefault();
+      // following browser back behaviour.
+      window.history.back();
+    };
+
     return (
       <div className="magv2-header-wrapper">
         <ConditionalView condition={window.innerWidth < 768}>
-          {backArrow ? (
-            <a className="back-button" href={backArrow} />
-          ) : null}
+          <a className="back-button" href="#" onClick={(e) => backArrow(e)} />
           <PdpInfo
             title={title}
             finalPrice={finalPrice}
