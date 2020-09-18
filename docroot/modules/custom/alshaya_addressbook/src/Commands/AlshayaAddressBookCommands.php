@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_addressbook\Commands;
 
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
@@ -73,6 +74,8 @@ class AlshayaAddressBookCommands extends DrushCommands {
 
     // Reset magento form fields cache.
     $this->alshayaAddressBookManager->resetMagentoFormFields();
+    // Invalidate checkout page cache.
+    Cache::invalidateTags(['page_manager_route_name:alshaya_spc.checkout']);
     $this->logger->notice('Form fields cache reset.');
   }
 
