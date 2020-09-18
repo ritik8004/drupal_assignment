@@ -46,7 +46,8 @@
     }
   }
 
-  .block-content.registered-user-linked {
+  .block-content.registered-user-linked,
+  .block-content.registered-user-linked-pending-enrollment {
     .spc-aura-points-to-earn {
       display: flex;
       justify-content: space-between;
