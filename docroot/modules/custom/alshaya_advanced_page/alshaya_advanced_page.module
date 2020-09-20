@@ -19,6 +19,7 @@ use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Implements hook_acq_sku_sync_categories_delete_alter().
@@ -446,4 +447,79 @@ function alshaya_advanced_page_node_view(array &$build, EntityInterface $entity,
   $response = new RedirectResponse($term->url(), 301);
   $response->send();
   exit;
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_advanced_page_page_attachments_alter(&$page) {
+  foreach (alshaya_advanced_page_language_get_translations() as $translated_path) {
+    if ($translated_path['access']) {
+      $hreflang = $translated_path['language']->getId();
+
+      $page['#attached']['html_head'][] = [
+        [
+          '#tag' => 'link',
+          '#attributes' => [
+            'rel' => 'alternate',
+            'hreflang' => $hreflang,
+            'href' => $translated_path['url_absolute'],
+          ],
+        ],
+        'language:alternate:' . $hreflang . ':' . $translated_path['url_absolute'],
+      ];
+
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_advanced_page_language_get_translations() {
+
+  // When route does not exists.
+  if (\Drupal::requestStack()->getCurrentRequest()->attributes->get('exception')) {
+    return [];
+  }
+
+  $paths = [];
+  if (\Drupal::languageManager()->isMultilingual()) {
+    $languages = \Drupal::languageManager()->getLanguages(LanguageInterface::STATE_CONFIGURABLE);
+
+    foreach ($languages as $lang) {
+      $url = Url::fromRoute('<current>', [], ['language' => $lang]);
+      if ($url) {
+        $path = [
+          'language' => $lang,
+          'access' => FALSE,
+        ];
+        // Enabling access for path if url is valid.
+        if (\Drupal::pathValidator()->getUrlIfValid($url->toString())) {
+          $path['access'] = TRUE;
+        }
+        // Making sure front page url is set as per existing settings.
+        if (\Drupal::service('path.matcher')->matchPath('/' . $url->getInternalPath(), '<front>')) {
+          $url = Url::fromRoute('<front>', [], ['language' => $lang]);
+        }
+        $path['url'] = $url->toString();
+        $path['url_absolute'] = $url->setAbsolute()->toString();
+
+        $paths[] = $path;
+      }
+    }
+  }
+
+  return $paths;
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_advanced_page_module_implements_alter(&$implementations, $hook) {
+  // Remove default hreflanf tags core implemetation.
+  // Unset page attachment alter in content translation module.
+  if ($hook === 'page_attachments' && isset($implementations['content_translation'])) {
+    unset($implementations['content_translation']);
+  }
 }
