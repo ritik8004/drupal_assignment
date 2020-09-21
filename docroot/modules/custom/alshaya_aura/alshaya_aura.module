@@ -29,21 +29,25 @@ function alshaya_aura_theme() {
  * Implements hook_page_attachments().
  */
 function alshaya_aura_page_attachments(array &$page) {
-  $settings['aura'] = [
-    'enabled' => 1,
-  ];
+  $settings['enabled'] = 1;
   $uid = \Drupal::currentUser()->id();
   $user = \Drupal::entityTypeManager()->getStorage('user')->load($uid);
 
   if (!empty($user)) {
-    $settings['aura']['user_details'] = [
+    $settings['user_details'] = [
       'id' => $uid,
       'email' => \Drupal::currentUser()->getEmail(),
       'loyaltyStatus' => $user->get('field_aura_loyalty_status')->getString(),
     ];
   }
 
-  $page['#attached']['drupalSettings'] = $settings;
+  $alshaya_aura_config = \Drupal::config('alshaya_aura_react.settings');
+  $settings['config'] = [
+    'appStoreLink' => $alshaya_aura_config->get('aura_app_store_link'),
+    'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
+  ];
+
+  $page['#attached']['drupalSettings']['aura'] = $settings;
 }
 
 /**
