@@ -30,7 +30,7 @@ const productRecommendationsSuffix = 'pr-';
         }
 
         // We get variant details in event object for magazine v2 layout.
-        if (event.detail.variant) {
+        if ((typeof event.detail !== 'undefined') && (typeof event.detail.variant !== 'undefined')) {
           variant = event.detail.variant;
         }
         var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
