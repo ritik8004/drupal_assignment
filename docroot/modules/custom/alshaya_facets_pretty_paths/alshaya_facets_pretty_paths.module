@@ -178,6 +178,8 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
     }
   }
 
+  $hreflang_languages = [];
+
   // Adding hreflang tags as per current route.
   // Making sure we add alternate tags for other languages.
   foreach (alshaya_facets_pretty_paths_language_get_translations() as $translated_path) {
@@ -193,6 +195,15 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
       ],
       'language:alternate:' . $hreflang . ':' . $translated_path['url_absolute'],
     ];
+
+    $hreflang_languages[] = $hreflang;
+  }
+
+  // Remove default links coming from content_translation.
+  foreach ($page['#attached']['html_head_link'] as $key => $element) {
+    if (isset($element[0]['hreflang']) && in_array($element[0]['hreflang'], $hreflang_languages)) {
+      unset($page['#attached']['html_head_link'][$key]);
+    }
   }
 }
 
@@ -234,15 +245,4 @@ function alshaya_facets_pretty_paths_language_get_translations() {
   }
 
   return $paths;
-}
-
-/**
- * Implements hook_module_implements_alter().
- */
-function alshaya_facets_pretty_paths_module_implements_alter(&$implementations, $hook) {
-  // Remove default hreflang tags core implemetation.
-  // Unset page attachment alter in content translation module.
-  if ($hook === 'page_attachments' && isset($implementations['content_translation'])) {
-    unset($implementations['content_translation']);
-  }
 }
