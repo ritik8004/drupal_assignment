@@ -8,6 +8,8 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Url;
 
 /**
  * Mappings for specific listing page type to make updates dynamic.
@@ -174,5 +176,73 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
         'noindex',
       ];
     }
+  }
+
+  // Adding hreflang tags as per current route.
+  // Making sure we add alternate tags for other languages.
+  foreach (alshaya_facets_pretty_paths_language_get_translations() as $translated_path) {
+    $hreflang = $translated_path['language']->getId();
+    $page['#attached']['html_head'][] = [
+      [
+        '#tag' => 'link',
+        '#attributes' => [
+          'rel' => 'alternate',
+          'hreflang' => $hreflang,
+          'href' => $translated_path['url_absolute'],
+        ],
+      ],
+      'language:alternate:' . $hreflang . ':' . $translated_path['url_absolute'],
+    ];
+  }
+}
+
+/**
+ * Get translations for current route.
+ */
+function alshaya_facets_pretty_paths_language_get_translations() {
+  // When route does not exists.
+  if (\Drupal::requestStack()->getCurrentRequest()->attributes->get('exception')) {
+    return [];
+  }
+
+  $paths = [];
+  if (\Drupal::languageManager()->isMultilingual()) {
+    $languages = \Drupal::languageManager()->getLanguages(LanguageInterface::STATE_CONFIGURABLE);
+
+    foreach ($languages as $lang) {
+      $url = Url::fromRoute('<current>', [], ['language' => $lang]);
+      if ($url) {
+        $path = [
+          'language' => $lang,
+          'access' => FALSE,
+        ];
+        // Enabling access for path if url is valid.
+        if (\Drupal::pathValidator()->getUrlIfValid($url->toString())) {
+          $path['access'] = TRUE;
+        }
+        // Making sure front page url is set as per existing settings.
+        if (\Drupal::service('path.matcher')->matchPath('/' . $url->getInternalPath(), '<front>')) {
+          $url = Url::fromRoute('<front>', [], ['language' => $lang]);
+        }
+        $path['url'] = $url->toString();
+        $path['url_absolute'] = $url->setAbsolute()->toString();
+        if ($path['access']) {
+          $paths[] = $path;
+        }
+      }
+    }
+  }
+
+  return $paths;
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_facets_pretty_paths_module_implements_alter(&$implementations, $hook) {
+  // Remove default hreflang tags core implemetation.
+  // Unset page attachment alter in content translation module.
+  if ($hook === 'page_attachments' && isset($implementations['content_translation'])) {
+    unset($implementations['content_translation']);
   }
 }
