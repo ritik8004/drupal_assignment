@@ -1,7 +1,11 @@
 .has--three-levels {
   @include breakpoint($desktop) {
+    .highlights {
+      margin-right: 1.35rem;
+    }
+
     .menu--two__list {
-      padding-top: 1rem;
+      padding-top: 1.35rem;
 
       .menu--three__list li a:hover {
         text-decoration: none;
@@ -9,6 +13,7 @@
 
       .menu--two__list-item {
         min-width: 12.5rem;
+        padding: 0 0.3rem;
       }
     }
 
