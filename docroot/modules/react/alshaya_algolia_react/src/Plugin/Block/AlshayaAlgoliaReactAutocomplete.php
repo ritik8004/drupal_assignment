@@ -146,6 +146,11 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     // Default menu level is upto L1.
     $maximum_depth_lhn = ($show_terms_in_lhn == 'all' ? '3' : '1');
 
+    // Add attributes_to_sort_by_name config in drupalSettings.
+    $attributes_to_sort_by_name = $this->configFactory
+      ->get('alshaya_algolia_react.settings')
+      ->get('attributes_to_sort_by_name') ?? [];
+
     $libraries = [
       'alshaya_algolia_react/autocomplete',
       'alshaya_white_label/algolia_search',
@@ -173,6 +178,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
             'category_facet_label' => $this->t('Category'),
             'sizeGroupSeparator' => SkuManager::SIZE_GROUP_SEPARATOR,
             'maximumDepthLhn' => $maximum_depth_lhn,
+            'attributes_to_sort_by_name' => $attributes_to_sort_by_name,
           ],
           'autocomplete' => [
             'hits' => $configuration['hits'] ?? 4,
@@ -440,6 +446,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
       'config:alshaya_search_api.listing_settings',
       'config:alshaya_search.settings',
       'config:alshaya_acm_product.settings',
+      'config:alshaya_algolia_react.settings',
     ]);
   }
 
