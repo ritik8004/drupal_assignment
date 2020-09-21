@@ -85,4 +85,3 @@ variables:
   cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   delivery_type_text: 'التوصيل متوقع خلال:'
   payment_type_text: 'طريقة الدفع:'
-  governorate: ''
