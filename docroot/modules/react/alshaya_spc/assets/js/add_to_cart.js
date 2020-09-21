@@ -113,18 +113,19 @@
                   // Process required data and trigger add to cart failure event.
                   const selectedOptions = [];
                   // Get the key-value pair of selected option name and value.
-                  document.querySelectorAll('#configurable_ajax select').forEach(element => {
-                    const configLabel = element.getAttribute('data-default-title');
-                    const configValue = element.querySelector('option:selected').innerHTML;
-                    const option = `${configLabel}: ${configValue}`;
+                  var elements = document.querySelectorAll('#configurable_ajax select');
+                  for (var i = 0; i < elements.length; i++) {
+                    const configLabel = elements[i].getAttribute('data-default-title');
+                    const configValue = elements[i].querySelector('option:selected').innerHTML;
+                    const option = configLabel + ": " + configValue;
                     selectedOptions.push(option);
-                  });
+                  }
                   productData.options = selectedOptions;
                   // Prepare the event.
                   const cartNotification = new CustomEvent('product-add-to-cart-failed', {
                     bubbles: true,
                     detail: {
-                      productData,
+                      productData: productData,
                       message: response.error_message,
                     },
                   });
