@@ -1,0 +1,59 @@
+@import "../../aura-loyalty-global/component/aura-fonts";
+
+.spc-order-summary-item {
+  &.aura-order-summary-item {
+    font-size: 0.875rem;
+    margin-top: 5px;
+    padding: 1.1875rem 1.25rem;
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    background: $spc-checkout-order-detail-bg;
+
+    .spc-aura-label {
+      color: $aura-order-confirmation-label;
+    }
+
+    .spc-aura-value {
+      color: $aura-order-confirmation-redeem-points;
+    }
+
+    &.earn .spc-aura-value {
+      color: $aura-order-confirmation-points;
+
+      .tooltip-anchor {
+        display: inline-block;
+        margin-#{$left}: 0.5rem;
+
+        .tooltip-box {
+          font-family: $aura-regular;
+          background: $aura-order-confirmation-points-tooltip-bg;
+          box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.24);
+          border: none;
+          color: $aura-order-confirmation-points-tooltip-txt;
+          bottom: 1.5rem;
+
+          @include breakpoint($only-mobile) {
+            #{$left}: -10rem;
+            transform: none;
+          }
+
+          &::before,
+          &::after {
+            display: none;
+          }
+        }
+
+        &::before {
+          background: $aura-order-confirmation-points-question-bg;
+          border: none;
+          color: $aura-order-confirmation-points-question-txt;
+        }
+      }
+    }
+  }
+}
+
+.spc-order-summary .spc-aura-pending-enrollment-message {
+  margin-top: 0.3125rem;
+}
