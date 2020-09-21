@@ -129,9 +129,9 @@ then
 fi
 
 # Enable maintenance mode if mode is updb.
-log_message "Turning maintenance on"
 if [ "$mode" = "updb" ]
 then
+  log_message "Turning maintenance on"
   drush --root=$docroot sfmlc alshaya-enable-maintenance &>> ${log_file}
   if [ $? -ne 0 ]
   then
