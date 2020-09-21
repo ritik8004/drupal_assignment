@@ -14,6 +14,9 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   if (in_array($current_route, ['acq_cart.cart', 'alshaya_spc.checkout'])) {
     $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty';
   }
+  elseif ($current_route === 'entity.user.canonical') {
+    $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
+  }
 }
 
 /**

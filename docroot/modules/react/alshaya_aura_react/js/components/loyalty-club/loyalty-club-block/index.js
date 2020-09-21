@@ -4,7 +4,7 @@ import CardNotLinkedMdcData from './card-not-linked-mdc-data';
 import CardNotLinkedNoData from './card-not-linked-no-data';
 
 const LoyaltyClubBlock = () => {
-  if (typeof drupalSettings.alshaya_aura !== 'undefined'
+  if (typeof drupalSettings.aura !== 'undefined'
     && typeof drupalSettings.aura.user_details !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'loyaltyStatus')) {
     let { loyaltyStatus } = drupalSettings.aura.user_details;
