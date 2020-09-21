@@ -62,6 +62,17 @@ class AlshayaAcmProductAcqSkuValidateEventSubscriber implements EventSubscriberI
     }
 
     /*
+     * Root reason: At times Magento is disabling and enabling product back
+     * again on same day or after getting stock back. At times stock is lost
+     * even because of consumer issues.
+     *
+     * Workaround done here: For each product we download images, set caches
+     * and do some processing. We can avoid this by deleting the products after
+     * few days of it being disabled from Magento. Here we just remove it from
+     * processed list and let the Node be removed (by updating visibility)
+     * so it is not processed again. And we actually delete them in cron job
+     * after X (7 default) days via drush remove-disabled-products command.
+     *
      * Status: 1 means enabled
      * Status: 2 means disabled
      * Status: 0 - used internally to mark as disabled
