@@ -15,22 +15,6 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * Set value for lpn_attribute config.
- * Invalidate `alshaya_product_configurations` permanent cache.
- */
-function alshaya_hm_update_8055() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs(['alshaya_product_lpn.settings'], 'alshaya_product_lpn');
-
-  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
-  $cache = \Drupal::service('cache.alshaya_product_configurations');
-  $cache->deleteAllPermanent();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable alshaya_product_lpn module.
  */
 function alshaya_hm_update_8054() {
