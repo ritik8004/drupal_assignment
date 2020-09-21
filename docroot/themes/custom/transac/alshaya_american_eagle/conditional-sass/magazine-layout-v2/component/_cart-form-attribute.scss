@@ -2,6 +2,10 @@
   .non-groupped-attr {
     li a {
       border-radius: 50%;
+
+      @include breakpoint($tablet) {
+        background-size: cover;
+      }
     }
 
     li.active {
