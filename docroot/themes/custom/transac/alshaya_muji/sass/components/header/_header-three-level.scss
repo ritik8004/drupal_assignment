@@ -1,7 +1,7 @@
 .has--three-levels {
   @include breakpoint($desktop) {
     .highlights {
-      margin-right: 1.35rem;
+      margin-#{$right}: 1.35rem;
     }
 
     .menu--two__list {
