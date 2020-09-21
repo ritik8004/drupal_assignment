@@ -44,6 +44,18 @@ function alshaya_aura_page_attachments(array &$page) {
   }
 
   $page['#attached']['drupalSettings'] = $settings;
+
+  // Attach libraries using route check.
+  $route_match = \Drupal::routeMatch();
+  if ($route_match->getRouteName() == 'alshaya_spc.checkout'
+    || $route_match->getRouteName() == 'acq_cart.cart') {
+    $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc';
+  }
+
+  if ($route_match->getRouteName() == 'alshaya_spc.checkout.confirmation') {
+    $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc';
+    $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc-confirmation';
+  }
 }
 
 /**

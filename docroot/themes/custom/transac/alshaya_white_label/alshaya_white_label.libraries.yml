@@ -420,10 +420,24 @@ sub-brand-logo:
     theme:
       css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}
 
-aura-loyalty:
+aura-loyalty-spc-common:
   css:
     theme:
-      css/conditional-sass/aura-loyalty/aura-loyalty.ltr.css: {}
+      css/conditional-sass/aura-loyalty-spc-common/aura-loyalty-spc-common.ltr.css: {}
+
+aura-loyalty-spc:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-spc/aura-loyalty-spc.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-spc-common
+
+aura-loyalty-spc-confirmation:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-spc-confirmation/aura-loyalty-spc-confirmation.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-spc-common
 
 aura-loyalty-global:
   css:

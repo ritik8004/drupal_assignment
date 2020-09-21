@@ -1,6 +1,10 @@
 import React from 'react';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
+import AuraEarnOrderSummaryItem
+  from '../../../aura-loyalty/components/aura-earn-order-summary-item';
+import AuraRedeemOrderSummaryItem
+  from '../../../aura-loyalty/components/aura-redeem-order-summary-item';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -153,6 +157,11 @@ const OrderSummary = () => {
           <OrderSummaryItem label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>
+      {/* TODO: Aura SPC - Improve these conditions once BE for AURA is integrated. */}
+      <ConditionalView condition={drupalSettings.aura && drupalSettings.aura.enabled}>
+        <AuraEarnOrderSummaryItem pointsEarned="5436" fullEnrollment="yes" animationDelay="0.8s" />
+        <AuraRedeemOrderSummaryItem pointsRedeemed="900" animationDelay="1s" />
+      </ConditionalView>
     </div>
   );
 };
