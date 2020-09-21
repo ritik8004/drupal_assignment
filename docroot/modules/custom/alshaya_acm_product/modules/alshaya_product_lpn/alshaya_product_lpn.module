@@ -55,12 +55,6 @@ function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$childre
   $configurations = unserialize($sku->get('field_configurable_attributes')->getString());
   $configurable_attribute_codes = array_column($configurations, 'code', 'code');
 
-  // Do not process further if we don't have lpn_attribute as
-  // configurable_attribute for the product.
-  if (!in_array($lpn_attribute, $configurable_attribute_codes)) {
-    return;
-  }
-
   foreach ($children as $child_sku => $child) {
     $attributes = $child->get('attributes')->getValue();
     $attributes = array_column($attributes, 'value', 'key');
