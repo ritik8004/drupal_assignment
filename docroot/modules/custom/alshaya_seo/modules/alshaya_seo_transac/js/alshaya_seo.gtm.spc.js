@@ -51,30 +51,31 @@
    *   Checkout step for gtm checkout event.
    */
   Drupal.alshayaSeoSpc.cartGtm = function(cart_data, step) {
-    const cartDataLayer = {};
     // GTM data for SPC cart.
     if (cart_data !== undefined) {
-      cartDataLayer.privilegeCustomer = 'Regular Customer';
-      cartDataLayer.privilegesCardNumber = '';
-      cartDataLayer.productSKU = [];
-      cartDataLayer.productStyleCode = [];
-      cartDataLayer.cartTotalValue = cart_data.cart_total;
-      cartDataLayer.cartItemsCount = cart_data.items_qty;
-      var items = cart_data.items;
-      cartDataLayer.checkout = { actionField: { step: step }};
-      if (items !== undefined) {
-        cartDataLayer.checkout = Object.assign(cartDataLayer.checkout, {products: []} )
-        // dataLayer.checkout.products = [];
+      const cartDataLayer = {
+        privilegeCustomer: 'Regular Customer',
+        privilegesCardNumber: '',
+        productSKU: [],
+        productStyleCode: [],
+        cartTotalValue: cart_data.cart_total,
+        cartItemsCount: cart_data.items_qty,
+        checkout: {
+          actionField: { step: step },
+          products: [],
+        }
+      };
+      if (cart_data.items !== undefined) {
         if (!drupalSettings.gtm.disabled_vars.indexOf('cartItemsFlocktory')) {
           cartDataLayer.cartItemsFlocktory = [];
         }
 
-        Object.entries(items).forEach(function(productItem) {
+        Object.entries(cart_data.items).forEach(function(productItem) {
           const product = productItem[1];
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
             finalPrice: product.finalPrice,
-            cartDataLayer: cartDataLayer,
+            cartDataLayer: Object.assign({}, cartDataLayer),
           });
         });
       }
