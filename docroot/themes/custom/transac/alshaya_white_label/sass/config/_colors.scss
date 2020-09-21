@@ -153,6 +153,11 @@ $aura-purple: #7a2682;
 $aura-darkblue: #1e2a54;
 $aura-purpleTwo: #772583;
 $night-blue: #140247;
+$darkish-purple: #8e227c;
+$aura-redeem-points: #cd2026;
+$aura-points: #1da545;
+$lucky-purple-two: #7a2582;
+$dark-night-owl: #1e2749;
 
 // Aura Graidents.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -1564,3 +1569,10 @@ $aura-expiry-item-txt: $ancient-dark-moss;
 $aura-expiry-item-bg: $dried-urban;
 $aura-spc-cart-block-pending-enrollment: $aura-gradient-5;
 $aura-spc-pending-enrollment-text: $night-blue;
+$aura-order-confirmation-label: $darkish-purple;
+$aura-order-confirmation-redeem-points: $aura-redeem-points;
+$aura-order-confirmation-points: $aura-points;
+$aura-order-confirmation-points-question-bg: $lucky-purple-two;
+$aura-order-confirmation-points-question-txt: $white-five;
+$aura-order-confirmation-points-tooltip-txt: $dark-night-owl;
+$aura-order-confirmation-points-tooltip-bg: $white-five;
