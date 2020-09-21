@@ -182,6 +182,7 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
 
   // Adding hreflang tags as per current route.
   // Making sure we add alternate tags for other languages.
+  // Also current pretty path url is being added.
   foreach (alshaya_facets_pretty_paths_language_get_translations() as $translated_path) {
     $hreflang = $translated_path['language']->getId();
     $page['#attached']['html_head'][] = [
@@ -199,7 +200,9 @@ function alshaya_facets_pretty_paths_page_attachments_alter(array &$page) {
     $hreflang_languages[] = $hreflang;
   }
 
-  // Remove default links coming from content_translation.
+  // Default hreflang links does not have pretty path urls.
+  // Unsetting "html_head_link" structure coming from content_translation.
+  // Refer CORE-17204 for more info.
   foreach ($page['#attached']['html_head_link'] as $key => $element) {
     if (isset($element[0]['hreflang']) && in_array($element[0]['hreflang'], $hreflang_languages)) {
       unset($page['#attached']['html_head_link'][$key]);
