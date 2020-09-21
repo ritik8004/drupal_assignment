@@ -133,9 +133,22 @@ function hasSuperCategoryFilter() {
   }
 }
 
+/**
+ * Redirect to url if keyword matches as per
+ * rules configured in algolia dashboard.
+ */
+function customQueryRedirect(items) {
+  const match = items.find(data => Boolean(data.redirect));
+  if (match && match.redirect) {
+    window.location.href = match.redirect;
+  }
+  return [];
+}
+
 export {
   getFilters,
   hasCategoryFilter,
   getSortedItems,
-  hasSuperCategoryFilter
+  hasSuperCategoryFilter,
+  customQueryRedirect
 }
