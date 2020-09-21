@@ -3,3 +3,9 @@ alshaya_aura_loyalty_club:
     dist/loyalty_club.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+alshaya_aura_my_accounts:
+  js:
+    dist/my_accounts.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

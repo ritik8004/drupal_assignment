@@ -4,6 +4,7 @@ var buildPath = '/modules/react/alshaya_aura_react/dist/';
 var config = {
   entry: {
     loyalty_club: './js/my-loyalty-club',
+    my_accounts: './js/my-accounts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
