@@ -8,7 +8,7 @@ variables:
   size_filter: 'Size'
   promotional_filter: ''
   language_collection_filter: 'المجموعة'
-  language_sort_filter: 'رتب حسب'
+  language_sort_filter: 'رتبي حسب'
   language_price_filter: 'السعر'
   language_brand_filter: ''
   language_color_filter: 'اللون'
