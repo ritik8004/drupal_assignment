@@ -276,6 +276,14 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $vars['#attached']['drupalSettings']['productInfo'][$sku]['rawGallery'] = $variant_gallery;
         }
       }
+
+      // Get the first child from variants of selected parent.
+      foreach (Configurable::getChildSkus($product_tree['parent']) as $child_sku) {
+        if (isset($product_tree['products'][$child_sku])) {
+          $vars['#attached']['drupalSettings']['configurableCombinations'][$sku_entity->getSku()]['firstChild'] = $child_sku;
+          break;
+        }
+      }
     }
 
   }
