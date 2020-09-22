@@ -150,4 +150,35 @@ class LoyaltyClubController {
     // }
   }
 
+  /**
+   * Get APC user details by email.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
+  public function getApcUserDetailsByEmail(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    $email = $request_content['email'] ?? '';
+
+    try {
+      if (empty($email)) {
+        $this->logger->error('Error while trying to fetch APC user details by email. Email is required.');
+        throw new \Exception('Email is required.');
+      }
+
+      // @TODO: Remove the hardcoded value when MDC API is ready.
+      return new JsonResponse('1234567890');
+
+      $endpoint = sprintf('/customers/apc-search/email/%s', $email);
+      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+
+      return new JsonResponse($response['apcIdentifierId']);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to fetch APC user details for user with email address @email.', [
+        '@email' => $email,
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
+  }
+
 }
