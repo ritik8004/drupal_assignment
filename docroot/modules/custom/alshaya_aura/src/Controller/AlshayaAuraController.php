@@ -105,7 +105,7 @@ class AlshayaAuraController extends ControllerBase {
     }
 
     $loyalty_status = (int) $this->userInfo->userObject->get('field_aura_loyalty_status')->getString();
-    if (in_array($loyalty_status, AuraStatus::getLinkedLoyaltyStatuses())) {
+    if (AuraStatus::LINKED_STATUSES[$loyalty_status] ?? []) {
       $is_loyalty_linked = TRUE;
     }
 
