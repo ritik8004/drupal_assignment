@@ -38,7 +38,7 @@
       var userPointsAjaxFetch = Drupal.ajax({
         type: 'GET',
         progress: {type: 'throbber'},
-        url: '/' + drupalSettings.path.currentLanguage + drupalSettings.aura.user_points_route,
+        url: '/' + drupalSettings.path.currentLanguage + '/get/aura/user-points',
       });
       const userPointsSuccessCallback = function (data) {
         if (data.aura_user.points >= 0 && data.aura_user.is_loyalty_linked == 1) {
