@@ -70,3 +70,19 @@ product_slider:
     - alshaya_seo_transac/gtm
     - alshaya_master/jquery_is_in_viewport
     - core/drupal.debounce
+
+gtm_pdp_magazine_v2:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.pdp_magazine_v2.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal.debounce
+
+gtm_pdp_default:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.pdp_default.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal.debounce

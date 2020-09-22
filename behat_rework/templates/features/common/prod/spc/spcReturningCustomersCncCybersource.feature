@@ -1,4 +1,4 @@
-@javascript @returnUser @cybersourcePayment @clickCollect @bbwaeprod
+@javascript @returnUser @cybersourcePayment @clickCollect @bbwaeprod @bbwaepprod @vsaeprod @vsaepprod @hmaeprod @hmaepprod @flaeprod @flaepprod
 Feature: SPC Checkout using Click & Collect store for returning customer using Cybersource Payment Metod
 
   Background:
@@ -32,6 +32,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for AJAX to finish
     Then I add the store details with:
      | edit-store-location | {store_area} |
@@ -79,6 +80,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for AJAX to finish
     Then I add the store details with:
      | edit-store-location | {language_store_area} |
@@ -124,6 +126,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for AJAX to finish
     Then I add the store details with:
      | edit-store-location | {language_store_area} |

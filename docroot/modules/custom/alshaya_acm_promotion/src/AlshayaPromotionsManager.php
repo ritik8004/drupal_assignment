@@ -254,7 +254,7 @@ class AlshayaPromotionsManager {
         elseif ($promotion['action'] == 'cart_fixed') {
           return self::SUBTYPE_FIXED_AMOUNT_DISCOUNT_ORDER;
         }
-        elseif ($promotion['action'] == 'ampromo_cart') {
+        elseif ($promotion['action'] == 'ampromo_cart' || $promotion['action'] == 'ampromo_items') {
           return self::SUBTYPE_FREE_GIFT;
         }
       }

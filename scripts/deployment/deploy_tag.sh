@@ -91,6 +91,7 @@ fi
 cd "$directory/$stack"
 
 # Fetch all tags.
+log_message "Fetching tags"
 git fetch origin --tags &>> ${log_file}
 
 # Validate if tag exists.
@@ -100,7 +101,7 @@ if [ ! $(git tag -l "$tag") ]; then
 fi
 
 # Checkout deployment branch used for deployment.
-git reset --hard &>> ${log_file}
+log_message "Checkout $branch"
 git checkout $branch &>> ${log_file}
 if [ $? -ne 0 ]
 then
@@ -109,6 +110,7 @@ then
 fi
 
 # Reset the code to match the tag.
+log_message "Reset to $tag"
 git reset --hard $tag &>> ${log_file}
 if [ $? -ne 0 ]
 then
@@ -117,8 +119,9 @@ then
 fi
 
 # Taking backup now.
+log_message "Take DB backup"
 mkdir -p "$backup_directory"
-drush --root=$docroot acsf-tools-dump --result-folder=$backup_directory -y --gzip &>> ${log_file}
+drush --root=$docroot acsf-tools-dump --result-folder=$backup_directory -y -v --gzip &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to take backup, aborting"
@@ -128,6 +131,7 @@ fi
 # Enable maintenance mode if mode is updb.
 if [ "$mode" = "updb" ]
 then
+  log_message "Turning maintenance on"
   drush --root=$docroot sfmlc alshaya-enable-maintenance &>> ${log_file}
   if [ $? -ne 0 ]
   then
@@ -137,7 +141,8 @@ then
 fi
 
 # Force the push to avoid issues with previous commit history.
-git push origin $branch &>> ${log_file}
+log_message "Pushing changes"
+git push origin $branch --force &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to deploy code, aborting"
@@ -148,7 +153,7 @@ fi
 deployment_identifier=$(cat "$server_root/deployment_identifier")
 while [ "${deployment_identifier}" != "${tag}" ]
 do
-  log_message "Waiting for code to be deployed on server"
+  log_message "Waiting for code to be deployed on server (current=$deployment_identifier)"
   sleep 5
   deployment_identifier=$(cat "$server_root/deployment_identifier")
 done
@@ -157,9 +162,10 @@ log_message "Code deployment finished"
 
 if [ "$mode" = "updb" ]
 then
+  log_message "Running updates"
   for site in `drush --root=$docroot acsf-tools-list | grep -v " "`
   do
-    drush --root=$docroot -l "${site}${base_uri}" cc drush -y &>> ${log_file}
+    log_message "Running updates on $site"
     drush --root=$docroot -l "${site}${base_uri}" updb -y &>> ${log_file}
     if [ $? -ne 0 ]
     then
@@ -168,8 +174,9 @@ then
       drush --root=$docroot -l "${site}${base_uri}" alshaya-disable-maintenance &>> ${log_file}
       log_message "$site: UPDB done and site put back online"
     fi
-
   done
+
+  drush --root=$docroot cc drush -y &>> ${log_file}
 fi
 
 if [ "$mode" = "hotfix_crf" ]

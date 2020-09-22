@@ -420,3 +420,19 @@ function alshaya_hm_alshaya_mobile_app_product_exclude_linked_data_alter(array &
   $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
   $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_hm_form_webform_submission_alshaya_contact_api_form_alter(&$form, FormStateInterface $form_state) {
+  if (\Drupal::routeMatch()->getRouteName() !== 'rest.webform_rest_submit.POST') {
+    return;
+  }
+
+  // Set default values for new fields so contact form of mobile app
+  // keeps working.
+  // @TODO: Remove this in phase2 implementation of contact form for hm.
+  $form['elements']['feedback']['#default_value'] = 'feeback_inquiry';
+  $form['elements']['type']['#default_value'] = 'inquiry';
+  $form['elements']['reason4']['#default_value'] = 'others';
+}

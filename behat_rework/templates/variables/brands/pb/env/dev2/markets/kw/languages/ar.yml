@@ -43,7 +43,7 @@ variables:
   language_continue_shopping: 'go shopping'
   continue_shopping: "اذهب للتسوق"
   language_short: 'en'
-  language_area_option: 'Salmiya'
+  language_area_option: 'Kuwait City'
   language_city_option: ''
   street: 'Street A'
   building: 'Building B'

@@ -21,6 +21,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class ClickCollectController.
@@ -316,20 +317,18 @@ class ClickCollectController extends ControllerBase {
           '@count' => count($stores),
         ]);
 
-        if ($top_three['#has_more']) {
-          $store_form = $this->formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
-          $config = $this->configFactory->get('alshaya_click_collect.settings');
-          $all_stores = [];
-          $all_stores['#theme'] = 'pdp_click_collect_all_stores';
-          $all_stores['#stores'] = $stores;
-          $all_stores['#title'] = $config->get('pdp_click_collect_title');
-          $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
-          $all_stores['#available_at_title'] = $this->t('Available at @count stores near', [
-            '@count' => count($stores),
-          ]);
-          $all_stores['#store_finder_form'] = render($store_form);
-          $all_stores['#help_text'] = $config->get('pdp_click_collect_help_text.value');
-        }
+        $store_form = $this->formBuilder()->getForm('\Drupal\alshaya_click_collect\Form\ClickCollectAvailableStores');
+        $config = $this->configFactory->get('alshaya_click_collect.settings');
+        $all_stores = [];
+        $all_stores['#theme'] = 'pdp_click_collect_all_stores';
+        $all_stores['#stores'] = $stores;
+        $all_stores['#title'] = $config->get('pdp_click_collect_title');
+        $all_stores['#subtitle'] = $config->get('pdp_click_collect_subtitle');
+        $all_stores['#available_at_title'] = $this->t('Available at @count stores near', [
+          '@count' => count($stores),
+        ]);
+        $all_stores['#store_finder_form'] = render($store_form);
+        $all_stores['#help_text'] = $config->get('pdp_click_collect_help_text.value');
       }
     }
 
@@ -410,6 +409,11 @@ class ClickCollectController extends ControllerBase {
    */
   public function getProductStoresJson($sku, $lat, $lon) {
     $data = $this->getProductStores($sku, $lat, $lon);
+    // Condition to get only Json response
+    // for click and collect pdp.
+    if ($this->currentRequest->getQueryString() == 'json') {
+      return new JsonResponse($data);
+    }
 
     $response = new AjaxResponse();
     $settings['alshaya_click_collect']['pdp'] = ['top_three' => FALSE, 'all_stores' => FALSE];

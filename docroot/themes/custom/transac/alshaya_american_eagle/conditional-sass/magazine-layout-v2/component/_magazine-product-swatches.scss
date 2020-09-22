@@ -1,0 +1,19 @@
+.non-groupped-attr {
+  .select-attribute {
+    @include breakpoint($only-mobile) {
+      padding-top: 0.3125rem;
+
+      a {
+        width: 4.6875rem;
+        height: 4.6875rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      li {
+        width: 5.3125rem;
+        height: 4.6875rem;
+      }
+    }
+  }
+}

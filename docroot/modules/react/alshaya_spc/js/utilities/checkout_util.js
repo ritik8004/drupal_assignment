@@ -94,6 +94,7 @@ export const removeFullScreenLoader = () => {
  */
 export const placeOrder = (paymentMethod) => {
   const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
+  const langcode = drupalSettings.path.currentLanguage;
 
   showFullScreenLoader();
   controlPlaceOrderCTA('disable');
@@ -104,7 +105,7 @@ export const placeOrder = (paymentMethod) => {
     },
   };
   return axios
-    .post(`${middlewareUrl}/cart/place-order`, {
+    .post(`${middlewareUrl}/cart/place-order?lang=${langcode}`, {
       data,
     })
     .then(
@@ -544,3 +545,11 @@ export function validateCvv(cvv) {
   const cvvLength = cvv.toString().length;
   return [3, 4].includes(cvvLength) && !Number.isNaN(cvv);
 }
+
+export const applyCode = (e) => {
+  const codeValue = e.target.innerHTML;
+  if (codeValue !== undefined) {
+    document.getElementById('promo-code').value = codeValue.trim();
+    document.getElementById('promo-action-button').click();
+  }
+};

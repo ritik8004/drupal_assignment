@@ -1,0 +1,98 @@
+.magv2-qty {
+  &-container {
+    display: flex;
+
+    @include breakpoint($desktop) {
+      width: 9.188rem;
+      height: 3.125rem;
+    }
+
+    button[disabled]::before {
+      color: $magv2-size-button-disabled;
+      background: $magv2-size-btn-bg;
+    }
+  }
+
+  &-wrapper {
+    display: inline-block;
+    border: 0.063rem solid $magv2-size-btn-border;
+
+    @include breakpoint($only-tablet) {
+      width: calc(50% - 1.563rem);
+    }
+
+    @include breakpoint($only-mobile) {
+      width: calc(50% - 0.625rem);
+    }
+  }
+
+  &-btn--down {
+    background-color: $magv2-qty-btn-bg;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 0.438rem;
+    }
+
+    @include icon(minus, before) {
+      font-size: 0.875rem;
+
+      @include breakpoint($desktop) {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  &-btn--up {
+    padding-#{$left}: 0;
+    background-color: $magv2-qty-btn-bg;
+
+    @include breakpoint($only-tablet) {
+      padding-#{$right}: 0.875rem;
+    }
+
+    @include icon(plus, before) {
+      font-size: 0.875rem;
+
+      @include breakpoint($desktop) {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  &-btn--down,
+  &-btn--up {
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include breakpoint($only-tablet) {
+      padding: 0 0.875rem;
+    }
+  }
+
+  &-btn,
+  &-input {
+    border: none !important;
+  }
+
+  &-btn {
+    cursor: pointer;
+
+    &::before {
+      color: $magv2-qty-text;
+    }
+  }
+
+  &-input {
+    font-size: 1.125rem;
+    text-align: center;
+    cursor: unset;
+    color: $magv2-qty-text;
+    max-width: calc(100% - 5rem);
+
+    @include breakpoint($only-tablet) {
+      max-width: 100%;
+    }
+  }
+}

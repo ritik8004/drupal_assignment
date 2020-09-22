@@ -56,6 +56,8 @@ class SkuManager {
 
   const PDP_LAYOUT_MAGAZINE = 'pdp-magazine';
 
+  const PDP_LAYOUT_MAGAZINE_V2 = 'pdp-magazine_v2';
+
   const AGGREGATED_LISTING = 'aggregated';
 
   const NON_AGGREGATED_LISTING = 'non_aggregated';
@@ -918,6 +920,7 @@ class SkuManager {
 
         case 'free_gift':
           $promos[$promotion_node->id()] = [];
+          $promos[$promotion_node->id()]['type'] = 'free_gift';
           $promos[$promotion_node->id()]['text'] = $promotion_text;
           $promos[$promotion_node->id()]['description'] = $description;
           $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getValue();
@@ -935,6 +938,7 @@ class SkuManager {
 
         default:
           $promos[$promotion_node->id()] = [
+            'type' => 'generic',
             'text' => $promotion_text,
             'description' => $description,
             'discount_type' => $discount_type,
@@ -2829,13 +2833,9 @@ class SkuManager {
    *   PDP layout context to be used.
    */
   public function getContextFromLayoutKey($context, $pdp_layout) {
-    switch ($pdp_layout) {
-      case 'default':
-        return $context;
-
-      case 'magazine':
-        return $context . '-' . $pdp_layout;
-    }
+    $context_key = $context;
+    $this->moduleHandler->alter('alshaya_context_key_from_layout', $context_key, $pdp_layout);
+    return $context_key;
   }
 
   /**

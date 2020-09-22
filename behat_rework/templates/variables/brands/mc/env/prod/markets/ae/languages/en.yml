@@ -92,5 +92,6 @@ variables:
   continue_shopping_text: 'continue shopping'
   language_continue_shopping_text: 'تابعي التسوق'
   continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهبي للتسوق"
+  language_continue_shopping: "اذهب للتسوق"
   language_vat: 'تتضمن ضريبة القيمة المضافة'
+  governorate: ''

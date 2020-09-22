@@ -1,4 +1,4 @@
-@javascript @returnUser @cybersourcePayment @clickCollect
+@javascript @returnUser @cybersourcePayment @clickCollect @hmaeuat @auth
 Feature: SPC Checkout using Click & Collect store for returning customer using Cybersource Payment Metod
 
   Background:
@@ -30,6 +30,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for AJAX to finish
     Then I add the store details with:
      | edit-store-location | {store_area} |
@@ -109,6 +110,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for AJAX to finish
     Then I add the store details with:
      | edit-store-location | {language_store_area} |
@@ -145,7 +147,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     Then I should see "{language_cnc_delivery_type}"
     Then I should see "{language_payment_type_text}"
     Then I should see "{language_cs_payment_type}"
-    
+
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -189,6 +191,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-click_and_collect" element on page
     And I wait 10 seconds
+    Then the "delivery-method-click_and_collect" checkbox should be checked
     And I wait for AJAX to finish
     Then I add the store details with:
      | edit-store-location | {language_store_area} |

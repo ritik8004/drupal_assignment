@@ -8,6 +8,7 @@ use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AlshayaColorSplitManager.
@@ -57,6 +58,13 @@ class AlshayaColorSplitManager {
   protected $swatchHelper;
 
   /**
+   * Request stock service object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
    * AlshayaColorSplitManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -67,15 +75,19 @@ class AlshayaColorSplitManager {
    *   Production Options Manager.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatch_helper
    *   Swatch Helper.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    */
   public function __construct(SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ProductOptionsHelper $product_options_helper,
-                              SwatchesHelper $swatch_helper) {
+                              SwatchesHelper $swatch_helper,
+                              RequestStack $request_stack) {
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->productOptionsHelper = $product_options_helper;
     $this->swatchHelper = $swatch_helper;
+    $this->currentRequest = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -229,6 +241,10 @@ class AlshayaColorSplitManager {
         $swatch = $this->getGroupingAttributeSwatchData($attr['value'], $grouping_attribute);
         if (!empty($swatch)) {
           $variant['attributes'][$key]['type'] = $swatch['type'];
+          if (SwatchesHelper::SWATCH_TYPE_VISUAL_IMAGE === $swatch['type']) {
+            // Absolute url for grouping swatch image for MAPP.
+            $swatch['swatch'] = $this->currentRequest->getSchemeAndHttpHost() . $swatch['swatch'];
+          }
           $variant['attributes'][$key]['swatch'] = $swatch['swatch'];
         }
       }

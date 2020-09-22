@@ -45,7 +45,7 @@
    */
   Drupal.alshayaSeoSpc.prepareProductImpression = function (recommendedProducts, position) {
     var impressions = [];
-    var productLinkSelector = $('.spc-recommended-products .block-content a:not(".impression-processed")');
+    var productLinkSelector = $('.spc-recommended-products .block-content .recommended-product:not(".impression-processed")');
 
     if (productLinkSelector.length > 0) {
       productLinkSelector.each(function () {

@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @homeDelivery @mcsaprod @mckwprod @bbwsaprod @bbwkwprod
+@javascript @returnUser @checkoutPayment @homeDelivery @mcsaprod @mcsapprod @mckwprod @mckwpprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @hmkwpprod @vssaprod @vssapprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2D) Card Payment Method
 
   Background:
@@ -31,8 +31,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -41,7 +43,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -84,8 +85,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -94,7 +97,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -136,8 +138,10 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
     And I wait 10 seconds
+    Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
     When I add in the billing address with following:
+      | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
       | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
@@ -146,7 +150,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-      | mobile                        | {mobile}      |
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish

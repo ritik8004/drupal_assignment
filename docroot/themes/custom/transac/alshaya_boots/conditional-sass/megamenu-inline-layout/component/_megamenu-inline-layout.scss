@@ -100,4 +100,16 @@
       }
     }
   }
+
+  .block-alshaya-main-menu {
+    &.megamenu-inline-layout {
+      .has--three-levels .menu--two__list {
+        min-height: auto !important;
+
+        .menu__links__wrapper {
+          max-height: none !important;
+        }
+      }
+    }
+  }
 }

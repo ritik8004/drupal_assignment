@@ -16,20 +16,23 @@ const productRecommendationsSuffix = 'pr-';
 
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
-  var currentListName = null;
   var productImpressions = [];
   var productImpressionsTimer = null;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
-      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected', function (event, variant, code) {
-        var product = $(this).closest('article[gtm-type="gtm-product-link"]');
+      $('.sku-base-form').once('alshaya-seo-gtm').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
+        var product = $(this).closest('[gtm-type="gtm-product-link"]');
         var sku = $(this).attr('data-sku');
         var productKey = (product.attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
         if (typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
         }
 
+        // We get variant details in event object for magazine v2 layout.
+        if ((typeof event.detail !== 'undefined') && (typeof event.detail.variant !== 'undefined')) {
+          variant = event.detail.variant;
+        }
         var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
         product.attr('gtm-product-sku', variant);
@@ -52,13 +55,27 @@ const productRecommendationsSuffix = 'pr-';
       });
 
       $('.sku-base-form').once('js-event').on('product-add-to-cart-success', function () {
-        var addedProduct = $(this).closest('article[gtm-type="gtm-product-link"]');
-        var quantity = parseInt($('.form-item-quantity select', $(this)).val());
+        var addedProduct = $(this).closest('[gtm-type="gtm-product-link"]');
+        if (addedProduct.length === 0) {
+          return;
+        }
         var size = $('.form-item-configurables-size select option:selected', $(this)).text();
         var selectedVariant = '';
+        var quantity = null;
 
-        if (addedProduct.attr('gtm-sku-type') === 'configurable') {
-          selectedVariant = $('.selected-variant-sku', $(this)).val();
+        // Since markup is different for magazine v2 layout, we fetch values
+        // differently.
+        if ($('body').hasClass('new-pdp-magazine-layout')) {
+          quantity = parseInt($('.magv2-qty-container .magv2-qty-input', $(this)).val());
+          if (addedProduct.attr('gtm-sku-type') === 'configurable') {
+            selectedVariant = $(this).attr('variantselected');
+          }
+        }
+        else {
+          quantity = parseInt($('.form-item-quantity select', $(this)).val());
+          if (addedProduct.attr('gtm-sku-type') === 'configurable') {
+            selectedVariant = $('.selected-variant-sku', $(this)).val();
+          }
         }
 
         var product = Drupal.alshaya_seo_gtm_get_product_values(addedProduct);
@@ -94,7 +111,7 @@ const productRecommendationsSuffix = 'pr-';
         var productData = {
           event: 'addToCart',
           ecommerce: {
-            currencyCode: drupalSettings.currency_code,
+            currencyCode: drupalSettings.gtm.currency,
             add: {
               products: [
                 product
@@ -107,21 +124,12 @@ const productRecommendationsSuffix = 'pr-';
       });
 
       // Push GTM event on add to cart failure.
-      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e, productInfo) {
-        var sku = productInfo.parentSku;
-        var errorMessage = $('.errors-container .error', $(this)).text();
-        // Get selected attributes.
-        var attributes = [];
-        $('#configurable_ajax select', $(this)).each(function() {
-          var configLabel = $(this).attr('data-default-title');
-          var configValue = $('option:selected', $(this)).text();
-          var attribute = configLabel + ': ' + configValue;
-          attributes.push(attribute);
-        });
+      $('.sku-base-form').once('js-event-fail').on('product-add-to-cart-failed', function (e) {
+        const sku = (e.detail.productData.parentSku !== 'undefined') ? e.detail.productData.parentSku : null;
         // Set Event label.
         var label = 'Update cart failed for Product [' + sku + '] ';
-        label = label + attributes.join(', ');
-        Drupal.logJavascriptError(label, errorMessage, GTM_CONSTANTS.CART_ERRORS);
+        label = label + e.detail.productData.options.join(', ');
+        Drupal.logJavascriptError(label, e.detail.message, GTM_CONSTANTS.CART_ERRORS);
       });
 
       // Global variables & selectors.
@@ -195,35 +203,6 @@ const productRecommendationsSuffix = 'pr-';
         // Push on all pages except confirmation page.
         if (orderConfirmationPage.length === 0) {
           dataLayer.push(userDetails);
-        }
-
-          if ($(context).filter('article[data-vmode="modal"]').length === 1
-            || $(document).find('article[data-vmode="full"]').length === 1) {
-
-          if ($(document).find('article[data-vmode="full"]').length === 1) {
-            var productContext = $(document).find('article[data-vmode="full"]');
-          }
-          else {
-            var productContext = $(context).filter('article[data-vmode="modal"]');
-          }
-
-          var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-          product.variant = '';
-          if (currentListName != null && currentListName !== 'PDP-placeholder') {
-            product.list = currentListName;
-            currentListName = null;
-          }
-          var data = {
-            event: 'productDetailView',
-            ecommerce: {
-              currencyCode: currencyCode,
-              detail: {
-                products: [product]
-              }
-            }
-          };
-
-          dataLayer.push(data);
         }
       });
 
@@ -1254,6 +1233,30 @@ const productRecommendationsSuffix = 'pr-';
     }
     return impressions;
   };
+
+  /**
+   * Function to push product detail view event to data layer.
+   *
+   * @param {object} productContext
+   *   The jQuery HTML object containing GTM attributes for the product.
+   */
+  Drupal.alshayaSeoGtmPushProductDetailView = function(productContext) {
+    var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+    // This is populated only post add to cart.
+    product.variant = '';
+
+    var data = {
+      event: 'productDetailView',
+      ecommerce: {
+        currencyCode: drupalSettings.gtm.currency,
+        detail: {
+          products: [product]
+        }
+      }
+    };
+
+    dataLayer.push(data);
+  }
 
   // Ajax command to push deliveryAddress Event.
   $.fn.triggerDeliveryAddress = function () {

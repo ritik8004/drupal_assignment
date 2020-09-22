@@ -1,5 +1,5 @@
 const CartItemFree = ({ freeItem }) => (
-  (freeItem === true) ? Drupal.t('Free gift with purchase') : null
+  (freeItem === true) ? Drupal.t('Free Gift with Purchase') : null
 );
 
 export default CartItemFree;
