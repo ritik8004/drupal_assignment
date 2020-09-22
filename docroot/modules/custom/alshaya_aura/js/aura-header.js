@@ -16,7 +16,7 @@
     const mobilePopup = $('.block-alshaya-main-menu .menu__list .aura-header-popup-wrapper');
     const body = $('body');
 
-    if (body.hasClass('logged-out')) {
+    if (drupalSettings.user.uid == 0) {
       // Following code is executed for anonymous users.
       // Desktop mode.
       auraHeader.find('.aura-header-popup-wrapper').removeClass('hidden');
