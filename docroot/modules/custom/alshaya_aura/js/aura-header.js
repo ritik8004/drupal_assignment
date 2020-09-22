@@ -26,7 +26,7 @@
     else if (body.hasClass('aura-my-account')) {
       // We do not show points on My account pages.
       // Desktop mode.
-      $('.aura-my-account-page').removeClass('hidden');
+      $('.aura-my-account-rewards-header').removeClass('hidden');
       auraHeader.find('.aura-header-link').addClass('hidden');
       if (data.aura_user.is_loyalty_linked == 0) {
         // Mobile mode.
@@ -43,11 +43,11 @@
       const userPointsSuccessCallback = function (data) {
         if (data.aura_user.points >= 0 && data.aura_user.is_loyalty_linked == 1) {
           // Desktop mode.
-          auraHeader.find('.aura-general-pages .name').html(data.aura_user.name);
-          auraHeader.find('.aura-general-pages .points').html(data.aura_user.points + Drupal.t(' Points'));
-          auraHeader.find('.aura-general-pages .badge').addClass('badge-' + data.aura_user.tier);
+          auraHeader.find('.aura-logged-in-rewards-header .name').html(data.aura_user.name);
+          auraHeader.find('.aura-logged-in-rewards-header .points').html(data.aura_user.points + Drupal.t(' Points'));
+          auraHeader.find('.aura-logged-in-rewards-header .badge').addClass('badge-' + data.aura_user.tier);
           auraHeader.find('.aura-header-link').addClass('hidden');
-          auraHeader.find('.aura-general-pages').removeClass('hidden');
+          auraHeader.find('.aura-logged-in-rewards-header').removeClass('hidden');
 
           // Mobile mode.
           main_menu_element.find('.name').html(data.aura_user.name);
