@@ -8,29 +8,13 @@ use Drupal\alshaya_aura\Helper\AuraTier;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Controller\ControllerBase;
-use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Returns responses for Alshaya Aura routes.
  */
 class AlshayaAuraController extends ControllerBase {
-
-  /**
-   * Current request object.
-   *
-   * @var \Symfony\Component\HttpFoundation\Request
-   */
-  protected $currentRequest;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \GuzzleHttp\ClientInterface
-   */
-  protected $httpClient;
 
   /**
    * Alshaya User Info service object.
@@ -58,8 +42,6 @@ class AlshayaAuraController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('request_stack')->getCurrentRequest(),
-      $container->get('http_client'),
       $container->get('alshaya_user.info'),
       $container->get('logger.channel.alshaya_aura'),
       $container->get('alshaya_api.api')
@@ -69,10 +51,6 @@ class AlshayaAuraController extends ControllerBase {
   /**
    * UserController constructor.
    *
-   * @param \Symfony\Component\HttpFoundation\Request $current_request
-   *   Current request object.
-   * @param \GuzzleHttp\ClientInterface $http_client
-   *   The HTTP client service.
    * @param \Drupal\alshaya_user\AlshayaUserInfo $user_info
    *   The user info service.
    * @param \Psr\Log\LoggerInterface $logger
@@ -81,14 +59,10 @@ class AlshayaAuraController extends ControllerBase {
    *   API Wrapper service.
    */
   public function __construct(
-    Request $current_request,
-    ClientInterface $http_client,
     AlshayaUserInfo $user_info,
     LoggerInterface $logger,
     AlshayaApiWrapper $api_wrapper
     ) {
-    $this->currentRequest = $current_request;
-    $this->httpClient = $http_client;
     $this->userInfo = $user_info;
     $this->logger = $logger;
     $this->apiWrapper = $api_wrapper;
