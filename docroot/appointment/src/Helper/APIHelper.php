@@ -3,9 +3,11 @@
 namespace App\Helper;
 
 use App\Cache\Cache;
+use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoApiWrapper;
 use Psr\Log\LoggerInterface;
 use App\Service\Config\SystemSettings;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class APIHelper.
@@ -42,6 +44,20 @@ class APIHelper {
   protected $magento;
 
   /**
+   * Drupal service.
+   *
+   * @var \App\Service\Drupal\Drupal
+   */
+  protected $drupal;
+
+  /**
+   * Current Request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -52,15 +68,23 @@ class APIHelper {
    *   Cache Helper.
    * @param \App\Service\Magento\MagentoApiWrapper $magentoApiWrapper
    *   Magento Api wrapper.
+   * @param \App\Service\Drupal\Drupal $drupal
+   *   Drupal service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   Request Stack service.
    */
   public function __construct(LoggerInterface $logger,
                               SystemSettings $settings,
                               Cache $cache,
-                              MagentoApiWrapper $magentoApiWrapper) {
+                              MagentoApiWrapper $magentoApiWrapper,
+                              Drupal $drupal,
+                              RequestStack $requestStack) {
     $this->logger = $logger;
     $this->settings = $settings;
     $this->cache = $cache;
     $this->magento = $magentoApiWrapper;
+    $this->drupal = $drupal;
+    $this->request = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -258,35 +282,38 @@ class APIHelper {
   }
 
   /**
-   * Get Magento user info.
-   *
-   * @param string $token
-   *   Authorization Bearer.
+   * Get user info from backend system.
    *
    * @return array
    *   User info array.
    *
    * @throws \Exception
    */
-  public function getMagentoUserInfo($token) {
-    $options = [
-      'headers' => [
-        'Authorization' => 'Bearer ' . $token,
-        'Content-Type' => 'application/json',
-      ],
-    ];
+  public function getUserInfo() {
+    // If API request is from mobile app then verify user id from magento.
+    if (!empty($token = $this->request->headers->get($_ENV['MAGENTO_BEARER_HEADER']))) {
+      $options = [
+        'headers' => [
+          'Authorization' => 'Bearer ' . $token,
+          'Content-Type' => 'application/json',
+        ],
+      ];
 
-    $result = $this->magento->doRequest('GET', 'customers/me', $options);
-    if (empty($result) || !is_array($result) || (is_array($result) && empty($result['email']))) {
-      throw new \Exception('Not valid expected response from magento Response: @result', [
-        '@result' => json_decode($result),
-      ]);
+      $result = $this->magento->doRequest('GET', 'customers/me', $options);
+      if (empty($result['email'])) {
+        $message = $result['error_message'] ?? 'Error while fetching user info from Magento.';
+        throw new \Exception($message);
+      }
+
+      return [
+        'uid' => (string) $result['id'],
+        'email' => $result['email'],
+      ];
     }
 
-    return [
-      'uid' => (string) $result['id'],
-      'email' => $result['email'],
-    ];
+    // Authenticate logged in user by
+    // matching userid from request and Drupal.
+    return $this->drupal->getSessionUserInfo();
   }
 
 }

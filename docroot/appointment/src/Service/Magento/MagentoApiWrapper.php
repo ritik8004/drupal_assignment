@@ -3,7 +3,6 @@
 namespace App\Service\Magento;
 
 use GuzzleHttp\TransferStats;
-use GuzzleHttp\Exception\ConnectException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -89,16 +88,20 @@ class MagentoApiWrapper {
         : $result;
 
       if ($response->getStatusCode() !== 200) {
-        $this->logger->error('Error occurred while calling: @url result: @result', [
-          '@url' => $url,
-          '@result' => json_encode($result),
-        ]);
-        return [];
+        $message = 'Error occurred while calling: ' . $url . ' result: ' . json_encode($result);
+        $this->logger->error($message);
+        return [
+          'error' => TRUE,
+          'error_message' => $message,
+        ];
       }
     }
-    catch (ConnectException $e) {
+    catch (\Exception $e) {
       $this->logger->error($e->getMessage());
-      return [];
+      return [
+        'error' => TRUE,
+        'error_message' => $e->getMessage(),
+      ];
     }
 
     return $result;
