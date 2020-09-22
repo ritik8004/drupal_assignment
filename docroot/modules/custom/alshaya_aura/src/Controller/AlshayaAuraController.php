@@ -115,8 +115,11 @@ class AlshayaAuraController extends ControllerBase {
     $is_customer = alshaya_acm_customer_is_customer($this->userInfo->currentUser);
 
     if ($is_customer && $is_loyalty_linked) {
-      $user_tier = AuraTier::getAllAuraTiers()[$this->userInfo->userObject->get('field_aura_tier')->getString()]
-      ?? AuraTier::getDefaultAuraTier();
+      $user_tier = AuraTier::ALL_TIERS[$this->userInfo->userObject->get('field_aura_tier')->getString()]
+      ?? AuraTier::DEFAULT_TIER;
+      // The number part of the tier constant will be used in naming the tier
+      // class in the HTML.
+      $user_tier = substr($user_tier, -1);
       try {
         // Following code will be uncommented once API is available.
         // @codingStandardsIgnoreStart
@@ -129,8 +132,6 @@ class AlshayaAuraController extends ControllerBase {
         // @codingStandardsIgnoreEnd
         // The following line of code should be removed once API is available.
         $result['points'] = rand(-100, 9999);
-        $user_tier = AuraTier::getAllAuraTiers()[$this->userInfo->userObject->get('field_aura_tier')->getString()]
-        ?? AuraTier::getDefaultAuraTier();
 
         $user = array_merge($user, [
           'points' => $result['points'],

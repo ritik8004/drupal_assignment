@@ -5,44 +5,33 @@ namespace Drupal\alshaya_aura\Helper;
 /**
  * Class AuraTier.
  *
- * @todo Update the constant names once available from MDC. The values should
- * remain the same. Also getDefaultAuraTier() needs to be modified.
+ * @todo Update the constant values once available from MDC.
  */
 final class AuraTier {
   /**
-   * Tier 0 and the default constant.
+   * Tier 1 and the default constant.
    */
-  const APC_TIER_0 = 0;
-
-  /**
-   * Tier 1 constant.
-   */
-  const APC_TIER_1 = 1;
+  const TIER_1 = 1;
 
   /**
    * Tier 2 constant.
    */
-  const APC_TIER_2 = 2;
+  const TIER_2 = 2;
 
   /**
-   * Returns all the tiers in this class in an array format.
-   *
-   * @return array
-   *   Array of all tiers in the class, grouped by the tier value.
+   * Tier 3 constant.
    */
-  public static function getAllAuraTiers() {
-    $reflection_class = new \ReflectionClass(__CLASS__);
-    return $reflection_class->getConstants();
-  }
+  const TIER_3 = 3;
 
   /**
-   * Returns value of the default tier constant.
-   *
-   * @return array
-   *   The default tier value.
+   * Contains all the tiers in the class.
    */
-  public static function getDefaultAuraTier() {
-    return self::APC_TIER_0;
-  }
+  const ALL_TIERS = [
+    self::TIER_1 => 'TIER_1',
+    self::TIER_2 => 'TIER_2',
+    self::TIER_3 => 'TIER_3',
+  ];
+
+  const DEFAULT_TIER = 'TIER_1';
 
 }
