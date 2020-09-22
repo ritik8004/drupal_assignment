@@ -18,7 +18,6 @@
     if ($('body').hasClass('logged-out')) {
       // Following code is executed for anonymous users.
       // Desktop mode.
-      auraHeader.find('.aura-header-link').removeClass('hidden');
       auraHeader.find('.aura-header-popup-wrapper').removeClass('hidden');
       // Mobile mode.
       mobilePopup.removeClass('hidden');
@@ -36,6 +35,7 @@
           auraHeader.find('.aura-general-pages .name').html(data.aura_user.name);
           auraHeader.find('.aura-general-pages .points').html(data.aura_user.points + Drupal.t(' Points'));
           auraHeader.find('.aura-general-pages .badge').addClass('badge-' + data.aura_user.tier);
+          auraHeader.find('.aura-header-link').addClass('hidden');
 
           // Mobile mode.
           main_menu_element.find('.name').html(data.aura_user.name);
@@ -46,7 +46,6 @@
           // Loyalty card is linked, but points not there in the API response.
           // Then show the same things as for anonymous users.
           // Desktop mode.
-          auraHeader.find('.aura-header-link').removeClass('hidden');
           auraHeader.find('.aura-header-popup-wrapper').removeClass('hidden');
           // Mobile mode.
           mobilePopup.removeClass('hidden');
@@ -68,12 +67,12 @@
         else {
           if (data.aura_user.is_loyalty_linked == 1) {
             // We show the user points data.
-            $('.aura-general-pages').removeClass('hidden')
+          auraHeader.find('.aura-header-link').addClass('hidden');
+          $('.aura-general-pages').removeClass('hidden')
           }
           else {
             // We do not show the user points data.
             // Desktop mode.
-            auraHeader.find('.aura-header-link').removeClass('hidden');
             auraHeader.find('.aura-header-popup-wrapper').removeClass('hidden');
             // Mobile mode.
             mobilePopup.removeClass('hidden');
