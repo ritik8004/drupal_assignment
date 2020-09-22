@@ -6,7 +6,7 @@ const AvailableSelectOptions = ({
   if (nextValues.indexOf(attr) !== -1) {
     let selectedVal = selected;
     // If the previously selected value is disabled.
-    if (nextValues.indexOf(selected) === -1) {
+    if (nextValues.indexOf(String(selectedVal)) === -1) {
       // set first available value as active.
       [selectedVal] = nextValues;
     }
@@ -31,7 +31,7 @@ const AvailableSelectOptions = ({
       key={attr}
       value={attr}
       id={`value${attr}`}
-      className="magv2-select-list-item disabled"
+      className="magv2-select-list-item disabled in-active"
     >
       <span onClick={(e) => handleLiClick(e, code)} className="magv2-select-list-wrapper">
         <span className="magv2-select-list-name">{value}</span>
