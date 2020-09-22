@@ -104,17 +104,23 @@ class AlshayaAuraController extends ControllerBase {
       return new CacheableJsonResponse([]);
     }
 
+    $user = [];
+    // User name and loyalty card linked status always be sent to front end.
+    $user['name'] = $this->userInfo->getName();
+    $user['is_loyalty_linked'] = $is_loyalty_linked = FALSE;
+
+    $is_customer = alshaya_acm_customer_is_customer($this->userInfo->currentUser);
+    if (!$is_customer) {
+      return new CacheableJsonResponse($user);
+    }
+
     $loyalty_status = (int) $this->userInfo->userObject->get('field_aura_loyalty_status')->getString();
     if (AuraStatus::LINKED_STATUSES[$loyalty_status] ?? []) {
       $is_loyalty_linked = TRUE;
     }
+    $user['is_loyalty_linked'] = $is_loyalty_linked;
 
-    $user['name'] = $this->userInfo->getName();
-    $user['is_loyalty_linked'] = $is_loyalty_linked ?? FALSE;
-
-    $is_customer = alshaya_acm_customer_is_customer($this->userInfo->currentUser);
-
-    if ($is_customer && $is_loyalty_linked) {
+    if ($is_loyalty_linked) {
       $user_tier = AuraTier::ALL_TIERS[$this->userInfo->userObject->get('field_aura_tier')->getString()]
       ?? AuraTier::DEFAULT_TIER;
       // The number part of the tier constant will be used in naming the tier
