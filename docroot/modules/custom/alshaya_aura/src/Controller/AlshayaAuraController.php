@@ -111,7 +111,8 @@ class AlshayaAuraController extends ControllerBase {
 
     $is_customer = alshaya_acm_customer_is_customer($this->userInfo->currentUser);
     if (!$is_customer) {
-      return new CacheableJsonResponse($user);
+      $response = new CacheableJsonResponse(['aura_user' => $user]);
+      $response->addCacheableDependency($this->userInfo->userObject);
     }
 
     $loyalty_status = (int) $this->userInfo->userObject->get('field_aura_loyalty_status')->getString();
