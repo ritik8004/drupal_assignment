@@ -86,7 +86,7 @@ class ProductCategoryMappingManager {
 
     if (empty($categories_new) && empty($categories_existing)) {
       // Skip if both are empty.
-      $this->logger->notice('Category mapping skipped as there is no change for SKU @sku', [
+      $this->logger->notice('Category mapping skipped as both existing and new are empty for SKU @sku', [
         '@sku' => $sku,
       ]);
       return;
@@ -99,8 +99,10 @@ class ProductCategoryMappingManager {
     }
     else {
       // No diff found, we skip.
-      $this->logger->notice('Category mapping skipped as there is no change for SKU @sku', [
+      $this->logger->notice('Category mapping skipped as there is no change for SKU @sku; New: @new; Existing: @existing', [
         '@sku' => $sku,
+        '@new' => $categories_new,
+        '@existing' => $categories_existing,
       ]);
       return;
     }

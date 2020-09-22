@@ -281,12 +281,15 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage alshaya-api-sanity-check --check="category,price,stock,status" --page_size=3
    * @usage alshaya-api-sanity-check --check="category,stock"
    * @usage alshaya-api-sanity-check --check="category,status"
+   * @usage alshaya-api-sanity-check --mode="sync"
+   * @usage alshaya-api-sanity-check --mode="update"
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function sanityCheck(array $options = [
     'page_size' => 3,
     'check' => 'category,price,stock,status',
+    'mode' => 'sync',
   ]) {
     $to_check = explode(',', $options['check']);
 
@@ -321,8 +324,12 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage drush alshaya-api-sanity-check-cats
    * @usage drush alshaya-api-sanity-check-cats --page_size=2
    */
-  public function sanityCheckCategoryMappings(array $options = ['page_size' => 3]) {
+  public function sanityCheckCategoryMappings(array $options = ['page_size' => 3, 'mode' => 'sync']) {
     $verbose = $options['verbose'] ?? FALSE;
+    $mode = $options['mode'] ?? 'sync';
+    if ($mode === 'update') {
+      $verbose = TRUE;
+    }
 
     $to_sync = [];
 
@@ -403,7 +410,7 @@ class AlshayaApiCommands extends DrushCommands {
       '@count' => count($to_sync),
     ]);
 
-    if ($verbose && $this->io()->confirm($confirmation)) {
+    if ($mode === 'update' && $this->io()->confirm($confirmation)) {
       foreach ($to_sync as $sku => $mids) {
         $this->categoryMappingManager->mapCategoriesToProduct($sku, $mids);
       }
@@ -435,10 +442,16 @@ class AlshayaApiCommands extends DrushCommands {
    *
    * @aliases alshaya-api-sanity-check-stock
    * @usage drush alshaya-api-sanity-check-stock
+   * @usage drush alshaya-api-sanity-check-stock --mode=sync
+   * @usage drush alshaya-api-sanity-check-stock --mode=update
    * @usage drush alshaya-api-sanity-check-stock --page_size=2
    */
-  public function sanityCheckStock(array $options = ['page_size' => 3]) {
+  public function sanityCheckStock(array $options = ['page_size' => 3, 'mode' => 'sync']) {
     $verbose = $options['verbose'] ?? FALSE;
+    $mode = $options['mode'] ?? 'sync';
+    if ($mode === 'update') {
+      $verbose = TRUE;
+    }
 
     $to_sync = [];
     $to_update = [];
@@ -521,7 +534,7 @@ class AlshayaApiCommands extends DrushCommands {
       '@count' => count($to_update),
     ]);
 
-    if ($verbose && $this->io()->confirm($confirmation)) {
+    if ($mode === 'update' && $this->io()->confirm($confirmation)) {
       foreach ($to_update as $sku => $mdata) {
         $this->stockManager->updateStock(
           $sku,
@@ -565,8 +578,13 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage drush alshaya-api-sanity-check-price
    * @usage drush alshaya-api-sanity-check-price --page_size=2
    */
-  public function sanityCheckPrice(array $options = ['page_size' => 3]) {
+  public function sanityCheckPrice(array $options = ['page_size' => 3, 'mode' => 'sync']) {
     $verbose = $options['verbose'] ?? FALSE;
+    $mode = $options['mode'] ?? 'sync';
+    if ($mode === 'update') {
+      $verbose = TRUE;
+    }
+
     $to_sync = [];
 
     $dskus = $this->getDataFromDrupal();
@@ -611,7 +629,7 @@ class AlshayaApiCommands extends DrushCommands {
       '@count' => count($to_sync),
     ]);
 
-    if ($verbose && $this->io()->confirm($confirmation)) {
+    if ($mode === 'update' && $this->io()->confirm($confirmation)) {
       foreach ($to_sync as $sku => $mdata) {
         $sku_entity = SKU::loadFromSku($sku);
         if ($sku_entity instanceof SKU) {
