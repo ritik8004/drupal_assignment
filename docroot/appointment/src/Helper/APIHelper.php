@@ -3,6 +3,7 @@
 namespace App\Helper;
 
 use App\Cache\Cache;
+use App\Service\Magento\MagentoApiWrapper;
 use Psr\Log\LoggerInterface;
 use App\Service\Config\SystemSettings;
 
@@ -34,6 +35,13 @@ class APIHelper {
   protected $cache;
 
   /**
+   * Magento API wrapper.
+   *
+   * @var \App\Service\Magento\MagentoApiWrapper
+   */
+  protected $magento;
+
+  /**
    * ConfigurationServices constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -42,13 +50,17 @@ class APIHelper {
    *   System Settings service.
    * @param \App\Cache\Cache $cache
    *   Cache Helper.
+   * @param \App\Service\Magento\MagentoApiWrapper $magentoApiWrapper
+   *   Magento Api wrapper.
    */
   public function __construct(LoggerInterface $logger,
                               SystemSettings $settings,
-                              Cache $cache) {
+                              Cache $cache,
+                              MagentoApiWrapper $magentoApiWrapper) {
     $this->logger = $logger;
     $this->settings = $settings;
     $this->cache = $cache;
+    $this->magento = $magentoApiWrapper;
   }
 
   /**
@@ -243,6 +255,41 @@ class APIHelper {
   public function getSiteCountryCode() {
     $appointment_settings = $this->settings->getSettings('appointment_settings');
     return $appointment_settings['country_code'];
+  }
+
+  /**
+   * Get Magento user info.
+   *
+   * @param string $token
+   *   Authorization Bearer.
+   *
+   * @return array
+   *   User info array.
+   *
+   * @throws \Exception
+   */
+  public function getMagentoUserInfo($token) {
+    try {
+      $options = [
+        'headers' => [
+          'Authorization' => 'Bearer ' . $token,
+          'Content-Type' => 'application/json',
+        ],
+      ];
+
+      $result = $this->magento->doRequest('GET', 'customers/me', $options);
+      $user = [
+        'uid' => (string) $result['id'],
+        'email' => $result['email'],
+      ];
+      return $user;
+    }
+    catch (\Exception $e) {
+      $this->logger->error('User is not authorized from magento Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      throw new \Exception($e->getMessage());
+    }
   }
 
 }
