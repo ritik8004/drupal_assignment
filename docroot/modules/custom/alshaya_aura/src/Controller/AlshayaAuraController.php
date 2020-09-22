@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_aura\Controller;
 
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_aura\Helper\AuraStatus;
 use Drupal\alshaya_aura\Helper\AuraTier;
 use Drupal\alshaya_user\AlshayaUserInfo;
@@ -46,6 +47,13 @@ class AlshayaAuraController extends ControllerBase {
   protected $logger;
 
   /**
+   * API Wrapper service.
+   *
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
+   */
+  protected $apiWrapper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -54,6 +62,7 @@ class AlshayaAuraController extends ControllerBase {
       $container->get('http_client'),
       $container->get('alshaya_user.info'),
       $container->get('logger.channel.alshaya_aura'),
+      $container->get('alshaya_api.api')
     );
   }
 
@@ -68,17 +77,21 @@ class AlshayaAuraController extends ControllerBase {
    *   The user info service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger service.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   API Wrapper service.
    */
   public function __construct(
     Request $current_request,
     ClientInterface $http_client,
     AlshayaUserInfo $user_info,
-    LoggerInterface $logger
-  ) {
+    LoggerInterface $logger,
+    AlshayaApiWrapper $api_wrapper
+    ) {
     $this->currentRequest = $current_request;
     $this->httpClient = $http_client;
     $this->userInfo = $user_info;
     $this->logger = $logger;
+    $this->apiWrapper = $api_wrapper;
   }
 
   /**
@@ -99,19 +112,23 @@ class AlshayaAuraController extends ControllerBase {
     $user['name'] = $this->userInfo->getName();
     $user['is_loyalty_linked'] = $is_loyalty_linked ?? FALSE;
 
-    if ($is_loyalty_linked) {
+    $is_customer = alshaya_acm_customer_is_customer($this->userInfo->currentUser);
+
+    if ($is_customer && $is_loyalty_linked) {
       $user_tier = AuraTier::getAllAuraTiers()[$this->userInfo->userObject->get('field_aura_tier')->getString()]
       ?? AuraTier::getDefaultAuraTier();
       try {
-        $endpoint = $this->currentRequest->getSchemeAndHttpHost()
-        . _alshaya_spc_get_middleware_url()
-        . '/get/loyalty-club/get-customer-points';
-        $response = $this->httpClient->request('GET', $endpoint, ['verify' => FALSE]);
-        $result = json_decode($response->getBody()->getContents(), TRUE);
-        if (isset($result['error'])) {
-          throw new \Exception($result['error_message'] ?? 'Unknown error');
-        }
-
+        // Following code will be uncommented once API is available.
+        // @codingStandardsIgnoreStart
+        // $endpoint = sprintf('/customers/apc-points-balance/%s', $this->userInfo->userObject->get('acq_customer_id')->getString());
+        // $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', TRUE);
+        // $result = json_decode($response->getBody()->getContents(), TRUE);
+        // if (isset($result['error'])) {
+        //   throw new \Exception($result['error_message'] ?? 'Unknown error');
+        // }
+        // @codingStandardsIgnoreEnd
+        // The following line of code should be removed once API is available.
+        $result['points'] = rand(-100, 9999);
         $user_tier = AuraTier::getAllAuraTiers()[$this->userInfo->userObject->get('field_aura_tier')->getString()]
         ?? AuraTier::getDefaultAuraTier();
 
