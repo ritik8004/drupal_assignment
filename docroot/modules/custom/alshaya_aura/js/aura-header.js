@@ -39,7 +39,7 @@
 
           // Mobile mode.
           main_menu_element.find('.name').html(data.aura_user.name);
-          main_menu_element.find('.points').html(data.aura_user.points).removeClass('hidden');
+          main_menu_element.find('.points').html(data.aura_user.points + Drupal.t(' Points')).removeClass('hidden');
           main_menu_element.find('.badge').addClass('badge-' + data.aura_user.tier).removeClass('hidden');
         }
         else if (data.aura_user.is_loyalty_linked == 1) {
