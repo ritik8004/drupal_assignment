@@ -2,6 +2,8 @@
 
 namespace App\Service\Config;
 
+use Symfony\Component\HttpFoundation\RequestStack;
+
 /**
  * Class SystemSettings.
  *
@@ -17,9 +19,18 @@ class SystemSettings {
   protected $appointmentSettings;
 
   /**
+   * RequestStack Object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * SystemSettings constructor.
    */
-  public function __construct() {
+  public function __construct(RequestStack $request) {
+    $this->request = $request->getCurrentRequest();
+
     // We need this always.
     // Do it here once.
     $this->readSettingsFromCode();
@@ -49,6 +60,13 @@ class SystemSettings {
     }
 
     $site_country_code = alshaya_get_site_country_code($this->getSiteCode());
+    require_once DRUPAL_ROOT . '/../factory-hooks/environments/mapping.php';
+
+    $settings = alshaya_get_commerce_third_party_settings(
+      $site_country_code['site_code'],
+      $site_country_code['country_code'],
+      $env
+    );
 
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_security.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/appointment.php';
@@ -109,6 +127,17 @@ class SystemSettings {
    */
   public function getSettings(string $key, $default = NULL) {
     return $this->appointmentSettings[$key] ?? $default;
+  }
+
+  /**
+   * Get current request language.
+   *
+   * @return string
+   *   Requested language.
+   */
+  public function getRequestLanguage() {
+    $lang = $this->request->query->get('lang', 'en');
+    return in_array($lang, ['en', 'ar']) ? $lang : 'en';
   }
 
 }
