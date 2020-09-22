@@ -269,27 +269,24 @@ class APIHelper {
    * @throws \Exception
    */
   public function getMagentoUserInfo($token) {
-    try {
-      $options = [
-        'headers' => [
-          'Authorization' => 'Bearer ' . $token,
-          'Content-Type' => 'application/json',
-        ],
-      ];
+    $options = [
+      'headers' => [
+        'Authorization' => 'Bearer ' . $token,
+        'Content-Type' => 'application/json',
+      ],
+    ];
 
-      $result = $this->magento->doRequest('GET', 'customers/me', $options);
-      $user = [
-        'uid' => (string) $result['id'],
-        'email' => $result['email'],
-      ];
-      return $user;
-    }
-    catch (\Exception $e) {
-      $this->logger->error('User is not authorized from magento Message: @message', [
-        '@message' => $e->getMessage(),
+    $result = $this->magento->doRequest('GET', 'customers/me', $options);
+    if (empty($result) || !is_array($result) || (is_array($result) && empty($result['email']))) {
+      throw new \Exception('Not valid expected response from magento Response: @result', [
+        '@result' => json_decode($result),
       ]);
-      throw new \Exception($e->getMessage());
     }
+
+    return [
+      'uid' => (string) $result['id'],
+      'email' => $result['email'],
+    ];
   }
 
 }

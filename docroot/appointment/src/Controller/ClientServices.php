@@ -165,6 +165,7 @@ class ClientServices {
 
       // If API request is from mobile app then verify user id from magento.
       if (!empty($token = $request->headers->get($_ENV['MAGENTO_BEARER_HEADER']))) {
+        $this->logger->notice('Non web middleware API request.');
         $user = $this->apiHelper->getMagentoUserInfo($token);
       }
       else {
