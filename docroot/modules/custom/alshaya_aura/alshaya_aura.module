@@ -76,6 +76,7 @@ function alshaya_aura_preprocess_alshaya_main_menu_level1(array &$variables) {
     ->getViewBuilder('block')
     ->view($block);
   $variables['aura_rewards_header'] = $block_content;
+  $variables['aura_enabled'] = 1;
 }
 
 /**
