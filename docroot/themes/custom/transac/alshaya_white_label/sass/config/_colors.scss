@@ -1465,8 +1465,8 @@ $magv2-desc-popup-bg: $grey-light-three;
 $magv2-desc-popup-content-bg: $white-five;
 $magv2-desc-popup-grey-border: $grey-light-three;
 $magv2-card-bg: $white-five;
-$magv2-price-strike: $grey-light;
-$magv2-vat-text: $grey-light;
+$magv2-price-strike: $black;
+$magv2-vat-text: $brownish-grey;
 $magv2-section-title-color: $marine-blue;
 $magv2-pdp-title: $grey-ash;
 $magv2-pdp-bg: $grey-light-three;
@@ -1542,6 +1542,8 @@ $magv2-click-collect-search: $brownish-grey;
 $magv2-size-options: $grey-ash;
 $magv2-mobile-size-drawer-label: $brownish-grey;
 $magv2-share-icons-default-color: $marine-blue;
+$magv2-click-collect-unavailable-txt: $brownish-grey;
+$magv2-crossel-upsell-pagination: $brownish-grey;
 
 // Sub brand logo.
 $sub_brand_logo_separator: $_ancestral-water;
