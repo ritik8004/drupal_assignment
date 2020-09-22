@@ -1,4 +1,13 @@
 .promotions-full-view-mode {
+  span {
+    display: block;
+    padding: 0 1.25rem 0.625rem;
+
+    &:last-child {
+      padding-bottom: 1.5625rem;
+    }
+  }
+
   a {
     font-size: 0.875rem;
     font-family: $alshaya-thin;
