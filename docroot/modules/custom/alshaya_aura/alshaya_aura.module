@@ -91,3 +91,27 @@ function alshaya_aura_preprocess_html(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function alshaya_aura_block_view_alshaya_my_account_links_alter(&$build, $block) {
+  // We remove the "Welcome @username" text from the mobile menu.
+  if ($block->getPluginId() === 'alshaya_my_account_links') {
+    $build['#pre_render'][] = '_alshaya_aura_my_account_block_pre_render';
+  }
+}
+
+/**
+ * Pre render callback for building My Account Links block.
+ *
+ * @param array $build
+ *   The block build array.
+ *
+ * @return array
+ *   The altered block build array.
+ */
+function _alshaya_aura_my_account_block_pre_render(array $build) {
+  unset($build['content']['my_account_title']);
+  return $build;
+}
