@@ -143,9 +143,11 @@ class ConfigurableProductForm extends React.Component {
   };
 
   buttonLabel = (attr) => {
-    const { context } = this.props;
+    const { context, skuCode, configurableCombinations } = this.props;
+    const { configurables } = configurableCombinations[skuCode];
     const sizeElem = document.querySelector(`#pdp-add-to-cart-form-${context} #${attr}`).querySelectorAll('.active')[0];
-    let label = '';
+    // Setting default value for size drawer label.
+    let label = Drupal.t('Select @title', {'@title': configurables[attr].label});
     if (sizeElem !== undefined) {
       const size = document.querySelector(`#pdp-add-to-cart-form-${context} #${attr}`).querySelectorAll('.active')[0].innerText;
       let group = '';
