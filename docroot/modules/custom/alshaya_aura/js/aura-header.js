@@ -14,13 +14,24 @@
     const auraHeader = $('.block-aura-rewards-header');
     const main_menu_element = $('.aura-main-menu-user');
     const mobilePopup = $('.block-alshaya-main-menu .menu__list .aura-header-popup-wrapper');
+    const body = $('body');
 
-    if ($('body').hasClass('logged-out')) {
+    if (body.hasClass('logged-out')) {
       // Following code is executed for anonymous users.
       // Desktop mode.
       auraHeader.find('.aura-header-popup-wrapper').removeClass('hidden');
       // Mobile mode.
       mobilePopup.removeClass('hidden');
+    }
+    else if (body.hasClass('aura-my-account')) {
+      // We do not show points on My account pages.
+      // Desktop mode.
+      $('.aura-my-account-page').removeClass('hidden');
+      auraHeader.find('.aura-header-link').addClass('hidden');
+      if (data.aura_user.is_loyalty_linked == 0) {
+        // Mobile mode.
+        mobilePopup.removeClass('hidden');
+      }
     }
     else {
       // Following code is executed for logged in users.
@@ -36,6 +47,7 @@
           auraHeader.find('.aura-general-pages .points').html(data.aura_user.points + Drupal.t(' Points'));
           auraHeader.find('.aura-general-pages .badge').addClass('badge-' + data.aura_user.tier);
           auraHeader.find('.aura-header-link').addClass('hidden');
+          auraHeader.find('.aura-general-pages').removeClass('hidden');
 
           // Mobile mode.
           main_menu_element.find('.name').html(data.aura_user.name);
@@ -48,35 +60,11 @@
           // Desktop mode.
           auraHeader.find('.aura-header-popup-wrapper').removeClass('hidden');
           // Mobile mode.
-          mobilePopup.removeClass('hidden');
+          main_menu_element.find('.name').html(data.aura_user.name);
         }
         else {
           // Loyalty card is not linked.
           main_menu_element.find('.name').html(data.aura_user.name);
-        }
-
-        // We show different content in the header depending on whether the user is
-        // logged in or anonymous.
-        if ($('body').hasClass('aura-my-account')) {
-          $('.aura-my-account-page').removeClass('hidden');
-          if (data.aura_user.is_loyalty_linked == 0) {
-            // Mobile mode.
-            mobilePopup.removeClass('hidden');
-          }
-        }
-        else {
-          if (data.aura_user.is_loyalty_linked == 1) {
-            // We show the user points data.
-          auraHeader.find('.aura-header-link').addClass('hidden');
-          $('.aura-general-pages').removeClass('hidden')
-          }
-          else {
-            // We do not show the user points data.
-            // Desktop mode.
-            auraHeader.find('.aura-header-popup-wrapper').removeClass('hidden');
-            // Mobile mode.
-            mobilePopup.removeClass('hidden');
-          }
         }
       }
       userPointsAjaxFetch.options.success = userPointsSuccessCallback;
