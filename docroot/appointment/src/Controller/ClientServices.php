@@ -163,8 +163,8 @@ class ClientServices {
         throw new \Exception($message);
       }
 
-      // Authenticate logged in user by matching userid from request and Drupal.
-      $user = $this->drupal->getSessionUserInfo();
+      // Get user info from backend system.
+      $user = $this->apiHelper->getUserInfo();
       if ($userId == 0 || $user['uid'] !== $userId) {
         $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
