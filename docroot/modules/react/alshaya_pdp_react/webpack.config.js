@@ -23,7 +23,10 @@ var config = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        use: ['babel-loader']
+        loader: "babel-loader",
+        options: {
+          rootMode: "upward",
+        }
       },
       {
         test: /\.css$/,

@@ -16,6 +16,7 @@ export default class PdpHeader extends React.PureComponent {
       skuCode,
       productInfo,
       configurableCombinations,
+      pdpLabelRefresh,
       context,
     } = this.props;
 
@@ -31,12 +32,16 @@ export default class PdpHeader extends React.PureComponent {
       backArrow = previousLink;
     }
 
+    backArrow = (e) => {
+      e.preventDefault();
+      // following browser back behaviour.
+      window.history.back();
+    };
+
     return (
       <div className="magv2-header-wrapper">
         <ConditionalView condition={window.innerWidth < 768}>
-          {backArrow ? (
-            <a className="back-button" href={backArrow} />
-          ) : null}
+          <a className="back-button" href="#" onClick={(e) => backArrow(e)} />
           <PdpInfo
             title={title}
             finalPrice={finalPrice}
@@ -71,7 +76,7 @@ export default class PdpHeader extends React.PureComponent {
                     className="magv2-button"
                     type="submit"
                     id="add-to-cart-sticky"
-                    onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo, context)}
+                    onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo, pdpLabelRefresh, context, null)}
                   >
                     {Drupal.t('Add To Bag')}
                   </button>
@@ -80,7 +85,7 @@ export default class PdpHeader extends React.PureComponent {
                     className="magv2-button"
                     type="submit"
                     id="add-to-cart-sticky"
-                    onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo, context)}
+                    onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo, pdpLabelRefresh, context, null)}
                   >
                     {Drupal.t('Add To Bag')}
                   </button>

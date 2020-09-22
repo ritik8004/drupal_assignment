@@ -127,6 +127,7 @@ services:
     class: Drupal\alshaya_acm_product\EventSubscriber\ProductUpdatedEventSubscriber
     arguments:
       - '@alshaya_acm_product.product_queue_utility'
+      - '@alshaya_acm_product.product_processed_manager'
     tags:
       - { name: 'event_subscriber' }
   alshaya_acm_product.process_finish_event:
@@ -139,6 +140,7 @@ services:
   alshaya_acm_product.acq_sku_validate_event:
     class: Drupal\alshaya_acm_product\EventSubscriber\AlshayaAcmProductAcqSkuValidateEventSubscriber
     arguments:
+      - '@alshaya_acm_product.product_processed_manager'
       - '@logger.factory'
     tags:
       - { name: event_subscriber }

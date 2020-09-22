@@ -123,6 +123,7 @@ const PdpLayout = () => {
           skuCode={skuItemCode}
           configurableCombinations={configurableCombinations}
           productInfo={productInfo}
+          pdpLabelRefresh={pdpLabelRefresh}
           context="main"
         />
       </div>

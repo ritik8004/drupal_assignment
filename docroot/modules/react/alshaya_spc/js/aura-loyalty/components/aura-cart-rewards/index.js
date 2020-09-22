@@ -4,6 +4,7 @@ import PointsToEarnMessage from '../utilities/points-to-earn';
 import ConditionalView from '../../../common/components/conditional-view';
 import PointsPromoMessage from '../utilities/points-promo-message';
 import PointsExpiryMessage from '../utilities/points-expiry-message';
+import PendingEnrollmentMessage from '../utilities/pending-enrollment-message';
 
 class AuraCartRewards extends React.Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class AuraCartRewards extends React.Component {
       <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
         <SectionTitle>{sectionTitle}</SectionTitle>
         {/* Guest */}
+        {/* @todo: Update condition. */}
         <ConditionalView condition={uid < 1}>
           <div className="block-content guest-user">
             <PointsToEarnMessage points={points} />
@@ -57,12 +59,23 @@ class AuraCartRewards extends React.Component {
           </div>
         </ConditionalView>
         {/* Registered with Linked Loyalty Card */}
+        {/* @todo: Update condition. */}
         <ConditionalView condition={uid > 0}>
           <div className="block-content registered-user-linked">
             <PointsToEarnMessage points={points} />
             <div className="actions">
               <PointsPromoMessage />
               <PointsExpiryMessage />
+            </div>
+          </div>
+        </ConditionalView>
+        {/* Registered with Linked Loyalty Card - Pending Enrollment */}
+        {/* @todo: Update condition. */}
+        <ConditionalView condition={uid > 0}>
+          <div className="block-content registered-user-linked-pending-enrollment">
+            <PointsToEarnMessage points={points} />
+            <div className="actions">
+              <PendingEnrollmentMessage />
             </div>
           </div>
         </ConditionalView>

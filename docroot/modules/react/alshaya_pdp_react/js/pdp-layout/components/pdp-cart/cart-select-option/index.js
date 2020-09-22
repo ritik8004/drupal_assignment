@@ -107,9 +107,11 @@ class CartSelectOption extends React.Component {
    * Handle click on <li>.
    */
   handleLiClick = (e, code) => {
-    const { context } = this.props;
+    const { context, configurableCombinations, skuCode } = this.props;
+    const { configurables } = configurableCombinations[skuCode];
+    const codeValue = e.currentTarget.parentElement.value;
     this.setState({
-      selected: e.currentTarget.parentElement.value,
+      selected: codeValue,
     });
     // Remove the previous active class.
     const activeElem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${code} li.active`);
@@ -118,11 +120,35 @@ class CartSelectOption extends React.Component {
       activeElem.classList.toggle('in-active');
     }
     // Set active class on the current element.
-    const elem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${code} li#value${e.currentTarget.parentElement.value}`);
+    const elem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${code} li#value${codeValue}`);
     if (elem.classList.contains('in-active')) {
       elem.classList.remove('in-active');
     }
     elem.classList.toggle('active');
+    // Refresh the active class of other attributes as
+    // active class on the previous element might be
+    // of a disabled value.
+    if (configurableCombinations[skuCode].combinations[code] !== undefined) {
+      const combination = configurableCombinations[skuCode].combinations[code][codeValue];
+      Object.keys(configurables).forEach((key) => {
+        // Condition to get the non-selected attribute.
+        if (key !== code) {
+          // Remove the previous active class.
+          const nonselectedElem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${key} li.active`);
+          if (nonselectedElem) {
+            nonselectedElem.classList.remove('active');
+            nonselectedElem.classList.toggle('in-active');
+          }
+          const firstAvailableVal = Object.keys(combination[key])[0];
+          // Set active class on the current element.
+          const availableElem = document.querySelector(`#pdp-add-to-cart-form-${context} ul#${key} li#value${firstAvailableVal}`);
+          if (availableElem.classList.contains('in-active')) {
+            availableElem.classList.remove('in-active');
+          }
+          availableElem.classList.toggle('active');
+        }
+      });
+    }
     this.handleSelectionChanged(e, code);
   };
 

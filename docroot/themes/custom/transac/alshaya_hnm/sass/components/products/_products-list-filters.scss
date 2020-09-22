@@ -5,13 +5,10 @@
 
       .field--name-name {
         padding: 0;
+        margin: 1.375rem 0 0;
 
         @include breakpoint($only-mobile) {
           margin-#{$right}: 1rem;
-        }
-
-        @include breakpoint($tablet) {
-          margin: 1.375rem 0 0;
         }
 
         a,

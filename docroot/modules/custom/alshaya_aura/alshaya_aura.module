@@ -47,10 +47,23 @@ function alshaya_aura_theme() {
  * Implements hook_page_attachments().
  */
 function alshaya_aura_page_attachments(array &$page) {
-  $page['#attached']['drupalSettings']['aura']['enabled'] = 1;
-  $page['#attached']['drupalSettings']['aura']['user_points_route'] = '/get/aura/user-points';
   $page['#attached']['library'][] = 'alshaya_aura/aura_header_library';
   $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-global';
+  $settings['aura'] = [
+    'enabled' => 1,
+  ];
+  $uid = \Drupal::currentUser()->id();
+  $user = \Drupal::entityTypeManager()->getStorage('user')->load($uid);
+
+  if (!empty($user)) {
+    $settings['aura']['user_details'] = [
+      'id' => $uid,
+      'email' => \Drupal::currentUser()->getEmail(),
+      'loyaltyStatus' => $user->get('field_aura_loyalty_status')->getString(),
+    ];
+  }
+  $settings['aura']['user_points_route'] = '/get/aura/user-points';
+  $page['#attached']['drupalSettings'] = $settings;
 }
 
 /**

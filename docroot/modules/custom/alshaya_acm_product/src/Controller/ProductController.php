@@ -245,7 +245,9 @@ class ProductController extends ControllerBase {
         // for new PDP layout.
         if ($this->request->query->get('type') == 'json') {
           $related_products = $this->getRelatedProductsJson($related_skus, $data);
-          $this->moduleHandler->alter('alshaya_acm_product_recommended_products_data', $type, $related_products);
+          if (!empty($related_products)) {
+            $this->moduleHandler->alter('alshaya_acm_product_recommended_products_data', $type, $related_products);
+          }
           return new JsonResponse($related_products);
         }
         $build['related'] = [
@@ -278,7 +280,7 @@ class ProductController extends ControllerBase {
   public function getRelatedProductsJson(array $related_skus, array $data) {
     foreach ($related_skus as $related_sku => $value) {
       $related_sku_entity = SKU::loadFromSku($related_sku);
-      if ($related_sku_entity instanceof SKUInterface) {
+      if ($related_sku_entity instanceof SKU) {
         $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
 
         if (!empty($sku_media['drupal_uri'])) {
