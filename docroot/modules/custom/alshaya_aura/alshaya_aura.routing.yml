@@ -5,3 +5,11 @@ alshaya_aura.aura_loyalty_config:
     _title: 'Alshaya AURA Configurations'
   requirements:
     _permission: 'administer site configuration'
+
+alshaya_aura.user_points:
+  path: '/get/aura/user-points'
+  defaults:
+    _title: 'User Points'
+    _controller: '\Drupal\alshaya_aura\Controller\AlshayaAuraController::userPoints'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,25 @@
+.labels-container {
+  .label {
+    &.top {
+      &-left {
+        #{$left}: 1.25rem;
+        top: 1rem;
+      }
+
+      &-right {
+        top: 1rem;
+        #{$right}: 1.25rem;
+      }
+    }
+
+    &.bottom {
+      &-left {
+        #{$left}: 1.25rem;
+      }
+
+      &-right {
+        #{$right}: 1.25rem;
+      }
+    }
+  }
+}

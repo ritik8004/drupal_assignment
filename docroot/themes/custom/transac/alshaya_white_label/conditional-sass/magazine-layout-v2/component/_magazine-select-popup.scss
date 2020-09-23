@@ -37,6 +37,7 @@
             display: inline-block;
             position: relative;
             transform: none;
+            top: 0;
 
             @include icon('close') {
               padding-#{$left}: 0;

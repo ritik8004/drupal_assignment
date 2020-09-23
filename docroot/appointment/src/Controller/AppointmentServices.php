@@ -205,8 +205,8 @@ class AppointmentServices {
 
         // If userId is 0, then anonymous user booking appointment.
         if ($userId) {
-          // Authenticate user by matching userid from request and Drupal.
-          $user = $this->drupal->getSessionUserInfo();
+          // Get user info from backend system.
+          $user = $this->apiHelper->getUserInfo();
           if ($user['uid'] !== $userId) {
             $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
@@ -260,8 +260,8 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      // Authenticate logged in user by matching userid from request and Drupal.
-      $user = $this->drupal->getSessionUserInfo();
+      // Get user info from backend system.
+      $user = $this->apiHelper->getUserInfo();
       if ($userId == 0 || $user['uid'] !== $userId) {
         $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
@@ -338,8 +338,8 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      // Authenticate logged in user by matching userid from request and Drupal.
-      $user = $this->drupal->getSessionUserInfo();
+      // Get user info from backend system.
+      $user = $this->apiHelper->getUserInfo();
       if ($userId == 0 || $user['uid'] !== $userId) {
         $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
@@ -427,8 +427,8 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      // Authenticate logged in user by matching userid from request and Drupal.
-      $user = $this->drupal->getSessionUserInfo();
+      // Get user info from backend system.
+      $user = $this->apiHelper->getUserInfo();
       if ($userId == 0 || $user['uid'] !== $userId) {
         $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
@@ -522,8 +522,8 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      // Authenticate logged in user by matching userid from request and Drupal.
-      $user = $this->drupal->getSessionUserInfo();
+      // Get user info from backend system.
+      $user = $this->apiHelper->getUserInfo();
       if ($userId == 0 || $user['uid'] !== $userId) {
         $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
@@ -659,8 +659,8 @@ class AppointmentServices {
         throw new \Exception($message);
       }
 
-      // Authenticate logged in user by matching userid from request and Drupal.
-      $user = $this->drupal->getSessionUserInfo();
+      // Get user info from backend system.
+      $user = $this->apiHelper->getUserInfo();
       if ($userId == 0 || $user['uid'] !== $userId) {
         $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 

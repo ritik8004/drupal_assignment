@@ -801,6 +801,12 @@ header {
     .highlighted {
       margin: 0 0.625rem;
     }
+
+    > div {
+      &:first-child {
+        margin-#{$right}: 0;
+      }
+    }
   }
 
   .block-alshaya-main-menu {
