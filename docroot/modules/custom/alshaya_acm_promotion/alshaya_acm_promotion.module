@@ -354,15 +354,10 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     $form_state
   );
 
-  $brand_module = \Drupal::configFactory()->get('alshaya.installed_brand')->get('module');
-  $desc_func = "_{$brand_module}_get_product_description";
-  if (function_exists($desc_func)) {
-    $return = $desc_func($entity);
-    if (!empty($return['short_desc'])) {
-      $build['short_desc'] = $return['short_desc'];
-    }
-    $build['description'] = $return['description'];
-  }
+  /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+  $build['short_desc'] = $productInfoHelper->getValue($entity, 'short_description', 'pdp');
+  $build['description'] = $productInfoHelper->getValue($entity, 'description', 'pdp');
 }
 
 /**
