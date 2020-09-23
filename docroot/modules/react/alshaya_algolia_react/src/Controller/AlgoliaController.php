@@ -7,38 +7,11 @@ use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Customer controller to add front page.
  */
 class AlgoliaController extends ControllerBase {
-  /**
-   * Config Factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * AlgoliaController constructor.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory.
-   */
-  public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->configFactory = $config_factory;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory')
-    );
-  }
 
   /**
    * Returns the build for home page.
@@ -47,11 +20,6 @@ class AlgoliaController extends ControllerBase {
    *   Build array.
    */
   public function search() {
-    // Add attributes_to_sort_by_name config in drupalSettings.
-    $attributes_to_sort_by_name = $this->configFactory
-      ->get('alshaya_algolia_react.settings')
-      ->get('attributes_to_sort_by_name') ?? [];
-
     return [
       '#type' => 'markup',
       '#markup' => '<div id="alshaya-algolia-search-page"></div>',
@@ -59,7 +27,6 @@ class AlgoliaController extends ControllerBase {
         'drupalSettings' => [
           'algoliaSearch' => [
             'showSearchResults' => TRUE,
-            'attributes_to_sort_by_name' => $attributes_to_sort_by_name,
           ],
         ],
       ],

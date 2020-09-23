@@ -607,8 +607,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $is_non_refundable = $flags_status['non_refundable']['status'];
           $build['non_refundable'] = [
             '#theme' => 'non_refundable_markup',
-            '#text' => $flags_config['non_refundable']['text'],
-            '#tooltip' => $flags_config['non_refundable']['tooltip'],
+            '#text' => ($flags_config['non_refundable']['text']) ?? '',
+            '#tooltip' => ($flags_config['non_refundable']['tooltip']) ?? '',
           ];
         }
 
@@ -844,7 +844,7 @@ function alshaya_acm_product_get_flags_config() {
   $config = \Drupal::config('alshaya_acm_product.settings');
   $return = [];
 
-  if (!empty($config->get('non_refundable_tooltip')) && !empty($config->get('non_refundable_text'))) {
+  if (!empty($config->get('non_refundable_text'))) {
     $return['non_refundable']['tooltip'] = $config->get('non_refundable_tooltip');
     $return['non_refundable']['text'] = $config->get('non_refundable_text');
   }

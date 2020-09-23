@@ -524,7 +524,7 @@ class AlshayaSpcController extends ControllerBase {
 
       $plugin->processBuild($build);
 
-      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id']);
+      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id'], $payment_method['label']->__toString());
 
       $payment_methods[$payment_method['id']] = [
         'name' => $payment_method_term->label(),
