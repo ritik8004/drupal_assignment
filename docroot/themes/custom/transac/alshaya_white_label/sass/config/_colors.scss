@@ -158,6 +158,7 @@ $aura-redeem-points: #cd2026;
 $aura-points: #1da545;
 $lucky-purple-two: #7a2582;
 $dark-night-owl: #1e2749;
+$grey-gate: #b9b9b9;
 
 // Aura Graidents.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -1578,3 +1579,11 @@ $aura-order-confirmation-points-question-bg: $lucky-purple-two;
 $aura-order-confirmation-points-question-txt: $white-five;
 $aura-order-confirmation-points-tooltip-txt: $dark-night-owl;
 $aura-order-confirmation-points-tooltip-bg: $white-five;
+$aura-spc-checkout-block-bg: $white-five;
+$aura-spc-checkout-highlight: $darkish-purple;
+$aura-spc-textbox-border: $grey-gate;
+$aura-spc-textbox-placeholder: $_ancestral-water;
+$aura-spc-response-message: $_spc-radio-filled;
+$aura-spc-redeem-separator: $darkish-purple;
+$aura-spc-button-text: $darkish-purple;
+$aura-spc-button-bg: $white-five;
