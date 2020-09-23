@@ -1,0 +1,4 @@
+services:
+  logger.channel.alshaya_aura_react:
+    parent: logger.channel_base
+    arguments: ["alshaya_aura_react"]

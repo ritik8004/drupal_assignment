@@ -1,7 +1,0 @@
-name: 'Alshaya Aura'
-type: module
-description: 'Module to enable AURA Loyalty feature of Alshaya.'
-package: 'Alshaya'
-core: 8.x
-dependencies:
-  - alshaya_api:alshaya_api

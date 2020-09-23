@@ -1,6 +1,0 @@
-aura_header_library:
-  js:
-    js/aura-header.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery

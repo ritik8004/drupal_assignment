@@ -2,7 +2,7 @@
 <div class="toggle--sign no--desktop">
   <div class="shop one active">{{ 'shop' | t }}</div>
   {% if logged_in and aura_enabled is defined and aura_enabled == 1 %}
-    {% include "@alshaya_aura/aura-rewards-menu-item.html.twig" %}
+    {% include "@alshaya_aura_react/aura-rewards-menu-item.html.twig" %}
   {% elseif logged_in %}
     <div class="account--logged_in one">{{ 'my account' | t }}</div>
   {% else %}
@@ -27,7 +27,7 @@
   {% if aura_enabled is defined and aura_enabled == 1 %}
     <div class="no--desktop">
       <div class="aura-rewards-wrapper">
-        {% include "@alshaya_aura/aura-rewards-header-popup.html.twig" %}
+        {% include "@alshaya_aura_react/aura-rewards-header-popup.html.twig" %}
       </div>
     </div>
   {% endif %}
