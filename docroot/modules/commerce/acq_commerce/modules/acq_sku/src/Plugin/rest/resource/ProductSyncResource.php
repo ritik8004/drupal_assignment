@@ -221,23 +221,28 @@ class ProductSyncResource extends ResourceBase {
           continue;
         }
 
-        // Second check, product needs to have type.
+        // Second check - visibilty makes the product to be visible on FE.
+        if (!isset($product['visibility'])) {
+          $product['visibility'] = 0;
+          $product['status'] = 0;
+          // Adding info for sku when visibility data is missing.
+          $this->logger->info('visibility setting not found for SKU @sku.', [
+            '@sku' => $product['sku']),
+          ]);
+        }
+
+        // Third check, product needs to have type.
         if (!isset($product['type'])) {
           $ignored_skus[] = $product['sku'] . '(Missing product type in data)';
           $ignored++;
           continue;
         }
 
-        // Third check - store_id allows us to map to proper language.
+        // Final check - store_id allows us to map to proper language.
         if (!isset($product['store_id'])) {
           $ignored_skus[] = $product['sku'] . '(Missing store id in data)';
           $ignored++;
           continue;
-        }
-
-        // Final check - visibilty makes the product to be visible on FE.
-        if (empty($product['visibility']) || !isset($product['visibility'])) {
-          $product['visibility'] = 0;
         }
 
         $langcode = $this->i18nHelper->getLangcodeFromStoreId($product['store_id']);
