@@ -242,6 +242,7 @@ export default class CartItem extends React.Component {
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
+              <p>{Drupal.t('Item code: @skuId', { '@skuId': sku })}</p>
               {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
             </div>
           </div>
