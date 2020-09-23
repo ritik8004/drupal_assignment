@@ -227,7 +227,7 @@ class ProductSyncResource extends ResourceBase {
           $product['status'] = 0;
           // Adding info for sku when visibility data is missing.
           $this->logger->info('Ignoring product as no value received for visibility for SKU @sku.', [
-            '@sku' => $product['sku']),
+            '@sku' => $product['sku'],
           ]);
         }
 
