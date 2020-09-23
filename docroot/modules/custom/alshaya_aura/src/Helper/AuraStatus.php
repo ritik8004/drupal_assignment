@@ -31,4 +31,12 @@ final class AuraStatus {
    */
   const APC_NOT_LINKED_NOT_U = 4;
 
+  /**
+   * Get the values of statuses which are linked.
+   */
+  const LINKED_STATUSES = [
+    self::APC_LINKED_NOT_VERIFIED => 'APC_LINKED_NOT_VERIFIED',
+    self::APC_LINKED_VERIFIED => 'APC_LINKED_VERIFIED',
+  ];
+
 }

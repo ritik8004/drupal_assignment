@@ -1,8 +1,13 @@
 <div class="main--menu" data-menu-timing="{{ settings.desktop_main_menu_highlight_timing }}">
 <div class="toggle--sign no--desktop">
   <div class="shop one active">{{ 'shop' | t }}</div>
-  <div class="account one">{{ "sign in" | t }} / {{ "register" | t }}</div>
-  <div class="account--logged_in one">{{ 'my account' | t }}</div>
+  {% if logged_in and aura_enabled is defined and aura_enabled == 1 %}
+    {% include "@alshaya_aura/aura-rewards-menu-item.html.twig" %}
+  {% elseif logged_in %}
+    <div class="account--logged_in one">{{ 'my account' | t }}</div>
+  {% else %}
+    <div class="account one">{{ "sign in" | t }} / {{ "register" | t }}</div>
+  {% endif %}
 </div>
   <div class="mobile--close no--desktop">
     <span></span>
@@ -19,12 +24,13 @@
         {{ _self.getlevel1items(level1,level1) }}
       {% endfor %}
     {% endif %}
-
-    {% if not_logged_in == '0' and aura_rewards_header %}
-      <div class="no--desktop">
-        {{ aura_rewards_header }}
+  {% if aura_enabled is defined and aura_enabled == 1 %}
+    <div class="no--desktop">
+      <div class="aura-rewards-wrapper">
+        {% include "@alshaya_aura/aura-rewards-header-popup.html.twig" %}
       </div>
-    {% endif %}
+    </div>
+  {% endif %}
   </ul>
 </div>
 

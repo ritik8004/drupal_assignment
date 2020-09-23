@@ -11,9 +11,9 @@
  * Move AURA blocks to current theme.
  */
 function alshaya_aura_install() {
-  $configs = [
-    'block.block.aurarewardsheader',
-  ];
-
-  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura', 'optional');
+  \Drupal::service('alshaya_config.manager')->updateConfigs(['block.block.aurarewardsheader'], 'alshaya_aura', 'optional');
+  // Set the Welcome user block to appear before the rewards header block.
+  $config_factory = \Drupal::configFactory();
+  $reward_header_weight = (int) $config_factory->get('block.block.aurarewardsheader')->get('weight');
+  $config_factory->getEditable('block.block.welcomeuser')->set('weight', $reward_header_weight - 1)->save();
 }
