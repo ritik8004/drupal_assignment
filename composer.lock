@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e114c1a477f1bd845ca8b3382fb295c5",
+    "content-hash": "adc5f7089a94899bc048ec7aa74373c6",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -145,9 +145,6 @@
                 "composer-exit-on-patch-failure": true,
                 "branch-alias": {
                     "dev-master": "9.x-dev"
-                },
-                "patches_applied": {
-                    "Add truncate-branch option to deploy command": "patches/blt/blt-truncate-remotes.patch"
                 }
             },
             "autoload": {
@@ -3441,6 +3438,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Composer Plugin for updating the Drupal scaffold files when using drupal/core",
+            "abandoned": "drupal/core-composer-scaffold",
             "time": "2019-03-30T10:41:38+00:00"
         },
         {
