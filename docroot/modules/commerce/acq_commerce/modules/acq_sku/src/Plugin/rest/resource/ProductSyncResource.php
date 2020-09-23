@@ -228,9 +228,16 @@ class ProductSyncResource extends ResourceBase {
           continue;
         }
 
-        // Final check - store_id allows us to map to proper language.
+        // Third check - store_id allows us to map to proper language.
         if (!isset($product['store_id'])) {
           $ignored_skus[] = $product['sku'] . '(Missing store id in data)';
+          $ignored++;
+          continue;
+        }
+
+        // Final check - visibilty makes the product to be visible on FE.
+        if (!isset($product['visibility']) || $product['visibility'] != 1) {
+          $ignored_skus[] = $product['sku'] . '(Missing visibility in data)';
           $ignored++;
           continue;
         }
