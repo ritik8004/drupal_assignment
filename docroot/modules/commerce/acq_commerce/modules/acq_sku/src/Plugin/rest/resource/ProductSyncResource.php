@@ -236,10 +236,8 @@ class ProductSyncResource extends ResourceBase {
         }
 
         // Final check - visibilty makes the product to be visible on FE.
-        if (!isset($product['visibility']) || $product['visibility'] != 1) {
-          $ignored_skus[] = $product['sku'] . '(Missing visibility in data)';
-          $ignored++;
-          continue;
+        if (empty($product['visibility']) || !isset($product['visibility'])) {
+          $product['visibility'] = 0;
         }
 
         $langcode = $this->i18nHelper->getLangcodeFromStoreId($product['store_id']);
@@ -323,7 +321,7 @@ class ProductSyncResource extends ResourceBase {
         if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
           $skuData = $sku->toArray();
 
-          if ($product['status'] != 1) {
+          if ($product['status'] != 1 || $product['visibility'] == 0) {
             try {
               /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
               $plugin = $sku->getPluginInstance();
