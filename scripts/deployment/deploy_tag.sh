@@ -40,7 +40,7 @@ log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.
 
 if [[ "$AH_SITE_ENVIRONMENT" == *"live"* ]]
 then
-  base_uri = ".factory.alshaya.com"
+  base_uri=".factory.alshaya.com"
 else
   env_suffix=`echo $AH_SITE_ENVIRONMENT | sed -e "s/[0-9]*^*//"`
   base_uri="-${env_suffix}.factory.alshaya.com"
