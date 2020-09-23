@@ -1,0 +1,119 @@
+.spc-aura-checkout-rewards-block {
+  .spc-aura-highlight {
+    color: $aura-spc-checkout-highlight;
+    font-family: $alshaya-bold;
+    font-weight: normal;
+  }
+
+  .spc-aura-link-card-form {
+    .label {
+      padding-bottom: 0.625rem;
+    }
+
+    .item-wrapper {
+      display: flex;
+      flex-direction: row;
+
+      @include breakpoint($upto-desktop) {
+        flex-direction: column;
+      }
+
+      .spc-aura-link-card-wrapper {
+        width: 100%;
+      }
+
+      .sub-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        margin-#{$left}: 1.25rem;
+        width: 175px;
+        line-height: 18px;
+
+        a {
+          color: #8e227c;
+          text-decoration: underline;
+        }
+
+        @include breakpoint($upto-desktop) {
+          margin-top: 1.25rem;
+          margin-#{$left}: 0;
+          width: 100%;
+          flex-direction: row;
+
+          a {
+            margin-#{$left}: 0.625rem;
+          }
+        }
+      }
+    }
+  }
+
+  .block-content {
+    font-size: 0.875rem;
+
+    &.guest-user {
+      background: $aura-spc-checkout-block-bg;
+      padding: 1.25rem;
+
+      @include breakpoint($tablet) {
+        border-radius: 0.625rem;
+      }
+
+      .title {
+        padding-bottom: 1.25rem;
+      }
+
+      .subtitle-1 {
+        padding-bottom: 0.25rem;
+        color: $aura-spc-checkout-highlight;
+        font-family: $alshaya-bold;
+        font-weight: normal;
+      }
+    }
+
+    &.registered-user-linked,
+    &.registered-user-linked-pending-enrollment {
+      background: $aura-spc-checkout-block-bg;
+      padding: 1.25rem;
+
+      @include breakpoint($tablet) {
+        border-radius: 0.625rem;
+      }
+
+      .spc-aura-highlight {
+        font-family: $alshaya-bold;
+        font-weight: normal;
+        padding: 0 0.25rem;
+      }
+    }
+  }
+
+  .spc-aura-pending-enrollment-message {
+    margin-top: 0.3125rem;
+    font-size: 0.875rem;
+  }
+
+  .spc-aura-checkout-messages {
+    > div {
+      font-size: 0.875rem;
+
+      @include breakpoint($tablet) {
+        margin-top: 0.3125rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        &:not(:first-child) {
+          margin-top: 0.625rem;
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 1.25rem;
+      background: $aura-spc-checkout-block-bg;
+      margin-top: 5px;
+    }
+  }
+}
