@@ -130,6 +130,20 @@
           Drupal.blazyHorizontalLazyLoad(scrollArea);
         });
       }
+
+      $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').once('product-carousel').on('click', function () {
+        // Adjust the positioning of the throbber as per the transform property on slick-track.
+        if ($(window).width() > 1023) {
+          var sliderTrackTransform = $(this).parents('.slick-track').css('transform').replace(/[^0-9\-.,]/g, '').split(',');
+          var sliderWrapperWidth = $(this).parents('.owl-carousel').css('width');
+          if (isRTL()) {
+            $('.view-product-slider .owl-carousel .ajax-progress-throbber').css({'transform': 'translate3d(' + -Math.abs(sliderTrackTransform[4]) + 'px, 0px, 0px)', 'max-width': sliderWrapperWidth});
+          }
+          else {
+            $('.view-product-slider .owl-carousel .ajax-progress-throbber').css({'transform': 'translate3d(' + Math.abs(sliderTrackTransform[4]) + 'px, 0px, 0px)', 'max-width': sliderWrapperWidth});
+          }
+        }
+      });
     }
   };
 })(jQuery, Drupal);
