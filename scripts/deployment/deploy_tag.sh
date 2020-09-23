@@ -182,5 +182,5 @@ fi
 if [ "$mode" = "hotfix_crf" ]
 then
   log_message "Doing CRF now as requested"
-  drush --root=$docroot sfml crf --delay=10 &>> ${log_file}
+  drush --root=$docroot sfml crf --delay=20 &>> ${log_file}
 fi
