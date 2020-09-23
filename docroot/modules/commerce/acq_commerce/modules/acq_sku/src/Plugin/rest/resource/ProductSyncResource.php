@@ -226,7 +226,7 @@ class ProductSyncResource extends ResourceBase {
           $product['visibility'] = 0;
           $product['status'] = 0;
           // Adding info for sku when visibility data is missing.
-          $this->logger->info('Visibility setting not found for SKU @sku.', [
+          $this->logger->info('Ignoring product as no value received for visibility for SKU @sku.', [
             '@sku' => $product['sku']),
           ]);
         }
@@ -326,7 +326,7 @@ class ProductSyncResource extends ResourceBase {
         if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
           $skuData = $sku->toArray();
 
-          if ($product['status'] != 1 || $product['visibility'] == 0) {
+          if ($product['status'] != 1) {
             try {
               /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
               $plugin = $sku->getPluginInstance();
