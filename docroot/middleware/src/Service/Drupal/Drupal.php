@@ -275,4 +275,16 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
+  /**
+   * Get details of Drupal user in session.
+   */
+  public function getSessionUserInfo() {
+    $url = '/get/userinfo';
+    $response = $this->invokeApiWithSession('GET', $url);
+    $result = $response->getBody()->getContents();
+    $user = json_decode($result, TRUE);
+
+    return $user;
+  }
+
 }

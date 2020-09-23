@@ -1,0 +1,5 @@
+alshaya_aura_react.aura_loyalty_config:
+  title: 'AURA Loyalty Settings'
+  base_route_name: alshaya_aura_react.aura_loyalty_config
+  names:
+    - alshaya_aura_react.settings

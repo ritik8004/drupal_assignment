@@ -1,7 +1,0 @@
-alshaya_aura.aura_loyalty_config:
-  path: '/admin/config/alshaya/aura-loyalty'
-  defaults:
-    _form: '\Drupal\alshaya_aura\Form\AlshayaAuraSettingsForm'
-    _title: 'Alshaya AURA Configurations'
-  requirements:
-    _permission: 'administer site configuration'

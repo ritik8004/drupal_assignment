@@ -123,6 +123,10 @@
         transition: color 0.2s ease-in-out;
       }
 
+      @include breakpoint($only-mobile) {
+        padding: 0 0.4375rem;
+      }
+
       &.active,
       &:hover {
         background: $spc-cnc-store-search-icon;

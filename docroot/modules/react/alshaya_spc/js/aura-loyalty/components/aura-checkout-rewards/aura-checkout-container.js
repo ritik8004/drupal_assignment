@@ -5,7 +5,7 @@ const AuraCheckoutRedeem = React.lazy(() => import(/* webpackChunkName: 'aura-ch
 
 const AuraCheckoutContainer = () => (
   <React.Suspense fallback={<Loading />}>
-    <AuraCheckoutRedeem />
+    <AuraCheckoutRedeem animationDelay="0.4s" />
   </React.Suspense>
 );
 

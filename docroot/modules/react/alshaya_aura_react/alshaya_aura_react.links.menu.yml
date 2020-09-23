@@ -1,0 +1,5 @@
+alshaya_aura_react.aura_loyalty_config:
+  route_name: alshaya_aura_react.aura_loyalty_config
+  title: 'Alshaya AURA settings'
+  description: 'Configure Alshaya AURA settings.'
+  parent: alshaya_master.alshaya_admin

@@ -5,31 +5,47 @@
  * Contains alshaya_aura_react.module.
  */
 
+use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_aura_react_page_attachments_alter(array &$page) {
+  $settings['enabled'] = 1;
+  $uid = \Drupal::currentUser()->id();
+  $user = \Drupal::entityTypeManager()->getStorage('user')->load($uid);
+
+  if (!empty($user)) {
+    $settings['user_details'] = [
+      'id' => $uid,
+      'email' => \Drupal::currentUser()->getEmail(),
+      'loyaltyStatus' => $user->get('field_aura_loyalty_status')->getString(),
+    ];
+  }
+
+  $alshaya_aura_config = \Drupal::config('alshaya_aura_react.settings');
+  $settings['config'] = [
+    'appStoreLink' => $alshaya_aura_config->get('aura_app_store_link'),
+    'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
+  ];
+
+  $page['#attached']['drupalSettings']['aura'] = $settings;
+
+  $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
+  $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-global';
+
   $current_route = \Drupal::routeMatch()->getRouteName();
   // Attach aura library on cart/checkout page.
   if (in_array($current_route, ['acq_cart.cart', 'alshaya_spc.checkout'])) {
-    $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty';
+    $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc';
+  }
+  elseif ($current_route === 'alshaya_spc.checkout.confirmation') {
+    $page['#attached']['library'][] = 'alshaya_aura_react/aura-loyalty-spc-confirmation';
   }
   elseif ($current_route === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
   }
-}
-
-/**
- * Implements hook_theme().
- */
-function alshaya_aura_react_theme() {
-  $theme = [
-    'my_loyalty_club' => [
-      'variables' => [],
-    ],
-  ];
-
-  return $theme;
 }
 
 /**
@@ -42,4 +58,91 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
     'route' => 'alshaya_aura_react.my_loyalty_club',
     'weight' => 11,
   ];
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_aura_react_theme() {
+  $theme = [
+    'my_loyalty_club' => [
+      'variables' => [],
+    ],
+    'aura_rewards_header' => [
+      'variables' => [
+        'learn_more_link' => '',
+      ],
+      'template' => 'aura-rewards-header',
+    ],
+    'aura_pending_enrollment' => [
+      'variables' => [],
+    ],
+    'aura_rewards_header_authenticated' => [
+      'variables' => [
+        'aura_user' => [],
+      ],
+      'template' => 'aura-rewards-header-authenticated',
+    ],
+    'aura_rewards_header_popup' => [
+      'variables' => [],
+      'template' => 'aura-rewards-header-popup',
+    ],
+    'aura_rewards_menu_item' => [
+      'variables' => [
+        'aura_user' => [],
+      ],
+      'template' => 'aura-rewards-menu-item',
+    ],
+  ];
+
+  return $theme;
+}
+
+/**
+ * Implements hook_preprocess_alshaya_main_menu_level1() for menu template.
+ */
+function alshaya_aura_react_preprocess_alshaya_main_menu_level1(array &$variables) {
+  $block = Block::load('aurarewardsheader');
+  $block_content = \Drupal::entityTypeManager()
+    ->getViewBuilder('block')
+    ->view($block);
+  $variables['aura_rewards_header'] = $block_content;
+  $variables['aura_enabled'] = 1;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_aura_react_preprocess_html(&$variables) {
+  if ($variables['logged_in']) {
+    $my_account_links_routes = array_column(MyAccountLinks::getMyAccountLinks(), 'route');
+    if (in_array(\Drupal::routeMatch()->getRouteName(), $my_account_links_routes)) {
+      // Add class to body to distinguish between my account and other pages.
+      $variables['attributes']['class'][] = 'aura-my-account';
+    }
+  }
+}
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function alshaya_aura_react_block_view_alshaya_my_account_links_alter(&$build, $block) {
+  // We remove the "Welcome @username" text from the mobile menu.
+  if ($block->getPluginId() === 'alshaya_my_account_links') {
+    $build['#pre_render'][] = '_alshaya_aura_react_my_account_block_pre_render';
+  }
+}
+
+/**
+ * Pre render callback for building My Account Links block.
+ *
+ * @param array $build
+ *   The block build array.
+ *
+ * @return array
+ *   The altered block build array.
+ */
+function _alshaya_aura_react_my_account_block_pre_render(array $build) {
+  unset($build['content']['my_account_title']);
+  return $build;
 }

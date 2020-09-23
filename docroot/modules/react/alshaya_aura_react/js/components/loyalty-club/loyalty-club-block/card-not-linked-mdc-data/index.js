@@ -1,5 +1,5 @@
 import React from 'react';
-import { postAPIData } from '../../../../utilities/api/fetchApiData';
+import { getAPIData } from '../../../../utilities/api/fetchApiData';
 
 export default class CardNotLinkedMdcData extends React.Component {
   constructor(props) {
@@ -11,11 +11,8 @@ export default class CardNotLinkedMdcData extends React.Component {
 
   componentDidMount() {
     // API call to get card number with logged in user's email id.
-    const apiUrl = 'post/loyalty-club/get-apc-user-details-by-email';
-    const email = drupalSettings.aura.user_details.email
-      ? drupalSettings.aura.user_details.email
-      : '';
-    const apiData = postAPIData(apiUrl, { email });
+    const apiUrl = 'get/loyalty-club/get-apc-user-details-by-email';
+    const apiData = getAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
