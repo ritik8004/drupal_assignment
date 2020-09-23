@@ -1,4 +1,4 @@
-/alshaya_behat
+/tests/behat
 /architecture
 /docroot/web.config
 /docroot/core/install.php

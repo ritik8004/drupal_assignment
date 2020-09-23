@@ -1,24 +1,52 @@
-# This file defines common settings for all profiles (local and travis)
+#behat.yml
 default:
-  extensions:
-    DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
-    Behat\MinkExtension:
-      browser_name: chrome
-      javascript_session: default
-      show_cmd: "open %s"
-      files_path: "tests/behat/media"
-      sessions:
+    suites:
         default:
-          chrome:
-            api_url: "http://localhost:9222"
-    Drupal\DrupalExtension:
-      blackbox: ~
-      api_driver: "drupal"
-    jarnaiz\JUnitFormatter\JUnitFormatterExtension:
-      filename: report.xml
-      outputDir: tests/behat/build/tests
-    Bex\Behat\ScreenshotExtension:
-      screenshot_taking_mode: failed_steps
-      image_drivers:
-        local:
-          screenshot_directory: tests/behat/reports
+            paths:
+                - "%paths.base%/build/features"
+            contexts:
+                - Alshaya\BehatContexts\FeatureContext:
+                      parameters:
+                          ajax_waittime : 60
+                - Drupal\DrupalExtension\Context\MinkContext
+                - Drupal\DrupalExtension\Context\DrupalContext
+                - Drupal\DrupalExtension\Context\MessageContext
+                - emuse\BehatHTMLFormatter\Context\ScreenshotContext:
+                      screenshotDir: '%paths.base%/build/html/behat/assets/screenshots'
+    formatters:
+        pretty: ~
+    extensions:
+        Behat\MinkExtension:
+            files_path: "%paths.base%/files"
+            browser_name: chrome
+            goutte:
+                guzzle_parameters:
+                    verify: false
+            javascript_session: selenium2
+            selenium2:
+                wd_host: http://127.0.0.1:4444/wd/hub
+                capabilities:
+                    chrome:
+                        switches:
+                            - "--headless"
+                            - "--disable-gpu"
+                            - "--no-sandbox"
+#                            - "--window-size=1920,1080"
+                            - "--ignore-certificate-errors"
+        Drupal\DrupalExtension:
+            blackbox: ~
+        emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+            name: html
+            renderer: Twig,Behat2
+            file_name: index
+            print_args: true
+            print_outp: true
+            loop_break: true
+        Bex\Behat\ScreenshotExtension:
+            screenshot_taking_mode: failed_steps
+            image_drivers:
+                local:
+                    clear_screenshot_directory: true
+
+imports:
+    - build/profiles.yml
