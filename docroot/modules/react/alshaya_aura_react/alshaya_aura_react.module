@@ -12,7 +12,10 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $current_route = \Drupal::routeMatch()->getRouteName();
   // Attach aura library on cart/checkout page.
   if (in_array($current_route, ['acq_cart.cart', 'alshaya_spc.checkout'])) {
-    $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty';
+    $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc';
+  }
+  elseif ($current_route === 'alshaya_spc.checkout.confirmation') {
+    $page['#attached']['library'][] = 'alshaya_aura_react/aura-loyalty-spc-confirmation';
   }
   elseif ($current_route === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
