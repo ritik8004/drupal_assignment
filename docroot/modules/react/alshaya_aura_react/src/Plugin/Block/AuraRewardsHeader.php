@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_aura\Plugin\Block;
+namespace Drupal\alshaya_aura_react\Plugin\Block;
 
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Block\BlockBase;
@@ -106,7 +106,7 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
       $container->get('http_client'),
       $container->get('request_stack'),
       $container->get('alshaya_user.info'),
-      $container->get('logger.channel.alshaya_aura')
+      $container->get('logger.channel.alshaya_aura_react')
     );
   }
 
@@ -116,13 +116,13 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
   public function build() {
     return [
       '#theme' => 'aura_rewards_header',
-      '#learn_more_link' => $this->configFactory->get('alshaya_aura.settings')->get('aura_rewards_header_learn_more_link'),
+      '#learn_more_link' => $this->configFactory->get('alshaya_aura_react.settings')->get('aura_rewards_header_learn_more_link'),
       '#cache' => [
         'contexts' => [
           'user.roles:anonymous',
         ],
         'tags' => [
-          'config:alshaya_aura.settings',
+          'config:alshaya_aura_react.settings',
         ],
       ],
     ];

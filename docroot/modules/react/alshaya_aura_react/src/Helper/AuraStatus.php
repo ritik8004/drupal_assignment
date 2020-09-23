@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_aura\Helper;
+namespace Drupal\alshaya_aura_react\Helper;
 
 /**
  * Class AuraStatus.

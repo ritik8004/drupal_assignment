@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_aura\Form;
+namespace Drupal\alshaya_aura_react\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,25 +14,25 @@ class AlshayaAuraSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'alshaya_aura_settings';
+    return 'alshaya_aura_react_settings';
   }
 
   /**
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return ['alshaya_aura.settings'];
+    return ['alshaya_aura_react.settings'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['alshaya_aura']['aura_rewards_header_learn_more_link'] = [
+    $form['alshaya_aura_react']['aura_rewards_header_learn_more_link'] = [
       '#type' => 'textfield',
       '#title' => $this->t('AURA Rewards Header Learn More Link'),
       '#description' => $this->t('Learn More link to be added in AURA Rewards popup in header.'),
-      '#default_value' => $this->config('alshaya_aura.settings')->get('aura_rewards_header_learn_more_link'),
+      '#default_value' => $this->config('alshaya_aura_react.settings')->get('aura_rewards_header_learn_more_link'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -42,7 +42,7 @@ class AlshayaAuraSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('alshaya_aura.settings')
+    $this->config('alshaya_aura_react.settings')
       ->set('aura_rewards_header_learn_more_link', $form_state->getValue('aura_rewards_header_learn_more_link'))
       ->save();
 

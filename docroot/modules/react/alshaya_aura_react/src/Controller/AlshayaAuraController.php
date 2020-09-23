@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\alshaya_aura\Controller;
+namespace Drupal\alshaya_aura_react\Controller;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
-use Drupal\alshaya_aura\Helper\AuraStatus;
-use Drupal\alshaya_aura\Helper\AuraTier;
+use Drupal\alshaya_aura_react\Helper\AuraStatus;
+use Drupal\alshaya_aura_react\Helper\AuraTier;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Controller\ControllerBase;
@@ -43,7 +43,7 @@ class AlshayaAuraController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_user.info'),
-      $container->get('logger.channel.alshaya_aura'),
+      $container->get('logger.channel.alshaya_aura_react'),
       $container->get('alshaya_api.api')
     );
   }
