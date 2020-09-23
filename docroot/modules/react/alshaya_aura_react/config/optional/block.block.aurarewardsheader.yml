@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_aura_react
+    - user
+  theme:
+    - alshaya_white_label
+id: aurarewardsheader
+theme: alshaya_white_label
+region: menu_secondary
+weight: -35
+provider: null
+plugin: aura_rewards_header
+settings:
+  id: aura_rewards_header
+  label: 'AURA Rewards Header'
+  provider: alshaya_aura_react
+  label_display: '0'
+visibility:
+  user_role:
+    id: user_role
+    roles:
+      anonymous: anonymous
+      authenticated: authenticated
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

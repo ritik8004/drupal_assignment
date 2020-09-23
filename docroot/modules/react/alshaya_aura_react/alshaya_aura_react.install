@@ -7,19 +7,19 @@
 
 /**
  * Implements hook_install().
- *
- * Enable My Loyalty Club link in the menu.
- * Move My Account AURA block to current theme.
  */
 function alshaya_aura_react_install() {
+  // Enable My Loyalty Club link in the menu.
   $config = \Drupal::configFactory()->getEditable('alshaya_user.settings');
   $alshaya_loyalty_club = unserialize($config->get('my_account_enabled_links'));
   $alshaya_loyalty_club['alshaya_loyalty_club'] = 'alshaya_loyalty_club';
   $config->set('my_account_enabled_links', serialize($alshaya_loyalty_club));
   $config->save();
 
+  // Move blocks to current theme.
   $configs = [
     'block.block.myaccountsaurablock',
+    'block.block.aurarewardsheader',
   ];
   \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura_react', 'optional');
 }

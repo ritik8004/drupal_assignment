@@ -9,3 +9,10 @@ alshaya_aura_my_accounts:
     dist/my_accounts.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+aura_header_library:
+  js:
+    assets/aura-header.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

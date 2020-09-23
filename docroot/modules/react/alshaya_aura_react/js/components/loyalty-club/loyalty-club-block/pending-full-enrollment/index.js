@@ -17,8 +17,12 @@ const PendingFullEnrollment = () => (
           { Drupal.t('To redeem your points online, we need you to provide us more details. Please download Aura app to complete your full enrollment.') }
         </p>
         <div className="app-store-links">
-          <span> APP Store logo placeholder </span>
-          <span> Google Store logo placeholder </span>
+          <a href={drupalSettings.aura.config.appStoreLink ? drupalSettings.aura.config.appStoreLink : ''}>
+            <span> APP Store logo placeholder </span>
+          </a>
+          <a href={drupalSettings.aura.config.googlePlayLink ? drupalSettings.aura.config.googlePlayLink : ''}>
+            <span> Google Store logo placeholder </span>
+          </a>
         </div>
       </div>
     </div>
