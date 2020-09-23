@@ -235,7 +235,6 @@ body {
   background: $primary_full_page_overlay_bg;
   z-index: 9999;
   visibility: visible;
-  max-width: 100% !important;
 
   @content;
 
