@@ -353,6 +353,16 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     SelectFreeGiftForm::class,
     $form_state
   );
+
+  $brand_module = \Drupal::configFactory()->get('alshaya.installed_brand')->get('module');
+  $desc_func = "_{$brand_module}_get_product_description";
+  if (function_exists($desc_func)) {
+    $return = $desc_func($entity);
+    if (!empty($return['short_desc'])) {
+      $build['short_desc'] = $return['short_desc'];
+    }
+    $build['description'] = $return['description'];
+  }
 }
 
 /**
