@@ -11,7 +11,7 @@
 Otherwise install it via brew or from java:
 [https://www.java.com/en/download/help/index_installing.xml](https://www.java.com/en/download/help/index_installing.xml)
 
-1. `cd behat_rework` :file_folder:
+1. `cd tests/behat` :file_folder:
 2. `composer install` :hourglass_flowing_sand:
 3. `cd bin; npm install` :gear:
 4. `cd ..`
@@ -54,7 +54,7 @@ files and maintaining feature files for multi-sites.
 
 ## :scroll: Directory Structure
 
-Inside `behat_rework` directory:
+Inside `tests/behat` directory:
 ```text
 
     ├── bin

@@ -1,8 +1,8 @@
-composer.phar
-composer.lock
-bin
-vendor
-behat.local.yml
-*.rej
-test_releases
-
+/bin/*
+!/bin/package.json
+!/bin/package-lock.json
+/vendor
+/build
+/feature
+/templates/variables/brands/*/env/local/
+/features/
