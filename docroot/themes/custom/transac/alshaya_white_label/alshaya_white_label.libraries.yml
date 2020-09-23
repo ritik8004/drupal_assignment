@@ -425,12 +425,18 @@ aura-loyalty-spc-common:
     theme:
       css/conditional-sass/aura-loyalty-spc-common/aura-loyalty-spc-common.ltr.css: {}
 
+aura-loyalty-forms:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-forms/aura-loyalty-forms.ltr.css: {}
+
 aura-loyalty-spc:
   css:
     theme:
       css/conditional-sass/aura-loyalty-spc/aura-loyalty-spc.ltr.css: {}
   dependencies:
     - alshaya_white_label/aura-loyalty-spc-common
+    - alshaya_white_label/aura-loyalty-forms
 
 aura-loyalty-spc-confirmation:
   css:
