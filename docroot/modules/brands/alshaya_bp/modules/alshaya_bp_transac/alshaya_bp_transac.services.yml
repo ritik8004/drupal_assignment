@@ -1,0 +1,7 @@
+services:
+  alshaya_bp_transac.product_info_requested_event:
+    class: Drupal\alshaya_bp_transac\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_acm_product.helper'
+    tags:
+      - { name: 'event_subscriber' }
