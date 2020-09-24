@@ -2,7 +2,22 @@
   .form-items {
     height: 2.25rem;
     display: flex;
+    position: relative;
     align-items: flex-start;
+
+    &.success {
+      @include icon('check') {
+        display: inline-flex;
+        font-size: 1.8125rem;
+        position: absolute;
+        #{$right}: 6.25rem;
+        height: 100%;
+        width: 2rem;
+        align-items: center;
+        justify-content: center;
+        color: $aura-spc-response-message;
+      }
+    }
   }
 
   input,
