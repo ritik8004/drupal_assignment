@@ -23,6 +23,12 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     const totalPagers = Math.ceil(sliderProps.children.length / sliderProps.slidesToScroll);
     const currentPage = Math.ceil((sliderProps.initialSlide + 1) / sliderProps.slidesToScroll);
 
+    if (this.checkSlider()) {
+      document.querySelector('body').classList.add('rtl-slider-not-initialised');
+    } else {
+      document.querySelector('body').classList.remove('rtl-slider-not-initialised');
+    }
+
     this.setState({
       currentPage,
       totalPagers,
@@ -65,6 +71,21 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     const { removePanelData } = this.props;
     document.querySelector('body').classList.remove('overlay-crossel');
     removePanelData();
+  };
+
+  checkSlider = () => {
+    const { products } = this.props;
+    let flag = false;
+    if (drupalSettings.path.currentLanguage === 'ar') {
+      if (window.innerWidth < 768) {
+        flag = Object.keys(products).length <= 1;
+      } else if (window.innerWidth < 1025) {
+        flag = Object.keys(products).length <= 2;
+      } else {
+        flag = Object.keys(products).length <= 4;
+      }
+    }
+    return flag;
   };
 
   render() {

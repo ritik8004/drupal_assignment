@@ -137,6 +137,21 @@
 
         &:first-child {
           padding-left: 1.25rem;
+
+          // When number of slides doesn't match with slidesToShow config, slick slider doesn't have dir attribute which makes it rtl for Arabic.
+          // For that case, added rtl-slider-not-initialised class and updated the theming accordingly.
+          // This class is added by checkSlider() in .magv2-pdp-crossell-upsell/index.js . 
+          .rtl-slider-not-initialised & {
+            margin-right: 1.25rem;
+
+            @include breakpoint($tablet) {
+              margin-right: 1.875rem;
+            }
+
+            @include breakpoint($desktop) {
+              margin-right: 0;
+            }
+          }
         }
 
         @include breakpoint($tablet) {
