@@ -353,6 +353,11 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
     SelectFreeGiftForm::class,
     $form_state
   );
+
+  /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+  $build['short_desc'] = $productInfoHelper->getValue($entity, 'short_description', 'pdp');
+  $build['description'] = $productInfoHelper->getValue($entity, 'description', 'pdp');
 }
 
 /**
