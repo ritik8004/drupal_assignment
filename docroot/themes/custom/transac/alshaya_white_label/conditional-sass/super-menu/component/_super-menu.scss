@@ -6,6 +6,7 @@ $super-menu-height: 1.875rem;
 
   ul {
     li {
+      height: $super-menu-height;
       vertical-align: middle;
       border: 0;
 
@@ -24,13 +25,25 @@ $super-menu-height: 1.875rem;
 }
 
 // Margin top of body changes with super menu at mobile and tablet.
-body {
+body.frontpage {
   @include breakpoint($only-mobile) {
-    margin-top: 5.5875rem;
+    margin-top: 9rem !important;
   }
 
   @include breakpoint($only-tablet) {
-    margin-top: 9.8rem;
+    margin-top: 10.5rem;
+  }
+}
+
+body.plp-page-only,
+body.nodetype--acq_product {
+  @include breakpoint($only-mobile) {
+    margin-top: 5.6875rem;
+
+    .filter-fixed-top .show-all-filters-algolia,
+    .filter-fixed-top .block-facet-blockcategory-facet-search {
+      top: 5.575rem !important;
+    }
   }
 }
 
@@ -68,7 +81,7 @@ body.header-sticky-filter {
       @include clearfix;
 
       display: block !important;
-      z-index: 12;
+      z-index: 12 !important;
       position: fixed;
       top: 0;
       width: 100%;
