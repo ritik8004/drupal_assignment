@@ -1,5 +1,5 @@
 alshaya_acm_dashboard.dashboard:
-  path: '/dashboard'
+  path: '/admin/commerce/dashboard'
   defaults:
     _title: 'Dashboard'
     _controller: '\Drupal\alshaya_acm_dashboard\Controller\AlshayaAcmDashboardController::queuesStatuses'
