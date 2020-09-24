@@ -66,6 +66,13 @@ class AlshayaAcmProductCommands extends DrushCommands {
   private $entityTypeManager;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $drupalLogger;
+
+  /**
    * AlshayaAcmProductCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
@@ -87,7 +94,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
                               EventDispatcherInterface $event_dispatcher,
                               Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager) {
-    $this->logger = $logger_channel_factory->get('alshaya_acm_product');
+    $this->drupalLogger = $logger_channel_factory->get('alshaya_acm_product');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
     $this->eventDispatcher = $event_dispatcher;
@@ -107,7 +114,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     if ($mode === SkuManager::AGGREGATED_LISTING) {
       $message = 'Current mode is already set to display one product per configurable in listing pages.';
-      $this->logger->info($message);
+      $this->drupalLogger->info($message);
       $this->yell($message, 40, 'red');
 
       $ask = 'Are you sure you want to redo node deletion? Type "ok" if you are sure.';
@@ -144,7 +151,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     drush_backend_batch_process();
 
     $message = 'Updated mode to display one product per configurable in listing pages.';
-    $this->logger->info($message);
+    $this->drupalLogger->info($message);
     $this->say($message);
   }
 
@@ -160,7 +167,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     if ($mode === SkuManager::NON_AGGREGATED_LISTING) {
       $message = 'Current mode is already set to display one product per color in listing pages.';
-      $this->logger->info($message);
+      $this->drupalLogger->info($message);
       $this->yell($message, 40, 'red');
 
       $ask = 'Are you sure you want to redo node creation? Type "ok" if you are sure.';
@@ -197,7 +204,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     drush_backend_batch_process();
 
     $message = 'Updated mode to display one product per color in listing pages.';
-    $this->logger->info($message);
+    $this->drupalLogger->info($message);
     $this->say($message);
   }
 
@@ -350,7 +357,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
           $node = $this->entityTypeManager->getStorage('node')->load($rs['nid']);
           if ($node instanceof NodeInterface) {
             $node->delete();
-            $this->logger->notice(dt('Node:@nid having sku:@sku attached is deleted from the system successfully.', [
+            $this->drupalLogger->notice(dt('Node:@nid having sku:@sku attached is deleted from the system successfully.', [
               '@nid' => $rs['nid'],
               '@sku' => $rs['sku'],
             ]));
@@ -361,14 +368,14 @@ class AlshayaAcmProductCommands extends DrushCommands {
             // @see alshaya_acm_product_node_delete().
             // There are cases when there is an entry in node_field_data
             // table but actual node not exists in the system.
-            $this->logger->error(dt('Node:@nid with sku:@sku was either a color node or just having an entry in `node_field_data` table but actual node not exists .', [
+            $this->drupalLogger->error(dt('Node:@nid with sku:@sku was either a color node or just having an entry in `node_field_data` table but actual node not exists .', [
               '@nid' => $rs['nid'],
               '@sku' => $rs['sku'],
             ]));
           }
         }
         catch (\Exception $e) {
-          $this->logger->error(dt('There was an error while deleting node:@nid of sku:@sku Message:@message', [
+          $this->drupalLogger->error(dt('There was an error while deleting node:@nid of sku:@sku Message:@message', [
             '@nid' => $rs['nid'],
             '@sku' => $rs['sku'],
             '@message' => $e->getMessage(),
@@ -459,7 +466,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       '@entries' => print_r($result, TRUE),
     ]);
 
-    $this->logger()->notice($message);
+    $this->drupalLogger->notice($message);
 
     if (!$this->io()->confirm(dt('Do you want to delete them?'))) {
       throw new UserAbortException();
@@ -471,7 +478,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       ->condition('id', $ids, 'IN')
       ->execute();
 
-    $this->logger()->notice(dt('Corrupt entries in acq_sku_field_data are removed.'));
+    $this->drupalLogger->notice(dt('Corrupt entries in acq_sku_field_data are removed.'));
   }
 
   /**
@@ -494,7 +501,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       '@entries' => print_r($result, TRUE),
     ]);
 
-    $this->logger()->notice($message);
+    $this->drupalLogger->notice($message);
 
     if (!$this->io()->confirm(dt('Do you want to delete them?'))) {
       throw new UserAbortException();
@@ -513,7 +520,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
         if ($entity instanceof SKUInterface) {
           $entity->delete();
 
-          $this->logger()->notice(dt('Deleted SKU entity with ID @id for SKU @sku', [
+          $this->drupalLogger->notice(dt('Deleted SKU entity with ID @id for SKU @sku', [
             '@id' => $id,
             '@sku' => $sku,
           ]));
@@ -546,7 +553,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
   public function addMediaFilesUsage($field = 'media', array $options = ['batch_size' => 100]) {
     $batch_size = (int) $options['batch_size'];
 
-    $this->logger()->notice('Add file usage for all product media files...');
+    $this->drupalLogger->notice('Add file usage for all product media files...');
 
     $select = $this->connection->select('acq_sku_field_data');
     $select->fields('acq_sku_field_data', ['sku']);
@@ -579,7 +586,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     batch_set($batch);
     drush_backend_batch_process();
 
-    $this->logger()->notice('Added usage for all media files.');
+    $this->drupalLogger->notice('Added usage for all media files.');
   }
 
   /**
@@ -662,7 +669,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $result = $query->execute()->fetchAllKeyed(0, 0);
 
     if (empty($result)) {
-      $this->logger()->notice('No media files to check.');
+      $this->drupalLogger->notice('No media files to check.');
       return;
     }
 
@@ -832,7 +839,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     // Process the batch.
     drush_backend_batch_process();
 
-    $this->logger()->notice('Fixed missing files issues for all skus.');
+    $this->drupalLogger->notice('Fixed missing files issues for all skus.');
   }
 
   /**
@@ -895,7 +902,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     // We expect this in days.
     $not_modified_since = Settings::get('remove_disabled_products_not_modified_since_last_x_days', 7);
     if (empty($not_modified_since)) {
-      $this->logger()->notice(dt('Not processing remove-disabled-products as setting remove_disabled_products_not_modified_since_last_x_days set to @value', [
+      $this->drupalLogger->notice(dt('Not processing remove-disabled-products as setting remove_disabled_products_not_modified_since_last_x_days set to @value', [
         '@value' => serialize($not_modified_since),
       ]));
 
@@ -920,7 +927,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     foreach ($skus as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
-        $this->logger()->notice(dt('Deleting SKU @sku not modified since @changed', [
+        $this->drupalLogger->notice(dt('Deleting SKU @sku not modified since @changed', [
           '@sku' => $sku,
           '@changed' => $sku_entity->getChangedTime(),
         ]));
