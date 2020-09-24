@@ -147,7 +147,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   public function processShortDescription(ProductInfoRequestedEvent $event) {
     $sku_entity = $event->getSku();
     $prod_description = $this->getDescription($sku_entity);
-    $event->getValue($prod_description['short_desc']);
+    $event->setValue($prod_description['short_desc']);
   }
 
   /**
