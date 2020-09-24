@@ -2,6 +2,9 @@ alshaya_api.settings:
   type: config_object
   label: 'Alshaya API settings'
   mapping:
+    langcode:
+      type: string
+      label: 'Language code'
     ignored_mdc_cats_on_sanity_check:
       type: string
       label: 'Ignored MDC categories on sanity check'
