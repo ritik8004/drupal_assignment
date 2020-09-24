@@ -2,6 +2,7 @@ import React from 'react';
 import PendingFullEnrollment from './pending-full-enrollment';
 import CardNotLinkedMdcData from './card-not-linked-mdc-data';
 import CardNotLinkedNoData from './card-not-linked-no-data';
+import LinkedVerified from './linked-verified';
 
 const LoyaltyClubBlock = () => {
   if (typeof drupalSettings.aura !== 'undefined'
@@ -14,6 +15,8 @@ const LoyaltyClubBlock = () => {
       return <CardNotLinkedNoData />;
     } if (loyaltyStatus === 1) {
       return <CardNotLinkedMdcData />;
+    } if (loyaltyStatus === 2) {
+      return <LinkedVerified />;
     } if (loyaltyStatus === 3) {
       return <PendingFullEnrollment />;
     }

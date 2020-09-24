@@ -21,6 +21,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
       'id' => $uid,
       'email' => \Drupal::currentUser()->getEmail(),
       'loyaltyStatus' => $user->get('field_aura_loyalty_status')->getString(),
+      'tier' => $user->get('field_aura_tier')->getString(),
     ];
   }
 

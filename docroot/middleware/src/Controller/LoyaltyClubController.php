@@ -86,6 +86,13 @@ class LoyaltyClubController {
    *   The loyalty points related data for the current user or error message.
    */
   public function getCustomerPoints() {
+    // @TODO: Remove this when we have API ready.
+    return new JsonResponse([
+      'points' => '20000',
+      'expiredPoints' => '100',
+      'expiredPointsDate' => '2021-06-05',
+    ]);
+
     $customer_id = $this->drupal->getSessionCustomerInfo()['customer_id'];
 
     if (empty($customer_id)) {
