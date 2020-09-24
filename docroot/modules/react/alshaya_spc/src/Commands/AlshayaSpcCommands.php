@@ -136,11 +136,13 @@ class AlshayaSpcCommands extends DrushCommands {
         continue;
       }
 
+      $langcode = $data['langcode'] ?? 'en';
+
+      // Update the store context to match user's language.
+      $this->apiWrapper->updateStoreContext($langcode);
+
       switch ($type) {
         case 'knet':
-          // Update the store context to match user's language.
-          $this->apiWrapper->updateStoreContext($data['langcode']);
-
           $credentials = Settings::get('knet');
           $wrapper = new KnetApiWrapper(
             Settings::get('alshaya_knet.settings')['knet_base_url'],
@@ -181,7 +183,7 @@ class AlshayaSpcCommands extends DrushCommands {
                 throw new \Exception('Update payment data in cart failed, please check other logs to know the reason');
               }
 
-              $this->placeOrder($update['payment'], $payment['cart_id']);
+              $this->placeOrder($update['payment'], $payment['cart_id'], $langcode);
 
               $this->getLogger('PendingPaymentCheck')->notice('KNET Payment successful, order placed. Cart id: @cart_id, Data: @data, KNET response: @info', [
                 '@data' => $payment['data'],
@@ -270,7 +272,7 @@ class AlshayaSpcCommands extends DrushCommands {
                 throw new \Exception('Update payment data in cart failed, please check other logs to know the reason');
               }
 
-              $this->placeOrder($update['payment'], $payment['cart_id']);
+              $this->placeOrder($update['payment'], $payment['cart_id'], $langcode);
 
               $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment successful, order placed. Cart id: @cart_id, Data: @data, CheckoutCom response: @info', [
                 '@data' => $payment['data'],
@@ -368,10 +370,14 @@ class AlshayaSpcCommands extends DrushCommands {
    *   Update Array.
    * @param string $cart_id
    *   Cart id.
+   * @param string $langcode
+   *   Language code.
    *
    * @throws \Exception
    */
-  protected function placeOrder(array $update, string $cart_id) {
+  protected function placeOrder(array $update, string $cart_id, $langcode) {
+    $request_options['query']['lang'] = $langcode;
+
     // Add a custom header to ensure Middleware allows this request
     // without further authentication.
     $request_options['json']['data']['paymentMethod'] = $update;
