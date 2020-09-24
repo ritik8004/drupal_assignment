@@ -20,6 +20,7 @@ use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class AlshayaSpcController.
@@ -83,6 +84,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $languageManager;
 
   /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_method_manager
@@ -101,6 +109,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Order details helper.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    */
   public function __construct(AlshayaSpcPaymentMethodManager $payment_method_manager,
                               CheckoutOptionsManager $checkout_options_manager,
@@ -109,7 +119,8 @@ class AlshayaSpcController extends ControllerBase {
                               EntityTypeManagerInterface $entity_type_manager,
                               AddressBookAreasTermsHelper $areas_term_helper,
                               AlshayaSpcOrderHelper $order_helper,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              ModuleHandlerInterface $module_handler) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
@@ -118,6 +129,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->areaTermsHelper = $areas_term_helper;
     $this->orderHelper = $order_helper;
     $this->languageManager = $language_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -132,7 +144,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('entity_type.manager'),
       $container->get('alshaya_addressbook.area_terms_helper'),
       $container->get('alshaya_spc.order_helper'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -160,6 +173,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_acm_promotion/basket_labels_manager',
         ],
         'drupalSettings' => [
+          'item_code_label' => $this->t('Item code'),
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
           'global_error_message' => _alshaya_spc_global_error_message(),
           'alshaya_spc' => [
@@ -173,7 +187,9 @@ class AlshayaSpcController extends ControllerBase {
       ],
     ];
 
-    return $this->addCheckoutConfigSettings($build);
+    $render = $this->addCheckoutConfigSettings($build);
+    $this->moduleHandler->alter('alshaya_get_item_code_label', $render);
+    return $render;
   }
 
   /**

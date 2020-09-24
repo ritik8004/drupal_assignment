@@ -436,3 +436,11 @@ function alshaya_hm_form_webform_submission_alshaya_contact_api_form_alter(&$for
   $form['elements']['type']['#default_value'] = 'inquiry';
   $form['elements']['reason4']['#default_value'] = 'others';
 }
+
+/**
+ * Implements hook_alshaya_get_item_code_label_alter().
+ */
+function alshaya_hm_alshaya_get_item_code_label_alter(array &$render) {
+  $item_code_label = \Drupal::service('alshaya_hm.product_info_requested_event')->getLabelFromKey()['item_code_label'];
+  $render['#attached']['drupalSettings']['item_code_label'] = $item_code_label;
+}
