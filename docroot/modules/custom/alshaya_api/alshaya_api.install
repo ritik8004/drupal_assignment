@@ -16,13 +16,28 @@ use Drupal\user\Entity\User;
  * [5.8.0]Sync code and active storage for module provided settings.
  */
 function alshaya_api_update_8003() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_api.settings'],
-    'alshaya_api',
-    'install',
-  );
+  $config_keys_to_remove = [
+    'magento_host',
+    'magento_lang_prefix',
+    'magento_api_base',
+    'verify_ssl',
+    'token_cache_time',
+    'username',
+    'password',
+    'consumer_key',
+    'consumer_secret',
+    'access_token',
+    'access_token_secret',
+  ];
+  $config = \Drupal::configFactory()->getEditable('alshaya_api.settings');
+  $config_raw_data = $config->getRawData();
+  foreach ($config_keys_to_remove as $config_key) {
+    if (isset($config_raw_data[$config_key])) {
+      unset($config_raw_data[$config_key]);
+    }
+  }
+  $config->setData($config_raw_data);
+  $config->save();
 }
 
 /**
