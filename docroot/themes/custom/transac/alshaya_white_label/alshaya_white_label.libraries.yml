@@ -290,6 +290,13 @@ megamenu_inline_layout:
     theme:
       css/conditional-sass/megamenu-inline-layout/megamenu-inline-layout.ltr.css: {}
 
+super-menu:
+  js:
+    conditional-sass/super-menu/js/super_menu_clone.js: {}
+  css:
+    theme:
+      css/conditional-sass/super-menu/super-menu.ltr.css: {}
+
 dynamic-promotions:
   css:
     theme:
