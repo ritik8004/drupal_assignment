@@ -36,6 +36,16 @@
   }
 }
 
+.dynamic-yield-recommendations.ui-dialog {
+  .acq-content-product-modal {
+    .content__main {
+      .gallery-wrapper {
+        min-height: auto;
+      }
+    }
+  }
+}
+
 .acq-content-product-modal,
 .c-pdp {
   .content__title_wrapper h1 {
