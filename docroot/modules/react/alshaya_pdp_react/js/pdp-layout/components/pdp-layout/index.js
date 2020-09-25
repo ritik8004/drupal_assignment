@@ -83,7 +83,7 @@ const PdpLayout = () => {
   };
 
   const showStickyHeader = () => {
-    window.onscroll = () => {
+    window.addEventListener('scroll', debounce(function() {
       if ((content !== null) && (content !== undefined)) {
         if (window.pageYOffset >= content.current.offsetTop + content.current.offsetHeight) {
           header.current.classList.add('magv2-pdp-sticky-header');
@@ -91,8 +91,9 @@ const PdpLayout = () => {
           header.current.classList.remove('magv2-pdp-sticky-header');
         }
       }
-    };
+    }, 50));
   };
+
   useEffect(() => {
     showStickyHeader();
   },
