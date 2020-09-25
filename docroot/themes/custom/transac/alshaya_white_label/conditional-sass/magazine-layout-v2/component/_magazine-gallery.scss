@@ -62,12 +62,12 @@
       cursor: pointer;
       background: $magv2-gallery-bg;
 
+      img {
+        margin: 0 auto;
+      }
+
       @include breakpoint($desktop) {
         min-height: 30.375rem;
-
-        img {
-          margin: 0 auto;
-        }
       }
 
       @include breakpoint($only-tablet) {
