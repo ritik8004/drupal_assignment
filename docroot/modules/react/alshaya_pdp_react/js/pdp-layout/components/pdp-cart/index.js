@@ -49,6 +49,7 @@ const PdpCart = ({
     <div
       className={`pdp-cart-form ${(animatePdpCart ? 'fadeInUp notInMobile' : '')}`}
       style={(animatePdpCart ? { animationDelay: '0.6s' } : null)}
+      ref={wrapper}
     >
       <SimpleProductForm
         skuCode={skuCode}
