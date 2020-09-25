@@ -114,6 +114,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
     $response = [
       'customer_id' => 0,
       'uid' => 0,
+      'email' => '',
     ];
 
     if ($this->currentUser()->isAuthenticated()) {
@@ -126,6 +127,7 @@ class AlshayaSpcCustomerController extends ControllerBase {
         // Drupal CORE uses numeric 0 for anonymous but string for logged in.
         // We follow the same.
         $response['uid'] = $user->id();
+        $response['email'] = $user->get('mail')->getString();
       }
     }
 
