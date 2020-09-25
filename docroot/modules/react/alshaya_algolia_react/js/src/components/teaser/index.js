@@ -29,12 +29,12 @@ const Teaser = ({hit}) => {
   const showSwatches = drupalSettings.reactTeaserView.swatches.showSwatches;
   const collectionLabel = [];
   if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
-    const { plp_attributes } = drupalSettings;
-    for (var i = 0; i < plp_attributes.length; i++) {
-      if (hit && hit[plp_attributes[i]]) {
+    const { plp_attributes: plpAttributes } = drupalSettings;
+    for (let i = 0; i < plpAttributes.length; i++) {
+      if (hit && hit.collection_labels && hit.collection_labels[plpAttributes[i]]) {
         collectionLabel.push({
-          class: plp_attributes[i],
-          value: hit[plp_attributes[i]]
+          class: plpAttributes[i],
+          value: hit.collection_labels[plpAttributes[i]],
         });
         break;
       }
