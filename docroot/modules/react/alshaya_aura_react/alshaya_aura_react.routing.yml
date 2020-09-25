@@ -25,11 +25,3 @@ alshaya_aura_react.user_points:
     _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaAuraController::userPoints'
   requirements:
     _permission: 'access content'
-
-alshaya_aura_react.user_info:
-  path: '/get/userinfo'
-  defaults:
-    _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::getUserInfo'
-  methods: [GET]
-  requirements:
-    _middleware_request_check: 'TRUE'

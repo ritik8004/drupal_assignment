@@ -18,7 +18,7 @@ export default class CardNotLinkedMdcData extends React.Component {
       apiData.then((result) => {
         if (result.data.error === undefined && result.data !== undefined) {
           this.setState({
-            cardNumber: result.data,
+            cardNumber: result.data.apcCard,
           });
         }
       });
