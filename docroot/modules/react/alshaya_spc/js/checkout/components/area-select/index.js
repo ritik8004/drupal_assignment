@@ -6,6 +6,7 @@ import {
   gerAreaLabelById, getAreaParentId,
 } from '../../../utilities/address_util';
 import getStringMessage from '../../../utilities/strings';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class AreaSelect extends React.Component {
   isComponentMounted = true;
@@ -22,7 +23,7 @@ export default class AreaSelect extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.cityChanged !== state.currentCity) {
-      return { currentOption: [], currentCity: props.cityChanged };
+      return { currentOption: null, currentCity: props.cityChanged };
     }
 
     return null;
@@ -37,22 +38,36 @@ export default class AreaSelect extends React.Component {
     document.addEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap);
   }
 
+  componentDidUpdate() {
+    this.preSelectDefaultIfPossible();
+  }
+
   componentWillUnmount() {
     this.isComponentMounted = false;
     // Trigger event for handling area update from map.
     document.removeEventListener('updateAreaOnMapSelect', this.updateAreaFromGoogleMap);
   }
 
+  preSelectDefaultIfPossible = () => {
+    const { area_list: areaList } = this.props;
+    const { currentOption } = this.state;
+    if (currentOption === null && Object.values(areaList).length === 1) {
+      this.setState({
+        currentOption: Object.values(areaList)[0].value,
+      });
+    }
+  };
+
   areaCurrentOption = () => {
-    let currentOption = [];
+    let currentOption = null;
+
     const { default_val: defaultVal, field } = this.props;
-    if (defaultVal.length !== 0
-      && defaultVal.length !== 'undefined') {
+    if (defaultVal.length !== 0) {
       currentOption = defaultVal[field.key];
     }
 
     return currentOption;
-  }
+  };
 
   /**
    * When we search in google, update address.
@@ -158,19 +173,12 @@ export default class AreaSelect extends React.Component {
     return (
       <div className={`spc-type-select area-options-count-${options.length}`}>
         <label>{field.label}</label>
-        {
-          (areaLabel.length > 0) ? (
-            <div id="spc-area-select-selected" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
-              {areaLabel}
-            </div>
-          ) : (
-            <div id="spc-area-select-selected" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
-              {panelTitle}
-            </div>
-          )
-}
-        {showFilterList
-          && (
+
+        <div id="spc-area-select-selected" className="spc-area-select-selected" onClick={() => this.toggleFilterList()}>
+          { (areaLabel.length > 0) ? areaLabel : panelTitle }
+        </div>
+
+        <ConditionalView condition={showFilterList}>
           <FilterList
             selected={currentOption}
             options={options}
@@ -179,8 +187,10 @@ export default class AreaSelect extends React.Component {
             toggleFilterList={this.toggleFilterList}
             panelTitle={panelTitle}
           />
-          )}
+        </ConditionalView>
+
         <input type="hidden" id={fieldKey} name={fieldKey} value={hiddenFieldValue} />
+
         <div id={`${fieldKey}-error`} />
       </div>
     );
