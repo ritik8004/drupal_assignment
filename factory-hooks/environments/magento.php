@@ -416,7 +416,7 @@ $magentos = [
     ],
   ],
   'bbw_prod' => [
-    'url' => 'http://bbw.store.alshaya.com',
+    'url' => 'https://bbw.store.alshaya.com',
     'magento_secrets' => [],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 18],
