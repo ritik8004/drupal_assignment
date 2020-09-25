@@ -160,11 +160,6 @@ class LoyaltyClubController {
     try {
       // Get user email from session.
       $user = $this->drupal->getSessionCustomerInfo();
-      if (empty($user['email'])) {
-        $this->logger->error('Error while trying to fetch APC user details by email. Email is required.');
-        throw new \Exception('Email is required.');
-      }
-
       $endpoint = sprintf('/customers/apc-search/email/%s', $user['email']);
 
       // @TODO: Remove the hardcoded value when MDC API is ready.
@@ -175,8 +170,9 @@ class LoyaltyClubController {
       return new JsonResponse($responseData);
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to fetch APC user details for user with email address @email.', [
+      $this->logger->notice('Error while trying to fetch APC user details for user with email address @email. Message: @message', [
         '@email' => $user['email'],
+        '@message' => $e->getMessage(),
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
     }
