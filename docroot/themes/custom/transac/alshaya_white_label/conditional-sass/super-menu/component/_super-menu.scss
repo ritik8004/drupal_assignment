@@ -1,4 +1,4 @@
-$pbk-super-menu-height: 1.875rem;
+$super-menu-height: 1.875rem;
 
 .menu--super-menu {
   float: $left;
@@ -6,8 +6,16 @@ $pbk-super-menu-height: 1.875rem;
 
   ul {
     li {
-      height: $pbk-super-menu-height;
+      height: $super-menu-height;
+      vertical-align: middle;
       border: 0;
+
+      @include breakpoint($desktop) {
+        a {
+          display: flex;
+          align-items: center;
+        }
+      }
     }
   }
 
@@ -17,41 +25,53 @@ $pbk-super-menu-height: 1.875rem;
 }
 
 // Margin top of body changes with super menu at mobile and tablet.
-body {
+body.frontpage {
   @include breakpoint($only-mobile) {
-    margin-top: 5.5875rem;
+    margin-top: 9rem !important;
   }
 
   @include breakpoint($only-tablet) {
-    margin-top: 9.8rem;
+    margin-top: 10.5rem;
+  }
+}
+
+body.plp-page-only,
+body.nodetype--acq_product {
+  @include breakpoint($only-mobile) {
+    margin-top: 5.6875rem;
+
+    .filter-fixed-top .show-all-filters-algolia,
+    .filter-fixed-top .block-facet-blockcategory-facet-search {
+      top: 5.575rem !important;
+    }
   }
 }
 
 body.header-sticky-filter {
   @include breakpoint($tablet) {
-    margin-top: 7.8125rem + $pbk-super-menu-height !important;
+    margin-top: 7.8125rem + $super-menu-height !important;
   }
 
   @include breakpoint($desktop) {
-    margin-top: 2.5rem + $pbk-super-menu-height !important;
+    margin-top: 2.5rem + $super-menu-height !important;
   }
 
   &.slug-banner-processed {
     @include breakpoint($tablet) {
-      margin-top: 5.3125rem + $pbk-super-menu-height !important;
+      margin-top: 5.3125rem + $super-menu-height !important;
     }
   }
 }
 
 .filter-fixed-top .sticky-filter-wrapper {
   @include breakpoint($upto-desktop) {
-    top: $pbk-super-menu-height;
+    top: $super-menu-height !important;
   }
 }
 
 .filter-fixed-top .container-without-product {
   @include breakpoint($upto-desktop) {
-    top: $pbk-super-menu-height;
+    top: $super-menu-height !important;
   }
 }
 
@@ -61,12 +81,12 @@ body.header-sticky-filter {
       @include clearfix;
 
       display: block !important;
-      z-index: 12;
+      z-index: 12 !important;
       position: fixed;
       top: 0;
       width: 100%;
       max-width: none;
-      height: $pbk-super-menu-height;
+      height: $super-menu-height;
       background: $header_secondary_bg;
 
       .menu--super-menu {
@@ -79,15 +99,15 @@ body.header-sticky-filter {
           align-items: center;
 
           li {
-            height: $pbk-super-menu-height;
+            height: $super-menu-height;
             border: 0;
             display: inline-block;
             margin: 0;
 
             a {
               padding: 0;
-              line-height: $pbk-super-menu-height;
-              font-size: 12px;
+              line-height: $super-menu-height;
+              font-size: 0.75rem;
               text-transform: capitalize;
 
               &:hover,
@@ -112,7 +132,7 @@ body.header-sticky-filter {
 
   body {
     .branding__menu {
-      margin-top: $pbk-super-menu-height;
+      margin-top: $super-menu-height;
     }
   }
 }

@@ -11,6 +11,8 @@ class AuraFormLinkCard extends React.Component {
     // Return success failure message.
     const element = document.querySelector('.spc-aura-link-card-wrapper .spc-aura-link-api-response-message');
     element.innerHTML = Drupal.t('Your loyalty points will be credited to this account.');
+    const submitButton = document.querySelector('.spc-aura-link-card-wrapper .form-items');
+    submitButton.classList.add('success');
   };
 
   render() {
