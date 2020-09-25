@@ -70,11 +70,11 @@
           $(this).addClass('magazine-image-zoomed');
           if (!$(this).hasClass('height-processed')) {
             $(this).addClass('height-processed');
-            $(this).find('.pdp-image-zoom-wrapper').css({'height': $(this).find('img').height() + 'px'});
+            $(this).find('.height-processed .pdp-image-zoom-wrapper').css({'height': $(this).find('img').height() + 'px'});
           }
           $(this).find('.magazine-image-zoom-placeholder').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
         })
-        .on('mouseout', function(){
+          .on('mouseout', function(){
           $(this).removeClass('magazine-image-zoomed');
           $(this).find('.magazine-image-zoom-placeholder').css({'transform': 'scale(1)'});
         })
