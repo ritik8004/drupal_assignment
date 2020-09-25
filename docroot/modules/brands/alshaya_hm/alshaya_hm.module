@@ -385,7 +385,7 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
     if (!empty($label_attributes)) {
       foreach ($label_attributes as $attribute) {
         if ($sku->get($attribute)->getString()) {
-          $object[$attribute] = $sku->get($attribute)->getString();
+          $object['collection_labels'][$attribute] = $sku->get($attribute)->getString();
         }
       }
     }
@@ -418,6 +418,14 @@ function alshaya_hm_alshaya_acm_product_light_product_data_alter(SKU $sku, array
  * Implements hook_alshaya_mobile_app_product_exclude_linked_data_alter().
  */
 function alshaya_hm_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku) {
+  $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
+  $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
+}
+
+/**
+ * Implements hook_mobile_app_skus_product_list_data_alter().
+ */
+function alshaya_hm_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
   $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
   $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
 }
