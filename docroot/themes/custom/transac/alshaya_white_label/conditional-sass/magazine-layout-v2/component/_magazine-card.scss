@@ -4,6 +4,10 @@
   margin-bottom: 0.625rem;
   transition: max-height 0.3s ease-in-out;
 
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   .title {
     padding: 1.25rem;
     display: flex;
