@@ -2,6 +2,7 @@
 
 # This script must be executed from inside production server.
 # Command usage: deploy_tag.sh TAG MODE
+# Example for preparation mode: deploy_tag.sh main 5.6.0-build prep
 # Example for updb mode: deploy_tag.sh branch 5.6.0-build updb
 # Example for hotfix mode: deploy_tag.sh main 5.6.1-build hotfix
 # Example for hotfix mode and do CRF at the end: deploy_tag.sh main 5.6.1-build hotfix_crf
@@ -14,6 +15,7 @@ if [ -z "$branch" -o -z "$tag" -o -z "$mode" ]
 then
   echo "Deployment branch, Tag to deploy and deployment mode are required."
   echo "Command usage: deploy_tag.sh BRANCH TAG MODE"
+  echo "Example for preparation mode: deploy_tag.sh main 5.6.0-build prep"
   echo "Example for updb mode: deploy_tag.sh main 5.6.0-build updb"
   echo "Example for hotfix mode: deploy_tag.sh main 5.6.1-build hotfix"
   echo "Example for hotfix mode and do CRF at the end: deploy_tag.sh main 5.6.1-build hotfix_crf"
@@ -21,10 +23,11 @@ then
 fi
 
 # Validate mode is supported.
-if [ "$mode" != "updb" -a "$mode" != "hotfix" -a "$mode" != "hotfix_crf" ]
+if [ "$mode" != "prep" -a "$mode" != "updb" -a "$mode" != "hotfix" -a "$mode" != "hotfix_crf" ]
 then
   echo "Deployment mode $mode not supported."
   echo "Command usage: deploy_tag.sh BRANCH TAG MODE"
+  echo "Example for preparation mode: deploy_tag.sh main 5.6.0-build prep"
   echo "Example for updb mode: deploy_tag.sh main 5.6.0-build updb"
   echo "Example for hotfix mode: deploy_tag.sh main 5.6.1-build hotfix"
   echo "Example for hotfix mode and do CRF at the end: deploy_tag.sh main 5.6.1-build hotfix_crf"
@@ -115,6 +118,12 @@ git reset --hard $tag &>> ${log_file}
 if [ $? -ne 0 ]
 then
   log_message "Failed to reset to tag, aborting"
+  exit
+fi
+
+if [ "$mode" = "prep" ]
+then
+  log_message "Release preparation completed"
   exit
 fi
 
