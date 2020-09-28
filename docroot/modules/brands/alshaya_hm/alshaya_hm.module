@@ -350,11 +350,13 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
     // Get parent sku.
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $parent_sku = $skuManager->getParentSkuBySku($vars['sku']);
-    /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
-    $vars['product_attribute_labels'] = $labels;
+    $parent_sku = $skuManager->getParentSkuBySku($vars['sku']) ?? $vars['sku'];
+    if (!empty($parent_sku)) {
+      /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+      $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+      $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
+      $vars['product_attribute_labels'] = $labels;
+    }
   }
 }
 
