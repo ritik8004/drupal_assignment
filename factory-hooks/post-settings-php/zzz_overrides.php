@@ -48,6 +48,9 @@ foreach ($extensions as $extension) {
       case 'yml':
         if (file_exists($file)) {
           $overridden_settings = Yaml::decode(file_get_contents($file));
+          $settings = (!empty($overridden_settings))
+            ? array_replace_recursive($settings, $overridden_settings)
+            : $settings;
         }
         break;
       case 'php':
@@ -58,7 +61,3 @@ foreach ($extensions as $extension) {
     }
   }
 }
-
-$settings = (!empty($overridden_settings))
-  ? array_replace_recursive($settings, $overridden_settings)
-  : $settings;
