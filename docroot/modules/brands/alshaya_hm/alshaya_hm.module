@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_hm\EventSubscriber\ProductInfoRequestedEventSubscriber;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\search_api\IndexInterface;
@@ -440,7 +441,7 @@ function alshaya_hm_form_webform_submission_alshaya_contact_api_form_alter(&$for
 /**
  * Implements hook_alshaya_spc_cart_build_alter().
  */
-function alshaya_hm_alshaya_spc_cart_build_alter(array &$render) {
-  $item_code_label = \Drupal::service('alshaya_hm.product_info_requested_event')->getLabelFromKey('item_code_label');
-  $render['#attached']['drupalSettings']['item_code_label'] = $item_code_label;
+function alshaya_hm_alshaya_spc_cart_build_alter(array &$build) {
+  $item_code_label = ProductInfoRequestedEventSubscriber::getLabelFromKey('item_code_label');
+  $build['#attached']['drupalSettings']['item_code_label'] = $item_code_label;
 }
