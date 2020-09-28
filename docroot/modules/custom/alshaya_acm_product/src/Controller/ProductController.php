@@ -2,10 +2,10 @@
 
 namespace Drupal\alshaya_acm_product\Controller;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -111,15 +111,32 @@ class ProductController extends ControllerBase {
 
   /**
    * Title callback for the modal.
+   *
+   * @param string $code
+   *   The SKU code or node id.
+   *
+   * @return string
+   *   The label of the node.
    */
-  public function modalTitle(EntityInterface $node) {
+  public function modalTitle(string $code) {
+    $node = $this->getProductNode($code);
     return $node->label();
   }
 
   /**
    * Page callback for the modal.
+   *
+   * @param string $code
+   *   The SKU code or node id.
+   * @param string $js
+   *   Indicates whether request is AJAX request or not.
+   *
+   * @return array
+   *   The render array of the node if it is an AJAX request. Else redirects
+   *   users to node page.
    */
-  public function modalView(EntityInterface $node, $js) {
+  public function modalView(string $code, $js) {
+    $node = $this->getProductNode($code);
     if ($js === 'ajax') {
       $view_builder = $this->entityTypeManager()->getViewBuilder($node->getEntityTypeId());
       $build = $view_builder->view($node, 'modal');
@@ -129,7 +146,39 @@ class ProductController extends ControllerBase {
     $response = new RedirectResponse(Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString());
     $response->send();
     exit;
+  }
 
+  /**
+   * Returns the product node.
+   *
+   * @param string $code
+   *   The node id or SKU code.
+   *
+   * @return \Drupal\node\NodeInterface
+   *   The node object.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+   *   If the node object could not be loaded.
+   */
+  public function getProductNode(string $code) {
+    static $static;
+    if (isset($static)) {
+      return $static;
+    }
+    if (($sku_entity = SKU::loadFromSku($code)) && ($sku_entity instanceof SKUInterface)) {
+      $node = $this->skuManager->getDisplayNode($sku_entity);
+      if (!($node instanceof NodeInterface)) {
+        throw new NotFoundHttpException();
+      }
+    }
+    elseif (($node = $this->entityTypeManager()->getStorage('node')->load($code)) && ($node instanceof NodeInterface)) {
+    }
+    else {
+      throw new NotFoundHttpException('Could not load the provided entity.');
+    }
+
+    $static = $node;
+    return $node;
   }
 
   /**

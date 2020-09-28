@@ -204,3 +204,10 @@ function alshaya_spc_user_logout(AccountInterface $account) {
 function _alshaya_spc_global_error_message() {
   return t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.')->render();
 }
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_spc_preprocess_page(&$variables) {
+  $variables['#attached']['drupalSettings']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
+}

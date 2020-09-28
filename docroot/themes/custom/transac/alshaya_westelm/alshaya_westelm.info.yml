@@ -70,3 +70,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/algolia-search/algolia-search.ltr.css: css/conditional-sass/algolia-search/algolia-search.ltr.css
+
+  alshaya_white_label/super-menu:
+    css:
+      theme:
+        css/conditional-sass/super-menu/super-menu.ltr.css: css/conditional-sass/super-menu/super-menu.ltr.css

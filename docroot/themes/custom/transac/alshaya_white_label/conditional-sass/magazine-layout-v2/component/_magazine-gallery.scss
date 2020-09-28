@@ -16,6 +16,7 @@
 .magv2-pdp-gallery {
   @include breakpoint($tablet) {
     padding-top: 2rem;
+    padding-bottom: 3.75rem;
   }
 
   .magazine__gallery--container-desktop {
@@ -61,12 +62,12 @@
       cursor: pointer;
       background: $magv2-gallery-bg;
 
+      img {
+        margin: 0 auto;
+      }
+
       @include breakpoint($desktop) {
         min-height: 30.375rem;
-
-        img {
-          margin: 0 auto;
-        }
       }
 
       @include breakpoint($only-tablet) {

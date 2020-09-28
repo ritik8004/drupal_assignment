@@ -1,7 +1,0 @@
-alshaya_api.api_settings_form:
-  path: '/admin/commerce/config/magento-api-settings'
-  defaults:
-    _form: '\Drupal\alshaya_api\Form\AlshayaApiSettingsForm'
-    _title: 'Magento API Settings'
-  requirements:
-    _permission: 'access commerce administration pages'
