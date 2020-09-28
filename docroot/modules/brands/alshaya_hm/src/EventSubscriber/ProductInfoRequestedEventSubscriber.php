@@ -330,7 +330,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Prepare description array for given sku.
+   * Provides the label for a given key.
    *
    * @param string $key
    *   The key whose label is required.
