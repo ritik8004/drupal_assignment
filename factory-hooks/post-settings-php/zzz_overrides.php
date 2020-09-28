@@ -8,7 +8,7 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
-use Drupal\Core\Serialization\Yaml;
+use \Drupal\Component\Serialization\Yaml;
 
 require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
 $env = alshaya_get_site_environment();
