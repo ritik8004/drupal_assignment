@@ -1235,6 +1235,15 @@ class Cart {
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
     }
 
+    // If address extension attributes doesn't contain all the required fields
+    // or required field value is empty, not process/place order.
+    if (!$this->isAddressExtensionAttributesValid($cart)) {
+      $this->logger->error('Error while placing order. Shipping address not contains all address extension attributes. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
     // If first/last name not available in shipping address.
     if (empty($cart['shipping']['address']['firstname'])
       || empty($cart['shipping']['address']['lastname'])) {
@@ -1341,6 +1350,74 @@ class Cart {
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Validates the extension attributes of the address of the cart.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   FALSE if empty field value.
+   */
+  public function isAddressExtensionAttributesValid(array $cart) {
+    $is_valid = TRUE;
+    // If there are address fields available for validation
+    // in drupal settings.
+    if (!empty($address_fields_to_validate = $this->cartAddressFieldsToValidate())) {
+      $cart_address_custom = [];
+      // Prepare cart address field data.
+      foreach ($cart['shipping']['address']['custom_attributes'] as $cart_custom_attributes) {
+        $cart_address_custom[$cart_custom_attributes['attribute_code']] = $cart_custom_attributes['value'];
+      }
+
+      // Check each required field in custom attributes available in cart
+      // shipping address or not.
+      foreach ($address_fields_to_validate as $address_field) {
+        // If field not exists or empty.
+        if (empty($cart_address_custom[$address_field])) {
+          $this->logger->error('Field :@field_code not available in cart shipping address. Cart id: @cart_id', [
+            '@field_code' => $address_field,
+            '@cart_id' => $cart['cart']['id'],
+          ]);
+          $is_valid = FALSE;
+          break;
+        }
+      }
+    }
+
+    return $is_valid;
+  }
+
+  /**
+   * Get address fields to validate from drupal settings.
+   *
+   * @see `/factory-hooks/post-settings-php/alshaya_address_fields.php`
+   *
+   * @return array
+   *   Fields to validate.
+   */
+  public function cartAddressFieldsToValidate() {
+    $address_fields_to_validate = [];
+
+    // Get the address fields based on site/country code
+    // from the drupal settings.
+    $site_country_code = $this->settings->getSettings('alshaya_site_country_code');
+    $address_fields = $this->settings->getSettings('alshaya_address_fields');
+
+    // Use default value first if available.
+    if (isset($address_fields['default'][$site_country_code['country_code']])) {
+      $address_fields_to_validate = $address_fields['default'][$site_country_code['country_code']];
+    }
+
+    // If brand specific value available/override.
+    if (isset($address_fields[$site_country_code['site_code']])
+      || isset($address_fields[$site_country_code['country_code']])) {
+      $address_fields_to_validate = $address_fields[$site_country_code['site_code']][$site_country_code['country_code']];
+    }
+
+    return $address_fields_to_validate;
   }
 
   /**
