@@ -316,7 +316,6 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $checkout_feature_status = \Drupal::config('alshaya_acm.cart_config')->get('checkout_feature');
   $variables['#attached']['drupalSettings']['checkoutFeatureStatus'] = $checkout_feature_status;
   $variables['#attached']['drupalSettings']['cartMaxQty'] = $cart_max_qty;
-  $variables['#attached']['drupalSettings']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
   $sub_brand_logo = _alshaya_master_get_subbrand_logo_image_link();
   // If both sub brand logo image and link available.
   if (!empty($sub_brand_logo)) {
