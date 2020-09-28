@@ -1360,7 +1360,8 @@ class Cart {
    */
   private function isAddressExtensionAttributesValid(array $cart) {
     $is_valid = TRUE;
-    // If there are address fields available for validation.
+    // If there are address fields available for validation
+    // in drupal settings.
     if (!empty($address_fields_to_validate = $this->cartAddressFieldsToValidate())) {
       $cart_address_custom = [];
       // Prepare cart address field data.
@@ -1387,7 +1388,9 @@ class Cart {
   }
 
   /**
-   * Get address fields to validate from settings.
+   * Get address fields to validate from drupal settings.
+   *
+   * @see `/factory-hooks/post-settings-php/alshaya_address_fields.php`
    *
    * @return array
    *   Fields to validate.
@@ -1395,7 +1398,8 @@ class Cart {
   private function cartAddressFieldsToValidate() {
     $address_fields_to_validate = [];
 
-    // Get the address fields based on site/country code.
+    // Get the address fields based on site/country code
+    // from the drupal settings.
     $site_country_code = $this->settings->getSettings('alshaya_site_country_code');
     $address_fields = $this->settings->getSettings('alshaya_address_fields');
 
@@ -1404,7 +1408,7 @@ class Cart {
       $address_fields_to_validate = $address_fields['default'][$site_country_code['country_code']];
     }
 
-    // If brand specific value available.
+    // If brand specific value available/override.
     if (isset($address_fields[$site_country_code['site_code']])
       || isset($address_fields[$site_country_code['country_code']])) {
       $address_fields_to_validate = $address_fields[$site_country_code['site_code']][$site_country_code['country_code']];
