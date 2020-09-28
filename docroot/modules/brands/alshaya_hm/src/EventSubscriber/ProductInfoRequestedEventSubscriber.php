@@ -320,7 +320,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     if (!empty($sku_entity->getSku())) {
       $item_code = [
         '#theme' => 'product_item_code_markup',
-        '#title' => $this->getLabelFromKey()['item_code_label'],
+        '#title' => self::getLabelFromKey('item_code_label'),
         '#item_code' => $sku_entity->getSku(),
       ];
       $description_value .= $this->renderer->renderPlain($item_code);
@@ -335,10 +335,12 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @return array
    *   Return label based on the key.
    */
-  public function getLabelFromKey() {
-    return [
-      'item_code_label' => $this->t('ART NO'),
+  public static function getLabelFromKey($key) {
+    $mapping = [
+      'item_code_label' => t('ART NO'),
     ];
+
+    return $mapping[$key];
   }
 
   /**
