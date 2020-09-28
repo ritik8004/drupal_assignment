@@ -23,7 +23,7 @@ export default class LinkedVerified extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.data.error === undefined && result.data !== undefined) {
+        if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
             points: result.data.points,
             expiringPoints: result.data.expiredPoints,

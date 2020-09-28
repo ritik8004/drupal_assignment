@@ -2,15 +2,27 @@
  * Helper function to get AURA Loyalty Status.
  */
 function getAuraStatus() {
-  const status = drupalSettings.aura.user_details.loyaltyStatus || '';
-  return status;
+  let loyaltyStatus = '';
+  if (typeof drupalSettings.aura !== 'undefined'
+    && typeof drupalSettings.aura.user_details !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'loyaltyStatus')) {
+    loyaltyStatus = drupalSettings.aura.user_details.loyaltyStatus || '';
+  }
+
+  return loyaltyStatus;
 }
 
 /**
  * Helper function to get AURA tier.
  */
 function getAuraTier() {
-  const tier = drupalSettings.aura.user_details.tier || '';
+  let tier = '';
+  if (typeof drupalSettings.aura !== 'undefined'
+    && typeof drupalSettings.aura.user_details !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'tier')) {
+    tier = drupalSettings.aura.user_details.tier || '';
+  }
+
   return tier;
 }
 

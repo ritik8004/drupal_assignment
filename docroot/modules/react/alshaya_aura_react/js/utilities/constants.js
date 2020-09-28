@@ -1,0 +1,22 @@
+// AURA Loyalty Status Constants.
+const APC_NOT_LINKED_NO_DATA = 0;
+const APC_NOT_LINKED_MDC_DATA = 1;
+const APC_LINKED_VERIFIED = 2;
+const APC_LINKED_NOT_VERIFIED = 3;
+const APC_NOT_LINKED_NOT_U = 4;
+
+// AURA Tier Constants.
+const TIER_1 = 1;
+const TIER_2 = 2;
+const TIER_3 = 3;
+
+export {
+  APC_NOT_LINKED_NO_DATA,
+  APC_NOT_LINKED_MDC_DATA,
+  APC_LINKED_VERIFIED,
+  APC_LINKED_NOT_VERIFIED,
+  APC_NOT_LINKED_NOT_U,
+  TIER_1,
+  TIER_2,
+  TIER_3,
+};
