@@ -25,7 +25,7 @@ function hook_alshaya_spc_order_sku_details_alter(array &$data, SKUInterface $sk
 }
 
 /**
- * Allow other modules to change the render array for cart page.
+ * Allow other modules to change the build array for cart page.
  *
  * @param array $build
  *   Reference to the build array of spc cart.
