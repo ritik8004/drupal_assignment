@@ -44,16 +44,18 @@
 
     &.bottom {
       &-left {
+        #{$left}: 1.25rem;
+
         @include breakpoint($desktop) {
           bottom: 6.5rem;
-          #{$left}: 1.25rem;
         }
       }
 
       &-right {
+        #{$right}: 1.25rem;
+
         @include breakpoint($desktop) {
           bottom: 6.5rem;
-          #{$right}: 1.25rem;
         }
       }
     }

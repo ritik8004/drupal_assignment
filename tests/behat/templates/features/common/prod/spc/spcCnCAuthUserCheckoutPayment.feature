@@ -1,4 +1,4 @@
-@javascript @checkoutPayment @auth @clickCollect @vssapprod @vssaprod @vssapprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmsaprod @hmsapprod @flsaprod @flsapprod
+@javascript @checkoutPayment @auth @clickCollect @bbwaeprod @vsaeprod @vsaepprod @bbwaepprod @flaeprod @flaepprod @hmaeprod @hmaepprod @vssapprod @vssaprod @vssapprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @hmsaprod @hmsapprod @flsaprod @flsapprod
 Feature: SPC Checkout using Click & Collect store for Authenticated user using Checkout (2D) Cards
 
   Background:

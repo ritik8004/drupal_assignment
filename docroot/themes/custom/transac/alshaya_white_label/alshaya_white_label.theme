@@ -418,6 +418,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
     }
   }
 
+  if ($variables['plugin_id'] == 'system_menu_block:super-menu') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/super-menu';
+  }
+
   if ($variables['plugin_id'] == 'alshaya_dp_navigation_link') {
     $variables['#attached']['library'][] = 'alshaya_white_label/app-navigation-links';
   }

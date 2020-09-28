@@ -511,6 +511,7 @@ class AlshayaSpcController extends ControllerBase {
     $payment_methods = [];
     $exclude_payment_methods = array_filter($checkout_settings->get('exclude_payment_methods'));
     foreach ($this->paymentMethodManager->getDefinitions() ?? [] as $payment_method) {
+      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id'], $payment_method['label']->__toString());
       // Avoid displaying the excluded methods.
       if (isset($exclude_payment_methods[$payment_method['id']])) {
         continue;
@@ -523,8 +524,6 @@ class AlshayaSpcController extends ControllerBase {
       }
 
       $plugin->processBuild($build);
-
-      $payment_method_term = $this->checkoutOptionManager->loadPaymentMethod($payment_method['id']);
 
       $payment_methods[$payment_method['id']] = [
         'name' => $payment_method_term->label(),

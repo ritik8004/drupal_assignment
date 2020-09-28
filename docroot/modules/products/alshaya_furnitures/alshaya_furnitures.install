@@ -8,6 +8,24 @@
 /**
  * Implements hook_update_N().
  *
+ * [5.8.0] Add super menu for family brands.
+ * e.g. PB, WE and PBK.
+ */
+function alshaya_furnitures_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'block.block.supermenu',
+      'system.menu.super-menu',
+    ],
+    'alshaya_furnitures'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.7.0] To fix the footer block title issue for PB/WE/PBK sites.
  */
 function alshaya_furnitures_update_8002() {

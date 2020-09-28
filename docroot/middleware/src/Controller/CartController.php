@@ -789,9 +789,12 @@ class CartController {
     $result = $this->cart->placeOrder($request_content['data']);
 
     if (!isset($result['error'])) {
+      // If redirectUrl is set, it means we need to redirect user to that url
+      // in order to complete the payment.
       $response = [
         'success' => TRUE,
-        'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
+        'redirectUrl' => $result['redirect_url'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
+        'isAbsoluteUrl' => $result['redirect_url'] ? TRUE : FALSE,
       ];
 
       return new JsonResponse($response);
