@@ -23,7 +23,6 @@ use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Consolidation\AnnotatedCommand\CommandData;
-use Drupal\Component\Serialization\Yaml;
 
 /**
  * Class AlshayaAcmCommands.
@@ -222,32 +221,13 @@ class AlshayaAcmCommands extends DrushCommands {
 
       if (isset($magentos[$mdc])) {
         // Update the magento host.
-        $settings['magento_host'] = $magentos[$mdc]['url'];
+        $config = $this->configFactory->getEditable('alshaya_api.settings');
+        $config->set('magento_host', $magentos[$mdc]['url']);
         foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
-          $settings[$key] = $value;
+          $config->set($key, $value);
         }
 
-        $env = alshaya_get_site_environment();
-
-        if ($env === 'local') {
-          // @codingStandardsIgnoreLine
-          global $host_site_code;
-          $home = '/home/vagrant';
-          $site_country_code = alshaya_get_site_country_code($host_site_code);
-        }
-        else {
-          global $_acsf_site_name;
-          $home = $_SERVER['HOME'];
-          $site_country_code = alshaya_get_site_country_code($_acsf_site_name);
-        }
-
-        $acsf_site_code = $site_country_code['site_code'];
-        $country_code = $site_country_code['country_code'];
-        $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
-
-        $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
-        $settings = Yaml::encode(['alshaya_api.settings' => $settings]);
-        file_put_contents($settings_file, $settings);
+        $config->save();
 
         $this->output->writeln(dt('Configuring alshaya_api.settings.magento_host to @value.', [
           '@value' => $magentos[$mdc]['url'],
