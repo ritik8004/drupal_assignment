@@ -25,5 +25,15 @@ function hook_alshaya_spc_order_sku_details_alter(array &$data, SKUInterface $sk
 }
 
 /**
+ * Allow other modules to change the build array for cart page.
+ *
+ * @param array $build
+ *   Reference to the build array of spc cart.
+ */
+function hook_alshaya_spc_cart_build_alter(array &$build) {
+  $build['#attached']['drupalSettings']['item_code_label'] = 'Item Code';
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

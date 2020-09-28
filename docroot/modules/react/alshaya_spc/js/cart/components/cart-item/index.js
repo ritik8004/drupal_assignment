@@ -214,6 +214,10 @@ export default class CartItem extends React.Component {
       });
     }
 
+    const itemCodeLabel = drupalSettings.item_code_label
+      ? <div>{`${drupalSettings.item_code_label}: ${sku}`}</div>
+      : null;
+
     const qtyLimitClass = (drupalSettings.quantity_limit_enabled
       && currentQtyLimit > maxSaleQty
       && maxSaleQty > 0)
@@ -242,6 +246,7 @@ export default class CartItem extends React.Component {
               </div>
             </div>
             <div className="spc-product-attributes-wrapper">
+              { itemCodeLabel }
               {options.map((key) => <CheckoutConfigurableOption key={`${sku}-${key.value}`} label={key} />)}
             </div>
           </div>

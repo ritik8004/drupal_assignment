@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_hm\EventSubscriber\ProductInfoRequestedEventSubscriber;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\search_api\IndexInterface;
@@ -444,4 +445,12 @@ function alshaya_hm_form_webform_submission_alshaya_contact_api_form_alter(&$for
   $form['elements']['feedback']['#default_value'] = 'feeback_inquiry';
   $form['elements']['type']['#default_value'] = 'inquiry';
   $form['elements']['reason4']['#default_value'] = 'others';
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_hm_alshaya_spc_cart_build_alter(array &$build) {
+  $item_code_label = ProductInfoRequestedEventSubscriber::getLabelFromKey('item_code_label');
+  $build['#attached']['drupalSettings']['item_code_label'] = $item_code_label;
 }
