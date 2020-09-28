@@ -332,8 +332,11 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   /**
    * Prepare description array for given sku.
    *
-   * @return array
-   *   Return label based on the key.
+   * @param string $key
+   *   The key whose label is required.
+   *
+   * @return string|null
+   *   Return label based on the key or null if key not found.
    */
   public static function getLabelFromKey($key) {
     $mapping = [
