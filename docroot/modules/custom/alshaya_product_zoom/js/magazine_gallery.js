@@ -74,7 +74,7 @@
           }
           $(this).find('.magazine-image-zoom-placeholder').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
         })
-          .on('mouseout', function(){
+        .on('mouseout', function(){
           $(this).removeClass('magazine-image-zoomed');
           $(this).find('.magazine-image-zoom-placeholder').css({'transform': 'scale(1)'});
         })
