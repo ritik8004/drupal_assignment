@@ -80,9 +80,16 @@ class SystemSettings {
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/mada_bins.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/middleware_auth.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_checkout_settings.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_address_fields.php';
 
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';
+
+    // Store site code and country code in settings.
+    $settings['alshaya_site_country_code'] = [
+      'site_code' => $site_country_code['site_code'],
+      'country_code' => $site_country_code['country_code'],
+    ];
 
     $this->thirdPartySettings = $settings;
   }

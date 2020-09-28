@@ -636,6 +636,14 @@ class CartController {
             '@cart' => json_encode($cart),
           ]);
         }
+        // If address extension attributes doesn't contain all the required
+        // fields or required field value is empty, not process/place order.
+        elseif (!$this->cart->isAddressExtensionAttributesValid($cart)) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
         // If first/last name not available in shipping address.
         elseif (empty($cart['shipping']['address']['firstname'])
           || empty($cart['shipping']['address']['lastname'])) {
