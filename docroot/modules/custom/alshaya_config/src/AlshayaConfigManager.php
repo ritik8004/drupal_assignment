@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_config;
 
+use Drupal\Component\Serialization\Yaml as SerializationYaml;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -438,6 +439,69 @@ class AlshayaConfigManager {
       if (!empty($field_storage)) {
         $field_storage->delete();
       }
+    }
+  }
+
+  /**
+   * Helper function to replace YAML overrides for settings.
+   *
+   * This function only changes the overrides in
+   * ~/settings/settings-{brand}{country_code}.yml file.
+   *
+   * @param string $mdc
+   *   The settings value to update in the settings file.
+   */
+  public function replaceYamlSettingsOverrides(string $mdc = NULL) {
+    $env = alshaya_get_site_environment();
+
+    if ($env === 'local') {
+      // @codingStandardsIgnoreLine
+      global $host_site_code;
+      $home = '/home/vagrant';
+      $site_country_code = alshaya_get_site_country_code($host_site_code);
+    }
+    else {
+      global $_acsf_site_name;
+      $home = $_SERVER['HOME'];
+      $site_country_code = alshaya_get_site_country_code($_acsf_site_name);
+    }
+
+    if (empty($mdc)) {
+      // @codingStandardsIgnoreLine
+      global $acsf_site_code;
+      if (!$mdc) {
+        if ($env === 'local') {
+          $mdc = $acsf_site_code . '_qa';
+        }
+        else {
+          $mdc = $acsf_site_code . '_' . $env;
+        }
+      }
+    }
+
+    // @codingStandardsIgnoreLine
+    global $magentos;
+    // Update the magento host.
+    $settings['magento_host'] = $magentos[$mdc]['url'];
+    foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
+      $settings[$key] = $value;
+    }
+    $acsf_site_code = $site_country_code['site_code'];
+    $country_code = $site_country_code['country_code'];
+    $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
+
+    $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
+
+    $yml_settings = SerializationYaml::encode(['alshaya_api.settings' => $settings]);
+    if (file_put_contents($settings_file, $yml_settings)) {
+      $this->logger->info('Configuring alshaya_api.settings.magento_host to @value.', [
+        '@value' => $settings['magento_host'],
+      ]);
+    }
+    else {
+      $this->logger->notice('Failed configuring alshaya_api.settings.magento_host to @value.', [
+        '@value' => $settings['magento_host'],
+      ]);
     }
   }
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm;
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\alshaya_custom\AlshayaCountryManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Unicode;
@@ -68,6 +69,13 @@ class AlshayaAcmConfigCheck {
   protected $alshayaCountryManager;
 
   /**
+   * Config manager service.
+   *
+   * @var \Drupal\alshaya_config\AlshayaConfigManager
+   */
+  protected $configManager;
+
+  /**
    * AlshayaAcmConfigCheck constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -84,6 +92,8 @@ class AlshayaAcmConfigCheck {
    *   The state factory.
    * @param \Drupal\alshaya_custom\AlshayaCountryManager $alshaya_country_manager
    *   Alshaya country manager.
+   * @param \Drupal\alshaya_config\AlshayaConfigManager $config_manager
+   *   The config manager service.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleInstallerInterface $module_installer,
@@ -91,7 +101,8 @@ class AlshayaAcmConfigCheck {
                               LanguageManagerInterface $language_manager,
                               TimeInterface $date_time,
                               StateInterface $state,
-                              AlshayaCountryManager $alshaya_country_manager) {
+                              AlshayaCountryManager $alshaya_country_manager,
+                              AlshayaConfigManager $config_manager) {
     $this->configFactory = $config_factory;
     $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
@@ -99,6 +110,7 @@ class AlshayaAcmConfigCheck {
     $this->dateTime = $date_time;
     $this->state = $state;
     $this->alshayaCountryManager = $alshaya_country_manager;
+    $this->configManager = $config_manager;
   }
 
   /**
@@ -154,7 +166,6 @@ class AlshayaAcmConfigCheck {
 
     $reset = [
       'acq_commerce.conductor',
-      'alshaya_api.settings',
       'recaptcha.settings',
       'geolocation.settings',
       'exponea.settings',
@@ -199,6 +210,9 @@ class AlshayaAcmConfigCheck {
     $config = $this->configFactory->getEditable('webform.webform.alshaya_contact');
     $config->set('handlers.email.settings.to_mail', 'no-reply@acquia.com');
     $config->save();
+
+    // Reset the magento settings.
+    $this->configManager->replaceYamlSettingsOverrides();
 
     // Save config again to ensure overrides are taken into consideration.
     alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');
