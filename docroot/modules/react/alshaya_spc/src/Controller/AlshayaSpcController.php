@@ -187,9 +187,10 @@ class AlshayaSpcController extends ControllerBase {
       ],
     ];
 
-    $render = $this->addCheckoutConfigSettings($build);
-    $this->moduleHandler->alter('alshaya_get_item_code_label', $render);
-    return $render;
+    $build = $this->addCheckoutConfigSettings($build);
+    $this->moduleHandler->alter('alshaya_spc_cart_build', $build);
+
+    return $build;
   }
 
   /**
