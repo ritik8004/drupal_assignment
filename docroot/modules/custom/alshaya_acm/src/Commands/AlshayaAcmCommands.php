@@ -116,7 +116,6 @@ class AlshayaAcmCommands extends DrushCommands {
    */
   private $configManager;
 
-
   /**
    * AlshayaAcmCommands constructor.
    *
@@ -252,7 +251,6 @@ class AlshayaAcmCommands extends DrushCommands {
 
         $configs = [
           'acq_commerce.store' => 'store_id',
-          'alshaya_api.settings' => 'magento_lang_prefix',
         ];
 
         $this->moduleHandler->alter('alshaya_acm_switch_magento_configs', $configs);

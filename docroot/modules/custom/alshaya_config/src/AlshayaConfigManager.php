@@ -486,10 +486,21 @@ class AlshayaConfigManager {
     foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
       $settings[$key] = $value;
     }
+
     $acsf_site_code = $site_country_code['site_code'];
     $country_code = $site_country_code['country_code'];
-    $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
 
+    // Reset magento_lang_prefix - EN and AR.
+    foreach ($this->languageManager->getLanguages() as $langcode => $language) {
+      $settings['magento_lang_prefix'][$langcode] = $magentos[$mdc][$country_code]['magento_lang_prefix'][$langcode]
+        ?? $magentos['default'][$country_code]['magento_lang_prefix'][$langcode];
+      $this->logger->info('Configuring alshaya_api.settings.magento_lang_prefix @langcode to @value.', [
+        '@langcode' => $langcode,
+        '@value' => $settings['magento_lang_prefix'][$langcode],
+      ]);
+    }
+
+    $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
     $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
 
     $yml_settings = SerializationYaml::encode(['alshaya_api.settings' => $settings]);
