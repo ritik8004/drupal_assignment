@@ -1,11 +1,11 @@
 import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
+import { getAuraTier } from '../../../../utilities/helper';
 
 export default class LinkedVerified extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tier: drupalSettings.aura.user_details.tier || '',
       points: '',
       pointsOnHold: '',
       upgradeMsg: '',
@@ -36,7 +36,7 @@ export default class LinkedVerified extends React.Component {
 
   render() {
     const {
-      tier, points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
+      points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
     } = this.state;
 
     return (
@@ -47,7 +47,7 @@ export default class LinkedVerified extends React.Component {
           </div>
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">
-              { tier }
+              { getAuraTier() }
             </div>
             <div className="aura-points">
               { `${points} ${Drupal.t('POINTS')}`}
