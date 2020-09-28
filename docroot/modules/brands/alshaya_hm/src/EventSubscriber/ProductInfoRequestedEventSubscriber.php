@@ -340,7 +340,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       'item_code_label' => t('ART NO'),
     ];
 
-    return $mapping[$key];
+    return $mapping[$key] ?? NULL;
   }
 
   /**
