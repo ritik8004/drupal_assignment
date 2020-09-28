@@ -1238,6 +1238,9 @@ class Cart {
     // If address extension attributes doesn't contain all the required fields
     // or required field value is empty, not process/place order.
     if (!$this->isAddressExtensionAttributesValid($cart)) {
+      $this->logger->error('Error while placing order. Shipping address not contains all address extension attributes. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
     }
 
@@ -1358,7 +1361,7 @@ class Cart {
    * @return bool
    *   FALSE if empty field value.
    */
-  private function isAddressExtensionAttributesValid(array $cart) {
+  public function isAddressExtensionAttributesValid(array $cart) {
     $is_valid = TRUE;
     // If there are address fields available for validation
     // in drupal settings.
@@ -1374,9 +1377,9 @@ class Cart {
       foreach ($address_fields_to_validate as $address_field) {
         // If field not exists or empty.
         if (empty($cart_address_custom[$address_field])) {
-          $this->logger->error('Error while placing order. Field :@field_code not available in cart shipping address. Cart: @cart.', [
+          $this->logger->error('Field :@field_code not available in cart shipping address. Cart id: @cart_id', [
             '@field_code' => $address_field,
-            '@cart' => json_encode($cart),
+            '@cart_id' => $cart['cart']['id'],
           ]);
           $is_valid = FALSE;
           break;
@@ -1395,7 +1398,7 @@ class Cart {
    * @return array
    *   Fields to validate.
    */
-  private function cartAddressFieldsToValidate() {
+  public function cartAddressFieldsToValidate() {
     $address_fields_to_validate = [];
 
     // Get the address fields based on site/country code
