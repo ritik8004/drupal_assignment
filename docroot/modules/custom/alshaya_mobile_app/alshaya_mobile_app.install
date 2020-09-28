@@ -8,7 +8,39 @@
 use Drupal\Core\Site\Settings;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\consumers\Entity\Consumer;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Delete existing value for "Dy Banner (mobile app)" field and use the default
+ * value from config.
+ */
+function alshaya_mobile_app_update_8074() {
+  // Import config to set "dy_plp_banner_name" key.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['alshaya_mobile_app.settings'],
+    'alshaya_mobile_app',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  // Delete all existing value for "Dy Banner (mobile app)".
+  /** @var $connection \Drupal\Core\Database\Connection */
+  $connection = \Drupal::database();
+
+  $field_storage = FieldStorageConfig::loadByName('taxonomy_term', 'field_dy_banner');
+  if ($field_storage) {
+    $connection->delete('taxonomy_term__field_dy_banner')
+      ->condition('field_dy_banner_value', '', '<>')
+      ->execute();
+
+    $connection->delete('taxonomy_term_revision__field_dy_banner')
+      ->condition('field_dy_banner_value', '', '<>')
+      ->execute();
+  }
+}
 
 /**
  * Implements hook_update_N().
