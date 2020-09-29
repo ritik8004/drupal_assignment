@@ -456,9 +456,9 @@ class AlshayaConfigManager {
    */
   public function replaceYamlSettingsOverrides(string $mdc = NULL, $reset = FALSE) {
     // Include overrides.
-    $acsf_site_code = Settings::get('acsf_site_code');
-    $country_code = Settings::get('country_code');
-    $env = Settings::get('env');
+    $acsf_site_code = mb_strtolower(Settings::get('acsf_site_code'));
+    $country_code = mb_strtolower(Settings::get('country_code'));
+    $env = mb_strtolower(Settings::get('env'));
     $settings_path = Settings::get('settings_override_yaml_file_path');
 
     if (empty($mdc)) {
