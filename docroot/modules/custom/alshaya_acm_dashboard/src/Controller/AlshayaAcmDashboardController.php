@@ -73,7 +73,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
       $container->get('alshaya_acm.mdc_queue_manager'),
       $container->get('date.formatter'),
       $container->get('acq_commerce.agent_api'),
-      $container->get('acq_commerce.i18n_helper'),
+      $container->get('acq_commerce.i18n_helper')
     );
   }
 
