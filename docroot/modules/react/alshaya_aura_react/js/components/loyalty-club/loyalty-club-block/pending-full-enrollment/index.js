@@ -1,32 +1,32 @@
 import React from 'react';
+import AppStoreSVG
+  from '../../../../../../alshaya_spc/js/svg-component/app-store-svg';
 
-const PendingFullEnrollment = () => (
-  <div className="pending-full-enrollment-wrapper">
-    <div className="aura-logo">
-      AURA logo placeholder
-    </div>
-    <div className="pending-full-enrollment-description">
-      <div className="title">
-        { Drupal.t('Over 70 of the worlds best loved brands') }
-      </div>
-      <div className="description">
-        <p>
-          { Drupal.t('Congrats! You are now part of exclusive Aura rewards club. You will now earn points as you purchase AEO retail & online shops.') }
-        </p>
-        <p>
-          { Drupal.t('To redeem your points online, we need you to provide us more details. Please download Aura app to complete your full enrollment.') }
-        </p>
-        <div className="app-store-links">
-          <a href={drupalSettings.aura.config.appStoreLink ? drupalSettings.aura.config.appStoreLink : ''}>
-            <span> APP Store logo placeholder </span>
-          </a>
-          <a href={drupalSettings.aura.config.googlePlayLink ? drupalSettings.aura.config.googlePlayLink : ''}>
-            <span> Google Store logo placeholder </span>
-          </a>
+const AuraMyAccountPendingFullEnrollment = () => {
+  const {
+    appStoreLink: appleAppStoreLink,
+    googlePlayLink: googlePlayStoreLink,
+  } = drupalSettings.aura.config;
+
+  return (
+    <div className="aura-pending-full-enrollment-wrapper">
+      <div className="pending-full-enrollment-description">
+        <div className="title">
+          {Drupal.t('Congrats! You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store')}
+        </div>
+        <div className="description">
+          {Drupal.t('To spend your points online, please provide us with a few more details. Download Aura app and complete your profile.')}
+        </div>
+        <div className="app-links">
+          <a href={appleAppStoreLink}><AppStoreSVG store="appstore" /></a>
+          <a href={googlePlayStoreLink}><AppStoreSVG store="playstore" /></a>
         </div>
       </div>
+      <div className="aura-model">
+        <img loading="lazy" src="/modules/react/alshaya_aura_react/design-assets/model-image@3x.png" />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-export default PendingFullEnrollment;
+export default AuraMyAccountPendingFullEnrollment;
