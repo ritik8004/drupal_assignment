@@ -20,7 +20,7 @@ body.overlay-related-select {
   &-crossell {
     &-popup {
       &-content-wrapper {
-        padding: 1.25rem 1.875rem;
+        padding: 1.25rem;
         background-color: $magv2-desc-popup-content-bg;
 
         &::before {
@@ -31,11 +31,20 @@ body.overlay-related-select {
         }
 
         .magv2-pdp-gallery {
+          padding-top: 0;
+          padding-bottom: 0;
+
           .magazine__gallery--container-mobile {
             .slick-dots {
               left: auto;
               transform: none;
             }
+          }
+        }
+
+        .magv2-detail-wrapper {
+          .magv2-pdp-title {
+            padding-top: 0;
           }
         }
 
