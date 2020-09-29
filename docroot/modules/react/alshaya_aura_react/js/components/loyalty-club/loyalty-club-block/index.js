@@ -12,7 +12,7 @@ const LoyaltyClubBlock = () => {
   if (loyaltyStatus !== '') {
     if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA) {
       return <CardNotLinkedNoData />;
-    } if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_MDC_DATA) {
+    } if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
       return <CardNotLinkedData />;
     } if (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
       // @TODO: Add condition to not render this on user account page.
