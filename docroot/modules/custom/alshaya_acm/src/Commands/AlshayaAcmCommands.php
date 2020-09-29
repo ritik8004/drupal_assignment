@@ -232,7 +232,12 @@ class AlshayaAcmCommands extends DrushCommands {
       global $magentos;
 
       if (isset($magentos[$mdc])) {
-        $this->configManager->replaceYamlSettingsOverrides($mdc);
+        if ($this->configManager->replaceYamlSettingsOverrides($mdc)) {
+          $this->output->writeln(dt('Magento settings successfully added. Check Drupal logs for details.'));
+        }
+        else {
+          $this->output->writeln(dt('Magento settings could not be added successfully.  Check Drupal logs for details.'));
+        }
 
         // Determine the country code to use.
         $country_code = !empty($options['country_code'])

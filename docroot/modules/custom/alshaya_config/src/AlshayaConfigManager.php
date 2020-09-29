@@ -453,6 +453,9 @@ class AlshayaConfigManager {
    *   The settings value to update in the settings file.
    * @param bool $reset
    *   Whether to reset the config or not.
+   *
+   * @return int
+   *   Returns 1 if values are successfully set else 0.
    */
   public function replaceYamlSettingsOverrides(string $mdc = NULL, $reset = FALSE) {
     // Include overrides.
@@ -482,11 +485,12 @@ class AlshayaConfigManager {
       $yml_settings = SerializationYaml::encode(['alshaya_api.settings' => []]);
       if (file_exists($settings_file) && file_put_contents($settings_file, $yml_settings)) {
         $this->logger->info('Resetting alshaya_api.settings.magento_host');
+        return 1;
       }
       else {
         $this->logger->notice('Failed resetting alshaya_api.settings.magento_host.');
+        return 0;
       }
-      return;
     }
 
     foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
@@ -508,11 +512,13 @@ class AlshayaConfigManager {
       $this->logger->info('Configuring alshaya_api.settings.magento_host to @value.', [
         '@value' => $settings['magento_host'],
       ]);
+      return 1;
     }
     else {
       $this->logger->notice('Failed configuring alshaya_api.settings.magento_host to @value.', [
         '@value' => $settings['magento_host'],
       ]);
+      return 0;
     }
   }
 
