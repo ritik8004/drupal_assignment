@@ -41,7 +41,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc';
   }
   elseif ($current_route === 'alshaya_spc.checkout.confirmation') {
-    $page['#attached']['library'][] = 'alshaya_aura_react/aura-loyalty-spc-confirmation';
+    $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc-confirmation';
   }
   elseif ($current_route === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
