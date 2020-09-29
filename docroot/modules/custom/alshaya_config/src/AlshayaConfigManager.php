@@ -450,8 +450,10 @@ class AlshayaConfigManager {
    *
    * @param string $mdc
    *   The settings value to update in the settings file.
+   * @param bool $reset
+   *   Whether to reset the config or not.
    */
-  public function replaceYamlSettingsOverrides(string $mdc = NULL) {
+  public function replaceYamlSettingsOverrides(string $mdc = NULL, $reset = FALSE) {
     $env = alshaya_get_site_environment();
 
     if ($env === 'local') {
@@ -481,14 +483,27 @@ class AlshayaConfigManager {
 
     // @codingStandardsIgnoreLine
     global $magentos;
-    // Update the magento host.
     $settings['magento_host'] = $magentos[$mdc]['url'];
-    foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
-      $settings[$key] = $value;
-    }
 
     $acsf_site_code = $site_country_code['site_code'];
     $country_code = $site_country_code['country_code'];
+    $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
+    $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
+
+    if ($reset) {
+      $yml_settings = SerializationYaml::encode(['alshaya_api.settings' => []]);
+      if (file_exists($settings_file) && file_put_contents($settings_file, $yml_settings)) {
+        $this->logger->info('Resetting alshaya_api.settings.magento_host');
+      }
+      else {
+        $this->logger->notice('Failed resetting alshaya_api.settings.magento_host.');
+      }
+      return;
+    }
+
+    foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
+      $settings[$key] = $value;
+    }
 
     // Reset magento_lang_prefix - EN and AR.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
@@ -499,9 +514,6 @@ class AlshayaConfigManager {
         '@value' => $settings['magento_lang_prefix'][$langcode],
       ]);
     }
-
-    $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
-    $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
 
     $yml_settings = SerializationYaml::encode(['alshaya_api.settings' => $settings]);
     if (file_put_contents($settings_file, $yml_settings)) {

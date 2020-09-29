@@ -212,7 +212,7 @@ class AlshayaAcmConfigCheck {
     $config->save();
 
     // Reset the magento settings.
-    $this->configManager->replaceYamlSettingsOverrides();
+    $this->configManager->replaceYamlSettingsOverrides(NULL, TRUE);
 
     // Save config again to ensure overrides are taken into consideration.
     alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');
