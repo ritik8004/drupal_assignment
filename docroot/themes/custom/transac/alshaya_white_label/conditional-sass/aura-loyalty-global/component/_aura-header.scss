@@ -35,6 +35,10 @@ body.aura-header-open .header--wrapper {
     background: $aura-block-bg-mobile;
     padding: 1.25rem;
 
+    @include breakpoint($upto-desktop) {
+      display: block;
+    }
+
     @include breakpoint($desktop) {
       display: none;
       position: absolute;

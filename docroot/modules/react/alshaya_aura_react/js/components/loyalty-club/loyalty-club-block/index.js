@@ -1,6 +1,6 @@
 import React from 'react';
-import PendingFullEnrollment from './pending-full-enrollment';
 import CardNotLinkedData from './card-not-linked-data';
+import AuraMyAccountPendingFullEnrollment from './pending-full-enrollment';
 import CardNotLinkedNoData from './card-not-linked-no-data';
 import LinkedVerified from './linked-verified';
 import { getUserAuraStatus, getAllAuraStatus } from '../../../utilities/helper';
@@ -18,7 +18,7 @@ const LoyaltyClubBlock = () => {
       // @TODO: Add condition to not render this on user account page.
       return <LinkedVerified />;
     } if (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
-      return <PendingFullEnrollment />;
+      return <AuraMyAccountPendingFullEnrollment />;
     }
   }
 
