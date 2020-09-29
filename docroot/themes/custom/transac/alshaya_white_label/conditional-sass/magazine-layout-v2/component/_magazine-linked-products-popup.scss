@@ -49,7 +49,6 @@ body.overlay-related-select {
           border: 1px solid $spc-checkout-delivery-info-txt;
           color: $magv2-pdp-title;
           position: relative;
-          padding-#{$left}: 1.25rem;
           font-size: 0.875rem;
 
           @include icon('arrow-#{$right}', before) {
@@ -71,6 +70,10 @@ body.overlay-related-select {
           a {
             font-size: 1rem;
             color: $magv2-pdp-title;
+            padding-#{$left}: 1.25rem;
+            display: inline-block;
+            width: 100%;
+            z-index: 1;
           }
         }
 
