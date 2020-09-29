@@ -105,7 +105,7 @@ body {
 
 .branding__menu {
   @include breakpoint($upto-desktop) {
-    height: 4.375rem;
+    height: 7.91rem;
   }
 
   @include breakpoint($only-mobile) {
