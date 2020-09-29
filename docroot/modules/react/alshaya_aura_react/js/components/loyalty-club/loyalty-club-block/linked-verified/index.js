@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
-import { getAuraTier } from '../../../../utilities/helper';
+import { getUserAuraTier } from '../../../../utilities/helper';
 
 export default class LinkedVerified extends React.Component {
   constructor(props) {
@@ -47,7 +47,7 @@ export default class LinkedVerified extends React.Component {
           </div>
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">
-              { getAuraTier() }
+              { getUserAuraTier() }
             </div>
             <div className="aura-points">
               { `${points} ${Drupal.t('POINTS')}`}

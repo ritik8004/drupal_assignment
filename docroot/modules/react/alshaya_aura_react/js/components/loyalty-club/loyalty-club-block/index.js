@@ -1,23 +1,23 @@
 import React from 'react';
-import _indexOf from 'lodash/indexOf';
 import PendingFullEnrollment from './pending-full-enrollment';
-import CardNotLinkedMdcData from './card-not-linked-mdc-data';
+import CardNotLinkedData from './card-not-linked-data';
 import CardNotLinkedNoData from './card-not-linked-no-data';
 import LinkedVerified from './linked-verified';
-import { getAuraStatus, getAllAuraStatus } from '../../../utilities/helper';
+import { getUserAuraStatus, getAllAuraStatus } from '../../../utilities/helper';
 
 const LoyaltyClubBlock = () => {
-  const loyaltyStatus = parseInt(getAuraStatus(), 10);
+  const loyaltyStatus = parseInt(getUserAuraStatus(), 10);
   const allAuraStatus = getAllAuraStatus();
 
   if (loyaltyStatus !== '') {
-    if (loyaltyStatus === _indexOf(allAuraStatus, 'APC_NOT_LINKED_NO_DATA')) {
+    if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA) {
       return <CardNotLinkedNoData />;
-    } if (loyaltyStatus === _indexOf(allAuraStatus, 'APC_NOT_LINKED_MDC_DATA')) {
-      return <CardNotLinkedMdcData />;
-    } if (loyaltyStatus === _indexOf(allAuraStatus, 'APC_LINKED_VERIFIED')) {
+    } if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_MDC_DATA) {
+      return <CardNotLinkedData />;
+    } if (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
+      // @TODO: Add condition to not render this on user account page.
       return <LinkedVerified />;
-    } if (loyaltyStatus === _indexOf(allAuraStatus, 'APC_LINKED_NOT_VERIFIED')) {
+    } if (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
       return <PendingFullEnrollment />;
     }
   }

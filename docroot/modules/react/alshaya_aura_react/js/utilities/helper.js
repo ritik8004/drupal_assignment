@@ -1,34 +1,10 @@
 /**
- * Helper function to check if key exists in aura settings.
+ * Helper function to get user's AURA Status.
  */
-function existsInAuraSettings(key) {
-  let exists = false;
-  if (typeof drupalSettings.aura !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura, key)) {
-    exists = true;
-  }
-
-  return exists;
-}
-
-/**
- * Helper function to check if AURA is enabled.
- */
-function isAuraEnabled() {
-  let enabled = false;
-  if (existsInAuraSettings('enabled') && drupalSettings.aura.enabled) {
-    enabled = true;
-  }
-
-  return enabled;
-}
-
-/**
- * Helper function to get AURA Loyalty Status.
- */
-function getAuraStatus() {
+function getUserAuraStatus() {
   let loyaltyStatus = '';
-  if (existsInAuraSettings('user_details')
+  if (typeof drupalSettings.aura !== 'undefined'
+    && typeof drupalSettings.aura.user_details !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'loyaltyStatus')) {
     loyaltyStatus = drupalSettings.aura.user_details.loyaltyStatus || '';
   }
@@ -37,11 +13,12 @@ function getAuraStatus() {
 }
 
 /**
- * Helper function to get AURA tier.
+ * Helper function to get user's AURA tier.
  */
-function getAuraTier() {
+function getUserAuraTier() {
   let tier = '';
-  if (existsInAuraSettings('user_details')
+  if (typeof drupalSettings.aura !== 'undefined'
+    && typeof drupalSettings.aura.user_details !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'tier')) {
     tier = drupalSettings.aura.user_details.tier || '';
   }
@@ -50,33 +27,34 @@ function getAuraTier() {
 }
 
 /**
- * Helper function to get all AURA Loyalty Status.
+ * Helper function to get all AURA Status.
  */
 function getAllAuraStatus() {
-  let allLoyaltyStatus = [];
-  if (existsInAuraSettings('allAuraStatus') && drupalSettings.aura.allAuraStatus.length) {
-    allLoyaltyStatus = drupalSettings.aura.allAuraStatus || [];
+  let allAuraStatus = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'allAuraStatus')) {
+    allAuraStatus = drupalSettings.aura.allAuraStatus || {};
   }
 
-  return allLoyaltyStatus;
+  return allAuraStatus;
 }
 
 /**
  * Helper function to get all AURA Tiers.
  */
 function getAllAuraTier() {
-  let allTiers = [];
-  if (existsInAuraSettings('allTiers') && drupalSettings.aura.allTiers.length) {
-    allTiers = drupalSettings.aura.allTiers || [];
+  let allAuraTier = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'allAuraTier')) {
+    allAuraTier = drupalSettings.aura.allAuraTier || {};
   }
 
-  return allTiers;
+  return allAuraTier;
 }
 
 export {
-  isAuraEnabled,
-  getAuraStatus,
-  getAuraTier,
+  getUserAuraStatus,
+  getUserAuraTier,
   getAllAuraStatus,
   getAllAuraTier,
 };

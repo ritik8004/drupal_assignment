@@ -26,10 +26,10 @@ final class AuraTier {
   /**
    * Contains all the tiers in the class.
    */
-  const ALL_TIERS = [
-    self::TIER_1 => 'TIER_1',
-    self::TIER_2 => 'TIER_2',
-    self::TIER_3 => 'TIER_3',
+  const ALL_AURA_TIERS = [
+    'TIER_1' => self::TIER_1,
+    'TIER_2' => self::TIER_2,
+    'TIER_3' => self::TIER_3,
   ];
 
   const DEFAULT_TIER = 'TIER_1';

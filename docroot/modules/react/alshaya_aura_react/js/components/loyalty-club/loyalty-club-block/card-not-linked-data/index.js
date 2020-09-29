@@ -1,7 +1,7 @@
 import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
 
-export default class CardNotLinkedMdcData extends React.Component {
+export default class CardNotLinkedData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

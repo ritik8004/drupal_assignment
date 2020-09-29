@@ -2,3 +2,9 @@ services:
   logger.channel.alshaya_aura_react:
     parent: logger.channel_base
     arguments: ["alshaya_aura_react"]
+
+  alshaya_aura_react.aura_helper:
+    class: Drupal\alshaya_aura_react\Helper\AuraHelper
+    arguments:
+      - '@current_user'
+      - '@entity_type.manager'
