@@ -70,7 +70,7 @@ $super-menu-height: 1.875rem;
 }
 
 // We need to show it only on overlay.
-body.mobile--overlay {
+body.supermenu.mobile--overlay {
   .menu--super-menu--clone {
     @include breakpoint($upto-desktop) {
       display: block;
@@ -86,8 +86,8 @@ body.mobile--overlay {
   }
 }
 
-body:not(.mobile--overlay) {
+body.supermenu:not(.mobile--overlay) {
   div.header--wrapper .c-menu-secondary {
-    z-index: 5;
+    z-index: 12;
   }
 }
