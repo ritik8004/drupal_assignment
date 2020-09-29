@@ -25,6 +25,11 @@ export default class CardNotLinkedMdcData extends React.Component {
     }
   }
 
+  handleNotYou = () => {
+    const { handleNotYou } = this.props;
+    handleNotYou();
+  }
+
   render() {
     const { cardNumber } = this.state;
 
@@ -41,13 +46,15 @@ export default class CardNotLinkedMdcData extends React.Component {
             <span>
               { cardNumber }
             </span>
-            <a href="">
+            <a
+              onClick={this.handleNotYou}
+            >
               { Drupal.t('Not You?')}
             </a>
           </div>
           <div className="link-your-card">
             { Drupal.t('Already in Loyalty Club') }
-            <a href="">
+            <a>
               { Drupal.t('LINK YOUR CARD NOW') }
             </a>
           </div>

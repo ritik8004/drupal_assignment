@@ -97,3 +97,8 @@ loyalty_club.get_apc_user_details_by_email:
     path: /get/loyalty-club/get-apc-user-details-by-email
     controller: App\Controller\LoyaltyClubController::getApcUserDetailsByEmail
     methods: GET
+
+loyalty_club.apc_status_update:
+    path: /get/loyalty-club/apc-status-update
+    controller: App\Controller\LoyaltyClubController::apcStatusUpdate
+    methods: GET
