@@ -160,7 +160,7 @@ function alshaya_white_label_preprocess_html(&$variables) {
     $variables['#attached']['library'][] = 'alshaya_white_label/pace';
   }
 
-  // Add class for sites with super menu
+  // Add class for sites with super menu.
   if (isset($variables['page']['menu_secondary']['supermenu'])) {
     $variables['attributes']['class'][] = 'supermenu';
   }
