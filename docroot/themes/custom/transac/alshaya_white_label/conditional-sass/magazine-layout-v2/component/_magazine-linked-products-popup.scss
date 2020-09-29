@@ -35,6 +35,10 @@ body.overlay-related-select {
           padding-bottom: 0;
 
           .magazine__gallery--container-mobile {
+            .magv2-pdp-image {
+              position: relative;
+            }
+
             .slick-dots {
               left: auto;
               transform: none;
