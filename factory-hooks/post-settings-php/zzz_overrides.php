@@ -31,6 +31,10 @@ $country_code = $site_country_code['country_code'];
 
 $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
 
+$settings = $settings ?? [];
+$settings['acsf_site_code'] = $acsf_site_code;
+$settings['country_code'] = $country_code;
+$settings['settings_override_yaml_file_path'] = $settings_path;
 // Allow overriding settings and config to set secret info directly from
 // include files on server which can be for stack or per brand or brand
 // country combination.

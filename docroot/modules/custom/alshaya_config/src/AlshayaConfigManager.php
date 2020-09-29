@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -454,23 +455,13 @@ class AlshayaConfigManager {
    *   Whether to reset the config or not.
    */
   public function replaceYamlSettingsOverrides(string $mdc = NULL, $reset = FALSE) {
-    $env = alshaya_get_site_environment();
-
-    if ($env === 'local') {
-      // @codingStandardsIgnoreLine
-      global $host_site_code;
-      $home = '/home/vagrant';
-      $site_country_code = alshaya_get_site_country_code($host_site_code);
-    }
-    else {
-      global $_acsf_site_name;
-      $home = $_SERVER['HOME'];
-      $site_country_code = alshaya_get_site_country_code($_acsf_site_name);
-    }
+    // Include overrides.
+    $acsf_site_code = Settings::get('acsf_site_code');
+    $country_code = Settings::get('country_code');
+    $env = Settings::get('env');
+    $settings_path = Settings::get('settings_override_yaml_file_path');
 
     if (empty($mdc)) {
-      // @codingStandardsIgnoreLine
-      global $acsf_site_code;
       if (!$mdc) {
         if ($env === 'local') {
           $mdc = $acsf_site_code . '_qa';
@@ -485,9 +476,6 @@ class AlshayaConfigManager {
     global $magentos;
     $settings['magento_host'] = $magentos[$mdc]['url'];
 
-    $acsf_site_code = $site_country_code['site_code'];
-    $country_code = $site_country_code['country_code'];
-    $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
     $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
 
     if ($reset) {
