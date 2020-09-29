@@ -39,4 +39,15 @@ final class AuraStatus {
     self::APC_LINKED_VERIFIED => 'APC_LINKED_VERIFIED',
   ];
 
+  /**
+   * Contains all the aura status in the class.
+   */
+  const ALL_AURA_STATUS = [
+    self::APC_NOT_LINKED_NO_DATA => 'APC_NOT_LINKED_NO_DATA',
+    self::APC_NOT_LINKED_MDC_DATA => 'APC_NOT_LINKED_MDC_DATA',
+    self::APC_LINKED_VERIFIED => 'APC_LINKED_VERIFIED',
+    self::APC_LINKED_NOT_VERIFIED => 'APC_LINKED_NOT_VERIFIED',
+    self::APC_NOT_LINKED_NOT_U => 'APC_NOT_LINKED_NOT_U',
+  ];
+
 }

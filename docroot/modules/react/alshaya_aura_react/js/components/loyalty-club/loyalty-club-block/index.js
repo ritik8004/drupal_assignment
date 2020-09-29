@@ -1,28 +1,23 @@
 import React from 'react';
+import _indexOf from 'lodash/indexOf';
 import PendingFullEnrollment from './pending-full-enrollment';
 import CardNotLinkedMdcData from './card-not-linked-mdc-data';
 import CardNotLinkedNoData from './card-not-linked-no-data';
 import LinkedVerified from './linked-verified';
-import {
-  APC_NOT_LINKED_NO_DATA,
-  APC_NOT_LINKED_MDC_DATA,
-  APC_LINKED_VERIFIED,
-  APC_LINKED_NOT_VERIFIED,
-}
-  from '../../../utilities/constants';
-import { getAuraStatus } from '../../../utilities/helper';
+import { getAuraStatus, getAllAuraStatus } from '../../../utilities/helper';
 
 const LoyaltyClubBlock = () => {
   const loyaltyStatus = parseInt(getAuraStatus(), 10);
+  const allAuraStatus = getAllAuraStatus();
 
   if (loyaltyStatus !== '') {
-    if (loyaltyStatus === APC_NOT_LINKED_NO_DATA) {
+    if (loyaltyStatus === _indexOf(allAuraStatus, 'APC_NOT_LINKED_NO_DATA')) {
       return <CardNotLinkedNoData />;
-    } if (loyaltyStatus === APC_NOT_LINKED_MDC_DATA) {
+    } if (loyaltyStatus === _indexOf(allAuraStatus, 'APC_NOT_LINKED_MDC_DATA')) {
       return <CardNotLinkedMdcData />;
-    } if (loyaltyStatus === APC_LINKED_VERIFIED) {
+    } if (loyaltyStatus === _indexOf(allAuraStatus, 'APC_LINKED_VERIFIED')) {
       return <LinkedVerified />;
-    } if (loyaltyStatus === APC_LINKED_NOT_VERIFIED) {
+    } if (loyaltyStatus === _indexOf(allAuraStatus, 'APC_LINKED_NOT_VERIFIED')) {
       return <PendingFullEnrollment />;
     }
   }
