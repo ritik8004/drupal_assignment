@@ -482,9 +482,9 @@ class AlshayaConfigManager {
     $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
 
     if ($reset) {
-      $yml_settings = SerializationYaml::encode(['alshaya_api.settings' => []]);
-      if (file_exists($settings_file) && file_put_contents($settings_file, $yml_settings)) {
-        $this->logger->info('Resetting alshaya_api.settings.magento_host');
+      if (file_exists($settings_file)) {
+        unlink($settings_file);
+        $this->logger->info('Resetted alshaya_api.settings.magento_host to default value');
         return 1;
       }
       else {
