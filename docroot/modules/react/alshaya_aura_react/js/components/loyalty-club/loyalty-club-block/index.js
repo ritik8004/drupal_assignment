@@ -1,5 +1,5 @@
 import React from 'react';
-import PendingFullEnrollment from './pending-full-enrollment';
+import AuraMyAccountPendingFullEnrollment from './pending-full-enrollment';
 import CardNotLinkedMdcData from './card-not-linked-mdc-data';
 import CardNotLinkedNoData from './card-not-linked-no-data';
 
@@ -15,7 +15,7 @@ const LoyaltyClubBlock = () => {
     } if (loyaltyStatus === 1) {
       return <CardNotLinkedMdcData />;
     } if (loyaltyStatus === 3) {
-      return <PendingFullEnrollment />;
+      return <AuraMyAccountPendingFullEnrollment />;
     }
   }
 

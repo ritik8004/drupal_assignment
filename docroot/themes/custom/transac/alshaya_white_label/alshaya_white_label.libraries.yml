@@ -456,3 +456,8 @@ aura-loyalty-global:
   css:
     theme:
       css/conditional-sass/aura-loyalty-global/aura-loyalty-global.ltr.css: {}
+
+aura-loyalty-myaccount:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css: {}

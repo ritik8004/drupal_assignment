@@ -1,0 +1,101 @@
+@import "../../aura-loyalty-global/component/aura-fonts";
+
+.aura-pending-full-enrollment-wrapper {
+  background-image: url(../../../imgs/aura/aura-mobile.png);
+  background-repeat: no-repeat;
+  background-size: 8.5625rem;
+  background-position: top $left;
+  border-radius: 0.625rem;
+  margin: 1.5rem 0 0;
+  padding: 1.75rem 0 1.25rem;
+  color: $aura-loyalty-club-pending-enrollment-banner-text;
+  position: relative;
+
+  @include breakpoint($desktop) {
+    background-image: url(../../../imgs/aura/aura.png);
+    background-repeat: no-repeat;
+    background-size: 9.875rem;
+    background-position: 1px -1px;
+  }
+
+  @include breakpoint($upto-desktop) {
+    padding: 1.25rem 1.25rem 0.625rem;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    border-radius: 0.625rem;
+    background: linear-gradient(127deg, #efc06e -5%, #e31c79 65%, #772583 109%);
+
+    @include breakpoint($desktop) {
+      background: linear-gradient(109deg, #efc06e -11%, #e31c79 50%, #772583 107%);
+    }
+  }
+
+  .pending-full-enrollment-description {
+    text-align: center;
+
+    @include breakpoint($desktop) {
+      width: 75%;
+      padding-#{$left}: 183px;
+      text-align: $left;
+
+      .app-links {
+        margin-#{$left}: -10px;
+      }
+    }
+
+    .app-links {
+      svg {
+        g,
+        path {
+          fill: $aura-loyalty-club-pending-enrollment-banner-text;
+        }
+      }
+    }
+
+    .title {
+      font-family: $aura-bold;
+      font-size: 1.375rem;
+      padding-bottom: 0.8125rem;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 1.125rem;
+      }
+    }
+
+    .description {
+      font-family: $aura-regular;
+      font-size: 1.125rem;
+      padding-bottom: 1.1875rem;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .aura-model {
+    position: absolute;
+    #{$right}: 0;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+
+    img {
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
