@@ -95,7 +95,14 @@ class LoyaltyClubController {
 
     try {
       $endpoint = sprintf('/customers/apc-points-balance/%s', $customer_id);
-      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+
+      // @TODO: Update this when we have API ready.
+      // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      return new JsonResponse([
+        'points' => '20000',
+        'expiredPoints' => '100',
+        'expiredPointsDate' => '2021-06-05',
+      ]);
 
       return new JsonResponse([
         'points' => $response['apcPoints'],
