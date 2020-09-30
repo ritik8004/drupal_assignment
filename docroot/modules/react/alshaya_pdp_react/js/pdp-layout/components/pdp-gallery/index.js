@@ -46,9 +46,10 @@ export default class PdpGallery extends React.PureComponent {
     const emptyRes = (
       <div>Images not available</div>
     );
+
     const { open, currentIndex } = this.state;
     const isTouchDevice = window.innerWidth < 1024;
-    const isMobielDevice = window.innerWidth < 768;
+
     let centerPaddingValue;
     if (isTouchDevice && !showFullVersion) {
       centerPaddingValue = null;
@@ -58,7 +59,7 @@ export default class PdpGallery extends React.PureComponent {
 
     return (images) ? (
       <div className="magv2-pdp-gallery">
-        {(!isMobielDevice)
+        {(showFullVersion)
           ? (
             <div className="magazine__gallery--container-desktop">
               {images.map((image, key) => (
