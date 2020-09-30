@@ -1,8 +1,8 @@
 import React from 'react';
-import CardNotLinkedData from './card-not-linked-data';
+import AuraMyAccountOldCardFound from './card-not-linked-data';
 import AuraMyAccountPendingFullEnrollment from './pending-full-enrollment';
-import CardNotLinkedNoData from './card-not-linked-no-data';
-import LinkedVerified from './linked-verified';
+import AuraMyAccountNoLinkedCard from './card-not-linked-no-data';
+import AuraMyAccountVerifiedUser from './linked-verified';
 import { getUserAuraStatus, getAllAuraStatus } from '../../../utilities/helper';
 
 const LoyaltyClubBlock = () => {
@@ -11,12 +11,12 @@ const LoyaltyClubBlock = () => {
 
   if (loyaltyStatus !== '') {
     if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA) {
-      return <CardNotLinkedNoData />;
+      return <AuraMyAccountNoLinkedCard />;
     } if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
-      return <CardNotLinkedData />;
+      return <AuraMyAccountOldCardFound />;
     } if (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
       // @TODO: Add condition to not render this on user account page.
-      return <LinkedVerified />;
+      return <AuraMyAccountVerifiedUser />;
     } if (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
       return <AuraMyAccountPendingFullEnrollment />;
     }

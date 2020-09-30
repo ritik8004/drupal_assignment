@@ -1,25 +1,33 @@
 import React from 'react';
+import AuraLogo from '../../../../svg-component/aura-logo';
+import ConditionalView
+  from '../../../../../../alshaya_spc/js/common/components/conditional-view';
 
-const CardNotLinkedNoData = () => (
-  <div className="aura-card-not-linked-no-data-wrapper">
+const AuraMyAccountNoLinkedCard = () => (
+  <div className="aura-myaccount-not-linked-card-wrapper">
     <div className="aura-logo">
-      AURA logo placeholder
+      <ConditionalView condition={window.innerWidth > 1024}>
+        <AuraLogo stacked="vertical" />
+      </ConditionalView>
+      <ConditionalView condition={window.innerWidth < 1025}>
+        <AuraLogo stacked="horizontal" />
+      </ConditionalView>
     </div>
-    <div className="aura-card-not-linked-no-data-description">
+    <div className="aura-myaccount-not-linked-card-description">
       <div className="link-your-card">
-        { Drupal.t('Already in Loyalty Club') }
+        { Drupal.t('Already AURA Member?') }
         <a href="">
-          { Drupal.t('LINK YOUR CARD NOW') }
+          { Drupal.t('Link your card') }
         </a>
       </div>
       <div className="sign-up">
-        { Drupal.t('Ready to be Rewarded') }
+        { Drupal.t('Ready to be Rewarded?') }
         <a href="">
-          { Drupal.t('SIGN UP') }
+          { Drupal.t('Sign up') }
         </a>
       </div>
     </div>
   </div>
 );
 
-export default CardNotLinkedNoData;
+export default AuraMyAccountNoLinkedCard;
