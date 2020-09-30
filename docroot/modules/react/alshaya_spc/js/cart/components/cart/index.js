@@ -100,6 +100,15 @@ export default class Cart extends React.Component {
           };
         });
       }
+
+      // Call dynamic-yield spa api for cart context.
+      const { items } = this.state;
+      window.DY.API('spa', {
+        context: {
+          type: 'CART',
+          data: Object.keys(items),
+        },
+      });
     }, false);
 
     // Event handles cart message update.
