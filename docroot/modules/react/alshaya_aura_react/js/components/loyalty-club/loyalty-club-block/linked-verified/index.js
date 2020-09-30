@@ -2,7 +2,7 @@ import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
 import { getUserAuraTier } from '../../../../utilities/helper';
 
-export default class LinkedVerified extends React.Component {
+export default class AuraMyAccountVerifiedUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
