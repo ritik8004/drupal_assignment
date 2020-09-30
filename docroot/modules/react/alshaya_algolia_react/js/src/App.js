@@ -5,12 +5,14 @@ import AutoComplete from './components/algolia/Autocomplete';
 import SearchResults from './components/searchresults';
 import Portal from './components/portal';
 import Teaser from './components/teaser';
+import { QueryRuleCustomData } from 'react-instantsearch-dom';
 import {
   getCurrentSearchQuery,
   isMobile,
   redirectToOtherLang,
   setSearchQuery,
-  getSuperCategoryOptionalFilter
+  getSuperCategoryOptionalFilter,
+  customQueryRedirect
 } from './utils';
 import {algoliaSearchClient} from "./config/SearchClient";
 
@@ -70,6 +72,9 @@ class App extends React.PureComponent {
             onSuggestionCleared={this.onSuggestionCleared}
             onChange={this.onChange}
           />
+          <QueryRuleCustomData transformItems={items => customQueryRedirect(items)}>
+          {() => null}
+          </QueryRuleCustomData>
         </InstantSearch>
         {isMobile() && (
           <Portal id="top-results" conditional query={query}>
