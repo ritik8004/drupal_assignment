@@ -384,7 +384,7 @@ function _alshaya_appointment_my_appointments_static_strings() {
     ],
     [
       'key' => 'customer_details_label',
-      'value' => t('customer details'),
+      'value' => t('Customer details'),
     ],
     [
       'key' => 'close',
