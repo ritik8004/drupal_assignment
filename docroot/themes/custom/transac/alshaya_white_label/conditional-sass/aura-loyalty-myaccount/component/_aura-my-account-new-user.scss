@@ -1,0 +1,85 @@
+.aura-myaccount-not-linked-card-wrapper {
+  border-radius: 0.625rem;
+  background-image: $aura-loyalty-club-no-card-block-bg;
+  padding: 2.0625rem 2.5rem;
+  display: flex;
+  align-items: center;
+
+  @include breakpoint($desktop) {
+    height: 11.5rem;
+  }
+
+  @include breakpoint($upto-desktop) {
+    flex-direction: column;
+    background-image: $aura-loyalty-club-no-card-block-bg-mobile;
+  }
+
+  .aura-logo {
+    display: flex;
+    align-items: center;
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 8.625rem;
+    }
+  }
+
+  .aura-myaccount-not-linked-card-description {
+    display: flex;
+
+    @include breakpoint($upto-desktop) {
+      flex-direction: column;
+    }
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: $aura-loyalty-club-no-card-block-text;
+      font-family: $aura-regular;
+      font-size: 1.125rem;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 1.25rem;
+        margin-top: 2.5rem;
+      }
+
+      > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: $aura-bold;
+        letter-spacing: 0.71px;
+        font-size: 1rem;
+        margin-top: 0.875rem;
+        width: 14.0625rem;
+        height: 2.875rem;
+        border-radius: 1.75rem;
+
+        @include breakpoint($upto-desktop) {
+          width: 15.9375rem;
+        }
+      }
+
+      &.link-your-card {
+        @include breakpoint($desktop) {
+          margin-#{$right}: 3rem;
+        }
+
+        > a {
+          color: $aura-loyalty-club-no-card-block-text;
+          background-image: $aura-loyalty-club-no-card-block-link-card-btn;
+        }
+      }
+
+      &.sign-up > a {
+        border-style: solid;
+        border-width: 2px;
+        border-image-slice: 1;
+        border-image-source: $aura-loyalty-club-no-card-block-sign-up-border;
+        background-image: $aura-loyalty-club-no-card-block-sign-up-bg;
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+      }
+    }
+  }
+}
