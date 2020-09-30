@@ -22,6 +22,7 @@ class AlshayaLoyaltyController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_aura_react/alshaya_aura_loyalty_club',
+          'alshaya_white_label/aura-loyalty-myaccount',
         ],
       ],
       '#cache' => [

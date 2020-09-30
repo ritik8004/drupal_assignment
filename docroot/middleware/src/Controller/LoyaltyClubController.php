@@ -107,7 +107,14 @@ class LoyaltyClubController {
 
     try {
       $endpoint = sprintf('/customers/apc-points-balance/%s', $customer_id);
-      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+
+      // @TODO: Update this when we have API ready.
+      // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      return new JsonResponse([
+        'points' => '20000',
+        'expiredPoints' => '100',
+        'expiredPointsDate' => '2021-06-05',
+      ]);
 
       return new JsonResponse([
         'points' => $response['apcPoints'],
@@ -230,13 +237,12 @@ class LoyaltyClubController {
 
       // @TODO: Update this when MDC API is ready.
       // $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
-
       // On API success, update the user AURA Status in Drupal.
       $this->entityTypeManager->getStorage('user')->load($uid)->set('field_aura_loyalty_status', $aura_status)->save();
 
       // @TODO: Update this when MDC API is ready.
       return new JsonResponse(TRUE);
-      // return new JsonResponse($response);
+      // Return new JsonResponse($response);
     }
     catch (\Exception $e) {
       $this->logger->notice('Error while trying to update AURA Status for user with customer id @customer_id. Message: @message', [

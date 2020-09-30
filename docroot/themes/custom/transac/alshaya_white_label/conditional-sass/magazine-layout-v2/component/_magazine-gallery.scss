@@ -19,6 +19,12 @@
     padding-bottom: 3.75rem;
   }
 
+  .magv2-pdp-image {
+    img {
+      margin: 0 auto;
+    }
+  }
+
   .magazine__gallery--container-desktop {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -61,10 +67,6 @@
       display: inline-flex;
       cursor: pointer;
       background: $magv2-gallery-bg;
-
-      img {
-        margin: 0 auto;
-      }
 
       @include breakpoint($desktop) {
         min-height: 30.375rem;

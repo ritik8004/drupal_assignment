@@ -5,6 +5,7 @@ import AuraEarnOrderSummaryItem
   from '../../../aura-loyalty/components/aura-earn-order-summary-item';
 import AuraRedeemOrderSummaryItem
   from '../../../aura-loyalty/components/aura-redeem-order-summary-item';
+import { isAuraEnabled } from '../../../../../js/utilities/helper';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -158,7 +159,7 @@ const OrderSummary = () => {
         </div>
       </div>
       {/* TODO: Aura SPC - Improve these conditions once BE for AURA is integrated. */}
-      <ConditionalView condition={drupalSettings.aura && drupalSettings.aura.enabled}>
+      <ConditionalView condition={isAuraEnabled()}>
         <AuraEarnOrderSummaryItem pointsEarned="5436" fullEnrollment="yes" animationDelay="0.8s" />
         <AuraRedeemOrderSummaryItem pointsRedeemed="900" animationDelay="1s" />
       </ConditionalView>

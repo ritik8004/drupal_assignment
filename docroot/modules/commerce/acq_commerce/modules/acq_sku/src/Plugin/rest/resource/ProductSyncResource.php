@@ -221,7 +221,17 @@ class ProductSyncResource extends ResourceBase {
           continue;
         }
 
-        // Second check, product needs to have type.
+        // Second check - visibilty makes the product to be visible on FE.
+        if (!isset($product['visibility'])) {
+          $product['visibility'] = 0;
+          $product['status'] = 0;
+          // Adding info for sku when visibility data is missing.
+          $this->logger->info('Ignoring product as no value received for visibility for SKU @sku.', [
+            '@sku' => $product['sku'],
+          ]);
+        }
+
+        // Third check, product needs to have type.
         if (!isset($product['type'])) {
           $ignored_skus[] = $product['sku'] . '(Missing product type in data)';
           $ignored++;

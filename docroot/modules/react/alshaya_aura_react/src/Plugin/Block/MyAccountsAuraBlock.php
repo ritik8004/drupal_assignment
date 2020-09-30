@@ -66,6 +66,11 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
   public function build() {
     return [
       '#markup' => '<div id="my-accounts-aura"></div>',
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/aura-loyalty-myaccount',
+        ],
+      ],
     ];
   }
 

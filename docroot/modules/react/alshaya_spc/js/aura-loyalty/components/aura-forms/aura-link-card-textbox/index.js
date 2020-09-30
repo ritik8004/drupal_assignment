@@ -1,4 +1,5 @@
 import React from 'react';
+import Cleave from 'cleave.js/react';
 
 class AuraFormLinkCard extends React.Component {
   /**
@@ -19,11 +20,11 @@ class AuraFormLinkCard extends React.Component {
     return (
       <div className="spc-aura-link-card-wrapper">
         <div className="form-items">
-          <input
+          <Cleave
             placeholder={Drupal.t('Email, loyalty or mobile number')}
             name="spc-aura-link-card-input"
             className="spc-aura-link-card-input"
-            type="text"
+            options={{ blocks: [4, 4, 4, 4] }}
           />
           <button
             type="submit"

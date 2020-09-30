@@ -24,6 +24,7 @@ import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
 import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
+import { isAuraEnabled } from '../../../../../js/utilities/helper';
 
 window.fetchStore = 'idle';
 
@@ -222,7 +223,7 @@ export default class Checkout extends React.Component {
               <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
             </ClicknCollectContextProvider>
 
-            {drupalSettings.aura && drupalSettings.aura.enabled
+            {isAuraEnabled()
               ? <AuraCheckoutContainer />
               : null}
 

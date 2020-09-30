@@ -10,6 +10,7 @@ use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_aura_react\Helper\AuraHelper;
 
 /**
  * Returns responses for Alshaya Aura routes.
@@ -38,13 +39,21 @@ class AlshayaAuraController extends ControllerBase {
   protected $apiWrapper;
 
   /**
+   * Aura Helper service object.
+   *
+   * @var Drupal\alshaya_aura_react\Helper\AuraHelper
+   */
+  protected $auraHelper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_user.info'),
       $container->get('logger.channel.alshaya_aura_react'),
-      $container->get('alshaya_api.api')
+      $container->get('alshaya_api.api'),
+      $container->get('alshaya_aura_react.aura_helper')
     );
   }
 
@@ -57,15 +66,19 @@ class AlshayaAuraController extends ControllerBase {
    *   The logger service.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   API Wrapper service.
+   * @param Drupal\alshaya_aura_react\Helper\AuraHelper $aura_helper
+   *   The aura helper service.
    */
   public function __construct(
     AlshayaUserInfo $user_info,
     LoggerInterface $logger,
-    AlshayaApiWrapper $api_wrapper
+    AlshayaApiWrapper $api_wrapper,
+    AuraHelper $aura_helper
     ) {
     $this->userInfo = $user_info;
     $this->logger = $logger;
     $this->apiWrapper = $api_wrapper;
+    $this->auraHelper = $aura_helper;
   }
 
   /**
@@ -89,14 +102,14 @@ class AlshayaAuraController extends ControllerBase {
       $response->addCacheableDependency($this->userInfo->userObject);
     }
 
-    $loyalty_status = (int) $this->userInfo->userObject->get('field_aura_loyalty_status')->getString();
+    $loyalty_status = (int) $this->auraHelper->getUserAuraStatus();
     if (AuraStatus::LINKED_STATUSES[$loyalty_status] ?? []) {
       $is_loyalty_linked = TRUE;
     }
     $user['is_loyalty_linked'] = $is_loyalty_linked;
 
     if ($is_loyalty_linked) {
-      $user_tier = AuraTier::ALL_TIERS[$this->userInfo->userObject->get('field_aura_tier')->getString()]
+      $user_tier = AuraTier::ALL_AURA_TIERS[$this->auraHelper->getUserAuraTier()]
       ?? AuraTier::DEFAULT_TIER;
       // The number part of the tier constant will be used in naming the tier
       // class in the HTML.

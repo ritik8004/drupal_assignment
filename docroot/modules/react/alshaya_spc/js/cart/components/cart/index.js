@@ -18,6 +18,7 @@ import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-l
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import AuraCartContainer from '../../../aura-loyalty/components/aura-cart-rewards/aura-cart-container';
+import { isAuraEnabled } from '../../../../../js/utilities/helper';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -218,7 +219,7 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
             />
-            {drupalSettings.aura && drupalSettings.aura.enabled
+            {isAuraEnabled()
               ? <AuraCartContainer animationDelay="0.4s" />
               : null}
             <OrderSummaryBlock
