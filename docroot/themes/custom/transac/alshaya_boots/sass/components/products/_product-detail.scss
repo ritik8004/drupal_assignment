@@ -97,6 +97,21 @@
       }
     }
   }
+
+  &__sidebar {
+    .non-refundable--tooltip-wrapper {
+      .tooltip--wrap {
+        .non-refundable--text {
+          font-family: $alshaya-thin;
+          font-size: 0.875rem;
+
+          @include icon(infomation, before) {
+            font-weight: normal;
+          }
+        }
+      }
+    }
+  }
 }
 
 .basic-details-wrapper {
