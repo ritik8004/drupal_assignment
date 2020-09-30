@@ -275,4 +275,20 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
+  /**
+   * Update user's aura status.
+   *
+   * @param string $aura_status
+   *   Aura status.
+   *
+   * @return bool
+   *   true/false.
+   */
+  public function updateUserAuraStatus($aura_status) {
+    $url = '/update/user-aura-status?apcLinkStatus=' . $aura_status;
+    $response = $this->invokeApiWithSession('GET', $url);
+    $result = $response->getBody()->getContents();
+    return json_decode($result, TRUE);
+  }
+
 }

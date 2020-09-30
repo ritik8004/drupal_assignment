@@ -10,7 +10,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -53,13 +52,6 @@ class LoyaltyClubController {
   protected $cart;
 
   /**
-   * Entity Type Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  private $entityTypeManager;
-
-  /**
    * LoyaltyClubController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -72,23 +64,19 @@ class LoyaltyClubController {
    *   Utility Service.
    * @param \App\Service\Cart $cart
    *   Cart service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type Manager.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
     Drupal $drupal,
     Utility $utility,
-    Cart $cart,
-    EntityTypeManagerInterface $entity_type_manager
+    Cart $cart
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->drupal = $drupal;
     $this->utility = $utility;
     $this->cart = $cart;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -238,7 +226,17 @@ class LoyaltyClubController {
       // @TODO: Update this when MDC API is ready.
       // $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
       // On API success, update the user AURA Status in Drupal.
-      $this->entityTypeManager->getStorage('user')->load($uid)->set('field_aura_loyalty_status', $aura_status)->save();
+      $updated = $this->drupal->updateUserAuraStatus($aura_status);
+
+      // Check if user aura status was updated successfully in drupal.
+      if (!$updated) {
+        $message = 'Error while trying to update user AURA Status field in Drupal.';
+        $this->logger->error($message . ' User id: @uid, Aura Status: @aura_status', [
+          '@uid' => $uid,
+          '@aura_status' => $aura_status,
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse($message, 500));
+      }
 
       // @TODO: Update this when MDC API is ready.
       return new JsonResponse(TRUE);

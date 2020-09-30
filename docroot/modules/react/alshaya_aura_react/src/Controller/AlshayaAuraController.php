@@ -11,6 +11,10 @@ use Drupal\Core\Controller\ControllerBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_aura_react\Helper\AuraHelper;
+use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Returns responses for Alshaya Aura routes.
@@ -46,6 +50,20 @@ class AlshayaAuraController extends ControllerBase {
   protected $auraHelper;
 
   /**
+   * Drupal\Core\Session\AccountProxy definition.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  protected $currentUser;
+
+  /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -53,7 +71,9 @@ class AlshayaAuraController extends ControllerBase {
       $container->get('alshaya_user.info'),
       $container->get('logger.channel.alshaya_aura_react'),
       $container->get('alshaya_api.api'),
-      $container->get('alshaya_aura_react.aura_helper')
+      $container->get('alshaya_aura_react.aura_helper'),
+      $container->get('current_user'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -68,17 +88,25 @@ class AlshayaAuraController extends ControllerBase {
    *   API Wrapper service.
    * @param Drupal\alshaya_aura_react\Helper\AuraHelper $aura_helper
    *   The aura helper service.
+   * @param \Drupal\Core\Session\AccountProxy $current_user
+   *   Current user.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    */
   public function __construct(
     AlshayaUserInfo $user_info,
     LoggerInterface $logger,
     AlshayaApiWrapper $api_wrapper,
-    AuraHelper $aura_helper
+    AuraHelper $aura_helper,
+    AccountProxy $current_user,
+    EntityTypeManagerInterface $entity_type_manager
     ) {
     $this->userInfo = $user_info;
     $this->logger = $logger;
     $this->apiWrapper = $api_wrapper;
     $this->auraHelper = $aura_helper;
+    $this->currentUser = $current_user;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -147,6 +175,18 @@ class AlshayaAuraController extends ControllerBase {
     $response->addCacheableDependency($this->userInfo->userObject);
 
     return $response;
+  }
+
+  /**
+   * Update user's aura status.
+   */
+  public function updateUserAuraStatus(Request $request) {
+    $saved = FALSE;
+    $aura_status = $request->query->get('apcLinkStatus');
+    $uid = $this->currentUser->id();
+    $saved = $this->entityTypeManager->getStorage('user')->load($uid)->set('field_aura_loyalty_status', $aura_status)->save();
+
+    return new JsonResponse($saved);
   }
 
 }

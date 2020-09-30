@@ -15,8 +15,7 @@ export default class LoyaltyClubBlock extends React.Component {
   }
 
   handleNotYou = () => {
-    // @TODO: Discuss/Update the status value when user clicked on Not You?.
-    const loyaltyStatus = 0;
+    const loyaltyStatus = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
     // API call to update user's loyalty status.
     const apiUrl = `get/loyalty-club/apc-status-update?uid=${drupalSettings.aura.user_details.id}&apcLinkStatus=${loyaltyStatus}`;
     const apiData = getAPIData(apiUrl);
@@ -38,7 +37,8 @@ export default class LoyaltyClubBlock extends React.Component {
     loyaltyStatus = parseInt(loyaltyStatus, 10);
 
     if (loyaltyStatus !== '') {
-      if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA) {
+      if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
+        || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
         return <CardNotLinkedNoData />;
       } if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
         return (
