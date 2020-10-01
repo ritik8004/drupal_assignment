@@ -4,7 +4,7 @@ import ConditionalView
   from '../../../../../../alshaya_spc/js/common/components/conditional-view';
 
 const AuraMyAccountNoLinkedCard = () => (
-  <div className="aura-myaccount-not-linked-card-wrapper">
+  <div className="aura-myaccount-no-linked-card-wrapper no-card-found">
     <div className="aura-logo">
       <ConditionalView condition={window.innerWidth > 1024}>
         <AuraLogo stacked="vertical" />
@@ -13,7 +13,7 @@ const AuraMyAccountNoLinkedCard = () => (
         <AuraLogo stacked="horizontal" />
       </ConditionalView>
     </div>
-    <div className="aura-myaccount-not-linked-card-description">
+    <div className="aura-myaccount-no-linked-card-description no-card-found">
       <div className="link-your-card">
         { Drupal.t('Already AURA Member?') }
         <a href="">
