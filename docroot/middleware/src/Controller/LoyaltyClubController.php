@@ -163,7 +163,7 @@ class LoyaltyClubController {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Return card number of the user.
    */
-  public function getApcUserDetailsByEmail(Request $request) {
+  public function getApcUserDetailsByEmail() {
     try {
       // Get user email from session.
       $user = $this->drupal->getSessionCustomerInfo();
@@ -179,6 +179,81 @@ class LoyaltyClubController {
     catch (\Exception $e) {
       $this->logger->notice('Error while trying to fetch APC user details for user with email address @email. Message: @message', [
         '@email' => $user['email'],
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
+  }
+
+  /**
+   * Update User's AURA Status.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return success/failure response.
+   */
+  public function apcStatusUpdate(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    $uid = $request_content['uid'];
+    $aura_status = $request_content['apcLinkStatus'];
+
+    // Check if aura status in request is empty.
+    if (empty($aura_status)) {
+      $this->logger->error('Error while trying to update user AURA Status. AURA Status in request is empty.');
+      return new JsonResponse($this->utility->getErrorResponse('AURA Status in request is empty.', Response::HTTP_NOT_FOUND));
+    }
+
+    try {
+      // Get user details from session.
+      $user = $this->drupal->getSessionCustomerInfo();
+
+      // Check if we have user in session.
+      if (empty($user)) {
+        $this->logger->error('Error while trying to update user AURA Status. No user available in session. User id from request: @uid.', [
+          '@uid' => $uid,
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('No user available in session', Response::HTTP_NOT_FOUND));
+      }
+
+      // Check if uid in the request matches the one in session.
+      if ($user['uid'] !== $uid) {
+        $this->logger->error("Error while trying to update user AURA Status. User id in request doesn't match the one in session. User id from request: @req_uid. User id in session: @session_uid.", [
+          '@req_uid' => $uid,
+          '@session_uid' => $user['uid'],
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
+      }
+
+      $data = [
+        'customerId' => $user['customer_id'],
+        'apcLinkStatus' => $aura_status,
+      ];
+      $url = 'customers/apc-status-update';
+
+      // @TODO: Update this when MDC API is ready.
+      // $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+      // On API success, update the user AURA Status in Drupal.
+      $updated = $this->drupal->updateUserAuraStatus($uid, $aura_status);
+
+      // Check if user aura status was updated successfully in drupal.
+      if (!$updated) {
+        $message = 'Error while trying to update user AURA Status field in Drupal.';
+        $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
+          '@uid' => $uid,
+          '@aura_status' => $aura_status,
+          '@customer_id' => $user['customer_id'],
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse($message, 500));
+      }
+
+      $response = [
+        'status' => TRUE,
+      ];
+
+      return new JsonResponse($response);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to update AURA Status for user with customer id @customer_id. Message: @message', [
+        '@customer_id' => $user['customer_id'],
         '@message' => $e->getMessage(),
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
