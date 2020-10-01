@@ -3,7 +3,7 @@ import AuraMyAccountOldCardFound from './card-not-linked-data';
 import AuraMyAccountPendingFullEnrollment from './pending-full-enrollment';
 import AuraMyAccountNoLinkedCard from './card-not-linked-no-data';
 import AuraMyAccountVerifiedUser from './linked-verified';
-import { getAPIData } from '../../../utilities/api/fetchApiData';
+import { postAPIData } from '../../../utilities/api/fetchApiData';
 import { getUserAuraStatus, getAllAuraStatus } from '../../../utilities/helper';
 
 export default class LoyaltyClubBlock extends React.Component {
@@ -17,8 +17,12 @@ export default class LoyaltyClubBlock extends React.Component {
   handleNotYou = () => {
     const loyaltyStatus = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
     // API call to update user's loyalty status.
-    const apiUrl = `get/loyalty-club/apc-status-update?uid=${drupalSettings.aura.user_details.id}&apcLinkStatus=${loyaltyStatus}`;
-    const apiData = getAPIData(apiUrl);
+    const apiUrl = 'post/loyalty-club/apc-status-update';
+    const data = {
+      uid: drupalSettings.aura.user_details.id,
+      apcLinkStatus: loyaltyStatus,
+    };
+    const apiData = postAPIData(apiUrl, data);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {

@@ -278,17 +278,33 @@ class Drupal {
   /**
    * Update user's aura status.
    *
+   * @param string $uid
+   *   User Id.
    * @param string $aura_status
    *   Aura status.
    *
    * @return bool
    *   true/false.
    */
-  public function updateUserAuraStatus($aura_status) {
-    $url = '/update/user-aura-status?apcLinkStatus=' . $aura_status;
-    $response = $this->invokeApiWithSession('GET', $url);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
+  public function updateUserAuraStatus($uid, $aura_status) {
+    $url = '/update/user-aura-status';
+    $data = [
+      'uid' => $uid,
+      'apcLinkStatus' => $aura_status,
+    ];
+    $options = ['form_params' => $data];
+
+    try {
+      $response = $this->invokeApiWithSession('POST', $url, $options);
+      $result = $response->getBody()->getContents();
+      return json_decode($result, TRUE);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while updating user aura status. User Aura Status: @aura_status. Message: @message', [
+        '@aura_status' => $aura_status,
+        '@message' => $e->getMessage(),
+      ]);
+    }
   }
 
 }

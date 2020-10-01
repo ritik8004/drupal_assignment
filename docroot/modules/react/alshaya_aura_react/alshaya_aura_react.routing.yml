@@ -30,6 +30,6 @@ alshaya_aura_react.update_user_aura_status:
   path: '/update/user-aura-status'
   defaults:
     _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaAuraController::updateUserAuraStatus'
-  methods: [GET]
+  methods: [POST]
   requirements:
     _middleware_request_check: 'TRUE'
