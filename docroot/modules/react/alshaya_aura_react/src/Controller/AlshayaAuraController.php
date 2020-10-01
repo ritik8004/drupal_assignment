@@ -189,7 +189,8 @@ class AlshayaAuraController extends ControllerBase {
     // Update user's aura status only when uid in request
     // matches the current user's uid.
     if ($request_uid === $current_uid) {
-      $saved = $this->entityTypeManager->getStorage('user')->load($current_uid)->set('field_aura_loyalty_status', $aura_status)->save();
+      $updated = $this->entityTypeManager->getStorage('user')->load($current_uid)->set('field_aura_loyalty_status', $aura_status)->save();
+      $saved = $updated ? TRUE : $saved;
     }
 
     return new JsonResponse($saved);

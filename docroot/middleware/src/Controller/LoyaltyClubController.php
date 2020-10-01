@@ -245,9 +245,11 @@ class LoyaltyClubController {
         return new JsonResponse($this->utility->getErrorResponse($message, 500));
       }
 
-      // @TODO: Update this when MDC API is ready.
-      return new JsonResponse(TRUE);
-      // Return new JsonResponse($response);
+      $response = [
+        'status' => TRUE,
+      ];
+
+      return new JsonResponse($response);
     }
     catch (\Exception $e) {
       $this->logger->notice('Error while trying to update AURA Status for user with customer id @customer_id. Message: @message', [

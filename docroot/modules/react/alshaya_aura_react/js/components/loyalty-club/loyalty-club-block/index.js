@@ -27,9 +27,11 @@ export default class LoyaltyClubBlock extends React.Component {
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.data !== undefined && result.data.error === undefined) {
-          this.setState({
-            loyaltyStatus,
-          });
+          if (result.data.status) {
+            this.setState({
+              loyaltyStatus,
+            });
+          }
         }
       });
     }
