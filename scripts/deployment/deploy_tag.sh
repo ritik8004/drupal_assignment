@@ -182,6 +182,9 @@ then
     else
       drush --root=$docroot -l "${site}${base_uri}" alshaya-disable-maintenance &>> ${log_file}
       log_message "$site: UPDB done and site put back online"
+
+      drush --root=$docroot -l "${site}${base_uri}" cr -y &>> ${log_file}
+      log_message "$site: CR done"
     fi
   done
 

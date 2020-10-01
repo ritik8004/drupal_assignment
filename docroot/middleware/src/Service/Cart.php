@@ -1156,13 +1156,6 @@ class Cart {
       return $static[$key];
     }
 
-    $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHODS'];
-
-    $static[$key] = $expire > 0 ? $this->cache->get($key) : NULL;
-    if (isset($static[$key])) {
-      return $static[$key];
-    }
-
     $url = sprintf('carts/%d/payment-methods', $this->getCartId());
 
     try {
@@ -1175,9 +1168,6 @@ class Cart {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    if ($expire > 0) {
-      $this->cache->set($key, $expire, $static[$key]);
-    }
     return $static[$key];
   }
 

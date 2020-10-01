@@ -2,12 +2,14 @@
 
 namespace Drupal\alshaya_config;
 
+use Drupal\Component\Serialization\Yaml as SerializationYaml;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -438,6 +440,85 @@ class AlshayaConfigManager {
       if (!empty($field_storage)) {
         $field_storage->delete();
       }
+    }
+  }
+
+  /**
+   * Helper function to replace YAML overrides for settings.
+   *
+   * This function only changes the overrides in
+   * ~/settings/settings-{brand}{country_code}.yml file.
+   *
+   * @param string $mdc
+   *   The settings value to update in the settings file.
+   * @param bool $reset
+   *   Whether to reset the config or not.
+   *
+   * @return int
+   *   Returns 1 if values are successfully set else 0.
+   */
+  public function replaceYamlSettingsOverrides(string $mdc = NULL, $reset = FALSE) {
+    // Include overrides.
+    $acsf_site_code = mb_strtolower(Settings::get('acsf_site_code'));
+    $country_code = mb_strtolower(Settings::get('country_code'));
+    $env = mb_strtolower(Settings::get('env'));
+    $settings_path = Settings::get('settings_override_yaml_file_path');
+
+    if (empty($mdc)) {
+      if (!$mdc) {
+        if ($env === 'local') {
+          $mdc = $acsf_site_code . '_qa';
+        }
+        else {
+          $mdc = $acsf_site_code . '_' . $env;
+        }
+      }
+    }
+
+    // @codingStandardsIgnoreLine
+    global $magentos;
+    $settings['magento_host'] = $magentos[$mdc]['url'];
+
+    $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
+
+    if ($reset) {
+      if (file_exists($settings_file)) {
+        unlink($settings_file);
+        $this->logger->info('Resetted alshaya_api.settings.magento_host to default value');
+        return 1;
+      }
+      else {
+        $this->logger->notice('Failed resetting alshaya_api.settings.magento_host.');
+        return 0;
+      }
+    }
+
+    foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
+      $settings[$key] = $value;
+    }
+
+    // Reset magento_lang_prefix - EN and AR.
+    foreach ($this->languageManager->getLanguages() as $langcode => $language) {
+      $settings['magento_lang_prefix'][$langcode] = $magentos[$mdc][$country_code]['magento_lang_prefix'][$langcode]
+        ?? $magentos['default'][$country_code]['magento_lang_prefix'][$langcode];
+      $this->logger->info('Configuring alshaya_api.settings.magento_lang_prefix @langcode to @value.', [
+        '@langcode' => $langcode,
+        '@value' => $settings['magento_lang_prefix'][$langcode],
+      ]);
+    }
+
+    $yml_settings = SerializationYaml::encode(['alshaya_api.settings' => $settings]);
+    if (file_put_contents($settings_file, $yml_settings)) {
+      $this->logger->info('Configuring alshaya_api.settings.magento_host to @value.', [
+        '@value' => $settings['magento_host'],
+      ]);
+      return 1;
+    }
+    else {
+      $this->logger->notice('Failed configuring alshaya_api.settings.magento_host to @value.', [
+        '@value' => $settings['magento_host'],
+      ]);
+      return 0;
     }
   }
 
