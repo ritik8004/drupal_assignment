@@ -23,6 +23,7 @@ use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Consolidation\AnnotatedCommand\CommandData;
+use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Class AlshayaAcmCommands.
@@ -109,6 +110,13 @@ class AlshayaAcmCommands extends DrushCommands {
   private $moduleHandler;
 
   /**
+   * Config manager service.
+   *
+   * @var \Drupal\alshaya_config\AlshayaConfigManager
+   */
+  private $configManager;
+
+  /**
    * AlshayaAcmCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -133,6 +141,8 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Sku manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler.
+   * @param \Drupal\alshaya_config\AlshayaConfigManager $config_manager
+   *   Config manager service.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -144,7 +154,8 @@ class AlshayaAcmCommands extends DrushCommands {
                               APIWrapper $api_wrapper,
                               AlshayaMdcQueueManager $mdcQueueManager,
                               SkuManager $skuManager,
-                              ModuleHandlerInterface $moduleHandler) {
+                              ModuleHandlerInterface $moduleHandler,
+                              AlshayaConfigManager $config_manager) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -156,6 +167,7 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->mdcQueueManager = $mdcQueueManager;
     $this->skuManager = $skuManager;
     $this->moduleHandler = $moduleHandler;
+    $this->configManager = $config_manager;
   }
 
   /**
@@ -220,18 +232,12 @@ class AlshayaAcmCommands extends DrushCommands {
       global $magentos;
 
       if (isset($magentos[$mdc])) {
-        // Update the magento host.
-        $config = $this->configFactory->getEditable('alshaya_api.settings');
-        $config->set('magento_host', $magentos[$mdc]['url']);
-        foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
-          $config->set($key, $value);
+        if ($this->configManager->replaceYamlSettingsOverrides($mdc)) {
+          $this->output->writeln(dt('Magento settings successfully added. Check Drupal logs for details.'));
         }
-
-        $config->save();
-
-        $this->output->writeln(dt('Configuring alshaya_api.settings.magento_host to @value.', [
-          '@value' => $magentos[$mdc]['url'],
-        ]));
+        else {
+          $this->output->writeln(dt('Magento settings could not be added successfully.  Check Drupal logs for details.'));
+        }
 
         // Determine the country code to use.
         $country_code = !empty($options['country_code'])
@@ -250,7 +256,6 @@ class AlshayaAcmCommands extends DrushCommands {
 
         $configs = [
           'acq_commerce.store' => 'store_id',
-          'alshaya_api.settings' => 'magento_lang_prefix',
         ];
 
         $this->moduleHandler->alter('alshaya_acm_switch_magento_configs', $configs);

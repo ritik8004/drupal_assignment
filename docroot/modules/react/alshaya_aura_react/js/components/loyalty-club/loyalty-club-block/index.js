@@ -41,19 +41,26 @@ export default class LoyaltyClubBlock extends React.Component {
     loyaltyStatus = parseInt(loyaltyStatus, 10);
 
     if (loyaltyStatus !== '') {
+      // When user has no card associated with him.
       if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
         return <AuraMyAccountNoLinkedCard />;
-      } if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
+      }
+      // When user has a old card associated with same email.
+      if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
         return (
           <AuraMyAccountOldCardFound
             handleNotYou={this.handleNotYou}
           />
         );
-      } if (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
+      }
+      // When user has a verified card.
+      if (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
         // @TODO: Add condition to not render this on user account page.
         return <AuraMyAccountVerifiedUser />;
-      } if (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
+      }
+      // When user has a card but enrollment is pending.
+      if (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
         return <AuraMyAccountPendingFullEnrollment />;
       }
     }

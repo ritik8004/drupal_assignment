@@ -13,5 +13,6 @@ services:
       - '@alshaya_acm.mdc_queue_manager'
       - '@alshaya_acm_product.skumanager'
       - '@module_handler'
+      - '@alshaya_config.manager'
     tags:
       - { name: drush.command }
