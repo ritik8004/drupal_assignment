@@ -27,6 +27,7 @@ class MagazinePdpLayout extends PdpLayoutBase {
     $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
     $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
     $variables['#attached']['drupalSettings']['color_swatches_hover'] = TRUE;
+    $variables['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_default';
   }
 
   /**

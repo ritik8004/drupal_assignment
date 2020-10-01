@@ -13,7 +13,6 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\acq_commerce\SKUInterface;
-use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\ViewExecutable;
@@ -408,35 +407,24 @@ function alshaya_seo_transac_theme($existing, $type, $theme, $path) {
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() == 'acq_product' && $view_mode == 'full') {
+  $gtm_disabled_vars = \Drupal::config('alshaya_seo.disabled_gtm_vars')
+    ->get('disabled_vars');
+  if ($entity->bundle() == 'acq_product' && $view_mode == 'full' && !in_array('dimension6', $gtm_disabled_vars)) {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-    $gtm_disabled_vars = \Drupal::config('alshaya_seo.disabled_gtm_vars')
-      ->get('disabled_vars');
-    if (!in_array('dimension6', $gtm_disabled_vars)) {
-      $sku = $skuManager->getSkuForNode($entity);
-      if (!empty($sku)) {
-        // Always load the en values for GTM.
-        $sku_entity = SKU::loadFromSku($sku);
-        if ($sku_entity instanceof SKU) {
-          // We always use en for tracking.
-          if ($sku_entity->hasTranslation('en')) {
-            $sku_entity = $sku_entity->getTranslation('en');
-            $alshaya_product_size_config = $sku_entity->get('attr_size');
-            $build['#attached']['drupalSettings']['alshaya_product_size_config'] = $alshaya_product_size_config;
-          }
+    $sku = $skuManager->getSkuForNode($entity);
+    if (!empty($sku)) {
+      // Always load the en values for GTM.
+      $sku_entity = SKU::loadFromSku($sku);
+      if ($sku_entity instanceof SKU) {
+        // We always use en for tracking.
+        if ($sku_entity->hasTranslation('en')) {
+          $sku_entity = $sku_entity->getTranslation('en');
+          $alshaya_product_size_config = $sku_entity->get('attr_size');
+          $build['#attached']['drupalSettings']['alshaya_product_size_config'] = $alshaya_product_size_config;
         }
       }
-    }
-
-    // Attach PDP gtm libraries based on PDP layout.
-    $pdp_layout = $skuManager->getPdpLayout($entity, 'pdp');
-    if ($pdp_layout === SkuManager::PDP_LAYOUT_MAGAZINE_V2) {
-      $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_magazine_v2';
-    }
-    else {
-      $build['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_default';
     }
   }
 }
