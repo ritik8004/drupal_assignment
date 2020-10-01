@@ -64,8 +64,9 @@
 }
 
 @media print {
-  html, body {
-    height:100vh;
+  html,
+  body {
+    height: 100vh;
     margin: 0 !important;
     overflow: hidden;
   }
