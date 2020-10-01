@@ -35,6 +35,11 @@ export default class AuraMyAccountOldCardFound extends React.Component {
     });
   }
 
+  handleNotYou = () => {
+    const { handleNotYou } = this.props;
+    handleNotYou();
+  }
+
   render() {
     const { cardNumber } = this.state;
 
@@ -61,10 +66,17 @@ export default class AuraMyAccountOldCardFound extends React.Component {
               value={cardNumber}
               options={{ blocks: [4, 4, 4, 4] }}
             />
-            <a href="#" className="link-your-card">
+            <a
+              href="#"
+              className="link-your-card"
+            >
               { Drupal.t('Link your card') }
             </a>
-            <a href="#" className="not-you">
+            <a
+              href="#"
+              className="not-you"
+              onClick={this.handleNotYou}
+            >
               { Drupal.t('Not you?') }
             </a>
           </div>

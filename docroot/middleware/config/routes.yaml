@@ -98,6 +98,11 @@ loyalty_club.get_apc_user_details_by_email:
     controller: App\Controller\LoyaltyClubController::getApcUserDetailsByEmail
     methods: GET
 
+loyalty_club.apc_status_update:
+    path: /post/loyalty-club/apc-status-update
+    controller: App\Controller\LoyaltyClubController::apcStatusUpdate
+    methods: POST
+
 loyalty_club.send_otp:
     path: /post/loyalty-club/send-otp
     controller: App\Controller\LoyaltyClubController::sendOtp
