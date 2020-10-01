@@ -1,5 +1,9 @@
 import React from 'react';
+import Cleave from 'cleave.js/react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
+import ConditionalView
+  from '../../../../../../alshaya_spc/js/common/components/conditional-view';
+import AuraLogo from '../../../../svg-component/aura-logo';
 
 export default class AuraMyAccountOldCardFound extends React.Component {
   constructor(props) {
@@ -23,32 +27,45 @@ export default class AuraMyAccountOldCardFound extends React.Component {
         }
       });
     }
+
+    // For testing purpose only.
+    // @todo: To be removed when API integration is done.
+    this.setState({
+      cardNumber: 6362544000099511,
+    });
   }
 
   render() {
     const { cardNumber } = this.state;
 
     return (
-      <div className="aura-card-not-linked-mdc-data-wrapper">
+      <div className="aura-myaccount-no-linked-card-wrapper old-card-found">
         <div className="aura-logo">
-          AURA logo placeholder
+          <ConditionalView condition={window.innerWidth > 1024}>
+            <AuraLogo stacked="vertical" />
+          </ConditionalView>
+          <ConditionalView condition={window.innerWidth < 1025}>
+            <AuraLogo stacked="horizontal" />
+          </ConditionalView>
         </div>
-        <div className="aura-card-not-linked-mdc-data-description">
+        <div className="aura-myaccount-no-linked-card-description old-card-found">
           <div className="header">
-            { Drupal.t('We see a loyalty card associate with your email. It just a takes one click to link. Do you want to link now?') }
+            { Drupal.t('An Aura loyalty card is associate with your email address. It just a takes one click to link.') }
+            <span className="bold">{Drupal.t('Do you want to link now?')}</span>
           </div>
-          <div className="card-number">
-            <span>
-              { cardNumber }
-            </span>
-            <a href="">
-              { Drupal.t('Not You?')}
+          <div className="card-number-wrapper">
+            <Cleave
+              name="aura-my-account-link-card"
+              className="aura-my-account-link-card"
+              disabled
+              value={cardNumber}
+              options={{ blocks: [4, 4, 4, 4] }}
+            />
+            <a href="#" className="link-your-card">
+              { Drupal.t('Link your card') }
             </a>
-          </div>
-          <div className="link-your-card">
-            { Drupal.t('Already in Loyalty Club') }
-            <a href="">
-              { Drupal.t('LINK YOUR CARD NOW') }
+            <a href="#" className="not-you">
+              { Drupal.t('Not you?') }
             </a>
           </div>
         </div>

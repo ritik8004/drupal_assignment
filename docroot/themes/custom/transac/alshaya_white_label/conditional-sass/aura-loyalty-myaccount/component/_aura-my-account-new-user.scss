@@ -1,4 +1,21 @@
-.aura-myaccount-not-linked-card-wrapper {
+@mixin linkBtnDimensions() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $aura-bold;
+  letter-spacing: 0.71px;
+  font-size: 1rem;
+  width: 14.0625rem;
+  height: 2.875rem;
+  border-radius: 1.75rem;
+}
+
+@mixin linkCardBtn() {
+  color: $aura-loyalty-club-no-card-block-text;
+  background-image: $aura-loyalty-club-no-card-block-link-card-btn;
+}
+
+.aura-myaccount-no-linked-card-wrapper {
   border-radius: 0.625rem;
   background-image: $aura-loyalty-club-no-card-block-bg;
   padding: 2.0625rem 2.5rem;
@@ -23,7 +40,17 @@
     }
   }
 
-  .aura-myaccount-not-linked-card-description {
+  &.old-card-found {
+    padding: 1.875rem 2.5rem;
+  }
+
+  &.old-card-found .aura-logo {
+    @include breakpoint($desktop) {
+      margin-#{$right}: 3.625rem;
+    }
+  }
+
+  .aura-myaccount-no-linked-card-description.no-card-found {
     display: flex;
 
     @include breakpoint($upto-desktop) {
@@ -44,16 +71,9 @@
       }
 
       > a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: $aura-bold;
-        letter-spacing: 0.71px;
-        font-size: 1rem;
         margin-top: 0.875rem;
-        width: 14.0625rem;
-        height: 2.875rem;
-        border-radius: 1.75rem;
+
+        @include linkBtnDimensions();
 
         @include breakpoint($upto-desktop) {
           width: 15.9375rem;
@@ -66,8 +86,7 @@
         }
 
         > a {
-          color: $aura-loyalty-club-no-card-block-text;
-          background-image: $aura-loyalty-club-no-card-block-link-card-btn;
+          @include linkCardBtn();
         }
       }
 
@@ -79,6 +98,80 @@
         background-image: $aura-loyalty-club-no-card-block-sign-up-bg;
         background-origin: border-box;
         background-clip: content-box, border-box;
+      }
+    }
+  }
+
+  .aura-myaccount-no-linked-card-description.old-card-found {
+    .header {
+      color: $aura-loyalty-club-no-card-block-text;
+      font-family: $aura-regular;
+      font-size: 1.125rem;
+      width: 28.3125rem;
+
+      .bold {
+        font-family: $aura-bold;
+        padding-#{$left}: 2px;
+      }
+
+      @include breakpoint($upto-desktop) {
+        width: 100%;
+        text-align: center;
+        margin-top: 2rem;
+
+        .bold {
+          display: block;
+          padding: 0;
+          margin-top: 2rem;
+        }
+      }
+    }
+
+    .card-number-wrapper {
+      display: flex;
+      align-items: center;
+      margin-top: 1.625rem;
+
+      @include breakpoint($upto-desktop) {
+        flex-direction: column;
+      }
+
+      input.aura-my-account-link-card {
+        width: 14.0625rem;
+        height: 2.875rem;
+        border-radius: 1.75rem;
+        background-color: $aura-loyalty-club-old-card-text-bg;
+        border: none;
+        color: $aura-loyalty-club-old-card-text;
+        font-family: $aura-regular;
+        font-size: 1rem;
+        text-align: center;
+        letter-spacing: 0.71px;
+      }
+    }
+
+    a.link-your-card {
+      @include linkBtnDimensions();
+      @include linkCardBtn();
+
+      margin-top: 1.25rem;
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 1.875rem;
+        margin-top: 0;
+      }
+    }
+
+    a.not-you {
+      font-family: $aura-regular;
+      font-size: 1rem;
+      margin-top: 1.25rem;
+      color: $aura-loyalty-club-old-card-not-you-link;
+      text-decoration: underline;
+
+      @include breakpoint($desktop) {
+        margin-#{$left}: 1.875rem;
+        margin-top: 0;
       }
     }
   }
