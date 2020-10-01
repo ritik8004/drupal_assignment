@@ -28,6 +28,8 @@ export default class AuraMyAccountOldCardFound extends React.Component {
       });
     }
 
+    // For testing purpose only.
+    // @todo: To be removed when API integration is done.
     this.setState({
       cardNumber: 6362544000099511,
     });
