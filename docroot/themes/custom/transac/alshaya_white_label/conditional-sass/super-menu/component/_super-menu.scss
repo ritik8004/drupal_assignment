@@ -25,9 +25,14 @@ $super-menu-height: 1.875rem;
 }
 
 // Margin top of body changes with super menu at mobile and tablet.
-body.frontpage {
+body.frontpage.supermenu {
   @include breakpoint($only-mobile) {
-    margin-top: 9rem !important;
+    margin-top: 9.5rem !important;
+
+    .filter-fixed-top .show-all-filters-algolia,
+    .filter-fixed-top .block-facet-blockcategory-facet-search {
+      top: 3.6875rem !important;
+    }
   }
 
   @include breakpoint($only-tablet) {
@@ -35,10 +40,9 @@ body.frontpage {
   }
 }
 
-body.plp-page-only,
-body.nodetype--acq_product {
+body.supermenu {
   @include breakpoint($only-mobile) {
-    margin-top: 5.6875rem;
+    margin-top: 6rem !important;
 
     .filter-fixed-top .show-all-filters-algolia,
     .filter-fixed-top .block-facet-blockcategory-facet-search {
@@ -47,41 +51,49 @@ body.nodetype--acq_product {
   }
 }
 
-body.header-sticky-filter {
+body.supermenu.header-sticky-filter {
   @include breakpoint($tablet) {
-    margin-top: 7.8125rem + $super-menu-height !important;
+    margin-top: 7.8125rem + $super-menu-height;
   }
 
   @include breakpoint($desktop) {
-    margin-top: 2.5rem + $super-menu-height !important;
+    margin-top: 2.5rem + $super-menu-height;
   }
 
   &.slug-banner-processed {
     @include breakpoint($tablet) {
-      margin-top: 5.3125rem + $super-menu-height !important;
+      margin-top: 5.3125rem + $super-menu-height;
     }
   }
 }
 
-.filter-fixed-top .sticky-filter-wrapper {
-  @include breakpoint($upto-desktop) {
-    top: $super-menu-height !important;
+body.supermenu {
+  &.slug-banner-processed:not(.header--fixed) {
+    margin-top: 0;
   }
 }
 
-.filter-fixed-top .container-without-product {
-  @include breakpoint($upto-desktop) {
-    top: $super-menu-height !important;
+body.supermenu {
+  .filter-fixed-top .sticky-filter-wrapper {
+    @include breakpoint($upto-desktop) {
+      top: $super-menu-height;
+    }
+  }
+
+  .filter-fixed-top .container-without-product {
+    @include breakpoint($upto-desktop) {
+      top: $super-menu-height;
+    }
   }
 }
 
 @include breakpoint($upto-desktop) {
-  body:not(.mobile--overlay) {
+  body.supermenu:not(.mobile--overlay) {
     .c-menu-secondary {
       @include clearfix;
 
-      display: block !important;
-      z-index: 12 !important;
+      display: block;
+      z-index: 12;
       position: fixed;
       top: 0;
       width: 100%;
@@ -91,7 +103,7 @@ body.header-sticky-filter {
 
       .menu--super-menu {
         float: none;
-        display: block !important;
+        display: block;
 
         ul {
           display: flex;
@@ -130,7 +142,7 @@ body.header-sticky-filter {
     }
   }
 
-  body {
+  body.supermenu {
     .branding__menu {
       margin-top: $super-menu-height;
     }
@@ -138,7 +150,7 @@ body.header-sticky-filter {
 }
 
 @include breakpoint($only-tablet) {
-  body:not(.mobile--overlay) {
+  body.supermenu:not(.mobile--overlay) {
     .c-menu-secondary {
       .menu--super-menu {
         ul {
@@ -158,7 +170,7 @@ body.header-sticky-filter {
 }
 
 @include breakpoint($only-tablet) {
-  body:not(.mobile--overlay):not(.header-sticky-filter) {
+  body.supermenu:not(.mobile--overlay):not(.header-sticky-filter) {
     .c-menu-secondary {
       position: absolute;
     }
@@ -167,12 +179,12 @@ body.header-sticky-filter {
 
 // Front page, mobile resolution, scroll secondary menu up with content.
 @include breakpoint($only-mobile) {
-  body:not(.mobile--overlay).frontpage {
+  body.supermenu:not(.mobile--overlay).frontpage {
     .c-menu-secondary {
       position: absolute;
     }
 
-    &.Sticky-algolia-search {
+    &.sticky-algolia-search {
       .block-alshaya-algolia-react-autocomplete {
         z-index: 1;
       }
