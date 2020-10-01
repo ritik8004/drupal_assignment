@@ -197,7 +197,10 @@ export const prepareAddressDataFromForm = (elements) => {
 export const validateContactInfo = (e, validateEmail) => {
   let isError = false;
   const name = e.target.elements.fullname.value.trim();
-  const splitedName = name.split(' ');
+  let splitedName = name.split(' ');
+  splitedName = splitedName.filter((s) => (
+    (s.trim().length > 0
+    && (s !== '\\n' && s !== '\\t' && s !== '\\r'))));
   if (name.length === 0 || splitedName.length === 1) {
     document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
     document.getElementById('fullname-error').classList.add('error');
