@@ -8,6 +8,7 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
+use \Drupal\Component\Serialization\Yaml;
 
 require_once DRUPAL_ROOT . '/../factory-hooks/environments/environments.php';
 $env = alshaya_get_site_environment();
@@ -45,4 +46,38 @@ if (file_exists($brand_country_file)) {
 $brand_file = $settings_path . '-' . $acsf_site_code . '.php';
 if (file_exists($brand_file)) {
   include_once $brand_file;
+}
+
+$settings = $settings ?? [];
+$settings['acsf_site_code'] = $acsf_site_code;
+$settings['settings_override_yaml_file_path'] = $settings_path;
+// Allow overriding settings and config to set secret info directly from
+// include files on server which can be for stack or per brand or brand
+// country combination.
+$overridding_settings_files = [
+  $settings_path,
+  $settings_path . '-' . $acsf_site_code,
+  $settings_path . '-' . $acsf_site_code . $country_code,
+];
+$extensions = ['yml', 'php'];
+
+foreach ($extensions as $extension) {
+  foreach ($overridding_settings_files as $file) {
+    $file = $file . ".$extension";
+    switch ($extension) {
+      case 'yml':
+        if (file_exists($file)) {
+          $overridden_settings = Yaml::decode(file_get_contents($file));
+          $settings = (!empty($overridden_settings))
+            ? array_replace_recursive($settings, $overridden_settings)
+            : $settings;
+        }
+        break;
+      case 'php':
+        if (file_exists($file)) {
+          include_once $file;
+        }
+        break;
+    }
+  }
 }
