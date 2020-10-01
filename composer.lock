@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d44f17c4c2176a942228458e2dce7c86",
+    "content-hash": "75c601a60d91b3e33300a8cedd3a7bb3",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -1114,7 +1114,7 @@
             "version": "3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
@@ -13963,6 +13963,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-05-06/500-error-on-google-auth-3133754-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

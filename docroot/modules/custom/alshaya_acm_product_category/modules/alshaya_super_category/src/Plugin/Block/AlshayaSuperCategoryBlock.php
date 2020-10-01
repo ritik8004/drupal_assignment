@@ -130,6 +130,13 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build() {
+
+    // Don't need to build this block if status of super category settings
+    // is false.
+    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      return [];
+    }
+
     // Get all the parents of product category.
     $term_data = $this->productCategoryTree->getCategoryRootTerms();
 
