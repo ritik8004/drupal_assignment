@@ -30,6 +30,7 @@
         "drupal/change_pwd_page": "^1.0@beta",
         "drupal/ckeditor_font": "^1.0",
         "drupal/clientside_validation": "^1.0-rc4",
+        "drupal/cloudflare_image_style": "^1.0",
         "drupal/components": "^1.0",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
