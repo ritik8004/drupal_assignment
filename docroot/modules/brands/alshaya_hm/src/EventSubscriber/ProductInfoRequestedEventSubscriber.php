@@ -120,7 +120,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       }
     }
 
-    $event->setValue((object) $labels);
+    $event->setValue($labels);
   }
 
   /**
