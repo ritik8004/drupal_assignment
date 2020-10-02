@@ -1,0 +1,11 @@
+services:
+  alshaya_brand.stream_wrapper:
+    class: Drupal\alshaya_brand\StreamWrapper\BrandFilesStreamWrapper
+    tags:
+      - { name: stream_wrapper, scheme: brand }
+
+  alshaya_brand.path_processor_image_styles:
+    class: Drupal\alshaya_brand\PathProcessor\PathProcessorImageStyles
+    arguments: ['@stream_wrapper_manager']
+    tags:
+      - { name: path_processor_inbound, priority: 301 }
