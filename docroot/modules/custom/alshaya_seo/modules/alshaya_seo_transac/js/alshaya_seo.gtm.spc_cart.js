@@ -17,11 +17,12 @@
    *   GTM event string removeFromcart, addToCart.
    */
   Drupal.alshayaSeoSpc.gtmUpdateCartItem = function (product, gtmEvent) {
+    var action = gtmEvent === 'removeFromCart' ? 'remove' : 'add';
     var productData = {
       event: gtmEvent,
       ecommerce: {
         currencyCode: drupalSettings.alshaya_spc.currency_config.currency_code,
-        add: {
+        [action]: {
           product: []
         }
       }
@@ -33,7 +34,7 @@
     if (productInfo !== null) {
       var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
       productDetails.metric2 = product.finalPrice;
-      productData.ecommerce.add.product.push(productDetails);
+      productData.ecommerce[action].product.push(productDetails);
       dataLayer.push(productData);
     }
   };
