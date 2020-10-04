@@ -27,7 +27,7 @@
             : clickedOption.text();
           $('.select2Option', that).find('.list-title .selected-text').html(selectedText);
 
-          if( !isGroupData ) {
+          if (!isGroupData) {
             Drupal.alshayaSelect2OptionUpdateSelectedLabel();
           }
         }

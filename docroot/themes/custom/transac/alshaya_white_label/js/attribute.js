@@ -30,7 +30,7 @@
       // Get alternates from last option.
       var alternates = JSON.parse($(this).find('option:last').attr('group-data'));
 
-      if( alternates !== 'undefined' ) {
+      if (alternates !== 'undefined') {
         isGroupData = true;
       }
 
