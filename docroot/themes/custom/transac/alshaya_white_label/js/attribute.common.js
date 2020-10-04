@@ -12,7 +12,7 @@
    * @param {object} element
    *   The HTML element inside which we want to convert select list into unformatted list.
    */
-  Drupal.convertSelectListtoUnformattedList = function (element) {
+  Drupal.convertSelectListtoUnformattedList = function (element, isGroupData) {
     element.once('convert-select-list-to-unformatted-list').each(function () {
       $(this).on('refresh', function () {
         var that = $(this).parent();
@@ -27,7 +27,9 @@
             : clickedOption.text();
           $('.select2Option', that).find('.list-title .selected-text').html(selectedText);
 
-          Drupal.alshayaSelect2OptionUpdateSelectedLabel();
+          if(!isGroupData) {
+            Drupal.alshayaSelect2OptionUpdateSelectedLabel();
+          }
         }
       });
 
