@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bdc48e861be1234c687e54f065a63935",
+    "content-hash": "66350c1d5332a3f0f4d4124a146d0dc4",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -12043,7 +12043,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-10-05/content-type-feature-3159253-5.patch"
+                    "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-10-05/content-type-feature-3159253-6.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
