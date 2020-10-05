@@ -51,7 +51,7 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
         <div className="aura-card-linked-verified-wrapper-content">
           <div className="aura-logo">
             <div className="aura-user-avatar" />
-            <div className="aura-user-name" />
+            <div className="aura-user-name">Aura UserName</div>
           </div>
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">
