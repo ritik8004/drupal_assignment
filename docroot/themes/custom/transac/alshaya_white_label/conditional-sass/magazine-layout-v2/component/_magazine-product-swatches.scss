@@ -22,7 +22,9 @@
     a {
       height: 5.3125rem;
       display: block;
-      background-size: contain;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
 
       @include breakpoint($only-tablet) {
         height: 5.938rem;
