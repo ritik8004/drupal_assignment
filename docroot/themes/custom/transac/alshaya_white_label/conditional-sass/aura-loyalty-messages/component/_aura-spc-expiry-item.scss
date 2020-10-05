@@ -1,9 +1,16 @@
+@import "../../aura-loyalty-global/component/aura-fonts";
+
 .spc-aura-points-expiry-item {
   padding: 0.875rem 1.25rem 0.875rem 3.625rem;
   background: $aura-expiry-item-bg;
   border-radius: 0.625rem;
   color: $aura-expiry-item-txt;
   position: relative;
+  font-family: $aura-regular;
+
+  b {
+    font-family: $aura-bold;
+  }
 
   @include icon('warning') {
     width: 27px;

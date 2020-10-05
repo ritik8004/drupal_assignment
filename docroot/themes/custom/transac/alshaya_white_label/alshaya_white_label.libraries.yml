@@ -427,10 +427,25 @@ sub-brand-logo:
     theme:
       css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}
 
+aura-loyalty-tooltip:
+  css:
+    theme:
+      css/conditional-sass/aura-tooltip/aura-tooltip.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/tooltip
+
+aura-loyalty-messages:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-messages/aura-loyalty-messages.ltr.css: {}
+
 aura-loyalty-spc-common:
   css:
     theme:
       css/conditional-sass/aura-loyalty-spc-common/aura-loyalty-spc-common.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip
+    - alshaya_white_label/aura-loyalty-messages
 
 aura-loyalty-forms:
   css:
@@ -461,3 +476,6 @@ aura-loyalty-myaccount:
   css:
     theme:
       css/conditional-sass/aura-loyalty-myaccount/aura-loyalty-myaccount.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip
+    - alshaya_white_label/aura-loyalty-messages
