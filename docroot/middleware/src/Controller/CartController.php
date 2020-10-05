@@ -644,9 +644,11 @@ class CartController {
             '@cart' => json_encode($cart),
           ]);
         }
-        // If first/last name not available in shipping address.
+        // If first/last name not available in shipping/billing address.
         elseif (empty($cart['shipping']['address']['firstname'])
-          || empty($cart['shipping']['address']['lastname'])) {
+          || empty($cart['shipping']['address']['lastname'])
+          || empty($cart['cart']['billing_address']['firstname'])
+          || empty($cart['cart']['billing_address']['lastname'])) {
           $is_error = TRUE;
           $this->logger->error('Error while finalizing payment. First name or Last name not available in cart. Cart: @cart.', [
             '@cart' => json_encode($cart),
