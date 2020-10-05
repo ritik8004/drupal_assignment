@@ -696,11 +696,17 @@ class AlshayaSpcController extends ControllerBase {
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
+          $raw_number = $value;
           if (strpos($value, $country_mobile_code) === FALSE) {
             $value = $country_mobile_code . $value;
           }
 
           try {
+            // If mobile number not contains only digits.
+            if (!preg_match('/^[0-9]+$/', $raw_number)) {
+              throw new \Exception('Invalid mobile number.');
+            }
+
             if ($this->mobileUtil->testMobileNumber($value)) {
               $status[$key] = TRUE;
             }
