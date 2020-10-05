@@ -38,6 +38,7 @@ export default class LoyaltyClubBlock extends React.Component {
   }
 
   render() {
+    const { doNotshowLinkedVerifiedBlock } = this.props;
     const allAuraStatus = getAllAuraStatus();
     let { loyaltyStatus } = this.state;
     loyaltyStatus = parseInt(loyaltyStatus, 10);
@@ -57,8 +58,7 @@ export default class LoyaltyClubBlock extends React.Component {
         );
       }
       // When user has a verified card.
-      if (loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
-        // @TODO: Add condition to not render this on user account page.
+      if (!doNotshowLinkedVerifiedBlock && loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
         return <AuraMyAccountVerifiedUser />;
       }
       // When user has a card but enrollment is pending.
