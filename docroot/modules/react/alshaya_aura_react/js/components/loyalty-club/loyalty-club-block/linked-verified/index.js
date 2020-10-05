@@ -42,6 +42,8 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
   getToolTipContent = () => Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem the points.');
 
   render() {
+    const tierValue = getUserAuraTier();
+    const tierLabel = tierValue ? getUserAuraTierLabel(tierValue) : '';
     const {
       points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
     } = this.state;
@@ -56,7 +58,7 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">
               <label>{Drupal.t('Status')}</label>
-              <span className="aura-blend">{ getUserAuraTierLabel(getUserAuraTier()) }</span>
+              <span className="aura-blend">{ tierLabel }</span>
             </div>
             <div className="aura-points">
               <label>{Drupal.t('Point balance')}</label>
