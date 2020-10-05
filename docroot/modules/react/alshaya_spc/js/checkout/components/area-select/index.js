@@ -50,6 +50,11 @@ export default class AreaSelect extends React.Component {
 
   preSelectDefaultIfPossible = () => {
     const { area_list: areaList } = this.props;
+    // Do nothing if area list is empty.
+    if (areaList === null) {
+      return;
+    }
+
     const { currentOption } = this.state;
     if (currentOption === null && Object.values(areaList).length === 1) {
       this.setState({
