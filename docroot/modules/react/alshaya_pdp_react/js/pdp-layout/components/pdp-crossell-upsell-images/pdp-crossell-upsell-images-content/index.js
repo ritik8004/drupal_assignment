@@ -18,20 +18,20 @@ const PdpCrossellUpsellImageContent = ({
         title={title}
         loading="lazy"
       />
+      {productLabels ? (
+        <div className="product-labels">
+          {Object.keys(productLabels).map((key) => (
+            <div className={`labels ${productLabels[key].position}`} key={productLabels[key].position}>
+              <img
+                src={productLabels[key].image.url}
+                alt={productLabels[key].image.alt}
+                title={productLabels[key].image.title}
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
-    {productLabels ? (
-      <div className="product-labels">
-        {Object.keys(productLabels).map((key) => (
-          <div className={`labels ${productLabels[key].position}`} key={productLabels[key].position}>
-            <img
-              src={productLabels[key].image.url}
-              alt={productLabels[key].image.alt}
-              title={productLabels[key].image.title}
-            />
-          </div>
-        ))}
-      </div>
-    ) : null}
     <PdpInfo
       title={title}
       finalPrice={finalPrice}
