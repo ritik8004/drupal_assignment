@@ -59,9 +59,9 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
  * Implements hook_alshaya_my_account_links_alter().
  */
 function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
-  // Add My Loyalty Club link.
+  // Add My Aura link.
   $links['alshaya_loyalty_club'] = [
-    'text' => t('My Loyalty Club'),
+    'text' => t('My Aura'),
     'route' => 'alshaya_aura_react.my_loyalty_club',
     'weight' => 11,
   ];
