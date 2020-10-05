@@ -120,7 +120,7 @@ class AuraCheckoutRewards extends React.Component {
           <AuraFormRedeemPoints />
           <div className="spc-aura-checkout-messages">
             <PointsPromoMessage />
-            <PointsExpiryMessage />
+            <PointsExpiryMessage points="700" date={Drupal.t('30th June')} />
           </div>
         </ConditionalView>
         {/* Registered User - Linked Card - Pending Enrollment */}

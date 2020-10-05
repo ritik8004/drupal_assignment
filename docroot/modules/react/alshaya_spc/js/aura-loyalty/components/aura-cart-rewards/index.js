@@ -65,7 +65,7 @@ class AuraCartRewards extends React.Component {
             <PointsToEarnMessage points={points} />
             <div className="actions">
               <PointsPromoMessage />
-              <PointsExpiryMessage />
+              <PointsExpiryMessage points="700" date={Drupal.t('30th June')} />
             </div>
           </div>
         </ConditionalView>
