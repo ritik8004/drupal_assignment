@@ -172,7 +172,7 @@ class LoyaltyClubController {
       // @TODO: Remove the hardcoded value when MDC API is ready.
       // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $responseData = [
-        'apcCard' => '1234567890',
+        'apcCard' => '6362544000099511',
       ];
       return new JsonResponse($responseData);
     }
