@@ -79,6 +79,7 @@ gtm_pdp_magazine_v2:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce
 
+# This is for both classic and magazine layout since code is same.
 gtm_pdp_default:
   version: 1.x
   js:

@@ -26,6 +26,7 @@ class DefaultPdpLayout extends PdpLayoutBase {
     $variables['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
     $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
     $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
+    $variables['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_default';
   }
 
   /**
