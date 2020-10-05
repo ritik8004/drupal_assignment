@@ -413,7 +413,7 @@ function alshaya_hm_page_attachments(array &$page) {
 function alshaya_hm_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
   if (!empty($data) && ($type === 'light')) {
     $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
-    $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'plp');
+    $data['collection_labels'] = (object) $product_info_helper->getValue($sku, 'collection_labels', 'plp');
   }
 }
 
@@ -422,7 +422,7 @@ function alshaya_hm_alshaya_acm_product_light_product_data_alter(SKU $sku, array
  */
 function alshaya_hm_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku) {
   $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
-  $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
+  $data['collection_labels'] = (object) $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
 }
 
 /**
@@ -430,7 +430,7 @@ function alshaya_hm_alshaya_mobile_app_product_exclude_linked_data_alter(array &
  */
 function alshaya_hm_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
   $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
-  $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
+  $data['collection_labels'] = (object) $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
 }
 
 /**
