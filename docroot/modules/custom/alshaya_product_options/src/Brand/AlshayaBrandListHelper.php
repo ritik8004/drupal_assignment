@@ -4,7 +4,6 @@ namespace Drupal\alshaya_product_options\Brand;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Site\Settings;
-use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Class AlshayaBrandListHelper.
@@ -29,32 +28,20 @@ class AlshayaBrandListHelper {
   private $connection;
 
   /**
-   * The language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * AlshayaBrandListHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
    */
-  public function __construct(Connection $connection,
-                              LanguageManagerInterface $language_manager) {
+  public function __construct(Connection $connection) {
     $this->connection = $connection;
-    $this->languageManager = $language_manager;
   }
 
   /**
    * Load all product brand terms.
    */
-  public function getBrandTerms() {
+  public function getBrandTerms($langcode = 'en') {
     $logo_attribute = self::getLogoAttribute();
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $terms = [];
     if ($logo_attribute) {
       $query = $query = $this->connection->select('taxonomy_term_field_data', 'ttfd');

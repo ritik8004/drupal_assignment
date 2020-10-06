@@ -11,6 +11,7 @@ use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides alshaya brand carousel block.
@@ -44,13 +45,27 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
   protected $alshayaOptionsService;
 
   /**
+   * The Language Manager service.
+   *
+   * @var \Drupal\Core\Language\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AlshayaBrandListHelper $brand_list, ConfigFactoryInterface $config_factory, AlshayaOptionsListHelper $alshaya_options_service) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              AlshayaBrandListHelper $brand_list,
+                              ConfigFactoryInterface $config_factory,
+                              AlshayaOptionsListHelper $alshaya_options_service,
+                              LanguageManagerInterface $language_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->brandList = $brand_list;
     $this->config = $config_factory->get('alshaya_brand_carousel.settings');
     $this->alshayaOptionsService = $alshaya_options_service;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -63,7 +78,8 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
       $plugin_definition,
       $container->get('alshaya_product_options.brand_list_helper'),
       $container->get('config.factory'),
-      $container->get('alshaya_options_list.alshaya_options_service')
+      $container->get('alshaya_options_list.alshaya_options_service'),
+      $container->get('language_manager')
     );
   }
 
@@ -71,8 +87,10 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build() {
+    // Get current language code.
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get product brand details.
-    $terms = $this->brandList->getBrandTerms();
+    $terms = $this->brandList->getBrandTerms($langcode);
     $brand_images = [];
     $brand_carousel_settings = $this->config->get('brand_carousel_items_settings');
     $attributeName = AlshayaBrandListHelper::getBrandAttribute();

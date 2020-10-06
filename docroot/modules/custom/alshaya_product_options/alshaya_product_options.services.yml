@@ -52,4 +52,3 @@ services:
     class: Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper
     arguments:
       - '@database'
-      - '@language_manager'
