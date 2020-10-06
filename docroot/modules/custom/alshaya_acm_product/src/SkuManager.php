@@ -834,11 +834,20 @@ class SkuManager {
       }
     }
 
+    $promotion_nids = [];
     $query = $this->connection->select('node__field_acq_promotion_rule_id', 'node_field');
     $query->fields('node_field', ['entity_id']);
     $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
     $query->condition('mapping.sku', $skus, 'IN');
-    $promotion_nids = $query->execute()->fetchAllKeyed(0, 0);
+    $promotion_nids = $query->execute()->fetchCol();
+
+    // Fetch promotion nodes which apply to the entire catalog of products.
+    $query = $this->connection->select('node', 'n');
+    $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
+    $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
+    $query->fields('n', ['nid']);
+    $results = $query->execute()->fetchCol();
+    $promotion_nids = array_merge($promotion_nids, $results);
 
     if (!empty($promotion_nids)) {
       $promotion_nids = array_unique($promotion_nids);
