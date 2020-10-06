@@ -17,7 +17,7 @@
         #mimemail-body.ar {text-align: right;}
         @media only screen and (max-device-width: 480px) {
           #header {padding: 10px 7px; margin-bottom: 21px;}
-          #header img {width: 160px;}
+          #header img {width: 100%;}
           #center {padding: 0 7px}
           h1 {font-size: 18px; padding-bottom: 10px}
         }
@@ -25,7 +25,7 @@
   </head>
   <body id="mimemail-body" class="{{ lang }}" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
     <div id="header">
-      <img src="{{ email_logo }}" width="134px" alt="logo" title="logo"/>
+      <img src="{{ email_logo }}" width="100%" alt="logo" title="logo"/>
     </div>
     <div id="center">
       <div id="main">
