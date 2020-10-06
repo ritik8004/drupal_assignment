@@ -14,11 +14,13 @@
 </a>
 <div class="product-plp-detail-wrapper">
   {% if product_attribute_labels %}
-    <ul class="collection-labels">
-      {% for key, product_attribute_label in product_attribute_labels %}
-        <li class="{{ key }}">{{ product_attribute_label }}</li>
-      {% endfor %}
-    </ul>
+    <div class="product-labels">
+      <ul class="collection-labels">
+        {% for key, product_attribute_label in product_attribute_labels %}
+          <li class="{{ key }}">{{ product_attribute_label }}</li>
+        {% endfor %}
+      </ul>
+    </div>
   {% endif %}
   <h2 class="field--name-name">
     <a href="{{ product_url }}" class="product-selected-url">{{ product_label }}</a>
