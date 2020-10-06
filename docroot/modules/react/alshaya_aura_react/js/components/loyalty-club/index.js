@@ -1,12 +1,26 @@
 import React from 'react';
 import LoyaltyClubBlock from './loyalty-club-block';
-import LoyaltyClubBenefits from './loyalty-club-benefits';
+import LoyaltyClubTabs from './loyalty-club-tabs';
+import { getUserAuraStatus } from '../../utilities/helper';
 
-const LoyaltyClub = () => (
-  <>
-    <LoyaltyClubBlock />
-    <LoyaltyClubBenefits />
-  </>
-);
+class LoyaltyClub extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loyaltyStatus: getUserAuraStatus(),
+    };
+  }
+
+  render() {
+    const { loyaltyStatus } = this.state;
+
+    return (
+      <>
+        <LoyaltyClubBlock loyaltyStatus={loyaltyStatus} />
+        <LoyaltyClubTabs loyaltyStatus={loyaltyStatus} />
+      </>
+    );
+  }
+}
 
 export default LoyaltyClub;
