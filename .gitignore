@@ -161,3 +161,4 @@ console/
 
 # Ignore install script override for devs.
 install-site-dev.sh
+/autoload.php
