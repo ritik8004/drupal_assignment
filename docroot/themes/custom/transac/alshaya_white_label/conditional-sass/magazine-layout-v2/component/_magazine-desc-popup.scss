@@ -2,6 +2,10 @@
   &-desc {
     &-popup {
       &-container {
+        @include breakpoint($only-mobile) {
+          #{$left}: 0;
+        }
+
         .magv2-pdp-price-container {
           &.has-special-price {
             flex-direction: row;
