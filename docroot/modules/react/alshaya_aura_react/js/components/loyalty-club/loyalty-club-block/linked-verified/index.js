@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
-import { getUserAuraTier } from '../../../../utilities/helper';
+import { getUserAuraTier, getUserAuraTierLabel } from '../../../../utilities/helper';
 import PointsExpiryMessage
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import PointsUpgradeMessage
@@ -11,10 +11,10 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      points: '',
-      pointsOnHold: '',
+      points: 0,
+      pointsOnHold: 0,
       upgradeMsg: '',
-      expiringPoints: '',
+      expiringPoints: 0,
       expiryDate: '',
     };
   }
@@ -56,7 +56,7 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">
               <label>{Drupal.t('Status')}</label>
-              <span className="aura-blend">{ getUserAuraTier() }</span>
+              <span className="aura-blend">{ getUserAuraTierLabel(getUserAuraTier()) }</span>
             </div>
             <div className="aura-points">
               <label>{Drupal.t('Point balance')}</label>
