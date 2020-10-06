@@ -29,12 +29,14 @@ export default class PdpGallery extends React.PureComponent {
       open: true,
       currentIndex: indexOfChildWRTSiblings,
     });
+    document.querySelector('body').classList.add('pdp-modal-overlay');
   };
 
   closeModal = () => {
     this.setState({
       open: false,
     });
+    document.querySelector('body').classList.remove('pdp-modal-overlay');
   };
 
   render() {
