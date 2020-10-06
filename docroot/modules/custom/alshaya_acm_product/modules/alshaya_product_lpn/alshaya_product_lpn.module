@@ -141,20 +141,41 @@ function _alshaya_product_lpn_compare_season_codes(array $season_codes, $code_id
   $season_code1 = $season_codes[$code_id_1];
   $season_code2 = $season_codes[$code_id_2];
 
-  // Compare season code 1 with season code 2,
-  // If season 1 is 199 and season 2 is 190
-  // then 199 is older season return FALSE.
-  if (substr($season_code1, 0, 2) == substr($season_code2, 0, 2)
-    && $season_code2[strlen($season_code2) - 1] == '0') {
-    return FALSE;
+  // Split code to get year for each code.
+  $season_code1_year = substr($season_code1, 0, 2);
+  $season_code2_year = substr($season_code2, 0, 2);
+
+  $flag = FALSE;
+
+  // If season code 1 year > season code 2 year
+  // then season code 2 will shown.
+  if ($season_code1_year > $season_code2_year) {
+    $flag = TRUE;
   }
-  else {
-    // Compare season codes.
-    if ($season_code1 > $season_code2) {
-      return TRUE;
+  elseif ($season_code2_year > $season_code1_year) {
+    // Season code 1 will shown.
+    $flag = FALSE;
+  }
+
+  if ($season_code1_year == $season_code2_year) {
+    // Get season code digit for each code.
+    $season_code1_digit = $season_code1[strlen($season_code1) - 1] == 0 ? 10 : $season_code1[strlen($season_code1) - 1];
+    $season_code2_digit = $season_code2[strlen($season_code2) - 1] == 0 ? 10 : $season_code2[strlen($season_code2) - 1];
+
+    // If season code 1 digit > season code 2 digit
+    // then season code 2 will be shown.
+    if ($season_code1_digit > $season_code2_digit) {
+      $flag = TRUE;
+    }
+    elseif ($season_code2_digit > $season_code1_digit) {
+      // Season code 1 will be shown.
+      $flag = FALSE;
     }
     else {
-      return FALSE;
+      // If both digit are same then season code 1 will shown.
+      $flag = FALSE;
     }
   }
+
+  return $flag;
 }
