@@ -4,6 +4,7 @@ namespace Drupal\alshaya_product_options\Brand;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Class AlshayaBrandListHelper.
@@ -28,13 +29,24 @@ class AlshayaBrandListHelper {
   private $connection;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaBrandListHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
-  public function __construct(Connection $connection) {
+  public function __construct(Connection $connection,
+                              LanguageManagerInterface $language_manager) {
     $this->connection = $connection;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -42,6 +54,7 @@ class AlshayaBrandListHelper {
    */
   public function getBrandTerms() {
     $logo_attribute = self::getLogoAttribute();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $terms = [];
     if ($logo_attribute) {
       $query = $query = $this->connection->select('taxonomy_term_field_data', 'ttfd');
@@ -51,7 +64,7 @@ class AlshayaBrandListHelper {
       $query->innerJoin('file_managed', 'fm', 'ttasoi.field_attribute_swatch_org_image_target_id = fm.fid AND fm.status = 1');
       $query->addField('fm', 'uri');
       $query->condition('ttac.field_sku_attribute_code_value', $logo_attribute);
-      $query->condition('ttfd.default_langcode', 1);
+      $query->condition('ttfd.langcode', $langcode);
       $query->condition('ttfd.vid', self::BRAND_VID);
       $query->orderBy('ttfd.weight', 'ASC');
 
