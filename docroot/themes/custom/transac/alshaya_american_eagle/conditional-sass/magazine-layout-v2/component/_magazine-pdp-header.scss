@@ -5,3 +5,21 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  body.sub-brand-logo {
+    &:not(.frontpage) {
+      &:not(.alias--cart-login) {
+        &.new-pdp-magazine-layout {
+          margin-top: 3.5rem;
+        }
+      }
+    }
+
+    &.new-pdp-magazine-layout {
+      #block-alshayareactcartminicartblock {
+        top: unset;
+      }
+    }
+  }
+}
