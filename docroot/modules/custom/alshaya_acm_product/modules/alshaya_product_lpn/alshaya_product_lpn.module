@@ -54,6 +54,14 @@ function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$childre
 
   $configurations = unserialize($sku->get('field_configurable_attributes')->getString());
   $configurable_attribute_codes = array_column($configurations, 'code', 'code');
+  $season_codes = [];
+  foreach ($configurations as $configuration) {
+    if ($lpn_attribute == $configuration['code']) {
+      foreach ($configuration['values'] as $value) {
+        $season_codes[$value['value_id']] = $value['label'];
+      }
+    }
+  }
 
   // Do not process further if we don't have lpn_attribute as
   // configurable_attribute for the product.
@@ -77,7 +85,7 @@ function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$childre
     $attributes_key = implode('-', $children_with_attr);
 
     if (array_key_exists($attributes_key, $child_group)) {
-      if ($child_group[$attributes_key][$lpn_attribute] > $season_code) {
+      if (_alshaya_product_lpn_compare_season_codes($season_codes, $child_group[$attributes_key][$lpn_attribute], $season_code)) {
         // If current product's season_code is smaller than another child's
         // season code and both have same configurable attributes, then
         // remove the product with higher season code.
@@ -112,5 +120,41 @@ function alshaya_product_lpn_module_implements_alter(&$implementations, $hook) {
     $group = $implementations['alshaya_product_lpn'];
     unset($implementations['alshaya_product_lpn']);
     $implementations['alshaya_product_lpn'] = $group;
+  }
+}
+
+/**
+ * Compare Season code 1 and 2 value.
+ *
+ * @param array $season_codes
+ *   Season codes value_id, value array.
+ * @param string $code_id_1
+ *   Season code 1 value id.
+ * @param string $code_id_2
+ *   Season code 2 value id.
+ *
+ * @return bool
+ *   Comparison season_code1, season_code2 true or false.
+ */
+function _alshaya_product_lpn_compare_season_codes(array $season_codes, $code_id_1, $code_id_2) {
+  // Get Season code value from value id.
+  $season_code1 = $season_codes[$code_id_1];
+  $season_code2 = $season_codes[$code_id_2];
+
+  // Compare season code 1 with season code 2,
+  // If season 1 is 199 and season 2 is 190
+  // then 199 is older season return FALSE.
+  if (substr($season_code1, 0, 2) == substr($season_code2, 0, 2)
+    && $season_code2[strlen($season_code2) - 1] == '0') {
+    return FALSE;
+  }
+  else {
+    // Compare season codes.
+    if ($season_code1 > $season_code2) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
   }
 }
