@@ -388,9 +388,10 @@ function alshaya_hm_search_api_algolia_objects_alter(array &$objects, IndexInter
     if (!empty($label_attributes)) {
       foreach ($label_attributes as $attribute) {
         if ($sku->get($attribute)->getString()) {
-          $object[$attribute] = $sku->get($attribute)->getString();
+          $object['collection_labels'][$attribute] = $sku->get($attribute)->getString();
         }
       }
+      $object['collection_labels'] = $object['collection_labels'] ?? (object) $object['collection_labels'];
     }
   }
 
@@ -412,8 +413,7 @@ function alshaya_hm_page_attachments(array &$page) {
  */
 function alshaya_hm_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
   if (!empty($data) && ($type === 'light')) {
-    $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
-    $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'plp');
+    $data['collection_labels'] = _alshaya_hm_process_collection_labels_for_mobile_app($sku, 'plp');
   }
 }
 
@@ -421,8 +421,32 @@ function alshaya_hm_alshaya_acm_product_light_product_data_alter(SKU $sku, array
  * Implements hook_alshaya_mobile_app_product_exclude_linked_data_alter().
  */
 function alshaya_hm_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku) {
+  $data['collection_labels'] = _alshaya_hm_process_collection_labels_for_mobile_app($sku, 'pdp');
+}
+
+/**
+ * Implements hook_mobile_app_skus_product_list_data_alter().
+ */
+function alshaya_hm_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
+  $data['collection_labels'] = _alshaya_hm_process_collection_labels_for_mobile_app($sku, 'pdp');
+}
+
+/**
+ * Processes the collection lables to the format required by the mobile app.
+ *
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   The sku object.
+ * @param string $context
+ *   The context, if pdp or plp.
+ *
+ * @return mixed
+ *   An associative array of collection labels or an empty stdclass object, so
+ *   that the output is always a Json object.
+ */
+function _alshaya_hm_process_collection_labels_for_mobile_app(SKUInterface $sku, string $context) {
   $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
-  $data['collection_labels'] = $product_info_helper->getValue($sku, 'collection_labels', 'pdp');
+  $collection_labels = $product_info_helper->getValue($sku, 'collection_labels', $context);
+  return (!empty($collection_labels)) ? $collection_labels : (object) $collection_labels;
 }
 
 /**
