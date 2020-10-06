@@ -39,6 +39,12 @@ class AlshayaBrandListHelper {
 
   /**
    * Load all product brand terms.
+   *
+   * @param string $langcode
+   *   The langcode.
+   *
+   * @return array
+   *   Return the array of brand name from brand logo attribute.
    */
   public function getBrandTerms($langcode = 'en') {
     $logo_attribute = self::getLogoAttribute();

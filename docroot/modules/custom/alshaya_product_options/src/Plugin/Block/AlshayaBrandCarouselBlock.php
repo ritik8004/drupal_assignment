@@ -40,14 +40,14 @@ class AlshayaBrandCarouselBlock extends BlockBase implements ContainerFactoryPlu
   /**
    * Alshaya Options List Service.
    *
-   * @var Drupal\alshaya_options_list\AlshayaOptionsListHelper
+   * @var \Drupal\alshaya_options_list\AlshayaOptionsListHelper
    */
   protected $alshayaOptionsService;
 
   /**
    * The Language Manager service.
    *
-   * @var \Drupal\Core\Language\LanguageManager
+   * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
 
