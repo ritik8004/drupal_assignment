@@ -5,28 +5,6 @@ alshaya_api.settings:
     langcode:
       type: string
       label: 'Language code'
-    magento_host:
+    ignored_mdc_cats_on_sanity_check:
       type: string
-      label: 'Host'
-    magento_lang_prefix:
-      type: label
-      label: 'Language prefix'
-    magento_api_base:
-      type: string
-      label: 'API Base'
-    verify_ssl:
-      type: integer
-    token_cache_time:
-      type: integer
-    username:
-      type: string
-    password:
-      type: string
-    consumer_key:
-      type: string
-    consumer_secret:
-      type: string
-    access_token:
-      type: string
-    access_token_secret:
-      type: string
+      label: 'Ignored MDC categories on sanity check'

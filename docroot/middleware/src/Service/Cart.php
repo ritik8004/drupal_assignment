@@ -14,6 +14,7 @@ use Doctrine\DBAL\Connection;
 use Drupal\alshaya_spc\Helper\SecureText;
 use Psr\Log\LoggerInterface;
 use Drupal\alshaya_master\Helper\SortUtility;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
 
@@ -140,6 +141,13 @@ class Cart {
   protected $connection;
 
   /**
+   * RequestStack Object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -170,6 +178,8 @@ class Cart {
    *   Logger service.
    * @param \Doctrine\DBAL\Connection $connection
    *   Database connection.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   RequestStack Object.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -185,7 +195,8 @@ class Cart {
     Drupal $drupal,
     Orders $orders,
     LoggerInterface $logger,
-    Connection $connection
+    Connection $connection,
+    RequestStack $requestStack
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -201,6 +212,7 @@ class Cart {
     $this->orders = $orders;
     $this->logger = $logger;
     $this->connection = $connection;
+    $this->request = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -801,6 +813,15 @@ class Cart {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
 
+    // If upapi payment method (payment method via checkout.com).
+    if ($this->isUpapiPaymentMethod($data['method'])) {
+      // Add success and fail redirect url to additional data.
+      $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
+      $langcode = $this->request->query->get('lang');
+      $update['payment']['additional_data']['successUrl'] = $host . 'success/' . $langcode;
+      $update['payment']['additional_data']['failUrl'] = $host . 'error/' . $langcode;
+    }
+
     $old_cart = $this->getCart();
     $cart = $this->updateCart($update);
     if (isset($cart['error_code'])) {
@@ -815,6 +836,23 @@ class Cart {
     }
 
     return $cart;
+  }
+
+  /**
+   * Checks if upapi payment method (payment method via checkout.com).
+   *
+   * @param string $payment_method
+   *   Payment method code.
+   *
+   * @return bool
+   *   TRUE if payment methods from checkout.com
+   */
+  public function isUpapiPaymentMethod(string $payment_method) {
+    $payment_methods = [
+      'checkout_com_upapi_qpay',
+      'checkout_com_upapi_knet',
+    ];
+    return in_array($payment_method, $payment_methods);
   }
 
   /**
@@ -1138,13 +1176,6 @@ class Cart {
       return $static[$key];
     }
 
-    $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHODS'];
-
-    $static[$key] = $expire > 0 ? $this->cache->get($key) : NULL;
-    if (isset($static[$key])) {
-      return $static[$key];
-    }
-
     $url = sprintf('carts/%d/payment-methods', $this->getCartId());
 
     try {
@@ -1157,9 +1188,6 @@ class Cart {
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
 
-    if ($expire > 0) {
-      $this->cache->set($key, $expire, $static[$key]);
-    }
     return $static[$key];
   }
 
@@ -1217,10 +1245,28 @@ class Cart {
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
     }
 
+    // If address extension attributes doesn't contain all the required fields
+    // or required field value is empty, not process/place order.
+    if (!$this->isAddressExtensionAttributesValid($cart)) {
+      $this->logger->error('Error while placing order. Shipping address not contains all address extension attributes. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
     // If first/last name not available in shipping address.
     if (empty($cart['shipping']['address']['firstname'])
       || empty($cart['shipping']['address']['lastname'])) {
-      $this->logger->error('Error while placing order. First name or Last name not available in cart. Cart: @cart.', [
+      $this->logger->error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
+    // If first/last name not available in billing address.
+    if (empty($cart['cart']['billing_address']['firstname'])
+      || empty($cart['cart']['billing_address']['lastname'])) {
+      $this->logger->error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
@@ -1253,10 +1299,18 @@ class Cart {
 
       // We don't pass any payment data in place order call to MDC because its
       // optional and this also sets in ACM MDC observer.
+      $this->logger->notice('Place order initiated for Cart: @cart Data: @data', [
+        '@cart' => json_encode($cart),
+        '@data' => json_encode($data),
+      ]);
       $result = $this->magentoApiWrapper->doRequest('PUT', $url, $request_options);
 
       if (!empty($lock)) {
         $lock->release();
+      }
+
+      if (!empty($result['redirect_url'])) {
+        return $result;
       }
 
       $order_id = (int) str_replace('"', '', $result);
@@ -1318,6 +1372,74 @@ class Cart {
   }
 
   /**
+   * Validates the extension attributes of the address of the cart.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   FALSE if empty field value.
+   */
+  public function isAddressExtensionAttributesValid(array $cart) {
+    $is_valid = TRUE;
+    // If there are address fields available for validation
+    // in drupal settings.
+    if (!empty($address_fields_to_validate = $this->cartAddressFieldsToValidate())) {
+      $cart_address_custom = [];
+      // Prepare cart address field data.
+      foreach ($cart['shipping']['address']['custom_attributes'] as $cart_custom_attributes) {
+        $cart_address_custom[$cart_custom_attributes['attribute_code']] = $cart_custom_attributes['value'];
+      }
+
+      // Check each required field in custom attributes available in cart
+      // shipping address or not.
+      foreach ($address_fields_to_validate as $address_field) {
+        // If field not exists or empty.
+        if (empty($cart_address_custom[$address_field])) {
+          $this->logger->error('Field :@field_code not available in cart shipping address. Cart id: @cart_id', [
+            '@field_code' => $address_field,
+            '@cart_id' => $cart['cart']['id'],
+          ]);
+          $is_valid = FALSE;
+          break;
+        }
+      }
+    }
+
+    return $is_valid;
+  }
+
+  /**
+   * Get address fields to validate from drupal settings.
+   *
+   * @see `/factory-hooks/post-settings-php/alshaya_address_fields.php`
+   *
+   * @return array
+   *   Fields to validate.
+   */
+  public function cartAddressFieldsToValidate() {
+    $address_fields_to_validate = [];
+
+    // Get the address fields based on site/country code
+    // from the drupal settings.
+    $site_country_code = $this->settings->getSettings('alshaya_site_country_code');
+    $address_fields = $this->settings->getSettings('alshaya_address_fields');
+
+    // Use default value first if available.
+    if (isset($address_fields['default'][$site_country_code['country_code']])) {
+      $address_fields_to_validate = $address_fields['default'][$site_country_code['country_code']];
+    }
+
+    // If brand specific value available/override.
+    if (isset($address_fields[$site_country_code['site_code']])
+      || isset($address_fields[$site_country_code['country_code']])) {
+      $address_fields_to_validate = $address_fields[$site_country_code['site_code']][$site_country_code['country_code']];
+    }
+
+    return $address_fields_to_validate;
+  }
+
+  /**
    * Process post order is placed.
    *
    * @param int $order_id
@@ -1328,7 +1450,7 @@ class Cart {
    * @return array
    *   Final status array.
    */
-  private function processPostOrderPlaced(int $order_id, string $payment_method) {
+  public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
     $email = $this->getCartCustomerEmail();
 

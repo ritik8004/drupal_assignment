@@ -636,11 +636,27 @@ class CartController {
             '@cart' => json_encode($cart),
           ]);
         }
+        // If address extension attributes doesn't contain all the required
+        // fields or required field value is empty, not process/place order.
+        elseif (!$this->cart->isAddressExtensionAttributesValid($cart)) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. Shipping address not contains all required extension attributes. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
         // If first/last name not available in shipping address.
         elseif (empty($cart['shipping']['address']['firstname'])
           || empty($cart['shipping']['address']['lastname'])) {
           $is_error = TRUE;
-          $this->logger->error('Error while finalizing payment. First name or Last name not available in cart. Cart: @cart.', [
+          $this->logger->error('Error while finalizing payment. First name or Last name not available in cart for shipping address. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
+        // If first/last name not available in billing address.
+        elseif (empty($cart['cart']['billing_address']['firstname'])
+          || empty($cart['cart']['billing_address']['lastname'])) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. First name or Last name not available in cart for billing address. Cart: @cart.', [
             '@cart' => json_encode($cart),
           ]);
         }
@@ -789,9 +805,12 @@ class CartController {
     $result = $this->cart->placeOrder($request_content['data']);
 
     if (!isset($result['error'])) {
+      // If redirectUrl is set, it means we need to redirect user to that url
+      // in order to complete the payment.
       $response = [
         'success' => TRUE,
-        'redirectUrl' => 'checkout/confirmation?id=' . $result['secure_order_id'],
+        'redirectUrl' => $result['redirect_url'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
+        'isAbsoluteUrl' => $result['redirect_url'] ? TRUE : FALSE,
       ];
 
       return new JsonResponse($response);

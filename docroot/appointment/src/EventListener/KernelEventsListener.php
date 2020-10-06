@@ -3,6 +3,8 @@
 namespace App\EventListener;
 
 use App\Service\Config\SystemSettings;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
@@ -20,13 +22,24 @@ class KernelEventsListener {
   protected $systemSettings;
 
   /**
+   * Logger Interface.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * KernelEventsListener constructor.
    *
    * @param \App\Service\Config\SystemSettings $system_settings
    *   System Settings service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger Interface.
    */
-  public function __construct(SystemSettings $system_settings) {
+  public function __construct(SystemSettings $system_settings,
+                              LoggerInterface $logger) {
     $this->systemSettings = $system_settings;
+    $this->logger = $logger;
   }
 
   /**
@@ -63,6 +76,20 @@ class KernelEventsListener {
 
       // Add the header for HSTS.
       $response->headers->set('Strict-Transport-Security', $header);
+    }
+  }
+
+  /**
+   * This method is executed on kernel.request event.
+   *
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   *   Request event.
+   */
+  public function onKernelRequest(RequestEvent $event) {
+    $request = $event->getRequest();
+    // If API request not from web.
+    if (!empty($request->headers->get($_ENV['MAGENTO_BEARER_HEADER']))) {
+      $this->logger->notice('Non web middleware API request.');
     }
   }
 

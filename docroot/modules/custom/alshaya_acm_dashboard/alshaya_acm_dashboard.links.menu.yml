@@ -3,3 +3,9 @@ alshaya_acm_dashboard.dashboard_settings:
   route_name: 'alshaya_acm_dashboard.settings_form'
   parent: 'acq_commerce.configuration'
   description: 'Configure alshaya acm dashboard settings.'
+
+alshaya_acm_dashboard.dashboard:
+  title: 'Dashboard'
+  route_name: 'alshaya_acm_dashboard.dashboard'
+  parent: 'acq_commerce.admin_commerce'
+  description: 'View ACM and MDC queue and connection status.'

@@ -8,6 +8,7 @@ use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
 use Drupal\alshaya_config\AlshayaArrayUtils;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
@@ -250,6 +251,13 @@ class SkuManager {
   protected $productCacheManager;
 
   /**
+   * Product Processed Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductProcessedManager
+   */
+  protected $productProcessedManager;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -296,9 +304,8 @@ class SkuManager {
    *   Product Cache Manager.
    * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
    *   Alshaya array utility service.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
+   *   Product Processed Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -321,7 +328,8 @@ class SkuManager {
                               Simplesitemap $generator,
                               ProductInfoHelper $product_info_helper,
                               ProductCacheManager $product_cache_manager,
-                              AlshayaArrayUtils $alshayaArrayUtils) {
+                              AlshayaArrayUtils $alshayaArrayUtils,
+                              ProductProcessedManager $product_processed_manager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -347,6 +355,7 @@ class SkuManager {
     $this->productInfoHelper = $product_info_helper;
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
+    $this->productProcessedManager = $product_processed_manager;
   }
 
   /**
@@ -2547,6 +2556,13 @@ class SkuManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKUInterface $sku): bool {
+    // For all web requests we don't want to show the products
+    // that are not processed yet.
+    if (PHP_SAPI != 'cli'
+      && !($this->productProcessedManager->isProductProcessed($sku->getSku()))) {
+      return FALSE;
+    }
+
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku->getPluginInstance();
     $in_stock = $plugin->isProductInStock($sku);

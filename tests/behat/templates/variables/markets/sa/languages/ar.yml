@@ -59,7 +59,7 @@ variables:
   area_option: 'أحد رفيدة'
   city_option: 'أحد رفيدة'
   cart_promotional: '10'
-  cs_payment_type: 'Credit Card / Debit Card'
+  cs_payment_type: 'Credit Card/Debit Card'
   language_cs_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   billing_area_option: 'أحد رفيدة'
   billing_city_option: 'أحد رفيدة'

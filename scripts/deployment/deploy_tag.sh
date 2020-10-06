@@ -43,7 +43,7 @@ log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.
 
 if [[ "$AH_SITE_ENVIRONMENT" == *"live"* ]]
 then
-  base_uri = ".factory.alshaya.com"
+  base_uri=".factory.alshaya.com"
 else
   env_suffix=`echo $AH_SITE_ENVIRONMENT | sed -e "s/[0-9]*^*//"`
   base_uri="-${env_suffix}.factory.alshaya.com"
@@ -194,5 +194,5 @@ fi
 if [ "$mode" = "hotfix_crf" ]
 then
   log_message "Doing CRF now as requested"
-  drush --root=$docroot sfml crf --delay=10 &>> ${log_file}
+  drush --root=$docroot sfml crf --delay=20 &>> ${log_file}
 fi

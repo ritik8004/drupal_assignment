@@ -72,7 +72,7 @@ variables:
   language_cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   cc_payment_type: 'Credit / Debit Card'
   store_area: 'Dubai - United Arab Emirates'
-  cs_payment_type: 'Credit Card / Debit Card'
+  cs_payment_type: 'Credit Card/Debit Card'
   language_cs_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   cnc_delivery_type: 'Click and Collect'
   language_cnc_delivery_type: 'Click and Collect'

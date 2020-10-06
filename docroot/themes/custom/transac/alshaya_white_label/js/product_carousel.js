@@ -137,10 +137,10 @@
           var sliderTrackTransform = $(this).parents('.slick-track').css('transform').replace(/[^0-9\-.,]/g, '').split(',');
           var sliderWrapperWidth = $(this).parents('.owl-carousel').css('width');
           if (isRTL()) {
-            $('.ajax-progress-throbber').css({'transform': 'translate3d(' + -Math.abs(sliderTrackTransform[4]) + 'px, 0px, 0px)', 'max-width': sliderWrapperWidth});
+            $('.view-product-slider .owl-carousel .ajax-progress-throbber').css({'transform': 'translate3d(' + -Math.abs(sliderTrackTransform[4]) + 'px, 0px, 0px)', 'max-width': sliderWrapperWidth});
           }
           else {
-            $('.ajax-progress-throbber').css({'transform': 'translate3d(' + Math.abs(sliderTrackTransform[4]) + 'px, 0px, 0px)', 'max-width': sliderWrapperWidth});
+            $('.view-product-slider .owl-carousel .ajax-progress-throbber').css({'transform': 'translate3d(' + Math.abs(sliderTrackTransform[4]) + 'px, 0px, 0px)', 'max-width': sliderWrapperWidth});
           }
         }
       });

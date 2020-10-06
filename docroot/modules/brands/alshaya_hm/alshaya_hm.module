@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_hm\EventSubscriber\ProductInfoRequestedEventSubscriber;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\search_api\IndexInterface;
@@ -105,7 +106,7 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
 function alshaya_hm_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($view_mode == 'modal') {
     $return = _alshaya_hm_get_product_description($sku_entity);
-    $build['short_desc'] = $return['description'][0];
+    $build['short_desc'] = $return['short_desc'];
     $build['read_more_style']['value'] = [
       '#markup' => 'display:none;',
     ];
@@ -228,6 +229,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   if (!empty($specifications)) {
     $return['description'][] = $specifications;
   }
+  $return['short_desc'] = $return['description'][0];
 
   return $return;
 }
@@ -348,11 +350,13 @@ function alshaya_hm_preprocess_alshaya_magazine(&$vars) {
     // Get parent sku.
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $parent_sku = $skuManager->getParentSkuBySku($vars['sku']);
-    /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
-    $vars['product_attribute_labels'] = $labels;
+    $parent_sku = $skuManager->getParentSkuBySku($vars['sku']) ?? $vars['sku'];
+    if (!empty($parent_sku)) {
+      /** @var Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+      $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+      $labels = $productInfoHelper->getValue($parent_sku, 'collection_labels', 'pdp');
+      $vars['product_attribute_labels'] = $labels;
+    }
   }
 }
 
@@ -435,4 +439,12 @@ function alshaya_hm_form_webform_submission_alshaya_contact_api_form_alter(&$for
   $form['elements']['feedback']['#default_value'] = 'feeback_inquiry';
   $form['elements']['type']['#default_value'] = 'inquiry';
   $form['elements']['reason4']['#default_value'] = 'others';
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_hm_alshaya_spc_cart_build_alter(array &$build) {
+  $item_code_label = ProductInfoRequestedEventSubscriber::getLabelFromKey('item_code_label');
+  $build['#attached']['drupalSettings']['item_code_label'] = $item_code_label;
 }

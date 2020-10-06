@@ -7,6 +7,7 @@ use Drupal\acq_promotion\Event\PromotionMappingUpdatedEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
+use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
 use Drupal\alshaya_acm_product\Service\ProductQueueUtility;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -25,13 +26,24 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   protected $queueUtility;
 
   /**
+   * Product Processed Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductProcessedManager
+   */
+  protected $productProcessedManager;
+
+  /**
    * ProductUpdatedEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_acm_product\Service\ProductQueueUtility $queue_utility
    *   Utility to queue products for processing.
+   * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
+   *   Product Processed Manager.
    */
-  public function __construct(ProductQueueUtility $queue_utility) {
+  public function __construct(ProductQueueUtility $queue_utility,
+                              ProductProcessedManager $product_processed_manager) {
     $this->queueUtility = $queue_utility;
+    $this->productProcessedManager = $product_processed_manager;
   }
 
   /**
@@ -52,6 +64,11 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onProductUpdated(ProductUpdatedEvent $event) {
+    if ($event->getOperation() == ProductUpdatedEvent::EVENT_DELETE) {
+      $this->productProcessedManager->removeProduct($event->getSku()->getSku());
+      return;
+    }
+
     $this->queueProductForProcessing($event->getSku());
   }
 

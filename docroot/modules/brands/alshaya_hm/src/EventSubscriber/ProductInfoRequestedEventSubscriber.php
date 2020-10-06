@@ -147,7 +147,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   public function processShortDescription(ProductInfoRequestedEvent $event) {
     $sku_entity = $event->getSku();
     $prod_description = $this->getDescription($sku_entity);
-    $event->getValue($prod_description['short_desc']);
+    $event->setValue($prod_description['short_desc']);
   }
 
   /**
@@ -320,13 +320,30 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     if (!empty($sku_entity->getSku())) {
       $item_code = [
         '#theme' => 'product_item_code_markup',
-        '#title' => $this->t('ART NO'),
+        '#title' => self::getLabelFromKey('item_code_label'),
         '#item_code' => $sku_entity->getSku(),
       ];
       $description_value .= $this->renderer->renderPlain($item_code);
     }
 
     return $description_value;
+  }
+
+  /**
+   * Provides the label for a given key.
+   *
+   * @param string $key
+   *   The key whose label is required.
+   *
+   * @return string|null
+   *   Return label based on the key or null if key not found.
+   */
+  public static function getLabelFromKey($key) {
+    $mapping = [
+      'item_code_label' => t('ART NO'),
+    ];
+
+    return $mapping[$key] ?? NULL;
   }
 
   /**

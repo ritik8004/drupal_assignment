@@ -3,9 +3,11 @@
 namespace Drupal\alshaya_acm_dashboard\Controller;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\I18nHelper;
 use Drupal\alshaya_acm\AlshayaMdcQueueManager;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Site\Settings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,6 +37,13 @@ class AlshayaAcmDashboardController extends ControllerBase {
   private $apiWrapper;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  protected $i18nHelper;
+
+  /**
    * AlshayaAcmDashboardController constructor.
    *
    * @param \Drupal\alshaya_acm\AlshayaMdcQueueManager $mdcQueueManager
@@ -43,13 +52,17 @@ class AlshayaAcmDashboardController extends ControllerBase {
    *   Date formatter service.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   Conductor API  wrapper service.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18n helper service.
    */
   public function __construct(AlshayaMdcQueueManager $mdcQueueManager,
                               DateFormatter $dateFormatter,
-                              APIWrapper $api_wrapper) {
+                              APIWrapper $api_wrapper,
+                              I18nHelper $i18n_helper) {
     $this->mdcQueueManager = $mdcQueueManager;
     $this->dateFormatter = $dateFormatter;
     $this->apiWrapper = $api_wrapper;
+    $this->i18nHelper = $i18n_helper;
   }
 
   /**
@@ -59,7 +72,8 @@ class AlshayaAcmDashboardController extends ControllerBase {
     return new static(
       $container->get('alshaya_acm.mdc_queue_manager'),
       $container->get('date.formatter'),
-      $container->get('acq_commerce.agent_api')
+      $container->get('acq_commerce.agent_api'),
+      $container->get('acq_commerce.i18n_helper')
     );
   }
 
@@ -116,6 +130,44 @@ class AlshayaAcmDashboardController extends ControllerBase {
           $this->dateFormatter->format(REQUEST_TIME + (($acm_queue_stats * $acm_dashboard_settings->get('processing_rate_acm_queue')) / 1000), 'custom', 'D M j G:i:s T Y'),
         ],
       ],
+    ];
+
+    $conductor_settings = $this->config('acq_commerce.conductor');
+    $build['acm_connection_stats'] = [
+      '#type' => 'table',
+      '#caption' => $this->t('ACM Connection status'),
+      '#header' => [
+        $this->t('Key'),
+        $this->t('Value'),
+      ],
+      '#rows' => [
+        ['URL', $conductor_settings->get('url')],
+        ['HMAC ID', $conductor_settings->get('hmac_id')],
+      ],
+    ];
+
+    $mdc_settings = Settings::get('alshaya_api.settings');
+    $rows = [
+      ['URL', $mdc_settings['magento_host']],
+      ['Consumer key', $mdc_settings['consumer_key']],
+      ['Access token', $mdc_settings['access_token']],
+      ['Magento API base', $mdc_settings['magento_api_base']],
+      ['Verify SSL', empty($mdc_settings['verify_ssl']) ? 'Disabled' : 'Enabled'],
+    ];
+    $store_language_mapping = $this->i18nHelper->getStoreLanguageMapping();
+    $mdc_language_prefixes = Settings::get('magento_lang_prefix');
+    foreach ($store_language_mapping as $key => $value) {
+      $rows[] = ['Langcode | Prefix | Store ID', "$key | $mdc_language_prefixes[$key] | $value"];
+    }
+
+    $build['mdc_connection_stats'] = [
+      '#type' => 'table',
+      '#caption' => $this->t('MDC Connection status'),
+      '#header' => [
+        $this->t('Key'),
+        $this->t('Value'),
+      ],
+      '#rows' => $rows
     ];
 
     return $build;

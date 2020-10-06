@@ -28,7 +28,8 @@ export {
   getFilters,
   hasCategoryFilter,
   getSortedItems,
-  hasSuperCategoryFilter
+  hasSuperCategoryFilter,
+  customQueryRedirect
 } from './FilterUtils';
 
 export {

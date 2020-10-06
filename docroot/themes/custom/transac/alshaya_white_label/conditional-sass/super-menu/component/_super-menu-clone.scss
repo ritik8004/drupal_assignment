@@ -1,5 +1,5 @@
 // Super-menu--two is visible just behing the overly.
-$pbk-super-menu-height: 1.875rem;
+$super-menu-height: 1.875rem;
 
 // Super-menu--two styling.
 .menu--super-menu--clone {
@@ -9,7 +9,7 @@ $pbk-super-menu-height: 1.875rem;
   top: 0;
   width: 100%;
   max-width: none;
-  height: $pbk-super-menu-height;
+  height: $super-menu-height;
   background: $header_secondary_bg;
 
   ul {
@@ -32,7 +32,7 @@ $pbk-super-menu-height: 1.875rem;
     }
 
     li {
-      height: $pbk-super-menu-height;
+      height: $super-menu-height;
       border: 0;
       display: inline-block;
       margin: 0;
@@ -49,7 +49,7 @@ $pbk-super-menu-height: 1.875rem;
 
       a {
         padding: 0;
-        line-height: $pbk-super-menu-height;
+        line-height: $super-menu-height;
         font-size: 0.75rem;
         text-transform: capitalize;
         color: $header_secondary_menu_link;
@@ -70,7 +70,7 @@ $pbk-super-menu-height: 1.875rem;
 }
 
 // We need to show it only on overlay.
-body.mobile--overlay {
+body.supermenu.mobile--overlay {
   .menu--super-menu--clone {
     @include breakpoint($upto-desktop) {
       display: block;
@@ -86,8 +86,8 @@ body.mobile--overlay {
   }
 }
 
-body:not(.mobile--overlay) {
+body.supermenu:not(.mobile--overlay) {
   div.header--wrapper .c-menu-secondary {
-    z-index: 5;
+    z-index: 12;
   }
 }

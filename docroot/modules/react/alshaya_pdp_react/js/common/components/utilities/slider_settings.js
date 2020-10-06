@@ -26,14 +26,14 @@ export const crossellUpsellSliderSettings = {
   draggable: false,
   responsive: [
     {
-      breakpoint: 1024,
+      breakpoint: 1025,
       settings: {
         slidesToShow: 2,
         slidesToScroll: 2,
       },
     },
     {
-      breakpoint: 768,
+      breakpoint: 767,
       settings: {
         slidesToShow: 1,
         slidesToScroll: 1,
