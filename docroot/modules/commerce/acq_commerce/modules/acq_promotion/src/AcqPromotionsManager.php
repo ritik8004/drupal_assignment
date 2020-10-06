@@ -315,6 +315,9 @@ class AcqPromotionsManager {
 
     if (empty($promotion['products']) && empty($promotion['action_condition']['conditions'])) {
       $promotion_node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
+      if ($promotion_node->isNew()) {
+        \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+      }
     }
     else {
       $promotion_node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
