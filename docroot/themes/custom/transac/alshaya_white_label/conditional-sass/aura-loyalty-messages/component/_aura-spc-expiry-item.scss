@@ -8,6 +8,10 @@
   position: relative;
   font-family: $aura-regular;
 
+  @include breakpoint($only-mobile) {
+    padding: 0.875rem;
+  }
+
   b {
     font-family: $aura-bold;
   }

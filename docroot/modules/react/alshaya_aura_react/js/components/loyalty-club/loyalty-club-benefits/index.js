@@ -2,7 +2,7 @@ import React from 'react';
 import LoyaltyClubBenefitsRow from './loyalty-club-benefits-row';
 
 const LoyaltyClubBenefits = () => (
-  <div className="loyalty-club-details-wrapper">
+  <div className="loyalty-club-details-wrapper loyalty-tab-content">
     <div className="title">
       <span className="title-1">{ Drupal.t('Your Aura.') }</span>
       <span className="title-2">{ Drupal.t('Your Benefits.') }</span>
