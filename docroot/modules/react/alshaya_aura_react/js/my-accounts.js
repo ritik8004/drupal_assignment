@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LoyaltyClubBlock from './components/loyalty-club/loyalty-club-block';
+import MyAccount from './components/my-account';
 
 ReactDOM.render(
-  <LoyaltyClubBlock
-    doNotshowLinkedVerifiedBlock
-  />,
+  <MyAccount />,
   document.querySelector('#my-accounts-aura'),
 );
