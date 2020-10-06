@@ -316,6 +316,9 @@ class AcqPromotionsManager {
     if (empty($promotion['products']) && empty($promotion['action_condition']['conditions'])) {
       $promotion_node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
     }
+    else {
+      $promotion_node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
+    }
 
     // Store everything as serialized string in DB.
     // Before that remove products key, as we are not using it anywhere, and
