@@ -115,7 +115,8 @@
         "hubspot/pace": "^1.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "springimport/magento2-api-v1": "^1.0"
+        "springimport/magento2-api-v1": "^1.0",
+        "symfony/lock": "4.3.*"
     },
     "require-dev": {
         "drupal/console": "^1.8",
@@ -350,6 +351,9 @@
             },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
+            },
+            "drupal/r4032login": {
+                "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2020-04-27/2941064-38-complete.patch"
             },
             "drupal/shield": {
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
