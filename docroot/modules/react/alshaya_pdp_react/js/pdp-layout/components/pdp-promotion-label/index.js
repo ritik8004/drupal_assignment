@@ -15,7 +15,6 @@ class PdpPromotionLabel extends React.Component {
     if (promotionsRawData === null) {
       axios.get(url).then((response) => {
         if (response.data.length !== 0) {
-          console.log(response.data);
           this.setState({
             promotionsRawData: response.data.promotionsRaw,
           });
