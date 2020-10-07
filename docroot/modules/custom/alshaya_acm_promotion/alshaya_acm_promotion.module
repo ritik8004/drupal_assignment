@@ -99,6 +99,16 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
   if (!empty($promotion['free_gift_products'])) {
     $node->get('field_free_gift_skus')->setValue($promotion['free_gift_products']);
   }
+
+  if (empty($promotion['products']) && empty($promotion['action_condition']['conditions'])) {
+    $node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
+    if ($node->isNew()) {
+      \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+    }
+  }
+  else {
+    $node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
+  }
 }
 
 /**
