@@ -25,6 +25,10 @@
     button {
       width: 9.0625rem;
       margin-#{$left}: 1.875rem;
+
+      &:disabled {
+        opacity: 0.4;
+      }
     }
 
     .spc-aura-redeem-points-separator {
