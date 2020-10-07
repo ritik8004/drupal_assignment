@@ -1,7 +1,7 @@
 import React from 'react';
 
 const AuraFormTextField = (props) => {
-  const { name, placeholder } = props;
+  const { name, placeholder, onChangeCallback } = props;
 
   return (
     <div className={`spc-aura-textfield ${name}-form-item`}>
@@ -10,6 +10,7 @@ const AuraFormTextField = (props) => {
         name={name}
         className={name}
         type="text"
+        onChange={(e) => onChangeCallback(e)}
       />
     </div>
   );
