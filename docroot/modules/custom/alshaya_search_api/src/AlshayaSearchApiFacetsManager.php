@@ -301,7 +301,7 @@ class AlshayaSearchApiFacetsManager {
       }
 
       if (!empty($block_ids)) {
-        /* @var \Drupal\block\Entity\Block[] $block*/
+        /** @var \Drupal\block\Entity\Block[] $block*/
         $blocks_list = $this->entityTypeManager->getStorage('block')->loadMultiple($block_ids);
         // Sort the blocks.
         uasort($blocks_list, [$this, 'sortBlocksByWeight']);

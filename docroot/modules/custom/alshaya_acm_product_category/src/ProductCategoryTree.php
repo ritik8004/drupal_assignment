@@ -452,7 +452,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     // If /taxonomy/term/tid page.
     if ($route_name == 'entity.taxonomy_term.canonical') {
-      /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
+      /** @var \Drupal\taxonomy\TermInterface $route_parameter_value */
       $term = $this->routeMatch->getParameter('taxonomy_term');
     }
     // If it's a department page.

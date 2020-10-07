@@ -39,7 +39,7 @@ class AlshayaAdvancedPageRouteProvider extends RouteProvider {
           $node_route = $this->connection->query("SELECT name, route, fit FROM {" . $this->connection->escapeTable($this->tableName) . "} WHERE name = 'entity.node.canonical'")
             ->fetchAll(\PDO::FETCH_ASSOC);
           if ($node_route) {
-            /* @var \Symfony\Component\Routing\Route $route */
+            /** @var \Symfony\Component\Routing\Route $route */
             $route = unserialize($node_route[0]['route']);
             // Setting options to identify the department page later.
             $route->setOption('_department_page_term', $exploded_path[3]);

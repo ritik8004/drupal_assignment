@@ -15,7 +15,7 @@
         $(this).addClass('active');
         $('body').removeClass('large-grid');
         $('.c-products-list').removeClass('product-large').addClass('product-small');
-        setTimeout(function() {
+        setTimeout(function () {
           $('.search-lightSlider.slick-initialized').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
@@ -26,7 +26,7 @@
         $(this).addClass('active');
         $('body').addClass('large-grid');
         $('.c-products-list').removeClass('product-small').addClass('product-large');
-        setTimeout(function() {
+        setTimeout(function () {
           $('.search-lightSlider.slick-initialized').slick('refresh');
          }, 300);
          // Adjust height of PLP tiles.
@@ -40,7 +40,7 @@
 
       // On clicking facet block title, update the title of block and hide
       // other facets.
-      $('.all-filters .block-facets-ajax').on('click', function() {
+      $('.all-filters .block-facets-ajax').on('click', function () {
         // Update the title on click of facet.
         var facet_title = $(this).find('h3.c-facet__title').html();
         $('.filter-sort-title').html(facet_title);
@@ -58,7 +58,7 @@
       });
 
       // On clicking of sort option, update title
-      $('.all-filters .bef-exposed-form').on('click', function() {
+      $('.all-filters .bef-exposed-form').on('click', function () {
         // Update the title on click of facet.
         var facet_title = $(this).find('span.fieldset-legend').html();
         $('.filter-sort-title').html(facet_title);
@@ -77,7 +77,7 @@
 
       // On clicking on back button, reset the block title and add class so
       // that facet blocks can be closed.
-      $('.facet-all-back, .back-facet-list').once('facet-all-back-processed').on('click', function() {
+      $('.facet-all-back, .back-facet-list').once('facet-all-back-processed').on('click', function () {
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('filter & sort'));
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
@@ -89,7 +89,7 @@
       });
 
       // Show all filters blocks.
-      $('.show-all-filters').once().on('click', function() {
+      $('.show-all-filters').once().on('click', function () {
         $('.all-filters').addClass('filters-active');
 
         if ($(window).width() > 1023) {
@@ -111,7 +111,7 @@
       });
 
       // Fake facet apply button to close the `all filter`.
-      $('.facet-all-apply', context).once().on('click', function() {
+      $('.facet-all-apply', context).once().on('click', function () {
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
         $('html').removeClass('all-filters-overlay');
@@ -139,7 +139,7 @@
       }
 
       // On change of outer `sort by`, update the 'all filter' sort by as well.
-      $('.c-content .c-content__region .bef-exposed-form input:radio').on('click', function() {
+      $('.c-content .c-content__region .bef-exposed-form input:radio').on('click', function () {
         var idd = $(this).attr('id');
         $('.c-content__region .bef-exposed-form input:radio').attr('checked', false);
         $('.c-content__region .bef-exposed-form #' + idd).attr('checked', true);
@@ -164,7 +164,7 @@
       updateFacetTitlesWithSelected();
       updateCategoryTitle();
 
-      $(window).on('blazySuccess', function(event, element) {
+      $(window).on('blazySuccess', function (event, element) {
         Drupal.plpListingProductTileHeight('row', element);
       });
 
@@ -190,10 +190,10 @@
             filterBarSelector = '.block-facets-summary-blockfilter-bar';
           }
 
-          if ($(filterBarSelector +' ul .applied-filter').length < 1) {
-            $(filterBarSelector +' ul li:not(.clear-all)').wrapAll('<div class="applied-filter"></div>');
+          if ($(filterBarSelector + ' ul .applied-filter').length < 1) {
+            $(filterBarSelector + ' ul li:not(.clear-all)').wrapAll('<div class="applied-filter"></div>');
           }
-          var height = $(filterBarSelector+ ' .applied-filter').height();
+          var height = $(filterBarSelector + ' .applied-filter').height();
           // Add a max-height if there are filters on third line.
           if (height > 82) {
             $(filterBarSelector + ' .applied-filter').addClass('max-height');
@@ -201,7 +201,7 @@
 
           // Count the number of filters on the third line onwards.
           var count = 0;
-          $(filterBarSelector+ ' ul .applied-filter li').each(function () {
+          $(filterBarSelector + ' ul .applied-filter li').each(function () {
             if ($(this).position().top > 41) {
               count ++;
             }
@@ -463,7 +463,7 @@
                     subCategoryBlock.addClass('anti-ghosting-done');
                   }
                   // This small delay to ensure the entry animations works.
-                  setTimeout(function() {
+                  setTimeout(function () {
                     $('#block-subcategoryblock').addClass('mobile-sticky-sub-category');
                   }, 5);
                 }
@@ -491,7 +491,7 @@
                     subCategoryBlock.removeClass('anti-ghosting');
                     subCategoryBlock.addClass('anti-ghosting-done');
                     // This small delay to ensure the entry animations works.
-                    setTimeout(function() {
+                    setTimeout(function () {
                       $('.sticky-filter-wrapper').addClass('show-sub-category');
                     }, 5);
                   }
@@ -574,14 +574,14 @@
    */
   function updateFacetTitlesWithSelected() {
     // Iterate over each facet block.
-    $('.all-filters .block-facets-ajax').each(function() {
+    $('.all-filters .block-facets-ajax').each(function () {
       var facet_block = $(this);
       var new_title = '';
       var total_selected = 0;
       var facets_to_show_in_label = 2;
       // If any facet item active.
       var active_facets = $(facet_block).find('ul li.is-active:not(.facet-item--expanded) a span.facet-item__value');
-      $.each(active_facets, function(index, element) {
+      $.each(active_facets, function (index, element) {
         total_selected = total_selected + 1;
         // Show only two facets in title.
         if (total_selected <= facets_to_show_in_label) {
@@ -616,7 +616,7 @@
    * Update the category facet title on selection.
    */
   function updateCategoryTitle() {
-    $('.category-facet:not(.block-facet-blockcategory-facet-search)').each(function() {
+    $('.category-facet:not(.block-facet-blockcategory-facet-search)').each(function () {
       var active_cat_facet = $(this).find('ul li.is-active');
       if ($(active_cat_facet).length > 0) {
         var facet = $(active_cat_facet).find('label span.facet-item__value');
@@ -633,7 +633,7 @@
     // Get selected sort radio id.
     var selected_sort = $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] [name="sort_bef_combine"]:checked').attr('id');
     // Get the label for the radio button.
-    var for_label = $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] label[for="' + selected_sort +'"]').text();
+    var for_label = $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] label[for="' + selected_sort + '"]').text();
     var sort_label = '<span class="sort-for-label">' + for_label + '</span>';
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend span.sort-for-label').remove();
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend').append(sort_label);

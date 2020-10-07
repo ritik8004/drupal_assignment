@@ -43,13 +43,13 @@
 
   if (typeof CheckoutKit !== 'undefined') {
     // Handle api error which triggered on card tokenisation fail.
-    CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
+    CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function (event) {
       $(this).removeCheckoutLoader();
     });
   }
 
   // Display loader while payment form is submitted.
-  $(document).on('checkoutcom_form_validated', function(e) {
+  $(document).on('checkoutcom_form_validated', function (e) {
     $(this).showCheckoutLoader();
   });
 
@@ -59,7 +59,7 @@
     Drupal.setFocusToFirstError($('form.multistep-checkout'));
   });
 
-  $(document).on('checkoutcom_form_ajax', function(e, response) {
+  $(document).on('checkoutcom_form_ajax', function (e, response) {
     // Remove ajax loader when the ajax call does not contain
     // checkoutPaymentSuccess, that means there are some form errors and
     // can not continue with place order.

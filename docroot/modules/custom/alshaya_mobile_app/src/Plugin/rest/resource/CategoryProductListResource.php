@@ -299,7 +299,7 @@ class CategoryProductListResource extends ResourceBase {
    */
   public function prepareAndExecuteQuery(int $tid) {
     $index = Index::load(self::SEARCH_API_INDEX_ID);
-    /* @var \Drupal\search_api\Query\QueryInterface $query */
+    /** @var \Drupal\search_api\Query\QueryInterface $query */
     $query = $index->query();
 
     // Change the parse mode for the search.

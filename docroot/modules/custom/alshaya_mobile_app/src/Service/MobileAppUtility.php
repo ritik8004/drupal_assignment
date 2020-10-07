@@ -629,7 +629,8 @@ class MobileAppUtility {
 
         try {
           // Get the taxonomy term ID of the target term.
-          $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();;
+          $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();
+          ;
           if (!empty($params) && !empty($params['taxonomy_term'])) {
             $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
 

@@ -180,7 +180,7 @@ class SearchPageProductListResource extends ResourceBase {
    */
   public function prepareAndExecuteQuery(string $keyword) {
     $index = Index::load(self::SEARCH_API_INDEX_ID);
-    /* @var \Drupal\search_api\Query\QueryInterface $query */
+    /** @var \Drupal\search_api\Query\QueryInterface $query */
     $query = $index->query();
 
     // Set the search api server.

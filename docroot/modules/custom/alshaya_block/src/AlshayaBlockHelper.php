@@ -88,7 +88,7 @@ class AlshayaBlockHelper {
     // Get the active link if any!.
     foreach ($tree as $element) {
       if ($element->inActiveTrail) {
-        // @var $link \Drupal\Core\Menu\MenuLinkInterface
+        /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
         $link = $element->link;
         $active_link = $link->getUrlObject()->toString();
         if (strpos($active_link, $current_path_alias['alias']) !== 0) {

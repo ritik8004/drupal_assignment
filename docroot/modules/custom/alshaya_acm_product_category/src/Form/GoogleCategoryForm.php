@@ -78,7 +78,8 @@ class GoogleCategoryForm extends FormBase {
         // Load file.
         if (($fid) && $file = $this->fileStorage->load($fid)) {
           $csv_uri = $file->getFileUri();
-          $this->importFileName = $file->getFileName();;
+          $this->importFileName = $file->getFileName();
+          ;
           if (!empty($csv_uri)) {
             // Open file handler.
             if ($handle = fopen($csv_uri, 'r')) {

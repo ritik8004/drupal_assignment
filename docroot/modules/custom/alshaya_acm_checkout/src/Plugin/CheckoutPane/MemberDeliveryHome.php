@@ -315,7 +315,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     $profile->get('field_address')->setValue($address_values);
     $profile->get('field_mobile_number')->setValue(_alshaya_acm_checkout_clean_address_phone($address_values['mobile_number']));
 
-    /* @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
+    /** @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
     if ($violations = $profile->validate()) {
       foreach ($violations->getByFields(['field_address']) as $violation) {
         $error_field = explode('.', $violation->getPropertyPath());

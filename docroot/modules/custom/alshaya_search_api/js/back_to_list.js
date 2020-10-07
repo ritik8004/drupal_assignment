@@ -82,7 +82,7 @@
     $('.c-products-list').removeClass('product-' + grid_class_remove);
     $('.c-products-list').addClass('product-' + storage_value.grid_type);
     $('.c-products-list').addClass('back-to-list');
-    $('.' + grid_class_remove  + '-col-grid').removeClass('active');
+    $('.' + grid_class_remove + '-col-grid').removeClass('active');
     $('.' + storage_value.grid_type + '-col-grid').addClass('active');
     // Remove the grid_type property once applied when back from list
     // so that on next page load, default behavior is used.

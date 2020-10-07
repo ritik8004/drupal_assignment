@@ -435,8 +435,8 @@ class ProductResource extends ResourceBase {
         }
       }
 
-      $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
-      $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
+      $data['swatch_data'] = $data['swatch_data'] ?: new \stdClass();
+      $data['cart_combinations'] = $data['cart_combinations'] ?: new \stdClass();
 
       if ($current_request->query->get('pdp') == 'magazinev2') {
         // Setting configurable combination array.

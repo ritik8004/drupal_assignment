@@ -782,7 +782,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       'field_mobile_number' => $address_values['mobile_number'],
     ]);
 
-    /* @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
+    /** @var \Drupal\Core\Entity\EntityConstraintViolationListInterface $violations */
     if ($violations = $profile->validate()) {
       foreach ($violations->getByFields(['field_address']) as $violation) {
         $error_field = explode('.', $violation->getPropertyPath());

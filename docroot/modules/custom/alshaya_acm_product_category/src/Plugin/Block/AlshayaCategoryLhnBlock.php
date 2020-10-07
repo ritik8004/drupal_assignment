@@ -167,7 +167,7 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
     // term as well.
     if ((count($parents) - ($context['depth_offset'] + 1)) > 0) {
       // Get root parent term.
-      /* @var \Drupal\taxonomy\Entity\Term $root_parent_term*/
+      /** @var \Drupal\taxonomy\Entity\Term $root_parent_term*/
       $root_parent_term = array_pop($parents);
 
       if (!empty($context['depth_offset'])) {

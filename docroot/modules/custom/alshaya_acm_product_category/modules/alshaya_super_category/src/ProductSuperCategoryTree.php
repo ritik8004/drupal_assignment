@@ -228,7 +228,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Return the parent term object or NULL.
    */
   public function getCategoryTermRootParent($term = NULL, $langcode = NULL) {
-    if (empty($term) || !$term instanceof  TermInterface) {
+    if (empty($term) || !$term instanceof TermInterface) {
       $term = $this->getCategoryTermFromRoute();
     }
 

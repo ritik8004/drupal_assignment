@@ -10,7 +10,7 @@
    * Helper function for Drupal.plpListingProductTileHeight() to find
    * tallest height in a row.
    */
-  Drupal.findMaxRowHeight = function(indexStart, indexEnd, tiles) {
+  Drupal.findMaxRowHeight = function (indexStart, indexEnd, tiles) {
     var maxRowHeight = 0;
     // Find the tallest element in the row.
     for (var j = indexStart; j <= indexEnd; j++) {
@@ -28,8 +28,8 @@
   Drupal.plpRowHeightSync = function (indexStart, indexEnd, tiles) {
     var maxRowHeight = Drupal.findMaxRowHeight(indexStart, indexEnd, tiles);
     // Apply height to all tiles in row.
-    var rowTiles = tiles.slice(indexStart, indexEnd+1);
-    $.each(rowTiles, function(index, tile) {
+    var rowTiles = tiles.slice(indexStart, indexEnd + 1);
+    $.each(rowTiles, function (index, tile) {
       $(tile).css('height', maxRowHeight);
     });
   };
@@ -65,7 +65,7 @@
     }
   };
 
-  Drupal.plpListingPage = function(gridCount, element) {
+  Drupal.plpListingPage = function (gridCount, element) {
     var tiles = $('.c-products__item');
     var totalCount = $('.c-products__item').length;
     var loopCount = Math.ceil(totalCount / gridCount);
@@ -99,9 +99,9 @@
     }
   };
 
-  Drupal.subCategoryListingPage = function(gridCount) {
+  Drupal.subCategoryListingPage = function (gridCount) {
     var sections = [];
-    $('.term-header').each(function() {
+    $('.term-header').each(function () {
       sections.push($(this).get(0))
     });
 

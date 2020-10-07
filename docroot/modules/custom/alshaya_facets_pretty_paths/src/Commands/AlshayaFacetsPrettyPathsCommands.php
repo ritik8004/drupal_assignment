@@ -105,7 +105,7 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
   public function enablePrettyPaths(string $type) {
     $mapping = _alshaya_facets_pretty_paths_get_mappings()[$type];
 
-    /* @var \Drupal\facets\FacetInterface[] $facets */
+    /** @var \Drupal\facets\FacetInterface[] $facets */
     $facets = $this->facetManager->getEnabledFacets();
 
     $source = $this->configFactory->getEditable('facets.facet_source.search_api__' . $mapping['id']);
@@ -177,7 +177,7 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
   public function disablePrettyPaths(string $type) {
     $mapping = _alshaya_facets_pretty_paths_get_mappings()[$type];
 
-    /* @var \Drupal\facets\FacetInterface[] $facets */
+    /** @var \Drupal\facets\FacetInterface[] $facets */
     $facets = $this->facetManager->getEnabledFacets();
 
     $source = $this->configFactory->getEditable('facets.facet_source.search_api__' . $mapping['id']);
