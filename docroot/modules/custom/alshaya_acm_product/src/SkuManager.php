@@ -841,13 +841,27 @@ class SkuManager {
     $query->condition('mapping.sku', $skus, 'IN');
     $promotion_nids = $query->execute()->fetchCol();
 
-    // Fetch promotion nodes which apply to the entire catalog of products.
-    $query = $this->connection->select('node', 'n');
-    $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
-    $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
-    $query->fields('n', ['nid']);
-    $results = $query->execute()->fetchCol();
-    $promotion_nids = array_merge($promotion_nids, $results);
+    if ($full_catalog_promo_nids = $this->cache->get('full_catalog_promo_nids_list')) {
+      $full_catalog_promo_nids = $full_catalog_promo_nids->data;
+    }
+    else {
+      // Fetch promotion nodes which apply to the entire catalog of products.
+      $query = $this->connection->select('node', 'n');
+      $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
+      $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
+      $query->fields('n', ['nid']);
+      $query->distinct();
+      $full_catalog_promo_nids = $query->execute()->fetchCol();
+
+      $promotion_cache_tags = array_map(function ($nid) {
+        return "node:$nid";
+      }, $full_catalog_promo_nids);
+      // Adding list cache tag considering addition/deletion of product nodes.
+      $promotion_cache_tags[] = 'node_list';
+      $this->cache->set('full_catalog_promo_nids_list', $full_catalog_promo_nids, CacheBackendInterface::CACHE_PERMANENT, $promotion_cache_tags);
+    }
+
+    $promotion_nids = array_merge($promotion_nids, $full_catalog_promo_nids);
 
     if (!empty($promotion_nids)) {
       $promotion_nids = array_unique($promotion_nids);
