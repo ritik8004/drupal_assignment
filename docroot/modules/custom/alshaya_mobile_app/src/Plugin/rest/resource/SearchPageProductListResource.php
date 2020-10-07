@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class SearchPageProductListResource.
+ * Class Search Page Product List Resource.
  *
  * @RestResource(
  *   id = "search_page_product_list",

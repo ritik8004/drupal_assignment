@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * AlshayaAddressBookController class.
+ * Alshaya Address Book Controller class.
  */
 class AlshayaAddressBookController extends ProfileController {
 

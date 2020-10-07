@@ -24,7 +24,7 @@ use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AlshayaSearchApiQueryExecute.
+ * Class Alshaya Search Api Query Execute.
  */
 class AlshayaSearchApiQueryExecute {
 
@@ -798,7 +798,10 @@ class AlshayaSearchApiQueryExecute {
     ksort($results);
     foreach ($results as $result) {
       // Trim and remove html and newlines from the markup.
-      $display_value = trim(str_replace(["\n", "\r"], ' ', strip_tags($result->getDisplayValue())));
+      $display_value = trim(str_replace([
+        "\n",
+        "\r",
+      ], ' ', strip_tags($result->getDisplayValue())));
       // Remove extra spaces from text.
       $display_value = preg_replace('/\s\s+/', ' ', $display_value);
       $option_data[] = [

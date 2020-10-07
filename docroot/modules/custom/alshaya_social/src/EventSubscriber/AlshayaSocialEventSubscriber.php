@@ -74,7 +74,10 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[SocialAuthEvents::BEFORE_REDIRECT][] = ['beforeProviderRedirect', 100];
+    $events[SocialAuthEvents::BEFORE_REDIRECT][] = [
+      'beforeProviderRedirect',
+      100,
+    ];
     $events[SocialAuthEvents::FAILED_AUTH][] = ['onFailedAuth', 100];
     return $events;
   }

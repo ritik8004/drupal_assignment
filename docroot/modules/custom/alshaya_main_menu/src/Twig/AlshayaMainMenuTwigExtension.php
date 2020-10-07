@@ -5,7 +5,7 @@ namespace Drupal\alshaya_main_menu\Twig;
 use Drupal\Core\Render\RendererInterface;
 
 /**
- * Class AlshayaMainMenuTwigExtension.
+ * Class Alshaya Main Menu Twig Extension.
  */
 class AlshayaMainMenuTwigExtension extends \Twig_Extension {
 

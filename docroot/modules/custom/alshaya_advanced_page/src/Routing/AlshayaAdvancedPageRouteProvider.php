@@ -5,7 +5,7 @@ namespace Drupal\alshaya_advanced_page\Routing;
 use Drupal\Core\Routing\RouteProvider;
 
 /**
- * Class AlshayaAdvancedPageRouteProvider.
+ * Class Alshaya Advanced Page Route Provider.
  */
 class AlshayaAdvancedPageRouteProvider extends RouteProvider {
 

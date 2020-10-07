@@ -5,7 +5,7 @@ namespace Drupal\alshaya_department_page\Routing;
 use Drupal\Core\Routing\RouteProvider;
 
 /**
- * Class AlshayaDepartmentPageRouteProvider.
+ * Class Alshaya Department Page Route Provider.
  */
 class AlshayaDepartmentPageRouteProvider extends RouteProvider {
 

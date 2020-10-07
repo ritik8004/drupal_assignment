@@ -9,7 +9,7 @@ use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class AlshayaSiteMapBreadcrumb.
+ * Class Alshaya Site Map Breadcrumb.
  */
 class AlshayaSiteMapBreadcrumb implements BreadcrumbBuilderInterface {
 

@@ -8,7 +8,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class SitelinkSearchConfigForm.
+ * Class Site link Search Config Form.
  */
 class SitelinkSearchConfigForm extends ConfigFormBase {
 

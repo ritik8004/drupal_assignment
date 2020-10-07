@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
- * Class AlshayaGtmManager.
+ * Class Alshaya Gtm Manager.
  *
  * @package Drupal\alshaya_seo
  */
@@ -687,8 +687,9 @@ class AlshayaGtmManager {
     }
 
     // If list cookie is set, set the list variable.
-    if (isset($_COOKIE['product-list'])) {
-      $listValues = Json::decode($_COOKIE['product-list']);
+    $product_list = $this->requestStack->getCurrentRequest()->cookies->get('product-list');
+    if (isset($product_list)) {
+      $listValues = Json::decode($product_list);
       $product_details['list'] = $listValues[$product_details['id']] ?? '';
     }
     return $product_details;

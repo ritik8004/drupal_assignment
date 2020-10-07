@@ -255,7 +255,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
             '@uid' => $entity->getOwner()->id(),
             '@profile_id' => $entity->id(),
           ]);
-          throw new \Exception($this->t('Address you selected does not contain required information. Please update address.'));
+          throw new \Exception('Address you selected does not contain required information. Please update address.');
         }
 
         $cart->setShipping($address);
@@ -365,7 +365,10 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     if ($form_state->getErrors() && empty($form_state->getTemporaryValue('cart_update_failed'))) {
       $response->addCommand(new ReplaceCommand('#address-book-form-wrapper', $form['member_delivery_home']['address_form']));
       $response->addCommand(new InvokeCommand('#address-book-form-wrapper', 'show'));
-      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout .address-book-address', TRUE]));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', [
+        'form.multistep-checkout .address-book-address',
+        TRUE,
+      ]));
       return $response;
     }
 

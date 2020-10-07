@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 
 /**
- * Class ProductSuperCategoryTree.
+ * Class Product Super Category Tree.
  */
 class ProductSuperCategoryTree extends ProductCategoryTree {
 

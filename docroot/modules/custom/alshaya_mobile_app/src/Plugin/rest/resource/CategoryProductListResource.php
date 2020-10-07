@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\views\Views;
 
 /**
- * Class CategoryProductListResource.
+ * Class Category Product List Resource.
  *
  * @RestResource(
  *   id = "category_product_list",

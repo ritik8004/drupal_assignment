@@ -6,7 +6,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\pathauto\AliasUniquifier;
 
 /**
- * Class AlshayaSeoAliasUniquifier.
+ * Class Alshaya Seo Alias Uniquifier.
  *
  * @package Drupal\alshaya_seo
  */

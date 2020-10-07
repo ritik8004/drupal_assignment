@@ -23,7 +23,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Component\Serialization\Json;
 
 /**
- * Class AlshayaAcmApiWrapper.
+ * Class Alshaya Acm Api Wrapper.
  *
  * @package Drupal\alshaya_acm\Service
  */

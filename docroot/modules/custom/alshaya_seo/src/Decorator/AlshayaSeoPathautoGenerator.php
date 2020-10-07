@@ -9,7 +9,7 @@ use Drupal\pathauto\PathautoGenerator;
 use Drupal\pathauto\PathautoGeneratorInterface;
 
 /**
- * Class AlshayaSeoPathautoGenerator.
+ * Class Alshaya Seo Pathauto Generator.
  *
  * @package Drupal\alshaya_seo
  */

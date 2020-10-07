@@ -11,7 +11,7 @@ use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class AlshayaPlpSortOptionsBase.
+ * Class Alshaya Plp Sort Options Base.
  */
 class AlshayaPlpSortOptionsBase {
 

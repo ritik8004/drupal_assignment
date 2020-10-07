@@ -13,7 +13,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 
 /**
- * Class ProductCategoryManager.
+ * Class Product Category Manager.
  *
  * @package Drupal\alshaya_acm_product_category\Service
  */

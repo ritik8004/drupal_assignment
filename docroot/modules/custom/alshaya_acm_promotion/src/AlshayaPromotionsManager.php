@@ -21,7 +21,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AlshayaPromotionsManager.
+ * Class Alshaya Promotions Manager.
  *
  * @package Drupal\alshaya_acm_promotion
  */

@@ -7,7 +7,7 @@ use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class ProductUpdatedEventSubscriber.
+ * Class Product Updated Event Subscriber.
  *
  * @package Drupal\alshaya_acm_product_category\EventSubscriber
  */
@@ -35,7 +35,10 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT][] = ['onProductProcessed', 600];
+    $events[ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT][] = [
+      'onProductProcessed',
+      600,
+    ];
     return $events;
   }
 

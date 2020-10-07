@@ -6,7 +6,7 @@ use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaCustomerCommands.
+ * Class Alshaya Customer Commands.
  *
  * @package Drupal\alshaya_acm_customer\Commands
  */

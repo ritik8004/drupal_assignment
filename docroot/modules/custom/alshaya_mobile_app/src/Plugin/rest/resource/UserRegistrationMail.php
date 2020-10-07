@@ -11,7 +11,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 
 /**
- * Class UserRegistrationMail.
+ * Class User Registration Mail.
  *
  * @RestResource(
  *   id = "user_registration_mail",

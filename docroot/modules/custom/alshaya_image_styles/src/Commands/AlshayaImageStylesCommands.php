@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class AlshayaImageStylesCommands.
+ * Class Alshaya Image Styles Commands.
  *
  * @package Drupal\alshaya_image_styles\Commands
  */

@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class PromotionProductListResource.
+ * Class Promotion Product List Resource.
  *
  * @RestResource(
  *   id = "promotion_product_list",

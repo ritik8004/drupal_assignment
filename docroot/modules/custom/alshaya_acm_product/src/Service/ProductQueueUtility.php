@@ -7,7 +7,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Queue\QueueFactory;
 
 /**
- * Class ProductQueueUtility.
+ * Class Product Queue Utility.
  */
 class ProductQueueUtility {
 

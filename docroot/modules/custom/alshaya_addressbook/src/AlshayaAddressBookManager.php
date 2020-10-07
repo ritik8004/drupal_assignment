@@ -19,7 +19,7 @@ use Drupal\profile\Entity\Profile;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class AlshayaAddressBookManager.
+ * Class Alshaya Address Book Manager.
  *
  * @package Drupal\alshaya_addressbook
  */

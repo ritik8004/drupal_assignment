@@ -14,7 +14,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Class ProductOptionsHelper.
+ * Class Product Options Helper.
  *
  * @package Drupal\alshaya_product_options
  */

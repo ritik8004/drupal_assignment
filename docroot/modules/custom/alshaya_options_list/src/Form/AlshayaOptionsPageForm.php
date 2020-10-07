@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AlshayaOptionsPageForm.
+ * Class Alshaya Options Page Form.
  */
 class AlshayaOptionsPageForm extends ConfigFormBase {
 

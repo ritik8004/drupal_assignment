@@ -43,7 +43,7 @@ use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
- * Class SkuManager.
+ * Class Sku Manager.
  *
  * @package Drupal\alshaya_acm_product
  */
@@ -822,7 +822,10 @@ class SkuManager {
    * @return array
    *   List of Promotion Nodes.
    */
-  public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
+  public function getSkuPromotions(SKU $sku, array $types = [
+    'cart',
+    'category',
+  ]) {
     $skus = [$sku->getSku()];
 
     if ($sku->bundle() == 'simple') {
@@ -3139,7 +3142,10 @@ class SkuManager {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $item->getField('price')->setValues([max($selling_prices)]);
 
-      $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
+      $selling_prices = array_unique([
+        min($selling_prices),
+        max($selling_prices),
+      ]);
       $item->getField('attr_selling_price')->setValues($selling_prices);
 
       if ($this->isPriceModeFromTo()) {

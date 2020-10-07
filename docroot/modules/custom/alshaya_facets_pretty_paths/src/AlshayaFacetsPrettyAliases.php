@@ -7,7 +7,7 @@ use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * Class AlshayaFacetsPrettyAliases.
+ * Class Alshaya Facets Pretty Aliases.
  *
  * @package Drupal\alshaya_facets_pretty_paths
  */

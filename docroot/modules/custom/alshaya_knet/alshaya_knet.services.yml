@@ -5,6 +5,7 @@ services:
       - '@config.factory'
       - '@tempstore.shared'
       - '@logger.channel.knet'
+      - '@request_stack'
 
   logger.channel.knet:
     class: Drupal\Core\Logger\LoggerChannel

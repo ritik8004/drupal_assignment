@@ -8,9 +8,10 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class KnetController.
+ * Class Knet Controller.
  */
 class KnetController extends ControllerBase {
 
@@ -36,6 +37,13 @@ class KnetController extends ControllerBase {
   protected $logger;
 
   /**
+   * The RequestStack service.
+   *
+   * @var Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $requestStack;
+
+  /**
    * KnetController constructor.
    *
    * @param \Drupal\alshaya_knet\Helper\KnetHelper $knet_helper
@@ -44,15 +52,19 @@ class KnetController extends ControllerBase {
    *   The factory for the temp store object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger factory.
+   * @param Symfony\Component\HttpFoundation\RequestStack $stack
+   *   The request service.
    */
   public function __construct(
     KnetHelper $knet_helper,
     SharedTempStoreFactory $temp_store_factory,
-    LoggerChannelFactoryInterface $logger_factory
+    LoggerChannelFactoryInterface $logger_factory,
+    RequestStack $stack
   ) {
     $this->knetHelper = $knet_helper;
     $this->tempStore = $temp_store_factory->get('knet');
     $this->logger = $logger_factory->get('alshaya_knet');
+    $this->requestStack = $stack;
   }
 
   /**
@@ -70,7 +82,7 @@ class KnetController extends ControllerBase {
    * Page callback to process the payment and return redirect URL.
    */
   public function response() {
-    $data = $_POST;
+    $data = $this->requestStack->getCurrentRequest()->request->get();
 
     // For new K-Net toolkit, parse and decrypt the response first.
     if (!empty($data) && $this->knetHelper->useNewKnetToolKit()) {

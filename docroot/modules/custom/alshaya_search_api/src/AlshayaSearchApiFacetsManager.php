@@ -12,7 +12,7 @@ use Drupal\block\BlockInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class AlshayaSearchApiFacetsManager.
+ * Class Alshaya Search Api Facets Manager.
  *
  * @package Drupal\alshaya_search_api
  */

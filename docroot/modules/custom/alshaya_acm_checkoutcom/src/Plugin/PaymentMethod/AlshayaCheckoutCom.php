@@ -6,7 +6,7 @@ use Drupal\acq_checkoutcom\Plugin\PaymentMethod\CheckoutCom;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AlshayaCheckoutCom.
+ * Class Alshaya Checkout Com.
  *
  * @package Drupal\alshaya_acm_checkoutcom\Plugin\PaymentMethod
  */

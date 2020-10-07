@@ -9,7 +9,7 @@ use Drupal\address\Event\AddressFormatEvent;
 use Drupal\address\Event\AddressEvents;
 
 /**
- * Class AddressFormatSubscriber.
+ * Class Address Format Subscriber.
  */
 class AddressFormatSubscriber implements EventSubscriberInterface {
 

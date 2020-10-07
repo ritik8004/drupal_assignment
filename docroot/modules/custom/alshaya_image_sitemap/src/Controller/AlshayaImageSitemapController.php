@@ -11,7 +11,7 @@ use Drupal\Core\State\StateInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Class AlshayaImageSitemapController.
+ * Class Alshaya Image Sitemap Controller.
  *
  * @package Drupal\alshaya_image_sitemap\Controller
  */

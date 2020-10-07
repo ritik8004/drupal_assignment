@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class AlshayaAcmPlaceOrderFailedEvent.
+ * Class Alshaya Acm Place Order Failed Event.
  *
  * @package Drupal\acq_checkout\Event
  */

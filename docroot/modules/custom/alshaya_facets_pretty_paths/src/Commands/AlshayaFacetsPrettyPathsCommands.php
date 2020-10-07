@@ -11,7 +11,7 @@ use Drupal\facets_summary\Entity\FacetsSummary;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaFacetsPrettyPathsCommands.
+ * Class Alshaya Facets Pretty Paths Commands.
  *
  * @package Drupal\alshaya_facets_pretty_paths\Commands
  */

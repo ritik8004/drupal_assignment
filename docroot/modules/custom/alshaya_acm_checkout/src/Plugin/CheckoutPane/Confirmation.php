@@ -63,7 +63,10 @@ class Confirmation extends CheckoutPaneBase implements CheckoutPaneInterface {
       $user = User::load(\Drupal::currentUser()->id());
       $account['privilege_card_number'] = $user->get('field_privilege_card_number')->getString();
 
-      $print_link = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order['increment_id']]);
+      $print_link = Url::fromRoute('alshaya_acm_customer.orders_print', [
+        'user' => $user->id(),
+        'order_id' => $order['increment_id'],
+      ]);
     }
 
     $build = alshaya_acm_customer_build_order_detail($order);

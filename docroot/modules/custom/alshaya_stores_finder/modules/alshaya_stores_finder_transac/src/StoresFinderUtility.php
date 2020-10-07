@@ -20,7 +20,7 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class StoresFinderUtility.
+ * Class Stores Finder Utility.
  */
 class StoresFinderUtility {
 
@@ -366,11 +366,17 @@ class StoresFinderUtility {
     if ($node = $this->getStoreFromCode($store['store_code'], FALSE)) {
       if ($node->hasTranslation($langcode)) {
         $node = $node->getTranslation($langcode);
-        $this->logger->info('Updating store @store_code and @langcode', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
+        $this->logger->info('Updating store @store_code and @langcode', [
+          '@store_code' => $store['store_code'],
+          '@langcode' => $langcode,
+        ]);
       }
       else {
         $node = $node->addTranslation($langcode);
-        $this->logger->info('Adding @langcode translation for store @store_code', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
+        $this->logger->info('Adding @langcode translation for store @store_code', [
+          '@store_code' => $store['store_code'],
+          '@langcode' => $langcode,
+        ]);
       }
     }
     else {
@@ -382,7 +388,10 @@ class StoresFinderUtility {
 
       $node->get('field_store_locator_id')->setValue($store['store_code']);
 
-      $this->logger->info('Creating store @store_code in @langcode', ['@store_code' => $store['store_code'], '@langcode' => $langcode]);
+      $this->logger->info('Creating store @store_code in @langcode', [
+        '@store_code' => $store['store_code'],
+        '@langcode' => $langcode,
+      ]);
     }
 
     if (!empty($store['store_name'])) {
@@ -392,7 +401,10 @@ class StoresFinderUtility {
       $node->get('title')->setValue($store['store_code']);
     }
 
-    $node->get('field_latitude_longitude')->setValue(['lat' => $store['latitude'], 'lng' => $store['longitude']]);
+    $node->get('field_latitude_longitude')->setValue([
+      'lat' => $store['latitude'],
+      'lng' => $store['longitude'],
+    ]);
 
     $node->get('field_store_phone')->setValue($store['store_phone']);
     $node->get('field_store_email')->setValue($store['store_email']);
@@ -475,7 +487,10 @@ class StoresFinderUtility {
         }
         catch (\Exception $e) {
           // If something goes wrong.
-          $this->logger->error('Unable to delete the @bundle node with id @nid', ['@bundle' => $node->bundle(), '@nid' => $node->id()]);
+          $this->logger->error('Unable to delete the @bundle node with id @nid', [
+            '@bundle' => $node->bundle(),
+            '@nid' => $node->id(),
+          ]);
         }
       }
     }

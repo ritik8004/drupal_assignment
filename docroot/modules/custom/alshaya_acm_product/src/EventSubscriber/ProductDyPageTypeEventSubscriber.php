@@ -11,7 +11,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class ProductDyPageTypeEventSubscriber.
+ * Class Product DyPage Type Event Subscriber.
  *
  * @package Drupal\alshaya_acm_product\EventSubscriber
  */

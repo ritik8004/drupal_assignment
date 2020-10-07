@@ -7,7 +7,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AlshayaEntityHelper.
+ * Class Alshaya Entity Helper.
  *
  * @package Drupal\alshaya_master\Service
  */

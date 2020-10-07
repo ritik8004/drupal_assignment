@@ -83,7 +83,10 @@ class AlshayaBlockHelper {
     // Retrieve an array which contains the path pieces.
     $current_path = $this->currentPath->getPath();
     // Get current path alias.
-    $current_path_alias = $this->aliasStorage->load(['source' => $current_path, 'langcode' => $langcode]);
+    $current_path_alias = $this->aliasStorage->load([
+      'source' => $current_path,
+      'langcode' => $langcode,
+    ]);
 
     // Get the active link if any!.
     foreach ($tree as $element) {
