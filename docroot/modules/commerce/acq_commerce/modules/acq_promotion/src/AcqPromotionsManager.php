@@ -340,7 +340,7 @@ class AcqPromotionsManager {
     }
 
     // Invoke the alter hook to allow modules to update the node from API data.
-    \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $promotion_node, $promotion);
+    \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $promotion_node, $promotion, $promotion_label_languages);
 
     // Store everything as serialized string in DB.
     // Before that remove products key, as we are not using it anywhere, and
