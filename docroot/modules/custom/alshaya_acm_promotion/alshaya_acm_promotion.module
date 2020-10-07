@@ -100,16 +100,72 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
     $node->get('field_free_gift_skus')->setValue($promotion['free_gift_products']);
   }
 
-  if (empty($promotion['products'])
-    && empty($promotion['action_condition']['conditions']
-    && empty($promotion['condition']['conditions']))) {
-    $node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
+  $product_queue_utility = \Drupal::service('alshaya_acm_product.product_queue_utility');
+  $conditions = [
+    $promotion['products'],
+    $promotion['action_condition']['conditions'],
+    $promotion['condition']['conditions'],
+  ];
+  // Check if there are no products received in the rule data.
+  if (empty($conditions[0])) {
     if ($node->isNew()) {
-      \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+      if (empty($conditions[1]) && empty($conditions[2])) {
+        // Check if node is new or if node already exists but previously it was
+        // not marked for full catalog.
+        $node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
+        $product_queue_utility->queueAllProducts();
+      }
+    }
+    else {
+      $saved_promotion_data = unserialize($node->get('field_acq_promotion_data')->getString());
+      // Compare existing node with the incoming promotion data. If there is
+      // change in conditions the check them again and queue if required.
+      $saved_promotion_data_conditions = [
+        $saved_promotion_data['action_condition']['conditions'],
+        $saved_promotion_data['condition']['conditions'],
+      ];
+
+      if ((($saved_promotion_data_conditions[0] != $conditions[1])
+        || ($saved_promotion_data_conditions[1] != $conditions[2]))
+        && (empty($conditions[1]) && empty($conditions[2]))
+      ) {
+        $node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
+        $product_queue_utility->queueAllProducts();
+      }
     }
   }
   else {
     $node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
+
+    if ($node->isNew()) {
+      if ((!empty($conditions[1]) && empty($conditions[2]))
+      || (empty($conditions[1]) && !empty($conditions[2]))) {
+        foreach ($promotion['products'] as $product) {
+          $product_queue_utility->queueProduct($product['product_sku']);
+        }
+      }
+    }
+    else {
+      // Fetch saved promotion node data.
+      $saved_promotion_data = unserialize($node->get('field_acq_promotion_data')->getString());
+      $saved_promotion_data_conditions = [
+        $saved_promotion_data['action_condition']['conditions'],
+        $saved_promotion_data['condition']['conditions'],
+      ];
+      // Compare saved promotion data conditions with the conditions coming from
+      // the synced promotion data. If there is any change in conditions, only
+      // then we queue the affected products.
+      if (($saved_promotion_data_conditions[0] != $conditions[1])
+        || ($saved_promotion_data_conditions[1] != $conditions[2])
+      ) {
+        if ((!empty($conditions[1]) && empty($conditions[2]))
+        || (empty($conditions[1]) && !empty($conditions[2]))) {
+          foreach ($promotion['products'] as $product) {
+            $product_queue_utility->queueProduct($product['product_sku']);
+          }
+        }
+      }
+    }
   }
 }
 
