@@ -5,11 +5,18 @@ import LoyaltyClubRewardsActivity from '../loyalty-club-rewards-activity';
 
 class LoyaltyClubTabs extends React.Component {
   componentDidMount() {
-    // We use this to show the active tab's content on page load.
-    const activeTab = document.querySelector('.loyalty-club-tabs .loyalty-tab.active');
-    // Get the corresponding content.
-    const tabContentSelector = `.loyalty-club-tabs-content .${activeTab.getAttribute('data-tab-content')}`;
-    document.querySelector(tabContentSelector).classList.add('active');
+    const { loyaltyStatus } = this.props;
+    const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
+    const allAuraStatus = getAllAuraStatus();
+
+    // We show tabs only for registered & verified AURA user.
+    if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
+      // We use this to show the active tab's content on page load.
+      const activeTab = document.querySelector('.loyalty-club-tabs .loyalty-tab.active');
+      // Get the corresponding content.
+      const tabContentSelector = `.loyalty-club-tabs-content .${activeTab.getAttribute('data-tab-content')}`;
+      document.querySelector(tabContentSelector).classList.add('active');
+    }
   }
 
   switchTab = (e) => {
