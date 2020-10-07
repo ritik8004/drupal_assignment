@@ -23,16 +23,6 @@
       // Mobile mode.
       mobilePopup.removeClass('hidden');
     }
-    else if (body.hasClass('aura-my-account')) {
-      // We do not show points on My account pages.
-      // Desktop mode.
-      $('.aura-my-account-rewards-header').removeClass('hidden');
-      auraHeader.find('.aura-header-link').addClass('hidden');
-      if (data.aura_user.is_loyalty_linked == 0) {
-        // Mobile mode.
-        mobilePopup.removeClass('hidden');
-      }
-    }
     else {
       // Following code is executed for logged in users.
       var userPointsAjaxFetch = Drupal.ajax({
