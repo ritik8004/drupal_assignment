@@ -1,13 +1,17 @@
-.magv2-detail-wrapper {
-  .magv2-pdp-price-container {
-    .magv2-pdp-final-price-wrapper {
-      .magv2-pdp-discount-percentage {
-        margin-bottom: 0.3125rem;
-      }
-    }
+.magv2-header {
+  &:not(.magv2-pdp-sticky-header) {
+    .magv2-detail-wrapper {
+      .magv2-pdp-price-container {
+        .magv2-pdp-final-price-wrapper {
+          .magv2-pdp-discount-percentage {
+            margin-bottom: 0.3125rem;
+          }
+        }
 
-    .magv2-meta-data-wrapper {
-      align-items: center;
+        .magv2-meta-data-wrapper {
+          align-items: center;
+        }
+      }
     }
   }
 }
