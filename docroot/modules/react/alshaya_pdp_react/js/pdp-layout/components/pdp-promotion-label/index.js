@@ -10,7 +10,7 @@ class PdpPromotionLabel extends React.Component {
     };
   }
 
-  getRelatedProductsInfo = (promotionsRawData, url) => {
+  getPromotionInfo = (promotionsRawData, url) => {
     // If product promotion data is already processed.
     if (promotionsRawData === null) {
       axios.get(url).then((response) => {
@@ -32,7 +32,7 @@ class PdpPromotionLabel extends React.Component {
     } = this.props;
     const { promotionsRawData } = this.state;
     const url = Drupal.url(`rest/v1/product/${skuMainCode}?pdp=magazinev2`);
-    this.getRelatedProductsInfo(promotionsRawData, url);
+    this.getPromotionInfo(promotionsRawData, url);
 
     return (promotionsRawData) ? (
       <>
