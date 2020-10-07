@@ -76,7 +76,6 @@ class SizeFacetBlock extends BlockBase {
       ];
     }
 
-
     $build['#attached']['library'][] = 'alshaya_vs_search/size_facet_copy';
 
     return $build;

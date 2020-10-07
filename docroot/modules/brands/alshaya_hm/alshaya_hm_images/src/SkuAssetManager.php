@@ -25,7 +25,7 @@ use GuzzleHttp\Client;
 use Drupal\file\Entity\File;
 
 /**
- * SkuAssetManager Class.
+ * Sku Asset Manager Class.
  */
 class SkuAssetManager {
 

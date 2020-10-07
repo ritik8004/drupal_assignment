@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class ProductInfoRequestedEventSubscriber.
+ * Contains Product Info Requested Event Subscriber methods.
  *
  * @package Drupal\alshaya_hm\EventSubscriber
  */
@@ -399,7 +399,10 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
     $composition = $this->skuManager->fetchProductAttribute($sku_entity, 'attr_composition', $search_direction);
     if (!empty($composition)) {
-      $product_details[] = ['label' => $this->t('COMPOSITION'), 'composition' => ['#markup' => $composition]];
+      $product_details[] = [
+        'label' => $this->t('COMPOSITION'),
+        'composition' => ['#markup' => $composition],
+      ];
     }
 
     return $product_details;
