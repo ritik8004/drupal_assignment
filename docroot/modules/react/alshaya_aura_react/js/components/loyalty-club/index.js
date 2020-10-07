@@ -11,12 +11,21 @@ class LoyaltyClub extends React.Component {
     };
   }
 
+  updateLoyaltyStatus = (loyaltyStatus) => {
+    this.setState({
+      loyaltyStatus,
+    });
+  }
+
   render() {
     const { loyaltyStatus } = this.state;
 
     return (
       <>
-        <LoyaltyClubBlock loyaltyStatus={loyaltyStatus} />
+        <LoyaltyClubBlock
+          loyaltyStatus={loyaltyStatus}
+          updateLoyaltyStatus={this.updateLoyaltyStatus}
+        />
         <LoyaltyClubTabs loyaltyStatus={loyaltyStatus} />
       </>
     );

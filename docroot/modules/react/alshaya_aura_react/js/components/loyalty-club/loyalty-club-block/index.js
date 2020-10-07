@@ -21,7 +21,8 @@ export default class LoyaltyClubBlock extends React.Component {
       apiData.then((result) => {
         if (result.data !== undefined && result.data.error === undefined) {
           if (result.data.status) {
-            // @todo: Set in state that user has flagged this card is not him.
+            const { updateLoyaltyStatus } = this.props;
+            updateLoyaltyStatus(loyaltyStatusNotU);
           }
         }
       });
