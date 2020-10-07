@@ -1,5 +1,3 @@
-@import "../../aura-loyalty-global/component/aura-fonts";
-
 .loyalty-club-tabs {
   text-align: center;
   overflow-y: auto;
@@ -8,6 +6,7 @@
   @include breakpoint($only-mobile) {
     white-space: nowrap;
     text-align: $left;
+    margin: 3.125rem 0;
   }
 
   .loyalty-tab {

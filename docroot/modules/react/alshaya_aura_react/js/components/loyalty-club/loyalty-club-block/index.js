@@ -50,7 +50,7 @@ export default class LoyaltyClubBlock extends React.Component {
         );
       }
       // When user has a verified card.
-      if (!doNotshowLinkedVerifiedBlock && loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
+      if (!doNotshowLinkedVerifiedBlock && loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
         // @TODO: Add condition to not render this on user account page.
         return <AuraMyAccountVerifiedUser />;
       }

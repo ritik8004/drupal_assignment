@@ -1,3 +1,13 @@
 #my-loyalty-club {
   margin-top: 2.5rem;
 }
+
+.aura-my-account {
+  .block-my-accounts-aura-block {
+    margin-top: 2.5rem;
+
+    ~ .block-alshaya-user-recent-orders .edit-account {
+      top: -0.7rem;
+    }
+  }
+}
