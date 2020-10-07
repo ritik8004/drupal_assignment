@@ -15,10 +15,6 @@ body.aura-header-open .header--wrapper {
   position: relative;
   font-size: initial;
 
-  &.loading {
-    background: red;
-  }
-
   @include breakpoint($upto-desktop) {
     background-color: $mobile-aura-link-bg;
   }
