@@ -10,6 +10,24 @@ class PdpPromotionLabel extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // On first page load.
+    const { skuMainCode } = this.props;
+    const { promotionsRawData } = this.state;
+    const url = Drupal.url(`rest/v1/product/${skuMainCode}?pdp=magazinev2`);
+    this.getPromotionInfo(promotionsRawData, url);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { skuMainCode } = this.props;
+    // If there is a change in props value (parent sku).
+    if (prevProps.skuMainCode !== skuMainCode) {
+      const { promotionsRawData } = this.state;
+      const url = Drupal.url(`rest/v1/product/${skuMainCode}?pdp=magazinev2`);
+      this.getPromotionInfo(promotionsRawData, url);
+    }
+  }
+
   getPromotionInfo = (promotionsRawData, url) => {
     // If product promotion data is already processed.
     if (promotionsRawData === null) {
@@ -30,8 +48,6 @@ class PdpPromotionLabel extends React.Component {
       cartDataValue,
     } = this.props;
     const { promotionsRawData } = this.state;
-    const url = Drupal.url(`rest/v1/product/${skuMainCode}?pdp=magazinev2`);
-    this.getPromotionInfo(promotionsRawData, url);
 
     return (promotionsRawData) ? (
       <>
