@@ -5,3 +5,6 @@ alshaya_mobile_app.settings:
     pdp_click_collect_available_in_store:
       type: label
       label: 'PDP: Click and Collect available in store (Mobile App)'
+    dy_plp_banner_name:
+      type: label
+      label: 'Dy banner name for PLP.'

@@ -1,3 +1,4 @@
+
 .appointment-confirmation-print-content {
   .appointment-confirmation-print-header {
     display: flex;
@@ -63,6 +64,17 @@
 }
 
 @media print {
+  html,
+  body {
+    height: 100vh;
+    margin: 0 !important;
+    overflow: hidden;
+  }
+
+  @page {
+    margin-top: 4.6875rem;
+  }
+
   img {
     display: none;
   }

@@ -20,22 +20,98 @@ body.overlay-related-select {
   &-crossell {
     &-popup {
       &-content-wrapper {
-        padding: 1.25rem 1.875rem;
+        padding: 1.25rem;
         background-color: $magv2-desc-popup-content-bg;
 
         &::before {
           content: '';
           display: block;
           border-top: 0.625rem solid $magv2-desc-popup-grey-border;
-          margin: -1.25rem -1.875rem 0;
+          margin: -1.25rem -1.25rem 0;
         }
 
         .magv2-pdp-gallery {
+          padding-top: 0;
+          padding-bottom: 0;
+
           .magazine__gallery--container-mobile {
+            .magv2-pdp-image {
+              position: relative;
+            }
+
             .slick-dots {
               left: auto;
               transform: none;
+
+              @include breakpoint($tablet) {
+                li {
+                  width: 0.875rem;
+                  height: 0.875rem;
+
+                  button {
+                    width: 0.875rem;
+                    height: 0.875rem;
+
+                    &::before {
+                      font-size: 0.5rem;
+                      width: 0.875rem;
+                      height: 0.875rem;
+                    }
+                  }
+                }
+              }
             }
+
+            @include breakpoint($tablet) {
+              .slick-slider {
+                .slick-arrow {
+                  background: transparent;
+                  bottom: -0.625rem;
+                  top: auto;
+                  width: 2.125rem;
+                  height: 2.125rem;
+
+                  &::before {
+                    color: $magv2-slider-icon-bg;
+                    opacity: 1;
+                  }
+                }
+
+                .slick-next {
+                  #{$right}: 5rem;
+
+                  @include icon(chevron#{$right}) {
+                    font-size: 2.125rem;
+                    height: 2.125rem;
+                    width: 2.125rem;
+                  }
+                }
+
+                .slick-prev {
+                  #{$left}: 5rem;
+
+                  @include icon(chevron#{$left}) {
+                    font-size: 2.125rem;
+                    height: 2.125rem;
+                    width: 2.125rem;
+                  }
+                }
+
+                .slick-disabled {
+                  &::before {
+                    color: $gallery_arrows_disabled !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .magv2-detail-wrapper {
+          padding-top: 1.25rem;
+
+          .magv2-pdp-title {
+            padding-top: 0;
           }
         }
 
@@ -49,7 +125,6 @@ body.overlay-related-select {
           border: 1px solid $spc-checkout-delivery-info-txt;
           color: $magv2-pdp-title;
           position: relative;
-          padding-#{$left}: 1.25rem;
           font-size: 0.875rem;
 
           @include icon('arrow-#{$right}', before) {
@@ -71,6 +146,10 @@ body.overlay-related-select {
           a {
             font-size: 1rem;
             color: $magv2-pdp-title;
+            padding-#{$left}: 1.25rem;
+            display: inline-block;
+            width: 100%;
+            z-index: 1;
           }
         }
 

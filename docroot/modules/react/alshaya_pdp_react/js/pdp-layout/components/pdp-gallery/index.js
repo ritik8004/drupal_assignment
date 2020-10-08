@@ -29,12 +29,14 @@ export default class PdpGallery extends React.PureComponent {
       open: true,
       currentIndex: indexOfChildWRTSiblings,
     });
+    document.querySelector('body').classList.add('pdp-modal-overlay');
   };
 
   closeModal = () => {
     this.setState({
       open: false,
     });
+    document.querySelector('body').classList.remove('pdp-modal-overlay');
   };
 
   render() {
@@ -46,8 +48,10 @@ export default class PdpGallery extends React.PureComponent {
     const emptyRes = (
       <div>Images not available</div>
     );
+
     const { open, currentIndex } = this.state;
     const isTouchDevice = window.innerWidth < 1024;
+
     let centerPaddingValue;
     if (isTouchDevice && !showFullVersion) {
       centerPaddingValue = null;
@@ -85,7 +89,7 @@ export default class PdpGallery extends React.PureComponent {
               <Slider
                 dots={sliderSettings.dots}
                 infinite={sliderSettings.infinite}
-                arrows={sliderSettings.arrows}
+                arrows={(context === 'main') ? sliderSettings.arrows : true}
                 appendDots={sliderSettings.appendDots}
               >
                 {images.map((image, key) => (

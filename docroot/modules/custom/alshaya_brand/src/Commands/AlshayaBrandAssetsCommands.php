@@ -73,7 +73,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *
    * @command alshaya_brand:delete-unused-unavailable-file-entities
    *
-   * @aliases duufe delete-unused-unavailable-file-entities
+   * @aliases delete-unused-unavailable-file-entities
    *
    * @usage drush delete-unused-unavailable-file-entities
    *   Deletes unused assets .
@@ -145,7 +145,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *
    * @command alshaya_brand:list-unused-brand-asset-paths
    *
-   * @aliases lubap list-unused-brand-asset-paths
+   * @aliases list-unused-brand-asset-paths
    *
    * @usage drush list-unused-brand-asset-paths
    *   Lists unused asset paths .
@@ -176,7 +176,10 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $query->fields('fm', ['fid', 'uri']);
     $query->leftJoin('file_usage', 'fu', 'fm.fid = fu.fid');
     $query->isNull('fu.fid');
-    $query->condition('fm.uri', 's3://%', 'LIKE');
+    $or_group = $query->orConditionGroup()
+      ->condition('fm.uri', 's3://%', 'LIKE')
+      ->condition('fm.uri', 'brand://%', 'LIKE');
+    $query->condition($or_group);
     $result = $query->execute()->fetchAll();
 
     return $result;
@@ -190,7 +193,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    *
    * @command alshaya_brand:delete-unused-brand-assets-all-markets
    *
-   * @aliases dubaam delete-unused-brand-assets-all-markets
+   * @aliases delete-unused-brand-assets-all-markets
    *
    * @usage drush delete-unused-brand-assets-all-markets
    *   Delete unused assets across markets of a brand.
