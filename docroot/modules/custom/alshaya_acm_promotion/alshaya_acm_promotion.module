@@ -486,7 +486,6 @@ function alshaya_acm_promotion_entity_delete(EntityInterface $entity) {
   // Queue all products for reindexation when a promotion node applying to
   // entire catalog is deleted.
   if (($entity->bundle() === 'acq_promotion')
-    && ($entity->hasField('field_acq_promotion_full_catalog'))
     && ($entity->get('field_acq_promotion_full_catalog')->getString())) {
     \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
   }
