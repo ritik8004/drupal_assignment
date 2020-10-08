@@ -441,6 +441,11 @@ class CartController {
 
     if (!empty($response['shipping']['storeCode'])) {
       $response['shipping']['storeInfo'] = $this->drupal->getStoreInfo($response['shipping']['storeCode']);
+      // Set the CnC type (rnc or sts) if not already set.
+      if (empty($response['shipping']['storeInfo']['rnc_available'])
+       && !empty($response['shipping']['clickCollectType'])) {
+        $response['shipping']['storeInfo']['rnc_available'] = ($response['shipping']['clickCollectType'] == 'reserve_and_collect');
+      }
     }
     $response['payment'] = $data['payment'] ?? [];
 
