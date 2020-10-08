@@ -21,3 +21,9 @@
     }
   }
 }
+
+.aura-enabled.c-my-account-nav.block-alshaya-my-account-links {
+  @include breakpoint($upto-desktop) {
+    top: 3.75rem;
+  }
+}

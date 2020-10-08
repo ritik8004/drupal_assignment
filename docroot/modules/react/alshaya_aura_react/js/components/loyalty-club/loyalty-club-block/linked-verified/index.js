@@ -39,19 +39,39 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
     }
   }
 
+  /**
+   * Get tooltip content.
+   */
   getToolTipContent = () => Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem the points.');
+
+  /**
+   * Get User Profile info.
+   */
+  getUserProfileInfo = () => {
+    const { userName } = drupalSettings.userDetails;
+    const userInfo = {};
+    if (userName.length > 0) {
+      const parts = userName.split(' ');
+      userInfo.profileName = userName;
+      userInfo.avatar = `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
+    }
+
+    return userInfo;
+  };
 
   render() {
     const {
       points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
     } = this.state;
 
+    const profileInfo = this.getUserProfileInfo();
+
     return (
       <div className="aura-card-linked-verified-wrapper">
         <div className="aura-card-linked-verified-wrapper-content">
           <div className="aura-logo">
-            <div className="aura-user-avatar" />
-            <div className="aura-user-name">Aura UserName</div>
+            <div className="aura-user-avatar">{ profileInfo.avatar }</div>
+            <div className="aura-user-name">{ profileInfo.profileName }</div>
           </div>
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">
