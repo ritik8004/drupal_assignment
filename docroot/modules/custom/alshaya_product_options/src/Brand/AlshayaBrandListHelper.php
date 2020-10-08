@@ -39,8 +39,14 @@ class AlshayaBrandListHelper {
 
   /**
    * Load all product brand terms.
+   *
+   * @param string $langcode
+   *   The langcode.
+   *
+   * @return array
+   *   Return the array of brand name from brand logo attribute.
    */
-  public function getBrandTerms() {
+  public function getBrandTerms($langcode = 'en') {
     $logo_attribute = self::getLogoAttribute();
     $terms = [];
     if ($logo_attribute) {
@@ -51,7 +57,7 @@ class AlshayaBrandListHelper {
       $query->innerJoin('file_managed', 'fm', 'ttasoi.field_attribute_swatch_org_image_target_id = fm.fid AND fm.status = 1');
       $query->addField('fm', 'uri');
       $query->condition('ttac.field_sku_attribute_code_value', $logo_attribute);
-      $query->condition('ttfd.default_langcode', 1);
+      $query->condition('ttfd.langcode', $langcode);
       $query->condition('ttfd.vid', self::BRAND_VID);
       $query->orderBy('ttfd.weight', 'ASC');
 

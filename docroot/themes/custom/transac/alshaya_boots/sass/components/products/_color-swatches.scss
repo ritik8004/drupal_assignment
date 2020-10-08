@@ -1,8 +1,6 @@
 .sku-base-form {
   .configurable-swatch {
     .li-swatch-image {
-      width: 3rem;
-
       a,
       span {
         width: 2.75rem;
@@ -80,6 +78,16 @@
           border: 1px solid $pdp_color_option_border;
           padding: 0.875rem;
           margin-top: 0.125rem;
+          height: 2.25rem;
+          position: relative;
+
+          @include breakpoint($tablet) {
+            top: -1.0625rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            top: 0.1875rem;
+          }
 
           &.picked,
           &:hover {
@@ -96,6 +104,11 @@
           background: transparent;
           border: 0;
           margin-top: 0.5rem;
+          top: -0.375rem;
+
+          @include breakpoint($only-mobile) {
+            top: -0.125rem;
+          }
 
           &.picked,
           &:hover {

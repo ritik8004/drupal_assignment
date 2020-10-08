@@ -76,13 +76,14 @@ export default class PdpClickCollect extends React.PureComponent {
         lng: place.geometry.location.lng(),
         location: place.formatted_address,
       }).then((res) => {
-        if (res.data.all_stores['#stores'].length !== 0) {
+        if (res.data.all_stores['#stores'] !== undefined && res.data.all_stores['#stores'].length !== 0) {
           this.setState({
             stores: res.data.all_stores['#stores'],
             location: place.formatted_address,
             hideInput: true,
             showMore: false,
           });
+          document.getElementById('click-n-collect-search-field').classList.add('hidden');
         } else {
           // Show no result div.
           this.setState({

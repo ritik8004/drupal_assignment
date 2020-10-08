@@ -1,0 +1,54 @@
+.non-groupped-attr {
+  .select-attribute {
+    @include breakpoint($tablet) {
+      li {
+        margin: 0 0.3125rem 0.625rem;
+        padding: 0;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      li {
+        &:nth-child(2n) {
+          margin-#{$right}: 0;
+        }
+
+        &:nth-child(3n) {
+          margin-#{$right}: 0.3125rem;
+        }
+
+        &:nth-child(3n+1) {
+          margin-#{$left}: 0.3125rem;
+        }
+      }
+    }
+
+    @include breakpoint($tablet-landscape) {
+      li {
+        &:nth-child(3n) {
+          margin-#{$right}: 0;
+        }
+
+        &:nth-child(3n+1) {
+          margin-#{$left}: 0.3125rem;
+        }
+
+        &:nth-child(2n) {
+          margin-#{$right}: 0.3125rem;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      li {
+        &:nth-child(3n) {
+          margin-#{$right}: 0.3125rem;
+        }
+
+        &:nth-child(4n) {
+          margin-#{$right}: 0;
+        }
+      }
+    }
+  }
+}

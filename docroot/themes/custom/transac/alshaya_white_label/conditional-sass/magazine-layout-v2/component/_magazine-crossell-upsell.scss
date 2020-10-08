@@ -140,7 +140,7 @@
 
           // When number of slides doesn't match with slidesToShow config, slick slider doesn't have dir attribute which makes it rtl for Arabic.
           // For that case, added rtl-slider-not-initialised class and updated the theming accordingly.
-          // This class is added by checkSlider() in .magv2-pdp-crossell-upsell/index.js . 
+          // This class is added by checkSlider() in .magv2-pdp-crossell-upsell/index.js .
           .rtl-slider-not-initialised & {
             margin-right: 1.25rem;
 
@@ -312,42 +312,32 @@
   .magv2-pdp-crossell-upsell-image-wrapper {
     position: relative;
 
-    .product-labels {
-      position: static;
-      width: auto;
-      height: auto;
-      display: flex;
-      padding: 0 1.25rem;
-      flex-wrap: wrap;
+    .magv2-pdp-crossell-upsell-img {
+      position: relative;
+    }
 
+    .product-labels {
       .labels {
+        position: absolute;
+
         &.top-left,
         &.top-right {
-          position: absolute;
           top: 0.75rem;
-        }
-
-        &.top-left {
-          #{$left}: 0.9375rem;
-        }
-
-        &.top-right {
-          #{$right}: 0.9375rem;
         }
 
         &.bottom-left,
         &.bottom-right {
-          display: flex;
-          justify-content: flex-start;
-          padding: 0;
-          padding-bottom: 0.3125rem;
-          padding-#{$right}: 0.3125rem;
-          flex: 1 1 0;
+          bottom: 0;
         }
 
+        &.top-left,
+        &.bottom-left {
+          #{$left}: 0.9375rem;
+        }
+
+        &.top-right,
         &.bottom-right {
-          justify-content: flex-end;
-          padding-#{$right}: 0;
+          #{$right}: 0.9375rem;
         }
 
         img {
