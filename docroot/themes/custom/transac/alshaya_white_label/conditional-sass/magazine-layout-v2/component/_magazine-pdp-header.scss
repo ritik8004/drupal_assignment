@@ -17,8 +17,8 @@
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    background: $magv2-sticky-header-bg;
-    position: static;
+    background: transparent;
+    position: absolute;
   }
 
   &.magv2-pdp-sticky-header {
