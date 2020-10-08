@@ -12,29 +12,30 @@ class PdpPromotionLabel extends React.Component {
 
   componentDidMount() {
     // On first page load.
-    const { skuMainCode } = this.props;
-    const { promotionsRawData } = this.state;
-    const url = Drupal.url(`rest/v1/product/${skuMainCode}?pdp=magazinev2`);
-    this.getPromotionInfo(promotionsRawData, url);
+    this.getPromotionInfo();
   }
 
   componentDidUpdate(prevProps) {
     const { skuMainCode } = this.props;
     // If there is a change in props value (parent sku).
     if (prevProps.skuMainCode !== skuMainCode) {
-      const { promotionsRawData } = this.state;
-      const url = Drupal.url(`rest/v1/product/${skuMainCode}?pdp=magazinev2`);
-      this.getPromotionInfo(promotionsRawData, url);
+      this.getPromotionInfo();
     }
   }
 
-  getPromotionInfo = (promotionsRawData, url) => {
+  getPromotionInfo = () => {
     // If product promotion data is already processed.
-    if (promotionsRawData === null) {
+    const { skuMainCode } = this.props;
+    const { promotionsRawData } = this.state;
+    const url = Drupal.url(`rest/v1/product/${skuMainCode}?pdp=magazinev2`);
+    const promotionStateValue = promotionsRawData ? promotionsRawData[skuMainCode] : null;
+    if (promotionStateValue === null || promotionStateValue === undefined) {
       axios.get(url).then((response) => {
         if (response.data.length !== 0) {
+          const promotions = {};
+          promotions[skuMainCode] = response.data.promotionsRaw;
           this.setState({
-            promotionsRawData: response.data.promotionsRaw,
+            promotionsRawData: promotions,
           });
         }
       });
@@ -48,11 +49,12 @@ class PdpPromotionLabel extends React.Component {
       cartDataValue,
     } = this.props;
     const { promotionsRawData } = this.state;
+    const promotions = promotionsRawData ? promotionsRawData[skuMainCode] : null;
 
-    return (promotionsRawData) ? (
+    return (promotions) ? (
       <>
-        {Object.keys(promotionsRawData).map((key) => (
-          <p><a href={promotionsRawData[key].promo_web_url}>{promotionsRawData[key].text}</a></p>
+        {Object.keys(promotions).map((key) => (
+          <p><a href={promotions[key].promo_web_url}>{promotions[key].text}</a></p>
         ))}
         <div id="dynamic-promo-labels">
           <PdpDynamicPromotions skuMainCode={skuMainCode} cartDataValue={cartDataValue} />
