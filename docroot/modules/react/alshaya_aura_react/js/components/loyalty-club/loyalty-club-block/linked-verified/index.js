@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
-import { getUserAuraTier, getUserAuraTierLabel } from '../../../../utilities/helper';
+import { getUserAuraTier, getUserAuraTierLabel, getUserProfileInfo } from '../../../../utilities/helper';
 import PointsExpiryMessage
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import PointsUpgradeMessage
@@ -44,27 +44,12 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
    */
   getToolTipContent = () => Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem the points.');
 
-  /**
-   * Get User Profile info.
-   */
-  getUserProfileInfo = () => {
-    const { userName } = drupalSettings.userDetails;
-    const userInfo = {};
-    if (userName.length > 0) {
-      const parts = userName.split(' ');
-      userInfo.profileName = userName;
-      userInfo.avatar = `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
-    }
-
-    return userInfo;
-  };
-
   render() {
     const {
       points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
     } = this.state;
 
-    const profileInfo = this.getUserProfileInfo();
+    const profileInfo = getUserProfileInfo();
 
     return (
       <div className="aura-card-linked-verified-wrapper">

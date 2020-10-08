@@ -65,10 +65,27 @@ function getUserAuraTierLabel(tierValue) {
   return tierLabels[tierValue] || '';
 }
 
+/**
+ * Get User Profile info.
+ */
+function getUserProfileInfo() {
+  const { userName } = drupalSettings.userDetails;
+  const userInfo = {};
+  if (userName.length > 0) {
+    const parts = userName.split(' ');
+    userInfo.profileName = userName;
+    userInfo.avatar = `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
+  }
+
+  return userInfo;
+}
+
+
 export {
   getUserAuraStatus,
   getUserAuraTier,
   getAllAuraStatus,
   getAllAuraTier,
   getUserAuraTierLabel,
+  getUserProfileInfo,
 };
