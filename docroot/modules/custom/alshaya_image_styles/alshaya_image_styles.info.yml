@@ -12,5 +12,4 @@ dependencies:
   - drupal:views
   - imagemagick:imagemagick
   - memory_limit_policy:memory_limit_policy
-  - cloudflare_image_style:cloudflare_image_style
 package: Alshaya
