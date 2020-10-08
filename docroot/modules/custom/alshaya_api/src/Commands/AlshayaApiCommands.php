@@ -545,7 +545,7 @@ class AlshayaApiCommands extends DrushCommands {
         $this->stockManager->updateStock(
           $sku,
           (float) $mdata['qty'],
-          (bool) $mdata['stock_status'],
+          (int) $mdata['stock_status'],
           (float) $mdata['max_sale_qty'],
           (bool) $mdata['use_config_max_sale_qty']
         );

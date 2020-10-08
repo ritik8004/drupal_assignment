@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ff0c1aca8fe1050d0d693e3c0834a2f",
+    "content-hash": "565dc5acf8fe490c077799e300c19f00",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -12172,7 +12172,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-07-16/content-type-feature-3159253-4.patch"
+                    "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-10-05/content-type-feature-3159253-8.patch",
+                    "Fix warning for config entity values": "https://www.drupal.org/files/issues/2020-10-05/fix-large-number-of-entries-warning-3174826-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
