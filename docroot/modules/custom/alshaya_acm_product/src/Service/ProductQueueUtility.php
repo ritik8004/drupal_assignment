@@ -70,6 +70,41 @@ class ProductQueueUtility {
   }
 
   /**
+   * Queue all products for the provided SKUs.
+   *
+   * Takes care of finding parent SKUs if child SKUs given.
+   *
+   * @param array $skus
+   *   SKUs to queue.
+   */
+  public function queueAvailableProductsForSkus(array $skus) {
+    // First get all the parent skus if available.
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query->addField('acq_sku', 'sku');
+    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
+    $query->condition('child_sku.field_configured_skus_value', $skus);
+    $parents = $query->execute()->fetchCol();
+
+    // Merge parents and skus provided.
+    // There may be some simple products which are available as both
+    // configurable and simple.
+    $skus = array_merge($parents, $skus);
+
+    // Filter out and queue only those for which we have node available.
+    $query = $this->connection->select('node__field_skus', 'nfs');
+    $query->join('node_field_data', 'nfd', 'nfd.nid = nfs.entity_id AND nfd.langcode = nfs.langcode');
+    $query->condition('nfd.default_langcode', 1);
+    $query->condition('nfd.type', 'acq_product');
+    $query->condition('nfs.field_skus_value', $skus);
+    $query->addField('nfs', 'field_skus_value');
+
+    $products = $query->execute()->fetchCol();
+    foreach ($products as $sku) {
+      $this->queueProduct($sku);
+    }
+  }
+
+  /**
    * Static wrapper to get queue.
    *
    * @return \Drupal\Core\Queue\QueueInterface
