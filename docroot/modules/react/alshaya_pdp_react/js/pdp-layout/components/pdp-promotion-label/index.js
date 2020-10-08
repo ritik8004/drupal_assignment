@@ -32,7 +32,7 @@ class PdpPromotionLabel extends React.Component {
     if (promotionStateValue === null || promotionStateValue === undefined) {
       axios.get(url).then((response) => {
         if (response.data.length !== 0) {
-          const promotions = {};
+          const promotions = promotionsRawData || {};
           promotions[skuMainCode] = response.data.promotionsRaw;
           this.setState({
             promotionsRawData: promotions,
