@@ -79,7 +79,7 @@ class ProductQueueUtility {
    */
   public function queueAvailableProductsForSkus(array $skus) {
     // First get all the parent skus if available.
-    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query = $this->connection->select('acq_sku_field_data', 'acq_sku');
     $query->addField('acq_sku', 'sku');
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
     $query->condition('child_sku.field_configured_skus_value', $skus);
