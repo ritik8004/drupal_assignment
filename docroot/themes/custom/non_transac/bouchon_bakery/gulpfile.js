@@ -9,4 +9,3 @@ require('./gulp/svg')(gulp, config, bs);
 require('./gulp/performance')(gulp, config, bs);
 require('./gulp/watch')(gulp, config, bs);
 require('./gulp/default')(gulp, config);
-
