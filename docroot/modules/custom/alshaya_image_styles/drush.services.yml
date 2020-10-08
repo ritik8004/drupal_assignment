@@ -1,9 +1,0 @@
-services:
-  alshaya_image_styles.commands:
-    class: Drupal\alshaya_image_styles\Commands\AlshayaImageStylesCommands
-    arguments:
-      - '@logger.factory'
-      - '@entity_type.manager'
-      - '@config.factory'
-    tags:
-      - { name: drush.command }
