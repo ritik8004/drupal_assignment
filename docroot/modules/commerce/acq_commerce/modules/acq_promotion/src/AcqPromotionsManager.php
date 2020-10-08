@@ -302,6 +302,9 @@ class AcqPromotionsManager {
       $promotion_label_languages[$promotion_label_language] = $promotion_label['store_label'];
     }
 
+    // Pass the labels in the array so that it may be used in hooks.
+    $promotion['processed_promo_labels'] = $promotion_label_languages;
+
     $promotion_node->get('title')->setValue($promotion['name']);
 
     // Set the description.
@@ -340,7 +343,7 @@ class AcqPromotionsManager {
     }
 
     // Invoke the alter hook to allow modules to update the node from API data.
-    \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $promotion_node, $promotion, $promotion_label_languages);
+    \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $promotion_node, $promotion);
 
     // Store everything as serialized string in DB.
     // Before that remove products key, as we are not using it anywhere, and

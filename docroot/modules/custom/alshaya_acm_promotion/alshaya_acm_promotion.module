@@ -89,7 +89,7 @@ function alshaya_acm_promotion_theme_registry_alter(&$theme_registry) {
 /**
  * Implements hook_acq_promotion_promotion_node_alter().
  */
-function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, array $promotion, array $promotion_label_languages) {
+function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, array $promotion) {
   // Set the Promotion subtype.
   $node->get('field_alshaya_promotion_subtype')
     ->setValue(\Drupal::service('alshaya_acm_promotion.manager')
@@ -177,7 +177,7 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
       else {
         $temp_node = $node;
       }
-      if ($temp_node->get('field_acq_promotion_label')->getString() !== $promotion_label_languages[$language->getId()]) {
+      if ($temp_node->get('field_acq_promotion_label')->getString() !== $promotion['processed_promo_labels'][$language->getId()]) {
         if (empty($conditions[0])) {
           $product_queue_utility->queueAllProducts();
         }
