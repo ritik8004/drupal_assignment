@@ -19,7 +19,7 @@ function alshaya_acm_promotion_update_8024() {
   alshaya_config_install_configs([
     'field.storage.node.field_acq_promotion_full_catalog',
     'field.field.node.acq_promotion.field_acq_promotion_full_catalog',
-  ], 'alshaya_acm_promotion', 'optional');
+  ], 'alshaya_acm_promotion');
   // Re-install entity form and view display config for overrides to take
   // effect.
   alshaya_config_install_configs([
