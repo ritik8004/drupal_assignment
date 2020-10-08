@@ -4,7 +4,7 @@ import MagicSliderDots from 'react-magic-slider-dots';
 export const sliderSettings = {
   dots: true,
   infinite: false,
-  arrows: true,
+  arrows: false,
   appendDots: (dots) => <MagicSliderDots dots={dots} numDotsToShow={5} dotWidth={30} />,
 };
 

@@ -89,7 +89,7 @@ export default class PdpGallery extends React.PureComponent {
               <Slider
                 dots={sliderSettings.dots}
                 infinite={sliderSettings.infinite}
-                arrows={sliderSettings.arrows}
+                arrows={(context === 'main') ? sliderSettings.arrows : true}
                 appendDots={sliderSettings.appendDots}
               >
                 {images.map((image, key) => (
