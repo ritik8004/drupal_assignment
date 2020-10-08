@@ -3,8 +3,6 @@ status: true
 dependencies:
   module:
     - alshaya_email_signup
-  theme:
-    - alshaya_white_label
 id: alshaya_email_signup_link
 theme: alshaya_white_label
 region: header_secondary
