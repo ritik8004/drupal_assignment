@@ -134,22 +134,6 @@ export default class CompletePurchase extends React.Component {
 
     return (
       <div className={`checkout-link complete-purchase fadeInUp notInMobile submit ${className} ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
-        {window.innerWidth < 768
-          && (
-          <div className="order-preview">
-            <span className="total-count">
-              {' '}
-              {Drupal.t('Order total (@count items)', { '@count': cart.cart.items_qty })}
-              {' '}
-            </span>
-            <span className="total-price">
-              {' '}
-              <PriceElement amount={cart.cart.cart_total} />
-              {' '}
-            </span>
-          </div>
-          )}
-
         <ConditionalView condition={paymentMethod === 'checkout_com_applepay'}>
           <ApplePayButton isaActive={className} text={Drupal.t('Buy with')} lang={drupalSettings.path.currentLanguage} placeOrder={(e) => this.placeOrder(e)} />
         </ConditionalView>
