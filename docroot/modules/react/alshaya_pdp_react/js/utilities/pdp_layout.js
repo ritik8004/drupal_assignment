@@ -162,7 +162,7 @@ export const triggerAddToCart = (
         cartData,
       },
     });
-    form.dispatchEvent(cartNotification);
+
     // Adding add to cart button
     // success class.
     if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
@@ -173,10 +173,16 @@ export const triggerAddToCart = (
 
     const { addToCartNotificationTime } = drupalSettings;
 
-    // Close CS/US modal on add to cart success.
-    if (context === 'related') {
-      closeModal();
-    }
+    // Close CS/US modal/size panel and display cart notification
+    // after 500ms of add to cart success state.
+    setTimeout(() => {
+      if (context === 'main') {
+        document.querySelector('body').classList.remove('overlay-select');
+      } else {
+        closeModal();
+      }
+      form.dispatchEvent(cartNotification);
+    }, 500);
 
     // Removing the success button after 2 seconds.
     setTimeout(() => {
