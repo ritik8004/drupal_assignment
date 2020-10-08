@@ -40,7 +40,7 @@ body.overlay-related-select {
             }
 
             .slick-dots {
-              #{$left}: auto;
+              left: auto;
               transform: none;
 
               @include breakpoint($tablet) {
