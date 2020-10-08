@@ -150,12 +150,12 @@
 
     .aura-user-avatar {
       &:not(:empty) {
-        border: solid 2px #fff;
-        background-color: #ea7f72;
+        border: solid 2px $aura-loyalty-user-avatar-text;
+        background-color: $aura-loyalty-user-avatar-bg;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #fff;
+        color: $aura-loyalty-user-avatar-text;
         font-size: 2.875rem;
         font-family: $aura-regular;
         width: 6.3125rem;
