@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_email_signup
   theme:
-    - victoria_secret
+    - alshaya_white_label
 id: alshaya_email_signup_link
-theme: victoria_secret
+theme: alshaya_white_label
 region: header_secondary
 weight: -5
 provider: null
