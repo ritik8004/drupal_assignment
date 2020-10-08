@@ -97,8 +97,7 @@ class SKUFieldFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $view_modes = $this->entityDisplayRepository->getViewModes('node');
-      ->getViewModes('acq_sku');
+    $view_modes = $this->entityDisplayRepository->getViewModes('acq_sku');
     $options = [];
 
     foreach ($view_modes as $id => $view_mode) {
