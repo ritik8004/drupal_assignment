@@ -87,7 +87,10 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
       '#default_value' => date('m'),
       '#required' => TRUE,
       '#attributes' => [
-        'class' => ['cybersource-credit-card-exp-month-select', 'cybersource-input'],
+        'class' => [
+          'cybersource-credit-card-exp-month-select',
+          'cybersource-input',
+        ],
       ],
     ];
 
@@ -105,7 +108,10 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
       '#default_value' => date('Y'),
       '#required' => TRUE,
       '#attributes' => [
-        'class' => ['cybersource-credit-card-exp-year-select', 'cybersource-input'],
+        'class' => [
+          'cybersource-credit-card-exp-year-select',
+          'cybersource-input',
+        ],
       ],
     ];
 

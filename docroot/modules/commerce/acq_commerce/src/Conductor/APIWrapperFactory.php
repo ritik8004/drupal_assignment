@@ -5,7 +5,7 @@ namespace Drupal\acq_commerce\Conductor;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class APIWrapperFactory.
+ * Class API Wrapper Factory.
  */
 class APIWrapperFactory {
 

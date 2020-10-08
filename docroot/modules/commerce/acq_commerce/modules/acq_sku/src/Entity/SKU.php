@@ -549,7 +549,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
       // If we find more than one, raise a log.
       if (!empty($sku_records) && count($sku_records) > 1) {
-        \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku & lang code: @langcode.', ['@sku' => $sku, '@langcode' => $langcode]);
+        \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku & lang code: @langcode.', [
+          '@sku' => $sku,
+          '@langcode' => $langcode,
+        ]);
       }
 
       // We should always get one, but get first SKU entity for processing just
@@ -576,7 +579,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
       // Don't log for missing translation if flag is set to false.
       elseif ($log_not_found) {
-        \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
+        \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', [
+          '@sku' => $sku,
+          '@langcode' => $langcode,
+        ]);
       }
     }
     return $sku_entity;

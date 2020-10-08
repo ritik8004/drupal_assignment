@@ -14,7 +14,7 @@ use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
 /**
- * Class AcqSkuPositionCommands.
+ * Class Acq Sku Position Commands.
  *
  * @package Drupal\acq_sku_position\Commands
  */

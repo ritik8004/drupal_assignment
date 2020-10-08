@@ -20,7 +20,7 @@ use Drupal\node\Entity\Node;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class AcqPromotionsManager.
+ * Class Acq Promotions Manager.
  */
 class AcqPromotionsManager {
 
@@ -192,7 +192,7 @@ class AcqPromotionsManager {
 
     $nids = $query->execute();
     foreach ($nids as $nid) {
-      /* @var $node \Drupal\node\Entity\Node */
+      /** @var \Drupal\node\Entity\Node $node */
       $node = $this->nodeStorage->load($nid);
 
       if ($node instanceof Node) {
@@ -242,7 +242,7 @@ class AcqPromotionsManager {
       }
 
       // We only load the first node.
-      /* @var $node \Drupal\node\Entity\Node */
+      /** @var \Drupal\node\Entity\Node $node */
       $node = $this->nodeStorage->load(reset($nids));
       $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
       // Get the promotion with language fallback, if it did not have a
@@ -305,7 +305,10 @@ class AcqPromotionsManager {
     $promotion_node->get('title')->setValue($promotion['name']);
 
     // Set the description.
-    $promotion_node->get('field_acq_promotion_description')->setValue(['value' => $promotion['description'], 'format' => 'rich_text']);
+    $promotion_node->get('field_acq_promotion_description')->setValue([
+      'value' => $promotion['description'],
+      'format' => 'rich_text',
+    ]);
 
     // Set promotion rule_id.
     $promotion_node->get('field_acq_promotion_rule_id')->setValue($promotion['rule_id']);

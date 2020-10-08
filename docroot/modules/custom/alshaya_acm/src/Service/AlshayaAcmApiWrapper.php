@@ -21,6 +21,7 @@ use Drupal\alshaya_acm\Event\AlshayaAcmUpdateCartFailedEvent;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class Alshaya Acm Api Wrapper.
@@ -69,6 +70,8 @@ class AlshayaAcmApiWrapper extends APIWrapper {
    *   Alshaya API.
    * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Lock service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
@@ -77,8 +80,9 @@ class AlshayaAcmApiWrapper extends APIWrapper {
                               APIHelper $api_helper,
                               EventDispatcherInterface $dispatcher,
                               AlshayaApiWrapper $alshaya_api,
-                              LockBackendInterface $lock) {
-    parent::__construct($client_factory, $config_factory, $logger_factory, $i18nHelper, $api_helper, $dispatcher, $lock);
+                              LockBackendInterface $lock,
+                              ModuleHandlerInterface $module_handler) {
+    parent::__construct($client_factory, $config_factory, $logger_factory, $i18nHelper, $api_helper, $dispatcher, $lock, $module_handler);
     $this->alshayaApi = $alshaya_api;
     $this->configFactory = $config_factory;
   }

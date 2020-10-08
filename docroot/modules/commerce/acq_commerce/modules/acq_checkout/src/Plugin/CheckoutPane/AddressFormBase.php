@@ -117,7 +117,6 @@ class AddressFormBase extends CheckoutPaneBase implements CheckoutPaneInterface 
     $dynamic_parts =& $form[$pane_id]['address']['dynamic_parts'];
     $values = $form_state->getValue($form['#parents']);
     $country = $values[$pane_id]['address']['dynamic_parts']['country_id'];
-    $countryRepository = \Drupal::service('address.country_repository');
     $addressFormatRepository = \Drupal::service('address.address_format_repository');
     $address_format = $addressFormatRepository->get($country);
     $subdivisionRepository = \Drupal::service('address.subdivision_repository');

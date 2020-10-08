@@ -3,7 +3,7 @@
 namespace Drupal\acq_cart;
 
 /**
- * Class MiniCartManager.
+ * Class Mini Cart Manager.
  *
  * @package Drupal\acq_cart
  */

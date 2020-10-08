@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class AlshayaSpcOrderHelper.
+ * Class Alshaya Spc Order Helper.
  */
 class AlshayaSpcOrderHelper {
 

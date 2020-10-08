@@ -29,11 +29,11 @@ class Grouped extends SKUPluginBase {
     $form['grouped_items'] = [
       '#type' => 'table',
       '#header' => [
-        t('Product'),
-        t('Quantity'),
-        t('Price'),
+        $this->t('Product'),
+        $this->t('Quantity'),
+        $this->t('Price'),
       ],
-      '#empty' => t('This grouped product has no items.'),
+      '#empty' => $this->t('This grouped product has no items.'),
     ];
 
     foreach ($sku->field_grouped_skus as $grouped_sku) {
@@ -56,7 +56,7 @@ class Grouped extends SKUPluginBase {
 
     $form['add_to_cart'] = [
       '#type' => 'submit',
-      '#value' => t('Add to cart'),
+      '#value' => $this->t('Add to cart'),
     ];
 
     return $form;
@@ -77,7 +77,7 @@ class Grouped extends SKUPluginBase {
         $cart->addItemToCart($sku, $quantity);
 
         drupal_set_message(
-          t('Added @quantity of @name to the cart.',
+          $this->t('Added @quantity of @name to the cart.',
             [
               '@quantity' => $quantity,
               '@name' => SKU::loadFromSku($sku)->label(),
@@ -89,7 +89,7 @@ class Grouped extends SKUPluginBase {
     }
 
     if ($added == 0) {
-      drupal_set_message(t('Please select a quantity greater than 0.'), 'error');
+      drupal_set_message($this->t('Please select a quantity greater than 0.'), 'error');
     }
 
     try {

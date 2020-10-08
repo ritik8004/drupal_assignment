@@ -98,6 +98,7 @@ services:
       - '@event_dispatcher'
       - '@alshaya_api.api'
       - '@lock'
+      - '@module_handler'
 
   alshaya_acm.redirect_to_spc_cart_subscriber:
     class: Drupal\alshaya_acm\EventSubscriber\AlshayaAcmRedirectToSpcCart

@@ -13,7 +13,7 @@
   $.fn.checkoutPaymentError = function (formErrors) {
     Drupal.checkoutComProcessed = false;
     for (var errorFieldName in formErrors) {
-      Drupal.checkoutComShowError($('[name="'+ errorFieldName +'"]'), formErrors[errorFieldName]);
+      Drupal.checkoutComShowError($('[name="' + errorFieldName + '"]'), formErrors[errorFieldName]);
     }
     $(document).trigger('checkoutcom_form_error');
   };

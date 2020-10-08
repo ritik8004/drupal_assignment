@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class AlshayaSpcCnCController.
+ * Class Alshaya Spc CnC Controller.
  */
 class AlshayaSpcCnCController extends ControllerBase {
 

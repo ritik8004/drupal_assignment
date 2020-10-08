@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class CybersourceSettingsForm.
+ * Class Cybersource Settings Form.
  *
  * @package Drupal\acq_cybersource\Form
  *

@@ -5,7 +5,7 @@ namespace Drupal\acq_sku\Entity\Controller;
 use Drupal\Core\Entity\EntityViewBuilder;
 
 /**
- * SKUViewBuilder class.
+ * SKU View Builder class.
  */
 class SKUViewBuilder extends EntityViewBuilder {
 
@@ -28,7 +28,7 @@ class SKUViewBuilder extends EntityViewBuilder {
 
     // Allow blocking of add to cart render.
     if (!isset($build['#no_add_to_cart']) || !($build['#no_add_to_cart'])) {
-      /**
+      /*
        * @TODO: remove custom form_builder once
        *   https://www.drupal.org/node/766146 is fixed.
        */

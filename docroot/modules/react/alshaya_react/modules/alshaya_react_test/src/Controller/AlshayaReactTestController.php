@@ -5,7 +5,7 @@ namespace Drupal\alshaya_react_test\Controller;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * Class AlshayaReactTestController.
+ * Class Alshaya React Test Controller.
  *
  * @package Drupal\alshaya_react_test\Controller
  */

@@ -122,7 +122,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     ModuleHandlerInterface $module_handler,
     RequestStack $stack
   ) {
-    parent::__construct($config_factory, $temp_store_factory, $logger);
+    parent::__construct($config_factory, $temp_store_factory, $logger, $stack);
     $this->knetHelper = $knet_helper;
     $this->api = $api_wrapper;
     $this->alshayaApi = $alshaya_api;

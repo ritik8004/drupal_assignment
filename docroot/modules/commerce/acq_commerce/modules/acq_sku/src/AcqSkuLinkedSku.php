@@ -10,7 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
- * Class AcqSkuLinkedSku.
+ * Class Acq Sku Linked Sku.
  *
  * @package Drupal\acq_sku
  */

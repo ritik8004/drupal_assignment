@@ -5,7 +5,7 @@ namespace Drupal\acq_promotion\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class PromotionMappingUpdatedEvent.
+ * Class Promotion Mapping Updated Event.
  *
  * @package Drupal\acq_promotion\Event
  */
