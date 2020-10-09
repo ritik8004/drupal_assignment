@@ -2,15 +2,20 @@ import React from 'react';
 import parse from 'html-react-parser';
 import { getLoyaltyBenefitsTitle, getLoyaltyBenefitsContent } from '../../../utilities/helper';
 
-const LoyaltyClubBenefits = () => (
-  <div className="loyalty-club-details-wrapper loyalty-tab-content">
-    <div className="title">
-      {parse(getLoyaltyBenefitsTitle())}
+const LoyaltyClubBenefits = () => {
+  const loyaltyBenefitsTitle = getLoyaltyBenefitsTitle();
+
+  return (
+    <div className="loyalty-club-details-wrapper loyalty-tab-content">
+      <div className="title">
+        <span className="title-1">{parse(loyaltyBenefitsTitle.title1)}</span>
+        <span className="title-2">{parse(loyaltyBenefitsTitle.title2)}</span>
+      </div>
+      <div className="details">
+        {parse(getLoyaltyBenefitsContent())}
+      </div>
     </div>
-    <div className="details">
-      {parse(getLoyaltyBenefitsContent())}
-    </div>
-  </div>
-);
+  );
+};
 
 export default LoyaltyClubBenefits;

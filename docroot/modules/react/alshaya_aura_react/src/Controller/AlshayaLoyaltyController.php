@@ -16,11 +16,13 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function loyaltyClub() {
     $cache_tags = [];
-    $loyalty_benefits_config = $this->config('alshaya_aura_react.loyalty_benefits_form');
-    $loyalty_benefits_title = $loyalty_benefits_config->get('loyalty_benefits_title');
+    $loyalty_benefits_config = $this->config('alshaya_aura_react.loyalty_benefits');
     $loyalty_benefits_content = $loyalty_benefits_config->get('loyalty_benefits_content');
     $settings = [
-      'loyaltyBenefitsTitle' => $loyalty_benefits_title ? $loyalty_benefits_title['value'] : '',
+      'loyaltyBenefitsTitle' => [
+        'title1' => $loyalty_benefits_config->get('loyalty_benefits_title1') ?? '',
+        'title2' => $loyalty_benefits_config->get('loyalty_benefits_title2') ?? '',
+      ],
       'loyaltyBenefitsContent' => $loyalty_benefits_content ? $loyalty_benefits_content['value'] : '',
     ];
 

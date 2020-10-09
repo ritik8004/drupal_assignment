@@ -69,10 +69,14 @@ function getUserAuraTierLabel(tierValue) {
  * Helper function to get loyalty benefits content.
  */
 function getLoyaltyBenefitsTitle() {
-  let loyaltyBenefitsTitle = '';
+  let loyaltyBenefitsTitle = {
+    title1: '',
+    title2: '',
+  };
+
   if (typeof drupalSettings.aura !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura, 'loyaltyBenefitsTitle')) {
-    loyaltyBenefitsTitle = drupalSettings.aura.loyaltyBenefitsTitle || '';
+    loyaltyBenefitsTitle = drupalSettings.aura.loyaltyBenefitsTitle;
   }
 
   return loyaltyBenefitsTitle;
@@ -85,7 +89,7 @@ function getLoyaltyBenefitsContent() {
   let loyaltyBenefitsContent = '';
   if (typeof drupalSettings.aura !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura, 'loyaltyBenefitsContent')) {
-    loyaltyBenefitsContent = drupalSettings.aura.loyaltyBenefitsContent || '';
+    loyaltyBenefitsContent = drupalSettings.aura.loyaltyBenefitsContent;
   }
 
   return loyaltyBenefitsContent;
