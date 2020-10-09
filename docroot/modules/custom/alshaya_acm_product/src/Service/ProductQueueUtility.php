@@ -82,7 +82,7 @@ class ProductQueueUtility {
     $query = $this->connection->select('acq_sku_field_data', 'acq_sku');
     $query->addField('acq_sku', 'sku');
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
-    $query->condition('child_sku.field_configured_skus_value', $skus);
+    $query->condition('child_sku.field_configured_skus_value', $skus, 'IN');
     $parents = $query->execute()->fetchCol();
 
     // Merge parents and skus provided.
@@ -95,7 +95,7 @@ class ProductQueueUtility {
     $query->join('node_field_data', 'nfd', 'nfd.nid = nfs.entity_id AND nfd.langcode = nfs.langcode');
     $query->condition('nfd.default_langcode', 1);
     $query->condition('nfd.type', 'acq_product');
-    $query->condition('nfs.field_skus_value', $skus);
+    $query->condition('nfs.field_skus_value', $skus, 'IN');
     $query->addField('nfs', 'field_skus_value');
 
     $products = $query->execute()->fetchCol();
