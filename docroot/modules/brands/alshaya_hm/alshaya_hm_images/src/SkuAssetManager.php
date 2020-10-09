@@ -349,25 +349,9 @@ class SkuAssetManager {
     $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
 
     // Check if file already exists in the directory.
-    if (file_exists($target)) {
-      // If file exists in directory, check if file entity exists.
-      $uri = $this->fileStorage->loadByProperties(['uri' => $target]);
-      $files = reset($uri);
-      if (!empty($files) && $files instanceof FileInterface) {
-        return $files;
-      }
-      else {
-        // If file exists in directory but file entity doesnt exist
-        // then create file entity.
-        $file = File::create([
-          'uri' => $target,
-          'uid' => 0,
-          'status' => FILE_STATUS_PERMANENT,
-        ]);
-        $file->save();
-
-        return $file;
-      }
+    $file = $this->getFileIfTargetExists($target);
+    if ($file instanceof FileInterface) {
+      return $file;
     }
 
     $url = implode('/', [
@@ -475,12 +459,9 @@ class SkuAssetManager {
     $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
 
     // Check if file already exists in the directory.
-    if (file_exists($target)) {
-      // If file exists in directory, check if file entity exists.
-      $files = reset($this->fileStorage->loadByProperties(['uri' => $target]));
-      if (!empty($files) && $files instanceof FileInterface) {
-        return $files;
-      }
+    $file = $this->getFileIfTargetExists($target);
+    if ($file instanceof FileInterface) {
+      return $file;
     }
 
     $url = $this->getSkuAssetUrlLiquidPixel($asset);
@@ -619,7 +600,7 @@ class SkuAssetManager {
         $this->cacheMediaFileMapping->set($lock_key, $file->id(), $this->time->getRequestTime() + 120);
       }
 
-      $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
+      $this->logger->notice('Downloaded or re-used file @fid, uri @uri for Asset @id', [
         '@fid' => $file->id(),
         '@uri' => $file->getFileUri(),
         '@id' => $id,
@@ -1151,6 +1132,37 @@ class SkuAssetManager {
       : 'image';
 
     return $type;
+  }
+
+  /**
+   * Load or create file entity if target exists.
+   *
+   * @param string $target
+   *   Target URI.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   File entity if found.
+   */
+  protected function getFileIfTargetExists(string $target) {
+    if (file_exists($target)) {
+      // If file exists in directory, check if file entity exists.
+      $files = $this->fileStorage->loadByProperties(['uri' => $target]);
+      $file = reset($files);
+
+      if (!($file instanceof FileInterface)) {
+        // If file exists in directory but file entity doesnt exist
+        // then create file entity.
+        $file = File::create([
+          'uri' => $target,
+          'uid' => 0,
+          'status' => FILE_STATUS_PERMANENT,
+        ]);
+
+        $file->save();
+      }
+
+      return $file ?? NULL;
+    }
   }
 
 }
