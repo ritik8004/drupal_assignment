@@ -16,6 +16,15 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function loyaltyClub() {
     $cache_tags = [];
+    $loyalty_benefits_config = $this->config('alshaya_aura_react.loyalty_benefits');
+    $loyalty_benefits_content = $loyalty_benefits_config->get('loyalty_benefits_content');
+    $settings = [
+      'loyaltyBenefitsTitle' => [
+        'title1' => $loyalty_benefits_config->get('loyalty_benefits_title1') ?? '',
+        'title2' => $loyalty_benefits_config->get('loyalty_benefits_title2') ?? '',
+      ],
+      'loyaltyBenefitsContent' => $loyalty_benefits_content ? $loyalty_benefits_content['value'] : '',
+    ];
 
     return [
       '#theme' => 'my_loyalty_club',
@@ -23,6 +32,9 @@ class AlshayaLoyaltyController extends ControllerBase {
         'library' => [
           'alshaya_aura_react/alshaya_aura_loyalty_club',
           'alshaya_white_label/aura-loyalty-myaccount',
+        ],
+        'drupalSettings' => [
+          'aura' => $settings,
         ],
       ],
       '#cache' => [

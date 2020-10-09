@@ -1,0 +1,13 @@
+alshaya_aura_react.loyalty_benefits:
+  type: config_object
+  label: 'AURA Loyalty Benefits Settings'
+  mapping:
+    loyalty_benefits_title1:
+      type: text
+      label: 'AURA Loyalty Benefits Title 1'
+    loyalty_benefits_title2:
+      type: text
+      label: 'AURA Loyalty Benefits Title 2'
+    loyalty_benefits_content:
+      type: text_format
+      label: 'AURA Loyalty Benefits Content'
