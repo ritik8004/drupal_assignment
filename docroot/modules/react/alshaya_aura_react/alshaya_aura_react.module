@@ -37,9 +37,6 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $settings['allAuraTier'] = AuraTier::ALL_AURA_TIERS;
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
 
-  $loyalty_benefits = \Drupal::config('alshaya_aura_react.loyalty_benefits_form')->get('loyalty_benefits');
-  $settings['loyaltyBenefitsContent'] = $loyalty_benefits ? $loyalty_benefits['value'] : '';
-
   $page['#attached']['drupalSettings']['aura'] = $settings;
 
   $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';

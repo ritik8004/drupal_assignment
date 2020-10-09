@@ -2,6 +2,9 @@ alshaya_aura_react.loyalty_benefits_form:
   type: config_object
   label: 'AURA Loyalty Benefits Settings'
   mapping:
-    loyalty_benefits:
+    loyalty_benefits_title:
       type: text_format
-      label: 'AURA Loyalty Benefits content'
+      label: 'AURA Loyalty Benefits Title'
+    loyalty_benefits_content:
+      type: text_format
+      label: 'AURA Loyalty Benefits Content'
