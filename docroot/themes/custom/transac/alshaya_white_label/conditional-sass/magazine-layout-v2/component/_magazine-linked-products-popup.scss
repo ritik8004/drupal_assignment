@@ -65,13 +65,13 @@ body.overlay-related-select {
             @include breakpoint($tablet) {
               .slick-slider {
                 .slick-arrow {
-                  background: transparent;
                   bottom: -0.625rem;
                   top: auto;
                   width: 2.125rem;
                   height: 2.125rem;
 
                   &::before {
+                    background: transparent;
                     color: $magv2-slider-icon-bg;
                     opacity: 1;
                   }
