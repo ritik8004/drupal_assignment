@@ -348,14 +348,6 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       ],
     ];
 
-    if ($this->moduleHandler->moduleExists('alshaya_aura_react')) {
-      $build['my_account_my_aura_block_root'] = [
-        '#markup' => '<div id="my-accounts-aura-mobile"></div>',
-      ];
-
-      $build['#attributes']['class'][] = 'aura-enabled';
-    }
-
     return $build;
   }
 
