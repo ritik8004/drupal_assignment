@@ -185,10 +185,12 @@ body.overlay-related-select {
 }
 
 .nodetype--acq_product {
-  .magazine__gallery--container-mobile {
-    .product-labels {
-      .labels-container__inner {
-        width: auto;
+  .magv2-crossell-popup-content-wrapper {
+    .magazine__gallery--container-mobile {
+      .product-labels {
+        .labels-container__inner {
+          width: auto;
+        }
       }
     }
   }
