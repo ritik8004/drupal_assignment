@@ -13,6 +13,31 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * [5.10.0] Update permissions to allow post on new rest
+ * resource alshaya_acm_product_category_mapping.
+ */
+function alshaya_api_update_8005() {
+  alshaya_config_install_configs(
+    ['user.role.alshaya_magento_consumer'],
+    'alshaya_api'
+  );
+
+  // Assign user to the client to ensure we can use
+  // grant type client_credentials.
+  $user = user_load_by_name(Settings::get('alshaya_magento_user_username'));
+  if ($user instanceof User) {
+    $clients = \Drupal::entityTypeManager()->getStorage('consumer')->loadByProperties([
+      'uuid' => Settings::get('alshaya_magento_soauth_client_uuid'),
+    ]);
+    $client = reset($clients);
+    $client->set('user_id', $user->id());
+    $client->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.8.0]Sync code and active storage for module provided settings.
  */
 function alshaya_api_update_8003() {
@@ -135,5 +160,10 @@ function _alshaya_api_create_consumer() {
   $client->set('secret', Settings::get('alshaya_magento_soauth_client_secret'));
   $client->set('roles', ['alshaya_magento_consumer']);
   $client->set('uuid', Settings::get('alshaya_magento_soauth_client_uuid'));
+
+  $user = user_load_by_name(Settings::get('alshaya_magento_user_username'));
+  if ($user instanceof User) {
+    $client->set('user_id', $user->id());
+  }
   $client->save();
 }
