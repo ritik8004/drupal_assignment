@@ -8,8 +8,8 @@ const LoyaltyClubBenefits = () => {
   return (
     <div className="loyalty-club-details-wrapper loyalty-tab-content">
       <div className="title">
-        <span className="title-1">{parse(loyaltyBenefitsTitle.title1)}</span>
-        <span className="title-2">{parse(loyaltyBenefitsTitle.title2)}</span>
+        <span className="title-1">{loyaltyBenefitsTitle.title1}</span>
+        <span className="title-2">{loyaltyBenefitsTitle.title2}</span>
       </div>
       <div className="details">
         {parse(getLoyaltyBenefitsContent())}
