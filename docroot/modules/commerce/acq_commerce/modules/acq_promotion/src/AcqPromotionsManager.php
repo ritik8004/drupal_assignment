@@ -299,11 +299,12 @@ class AcqPromotionsManager {
         continue;
       }
 
-      $promotion_label_languages[$promotion_label_language] = $promotion_label['store_label'];
+      // Pass the labels in the $promotion['processed_promo_labels'] array so
+      // that it may be used in hooks.
+      $promotion_label_languages[$promotion_label_language]
+        = $promotion['processed_promo_labels'][$promotion_label_language]
+          = $promotion_label['store_label'];
     }
-
-    // Pass the labels in the array so that it may be used in hooks.
-    $promotion['processed_promo_labels'] = $promotion_label_languages;
 
     $promotion_node->get('title')->setValue($promotion['name']);
 
@@ -325,11 +326,6 @@ class AcqPromotionsManager {
     // Set promotion sort order.
     $promotion_node->get('field_acq_promotion_sort_order')->setValue($promotion['order']);
 
-    // Set the Promotion label.
-    if (isset($promotion_label_languages[$site_default_langcode])) {
-      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
-    }
-
     // Set promotion type to percent & discount value depending on the promotion
     // being imported.
     if (($promotion['type'] === 'NO_COUPON') && isset($promotion['action']) && ($promotion['action'] === 'by_percent')) {
@@ -350,6 +346,11 @@ class AcqPromotionsManager {
     // that is creating unnecessary load on promotion node load.
     unset($promotion['products']);
     $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
+
+    // Set the Promotion label.
+    if (isset($promotion_label_languages[$site_default_langcode])) {
+      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
+    }
 
     $status = $promotion_node->save();
     // Create promotion translations based on the language codes available in
