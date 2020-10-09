@@ -109,6 +109,7 @@ export default class Cart extends React.Component {
           data: Object.keys(items),
           lng: drupalSettings.alshaya_spc.lng,
         },
+        countAsPageview: false,
       });
     }, false);
 
