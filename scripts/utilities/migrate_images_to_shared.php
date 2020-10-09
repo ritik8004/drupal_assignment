@@ -66,8 +66,14 @@ do {
         continue;
       }
 
-      $source = $file_system->realpath($item['drupal_uri']);
+      $source = $file_system->realpath($drupal_uri_original);
       if (empty($source)) {
+        $logger->notice(dt('File no longer available, removing from asset. SKU: @sku; Source: @source; Destination: @destination', [
+          '@sku' => $row->sku,
+          '@source' => $source,
+          '@destination' => $item['drupal_uri'],
+        ]));
+
         unset($item['fid']);
         unset($item['drupal_uri']);
         $media[$index] = $item;
