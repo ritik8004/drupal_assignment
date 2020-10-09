@@ -117,13 +117,16 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
   }
   elseif ($is_full_catalog_promotion) {
     // Queue products when promotion label changes for full catalog promotions.
-    foreach ($node->getTranslationLanguages() as $language) {
-      $temp_node = ($node->language()->getId() != $language->getId())
-        ? $node->getTranslation($language->getId())
+    foreach ($node->getTranslationLanguages() as $langcode => $language) {
+      $temp_node = ($node->language()->getId() != $langcode)
+        ? $node->getTranslation($langcode)
         : $node;
 
       if ($temp_node->get('field_acq_promotion_label')->getString() !== $promotion['processed_promo_labels'][$language->getId()]) {
         $product_queue_utility->queueAllProducts();
+        // Since all products are already queued, we do not need to apply
+        // further checks.
+        break;
       }
     }
   }
