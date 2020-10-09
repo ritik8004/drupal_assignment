@@ -101,81 +101,29 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
   }
 
   $product_queue_utility = \Drupal::service('alshaya_acm_product.product_queue_utility');
-  $is_full_catalog_promotion = $is_originally_full_catalog_promotion = $node->get('field_acq_promotion_full_catalog')->getString();
-  $is_promotion_products_empty = empty($promotion['products']);
-  $is_action_conditions_empty = empty($promotion['action_condition']['conditions']);
-  $is_condition_conditions_empty = empty($promotion['condition']['conditions']);
+  $is_full_catalog_promotion = empty($promotion['products'])
+    && empty($promotion['action_condition']['conditions'])
+    && empty($promotion['condition']['conditions']);
+  $is_originally_full_catalog_promotion = $node->isNew() ? FALSE : (bool) $node->get('field_acq_promotion_full_catalog')->getString();
 
-  // Check if there are no products received in the rule data.
-  if ($is_promotion_products_empty) {
-    if ($node->isNew()) {
-      if ($is_action_conditions_empty && $is_condition_conditions_empty) {
-        // Check if node is new or if node already exists but previously it was
-        // not marked for full catalog.
-        $node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
-        $is_full_catalog_promotion = TRUE;
-        $product_queue_utility->queueAllProducts();
-      }
+  if ($is_originally_full_catalog_promotion !== $is_full_catalog_promotion) {
+    $product_queue_utility->queueAllProducts();
+    if ($is_full_catalog_promotion) {
+      $node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
     }
     else {
-      // Compare existing node with the incoming promotion data. If there is
-      // change in conditions the check them again and queue if required.
-      if ($is_action_conditions_empty && $is_condition_conditions_empty && !$is_full_catalog_promotion) {
-        $node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
-        $is_full_catalog_promotion = TRUE;
-        $product_queue_utility->queueAllProducts();
-      }
+      $node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
     }
   }
-  else {
-    $node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
-    $is_full_catalog_promotion = FALSE;
-
-    if ($node->isNew()) {
-      foreach ($promotion['products'] as $product) {
-        $product_queue_utility->queueProduct($product['product_sku']);
-      }
-    }
-    else {
-      // Fetch saved promotion node data.
-      $saved_promotion_data = unserialize($node->get('field_acq_promotion_data')->getString());
-
-      // Compare saved promotion data conditions with the conditions coming from
-      // the synced promotion data. If there is any change in conditions, only
-      // then we queue the affected products.
-      if (($saved_promotion_data['action_condition']['conditions'] != $promotion['action_condition']['conditions'])
-        || ($saved_promotion_data['condition']['conditions'] != $promotion['condition']['conditions'])
-      ) {
-        foreach ($promotion['products'] as $product) {
-          $product_queue_utility->queueProduct($product['product_sku']);
-        }
-      }
-    }
-  }
-
-  // Queue products when promotion label changes for full catalog promotions.
-  if (!$node->isNew()) {
+  elseif ($is_full_catalog_promotion) {
+    // Queue products when promotion label changes for full catalog promotions.
     foreach ($node->getTranslationLanguages() as $language) {
       $temp_node = ($node->language()->getId() != $language->getId())
         ? $node->getTranslation($language->getId())
         : $node;
 
       if ($temp_node->get('field_acq_promotion_label')->getString() !== $promotion['processed_promo_labels'][$language->getId()]) {
-        if ($is_originally_full_catalog_promotion) {
-          $product_queue_utility->queueAllProducts();
-        }
-        else {
-          if ($is_full_catalog_promotion) {
-            $product_queue_utility->queueAllProducts();
-          }
-          else {
-            if (!$is_promotion_products_empty) {
-              foreach ($promotion['products'] as $product) {
-                $product_queue_utility->queueProduct($product['product_sku']);
-              }
-            }
-          }
-        }
+        $product_queue_utility->queueAllProducts();
       }
     }
   }

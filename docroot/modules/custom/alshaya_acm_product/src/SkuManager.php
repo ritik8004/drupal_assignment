@@ -834,7 +834,6 @@ class SkuManager {
       }
     }
 
-    $promotion_nids = [];
     $query = $this->connection->select('node__field_acq_promotion_rule_id', 'node_field');
     $query->fields('node_field', ['entity_id']);
     $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
