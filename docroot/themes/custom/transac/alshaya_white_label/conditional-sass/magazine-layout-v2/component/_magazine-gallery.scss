@@ -364,3 +364,18 @@ html[lang="ar"] {
     }
   }
 }
+
+.magv2-main {
+  .magv2-pdp-gallery {
+    .magazine__gallery--container-mobile {
+      .slick-dots {
+        @include breakpoint($only-mobile) {
+          position: absolute !important;
+          bottom: 0.875rem;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+    }
+  }
+}
