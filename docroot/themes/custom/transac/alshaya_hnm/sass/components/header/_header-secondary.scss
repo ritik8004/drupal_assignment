@@ -160,7 +160,11 @@
   }
 
   @include breakpoint($only-tablet) {
-    height: 4.535rem;
+    height: 4.5rem;
+
+    &::before {
+      height: inherit;
+    }
 
     &.show-overlay {
       &::before {
