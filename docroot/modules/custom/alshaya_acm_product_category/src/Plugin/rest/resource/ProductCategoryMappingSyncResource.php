@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_api\Plugin\rest\resource;
+namespace Drupal\alshaya_acm_product_category\Plugin\rest\resource;
 
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryMappingManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -12,12 +12,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class ProductCategoryMappingSyncResource.
  *
- * @package Drupal\alshaya_api\Plugin
+ * @package Drupal\alshaya_acm_product_category\Plugin
  *
- * @ingroup alshaya_api
+ * @ingroup alshaya_acm_product_category
  *
  * @RestResource(
- *   id = "alshaya_api_product_category_mapping",
+ *   id = "alshaya_acm_product_category_mapping",
  *   label = @Translation("Alshaya Product Category Mapping Update"),
  *   uri_paths = {
  *     "canonical" = "/rest/v1/product-category-mapping",

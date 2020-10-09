@@ -13,15 +13,12 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
- * Update permissions to allow post on new rest
- * resource alshaya_api_product_category_mapping.
+ * [5.10.0] Update permissions to allow post on new rest
+ * resource alshaya_acm_product_category_mapping.
  */
 function alshaya_api_update_8005() {
   alshaya_config_install_configs(
-    [
-      'user.role.alshaya_magento_consumer',
-      'rest.resource.alshaya_api_product_category_mapping',
-    ],
+    ['user.role.alshaya_magento_consumer'],
     'alshaya_api'
   );
 
