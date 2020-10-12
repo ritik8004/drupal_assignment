@@ -21,11 +21,11 @@ const GroupSelectOption = ({
         <a className="close" onClick={(e) => closeModal(e)}>
           &times;
         </a>
-        <label htmlFor={keyId}>{configurables.label}</label>
+        <label htmlFor={keyId}>{Drupal.t('Select @title', { '@title': configurables.label })}</label>
       </div>
       <div className="magv2-select-popup-content-wrapper">
         <div className="group-anchor-wrapper">
-          <label htmlFor={keyId}>{configurables.label}</label>
+          <label htmlFor={keyId}>{Drupal.t('Select @title', { '@title': configurables.label })}</label>
           <div className="group-anchor-links">
             {Object.keys(configurables.alternates).map((alternate) => (
               <a
