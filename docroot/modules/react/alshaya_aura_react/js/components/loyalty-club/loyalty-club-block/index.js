@@ -7,13 +7,15 @@ import { postAPIData } from '../../../utilities/api/fetchApiData';
 import { getAllAuraStatus } from '../../../utilities/helper';
 
 export default class LoyaltyClubBlock extends React.Component {
-  handleNotYou = () => {
-    const loyaltyStatusNotU = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
+  handleNotYou = (cardNumber) => {
+    const loyaltyStatusNotU = getAllAuraStatus().APC_NOT_LINKED_NO_DATA;
     // API call to update user's loyalty status.
     const apiUrl = 'post/loyalty-club/apc-status-update';
     const data = {
       uid: drupalSettings.aura.user_details.id,
+      apcIdentifierId: cardNumber,
       apcLinkStatus: loyaltyStatusNotU,
+      link: 'N',
     };
     const apiData = postAPIData(apiUrl, data);
 

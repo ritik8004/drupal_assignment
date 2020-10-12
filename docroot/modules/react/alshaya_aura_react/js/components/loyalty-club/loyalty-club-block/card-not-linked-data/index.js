@@ -30,8 +30,9 @@ export default class AuraMyAccountOldCardFound extends React.Component {
   }
 
   handleNotYou = () => {
+    const { cardNumber } = this.state;
     const { handleNotYou } = this.props;
-    handleNotYou();
+    handleNotYou(cardNumber);
   }
 
   render() {
