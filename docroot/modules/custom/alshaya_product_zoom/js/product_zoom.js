@@ -203,7 +203,7 @@
             $(this).parent().find('img').trigger('click');
           });
 
-          $(this).find('img').on('load', function () {
+          $(this).find('img').on('load mouseover', function () {
             var imgWidth = $(this).width();
             var containerWidth = $(this).parent().width();
             var leftPosition = (containerWidth - imgWidth)/2;
