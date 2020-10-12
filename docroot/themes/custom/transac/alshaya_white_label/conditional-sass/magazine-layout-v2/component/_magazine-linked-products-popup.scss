@@ -197,20 +197,20 @@ body.overlay-related-select {
             width: auto;
           }
 
-          &__inner--bottom-right  {
+          &__inner--bottom-right {
             padding: 0 0.9375rem 1.5rem 1.25rem;
 
-             html[lang=ar] & {
-               padding: 0 1.25rem 1.5rem 0.9375rem;
-             }
+            html[lang=ar] & {
+              padding: 0 1.25rem 1.5rem 0.9375rem;
+            }
           }
 
-          &__inner--bottom-left  {
+          &__inner--bottom-left {
             padding: 0 1.25rem 1.5rem 0.9375rem;
 
-             html[lang=ar] & {
-               padding: 0 0.9375rem 1.5rem 1.25rem;
-             }
+            html[lang=ar] & {
+              padding: 0 0.9375rem 1.5rem 1.25rem;
+            }
           }
         }
       }
