@@ -157,12 +157,16 @@ body.overlay-related-select {
           padding: 1.0625rem 0.6875rem 0.9375rem;
 
           .back {
-            float: $left;
             font-size: 0;
+            position: absolute;
+            #{$left}: 0.6875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
 
             @include icon(arrowup, after) {
               display: block;
-              font-size: 2.125rem;
+              font-size: 2rem;
               height: 2rem;
               transform: rotate(-90deg);
               width: 2rem;
