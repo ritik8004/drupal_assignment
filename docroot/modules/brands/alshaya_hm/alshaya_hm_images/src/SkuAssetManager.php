@@ -23,6 +23,7 @@ use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
 use Drupal\file\Entity\File;
+use GuzzleHttp\TransferStats;
 
 /**
  * SkuAssetManager Class.
@@ -375,7 +376,7 @@ class SkuAssetManager {
         'timeout' => $timeout,
       ];
 
-      $file_stream = $this->httpClient->get($url, $options);
+      $file_stream = $this->downloadFile($url, $options);
       $file_data = $file_stream->getBody();
       $file_data_length = $file_stream->getHeader('Content-Length');
     }
@@ -472,7 +473,7 @@ class SkuAssetManager {
 
     // Download the file contents.
     try {
-      $file_stream = $this->httpClient->get($url);
+      $file_stream = $this->downloadFile($url);
       $file_data = $file_stream->getBody();
       $file_data_length = $file_stream->getHeader('Content-Length');
     }
@@ -1163,6 +1164,37 @@ class SkuAssetManager {
 
       return $file ?? NULL;
     }
+  }
+
+  /**
+   * Download Asset File.
+   *
+   * @param string $url
+   *   Image URL.
+   * @param array $request_options
+   *   Request options.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   File stream.
+   */
+  protected function downloadFile(string $url, array $request_options = []) {
+    $that = $this;
+
+    $request_options['on_stats'] = function (TransferStats $stats) use ($that) {
+      $code = ($stats->hasResponse())
+        ? $stats->getResponse()->getStatusCode()
+        : 0;
+
+      $that->logger->notice(sprintf(
+        'Asset download attempt finished for %s in %.4f. Response code: %d. Method: %s.',
+        $stats->getEffectiveUri(),
+        $stats->getTransferTime(),
+        $code,
+        $stats->getRequest()->getMethod()
+      ));
+    };
+
+    return $this->httpClient->get($url, $request_options);
   }
 
 }
