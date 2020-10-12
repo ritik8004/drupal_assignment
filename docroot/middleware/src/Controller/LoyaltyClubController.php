@@ -194,12 +194,17 @@ class LoyaltyClubController {
   public function apcStatusUpdate(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     $uid = $request_content['uid'];
-    $aura_status = $request_content['apcLinkStatus'];
+    $updated_aura_status = $request_content['updatedAuraStatus'];
+    $data['apcIdentifierId'] = $request_content['apcIdentifierId'];
+    $data['apcLinkStatus'] = $request_content['apcLinkStatus'];
+    $data['link'] = $request_content['link'];
 
-    // Check if aura status in request is empty.
-    if (empty($aura_status)) {
-      $this->logger->error('Error while trying to update user AURA Status. AURA Status in request is empty.');
-      return new JsonResponse($this->utility->getErrorResponse('AURA Status in request is empty.', Response::HTTP_NOT_FOUND));
+    // Check if required data is present in request.
+    if (empty($data['apcIdentifierId']) || $data['apcLinkStatus'] === '' || empty($data['link'])) {
+      $this->logger->error('Error while trying to update user AURA Status. AURA Card number, Status and Link value is required. Data: @request_data', [
+        '@request_data' => json_encode($data),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('AURA Card number, Status and Link value is required.', Response::HTTP_NOT_FOUND));
     }
 
     try {
@@ -223,23 +228,21 @@ class LoyaltyClubController {
         return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
       }
 
-      $data = [
-        'customerId' => $user['customer_id'],
-        'apcLinkStatus' => $aura_status,
-      ];
+      $data['customerId'] = $user['customer_id'];
+
       $url = 'customers/apc-status-update';
 
       // @TODO: Update this when MDC API is ready.
       // $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
       // On API success, update the user AURA Status in Drupal.
-      $updated = $this->drupal->updateUserAuraStatus($uid, $aura_status);
+      $updated = $this->drupal->updateUserAuraStatus($uid, $updated_aura_status);
 
       // Check if user aura status was updated successfully in drupal.
       if (!$updated) {
         $message = 'Error while trying to update user AURA Status field in Drupal.';
         $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
           '@uid' => $uid,
-          '@aura_status' => $aura_status,
+          '@aura_status' => $data['apcLinkStatus'],
           '@customer_id' => $user['customer_id'],
         ]);
         return new JsonResponse($this->utility->getErrorResponse($message, 500));

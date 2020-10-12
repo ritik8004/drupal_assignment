@@ -111,18 +111,17 @@
                   $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
 
                   // Process required data and trigger add to cart failure event.
-                  const selectedOptions = [];
+                  productData.options = [];
+
                   // Get the key-value pair of selected option name and value.
-                  var elements = document.querySelectorAll('#configurable_ajax select');
-                  for (var i = 0; i < elements.length; i++) {
-                    const configLabel = elements[i].getAttribute('data-default-title');
-                    const configValue = elements[i].querySelector('option:selected').innerHTML;
-                    const option = configLabel + ": " + configValue;
-                    selectedOptions.push(option);
-                  }
-                  productData.options = selectedOptions;
+                  $('#configurable_ajax select').each(function () {
+                    var configLabel = $(this).attr('data-default-title');
+                    var configValue = $(this).find('option:selected').text();
+                    productData.options.push(configLabel + ": " + configValue);
+                  });
+
                   // Prepare the event.
-                  const cartNotification = new CustomEvent('product-add-to-cart-failed', {
+                  var cartNotification = new CustomEvent('product-add-to-cart-failed', {
                     bubbles: true,
                     detail: {
                       productData: productData,

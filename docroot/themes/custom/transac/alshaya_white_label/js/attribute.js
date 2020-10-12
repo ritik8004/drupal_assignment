@@ -9,6 +9,7 @@
   var group_wrapper;
   var group_anchor_wrapper;
   var group_selected = {};
+  var isGroupData = false;
 
   Drupal.select2OptionConvert = function () {
     // Process configurable attributes which need to be shown as grouped.
@@ -28,6 +29,10 @@
 
       // Get alternates from last option.
       var alternates = JSON.parse($(this).find('option:last').attr('group-data'));
+
+      if (alternates !== 'undefined') {
+        isGroupData = true;
+      }
 
       // Loop through all alternates to add anchor and dropdown for each.
       for (var i in alternates) {
@@ -54,7 +59,7 @@
       $('.configurable-select .select2Option').show();
       // Hide the dropdowns when user resizes window and is now in desktop mode.
       $('.form-item-configurable-select').addClass('visually-hidden');
-      Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-select'));
+      Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-select'), isGroupData);
     }
     else {
       // Show the dropdowns when user is in mobile mode.
@@ -66,7 +71,7 @@
     // Always hide the dropdown for swatch field.
     $('.form-item-configurable-swatch').addClass('visually-hidden');
 
-    Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch'));
+    Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch'), isGroupData);
   };
 
   Drupal.processAlternateForGroupedSelected = function (that, i, alternate) {

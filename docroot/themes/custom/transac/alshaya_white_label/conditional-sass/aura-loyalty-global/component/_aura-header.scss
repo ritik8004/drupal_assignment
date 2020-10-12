@@ -28,6 +28,17 @@ body.aura-header-open .header--wrapper {
       @include breakpoint($upto-desktop) {
         display: none;
       }
+
+      width: 6.375rem;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        max-width: 3.6875rem;
+        margin: 0 auto;
+      }
     }
   }
 

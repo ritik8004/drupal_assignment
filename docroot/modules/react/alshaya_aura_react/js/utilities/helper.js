@@ -65,10 +65,58 @@ function getUserAuraTierLabel(tierValue) {
   return tierLabels[tierValue] || '';
 }
 
+/**
+ * Helper function to get loyalty benefits content.
+ */
+function getLoyaltyBenefitsTitle() {
+  let loyaltyBenefitsTitle = {
+    title1: '',
+    title2: '',
+  };
+
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'loyaltyBenefitsTitle')) {
+    loyaltyBenefitsTitle = drupalSettings.aura.loyaltyBenefitsTitle;
+  }
+
+  return loyaltyBenefitsTitle;
+}
+
+/**
+ * Helper function to get loyalty benefits content.
+ */
+function getLoyaltyBenefitsContent() {
+  let loyaltyBenefitsContent = '';
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'loyaltyBenefitsContent')) {
+    loyaltyBenefitsContent = drupalSettings.aura.loyaltyBenefitsContent;
+  }
+
+  return loyaltyBenefitsContent;
+}
+
+/**
+ * Get User Profile info.
+ */
+function getUserProfileInfo() {
+  const { userName } = drupalSettings.userDetails;
+  const userInfo = {};
+  if (userName.length > 0) {
+    const parts = userName.split(' ');
+    userInfo.profileName = userName;
+    userInfo.avatar = `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
+  }
+
+  return userInfo;
+}
+
 export {
   getUserAuraStatus,
   getUserAuraTier,
   getAllAuraStatus,
   getAllAuraTier,
   getUserAuraTierLabel,
+  getLoyaltyBenefitsTitle,
+  getLoyaltyBenefitsContent,
+  getUserProfileInfo,
 };

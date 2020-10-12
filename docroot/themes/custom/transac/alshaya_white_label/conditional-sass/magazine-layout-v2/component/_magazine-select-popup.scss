@@ -79,12 +79,17 @@
           }
         }
 
+        @include breakpoint($tablet) {
+          padding-bottom: 5.625rem;
+        }
+
         .group-anchor-wrapper,
         .non-group-anchor-wrapper {
           padding-#{$left}: 1.25rem;
           background-color: $magv2-desc-popup-content-bg;
           padding-top: 1.25rem;
           margin-top: 0.625rem;
+          border-bottom: 0.0625rem solid $magv2-size-btn-border;
 
           label {
             display: none;
@@ -112,7 +117,6 @@
             justify-content: space-between;
             padding-#{$right}: 1.25rem;
             margin-bottom: 0;
-            border-bottom: 0.0625rem solid $magv2-size-btn-border;
             margin-top: 0;
 
             label {
@@ -163,7 +167,13 @@
         }
 
         .magv2-confirm-size-btn {
-          margin: 0 1.25rem;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+          margin-#{$left}: 0;
+          background-color: $magv2-desc-popup-content-bg;
+          padding: 0 1.25rem;
+          box-shadow: 0.3875rem 0.3125rem 0.625rem $magv2-sticky-header-box-shadow;
 
           @include breakpoint($only-mobile) {
             display: none;

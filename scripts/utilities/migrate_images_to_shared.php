@@ -33,6 +33,7 @@ if (empty($count)) {
 }
 
 $processed = 0;
+$migrated = [];
 
 do {
   // Get all the public files currently in use.
@@ -53,18 +54,32 @@ do {
       if (empty($item['drupal_uri']) || strpos($item['drupal_uri'], 'public://') === FALSE) {
         continue;
       }
+
+      $drupal_uri_original = $item['drupal_uri'];
+      $item['drupal_uri'] = str_replace('public://', 'brand://', $drupal_uri_original);
+
       $update = TRUE;
 
-      $source = $file_system->realpath($item['drupal_uri']);
+      // Just update URI in SKU if it is already moved in another product.
+      if (in_array($item['fid'], $migrated)) {
+        $media[$index] = $item;
+        continue;
+      }
+
+      $source = $file_system->realpath($drupal_uri_original);
       if (empty($source)) {
+        $logger->notice(dt('File no longer available, removing from asset. SKU: @sku; Source: @source; Destination: @destination', [
+          '@sku' => $row->sku,
+          '@source' => $source,
+          '@destination' => $item['drupal_uri'],
+        ]));
+
         unset($item['fid']);
         unset($item['drupal_uri']);
         $media[$index] = $item;
 
         continue;
       }
-
-      $item['drupal_uri'] = str_replace('public://', 'brand://', $item['drupal_uri']);
 
       $directory = pathinfo($item['drupal_uri'], PATHINFO_DIRNAME);
       if (!$file_system->prepareDirectory($directory)) {
@@ -82,6 +97,10 @@ do {
           ->fields(['uri' => $item['drupal_uri']])
           ->condition('fid', $item['fid'])
           ->execute();
+
+        // Cache the file id which is already migrated to avoid moving
+        // it again and again.
+        $migrated[] = $item['fid'];
 
         $logger->notice(dt('File successfully moved. SKU: @sku; Source: @source; Destination: @destination', [
           '@sku' => $row->sku,

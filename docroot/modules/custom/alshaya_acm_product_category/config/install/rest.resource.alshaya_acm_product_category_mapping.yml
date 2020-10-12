@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_product_category
+    - alshaya_api
+    - serialization
+    - user
+    - simple_oauth
+id: alshaya_acm_product_category_mapping
+plugin_id: alshaya_acm_product_category_mapping
+granularity: method
+configuration:
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - oauth2

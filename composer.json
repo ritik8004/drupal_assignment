@@ -30,7 +30,6 @@
         "drupal/change_pwd_page": "^1.0@beta",
         "drupal/ckeditor_font": "^1.0",
         "drupal/clientside_validation": "^1.0-rc4",
-        "drupal/cloudflare_image_style": "^1.0",
         "drupal/components": "^1.0",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
@@ -379,7 +378,8 @@
                 "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"
             },
             "drupal/replicate_ui": {
-                "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-07-16/content-type-feature-3159253-4.patch"
+                "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-10-05/content-type-feature-3159253-8.patch",
+                "Fix warning for config entity values": "https://www.drupal.org/files/issues/2020-10-05/fix-large-number-of-entries-warning-3174826-2.patch"
             }
         },
         "installer-paths": {
