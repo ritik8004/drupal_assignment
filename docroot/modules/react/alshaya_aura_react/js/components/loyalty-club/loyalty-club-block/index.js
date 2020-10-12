@@ -7,13 +7,25 @@ import { postAPIData } from '../../../utilities/api/fetchApiData';
 import { getAllAuraStatus } from '../../../utilities/helper';
 
 export default class LoyaltyClubBlock extends React.Component {
-  handleNotYou = () => {
-    const loyaltyStatusNotU = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
+  handleNotYou = (cardNumber) => {
+    const loyaltyStatusNotU = getAllAuraStatus().APC_NOT_LINKED_NO_DATA;
+    this.updateUsersLoyaltyStatus(cardNumber, loyaltyStatusNotU, 'N', getAllAuraStatus().APC_NOT_LINKED_NOT_U);
+  }
+
+  handleLinkYourCardClick = (cardNumber) => {
+    const loyaltyStatus = getAllAuraStatus().APC_NOT_LINKED_DATA;
+    this.updateUsersLoyaltyStatus(cardNumber, loyaltyStatus, 'Y', getAllAuraStatus().APC_LINKED_NOT_VERIFIED);
+  }
+
+  updateUsersLoyaltyStatus = (cardNumber, auraStatus, link, updatedAuraStatus) => {
     // API call to update user's loyalty status.
     const apiUrl = 'post/loyalty-club/apc-status-update';
     const data = {
       uid: drupalSettings.aura.user_details.id,
-      apcLinkStatus: loyaltyStatusNotU,
+      apcIdentifierId: cardNumber,
+      apcLinkStatus: auraStatus,
+      link,
+      updatedAuraStatus,
     };
     const apiData = postAPIData(apiUrl, data);
 
@@ -22,7 +34,7 @@ export default class LoyaltyClubBlock extends React.Component {
         if (result.data !== undefined && result.data.error === undefined) {
           if (result.data.status) {
             const { updateLoyaltyStatus } = this.props;
-            updateLoyaltyStatus(loyaltyStatusNotU);
+            updateLoyaltyStatus(updatedAuraStatus);
           }
         }
       });
@@ -45,6 +57,7 @@ export default class LoyaltyClubBlock extends React.Component {
         return (
           <AuraMyAccountOldCardFound
             handleNotYou={this.handleNotYou}
+            handleLinkYourCardClick={this.handleLinkYourCardClick}
           />
         );
       }
