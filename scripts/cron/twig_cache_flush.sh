@@ -19,5 +19,5 @@ do
   echo "Twig flushing for server: ${server}"
   connection="${AH_SITE_GROUP}.${AH_SITE_ENVIRONMENT}@${server}"
   # SSH on server. Move to the Project directory. Run DRUSH command on all sites.
-  ssh -t ${connection} "cd /var/www/html/${AH_SITE_GROUP}.${AH_SITE_ENVIRONMENT}/docroot; drush sfml ev '\Drupal\Core\PhpStorage\PhpStorageFactory::get(\"twig\")->deleteAll();' &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/drush-cron.log"
+  ssh -t ${connection} 'cd /var/www/html/${AH_SITE_GROUP}.${AH_SITE_ENVIRONMENT}/docroot; drush sfml ev '\''\Drupal\Core\PhpStorage\PhpStorageFactory::get("twig")->deleteAll()'\'' &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/drush-cron.log'
 done
