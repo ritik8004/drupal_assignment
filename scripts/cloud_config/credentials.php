@@ -13,5 +13,5 @@ $_clientSecret = '';
 // If credentials not available, read/check from home directory.
 if (empty($_clientId) || empty($_clientSecret)) {
   $home = getenv('HOME');
-  include_once $home . '/acquia_cloud_api_credss.php';
+  include_once $home . '/acquia_cloud_api_creds.php';
 }
