@@ -21,11 +21,11 @@ const NonGroupSelectOption = ({
         <a className="close" onClick={(e) => closeModal(e)}>
           &times;
         </a>
-        <label htmlFor={attributeKey}>{configurables.label}</label>
+        <label htmlFor={attributeKey}>{Drupal.t('Select @title', { '@title': configurables.label })}</label>
       </div>
       <div className="magv2-select-popup-content-wrapper">
         <div className="non-group-anchor-wrapper">
-          <label htmlFor={attributeKey}>{configurables.label}</label>
+          <label htmlFor={attributeKey}>{Drupal.t('Select @title', { '@title': configurables.label })}</label>
         </div>
         <SizeGuide attrId={code} />
         <div className="non-group-option-wrapper">
