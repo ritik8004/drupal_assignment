@@ -728,6 +728,10 @@ header {
 @include breakpoint($upto-desktop) {
   .mobile--overlay {
     overflow: hidden;
+
+    .branding__menu {
+      border-bottom-color: $header_branding_shadow !important;
+    }
   }
 
   .block-alshaya-main-menu {

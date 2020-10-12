@@ -12,6 +12,25 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * [5.9.0]Adding fields for marking full catalog sync.
+ */
+function alshaya_acm_promotion_update_8024() {
+  // Install the new field configs.
+  alshaya_config_install_configs([
+    'field.storage.node.field_acq_promotion_full_catalog',
+    'field.field.node.acq_promotion.field_acq_promotion_full_catalog',
+  ], 'alshaya_acm_promotion');
+  // Re-install entity form and view display config for overrides to take
+  // effect.
+  alshaya_config_install_configs([
+    'core.entity_form_display.node.acq_promotion.default',
+    'core.entity_view_display.node.acq_promotion.default',
+  ], 'acq_promotion');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new value for promotion sub type and add translations.
  */
 function alshaya_acm_promotion_update_8023() {

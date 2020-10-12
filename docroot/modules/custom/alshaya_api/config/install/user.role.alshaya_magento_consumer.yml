@@ -7,3 +7,4 @@ is_admin: null
 permissions:
   - 'access content'
   - 'restful post sku_images'
+  - 'restful post alshaya_acm_product_category_mapping'

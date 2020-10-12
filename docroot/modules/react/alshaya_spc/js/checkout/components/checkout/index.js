@@ -235,10 +235,13 @@ export default class Checkout extends React.Component {
               {termConditions}
             </ConditionalView>
 
-            <CompletePurchase
-              cart={cart}
-              validateBeforePlaceOrder={this.validateBeforePlaceOrder}
-            />
+            <ConditionalView condition={window.innerWidth > 767}>
+              <CompletePurchase
+                cart={cart}
+                validateBeforePlaceOrder={this.validateBeforePlaceOrder}
+              />
+            </ConditionalView>
+
           </div>
           <div className="spc-sidebar">
             <OrderSummaryBlock
@@ -259,6 +262,14 @@ export default class Checkout extends React.Component {
             {termConditions}
           </ConditionalView>
         </div>
+
+        <ConditionalView condition={window.innerWidth < 768}>
+          <CompletePurchase
+            cart={cart}
+            validateBeforePlaceOrder={this.validateBeforePlaceOrder}
+          />
+        </ConditionalView>
+
         <div className="spc-footer">
           <VatFooterText />
         </div>

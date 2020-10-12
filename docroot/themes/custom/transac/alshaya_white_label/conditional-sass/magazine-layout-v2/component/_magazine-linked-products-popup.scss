@@ -27,7 +27,7 @@ body.overlay-related-select {
           content: '';
           display: block;
           border-top: 0.625rem solid $magv2-desc-popup-grey-border;
-          margin: -1.25rem -1.875rem 0;
+          margin: -1.25rem -1.25rem 0;
         }
 
         .magv2-pdp-gallery {
@@ -42,11 +42,74 @@ body.overlay-related-select {
             .slick-dots {
               left: auto;
               transform: none;
+
+              @include breakpoint($tablet) {
+                li {
+                  width: 0.875rem;
+                  height: 0.875rem;
+
+                  button {
+                    width: 0.875rem;
+                    height: 0.875rem;
+
+                    &::before {
+                      font-size: 0.5rem;
+                      width: 0.875rem;
+                      height: 0.875rem;
+                    }
+                  }
+                }
+              }
+            }
+
+            @include breakpoint($tablet) {
+              .slick-slider {
+                .slick-arrow {
+                  bottom: -0.625rem;
+                  top: auto;
+                  width: 2.125rem;
+                  height: 2.125rem;
+
+                  &::before {
+                    background: transparent;
+                    color: $magv2-slider-icon-bg;
+                    opacity: 1;
+                  }
+                }
+
+                .slick-next {
+                  #{$right}: 5rem;
+
+                  @include icon(chevron#{$right}) {
+                    font-size: 2.125rem;
+                    height: 2.125rem;
+                    width: 2.125rem;
+                  }
+                }
+
+                .slick-prev {
+                  #{$left}: 5rem;
+
+                  @include icon(chevron#{$left}) {
+                    font-size: 2.125rem;
+                    height: 2.125rem;
+                    width: 2.125rem;
+                  }
+                }
+
+                .slick-disabled {
+                  &::before {
+                    color: $gallery_arrows_disabled !important;
+                  }
+                }
+              }
             }
           }
         }
 
         .magv2-detail-wrapper {
+          padding-top: 1.25rem;
+
           .magv2-pdp-title {
             padding-top: 0;
           }
@@ -94,12 +157,16 @@ body.overlay-related-select {
           padding: 1.0625rem 0.6875rem 0.9375rem;
 
           .back {
-            float: $left;
             font-size: 0;
+            position: absolute;
+            #{$left}: 0.6875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
 
             @include icon(arrowup, after) {
               display: block;
-              font-size: 2.125rem;
+              font-size: 2rem;
               height: 2rem;
               transform: rotate(-90deg);
               width: 2rem;
@@ -116,6 +183,18 @@ body.overlay-related-select {
       &-header-wrapper {
         padding: 1.0625rem 1.875rem 0.9375rem;
         text-align: center;
+      }
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .magv2-crossell-popup-content-wrapper {
+    .magazine__gallery--container-mobile {
+      .product-labels {
+        .labels-container__inner {
+          width: auto;
+        }
       }
     }
   }

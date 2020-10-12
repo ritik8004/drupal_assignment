@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
-import { getUserAuraTier, getUserAuraTierLabel } from '../../../../utilities/helper';
+import { getUserAuraTier, getUserAuraTierLabel, getUserProfileInfo } from '../../../../utilities/helper';
 import PointsExpiryMessage
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import PointsUpgradeMessage
@@ -39,6 +39,9 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
     }
   }
 
+  /**
+   * Get tooltip content.
+   */
   getToolTipContent = () => Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem the points.');
 
   render() {
@@ -48,12 +51,14 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
       points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
     } = this.state;
 
+    const profileInfo = getUserProfileInfo();
+
     return (
       <div className="aura-card-linked-verified-wrapper">
         <div className="aura-card-linked-verified-wrapper-content">
           <div className="aura-logo">
-            <div className="aura-user-avatar" />
-            <div className="aura-user-name">Aura UserName</div>
+            <div className="aura-user-avatar">{ profileInfo.avatar }</div>
+            <div className="aura-user-name">{ profileInfo.profileName }</div>
           </div>
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">

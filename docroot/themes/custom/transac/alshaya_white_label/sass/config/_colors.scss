@@ -170,6 +170,11 @@ $_aura_expiry_black: #121212;
 $_aura_expiry_bg: #e3f4ff;
 $_aura_expiry_highlight: #09f;
 $_aura_banner_CTA_blend: #dbc3c2;
+$_aura_tab_border: #f0def3;
+$_aura_account_txt: #31281b;
+$_aura_status_hold: #ff7600;
+$_aura_status_credit: #1da545;
+$_aura_status_debit: #ff3030;
 
 // Aura Gradients.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -1377,6 +1382,7 @@ $spc-checkout-print-titile: $mothercare-black;
 $spc-checkout-print-header: $white-five;
 $spc-checkout-print-header-title: $mothercare-black;
 $spc-checkout-order-detail-map-link: $mothercare-black;
+$spc-checkout-link-btn-box-shadow-mobile: rgba(0, 0, 0, 0.24);
 
 // Order QTY Limit.
 $order_qty_limit_bg: $_dynamic_promo_text_bg;
@@ -1536,6 +1542,7 @@ $magv2-size-color: $mothercare-black;
 $magv2-size-guide-link: $new-pdp-blue;
 $magv2-product-swatch-active-border: $mothercare-black;
 $magv2-sticky-header-box-shadow: $mothercare-black;
+$magv2-sticky-box-shadow-mobile: $mothercare-black;
 $magv2-qty-btn-bg: $white-five;
 $magv2-size-option-disabled: $warm-grey-two;
 $magv2-promo-text: $white-five;
@@ -1566,6 +1573,9 @@ $magv2-mobile-size-drawer-label: $brownish-grey;
 $magv2-share-icons-default-color: $marine-blue;
 $magv2-click-collect-unavailable-txt: $brownish-grey;
 $magv2-crossel-upsell-pagination: $brownish-grey;
+$magv2-free-gift: $mothercare-black;
+$magv2-free-gift-modal-cross-icon: $mothercare-black;
+$magv2-free-gift-modal-item-code: $brownish-grey;
 
 // Sub brand logo.
 $sub_brand_logo_separator: $_ancestral-water;
@@ -1636,3 +1646,10 @@ $aura-loyalty-club-verified-user: $aura-gradient-11;
 $aura-loyalty-club-verified-user-mobile: $aura-gradient-12;
 $aura-loyalty-club-verified-user-banner-text: $white-five;
 $aura-loyalty-club-verified-user-blend: $_aura_banner_CTA_blend;
+$aura-loyalty-tab-border: $_aura_tab_border;
+$aura-loyalty-tab-color: $aura-purpleTwo;
+$aura-loyalty-tab-bg: $white-five;
+$aura-loyalty-tab-active: $aura-gradient-radial;
+$aura-loyalty-activity-txt: $_aura_account_txt;
+$aura-loyalty-user-avatar-text: $white-five;
+$aura-loyalty-user-avatar-bg: $_aura-hello;

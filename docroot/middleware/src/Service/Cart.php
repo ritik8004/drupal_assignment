@@ -813,11 +813,14 @@ class Cart {
       $this->cache->set('payment_method', $expire, $data['method']);
     }
 
-    // Add success and fail redirect url to additional data.
-    $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
-    $langcode = $this->request->query->get('lang');
-    $update['payment']['additional_data']['successUrl'] = $host . 'success/' . $langcode;
-    $update['payment']['additional_data']['failUrl'] = $host . 'error/' . $langcode;
+    // If upapi payment method (payment method via checkout.com).
+    if ($this->isUpapiPaymentMethod($data['method'])) {
+      // Add success and fail redirect url to additional data.
+      $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
+      $langcode = $this->request->query->get('lang');
+      $update['payment']['additional_data']['successUrl'] = $host . 'success/' . $langcode;
+      $update['payment']['additional_data']['failUrl'] = $host . 'error/' . $langcode;
+    }
 
     $old_cart = $this->getCart();
     $cart = $this->updateCart($update);
@@ -833,6 +836,23 @@ class Cart {
     }
 
     return $cart;
+  }
+
+  /**
+   * Checks if upapi payment method (payment method via checkout.com).
+   *
+   * @param string $payment_method
+   *   Payment method code.
+   *
+   * @return bool
+   *   TRUE if payment methods from checkout.com
+   */
+  public function isUpapiPaymentMethod(string $payment_method) {
+    $payment_methods = [
+      'checkout_com_upapi_qpay',
+      'checkout_com_upapi_knet',
+    ];
+    return in_array($payment_method, $payment_methods);
   }
 
   /**
@@ -1237,7 +1257,16 @@ class Cart {
     // If first/last name not available in shipping address.
     if (empty($cart['shipping']['address']['firstname'])
       || empty($cart['shipping']['address']['lastname'])) {
-      $this->logger->error('Error while placing order. First name or Last name not available in cart. Cart: @cart.', [
+      $this->logger->error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+    }
+
+    // If first/last name not available in billing address.
+    if (empty($cart['cart']['billing_address']['firstname'])
+      || empty($cart['cart']['billing_address']['lastname'])) {
+      $this->logger->error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
       return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);

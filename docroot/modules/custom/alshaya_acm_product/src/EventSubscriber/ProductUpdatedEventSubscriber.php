@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_promotion\Event\PromotionMappingUpdatedEvent;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
@@ -99,11 +98,9 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     $event->stopPropagation();
 
     // Queues all the products for processing.
-    foreach ($event->getSkus() as $sku) {
-      $entity = SKU::loadFromSku($sku);
-      if ($entity instanceof SKUInterface) {
-        $this->queueProductForProcessing($entity);
-      }
+    $skus = $event->getSkus() ?? [];
+    if (is_array($skus) && !empty($skus)) {
+      $this->queueUtility->queueAvailableProductsForSkus($skus);
     }
   }
 

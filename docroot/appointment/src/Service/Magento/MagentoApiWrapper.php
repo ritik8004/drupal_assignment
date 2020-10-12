@@ -64,12 +64,15 @@ class MagentoApiWrapper {
         : 0;
 
       $that->logger->info(sprintf(
-        'Finished API request %s in %.4f. Response code: %d. Method: %s. Action: %s',
+        'Finished API request %s in %.4f. Response code: %d. Method: %s. Action: %s. X-Cache: %s; X-Cache-Hits: %s; X-Served-By: %s;',
         $stats->getEffectiveUri(),
         $stats->getTransferTime(),
         $code,
         $stats->getRequest()->getMethod(),
-        $action
+        $action,
+        $stats->getResponse()->getHeaderLine('x-cache'),
+        $stats->getResponse()->getHeaderLine('x-cache-hits'),
+        $stats->getResponse()->getHeaderLine('x-served-by')
       ));
     };
 
