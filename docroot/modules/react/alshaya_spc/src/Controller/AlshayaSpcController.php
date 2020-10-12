@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CashOnDelivery;
 use Drupal\alshaya_user\AlshayaUserInfo;
@@ -162,6 +163,8 @@ class AlshayaSpcController extends ControllerBase {
     $cart_config = $this->config('alshaya_acm.cart_config');
     $cache_tags = Cache::mergeTags($cache_tags, $cart_config->getCacheTags());
 
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
     $build = [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
@@ -179,6 +182,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
+            'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
         ],
       ],
