@@ -194,6 +194,7 @@ class LoyaltyClubController {
   public function apcStatusUpdate(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     $uid = $request_content['uid'];
+    $updated_aura_status = $request_content['updatedAuraStatus'];
     $data['apcIdentifierId'] = $request_content['apcIdentifierId'];
     $data['apcLinkStatus'] = $request_content['apcLinkStatus'];
     $data['link'] = $request_content['link'];
@@ -234,7 +235,7 @@ class LoyaltyClubController {
       // @TODO: Update this when MDC API is ready.
       // $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
       // On API success, update the user AURA Status in Drupal.
-      $updated = $this->drupal->updateUserAuraStatus($uid, $data['apcLinkStatus']);
+      $updated = $this->drupal->updateUserAuraStatus($uid, $updated_aura_status);
 
       // Check if user aura status was updated successfully in drupal.
       if (!$updated) {

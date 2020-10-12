@@ -16,6 +16,7 @@ export default class LoyaltyClubBlock extends React.Component {
       apcIdentifierId: cardNumber,
       apcLinkStatus: loyaltyStatusNotU,
       link: 'N',
+      updatedAuraStatus: getAllAuraStatus().APC_NOT_LINKED_NOT_U,
     };
     const apiData = postAPIData(apiUrl, data);
 
