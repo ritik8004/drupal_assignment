@@ -1,24 +1,25 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
 
-class AuraFormLinkCard extends React.Component {
+class AuraFormUnlinkedCard extends React.Component {
   /**
    * Placeholder for callback to call link card API.
    */
   linkCard = () => {
-    // Assume all success and return the success message.
     // @todo: Aura - SPC - Call Link API.
-    // Add some loaders during API call in progress.
-    // Return success failure message.
-    const element = document.querySelector('.spc-aura-link-card-wrapper .spc-aura-link-api-response-message');
-    element.innerHTML = Drupal.t('Your loyalty points will be credited to this account.');
-    const submitButton = document.querySelector('.spc-aura-link-card-wrapper .form-items');
-    submitButton.classList.add('success');
+  };
+
+  notYou = () => {
+    // @todo: Aura - SPC - Not you link API.
   };
 
   render() {
     return (
-      <div className="spc-aura-link-card-wrapper">
+      <div className="spc-aura-unlink-card-wrapper">
+        <div className="description">
+          {Drupal.t('An Aura loyalty card is associate with your email adress. It just a takes one click to link.')}
+          <b>{Drupal.t('Do you want to link now?')}</b>
+        </div>
         <div className="form-items">
           <Cleave
             placeholder={Drupal.t('Enter Aura Card Number')}
@@ -31,8 +32,14 @@ class AuraFormLinkCard extends React.Component {
             className="spc-aura-link-card-submit spc-aura-button"
             onClick={() => this.linkCard()}
           >
-            { Drupal.t('Apply') }
+            { Drupal.t('Submit') }
           </button>
+        </div>
+        <div className="no-link-message">
+          {Drupal.t('Dont have one?')}
+          <a href="#" onClick={() => this.notYou()}>
+            {Drupal.t('Sign up now')}
+          </a>
         </div>
         <div className="spc-aura-link-api-response-message" />
       </div>
@@ -40,4 +47,4 @@ class AuraFormLinkCard extends React.Component {
   }
 }
 
-export default AuraFormLinkCard;
+export default AuraFormUnlinkedCard;
