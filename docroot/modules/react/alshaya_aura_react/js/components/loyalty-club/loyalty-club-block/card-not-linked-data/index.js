@@ -35,6 +35,12 @@ export default class AuraMyAccountOldCardFound extends React.Component {
     handleNotYou(cardNumber);
   }
 
+  handleLinkYourCardClick = () => {
+    const { cardNumber } = this.state;
+    const { handleLinkYourCardClick } = this.props;
+    handleLinkYourCardClick(cardNumber);
+  }
+
   render() {
     const { cardNumber } = this.state;
 
@@ -63,6 +69,7 @@ export default class AuraMyAccountOldCardFound extends React.Component {
             />
             <a
               className="link-your-card"
+              onClick={this.handleLinkYourCardClick}
             >
               { Drupal.t('Link your card') }
             </a>
