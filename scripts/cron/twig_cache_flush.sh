@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Please create a file "acquia_cloud_api_credss.php" in home directory.
+# Add the creds of api in the file same as "credentials.php".
+# Run the script like "./twig_cache_flush.sh ENV_UUID_HERE"
+
 env_uuid="$1"
 
 # If env uuid is not provided.
