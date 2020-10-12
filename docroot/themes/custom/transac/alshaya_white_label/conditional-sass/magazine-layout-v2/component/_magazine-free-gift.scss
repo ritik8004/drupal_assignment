@@ -1,0 +1,20 @@
+.new-pdp-magazine-layout {
+  .magv2-sidebar {
+    .free-gift-promo-wrapper.free-gift-promo-list {
+      .free-gift-title,
+      .coupon-code {
+        color: $magv2-free-gift;
+      }
+    }
+  }
+
+  .ui-dialog {
+    .ui-dialog-titlebar-close {
+      background-color: $magv2-free-gift-modal-cross-icon;
+    }
+
+    .content--item-code {
+      color: $magv2-free-gift-modal-item-code;
+    }
+  }
+}
