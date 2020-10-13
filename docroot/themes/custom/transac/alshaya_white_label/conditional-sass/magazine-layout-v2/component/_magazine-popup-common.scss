@@ -30,7 +30,7 @@
       }
 
       &-header-wrapper {
-        box-shadow: 0 0.3125rem 0.625rem -0.3125rem rgba(0, 0, 0, 0.3);
+        box-shadow: 0 -0.0625rem 1.25rem 0.5625rem $sticky-btn;
         background-color: $magv2-desc-popup-content-bg;
         position: relative;
         width: 100%;

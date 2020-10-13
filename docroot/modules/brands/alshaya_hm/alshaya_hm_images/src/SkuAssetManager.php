@@ -23,6 +23,7 @@ use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
 use Drupal\file\Entity\File;
+use GuzzleHttp\TransferStats;
 
 /**
  * Sku Asset Manager Class.
@@ -349,25 +350,9 @@ class SkuAssetManager {
     $target = $directory . DIRECTORY_SEPARATOR . $data['filename'];
 
     // Check if file already exists in the directory.
-    if (file_exists($target)) {
-      // If file exists in directory, check if file entity exists.
-      $uri = $this->fileStorage->loadByProperties(['uri' => $target]);
-      $files = reset($uri);
-      if (!empty($files) && $files instanceof FileInterface) {
-        return $files;
-      }
-      else {
-        // If file exists in directory but file entity doesnt exist
-        // then create file entity.
-        $file = File::create([
-          'uri' => $target,
-          'uid' => 0,
-          'status' => FILE_STATUS_PERMANENT,
-        ]);
-        $file->save();
-
-        return $file;
-      }
+    $file = $this->getFileIfTargetExists($target);
+    if ($file instanceof FileInterface) {
+      return $file;
     }
 
     $url = implode('/', [
@@ -391,7 +376,7 @@ class SkuAssetManager {
         'timeout' => $timeout,
       ];
 
-      $file_stream = $this->httpClient->get($url, $options);
+      $file_stream = $this->downloadFile($url, $options);
       $file_data = $file_stream->getBody();
       $file_data_length = $file_stream->getHeader('Content-Length');
     }
@@ -475,12 +460,9 @@ class SkuAssetManager {
     $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);
 
     // Check if file already exists in the directory.
-    if (file_exists($target)) {
-      // If file exists in directory, check if file entity exists.
-      $files = reset($this->fileStorage->loadByProperties(['uri' => $target]));
-      if (!empty($files) && $files instanceof FileInterface) {
-        return $files;
-      }
+    $file = $this->getFileIfTargetExists($target);
+    if ($file instanceof FileInterface) {
+      return $file;
     }
 
     $url = $this->getSkuAssetUrlLiquidPixel($asset);
@@ -491,7 +473,7 @@ class SkuAssetManager {
 
     // Download the file contents.
     try {
-      $file_stream = $this->httpClient->get($url);
+      $file_stream = $this->downloadFile($url);
       $file_data = $file_stream->getBody();
       $file_data_length = $file_stream->getHeader('Content-Length');
     }
@@ -619,7 +601,7 @@ class SkuAssetManager {
         $this->cacheMediaFileMapping->set($lock_key, $file->id(), $this->time->getRequestTime() + 120);
       }
 
-      $this->logger->notice('Downloaded file @fid, uri @uri for Asset @id', [
+      $this->logger->notice('Downloaded or re-used file @fid, uri @uri for Asset @id', [
         '@fid' => $file->id(),
         '@uri' => $file->getFileUri(),
         '@id' => $id,
@@ -1151,6 +1133,68 @@ class SkuAssetManager {
       : 'image';
 
     return $type;
+  }
+
+  /**
+   * Load or create file entity if target exists.
+   *
+   * @param string $target
+   *   Target URI.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   File entity if found.
+   */
+  protected function getFileIfTargetExists(string $target) {
+    if (file_exists($target)) {
+      // If file exists in directory, check if file entity exists.
+      $files = $this->fileStorage->loadByProperties(['uri' => $target]);
+      $file = reset($files);
+
+      if (!($file instanceof FileInterface)) {
+        // If file exists in directory but file entity doesnt exist
+        // then create file entity.
+        $file = File::create([
+          'uri' => $target,
+          'uid' => 0,
+          'status' => FILE_STATUS_PERMANENT,
+        ]);
+
+        $file->save();
+      }
+
+      return $file ?? NULL;
+    }
+  }
+
+  /**
+   * Download Asset File.
+   *
+   * @param string $url
+   *   Image URL.
+   * @param array $request_options
+   *   Request options.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   File stream.
+   */
+  protected function downloadFile(string $url, array $request_options = []) {
+    $that = $this;
+
+    $request_options['on_stats'] = function (TransferStats $stats) use ($that) {
+      $code = ($stats->hasResponse())
+        ? $stats->getResponse()->getStatusCode()
+        : 0;
+
+      $that->logger->notice(sprintf(
+        'Asset download attempt finished for %s in %.4f. Response code: %d. Method: %s.',
+        $stats->getEffectiveUri(),
+        $stats->getTransferTime(),
+        $code,
+        $stats->getRequest()->getMethod()
+      ));
+    };
+
+    return $this->httpClient->get($url, $request_options);
   }
 
 }

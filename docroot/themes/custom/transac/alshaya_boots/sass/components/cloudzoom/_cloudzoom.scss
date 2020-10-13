@@ -96,7 +96,7 @@
 
     .slick-next {
       @include breakpoint($desktop) {
-        bottom: 0;
+        bottom: 2.25rem;
       }
     }
 

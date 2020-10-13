@@ -21,7 +21,6 @@ body.overlay-related-select {
     &-popup {
       &-content-wrapper {
         padding: 1.25rem;
-        background-color: $magv2-desc-popup-content-bg;
 
         &::before {
           content: '';
@@ -37,11 +36,21 @@ body.overlay-related-select {
           .magazine__gallery--container-mobile {
             .magv2-pdp-image {
               position: relative;
+
+              html[lang=ar] & {
+                position: static;
+
+                .product-labels {
+                  width: 23.4375rem;
+                  left: 0;
+                }
+              }
             }
 
             .slick-dots {
               left: auto;
               transform: none;
+              bottom: 1.5625rem;
 
               @include breakpoint($tablet) {
                 li {
@@ -65,13 +74,13 @@ body.overlay-related-select {
             @include breakpoint($tablet) {
               .slick-slider {
                 .slick-arrow {
-                  background: transparent;
-                  bottom: -0.625rem;
+                  bottom: -0.1875rem;
                   top: auto;
                   width: 2.125rem;
                   height: 2.125rem;
 
                   &::before {
+                    background: transparent;
                     color: $magv2-slider-icon-bg;
                     opacity: 1;
                   }
@@ -108,7 +117,7 @@ body.overlay-related-select {
         }
 
         .magv2-detail-wrapper {
-          padding-top: 1.25rem;
+          padding-top: 0.3125rem;
 
           .magv2-pdp-title {
             padding-top: 0;
@@ -157,12 +166,16 @@ body.overlay-related-select {
           padding: 1.0625rem 0.6875rem 0.9375rem;
 
           .back {
-            float: $left;
             font-size: 0;
+            position: absolute;
+            #{$left}: 0.6875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
 
             @include icon(arrowup, after) {
               display: block;
-              font-size: 2.125rem;
+              font-size: 2rem;
               height: 2rem;
               transform: rotate(-90deg);
               width: 2rem;
@@ -179,6 +192,36 @@ body.overlay-related-select {
       &-header-wrapper {
         padding: 1.0625rem 1.875rem 0.9375rem;
         text-align: center;
+      }
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .magv2-crossell-popup-content-wrapper {
+    .magazine__gallery--container-mobile {
+      .product-labels {
+        .labels-container {
+          .labels-container__inner {
+            width: auto;
+          }
+
+          &__inner--bottom-right {
+            padding: 0 0.9375rem 1.5rem 1.25rem;
+
+            html[lang=ar] & {
+              padding: 0 1.25rem 1.5rem 0.9375rem;
+            }
+          }
+
+          &__inner--bottom-left {
+            padding: 0 1.25rem 1.5rem 0.9375rem;
+
+            html[lang=ar] & {
+              padding: 0 0.9375rem 1.5rem 1.25rem;
+            }
+          }
+        }
       }
     }
   }

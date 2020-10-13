@@ -299,7 +299,11 @@ class AcqPromotionsManager {
         continue;
       }
 
-      $promotion_label_languages[$promotion_label_language] = $promotion_label['store_label'];
+      // Pass the labels in the $promotion['processed_promo_labels'] array so
+      // that it may be used in hooks.
+      $promotion_label_languages[$promotion_label_language]
+        = $promotion['processed_promo_labels'][$promotion_label_language]
+          = $promotion_label['store_label'];
     }
 
     $promotion_node->get('title')->setValue($promotion['name']);
@@ -316,12 +320,6 @@ class AcqPromotionsManager {
     // Set the status.
     $promotion_node->setPublished((bool) $promotion['status']);
 
-    // Store everything as serialized string in DB.
-    // Before that remove products key, as we are not using it anywhere, and
-    // that is creating unnecessary load on promotion node load.
-    unset($promotion['products']);
-    $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
-
     // Set the Promotion type.
     $promotion_node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
 
@@ -330,11 +328,6 @@ class AcqPromotionsManager {
 
     // Set promotion sort order.
     $promotion_node->get('field_acq_promotion_sort_order')->setValue($promotion['order']);
-
-    // Set the Promotion label.
-    if (isset($promotion_label_languages[$site_default_langcode])) {
-      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
-    }
 
     // Set promotion type to percent & discount value depending on the promotion
     // being imported.
@@ -350,6 +343,17 @@ class AcqPromotionsManager {
 
     // Invoke the alter hook to allow modules to update the node from API data.
     \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $promotion_node, $promotion);
+
+    // Store everything as serialized string in DB.
+    // Before that remove products key, as we are not using it anywhere, and
+    // that is creating unnecessary load on promotion node load.
+    unset($promotion['products']);
+    $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
+
+    // Set the Promotion label.
+    if (isset($promotion_label_languages[$site_default_langcode])) {
+      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
+    }
 
     $status = $promotion_node->save();
     // Create promotion translations based on the language codes available in

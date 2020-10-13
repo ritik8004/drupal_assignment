@@ -238,10 +238,14 @@ class AlshayaApiWrapper {
           : 0;
 
         $that->logger->info(sprintf(
-          'Finished API request %s in %.4f. Response code: %d',
+          'Finished API request %s in %.4f. Response code: %d. Method: %s. X-Cache: %s; X-Cache-Hits: %s; X-Served-By: %s;',
           $stats->getEffectiveUri(),
           $stats->getTransferTime(),
-          $code
+          $code,
+          $stats->getRequest()->getMethod(),
+          $stats->getResponse()->getHeaderLine('x-cache'),
+          $stats->getResponse()->getHeaderLine('x-cache-hits'),
+          $stats->getResponse()->getHeaderLine('x-served-by')
         ));
       };
 

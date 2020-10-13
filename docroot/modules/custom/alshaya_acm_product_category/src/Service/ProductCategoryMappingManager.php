@@ -101,9 +101,10 @@ class ProductCategoryMappingManager {
       // No diff found, we skip.
       $this->logger->notice('Category mapping skipped as there is no change for SKU @sku; New: @new; Existing: @existing', [
         '@sku' => $sku,
-        '@new' => $categories_new,
-        '@existing' => $categories_existing,
+        '@new' => implode(',', $categories_new),
+        '@existing' => implode(',', $categories_existing),
       ]);
+
       return;
     }
 
@@ -115,8 +116,10 @@ class ProductCategoryMappingManager {
     // are invoked.
     _alshaya_acm_product_post_sku_operation($sku_entity, ProductUpdatedEvent::EVENT_UPDATE);
 
-    $this->logger->notice('Category mapping update for SKU @sku', [
+    $this->logger->notice('Category mapping updated for SKU @sku; New: @new; Existing: @existing', [
       '@sku' => $sku,
+      '@new' => implode(',', $categories_new),
+      '@existing' => implode(',', $categories_existing),
     ]);
   }
 

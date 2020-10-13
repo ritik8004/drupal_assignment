@@ -20,3 +20,15 @@
     }
   }
 }
+
+.free-gift-promo-list-overlay,
+.free-gifts-modal-overlay {
+  .slick-prev,
+  .slick-next {
+    &::before {
+      html[lang=ar] & {
+        transform: rotate(0deg);
+      }
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Controller;
 
+use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CashOnDelivery;
 use Drupal\alshaya_user\AlshayaUserInfo;
@@ -162,6 +163,8 @@ class AlshayaSpcController extends ControllerBase {
     $cart_config = $this->config('alshaya_acm.cart_config');
     $cache_tags = Cache::mergeTags($cache_tags, $cart_config->getCacheTags());
 
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
     $build = [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
@@ -171,6 +174,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
           'alshaya_acm_promotion/basket_labels_manager',
+          'alshaya_white_label/free_gifts',
         ],
         'drupalSettings' => [
           'item_code_label' => $this->t('Item code'),
@@ -179,6 +183,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
+            'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
         ],
       ],
@@ -696,11 +701,17 @@ class AlshayaSpcController extends ControllerBase {
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
+          $raw_number = $value;
           if (strpos($value, $country_mobile_code) === FALSE) {
             $value = $country_mobile_code . $value;
           }
 
           try {
+            // If mobile number not contains only digits.
+            if (!preg_match('/^[0-9]+$/', $raw_number)) {
+              throw new \Exception('Invalid mobile number.');
+            }
+
             if ($this->mobileUtil->testMobileNumber($value)) {
               $status[$key] = TRUE;
             }
