@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ProductCategoryMappingSyncResource.
+ * Class Product Category Mapping Sync Resource.
  *
  * @package Drupal\alshaya_acm_product_category\Plugin
  *
