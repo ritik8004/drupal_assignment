@@ -115,6 +115,7 @@ html[lang=ar] {
 
     .magv2-header-wrapper {
       display: flex;
+      align-items: center;
 
       .back-button {
         @include icon(arrowup, after) {
