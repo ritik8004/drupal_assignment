@@ -11,6 +11,7 @@ services:
       - '@path.current'
       - '@database'
       - '@alshaya_acm_product.category_helper'
+      - '@path.validator'
 
   cache.product_category_tree:
     class: Drupal\Core\Cache\CacheBackendInterface

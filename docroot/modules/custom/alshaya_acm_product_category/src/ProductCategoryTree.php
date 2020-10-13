@@ -17,6 +17,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Path\PathValidatorInterface;
 
 /**
  * Class ProductCategoryTree.
@@ -141,6 +142,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $productCategoryHelper;
 
   /**
+   * Path Validator service object.
+   *
+   * @var \Drupal\Core\Path\PathValidatorInterface
+   */
+  protected $pathValidator;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -161,6 +169,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Database connection.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   Product Category Helper service object.
+   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
+   *   Path Validator service object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
@@ -170,7 +180,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
                               RequestStack $request_stack,
                               CurrentPathStack $current_path,
                               Connection $connection,
-                              ProductCategoryHelper $product_category_helper) {
+                              ProductCategoryHelper $product_category_helper,
+                              PathValidatorInterface $path_validator) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
@@ -181,6 +192,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->connection = $connection;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->productCategoryHelper = $product_category_helper;
+    $this->pathValidator = $path_validator;
   }
 
   /**
@@ -486,9 +498,15 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
 
       if ($q) {
-        $route_params = Url::fromUserInput($q)->getRouteParameters();
-        if (isset($route_params['taxonomy_term'])) {
-          $term = $this->termStorage->load($route_params['taxonomy_term']);
+        $url_object = $this->pathValidator->getUrlIfValid($q);
+        if ($url_object) {
+          $route_params = Url::fromUserInput($q)->getRouteParameters();
+          if (isset($route_params['taxonomy_term'])) {
+            $term = $this->termStorage->load($route_params['taxonomy_term']);
+          }
+        }
+        else {
+          return NULL;
         }
       }
     }
