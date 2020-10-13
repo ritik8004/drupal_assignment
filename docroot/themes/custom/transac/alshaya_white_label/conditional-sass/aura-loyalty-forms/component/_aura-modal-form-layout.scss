@@ -1,0 +1,67 @@
+.popup-overlay.aura-modal-form {
+  .popup-content.aura-modal-form {
+    padding: 0 !important;
+    color: #a3a3a3;
+    max-width: 375px;
+    background: #f6f6f6 !important;
+
+    @include breakpoint($only-mobile) {
+      max-width: none;
+      width: 100%;
+    }
+
+    .aura-modal-header {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-family: $aura-regular;
+      color: #140247;
+      background: #fff;
+      box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.625rem;
+
+      .close {
+        position: absolute;
+        #{$right}: 3px;
+        cursor: pointer;
+
+        @include icon('close') {
+          font-size: 3rem;
+          width: 3rem;
+          height: 3rem;
+          color: #140247;
+        }
+      }
+    }
+
+    .aura-modal-form {
+      background: #fff;
+
+      .aura-modal-form-items {
+        padding: 40px 20px 20px;
+      }
+
+      .aura-modal-form-actions {
+        padding-bottom: 1.5rem;
+        border-top: 10px solid #f6f6f6;
+
+        .aura-modal-form-submit {
+          height: 46px;
+          border-radius: 28px;
+          background-image: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 99%, #283266 196%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          margin: 1.25rem 1.25rem 0;
+          cursor: pointer;
+          font-family: $aura-bold;
+          font-size: 1rem;
+          letter-spacing: 0.71px;
+        }
+      }
+    }
+  }
+}
