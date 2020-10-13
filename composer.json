@@ -444,6 +444,21 @@
     },
     "scripts": {
         "blt-alias": "blt blt:init:shell-alias -y --ansi",
+        "post-drupal-scaffold-cmd": [
+            "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-ssl-exception.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-force-www.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-increase-static-cachetime.patch",
+            "cd docroot && rm robots.txt",
+            "cd docroot && patch -p1 <../patches/development-services-twig.patch"
+        ],
         "nuke": [
             "rm -rf vendor composer.lock",
             "@composer clearcache",

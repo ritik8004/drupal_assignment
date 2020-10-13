@@ -45,7 +45,7 @@ AddEncoding gzip svgz
   ExpiresActive On
 
   # Cache all files for 2 weeks after access (A).
-  ExpiresDefault A1209600
+  ExpiresDefault A31557600
 
   <FilesMatch \.php$>
     # Do not allow PHP scripts to be cached unless they explicitly send cache
@@ -69,11 +69,24 @@ AddEncoding gzip svgz
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
+  # Add maintenance page.
+  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/%{HTTP_HOST}/.maintenance -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/.maintenance -f
+  RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
+  RewriteCond %{SCRIPT_FILENAME} !maintenance.html
+  RewriteRule ^.*$ /maintenance.html [R=503,L]
+  ErrorDocument 503 /maintenance.html
+
+  # Rewrite rule to remove .html and remove kwt-* from url.
+  RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
+
   # Set "protossl" to "s" if we were accessed via https://.  This is used later
   # if you enable "www." stripping or enforcement, in order to ensure that
   # you don't bounce between http and https.
   RewriteRule ^ - [E=protossl]
   RewriteCond %{HTTPS} on
+  RewriteRule ^ - [E=protossl:s]
+  RewriteCond %{HTTP:X-Forwarded-Proto} https [novary]
   RewriteRule ^ - [E=protossl:s]
 
   # Make sure Authorization HTTP header is available to PHP
@@ -111,6 +124,17 @@ AddEncoding gzip svgz
   # uncomment the following:
   # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
   # RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
+  RewriteCond %{HTTP_HOST} .
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  # Don't redirect ACSF domains.
+  RewriteCond %{HTTP_HOST} !\.acsitefactory\.com$ [NC]
+  # Don't redirect preprod domains.
+  RewriteCond %{HTTP_HOST} !\.factory\.alshaya\.com$ [NC]
+  # Don't redirect local dev sites.
+  RewriteCond %{HTTP_HOST} !^local\. [NC]
+  # Don't redirect on all *.hm.com domains.
+  RewriteCond %{HTTP_HOST} !\.hm\.com$ [NC]
+  RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
   # VirtualDocumentRoot and the rewrite rules are not working properly.
@@ -122,6 +146,17 @@ AddEncoding gzip svgz
   # uncomment the following line:
   # RewriteBase /
 
+  # Redirect HTTP to HTTPS for all requests
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [novary]
+  # Make sure we are not executing this rule after an internal redirection for
+  # index.php. Note that variable name is prefixed by Apache when recomputing
+  # redirect rules after an internal redirection.
+  RewriteCond %{ENV:REDIRECT_internal_redirect} !true
+  RewriteCond %{REQUEST_URI} !(knet) [NC]
+  RewriteCond %{REQUEST_URI} !(/forwarded) [NC]
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
   # Redirect common PHP files to their new locations.
   RewriteCond %{REQUEST_URI} ^(.*)?/(install.php) [OR]
   RewriteCond %{REQUEST_URI} ^(.*)?/(rebuild.php)
@@ -131,12 +166,16 @@ AddEncoding gzip svgz
   # Rewrite install.php during installation to see if mod_rewrite is working
   RewriteRule ^core/install.php core/install.php?rewrite=ok [QSA,L]
 
+  # Stop search engines from indexing non prod URLs.
+  RewriteCond %{HTTP_HOST} \.(acsitefactory|factory\.alshaya)\.com$ [NC]
+  RewriteRule ^robots.txt$ /robots-dev.txt [L,NC]
+
   # Pass all requests not referring directly to files in the filesystem to
   # index.php.
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_URI} !=/favicon.ico
-  RewriteRule ^ index.php [L]
+  RewriteRule ^ index.php [L,E=internal_redirect:true]
 
   # For security reasons, deny access to other PHP files on public sites.
   # Note: The following URI conditions are not anchored at the start (^),
@@ -150,6 +189,10 @@ AddEncoding gzip svgz
   # Copy and adapt this rule to directly execute PHP files in contributed or
   # custom modules or to run another PHP application in the same directory.
   RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics.php$
+  # Allow access to simplesaml paths
+  RewriteCond %{REQUEST_URI} !^/simplesaml
+  # ACSF requirement: allow access to apc_rebuild.php.
+  RewriteCond %{REQUEST_URI} !/sites/g/apc_rebuild.php$
   # Deny access to any other PHP files that do not match the rules above.
   # Specifically, disallow autoload.php from being served directly.
   RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]
@@ -183,7 +226,8 @@ AddEncoding gzip svgz
 # Various header fixes.
 <IfModule mod_headers.c>
   # Disable content sniffing, since it's an attack vector.
-  Header always set X-Content-Type-Options nosniff
+# MMCSP-1927: temporary workaround.
+#  Header always set X-Content-Type-Options nosniff
   # Disable Proxy header, since it's an attack vector.
   RequestHeader unset Proxy
 </IfModule>
