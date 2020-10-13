@@ -80,45 +80,6 @@ class LoyaltyClubController {
   }
 
   /**
-   * Returns the loyalty points related data for the current user.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   The loyalty points related data for the current user or error message.
-   */
-  public function getCustomerPoints() {
-    $customer_id = $this->drupal->getSessionCustomerInfo()['customer_id'];
-
-    if (empty($customer_id)) {
-      $this->logger->error('Error while trying to fetch loyalty points for customer. No customer available in session.');
-      return new JsonResponse($this->utility->getErrorResponse('No user in session', Response::HTTP_NOT_FOUND));
-    }
-
-    try {
-      $endpoint = sprintf('/customers/apc-points-balance/%s', $customer_id);
-
-      // @TODO: Update this when we have API ready.
-      // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
-      return new JsonResponse([
-        'points' => '20000',
-        'expiredPoints' => '100',
-        'expiredPointsDate' => '2021-06-05',
-      ]);
-
-      return new JsonResponse([
-        'points' => $response['apcPoints'],
-        'expiredPoints' => $response['apcExpiredPoints'],
-        'expiredPointsDate' => $response['apcExpiredPointsDate'],
-      ]);
-    }
-    catch (\Exception $e) {
-      $this->logger->notice('Error while trying to fetch loyalty points for user with customer id @customer_id.', [
-        '@customer_id' => $customer_id,
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
-    }
-  }
-
-  /**
    * Returns the loyalty points related data for a product.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse

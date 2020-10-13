@@ -1,6 +1,6 @@
 import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
-import { getUserAuraTier, getUserAuraTierLabel, getUserProfileInfo } from '../../../../utilities/helper';
+import { getUserProfileInfo } from '../../../../utilities/helper';
 import PointsExpiryMessage
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import PointsUpgradeMessage
@@ -11,6 +11,7 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      tier: '',
       points: 0,
       pointsOnHold: 0,
       upgradeMsg: '',
@@ -20,19 +21,19 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
   }
 
   componentDidMount() {
-    // @TODO: API calls to get pointsOnHold, upgradeMsg.
-
     // API call to get customer points.
-    const apiUrl = 'get/loyalty-club/get-customer-points';
+    const apiUrl = 'get/loyalty-club/get-customer-details';
     const apiData = getAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
-            points: result.data.points,
-            expiringPoints: result.data.expiredPoints,
-            expiryDate: result.data.expiredPointsDate,
+            tier: result.data.tier_info || '',
+            points: result.data.apc_points || 0,
+            expiringPoints: result.data.apc_points_to_expire || 0,
+            expiryDate: result.data.apc_points_expiry_date || '',
+            pointsOnHold: result.data.apc_on_hold_points || 0,
           });
         }
       });
@@ -45,10 +46,8 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
   getToolTipContent = () => Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem the points.');
 
   render() {
-    const tierValue = getUserAuraTier();
-    const tierLabel = tierValue ? getUserAuraTierLabel(tierValue) : '';
     const {
-      points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
+      tier, points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
     } = this.state;
 
     const profileInfo = getUserProfileInfo();
@@ -63,7 +62,7 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">
               <label>{Drupal.t('Status')}</label>
-              <span className="aura-blend">{ tierLabel }</span>
+              <span className="aura-blend">{ tier }</span>
             </div>
             <div className="aura-points">
               <label>{Drupal.t('Point balance')}</label>
