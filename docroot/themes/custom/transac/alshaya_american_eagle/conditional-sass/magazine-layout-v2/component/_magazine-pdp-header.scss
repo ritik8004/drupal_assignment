@@ -45,7 +45,11 @@
 
     &.new-pdp-magazine-layout {
       #block-alshayareactcartminicartblock {
+        display: block;
+        position: relative;
         top: unset;
+        width: auto;
+        height: auto;
       }
     }
   }
