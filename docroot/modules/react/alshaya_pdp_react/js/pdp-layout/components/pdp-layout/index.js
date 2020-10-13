@@ -27,8 +27,8 @@ const PdpLayout = () => {
   }
   const [skuMainCode, setSkuMainCode] = useState(skuItemCode);
 
-  const isMobile = window.outerWidth < 768;
-  const isTouchDevice = window.outerWidth < 1025;
+  const isMobile = window.innerWidth < 768;
+  const isTouchDevice = window.innerWidth < 1025;
 
   const pdpRefresh = (variantSelected, parentSkuSelected) => {
     setVariant(variantSelected);
@@ -83,7 +83,7 @@ const PdpLayout = () => {
   };
 
   const showStickyHeader = () => {
-    window.addEventListener('scroll', debounce(function() {
+    window.addEventListener('scroll', () => {
       if ((content !== null) && (content !== undefined)) {
         if (window.pageYOffset >= content.current.offsetTop + content.current.offsetHeight) {
           header.current.classList.add('magv2-pdp-sticky-header');
@@ -91,7 +91,7 @@ const PdpLayout = () => {
           header.current.classList.remove('magv2-pdp-sticky-header');
         }
       }
-    }, 50));
+    });
   };
 
   useEffect(() => {

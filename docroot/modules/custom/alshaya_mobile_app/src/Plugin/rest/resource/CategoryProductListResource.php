@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -96,6 +97,13 @@ class CategoryProductListResource extends ResourceBase {
   protected $productCategoryTree;
 
   /**
+   * The config factory object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * CategoryProductListResource constructor.
    *
    * @param array $configuration
@@ -122,8 +130,24 @@ class CategoryProductListResource extends ResourceBase {
    *   Entity repository.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository, ProductCategoryTree $product_category_tree) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    array $serializer_formats,
+    LoggerInterface $logger,
+    EntityTypeManagerInterface $entity_type_manager,
+    ParseModePluginManager $parse_mode_manager,
+    AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute,
+    MobileAppUtility $mobile_app_utility,
+    LanguageManagerInterface $language_manager,
+    EntityRepositoryInterface $entity_repository,
+    ProductCategoryTree $product_category_tree,
+    ConfigFactoryInterface $config_factory
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
     $this->parseModeManager = $parse_mode_manager;
@@ -132,6 +156,7 @@ class CategoryProductListResource extends ResourceBase {
     $this->languageManager = $language_manager;
     $this->entityRepository = $entity_repository;
     $this->productCategoryTree = $product_category_tree;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -150,7 +175,8 @@ class CategoryProductListResource extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('language_manager'),
       $container->get('entity.repository'),
-      $container->get('alshaya_acm_product_category.product_category_tree')
+      $container->get('alshaya_acm_product_category.product_category_tree'),
+      $container->get('config.factory')
     );
   }
 
@@ -245,6 +271,7 @@ class CategoryProductListResource extends ResourceBase {
   protected function addExtraTermData(TermInterface $term) {
     $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(TRUE);
     $dy_banner = $term->get('field_dy_banner')->getString();
+    $default_dy_banner = $this->configFactory->get('alshaya_mobile_app.settings')->get('dy_plp_banner_name');
     return [
       'id' => (int) $term->id(),
       'label' => $term->label(),
@@ -255,7 +282,9 @@ class CategoryProductListResource extends ResourceBase {
       ? $desc[0]['value']
       : '',
       'total' => 0,
-      'dy_banner' => $dy_banner ? ['plp_banner_name' => $dy_banner] : [],
+      'dy_banner' => [
+        'plp_banner_name' => $dy_banner ?: $default_dy_banner,
+      ],
     ];
   }
 

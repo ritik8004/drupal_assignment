@@ -111,10 +111,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     foreach ($collection_attributes as $attribute) {
       if ($attribute_value = $sku->get($attribute)->getString()) {
-        $labels[] = [
-          'content' => $attribute_value,
-          'class' => $attribute,
-        ];
+        $labels[$attribute] = $attribute_value;
 
         if ($context === 'plp') {
           // In plp we only display a single label.

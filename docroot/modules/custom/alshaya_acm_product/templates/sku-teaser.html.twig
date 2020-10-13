@@ -16,7 +16,9 @@
   {% if product_attribute_labels %}
     <div class="product-labels">
       <ul class="collection-labels">
-        <li class="{{ product_attribute_labels.class }}">{{ product_attribute_labels.content }}</li>
+        {% for key, product_attribute_label in product_attribute_labels %}
+          <li class="{{ key }}">{{ product_attribute_label }}</li>
+        {% endfor %}
       </ul>
     </div>
   {% endif %}

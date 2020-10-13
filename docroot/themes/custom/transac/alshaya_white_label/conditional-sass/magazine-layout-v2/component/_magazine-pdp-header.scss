@@ -17,8 +17,8 @@
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    background: $magv2-sticky-header-bg;
-    position: static;
+    background: transparent;
+    position: absolute;
   }
 
   &.magv2-pdp-sticky-header {
@@ -59,6 +59,30 @@
         height: 2.875rem;
         width: 2.875rem;
       }
+
+      @include breakpoint($only-mobile) {
+        position: relative;
+      }
+    }
+
+    .quantity {
+      @include breakpoint($only-mobile) {
+        font-size: 0.625rem;
+        position: absolute;
+        background: $primary_minicart_quantity_bg;
+        color: $primary_minicart_quantity_text;
+        text-align: center;
+        top: 1.5rem;
+        #{$left}: 0;
+        border-radius: 50%;
+        padding: 0;
+        width: 1.25rem;
+        height: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1 !important;
+      }
     }
   }
 }
@@ -91,6 +115,7 @@ html[lang=ar] {
 
     .magv2-header-wrapper {
       display: flex;
+      align-items: center;
 
       .back-button {
         @include icon(arrowup, after) {
@@ -248,6 +273,13 @@ html[lang=ar] {
           height: 2.125rem;
           width: 2.125rem;
         }
+
+        .quantity {
+          @include breakpoint($only-mobile) {
+            top: 1.2rem;
+            #{$left}: -0.375rem;
+          }
+        }
       }
 
       #sticky-header-btn {
@@ -258,6 +290,7 @@ html[lang=ar] {
           min-width: 18.75rem;
           font-size: 1rem;
           font-family: $alshaya-bold;
+          padding: 0.6875rem 0 0.625rem;
         }
 
         @include breakpoint($only-tablet) {
