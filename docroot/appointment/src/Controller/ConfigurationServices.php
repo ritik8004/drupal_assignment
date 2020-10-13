@@ -177,7 +177,9 @@ class ConfigurationServices {
       ];
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getActivities', [$param]);
-      $activities = $result->return->activities;
+
+      // If only one activity type is present then add as an array.
+      $activities = is_object($result->return->activities) ? [$result->return->activities] : $result->return->activities;
       $activityData = [];
 
       foreach ($activities ?? [] as $activity) {
