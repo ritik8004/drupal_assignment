@@ -14,7 +14,7 @@ class MyAccount extends React.Component {
     this.setState({
       loyaltyStatus,
     });
-  }
+  };
 
   render() {
     const { loyaltyStatus } = this.state;

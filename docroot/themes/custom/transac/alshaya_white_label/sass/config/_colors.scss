@@ -140,6 +140,7 @@ $_appointment-social-icon-gray-bg: #f6f6f6;
 $_appointment-delete-red: #e82d35;
 $_ancestral-water: #d0d0d0;
 $_screeching_white: #eee;
+$_shilling: #a3a3a3;
 
 // Aura Colors & Gradients.
 $purple-glory: #7b1f84;
@@ -1653,3 +1654,8 @@ $aura-loyalty-tab-active: $aura-gradient-radial;
 $aura-loyalty-activity-txt: $_aura_account_txt;
 $aura-loyalty-user-avatar-text: $white-five;
 $aura-loyalty-user-avatar-bg: $_aura-hello;
+$aura-form-otp-text: $_shilling;
+$aura-form-otp-background: $_appointment-social-icon-gray-bg;
+$aura-form-modal-title: $night-blue;
+$aura-form-modal-section-bg: $white-five;
+$aura-modal-submit: $aura-gradient-radial;
