@@ -1,48 +1,24 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import { getAPIData } from '../../../../utilities/api/fetchApiData';
 import ConditionalView
   from '../../../../../../alshaya_spc/js/common/components/conditional-view';
 import AuraLogo from '../../../../svg-component/aura-logo';
 
 export default class AuraMyAccountOldCardFound extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cardNumber: '',
-    };
-  }
-
-  componentDidMount() {
-    // API call to get card number with logged in user's email id.
-    const apiUrl = 'get/loyalty-club/get-apc-user-details-by-email';
-    const apiData = getAPIData(apiUrl);
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.data !== undefined && result.data.error === undefined) {
-          this.setState({
-            cardNumber: result.data.apcCard,
-          });
-        }
-      });
-    }
-  }
-
   handleNotYou = () => {
-    const { cardNumber } = this.state;
+    const { cardNumber } = this.props;
     const { handleNotYou } = this.props;
     handleNotYou(cardNumber);
   }
 
   handleLinkYourCardClick = () => {
-    const { cardNumber } = this.state;
+    const { cardNumber } = this.props;
     const { handleLinkYourCardClick } = this.props;
     handleLinkYourCardClick(cardNumber);
   }
 
   render() {
-    const { cardNumber } = this.state;
+    const { cardNumber } = this.props;
 
     return (
       <div className="aura-myaccount-no-linked-card-wrapper old-card-found">
