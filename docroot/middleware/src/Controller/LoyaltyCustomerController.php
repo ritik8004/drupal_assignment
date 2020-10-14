@@ -89,7 +89,8 @@ class LoyaltyCustomerController {
       return new JsonResponse($this->utility->getErrorResponse('No user in session', Response::HTTP_NOT_FOUND));
     }
 
-    // Call helper to get customer information only if fetch status is not false in request.
+    // Call helper to get customer information only if fetch status
+    // is not false in request.
     if ($fetchStatus) {
       $customer_info = $this->auraCustomerHelper->getCustomerInfo($customer_id);
 
@@ -98,7 +99,8 @@ class LoyaltyCustomerController {
       }
     }
 
-    // Call helper to get customer point details only if fetch points is not false in request.
+    // Call helper to get customer point details only if fetch points
+    // is not false in request.
     if ($fetchPoints) {
       $customer_points = $this->auraCustomerHelper->getCustomerPoints($customer_id);
 
@@ -107,12 +109,32 @@ class LoyaltyCustomerController {
       }
     }
 
-    // Call helper to get customer tier details if fetch tier is not false in request.
+    // Call helper to get customer tier details only if fetch tier
+    // is not false in request.
     if ($fetchTier) {
       $customer_tier = $this->auraCustomerHelper->getCustomerTier($customer_id);
 
       if (empty($customer_tier['error'])) {
         $response_data = array_merge($response_data, $customer_tier);
+      }
+    }
+
+    // Compare aura status and tier from drupal and API response and if
+    // they are different then call Drupal API to update the values.
+    if ($updateDrupal && !empty($response_data)) {
+      $updatedData = [];
+
+      if ((int) $status !== $response_data['auraStatus']) {
+        $updatedData['apcLinkStatus'] = $response_data['auraStatus'];
+      }
+
+      if ($tier !== $response_data['tier']) {
+        $updatedData['tier'] = $response_data['tier'];
+      }
+
+      if (!empty($updatedData)) {
+        $updatedData['uid'] = $sessionCustomerInfo['uid'];
+        $this->drupal->updateUserAuraInfo($updatedData);
       }
     }
 
