@@ -913,6 +913,11 @@ function alshaya_transac_install() {
   \Drupal::configFactory()->getEditable('acq_sku.settings')
     ->set('stock_mode', Settings::get('stock_mode'))
     ->save();
+
+  // Set trigger field value in back_to_top settings.
+  \Drupal::configFactory()->getEditable('back_to_top.settings')
+  ->set('back_to_top_button_trigger', 650)
+  ->save();
 }
 
 /**
