@@ -82,7 +82,7 @@ class KnetController extends ControllerBase {
    * Page callback to process the payment and return redirect URL.
    */
   public function response() {
-    $data = $this->requestStack->getCurrentRequest()->request->get();
+    $data = $this->requestStack->getCurrentRequest()->request->all();
 
     // For new K-Net toolkit, parse and decrypt the response first.
     if (!empty($data) && $this->knetHelper->useNewKnetToolKit()) {

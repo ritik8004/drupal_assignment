@@ -215,7 +215,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $state_key = $response['state_key'];
     $state_data = $this->tempStore->get($state_key);
     $cartToLog = $this->cartHelper->getCleanCartToLog($cart);
-    $message_data = $this->requestStack->getCurrentRequest()->request->get();
+    $message_data = $this->requestStack->getCurrentRequest()->request->all();
     // Check if we have data in state available and it matches data in POST.
     if (empty($state_data)
       || $state_data['cart_id'] != $response['quote_id']
