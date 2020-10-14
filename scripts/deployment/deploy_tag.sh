@@ -206,4 +206,4 @@ then
   drush --root=$docroot sfml crf --delay=20 &>> ${log_file}
 fi
 
-log_message_and_details "Release preparation completed"
+log_message_and_details "Release completed"
