@@ -405,6 +405,20 @@ function alshaya_acm_promotion_sku_variant_info_alter(array &$variant, SKUInterf
  * Implements hook_sku_product_info_alter().
  */
 function alshaya_acm_promotion_sku_product_info_alter(array &$product_info, SKUInterface $sku) {
+  _alshaya_acm_promotion_free_gift_promotion($product_info, $sku);
+}
+
+/**
+ * Implements hook_alshaya_mobile_app_product_exclude_linked_alter().
+ */
+function alshaya_acm_promotion_alshaya_mobile_app_product_exclude_linked_data_alter(array &$product_info, SKUInterface $sku) {
+  _alshaya_acm_promotion_free_gift_promotion($product_info, $sku);
+}
+
+/**
+ * Add free gift promotion data in product info.
+ */
+function _alshaya_acm_promotion_free_gift_promotion(array &$product_info, SKUInterface $sku) {
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
   $product_info['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'api');
