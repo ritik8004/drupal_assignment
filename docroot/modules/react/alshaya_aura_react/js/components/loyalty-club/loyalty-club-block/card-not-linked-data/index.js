@@ -67,18 +67,18 @@ export default class AuraMyAccountOldCardFound extends React.Component {
               value={cardNumber}
               options={{ blocks: [4, 4, 4, 4] }}
             />
-            <a
+            <div
               className="link-your-card"
               onClick={this.handleLinkYourCardClick}
             >
               { Drupal.t('Link your card') }
-            </a>
-            <a
+            </div>
+            <div
               className="not-you"
               onClick={this.handleNotYou}
             >
               { Drupal.t('Not you?') }
-            </a>
+            </div>
           </div>
         </div>
       </div>
