@@ -1046,6 +1046,10 @@ class Cart {
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
       if (!empty($exception_type)) {
+        // In case of add to cart, we only refresh for OOS scenario.
+        if ($is_add_to_cart && ($exception_type !== 'OOS')) {
+          return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+        }
         // Get cart object if already not available.
         $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
