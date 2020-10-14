@@ -602,9 +602,9 @@ class AlshayaApiCommands extends DrushCommands {
 
       // Cast prices to ensure comparison is between apple to apple.
       $d_price = (float) $data['price'];
-      $d_final_price = (float) $data['final_price'];
+      $d_final_price = (float) round($data['final_price'], 2);
       $m_price = (float) $mdata['price'];
-      $m_final_price = (float) $mdata['final_price'];
+      $m_final_price = (float) round($mdata['final_price'], 2);
 
       // If price in Drupal not matches with price in Magento.
       if (($d_price != $m_price) || ($d_final_price != $m_final_price)) {
