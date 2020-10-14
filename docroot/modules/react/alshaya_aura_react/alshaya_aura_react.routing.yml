@@ -26,10 +26,10 @@ alshaya_aura_react.user_points:
   requirements:
     _permission: 'access content'
 
-alshaya_aura_react.update_user_aura_status:
-  path: '/update/user-aura-status'
+alshaya_aura_react.update_user_aura_info:
+  path: '/update/user-aura-info'
   defaults:
-    _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaAuraController::updateUserAuraStatus'
+    _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaAuraController::updateUserAuraInfo'
   methods: [POST]
   requirements:
     _middleware_request_check: 'TRUE'

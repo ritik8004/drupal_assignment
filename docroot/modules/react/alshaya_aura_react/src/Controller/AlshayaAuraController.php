@@ -178,19 +178,28 @@ class AlshayaAuraController extends ControllerBase {
   }
 
   /**
-   * Update user's aura status.
+   * Update user's aura info.
    */
-  public function updateUserAuraStatus(Request $request) {
+  public function updateUserAuraInfo(Request $request) {
     $saved = FALSE;
     $request_uid = $request->request->get('uid');
     $aura_status = $request->request->get('apcLinkStatus');
+    $aura_tier = $request->request->get('tier');
     $current_uid = $this->currentUser->id();
 
     // Update user's aura status only when uid in request
     // matches the current user's uid.
-    if ($request_uid === $current_uid) {
-      $updated = $this->entityTypeManager->getStorage('user')->load($current_uid)->set('field_aura_loyalty_status', $aura_status)->save();
-      $saved = $updated ? TRUE : $saved;
+    if (($aura_status || $aura_tier) && $request_uid === $current_uid) {
+      $user = $this->entityTypeManager->getStorage('user')->load($current_uid);
+
+      if ($aura_status) {
+        $user->set('field_aura_loyalty_status', $aura_status);
+      }
+      if ($aura_tier) {
+        $user->set('field_aura_tier', $aura_tier);
+      }
+
+      $saved = $user->save() ? TRUE : $saved;
     }
 
     return new JsonResponse($saved);

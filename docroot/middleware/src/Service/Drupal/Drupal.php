@@ -276,22 +276,16 @@ class Drupal {
   }
 
   /**
-   * Update user's aura status.
+   * Update user's aura info.
    *
-   * @param string $uid
-   *   User Id.
-   * @param string $aura_status
-   *   Aura status.
+   * @param array $data
+   *   User's aura info.
    *
    * @return bool
    *   true/false.
    */
-  public function updateUserAuraStatus($uid, $aura_status) {
-    $url = '/update/user-aura-status';
-    $data = [
-      'uid' => $uid,
-      'apcLinkStatus' => $aura_status,
-    ];
+  public function updateUserAuraInfo(array $data) {
+    $url = '/update/user-aura-info';
     $options = ['form_params' => $data];
 
     try {
@@ -300,8 +294,8 @@ class Drupal {
       return json_decode($result, TRUE);
     }
     catch (\Exception $e) {
-      $this->logger->error('Error occurred while updating user aura status. User Aura Status: @aura_status. Message: @message', [
-        '@aura_status' => $aura_status,
+      $this->logger->error('Error occurred while updating user aura info. Data: @data. Message: @message', [
+        '@data' => json_decode($data),
         '@message' => $e->getMessage(),
       ]);
     }
