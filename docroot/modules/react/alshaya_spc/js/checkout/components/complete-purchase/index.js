@@ -73,8 +73,12 @@ export default class CompletePurchase extends React.Component {
       // Adding error class in the section.
       const deliveryInfo = document.getElementsByClassName('spc-checkout-delivery-information');
       if (deliveryInfo.length !== 0) {
-        deliveryInfo[0].classList.toggle('error-highlighted-section');
         smoothScrollTo('.spc-checkout-delivery-information');
+        const tag = document.createElement("p");
+        const errorMessage = document.createTextNode(Drupal.t('Please add delivery information'));
+        tag.appendChild(errorMessage);
+        deliveryInfo[0].appendChild(tag);
+        tag.setAttribute('id', 'delivery-information-error');
       }
       return false;
     }
