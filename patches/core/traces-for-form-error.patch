@@ -1,8 +1,8 @@
 diff --git a/core/lib/Drupal/Core/Form/FormCache.php b/core/lib/Drupal/Core/Form/FormCache.php
-index 9c931fd..76f28b0 100644
+index 9c931fd..d0cdb31 100644
 --- a/core/lib/Drupal/Core/Form/FormCache.php
 +++ b/core/lib/Drupal/Core/Form/FormCache.php
-@@ -118,24 +118,37 @@ class FormCache implements FormCacheInterface {
+@@ -118,24 +118,35 @@ class FormCache implements FormCacheInterface {
     * {@inheritdoc}
     */
    public function getCache($form_build_id, FormStateInterface $form_state) {
@@ -49,10 +49,7 @@ index 9c931fd..76f28b0 100644
 +        '@form_build_id' => $form_build_id,
 +        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
 +      ]);
-+
-+      return;
 +    }
    }
  
    /**
-
