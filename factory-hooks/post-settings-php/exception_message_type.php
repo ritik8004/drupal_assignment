@@ -19,6 +19,7 @@ $message_types = [
   'ليس لدينا العديد من' => 'OOS',
   'The maximum quantity per item has been exceeded' => 'quantity_limit',
   'Fraud rule detected. Reauthorization is required' => 'FRAUD',
+  'The requested qty is not available' => 'quantity_limit',
 ];
 
 $settings['alshaya_spc.exception_message'] = $message_types;

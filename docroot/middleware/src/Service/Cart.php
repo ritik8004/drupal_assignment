@@ -1045,7 +1045,7 @@ class Cart {
       // will show notification of add to cart (Which we don't need here.).
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
-      if (!empty($exception_type) && !$is_add_to_cart) {
+      if (!empty($exception_type)) {
         // Get cart object if already not available.
         $cart = !empty($cart) ? $cart : $this->getCart();
         // If cart is available and cart has item.
@@ -1054,6 +1054,9 @@ class Cart {
           if ($response['status'] == TRUE) {
             if (!empty($response['data']['stock'])) {
               self::$stockInfo = $response['data']['stock'];
+            }
+            if ($is_add_to_cart) {
+              return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             // Return cart object.
             return $cart;
