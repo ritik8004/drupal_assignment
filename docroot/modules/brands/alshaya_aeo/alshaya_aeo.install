@@ -8,6 +8,22 @@
 /**
  * Implements hook_update_N().
  *
+ * Update English AE logo for mobile.
+ */
+function alshaya_aeo_update_8002() {
+  // Only update the new english mobile logo.
+  // We need to do this as on some sites logo is uploaded via upload field.
+  // This will ensure consistent behaviour on all AE sites.
+  $config = \Drupal::configFactory()->getEditable('alshaya_master.theme.alshaya_american_eagle.en');
+  $logo_path = '/themes/custom/transac/alshaya_american_eagle/site-logo.svg';
+  $config->set('mobile_logo_path', $logo_path);
+  $config->set('mobile_logo_url', $logo_path);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Override `attribute_weights and sortable_options`.
  */
 function alshaya_aeo_update_8001() {
