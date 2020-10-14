@@ -84,8 +84,8 @@ payment.payment_error:
   methods: GET
 
 loyalty_club.get_customer_points:
-    path: /get/loyalty-club/get-customer-points
-    controller: App\Controller\LoyaltyClubController::getCustomerPoints
+    path: /get/loyalty-club/get-customer-details
+    controller: App\Controller\LoyaltyCustomerController::getCustomerDetails
     methods: GET
 
 loyalty_club.get_product_points:

@@ -1,11 +1,12 @@
 import React from 'react';
 import { getAPIData } from '../../../../utilities/api/fetchApiData';
-import { getUserProfileInfo } from '../../../../utilities/helper';
+import { getUserProfileInfo, getUserAuraStatus, getUserAuraTier } from '../../../../utilities/helper';
 import PointsExpiryMessage
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
 import PointsUpgradeMessage
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-upgrade-message';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
+
 
 export default class AuraMyAccountVerifiedUser extends React.Component {
   constructor(props) {
@@ -22,18 +23,18 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
 
   componentDidMount() {
     // API call to get customer points.
-    const apiUrl = 'get/loyalty-club/get-customer-details';
+    const apiUrl = `get/loyalty-club/get-customer-details?tier=${getUserAuraTier()}&status=${getUserAuraStatus()}`;
     const apiData = getAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
-            tier: result.data.tier_info || '',
-            points: result.data.apc_points || 0,
-            expiringPoints: result.data.apc_points_to_expire || 0,
-            expiryDate: result.data.apc_points_expiry_date || '',
-            pointsOnHold: result.data.apc_on_hold_points || 0,
+            tier: result.data.tier || '',
+            points: result.data.auraPoints || 0,
+            expiringPoints: result.data.auraPointsToExpire || 0,
+            expiryDate: result.data.auraPointsExpiryDate || '',
+            pointsOnHold: result.data.auraOnHoldPoints || 0,
           });
         }
       });

@@ -67,6 +67,38 @@ class CustomerHelper {
   }
 
   /**
+   * Get Customer Information.
+   *
+   * @return array
+   *   Return customer's loyalty information.
+   */
+  public function getCustomerInfo($customer_id) {
+    try {
+      $endpoint = sprintf('/customers/apcCustomerData/%s', $customer_id);
+      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $response_data = [];
+
+      if (is_array($response)) {
+        $response_data = [
+          'cardNumber' => $response["apc_identifier_number"] ?? '',
+          'auraStatus' => $response["apc_link"] ?? '',
+          'auraPoints' => $response["apc_points"] ?? 0,
+          'phoneNumber' => $response["apc_phone_number"] ?? '',
+        ];
+      }
+
+      return $response_data;
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to fetch customer information for user with customer id @customer_id. Message: @message.', [
+        '@customer_id' => $customer_id,
+        '@message' => $e->getMessage(),
+      ]);
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
+  /**
    * Get Customer Points.
    *
    * @return array
@@ -76,12 +108,25 @@ class CustomerHelper {
     try {
       $endpoint = sprintf('/customers/apc-points-balance/%s', $customer_id);
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $response_data = [];
 
-      return $response;
+      if (is_array($response)) {
+        $response_data = [
+          'customerId' => $response["customer_id"] ?? '',
+          'cardNumber' => $response["apc_identifier_number"] ?? '',
+          'auraPoints' => $response["apc_points"] ?? 0,
+          'auraPointsToExpire' => $response["apc_points_to_expire"] ?? 0,
+          'auraPointsExpiryDate' => $response["apc_points_expiry_date"] ?? '',
+          'auraOnHoldPoints' => $response["apc_on_hold_points"] ?? 0,
+        ];
+      }
+
+      return $response_data;
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to fetch loyalty points for user with customer id @customer_id.', [
+      $this->logger->notice('Error while trying to fetch loyalty points for user with customer id @customer_id. Message: @message.', [
         '@customer_id' => $customer_id,
+        '@message' => $e->getMessage(),
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
@@ -97,12 +142,20 @@ class CustomerHelper {
     try {
       $endpoint = sprintf('/customers/apc-tiers/%s', $customer_id);
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $response_data = [];
 
-      return $response;
+      if (is_array($response)) {
+        $response_data = [
+          'tier' => $response["tier_info"] ?? '',
+        ];
+      }
+
+      return $response_data;
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to fetch tier information for user with customer id @customer_id.', [
+      $this->logger->notice('Error while trying to fetch tier information for user with customer id @customer_id. Message: @message.', [
         '@customer_id' => $customer_id,
+        '@message' => $e->getMessage(),
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }

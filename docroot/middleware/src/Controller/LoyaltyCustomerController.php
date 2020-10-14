@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Aura\CustomerHelper;
 use App\Service\Drupal\Drupal;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides route callbacks for Loyalty Customer APIs.
@@ -42,7 +43,7 @@ class LoyaltyCustomerController {
   protected $drupal;
 
   /**
-   * LoyaltyClubController constructor.
+   * LoyaltyCustomerController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
@@ -66,47 +67,56 @@ class LoyaltyCustomerController {
   }
 
   /**
-   * Returns the loyalty points related data for the current user.
+   * Returns the loyalty customer details.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   The loyalty points related data for the current user or error message.
+   *   The loyalty customer details for the current user or error message.
    */
-  public function getCustomerDetails() {
+  public function getCustomerDetails(Request $request) {
+    $fetchStatus = $request->get('fetchStatus') ?? TRUE;
+    $fetchPoints = $request->get('fetchPoints') ?? TRUE;
+    $fetchTier = $request->get('fetchTier') ?? TRUE;
+    $updateDrupal = $request->get('update') ?? TRUE;
+    $tier = $request->get('tier') ?? '';
+    $status = $request->get('status') ?? '';
+
     $sessionCustomerInfo = $this->drupal->getSessionCustomerInfo();
     $customer_id = $sessionCustomerInfo['customer_id'];
+    $response_data = [];
 
     if (empty($customer_id)) {
       $this->logger->error('Error while trying to fetch loyalty points for customer. No customer available in session.');
       return new JsonResponse($this->utility->getErrorResponse('No user in session', Response::HTTP_NOT_FOUND));
     }
 
-    // Call helper to get customer point details.
-    $customer_points = $this->auraCustomerHelper->getCustomerPoints($customer_id);
+    // Call helper to get customer information only if fetch status is not false in request.
+    if ($fetchStatus) {
+      $customer_info = $this->auraCustomerHelper->getCustomerInfo($customer_id);
 
-    // If there is any exception/error, return as is with exception message
-    // without processing further.
-    if (!empty($customer_points['error'])) {
-      $this->logger->notice('Error while trying to fetch customer points for user with customer id @customer_id.', [
-        '@customer_id' => $customer_id,
-      ]);
-
-      return new JsonResponse($customer_points);
+      if (empty($customer_info['error'])) {
+        $response_data = array_merge($response_data, $customer_info);
+      }
     }
 
-    // Call helper to get customer tier details.
-    $customer_tier = $this->auraCustomerHelper->getCustomerTier($customer_id);
+    // Call helper to get customer point details only if fetch points is not false in request.
+    if ($fetchPoints) {
+      $customer_points = $this->auraCustomerHelper->getCustomerPoints($customer_id);
 
-    // If there is any exception/error, return as is with exception message
-    // without processing further.
-    if (!empty($customer_tier['error'])) {
-      $this->logger->notice('Error while trying to fetch customer tier for user with customer id @customer_id.', [
-        '@customer_id' => $customer_id,
-      ]);
-
-      return new JsonResponse($customer_tier);
+      if (empty($customer_points['error'])) {
+        $response_data = array_merge($response_data, $customer_points);
+      }
     }
 
-    return new JsonResponse(array_merge($customer_points, $customer_tier));
+    // Call helper to get customer tier details if fetch tier is not false in request.
+    if ($fetchTier) {
+      $customer_tier = $this->auraCustomerHelper->getCustomerTier($customer_id);
+
+      if (empty($customer_tier['error'])) {
+        $response_data = array_merge($response_data, $customer_tier);
+      }
+    }
+
+    return new JsonResponse($response_data);
   }
 
 }
