@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_aura_react\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Class AlshayaLoyaltyController.
@@ -26,8 +27,10 @@ class AlshayaLoyaltyController extends ControllerBase {
       'loyaltyBenefitsContent' => $loyalty_benefits_content ? $loyalty_benefits_content['value'] : '',
     ];
 
+    $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
+
     return [
-      '#theme' => 'my_loyalty_club',
+      '#markup' => '<div id="my-loyalty-club"></div>',
       '#attached' => [
         'library' => [
           'alshaya_aura_react/alshaya_aura_loyalty_club',

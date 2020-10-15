@@ -72,17 +72,11 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
  */
 function alshaya_aura_react_theme() {
   $theme = [
-    'my_loyalty_club' => [
-      'variables' => [],
-    ],
     'aura_rewards_header' => [
       'variables' => [
         'learn_more_link' => '',
       ],
       'template' => 'aura-rewards-header',
-    ],
-    'aura_pending_enrollment' => [
-      'variables' => [],
     ],
     'aura_rewards_header_authenticated' => [
       'variables' => [

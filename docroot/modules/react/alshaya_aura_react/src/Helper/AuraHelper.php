@@ -23,7 +23,7 @@ class AuraHelper {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  private $entityTypeManager;
+  protected $entityTypeManager;
 
   /**
    * AuraHelper constructor.
