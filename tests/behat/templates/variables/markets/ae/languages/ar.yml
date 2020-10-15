@@ -75,3 +75,4 @@ variables:
   cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   store_area: 'دبي'
   language_store_area: 'Dubai - United Arab Emirates'
+  address_area_field: 'البراحة'
