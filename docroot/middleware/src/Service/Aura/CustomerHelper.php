@@ -80,10 +80,10 @@ class CustomerHelper {
 
       if (is_array($response)) {
         $response_data = [
-          'cardNumber' => $response["apc_identifier_number"] ?? '',
-          'auraStatus' => $response["apc_link"] ?? '',
-          'auraPoints' => $response["apc_points"] ?? 0,
-          'phoneNumber' => $response["apc_phone_number"] ?? '',
+          'cardNumber' => $response['apc_identifier_number'] ?? '',
+          'auraStatus' => $response['apc_link'] ?? '',
+          'auraPoints' => $response['apc_points'] ?? 0,
+          'phoneNumber' => $response['apc_phone_number'] ?? '',
         ];
       }
 
@@ -112,12 +112,12 @@ class CustomerHelper {
 
       if (is_array($response)) {
         $response_data = [
-          'customerId' => $response["customer_id"] ?? '',
-          'cardNumber' => $response["apc_identifier_number"] ?? '',
-          'auraPoints' => $response["apc_points"] ?? 0,
-          'auraPointsToExpire' => $response["apc_points_to_expire"] ?? 0,
-          'auraPointsExpiryDate' => $response["apc_points_expiry_date"] ?? '',
-          'auraOnHoldPoints' => $response["apc_on_hold_points"] ?? 0,
+          'customerId' => $response['customer_id'] ?? '',
+          'cardNumber' => $response['apc_identifier_number'] ?? '',
+          'auraPoints' => $response['apc_points'] ?? 0,
+          'auraPointsToExpire' => $response['apc_points_to_expire'] ?? 0,
+          'auraPointsExpiryDate' => $response['apc_points_expiry_date'] ?? '',
+          'auraOnHoldPoints' => $response['apc_on_hold_points'] ?? 0,
         ];
       }
 
@@ -146,7 +146,7 @@ class CustomerHelper {
 
       if (is_array($response)) {
         $response_data = [
-          'tier' => $response["tier_info"] ?? '',
+          'tier' => $response['tier_info'] ?? '',
         ];
       }
 

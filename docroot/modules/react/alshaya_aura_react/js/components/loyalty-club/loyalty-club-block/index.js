@@ -8,16 +8,14 @@ import { getAllAuraStatus } from '../../../utilities/helper';
 
 export default class LoyaltyClubBlock extends React.Component {
   handleNotYou = (cardNumber) => {
-    const loyaltyStatusNotU = getAllAuraStatus().APC_NOT_LINKED_NO_DATA;
-    this.updateUsersLoyaltyStatus(cardNumber, loyaltyStatusNotU, 'N', getAllAuraStatus().APC_NOT_LINKED_NOT_U);
+    this.updateUsersLoyaltyStatus(cardNumber, getAllAuraStatus().APC_NOT_LINKED_NOT_U, 'N');
   }
 
   handleLinkYourCardClick = (cardNumber) => {
-    const loyaltyStatus = getAllAuraStatus().APC_NOT_LINKED_DATA;
-    this.updateUsersLoyaltyStatus(cardNumber, loyaltyStatus, 'Y', getAllAuraStatus().APC_LINKED_NOT_VERIFIED);
+    this.updateUsersLoyaltyStatus(cardNumber, getAllAuraStatus().APC_LINKED_NOT_VERIFIED, 'Y');
   }
 
-  updateUsersLoyaltyStatus = (cardNumber, auraStatus, link, updatedAuraStatus) => {
+  updateUsersLoyaltyStatus = (cardNumber, auraStatus, link) => {
     // API call to update user's loyalty status.
     const apiUrl = 'post/loyalty-club/apc-status-update';
     const data = {
@@ -25,7 +23,6 @@ export default class LoyaltyClubBlock extends React.Component {
       apcIdentifierId: cardNumber,
       apcLinkStatus: auraStatus,
       link,
-      updatedAuraStatus,
     };
     const apiData = postAPIData(apiUrl, data);
 
@@ -34,7 +31,7 @@ export default class LoyaltyClubBlock extends React.Component {
         if (result.data !== undefined && result.data.error === undefined) {
           if (result.data.status) {
             const { updateLoyaltyStatus } = this.props;
-            updateLoyaltyStatus(updatedAuraStatus);
+            updateLoyaltyStatus(auraStatus);
           }
         }
       });
@@ -43,7 +40,9 @@ export default class LoyaltyClubBlock extends React.Component {
 
   render() {
     const allAuraStatus = getAllAuraStatus();
-    const { loyaltyStatus } = this.props;
+    const {
+      loyaltyStatus, tier, points, cardNumber, expiringPoints, expiryDate, pointsOnHold, upgradeMsg,
+    } = this.props;
     const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
 
     if (loyaltyStatusInt !== '') {
@@ -58,12 +57,22 @@ export default class LoyaltyClubBlock extends React.Component {
           <AuraMyAccountOldCardFound
             handleNotYou={this.handleNotYou}
             handleLinkYourCardClick={this.handleLinkYourCardClick}
+            cardNumber={cardNumber}
           />
         );
       }
       // When user has a verified card.
       if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
-        return <AuraMyAccountVerifiedUser />;
+        return (
+          <AuraMyAccountVerifiedUser
+            tier={tier}
+            points={points}
+            expiringPoints={expiringPoints}
+            expiryDate={expiryDate}
+            pointsOnHold={pointsOnHold}
+            upgradeMsg={upgradeMsg}
+          />
+        );
       }
       // When user has a card but enrollment is pending.
       if (loyaltyStatusInt === allAuraStatus.APC_LINKED_NOT_VERIFIED) {
