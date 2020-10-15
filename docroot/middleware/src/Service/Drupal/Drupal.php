@@ -275,4 +275,42 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
+  /**
+   * Refresh stock for skus.
+   *
+   * @param array $data
+   *   Array of values prepraed by App\Controller\CartController::updateCart.
+   * @param array $cart
+   *   The cart object.
+   *
+   * @return array
+   *   Array containing "status"(indicating stock refresh was successful or not)
+   *   and stock data if stock refresh was successful.
+   */
+  public function triggerStockRefreshEvent(array $data, array $cart = []) {
+    foreach ($data['items'] as $element) {
+      $skus[] = $element->variant_sku ?? $element->sku;
+    }
+    foreach ($cart['cart']['items'] ?? [] as $item) {
+      $skus[] = $item['sku'];
+    }
+
+    $endpoint = '/spc/refresh-stock';
+
+    $options = ['form_params' => ['skus' => $skus]];
+
+    try {
+      $response = $this->invokeApiWithSession('POST', $endpoint, $options);
+      $result = $response->getBody()->getContents();
+      return json_decode($result, TRUE);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error occurred on triggering stock refresh call. Message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return ['status' => FALSE];
+  }
+
 }
