@@ -44,8 +44,6 @@ variables:
   continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'en'
   language_short: 'en'
-  language_area_option: 'Kuwait City'
-  language_city_option: ''
   language_street: 'Street S'
   language_building: 'Building B'
   language_locality: 'Block A'
@@ -67,8 +65,6 @@ variables:
   delivery_type: 'خدمة التوصيل للمنزل'
   language_payment_type: 'نقداً عند التوصيل'
   language_payment_type_text: 'payment method:'
-  area_option: 'السالمية'
-  city_option: ''
   cart_promotional: ''
   street: 'Street A'
   building: 'Building B'
