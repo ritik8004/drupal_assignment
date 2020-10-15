@@ -1,4 +1,4 @@
-@javascript @auth @checkoutPayment @homeDelivery @bbwaeprod @vsaeprod @vsaepprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @bbwaepprod @bbwsaprod @bbwsapprod @bbwkwprod @vssapprod @bbwkwpprod @hmkwpprod @vssaprod @vssapprod @pbsaprod @pbsapprod @pbkwprod @pbkwpprod @mcsaprod @mcsapprod @mckwprod @mckwpprod @hmkwprod @hmkwpprod @flkwprod @flkwpprod @flaeprod @flaepprod @hmaeprod @hmaepprod @pbaeprod @bbwaeprod @bbwaepprod @pbaepprod @hmsaprod @hmsapprod @flsaprod @flsapprod
+@javascript @auth @checkoutPayment @homeDelivery @vssapprod @vsaepprod @pbsapprod @pbaepprod @pbkwpprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwpprod @mcsapprod @mckwprod  @vssaprod @vsaeprod @pbsaprod @pbaeprod @pbkwprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod @mcsaprod @mckwprod
 Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Authenticated user
 
   Background:
