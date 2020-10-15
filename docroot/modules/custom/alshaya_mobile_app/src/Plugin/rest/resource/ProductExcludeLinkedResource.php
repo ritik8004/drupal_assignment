@@ -349,6 +349,10 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
     }
 
+    // Allow other modules to alter light product data.
+    $type = 'full';
+    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
+
     return $data;
   }
 
