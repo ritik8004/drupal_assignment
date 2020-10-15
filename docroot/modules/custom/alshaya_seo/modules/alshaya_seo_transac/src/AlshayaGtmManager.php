@@ -451,6 +451,9 @@ class AlshayaGtmManager {
       // Site name.
       $gtm_brand = $this->configFactory->get('system.site')->get('name');
       $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
+      if ($sku->hasField('attr_brand')) {
+        $attributes['gtm-brand'] = $sku->get('attr_brand')->getString() ?: $gtm_brand;
+      }
     }
 
     $media = $this->skuImagesManager->getProductMedia($sku, 'pdp', TRUE);
