@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class CartDyPageTypeEventSubscriber.
+ * Class Cart DyPage Type Event Subscriber.
  *
  * @package Drupal\alshaya_acm_checkout\EventSubscriber
  */

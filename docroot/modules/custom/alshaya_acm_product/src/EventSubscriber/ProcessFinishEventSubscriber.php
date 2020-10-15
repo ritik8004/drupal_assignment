@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Class ProcessFinishEventSubscriber.
+ * Class Process Finish Event Subscriber.
  *
  * @package Drupal\alshaya_acm_product\EventSubscriber
  */
@@ -61,7 +61,10 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events[KernelEvents::TERMINATE][] = ['onKernelTerminate', 200];
-    $events[AlshayaAcmProductCommands::POST_DRUSH_COMMAND_EVENT][] = ['postDrushCommand', 200];
+    $events[AlshayaAcmProductCommands::POST_DRUSH_COMMAND_EVENT][] = [
+      'postDrushCommand',
+      200,
+    ];
     return $events;
   }
 

@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class FreeGiftController.
+ * Class Free Gift Controller.
  */
 class FreeGiftController extends ControllerBase {
 

@@ -6,7 +6,7 @@ use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AlshayaPlpSortLabelSettingsForm.
+ * Class Alshaya Plp Sort Label Settings Form.
  */
 class AlshayaPlpSortLabelSettingsForm extends AlshayaDynamicConfigValueBase {
 

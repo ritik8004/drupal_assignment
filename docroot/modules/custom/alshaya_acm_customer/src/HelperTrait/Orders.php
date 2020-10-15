@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_acm_customer\HelperTrait;
 
 /**
- * Trait Orders.
+ * Trait Orders methods.
  *
  * @package Drupal\alshaya_acm_customer\HelperTrait
  */

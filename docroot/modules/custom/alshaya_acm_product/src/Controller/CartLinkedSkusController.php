@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class CartLinkedSkusController.
+ * Class Cart Linked Skus Controller.
  */
 class CartLinkedSkusController extends ControllerBase {
 

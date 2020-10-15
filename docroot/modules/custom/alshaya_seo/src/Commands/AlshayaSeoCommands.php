@@ -11,7 +11,7 @@ use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
 /**
- * Class AlshayaSeoCommands.
+ * Class Alshaya Seo Commands.
  *
  * @package Drupal\alshaya_seo\Commands
  */

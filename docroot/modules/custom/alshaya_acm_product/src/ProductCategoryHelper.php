@@ -11,7 +11,7 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * Class ProductCategoryHelper.
+ * Class Product Category Helper.
  */
 class ProductCategoryHelper {
 

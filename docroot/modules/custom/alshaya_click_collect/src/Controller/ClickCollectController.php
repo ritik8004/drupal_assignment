@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Class ClickCollectController.
+ * Class Click Collect Controller.
  */
 class ClickCollectController extends ControllerBase {
 
@@ -416,7 +416,10 @@ class ClickCollectController extends ControllerBase {
     }
 
     $response = new AjaxResponse();
-    $settings['alshaya_click_collect']['pdp'] = ['top_three' => FALSE, 'all_stores' => FALSE];
+    $settings['alshaya_click_collect']['pdp'] = [
+      'top_three' => FALSE,
+      'all_stores' => FALSE,
+    ];
     if (!empty($data['top_three'])) {
       $settings['alshaya_click_collect']['pdp']['top_three'] = TRUE;
       $settings['alshaya_click_collect']['searchForm'] = FALSE;

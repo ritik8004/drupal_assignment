@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class LoyaltyConfigForm.
+ * Class Loyalty Config Form.
  */
 class LoaderConfigForm extends ConfigFormBase {
 

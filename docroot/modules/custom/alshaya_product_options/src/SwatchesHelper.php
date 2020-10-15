@@ -19,7 +19,7 @@ use GuzzleHttp\Client;
 use Drupal\alshaya_product_options\Brand\AlshayaBrandListHelper;
 
 /**
- * Class SwatchesHelper.
+ * Class Swatches Helper.
  *
  * @package Drupal\alshaya_product_options
  */

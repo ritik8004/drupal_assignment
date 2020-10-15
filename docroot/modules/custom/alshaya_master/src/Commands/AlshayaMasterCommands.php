@@ -21,7 +21,7 @@ use Consolidation\AnnotatedCommand\AnnotationData;
 use Drush\Drush;
 
 /**
- * AlshayaMasterCommands class.
+ * Alshaya Master Commands class.
  */
 class AlshayaMasterCommands extends DrushCommands {
 
@@ -142,7 +142,10 @@ class AlshayaMasterCommands extends DrushCommands {
    *
    * @aliases apdi,alshaya-post-drupal-install
    */
-  public function postDrupalinstall($options = ['brand_module' => self::REQ, 'country_code' => self::REQ]) {
+  public function postDrupalinstall($options = [
+    'brand_module' => self::REQ,
+    'country_code' => self::REQ,
+  ]) {
     $post_install_status = $this->state->get('alshaya_master_post_drupal_install', 'not done');
     $modules = system_rebuild_module_data();
 
@@ -272,7 +275,9 @@ class AlshayaMasterCommands extends DrushCommands {
     }
 
     if ($ids_to_delete) {
-      $this->output()->writeln(dt('Following user ids are about to be deleted: @ids', ['@ids' => implode(', ', $ids_to_delete)]));
+      $this->output()->writeln(dt('Following user ids are about to be deleted: @ids', [
+        '@ids' => implode(', ', $ids_to_delete),
+      ]));
 
       if ($this->io()->confirm(dt('Are you sure you want to delete @num non-privileged users?', ['@num' => count($ids_to_delete)]))) {
         foreach ($ids_to_delete as $id_to_delete) {

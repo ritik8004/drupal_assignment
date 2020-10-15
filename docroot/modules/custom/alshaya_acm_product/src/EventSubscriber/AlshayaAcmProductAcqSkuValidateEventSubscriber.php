@@ -10,7 +10,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AlshayaAcmProductAcqSkuValidateEventSubscriber.
+ * Class Alshaya Acm Product Acq Sku Validate EventSubscriber.
  *
  * @package Drupal\acq_sku\EventSubscriber
  */

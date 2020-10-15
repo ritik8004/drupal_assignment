@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityManager;
 
 /**
- * Class PDPModalLinksForm.
+ * Class PDP Modal Links Form.
  */
 class PDPModalLinksForm extends ConfigFormBase {
 

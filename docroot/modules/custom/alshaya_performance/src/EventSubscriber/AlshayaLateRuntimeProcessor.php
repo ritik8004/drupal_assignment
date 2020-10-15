@@ -6,7 +6,7 @@ use Drupal\purge_processor_lateruntime\EventSubscriber\LateRuntimeProcessor;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 
 /**
- * Class AlshayaLateRuntimeProcessor.
+ * Class Alshaya Late Runtime Processor.
  *
  * @package Drupal\alshaya_performance\EventSubscriber
  */

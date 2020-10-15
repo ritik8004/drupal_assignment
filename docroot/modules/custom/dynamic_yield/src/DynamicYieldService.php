@@ -5,7 +5,7 @@ namespace Drupal\dynamic_yield;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class DynamicYieldService.
+ * Class Dynamic Yield Service.
  *
  * @package Drupal\dynamic_yield
  */

@@ -7,7 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class AlshayaClickCollect.
+ * Class Alshaya Click Collect.
  *
  * @package Drupal\alshaya_click_collect\Service
  */

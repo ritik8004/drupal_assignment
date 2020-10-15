@@ -29,7 +29,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class PromotionController.
+ * Class Promotion Controller.
  */
 class PromotionController extends ControllerBase {
 

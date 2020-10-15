@@ -46,8 +46,8 @@
       type: 'GET',
       url: worker_url,
       dataType: 'json',
-      success: function(data) {
-        $.each( data, function(key, val) {
+      success: function (data) {
+        $.each( data, function (key, val) {
           user_location = val;
         });
       },

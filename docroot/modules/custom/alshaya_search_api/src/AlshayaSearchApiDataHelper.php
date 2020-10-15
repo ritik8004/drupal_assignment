@@ -5,7 +5,7 @@ namespace Drupal\alshaya_search_api;
 use Drupal\Core\Database\Connection;
 
 /**
- * Class AlshayaSearchApiDataHelper.
+ * Class Alshaya Search Api Data Helper.
  */
 class AlshayaSearchApiDataHelper {
 

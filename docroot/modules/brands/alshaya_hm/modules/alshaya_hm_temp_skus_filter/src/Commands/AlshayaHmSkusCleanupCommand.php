@@ -5,10 +5,9 @@ namespace Drupal\alshaya_hm_temp_skus_filter\Commands;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
-use SplFixedArray;
 
 /**
- * Class AlshayaHmSkusCleanupCommand.
+ * Contains Alshaya Hm Skus Cleanup Command methods.
  *
  * @package Drupal\alshaya_hm_temp_skus_filter\Commands
  */
@@ -28,7 +27,10 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
    *
    * @aliases alshaya_hm_skus_cleanup
    */
-  public function cleanSkusWithoutImages(array $options = ['size' => 100, 'process_multipack' => FALSE]) {
+  public function cleanSkusWithoutImages(array $options = [
+    'size' => 100,
+    'process_multipack' => FALSE,
+  ]) {
     $batch_size = $options['size'];
     $count_descriptive = 0;
 
@@ -66,14 +68,16 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
 
     // Calculate size of Array & allocate space for it.
     $array_size = ceil(count($entity_list) / $batch_size) + ceil($count_descriptive / $batch_size);
-    $operations = new SplFixedArray($array_size);
+    $operations = new \SplFixedArray($array_size);
     $counter = 0;
 
     // Process SKUs missing DescriptiveStillLife imgages.
     foreach ($chunks as $chunk) {
       $progress += count($chunk);
       $operations[$counter] = [
-        ['\Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand', 'processBatch'],
+        ['\Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand',
+          'processBatch',
+        ],
         [
           $chunk,
           dt('@percent% (Processing @progress of @total)', [
@@ -95,7 +99,9 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
         // SKUs. Passing only start & end range to the chunks & load items to be
         // processed while processing the batch itself.
         $operations[$counter] = [
-          ['\Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand', 'processBatch'],
+          ['\Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand',
+            'processBatch',
+          ],
           [
             [['start_range' => $i, 'end_range' => $i + $batch_size]],
             dt('@percent% (Processing @progress of @total)', [
@@ -112,7 +118,9 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     $batch = [
       'operations' => $operations,
       'title' => dt('Entity process callback batch'),
-      'finished' => ['\Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand', 'postCleanupCallback'],
+      'finished' => ['\Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand',
+        'postCleanupCallback',
+      ],
       'progress_message' => dt('@current entities of @total were processed.'),
     ];
 

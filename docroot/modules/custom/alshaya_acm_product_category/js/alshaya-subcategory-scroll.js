@@ -64,9 +64,9 @@
 
   Drupal.behaviors.alshayaAcmProductCategorySubCategoryScroll = {
     attach: function () {
-      $('.sub-category').once('category-scroll').on('click', function() {
+      $('.sub-category').once('category-scroll').on('click', function () {
         var tid = $(this).attr('data-tid');
-        setTimeout(function() {
+        setTimeout(function () {
           scrollToCategoryHeader(tid);
         }, 300);
       });
@@ -76,7 +76,7 @@
       }
 
       // Hide the divs that do not have results.
-      $('div.plp-subcategory-block').find('div.sub-category').each(function(){
+      $('div.plp-subcategory-block').find('div.sub-category').each(function () {
         var tid = $(this).attr('data-tid');
         if($('term#' + tid).length === 0) {
           // Hide sub category links when filtering and no data

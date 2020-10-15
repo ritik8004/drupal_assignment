@@ -12,7 +12,7 @@
         });
       });
 
-      $('.coupon-code-wrapper').once('coupon-code').on('accordion:initialized', function() {
+      $('.coupon-code-wrapper').once('coupon-code').on('accordion:initialized', function () {
         // Activate the accordion in case we have a coupon code applied to the
         // cart.
         if (($('input.cancel-promocode').length > 0) &&
@@ -62,7 +62,7 @@
       });
 
       // Trigger coupon apply button when clicking on coupon code in promo label.
-      $('.sku-promotions .coupon-code, .free-gifts-wrapper .coupon-code').click(function() {
+      $('.sku-promotions .coupon-code, .free-gifts-wrapper .coupon-code').click(function () {
         $('#edit-coupon').val($(this).text());
         $('#coupon-button').click();
       });

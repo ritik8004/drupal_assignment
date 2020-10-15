@@ -8,7 +8,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\acq_commerce\SKUInterface;
 
 /**
- * Class ProductHelper.
+ * Class Product Helper.
  *
  * @package Drupal\alshaya_acm_product
  */

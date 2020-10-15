@@ -6,7 +6,7 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AcqPromotionBase.
+ * Class Acq Promotion Base.
  *
  * @package Drupal\acq_promotion
  */

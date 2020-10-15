@@ -7,7 +7,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaProductOptionsCommands.
+ * Class Alshaya Product Options Commands.
  *
  * @package Drupal\alshaya_product_options\Commands
  */

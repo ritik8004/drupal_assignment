@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_api\Helper;
 
 /**
- * Class MagentoApiRequestHelper.
+ * Class Magento Api Request Helper.
  *
  * @package Drupal\alshaya_api\Helper
  */

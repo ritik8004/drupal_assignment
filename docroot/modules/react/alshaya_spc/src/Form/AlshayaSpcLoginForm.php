@@ -13,7 +13,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class AlshayaSpcLoginForm.
+ * Class Alshaya Spc Login Form.
  *
  * @package Drupal\alshaya_spc\Form
  */

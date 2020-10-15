@@ -12,7 +12,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
- * Class GoogleCategoryMappingController.
+ * Class Google Category Mapping Controller.
  *
  * @package Drupal\alshaya_acm_product_category\Controller
  */

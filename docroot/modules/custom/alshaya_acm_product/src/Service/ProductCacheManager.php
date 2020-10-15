@@ -7,7 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 
 /**
- * Class ProductCacheManager.
+ * Class Product Cache Manager.
  *
  * @package Drupal\alshaya_acm_product\Service
  */

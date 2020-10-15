@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Render\BubbleableMetadata;
 
 /**
- * Class AlshayaPathProcessorSitemapVariant.
+ * Class Alshaya Path Processor Sitemap Variant.
  *
  *   This path processor converts routes in the format:
  *   /sitemap-1.xml, /sitemap-2.xml etc. to

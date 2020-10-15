@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class SKUTypeForm.
+ * Class SKU Type Form.
  *
  * @package Drupal\acq_sku\Form
  */

@@ -90,7 +90,10 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
 
     if (empty($mappings)) {
       $query = $this->connection->select('taxonomy_term__field_commerce_id');
-      $query->fields('taxonomy_term__field_commerce_id', ['field_commerce_id_value', 'entity_id']);
+      $query->fields('taxonomy_term__field_commerce_id', [
+        'field_commerce_id_value',
+        'entity_id',
+      ]);
       $mappings = $query->execute()->fetchAllKeyed(0, 1);
     }
 

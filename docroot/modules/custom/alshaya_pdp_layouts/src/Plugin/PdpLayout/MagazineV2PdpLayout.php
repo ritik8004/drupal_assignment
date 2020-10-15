@@ -266,7 +266,10 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
           $variant_gallery = $gallery;
         }
 
-        $options = NestedArray::mergeDeepArray([$options, $this->skuManager->getCombinationArray($combination)], TRUE);
+        $options = NestedArray::mergeDeepArray([
+          $options,
+          $this->skuManager->getCombinationArray($combination),
+        ], TRUE);
         $vars['#attached']['drupalSettings']['configurableCombinations'][$sku]['combinations'] = $options;
         // Get the first child from attribute_sku.
         $sorted_variants = array_values(array_values($combinations['attribute_sku'])[0])[0];

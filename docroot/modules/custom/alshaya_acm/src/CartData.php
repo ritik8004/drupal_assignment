@@ -7,7 +7,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
 
 /**
- * Class CartData.
+ * Class Cart Data.
  *
  * @package Drupal\alshaya_acm
  */

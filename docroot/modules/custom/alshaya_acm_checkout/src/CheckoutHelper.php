@@ -20,7 +20,7 @@ use Drupal\profile\Entity\Profile;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class CheckoutHelper.
+ * Class Checkout Helper.
  *
  * @package Drupal\alshaya_acm_checkout
  */

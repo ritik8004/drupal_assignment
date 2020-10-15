@@ -12,7 +12,7 @@ use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaSearchAlgoliaCommands.
+ * Class Alshaya Search Algolia Commands.
  *
  * @package Drupal\alshaya_search_algolia\Commands
  */
