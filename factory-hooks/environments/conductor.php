@@ -487,6 +487,11 @@ $conductors = [
     'hmac_secret' => 'MDI0NzkxOGQtMzNjYi00',
     'site_id' => 142,
   ],
+  'flsa_dev3' => [
+    'hmac_id' => 'ed7d82d31ffd424ebe0746b5848703a9',
+    'hmac_secret' => 'YTY1YjE5OTktZTZkMy00',
+    'site_id' => 292,
+  ],
   'flsa_qa' => [
     'hmac_id' => '31a27139b98448379c08c90bee5e866e',
     'hmac_secret' => 'Njk0ZDgyMTgtNTc3Mi00',
