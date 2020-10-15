@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Service\Magento\MagentoApiWrapper;
 
 /**
  * Provides route callbacks for Loyalty Club OTP APIs.
@@ -27,19 +28,30 @@ class LoyaltyClubOtpController {
   protected $utility;
 
   /**
+   * Magento API Wrapper service.
+   *
+   * @var \App\Service\Magento\MagentoApiWrapper
+   */
+  protected $magentoApiWrapper;
+
+  /**
    * LoyaltyClubController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
+   *   Magento API wrapper service.
    */
   public function __construct(
     LoggerInterface $logger,
-    Utility $utility
+    Utility $utility,
+    MagentoApiWrapper $magento_api_wrapper
   ) {
     $this->logger = $logger;
     $this->utility = $utility;
+    $this->magentoApiWrapper = $magento_api_wrapper;
   }
 
   /**
@@ -49,7 +61,8 @@ class LoyaltyClubOtpController {
    *   Return API response status.
    */
   public function sendOtp(Request $request) {
-    $mobile = $request->request->get('mobile');
+    $request_content = json_decode($request->getContent(), TRUE);
+    $mobile = $request_content['mobile'];
 
     if (empty($mobile)) {
       $this->logger->error('Error while trying to send otp. Mobile number is required.');
@@ -58,11 +71,9 @@ class LoyaltyClubOtpController {
 
     try {
       $endpoint = sprintf('/sendotp/phonenumber/%s', $mobile);
-
-      // @TODO: Remove the hardcoded value when MDC API is ready.
-      // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $responseData = [
-        'status' => TRUE,
+        'status' => $response,
       ];
       return new JsonResponse($responseData);
     }
@@ -82,8 +93,9 @@ class LoyaltyClubOtpController {
    *   Return API response status.
    */
   public function verifyOtp(Request $request) {
-    $mobile = $request->request->get('mobile');
-    $otp = $request->request->get('otp');
+    $request_content = json_decode($request->getContent(), TRUE);
+    $mobile = $request_content['mobile'];
+    $otp = $request_content['otp'];
 
     if (empty($mobile) || empty($otp)) {
       $this->logger->error('Error while trying to verify otp. Mobile number and OTP is required.');
@@ -92,11 +104,9 @@ class LoyaltyClubOtpController {
 
     try {
       $endpoint = sprintf('/verifyotp/phonenumber/%s/otp/%s', $mobile, $otp);
-
-      // @TODO: Remove the hardcoded value when MDC API is ready.
-      // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $responseData = [
-        'status' => TRUE,
+        'status' => $response,
       ];
       return new JsonResponse($responseData);
     }

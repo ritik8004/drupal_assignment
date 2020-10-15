@@ -18,6 +18,8 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $uid = \Drupal::currentUser()->id();
   $user = \Drupal::entityTypeManager()->getStorage('user')->load($uid);
   $aura_helper = \Drupal::service('alshaya_aura_react.aura_helper');
+  // Get country code.
+  $country_code = _alshaya_custom_get_site_level_country_code();
 
   if (!empty($user)) {
     $settings['user_details'] = [
@@ -28,16 +30,8 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     ];
   }
 
-  $alshaya_aura_config = \Drupal::config('alshaya_aura_react.settings');
-  $settings['config'] = [
-    'appStoreLink' => $alshaya_aura_config->get('aura_app_store_link'),
-    'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
-  ];
-
   $settings['allAuraTier'] = AuraTier::ALL_AURA_TIERS;
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
-
-  $page['#attached']['drupalSettings']['aura'] = $settings;
 
   $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
   $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-global';
@@ -52,7 +46,19 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
+
+    $alshaya_aura_config = \Drupal::config('alshaya_aura_react.settings');
+    $alshaya_master_config = \Drupal::config('alshaya_master.mobile_number_settings');
+
+    $settings['config'] = [
+      'appStoreLink' => $alshaya_aura_config->get('aura_app_store_link'),
+      'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
+      'country_mobile_code' => \Drupal::service('mobile_number.util')->getCountryCode($country_code),
+      'mobile_maxlength' => $alshaya_master_config->get('maxlength'),
+    ];
   }
+
+  $page['#attached']['drupalSettings']['aura'] = $settings;
 }
 
 /**
