@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ecc10b44a6b9c303ab4bd2379e80418",
+    "content-hash": "c9d2c188499fae33feb8ace454d09155",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -1132,7 +1132,7 @@
             "version": "v1.8.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kenwheeler/slick.git",
+                "url": "git@github.com:kenwheeler/slick.git",
                 "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee"
             },
             "dist": {
@@ -5873,6 +5873,7 @@
                     "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
                     "CORE-8488 - Add log trace for 500 error": "patches/core/missing-handler-check-cache.patch",
                     "Updating translations does not clear the JS asset cache so new translations are not loaded": "https://www.drupal.org/files/issues/2019-10-23/3089764-3.patch",
+                    "CORE-24231 - Adding log trace for 500 error on user login page": "patches/core/traces-for-form-error.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",
                     "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2018-10-12/1356276-531.patch",
