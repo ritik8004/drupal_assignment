@@ -1,12 +1,13 @@
 import React from 'react';
 import AppStoreSVG
   from '../../../../../../alshaya_spc/js/svg-component/app-store-svg';
+import { getAuraConfig } from '../../../../utilities/helper';
 
 const AuraMyAccountPendingFullEnrollment = () => {
   const {
     appStoreLink: appleAppStoreLink,
     googlePlayLink: googlePlayStoreLink,
-  } = drupalSettings.aura.config;
+  } = getAuraConfig();
 
   return (
     <div className="aura-pending-full-enrollment-wrapper">

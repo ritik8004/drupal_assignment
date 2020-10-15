@@ -20,7 +20,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $aura_helper = \Drupal::service('alshaya_aura_react.aura_helper');
 
   if (!empty($user)) {
-    $settings['user_details'] = [
+    $settings['userDetails'] = [
       'id' => $uid,
       'email' => \Drupal::currentUser()->getEmail(),
       'loyaltyStatus' => $aura_helper->getUserAuraStatus(),
