@@ -326,7 +326,7 @@ class APIWrapper implements APIWrapperInterface {
         ]
       );
 
-      throw new RouteException(__FUNCTION__, 'Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.');
+      throw new RouteException(__FUNCTION__, $this->t('Sorry, we were able to complete your purchase but something went wrong and we could not display the order confirmation page. Please review your past orders or contact our customer service team for assistance.'));
     }
 
     try {
