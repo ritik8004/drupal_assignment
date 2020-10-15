@@ -74,7 +74,7 @@ export default class CompletePurchase extends React.Component {
       const deliveryInfo = document.getElementsByClassName('spc-checkout-delivery-information');
       if (deliveryInfo.length !== 0) {
         smoothScrollTo('.spc-checkout-delivery-information');
-        const tag = document.createElement("p");
+        const tag = document.createElement('p');
         const errorMessage = document.createTextNode(Drupal.t('Please add delivery information'));
         tag.appendChild(errorMessage);
         deliveryInfo[0].appendChild(tag);
@@ -89,8 +89,14 @@ export default class CompletePurchase extends React.Component {
       // Adding error class in the section.
       const paymentMethods = document.getElementById('spc-payment-methods');
       if (paymentMethods) {
-        paymentMethods.classList.toggle('error-highlighted-section');
         smoothScrollTo('#spc-payment-methods');
+        const allInputs = document.querySelectorAll('#spc-payment-methods input');
+        for (let x = 0; x < allInputs.length; x++) {
+          // Trigerring payment card errors.
+          const ev = new Event('blur', { bubbles: true });
+          ev.simulated = true;
+          allInputs[x].dispatchEvent(ev);
+        }
       }
       return false;
     }
@@ -100,8 +106,12 @@ export default class CompletePurchase extends React.Component {
       // Adding error class in the section.
       const billingAddress = document.getElementsByClassName('spc-section-billing-address');
       if (billingAddress !== 0) {
-        billingAddress[0].classList.toggle('error-highlighted-section');
         smoothScrollTo('.spc-section-billing-address');
+        const tag = document.createElement('p');
+        const errorMessage = document.createTextNode(Drupal.t('Please add billing address information'));
+        tag.appendChild(errorMessage);
+        billingAddress[0].appendChild(tag);
+        tag.setAttribute('id', 'billing-address-information-error');
       }
       return false;
     }
