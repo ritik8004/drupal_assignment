@@ -1064,13 +1064,11 @@ class Cart {
           }
         }
       }
-      elseif (!empty($exception_type) && $is_add_to_cart) {
-        if ($exception_type === 'OOS') {
-          $response = $this->drupal->triggerStockRefreshEvent($data, $cart);
-          if ($response['status'] == TRUE) {
-            if (!empty($response['data']['stock'])) {
-              self::$stockInfo = $response['data']['stock'];
-            }
+      elseif (!empty($exception_type) && $is_add_to_cart && ($exception_type === 'OOS')) {
+        $response = $this->drupal->triggerStockRefreshEvent($data, $cart);
+        if ($response['status'] == TRUE) {
+          if (!empty($response['data']['stock'])) {
+            self::$stockInfo = $response['data']['stock'];
           }
         }
       }
