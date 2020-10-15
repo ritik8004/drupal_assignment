@@ -24,7 +24,7 @@ Feature: Test the adding address to existing user account
     And I wait 2 seconds
     Then I select "{governorate}" from "field_address[0][address][area_parent]" address
     And I wait 2 seconds
-    Then I select "{area_option}" from "field_address[0][address][administrative_area]" address
+    Then I select "{address_area_field}" from "field_address[0][address][administrative_area]" address
     When I scroll to the ".country-field-wrapper" element
     When fill in billing address with following:
       | field_address[0][address][address_line1]             | {street}      |

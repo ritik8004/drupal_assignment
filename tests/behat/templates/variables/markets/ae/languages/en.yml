@@ -72,3 +72,4 @@ variables:
   language_cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   language_store_area: 'دبي'
   store_area: 'Dubai - United Arab Emirates'
+  address_area_field: 'Al Baraha'

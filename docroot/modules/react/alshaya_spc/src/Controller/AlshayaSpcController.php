@@ -707,6 +707,9 @@ class AlshayaSpcController extends ControllerBase {
           }
 
           try {
+            // Remove country code from raw number if added so that
+            // validation can be done only on raw number.
+            $raw_number = str_replace($country_mobile_code, '', $raw_number);
             // If mobile number not contains only digits.
             if (!preg_match('/^[0-9]+$/', $raw_number)) {
               throw new \Exception('Invalid mobile number.');

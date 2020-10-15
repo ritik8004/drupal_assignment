@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'http://bbwkw-test.factory.alshaya.com/en/'
+  url_base_uri: 'http://bbwkw-test.factory.alshaya.com/en'
   language_collection_filter: 'العروض'
   language_filters: 'جميع اختياراتك'
   knet_payment_type: 'K-NET'
@@ -53,7 +53,7 @@ variables:
   mobile_language_class: 'ar'
   language_short: 'ar'
   city_option: ''
-  area_option: 'Kuwait City'
+
   street: 'Street A'
   building: 'Building B'
   locality: 'Block N'
@@ -65,7 +65,6 @@ variables:
   anon_username: 'Sample User Name'
   store_area: 'Salmiya'
   language_city_option: ''
-  language_area_option: 'السالمية'
   order_confirm_text: 'Order Confirmation'
   order_detail: 'order detail'
   delivery_type: 'Home delivery'
@@ -91,8 +90,6 @@ variables:
   language_payment_type_text: 'طريقة الدفع:'
   language_store_area: 'دبي'
   language_billing_city_option: ''
-  language_billing_area_option: 'السالمية'
-  billing_area_option: 'Kuwait City'
   billing_city_option: ''
   billing_street: 'St. Santa Marlo'
   billing_building: 'Broadway'

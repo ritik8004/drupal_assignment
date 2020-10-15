@@ -51,8 +51,6 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
-  city_option: 'Salmiya'
-  area_option: 'Kuwait City'
   street: 'Street A'
   building: 'Building B'
   locality: ''
@@ -63,8 +61,6 @@ variables:
   anon_email: 'exampleuser@mailinator.com'
   anon_username: 'Sample User Name'
   store_area: 'Salmiya'
-  language_city_option: 'السالمية'
-  language_area_option: 'السالمية'
   cc_mada_payment_type: 'Credit / Debit Card'
   language_cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   language_order_detail: 'تفاصيل الطلبية'
