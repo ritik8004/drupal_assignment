@@ -93,3 +93,11 @@ alshaya_spc.checkout.checkout_event:
   methods: [POST]
   requirements:
     _middleware_request_check: 'TRUE'
+
+alshaya_spc.product.stock_refresh:
+  path: '/spc/refresh-stock'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcProductController::stockRefresh'
+  methods: [POST]
+  requirements:
+    _middleware_request_check: 'TRUE'
