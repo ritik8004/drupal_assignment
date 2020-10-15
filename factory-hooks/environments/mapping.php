@@ -146,7 +146,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
       'dev3' => [
         'magento' => 'fl_apc',
-        'conductor' => 'flsa_dev',
+        'conductor' => 'flsa_dev3',
       ],
     ],
     'bbwkw' => [
