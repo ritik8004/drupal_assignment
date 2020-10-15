@@ -174,6 +174,28 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
           // Do nothing.
         }
         break;
+
+      case 'refresh stock':
+        $data = $request->request->get('data');
+        $skus = [];
+
+        foreach ($data['items'] as $element) {
+          $skus[] = $element['variant_sku'] ?? $element['sku'];
+        }
+        foreach ($cart['cart']['items'] ?? [] as $item) {
+          $skus[] = $item['sku'];
+        }
+
+        if (!empty($skus)) {
+          $stock = $this->spcStockHelper->refreshStockForSkus($skus);
+
+          if (!empty($stock)) {
+            $response = [
+              'status' => TRUE,
+              'data' => $stock,
+            ];
+          }
+        }
     }
 
     return new JsonResponse($response);
