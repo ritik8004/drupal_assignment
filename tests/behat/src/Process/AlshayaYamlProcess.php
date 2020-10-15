@@ -384,7 +384,7 @@ class AlshayaYamlProcess {
 
     //Running specific tags on uat and prod environment on test executions
     $environment = explode('-', $profile);
-    if (in_array($environment[2], ['prod', 'pprod'])) {
+    if (in_array($environment[2], ['prod', 'pprod', 'uat'])) {
       $tags = $tags . '&&' . $environment[0] . $environment[1] . $environment[2];
     }
     $yaml['suites']['default']['filters']['tags'] = $tags;
