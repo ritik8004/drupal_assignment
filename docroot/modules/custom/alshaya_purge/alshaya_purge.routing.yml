@@ -1,0 +1,7 @@
+alshaya_purge.settings:
+  path: 'admin/config/alshaya_purge/config'
+  defaults:
+    _form: '\Drupal\alshaya_purge\Form\ConfigForm'
+    _title: 'Alshaya Purge Configuration'
+  requirements:
+    _permission: 'administer site configuration'

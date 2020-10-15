@@ -329,7 +329,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ];
     }
 
-    $data['configurable_values'] = $this->getConfigurableValues($sku);
+    $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
 
     if ($sku->bundle() === 'configurable') {
       $data['swatch_data'] = $this->getSwatchData($sku);
@@ -341,13 +341,17 @@ class ProductExcludeLinkedResource extends ResourceBase {
           continue;
         }
         $variant = $this->getSkuData($child);
-        $variant['configurable_values'] = $this->getConfigurableValues($child, $values['attributes']);
+        $variant['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($child, $values['attributes']);
         $data['variants'][] = $variant;
       }
 
       $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
       $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
     }
+
+    // Allow other modules to alter light product data.
+    $type = 'full';
+    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
 
     return $data;
   }
@@ -450,34 +454,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
 
     return $swatches;
-  }
-
-  /**
-   * Wrapper function get configurable values.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param array $attributes
-   *   Array of attributes containing attribute code and value.
-   *
-   * @return array
-   *   Configurable Values.
-   */
-  private function getConfigurableValues(SKUInterface $sku, array $attributes = []): array {
-    if ($sku->bundle() !== 'simple') {
-      return [];
-    }
-
-    $values = $this->skuManager->getConfigurableValues($sku);
-    $attr_values = array_column($attributes, 'value', 'attribute_code');
-    foreach ($values as $attribute_code => &$value) {
-      $value['attribute_code'] = $attribute_code;
-      if ($attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
-        $value['value'] = (string) $attr_value;
-      }
-    }
-
-    return array_values($values);
   }
 
   /**

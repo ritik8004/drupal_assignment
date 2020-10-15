@@ -4,9 +4,9 @@
 function getUserAuraStatus() {
   let loyaltyStatus = '';
   if (typeof drupalSettings.aura !== 'undefined'
-    && typeof drupalSettings.aura.user_details !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'loyaltyStatus')) {
-    loyaltyStatus = drupalSettings.aura.user_details.loyaltyStatus || '';
+    && typeof drupalSettings.aura.userDetails !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura.userDetails, 'loyaltyStatus')) {
+    loyaltyStatus = drupalSettings.aura.userDetails.loyaltyStatus || '';
   }
 
   return loyaltyStatus;
@@ -18,9 +18,9 @@ function getUserAuraStatus() {
 function getUserAuraTier() {
   let tier = '';
   if (typeof drupalSettings.aura !== 'undefined'
-    && typeof drupalSettings.aura.user_details !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'tier')) {
-    tier = drupalSettings.aura.user_details.tier || '';
+    && typeof drupalSettings.aura.userDetails !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura.userDetails, 'tier')) {
+    tier = drupalSettings.aura.userDetails.tier || '';
   }
 
   return tier;
@@ -110,6 +110,32 @@ function getUserProfileInfo() {
   return userInfo;
 }
 
+/**
+ * Helper function to get aura user details.
+ */
+function getUserDetails() {
+  let loyaltyUserDetails = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'userDetails')) {
+    loyaltyUserDetails = drupalSettings.aura.userDetails;
+  }
+
+  return loyaltyUserDetails;
+}
+
+/**
+ * Helper function to get aura config.
+ */
+function getAuraConfig() {
+  let loyaltyConfig = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'config')) {
+    loyaltyConfig = drupalSettings.aura.config;
+  }
+
+  return loyaltyConfig;
+}
+
 export {
   getUserAuraStatus,
   getUserAuraTier,
@@ -119,4 +145,6 @@ export {
   getLoyaltyBenefitsTitle,
   getLoyaltyBenefitsContent,
   getUserProfileInfo,
+  getUserDetails,
+  getAuraConfig,
 };

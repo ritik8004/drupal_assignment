@@ -22,7 +22,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $country_code = _alshaya_custom_get_site_level_country_code();
 
   if (!empty($user)) {
-    $settings['user_details'] = [
+    $settings['userDetails'] = [
       'id' => $uid,
       'email' => \Drupal::currentUser()->getEmail(),
       'loyaltyStatus' => $aura_helper->getUserAuraStatus(),

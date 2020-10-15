@@ -4,6 +4,7 @@ import TextField from '../../../../utilities/textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
 import { validateInfo } from '../../../../utilities/checkout_util';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
+import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
@@ -145,15 +146,15 @@ class AuraFormSignUpOTPModal extends React.Component {
       otpRequested,
     } = this.state;
 
-    const countryMobileCode = drupalSettings.aura.config.country_mobile_code
+    const { country_mobile_code, mobile_maxlength } = getAuraConfig();
+    const countryMobileCode = country_mobile_code
       ? (
         <span className="country-code">
           +
-          {drupalSettings.aura.config.country_mobile_code}
+          {country_mobile_code}
         </span>
       )
       : '';
-    const countryMobileCodeMaxLength = drupalSettings.aura.config.mobile_maxlength || '';
 
     const submitButtonText = otpRequested === true ? Drupal.t('Verify') : Drupal.t('Send One Time Pin');
 
@@ -171,7 +172,7 @@ class AuraFormSignUpOTPModal extends React.Component {
               required
               name="mobile"
               label={Drupal.t('Mobile Number')}
-              maxLength={countryMobileCodeMaxLength}
+              maxLength={mobile_maxlength}
               onChangeCallback={this.handleChange}
             />
             <ConditionalView condition={otpRequested === true}>
