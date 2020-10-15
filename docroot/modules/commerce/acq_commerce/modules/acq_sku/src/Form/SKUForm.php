@@ -19,7 +19,7 @@ class SKUForm extends ContentEntityForm {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    /* @var $entity \Drupal\acq_sku\Entity\SKU */
+    /** @var \Drupal\acq_sku\Entity\SKU $entity */
     $entity = $this->entity;
 
     $form['langcode'] = [

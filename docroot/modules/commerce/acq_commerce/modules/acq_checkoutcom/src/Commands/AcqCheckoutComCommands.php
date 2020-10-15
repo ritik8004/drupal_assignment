@@ -7,7 +7,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AcqCheckoutComCommands.
+ * Class Acq Checkout Com Commands.
  *
  * @package Drupal\acq_checkoutcom\Commands
  */

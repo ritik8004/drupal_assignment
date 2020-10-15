@@ -7,7 +7,7 @@ use Drupal\Core\Cache\Context\CacheContextInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class FacetsCacheContext.
+ * Class Facets Cache Context.
  *
  * @package Drupal\facets
  */

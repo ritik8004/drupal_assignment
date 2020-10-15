@@ -24,7 +24,7 @@ use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AlshayaSearchApiQueryExecute.
+ * Class Alshaya Search Api Query Execute.
  */
 class AlshayaSearchApiQueryExecute {
 
@@ -416,7 +416,7 @@ class AlshayaSearchApiQueryExecute {
           $filter = $query->createConditionGroup('OR', ['facet:' . $filter_key]);
           foreach ($filter_val as $price) {
             $exclude = FALSE;
-            /* @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
+            /** @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
             $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
               'facet' => $this->priceFacet,
               'query' => $query,
@@ -781,7 +781,7 @@ class AlshayaSearchApiQueryExecute {
    *   Processed price facet result array.
    */
   public function processPriceFacet(array $price_facet_result) {
-    /* @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
+    /** @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
     $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
       'query' => NULL,
       'facet' => $this->priceFacet,
@@ -789,7 +789,7 @@ class AlshayaSearchApiQueryExecute {
     ]);
 
     // Get price facet build.
-    /* @var \Drupal\facets\Entity\Facet $price_facet_build */
+    /** @var \Drupal\facets\Entity\Facet $price_facet_build */
     $price_facet_build = $alshaya_search_granular->build();
 
     $option_data = [];
@@ -798,7 +798,10 @@ class AlshayaSearchApiQueryExecute {
     ksort($results);
     foreach ($results as $result) {
       // Trim and remove html and newlines from the markup.
-      $display_value = trim(str_replace(["\n", "\r"], ' ', strip_tags($result->getDisplayValue())));
+      $display_value = trim(str_replace([
+        "\n",
+        "\r",
+      ], ' ', strip_tags($result->getDisplayValue())));
       // Remove extra spaces from text.
       $display_value = preg_replace('/\s\s+/', ' ', $display_value);
       $option_data[] = [

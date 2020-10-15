@@ -130,7 +130,7 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       $parents = $this->productCategoryTree->getCategoryTermParents($term);
 
       if (!empty($parents)) {
-        /* @var \Drupal\taxonomy\TermInterface $root_parent_term */
+        /** @var \Drupal\taxonomy\TermInterface $root_parent_term */
         foreach ($parents as $parent) {
           if (isset($term_data[$parent->id()])) {
             $term_data[$parent->id()]['class'][] = 'active';

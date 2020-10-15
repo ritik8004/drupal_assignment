@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Url;
 
 /**
- * Class DefaultMetaImageEventSubscriber.
+ * Class Default Meta Image Event Subscriber.
  *
  * @package Drupal\alshaya_seo\EventSubscriber
  */

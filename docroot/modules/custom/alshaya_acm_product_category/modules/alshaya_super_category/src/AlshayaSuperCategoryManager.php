@@ -11,7 +11,7 @@ use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Class AlshayaSuperCategoryManager.
+ * Class Alshaya Super Category Manager.
  */
 class AlshayaSuperCategoryManager {
 

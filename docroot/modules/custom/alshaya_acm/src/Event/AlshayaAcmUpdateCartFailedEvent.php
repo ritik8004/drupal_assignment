@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class AlshayaAcmUpdateCartFailedEvent.
+ * Class Alshaya Acm Update Cart Failed Event.
  *
  * @package Drupal\acq_checkout\Event
  */

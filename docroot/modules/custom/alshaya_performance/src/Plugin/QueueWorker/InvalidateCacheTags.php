@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * InvalidateCacheTags.
+ * Invalidate Cache Tags.
  *
  * @QueueWorker(
  *   id = "alshaya_invalidate_cache_tags",

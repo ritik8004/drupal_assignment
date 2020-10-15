@@ -15,7 +15,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class StockManager.
+ * Class Stock Manager.
  *
  * @package Drupal\acq_sku
  */
@@ -118,7 +118,10 @@ class StockManager {
 
     if (empty($sku_string)) {
       $langcode = $sku->language()->getId();
-      $this->logger->error('Empty SKU string in SKU entity with @id and language @langcode.', ['@id' => $sku->id(), '@langcode' => $langcode]);
+      $this->logger->error('Empty SKU string in SKU entity with @id and language @langcode.', [
+        '@id' => $sku->id(),
+        '@langcode' => $langcode,
+      ]);
 
       return FALSE;
     }

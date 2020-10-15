@@ -6,7 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class StockUpdatedEvent.
+ * Class Stock Updated Event.
  *
  * @package Drupal\acq_sku_stock
  */
@@ -80,7 +80,5 @@ class StockUpdatedEvent extends Event {
   public function isLowQuantity() {
     return $this->lowQuantity;
   }
-
-
 
 }

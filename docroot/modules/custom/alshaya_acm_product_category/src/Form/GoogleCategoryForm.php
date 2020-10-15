@@ -10,7 +10,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class GoogleCategoryForm.
+ * Class Google Category Form.
  */
 class GoogleCategoryForm extends FormBase {
 
@@ -78,7 +78,8 @@ class GoogleCategoryForm extends FormBase {
         // Load file.
         if (($fid) && $file = $this->fileStorage->load($fid)) {
           $csv_uri = $file->getFileUri();
-          $this->importFileName = $file->getFileName();;
+          $this->importFileName = $file->getFileName();
+          ;
           if (!empty($csv_uri)) {
             // Open file handler.
             if ($handle = fopen($csv_uri, 'r')) {
@@ -92,7 +93,12 @@ class GoogleCategoryForm extends FormBase {
                 }
                 // Process only for exact 4 columns count.
                 if (count($data) == 4) {
-                  $this->categories[] = [$data[0], $data[1], $data[2], $data[3]];
+                  $this->categories[] = [
+                    $data[0],
+                    $data[1],
+                    $data[2],
+                    $data[3],
+                  ];
                 }
                 else {
                   // If there is some discrepancy in column count.

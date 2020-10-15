@@ -9,7 +9,7 @@ use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
- * Class AlshayaSpcCustomerHelper.
+ * Class Alshaya Spc Customer Helper.
  */
 class AlshayaSpcCustomerHelper {
 
@@ -192,7 +192,7 @@ class AlshayaSpcCustomerHelper {
   public function updateCustomerDefaultAddress(int $profile, int $uid) {
     $return = FALSE;
     try {
-      /* @var \Drupal\profile\Entity\Profile $profile */
+      /** @var \Drupal\profile\Entity\Profile $profile */
       $profile = $this->entityTypeManager->getStorage('profile')->load($profile);
       // If profile is valid and belongs to the user.
       if ($profile && $profile->getOwnerId() == $uid) {
@@ -223,7 +223,7 @@ class AlshayaSpcCustomerHelper {
   public function deleteCustomerAddress(int $profile, int $uid) {
     $return = FALSE;
     try {
-      /* @var \Drupal\profile\Entity\Profile $profile */
+      /** @var \Drupal\profile\Entity\Profile $profile */
       $profile = $this->entityTypeManager->getStorage('profile')->load($profile);
       // If address belongs to the current user.
       if ($profile && $profile->getOwnerId() == $uid) {

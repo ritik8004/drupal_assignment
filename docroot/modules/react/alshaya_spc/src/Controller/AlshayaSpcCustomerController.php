@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
- * Class AlshayaSpcCustomerController.
+ * Class Alshaya Spc Customer Controller.
  */
 class AlshayaSpcCustomerController extends ControllerBase {
 

@@ -21,7 +21,7 @@ use Drupal\alshaya_acm_product\Service\ProductOrderLimit;
 use Drupal\alshaya_acm_product\Event\AddToCartFormSubmitEvent;
 
 /**
- * Class ProductStockController.
+ * Class Product Stock Controller.
  *
  * @package Drupal\alshaya_acm_product\Controller
  */
@@ -149,7 +149,10 @@ class ProductStockController extends ControllerBase {
 
         $parent_sku = isset($data['selected_parent_sku']) ? $data['selected_parent_sku'] : $variant_sku;
 
-        $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [$parent_sku, $variant_sku]));
+        $return->addCommand(new InvokeCommand(NULL, 'LimitExceededInCart', [
+          $parent_sku,
+          $variant_sku,
+        ]));
       }
       else {
         $class = '.error-container-' . strtolower(Html::cleanCssIdentifier($entity->getSku()));

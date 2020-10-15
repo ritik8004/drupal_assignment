@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_config;
 
 /**
- * Class AlshayaArrayUtils.
+ * Class Alshaya Array Utils.
  *
  * @package Drupal\alshaya
  */

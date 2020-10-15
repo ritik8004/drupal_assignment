@@ -5,7 +5,7 @@ namespace Drupal\acq_checkout\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class AcqCheckoutPaymentFailedEvent.
+ * Class Acq Checkout Payment Failed Event.
  *
  * @package Drupal\acq_checkout\Event
  */

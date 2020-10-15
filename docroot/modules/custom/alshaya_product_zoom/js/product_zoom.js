@@ -176,7 +176,7 @@
         $('#product-zoom-container .img-wrap').each(function () {
           $(this).on('mousemove', function (e) {
             $(this).find('.product-image-zoom-placeholder-content').css({
-              'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'
+              'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 + '%'
             });
           });
 
@@ -190,8 +190,8 @@
           $(this).on('mouseover', function () {
             $(this).addClass('product-image-zoomed');
             $(this).find('.product-image-zoom-placeholder-content').css({
-              'background-image': 'url('+ $(this).find('img').attr('data-zoom-url') +')',
-              'transform': 'scale('+ $(this).attr('data-scale') +')'
+              'background-image': 'url(' + $(this).find('img').attr('data-zoom-url') + ')',
+              'transform': 'scale(' + $(this).attr('data-scale') + ')'
             });
           });
 
@@ -199,14 +199,14 @@
           $(this).once('product-image-zoom-placeholder-appended').append('<div class="product-image-zoom-placeholder"><div class="product-image-zoom-placeholder-content"></div></div>');
 
           // Binding click event to image zoom placeholder sibling.
-          $(this).children('.product-image-zoom-placeholder').on('click', function (){
+          $(this).children('.product-image-zoom-placeholder').on('click', function () {
             $(this).parent().find('img').trigger('click');
           });
 
           $(this).find('img').on('load mouseover', function () {
             var imgWidth = $(this).width();
             var containerWidth = $(this).parent().width();
-            var leftPosition = (containerWidth - imgWidth)/2;
+            var leftPosition = (containerWidth - imgWidth) / 2;
             $(this).parent().find('.product-image-zoom-placeholder').css({'width': imgWidth + 'px', 'left': leftPosition + 'px'})
           });
         });

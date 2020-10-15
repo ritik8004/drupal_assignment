@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class ApplePayController.
+ * Class Apple Pay Controller.
  *
  * @package Drupal\acq_checkoutcom\Controller
  */

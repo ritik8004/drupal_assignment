@@ -93,7 +93,7 @@ class DeliveryMethodResource extends ResourceBase {
    */
   public function get() {
     $response_data = [];
-    /* @var \Drupal\taxonomy\TermInterface[] $delivery_method_terms*/
+    /** @var \Drupal\taxonomy\TermInterface[] $delivery_method_terms*/
     $delivery_method_terms = $this->checkoutOptionManager->getAllShippingTerms();
     // If there any delivery method available.
     if (!empty($delivery_method_terms)) {

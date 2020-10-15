@@ -6,7 +6,7 @@ use Drupal\Core\Url;
 use Drupal\simple_sitemap\Plugin\simple_sitemap\SitemapGenerator\DefaultSitemapGenerator;
 
 /**
- * Class AlshayaSitemapGenerator.
+ * Class Alshaya Sitemap Generator.
  *
  *   Extends/overrides the DefaultSitemapGenerator features.
  *   DefaultSitemapGenerator was previously used but due to changes in

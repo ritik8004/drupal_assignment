@@ -19,7 +19,7 @@ use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
 
 /**
- * Class Cart.
+ * Class Cart methods.
  */
 class Cart {
 

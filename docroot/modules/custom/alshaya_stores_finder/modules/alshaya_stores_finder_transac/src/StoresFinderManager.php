@@ -7,7 +7,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
- * Class StoresFinderManager.
+ * Class Stores Finder Manager.
  *
  * @package Drupal\alshaya_stores_finder_transac
  */

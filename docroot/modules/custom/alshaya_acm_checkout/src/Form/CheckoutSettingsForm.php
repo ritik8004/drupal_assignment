@@ -9,7 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class CheckoutSettingsForm.
+ * Class Checkout Settings Form.
  */
 class CheckoutSettingsForm extends ConfigFormBase {
 

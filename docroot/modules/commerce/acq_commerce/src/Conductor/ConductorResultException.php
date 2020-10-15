@@ -5,7 +5,7 @@ namespace Drupal\acq_commerce\Conductor;
 use Drupal\acq_commerce\Connector\ConnectorException;
 
 /**
- * Class ConductorResultException.
+ * Class Conductor Result Exception.
  *
  * @package Drupal\acq_commerce\Conductor
  *
@@ -44,7 +44,7 @@ class ConductorResultException extends ConnectorException {
 
       $prefix = 'response:';
 
-      if ($position = strpos($mesg, $prefix)) {
+      if (strpos($mesg, $prefix)) {
         $responseString = substr($mesg, strpos($mesg, $prefix) + strlen($prefix));
         $response = json_decode($responseString, TRUE);
         if (is_array($response) && isset($response['message'])) {

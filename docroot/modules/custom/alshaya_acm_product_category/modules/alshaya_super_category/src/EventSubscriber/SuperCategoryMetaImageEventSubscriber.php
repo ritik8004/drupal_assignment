@@ -13,7 +13,7 @@ use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class SuperCtegoryMetaImageEventSubscriber.
+ * Class Super Category Meta Image Event Subscriber.
  *
  * @package Drupal\alshaya_super_category\EventSubscriber
  */
@@ -70,7 +70,10 @@ class SuperCategoryMetaImageEventSubscriber implements EventSubscriberInterface 
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[MetaImageRenderEvent::EVENT_NAME][] = ['setSuperCategoryLogoMetaImage', 150];
+    $events[MetaImageRenderEvent::EVENT_NAME][] = [
+      'setSuperCategoryLogoMetaImage',
+      150,
+    ];
     return $events;
   }
 

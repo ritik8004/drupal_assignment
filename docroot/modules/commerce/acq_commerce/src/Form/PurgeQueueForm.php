@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class PurgeQueueForm.
+ * Class Purge Queue Form.
  *
  * @package Drupal\acm\Form
  *
@@ -75,7 +75,7 @@ class PurgeQueueForm extends FormBase {
 
     $form['actions']['purge_queue'] = [
       '#type' => 'submit',
-      '#value' => t('Purge queue'),
+      '#value' => $this->t('Purge queue'),
     ];
 
     return ($form);

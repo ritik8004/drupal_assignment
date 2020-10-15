@@ -9,7 +9,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\user\UserInterface;
 
 /**
- * AlshayaCustomerPortalHelper class.
+ * Alshaya Customer Portal Helper class.
  */
 class AlshayaCustomerPortalHelper {
 

@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_master\Helper;
 
 /**
- * Class SortUtility.
+ * Class Sort Utility.
  *
  * @package Drupal\alshaya_master\Helper
  */

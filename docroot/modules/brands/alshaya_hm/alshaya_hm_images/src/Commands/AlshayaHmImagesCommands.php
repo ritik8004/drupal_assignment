@@ -7,7 +7,7 @@ use Drupal\Core\Database\Connection;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaHmImagesCommands.
+ * Contains Alshaya Hm Images Commands methods.
  *
  * @package Drupal\alshaya_hm_images\Commands
  */

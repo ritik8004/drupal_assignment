@@ -11,7 +11,7 @@ use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\node\NodeInterface;
 
 /**
- * Class ProductCategoryMappingManager.
+ * Class Product Category Mapping Manager.
  *
  * @package Drupal\alshaya_acm_product_category\Service
  */

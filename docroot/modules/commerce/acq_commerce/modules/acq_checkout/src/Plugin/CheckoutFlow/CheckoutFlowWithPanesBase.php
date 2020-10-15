@@ -92,7 +92,10 @@ abstract class CheckoutFlowWithPanesBase extends CheckoutFlowBase implements Che
         ];
       }
       // Sort the panes and flatten the array.
-      uasort($this->panes, ['\Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
+      uasort($this->panes, [
+        '\Drupal\Component\Utility\SortArray',
+        'sortByWeightElement',
+      ]);
       $this->panes = array_map(function ($pane_data) {
         return $pane_data['pane'];
       }, $this->panes);

@@ -22,7 +22,7 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\Core\TypedData\TranslatableInterface;
 
 /**
- * Class SkuInfoHelper.
+ * Class Sku Info Helper.
  *
  * @package Drupal\alshaya_acm_product
  */

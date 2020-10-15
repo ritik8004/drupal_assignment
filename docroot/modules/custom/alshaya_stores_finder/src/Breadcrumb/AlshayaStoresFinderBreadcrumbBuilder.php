@@ -9,7 +9,7 @@ use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class AlshayaStoresFinderBreadcrumbBuilder.
+ * Class Alshaya Stores Finder Breadcrumb Builder.
  */
 class AlshayaStoresFinderBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
@@ -38,7 +38,7 @@ class AlshayaStoresFinderBreadcrumbBuilder implements BreadcrumbBuilderInterface
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
     $breadcrumb->addLink(Link::createFromRoute($this->t('Find stores'), 'view.stores_finder.page_2'));
 
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     if ($node = $route_match->getParameter('node')) {
       if ($node->bundle() == 'store') {
         $breadcrumb->addLink(Link::createFromRoute($node->getTitle(), 'entity.node.canonical', ['node' => $node->id()]));

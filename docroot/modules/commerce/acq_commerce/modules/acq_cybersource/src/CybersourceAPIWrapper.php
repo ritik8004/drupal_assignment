@@ -16,7 +16,7 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * CybersourceAPIWrapper class.
+ * Cybersource API Wrapper class.
  */
 class CybersourceAPIWrapper extends APIWrapper {
 

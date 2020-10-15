@@ -111,7 +111,7 @@ class ProductLinkedSkusResource extends ResourceBase {
   public function get(string $sku) {
     $skuEntity = SKU::loadFromSku($sku);
     if (!$skuEntity instanceof SKUInterface) {
-      throw new NotFoundHttpException($this->t("page not found"));
+      throw new NotFoundHttpException("page not found");
     }
     $skuIds[] = $sku;
 
@@ -120,7 +120,7 @@ class ProductLinkedSkusResource extends ResourceBase {
       // Get parent SKU entity.
       $skuEntity = $this->sku_manager->getParentSkuBySku($sku);
       if (!$skuEntity instanceof SKUInterface) {
-        throw new NotFoundHttpException($this->t("page not found"));
+        throw new NotFoundHttpException("page not found");
       }
       $skuIds[] = $skuEntity->getSku();
     }
