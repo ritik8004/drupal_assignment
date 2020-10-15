@@ -6,10 +6,4 @@
       padding-top: 2.5rem;
     }
   }
-
-  .spc-sidebar {
-    @include breakpoint($only-mobile) {
-      margin-top: 4rem;
-    }
-  }
 }

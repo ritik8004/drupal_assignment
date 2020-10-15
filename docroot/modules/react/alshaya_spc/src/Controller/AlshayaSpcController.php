@@ -174,6 +174,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc/cart-sticky-header',
           'alshaya_white_label/spc-cart',
           'alshaya_acm_promotion/basket_labels_manager',
+          'alshaya_white_label/free_gifts',
         ],
         'drupalSettings' => [
           'item_code_label' => $this->t('Item code'),
@@ -700,11 +701,20 @@ class AlshayaSpcController extends ControllerBase {
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
 
+          $raw_number = $value;
           if (strpos($value, $country_mobile_code) === FALSE) {
             $value = $country_mobile_code . $value;
           }
 
           try {
+            // Remove country code from raw number if added so that
+            // validation can be done only on raw number.
+            $raw_number = str_replace($country_mobile_code, '', $raw_number);
+            // If mobile number not contains only digits.
+            if (!preg_match('/^[0-9]+$/', $raw_number)) {
+              throw new \Exception('Invalid mobile number.');
+            }
+
             if ($this->mobileUtil->testMobileNumber($value)) {
               $status[$key] = TRUE;
             }
