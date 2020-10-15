@@ -98,8 +98,8 @@ class ClientHelper {
 
       $userId = $clientData['id'] ?? '';
       if ($userId) {
-        // Authenticate user by matching userid from request and Drupal.
-        $user = $this->drupal->getSessionUserInfo();
+        // Get user info from backend system.
+        $user = $this->apiHelper->getUserInfo();
         if ($user['uid'] == 0 || $user['uid'] !== $userId) {
           $message = sprintf('Userid from request does not match userId of logged in user. Userid from request:%s, Users id:%s', $userId, $user['uid']);
 
@@ -120,8 +120,7 @@ class ClientHelper {
       return $clientExternalId;
     }
     catch (\Exception $e) {
-      $message = 'Error occurred while @operation client.';
-      $this->logger->error($message . ' Message: @message', [
+      $this->logger->error('Error occurred while operation: @operation client. Message: @message', [
         '@message' => $e->getMessage(),
         '@operation' => $clientData['clientExternalId'] ? 'updated' : 'inserted',
       ]);
