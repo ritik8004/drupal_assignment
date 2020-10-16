@@ -6,6 +6,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class AuraHelper.
@@ -13,6 +14,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  * @package Drupal\alshaya_aura_react\Helper
  */
 class AuraHelper {
+
+  use StringTranslationTrait;
+
   /**
    * The current user making the request.
    *
@@ -74,7 +78,7 @@ class AuraHelper {
   public function getUserAuraStatus() {
     $uid = $this->currentUser->id();
     $user = $this->entityTypeManager->getStorage('user')->load($uid);
-    $status = $user->get('field_aura_loyalty_status')->getString() ?? '';
+    $status = $user->get('field_aura_loyalty_status')->getString() ?? 0;
 
     return $status;
   }
@@ -111,6 +115,65 @@ class AuraHelper {
     ];
 
     return $config;
+  }
+
+  /**
+   * Get Static Strings.
+   *
+   * @return array
+   *   Array of static strings.
+   */
+  public function getStaticStrings() {
+    return [
+      [
+        'key' => 'form_error_valid_mobile_number',
+        'value' => $this->t('Please enter valid mobile number.'),
+      ],
+      [
+        'key' => 'form_error_mobile_number',
+        'value' => $this->t('Please enter mobile number.'),
+      ],
+      [
+        'key' => 'form_error_otp',
+        'value' => $this->t('Please enter OTP.'),
+      ],
+      [
+        'key' => 'otp_send_message',
+        'value' => $this->t('We have sent the One Time Pin to your mobile number.'),
+      ],
+      [
+        'key' => 'didnt_receive_otp_message',
+        'value' => $this->t('Didn’t receive the One Time Pin?'),
+      ],
+      [
+        'key' => 'send_otp_helptext',
+        'value' => $this->t('We will send a One Time Pin to both your email address and mobile number.'),
+      ],
+      [
+        'key' => 'verify',
+        'value' => $this->t('Verify'),
+      ],
+      [
+        'key' => 'otp_button_label',
+        'value' => $this->t('Send One Time Pin'),
+      ],
+      [
+        'key' => 'otp_modal_title',
+        'value' => $this->t('Say hello to Aura'),
+      ],
+      [
+        'key' => 'resend_code',
+        'value' => $this->t('Resend Code'),
+      ],
+      [
+        'key' => 'mobile_label',
+        'value' => $this->t('Mobile Number'),
+      ],
+      [
+        'key' => 'otp_label',
+        'value' => $this->t('One Time Pin'),
+      ],
+    ];
   }
 
 }

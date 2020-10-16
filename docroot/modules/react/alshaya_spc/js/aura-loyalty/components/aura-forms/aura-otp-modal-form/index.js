@@ -5,13 +5,12 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import { validateInfo } from '../../../../utilities/checkout_util';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import getStringMessage from '../../../../utilities/strings';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mobile: '',
-      otp: '',
       otpRequested: false,
       otpVerified: false,
     };
@@ -26,45 +25,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     }));
   }
 
-  processOtpVerification = (e) => {
-    const { action } = e.target.dataset;
-    const { mobile, otp, otpRequested } = this.state;
-
-    if (mobile) {
-      if (!Number.isNaN(Number(mobile))) {
-        const validationRequest = validateInfo({ mobile });
-        if (validationRequest instanceof Promise) {
-          validationRequest.then((result) => {
-            if (result.status === 200 && result.data.status) {
-              // If not valid mobile number.
-              if (result.data.mobile === false) {
-                // @TODO: Add strings from controller to manage translation in all modals.
-                this.showError('mobile-error', Drupal.t('Please enter valid mobile number.'));
-              } else {
-                // If valid mobile number, remove error message.
-                this.removeError('mobile-error');
-
-                // Check if OTP is not already requested or is resend request,
-                // then call send OTP API else call verify OTP API.
-                if (action === 'resend' || !otpRequested) {
-                  this.sendOtp();
-                } else if (otp) {
-                  this.removeError('otp-error');
-                  this.verifyOtp();
-                } else {
-                  this.showError('otp-error', Drupal.t('OTP field is required.'));
-                }
-              }
-            }
-          });
-        }
-      } else {
-        this.showError('mobile-error', Drupal.t('Mobile number should be numeric.'));
-      }
-    } else {
-      this.showError('mobile-error', Drupal.t('Mobile number field is required.'));
-    }
-  };
+  getElementValue = (elementId) => document.getElementById(elementId).value
 
   showError = (elementId, msg) => {
     document.getElementById(elementId).innerHTML = msg;
@@ -76,47 +37,83 @@ class AuraFormSignUpOTPModal extends React.Component {
     document.getElementById(elementId).classList.remove('error');
   }
 
-  sendOtp = () => {
-    // API call to send otp.
-    const { mobile } = this.state;
+  validateMobileOtp = async (data, action) => {
+    let isValid = true;
 
-    const apiUrl = 'post/loyalty-club/send-otp';
-    const apiData = postAPIData(apiUrl, { mobile });
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.data !== undefined && result.data.error === undefined) {
-          // Once we get a success response that OTP is sent, we update state,
-          // to show the otp fields.
-          if (result.data.status) {
-            this.setState({
-              otpRequested: true,
-            });
+    if (action === 'send_otp') {
+      const validationRequest = validateInfo({ mobile: data.mobile });
+      return validationRequest.then((result) => {
+        if (result.status === 200 && result.data.status) {
+          // If not valid mobile number.
+          if (result.data.mobile === false) {
+            this.showError('mobile-error', getStringMessage('form_error_valid_mobile_number'));
+            isValid = false;
+          } else {
+            // If valid mobile number, remove error message.
+            this.removeError('mobile-error');
           }
         }
+        return isValid;
       });
+    }
+    return isValid;
+  }
+
+  sendOtp = async () => {
+    const mobile = this.getElementValue('mobile');
+
+    if (mobile.length === 0 || mobile.match(/^[0-9]+$/) === null) {
+      this.showError('mobile-error', getStringMessage('form_error_mobile_number'));
+    } else {
+      const valid = await this.validateMobileOtp({ mobile }, 'send_otp');
+
+      if (valid === true) {
+        // API call to send otp.
+        const apiUrl = 'post/loyalty-club/send-otp';
+        const apiData = postAPIData(apiUrl, { mobile });
+
+        if (apiData instanceof Promise) {
+          apiData.then((result) => {
+            if (result.data !== undefined && result.data.error === undefined) {
+              // Once we get a success response that OTP is sent, we update state,
+              // to show the otp fields.
+              if (result.data.status) {
+                this.setState({
+                  otpRequested: true,
+                });
+              }
+            }
+          });
+        }
+      }
     }
   };
 
-  verifyOtp = () => {
-    // API call to verify otp.
-    const { mobile, otp } = this.state;
+  verifyOtp = async () => {
+    const mobile = this.getElementValue('mobile');
+    const otp = this.getElementValue('otp');
 
-    const apiUrl = 'post/loyalty-club/verify-otp';
-    const apiData = postAPIData(apiUrl, { mobile, otp });
+    if (otp.length === 0) {
+      this.showError('otp-error', getStringMessage('form_error_otp'));
+    } else {
+      this.removeError('otp-error');
+      // API call to verify otp.
+      const apiUrl = 'post/loyalty-club/verify-otp';
+      const apiData = postAPIData(apiUrl, { mobile, otp });
 
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.data !== undefined && result.data.error === undefined) {
-          // Once we get a success response that OTP is verified, we update state,
-          // to show the quick enrollment fields.
-          if (result.data.status) {
-            this.setState({
-              otpVerified: true,
-            });
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.data !== undefined && result.data.error === undefined) {
+            // Once we get a success response that OTP is verified, we update state,
+            // to show the quick enrollment fields.
+            if (result.data.status) {
+              this.setState({
+                otpVerified: true,
+              });
+            }
           }
-        }
-      });
+        });
+      }
     }
   };
 
@@ -128,11 +125,11 @@ class AuraFormSignUpOTPModal extends React.Component {
     let description = '';
     if (otpRequested === true) {
       description = [
-        <span className="part">{Drupal.t('We have sent the One Time Pin to your mobile number.')}</span>,
-        <span className="part">{Drupal.t('Didn’t receive the One Time Pin?')}</span>,
+        <span key="part1" className="part">{getStringMessage('otp_send_message')}</span>,
+        <span key="part2" className="part">{getStringMessage('didnt_receive_otp_message')}</span>,
       ];
     } else {
-      description = Drupal.t('We will send a One Time Pin to your both your email address and mobile number.');
+      description = getStringMessage('send_otp_helptext');
     }
     return description;
   };
@@ -150,6 +147,7 @@ class AuraFormSignUpOTPModal extends React.Component {
       country_mobile_code: countryMobileCode,
       mobile_maxlength: countryMobileCodeMaxLength,
     } = getAuraConfig();
+
     const countryMobileCodeMarkup = countryMobileCode
       ? (
         <span className="country-code">
@@ -159,12 +157,12 @@ class AuraFormSignUpOTPModal extends React.Component {
       )
       : '';
 
-    const submitButtonText = otpRequested === true ? Drupal.t('Verify') : Drupal.t('Send One Time Pin');
+    const submitButtonText = otpRequested === true ? getStringMessage('verify') : getStringMessage('otp_button_label');
 
     return (
       <div className="aura-otp-form">
         <div className="aura-modal-header">
-          <SectionTitle>{Drupal.t('Say hello to Aura')}</SectionTitle>
+          <SectionTitle>{getStringMessage('otp_modal_title')}</SectionTitle>
           <a className="close" onClick={() => closeModal()} />
         </div>
         <div className="aura-modal-form">
@@ -174,17 +172,15 @@ class AuraFormSignUpOTPModal extends React.Component {
               type="text"
               required
               name="mobile"
-              label={Drupal.t('Mobile Number')}
+              label={getStringMessage('mobile_label')}
               maxLength={countryMobileCodeMaxLength}
-              onChangeCallback={this.handleChange}
             />
             <ConditionalView condition={otpRequested === true}>
               <TextField
                 type="text"
                 required={false}
                 name="otp"
-                label={Drupal.t('One Time Pin')}
-                onChangeCallback={this.handleChange}
+                label={getStringMessage('otp_label')}
               />
             </ConditionalView>
           </div>
@@ -194,17 +190,15 @@ class AuraFormSignUpOTPModal extends React.Component {
               <ConditionalView condition={otpRequested === true}>
                 <span
                   className="resend-otp"
-                  data-action="resend"
-                  onClick={(e) => this.processOtpVerification(e)}
+                  onClick={this.sendOtp}
                 >
-                  {Drupal.t('Resend Code')}
+                  {getStringMessage('resend_code')}
                 </span>
               </ConditionalView>
             </div>
             <div
               className="aura-modal-form-submit"
-              data-action="submit"
-              onClick={(e) => this.processOtpVerification(e)}
+              onClick={otpRequested === true ? this.verifyOtp : this.sendOtp}
             >
               {submitButtonText}
             </div>

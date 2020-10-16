@@ -74,7 +74,8 @@ class AlshayaLoyaltyController extends ControllerBase {
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
 
     return [
-      '#markup' => '<div id="my-loyalty-club"></div>',
+      '#theme' => 'my_loyalty_club',
+      '#strings' => $this->auraHelper->getStaticStrings(),
       '#attached' => [
         'library' => [
           'alshaya_aura_react/alshaya_aura_loyalty_club',

@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\alshaya_aura_react\Helper\AuraHelper;
 
 /**
  * Provides My Accounts AURA block.
@@ -27,6 +28,13 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
   protected $routeMatch;
 
   /**
+   * Aura Helper service object.
+   *
+   * @var Drupal\alshaya_aura_react\Helper\AuraHelper
+   */
+  protected $auraHelper;
+
+  /**
    * AuraRewardsHeader constructor.
    *
    * @param array $configuration
@@ -37,13 +45,17 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
    *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
+   * @param Drupal\alshaya_aura_react\Helper\AuraHelper $aura_helper
+   *   The aura helper service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              RouteMatchInterface $route_match) {
+                              RouteMatchInterface $route_match,
+                              AuraHelper $aura_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
+    $this->auraHelper = $aura_helper;
   }
 
   /**
@@ -56,7 +68,8 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
     return new static($configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('alshaya_aura_react.aura_helper')
     );
   }
 
@@ -65,7 +78,8 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
    */
   public function build() {
     return [
-      '#markup' => '<div id="my-accounts-aura"></div>',
+      '#theme' => 'my_accounts_aura_block',
+      '#strings' => $this->auraHelper->getStaticStrings(),
       '#attached' => [
         'library' => [
           'alshaya_white_label/aura-loyalty-myaccount',

@@ -67,6 +67,16 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
  */
 function alshaya_aura_react_theme() {
   $theme = [
+    'my_loyalty_club' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'my_accounts_aura_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
     'aura_rewards_header' => [
       'variables' => [
         'learn_more_link' => '',
