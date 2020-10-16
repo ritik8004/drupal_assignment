@@ -521,7 +521,7 @@ class CartController {
           }
         }
 
-        $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], $action, $options, $request_content['variant_sku']);
+        $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], $action, $options, ($request_content['variant_sku'] ?? NULL));
         break;
 
       case CartActions::CART_APPLY_COUPON:
