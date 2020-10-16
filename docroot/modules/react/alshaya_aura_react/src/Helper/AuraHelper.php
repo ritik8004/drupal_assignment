@@ -77,8 +77,8 @@ class AuraHelper {
    */
   public function getUserAuraStatus() {
     $uid = $this->currentUser->id();
-    $user = $this->entityTypeManager->getStorage('user')->load($uid);
-    $status = $user->get('field_aura_loyalty_status')->getString() ?? 0;
+    $aura_status_field = $this->entityTypeManager->getStorage('user')->load($uid)->get('field_aura_loyalty_status')->getString() ?? '';
+    $status = $aura_status_field !== '' ? $aura_status_field : 0;
 
     return $status;
   }
