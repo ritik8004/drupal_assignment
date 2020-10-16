@@ -75,7 +75,12 @@ export default class CompletePurchase extends React.Component {
       if (deliveryInfo.length !== 0) {
         smoothScrollTo('.spc-checkout-delivery-information');
         const tag = document.createElement('p');
-        const errorMessage = document.createTextNode(Drupal.t('Please add delivery information'));
+        let errorMessage;
+        if (cart.delivery_type === 'click_and_collect') {
+          errorMessage = document.createTextNode(Drupal.t('Please select the collection store'));
+        } else {
+          errorMessage = document.createTextNode(Drupal.t('Please add delivery information'));
+        }
         tag.appendChild(errorMessage);
         deliveryInfo[0].appendChild(tag);
         tag.setAttribute('id', 'delivery-information-error');
