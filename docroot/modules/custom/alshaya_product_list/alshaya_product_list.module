@@ -57,8 +57,8 @@ function alshaya_product_list_search_api_db_query_alter(SelectInterface &$db_que
     if ((($node = Node::load($nid)) instanceof NodeInterface)
       && $node->bundle() == 'product_list') {
       $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
-      $attr_value = $node->get('field_attribute_value')->first()->getString();
-      $attr_name = $node->get('field_attribute_name')->first()->getString();
+      $attr_value = $node->get('field_attribute_value')->getString();
+      $attr_name = $node->get('field_attribute_name')->getString();
     }
 
     // Add condition on query.
