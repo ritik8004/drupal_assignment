@@ -86,9 +86,15 @@ const PdpLayout = () => {
     window.addEventListener('scroll', () => {
       if ((content !== null) && (content !== undefined)) {
         if (window.pageYOffset >= content.current.offsetTop + content.current.offsetHeight) {
+          header.current.classList.remove('magv2-pdp-non-sticky-header');
           header.current.classList.add('magv2-pdp-sticky-header');
+          header.current.classList.add('fadeInUp');
+          header.current.classList.remove('fadeOutVertical');
         } else {
           header.current.classList.remove('magv2-pdp-sticky-header');
+          header.current.classList.add('magv2-pdp-non-sticky-header');
+          header.current.classList.add('fadeOutVertical');
+          header.current.classList.remove('fadeInUp');
         }
       }
     });
@@ -113,7 +119,7 @@ const PdpLayout = () => {
 
   return (skuItemCode) ? (
     <>
-      <div className="magv2-header fadeInUp" style={{ animationDelay: '0.3s' }} ref={header}>
+      <div className="magv2-header" style={{ animationDelay: '0.3s' }} ref={header}>
         <PdpHeader
           title={title}
           finalPrice={finalPrice}
