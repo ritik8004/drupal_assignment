@@ -176,11 +176,11 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         break;
 
       case 'refresh stock':
-        $data = $request->request->get('data');
+        $variant_skus = $request->request->get('variant_skus');
         $skus = [];
 
-        foreach ($data['items'] as $element) {
-          $skus[] = $element['variant_sku'] ?? $element['sku'];
+        foreach ($variant_skus as $variant_sku) {
+          $skus[] = $variant_sku;
         }
         foreach ($cart['cart']['items'] ?? [] as $item) {
           $skus[] = $item['sku'];
