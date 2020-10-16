@@ -70,7 +70,7 @@ class AlshayaSpcStockHelper {
    * @throws \Exception
    *   Exception is thrown if there is problem connecting with MDC API.
    */
-  public function refreshStock(SKUInterface $sku_entity) {
+  private function refreshStock(SKUInterface $sku_entity) {
     static $processed_parents = [];
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
