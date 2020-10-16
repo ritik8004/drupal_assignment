@@ -20,11 +20,15 @@
   }
 
   &.magv2-pdp-sticky-header {
-    opacity: 1;
+    @include breakpoint($tablet) {
+      opacity: 1;
+    }
   }
 
   &.magv2-pdp-non-sticky-header {
-    opacity: 0;
+    @include breakpoint($tablet) {
+      opacity: 0;
+    }
   }
 
   @include breakpoint($only-mobile) {
@@ -33,6 +37,7 @@
     flex-direction: column;
     background: transparent;
     position: absolute;
+    opacity: 1;
   }
 
   .magv2-header-wrapper {
@@ -172,6 +177,11 @@
 
     .magv2-compact-detail-wrapper {
       display: none;
+
+      @include breakpoint($only-mobile){
+        display: block;
+        opacity: 0;
+      }
     }
 
     .cart-link {
@@ -253,8 +263,17 @@ html[lang=ar] {
     position: fixed;
     #{$left}: 0;
     top: 0;
+    @include breakpoint($only-mobile) {
+      background: $magv2-sticky-header-bg;
+    }
 
     .magv2-header-wrapper {
+      .magv2-compact-detail-wrapper,
+      .magv2-detail-wrapper {
+        display: flex;
+        opacity: 1;
+      }
+
       .back-button {
         @include icon(arrowup, after) {
           background: none;
