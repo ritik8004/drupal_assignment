@@ -178,7 +178,7 @@
     .magv2-compact-detail-wrapper {
       display: none;
 
-      @include breakpoint($only-mobile){
+      @include breakpoint($only-mobile) {
         display: block;
         opacity: 0;
       }
@@ -263,6 +263,7 @@ html[lang=ar] {
     position: fixed;
     #{$left}: 0;
     top: 0;
+
     @include breakpoint($only-mobile) {
       background: $magv2-sticky-header-bg;
     }
