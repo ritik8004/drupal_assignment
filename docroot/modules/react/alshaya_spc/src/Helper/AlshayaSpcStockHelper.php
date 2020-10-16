@@ -72,12 +72,11 @@ class AlshayaSpcStockHelper {
    */
   private function refreshStock(SKUInterface $sku_entity) {
     static $processed_parents = [];
-    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-    $plugin = $sku_entity->getPluginInstance();
-    $parent = $plugin->getParentSku($sku_entity);
+    $parent = $sku_entity->getPluginInstance()->getParentSku($sku_entity);
 
     // Refresh current sku stock.
     $sku_entity->refreshStock();
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
     $stock_status[$sku_entity->getSku()] = $plugin->isProductInStock($sku_entity);
     // Refresh parent stock once if exists for cart items.
