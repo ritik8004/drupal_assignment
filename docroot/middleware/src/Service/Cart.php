@@ -989,9 +989,9 @@ class Cart {
 
     // We do not want to send the variant sku values to magento unnecessarily.
     // So we store it separately and remove it from $data.
-    $variant_skus = [];
+    $skus = [];
     foreach ($data['items'] as $key => $item) {
-      $variant_skus[] = $item->variant_sku ?? $item->sku;
+      $skus[] = $item->variant_sku ?? $item->sku;
       unset($data['items'][$key]->variant_sku);
     }
 
@@ -1073,9 +1073,11 @@ class Cart {
         }
       }
       elseif (!empty($exception_type) && $is_add_to_cart && ($exception_type === 'OOS')) {
+        if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
+          $skus = array_merge($skus, array_column($cart['cart']['items'], 'sku'));
+        }
         $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
-          'cart' => $cart['cart'],
-          'variant_skus' => $variant_skus,
+          'skus' => $skus,
         ]);
 
         if ($response['status'] == TRUE) {
