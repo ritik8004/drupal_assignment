@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_aura_react\Helper\AuraHelper;
 
 /**
- * Class AlshayaLoyaltyController.
+ * AlshayaLoyaltyController for loyalty club page.
  *
  * @package Drupal\alshaya_aura_react\Controller
  */

@@ -9,7 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class AuraHelper.
+ * Helper class for Aura.
  *
  * @package Drupal\alshaya_aura_react\Helper
  */
