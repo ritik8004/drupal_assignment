@@ -146,12 +146,15 @@ class AuraFormSignUpOTPModal extends React.Component {
       otpRequested,
     } = this.state;
 
-    const { country_mobile_code, mobile_maxlength } = getAuraConfig();
-    const countryMobileCode = country_mobile_code
+    const {
+      country_mobile_code: countryMobileCode,
+      mobile_maxlength: countryMobileCodeMaxLength,
+    } = getAuraConfig();
+    const countryMobileCodeMarkup = countryMobileCode
       ? (
         <span className="country-code">
           +
-          {country_mobile_code}
+          {countryMobileCode}
         </span>
       )
       : '';
@@ -166,13 +169,13 @@ class AuraFormSignUpOTPModal extends React.Component {
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">
-            {countryMobileCode}
+            {countryMobileCodeMarkup}
             <TextField
               type="text"
               required
               name="mobile"
               label={Drupal.t('Mobile Number')}
-              maxLength={mobile_maxlength}
+              maxLength={countryMobileCodeMaxLength}
               onChangeCallback={this.handleChange}
             />
             <ConditionalView condition={otpRequested === true}>

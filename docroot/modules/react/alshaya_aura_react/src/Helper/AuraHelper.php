@@ -4,6 +4,8 @@ namespace Drupal\alshaya_aura_react\Helper;
 
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\mobile_number\MobileNumberUtilInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class AuraHelper.
@@ -26,17 +28,41 @@ class AuraHelper {
   protected $entityTypeManager;
 
   /**
+   * Mobile utility.
+   *
+   * @var \Drupal\mobile_number\MobileNumberUtilInterface
+   */
+  protected $mobileUtil;
+
+  /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AuraHelper constructor.
    *
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   Current user object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
+   * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
+   *   Mobile utility.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
-  public function __construct(AccountProxyInterface $current_user,
-                              EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    AccountProxyInterface $current_user,
+    EntityTypeManagerInterface $entity_type_manager,
+    MobileNumberUtilInterface $mobile_util,
+    ConfigFactoryInterface $config_factory
+  ) {
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
+    $this->mobileUtil = $mobile_util;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -65,6 +91,26 @@ class AuraHelper {
     $tier = $user->get('field_aura_tier')->getString() ?? '';
 
     return $tier;
+  }
+
+  /**
+   * Get aura config.
+   *
+   * @return array
+   *   AURA config.
+   */
+  public function getAuraConfig() {
+    $country_code = _alshaya_custom_get_site_level_country_code();
+    $alshaya_aura_config = $this->configFactory->get('alshaya_aura_react.settings');
+
+    $config = [
+      'appStoreLink' => $alshaya_aura_config->get('aura_app_store_link'),
+      'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
+      'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+      'mobile_maxlength' => $this->configFactory->get('alshaya_master.mobile_number_settings')->get('maxlength'),
+    ];
+
+    return $config;
   }
 
 }
