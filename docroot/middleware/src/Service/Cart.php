@@ -987,6 +987,15 @@ class Cart {
       ? $data['extension']['action'] ?? ''
       : $data['extension']->action ?? '';
 
+    // We do not need to send the variant sku value to Magento. So we save it,
+    // unset it from $data and use it later. We serialize it since
+    // $data['items'] is an object and unsetting that also affects
+    // $data_with_variant_sku.
+    $data_with_variant_sku = serialize($data);
+    foreach ($data['items'] as $key => $item) {
+      unset($data['items'][$key]->variant_sku);
+    }
+
     try {
       $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data], $action);
       static::$cart = $this->formatCart($cart_updated);
@@ -1067,7 +1076,7 @@ class Cart {
       elseif (!empty($exception_type) && $is_add_to_cart && ($exception_type === 'OOS')) {
         $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
           'cart' => $cart['cart'],
-          'data' => $data,
+          'data' => unserialize($data_with_variant_sku),
         ]);
 
         if ($response['status'] == TRUE) {
