@@ -16,15 +16,6 @@ class AuraFormSignUpOTPModal extends React.Component {
     };
   }
 
-  handleChange = (e) => {
-    const { name, value } = e.target;
-
-    this.setState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
-
   getElementValue = (elementId) => document.getElementById(elementId).value
 
   showError = (elementId, msg) => {
@@ -90,7 +81,6 @@ class AuraFormSignUpOTPModal extends React.Component {
   };
 
   verifyOtp = async () => {
-    const mobile = this.getElementValue('mobile');
     const otp = this.getElementValue('otp');
 
     if (otp.length === 0) {
@@ -99,6 +89,7 @@ class AuraFormSignUpOTPModal extends React.Component {
       this.removeError('otp-error');
       // API call to verify otp.
       const apiUrl = 'post/loyalty-club/verify-otp';
+      const mobile = this.getElementValue('mobile');
       const apiData = postAPIData(apiUrl, { mobile, otp });
 
       if (apiData instanceof Promise) {
