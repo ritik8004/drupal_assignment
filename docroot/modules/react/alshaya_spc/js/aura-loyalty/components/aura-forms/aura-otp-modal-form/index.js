@@ -1,23 +1,52 @@
 import React from 'react';
+import Popup from 'reactjs-popup';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
+import Loading from '../../../../utilities/loading';
+import WithModal from '../../../../checkout/components/with-modal';
+
+const AuraFormNewAuraUserModal = React.lazy(
+  () => import('../aura-new-aura-user-form'),
+);
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      mobileNumber: null,
       otpRequested: false,
     };
   }
 
   requestOtp = () => {
-    // @todo: API Call to request OTP for the mobile number.
-    // Once we get a success response that OTP is sent, we update state,
-    // to show the otp fields.
-    this.setState({
-      otpRequested: true,
-    });
+    const {
+      otpRequested,
+    } = this.state;
+
+    // If state is true, it means otp is already sent.
+    if (otpRequested === false) {
+      // @todo: API Call to request OTP for the mobile number.
+      // Once we get a success response that OTP is sent, we update state,
+      // to show the otp fields.
+      this.setState({
+        mobileNumber: document.querySelector('#otp-mobile-number').value,
+        otpRequested: true,
+      });
+    }
+  };
+
+  verifyOtp = (openModalCallback) => {
+    const {
+      otpRequested,
+    } = this.state;
+
+    // If state is true, it means otp is already sent.
+    if (otpRequested === true) {
+      // @todo: API Call to verify OTP for the mobile number.
+      // Open modal for the new user.
+      openModalCallback();
+    }
   };
 
   getOtpDescription = () => {
@@ -28,8 +57,8 @@ class AuraFormSignUpOTPModal extends React.Component {
     let description = '';
     if (otpRequested === true) {
       description = [
-        <span className="part">{Drupal.t('We have sent the One Time Pin to your mobile number.')}</span>,
-        <span className="part">{Drupal.t('Didn’t receive the One Time Pin?')}</span>,
+        <span key="part1" className="part">{Drupal.t('We have sent the One Time Pin to your mobile number.')}</span>,
+        <span key="part2" className="part">{Drupal.t('Didn’t receive the One Time Pin?')}</span>,
       ];
     } else {
       description = Drupal.t('We will send a One Time Pin to your both your email address and mobile number.');
@@ -44,6 +73,7 @@ class AuraFormSignUpOTPModal extends React.Component {
 
     const {
       otpRequested,
+      mobileNumber,
     } = this.state;
 
     const submitButtonText = otpRequested === true ? Drupal.t('Verify') : Drupal.t('Send One Time Pin');
@@ -78,7 +108,31 @@ class AuraFormSignUpOTPModal extends React.Component {
                 <span className="resend-otp">{Drupal.t('Resend Code')}</span>
               </ConditionalView>
             </div>
-            <div className="aura-modal-form-submit" onClick={() => this.requestOtp()}>{submitButtonText}</div>
+            <ConditionalView condition={otpRequested === false}>
+              <div className="aura-modal-form-submit" onClick={() => this.requestOtp()}>{submitButtonText}</div>
+            </ConditionalView>
+            <ConditionalView condition={otpRequested === true}>
+              <WithModal modalStatusKey="aura-modal-new-aura-user">
+                {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+                  <>
+                    <div className="aura-modal-form-submit" onClick={() => this.verifyOtp(triggerOpenModal)}>{submitButtonText}</div>
+                    <Popup
+                      className="aura-modal-form new-aura-user"
+                      open={isModalOpen}
+                      closeOnEscape={false}
+                      closeOnDocumentClick={false}
+                    >
+                      <React.Suspense fallback={<Loading />}>
+                        <AuraFormNewAuraUserModal
+                          mobileNumber={mobileNumber}
+                          closeModal={triggerCloseModal}
+                        />
+                      </React.Suspense>
+                    </Popup>
+                  </>
+                )}
+              </WithModal>
+            </ConditionalView>
           </div>
         </div>
       </div>

@@ -85,7 +85,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
   render() {
     return (
-      <div className="loyalty-club-rewards-wrapper loyalty-tab-content">
+      <div className="loyalty-club-rewards-wrapper loyalty-tab-content fadeInUp" style={{ animationDelay: '0.6s' }}>
         <div className="header-row">
           <span className="order-id">{Drupal.t('Order No.')}</span>
           <span className="date">{Drupal.t('Date')}</span>

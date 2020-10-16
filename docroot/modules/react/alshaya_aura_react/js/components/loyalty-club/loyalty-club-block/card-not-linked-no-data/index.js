@@ -12,7 +12,7 @@ const AuraFormSignUpOTPModal = React.lazy(
 );
 
 const AuraMyAccountNoLinkedCard = () => (
-  <div className="aura-myaccount-no-linked-card-wrapper no-card-found">
+  <div className="aura-myaccount-no-linked-card-wrapper no-card-found fadeInUp">
     <div className="aura-logo">
       <ConditionalView condition={window.innerWidth > 1024}>
         <AuraLogo stacked="vertical" />
