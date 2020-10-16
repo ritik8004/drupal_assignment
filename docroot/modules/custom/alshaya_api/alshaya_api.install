@@ -22,6 +22,14 @@ function alshaya_api_update_8004() {
     'alshaya_api'
   );
 
+  // Correct the target type for client field in token.
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  $client_field = $update_manager->getFieldStorageDefinition('client', 'oauth2_token');
+  if ($client_field->getItemDefinition()->getSetting('target_type') !== 'consumer') {
+    $client_field->getItemDefinition()->setSetting('target_type', 'consumer');
+    $update_manager->updateFieldStorageDefinition($client_field);
+  }
+
   // Assign user to the client to ensure we can use
   // grant type client_credentials.
   $user = user_load_by_name(Settings::get('alshaya_magento_user_username'));
