@@ -132,6 +132,7 @@ class AuraFormSignUpOTPModal extends React.Component {
 
     const {
       otpRequested,
+      otpVerified,
     } = this.state;
 
     const {
@@ -149,6 +150,11 @@ class AuraFormSignUpOTPModal extends React.Component {
       : '';
 
     const submitButtonText = otpRequested === true ? getStringMessage('verify') : getStringMessage('otp_button_label');
+
+    if (otpVerified) {
+      // @TODO: If otp is successfully verified, create
+      // component for quick enrollment modal and render.
+    }
 
     return (
       <div className="aura-otp-form">
