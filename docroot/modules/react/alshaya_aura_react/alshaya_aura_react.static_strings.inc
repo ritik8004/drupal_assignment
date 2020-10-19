@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Contains Aura related static strings.
+ */
+
+/**
+ * Aura static strings.
+ */
+function _alshaya_aura_static_strings() {
+  return [
+    [
+      'key' => 'form_error_valid_mobile_number',
+      'value' => t('Please enter valid mobile number.'),
+    ],
+    [
+      'key' => 'form_error_mobile_number',
+      'value' => t('Please enter mobile number.'),
+    ],
+    [
+      'key' => 'form_error_otp',
+      'value' => t('Please enter OTP.'),
+    ],
+    [
+      'key' => 'otp_send_message',
+      'value' => t('We have sent the One Time Pin to your mobile number.'),
+    ],
+    [
+      'key' => 'didnt_receive_otp_message',
+      'value' => t('Didn’t receive the One Time Pin?'),
+    ],
+    [
+      'key' => 'send_otp_helptext',
+      'value' => t('We will send a One Time Pin to both your email address and mobile number.'),
+    ],
+    [
+      'key' => 'verify',
+      'value' => t('Verify'),
+    ],
+    [
+      'key' => 'otp_button_label',
+      'value' => t('Send One Time Pin'),
+    ],
+    [
+      'key' => 'otp_modal_title',
+      'value' => t('Say hello to Aura'),
+    ],
+    [
+      'key' => 'resend_code',
+      'value' => t('Resend Code'),
+    ],
+    [
+      'key' => 'mobile_label',
+      'value' => t('Mobile Number'),
+    ],
+    [
+      'key' => 'otp_label',
+      'value' => t('One Time Pin'),
+    ],
+  ];
+}

@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_aura_react\Helper;
 
 /**
- * Class AuraTier.
+ * Contains all aura tier constants.
  *
  * @todo Update the constant values once available from MDC.
  */

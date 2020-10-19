@@ -2,11 +2,11 @@
  * Helper function to get user's AURA Status.
  */
 function getUserAuraStatus() {
-  let loyaltyStatus = '';
+  let loyaltyStatus = 0;
   if (typeof drupalSettings.aura !== 'undefined'
     && typeof drupalSettings.aura.userDetails !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura.userDetails, 'loyaltyStatus')) {
-    loyaltyStatus = drupalSettings.aura.userDetails.loyaltyStatus || '';
+    loyaltyStatus = drupalSettings.aura.userDetails.loyaltyStatus || 0;
   }
 
   return loyaltyStatus;

@@ -28,16 +28,8 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     ];
   }
 
-  $alshaya_aura_config = \Drupal::config('alshaya_aura_react.settings');
-  $settings['config'] = [
-    'appStoreLink' => $alshaya_aura_config->get('aura_app_store_link'),
-    'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
-  ];
-
   $settings['allAuraTier'] = AuraTier::ALL_AURA_TIERS;
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
-
-  $page['#attached']['drupalSettings']['aura'] = $settings;
 
   $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
   $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-global';
@@ -52,7 +44,10 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
+    $settings['config'] = $aura_helper->getAuraConfig();
   }
+
+  $page['#attached']['drupalSettings']['aura'] = $settings;
 }
 
 /**
@@ -72,6 +67,16 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
  */
 function alshaya_aura_react_theme() {
   $theme = [
+    'my_loyalty_club' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'my_accounts_aura_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
     'aura_rewards_header' => [
       'variables' => [
         'learn_more_link' => '',
