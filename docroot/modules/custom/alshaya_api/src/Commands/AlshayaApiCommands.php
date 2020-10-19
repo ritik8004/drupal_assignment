@@ -610,10 +610,11 @@ class AlshayaApiCommands extends DrushCommands {
       }
 
       // Cast prices to ensure comparison is between apple to apple.
+      $demical_point = $this->configFactory->get('acq_commerce.currency')->get('decimal_points');
       $d_price = (float) $data['price'];
-      $d_final_price = (float) round($data['final_price'], 2);
+      $d_final_price = (float) round($data['final_price'], $demical_point);
       $m_price = (float) $mdata['price'];
-      $m_final_price = (float) round($mdata['final_price'], 2);
+      $m_final_price = (float) round($mdata['final_price'], $demical_point);
 
       // If price in Drupal not matches with price in Magento.
       if (($d_price != $m_price) || ($d_final_price != $m_final_price)) {
