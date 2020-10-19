@@ -8,15 +8,21 @@ class AuraFormNewAuraUserModal extends React.Component {
     <a key="part2" className="t-c-link">{Drupal.t('Terms & Conditions')}</a>,
   ];
 
-  registerUser = (closeModal) => {
+  registerUser = () => {
+    const {
+      closeNewUserModal,
+      closeOTPModal,
+    } = this.props;
+
     // @todo: API Call to register Aura User.
-    // Close both the modals.
-    closeModal();
+    // Close the modals.
+    closeNewUserModal();
+    closeOTPModal();
   };
 
   render() {
     const {
-      closeModal,
+      closeNewUserModal,
       mobileNumber,
     } = this.props;
 
@@ -26,7 +32,7 @@ class AuraFormNewAuraUserModal extends React.Component {
       <div className="aura-new-user-form">
         <div className="aura-modal-header">
           <SectionTitle>{Drupal.t('Say hello to Aura')}</SectionTitle>
-          <a className="close" onClick={() => closeModal()} />
+          <button type="button" className="close" onClick={() => closeNewUserModal()} />
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">
@@ -55,7 +61,7 @@ class AuraFormNewAuraUserModal extends React.Component {
             <div className="aura-new-user-t-c aura-otp-submit-description">
               {this.getNewUserFormDescription()}
             </div>
-            <div className="aura-modal-form-submit" onClick={() => this.registerUser(closeModal)}>
+            <div className="aura-modal-form-submit" onClick={() => this.registerUser()}>
               {submitButtonText}
             </div>
           </div>

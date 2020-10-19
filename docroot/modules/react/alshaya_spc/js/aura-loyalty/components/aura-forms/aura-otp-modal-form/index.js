@@ -3,12 +3,7 @@ import Popup from 'reactjs-popup';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
-import Loading from '../../../../utilities/loading';
-import WithModal from '../../../../checkout/components/with-modal';
-
-const AuraFormNewAuraUserModal = React.lazy(
-  () => import('../aura-new-aura-user-form'),
-);
+import AuraFormNewAuraUserModal from '../aura-new-aura-user-form';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
@@ -16,8 +11,28 @@ class AuraFormSignUpOTPModal extends React.Component {
     this.state = {
       mobileNumber: null,
       otpRequested: false,
+      isNewUserModalOpen: false,
     };
   }
+
+  openNewUserModal = () => {
+    this.setState({
+      isNewUserModalOpen: true,
+    });
+  };
+
+  closeNewUserModal = () => {
+    const {
+      closeOTPModal,
+    } = this.props;
+
+    this.setState({
+      isNewUserModalOpen: false,
+    });
+
+    // Also close OTP Modal.
+    closeOTPModal();
+  };
 
   requestOtp = () => {
     const {
@@ -36,7 +51,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     }
   };
 
-  verifyOtp = (openModalCallback) => {
+  verifyOtp = () => {
     const {
       otpRequested,
     } = this.state;
@@ -45,7 +60,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     if (otpRequested === true) {
       // @todo: API Call to verify OTP for the mobile number.
       // Open modal for the new user.
-      openModalCallback();
+      this.openNewUserModal();
     }
   };
 
@@ -68,12 +83,13 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   render() {
     const {
-      closeModal,
+      closeOTPModal,
     } = this.props;
 
     const {
       otpRequested,
       mobileNumber,
+      isNewUserModalOpen,
     } = this.state;
 
     const submitButtonText = otpRequested === true ? Drupal.t('Verify') : Drupal.t('Send One Time Pin');
@@ -82,7 +98,7 @@ class AuraFormSignUpOTPModal extends React.Component {
       <div className="aura-otp-form">
         <div className="aura-modal-header">
           <SectionTitle>{Drupal.t('Say hello to Aura')}</SectionTitle>
-          <a className="close" onClick={() => closeModal()} />
+          <button type="button" className="close" onClick={() => closeOTPModal()} />
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">
@@ -112,26 +128,21 @@ class AuraFormSignUpOTPModal extends React.Component {
               <div className="aura-modal-form-submit" onClick={() => this.requestOtp()}>{submitButtonText}</div>
             </ConditionalView>
             <ConditionalView condition={otpRequested === true}>
-              <WithModal modalStatusKey="aura-modal-new-aura-user">
-                {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
-                  <>
-                    <div className="aura-modal-form-submit" onClick={() => this.verifyOtp(triggerOpenModal)}>{submitButtonText}</div>
-                    <Popup
-                      className="aura-modal-form new-aura-user"
-                      open={isModalOpen}
-                      closeOnEscape={false}
-                      closeOnDocumentClick={false}
-                    >
-                      <React.Suspense fallback={<Loading />}>
-                        <AuraFormNewAuraUserModal
-                          mobileNumber={mobileNumber}
-                          closeModal={triggerCloseModal}
-                        />
-                      </React.Suspense>
-                    </Popup>
-                  </>
-                )}
-              </WithModal>
+              <>
+                <div className="aura-modal-form-submit" onClick={() => this.verifyOtp()}>{submitButtonText}</div>
+                <Popup
+                  className="aura-modal-form new-aura-user"
+                  open={isNewUserModalOpen}
+                  closeOnEscape={false}
+                  closeOnDocumentClick={false}
+                >
+                  <AuraFormNewAuraUserModal
+                    mobileNumber={mobileNumber}
+                    closeNewUserModal={() => this.closeNewUserModal()}
+                    closeOTPModal={() => this.closeNewUserModal()}
+                  />
+                </Popup>
+              </>
             </ConditionalView>
           </div>
         </div>
