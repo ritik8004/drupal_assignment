@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Helper;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
@@ -21,40 +22,76 @@ class AlshayaSpcStockHelper {
    *   Response data.
    */
   public function refreshStockForProductsInCart($cart = NULL) {
-    $processed_parents = [];
-
     // If empty, simply return.
-    if (empty($cart)) {
+    if (empty($cart) || empty($cart['items'])) {
       return [];
     }
 
-    $response = [];
+    $skus = array_column($cart['items'], 'sku');
+    return $this->refreshStockForSkus($skus);
+  }
 
-    foreach ($cart['items'] ?? [] as $item) {
-      if ($sku_entity = SKU::loadFromSku($item['sku'])) {
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-        $parent = $plugin->getParentSku($sku_entity);
-
-        // Refresh Current Sku stock.
-        $sku_entity->refreshStock();
-        $plugin = $sku_entity->getPluginInstance();
-        $response['stock'][$sku_entity->getSku()] = $plugin->isProductInStock($sku_entity);
-        // Refresh parent stock once if exists for cart items.
-        if ($parent instanceof SKU && !in_array($parent->getSku(), $processed_parents)) {
-          $processed_parents[] = $parent->getSku();
-          $parent->refreshStock();
-          $plugin = $parent->getPluginInstance();
-          $parent_in_stock = $plugin->isProductInStock($parent);
-          if ($response['stock'][$sku_entity->getSku()]
-            && !$parent_in_stock) {
-            $response['stock'][$sku_entity->getSku()] = FALSE;
+  /**
+   * Refreshes stock for a set of skus.
+   *
+   * @param array $skus
+   *   The array of sku values.
+   *
+   * @return array
+   *   The stock status of all skus or empty array if nothing is updated.
+   */
+  public function refreshStockForSkus(array $skus) {
+    foreach ($skus as $sku) {
+      if ($sku_entity = SKU::loadFromSku($sku)) {
+        try {
+          $statuses = $this->refreshStock($sku_entity);
+          foreach ($statuses as $sku => $status) {
+            $response['stock'][$sku] = $status;
           }
+        }
+        catch (\Exception $e) {
+          // Do nothing.
         }
       }
     }
 
-    return $response;
+    return $response ?? [];
+  }
+
+  /**
+   * Refreshes stock for a particular sku entity.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku_entity
+   *   The loaded sku entity.
+   *
+   * @return array
+   *   The stock status of sku.
+   *
+   * @throws \Exception
+   *   Exception is thrown if there is problem connecting with MDC API.
+   */
+  private function refreshStock(SKUInterface $sku_entity) {
+    static $processed_parents = [];
+    $parent = $sku_entity->getPluginInstance()->getParentSku($sku_entity);
+
+    // Refresh current sku stock.
+    $sku_entity->refreshStock();
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku_entity->getPluginInstance();
+    $stock_status[$sku_entity->getSku()] = $plugin->isProductInStock($sku_entity);
+    // Refresh parent stock once if exists for cart items.
+    if ($parent instanceof SKU && !in_array($parent->getSku(), $processed_parents)) {
+      $processed_parents[] = $parent->getSku();
+      $parent->refreshStock();
+      $plugin = $parent->getPluginInstance();
+      $parent_in_stock = $plugin->isProductInStock($parent);
+      if ($stock_status[$sku_entity->getSku()]
+        && !$parent_in_stock) {
+        $stock_status[$sku_entity->getSku()] = FALSE;
+      }
+    }
+
+    return $stock_status;
   }
 
 }
