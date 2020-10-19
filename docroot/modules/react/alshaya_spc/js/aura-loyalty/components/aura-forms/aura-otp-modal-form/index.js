@@ -28,7 +28,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     document.getElementById(elementId).classList.remove('error');
   }
 
-  validateMobileOtp = async (data, action) => {
+  validateMobileOtp = (data, action) => {
     let isValid = true;
 
     if (action === 'send_otp') {
@@ -50,37 +50,42 @@ class AuraFormSignUpOTPModal extends React.Component {
     return isValid;
   }
 
-  sendOtp = async () => {
+  sendOtp = () => {
     const mobile = this.getElementValue('mobile');
 
     if (mobile.length === 0 || mobile.match(/^[0-9]+$/) === null) {
       this.showError('mobile-error', getStringMessage('form_error_mobile_number'));
-    } else {
-      const valid = await this.validateMobileOtp({ mobile }, 'send_otp');
+      return;
+    }
 
-      if (valid === true) {
-        // API call to send otp.
-        const apiUrl = 'post/loyalty-club/send-otp';
-        const apiData = postAPIData(apiUrl, { mobile });
+    // Call API to check if mobile number is valid.
+    const validationRequest = this.validateMobileOtp({ mobile }, 'send_otp');
+    if (validationRequest instanceof Promise) {
+      validationRequest.then((valid) => {
+        if (valid === true) {
+          // API call to send otp.
+          const apiUrl = 'post/loyalty-club/send-otp';
+          const apiData = postAPIData(apiUrl, { mobile });
 
-        if (apiData instanceof Promise) {
-          apiData.then((result) => {
-            if (result.data !== undefined && result.data.error === undefined) {
-              // Once we get a success response that OTP is sent, we update state,
-              // to show the otp fields.
-              if (result.data.status) {
-                this.setState({
-                  otpRequested: true,
-                });
+          if (apiData instanceof Promise) {
+            apiData.then((result) => {
+              if (result.data !== undefined && result.data.error === undefined) {
+                // Once we get a success response that OTP is sent, we update state,
+                // to show the otp fields.
+                if (result.data.status) {
+                  this.setState({
+                    otpRequested: true,
+                  });
+                }
               }
-            }
-          });
+            });
+          }
         }
-      }
+      });
     }
   };
 
-  verifyOtp = async () => {
+  verifyOtp = () => {
     const otp = this.getElementValue('otp');
 
     if (otp.length === 0) {
