@@ -10,7 +10,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * ApiHelper.
+ * Api Helper Class.
  */
 class ApiHelper {
 

@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class GoogleKnowledgeGraphConfigForm.
+ * Class Google Knowledge Graph Config Form.
  */
 class GoogleKnowledgeGraphConfigForm extends ConfigFormBase {
 

@@ -7,7 +7,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * AlshayaStoreFinderCommands class.
+ * Alshaya Store Finder Commands class.
  */
 class AlshayaStoreFinderCommands extends DrushCommands {
 

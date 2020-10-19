@@ -149,7 +149,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
 
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
 
     if ($field_category = $node->get('field_category')) {

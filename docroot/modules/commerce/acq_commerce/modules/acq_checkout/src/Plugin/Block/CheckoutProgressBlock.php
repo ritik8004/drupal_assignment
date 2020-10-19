@@ -8,6 +8,8 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Component\Plugin\PluginManagerInterface;
 
 /**
  * Provides a checkout progress block.
@@ -35,6 +37,20 @@ class CheckoutProgressBlock extends BlockBase implements ContainerFactoryPluginI
   protected $cartStorage;
 
   /**
+   * Stores the configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * ACQ Checkout Flow plugin manager object.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $pluginManager;
+
+  /**
    * Constructs a new CheckoutProgressBlock.
    *
    * @param array $configuration
@@ -47,12 +63,18 @@ class CheckoutProgressBlock extends BlockBase implements ContainerFactoryPluginI
    *   The current route match.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart session.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   *   ACQ Checkout Flow plugin manager object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, CartStorageInterface $cart_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match, CartStorageInterface $cart_storage, ConfigFactoryInterface $config_factory, PluginManagerInterface $plugin_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->routeMatch = $route_match;
     $this->cartStorage = $cart_storage;
+    $this->configFactory = $config_factory;
+    $this->pluginManager = $plugin_manager;
   }
 
   /**
@@ -64,7 +86,9 @@ class CheckoutProgressBlock extends BlockBase implements ContainerFactoryPluginI
       $plugin_id,
       $plugin_definition,
       $container->get('current_route_match'),
-      $container->get('acq_cart.cart_storage')
+      $container->get('acq_cart.cart_storage'),
+      $container->get('config.factory'),
+      $container->get('plugin.manager.acq_checkout_flow')
     );
   }
 
@@ -81,10 +105,9 @@ class CheckoutProgressBlock extends BlockBase implements ContainerFactoryPluginI
     }
 
     // Load the CheckoutFlow plugin.
-    $config = \Drupal::config('acq_checkout.settings');
+    $config = $this->configFactory->get('acq_checkout.settings');
     $checkout_flow_plugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
-    $plugin_manager = \Drupal::service('plugin.manager.acq_checkout_flow');
-    $checkout_flow = $plugin_manager->createInstance($checkout_flow_plugin, []);
+    $checkout_flow = $this->pluginManager->createInstance($checkout_flow_plugin, []);
 
     // Build the steps sent to the template.
     $steps = [];

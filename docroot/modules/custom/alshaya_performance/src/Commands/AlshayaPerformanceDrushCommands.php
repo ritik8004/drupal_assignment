@@ -6,7 +6,7 @@ use Drupal\Core\File\FileSystem;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaPerformanceDrushCommands.
+ * Class Alshaya Performance Drush Commands.
  */
 class AlshayaPerformanceDrushCommands extends DrushCommands {
 

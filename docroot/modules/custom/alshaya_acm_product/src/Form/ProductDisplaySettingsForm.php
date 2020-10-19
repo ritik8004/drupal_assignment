@@ -7,7 +7,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class ProductDisplaySettingsForm.
+ * Class Product Display Settings Form.
  */
 class ProductDisplaySettingsForm extends ConfigFormBase {
 

@@ -10,7 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Cache\Cache;
 
 /**
- * Class AddressBookAreasTermsHelper.
+ * Class Address Book Areas TermsHelper.
  *
  * @package Drupal\alshaya_addressbook
  */

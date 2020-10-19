@@ -7,7 +7,7 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * IngestAPIWrapper class.
+ * Ingest API Wrapper class.
  */
 class IngestAPIWrapper {
 

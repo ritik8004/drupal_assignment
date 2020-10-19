@@ -9,7 +9,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class SkuPriceHelper.
+ * Class Sku Price Helper.
  *
  * @package Drupal\alshaya_acm_product\Service
  */

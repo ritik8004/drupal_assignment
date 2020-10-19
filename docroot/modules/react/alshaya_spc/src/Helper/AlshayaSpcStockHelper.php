@@ -5,7 +5,7 @@ namespace Drupal\alshaya_spc\Helper;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
- * Class AlshayaSpcStockHelper.
+ * Class Alshaya Spc Stock Helper.
  *
  * @package Drupal\alshaya_spc\Helper
  */

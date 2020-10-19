@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 
 /**
- * Class UserForgotPasswordMail.
+ * Class User Forgot Password Mail.
  *
  * @RestResource(
  *   id = "user_forgot_password_mail",

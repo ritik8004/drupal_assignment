@@ -18,7 +18,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaApiCommands.
+ * Class Alshaya Api Commands.
  *
  * @package Drupal\alshaya_api\Commands
  */
@@ -324,7 +324,10 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage drush alshaya-api-sanity-check-cats
    * @usage drush alshaya-api-sanity-check-cats --page_size=2
    */
-  public function sanityCheckCategoryMappings(array $options = ['page_size' => 3, 'mode' => 'sync']) {
+  public function sanityCheckCategoryMappings(array $options = [
+    'page_size' => 3,
+    'mode' => 'sync',
+  ]) {
     $verbose = $options['verbose'] ?? FALSE;
     $mode = $options['mode'] ?? 'sync';
     if ($mode === 'update') {
@@ -446,7 +449,10 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage drush alshaya-api-sanity-check-stock --mode=update
    * @usage drush alshaya-api-sanity-check-stock --page_size=2
    */
-  public function sanityCheckStock(array $options = ['page_size' => 3, 'mode' => 'sync']) {
+  public function sanityCheckStock(array $options = [
+    'page_size' => 3,
+    'mode' => 'sync',
+  ]) {
     $verbose = $options['verbose'] ?? FALSE;
     $mode = $options['mode'] ?? 'sync';
     if ($mode === 'update') {
@@ -578,7 +584,10 @@ class AlshayaApiCommands extends DrushCommands {
    * @usage drush alshaya-api-sanity-check-price
    * @usage drush alshaya-api-sanity-check-price --page_size=2
    */
-  public function sanityCheckPrice(array $options = ['page_size' => 3, 'mode' => 'sync']) {
+  public function sanityCheckPrice(array $options = [
+    'page_size' => 3,
+    'mode' => 'sync',
+  ]) {
     $verbose = $options['verbose'] ?? FALSE;
     $mode = $options['mode'] ?? 'sync';
     if ($mode === 'update') {
@@ -601,10 +610,11 @@ class AlshayaApiCommands extends DrushCommands {
       }
 
       // Cast prices to ensure comparison is between apple to apple.
+      $demical_point = $this->configFactory->get('acq_commerce.currency')->get('decimal_points');
       $d_price = (float) $data['price'];
-      $d_final_price = (float) round($data['final_price'], 2);
+      $d_final_price = (float) round($data['final_price'], $demical_point);
       $m_price = (float) $mdata['price'];
-      $m_final_price = (float) round($mdata['final_price'], 2);
+      $m_final_price = (float) round($mdata['final_price'], $demical_point);
 
       // If price in Drupal not matches with price in Magento.
       if (($d_price != $m_price) || ($d_final_price != $m_final_price)) {

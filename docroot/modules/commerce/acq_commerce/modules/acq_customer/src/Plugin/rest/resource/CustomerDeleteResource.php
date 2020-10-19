@@ -7,7 +7,7 @@ use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 
 /**
- * Class CustomerDeleteResource.
+ * Class Customer Delete Resource.
  *
  * @package Drupal\acq_customer\Plugin
  *
@@ -45,14 +45,17 @@ class CustomerDeleteResource extends ResourceBase {
 
     $email = $data['email'];
 
-    /* @var \Drupal\user\Entity\User $user */
+    /** @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($email);
 
     // If there is user with given email.
     if ($user) {
       try {
         $user->delete();
-        $this->logger->notice('Deleted user with uid %id and email %email.', ['%id' => $user->id(), '%email' => $email]);
+        $this->logger->notice('Deleted user with uid %id and email %email.', [
+          '%id' => $user->id(),
+          '%email' => $email,
+        ]);
       }
       catch (EntityStorageException $e) {
         $this->logger->error($e->getMessage());

@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use App\Service\Drupal\Drupal;
 
 /**
- * Class ClientHelper.
+ * Class Client Helper.
  *
  * @package App\Helper
  */

@@ -30,7 +30,7 @@
     dataLayer.push(data);
   };
 
-  Drupal.alshayaSeoSpc.pushStoreData = function(cart) {
+  Drupal.alshayaSeoSpc.pushStoreData = function (cart) {
     if (cart.shipping.type !== 'click_and_collect' || !cart.shipping.storeInfo) {
       return;
     }
@@ -39,11 +39,11 @@
       deliveryOption: 'Click and Collect',
       deliveryType: 'ship_to_store',
       storeLocation: cart.shipping.storeInfo.name,
-      storeAddress: cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' +  cart.shipping.storeInfo.gtm_cart_address.administrative_area_display,
+      storeAddress: cart.shipping.storeInfo.gtm_cart_address.address_line1 + ' ' + cart.shipping.storeInfo.gtm_cart_address.administrative_area_display,
     };
   };
 
-  Drupal.alshayaSeoSpc.pushHomeDeliveryData = function(cart) {
+  Drupal.alshayaSeoSpc.pushHomeDeliveryData = function (cart) {
     if (cart.shipping.type !== 'home_delivery' || !cart.shipping.methods || !cart.shipping.address) {
       return;
     }
@@ -54,7 +54,7 @@
       return;
     }
 
-    var input = document.querySelector('[data-id="'+ area_id +'"]');
+    var input = document.querySelector('[data-id="' + area_id + '"]');
     return {
       deliveryOption: 'Home Delivery',
       deliveryType: cart.shipping.methods[0].carrier_title,
@@ -71,7 +71,7 @@
     dataLayer.push(data);
   };
 
-  Drupal.alshayaSeoSpc.checkoutEvent = function(cartData, step) {
+  Drupal.alshayaSeoSpc.checkoutEvent = function (cartData, step) {
     var checkoutPaymentPage = 'checkout payment page';
     var data = {
       language: drupalSettings.gtm.language,
@@ -166,7 +166,7 @@
 
   Drupal.behaviors.spcCheckoutGtm = {
     attach: function (context, settings) {
-      $('body').once('spc-checkout-gtm-onetime').each(function() {
+      $('body').once('spc-checkout-gtm-onetime').each(function () {
         if (settings.user.uid > 0) {
           Drupal.alshayaSeoSpc.gtmPushCheckoutOption('Logged In', 1);
         }

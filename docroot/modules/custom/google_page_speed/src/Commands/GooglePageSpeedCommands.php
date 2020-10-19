@@ -14,7 +14,7 @@ use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\google_page_speed\Service\GpsInsightsWrapper;
 
 /**
- * Class GooglePageSpeedCommands.
+ * Class Google Page Speed Commands.
  *
  * @package Drupal\google_page_speed\Commands
  */

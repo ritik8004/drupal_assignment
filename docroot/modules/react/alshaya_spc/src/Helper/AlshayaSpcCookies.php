@@ -7,7 +7,7 @@ use Drupal\Core\Database\Connection;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class AlshayaSpcCookies.
+ * Class Alshaya Spc Cookies.
  *
  * @package Drupal\alshaya_spc\Helper
  */

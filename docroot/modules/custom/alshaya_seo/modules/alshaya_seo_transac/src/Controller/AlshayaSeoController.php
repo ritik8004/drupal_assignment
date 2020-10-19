@@ -7,7 +7,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class AlshayaSeoController.
+ * Class Alshaya Seo Controller.
  */
 class AlshayaSeoController extends ControllerBase {
 

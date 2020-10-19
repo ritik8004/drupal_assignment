@@ -110,13 +110,13 @@ class BillingInformation extends AddressFormBase {
     }
 
     if (!(\Drupal::service('email.validator')->isValid($values['email']))) {
-      $form_state->setErrorByName('email', t('You have entered an invalid email addresss.'));
+      $form_state->setErrorByName('email', $this->t('You have entered an invalid email addresss.'));
     }
 
     $user = user_load_by_mail($values['email']);
 
     if ($user !== FALSE) {
-      $form_state->setErrorByName('email', t('You already have an account, please login.'));
+      $form_state->setErrorByName('email', $this->t('You already have an account, please login.'));
     }
   }
 

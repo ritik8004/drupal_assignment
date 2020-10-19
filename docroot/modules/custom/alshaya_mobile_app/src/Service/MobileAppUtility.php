@@ -33,7 +33,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\redirect\RedirectRepository;
 
 /**
- * MobileAppUtility Class.
+ * Mobile App Utility Class.
  */
 class MobileAppUtility {
 
@@ -509,7 +509,7 @@ class MobileAppUtility {
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
   public function throwException($message = NULL) {
-    throw new NotFoundHttpException($message ?? $this->t("page not found"));
+    throw new NotFoundHttpException($message ?? "page not found");
   }
 
   /**
@@ -629,7 +629,8 @@ class MobileAppUtility {
 
         try {
           // Get the taxonomy term ID of the target term.
-          $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();;
+          $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();
+          ;
           if (!empty($params) && !empty($params['taxonomy_term'])) {
             $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
 

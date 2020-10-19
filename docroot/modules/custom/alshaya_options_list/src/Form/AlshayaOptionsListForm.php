@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_options_list\Form;
 
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
-use Drupal\block\Entity\Block;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -11,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteBuilderInterface;
 
 /**
- * Class AlshayaOptionsListForm.
+ * Class Alshaya Options List Form.
  */
 class AlshayaOptionsListForm extends ConfigFormBase {
 
@@ -199,7 +198,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
 
     // Remove page url from breadcrumb block.
     $url = $config->get('alshaya_options_pages.' . $key . '.url');
-    $block = Block::load('breadcrumbs');
+    $block = $this->entityTypeManager->getStorage('block')->load('breadcrumbs');
     $visibility = $block->getVisibility();
     if (isset($visibility['request_path']['pages']) && stripos($visibility['request_path']['pages'], PHP_EOL . '/' . $url)) {
       $pages = explode(PHP_EOL, $visibility['request_path']['pages']);
@@ -247,7 +246,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       $config->set($config_key . '.attributes', $attributes);
 
       // Allow breadcrumb on url.
-      $block = Block::load('breadcrumbs');
+      $block = $this->entityTypeManager->getStorage('block')->load('breadcrumbs');
       $visibility = $block->getVisibility();
       $breadcrumb_url_string = PHP_EOL . '/' . $url;
       if (isset($visibility['request_path']['pages']) && !stripos($visibility['request_path']['pages'], $breadcrumb_url_string)) {

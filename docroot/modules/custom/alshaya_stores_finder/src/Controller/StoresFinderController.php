@@ -15,7 +15,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class StoresFinderController.
+ * Class Stores Finder Controller.
  */
 class StoresFinderController extends ControllerBase {
 

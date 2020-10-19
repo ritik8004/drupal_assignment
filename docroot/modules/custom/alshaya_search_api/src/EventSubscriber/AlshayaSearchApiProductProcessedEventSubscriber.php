@@ -12,7 +12,7 @@ use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AlshayaSearchApiProductProcessedEventSubscriber.
+ * Class Alshaya Search Api Product Processed EventSubscriber.
  *
  * @package Drupal\alshaya_search_api\EventSubscriber
  */
@@ -67,7 +67,10 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT][] = ['onProductProcessed', 400];
+    $events[ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT][] = [
+      'onProductProcessed',
+      400,
+    ];
     return $events;
   }
 

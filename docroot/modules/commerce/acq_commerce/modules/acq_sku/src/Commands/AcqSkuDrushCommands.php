@@ -25,7 +25,7 @@ use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
 /**
- * Class AcqSkuDrushCommands.
+ * Class Acq Sku Drush Commands.
  */
 class AcqSkuDrushCommands extends DrushCommands {
 
@@ -220,7 +220,10 @@ class AcqSkuDrushCommands extends DrushCommands {
    *
    * @throws \Drush\Exceptions\UserAbortException
    */
-  public function syncProducts($langcode, $page_size, array $options = ['skus' => NULL, 'category_id' => NULL]) {
+  public function syncProducts($langcode, $page_size, array $options = [
+    'skus' => NULL,
+    'category_id' => NULL,
+  ]) {
     $langcode = strtolower($langcode);
 
     $store_id = $this->i18nhelper->getStoreIdFromLangcode($langcode);

@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Class SocialMediaLinksResource.
+ * Class Social Media Links Resource.
  *
  * @RestResource(
  *   id = "social_media_links",

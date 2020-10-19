@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * Class AlshayaI18nHelper.
+ * Class Alshaya I18n Helper.
  */
 class AlshayaI18nHelper {
 

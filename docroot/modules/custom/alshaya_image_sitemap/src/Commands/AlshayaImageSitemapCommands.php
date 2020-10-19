@@ -9,7 +9,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaImageSitemapCommands.
+ * Class Alshaya Image Sitemap Commands.
  *
  * @package Drupal\alshaya_image_sitemap\Commands
  */

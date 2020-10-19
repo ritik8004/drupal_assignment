@@ -113,24 +113,26 @@ class AlshayaCloudPurger extends AcquiaCloudPurger {
 
     // Now create requests for all groups of tags.
     $site = $this->hostingInfo->getSiteIdentifier();
-    $ipv4 = $this->configFactory->get('alshaya_purge.settings')->get('ipv4');
-    $requests = function () use ($groups, $ipv4, $site) {
+    $ipv4_addresses = $this->configFactory->get('alshaya_purge.settings')->get('ipv4_addresses');
+    $requests = function () use ($groups, $ipv4_addresses, $site) {
       foreach ($groups as $group_id => $group) {
         $tags = implode(' ', Hash::cacheTags($group['tags']));
-        yield $group_id => function ($poolopt) use ($site, $tags, $ipv4) {
-          $opt = [
-            'headers' => [
-              'X-Acquia-Purge' => $site,
-              'X-Acquia-Purge-Tags' => $tags,
-              'Accept-Encoding' => 'gzip',
-              'User-Agent' => 'Acquia Purge',
-            ],
-          ];
-          if (is_array($poolopt) && count($poolopt)) {
-            $opt = array_merge($poolopt, $opt);
-          }
-          return $this->client->requestAsync('BAN', "http://$ipv4/tags", $opt);
-        };
+        foreach ($ipv4_addresses as $ipv4) {
+          yield $group_id => function ($poolopt) use ($site, $tags, $ipv4) {
+            $opt = [
+              'headers' => [
+                'X-Acquia-Purge' => $site,
+                'X-Acquia-Purge-Tags' => $tags,
+                'Accept-Encoding' => 'gzip',
+                'User-Agent' => 'Acquia Purge',
+              ],
+            ];
+            if (is_array($poolopt) && count($poolopt)) {
+              $opt = array_merge($poolopt, $opt);
+            }
+            return $this->client->requestAsync('BAN', 'http://' . str_replace('-', '.', $ipv4) . '/tags', $opt);
+          };
+        }
       }
     };
 

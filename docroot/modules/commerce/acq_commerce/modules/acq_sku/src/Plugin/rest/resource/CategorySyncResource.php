@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class CategorySyncResource.
+ * Class Category Sync Resource.
  *
  * @package Drupal\acq_sku\Plugin
  *
