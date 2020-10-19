@@ -1,5 +1,5 @@
 import React from 'react';
-import AuraFormTextField from '../aura-textfield';
+import AuraRedeemPointsTextField from '../aura-redeem-textfield';
 
 class AuraFormRedeemPoints extends React.Component {
   constructor(props) {
@@ -30,13 +30,13 @@ class AuraFormRedeemPoints extends React.Component {
         <span className="label">{ Drupal.t('Use your points') }</span>
         <div className="form-items">
           <div className="inputs">
-            <AuraFormTextField
+            <AuraRedeemPointsTextField
               name="spc-aura-redeem-field-points"
               placeholder="0"
               onChangeCallback={this.enableSubmitButton}
             />
             <span className="spc-aura-redeem-points-separator">=</span>
-            <AuraFormTextField
+            <AuraRedeemPointsTextField
               name="spc-aura-redeem-field-amount"
               placeholder={Drupal.t('KWD 0.000')}
             />

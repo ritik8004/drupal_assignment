@@ -23,6 +23,11 @@
     margin-bottom: 1.5rem;
   }
 
+  input:disabled {
+    background: none;
+    opacity: 0.5;
+  }
+
   .error {
     font-size: 0.75rem;
     color: $primary_input_inline_error;

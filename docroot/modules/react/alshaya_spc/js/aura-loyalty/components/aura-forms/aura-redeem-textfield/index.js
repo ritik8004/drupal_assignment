@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AuraFormTextField = (props) => {
+const AuraRedeemPointsTextField = (props) => {
   const { name, placeholder, onChangeCallback } = props;
 
   return (
@@ -16,4 +16,4 @@ const AuraFormTextField = (props) => {
   );
 };
 
-export default AuraFormTextField;
+export default AuraRedeemPointsTextField;

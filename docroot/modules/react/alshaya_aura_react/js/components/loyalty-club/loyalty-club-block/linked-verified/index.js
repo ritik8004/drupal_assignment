@@ -20,7 +20,7 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
     const profileInfo = getUserProfileInfo();
 
     return (
-      <div className="aura-card-linked-verified-wrapper">
+      <div className="aura-card-linked-verified-wrapper fadeInUp">
         <div className="aura-card-linked-verified-wrapper-content">
           <div className="aura-logo">
             <div className="aura-user-avatar">{ profileInfo.avatar }</div>
