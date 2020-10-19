@@ -90,26 +90,27 @@ class AuraFormSignUpOTPModal extends React.Component {
 
     if (otp.length === 0) {
       this.showError('otp-error', getStringMessage('form_error_otp'));
-    } else {
-      this.removeError('otp-error');
-      // API call to verify otp.
-      const apiUrl = 'post/loyalty-club/verify-otp';
-      const mobile = this.getElementValue('mobile');
-      const apiData = postAPIData(apiUrl, { mobile, otp });
+      return;
+    }
 
-      if (apiData instanceof Promise) {
-        apiData.then((result) => {
-          if (result.data !== undefined && result.data.error === undefined) {
-            // Once we get a success response that OTP is verified, we update state,
-            // to show the quick enrollment fields.
-            if (result.data.status) {
-              this.setState({
-                otpVerified: true,
-              });
-            }
+    this.removeError('otp-error');
+    // API call to verify otp.
+    const apiUrl = 'post/loyalty-club/verify-otp';
+    const mobile = this.getElementValue('mobile');
+    const apiData = postAPIData(apiUrl, { mobile, otp });
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.data !== undefined && result.data.error === undefined) {
+          // Once we get a success response that OTP is verified, we update state,
+          // to show the quick enrollment fields.
+          if (result.data.status) {
+            this.setState({
+              otpVerified: true,
+            });
           }
-        });
-      }
+        }
+      });
     }
   };
 
