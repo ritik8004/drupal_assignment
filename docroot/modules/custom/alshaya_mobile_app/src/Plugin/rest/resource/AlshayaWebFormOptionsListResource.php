@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Symfony\Component\Yaml\Yaml;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -30,6 +32,13 @@ class AlshayaWebFormOptionsListResource extends ResourceBase {
   protected $configFactory;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaWebFormOptionsListResource constructor.
    *
    * @param array $configuration
@@ -44,6 +53,8 @@ class AlshayaWebFormOptionsListResource extends ResourceBase {
    *   Logger channel.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(
     array $configuration,
@@ -51,10 +62,12 @@ class AlshayaWebFormOptionsListResource extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    LanguageManagerInterface $language_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->configFactory = $config_factory;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -67,7 +80,8 @@ class AlshayaWebFormOptionsListResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('language_manager')
     );
   }
 
@@ -87,7 +101,7 @@ class AlshayaWebFormOptionsListResource extends ResourceBase {
       throw (new NotFoundHttpException());
     }
 
-    $data = $this->getWebformOptionsList($config->getRawData());
+    $data = $this->getWebformOptionsList($config);
 
     $response = new ResourceResponse($data);
     $response->addCacheableDependency($response);
@@ -98,18 +112,23 @@ class AlshayaWebFormOptionsListResource extends ResourceBase {
   /**
    * Get the list of field options based on avaiable form id.
    *
-   * @param array $config
-   *   Config array.
+   * @param object $config
+   *   Config object.
    *
    * @return array
    *   Returns available options from webform fields.
    */
-  private function getWebformOptionsList(array $config) {
+  private function getWebformOptionsList($config) {
     $data = [];
-    if ($config['id'] === 'alshaya_contact') {
-      $field_elements = yaml_parse($config['elements']);
+    if ($config->get('id') === 'alshaya_contact') {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      if ($langcode === 'ar') {
+        $config = $this->languageManager->getLanguageConfigOverride($langcode, 'webform.webform.' . $config->get('id'));
+      }
+      $field_elements = Yaml::parse($config->get('elements'));
+
       foreach ($field_elements as $key => $value) {
-        if ($field_elements[$key]['#type'] === 'select') {
+        if (!empty($field_elements[$key]['#options'])) {
           if (in_array($key, ['reason1', 'reason2', 'reason3', 'reason4'])) {
             $data['reasons'][$key] = $field_elements[$key]['#options'];
           }
