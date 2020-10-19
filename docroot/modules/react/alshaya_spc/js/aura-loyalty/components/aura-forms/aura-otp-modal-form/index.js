@@ -16,7 +16,6 @@ class AuraFormSignUpOTPModal extends React.Component {
       mobileNumber: null,
       otpRequested: false,
       isNewUserModalOpen: false,
-      otpVerified: false,
     };
   }
 
@@ -39,18 +38,22 @@ class AuraFormSignUpOTPModal extends React.Component {
     closeOTPModal();
   };
 
-  getElementValue = (elementId) => document.getElementById(elementId).value
+  // Read form values.
+  getElementValue = (elementId) => document.getElementById(elementId).value;
 
+  // Show inline error.
   showError = (elementId, msg) => {
     document.getElementById(elementId).innerHTML = msg;
     document.getElementById(elementId).classList.add('error');
-  }
+  };
 
+  // Remove inline error.
   removeError = (elementId) => {
     document.getElementById(elementId).innerHTML = '';
     document.getElementById(elementId).classList.remove('error');
-  }
+  };
 
+  // Verify OTP and show error.
   validateMobileOtp = (data, action) => {
     let isValid = true;
 
@@ -71,8 +74,9 @@ class AuraFormSignUpOTPModal extends React.Component {
       });
     }
     return isValid;
-  }
+  };
 
+  // Send OTP to the user.
   sendOtp = () => {
     const mobile = this.getElementValue('mobile');
 
@@ -98,6 +102,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                 if (result.data.status) {
                   this.setState({
                     otpRequested: true,
+                    mobileNumber: mobile,
                   });
                 }
               }
@@ -108,6 +113,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     }
   };
 
+  // Verify OTP from user.
   verifyOtp = () => {
     const otp = this.getElementValue('otp');
 
@@ -128,42 +134,11 @@ class AuraFormSignUpOTPModal extends React.Component {
           // Once we get a success response that OTP is verified, we update state,
           // to show the quick enrollment fields.
           if (result.data.status) {
-            this.setState({
-              otpVerified: true,
-            });
+            // Open modal for the new user.
+            this.openNewUserModal();
           }
         }
       });
-    }
-  };
-
-  requestOtp = () => {
-    const {
-      otpRequested,
-    } = this.state;
-
-    // If state is true, it means otp is already sent.
-    if (otpRequested === false) {
-      // @todo: API Call to request OTP for the mobile number.
-      // Once we get a success response that OTP is sent, we update state,
-      // to show the otp fields.
-      this.setState({
-        mobileNumber: document.querySelector('#otp-mobile-number').value,
-        otpRequested: true,
-      });
-    }
-  };
-
-  verifyOtp = () => {
-    const {
-      otpRequested,
-    } = this.state;
-
-    // If state is true, it means otp is already sent.
-    if (otpRequested === true) {
-      // @todo: API Call to verify OTP for the mobile number.
-      // Open modal for the new user.
-      this.openNewUserModal();
     }
   };
 
@@ -193,7 +168,6 @@ class AuraFormSignUpOTPModal extends React.Component {
       otpRequested,
       mobileNumber,
       isNewUserModalOpen,
-      otpVerified,
     } = this.state;
 
     const {
@@ -212,16 +186,11 @@ class AuraFormSignUpOTPModal extends React.Component {
 
     const submitButtonText = otpRequested === true ? Drupal.t('Verify') : Drupal.t('Send One Time Pin');
 
-    if (otpVerified) {
-      // @TODO: If otp is successfully verified, create
-      // component for quick enrollment modal and render.
-    }
-
     return (
       <div className="aura-otp-form">
         <div className="aura-modal-header">
           <SectionTitle>{getStringMessage('otp_modal_title')}</SectionTitle>
-          <a className="close" onClick={() => closeModal()} />
+          <a className="close" onClick={() => closeOTPModal()} />
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">
@@ -257,7 +226,7 @@ class AuraFormSignUpOTPModal extends React.Component {
             <ConditionalView condition={otpRequested === false}>
               <div
                 className="aura-modal-form-submit"
-                onClick={otpRequested === true ? this.verifyOtp : this.sendOtp}
+                onClick={() => this.sendOtp()}
               >
                 {submitButtonText}
               </div>
