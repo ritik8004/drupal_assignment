@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\alshaya_aura_react\Helper\AuraHelper;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides My Accounts AURA block.
@@ -28,11 +28,11 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
   protected $routeMatch;
 
   /**
-   * Aura Helper service object.
+   * Module handler.
    *
-   * @var Drupal\alshaya_aura_react\Helper\AuraHelper
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $auraHelper;
+  protected $moduleHandler;
 
   /**
    * AuraRewardsHeader constructor.
@@ -45,17 +45,17 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
    *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The current route match.
-   * @param Drupal\alshaya_aura_react\Helper\AuraHelper $aura_helper
-   *   The aura helper service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               RouteMatchInterface $route_match,
-                              AuraHelper $aura_helper) {
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
-    $this->auraHelper = $aura_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -69,7 +69,7 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
       $plugin_id,
       $plugin_definition,
       $container->get('current_route_match'),
-      $container->get('alshaya_aura_react.aura_helper')
+      $container->get('module_handler')
     );
   }
 
@@ -77,9 +77,10 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function build() {
+    $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
     return [
       '#theme' => 'my_accounts_aura_block',
-      '#strings' => $this->auraHelper->getStaticStrings(),
+      '#strings' => _alshaya_aura_static_strings(),
       '#attached' => [
         'library' => [
           'alshaya_white_label/aura-loyalty-myaccount',

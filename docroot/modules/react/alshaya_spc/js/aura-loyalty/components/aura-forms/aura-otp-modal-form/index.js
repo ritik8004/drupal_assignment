@@ -1,7 +1,9 @@
 import React from 'react';
+import Popup from 'reactjs-popup';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
+import AuraFormNewAuraUserModal from '../aura-new-aura-user-form';
 import { validateInfo } from '../../../../utilities/checkout_util';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
@@ -11,24 +13,48 @@ class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      mobileNumber: null,
       otpRequested: false,
-      otpVerified: false,
+      isNewUserModalOpen: false,
     };
   }
 
-  getElementValue = (elementId) => document.getElementById(elementId).value
+  openNewUserModal = () => {
+    this.setState({
+      isNewUserModalOpen: true,
+    });
+  };
 
+  closeNewUserModal = () => {
+    const {
+      closeOTPModal,
+    } = this.props;
+
+    this.setState({
+      isNewUserModalOpen: false,
+    });
+
+    // Also close OTP Modal.
+    closeOTPModal();
+  };
+
+  // Read form values.
+  getElementValue = (elementId) => document.getElementById(elementId).value;
+
+  // Show inline error.
   showError = (elementId, msg) => {
     document.getElementById(elementId).innerHTML = msg;
     document.getElementById(elementId).classList.add('error');
-  }
+  };
 
+  // Remove inline error.
   removeError = (elementId) => {
     document.getElementById(elementId).innerHTML = '';
     document.getElementById(elementId).classList.remove('error');
-  }
+  };
 
-  validateMobileOtp = async (data, action) => {
+  // Verify OTP and show error.
+  validateMobileOtp = (data, action) => {
     let isValid = true;
 
     if (action === 'send_otp') {
@@ -48,63 +74,71 @@ class AuraFormSignUpOTPModal extends React.Component {
       });
     }
     return isValid;
-  }
+  };
 
-  sendOtp = async () => {
+  // Send OTP to the user.
+  sendOtp = () => {
     const mobile = this.getElementValue('mobile');
 
     if (mobile.length === 0 || mobile.match(/^[0-9]+$/) === null) {
       this.showError('mobile-error', getStringMessage('form_error_mobile_number'));
-    } else {
-      const valid = await this.validateMobileOtp({ mobile }, 'send_otp');
+      return;
+    }
 
-      if (valid === true) {
-        // API call to send otp.
-        const apiUrl = 'post/loyalty-club/send-otp';
-        const apiData = postAPIData(apiUrl, { mobile });
+    // Call API to check if mobile number is valid.
+    const validationRequest = this.validateMobileOtp({ mobile }, 'send_otp');
+    if (validationRequest instanceof Promise) {
+      validationRequest.then((valid) => {
+        if (valid === true) {
+          // API call to send otp.
+          const apiUrl = 'post/loyalty-club/send-otp';
+          const apiData = postAPIData(apiUrl, { mobile });
 
-        if (apiData instanceof Promise) {
-          apiData.then((result) => {
-            if (result.data !== undefined && result.data.error === undefined) {
-              // Once we get a success response that OTP is sent, we update state,
-              // to show the otp fields.
-              if (result.data.status) {
-                this.setState({
-                  otpRequested: true,
-                });
+          if (apiData instanceof Promise) {
+            apiData.then((result) => {
+              if (result.data !== undefined && result.data.error === undefined) {
+                // Once we get a success response that OTP is sent, we update state,
+                // to show the otp fields.
+                if (result.data.status) {
+                  this.setState({
+                    otpRequested: true,
+                    mobileNumber: mobile,
+                  });
+                }
               }
-            }
-          });
+            });
+          }
         }
-      }
+      });
     }
   };
 
-  verifyOtp = async () => {
+  // Verify OTP from user.
+  verifyOtp = () => {
     const otp = this.getElementValue('otp');
 
     if (otp.length === 0) {
       this.showError('otp-error', getStringMessage('form_error_otp'));
-    } else {
-      this.removeError('otp-error');
-      // API call to verify otp.
-      const apiUrl = 'post/loyalty-club/verify-otp';
-      const mobile = this.getElementValue('mobile');
-      const apiData = postAPIData(apiUrl, { mobile, otp });
+      return;
+    }
 
-      if (apiData instanceof Promise) {
-        apiData.then((result) => {
-          if (result.data !== undefined && result.data.error === undefined) {
-            // Once we get a success response that OTP is verified, we update state,
-            // to show the quick enrollment fields.
-            if (result.data.status) {
-              this.setState({
-                otpVerified: true,
-              });
-            }
+    this.removeError('otp-error');
+    // API call to verify otp.
+    const apiUrl = 'post/loyalty-club/verify-otp';
+    const mobile = this.getElementValue('mobile');
+    const apiData = postAPIData(apiUrl, { mobile, otp });
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.data !== undefined && result.data.error === undefined) {
+          // Once we get a success response that OTP is verified, we update state,
+          // to show the quick enrollment fields.
+          if (result.data.status) {
+            // Open modal for the new user.
+            this.openNewUserModal();
           }
-        });
-      }
+        }
+      });
     }
   };
 
@@ -127,12 +161,13 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   render() {
     const {
-      closeModal,
+      closeOTPModal,
     } = this.props;
 
     const {
       otpRequested,
-      otpVerified,
+      mobileNumber,
+      isNewUserModalOpen,
     } = this.state;
 
     const {
@@ -149,18 +184,13 @@ class AuraFormSignUpOTPModal extends React.Component {
       )
       : '';
 
-    const submitButtonText = otpRequested === true ? getStringMessage('verify') : getStringMessage('otp_button_label');
-
-    if (otpVerified) {
-      // @TODO: If otp is successfully verified, create
-      // component for quick enrollment modal and render.
-    }
+    const submitButtonText = otpRequested === true ? Drupal.t('Verify') : Drupal.t('Send One Time Pin');
 
     return (
       <div className="aura-otp-form">
         <div className="aura-modal-header">
           <SectionTitle>{getStringMessage('otp_modal_title')}</SectionTitle>
-          <a className="close" onClick={() => closeModal()} />
+          <a className="close" onClick={() => closeOTPModal()} />
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">
@@ -193,12 +223,31 @@ class AuraFormSignUpOTPModal extends React.Component {
                 </span>
               </ConditionalView>
             </div>
-            <div
-              className="aura-modal-form-submit"
-              onClick={otpRequested === true ? this.verifyOtp : this.sendOtp}
-            >
-              {submitButtonText}
-            </div>
+            <ConditionalView condition={otpRequested === false}>
+              <div
+                className="aura-modal-form-submit"
+                onClick={() => this.sendOtp()}
+              >
+                {submitButtonText}
+              </div>
+            </ConditionalView>
+            <ConditionalView condition={otpRequested === true}>
+              <>
+                <div className="aura-modal-form-submit" onClick={() => this.verifyOtp()}>{submitButtonText}</div>
+                <Popup
+                  className="aura-modal-form new-aura-user"
+                  open={isNewUserModalOpen}
+                  closeOnEscape={false}
+                  closeOnDocumentClick={false}
+                >
+                  <AuraFormNewAuraUserModal
+                    mobileNumber={mobileNumber}
+                    closeNewUserModal={() => this.closeNewUserModal()}
+                    closeOTPModal={() => this.closeNewUserModal()}
+                  />
+                </Popup>
+              </>
+            </ConditionalView>
           </div>
         </div>
       </div>

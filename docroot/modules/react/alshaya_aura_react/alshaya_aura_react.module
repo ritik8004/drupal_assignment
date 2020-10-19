@@ -154,6 +154,7 @@ function _alshaya_aura_react_my_account_block_pre_render(array $build) {
 
   $build['content']['my_account_my_aura_block_root'] = [
     '#markup' => '<div id="my-accounts-aura-mobile"></div>',
+    '#weight' => -1,
   ];
 
   $build['#attributes']['class'][] = 'aura-enabled';

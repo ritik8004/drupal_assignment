@@ -10,7 +10,7 @@ const AuraMyAccountPendingFullEnrollment = () => {
   } = getAuraConfig();
 
   return (
-    <div className="aura-pending-full-enrollment-wrapper">
+    <div className="aura-pending-full-enrollment-wrapper fadeInUp">
       <div className="pending-full-enrollment-description">
         <div className="title">
           {Drupal.t('Congrats! You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store')}

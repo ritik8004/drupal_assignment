@@ -38,7 +38,7 @@ class LoyaltyClubTabs extends React.Component {
     if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
       return (
         <>
-          <div className="loyalty-club-tabs">
+          <div className="loyalty-club-tabs fadeInUp" style={{ animationDelay: '0.5s' }}>
             <div className="loyalty-tab rewards-activity active" data-tab-content="loyalty-club-rewards-wrapper" onClick={(e) => this.switchTab(e)}>
               {Drupal.t('Rewards Activity')}
             </div>

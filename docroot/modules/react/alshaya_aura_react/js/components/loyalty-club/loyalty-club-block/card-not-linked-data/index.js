@@ -21,7 +21,7 @@ export default class AuraMyAccountOldCardFound extends React.Component {
     const { cardNumber } = this.props;
 
     return (
-      <div className="aura-myaccount-no-linked-card-wrapper old-card-found">
+      <div className="aura-myaccount-no-linked-card-wrapper old-card-found fadeInUp">
         <div className="aura-logo">
           <ConditionalView condition={window.innerWidth > 1024}>
             <AuraLogo stacked="vertical" />

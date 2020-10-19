@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_aura_react\Helper\AuraHelper;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * AlshayaLoyaltyController for loyalty club page.
@@ -29,19 +30,30 @@ class AlshayaLoyaltyController extends ControllerBase {
   protected $auraHelper;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaLoyaltyController constructor.
    *
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
    * @param Drupal\alshaya_aura_react\Helper\AuraHelper $aura_helper
    *   The aura helper service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(
     MobileNumberUtilInterface $mobile_util,
-    AuraHelper $aura_helper
+    AuraHelper $aura_helper,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->mobileUtil = $mobile_util;
     $this->auraHelper = $aura_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -50,7 +62,8 @@ class AlshayaLoyaltyController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('mobile_number.util'),
-      $container->get('alshaya_aura_react.aura_helper')
+      $container->get('alshaya_aura_react.aura_helper'),
+      $container->get('module_handler')
     );
   }
 
@@ -72,10 +85,11 @@ class AlshayaLoyaltyController extends ControllerBase {
     ];
 
     $cache_tags = Cache::mergeTags($cache_tags, $loyalty_benefits_config->getCacheTags());
+    $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
 
     return [
       '#theme' => 'my_loyalty_club',
-      '#strings' => $this->auraHelper->getStaticStrings(),
+      '#strings' => _alshaya_aura_static_strings(),
       '#attached' => [
         'library' => [
           'alshaya_aura_react/alshaya_aura_loyalty_club',
