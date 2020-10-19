@@ -58,5 +58,17 @@ function _alshaya_aura_static_strings() {
       'key' => 'otp_label',
       'value' => t('One Time Pin'),
     ],
+    [
+      'key' => 'form_error_full_name',
+      'value' => t('Please enter your full name.'),
+    ],
+    [
+      'key' => 'form_error_email',
+      'value' => t('Please enter email.'),
+    ],
+    [
+      'key' => 'form_error_email_not_valid',
+      'value' => t('The email address %mail is not valid.'),
+    ],
   ];
 }

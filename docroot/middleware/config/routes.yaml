@@ -112,3 +112,8 @@ loyalty_club.verify_otp:
     path: /post/loyalty-club/verify-otp
     controller: App\Controller\LoyaltyClubOtpController::verifyOtp
     methods: POST
+
+loyalty_club.quick_enrollment:
+    path: /post/loyalty-club/quick-enrollment
+    controller: App\Controller\LoyaltyCustomerController::quickEnrollment
+    methods: POST

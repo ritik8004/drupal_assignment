@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Service\Aura\CustomerHelper;
 use App\Service\Drupal\Drupal;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\Magento\MagentoApiWrapper;
 
 /**
  * Provides route callbacks for Loyalty Customer APIs.
@@ -43,6 +44,13 @@ class LoyaltyCustomerController {
   protected $drupal;
 
   /**
+   * Magento API Wrapper service.
+   *
+   * @var \App\Service\Magento\MagentoApiWrapper
+   */
+  protected $magentoApiWrapper;
+
+  /**
    * LoyaltyCustomerController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -53,17 +61,21 @@ class LoyaltyCustomerController {
    *   Aura customer helper service.
    * @param \App\Service\Drupal\Drupal $drupal
    *   Drupal service.
+   * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
+   *   Magento API wrapper service.
    */
   public function __construct(
     LoggerInterface $logger,
     Utility $utility,
     CustomerHelper $aura_customer_helper,
-    Drupal $drupal
+    Drupal $drupal,
+    MagentoApiWrapper $magento_api_wrapper
   ) {
     $this->logger = $logger;
     $this->utility = $utility;
     $this->auraCustomerHelper = $aura_customer_helper;
     $this->drupal = $drupal;
+    $this->magentoApiWrapper = $magento_api_wrapper;
   }
 
   /**
@@ -139,6 +151,84 @@ class LoyaltyCustomerController {
     }
 
     return new JsonResponse($response_data);
+  }
+
+  /**
+   * Quick Enrollment.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return API response status.
+   */
+  public function quickEnrollment(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+    $uid = $request_content['uid'];
+
+    if (empty($request_content['firstname']) || empty($request_content['lastname']) || empty($request_content['email']) || empty($request_content['mobile'])) {
+      $this->logger->error('Error while trying to do Quick Enrollment. First name, last name, email and mobile number is required. Data: @data', [
+        '@data' => $request_content,
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('First name, last name, email and mobile number is required.', Response::HTTP_NOT_FOUND));
+    }
+
+    try {
+      // Get user details from session.
+      $user = $this->drupal->getSessionCustomerInfo();
+
+      // Check if we have user in session.
+      if (empty($user)) {
+        $this->logger->error('Error while trying to do Quick Enrollment. No user available in session. User id from request: @uid.', [
+          '@uid' => $uid,
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('No user available in session', Response::HTTP_NOT_FOUND));
+      }
+
+      // Check if uid in the request matches the one in session.
+      if ($user['uid'] !== $uid) {
+        $this->logger->error("Error while trying to do Quick Enrollment. User id in request doesn't match the one in session. User id from request: @req_uid. User id in session: @session_uid.", [
+          '@req_uid' => $uid,
+          '@session_uid' => $user['uid'],
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
+      }
+
+      $data['customer'] = array_merge($request_content, ['isVerified' => 'Y']);
+
+      $url = 'customers/quick-enrollment';
+      $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+      $responseData = [
+        'status' => TRUE,
+        'data' => $response,
+      ];
+
+      // On API success, update the user AURA Status in Drupal.
+      if (is_array($response) && !empty($response['apc_link'])) {
+        $auraData = [
+          'uid' => $uid,
+          'apcLinkStatus' => $response['apc_link'],
+        ];
+        $updated = $this->drupal->updateUserAuraInfo($auraData);;
+
+        // Check if user aura status was updated successfully in drupal.
+        if (!$updated) {
+          $message = 'Error while trying to update user AURA Status field in Drupal after quick enrollment.';
+          $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
+            '@uid' => $uid,
+            '@customer_id' => $user['customer_id'],
+            '@aura_status' => $response['apc_link'],
+          ]);
+          return new JsonResponse($this->utility->getErrorResponse($message, 500));
+        }
+      }
+
+      return new JsonResponse($responseData);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to do Quick Enrollment. Request Data: @data, Message: @message', [
+        '@data' => $request_content,
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
   }
 
 }

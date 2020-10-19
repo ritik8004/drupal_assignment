@@ -166,7 +166,6 @@ function _alshaya_aura_react_my_account_block_pre_render(array $build) {
  * Implements hook_alshaya_acm_customer_update_account_alter().
  */
 function alshaya_aura_react_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
-  // Update privilege card number if available in customer data.
   if (isset($customer['extension'])) {
     // Update user aura status and tier in drupal if changed.
     if (!empty($customer['extension']['apc_link'])

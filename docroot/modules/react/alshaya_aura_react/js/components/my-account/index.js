@@ -2,11 +2,16 @@ import React from 'react';
 import LoyaltyClubBlock from '../loyalty-club/loyalty-club-block';
 import { getUserAuraStatus, getUserAuraTier } from '../../utilities/helper';
 import { getAPIData } from '../../utilities/api/fetchApiData';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../../../../alshaya_spc/js/utilities/checkout_util';
 
 class MyAccount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      wait: true,
       loyaltyStatus: getUserAuraStatus(),
       tier: getUserAuraTier(),
       points: 0,
@@ -21,8 +26,16 @@ class MyAccount extends React.Component {
   componentDidMount() {
     // API call to get customer points.
     const {
-      loyaltyStatus, tier, points, cardNumber, expiringPoints, expiryDate, pointsOnHold,
+      loyaltyStatus,
+      tier,
+      points,
+      cardNumber,
+      expiringPoints,
+      expiryDate,
+      pointsOnHold,
     } = this.state;
+
+    showFullScreenLoader();
     const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
     const apiData = getAPIData(apiUrl);
 
@@ -30,6 +43,7 @@ class MyAccount extends React.Component {
       apiData.then((result) => {
         if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
+            wait: false,
             loyaltyStatus: result.data.auraStatus || loyaltyStatus,
             tier: result.data.tier || tier,
             points: result.data.auraPoints || points,
@@ -39,6 +53,7 @@ class MyAccount extends React.Component {
             pointsOnHold: result.data.auraOnHoldPoints || pointsOnHold,
           });
         }
+        removeFullScreenLoader();
       });
     }
   }
@@ -51,8 +66,20 @@ class MyAccount extends React.Component {
 
   render() {
     const {
-      loyaltyStatus, tier, points, cardNumber, expiringPoints, expiryDate, pointsOnHold, upgradeMsg,
+      wait,
+      loyaltyStatus,
+      tier,
+      points,
+      cardNumber,
+      expiringPoints,
+      expiryDate,
+      pointsOnHold,
+      upgradeMsg,
     } = this.state;
+
+    if (wait) {
+      return null;
+    }
 
     return (
       <LoyaltyClubBlock
