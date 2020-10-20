@@ -65,13 +65,6 @@ export default class DeliveryInformation extends React.Component {
       deliveryComponent = <ClicknCollectDeiveryInfo cart={cart} refreshCart={refreshCart} />;
     }
 
-    // Removing any previously added error messages
-    // from complete purchase validation.
-    const deliveryInfoError = document.getElementById('delivery-information-error');
-    if (deliveryInfoError !== null) {
-      deliveryInfoError.remove();
-    }
-
     return (
       <div className="spc-checkout-delivery-information fadeInUp" style={{ animationDelay: '0.45s' }}>
         <SectionTitle>{title}</SectionTitle>
