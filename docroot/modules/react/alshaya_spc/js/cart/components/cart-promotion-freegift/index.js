@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { applyCode } from '../../../utilities/checkout_util';
+import { applyCode, openFreeGiftModal } from '../../../utilities/checkout_util';
 
 const CartPromotionFreeGift = ({ promo, couponCode }) => {
   useEffect(() => {
@@ -22,15 +22,15 @@ const CartPromotionFreeGift = ({ promo, couponCode }) => {
         {Drupal.t('Click')}
         <span className="coupon-code" onClick={(e) => applyCode(e)}>{promo.coupon}</span>
         {Drupal.t('to get a Free Gift')}
-        <span className="free-gift-title">
-          <a
-            className="use-ajax"
-            data-dialog-type="modal"
-            href={promo.promo_web_url}
-          >
-            {promo.promo_title}
-          </a>
+        <span className="free-gift-title" onClick={(e) => openFreeGiftModal(e)}>
+          {promo.promo_title}
         </span>
+        <a
+          id="spc-free-gift"
+          className="use-ajax visually-hidden"
+          data-dialog-type="modal"
+          href={promo.promo_web_url}
+        />
       </div>
     </div>
   );
