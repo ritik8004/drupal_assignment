@@ -15,6 +15,8 @@ use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Logger\LoggerChannelTrait;
 
 /**
  * Provides a resource to node data of advanced page.
@@ -28,6 +30,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  * )
  */
 class AdvancedPageResource extends ResourceBase {
+
+  use LoggerChannelTrait;
 
   /**
    * Node bundle machine name.
@@ -133,7 +137,21 @@ class AdvancedPageResource extends ResourceBase {
       $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
     }
 
-    $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
+    try {
+      $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
+    }
+    catch (\Exception $e) {
+      // Redirect to 404.
+      // Adding log entry for exceptions.
+      $message = 'Invalid path: @alias, redirecting to 404';
+
+      $this->getLogger('AdvancedPageResourcePathCheck')->warning($message, [
+        '@code' => $e->getCode(),
+        '@message' => $e->getMessage(),
+        '@alias' => $alias,
+      ]);
+      throw new NotFoundHttpException();
+    }
 
     if (!$node instanceof NodeInterface) {
       $this->mobileAppUtility->throwException();

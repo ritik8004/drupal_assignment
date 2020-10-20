@@ -33,11 +33,9 @@
 
           .free-gift-title {
             padding-#{$left}: 0.3125rem;
-
-            a.use-ajax {
-              color: $spc-cart-free-gifts-link;
-              text-decoration: underline;
-            }
+            color: $spc-cart-free-gifts-link;
+            text-decoration: underline;
+            cursor: pointer;
           }
         }
       }
