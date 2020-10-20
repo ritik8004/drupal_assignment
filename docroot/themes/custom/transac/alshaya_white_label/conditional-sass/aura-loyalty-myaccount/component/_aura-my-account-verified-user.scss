@@ -175,6 +175,32 @@
       @include breakpoint($desktop) {
         padding-#{$left}: 1.875rem;
       }
+
+      .aura-card-number {
+        font-size: 1rem;
+        font-family: $aura-regular;
+        display: flex;
+        flex-direction: column;
+
+        input:disabled {
+          padding: 0;
+          background: none;
+          border: none;
+          width: 9.5625rem;
+        }
+      }
+
+      @include breakpoint($upto-desktop) {
+        text-align: center;
+
+        .aura-card-number {
+          flex-direction: row;
+
+          > span:first-child {
+            margin-#{$right}: 0.625rem;
+          }
+        }
+      }
     }
   }
 }

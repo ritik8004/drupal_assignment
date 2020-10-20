@@ -1,4 +1,5 @@
 import React from 'react';
+import Cleave from 'cleave.js/react';
 import { getUserProfileInfo } from '../../../../utilities/helper';
 import PointsExpiryMessage
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
@@ -24,7 +25,21 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
         <div className="aura-card-linked-verified-wrapper-content">
           <div className="aura-logo">
             <div className="aura-user-avatar">{ profileInfo.avatar }</div>
-            <div className="aura-user-name">{ profileInfo.profileName }</div>
+            <div className="aura-user-name">
+              { profileInfo.profileName }
+              <div className="aura-card-number">
+                <span>{Drupal.t('Card No.')}</span>
+                <span>
+                  <Cleave
+                    name="aura-my-account-user-card"
+                    className="aura-my-account-user-card"
+                    disabled
+                    value={profileInfo.cardNumber}
+                    options={{ blocks: [4, 4, 4, 4] }}
+                  />
+                </span>
+              </div>
+            </div>
           </div>
           <div className="aura-card-linked-verified-description">
             <div className="aura-tier">
