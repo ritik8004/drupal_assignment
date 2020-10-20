@@ -8,6 +8,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteBuilderInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Class Alshaya Options List Form.
@@ -29,17 +30,28 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   protected $routerBuilder;
 
   /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManager;
+
+  /**
    * AlshayaOptionsListForm constructor.
    *
    * @param Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya options service.
    * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
    *   The router builder service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
    */
   public function __construct(AlshayaOptionsListHelper $alshaya_options_service,
-                              RouteBuilderInterface $router_builder) {
+                              RouteBuilderInterface $router_builder,
+                              EntityTypeManagerInterface $entityTypeManager) {
     $this->alshayaOptionsService = $alshaya_options_service;
     $this->routerBuilder = $router_builder;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -48,7 +60,8 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_options_list.alshaya_options_service'),
-      $container->get('router.builder')
+      $container->get('router.builder'),
+      $container->get('entity_type.manager')
     );
   }
 

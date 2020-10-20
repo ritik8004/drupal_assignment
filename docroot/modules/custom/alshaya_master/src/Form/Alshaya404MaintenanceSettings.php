@@ -202,7 +202,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
    *   Image uri name.
    */
   protected function createImageStyle($image_style, $uri) {
-    $style = $this->entityTypeManager->getStorage('image_style')->load($image_style);
+    $style = $this->entityTypeManager()->getStorage('image_style')->load($image_style);
     $destination = $style->buildUri($uri);
     $style->createDerivative($uri, $destination);
   }

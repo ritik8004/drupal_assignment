@@ -332,7 +332,7 @@ class ProductController extends ControllerBase {
         $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
 
         if (!empty($sku_media['drupal_uri'])) {
-          $image_style = $this->entityTypeManager->getStorage('image_style')->load('product_zoom_medium_606x504');
+          $image_style = $this->entityTypeManager()->getStorage('image_style')->load('product_zoom_medium_606x504');
           if ($image_style instanceof ImageStyleInterface) {
             $image = $image_style->buildUrl($sku_media['drupal_uri']);
           }
