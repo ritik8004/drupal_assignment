@@ -9,6 +9,11 @@ import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/a
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import getStringMessage from '../../../../utilities/strings';
 import AuraMobileNumberField from '../aura-mobile-number-field';
+import { getElementValue, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import {
+  removeFullScreenLoader,
+  showFullScreenLoader,
+} from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
@@ -47,21 +52,6 @@ class AuraFormSignUpOTPModal extends React.Component {
     });
   };
 
-  // Read form values.
-  getElementValue = (elementId) => document.getElementById(elementId).value;
-
-  // Show inline error.
-  showError = (elementId, msg) => {
-    document.getElementById(elementId).innerHTML = msg;
-    document.getElementById(elementId).classList.add('error');
-  };
-
-  // Remove inline error.
-  removeError = (elementId) => {
-    document.getElementById(elementId).innerHTML = '';
-    document.getElementById(elementId).classList.remove('error');
-  };
-
   // Verify OTP and show error.
   validateMobileOtp = (data, action) => {
     let isValid = true;
@@ -72,11 +62,11 @@ class AuraFormSignUpOTPModal extends React.Component {
         if (result.status === 200 && result.data.status) {
           // If not valid mobile number.
           if (result.data.mobile === false) {
-            this.showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_valid_mobile_number'));
+            showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_valid_mobile_number'));
             isValid = false;
           } else {
             // If valid mobile number, remove error message.
-            this.removeError('otp-mobile-aura-mobile-field-error');
+            removeError('otp-mobile-aura-mobile-field-error');
           }
         }
         return isValid;
@@ -91,7 +81,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     const userMobile = this.getElementValue('otp-mobile-mobile-number');
 
     if (userMobile.length === 0 || userMobile.match(/^[0-9]+$/) === null) {
-      this.showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
+      showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
       return;
     }
 
@@ -106,6 +96,7 @@ class AuraFormSignUpOTPModal extends React.Component {
           // API call to send otp.
           const apiUrl = 'post/loyalty-club/send-otp';
           const apiData = postAPIData(apiUrl, { mobile });
+          showFullScreenLoader();
 
           if (apiData instanceof Promise) {
             apiData.then((result) => {
@@ -120,6 +111,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                   });
                 }
               }
+              removeFullScreenLoader();
             });
           }
         }
@@ -129,18 +121,19 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Verify OTP from user.
   verifyOtp = () => {
-    const otp = this.getElementValue('otp');
+    const otp = getElementValue('otp');
 
     if (otp.length === 0) {
-      this.showError('otp-error', getStringMessage('form_error_otp'));
+      showError('otp-error', getStringMessage('form_error_otp'));
       return;
     }
 
-    this.removeError('otp-error');
+    removeError('otp-error');
     // API call to verify otp.
     const apiUrl = 'post/loyalty-club/verify-otp';
-    const mobile = this.getElementValue('mobile');
+    const mobile = getElementValue('mobile');
     const apiData = postAPIData(apiUrl, { mobile, otp });
+    showFullScreenLoader();
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -152,6 +145,7 @@ class AuraFormSignUpOTPModal extends React.Component {
             this.openNewUserModal();
           }
         }
+        removeFullScreenLoader();
       });
     }
   };
@@ -176,6 +170,7 @@ class AuraFormSignUpOTPModal extends React.Component {
   render() {
     const {
       closeOTPModal,
+      handleSignUp,
     } = this.props;
 
     const {
@@ -252,6 +247,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                     mobileNumber={mobileNumber}
                     closeNewUserModal={() => this.closeNewUserModal()}
                     closeOTPModal={() => this.closeNewUserModal()}
+                    handleSignUp={handleSignUp}
                   />
                 </Popup>
               </>

@@ -14,6 +14,11 @@ class AuraMyAccountNoLinkedCard extends React.Component {
     };
   }
 
+  handleSignUp = () => {
+    const { handleSignUp } = this.props;
+    handleSignUp();
+  }
+
   openOTPModal = () => {
     this.setState({
       isOTPModalOpen: true,
@@ -28,6 +33,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
 
   render() {
     const { isOTPModalOpen } = this.state;
+    const { handleSignUp } = this.props;
 
     return (
       <div className="aura-myaccount-no-linked-card-wrapper no-card-found fadeInUp">
@@ -62,6 +68,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
             >
               <AuraFormSignUpOTPModal
                 closeOTPModal={() => this.closeOTPModal()}
+                handleSignUp={handleSignUp}
               />
             </Popup>
           </div>

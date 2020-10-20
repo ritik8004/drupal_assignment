@@ -105,8 +105,6 @@ function getUserProfileInfo() {
     const parts = userName.split(' ');
     userInfo.profileName = userName;
     userInfo.avatar = `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
-    // @todo: Replace with real card number.
-    userInfo.cardNumber = 6362544000099511;
   }
 
   return userInfo;

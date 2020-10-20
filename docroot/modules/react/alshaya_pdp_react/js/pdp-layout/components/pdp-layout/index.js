@@ -119,7 +119,7 @@ const PdpLayout = () => {
 
   return (skuItemCode) ? (
     <>
-      <div className="magv2-header" style={{ animationDelay: '0.3s' }} ref={header}>
+      <div className={`magv2-header ${(isMobile ? 'fadeInUp' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
         <PdpHeader
           title={title}
           finalPrice={finalPrice}

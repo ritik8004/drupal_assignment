@@ -15,7 +15,13 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
 
   render() {
     const {
-      tier, points, pointsOnHold, upgradeMsg, expiringPoints, expiryDate,
+      tier,
+      points,
+      cardNumber,
+      pointsOnHold,
+      upgradeMsg,
+      expiringPoints,
+      expiryDate,
     } = this.props;
 
     const profileInfo = getUserProfileInfo();
@@ -34,7 +40,7 @@ export default class AuraMyAccountVerifiedUser extends React.Component {
                     name="aura-my-account-user-card"
                     className="aura-my-account-user-card"
                     disabled
-                    value={profileInfo.cardNumber}
+                    value={cardNumber}
                     options={{ blocks: [4, 4, 4, 4] }}
                   />
                 </span>

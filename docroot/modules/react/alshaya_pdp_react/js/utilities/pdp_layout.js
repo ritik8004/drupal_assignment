@@ -32,6 +32,7 @@ export const getPostData = (skuCode, variantSelected, parentSKU) => {
     sku: parentSku,
     quantity: qty,
     cart_id: cartId,
+    variant_sku: variantSelected,
   };
 
   const productData = {
@@ -113,6 +114,7 @@ export const triggerAddToCart = (
     let maxSaleQty = (context === 'main') ? productData.maxSaleQty : productData.max_sale_qty;
     let maxSaleQtyParent = productData.max_sale_qty_parent;
     const gtmAttributes = productInfo[skuCode].gtm_attributes;
+    let freeGiftPromotion = productInfo[skuCode].freeGiftPromotion;
     let options = [];
 
     if (configurableCombinations) {
@@ -124,6 +126,7 @@ export const triggerAddToCart = (
       maxSaleQty = (context === 'main') ? productVariantInfo.maxSaleQty : productVariantInfo.max_sale_qty;
       maxSaleQtyParent = productVariantInfo.max_sale_qty_parent;
       options = (context === 'main') ? productVariantInfo.configurableOptions : productVariantInfo.configurable_values;
+      freeGiftPromotion = productVariantInfo.freeGiftPromotion;
 
       if (productVariantInfo.url !== undefined) {
         const langcode = document.getElementsByTagName('html')[0].getAttribute('lang');
@@ -144,6 +147,7 @@ export const triggerAddToCart = (
       maxSaleQty,
       maxSaleQtyParent,
       gtmAttributes,
+      freeGiftPromotion,
     });
 
     // Triggering event to notify react component.

@@ -7,6 +7,7 @@ class MyAccount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      wait: true,
       loyaltyStatus: getUserAuraStatus(),
       tier: getUserAuraTier(),
       points: 0,
@@ -21,8 +22,15 @@ class MyAccount extends React.Component {
   componentDidMount() {
     // API call to get customer points.
     const {
-      loyaltyStatus, tier, points, cardNumber, expiringPoints, expiryDate, pointsOnHold,
+      loyaltyStatus,
+      tier,
+      points,
+      cardNumber,
+      expiringPoints,
+      expiryDate,
+      pointsOnHold,
     } = this.state;
+
     const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
     const apiData = getAPIData(apiUrl);
 
@@ -30,6 +38,7 @@ class MyAccount extends React.Component {
       apiData.then((result) => {
         if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
+            wait: false,
             loyaltyStatus: result.data.auraStatus || loyaltyStatus,
             tier: result.data.tier || tier,
             points: result.data.auraPoints || points,
@@ -51,11 +60,20 @@ class MyAccount extends React.Component {
 
   render() {
     const {
-      loyaltyStatus, tier, points, cardNumber, expiringPoints, expiryDate, pointsOnHold, upgradeMsg,
+      wait,
+      loyaltyStatus,
+      tier,
+      points,
+      cardNumber,
+      expiringPoints,
+      expiryDate,
+      pointsOnHold,
+      upgradeMsg,
     } = this.state;
 
     return (
       <LoyaltyClubBlock
+        wait={wait}
         loyaltyStatus={loyaltyStatus}
         tier={tier}
         points={points}

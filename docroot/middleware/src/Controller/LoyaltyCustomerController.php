@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Service\Aura\CustomerHelper;
 use App\Service\Drupal\Drupal;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\Magento\MagentoApiWrapper;
 
 /**
  * Provides route callbacks for Loyalty Customer APIs.
@@ -43,6 +44,13 @@ class LoyaltyCustomerController {
   protected $drupal;
 
   /**
+   * Magento API Wrapper service.
+   *
+   * @var \App\Service\Magento\MagentoApiWrapper
+   */
+  protected $magentoApiWrapper;
+
+  /**
    * LoyaltyCustomerController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -53,17 +61,21 @@ class LoyaltyCustomerController {
    *   Aura customer helper service.
    * @param \App\Service\Drupal\Drupal $drupal
    *   Drupal service.
+   * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
+   *   Magento API wrapper service.
    */
   public function __construct(
     LoggerInterface $logger,
     Utility $utility,
     CustomerHelper $aura_customer_helper,
-    Drupal $drupal
+    Drupal $drupal,
+    MagentoApiWrapper $magento_api_wrapper
   ) {
     $this->logger = $logger;
     $this->utility = $utility;
     $this->auraCustomerHelper = $aura_customer_helper;
     $this->drupal = $drupal;
+    $this->magentoApiWrapper = $magento_api_wrapper;
   }
 
   /**
@@ -139,6 +151,79 @@ class LoyaltyCustomerController {
     }
 
     return new JsonResponse($response_data);
+  }
+
+  /**
+   * Loyalty Club Signup.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return API response status.
+   */
+  public function loyaltyClubSignUp(Request $request) {
+    $request_content = json_decode($request->getContent(), TRUE);
+
+    if (empty($request_content['firstname']) || empty($request_content['lastname'])) {
+      $this->logger->error('Error while trying to do loyalty club sign up. First name and last name is required. Data: @data', [
+        '@data' => $request_content,
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('INVALID_NAME_ERROR', 500));
+    }
+
+    if (empty($request_content['email']) || !filter_var($request_content['email'], FILTER_VALIDATE_EMAIL)) {
+      $this->logger->error('Error while trying to do loyalty club sign up. Email is missing/invalid. Data: @data', [
+        '@data' => $request_content,
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('INVALID_EMAIL', 500));
+    }
+
+    if (empty($request_content['mobile']) || !preg_match('/^\+[0-9]+$/', $request_content['mobile'])) {
+      $this->logger->error('Error while trying to do loyalty club sign up. Mobile number is missing/invalid. Data: @data', [
+        '@data' => $request_content,
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('INVALID_MOBILE_ERROR', 500));
+    }
+
+    try {
+      // Get user details from session.
+      $user = $this->drupal->getSessionCustomerInfo();
+      $data['customer'] = array_merge($request_content, ['isVerified' => 'Y']);
+
+      $url = 'customers/quick-enrollment';
+      $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+      $responseData = [
+        'status' => TRUE,
+        'data' => $response,
+      ];
+
+      // On API success, update user AURA Status in Drupal for logged in user.
+      if (!empty($user['uid']) && is_array($response) && !empty($response['apc_link'])) {
+        $auraData = [
+          'uid' => $user['uid'],
+          'apcLinkStatus' => $response['apc_link'],
+        ];
+        $updated = $this->drupal->updateUserAuraInfo($auraData);;
+
+        // Check if user aura status was updated successfully in drupal.
+        if (!$updated) {
+          $message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
+          $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
+            '@uid' => $user['uid'],
+            '@customer_id' => $user['customer_id'],
+            '@aura_status' => $response['apc_link'],
+          ]);
+          return new JsonResponse($this->utility->getErrorResponse($message, 500));
+        }
+      }
+
+      return new JsonResponse($responseData);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', [
+        '@data' => $request_content,
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
   }
 
 }

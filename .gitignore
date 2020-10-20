@@ -161,3 +161,11 @@ console/
 
 # Ignore install script override for devs.
 install-site-dev.sh
+
+# Ignore new files created after composer install.
+docroot/.gitignore
+docroot/.htaccess.orig
+docroot/modules/.gitignore
+docroot/profiles/.gitignore
+/.editorconfig
+/.gitattributes
