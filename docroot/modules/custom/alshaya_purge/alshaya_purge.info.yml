@@ -1,0 +1,10 @@
+name: Alshaya Purge
+type: module
+description: Provides a Purge plugin in order to be able to target a specific Load Balancer.
+package: alshaya
+core: 8.x
+
+dependencies:
+  - purge
+  - purge_ui
+  - acquia_purge

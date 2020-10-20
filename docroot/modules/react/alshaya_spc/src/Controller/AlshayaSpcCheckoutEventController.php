@@ -111,7 +111,8 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
   public function checkoutEvent(Request $request) {
     $action = $request->request->get('action');
     $cart = $request->request->get('cart');
-    if (empty($action) || empty($cart)) {
+    $skus = $request->request->get('skus');
+    if (empty($action) || (empty($cart) && empty($skus))) {
       throw new BadRequestHttpException('Missing required parameters');
     }
 
@@ -171,6 +172,16 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
           // Do nothing.
         }
         break;
+
+      case 'refresh stock':
+        $stock = $this->spcStockHelper->refreshStockForSkus($skus);
+
+        if (!empty($stock)) {
+          $response = [
+            'status' => TRUE,
+            'data' => $stock,
+          ];
+        }
     }
 
     return new JsonResponse($response);

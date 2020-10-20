@@ -235,25 +235,6 @@ function _alshaya_hm_get_product_description($sku_entity) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
-  // Update composition field.
-  $composition = json_decode($sku->get('attr_composition')->getString(), TRUE);
-  if (!empty($composition)) {
-    $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
-      ->transformCompositionArrayToList($composition));
-  }
-  else {
-    if (!empty($sku->get('attr_composition')->getString())) {
-      \Drupal::logger('alshaya_hm')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
-    }
-
-    $sku->set('attr_composition', NULL);
-  }
-}
-
-/**
  * Implements hook_alshaya_get_currency_code().
  */
 function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
@@ -267,6 +248,20 @@ function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
 function alshaya_hm_acq_sku_product_sku_alter(SKU $sku, array $product) {
   if (isset($product['style_code']) && $sku->hasField('attr_style_code')) {
     $sku->get('attr_style_code')->setValue($product['style_code']);
+  }
+
+  // Update composition field.
+  $composition = json_decode($sku->get('attr_composition')->getString(), TRUE);
+  if (!empty($composition)) {
+    $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
+      ->transformCompositionArrayToList($composition));
+  }
+  else {
+    if (!empty($sku->get('attr_composition')->getString())) {
+      \Drupal::logger('alshaya_hm')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
+    }
+
+    $sku->set('attr_composition', NULL);
   }
 }
 
