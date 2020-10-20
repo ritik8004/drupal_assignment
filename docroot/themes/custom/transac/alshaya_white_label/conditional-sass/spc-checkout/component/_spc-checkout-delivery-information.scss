@@ -87,5 +87,9 @@
     padding-top: 0.3125rem;
     display: block;
     margin: 0;
+
+    @include breakpoint($only-mobile) {
+      margin: 0 0.625rem;
+    }
   }
 }
