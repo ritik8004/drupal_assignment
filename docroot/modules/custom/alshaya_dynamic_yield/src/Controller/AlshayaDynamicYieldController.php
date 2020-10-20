@@ -41,11 +41,11 @@ class AlshayaDynamicYieldController extends ControllerBase {
   }
 
   /**
-   * Sets cookie for DY Intelligent tracking protocol.
+   * Sets cookie for DY Intelligent tracking.
    *
    * @see https://support.dynamicyield.com/hc/en-us/articles/360007211797-Safari-s-Intelligent-Tracking-Prevention-ITP-Policy-and-DYID-Retention#code-examples-0-4
    */
-  public function intelligentTrackingProtocol(Request $request) {
+  public function intelligentTracking(Request $request) {
     $dyid_cookie = $request->cookies->get('_dyid');
 
     $response = new Response();

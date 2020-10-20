@@ -1,5 +1,5 @@
 (function($) {
-  Drupal.behaviors.alshayaDynamicYieldItpBehavior = {
+  Drupal.behaviors.alshayaDynamicYieldItBehavior = {
     attach: function (context, settings) {
       if (context == document) {
         var dyIdServerCookie = document.cookie.split(';')

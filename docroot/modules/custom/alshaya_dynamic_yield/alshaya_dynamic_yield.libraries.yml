@@ -5,8 +5,8 @@ alshaya_dynamic_yield.product_modal:
   dependencies:
     - core/jquery.once
 
-alshaya_dynamic_yield.intelligent_tracking_protocol:
+alshaya_dynamic_yield.intelligent_tracking:
   js:
-    js/alshaya_dynamic_yield.intelligent_tracking_protocol.js: {}
+    js/alshaya_dynamic_yield.intelligent_tracking.js: {}
   dependencies:
     - core/jquery
