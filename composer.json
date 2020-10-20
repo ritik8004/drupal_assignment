@@ -372,6 +372,9 @@
             "drupal/acquia_purge": {
                 "Allow faster processing of purge queues for content rich sites": "https://www.drupal.org/files/issues/2019-07-08/3066449-5.patch"
             },
+            "drupal/google_tag": {
+                "Cache content and avoid using file_get_contents for better performance": "patches/google_tag/3092193.patch"
+            },
             "drupal/robotstxt": {
                 "Redirection when using a language prefix path": "https://www.drupal.org/files/issues/2018-04-11/robotstxt-avoid_redirection-2930799-5.patch"
             },

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b51c376dc0a98ef59164bd16f9085b33",
+    "content-hash": "e62151fb6a5f2062c02e3db9392e0501",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1164,7 +1164,7 @@
             "version": "v1.8.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:kenwheeler/slick.git",
+                "url": "https://github.com/kenwheeler/slick.git",
                 "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee"
             },
             "dist": {
@@ -7739,6 +7739,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Cache content and avoid using file_get_contents for better performance": "patches/google_tag/3092193.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
