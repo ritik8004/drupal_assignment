@@ -1,0 +1,8 @@
+alshaya_dynamic_yield.intelligent_tracking:
+  path: '/dyid'
+  defaults:
+    _title: 'Dynamic Yield Intelligent Tracking'
+    _controller: '\Drupal\alshaya_dynamic_yield\Controller\AlshayaDynamicYieldController::intelligentTracking'
+  methods: ['POST']
+  requirements:
+    _permission: 'access content'
