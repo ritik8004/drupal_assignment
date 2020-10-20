@@ -102,9 +102,12 @@ class AlshayaWebFormOptionsListResource extends ResourceBase {
     }
 
     $data = $this->getWebformOptionsList($config);
-
     $response = new ResourceResponse($data);
-    $response->addCacheableDependency($response);
+
+    $cacheableMetadata = $response->getCacheableMetadata();
+    $cacheableMetadata->addCacheTags($config->getCacheTags());
+    $cacheableMetadata->addCacheContexts($config->getCacheContexts());
+    $response->addCacheableDependency($cacheableMetadata);
 
     return $response;
   }
