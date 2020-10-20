@@ -9,6 +9,10 @@ import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/a
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import getStringMessage from '../../../../utilities/strings';
 import { getElementValue, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import {
+  removeFullScreenLoader,
+  showFullScreenLoader,
+} from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
@@ -79,6 +83,7 @@ class AuraFormSignUpOTPModal extends React.Component {
           // API call to send otp.
           const apiUrl = 'post/loyalty-club/send-otp';
           const apiData = postAPIData(apiUrl, { mobile });
+          showFullScreenLoader();
 
           if (apiData instanceof Promise) {
             apiData.then((result) => {
@@ -92,6 +97,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                   });
                 }
               }
+              removeFullScreenLoader();
             });
           }
         }
@@ -113,6 +119,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     const apiUrl = 'post/loyalty-club/verify-otp';
     const mobile = getElementValue('mobile');
     const apiData = postAPIData(apiUrl, { mobile, otp });
+    showFullScreenLoader();
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -124,6 +131,7 @@ class AuraFormSignUpOTPModal extends React.Component {
             this.openNewUserModal();
           }
         }
+        removeFullScreenLoader();
       });
     }
   };

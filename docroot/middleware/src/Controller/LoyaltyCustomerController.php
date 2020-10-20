@@ -169,8 +169,8 @@ class LoyaltyCustomerController {
       return new JsonResponse($this->utility->getErrorResponse('INVALID_NAME_ERROR', 500));
     }
 
-    if (empty($request_content['email'])) {
-      $this->logger->error('Error while trying to do loyalty club sign up. Email is required. Data: @data', [
+    if (empty($request_content['email']) || !filter_var($request_content['email'], FILTER_VALIDATE_EMAIL)) {
+      $this->logger->error('Error while trying to do loyalty club sign up. Email is missing/invalid. Data: @data', [
         '@data' => $request_content,
       ]);
       return new JsonResponse($this->utility->getErrorResponse('INVALID_EMAIL', 500));
