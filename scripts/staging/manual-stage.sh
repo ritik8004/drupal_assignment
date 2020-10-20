@@ -90,6 +90,12 @@ for current_site in $(echo ${valid_sites:1} | tr "," "\n")
 do
   uri="https://$current_site-$target_domain"
 
+  # Remove trailing numbers to get exact site code.
+  site_code=${current_site//[0-9]/}
+
+  # Remove the last two characters which are always the country code.
+  brand_code=${site_code%??}
+
   echo
   echo "Droppping and importing database again for $current_site"
   ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sql-drop -y; drush -l $uri sql-cli < ~/manual-stage/$current_site.sql"
@@ -121,15 +127,18 @@ do
   siteUri=`drush acsf-tools-list --fields=domains | grep -A3 "^$current_site$" | tail -n 1 | cut -d' ' -f6`
   site_files=`drush acsf-tools-info | grep $current_site | cut -d"	" -f3`
   files_folder="sites/g/files/$site_files/files"
+  brand_files_folder="sites/g/files/$brand_code"
+
   target_files_folder="/var/www/html/$AH_SITE_GROUP.$target_env/docroot/$files_folder"
+  target_brand_files_folder="/var/www/html/$AH_SITE_GROUP.$target_env/docroot/sites/g/files/$brand_code"
 
   rsync -a $files_folder/* --exclude 'css' --exclude 'js' --exclude 'styles' --exclude 'media' --exclude 'assets' --exclude 'assets-shared' $target:$target_files_folder
 
   if [[ "$type" == "iso" ]]; then
     echo
     echo "Initiating rsync of product media files in screen rsync_${current_site}_${target_env}"
-    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder --delete"
-    screen -S rsync_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/assets-shared $target:$target_files_folder  --delete"
+    screen -S rsync_media_${current_site}_${target_env} -dm bash -c "rsync -auv $files_folder/media $target:$target_files_folder --delete"
+    screen -S rsync_brand_${current_site}_${target_env} -dm bash -c "rsync -auv $brand_files_folder/* --exclude 'styles' $target:$target_brand_files_folder  --delete"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c acquia_search_index"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri sapi-c alshaya_algolia_index"
     ssh $target "screen -S $current_site -dm bash -c \"cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri sapi-i\""
