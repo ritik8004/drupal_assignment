@@ -19,7 +19,7 @@
     font-family: $alshaya-thin;
 
     @include breakpoint($only-mobile) {
-      padding: 0 1.25rem 2.5rem;
+      padding: 0 1.25rem 1.25rem;
       background-color: $pdp_background;
     }
 
@@ -27,7 +27,7 @@
       width: 35%;
       float: $right;
       padding-#{$left}: 1.25rem;
-      padding-bottom: 6.25rem;
+      padding-bottom: 3rem;
     }
 
     @include breakpoint($desktop) {
