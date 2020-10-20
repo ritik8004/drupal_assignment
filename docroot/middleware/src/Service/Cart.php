@@ -415,13 +415,15 @@ class Cart {
    *   Action to be performed (add/update/remove).
    * @param array $options
    *   Options array.
+   * @param string $variant_sku
+   *   The variant sku value.
    *
    * @return array
    *   Cart data.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = []) {
+  public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = [], string $variant_sku = NULL) {
     $option_data = [];
 
     if ($action == CartActions::CART_REMOVE_ITEM) {
@@ -449,6 +451,7 @@ class Cart {
       'qty' => $quantity ?? 1,
       'quote_id' => (string) $this->getCartId(),
       'product_option' => (object) $option_data,
+      'variant_sku' => $variant_sku,
     ];
     $data['extension'] = (object) [
       'action' => $action,
@@ -984,6 +987,14 @@ class Cart {
       ? $data['extension']['action'] ?? ''
       : $data['extension']->action ?? '';
 
+    // We do not want to send the variant sku values to magento unnecessarily.
+    // So we store it separately and remove it from $data.
+    $skus = [];
+    foreach ($data['items'] as $key => $item) {
+      $skus[] = $item->variant_sku ?? $item->sku;
+      unset($data['items'][$key]->variant_sku);
+    }
+
     try {
       $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data], $action);
       static::$cart = $this->formatCart($cart_updated);
@@ -1035,6 +1046,9 @@ class Cart {
         $this->cancelCartReservation($e->getMessage());
       }
 
+      // Get cart object if already not available.
+      $cart = !empty($cart) ? $cart : $this->getCart();
+
       // Check the exception type from drupal.
       $exception_type = $this->exceptionType($e->getMessage());
       // We want to throw error for add to cart action, to display errors
@@ -1045,13 +1059,7 @@ class Cart {
       // will show notification of add to cart (Which we don't need here.).
       // If exception type is of stock limit or of quantity limit,
       // refresh the stock for the sku items in cart from MDC to drupal.
-      if (!empty($exception_type)) {
-        // In case of add to cart, we only refresh for OOS scenario.
-        if ($is_add_to_cart && ($exception_type !== 'OOS')) {
-          return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
-        }
-        // Get cart object if already not available.
-        $cart = !empty($cart) ? $cart : $this->getCart();
+      if (!empty($exception_type) && !$is_add_to_cart) {
         // If cart is available and cart has item.
         if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
           $response = $this->drupal->triggerCheckoutEvent('validate cart', ['cart' => $cart['cart']]);
@@ -1059,11 +1067,22 @@ class Cart {
             if (!empty($response['data']['stock'])) {
               self::$stockInfo = $response['data']['stock'];
             }
-            if ($is_add_to_cart) {
-              return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
-            }
             // Return cart object.
             return $cart;
+          }
+        }
+      }
+      elseif (!empty($exception_type) && $is_add_to_cart && ($exception_type === 'OOS')) {
+        if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
+          $skus = array_merge($skus, array_column($cart['cart']['items'], 'sku'));
+        }
+        $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
+          'skus' => $skus,
+        ]);
+
+        if ($response['status'] == TRUE) {
+          if (!empty($response['data']['stock'])) {
+            self::$stockInfo = $response['data']['stock'];
           }
         }
       }

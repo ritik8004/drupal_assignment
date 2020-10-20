@@ -32,6 +32,7 @@ export const getPostData = (skuCode, variantSelected, parentSKU) => {
     sku: parentSku,
     quantity: qty,
     cart_id: cartId,
+    variant_sku: variantSelected,
   };
 
   const productData = {
