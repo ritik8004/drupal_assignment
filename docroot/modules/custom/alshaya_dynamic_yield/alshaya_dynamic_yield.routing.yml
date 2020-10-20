@@ -1,0 +1,8 @@
+alshaya_dynamic_yield.intelligent_tracking_protocol:
+  path: '/dyid'
+  defaults:
+    _title: 'Dynamic Yield Intelligent Tracking Protocol Implementation'
+    _controller: '\Drupal\alshaya_dynamic_yield\Controller\AlshayaDynamicYieldController::intelligentTrackingProtocol'
+  methods: ['POST']
+  requirements:
+    _permission: 'access content'
