@@ -21,7 +21,6 @@ body.overlay-related-select {
     &-popup {
       &-content-wrapper {
         padding: 1.25rem;
-        background-color: $magv2-desc-popup-content-bg;
 
         &::before {
           content: '';
@@ -42,6 +41,7 @@ body.overlay-related-select {
             .slick-dots {
               left: auto;
               transform: none;
+              bottom: 1.5625rem;
 
               @include breakpoint($tablet) {
                 li {
@@ -65,7 +65,7 @@ body.overlay-related-select {
             @include breakpoint($tablet) {
               .slick-slider {
                 .slick-arrow {
-                  bottom: -0.625rem;
+                  bottom: -0.1875rem;
                   top: auto;
                   width: 2.125rem;
                   height: 2.125rem;
@@ -108,7 +108,7 @@ body.overlay-related-select {
         }
 
         .magv2-detail-wrapper {
-          padding-top: 1.25rem;
+          padding-top: 0.3125rem;
 
           .magv2-pdp-title {
             padding-top: 0;
@@ -192,8 +192,26 @@ body.overlay-related-select {
   .magv2-crossell-popup-content-wrapper {
     .magazine__gallery--container-mobile {
       .product-labels {
-        .labels-container__inner {
-          width: auto;
+        .labels-container {
+          .labels-container__inner {
+            width: auto;
+          }
+
+          &__inner--bottom-right {
+            padding: 0 0.9375rem 1.5rem 1.25rem;
+
+            html[lang=ar] & {
+              padding: 0 1.25rem 1.5rem 0.9375rem;
+            }
+          }
+
+          &__inner--bottom-left {
+            padding: 0 1.25rem 1.5rem 0.9375rem;
+
+            html[lang=ar] & {
+              padding: 0 0.9375rem 1.5rem 1.25rem;
+            }
+          }
         }
       }
     }

@@ -666,6 +666,12 @@ $conductors = [
   'aeoeg_prod' => [
     'site_id' => 208,
   ],
+  'aeobh_prod' => [
+    'site_id' => 293,
+  ],
+  'aeoqa_prod' => [
+    'site_id' => 294,
+  ],
   // Muji
   'muae_dev' => [
     'hmac_id' => 'fa9f4aee73dd4acc93bb4f8457cc8486',
