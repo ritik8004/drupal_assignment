@@ -5,6 +5,11 @@ import AuraMyAccountNoLinkedCard from './card-not-linked-no-data';
 import AuraMyAccountVerifiedUser from './linked-verified';
 import { postAPIData } from '../../../utilities/api/fetchApiData';
 import { getAllAuraStatus, getUserDetails } from '../../../utilities/helper';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 
 export default class LoyaltyClubBlock extends React.Component {
   handleNotYou = (cardNumber) => {
@@ -15,8 +20,14 @@ export default class LoyaltyClubBlock extends React.Component {
     this.updateUsersLoyaltyStatus(cardNumber, getAllAuraStatus().APC_LINKED_NOT_VERIFIED, 'Y');
   }
 
+  handleSignUp = () => {
+    const { updateLoyaltyStatus } = this.props;
+    updateLoyaltyStatus(getAllAuraStatus().APC_LINKED_NOT_VERIFIED);
+  }
+
   updateUsersLoyaltyStatus = (cardNumber, auraStatus, link) => {
     // API call to update user's loyalty status.
+    showFullScreenLoader();
     const apiUrl = 'post/loyalty-club/apc-status-update';
     const data = {
       uid: getUserDetails().id,
@@ -34,6 +45,7 @@ export default class LoyaltyClubBlock extends React.Component {
             updateLoyaltyStatus(auraStatus);
           }
         }
+        removeFullScreenLoader();
       });
     }
   }
@@ -41,15 +53,32 @@ export default class LoyaltyClubBlock extends React.Component {
   render() {
     const allAuraStatus = getAllAuraStatus();
     const {
-      loyaltyStatus, tier, points, cardNumber, expiringPoints, expiryDate, pointsOnHold, upgradeMsg,
+      wait,
+      loyaltyStatus,
+      tier,
+      points,
+      cardNumber,
+      expiringPoints,
+      expiryDate,
+      pointsOnHold,
+      upgradeMsg,
     } = this.props;
+
+    if (wait) {
+      return <Loading />;
+    }
+
     const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
 
     if (loyaltyStatusInt !== '') {
       // When user has no card associated with him.
       if (loyaltyStatusInt === allAuraStatus.APC_NOT_LINKED_NO_DATA
         || loyaltyStatusInt === allAuraStatus.APC_NOT_LINKED_NOT_U) {
-        return <AuraMyAccountNoLinkedCard />;
+        return (
+          <AuraMyAccountNoLinkedCard
+            handleSignUp={this.handleSignUp}
+          />
+        );
       }
       // When user has a old card associated with same email.
       if (loyaltyStatusInt === allAuraStatus.APC_NOT_LINKED_DATA) {
