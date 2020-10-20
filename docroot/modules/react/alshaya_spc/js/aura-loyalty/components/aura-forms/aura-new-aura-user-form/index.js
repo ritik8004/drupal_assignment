@@ -1,6 +1,7 @@
 import React from 'react';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
+import AuraMobileNumberField from '../aura-mobile-number-field';
 
 class AuraFormNewAuraUserModal extends React.Component {
   getNewUserFormDescription = () => [
@@ -23,7 +24,8 @@ class AuraFormNewAuraUserModal extends React.Component {
   render() {
     const {
       closeNewUserModal,
-      mobileNumber,
+      chosenCountryCode,
+      chosenUserMobile,
     } = this.props;
 
     const submitButtonText = Drupal.t('Submit');
@@ -36,13 +38,11 @@ class AuraFormNewAuraUserModal extends React.Component {
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">
-            <TextField
-              type="text"
-              required
-              disabled
+            <AuraMobileNumberField
+              isDisabled
               name="new-aura-user-mobile-number"
-              defaultValue={mobileNumber}
-              label={Drupal.t('Mobile Number')}
+              countryMobileCode={chosenCountryCode}
+              defaultValue={chosenUserMobile}
             />
             <TextField
               type="text"

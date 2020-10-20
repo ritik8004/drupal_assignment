@@ -8,6 +8,7 @@ import { validateInfo } from '../../../../utilities/checkout_util';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import getStringMessage from '../../../../utilities/strings';
+import AuraMobileNumberField from '../aura-mobile-number-field';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class AuraFormSignUpOTPModal extends React.Component {
       mobileNumber: null,
       otpRequested: false,
       isNewUserModalOpen: false,
+      chosenCountryCode: null,
+      chosenUserMobile: null,
     };
   }
 
@@ -36,6 +39,12 @@ class AuraFormSignUpOTPModal extends React.Component {
 
     // Also close OTP Modal.
     closeOTPModal();
+  };
+
+  setCountryCode = (code) => {
+    this.setState({
+      chosenCountryCode: code,
+    });
   };
 
   // Read form values.
@@ -63,11 +72,11 @@ class AuraFormSignUpOTPModal extends React.Component {
         if (result.status === 200 && result.data.status) {
           // If not valid mobile number.
           if (result.data.mobile === false) {
-            this.showError('mobile-error', getStringMessage('form_error_valid_mobile_number'));
+            this.showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_valid_mobile_number'));
             isValid = false;
           } else {
             // If valid mobile number, remove error message.
-            this.removeError('mobile-error');
+            this.removeError('otp-mobile-aura-mobile-field-error');
           }
         }
         return isValid;
@@ -78,12 +87,16 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Send OTP to the user.
   sendOtp = () => {
-    const mobile = this.getElementValue('mobile');
+    const { chosenCountryCode } = this.state;
+    const userMobile = this.getElementValue('otp-mobile-mobile-number');
 
-    if (mobile.length === 0 || mobile.match(/^[0-9]+$/) === null) {
-      this.showError('mobile-error', getStringMessage('form_error_mobile_number'));
+    if (userMobile.length === 0 || userMobile.match(/^[0-9]+$/) === null) {
+      this.showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
       return;
     }
+
+    // Combine mobile and country code
+    const mobile = chosenCountryCode + userMobile;
 
     // Call API to check if mobile number is valid.
     const validationRequest = this.validateMobileOtp({ mobile }, 'send_otp');
@@ -103,6 +116,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                   this.setState({
                     otpRequested: true,
                     mobileNumber: mobile,
+                    chosenUserMobile: userMobile,
                   });
                 }
               }
@@ -168,21 +182,14 @@ class AuraFormSignUpOTPModal extends React.Component {
       otpRequested,
       mobileNumber,
       isNewUserModalOpen,
+      chosenCountryCode,
+      chosenUserMobile,
     } = this.state;
 
     const {
       country_mobile_code: countryMobileCode,
       mobile_maxlength: countryMobileCodeMaxLength,
     } = getAuraConfig();
-
-    const countryMobileCodeMarkup = countryMobileCode
-      ? (
-        <span className="country-code">
-          +
-          {countryMobileCode}
-        </span>
-      )
-      : '';
 
     const submitButtonText = otpRequested === true ? Drupal.t('Verify') : Drupal.t('Send One Time Pin');
 
@@ -194,13 +201,12 @@ class AuraFormSignUpOTPModal extends React.Component {
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">
-            {countryMobileCodeMarkup}
-            <TextField
-              type="text"
-              required
-              name="mobile"
-              label={getStringMessage('mobile_label')}
+            <AuraMobileNumberField
+              isDisabled={false}
+              name="otp-mobile"
+              countryMobileCode={countryMobileCode}
               maxLength={countryMobileCodeMaxLength}
+              setCountryCode={this.setCountryCode}
             />
             <ConditionalView condition={otpRequested === true}>
               <TextField
@@ -241,6 +247,8 @@ class AuraFormSignUpOTPModal extends React.Component {
                   closeOnDocumentClick={false}
                 >
                   <AuraFormNewAuraUserModal
+                    chosenCountryCode={chosenCountryCode}
+                    chosenUserMobile={chosenUserMobile}
                     mobileNumber={mobileNumber}
                     closeNewUserModal={() => this.closeNewUserModal()}
                     closeOTPModal={() => this.closeNewUserModal()}
