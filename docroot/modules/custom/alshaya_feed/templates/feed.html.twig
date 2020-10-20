@@ -49,6 +49,7 @@
       {% for image in product.images %}
       <image>
         <url>{{ image.url }}</url>
+        <url_product_listing>{{ image.url_product_listing }}</url_product_listing>
         <label>{{ image.label }}</label>
       </image>
       {% endfor %}
@@ -70,6 +71,7 @@
         {% for image in product.images %}
         <image>
           <url>{{ image.url }}</url>
+          <url_product_listing>{{ image.url_product_listing }}</url_product_listing>
           <label>{{ image.label }}</label>
         </image>
         {% endfor %}
