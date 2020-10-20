@@ -10,4 +10,5 @@
  */
 function alshaya_dynamic_yield_page_attachments(array &$page) {
   $page['#attached']['library'][] = 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal';
+  $page['#attached']['library'][] = 'alshaya_dynamic_yield/alshaya_dynamic_yield.intelligent_tracking_protocol';
 }
