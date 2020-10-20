@@ -559,7 +559,7 @@ export const applyCode = (e) => {
 /**
  * Add class to body and trigger free gift modal.
  */
-export const openFreeGiftModal = () => {
+export const openCartFreeGiftModal = () => {
   const body = document.querySelector('body');
   body.classList.add('free-gifts-modal-overlay');
   document.getElementById('spc-free-gift').click();
