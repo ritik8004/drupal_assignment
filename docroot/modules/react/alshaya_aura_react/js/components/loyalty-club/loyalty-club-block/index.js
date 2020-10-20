@@ -8,7 +8,7 @@ import { getAllAuraStatus, getUserDetails } from '../../../utilities/helper';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
-} from '../../../../../alshaya_spc/js/utilities/checkout_util';
+} from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 export default class LoyaltyClubBlock extends React.Component {
   handleNotYou = (cardNumber) => {

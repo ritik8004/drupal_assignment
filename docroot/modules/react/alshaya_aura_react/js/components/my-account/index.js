@@ -5,7 +5,7 @@ import { getAPIData } from '../../utilities/api/fetchApiData';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
-} from '../../../../alshaya_spc/js/utilities/checkout_util';
+} from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class MyAccount extends React.Component {
   constructor(props) {

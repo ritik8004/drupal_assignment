@@ -6,7 +6,7 @@ import { getAPIData } from '../../utilities/api/fetchApiData';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
-} from '../../../../alshaya_spc/js/utilities/checkout_util';
+} from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class LoyaltyClub extends React.Component {
   constructor(props) {

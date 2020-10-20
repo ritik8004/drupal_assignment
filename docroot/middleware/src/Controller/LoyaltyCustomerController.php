@@ -154,14 +154,13 @@ class LoyaltyCustomerController {
   }
 
   /**
-   * Quick Enrollment.
+   * Loyalty Club Signup.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Return API response status.
    */
-  public function quickEnrollment(Request $request) {
+  public function loyaltyClubSignUp(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
-    $uid = $request_content['uid'];
 
     if (empty($request_content['firstname']) || empty($request_content['lastname']) || empty($request_content['email']) || empty($request_content['mobile'])) {
       $this->logger->error('Error while trying to do Quick Enrollment. First name, last name, email and mobile number is required. Data: @data', [
@@ -173,24 +172,6 @@ class LoyaltyCustomerController {
     try {
       // Get user details from session.
       $user = $this->drupal->getSessionCustomerInfo();
-
-      // Check if we have user in session.
-      if (empty($user)) {
-        $this->logger->error('Error while trying to do Quick Enrollment. No user available in session. User id from request: @uid.', [
-          '@uid' => $uid,
-        ]);
-        return new JsonResponse($this->utility->getErrorResponse('No user available in session', Response::HTTP_NOT_FOUND));
-      }
-
-      // Check if uid in the request matches the one in session.
-      if ($user['uid'] !== $uid) {
-        $this->logger->error("Error while trying to do Quick Enrollment. User id in request doesn't match the one in session. User id from request: @req_uid. User id in session: @session_uid.", [
-          '@req_uid' => $uid,
-          '@session_uid' => $user['uid'],
-        ]);
-        return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
-      }
-
       $data['customer'] = array_merge($request_content, ['isVerified' => 'Y']);
 
       $url = 'customers/quick-enrollment';
@@ -200,10 +181,10 @@ class LoyaltyCustomerController {
         'data' => $response,
       ];
 
-      // On API success, update the user AURA Status in Drupal.
-      if (is_array($response) && !empty($response['apc_link'])) {
+      // On API success, update user AURA Status in Drupal for logged in user.
+      if (!empty($user['uid']) && is_array($response) && !empty($response['apc_link'])) {
         $auraData = [
-          'uid' => $uid,
+          'uid' => $user['uid'],
           'apcLinkStatus' => $response['apc_link'],
         ];
         $updated = $this->drupal->updateUserAuraInfo($auraData);;
@@ -212,7 +193,7 @@ class LoyaltyCustomerController {
         if (!$updated) {
           $message = 'Error while trying to update user AURA Status field in Drupal after quick enrollment.';
           $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
-            '@uid' => $uid,
+            '@uid' => $user['uid'],
             '@customer_id' => $user['customer_id'],
             '@aura_status' => $response['apc_link'],
           ]);

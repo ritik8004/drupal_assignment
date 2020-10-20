@@ -4,7 +4,7 @@ import TextField from '../../../../utilities/textfield';
 import { getElementValue, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
 import { validateInfo } from '../../../../utilities/checkout_util';
-import { getUserDetails, getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 
 class AuraFormNewAuraUserModal extends React.Component {
@@ -83,9 +83,8 @@ class AuraFormNewAuraUserModal extends React.Component {
           // API call to do quick enrollment.
           const fullname = getElementValue('new-aura-user-full-name');
           const splitedName = fullname.split(' ');
-          const apiUrl = 'post/loyalty-club/quick-enrollment';
+          const apiUrl = 'post/loyalty-club/sign-up';
           const data = {
-            uid: getUserDetails().id,
             firstname: splitedName[0],
             lastname: splitedName[1],
             email,
