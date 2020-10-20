@@ -12,7 +12,7 @@ use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
- * Class BookingPaymentManager.
+ * Class Booking Payment Manager.
  *
  * @package Drupal\alshaya_kz_transac_lite
  */

@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AlshayaCheckoutSubscriber.
+ * Class Alshaya Checkout Subscriber.
  *
  * Redirect users from cart/checkout to specific page if checkout is disabled.
  */

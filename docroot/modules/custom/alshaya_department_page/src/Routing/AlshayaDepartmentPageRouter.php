@@ -7,7 +7,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AlshayaDepartmentPageRouter.
+ * Class Alshaya Department Page Router.
  */
 class AlshayaDepartmentPageRouter extends Router {
 

@@ -5,7 +5,7 @@ namespace Drupal\alshaya_custom;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Class AlshayaCountryManager.
+ * Class Alshaya Country Manager.
  */
 class AlshayaCountryManager {
 

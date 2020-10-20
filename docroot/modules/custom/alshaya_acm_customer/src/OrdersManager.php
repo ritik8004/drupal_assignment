@@ -12,7 +12,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
- * Class OrdersManager.
+ * Class Orders Manager.
  *
  * @TODO: Move all code from utility file to here.
  * Target file alshaya_acm_customer.orders.inc.

@@ -5,7 +5,7 @@ namespace Drupal\acq_commerce\Conductor;
 use Drupal\acq_commerce\RouteExceptionEvent;
 
 /**
- * Class RouteException.
+ * Class Route Exception.
  */
 final class RouteException extends \UnexpectedValueException {
 

@@ -8,7 +8,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class SitelinkSearchConfigForm.
+ * Class Site link Search Config Form.
  */
 class SitelinkSearchConfigForm extends ConfigFormBase {
 
@@ -26,7 +26,8 @@ class SitelinkSearchConfigForm extends ConfigFormBase {
    *   The module handler.
    */
   public function __construct(ModuleHandlerInterface $module_handler) {
-    $this->moduleHandler = $module_handler;;
+    $this->moduleHandler = $module_handler;
+    ;
   }
 
   /**

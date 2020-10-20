@@ -9,15 +9,15 @@
   Drupal.behaviors.sizegroupFilter = {
     // Opens the selected grand parent filter value using
     // #all-filter-active-facet-sort text value.
-    openSelectedSizeGroupFilter: function() {
+    openSelectedSizeGroupFilter: function () {
       var active_facet_sort = $('#all-filter-active-facet-sort').val();
       var active_facet_sort_elements = active_facet_sort.split(','); // convert to array of values
 
       if(active_facet_sort_elements.length > 1) {
-        for(var i = 0; i < active_facet_sort_elements.length ; i++) {
+        for(var i = 0; i < active_facet_sort_elements.length; i++) {
           // Normal execution in case of the facet block selector.
           if($('.all-filters #' + active_facet_sort_elements[i]).hasClass('block-facets')) {
-            $('.all-filters #'  + active_facet_sort_elements[i]).addClass('show-facet');
+            $('.all-filters #' + active_facet_sort_elements[i]).addClass('show-facet');
           } else { // Add class to the parent of selected children if the selector is not block facet.
             $('.all-filters #block-plpsize >ul >li, .all-filters #block-promosize >ul >li').hide();
             $('.all-filters [id=' + active_facet_sort_elements[i] + ']').parent().addClass('show-facet');
@@ -31,7 +31,7 @@
       Drupal.behaviors.sizegroupFilter.openSelectedSizeGroupFilter();
 
       // Override reopen facet logic.
-      $('.sticky-filter-wrapper').once('facet-show-all-for-sizegroup-processed').on('click', '.show-all-filters', function() {
+      $('.sticky-filter-wrapper').once('facet-show-all-for-sizegroup-processed').on('click', '.show-all-filters', function () {
         Drupal.behaviors.sizegroupFilter.openSelectedSizeGroupFilter();
       });
 
@@ -76,7 +76,7 @@
         event.preventDefault();
       });
 
-      $('.all-filters').once('facet-all-back-for-sizegroup-processed').on('click', '.facet-all-back', function() {
+      $('.all-filters').once('facet-all-back-for-sizegroup-processed').on('click', '.facet-all-back', function () {
         var $selectedGrandChild = $('.all-filters #block-plpsize >ul >li.show-facet, .all-filters #block-promosize >ul >li.show-facet');
 
         // If any grand child is open go to this custom logic.

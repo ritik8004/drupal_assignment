@@ -18,7 +18,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Language\LanguageInterface;
 
 /**
- * Class AlshayaFacetsPrettyPathsHelper.
+ * Class Alshaya Facets Pretty Paths Helper.
  *
  * @package Drupal\alshaya_facets_pretty_paths
  */
@@ -225,7 +225,10 @@ class AlshayaFacetsPrettyPathsHelper {
       // Specific case for collection, it comes from product_collection
       // in some sites.
       if ($attribute_code === 'collection') {
-        $query->condition('field_sku_attribute_code', ['collection', 'product_collection']);
+        $query->condition('field_sku_attribute_code', [
+          'collection',
+          'product_collection',
+        ]);
       }
       else {
         $query->condition('field_sku_attribute_code', $attribute_code);

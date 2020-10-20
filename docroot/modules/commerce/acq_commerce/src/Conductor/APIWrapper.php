@@ -16,9 +16,10 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * APIWrapper class.
+ * API Wrapper class.
  */
 class APIWrapper implements APIWrapperInterface {
 
@@ -67,6 +68,13 @@ class APIWrapper implements APIWrapperInterface {
   protected $lock;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\ClientFactory $client_factory
@@ -83,6 +91,8 @@ class APIWrapper implements APIWrapperInterface {
    *   Event Dispatcher.
    * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Lock service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
@@ -90,13 +100,15 @@ class APIWrapper implements APIWrapperInterface {
                               I18nHelper $i18nHelper,
                               APIHelper $api_helper,
                               EventDispatcherInterface $dispatcher,
-                              LockBackendInterface $lock) {
+                              LockBackendInterface $lock,
+                              ModuleHandlerInterface $module_handler) {
     $this->clientFactory = $client_factory;
     $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
     $this->logger = $logger_factory->get('acq_sku');
     $this->helper = $api_helper;
     $this->dispatcher = $dispatcher;
     $this->lock = $lock;
+    $this->moduleHandler = $module_handler;
 
     // We always use the current language id to get store id. If required
     // function calling the api wrapper will pass different store id to
@@ -470,7 +482,7 @@ class APIWrapper implements APIWrapperInterface {
       }
 
       // Invoke the alter hook to allow all modules to update the customer data.
-      \Drupal::moduleHandler()->alter('acq_commerce_update_customer_api_request', $opt);
+      $this->moduleHandler->alter('acq_commerce_update_customer_api_request', $opt);
 
       // Do some cleanup.
       $opt['json']['customer'] = $this->helper->cleanCustomerData($opt['json']['customer']);
@@ -608,7 +620,6 @@ class APIWrapper implements APIWrapperInterface {
     };
 
     $customer = [];
-    $exception = NULL;
 
     try {
       $customer = $this->tryAgentRequest($doReq, 'getCustomer', 'customer');
@@ -868,8 +879,8 @@ class APIWrapper implements APIWrapperInterface {
 
     $doReq = function ($client, $opt) use ($endpoint, $skus, $categoryId) {
 
-      if (!empty($category_id)) {
-        $opt['query']['category_id'] = $category_id;
+      if (!empty($categoryId)) {
+        $opt['query']['category_id'] = $categoryId;
       }
       elseif (!empty($skus)) {
         $opt['query']['skus'] = $skus;

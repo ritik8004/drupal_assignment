@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\acq_sku\Entity\SKUTypeInterface;
 
 /**
- * Class SKUController.
+ * Class SKU Controller.
  *
  * @package Drupal\acq_sku\Controller
  */

@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 /**
- * Class KnetApiWrapper.
+ * Class Knet Api Wrapper.
  *
  * @package Drupal\alshaya_knet\Knet
  */

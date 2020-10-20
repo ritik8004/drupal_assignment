@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://flkw2-uat.factory.alshaya.com/ar/'
+  url_base_uri: 'https://flkw2-uat.factory.alshaya.com/ar'
   language_collection_filter: ''
   language_sort_filter: 'sort by'
   language_price_filter: 'Price'
@@ -44,7 +44,6 @@ variables:
   continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'en'
   language_short: 'en'
-  language_area_option: 'Kuwait City'
   language_city_option: ''
   language_street: 'Street S'
   language_building: 'Building B'
@@ -67,7 +66,6 @@ variables:
   delivery_type: 'خدمة التوصيل للمنزل'
   language_payment_type: 'نقداً عند التوصيل'
   language_payment_type_text: 'payment method:'
-  area_option: 'السالمية'
   city_option: ''
   cart_promotional: ''
   street: 'Street A'

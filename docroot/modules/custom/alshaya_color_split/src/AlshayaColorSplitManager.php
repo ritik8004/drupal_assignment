@@ -11,7 +11,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class AlshayaColorSplitManager.
+ * Class Alshaya Color Split Manager.
  *
  * @package Drupal\alshaya_color_split
  */

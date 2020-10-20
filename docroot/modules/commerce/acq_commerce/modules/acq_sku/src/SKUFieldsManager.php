@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
- * Class SKUFieldsManager.
+ * Class SKU Fields Manager.
  *
  * @package Drupal\acq_sku
  */
@@ -112,7 +112,10 @@ class SKUFieldsManager {
         );
       }
       // Allow other modules to take some action after the fields are added.
-      $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields, 'add']);
+      $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [
+        $fields,
+        'add',
+      ]);
     }
     else {
       $this->logger->warning('No new fields found to add.');
@@ -147,7 +150,10 @@ class SKUFieldsManager {
       $field_code => $field,
     ];
 
-    $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields_removed, 'remove']);
+    $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [
+      $fields_removed,
+      'remove',
+    ]);
   }
 
   /**
@@ -327,7 +333,10 @@ class SKUFieldsManager {
     $config = $this->configFactory->getEditable(self::BASE_FIELD_ADDITIONS_CONFIG);
     $config->setData($fields);
     $config->save();
-    $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields, 'add']);
+    $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [
+      $fields,
+      'add',
+    ]);
   }
 
   /**

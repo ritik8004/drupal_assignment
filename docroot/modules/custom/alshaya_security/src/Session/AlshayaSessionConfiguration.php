@@ -44,7 +44,6 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
       if (strpos($name, AlshayaSessionManager::LEGACY_SUFFIX) !== FALSE) {
         $expected = str_replace(AlshayaSessionManager::LEGACY_SUFFIX, '', $name);
         if (empty($cookies[$expected])) {
-          $_COOKIE[$expected] = $value;
           $request->cookies->set($expected, $value);
 
           $options = $this->getOptions($request);

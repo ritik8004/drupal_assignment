@@ -12,7 +12,7 @@ use Drupal\node\NodeInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class AlshayaFeed.
+ * Class Alshaya Feed.
  *
  * @package Drupal\alshaya_feed
  */

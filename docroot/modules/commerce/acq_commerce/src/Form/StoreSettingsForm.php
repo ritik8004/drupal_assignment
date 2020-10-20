@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class StoreSettingsForm.
+ * Class Store Settings Form.
  *
  * @package Drupal\acq_commerce\Form
  *

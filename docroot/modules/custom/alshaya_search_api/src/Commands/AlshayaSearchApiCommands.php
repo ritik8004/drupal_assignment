@@ -13,7 +13,7 @@ use Drupal\search_api\Entity\Index;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaSearchApiCommands.
+ * Class Alshaya Search Api Commands.
  *
  * @package Drupal\alshaya_search_api\Commands
  */
@@ -205,7 +205,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
    * @usage drush index-specified-skus acquia_search_index --skus="1234,4323" --batch-size=100
    *   Index specified skus in batches of 100.
    */
-  public function prioritiseIndexing(string $index_id, array $options = ['skus' => NULL, 'batch-size' => 100]) {
+  public function prioritiseIndexing(string $index_id, array $options = [
+    'skus' => NULL,
+    'batch-size' => 100,
+  ]) {
     // Validate index.
     $index = Index::load($index_id);
     if (empty($index)) {

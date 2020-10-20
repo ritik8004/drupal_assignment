@@ -9,9 +9,10 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Psr\Log\LoggerInterface;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
- * Class ProductDyPageTypeEventSubscriber.
+ * Class Product DyPage Type Event Subscriber.
  *
  * @package Drupal\alshaya_acm_product\EventSubscriber
  */
@@ -87,13 +88,13 @@ class ProductDyPageTypeEventSubscriber implements EventSubscriberInterface {
         }
 
         $productSku = SKU::loadFromSku($productSku);
-        if (empty($productSku)) {
+        if (!($productSku instanceof SKUInterface)) {
           $this->logger->notice('ProductDyPageTypeEventSubscriber: SKU could not be loaded for the Product ID: @nid.', ['@nid' => $node->id()]);
           return;
         }
         if ($productSku->bundle() === 'configurable') {
           $combinations = $this->skuManager->getConfigurableCombinations($productSku);
-          if (key($combinations['by_sku'])) {
+          if (isset($combinations['by_sku'])) {
             $event->setDyContextData([key($combinations['by_sku'])]);
           }
         }

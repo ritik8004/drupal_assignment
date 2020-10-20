@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * Class AlshayaMobileAppController.
+ * Class Alshaya Mobile App Controller.
  */
 class AlshayaMobileAppController extends ControllerBase {
 

@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm_customer;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 
 /**
- * Class CustomerHelper.
+ * Class Customer Helper.
  *
  * @package Drupal\alshaya_acm_customer
  */

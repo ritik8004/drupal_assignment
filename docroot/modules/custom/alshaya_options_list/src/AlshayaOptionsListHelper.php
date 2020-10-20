@@ -205,7 +205,8 @@ class AlshayaOptionsListHelper {
   public function groupAlphabetically(array $options_array) {
     $return_array = [];
     foreach ($options_array as $option) {
-      $char = strtolower($option['title'][0]);
+      preg_match("/./u", $option['title'], $firstChar);
+      $char = strtolower($firstChar[0]);
       $return_array[$char][] = $option;
     }
     return $return_array;

@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class PlpConfigForm.
+ * Class Plp Config Form.
  */
 class PlpConfigForm extends ConfigFormBase {
 

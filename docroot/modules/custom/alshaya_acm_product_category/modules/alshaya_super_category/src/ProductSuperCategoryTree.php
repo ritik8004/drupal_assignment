@@ -22,7 +22,7 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\Core\Path\PathValidatorInterface;
 
 /**
- * Class ProductSuperCategoryTree.
+ * Class Product Super Category Tree.
  */
 class ProductSuperCategoryTree extends ProductCategoryTree {
 
@@ -232,7 +232,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Return the parent term object or NULL.
    */
   public function getCategoryTermRootParent($term = NULL, $langcode = NULL) {
-    if (empty($term) || !$term instanceof  TermInterface) {
+    if (empty($term) || !$term instanceof TermInterface) {
       $term = $this->getCategoryTermFromRoute();
     }
 

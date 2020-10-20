@@ -19,7 +19,7 @@ use Drupal\Component\Serialization\Json;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * CheckoutComAPIWrapper class.
+ * Checkout Com API Wrapper class.
  */
 class CheckoutComAPIWrapper {
 

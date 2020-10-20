@@ -8,7 +8,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaAddressBookCommands.
+ * Class Alshaya Address Book Commands.
  *
  * @package Drupal\alshaya_addressbook\Commands
  */

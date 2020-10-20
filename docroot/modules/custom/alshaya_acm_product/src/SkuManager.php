@@ -43,7 +43,7 @@ use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
- * Class SkuManager.
+ * Class Sku Manager.
  *
  * @package Drupal\alshaya_acm_product
  */
@@ -822,7 +822,10 @@ class SkuManager {
    * @return array
    *   List of Promotion Nodes.
    */
-  public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
+  public function getSkuPromotions(SKU $sku, array $types = [
+    'cart',
+    'category',
+  ]) {
     $skus = [$sku->getSku()];
 
     if ($sku->bundle() == 'simple') {
@@ -3161,7 +3164,10 @@ class SkuManager {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $item->getField('price')->setValues([max($selling_prices)]);
 
-      $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
+      $selling_prices = array_unique([
+        min($selling_prices),
+        max($selling_prices),
+      ]);
       $item->getField('attr_selling_price')->setValues($selling_prices);
 
       if ($this->isPriceModeFromTo()) {
@@ -3672,6 +3678,34 @@ class SkuManager {
     }
 
     return $attributes;
+  }
+
+  /**
+   * Wrapper function get configurable values.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param array $attributes
+   *   Array of attributes containing attribute code and value.
+   *
+   * @return array
+   *   Configurable Values For Rest Apis.
+   */
+  public function getConfigurableValuesForApi(SKUInterface $sku, array $attributes = []): array {
+    if ($sku->bundle() !== 'simple') {
+      return [];
+    }
+
+    $values = $this->getConfigurableValues($sku);
+    $attr_values = array_column($attributes, 'value', 'attribute_code');
+    foreach ($values as $attribute_code => &$value) {
+      $value['attribute_code'] = $attribute_code;
+      if (isset($attr_values[str_replace('attr_', '', $attribute_code)]) && $attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
+        $value['value'] = (string) $attr_value;
+      }
+    }
+
+    return array_values($values);
   }
 
 }

@@ -66,28 +66,28 @@
       // Zoom effect on image hover for desktop.
       if ($(window).width() > 1025) {
         $('.pdp-image')
-        .on('mouseover', function(){
+        .on('mouseover', function () {
           $(this).addClass('magazine-image-zoomed');
           if (!$(this).hasClass('height-processed')) {
             $(this).addClass('height-processed');
             $(this).find('.height-processed .pdp-image-zoom-wrapper').css({'height': $(this).find('img').height() + 'px'});
           }
-          $(this).find('.magazine-image-zoom-placeholder').css({'transform': 'scale('+ $(this).attr('data-scale') +')'});
+          $(this).find('.magazine-image-zoom-placeholder').css({'transform': 'scale(' + $(this).attr('data-scale') + ')'});
         })
-        .on('mouseout', function(){
+        .on('mouseout', function () {
           $(this).removeClass('magazine-image-zoomed');
           $(this).find('.magazine-image-zoom-placeholder').css({'transform': 'scale(1)'});
         })
-        .on('mousemove', function(e){
-          $(this).find('.magazine-image-zoom-placeholder').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
+        .on('mousemove', function (e) {
+          $(this).find('.magazine-image-zoom-placeholder').css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 + '%'});
         })
-        .each(function(){
+        .each(function () {
           $(this)
           .once('magazine-image-zoom-placeholder-appended')
           // Add a magazine image zoom placeholder.
           .find('.pdp-image-zoom-wrapper').append('<div class="magazine-image-zoom-placeholder"></div>')
           // Set up a background image for each magazine image zoom placeholder based on data-zoom attribute.
-          .find('.magazine-image-zoom-placeholder').css({'background-image': 'url('+ $(this).find('img').attr('data-zoom-url') +')'});
+          .find('.magazine-image-zoom-placeholder').css({'background-image': 'url(' + $(this).find('img').attr('data-zoom-url') + ')'});
         })
       }
     },

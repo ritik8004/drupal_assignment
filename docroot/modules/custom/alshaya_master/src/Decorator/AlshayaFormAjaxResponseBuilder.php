@@ -9,7 +9,7 @@ use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AlshayaFormAjaxResponseBuilder.
+ * Class Alshaya Form Ajax Response Builder.
  *
  * @package Drupal\alshaya_master\Decorator
  */

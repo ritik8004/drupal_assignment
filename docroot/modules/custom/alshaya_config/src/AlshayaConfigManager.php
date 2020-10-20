@@ -17,7 +17,7 @@ use Drupal\search_api\Entity\Index;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class AlshayaConfigManager.
+ * Class Alshaya Config Manager.
  *
  * @package Drupal\alshaya_config
  */
@@ -399,7 +399,10 @@ class AlshayaConfigManager {
     foreach ($data as $key => $value) {
       if (is_array($value)) {
         $existing = $config->get($key) ?? [];
-        $config->set($key, NestedArray::mergeDeepArray([$existing, $value], TRUE));
+        $config->set($key, NestedArray::mergeDeepArray([
+          $existing,
+          $value,
+        ], TRUE));
       }
       else {
         $config->set($key, $value);

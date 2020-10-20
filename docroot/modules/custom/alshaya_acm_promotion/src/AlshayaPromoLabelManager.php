@@ -17,7 +17,7 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AlshayaPromoLabelManager.
+ * Class Alshaya Promo Label Manager.
  *
  * @package Drupal\alshaya_acm_promotion
  */

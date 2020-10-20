@@ -75,3 +75,4 @@ variables:
   cc_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   store_area: 'جدة'
   language_store_area: 'Jeddah'
+  address_area_field: 'أحد رفيدة'

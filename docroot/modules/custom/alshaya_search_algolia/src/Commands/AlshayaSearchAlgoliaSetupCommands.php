@@ -7,7 +7,7 @@ use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaSearchAlgoliaSetupCommands.
+ * Class Alshaya Search Algolia Setup Commands.
  *
  * @package Drupal\alshaya_search_algolia\Commands
  */

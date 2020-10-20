@@ -6,7 +6,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Site\Settings;
 
 /**
- * Class AlshayaBrandListHelper.
+ * Class Alshaya Brand List Helper.
  */
 class AlshayaBrandListHelper {
 

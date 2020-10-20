@@ -6,7 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class ProductUpdatedEvent.
+ * Class Product Updated Event.
  *
  * @package Drupal\alshaya_acm_product
  */

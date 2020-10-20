@@ -11,7 +11,7 @@ use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class AddToCartFormHelper.
+ * Class Add To Cart Form Helper.
  *
  * @package Drupal\alshaya_acm_product\Service
  */

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class PaymentCardsController.
+ * Class Payment Cards Controller.
  *
  * @package Drupal\acq_checkoutcom\Controller
  */

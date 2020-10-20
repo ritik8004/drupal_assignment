@@ -7,7 +7,7 @@ use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\RequestException;
 
 /**
- * Trait IngestRequestTrait.
+ * Trait Ingest Request Trait.
  *
  * @package Drupal\acq_commerce\Conductor
  *
@@ -48,8 +48,10 @@ trait IngestRequestTrait {
    *   Action name for logging.
    * @param string $reskey
    *   Result data key (or NULL)
+   * @param string $acm_uuid
+   *   Acm uuid.
    *
-   * @throws ConnectorException
+   * @throws \Drupal\acq_commerce\Connector\ConnectorException
    */
   protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL, $acm_uuid = '') {
 
@@ -81,7 +83,7 @@ trait IngestRequestTrait {
 
     // Make Request.
     try {
-      $result = $doReq($client, $reqOpts);
+      $doReq($client, $reqOpts);
     }
     catch (RequestException $e) {
       $mesg = sprintf(

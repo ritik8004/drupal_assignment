@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Class CartConfigForm.
+ * Class Cart Config Form.
  */
 class CartConfigForm extends ConfigFormBase {
 

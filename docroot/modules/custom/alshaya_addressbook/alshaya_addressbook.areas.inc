@@ -58,7 +58,10 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas = [];
 
   $areas['kw'] = [];
-  $areas['kw'][] = ['en' => 'Abdullah Al-Salem', 'ar' => 'ضاحية عبد الله السالم'];
+  $areas['kw'][] = [
+    'en' => 'Abdullah Al-Salem',
+    'ar' => 'ضاحية عبد الله السالم',
+  ];
   $areas['kw'][] = ['en' => 'Adailiya', 'ar' => 'العديلية'];
   $areas['kw'][] = ['en' => 'Al-Daiya', 'ar' => 'الدعية'];
   $areas['kw'][] = ['en' => 'Al-Dasma', 'ar' => 'الدسمة'];
@@ -87,8 +90,14 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Salhia', 'ar' => 'الصالحية'];
   $areas['kw'][] = ['en' => 'Sawaber', 'ar' => 'الصوابر'];
   $areas['kw'][] = ['en' => 'Sharq', 'ar' => 'شرق'];
-  $areas['kw'][] = ['en' => 'Shuwaikh Educational Area', 'ar' => 'الشويخ المنطقة التعليمية'];
-  $areas['kw'][] = ['en' => 'Shuwaikh Industrial Area', 'ar' => 'الشويخ المنطقة الصناعية'];
+  $areas['kw'][] = [
+    'en' => 'Shuwaikh Educational Area',
+    'ar' => 'الشويخ المنطقة التعليمية',
+  ];
+  $areas['kw'][] = [
+    'en' => 'Shuwaikh Industrial Area',
+    'ar' => 'الشويخ المنطقة الصناعية',
+  ];
   $areas['kw'][] = ['en' => 'Sulaibikhat', 'ar' => 'الصليبيخات'];
   $areas['kw'][] = ['en' => 'Surra', 'ar' => 'السرة'];
   $areas['kw'][] = ['en' => 'Wateya', 'ar' => 'الوطية'];
@@ -101,14 +110,20 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Jabriya', 'ar' => 'الجابرية'];
   $areas['kw'][] = ['en' => 'Midan Hawalli', 'ar' => 'ميدان حولي'];
   $areas['kw'][] = ['en' => 'Mishref', 'ar' => 'مشرف'];
-  $areas['kw'][] = ['en' => 'Mubarak Al-Abdullah', 'ar' => 'ضاحية مبارك العبد الله الجابر'];
+  $areas['kw'][] = [
+    'en' => 'Mubarak Al-Abdullah',
+    'ar' => 'ضاحية مبارك العبد الله الجابر',
+  ];
   $areas['kw'][] = ['en' => 'Rumaithiya', 'ar' => 'الرميثية'];
   $areas['kw'][] = ['en' => 'Salmiya', 'ar' => 'السالمية'];
   $areas['kw'][] = ['en' => 'Salwa', 'ar' => 'سلوى'];
   $areas['kw'][] = ['en' => 'Shaab', 'ar' => 'الشعب'];
   $areas['kw'][] = ['en' => 'Zahraa', 'ar' => 'الزهراء'];
   $areas['kw'][] = ['en' => 'Abbasiya', 'ar' => 'العباسية'];
-  $areas['kw'][] = ['en' => 'Abdullah Al-Mubarak Al-Sabah', 'ar' => 'ضاحية عبد الله المبارك'];
+  $areas['kw'][] = [
+    'en' => 'Abdullah Al-Mubarak Al-Sabah',
+    'ar' => 'ضاحية عبد الله المبارك',
+  ];
   $areas['kw'][] = ['en' => 'Abraq Khaitan', 'ar' => 'أبرق خيطان'];
   $areas['kw'][] = ['en' => 'Al-Rai', 'ar' => 'الري'];
   $areas['kw'][] = ['en' => 'Andalus', 'ar' => 'الأندلس'];
@@ -120,7 +135,10 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Ishbilia', 'ar' => 'اشبيلية'];
   $areas['kw'][] = ['en' => 'Jleeb Al-Shuyoukh', 'ar' => 'جليب الشيوخ'];
   $areas['kw'][] = ['en' => 'Khaitan', 'ar' => 'خيطان'];
-  $areas['kw'][] = ['en' => 'Kuwait International Airport', 'ar' => 'مطار الكويت الدولي'];
+  $areas['kw'][] = [
+    'en' => 'Kuwait International Airport',
+    'ar' => 'مطار الكويت الدولي',
+  ];
   $areas['kw'][] = ['en' => 'New Khitan', 'ar' => 'خيطان الجديدة'];
   $areas['kw'][] = ['en' => 'Omariyah', 'ar' => 'العمرية'];
   $areas['kw'][] = ['en' => 'Shadadiya', 'ar' => 'الشدادية'];
@@ -132,7 +150,10 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Abu Halifa', 'ar' => 'أبو حليفة'];
   $areas['kw'][] = ['en' => 'Al-Ahmadi', 'ar' => 'الأحمدي'];
   $areas['kw'][] = ['en' => 'Al-Wafrah', 'ar' => 'الوفرة'];
-  $areas['kw'][] = ['en' => 'Ali Sabah Al-Salem', 'ar' => 'ضاحية علي صباح السالم'];
+  $areas['kw'][] = [
+    'en' => 'Ali Sabah Al-Salem',
+    'ar' => 'ضاحية علي صباح السالم',
+  ];
   $areas['kw'][] = ['en' => 'Aqila', 'ar' => 'العقيلة'];
   $areas['kw'][] = ['en' => 'Daher', 'ar' => 'الظهر'];
   $areas['kw'][] = ['en' => 'Fahaheel', 'ar' => 'الفحيحيل'];
@@ -177,8 +198,14 @@ function _alshaya_addressbook_get_areas($country_code = 'kw') {
   $areas['kw'][] = ['en' => 'Ouyoun', 'ar' => 'العيون'];
   $areas['kw'][] = ['en' => 'Qaisariya', 'ar' => 'القيصرية'];
   $areas['kw'][] = ['en' => 'Saad Al-Abdallah', 'ar' => 'مدينة سعد العبد الله'];
-  $areas['kw'][] = ['en' => 'Sulaibiya Agriculture', 'ar' => 'الصليبية الزراعية'];
-  $areas['kw'][] = ['en' => 'Sulaibiya industrial', 'ar' => 'الصليبية الصناعية'];
+  $areas['kw'][] = [
+    'en' => 'Sulaibiya Agriculture',
+    'ar' => 'الصليبية الزراعية',
+  ];
+  $areas['kw'][] = [
+    'en' => 'Sulaibiya industrial',
+    'ar' => 'الصليبية الصناعية',
+  ];
   $areas['kw'][] = ['en' => 'Sulaibiya Shabiya', 'ar' => 'الصليبية الحرفية'];
   $areas['kw'][] = ['en' => 'Taima', 'ar' => 'تيماء'];
   $areas['kw'][] = ['en' => 'Waha', 'ar' => 'الواحة'];
