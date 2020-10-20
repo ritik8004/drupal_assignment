@@ -162,11 +162,25 @@ class LoyaltyCustomerController {
   public function loyaltyClubSignUp(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
 
-    if (empty($request_content['firstname']) || empty($request_content['lastname']) || empty($request_content['email']) || empty($request_content['mobile'])) {
-      $this->logger->error('Error while trying to do Quick Enrollment. First name, last name, email and mobile number is required. Data: @data', [
+    if (empty($request_content['firstname']) || empty($request_content['lastname'])) {
+      $this->logger->error('Error while trying to do loyalty club sign up. First name and last name is required. Data: @data', [
         '@data' => $request_content,
       ]);
-      return new JsonResponse($this->utility->getErrorResponse('First name, last name, email and mobile number is required.', Response::HTTP_NOT_FOUND));
+      return new JsonResponse($this->utility->getErrorResponse('INVALID_NAME_ERROR', 500));
+    }
+
+    if (empty($request_content['email'])) {
+      $this->logger->error('Error while trying to do loyalty club sign up. Email is required. Data: @data', [
+        '@data' => $request_content,
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('INVALID_EMAIL', 500));
+    }
+
+    if (empty($request_content['mobile']) || !preg_match('/^\+[0-9]+$/', $request_content['mobile'])) {
+      $this->logger->error('Error while trying to do loyalty club sign up. Mobile number is missing/invalid. Data: @data', [
+        '@data' => $request_content,
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('INVALID_MOBILE_ERROR', 500));
     }
 
     try {
@@ -191,7 +205,7 @@ class LoyaltyCustomerController {
 
         // Check if user aura status was updated successfully in drupal.
         if (!$updated) {
-          $message = 'Error while trying to update user AURA Status field in Drupal after quick enrollment.';
+          $message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
           $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
             '@uid' => $user['uid'],
             '@customer_id' => $user['customer_id'],
@@ -204,7 +218,7 @@ class LoyaltyCustomerController {
       return new JsonResponse($responseData);
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to do Quick Enrollment. Request Data: @data, Message: @message', [
+      $this->logger->notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', [
         '@data' => $request_content,
         '@message' => $e->getMessage(),
       ]);

@@ -9,6 +9,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 
 export default class LoyaltyClubBlock extends React.Component {
   handleNotYou = (cardNumber) => {
@@ -52,8 +53,21 @@ export default class LoyaltyClubBlock extends React.Component {
   render() {
     const allAuraStatus = getAllAuraStatus();
     const {
-      loyaltyStatus, tier, points, cardNumber, expiringPoints, expiryDate, pointsOnHold, upgradeMsg,
+      wait,
+      loyaltyStatus,
+      tier,
+      points,
+      cardNumber,
+      expiringPoints,
+      expiryDate,
+      pointsOnHold,
+      upgradeMsg,
     } = this.props;
+
+    if (wait) {
+      return <Loading />;
+    }
+
     const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
 
     if (loyaltyStatusInt !== '') {

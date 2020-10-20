@@ -2,10 +2,6 @@ import React from 'react';
 import LoyaltyClubBlock from '../loyalty-club/loyalty-club-block';
 import { getUserAuraStatus, getUserAuraTier } from '../../utilities/helper';
 import { getAPIData } from '../../utilities/api/fetchApiData';
-import {
-  showFullScreenLoader,
-  removeFullScreenLoader,
-} from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class MyAccount extends React.Component {
   constructor(props) {
@@ -35,7 +31,6 @@ class MyAccount extends React.Component {
       pointsOnHold,
     } = this.state;
 
-    showFullScreenLoader();
     const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
     const apiData = getAPIData(apiUrl);
 
@@ -53,7 +48,6 @@ class MyAccount extends React.Component {
             pointsOnHold: result.data.auraOnHoldPoints || pointsOnHold,
           });
         }
-        removeFullScreenLoader();
       });
     }
   }
@@ -77,12 +71,9 @@ class MyAccount extends React.Component {
       upgradeMsg,
     } = this.state;
 
-    if (wait) {
-      return null;
-    }
-
     return (
       <LoyaltyClubBlock
+        wait={wait}
         loyaltyStatus={loyaltyStatus}
         tier={tier}
         points={points}
