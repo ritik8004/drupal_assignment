@@ -78,7 +78,7 @@ class AuraFormSignUpOTPModal extends React.Component {
   // Send OTP to the user.
   sendOtp = () => {
     const { chosenCountryCode } = this.state;
-    const userMobile = this.getElementValue('otp-mobile-mobile-number');
+    const userMobile = getElementValue('otp-mobile-mobile-number');
 
     if (userMobile.length === 0 || userMobile.match(/^[0-9]+$/) === null) {
       showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
