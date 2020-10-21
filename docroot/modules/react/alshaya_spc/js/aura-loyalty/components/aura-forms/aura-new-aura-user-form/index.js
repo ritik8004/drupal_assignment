@@ -1,6 +1,7 @@
 import React from 'react';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
+import AuraMobileNumberField from '../aura-mobile-number-field';
 import { getElementValue, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
 import { validateInfo } from '../../../../utilities/checkout_util';
@@ -141,18 +142,9 @@ class AuraFormNewAuraUserModal extends React.Component {
   render() {
     const {
       closeNewUserModal,
-      mobileNumber,
+      chosenCountryCode,
+      chosenUserMobile,
     } = this.props;
-
-    const countryMobileCode = this.getCountryMobileCode();
-    const countryMobileCodeMarkup = countryMobileCode
-      ? (
-        <span className="country-code" id="country_code">
-          +
-          {countryMobileCode}
-        </span>
-      )
-      : '';
 
     const submitButtonText = Drupal.t('Submit');
 
@@ -164,14 +156,11 @@ class AuraFormNewAuraUserModal extends React.Component {
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">
-            {countryMobileCodeMarkup}
-            <TextField
-              type="text"
-              required
-              disabled
+            <AuraMobileNumberField
+              isDisabled
               name="new-aura-user-mobile-number"
-              defaultValue={mobileNumber}
-              label={Drupal.t('Mobile Number')}
+              countryMobileCode={chosenCountryCode}
+              defaultValue={chosenUserMobile}
             />
             <TextField
               type="text"
