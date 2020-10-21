@@ -92,7 +92,7 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Send OTP to the user.
   sendOtp = () => {
-    // Reset/Remove if any message is displayed.
+    // Reset/Remove if any message is displayed already.
     this.setState({
       messageType: null,
       messageContent: null,
@@ -148,7 +148,7 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Verify OTP from user.
   verifyOtp = () => {
-    // Reset/Remove if any message is displayed.
+    // Reset/Remove if any message is displayed already.
     this.setState({
       messageType: null,
       messageContent: null,
