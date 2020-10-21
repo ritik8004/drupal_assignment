@@ -1,4 +1,4 @@
-(function($) {
+(function($, Drupal) {
   $(window).on('load', function() {
     // This is being done on "load" since only at this time we have the
     // _dyid cookie available which will be required in the controller.
@@ -11,9 +11,9 @@
     }
 
     // Simply call the controller to set the cookie.
-    $.ajax({
+    Drupal.ajax({
       type: 'POST',
-      url: '/dyid',
-    });
+      url: Drupal.url('dyid'),
+    }).execute();
   });
-})(jQuery);
+})(jQuery, Drupal);
