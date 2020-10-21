@@ -1,0 +1,6 @@
+dynamic_yield.intelligent_tracking:
+  js:
+    js/dynamic_yield.intelligent_tracking.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.cookie
