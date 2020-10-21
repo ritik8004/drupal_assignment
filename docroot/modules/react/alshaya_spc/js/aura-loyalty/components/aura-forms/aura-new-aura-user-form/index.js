@@ -10,8 +10,17 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import AuraFormModalMessage from '../aura-form-modal-message';
 
 class AuraFormNewAuraUserModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      messageType: null,
+      messageContent: null,
+    };
+  }
+
   getNewUserFormDescription = () => [
     <span key="part1">{Drupal.t('By pressing submit, you agree to have read and accepted our')}</span>,
     <a key="part2" className="t-c-link">{Drupal.t('Terms & Conditions')}</a>,
@@ -38,11 +47,11 @@ class AuraFormNewAuraUserModal extends React.Component {
     }
 
     // Validate full name.
-    if (enrollmentData.fullname.length === 0) {
+    if (enrollmentData.fullName.length === 0) {
       showError('new-aura-user-full-name-error', getStringMessage('form_error_full_name'));
       hasError = true;
     } else {
-      let splitedName = enrollmentData.fullname.split(' ');
+      let splitedName = enrollmentData.fullName.split(' ');
       splitedName = splitedName.filter((s) => (
         (s.trim().length > 0
         && (s !== '\\n' && s !== '\\t' && s !== '\\r'))));
@@ -68,7 +77,7 @@ class AuraFormNewAuraUserModal extends React.Component {
 
   getEnrollmentData = () => {
     const enrollmentData = {
-      fullname: getElementValue('new-aura-user-full-name'),
+      fullName: getElementValue('new-aura-user-full-name'),
       mobile: getElementValue('new-aura-user-mobile-number'),
       email: document.getElementsByName('new-aura-user-email')[0].value,
     };
@@ -92,10 +101,10 @@ class AuraFormNewAuraUserModal extends React.Component {
 
     // API call to do quick enrollment.
     const apiUrl = 'post/loyalty-club/sign-up';
-    const splitedName = enrollmentData.fullname.split(' ');
+    const splitName = enrollmentData.fullName.split(' ');
     const data = {
-      firstname: splitedName[0],
-      lastname: splitedName[1],
+      firstname: splitName[0],
+      lastname: splitName[1],
       email: enrollmentData.email,
       mobile: `+${this.getCountryMobileCode()}${enrollmentData.mobile}`,
     };
@@ -126,6 +135,11 @@ class AuraFormNewAuraUserModal extends React.Component {
       chosenUserMobile,
     } = this.props;
 
+    const {
+      messageType,
+      messageContent,
+    } = this.state;
+
     const submitButtonText = Drupal.t('Submit');
 
     return (
@@ -135,6 +149,12 @@ class AuraFormNewAuraUserModal extends React.Component {
           <button type="button" className="close" onClick={() => closeNewUserModal()} />
         </div>
         <div className="aura-modal-form">
+          <div className="aura-form-messages-container">
+            <AuraFormModalMessage
+              messageType={messageType}
+              messageContent={messageContent}
+            />
+          </div>
           <div className="aura-modal-form-items">
             <AuraMobileNumberField
               isDisabled

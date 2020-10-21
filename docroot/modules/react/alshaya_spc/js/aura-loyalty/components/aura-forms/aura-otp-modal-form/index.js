@@ -14,6 +14,7 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import AuraFormModalMessage from '../aura-form-modal-message';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
@@ -24,6 +25,8 @@ class AuraFormSignUpOTPModal extends React.Component {
       isNewUserModalOpen: false,
       chosenCountryCode: null,
       chosenUserMobile: null,
+      messageType: null,
+      messageContent: null,
     };
   }
 
@@ -120,6 +123,8 @@ class AuraFormSignUpOTPModal extends React.Component {
                     otpRequested: true,
                     mobileNumber: mobile,
                     chosenUserMobile: userMobile,
+                    messageType: 'success',
+                    messageContent: Drupal.t('Error in sending OTP. Please try again.'),
                   });
                 }
               }
@@ -191,6 +196,8 @@ class AuraFormSignUpOTPModal extends React.Component {
       isNewUserModalOpen,
       chosenCountryCode,
       chosenUserMobile,
+      messageType,
+      messageContent,
     } = this.state;
 
     const {
@@ -207,6 +214,12 @@ class AuraFormSignUpOTPModal extends React.Component {
           <a className="close" onClick={() => closeOTPModal()} />
         </div>
         <div className="aura-modal-form">
+          <div className="aura-form-messages-container">
+            <AuraFormModalMessage
+              messageType={messageType}
+              messageContent={messageContent}
+            />
+          </div>
           <div className="aura-modal-form-items">
             <AuraMobileNumberField
               isDisabled={false}
