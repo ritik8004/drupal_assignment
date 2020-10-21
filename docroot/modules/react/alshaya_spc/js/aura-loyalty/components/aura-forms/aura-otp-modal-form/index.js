@@ -1,9 +1,7 @@
 import React from 'react';
-import Popup from 'reactjs-popup';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
-import AuraFormNewAuraUserModal from '../aura-new-aura-user-form';
 import { validateInfo } from '../../../../utilities/checkout_util';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
@@ -20,40 +18,11 @@ class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mobileNumber: null,
       otpRequested: false,
-      isNewUserModalOpen: false,
-      chosenCountryCode: null,
-      chosenUserMobile: null,
       messageType: null,
       messageContent: null,
     };
   }
-
-  openNewUserModal = () => {
-    this.setState({
-      isNewUserModalOpen: true,
-    });
-  };
-
-  closeNewUserModal = () => {
-    const {
-      closeOTPModal,
-    } = this.props;
-
-    this.setState({
-      isNewUserModalOpen: false,
-    });
-
-    // Also close OTP Modal.
-    closeOTPModal();
-  };
-
-  setCountryCode = (code) => {
-    this.setState({
-      chosenCountryCode: code,
-    });
-  };
 
   getOtpModalData = () => {
     const otpModalData = {
@@ -92,8 +61,14 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Send OTP to the user.
   sendOtp = () => {
-    const { chosenCountryCode } = this.state;
     const { mobile: userMobile } = this.getOtpModalData();
+
+    const {
+      setChosenUserMobile,
+      chosenCountryCode,
+    } = this.props;
+
+    setChosenUserMobile(userMobile);
 
     if (userMobile.length === 0 || userMobile.match(/^[0-9]+$/) === null) {
       showError('otp-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
@@ -121,8 +96,6 @@ class AuraFormSignUpOTPModal extends React.Component {
                 if (result.data.status) {
                   this.setState({
                     otpRequested: true,
-                    mobileNumber: mobile,
-                    chosenUserMobile: userMobile,
                     messageType: 'success',
                     messageContent: getStringMessage('otp_sent_message'),
                   });
@@ -145,6 +118,11 @@ class AuraFormSignUpOTPModal extends React.Component {
   verifyOtp = () => {
     const { otp, mobile } = this.getOtpModalData();
 
+    const {
+      closeOTPModal,
+      openNewUserModal,
+    } = this.props;
+
     if (otp.length === 0) {
       showError('otp-error', getStringMessage('form_error_otp'));
       return;
@@ -162,8 +140,10 @@ class AuraFormSignUpOTPModal extends React.Component {
           // Once we get a success response that OTP is verified, we update state,
           // to show the quick enrollment fields.
           if (result.data.status) {
+            // Close the OTP Modal.
+            closeOTPModal();
             // Open modal for the new user.
-            this.openNewUserModal();
+            openNewUserModal();
           }
           showError('otp-error', getStringMessage('form_error_invalid_otp'));
         }
@@ -192,15 +172,11 @@ class AuraFormSignUpOTPModal extends React.Component {
   render() {
     const {
       closeOTPModal,
-      handleSignUp,
+      setChosenCountryCode,
     } = this.props;
 
     const {
       otpRequested,
-      mobileNumber,
-      isNewUserModalOpen,
-      chosenCountryCode,
-      chosenUserMobile,
       messageType,
       messageContent,
     } = this.state;
@@ -231,7 +207,7 @@ class AuraFormSignUpOTPModal extends React.Component {
               name="otp"
               countryMobileCode={countryMobileCode}
               maxLength={countryMobileCodeMaxLength}
-              setCountryCode={this.setCountryCode}
+              setCountryCode={setChosenCountryCode}
             />
             <ConditionalView condition={otpRequested === true}>
               <TextField
@@ -263,24 +239,7 @@ class AuraFormSignUpOTPModal extends React.Component {
               </div>
             </ConditionalView>
             <ConditionalView condition={otpRequested === true}>
-              <>
-                <div className="aura-modal-form-submit" onClick={() => this.verifyOtp()}>{submitButtonText}</div>
-                <Popup
-                  className="aura-modal-form new-aura-user"
-                  open={isNewUserModalOpen}
-                  closeOnEscape={false}
-                  closeOnDocumentClick={false}
-                >
-                  <AuraFormNewAuraUserModal
-                    chosenCountryCode={chosenCountryCode}
-                    chosenUserMobile={chosenUserMobile}
-                    mobileNumber={mobileNumber}
-                    closeNewUserModal={() => this.closeNewUserModal()}
-                    closeOTPModal={() => this.closeNewUserModal()}
-                    handleSignUp={handleSignUp}
-                  />
-                </Popup>
-              </>
+              <div className="aura-modal-form-submit" onClick={() => this.verifyOtp()}>{submitButtonText}</div>
             </ConditionalView>
           </div>
         </div>
