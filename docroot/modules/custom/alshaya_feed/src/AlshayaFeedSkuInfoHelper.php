@@ -370,7 +370,7 @@ class AlshayaFeedSkuInfoHelper {
         return [
           'label' => $image['label'],
           'url' => file_create_url($image['drupal_uri']),
-          'url_product_listing' => preg_replace('/\\?itok=.*$/', '', $image_style_plp->buildUrl($image['drupal_uri'])),
+          'url_product_listing' => $image_style_plp->buildUrl($image['drupal_uri']),
         ];
       }
     }, $media_items['media_items']['images']);
