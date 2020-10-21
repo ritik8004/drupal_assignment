@@ -2,9 +2,7 @@
 
 namespace Drupal\alshaya_dynamic_yield\Controller;
 
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,32 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
  * Returns responses for Alshaya Dynamic Yield routes.
  */
 class AlshayaDynamicYieldController extends ControllerBase {
-
-  /**
-   * The date time service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected $dateTime;
-
-  /**
-   * The AlshayaDynamicYieldController constructor.
-   *
-   * @param \Drupal\Component\Datetime\TimeInterface $date_time
-   *   The datatime object.
-   */
-  public function __construct(TimeInterface $date_time) {
-    $this->dateTime = $date_time;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('datetime.time'),
-    );
-  }
 
   /**
    * Sets cookie for DY Intelligent tracking.
@@ -57,7 +29,7 @@ class AlshayaDynamicYieldController extends ControllerBase {
       $response->headers->setCookie(new Cookie(
         '_dyid_server',
         $dyid_cookie,
-        $this->dateTime->getRequestTime() + 31540000000000,
+        strtotime('+1 year'),
         '/',
         NULL,
         NULL,
