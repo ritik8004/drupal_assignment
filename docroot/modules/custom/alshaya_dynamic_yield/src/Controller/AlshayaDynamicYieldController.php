@@ -50,8 +50,9 @@ class AlshayaDynamicYieldController extends ControllerBase {
 
     $response = new Response();
 
-    // Double check that _dyid_server cookie does not exist.
-    if (!$request->cookies->get('_dyid_server')) {
+    // Double check that _dyid cookie exists and that _dyid_server cookie
+    // does not exist.
+    if ($dyid_cookie && !$request->cookies->get('_dyid_server')) {
       // Add _dyid_server cookie.
       $response->headers->setCookie(new Cookie(
         '_dyid_server',
