@@ -412,7 +412,7 @@ function alshaya_acm_promotion_sku_product_info_alter(array &$product_info, SKUI
 }
 
 /**
- * Implements hook_alshaya_mobile_app_product_exclude_linked_alter().
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
 function alshaya_acm_promotion_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
