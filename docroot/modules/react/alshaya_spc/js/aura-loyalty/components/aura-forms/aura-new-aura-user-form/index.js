@@ -4,7 +4,6 @@ import TextField from '../../../../utilities/textfield';
 import AuraMobileNumberField from '../aura-mobile-number-field';
 import { getElementValue, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
-import { validateInfo } from '../../../../utilities/checkout_util';
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import {
@@ -86,25 +85,6 @@ class AuraFormNewAuraUserModal extends React.Component {
     return enrollmentData;
   };
 
-  // Validate email.
-  validateEmail = (email) => {
-    let isValid = true;
-
-    const validationRequest = validateInfo({ email });
-    return validationRequest.then((result) => {
-      if (result.status === 200 && result.data.status) {
-        if (result.data.email !== undefined && result.data.email === 'invalid') {
-          showError('new-aura-user-email-error', getStringMessage('form_error_email_not_valid', { '%mail': email }));
-          isValid = false;
-        } else {
-          // If valid email, remove error message.
-          removeError('new-aura-user-email-error');
-        }
-      }
-      return isValid;
-    });
-  };
-
   registerUser = () => {
     const {
       closeNewUserModal,
@@ -178,7 +158,7 @@ class AuraFormNewAuraUserModal extends React.Component {
           <div className="aura-modal-form-items">
             <AuraMobileNumberField
               isDisabled
-              name="new-aura-user-mobile-number"
+              name="new-aura-user"
               countryMobileCode={chosenCountryCode}
               defaultValue={chosenUserMobile}
             />
