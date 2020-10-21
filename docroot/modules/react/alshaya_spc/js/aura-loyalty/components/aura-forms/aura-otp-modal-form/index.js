@@ -92,6 +92,11 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Send OTP to the user.
   sendOtp = () => {
+    // Reset/Remove if any message is displayed.
+    this.setState({
+      messageType: null,
+      messageContent: null,
+    });
     const { chosenCountryCode } = this.state;
     const { mobile: userMobile } = this.getOtpModalData();
 
@@ -110,7 +115,7 @@ class AuraFormSignUpOTPModal extends React.Component {
         if (valid === true) {
           // API call to send otp.
           const apiUrl = 'post/loyalty-club/send-otp';
-          const apiData = postAPIData(apiUrl, { mobile });
+          const apiData = postAPIData(apiUrl, { mobile: userMobile });
           showFullScreenLoader();
 
           if (apiData instanceof Promise) {
@@ -126,12 +131,12 @@ class AuraFormSignUpOTPModal extends React.Component {
                     messageType: 'success',
                     messageContent: getStringMessage('otp_sent_message'),
                   });
-                } else {
-                  this.setState({
-                    messageType: 'error',
-                    messageContent: getStringMessage('form_error_send_otp_failed_message'),
-                  });
                 }
+              } else {
+                this.setState({
+                  messageType: 'error',
+                  messageContent: getStringMessage('form_error_send_otp_failed_message'),
+                });
               }
               removeFullScreenLoader();
             });
@@ -143,6 +148,11 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Verify OTP from user.
   verifyOtp = () => {
+    // Reset/Remove if any message is displayed.
+    this.setState({
+      messageType: null,
+      messageContent: null,
+    });
     const { otp, mobile } = this.getOtpModalData();
 
     if (otp.length === 0) {
