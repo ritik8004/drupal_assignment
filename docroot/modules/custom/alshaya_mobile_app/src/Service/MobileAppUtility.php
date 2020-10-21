@@ -327,6 +327,9 @@ class MobileAppUtility {
           break;
       }
     }
+    elseif ($object instanceof SKUInterface && $type === 'free_gift') {
+      $return = 'product-exclude-linked/' . $object->getSku() . '?type=' . $type;
+    }
     elseif ($object instanceof SKUInterface) {
       $return = 'product-exclude-linked/' . $object->getSku();
     }

@@ -547,11 +547,13 @@ class AlshayaPromoLabelManager {
    *   Product.
    * @param string $view_mode
    *   View mode.
+   * @param string $type
+   *   Request type.
    *
    * @return array
    *   Promotion render data (generic/dynamic/free).
    */
-  public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode) {
+  public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode, string $type = '') {
     // Get promotions for the product.
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
     $displayMode = $view_mode === 'api' ? 'api' : 'links';
@@ -604,9 +606,13 @@ class AlshayaPromoLabelManager {
         return [];
       }
 
-      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions);
+      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions, $type);
       if (empty($free_promotion)) {
         return [];
+      }
+
+      if ($type === 'free_gift_api') {
+        return $free_promotion;
       }
 
       $coupon = $free_promotion['#promo_code'] ?? '';
@@ -825,6 +831,60 @@ class AlshayaPromoLabelManager {
   }
 
   /**
+   * Get free gift promotion data to expose in API.
+   *
+   * @param int|string $promotion_id
+   *   Promotion ID.
+   * @param array $free_gift_promotion
+   *   Free gift promotion processed data.
+   * @param \Drupal\acq_sku\Entity\SKU[] $free_skus
+   *   Array of Free SKUs.
+   *
+   * @return array
+   *   Render array.
+   */
+  protected function getFreeGiftRaw($promotion_id, array $free_gift_promotion, array $free_skus) {
+    $coupon = $free_gift_promotion['coupon_code'][0]['value'] ?? '';
+
+    // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
+    // This is for PDP. On PDP we display the list only if there are
+    // more than one free gift available.
+    if (
+      $free_gift_promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU
+      && count($free_skus) > 1
+    ) {
+      // This will be covered in AB-3710.
+    }
+    else {
+      $free_sku_entity = reset($free_skus);
+
+      $free_sku_media = $this->imagesManager->getFirstImage($free_sku_entity);
+
+      // If free gift sku has no media, then we check from the default
+      // image from the configuration.
+      if (empty($free_sku_media) && !empty($default_image = $this->imagesManager->getProductDefaultImage())) {
+        $free_sku_image_url = file_create_url($default_image->getFileUri());
+      }
+
+      if ($free_sku_media) {
+        $free_sku_image_url = file_create_url($free_sku_media['drupal_uri']);
+      }
+
+      // Get sku title & image.
+      $return = [
+        'free_sku_code' => $free_sku_entity->getSku(),
+        'free_sku_title' => $free_sku_entity->get('name')->getString(),
+        'promo_title' => $free_gift_promotion['text'],
+        'promo_code' => $free_gift_promotion['coupon_code'],
+        'sku_image' => $free_sku_image_url,
+        'coupon' => $coupon,
+      ];
+    }
+
+    return $return;
+  }
+
+  /**
    * Processes the amount through template and returns in plain text.
    *
    * @param string $amount
@@ -845,11 +905,13 @@ class AlshayaPromoLabelManager {
    *
    * @param array $free_gift_promotions
    *   Free Gift promotions.
+   * @param string $type
+   *   Type of request.
    *
    * @return array
    *   Promotion data for first available free gift promotion.
    */
-  private function getFreeGiftPromotionData(array $free_gift_promotions) {
+  private function getFreeGiftPromotionData(array $free_gift_promotions, string $type = '') {
     // For free gift promotions, the promo needs to be rendered in a
     // different way.
     foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
@@ -860,7 +922,12 @@ class AlshayaPromoLabelManager {
         continue;
       }
 
-      $data = $this->getFreeGiftDisplay($promotion_id, $free_gift_promotion, $free_skus);
+      if ($type === 'free_gift_api') {
+        $data = $this->getFreeGiftRaw($promotion_id, $free_gift_promotion, $free_skus);
+      }
+      else {
+        $data = $this->getFreeGiftDisplay($promotion_id, $free_gift_promotion, $free_skus);
+      }
 
       // We support displaying only one free gift promotion for now.
       break;
