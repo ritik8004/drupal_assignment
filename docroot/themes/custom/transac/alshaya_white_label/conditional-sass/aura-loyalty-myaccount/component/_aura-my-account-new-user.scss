@@ -13,6 +13,7 @@
 @mixin linkCardBtn() {
   color: $aura-loyalty-club-no-card-block-text;
   background-image: $aura-loyalty-club-no-card-block-link-card-btn;
+  cursor: pointer;
 }
 
 .aura-myaccount-no-linked-card-wrapper {
@@ -171,6 +172,7 @@
       margin-top: 1.25rem;
       color: $aura-loyalty-club-old-card-not-you-link;
       text-decoration: underline;
+      cursor: pointer;
 
       @include breakpoint($desktop) {
         margin-#{$left}: 1.875rem;

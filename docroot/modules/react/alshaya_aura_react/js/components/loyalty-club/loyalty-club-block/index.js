@@ -65,7 +65,11 @@ export default class LoyaltyClubBlock extends React.Component {
     } = this.props;
 
     if (wait) {
-      return <Loading />;
+      return (
+        <div className="aura-myaccount-waiting-wrapper">
+          <Loading />
+        </div>
+      );
     }
 
     const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
@@ -100,6 +104,7 @@ export default class LoyaltyClubBlock extends React.Component {
             expiryDate={expiryDate}
             pointsOnHold={pointsOnHold}
             upgradeMsg={upgradeMsg}
+            cardNumber={cardNumber}
           />
         );
       }

@@ -48,6 +48,7 @@ class AuraMobileNumberField extends React.Component {
   // @todo: This should come from MDC or some config.
   getAvailableCountryCodes = () => [
     { value: '965', label: '+965' },
+    { value: '966', label: '+966' },
     { value: '975', label: '+975' },
   ];
 
