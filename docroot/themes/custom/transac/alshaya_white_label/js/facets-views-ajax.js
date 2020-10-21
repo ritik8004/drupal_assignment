@@ -113,13 +113,15 @@
     var views_ajax_settings = Drupal.views.instances['views_dom_id:' + current_dom_id].element_settings;
     views_ajax_settings.submit = views_settings;
     views_ajax_settings.url = Drupal.url('views/ajax') + '?q=' + facetLink.attr('href');
-
     // Update facet blocks.
+    var q = facetLink.attr('href').split('/');
+    // This is to replace URL Alias with the actual path.
+    var link = settings.views.ajaxViews['views_dom_id:alshaya_product_list_block_1'].view_path + '/' + q[q.length - 2] + '/';
     var facet_settings = {
       url: Drupal.url('facets-block/ajax'),
       type: 'GET',
       submit: {
-        facet_link: facetLink.attr('href'),
+        facet_link: link,
         facets_blocks: facets_blocks
       }
     };
