@@ -72,7 +72,15 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'form_error_invalid_otp',
-      'value' => t('Please enter a valid OTP.'),
+      'value' => t('OTP is not valid.'),
+    ],
+    [
+      'key' => 'form_error_send_otp_failed_message',
+      'value' => t('Error in sending OTP. Please try again.'),
+    ],
+    [
+      'key' => 'otp_sent_message',
+      'value' => t('OTP Sent.'),
     ],
   ];
 }

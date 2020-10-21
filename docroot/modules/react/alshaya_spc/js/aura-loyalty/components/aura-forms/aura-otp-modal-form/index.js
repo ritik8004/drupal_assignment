@@ -124,7 +124,12 @@ class AuraFormSignUpOTPModal extends React.Component {
                     mobileNumber: mobile,
                     chosenUserMobile: userMobile,
                     messageType: 'success',
-                    messageContent: Drupal.t('Error in sending OTP. Please try again.'),
+                    messageContent: getStringMessage('otp_sent_message'),
+                  });
+                } else {
+                  this.setState({
+                    messageType: 'error',
+                    messageContent: getStringMessage('form_error_send_otp_failed_message'),
                   });
                 }
               }
