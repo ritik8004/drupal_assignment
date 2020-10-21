@@ -1,6 +1,6 @@
 import React from 'react';
 import LoyaltyClubBlock from '../loyalty-club/loyalty-club-block';
-import { getUserAuraStatus, getUserAuraTier } from '../../utilities/helper';
+import { getUserAuraStatus, getUserAuraTier, getAllAuraStatus } from '../../utilities/helper';
 import { getAPIData } from '../../utilities/api/fetchApiData';
 
 class MyAccount extends React.Component {
@@ -30,6 +30,15 @@ class MyAccount extends React.Component {
       expiryDate,
       pointsOnHold,
     } = this.state;
+
+    const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
+
+    if (loyaltyStatusInt === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+      this.setState({
+        wait: false,
+      });
+      return;
+    }
 
     const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
     const apiData = getAPIData(apiUrl);
