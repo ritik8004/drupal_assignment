@@ -2,15 +2,22 @@
   $(window).on('load', function() {
     // This is being done on "load" since only at this time we have the
     // _dyid cookie available which will be required in the controller.
-    var dyIdCookie = document.cookie.split(';')
-      .find(function(row) {
-        return row.match(/_dyid_server|_dyid/);
-      });
+    var isDyIdCookieSet = false;
+    var isDyIdServerCookieSet = false;
+    $.each($.cookie(), function(key) {
+      if (!isDyIdCookieSet && key.indexOf('_dyid') > -1) {
+        isDyIdCookieSet = true;
+      }
+      if (!isDyIdServerCookieSet && key.indexOf('_dyid_server') > -1) {
+        isDyIdServerCookieSet = true;
+      }
+      if (isDyIdCookieSet && isDyIdServerCookieSet) {
+        // Break from loop.
+        return false;
+      }
+    });
 
-    if ((typeof dyIdCookie !== 'undefined')
-      && ((dyIdCookie.indexOf('_dyid') < 0)
-      || (dyIdCookie.indexOf('_dyid_server') > -1))
-    ) {
+    if (!isDyIdCookieSet || isDyIdServerCookieSet) {
       return;
     }
 
