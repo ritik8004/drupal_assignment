@@ -70,5 +70,9 @@ function _alshaya_aura_static_strings() {
       'key' => 'form_error_email_not_valid',
       'value' => t('The email address %mail is not valid.'),
     ],
+    [
+      'key' => 'form_error_invalid_otp',
+      'value' => t('Please enter a valid OTP.'),
+    ],
   ];
 }

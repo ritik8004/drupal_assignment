@@ -158,7 +158,7 @@ class AuraFormNewAuraUserModal extends React.Component {
           <div className="aura-modal-form-items">
             <AuraMobileNumberField
               isDisabled
-              name="new-aura-user-mobile-number"
+              name="new-aura-user"
               countryMobileCode={chosenCountryCode}
               defaultValue={chosenUserMobile}
             />

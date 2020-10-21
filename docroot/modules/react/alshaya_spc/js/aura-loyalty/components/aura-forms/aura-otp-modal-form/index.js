@@ -52,23 +52,35 @@ class AuraFormSignUpOTPModal extends React.Component {
     });
   };
 
+  getOtpModalData = () => {
+    const otpModalData = {
+      mobile: getElementValue('otp-mobile-number'),
+      otp: getElementValue('otp'),
+    };
+
+    return otpModalData;
+  };
+
   // Verify OTP and show error.
   validateMobileOtp = (data, action) => {
     let isValid = true;
 
     if (action === 'send_otp') {
-      const validationRequest = validateInfo({ mobile: data.mobile });
+      const { chosenCountryCode } = this.state;
+      const validationRequest = validateInfo({ mobile: data.userMobile, chosenCountryCode });
+      showFullScreenLoader();
       return validationRequest.then((result) => {
         if (result.status === 200 && result.data.status) {
           // If not valid mobile number.
           if (result.data.mobile === false) {
-            showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_valid_mobile_number'));
+            showError('otp-aura-mobile-field-error', getStringMessage('form_error_valid_mobile_number'));
             isValid = false;
           } else {
             // If valid mobile number, remove error message.
-            removeError('otp-mobile-aura-mobile-field-error');
+            removeError('otp-aura-mobile-field-error');
           }
         }
+        removeFullScreenLoader();
         return isValid;
       });
     }
@@ -78,10 +90,10 @@ class AuraFormSignUpOTPModal extends React.Component {
   // Send OTP to the user.
   sendOtp = () => {
     const { chosenCountryCode } = this.state;
-    const userMobile = getElementValue('otp-mobile-mobile-number');
+    const { mobile: userMobile } = this.getOtpModalData();
 
     if (userMobile.length === 0 || userMobile.match(/^[0-9]+$/) === null) {
-      showError('otp-mobile-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
+      showError('otp-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
       return;
     }
 
@@ -89,7 +101,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     const mobile = chosenCountryCode + userMobile;
 
     // Call API to check if mobile number is valid.
-    const validationRequest = this.validateMobileOtp({ mobile }, 'send_otp');
+    const validationRequest = this.validateMobileOtp({ userMobile }, 'send_otp');
     if (validationRequest instanceof Promise) {
       validationRequest.then((valid) => {
         if (valid === true) {
@@ -121,7 +133,7 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Verify OTP from user.
   verifyOtp = () => {
-    const otp = getElementValue('otp');
+    const { otp, mobile } = this.getOtpModalData();
 
     if (otp.length === 0) {
       showError('otp-error', getStringMessage('form_error_otp'));
@@ -131,7 +143,6 @@ class AuraFormSignUpOTPModal extends React.Component {
     removeError('otp-error');
     // API call to verify otp.
     const apiUrl = 'post/loyalty-club/verify-otp';
-    const mobile = getElementValue('mobile');
     const apiData = postAPIData(apiUrl, { mobile, otp });
     showFullScreenLoader();
 
@@ -144,6 +155,7 @@ class AuraFormSignUpOTPModal extends React.Component {
             // Open modal for the new user.
             this.openNewUserModal();
           }
+          showError('otp-error', getStringMessage('form_error_invalid_otp'));
         }
         removeFullScreenLoader();
       });
@@ -198,7 +210,7 @@ class AuraFormSignUpOTPModal extends React.Component {
           <div className="aura-modal-form-items">
             <AuraMobileNumberField
               isDisabled={false}
-              name="otp-mobile"
+              name="otp"
               countryMobileCode={countryMobileCode}
               maxLength={countryMobileCodeMaxLength}
               setCountryCode={this.setCountryCode}
