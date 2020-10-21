@@ -33,6 +33,14 @@ class AuraFormSignUpOTPModal extends React.Component {
     return otpModalData;
   };
 
+  resetModalMessages = () => {
+    // Reset/Remove if any message is displayed.
+    this.setState({
+      messageType: null,
+      messageContent: null,
+    });
+  };
+
   // Verify OTP and show error.
   validateMobileOtp = (data, action) => {
     let isValid = true;
@@ -61,17 +69,10 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Send OTP to the user.
   sendOtp = () => {
-    // Reset/Remove if any message is displayed.
-    this.setState({
-      messageType: null,
-      messageContent: null,
-    });
-
+    this.resetModalMessages();
     const { mobile: userMobile } = this.getOtpModalData();
-
     const {
       setChosenUserMobile,
-      chosenCountryCode,
     } = this.props;
 
     setChosenUserMobile(userMobile);
@@ -80,9 +81,6 @@ class AuraFormSignUpOTPModal extends React.Component {
       showError('otp-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
       return;
     }
-
-    // Combine mobile and country code
-    const mobile = chosenCountryCode + userMobile;
 
     // Call API to check if mobile number is valid.
     const validationRequest = this.validateMobileOtp({ userMobile }, 'send_otp');
@@ -122,11 +120,7 @@ class AuraFormSignUpOTPModal extends React.Component {
 
   // Verify OTP from user.
   verifyOtp = () => {
-    // Reset/Remove if any message is displayed.
-    this.setState({
-      messageType: null,
-      messageContent: null,
-    });
+    this.resetModalMessages();
     const { otp, mobile } = this.getOtpModalData();
 
     const {
