@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_dynamic_yield\Controller;
+namespace Drupal\dynamic_yield\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Returns responses for Alshaya Dynamic Yield routes.
+ * Returns responses for Dynamic Yield routes.
  */
-class AlshayaDynamicYieldController extends ControllerBase {
+class DynamicYieldController extends ControllerBase {
 
   /**
    * Sets cookie for DY Intelligent tracking.
