@@ -72,7 +72,8 @@ export default class CompletePurchase extends React.Component {
     if (!deliverSameAsInCart || !isShippingSet) {
       // Adding error class in the section.
       const deliveryInfo = document.getElementsByClassName('spc-checkout-delivery-information');
-      if (deliveryInfo.length !== 0) {
+      const deliveryInfoError = document.getElementById('delivery-information-error');
+      if (deliveryInfo.length !== 0 && deliveryInfoError === null) {
         smoothScrollTo('.spc-checkout-delivery-information');
         const tag = document.createElement('p');
         let errorMessage;
@@ -110,7 +111,8 @@ export default class CompletePurchase extends React.Component {
     if (!isBillingSet) {
       // Adding error class in the section.
       const billingAddress = document.getElementsByClassName('spc-section-billing-address');
-      if (billingAddress !== 0) {
+      const billingAddressError = document.getElementById('billing-address-information-error');
+      if (billingAddress !== 0 && billingAddressError === null) {
         smoothScrollTo('.spc-section-billing-address');
         const tag = document.createElement('p');
         const errorMessage = document.createTextNode(Drupal.t('Please add billing address information'));
