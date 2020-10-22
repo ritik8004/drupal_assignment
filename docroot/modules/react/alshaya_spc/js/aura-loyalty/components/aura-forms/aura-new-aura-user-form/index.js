@@ -4,7 +4,7 @@ import TextField from '../../../../utilities/textfield';
 import AuraMobileNumberField from '../aura-mobile-number-field';
 import { getElementValue, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
-import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import { getAuraConfig, getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import {
   removeFullScreenLoader,
@@ -140,6 +140,8 @@ class AuraFormNewAuraUserModal extends React.Component {
 
     const submitButtonText = Drupal.t('Submit');
 
+    const email = getUserDetails().email || '';
+
     return (
       <div className="aura-new-user-form">
         <div className="aura-modal-header">
@@ -171,6 +173,7 @@ class AuraFormNewAuraUserModal extends React.Component {
               required
               name="new-aura-user-email"
               label={Drupal.t('Email address')}
+              defaultValue={email}
             />
           </div>
           <div className="aura-modal-form-actions">

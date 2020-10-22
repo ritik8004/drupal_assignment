@@ -5,6 +5,12 @@ alshaya_aura_react.settings:
     aura_rewards_header_learn_more_link:
       type: text
       label: 'AURA Rewards Header Learn More Link'
+    aura_app_store_link:
+      type: text
+      label: 'AURA Apple App Store Link'
+    aura_google_play_link:
+      type: text
+      label: 'AURA Google Play Store Link'
 
 alshaya_aura_react.loyalty_benefits:
   type: config_object

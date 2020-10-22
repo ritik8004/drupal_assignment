@@ -32,7 +32,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'send_otp_helptext',
-      'value' => t('We will send a One Time Pin to both your email address and mobile number.'),
+      'value' => t('We will send a One Time Pin to your mobile number.'),
     ],
     [
       'key' => 'verify',
@@ -77,10 +77,6 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'form_error_send_otp_failed_message',
       'value' => t('Error in sending OTP. Please try again.'),
-    ],
-    [
-      'key' => 'otp_sent_message',
-      'value' => t('OTP Sent.'),
     ],
   ];
 }
