@@ -63,6 +63,11 @@ body {
         display: none;
       }
     }
+
+    &:hover,
+    &.is-active {
+      color: $header_secondary_menu_link_hover;
+    }
   }
 
   li {
