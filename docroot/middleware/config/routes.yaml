@@ -94,9 +94,19 @@ loyalty_club.get_product_points:
     methods: POST
 
 loyalty_club.get_apc_user_details_by_email:
-    path: /get/loyalty-club/get-apc-user-details-by-email
-    controller: App\Controller\LoyaltyClubController::getApcUserDetailsByEmail
-    methods: GET
+    path: /post/loyalty-club/get-apc-user-details-by-email
+    controller: App\Controller\LoyaltySearchController::getApcUserDetailsByEmail
+    methods: POST
+
+loyalty_club.get_apc_user_details_by_card:
+    path: /post/loyalty-club/get-apc-user-details-by-card
+    controller: App\Controller\LoyaltySearchController::getApcUserDetailsByCard
+    methods: POST
+
+loyalty_club.get_apc_user_details_by_mobile_number:
+    path: /post/loyalty-club/get-apc-user-details-by-mobile-number
+    controller: App\Controller\LoyaltySearchController::getApcUserDetailsByMobileNumber
+    methods: POST
 
 loyalty_club.apc_status_update:
     path: /post/loyalty-club/apc-status-update
