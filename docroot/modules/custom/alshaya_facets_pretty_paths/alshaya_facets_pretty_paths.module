@@ -256,9 +256,19 @@ function alshaya_facets_pretty_paths_language_get_translations() {
 function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
   if (isset($settings['views']['ajaxViews']['views_dom_id:alshaya_product_list_block_1'])) {
     // This is to replace URL Alias with the actual path.
-    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $taxonomy_term_path = "/$language/taxonomy/term/" . $settings['views']['ajaxViews']['views_dom_id:alshaya_product_list_block_1']['view_args'];
-    $settings['views']['ajaxViews']['views_dom_id:alshaya_product_list_block_1']['view_path'] = $taxonomy_term_path;
-    $settings['taxonomy_term_path'] = $taxonomy_term_path;
+    $path = $settings['views']['ajaxViews']['views_dom_id:alshaya_product_list_block_1']['view_path'];
+    $facets_path = explode('/--', $path);
+    $facets = '';
+    if (isset($facets_path[1])) {
+      $facets = '/--' . $facets_path[1];
+    }
+    $path = explode('/', $facets_path[0]);
+    $language = $path[1];
+    unset($path[1]);
+    $path = implode('/', $path);
+    $path = \Drupal::service('path.alias_manager')->getPathByAlias(rtrim($path, '/'));
+    $path = "/$language" . $path . $facets;
+    $settings['views']['ajaxViews']['views_dom_id:alshaya_product_list_block_1']['view_path'] = $path;
+    $settings['alshaya_taxonomy_term_path'] = $path;
   }
 }
