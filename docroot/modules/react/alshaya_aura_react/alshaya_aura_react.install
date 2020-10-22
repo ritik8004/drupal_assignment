@@ -26,4 +26,10 @@ function alshaya_aura_react_install() {
   $config_factory = \Drupal::configFactory();
   $page_title_weight = (int) $config_factory->get('block.block.page_title')->get('weight');
   $config_factory->getEditable('block.block.myaccountsaurablock')->set('weight', $page_title_weight + 1)->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translations');
+  if ($translations = _alshaya_aura_react_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
