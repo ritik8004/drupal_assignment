@@ -14,8 +14,8 @@ function getElementValue(elementId) {
 function showError(elementId, msg) {
   const element = document.getElementById(elementId);
   if (element) {
-    document.getElementById(elementId).innerHTML = msg;
-    document.getElementById(elementId).classList.add('error');
+    element.innerHTML = msg;
+    element.classList.add('error');
   }
 }
 
@@ -25,8 +25,8 @@ function showError(elementId, msg) {
 function removeError(elementId) {
   const element = document.getElementById(elementId);
   if (element) {
-    document.getElementById(elementId).innerHTML = '';
-    document.getElementById(elementId).classList.remove('error');
+    element.innerHTML = '';
+    element.classList.remove('error');
   }
 }
 

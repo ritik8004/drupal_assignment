@@ -41,6 +41,14 @@ class AuraFormSignUpOTPModal extends React.Component {
     });
   };
 
+  resetModalField = (elementId) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.value = '';
+      removeError(`${elementId}-error`);
+    }
+  };
+
   // Verify OTP and show error.
   validateMobileOtp = (data, action) => {
     let isValid = true;
@@ -70,6 +78,7 @@ class AuraFormSignUpOTPModal extends React.Component {
   // Send OTP to the user.
   sendOtp = () => {
     this.resetModalMessages();
+    this.resetModalField('otp');
     const { mobile: userMobile } = this.getOtpModalData();
     const {
       setChosenUserMobile,
