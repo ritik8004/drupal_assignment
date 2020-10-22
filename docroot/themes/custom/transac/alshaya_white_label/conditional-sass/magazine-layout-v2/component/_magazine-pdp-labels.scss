@@ -44,6 +44,7 @@
 
         @include breakpoint($only-mobile) {
           padding-top: 0;
+          top: 5.375rem;
         }
       }
 
@@ -60,6 +61,7 @@
 
         @include breakpoint($only-mobile) {
           padding-top: 0;
+          top: 5.375rem;
         }
       }
 
