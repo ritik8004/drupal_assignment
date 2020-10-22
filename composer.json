@@ -381,6 +381,9 @@
             "drupal/replicate_ui": {
                 "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-10-05/content-type-feature-3159253-8.patch",
                 "Fix warning for config entity values": "https://www.drupal.org/files/issues/2020-10-05/fix-large-number-of-entries-warning-3174826-2.patch"
+            },
+            "drupal/search_api_algolia": {
+                "Allow to override maxValuesPerFacet Algolia setting": "https://www.drupal.org/files/issues/2020-10-20/search-api-algolia-maxvaluesperfacet-3177896.patch"
             }
         },
         "installer-paths": {
