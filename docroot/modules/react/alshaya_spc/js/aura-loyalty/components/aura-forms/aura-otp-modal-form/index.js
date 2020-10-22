@@ -109,8 +109,6 @@ class AuraFormSignUpOTPModal extends React.Component {
                 if (result.data.status) {
                   this.setState({
                     otpRequested: true,
-                    messageType: 'success',
-                    messageContent: getStringMessage('otp_sent_message'),
                   });
                 }
               } else {
