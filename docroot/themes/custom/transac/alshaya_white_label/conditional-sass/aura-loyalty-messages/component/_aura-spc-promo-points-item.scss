@@ -3,4 +3,8 @@
   background: $aura-promotion-item-bg;
   border-radius: 0.625rem;
   color: $aura-promotion-item-txt;
+
+  html[lang=ar] & {
+    background: $aura-promotion-item-bg-ar;
+  }
 }

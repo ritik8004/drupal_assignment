@@ -4,6 +4,10 @@
   color: $aura-spc-pending-enrollment-text;
   background: $aura-spc-cart-block-pending-enrollment;
 
+  html[lang=ar] & {
+    background: $aura-spc-cart-block-pending-enrollment-ar;
+  }
+
   .message {
     padding: 0 1.25rem 0.625rem;
   }

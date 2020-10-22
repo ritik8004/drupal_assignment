@@ -1,23 +1,40 @@
 .aura-pending-full-enrollment-wrapper {
-  background-image: url('#{$base_theme_img_directory_path}/aura/aura-mobile.png');
-  background-repeat: no-repeat;
-  background-size: 8.5625rem;
-  background-position: top $left;
   border-radius: 0.625rem;
   margin: 1.5rem 0 0;
   padding: 1.75rem 0 1.25rem;
   color: $aura-loyalty-club-pending-enrollment-banner-text;
   position: relative;
-
-  @include breakpoint($desktop) {
-    background-image: url('#{$base_theme_img_directory_path}/aura/aura.png');
-    background-repeat: no-repeat;
-    background-size: 9.875rem;
-    background-position: 1px -1px;
-  }
+  min-height: 15.625rem;
 
   @include breakpoint($upto-desktop) {
     padding: 1.25rem 1.25rem 0.625rem;
+    min-height: 16.1875rem;
+  }
+
+  &::after {
+    content: '';
+    background-image: url('#{$base_theme_img_directory_path}/aura/aura-mobile.png');
+    background-repeat: no-repeat;
+    background-size: 8.5625rem;
+    // Intentionally non Rtl.
+    background-position: top left;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    #{$left}: 0;
+    z-index: -1;
+    width: 15.625rem;
+
+    html[lang=ar] & {
+      transform: scaleX(-1);
+    }
+
+    @include breakpoint($desktop) {
+      background-image: url('#{$base_theme_img_directory_path}/aura/aura.png');
+      background-repeat: no-repeat;
+      background-size: 9.875rem;
+      background-position: 1px -1px;
+    }
   }
 
   &::before {
@@ -29,10 +46,18 @@
     right: 0;
     z-index: -1;
     border-radius: 0.625rem;
-    background: linear-gradient(127deg, #efc06e -5%, #e31c79 65%, #772583 109%);
+    background: $aura-loyalty-club-no-card-block-pending-enroll-bg;
+
+    html[lang=ar] & {
+      background: $aura-loyalty-club-no-card-block-pending-enroll-bg-ar;
+    }
 
     @include breakpoint($desktop) {
-      background: linear-gradient(109deg, #efc06e -11%, #e31c79 50%, #772583 107%);
+      background: $aura-loyalty-club-no-card-block-pending-enroll-bg-desktop;
+
+      html[lang=ar] & {
+        background: $aura-loyalty-club-no-card-block-pending-enroll-bg-desktop-ar;
+      }
     }
   }
 
@@ -86,6 +111,10 @@
     height: 100%;
     overflow: hidden;
     z-index: -1;
+
+    html[lang=ar] & {
+      transform: scaleX(-1);
+    }
 
     @include breakpoint($upto-desktop) {
       display: none;
