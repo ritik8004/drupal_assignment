@@ -26,6 +26,8 @@
    * Apply same height to all elements of a product listing row.
    */
   Drupal.plpRowHeightSync = function (indexStart, indexEnd, tiles) {
+    // Adjust height of PLP tiles.
+    Drupal.plpListingProductTileHeight('full_page', element);
     var maxRowHeight = Drupal.findMaxRowHeight(indexStart, indexEnd, tiles);
     // Apply height to all tiles in row.
     var rowTiles = tiles.slice(indexStart, indexEnd + 1);
