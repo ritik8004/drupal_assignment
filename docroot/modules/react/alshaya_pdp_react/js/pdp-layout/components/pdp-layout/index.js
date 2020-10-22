@@ -90,6 +90,8 @@ const PdpLayout = () => {
           header.current.classList.add('magv2-pdp-sticky-header');
           header.current.classList.add('fadeInUp');
           header.current.classList.remove('fadeOutVertical');
+        } else if (isMobile && window.pageYOffset <= 90) {
+          header.current.classList.remove('magv2-pdp-non-sticky-header');
         } else {
           header.current.classList.remove('magv2-pdp-sticky-header');
           header.current.classList.add('magv2-pdp-non-sticky-header');
