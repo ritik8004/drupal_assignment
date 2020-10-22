@@ -147,13 +147,13 @@ class AuraFormNewAuraUserModal extends React.Component {
           <button type="button" className="close" onClick={() => closeNewUserModal()} />
         </div>
         <div className="aura-modal-form">
-          <div className="aura-form-messages-container">
-            <AuraFormModalMessage
-              messageType={messageType}
-              messageContent={messageContent}
-            />
-          </div>
           <div className="aura-modal-form-items">
+            <div className="aura-form-messages-container">
+              <AuraFormModalMessage
+                messageType={messageType}
+                messageContent={messageContent}
+              />
+            </div>
             <AuraMobileNumberField
               isDisabled
               name="new-aura-user"

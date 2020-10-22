@@ -11,6 +11,10 @@
       color: $spc-checkout-error-message-color;
       background-color: $spc-checkout-error-message-background;
 
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1rem;
+      }
+
       @include icon(warning) {
         width: 2.125rem;
         height: 2.125rem;
@@ -19,17 +23,16 @@
         margin-#{$right}: 0.3125rem;
         vertical-align: middle;
         text-indent: 0;
-
-        @include breakpoint($only-mobile) {
-          position: absolute;
-          #{$left}: 0;
-        }
       }
     }
 
     &.success-aura-message {
       color: $spc-checkout-error-message-color;
       background-color: $aura-spc-response-message;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1rem;
+      }
 
       @include icon(checkshape) {
         width: 2.125rem;
@@ -39,11 +42,6 @@
         margin-#{$right}: 0.3125rem;
         vertical-align: middle;
         text-indent: 0;
-
-        @include breakpoint($only-mobile) {
-          position: absolute;
-          #{$left}: 0;
-        }
       }
     }
   }

@@ -69,3 +69,26 @@
     }
   }
 }
+
+.aura-otp-form,
+.aura-new-user-form {
+  @include breakpoint($only-mobile) {
+    .aura-modal-form {
+      height: calc(100vh - 3.5rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: $aura-form-otp-background !important;
+    }
+
+    .aura-modal-form-items,
+    .aura-modal-form-actions {
+      border-top: none;
+      background: $aura-form-modal-section-bg;
+    }
+
+    .aura-form-messages-container:not(:empty) {
+      padding: 0;
+    }
+  }
+}

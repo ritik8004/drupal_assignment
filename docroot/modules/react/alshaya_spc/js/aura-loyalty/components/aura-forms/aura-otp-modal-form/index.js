@@ -209,13 +209,13 @@ class AuraFormSignUpOTPModal extends React.Component {
           <a className="close" onClick={() => closeOTPModal()} />
         </div>
         <div className="aura-modal-form">
-          <div className="aura-form-messages-container">
-            <AuraFormModalMessage
-              messageType={messageType}
-              messageContent={messageContent}
-            />
-          </div>
           <div className="aura-modal-form-items">
+            <div className="aura-form-messages-container">
+              <AuraFormModalMessage
+                messageType={messageType}
+                messageContent={messageContent}
+              />
+            </div>
             <AuraMobileNumberField
               isDisabled={false}
               name="otp"
