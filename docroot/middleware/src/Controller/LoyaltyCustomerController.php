@@ -226,4 +226,41 @@ class LoyaltyCustomerController {
     }
   }
 
+  /**
+   * Search APC user.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return users loyalty details.
+   */
+  public function searchApcUser(Request $request) {
+    try {
+      $request_content = json_decode($request->getContent(), TRUE);
+      $type = $request_content['type'];
+      $value = $request_content['value'];
+
+      // Check if required data is present in request.
+      if (empty($type) || empty($value)) {
+        $this->logger->error('Error while trying to search APC user. Required parameters missing. Request Data: @data', [
+          '@data' => json_encode($request_content),
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('Required parameters missing.', Response::HTTP_NOT_FOUND));
+      }
+
+      $endpoint = sprintf('/customers/apc-search/%s/%s', $type, $value);
+      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $responseData = [
+        'status' => TRUE,
+        'data' => $response,
+      ];
+      return new JsonResponse($responseData);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to search APC user. Request Data: @data. Message: @message', [
+        '@data' => json_encode($request_content),
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
+  }
+
 }
