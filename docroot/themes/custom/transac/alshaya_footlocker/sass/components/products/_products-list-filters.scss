@@ -36,40 +36,6 @@
       }
     }
   }
-
-  .all-filters,
-  .all-filters-algolia {
-    .filter__foot {
-      .facet-all-clear,
-      .facet-clear-all {
-        .block-facets-summary-blockfilter {
-          &-bar-promotions,
-          &-bar-plp,
-          &-bar-productlist,
-          &-bar {
-            ul {
-              li {
-                &.clear-all {
-                  a {
-                    padding: 0.625rem 0;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      .facet-clear-all {
-        &.has-link a {
-          &:hover {
-            background: $primary_btn_bg;
-            color: $primary_btn_text;
-          }
-        }
-      }
-    }
-  }
 }
 
 .show-all-filters {
