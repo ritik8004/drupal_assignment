@@ -88,7 +88,6 @@ class AuraFormNewAuraUserModal extends React.Component {
   registerUser = () => {
     const {
       closeNewUserModal,
-      closeOTPModal,
     } = this.props;
 
     const enrollmentData = this.getEnrollmentData();
@@ -120,7 +119,6 @@ class AuraFormNewAuraUserModal extends React.Component {
             handleSignUp();
             // Close the modals.
             closeNewUserModal();
-            closeOTPModal();
           }
         }
         removeFullScreenLoader();

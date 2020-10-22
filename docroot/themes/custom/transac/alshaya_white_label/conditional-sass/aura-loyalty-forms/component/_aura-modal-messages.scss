@@ -28,8 +28,8 @@
     }
 
     &.success-aura-message {
-      color: $aura-spc-response-message;
-      background-color: $spc-checkout-success-message-background;
+      color: $spc-checkout-error-message-color;
+      background-color: $aura-spc-response-message;
 
       @include icon(checkshape) {
         width: 2.125rem;

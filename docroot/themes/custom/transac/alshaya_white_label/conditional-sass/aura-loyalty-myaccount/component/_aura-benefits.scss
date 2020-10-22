@@ -119,6 +119,12 @@
       background: $aura-loyalty-club-even-row;
     }
 
+    .star-icon,
+    .tick-icon {
+      display: flex;
+      align-items: center;
+    }
+
     .star-icon {
       @include icon('ratingfull') {
         display: block;

@@ -5,19 +5,36 @@ import ConditionalView
   from '../../../../../../alshaya_spc/js/common/components/conditional-view';
 import AuraFormSignUpOTPModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-otp-modal-form';
+import AuraFormNewAuraUserModal
+  from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-new-aura-user-form';
 
 class AuraMyAccountNoLinkedCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isOTPModalOpen: false,
+      isNewUserModalOpen: false,
+      chosenCountryCode: null,
+      chosenUserMobile: null,
     };
   }
+
+  setChosenCountryCode = (code) => {
+    this.setState({
+      chosenCountryCode: code,
+    });
+  };
+
+  setChosenUserMobile = (code) => {
+    this.setState({
+      chosenUserMobile: code,
+    });
+  };
 
   handleSignUp = () => {
     const { handleSignUp } = this.props;
     handleSignUp();
-  }
+  };
 
   openOTPModal = () => {
     this.setState({
@@ -31,8 +48,25 @@ class AuraMyAccountNoLinkedCard extends React.Component {
     });
   };
 
+  openNewUserModal = () => {
+    this.setState({
+      isNewUserModalOpen: true,
+    });
+  };
+
+  closeNewUserModal = () => {
+    this.setState({
+      isNewUserModalOpen: false,
+    });
+  };
+
   render() {
-    const { isOTPModalOpen } = this.state;
+    const {
+      isOTPModalOpen,
+      isNewUserModalOpen,
+      chosenCountryCode,
+      chosenUserMobile,
+    } = this.state;
     const { handleSignUp } = this.props;
 
     return (
@@ -68,6 +102,23 @@ class AuraMyAccountNoLinkedCard extends React.Component {
             >
               <AuraFormSignUpOTPModal
                 closeOTPModal={() => this.closeOTPModal()}
+                openNewUserModal={() => this.openNewUserModal()}
+                setChosenCountryCode={this.setChosenCountryCode}
+                setChosenUserMobile={this.setChosenUserMobile}
+                handleSignUp={handleSignUp}
+                chosenCountryCode={chosenCountryCode}
+              />
+            </Popup>
+            <Popup
+              className="aura-modal-form new-aura-user"
+              open={isNewUserModalOpen}
+              closeOnEscape={false}
+              closeOnDocumentClick={false}
+            >
+              <AuraFormNewAuraUserModal
+                chosenCountryCode={chosenCountryCode}
+                chosenUserMobile={chosenUserMobile}
+                closeNewUserModal={() => this.closeNewUserModal()}
                 handleSignUp={handleSignUp}
               />
             </Popup>
