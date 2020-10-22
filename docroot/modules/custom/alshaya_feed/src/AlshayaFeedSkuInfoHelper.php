@@ -19,6 +19,7 @@ use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\metatag\MetatagToken;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Class SkuInfoHelper.
@@ -368,11 +369,14 @@ class AlshayaFeedSkuInfoHelper {
       return [];
     }
 
-    $images = array_map(function ($image) {
+    $image_style_plp = ImageStyle::load('product_listing');
+
+    $images = array_map(function ($image) use ($image_style_plp) {
       if (!empty($image['drupal_uri'])) {
         return [
           'label' => $image['label'],
           'url' => file_create_url($image['drupal_uri']),
+          'url_product_listing' => $image_style_plp->buildUrl($image['drupal_uri']),
         ];
       }
     }, $media_items['media_items']['images']);

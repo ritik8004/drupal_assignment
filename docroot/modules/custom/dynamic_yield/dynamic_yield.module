@@ -86,6 +86,7 @@ function dynamic_yield_page_attachments(array &$page) {
 
   }
   $page['#cache']['tags'][] = 'config:dynamic_yield.settings';
+  $page['#attached']['library'][] = 'dynamic_yield/dynamic_yield.intelligent_tracking';
 }
 
 /**

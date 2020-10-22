@@ -693,6 +693,12 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 22, 'ar' => 19],
     ],
+    'bh' => [
+      'store_id' => ['en' => 28, 'ar' => 25],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 34, 'ar' => 31],
+    ],
   ],
   'mu_qa' => [
     'url' => 'https://integration-5ojmyuq-szaftnexsfo4k.eu-3.magentosite.cloud',

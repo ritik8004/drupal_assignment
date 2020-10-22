@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Language\LanguageInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Class Alshaya Facets Pretty Paths Helper.
@@ -97,6 +99,13 @@ class AlshayaFacetsPrettyPathsHelper {
   protected $prettyAliases;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $logger;
+
+  /**
    * Replacement characters for facet values.
    */
   const REPLACEMENTS = [
@@ -138,6 +147,8 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Default Facets Summary Manager.
    * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases $pretty_aliases
    *   Pretty Aliases.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   LoggerFactory object.
    */
   public function __construct(RouteMatchInterface $route_match,
                               RequestStack $request_stack,
@@ -148,7 +159,8 @@ class AlshayaFacetsPrettyPathsHelper {
                               ConfigFactoryInterface $config_factory,
                               SkuManager $sku_manager,
                               DefaultFacetsSummaryManager $default_facets_summary_manager,
-                              AlshayaFacetsPrettyAliases $pretty_aliases) {
+                              AlshayaFacetsPrettyAliases $pretty_aliases,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->routeMatch = $route_match;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->entityTypeManager = $entity_type_manager;
@@ -159,6 +171,7 @@ class AlshayaFacetsPrettyPathsHelper {
     $this->skuManager = $sku_manager;
     $this->defaultFacetsSummaryManager = $default_facets_summary_manager;
     $this->prettyAliases = $pretty_aliases;
+    $this->logger = $logger_factory->get('alshaya_facets_pretty_paths');
   }
 
   /**
@@ -384,9 +397,15 @@ class AlshayaFacetsPrettyPathsHelper {
     elseif ($this->routeMatch->getRouteName() === 'views.ajax') {
       $q = $this->currentRequest->query->get('q') ?? $this->currentRequest->query->get('facet_filter_url');
       if ($q) {
-        $route_params = Url::fromUserInput($q)->getRouteParameters();
-        if (isset($route_params['facets_query'])) {
-          $alshaya_active_facet_filter_string = $route_params['facets_query'];
+        try {
+          $route_params = Url::fromUserInput($q)->getRouteParameters();
+          if (isset($route_params['facets_query'])) {
+            $alshaya_active_facet_filter_string = $route_params['facets_query'];
+          }
+        }
+        catch (\UnexpectedValueException $exception) {
+          $this->logger->notice($exception->getMessage() . ' URL: ' . $q);
+          throw new NotFoundHttpException();
         }
       }
     }
