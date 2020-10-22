@@ -14,6 +14,10 @@
   color: $aura-loyalty-club-no-card-block-text;
   background-image: $aura-loyalty-club-no-card-block-link-card-btn;
   cursor: pointer;
+
+  html[lang=ar] & {
+    background-image: $aura-loyalty-club-no-card-block-link-card-btn-ar;
+  }
 }
 
 .aura-myaccount-no-linked-card-wrapper {
@@ -23,6 +27,10 @@
   display: flex;
   align-items: center;
 
+  html[lang=ar] & {
+    background-image: $aura-loyalty-club-no-card-block-bg-ar;
+  }
+
   @include breakpoint($desktop) {
     height: 11.5rem;
   }
@@ -30,6 +38,10 @@
   @include breakpoint($upto-desktop) {
     flex-direction: column;
     background-image: $aura-loyalty-club-no-card-block-bg-mobile;
+
+    html[lang=ar] & {
+      background-image: $aura-loyalty-club-no-card-block-bg-mobile-ar;
+    }
   }
 
   .aura-logo {
@@ -102,6 +114,11 @@
         background-image: $aura-loyalty-club-no-card-block-sign-up-bg;
         background-origin: border-box;
         background-clip: content-box, border-box;
+
+        html[lang=ar] & {
+          border-image-source: $aura-loyalty-club-no-card-block-sign-up-border-ar;
+          background-image: $aura-loyalty-club-no-card-block-sign-up-bg-ar;
+        }
       }
     }
   }

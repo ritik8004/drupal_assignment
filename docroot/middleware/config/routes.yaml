@@ -93,10 +93,10 @@ loyalty_club.get_product_points:
     controller: App\Controller\LoyaltyClubController::getProductPoints
     methods: POST
 
-loyalty_club.get_apc_user_details_by_email:
-    path: /get/loyalty-club/get-apc-user-details-by-email
-    controller: App\Controller\LoyaltyClubController::getApcUserDetailsByEmail
-    methods: GET
+loyalty_club.search_apc_user:
+    path: /post/loyalty-club/search-apc-user
+    controller: App\Controller\LoyaltyCustomerController::searchApcUser
+    methods: POST
 
 loyalty_club.apc_status_update:
     path: /post/loyalty-club/apc-status-update
