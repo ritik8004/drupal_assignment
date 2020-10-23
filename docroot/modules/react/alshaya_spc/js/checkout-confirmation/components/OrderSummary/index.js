@@ -102,6 +102,10 @@ const OrderSummary = () => {
   // Customer name on shipping.
   const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
 
+  const {
+    accruedPoints, redeemedPoints,
+  } = drupalSettings.order_details;
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
@@ -160,8 +164,8 @@ const OrderSummary = () => {
       </div>
       {/* TODO: Aura SPC - Improve these conditions once BE for AURA is integrated. */}
       <ConditionalView condition={isAuraEnabled()}>
-        <AuraEarnOrderSummaryItem pointsEarned="5436" fullEnrollment="yes" animationDelay="0.8s" />
-        <AuraRedeemOrderSummaryItem pointsRedeemed="900" animationDelay="1s" />
+        <AuraEarnOrderSummaryItem pointsEarned={accruedPoints} animationDelay="0.8s" />
+        <AuraRedeemOrderSummaryItem pointsRedeemed={redeemedPoints} animationDelay="1s" />
       </ConditionalView>
     </div>
   );

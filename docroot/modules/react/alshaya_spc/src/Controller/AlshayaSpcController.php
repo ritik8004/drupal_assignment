@@ -641,6 +641,10 @@ class AlshayaSpcController extends ControllerBase {
       ],
     ];
 
+    // Invoke the alter hook to allow all modules to contribute
+    // to order details settings.
+    $this->moduleHandler->alter('alshaya_spc_order_details_settings', $order, $settings);
+
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
       $strings = array_merge($strings, CashOnDelivery::getCodSurchargeStrings());
     }

@@ -2,16 +2,18 @@ import React from 'react';
 import PendingEnrollmentMessage from '../utilities/pending-enrollment-message';
 import ToolTip from '../../../utilities/tooltip';
 import ConditionalView from '../../../common/components/conditional-view';
+import { getUserAuraStatus, getAllAuraStatus } from '../../../../../alshaya_aura_react/js/utilities/helper';
 
 const AuraEarnOrderSummaryItem = (props) => {
   const {
     pointsEarned,
-    fullEnrollment,
     animationDelay: animationDelayValue,
   } = props;
 
   const label = Drupal.t('Aura points earned');
   const tooltip = Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem  the points.');
+
+  const userFullyEnrolled = (getUserAuraStatus() === getAllAuraStatus().APC_LINKED_NOT_VERIFIED);
 
   if (pointsEarned > 0) {
     return (
@@ -23,7 +25,7 @@ const AuraEarnOrderSummaryItem = (props) => {
             <ToolTip enable question>{ tooltip }</ToolTip>
           </span>
         </div>
-        <ConditionalView condition={fullEnrollment === 'no'}>
+        <ConditionalView condition={userFullyEnrolled}>
           <PendingEnrollmentMessage />
         </ConditionalView>
       </>
