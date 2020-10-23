@@ -6,6 +6,7 @@ use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Component\Datetime\Time;
 use Drupal\Component\Serialization\Json;
 
 /**
@@ -14,6 +15,11 @@ use Drupal\Component\Serialization\Json;
  * @package Drupal\alshaya_acm_checkoutcom\Helper
  */
 class AlshayaAcmCheckoutComAPIHelper {
+
+  /**
+   * Config cache expiry for checkout.com upapi (1hr).
+   */
+  const CHECKOUTCOM_UPAPI_CONFIG_EXPIRE = 3600;
 
   /**
    * Api wrapper.
@@ -37,6 +43,13 @@ class AlshayaAcmCheckoutComAPIHelper {
   protected $logger;
 
   /**
+   * The time service.
+   *
+   * @var \Drupal\Component\Datetime\Time
+   */
+  protected $time;
+
+  /**
    * Cache service.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -52,6 +65,8 @@ class AlshayaAcmCheckoutComAPIHelper {
    *   Config factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   Logger factory.
+   * @param \Drupal\Component\Datetime\Time $time
+   *   The time service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache service.
    */
@@ -59,11 +74,13 @@ class AlshayaAcmCheckoutComAPIHelper {
     AlshayaApiWrapper $api_wrapper,
     ConfigFactoryInterface $config_factory,
     LoggerChannelFactory $logger_factory,
+    Time $time,
     CacheBackendInterface $cache
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
     $this->logger = $logger_factory->get('alshaya_acm_checkoutcom');
+    $this->time = $time;
     $this->cache = $cache;
   }
 
@@ -92,7 +109,10 @@ class AlshayaAcmCheckoutComAPIHelper {
       $configs = Json::decode($response);
 
       if (!empty($configs)) {
-        $this->cache->set($cache_key, $configs);
+        $this->cache->set($cache_key,
+          $configs,
+          $this->time->getRequestTime() + self::CHECKOUTCOM_UPAPI_CONFIG_EXPIRE
+        );
       }
     }
     else {
