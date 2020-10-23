@@ -488,6 +488,10 @@
               .price-amount,
               .price-currency {
                 font-size: 0.75rem !important;
+
+                &.suffix {
+                  margin-#{$right}: 0.25rem;
+                }
               }
             }
           }
