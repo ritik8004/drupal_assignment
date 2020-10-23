@@ -18,7 +18,7 @@
 
       // Attach click handler to product list elements. Products get loaded by
       // AJAX also hence this is placed inside attach behaviors.
-      $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context).once('product-list-clicked').on('click', function() {
+      $('[gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]', context).once('product-list-clicked').on('click', function () {
         var that = $(this);
         var position = parseInt($(this).closest('.views-row').data('list-item-position'));
         Drupal.alshaya_seo_gtm_push_product_clicks(that, drupalSettings.gtm.currency, $('body').attr('gtm-list-name'), position);

@@ -8,7 +8,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
- * Class AlshayaMainMenuConfigForm.
+ * Class Alshaya Main Menu Config Form.
  */
 class AlshayaMainMenuConfigForm extends ConfigFormBase {
 

@@ -7,7 +7,7 @@ use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Entity\EntityRepository;
 
 /**
- * Class AlshayaUserInfo.
+ * Class Alshaya User Info.
  *
  * @package Drupal\alshaya_user
  */
@@ -94,7 +94,10 @@ class AlshayaUserInfo {
   public static function getFullName($user, $glue = ' ') {
     $firstName = self::getUserNameField($user, 'field_first_name');
     $lastName = self::getUserNameField($user, 'field_last_name');
-    return !empty($firstName) || !empty($lastName) ? implode($glue, array_filter([$firstName, $lastName])) : '';
+    return !empty($firstName) || !empty($lastName) ? implode($glue, array_filter([
+      $firstName,
+      $lastName,
+    ])) : '';
   }
 
   /**

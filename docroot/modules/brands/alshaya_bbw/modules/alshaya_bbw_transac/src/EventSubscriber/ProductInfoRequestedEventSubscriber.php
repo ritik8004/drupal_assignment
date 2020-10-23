@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class ProductInfoRequestedEventSubscriber.
+ * Contains Product Info Requested Event Subscriber methods.
  *
  * @package Drupal\alshaya_bbw_transac\EventSubscriber
  */

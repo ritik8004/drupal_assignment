@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Class AlshayaSearchApiHelper.
+ * Class Alshaya Search Api Helper.
  */
 class AlshayaSearchApiHelper {
 

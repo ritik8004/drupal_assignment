@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_acm_product_position;
 
 /**
- * Class AlshayaPlpSortOptionsService.
+ * Class Alshaya Plp Sort Options Service.
  */
 class AlshayaPlpSortOptionsService extends AlshayaPlpSortOptionsBase {
 

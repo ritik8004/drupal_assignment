@@ -10,7 +10,7 @@ use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\RequestException;
 
 /**
- * Trait AgentRequestTrait.
+ * Trait Agent Request Trait.
  *
  * @package Drupal\acq_commerce\Conductor
  *

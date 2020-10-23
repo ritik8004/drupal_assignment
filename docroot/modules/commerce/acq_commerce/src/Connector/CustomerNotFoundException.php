@@ -3,7 +3,7 @@
 namespace Drupal\acq_commerce\Connector;
 
 /**
- * Class CustomerNotFoundException.
+ * Class Customer Not Found Exception.
  *
  * @package Drupal\acq_commerce\Connector
  *

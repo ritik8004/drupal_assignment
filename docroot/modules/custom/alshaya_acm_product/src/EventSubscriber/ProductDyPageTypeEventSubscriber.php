@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Drupal\acq_commerce\SKUInterface;
 
 /**
- * Class ProductDyPageTypeEventSubscriber.
+ * Class Product DyPage Type Event Subscriber.
  *
  * @package Drupal\alshaya_acm_product\EventSubscriber
  */

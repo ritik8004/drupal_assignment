@@ -5,7 +5,7 @@ namespace Drupal\alshaya_spc;
 use Drupal\Component\Plugin\PluginBase;
 
 /**
- * Class AlshayaSpcPaymentMethodPluginBase.
+ * Class Alshaya Spc Payment Method Plugin Base.
  */
 abstract class AlshayaSpcPaymentMethodPluginBase extends PluginBase {
 

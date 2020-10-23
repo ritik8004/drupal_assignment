@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_knet\Knet;
 
 /**
- * Class KnetNewToolKit.
+ * Class Knet New Tool Kit.
  */
 class KnetNewToolKit extends E24PaymentPipe {
 

@@ -6,7 +6,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableRedirectResponse;
 
 /**
- * Class NonCachedRedirect.
+ * Class Non Cached Redirect.
  *
  * @package Drupal\alshaya_master\Helper
  */

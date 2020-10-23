@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm_product_position;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 
 /**
- * Class AlshayaPlpSortLabelsService.
+ * Class Alshaya Plp Sort Labels Service.
  */
 class AlshayaPlpSortLabelsService extends AlshayaPlpSortOptionsBase {
 

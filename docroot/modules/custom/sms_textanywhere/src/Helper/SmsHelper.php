@@ -9,7 +9,7 @@ use Drupal\sms\Message\SmsMessageResultInterface;
 use Drupal\sms\Entity\SmsMessage;
 
 /**
- * Class SmsHelper.
+ * Class Sms Helper.
  *
  * @package Drupal\sms_textanywhere
  */

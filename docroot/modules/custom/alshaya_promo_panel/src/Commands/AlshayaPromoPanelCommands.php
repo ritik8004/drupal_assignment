@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaPromoPanelCommands.
+ * Class Alshaya Promo Panel Commands.
  *
  * @package Drupal\alshaya_promo_panel\Commands
  */

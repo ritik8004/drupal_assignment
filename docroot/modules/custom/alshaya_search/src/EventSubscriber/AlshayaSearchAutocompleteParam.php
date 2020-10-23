@@ -8,7 +8,7 @@ use Solarium\Core\Event\Events;
 use Solarium\Core\Event\PreExecute as PreExecuteEvent;
 
 /**
- * Class AlshayaSearchAutocompleteParam.
+ * Class Alshaya Search Autocomplete Param.
  */
 class AlshayaSearchAutocompleteParam implements EventSubscriberInterface {
 

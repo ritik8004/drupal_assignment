@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Class AlshayaAcmRedirectToSpcCart.
+ * Class Alshaya Acm Redirect To SpcCart.
  */
 class AlshayaAcmRedirectToSpcCart implements EventSubscriberInterface {
 

@@ -3,15 +3,15 @@
 namespace Drupal\alshaya_options_list\Form;
 
 use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
-use Drupal\block\Entity\Block;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteBuilderInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Class AlshayaOptionsListForm.
+ * Class Alshaya Options List Form.
  */
 class AlshayaOptionsListForm extends ConfigFormBase {
 
@@ -30,17 +30,28 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   protected $routerBuilder;
 
   /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManager;
+
+  /**
    * AlshayaOptionsListForm constructor.
    *
    * @param Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya options service.
    * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
    *   The router builder service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
    */
   public function __construct(AlshayaOptionsListHelper $alshaya_options_service,
-                              RouteBuilderInterface $router_builder) {
+                              RouteBuilderInterface $router_builder,
+                              EntityTypeManagerInterface $entityTypeManager) {
     $this->alshayaOptionsService = $alshaya_options_service;
     $this->routerBuilder = $router_builder;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -49,7 +60,8 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('alshaya_options_list.alshaya_options_service'),
-      $container->get('router.builder')
+      $container->get('router.builder'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -199,7 +211,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
 
     // Remove page url from breadcrumb block.
     $url = $config->get('alshaya_options_pages.' . $key . '.url');
-    $block = Block::load('breadcrumbs');
+    $block = $this->entityTypeManager->getStorage('block')->load('breadcrumbs');
     $visibility = $block->getVisibility();
     if (isset($visibility['request_path']['pages']) && stripos($visibility['request_path']['pages'], PHP_EOL . '/' . $url)) {
       $pages = explode(PHP_EOL, $visibility['request_path']['pages']);
@@ -247,7 +259,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       $config->set($config_key . '.attributes', $attributes);
 
       // Allow breadcrumb on url.
-      $block = Block::load('breadcrumbs');
+      $block = $this->entityTypeManager->getStorage('block')->load('breadcrumbs');
       $visibility = $block->getVisibility();
       $breadcrumb_url_string = PHP_EOL . '/' . $url;
       if (isset($visibility['request_path']['pages']) && !stripos($visibility['request_path']['pages'], $breadcrumb_url_string)) {

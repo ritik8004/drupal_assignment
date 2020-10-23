@@ -26,7 +26,7 @@ use Drupal\file\Entity\File;
 use GuzzleHttp\TransferStats;
 
 /**
- * SkuAssetManager Class.
+ * Sku Asset Manager Class.
  */
 class SkuAssetManager {
 

@@ -7,7 +7,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class UpdateCartErrorEventSubscriber.
+ * Class Update Cart Error Event Subscriber.
  *
  * @package Drupal\alshaya_acm
  */

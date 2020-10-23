@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class ProductCategoryDyPageTypeEventSubscriber.
+ * Class Product Category DyPage Type EventSubscriber.
  *
  * @package Drupal\alshaya_acm_product_category\EventSubscriber
  */

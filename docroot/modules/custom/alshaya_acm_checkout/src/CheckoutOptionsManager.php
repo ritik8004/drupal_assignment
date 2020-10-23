@@ -11,7 +11,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class CheckoutOptionsManager.
+ * Class Checkout Options Manager.
  *
  * @package Drupal\alshaya_acm_checkout
  */

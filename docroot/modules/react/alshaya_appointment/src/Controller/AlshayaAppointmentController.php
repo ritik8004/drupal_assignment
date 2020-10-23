@@ -15,7 +15,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Class AlshayaAppointmentController.
+ * Class Alshaya Appointment Controller.
  *
  * @package Drupal\alshaya_appointments\Controller
  */

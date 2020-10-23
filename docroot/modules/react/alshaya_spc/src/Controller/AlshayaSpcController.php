@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Class AlshayaSpcController.
+ * Class Alshaya Spc Controller.
  */
 class AlshayaSpcController extends ControllerBase {
 

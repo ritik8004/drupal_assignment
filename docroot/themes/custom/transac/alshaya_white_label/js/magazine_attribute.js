@@ -189,7 +189,6 @@
     $('.size-tray .select2Option .list-title .selected-text').text(clickedOption.text());
     $('.select-buttons a[data-value="' + clickedOption.text() + '"]', context).addClass('picked');
 
-
     $('.content__title_wrapper').find('.size-tray-link').remove();
     var sizeTraylinkText = Drupal.t('Select Size');
     // If size is default selected.

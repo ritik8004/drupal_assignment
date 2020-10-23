@@ -1,5 +1,5 @@
-(function($, Drupal) {
-  $(window).on('load', function() {
+(function ($, Drupal) {
+  $(window).on('load', function () {
     // This is being done on "load" since only at this time we have the
     // _dyid cookie available which will be required in the controller.
     var allCookies = $.cookie();

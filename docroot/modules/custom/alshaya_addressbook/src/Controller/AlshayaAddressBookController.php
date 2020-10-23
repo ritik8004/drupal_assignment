@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * AlshayaAddressBookController class.
+ * Alshaya Address Book Controller class.
  */
 class AlshayaAddressBookController extends ProfileController {
 
@@ -106,7 +106,7 @@ class AlshayaAddressBookController extends ProfileController {
    *   A redirect back to the currency listing.
    */
   public function setDefaultAddress(RouteMatchInterface $routeMatch, $token) {
-    /* @var \Drupal\profile\Entity\Profile $profile */
+    /** @var \Drupal\profile\Entity\Profile $profile */
     $profile = $routeMatch->getParameter('profile');
 
     /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */

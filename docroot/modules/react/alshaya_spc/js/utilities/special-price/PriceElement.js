@@ -7,7 +7,9 @@ const PriceElement = ({ amount: priceAmount }) => {
   }
 
   const priceParts = { ...getAmountWithCurrency(priceAmount, false) };
-  priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{priceParts.amount}</span>);
+  const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
+
+  priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{ parseFloat(priceParts.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: currencyConfig.decimal_points }) }</span>);
   priceParts.currency = (<span key="currency" style={{ display: 'inline-block' }} className="price-currency suffix">{priceParts.currency}</span>);
 
   return (

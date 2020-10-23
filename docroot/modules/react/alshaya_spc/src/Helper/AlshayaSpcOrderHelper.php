@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class AlshayaSpcOrderHelper.
+ * Class Alshaya Spc Order Helper.
  */
 class AlshayaSpcOrderHelper {
 
@@ -302,9 +302,13 @@ class AlshayaSpcOrderHelper {
     $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);
     $skuEntity = SKU::loadFromSku($item['sku']);
-    if (($skuEntity instanceof SKUInterface) && ($node instanceof NodeInterface)) {
+    if ($skuEntity instanceof SKUInterface) {
       $data['title'] = $this->productInfoHelper->getTitle($skuEntity, 'basket');
-      $data['url'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
+
+      if ($node instanceof NodeInterface) {
+        $data['url'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
+      }
+
       $data['image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
       // Check if we can find a parent SKU for this to get proper name.
       if ($this->skuManager->getParentSkuBySku($skuEntity)) {

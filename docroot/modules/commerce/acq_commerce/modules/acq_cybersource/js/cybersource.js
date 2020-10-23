@@ -88,7 +88,6 @@
     }
   };
 
-
   Drupal.finishCybersourcePayment = function () {
     var wrapper = $('.cybersource-credit-card-input').closest('#payment_details');
 
@@ -184,7 +183,7 @@ function cybersource_form_submit_handler(form) {
   var card_expiry_date = card_expiry_date_month + '-' + card_expiry_date_year;
 
   var today = new Date();
-  var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
   if (lastDayOfMonth.getFullYear() === card_expiry_date_year && lastDayOfMonth.getMonth() > card_expiry_date_month) {
     Drupal.cybersourceShowError($('.cybersource-credit-card-exp-year-select').parent(), Drupal.t('Incorrect credit card expiration date'));

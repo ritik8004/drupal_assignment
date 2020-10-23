@@ -8,7 +8,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 
 /**
- * Class MigrateSymmetricToAsymmetric.
+ * Class Migrate Symmetric To Asymmetric.
  *
  * @package Drupal\alshaya_paragraphs\Helper
  */

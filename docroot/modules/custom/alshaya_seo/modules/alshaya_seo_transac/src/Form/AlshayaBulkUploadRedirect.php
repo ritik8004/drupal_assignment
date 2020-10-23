@@ -11,7 +11,7 @@ use Drupal\redirect\Entity\Redirect;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class AlshayaBulkUploadRedirect.
+ * Class Alshaya Bulk Upload Redirect.
  */
 class AlshayaBulkUploadRedirect extends FormBase {
 

@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class StoresFinderResource.
+ * Class Stores Finder Resource.
  *
  * @RestResource(
  *   id = "stores_finder",

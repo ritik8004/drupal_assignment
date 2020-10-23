@@ -7,7 +7,7 @@ use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class OrderPlacedEventSubscriber.
+ * Class Order Placed Event Subscriber.
  *
  * @package Drupal\alshaya_acm_checkout\EventSubscriber
  */

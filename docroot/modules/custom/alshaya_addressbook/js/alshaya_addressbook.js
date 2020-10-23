@@ -39,7 +39,7 @@
    * On addressbook ajax validation, mobile number prefix is lost
    * as its added by the JS. Here we just adding that again.
    */
-  $.fn.mobileNumberPrefixAjax = function() {
+  $.fn.mobileNumberPrefixAjax = function () {
     // Re-attaching the behaviors so that it applies the dom change again.
     Drupal.attachBehaviors(document, Drupal.settings);
   }

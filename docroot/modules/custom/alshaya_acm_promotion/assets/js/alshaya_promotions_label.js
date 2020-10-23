@@ -53,9 +53,9 @@
   Drupal.alshayaPromotions.initializeDynamicPromotions = function () {
     // Slide down the dynamic label.
     $('.promotions-dynamic-label').once('initializeDynamicPromotions').each(function () {
-      $(this).on('cart:notification:animation:complete', function() {
+      $(this).on('cart:notification:animation:complete', function () {
         if ($(window).width() > 767) {
-          $(this).slideDown('slow', function() {
+          $(this).slideDown('slow', function () {
           });
         }
         else if ($(window).width() < 768 && $('.nodetype--acq_product').length > 0) {

@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class BasketDeliverySettingsForm.
+ * Class Basket Delivery Settings Form.
  */
 class BasketDeliverySettingsForm extends ConfigFormBase {
 

@@ -19,7 +19,7 @@ use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class ProductCategoryTree.
+ * Class Product Category Tree.
  */
 class ProductCategoryTree implements ProductCategoryTreeInterface {
 
@@ -452,7 +452,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     // If /taxonomy/term/tid page.
     if ($route_name == 'entity.taxonomy_term.canonical') {
-      /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
+      /** @var \Drupal\taxonomy\TermInterface $route_parameter_value */
       $term = $this->routeMatch->getParameter('taxonomy_term');
     }
     // If it's a department page.
@@ -591,7 +591,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    */
   protected function getHighLightParagraphs($vid) {
     $query = $this->connection->select('taxonomy_term__field_main_menu_highlight', 'tmmh');
-    $query->fields('tmmh', ['entity_id', 'field_main_menu_highlight_target_id']);
+    $query->fields('tmmh', [
+      'entity_id',
+      'field_main_menu_highlight_target_id',
+    ]);
     $query->condition('tmmh.bundle', $vid);
     $highlight_paragraphs = $query->execute()->fetchAll();
     if (!empty($highlight_paragraphs)) {
@@ -617,7 +620,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected function getTermsColors($langcode, $type, $vid = NULL) {
     $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term__field_term_' . $type . '_color', 'ttbc');
-    $query->fields('ttbc', ['entity_id', 'field_term_' . $type . '_color_value']);
+    $query->fields('ttbc', [
+      'entity_id',
+      'field_term_' . $type . '_color_value',
+    ]);
     $query->condition('ttbc.langcode', $langcode);
     $query->condition('ttbc.bundle', $vid);
     return $query->execute()->fetchAllKeyed();

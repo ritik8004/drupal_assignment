@@ -204,7 +204,10 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
         $meta_title = $metatags['title']['#attributes']['content'];
         $meta_description = $metatags['description']['#attributes']['content'];
 
-        $response->addCommand(new InvokeCommand(NULL, 'updateMetaData', [$meta_title, $meta_description]));
+        $response->addCommand(new InvokeCommand(NULL, 'updateMetaData', [
+          $meta_title,
+          $meta_description,
+        ]));
       }
 
     }

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class AlshayaSpcCheckoutEventController.
+ * Class Alshaya Spc Checkout Event Controller.
  */
 class AlshayaSpcCheckoutEventController extends ControllerBase {
 
@@ -113,7 +113,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
     $cart = $request->request->get('cart');
     $skus = $request->request->get('skus');
     if (empty($action) || (empty($cart) && empty($skus))) {
-      throw new BadRequestHttpException($this->t('Missing required parameters'));
+      throw new BadRequestHttpException('Missing required parameters');
     }
 
     $response = [
@@ -126,7 +126,7 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         $cart = $request->request->get('cart');
         $payment_method = $request->get('payment_method');
         if (empty($order_id)) {
-          throw new BadRequestHttpException($this->t('Missing required parameters'));
+          throw new BadRequestHttpException('Missing required parameters');
         }
 
         // Add success message in logs.

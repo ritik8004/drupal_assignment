@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class ProductSyncResource.
+ * Class Product Sync Resource.
  *
  * @package Drupal\acq_sku\Plugin
  *
@@ -596,12 +596,16 @@ class ProductSyncResource extends ResourceBase {
 
     // Log Product sync summary for ignored ones.
     if (!empty($ignored_skus)) {
-      $this->logger->info('Ignored SKUs: @ignored_skus', ['@ignored_skus' => implode(',', $ignored_skus)]);
+      $this->logger->info('Ignored SKUs: @ignored_skus', [
+        '@ignored_skus' => implode(',', $ignored_skus),
+      ]);
     }
 
     // Log Product sync summary for failed ones.
     if (!empty($failed_skus)) {
-      $this->logger->error('Failed SKUs: @failed_skus', ['@failed_skus' => implode(',', $failed_skus)]);
+      $this->logger->error('Failed SKUs: @failed_skus', [
+        '@failed_skus' => implode(',', $failed_skus),
+      ]);
     }
 
     return (new ModifiedResourceResponse($response));

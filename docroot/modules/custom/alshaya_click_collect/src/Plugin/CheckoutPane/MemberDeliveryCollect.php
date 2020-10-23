@@ -376,7 +376,10 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
     if ($form_state->getErrors()) {
       $response = new AjaxResponse();
       $response->addCommand(new ReplaceCommand('#selected-store-elements-wrapper', $form['member_delivery_collect']['selected_store']['elements']));
-      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', ['form.multistep-checkout #selected-store-elements-wrapper', TRUE]));
+      $response->addCommand(new InvokeCommand(NULL, 'firstErrorFocus', [
+        'form.multistep-checkout #selected-store-elements-wrapper',
+        TRUE,
+      ]));
       return $response;
     }
 

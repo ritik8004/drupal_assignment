@@ -10,7 +10,7 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class UserGetStatusResource.
+ * Class User Get Status Resource.
  *
  * @RestResource(
  *   id = "user_get_status",

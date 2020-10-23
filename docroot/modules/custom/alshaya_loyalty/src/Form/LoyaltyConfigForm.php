@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Cache\Cache;
 
 /**
- * Class LoyaltyConfigForm.
+ * Class Loyalty Config Form.
  */
 class LoyaltyConfigForm extends ConfigFormBase {
 

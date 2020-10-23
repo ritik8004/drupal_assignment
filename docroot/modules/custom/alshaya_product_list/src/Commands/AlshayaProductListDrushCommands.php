@@ -10,7 +10,7 @@ use Drupal\node\Entity\Node;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaProductListDrushCommands.
+ * Class Alshaya Product List Drush Commands.
  *
  * @package Drupal\alshaya_product_list\Commands
  */

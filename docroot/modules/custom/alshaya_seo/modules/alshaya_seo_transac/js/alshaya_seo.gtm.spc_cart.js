@@ -77,7 +77,7 @@
    * @return string
    *   The recommendation list name.
    */
-  Drupal.alshayaSeoSpc.getRecommendationGtmAttributes = function(sku) {
+  Drupal.alshayaSeoSpc.getRecommendationGtmAttributes = function (sku) {
     var key = 'recommendedProduct:' + drupalSettings.path.currentLanguage;
     var relatedProductsInfo = JSON.parse(localStorage.getItem(key));
     // Cannot use Drupal.alshayaSeoSpc.gtmProduct as the method expectes
@@ -92,7 +92,7 @@
    * @return string
    *   The recommendation list name.
    */
-  Drupal.alshayaSeoSpc.getRecommendationsListName = function() {
+  Drupal.alshayaSeoSpc.getRecommendationsListName = function () {
     var gtmListName = $('body').attr('gtm-list-name');
     var label = $('.spc-post-content .spc-checkout-section-title').text();
     return (productRecommendationsSuffix + gtmListName.replace('placeholder', label)).toLowerCase();
@@ -101,9 +101,9 @@
   /**
    * Sets the postion of all recommended products in carousel at once.
    */
-  Drupal.alshayaSeoSpc.setRecommendationsPosition = function() {
+  Drupal.alshayaSeoSpc.setRecommendationsPosition = function () {
     var count = 1;
-    $('.spc-recommended-products .recommended-product').each(function() {
+    $('.spc-recommended-products .recommended-product').each(function () {
       $(this).data('list-item-position', count++);
     });
   }
@@ -129,20 +129,20 @@
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, e);
     // Process impressions on scroll for cases where the recommendations have
     // loaded but the items are not visible on screen.
-    window.addEventListener('scroll', debounce(function(scrollEvent) {
+    window.addEventListener('scroll', debounce(function (scrollEvent) {
       Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, scrollEvent);
     }, 500));
     // Process impressions when user swipes the carousel on mobile.
-    window.addEventListener('touchmove', debounce(function(touchEvent) {
+    window.addEventListener('touchmove', debounce(function (touchEvent) {
       Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, touchEvent);
     }, 500));
     // Process impressions when user is leaving the page.
-    window.addEventListener('pagehide', function(pagehideEvent) {
+    window.addEventListener('pagehide', function (pagehideEvent) {
       Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, pagehideEvent);
     });
     // Process impressions when user clicks previous button.
-    document.querySelectorAll('.spc-recommended-products .nav-prev').forEach(function(element) {
-      element.addEventListener('click', function(clickEvent) {
+    document.querySelectorAll('.spc-recommended-products .nav-prev').forEach(function (element) {
+      element.addEventListener('click', function (clickEvent) {
         Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoSpc.prepareProductImpression, $('.spc-post-content'), drupalSettings, clickEvent);
       });
     });
@@ -154,9 +154,9 @@
     });
 
     // Add product click handler.
-    document.querySelectorAll('.spc-recommended-products a').forEach(function(element, index) {
-      element.addEventListener('click', function() {
-        var listName =  Drupal.alshayaSeoSpc.getRecommendationsListName();
+    document.querySelectorAll('.spc-recommended-products a').forEach(function (element, index) {
+      element.addEventListener('click', function () {
+        var listName = Drupal.alshayaSeoSpc.getRecommendationsListName();
         // Currently the elements do not have GTM attributes. So we fetch them
         // and add them to each element and send them to be processed by the
         // product click handler.
@@ -166,7 +166,7 @@
         const position = Drupal.alshayaSeoSpc.getRecommendationsPosition(element);
         const attribute_keys = Object.keys(elementGtmAttributes);
         var i;
-        for (i=0; i<attribute_keys.length; i++) {
+        for (i = 0; i < attribute_keys.length; i++) {
           element.setAttribute('gtm-' + attribute_keys[i], elementGtmAttributes[attribute_keys[i]]);
         }
         Drupal.alshaya_seo_gtm_push_product_clicks($(element), drupalSettings.gtm.currency, listName, position);
@@ -237,7 +237,7 @@
     attach: function (context, settings) {
       var step = Drupal.alshayaSeoSpc.getStepFromContainer();
       var cart_data = Drupal.alshayaSpc.getCartData();
-      $('body[gtm-container="cart page"]').once('spc-cart-gtm-onetime').each(function() {
+      $('body[gtm-container="cart page"]').once('spc-cart-gtm-onetime').each(function () {
         if (cart_data) {
           Drupal.alshayaSeoSpc.cartGtm(cart_data, step);
         }

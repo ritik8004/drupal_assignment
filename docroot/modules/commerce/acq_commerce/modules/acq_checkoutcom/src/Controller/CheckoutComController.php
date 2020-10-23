@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CheckoutComController.
+ * Class Checkout Com Controller.
  *
  * @package Drupal\acq_checkoutcom\Controller
  */
