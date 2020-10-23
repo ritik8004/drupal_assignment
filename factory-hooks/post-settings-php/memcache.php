@@ -102,6 +102,11 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
       Memcached::OPT_COMPRESSION => TRUE,
     ];
 
+    // Disable Binary protocol for non-SASL.
+    $settings['memcache']['options'][Memcached::OPT_BINARY_PROTOCOL] = FALSE;
+    // Decrease latency.
+    $settings['memcache']['options'][Memcached::OPT_TCP_NODELAY] = TRUE;
+
     if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
       global $host_site_code;
       $settings['memcache']['key_prefix'] = $host_site_code;
