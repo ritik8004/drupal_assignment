@@ -1209,6 +1209,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
+  // Remove the ACM submit handler.
+  unset($form['#submit']);
+
   // Load SKU entity.
   $sku_entity = $sku_manager->loadSkuById((int) $form['sku_id']['#value']);
 
