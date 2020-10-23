@@ -15,9 +15,9 @@
       var controllerUrl = Drupal.url('checkoutcom/applepay/validate');
       var validationUrl = controllerUrl + '?u=' + valURL;
 
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
-        xhr.onload = function() {
+        xhr.onload = function () {
           var data = JSON.parse(this.responseText);
           resolve(data);
         };
@@ -28,12 +28,12 @@
     };
 
     this.sendChargeRequest = function (paymentData) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         $.ajax({
           url: Drupal.url('checkoutcom/applepay/save-payment'),
           type: 'POST',
           data: paymentData,
-          success: function(data, textStatus, xhr) {
+          success: function (data, textStatus, xhr) {
             if (data.status === true) {
               resolve(data.status);
             }
@@ -41,7 +41,7 @@
               reject;
             }
           },
-          error: function(xhr, textStatus, error) {
+          error: function (xhr, textStatus, error) {
             reject;
           }
         });
@@ -153,7 +153,7 @@
       };
 
       // Session cancellation
-      applePaySessionObject.oncancel = function(event) {
+      applePaySessionObject.oncancel = function (event) {
         $(document).trigger('apple_pay_cancel');
       };
 
@@ -198,7 +198,6 @@
         // Show Apple pay at once, we will hide again quickly if something
         // goes wrong.
         $('#payment_method_checkout_com_applepay').addClass('supported');
-
 
         // Do next check only if user has selected apple pay.
         if ($('#ckoApplePayButton').length > 0) {

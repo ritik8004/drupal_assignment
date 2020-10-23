@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ProductStockSyncResource.
+ * Class Product Stock Sync Resource.
  *
  * @package Drupal\acq_sku\Plugin
  *

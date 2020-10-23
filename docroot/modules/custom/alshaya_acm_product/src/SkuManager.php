@@ -43,7 +43,7 @@ use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
- * Class SkuManager.
+ * Class Sku Manager.
  *
  * @package Drupal\alshaya_acm_product
  */
@@ -822,7 +822,10 @@ class SkuManager {
    * @return array
    *   List of Promotion Nodes.
    */
-  public function getSkuPromotions(SKU $sku, array $types = ['cart', 'category']) {
+  public function getSkuPromotions(SKU $sku, array $types = [
+    'cart',
+    'category',
+  ]) {
     $skus = [$sku->getSku()];
 
     if ($sku->bundle() == 'simple') {
@@ -838,7 +841,29 @@ class SkuManager {
     $query->fields('node_field', ['entity_id']);
     $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
     $query->condition('mapping.sku', $skus, 'IN');
-    $promotion_nids = $query->execute()->fetchAllKeyed(0, 0);
+    $promotion_nids = $query->execute()->fetchCol();
+
+    if ($full_catalog_promo_nids = $this->cache->get('full_catalog_promo_nids_list')) {
+      $full_catalog_promo_nids = $full_catalog_promo_nids->data;
+    }
+    else {
+      // Fetch promotion nodes which apply to the entire catalog of products.
+      $query = $this->connection->select('node', 'n');
+      $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
+      $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
+      $query->fields('n', ['nid']);
+      $query->distinct();
+      $full_catalog_promo_nids = $query->execute()->fetchCol();
+
+      $promotion_cache_tags = array_map(function ($nid) {
+        return "node:$nid";
+      }, $full_catalog_promo_nids);
+      // Adding list cache tag considering addition/deletion of promotion nodes.
+      $promotion_cache_tags[] = 'node_type:acq_promotion';
+      $this->cache->set('full_catalog_promo_nids_list', $full_catalog_promo_nids, CacheBackendInterface::CACHE_PERMANENT, $promotion_cache_tags);
+    }
+
+    $promotion_nids = array_merge($promotion_nids, $full_catalog_promo_nids);
 
     if (!empty($promotion_nids)) {
       $promotion_nids = array_unique($promotion_nids);
@@ -3139,7 +3164,10 @@ class SkuManager {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $item->getField('price')->setValues([max($selling_prices)]);
 
-      $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
+      $selling_prices = array_unique([
+        min($selling_prices),
+        max($selling_prices),
+      ]);
       $item->getField('attr_selling_price')->setValues($selling_prices);
 
       if ($this->isPriceModeFromTo()) {
@@ -3650,6 +3678,34 @@ class SkuManager {
     }
 
     return $attributes;
+  }
+
+  /**
+   * Wrapper function get configurable values.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param array $attributes
+   *   Array of attributes containing attribute code and value.
+   *
+   * @return array
+   *   Configurable Values For Rest Apis.
+   */
+  public function getConfigurableValuesForApi(SKUInterface $sku, array $attributes = []): array {
+    if ($sku->bundle() !== 'simple') {
+      return [];
+    }
+
+    $values = $this->getConfigurableValues($sku);
+    $attr_values = array_column($attributes, 'value', 'attribute_code');
+    foreach ($values as $attribute_code => &$value) {
+      $value['attribute_code'] = $attribute_code;
+      if (isset($attr_values[str_replace('attr_', '', $attribute_code)]) && $attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
+        $value['value'] = (string) $attr_value;
+      }
+    }
+
+    return array_values($values);
   }
 
 }

@@ -329,12 +329,14 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       '#markup' => '<h3 class="my-account-title">' . $this->t('Welcome, @name', [
         '@name' => $this->userInfo->getName(),
       ]) . '</h3>',
+      '#weight' => -2,
     ];
 
     $build['my_account_mobile_title'] = [
       '#markup' => '<h3 class="my-account-mobile-title1">' . $this->t('my account') . '</h3><h4 class="my-account-mobile-title2">' . $this->t('logged in as @name', [
         '@name' => $this->userInfo->getName(),
       ]) . '</h4>',
+      '#weight' => -2,
     ];
 
     $build['my_account_links'] = [
@@ -362,7 +364,10 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $this->currentUser->id(), 'config:alshaya_user.settings']);
+    return Cache::mergeTags(parent::getCacheTags(), [
+      'user:' . $this->currentUser->id(),
+      'config:alshaya_user.settings',
+    ]);
   }
 
 }

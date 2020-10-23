@@ -50,7 +50,7 @@
    * @param step
    *   Checkout step for gtm checkout event.
    */
-  Drupal.alshayaSeoSpc.cartGtm = function(cart_data, step) {
+  Drupal.alshayaSeoSpc.cartGtm = function (cart_data, step) {
     // GTM data for SPC cart.
     if (cart_data !== undefined) {
       const cartDataLayer = {
@@ -70,7 +70,7 @@
           cartDataLayer.cartItemsFlocktory = [];
         }
 
-        Object.entries(cart_data.items).forEach(function(productItem) {
+        Object.entries(cart_data.items).forEach(function (productItem) {
           const product = productItem[1];
           Drupal.alshayaSpc.getProductData(product.sku, Drupal.alshayaSeoSpc.cartGtmCallback, {
             qty: product.qty,
@@ -88,7 +88,7 @@
    *
    * @param product
    */
-  Drupal.alshayaSeoSpc.cartGtmCallback = function(product, extraData) {
+  Drupal.alshayaSeoSpc.cartGtmCallback = function (product, extraData) {
     if (product !== undefined && product.sku !== undefined) {
       // gtmAttributes.id contains value of "getSkuForNode", which we need
       // to pass for productStyleCode.
@@ -109,7 +109,7 @@
     }
   };
 
-  Drupal.alshayaSeoSpc.loginData = function(cart_data) {
+  Drupal.alshayaSeoSpc.loginData = function (cart_data) {
     const cartLoginData = {
       language: drupalSettings.path.currentLanguage,
       country: drupalSettings.country_name,
@@ -122,11 +122,11 @@
     }
     // Copy items object.
     var items = JSON.parse(JSON.stringify(cart_data.items));
-    Object.entries(items).forEach(function(productItem) {
+    Object.entries(items).forEach(function (productItem) {
       const product = productItem[1];
       Drupal.alshayaSpc.getProductData(
         product.sku,
-        function(product, extraData) {
+        function (product, extraData) {
           delete items[product.sku];
           cartLoginData.productSKU.push(product.sku);
           // gtmAttributes.id contains value of "getSkuForNode", which we need

@@ -8,6 +8,10 @@
     padding: 1.25rem;
     display: flex;
 
+    html[lang=ar] & {
+      background-image: $aura-spc-block-bg-desktop-ar;
+    }
+
     .spc-aura-points-to-earn {
       color: $aura-normal-text;
       padding-#{$right}: 1.25rem;
@@ -22,6 +26,10 @@
       flex-direction: column;
       background-image: $aura-block-bg-mobile;
       margin: 0 1.25rem;
+
+      html[lang=ar] & {
+        background-image: $aura-block-bg-mobile-ar;
+      }
 
       .spc-aura-points-to-earn {
         text-align: center;
@@ -43,6 +51,10 @@
       align-items: center;
       justify-content: center;
       border-color: transparent;
+
+      html[lang=ar] & {
+        background-image: $aura-join-link-ar;
+      }
     }
   }
 

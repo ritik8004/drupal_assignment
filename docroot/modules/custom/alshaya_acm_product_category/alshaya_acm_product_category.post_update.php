@@ -30,7 +30,10 @@ function alshaya_acm_product_category_post_update_8032() {
 function alshaya_acm_product_category_post_update_8030() {
   // Set include in desktop and mobile to true, to make existing links visible
   // on all devices as is.
-  foreach (['field_include_in_desktop', 'field_include_in_mobile_tablet'] as $field_name) {
+  foreach ([
+    'field_include_in_desktop',
+    'field_include_in_mobile_tablet',
+  ] as $field_name) {
     $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
     $query->leftJoin("taxonomy_term__{$field_name}", 'tb', 'ttfd.tid = tb.entity_id');
     $query->fields('ttfd', ['tid', 'langcode']);

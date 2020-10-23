@@ -211,7 +211,8 @@ export const validateContactInfo = (e, validateEmail) => {
   }
 
   const mobile = e.target.elements.mobile.value.trim();
-  if (mobile.length === 0) {
+  if (mobile.length === 0
+    || mobile.match(/^[0-9]+$/) === null) {
     document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_mobile_number');
     document.getElementById('mobile-error').classList.add('error');
     isError = true;

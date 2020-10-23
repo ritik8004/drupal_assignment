@@ -26,10 +26,18 @@ alshaya_aura_react.user_points:
   requirements:
     _permission: 'access content'
 
-alshaya_aura_react.update_user_aura_status:
-  path: '/update/user-aura-status'
+alshaya_aura_react.update_user_aura_info:
+  path: '/update/user-aura-info'
   defaults:
-    _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaAuraController::updateUserAuraStatus'
+    _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaAuraController::updateUserAuraInfo'
   methods: [POST]
   requirements:
     _middleware_request_check: 'TRUE'
+
+alshaya_aura_react.aura_loyalty_benefits_config:
+  path: '/admin/config/alshaya/aura-loyalty-benefits'
+  defaults:
+    _form: '\Drupal\alshaya_aura_react\Form\AlshayaAuraLoyaltyBenefitsForm'
+    _title: 'AURA Loyalty Benefits Configuration'
+  requirements:
+    _permission: 'administer site configuration'

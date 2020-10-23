@@ -84,8 +84,8 @@ payment.payment_error:
   methods: GET
 
 loyalty_club.get_customer_points:
-    path: /get/loyalty-club/get-customer-points
-    controller: App\Controller\LoyaltyClubController::getCustomerPoints
+    path: /get/loyalty-club/get-customer-details
+    controller: App\Controller\LoyaltyCustomerController::getCustomerDetails
     methods: GET
 
 loyalty_club.get_product_points:
@@ -93,10 +93,10 @@ loyalty_club.get_product_points:
     controller: App\Controller\LoyaltyClubController::getProductPoints
     methods: POST
 
-loyalty_club.get_apc_user_details_by_email:
-    path: /get/loyalty-club/get-apc-user-details-by-email
-    controller: App\Controller\LoyaltyClubController::getApcUserDetailsByEmail
-    methods: GET
+loyalty_club.search_apc_user:
+    path: /post/loyalty-club/search-apc-user
+    controller: App\Controller\LoyaltyCustomerController::searchApcUser
+    methods: POST
 
 loyalty_club.apc_status_update:
     path: /post/loyalty-club/apc-status-update
@@ -111,4 +111,9 @@ loyalty_club.send_otp:
 loyalty_club.verify_otp:
     path: /post/loyalty-club/verify-otp
     controller: App\Controller\LoyaltyClubOtpController::verifyOtp
+    methods: POST
+
+loyalty_club.loyalty_club_sign_up:
+    path: /post/loyalty-club/sign-up
+    controller: App\Controller\LoyaltyCustomerController::loyaltyClubSignUp
     methods: POST

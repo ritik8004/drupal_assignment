@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\Event;
 use Drupal\dynamic_yield\Event\DyPageType;
 
 /**
- * Class DefaultSubscriber.
+ * Class Default Subscriber.
  */
 class DefaultSubscriber implements EventSubscriberInterface {
 

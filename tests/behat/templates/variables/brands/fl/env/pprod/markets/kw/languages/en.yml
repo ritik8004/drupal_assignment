@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'http://flkw2-pprod.factory.alshaya.com/en/'
+  url_base_uri: 'http://flkw2-pprod.factory.alshaya.com/en'
   collection_filter: ''
   sort_filter: 'sort by'
   price_filter: 'Price'
@@ -53,7 +53,7 @@ variables:
   mobile_language_class: 'ar'
   language_short: 'ar'
   city_option: ''
-  area_option: 'Kuwait City'
+
   street: 'Street A'
   building: 'Building B'
   locality: 'Block N'

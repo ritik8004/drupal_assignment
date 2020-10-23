@@ -27,7 +27,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
- * Class AlshayaAlgoliaIndexHelper.
+ * Class Alshaya Algolia Index Helper.
  *
  * @package Drupal\alshaya_search_algolia\Service
  */
@@ -268,7 +268,10 @@ class AlshayaAlgoliaIndexHelper {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $object['price'] = max($selling_prices);
 
-      $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
+      $selling_prices = array_unique([
+        min($selling_prices),
+        max($selling_prices),
+      ]);
       $object['attr_selling_price'] = $selling_prices;
 
       if ($this->skuManager->isPriceModeFromTo()) {

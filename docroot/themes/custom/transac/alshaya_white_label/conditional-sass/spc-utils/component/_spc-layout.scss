@@ -174,4 +174,10 @@
       padding-bottom: 7.8125rem;
     }
   }
+
+  .spc-main {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.9375rem;
+    }
+  }
 }

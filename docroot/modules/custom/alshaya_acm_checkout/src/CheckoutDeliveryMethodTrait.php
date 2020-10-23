@@ -6,7 +6,7 @@ use Drupal\acq_commerce\Response\NeedsRedirectException;
 use Drupal\Core\Url;
 
 /**
- * Trait CheckoutDeliveryMethodTrait.
+ * Trait Checkout Delivery Method Trait.
  *
  * @package Drupal\alshaya_acm_checkout
  *

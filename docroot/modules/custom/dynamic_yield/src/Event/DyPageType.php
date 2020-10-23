@@ -5,7 +5,7 @@ namespace Drupal\dynamic_yield\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class DyPageType.
+ * Class Dy Page Type.
  *
  * @package Drupal\dynamic_yield\Event
  */

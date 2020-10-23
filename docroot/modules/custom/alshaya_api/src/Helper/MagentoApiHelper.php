@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_api\Helper;
 
 /**
- * Class MagentoApiHelper.
+ * Class Magento Api Helper.
  *
  * Contains all reusable functions which don't require any other service.
  *

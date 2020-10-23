@@ -15,20 +15,20 @@
   }
 
   // Get markup for the cart notification.
-  Drupal.theme.cartNotificationMarkup = function(data) {
+  Drupal.theme.cartNotificationMarkup = function (data) {
     var markup = '<div class="notification">';
     markup += '<div class="col-1">';
     markup += '<img src="' + data.image + '" alt="' + data.name + '" title="' + data.name + '">';
     markup += '<span class="qty">' + Drupal.t('Qty') + ': ' + data.quantity + '</span></div>';
     markup += '<div class="col-2"><span class="name">' + data.name + '</span>';
     markup += Drupal.t('has been added to your cart.');
-    markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
+    markup += '<a href="' + data.link + '">' + data.link_text + '</a>';
     markup += '</div>';
     markup += '</div>';
     return markup;
   };
 
-  Drupal.theme.matchBackCartNotificationMarkup = function(data) {
+  Drupal.theme.matchBackCartNotificationMarkup = function (data) {
     var markup = '<div class="matchback-notification notification">';
     markup += '<div class="matchback-cart-notification-close"></div>';
     markup += '<div class="col-1">';
@@ -42,7 +42,7 @@
     markup += '<span class="qty">' + data.quantity + '</span>';
     markup += '</div>';
     markup += '<div class="matchback-prod-added-text">' + Drupal.t('has been added to your cart.') + '</div>';
-    markup += '<a href="'+ data.link +'">' + data.link_text + '</a>';
+    markup += '<a href="' + data.link + '">' + data.link_text + '</a>';
     markup += '</div>';
     markup += '</div>';
     return markup;
@@ -185,7 +185,7 @@
         }
         else {
           $('html, body').animate({
-            scrollTop: $('.header--wrapper').offset().top
+            scrollTop: 0
           }, 'slow');
 
           setTimeout(function () {
@@ -202,7 +202,7 @@
       };
 
       // On PDP scroll to first error label.
-      var scrollToErrorPDP = function() {
+      var scrollToErrorPDP = function () {
         // Check pdp layout is default one or work for tab and above view port.
         if ($('.magazine-layout').length < 1 || $(window).width() > 767) {
           // Doing this for the JS conflict.
@@ -230,7 +230,7 @@
       };
 
       // Calculate the sticky header hight.
-      var stickyHeaderHight = function() {
+      var stickyHeaderHight = function () {
         var brandingMenuHight = ($('.branding__menu').length > 0) ? $('.branding__menu').height() : 0;
         var superCategoryHight = ($('#block-supercategorymenu').length > 0) ? $('#block-supercategorymenu').height() : 0;
 
@@ -247,13 +247,13 @@
       };
 
       // Check if error element is visible.
-      var isInViewPort = function(element) {
+      var isInViewPort = function (element) {
         var stickyHeader = stickyHeaderHight();
         var elementTop = element.offset().top;
         var elementBottom = elementTop + element.outerHeight();
         var viewportTop = $(window).scrollTop() + stickyHeader;
         var viewportBottom = viewportTop + $(window).height() + stickyHeader;
-        return elementBottom  > viewportTop && elementTop < viewportBottom;
+        return elementBottom > viewportTop && elementTop < viewportBottom;
       };
 
       $.fn.cartGenericScroll = function (selector) {

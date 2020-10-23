@@ -104,9 +104,13 @@
         .non-refundable--text {
           font-family: $alshaya-thin;
           font-size: 0.875rem;
+          text-decoration: none;
 
           @include icon(infomation, before) {
             font-weight: normal;
+            position: relative;
+            margin-#{$right}: 0;
+            top: -0.125rem;
           }
         }
       }

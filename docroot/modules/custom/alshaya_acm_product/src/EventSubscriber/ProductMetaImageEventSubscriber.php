@@ -11,7 +11,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class ProductMetaImageEventSubscriber.
+ * Class Product Meta Image Event Subscriber.
  *
  * @package Drupal\alshaya_acm_product\EventSubscriber
  */

@@ -10,6 +10,10 @@
   &.badge-1 {
     background-image: $aura-hello-tier;
 
+    html[lang=ar] & {
+      background-image: $aura-hello-tier-ar;
+    }
+
     ~ .points {
       color: $_aura-hello;
     }
@@ -18,6 +22,10 @@
   &.badge-2 {
     background-image: $aura-stars-tier;
 
+    html[lang=ar] & {
+      background-image: $aura-stars-tier-ar;
+    }
+
     ~ .points {
       color: $_aura-stars;
     }
@@ -25,6 +33,10 @@
 
   &.badge-3 {
     background-image: $aura-vip-tier;
+
+    html[lang=ar] & {
+      background-image: $aura-vip-tier-ar;
+    }
 
     ~ .points {
       color: $_aura-vip;

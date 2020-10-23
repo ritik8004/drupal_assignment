@@ -78,8 +78,8 @@ class ShippingInformation extends AddressFormBase {
 
     $pane_form['address']['shipping_methods'] = [
       '#type' => 'select',
-      '#title' => t('Shipping Methods'),
-      '#empty_option' => t('Available Shipping Methods'),
+      '#title' => $this->t('Shipping Methods'),
+      '#empty_option' => $this->t('Available Shipping Methods'),
       '#default_value' => $cart->getShippingMethodAsString(),
       '#validated' => TRUE,
       '#attributes' => [

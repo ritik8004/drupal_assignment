@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://www.mothercare.com.sa/ar/'
+  url_base_uri: 'https://www.mothercare.com.sa/ar'
   language_collection_filter: 'Collection'
   language_sort_filter: 'sort by'
   language_price_filter: 'Price'

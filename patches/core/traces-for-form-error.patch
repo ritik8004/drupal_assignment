@@ -1,0 +1,55 @@
+diff --git a/core/lib/Drupal/Core/Form/FormCache.php b/core/lib/Drupal/Core/Form/FormCache.php
+index 9c931fd..d0cdb31 100644
+--- a/core/lib/Drupal/Core/Form/FormCache.php
++++ b/core/lib/Drupal/Core/Form/FormCache.php
+@@ -118,24 +118,35 @@ class FormCache implements FormCacheInterface {
+    * {@inheritdoc}
+    */
+   public function getCache($form_build_id, FormStateInterface $form_state) {
+-    if ($form = $this->keyValueExpirableFactory->get('form')->get($form_build_id)) {
+-      if ((isset($form['#cache_token']) && $this->csrfToken->validate($form['#cache_token'])) || (!isset($form['#cache_token']) && $this->currentUser->isAnonymous())) {
+-        $this->loadCachedFormState($form_build_id, $form_state);
+-
+-        // Generate a new #build_id if the cached form was rendered on a
+-        // cacheable page.
+-        $build_info = $form_state->getBuildInfo();
+-        if (!empty($build_info['immutable'])) {
+-          $form['#build_id_old'] = $form['#build_id'];
+-          $form['#build_id'] = 'form-' . Crypt::randomBytesBase64();
+-          $form['form_build_id']['#value'] = $form['#build_id'];
+-          $form['form_build_id']['#id'] = $form['#build_id'];
+-          unset($build_info['immutable']);
+-          $form_state->setBuildInfo($build_info);
++    try {
++      if ($form = $this->keyValueExpirableFactory->get('form')->get($form_build_id)) {
++        if ((isset($form['#cache_token']) && $this->csrfToken->validate($form['#cache_token'])) || (!isset($form['#cache_token']) && $this->currentUser->isAnonymous())) {
++          $this->loadCachedFormState($form_build_id, $form_state);
++
++          // Generate a new #build_id if the cached form was rendered on a
++          // cacheable page.
++          $build_info = $form_state->getBuildInfo();
++          if (!empty($build_info['immutable'])) {
++            $form['#build_id_old'] = $form['#build_id'];
++            $form['#build_id'] = 'form-' . Crypt::randomBytesBase64();
++            $form['form_build_id']['#value'] = $form['#build_id'];
++            $form['form_build_id']['#id'] = $form['#build_id'];
++            unset($build_info['immutable']);
++            $form_state->setBuildInfo($build_info);
++          }
++          return $form;
+         }
+-        return $form;
+       }
+     }
++    catch (\Exception $e) {
++      // Adding a trace for 500 errors for corrupt form ids.
++      // Check CORE-24231 for more info.
++      $this->logger->error('Error while submitting form @form_build_id due to corrupt form id, requested from @trace', [
++        '@message' => $e->getMessage(),
++        '@form_build_id' => $form_build_id,
++        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
++      ]);
++    }
+   }
+ 
+   /**

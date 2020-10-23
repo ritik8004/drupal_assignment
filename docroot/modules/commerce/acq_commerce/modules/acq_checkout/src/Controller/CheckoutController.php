@@ -10,6 +10,8 @@ use Drupal\Core\Form\FormState;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Component\Plugin\PluginManagerInterface;
 
 /**
  * Provides the checkout form page.
@@ -31,16 +33,36 @@ class CheckoutController implements ContainerInjectionInterface {
   protected $cartStorage;
 
   /**
+   * Stores the configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * ACQ Checkout Flow plugin manager object.
+   *
+   * @var \Drupal\Component\Plugin\PluginManagerInterface
+   */
+  protected $pluginManager;
+
+  /**
    * Constructs a new CheckoutController object.
    *
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    *   The form builder.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart session.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
+   *   ACQ Checkout Flow plugin manager object.
    */
-  public function __construct(FormBuilderInterface $form_builder, CartStorageInterface $cart_storage) {
+  public function __construct(FormBuilderInterface $form_builder, CartStorageInterface $cart_storage, ConfigFactoryInterface $config_factory, PluginManagerInterface $plugin_manager) {
     $this->formBuilder = $form_builder;
     $this->cartStorage = $cart_storage;
+    $this->configFactory = $config_factory;
+    $this->pluginManager = $plugin_manager;
   }
 
   /**
@@ -49,7 +71,9 @@ class CheckoutController implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('form_builder'),
-      $container->get('acq_cart.cart_storage')
+      $container->get('acq_cart.cart_storage'),
+      $container->get('config.factory'),
+      $container->get('plugin.manager.acq_checkout_flow')
     );
   }
 
@@ -65,10 +89,9 @@ class CheckoutController implements ContainerInjectionInterface {
   public function formPage(RouteMatchInterface $route_match) {
     // @TODO: Create backend configuration form for this.
     $form_state = new FormState();
-    $config = \Drupal::config('acq_checkout.settings');
+    $config = $this->configFactory->get('acq_checkout.settings');
     $checkoutFlowPlugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
-    $plugin_manager = \Drupal::service('plugin.manager.acq_checkout_flow');
-    $type = $plugin_manager->createInstance($checkoutFlowPlugin, ['validate_current_step' => TRUE]);
+    $type = $this->pluginManager->createInstance($checkoutFlowPlugin, ['validate_current_step' => TRUE]);
     return $this->formBuilder->buildForm($type, $form_state);
   }
 

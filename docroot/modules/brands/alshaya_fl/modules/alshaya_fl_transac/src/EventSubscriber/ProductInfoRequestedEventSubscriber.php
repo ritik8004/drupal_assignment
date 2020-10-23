@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class ProductInfoRequestedEventSubscriber.
+ * Contains Product Info Requested Event Subscriber methods.
  *
  * @package Drupal\alshaya_fl_transac\EventSubscriber
  */

@@ -21,7 +21,7 @@ use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
 
 /**
- * Class AlshayaApiWrapper.
+ * Class Alshaya Api Wrapper.
  */
 class AlshayaApiWrapper {
 
@@ -238,10 +238,14 @@ class AlshayaApiWrapper {
           : 0;
 
         $that->logger->info(sprintf(
-          'Finished API request %s in %.4f. Response code: %d',
+          'Finished API request %s in %.4f. Response code: %d. Method: %s. X-Cache: %s; X-Cache-Hits: %s; X-Served-By: %s;',
           $stats->getEffectiveUri(),
           $stats->getTransferTime(),
-          $code
+          $code,
+          $stats->getRequest()->getMethod(),
+          $stats->getResponse()->getHeaderLine('x-cache'),
+          $stats->getResponse()->getHeaderLine('x-cache-hits'),
+          $stats->getResponse()->getHeaderLine('x-served-by')
         ));
       };
 
@@ -381,7 +385,10 @@ class AlshayaApiWrapper {
    * @return array
    *   An array of SKUs indexed by type.
    */
-  public function getEnabledSkusFromMerchandisingReport($types = ['simple', 'configurable'], $reset = TRUE) {
+  public function getEnabledSkusFromMerchandisingReport($types = [
+    'simple',
+    'configurable',
+  ], $reset = TRUE) {
     $handle = $this->getMerchandisingReport($reset);
 
     $mskus = [];
@@ -439,7 +446,10 @@ class AlshayaApiWrapper {
         }
 
         // We only deal with simple and configurable products.
-        if (!in_array(trim(strtolower($data[$indexes['type']])), ['simple product', 'configurable product'])) {
+        if (!in_array(trim(strtolower($data[$indexes['type']])), [
+          'simple product',
+          'configurable product',
+        ])) {
           continue;
         }
 
@@ -474,7 +484,10 @@ class AlshayaApiWrapper {
    * @return array
    *   An array of SKUs indexed by type.
    */
-  public function getSkus(array $types = ['simple', 'configurable'], array $skus = []) {
+  public function getSkus(array $types = [
+    'simple',
+    'configurable',
+  ], array $skus = []) {
     $endpoint = 'products?';
 
     // Query parameters to get all enabled SKUs. We only want the SKUs.

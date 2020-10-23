@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://mckw4-pprod.factory.alshaya.com/ar/'
+  url_base_uri: 'https://mckw4-pprod.factory.alshaya.com/ar'
   language_collection_filter: 'Collection'
   language_sort_filter: 'sort by'
   language_price_filter: 'Price'
@@ -51,8 +51,6 @@ variables:
   language_order_summary: 'order summary'
   language_promo_code: 'have a promo code?'
   language_excluding_delivery: 'excluding delivery'
-  city_option: ''
-  area_option: 'Andalus'
   street: 'Street A'
   building: 'Building B'
   locality: ''

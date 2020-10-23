@@ -8,3 +8,5 @@ services:
     arguments:
       - '@current_user'
       - '@entity_type.manager'
+      - '@mobile_number.util'
+      - '@config.factory'

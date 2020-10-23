@@ -6,7 +6,7 @@ use Drupal\acq_commerce\Response\NeedsRedirectException;
 use Drupal\Core\Url;
 
 /**
- * Trait CheckoutLoginTabsTrait.
+ * Trait Checkout Login Tabs Trait.
  *
  * @package Drupal\alshaya_acm_checkout
  *

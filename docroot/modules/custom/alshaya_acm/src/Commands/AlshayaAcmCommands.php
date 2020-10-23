@@ -26,7 +26,7 @@ use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
- * Class AlshayaAcmCommands.
+ * Class Alshaya Acm Commands.
  *
  * @package Drupal\alshaya_acm\Commands
  */
@@ -321,7 +321,10 @@ class AlshayaAcmCommands extends DrushCommands {
    *
    * @aliases aaops,alshaya-acm-offline-products-sync
    */
-  public function syncProductsOffline(array $options = ['limit' => 0, 'skus' => '']) {
+  public function syncProductsOffline(array $options = [
+    'limit' => 0,
+    'skus' => '',
+  ]) {
     $brand_module = $this->configFactory->get('alshaya.installed_brand')->get('module');
 
     // Get country code.
@@ -372,7 +375,10 @@ class AlshayaAcmCommands extends DrushCommands {
       }
 
       if (empty($_alshaya_acm_products)) {
-        $this->output->writeln(dt('No @language products in @filename', ['@language' => strtolower($language->getName()), '@filename' => $path . '/data/products_' . $country_code . '_' . $langcode . '.data']));
+        $this->output->writeln(dt('No @language products in @filename', [
+          '@language' => strtolower($language->getName()),
+          '@filename' => $path . '/data/products_' . $country_code . '_' . $langcode . '.data',
+        ]));
         continue;
       }
 
@@ -698,7 +704,9 @@ class AlshayaAcmCommands extends DrushCommands {
       return;
     }
 
-    $confirm_message = dt('You are going to disable the following SKUs from Drupal: !skus', ['!skus' => implode(',', $results)]);
+    $confirm_message = dt('You are going to disable the following SKUs from Drupal: !skus', [
+      '!skus' => implode(',', $results),
+    ]);
     if (!$this->io()->confirm($confirm_message)) {
       throw new UserAbortException();
     }
@@ -736,7 +744,9 @@ class AlshayaAcmCommands extends DrushCommands {
     }
 
     if (!empty($deleted_skus)) {
-      $this->logger->info('Cleaned up following SKUs which had no children attached: @cleaned_skus', ['@clenaed_skus' => implode(',', $deleted_skus)]);
+      $this->logger->info('Cleaned up following SKUs which had no children attached: @cleaned_skus', [
+        '@clenaed_skus' => implode(',', $deleted_skus),
+      ]);
       $this->io()->success('Cleaned up following SKUs which had no children attached: ' . implode(',', $deleted_skus));
     }
   }

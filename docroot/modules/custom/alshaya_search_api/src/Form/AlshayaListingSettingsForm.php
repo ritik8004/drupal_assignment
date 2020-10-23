@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AlshayaListingSettingsForm.
+ * Class Alshaya Listing Settings Form.
  */
 class AlshayaListingSettingsForm extends ConfigFormBase {
 

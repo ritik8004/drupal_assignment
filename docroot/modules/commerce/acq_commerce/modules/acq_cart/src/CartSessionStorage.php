@@ -7,9 +7,11 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Session\AccountInterface;
 
 /**
- * Class CartSessionStorage.
+ * Class Cart Session Storage.
  *
  * @package Drupal\acq_cart
  */
@@ -30,6 +32,20 @@ class CartSessionStorage implements CartStorageInterface {
   private $apiWrapper;
 
   /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+  /**
    * Constructor.
    *
    * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
@@ -38,11 +54,17 @@ class CartSessionStorage implements CartStorageInterface {
    *   ApiWrapper object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
    */
-  public function __construct(SessionInterface $session, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(SessionInterface $session, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, RequestStack $request_stack, AccountInterface $current_user) {
     $this->session = $session;
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_cart');
+    $this->request = $request_stack->getCurrentRequest();
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -68,7 +90,7 @@ class CartSessionStorage implements CartStorageInterface {
   public function addCart(CartInterface $cart) {
     $this->session->set(self::STORAGE_KEY, $cart);
     // Update cookies cache in Drupal to use new one.
-    \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', $cart->id());
+    $this->request->cookies->set('Drupal_visitor_acq_cart_id', $cart->id());
     user_cookie_save([
       'acq_cart_id' => $cart->id(),
     ]);
@@ -112,7 +134,7 @@ class CartSessionStorage implements CartStorageInterface {
     ]);
 
     // Clear in drupal request for next calls in same page load.
-    \Drupal::request()->cookies->set('Drupal_visitor_acq_cart_id', NULL);
+    $this->request->cookies->set('Drupal_visitor_acq_cart_id', NULL);
 
     // Clear the values in session.
     $this->session->remove(self::STORAGE_KEY);
@@ -269,8 +291,8 @@ class CartSessionStorage implements CartStorageInterface {
     // @TODO: It seems this customer_id is never used by Magento.
     // We may need to edit Magento code to associate the cart if customer_id is
     // given or use the associate endpoint.
-    if (!\Drupal::currentUser()->isAnonymous()) {
-      $customer_id = \Drupal::currentUser()->getAccount()->acq_customer_id;
+    if (!$this->currentUser->isAnonymous()) {
+      $customer_id = $this->currentUser->getAccount()->acq_customer_id;
     }
 
     $cart = (object) $this->apiWrapper->createCart($customer_id);

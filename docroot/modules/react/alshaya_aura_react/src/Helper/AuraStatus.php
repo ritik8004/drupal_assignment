@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_aura_react\Helper;
 
 /**
- * Class AuraStatus.
+ * Constains all aura status constants.
  */
 final class AuraStatus {
   /**

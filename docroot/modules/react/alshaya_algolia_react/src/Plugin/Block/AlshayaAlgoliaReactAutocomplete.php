@@ -14,7 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\image\Entity\ImageStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -134,7 +133,7 @@ class AlshayaAlgoliaReactAutocomplete extends BlockBase implements ContainerFact
     $index_name = $index['algolia_index_name'] . '_' . $lang;
     $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
     if ($default_image = $this->skuImagesManager->getProductDefaultImage()) {
-      $default_image = ImageStyle::load('product_listing')->buildUrl($default_image->getFileUri());
+      $default_image = $this->entityTypeManager->getStorage('image_style')->load('product_listing')->buildUrl($default_image->getFileUri());
     }
     $currency = $this->configFactory->get('acq_commerce.currency');
     $configuration = $this->getConfiguration();

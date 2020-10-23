@@ -15,8 +15,8 @@
 
 .magv2-pdp-gallery {
   @include breakpoint($tablet) {
-    padding-top: 2rem;
-    padding-bottom: 3.75rem;
+    padding-top: 1.875rem;
+    padding-bottom: 3rem;
   }
 
   .magv2-pdp-image {
@@ -360,6 +360,21 @@ html[lang="ar"] {
       &:nth-child(2n) {
         width: calc(50% - 0.75rem);
         float: #{$right};
+      }
+    }
+  }
+}
+
+.magv2-main {
+  .magv2-pdp-gallery {
+    .magazine__gallery--container-mobile {
+      .slick-dots {
+        @include breakpoint($only-mobile) {
+          position: absolute !important;
+          bottom: 0.875rem;
+          left: 50%;
+          transform: translateX(-50%);
+        }
       }
     }
   }

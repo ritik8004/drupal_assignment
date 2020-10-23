@@ -205,7 +205,8 @@ class AlshayaOptionsListHelper {
   public function groupAlphabetically(array $options_array) {
     $return_array = [];
     foreach ($options_array as $option) {
-      $char = strtolower($option['title'][0]);
+      preg_match("/./u", $option['title'], $firstChar);
+      $char = strtolower($firstChar[0]);
       $return_array[$char][] = $option;
     }
     return $return_array;
@@ -314,6 +315,9 @@ class AlshayaOptionsListHelper {
 
     // Set the facets data to load.
     $query->setOption('search_api_facets', $facet_to_load);
+
+    // Override Algolia settings maxValuesPerFacet.
+    $query->setOption('maxValuesPerFacet', 1000);
 
     // Limit to only one result, we want only facets data.
     $query->range(0, 1);

@@ -12,7 +12,7 @@ use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AlshayaHmCommands.
+ * Class Alshaya Hm Commands.
  *
  * @package Drupal\alshaya_hm\Commands
  */

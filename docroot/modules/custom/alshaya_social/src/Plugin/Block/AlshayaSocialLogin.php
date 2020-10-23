@@ -68,7 +68,10 @@ class AlshayaSocialLogin extends BlockBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function build() {
-    if (!in_array($this->routeMatch->getRouteName(), ['user.login', 'user.register'])) {
+    if (!in_array($this->routeMatch->getRouteName(), [
+      'user.login',
+      'user.register',
+    ])) {
       return [];
     }
 

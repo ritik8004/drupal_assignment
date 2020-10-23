@@ -2,11 +2,11 @@
  * Helper function to get user's AURA Status.
  */
 function getUserAuraStatus() {
-  let loyaltyStatus = '';
+  let loyaltyStatus = 0;
   if (typeof drupalSettings.aura !== 'undefined'
-    && typeof drupalSettings.aura.user_details !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'loyaltyStatus')) {
-    loyaltyStatus = drupalSettings.aura.user_details.loyaltyStatus || '';
+    && typeof drupalSettings.aura.userDetails !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura.userDetails, 'loyaltyStatus')) {
+    loyaltyStatus = drupalSettings.aura.userDetails.loyaltyStatus || 0;
   }
 
   return loyaltyStatus;
@@ -18,9 +18,9 @@ function getUserAuraStatus() {
 function getUserAuraTier() {
   let tier = '';
   if (typeof drupalSettings.aura !== 'undefined'
-    && typeof drupalSettings.aura.user_details !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura.user_details, 'tier')) {
-    tier = drupalSettings.aura.user_details.tier || '';
+    && typeof drupalSettings.aura.userDetails !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura.userDetails, 'tier')) {
+    tier = drupalSettings.aura.userDetails.tier || '';
   }
 
   return tier;
@@ -65,10 +65,86 @@ function getUserAuraTierLabel(tierValue) {
   return tierLabels[tierValue] || '';
 }
 
+/**
+ * Helper function to get loyalty benefits content.
+ */
+function getLoyaltyBenefitsTitle() {
+  let loyaltyBenefitsTitle = {
+    title1: '',
+    title2: '',
+  };
+
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'loyaltyBenefitsTitle')) {
+    loyaltyBenefitsTitle = drupalSettings.aura.loyaltyBenefitsTitle;
+  }
+
+  return loyaltyBenefitsTitle;
+}
+
+/**
+ * Helper function to get loyalty benefits content.
+ */
+function getLoyaltyBenefitsContent() {
+  let loyaltyBenefitsContent = '';
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'loyaltyBenefitsContent')) {
+    loyaltyBenefitsContent = drupalSettings.aura.loyaltyBenefitsContent;
+  }
+
+  return loyaltyBenefitsContent;
+}
+
+/**
+ * Get User Profile info.
+ */
+function getUserProfileInfo() {
+  const { userName } = drupalSettings.userDetails;
+  const userInfo = {};
+  if (userName.length > 0) {
+    const parts = userName.split(' ');
+    userInfo.profileName = userName;
+    userInfo.avatar = `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
+  }
+
+  return userInfo;
+}
+
+/**
+ * Helper function to get aura user details.
+ */
+function getUserDetails() {
+  let loyaltyUserDetails = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'userDetails')) {
+    loyaltyUserDetails = drupalSettings.aura.userDetails;
+  }
+
+  return loyaltyUserDetails;
+}
+
+/**
+ * Helper function to get aura config.
+ */
+function getAuraConfig() {
+  let loyaltyConfig = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'config')) {
+    loyaltyConfig = drupalSettings.aura.config;
+  }
+
+  return loyaltyConfig;
+}
+
 export {
   getUserAuraStatus,
   getUserAuraTier,
   getAllAuraStatus,
   getAllAuraTier,
   getUserAuraTierLabel,
+  getLoyaltyBenefitsTitle,
+  getLoyaltyBenefitsContent,
+  getUserProfileInfo,
+  getUserDetails,
+  getAuraConfig,
 };

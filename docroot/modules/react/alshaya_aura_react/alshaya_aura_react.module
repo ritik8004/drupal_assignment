@@ -9,6 +9,7 @@ use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
 use Drupal\block\Entity\Block;
 use Drupal\alshaya_aura_react\Helper\AuraStatus;
 use Drupal\alshaya_aura_react\Helper\AuraTier;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -20,7 +21,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $aura_helper = \Drupal::service('alshaya_aura_react.aura_helper');
 
   if (!empty($user)) {
-    $settings['user_details'] = [
+    $settings['userDetails'] = [
       'id' => $uid,
       'email' => \Drupal::currentUser()->getEmail(),
       'loyaltyStatus' => $aura_helper->getUserAuraStatus(),
@@ -28,16 +29,8 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     ];
   }
 
-  $alshaya_aura_config = \Drupal::config('alshaya_aura_react.settings');
-  $settings['config'] = [
-    'appStoreLink' => $alshaya_aura_config->get('aura_app_store_link'),
-    'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
-  ];
-
   $settings['allAuraTier'] = AuraTier::ALL_AURA_TIERS;
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
-
-  $page['#attached']['drupalSettings']['aura'] = $settings;
 
   $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
   $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-global';
@@ -52,7 +45,10 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
+    $settings['config'] = $aura_helper->getAuraConfig();
   }
+
+  $page['#attached']['drupalSettings']['aura'] = $settings;
 }
 
 /**
@@ -73,16 +69,20 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
 function alshaya_aura_react_theme() {
   $theme = [
     'my_loyalty_club' => [
-      'variables' => [],
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
+    'my_accounts_aura_block' => [
+      'variables' => [
+        'strings' => [],
+      ],
     ],
     'aura_rewards_header' => [
       'variables' => [
         'learn_more_link' => '',
       ],
       'template' => 'aura-rewards-header',
-    ],
-    'aura_pending_enrollment' => [
-      'variables' => [],
     ],
     'aura_rewards_header_authenticated' => [
       'variables' => [
@@ -151,5 +151,30 @@ function alshaya_aura_react_block_view_alshaya_my_account_links_alter(&$build, $
  */
 function _alshaya_aura_react_my_account_block_pre_render(array $build) {
   unset($build['content']['my_account_title']);
+
+  $build['content']['my_account_my_aura_block_root'] = [
+    '#markup' => '<div id="my-accounts-aura-mobile"></div>',
+    '#weight' => -1,
+  ];
+
+  $build['#attributes']['class'][] = 'aura-enabled';
+
   return $build;
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_update_account_alter().
+ */
+function alshaya_aura_react_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
+  if (isset($customer['extension'])) {
+    // Update user aura status and tier in drupal if changed.
+    if (!empty($customer['extension']['apc_link'])
+      && $customer['extension']['apc_link'] !== $user->get('field_aura_loyalty_status')->getString()) {
+      $user->set('field_aura_loyalty_status', $customer['extension']['apc_link']);
+    }
+    if (!empty($customer['extension']['tier_info'])
+      && $customer['extension']['tier_info'] !== $user->get('field_aura_tier')->getString()) {
+      $user->set('field_aura_tier', $customer['extension']['tier_info']);
+    }
+  }
 }

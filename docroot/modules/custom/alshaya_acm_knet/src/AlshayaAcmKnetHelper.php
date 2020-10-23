@@ -16,9 +16,10 @@ use Drupal\Core\TempStore\SharedTempStoreFactory;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class AlshayaAcmKnetHelper.
+ * Class Alshaya Acm Knet Helper.
  *
  * @package Drupal\alshaya_acm_knet
  */
@@ -76,6 +77,13 @@ class AlshayaAcmKnetHelper extends KnetHelper {
   protected $moduleHandler;
 
   /**
+   * The RequestStack service.
+   *
+   * @var Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $requestStack;
+
+  /**
    * AlshayaAcmKnetHelper constructor.
    *
    * @param \Drupal\alshaya_knet\Helper\KnetHelper $knet_helper
@@ -98,6 +106,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
    *   Cart helper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param Symfony\Component\HttpFoundation\RequestStack $stack
+   *   The request service.
    */
   public function __construct(
     KnetHelper $knet_helper,
@@ -109,9 +119,10 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     CartStorageInterface $cart_storage,
     CheckoutHelper $checkout_helper,
     CartHelper $cart_helper,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    RequestStack $stack
   ) {
-    parent::__construct($config_factory, $temp_store_factory, $logger);
+    parent::__construct($config_factory, $temp_store_factory, $logger, $stack);
     $this->knetHelper = $knet_helper;
     $this->api = $api_wrapper;
     $this->alshayaApi = $alshaya_api;
@@ -119,6 +130,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $this->checkoutHelper = $checkout_helper;
     $this->cartHelper = $cart_helper;
     $this->moduleHandler = $module_handler;
+    $this->requestStack = $stack;
   }
 
   /**
@@ -203,6 +215,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $state_key = $response['state_key'];
     $state_data = $this->tempStore->get($state_key);
     $cartToLog = $this->cartHelper->getCleanCartToLog($cart);
+    $message_data = $this->requestStack->getCurrentRequest()->request->all();
     // Check if we have data in state available and it matches data in POST.
     if (empty($state_data)
       || $state_data['cart_id'] != $response['quote_id']
@@ -210,7 +223,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
       || $state_data['payment_id'] != $response['payment_id']
     ) {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
-        '@message' => json_encode($_POST),
+        '@message' => json_encode($message_data),
         '@state' => json_encode($state_data),
         '@cart' => $cartToLog,
       ]);
@@ -219,7 +232,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $totals = $cart['totals'];
     if ($state_data['amount'] != $totals['grand']) {
       $this->logger->error('Amount currently in cart dont match amount in state variable.<br>POST: @message<br>Cart: @cart<br>State: @state', [
-        '@message' => json_encode($_POST),
+        '@message' => json_encode($message_data),
         '@state' => json_encode($state_data),
         '@cart' => $cartToLog,
       ]);
@@ -409,7 +422,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     // Log messages always in English.
     $message = 'User either cancelled or response url returned error.';
     $message .= PHP_EOL . 'Debug info:' . PHP_EOL;
-    foreach ($_GET as $key => $value) {
+    $message_info = $this->requestStack->getCurrentRequest()->query->get();
+    foreach ($message_info as $key => $value) {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 

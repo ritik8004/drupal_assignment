@@ -19,7 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Class AlshayaConfigSubscriber.
+ * Class Alshaya Config Subscriber.
  */
 class AlshayaConfigSubscriber implements EventSubscriberInterface {
 

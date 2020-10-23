@@ -12,7 +12,7 @@ use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
 /**
- * Class AlshayaSuperCategoryCommands.
+ * Class Alshaya Super Category Commands.
  *
  * @package Drupal\alshaya_super_category\Commands
  */

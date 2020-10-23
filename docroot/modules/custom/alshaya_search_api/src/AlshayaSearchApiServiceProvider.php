@@ -8,7 +8,7 @@ use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
 
 /**
- * Class AlshayaSearchApiServiceProvider.
+ * Class Alshaya Search Api Service Provider.
  */
 class AlshayaSearchApiServiceProvider extends ServiceProviderBase implements ServiceModifierInterface {
 

@@ -1,15 +1,16 @@
 import React from 'react';
 import AppStoreSVG
   from '../../../../../../alshaya_spc/js/svg-component/app-store-svg';
+import { getAuraConfig } from '../../../../utilities/helper';
 
 const AuraMyAccountPendingFullEnrollment = () => {
   const {
     appStoreLink: appleAppStoreLink,
     googlePlayLink: googlePlayStoreLink,
-  } = drupalSettings.aura.config;
+  } = getAuraConfig();
 
   return (
-    <div className="aura-pending-full-enrollment-wrapper">
+    <div className="aura-pending-full-enrollment-wrapper fadeInUp">
       <div className="pending-full-enrollment-description">
         <div className="title">
           {Drupal.t('Congrats! You are now part of the exclusive Aura Club. Earn points as you shop, whether its online or in-store')}

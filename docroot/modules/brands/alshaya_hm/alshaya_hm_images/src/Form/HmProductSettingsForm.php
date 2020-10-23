@@ -6,7 +6,7 @@ use Drupal\alshaya_acm_product\Form\ProductSettingsForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class HmProductSettingsForm.
+ * Contains Hm Product Settings Form methods.
  *
  * @package Drupal\alshaya_hm_images\Form
  */
@@ -32,7 +32,8 @@ class HmProductSettingsForm extends ProductSettingsForm {
       '#default_value' => $this->config('alshaya_hm_images.settings')->get('base_url'),
     ];
 
-    return parent::buildForm($form, $form_state);;
+    return parent::buildForm($form, $form_state);
+    ;
   }
 
   /**

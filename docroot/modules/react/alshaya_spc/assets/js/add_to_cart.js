@@ -67,6 +67,8 @@
               'quantity': quantity,
               'cart_id': cart_id,
               'options': options,
+              // This will be useful on add to cart errors.
+              'variant_sku': variant_sku,
             };
 
             var productData = {

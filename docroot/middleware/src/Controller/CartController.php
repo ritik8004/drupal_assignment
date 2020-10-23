@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CartController.
+ * Class Cart Controller.
  */
 class CartController {
 
@@ -441,6 +441,11 @@ class CartController {
 
     if (!empty($response['shipping']['storeCode'])) {
       $response['shipping']['storeInfo'] = $this->drupal->getStoreInfo($response['shipping']['storeCode']);
+      // Set the CnC type (rnc or sts) if not already set.
+      if (empty($response['shipping']['storeInfo']['rnc_available'])
+       && !empty($response['shipping']['clickCollectType'])) {
+        $response['shipping']['storeInfo']['rnc_available'] = ($response['shipping']['clickCollectType'] == 'reserve_and_collect');
+      }
     }
     $response['payment'] = $data['payment'] ?? [];
 
@@ -516,7 +521,7 @@ class CartController {
           }
         }
 
-        $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], $action, $options);
+        $cart = $this->cart->addUpdateRemoveItem($request_content['sku'], $request_content['quantity'], $action, $options, ($request_content['variant_sku'] ?? NULL));
         break;
 
       case CartActions::CART_APPLY_COUPON:

@@ -20,7 +20,7 @@ use Drupal\node\Entity\Node;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class AcqPromotionsManager.
+ * Class Acq Promotions Manager.
  */
 class AcqPromotionsManager {
 
@@ -192,7 +192,7 @@ class AcqPromotionsManager {
 
     $nids = $query->execute();
     foreach ($nids as $nid) {
-      /* @var $node \Drupal\node\Entity\Node */
+      /** @var \Drupal\node\Entity\Node $node */
       $node = $this->nodeStorage->load($nid);
 
       if ($node instanceof Node) {
@@ -242,7 +242,7 @@ class AcqPromotionsManager {
       }
 
       // We only load the first node.
-      /* @var $node \Drupal\node\Entity\Node */
+      /** @var \Drupal\node\Entity\Node $node */
       $node = $this->nodeStorage->load(reset($nids));
       $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
       // Get the promotion with language fallback, if it did not have a
@@ -299,25 +299,26 @@ class AcqPromotionsManager {
         continue;
       }
 
-      $promotion_label_languages[$promotion_label_language] = $promotion_label['store_label'];
+      // Pass the labels in the $promotion['processed_promo_labels'] array so
+      // that it may be used in hooks.
+      $promotion_label_languages[$promotion_label_language]
+        = $promotion['processed_promo_labels'][$promotion_label_language]
+          = $promotion_label['store_label'];
     }
 
     $promotion_node->get('title')->setValue($promotion['name']);
 
     // Set the description.
-    $promotion_node->get('field_acq_promotion_description')->setValue(['value' => $promotion['description'], 'format' => 'rich_text']);
+    $promotion_node->get('field_acq_promotion_description')->setValue([
+      'value' => $promotion['description'],
+      'format' => 'rich_text',
+    ]);
 
     // Set promotion rule_id.
     $promotion_node->get('field_acq_promotion_rule_id')->setValue($promotion['rule_id']);
 
     // Set the status.
     $promotion_node->setPublished((bool) $promotion['status']);
-
-    // Store everything as serialized string in DB.
-    // Before that remove products key, as we are not using it anywhere, and
-    // that is creating unnecessary load on promotion node load.
-    unset($promotion['products']);
-    $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
 
     // Set the Promotion type.
     $promotion_node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
@@ -327,11 +328,6 @@ class AcqPromotionsManager {
 
     // Set promotion sort order.
     $promotion_node->get('field_acq_promotion_sort_order')->setValue($promotion['order']);
-
-    // Set the Promotion label.
-    if (isset($promotion_label_languages[$site_default_langcode])) {
-      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
-    }
 
     // Set promotion type to percent & discount value depending on the promotion
     // being imported.
@@ -347,6 +343,17 @@ class AcqPromotionsManager {
 
     // Invoke the alter hook to allow modules to update the node from API data.
     \Drupal::moduleHandler()->alter('acq_promotion_promotion_node', $promotion_node, $promotion);
+
+    // Store everything as serialized string in DB.
+    // Before that remove products key, as we are not using it anywhere, and
+    // that is creating unnecessary load on promotion node load.
+    unset($promotion['products']);
+    $promotion_node->get('field_acq_promotion_data')->setValue(serialize($promotion));
+
+    // Set the Promotion label.
+    if (isset($promotion_label_languages[$site_default_langcode])) {
+      $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
+    }
 
     $status = $promotion_node->save();
     // Create promotion translations based on the language codes available in

@@ -3,11 +3,11 @@
  * Attaches behaviors for the Braintree pane.
  */
 
-(function($, Drupal, braintree) {
+(function ($, Drupal, braintree) {
   'use strict';
 
   Drupal.behaviors.braintree = {
-    attach: function(context, settings) {
+    attach: function (context, settings) {
       var $form = $('#multistep-default');
       var $pane = $('#braintree_pane');
       var $nonceField = $('input[name="payment_methods[payment_details][payload_nonce]"]');
@@ -22,7 +22,7 @@
 
       braintree.client.create({
         authorization: authorizationToken,
-      }, function(err, clientInstance) {
+      }, function (err, clientInstance) {
         if (err) {
           return;
         }
@@ -69,17 +69,17 @@
               placeholder: '10 / 2019'
             }
           }
-        }, function(err, hostedFieldsInstance) {
+        }, function (err, hostedFieldsInstance) {
           if (err) {
             return;
           }
 
-          hostedFieldsInstance.on('empty', function(event) {
+          hostedFieldsInstance.on('empty', function (event) {
             $cardImage.removeClass();
             $pane.removeClass();
           });
 
-          hostedFieldsInstance.on('cardTypeChange', function(event) {
+          hostedFieldsInstance.on('cardTypeChange', function (event) {
             // Change card bg depending on card type.
             if (!event.cards.length) {
               hostedFieldsInstance.setPlaceholder('cvv', '123');
@@ -95,10 +95,10 @@
             }
           });
 
-          submit.addEventListener('click', function(event) {
+          submit.addEventListener('click', function (event) {
             event.preventDefault();
 
-            hostedFieldsInstance.tokenize(function(err, payload) {
+            hostedFieldsInstance.tokenize(function (err, payload) {
               if (err) {
                 // @TODO: Add front-end error messages if this fails.
                 return;

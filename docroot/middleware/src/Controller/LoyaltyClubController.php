@@ -80,45 +80,6 @@ class LoyaltyClubController {
   }
 
   /**
-   * Returns the loyalty points related data for the current user.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   The loyalty points related data for the current user or error message.
-   */
-  public function getCustomerPoints() {
-    $customer_id = $this->drupal->getSessionCustomerInfo()['customer_id'];
-
-    if (empty($customer_id)) {
-      $this->logger->error('Error while trying to fetch loyalty points for customer. No customer available in session.');
-      return new JsonResponse($this->utility->getErrorResponse('No user in session', Response::HTTP_NOT_FOUND));
-    }
-
-    try {
-      $endpoint = sprintf('/customers/apc-points-balance/%s', $customer_id);
-
-      // @TODO: Update this when we have API ready.
-      // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
-      return new JsonResponse([
-        'points' => '20000',
-        'expiredPoints' => '100',
-        'expiredPointsDate' => '2021-06-05',
-      ]);
-
-      return new JsonResponse([
-        'points' => $response['apcPoints'],
-        'expiredPoints' => $response['apcExpiredPoints'],
-        'expiredPointsDate' => $response['apcExpiredPointsDate'],
-      ]);
-    }
-    catch (\Exception $e) {
-      $this->logger->notice('Error while trying to fetch loyalty points for user with customer id @customer_id.', [
-        '@customer_id' => $customer_id,
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
-    }
-  }
-
-  /**
    * Returns the loyalty points related data for a product.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -158,34 +119,6 @@ class LoyaltyClubController {
   }
 
   /**
-   * Get APC user details by email.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Return card number of the user.
-   */
-  public function getApcUserDetailsByEmail() {
-    try {
-      // Get user email from session.
-      $user = $this->drupal->getSessionCustomerInfo();
-      $endpoint = sprintf('/customers/apc-search/email/%s', $user['email']);
-
-      // @TODO: Remove the hardcoded value when MDC API is ready.
-      // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
-      $responseData = [
-        'apcCard' => '6362544000099511',
-      ];
-      return new JsonResponse($responseData);
-    }
-    catch (\Exception $e) {
-      $this->logger->notice('Error while trying to fetch APC user details for user with email address @email. Message: @message', [
-        '@email' => $user['email'],
-        '@message' => $e->getMessage(),
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
-    }
-  }
-
-  /**
    * Update User's AURA Status.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -195,11 +128,19 @@ class LoyaltyClubController {
     $request_content = json_decode($request->getContent(), TRUE);
     $uid = $request_content['uid'];
     $aura_status = $request_content['apcLinkStatus'];
+    $data = [
+      'statusUpdate' => [
+        'apcIdentifierId' => $request_content['apcIdentifierId'],
+        'link' => $request_content['link'],
+      ],
+    ];
 
-    // Check if aura status in request is empty.
-    if (empty($aura_status)) {
-      $this->logger->error('Error while trying to update user AURA Status. AURA Status in request is empty.');
-      return new JsonResponse($this->utility->getErrorResponse('AURA Status in request is empty.', Response::HTTP_NOT_FOUND));
+    // Check if required data is present in request.
+    if (empty($data['statusUpdate']['apcIdentifierId']) || empty($data['statusUpdate']['link'])) {
+      $this->logger->error('Error while trying to update user AURA Status. AURA Card number and Link value is required. Data: @request_data', [
+        '@request_data' => json_encode($data),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('AURA Card number and Link value is required.', Response::HTTP_NOT_FOUND));
     }
 
     try {
@@ -223,37 +164,40 @@ class LoyaltyClubController {
         return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
       }
 
-      $data = [
-        'customerId' => $user['customer_id'],
-        'apcLinkStatus' => $aura_status,
-      ];
+      $data['statusUpdate']['customerId'] = $user['customer_id'];
       $url = 'customers/apc-status-update';
+      $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
 
-      // @TODO: Update this when MDC API is ready.
-      // $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
       // On API success, update the user AURA Status in Drupal.
-      $updated = $this->drupal->updateUserAuraStatus($uid, $aura_status);
+      if ($response) {
+        $auraData = [
+          'uid' => $uid,
+          'apcLinkStatus' => $aura_status,
+        ];
+        $updated = $this->drupal->updateUserAuraInfo($auraData);;
 
-      // Check if user aura status was updated successfully in drupal.
-      if (!$updated) {
-        $message = 'Error while trying to update user AURA Status field in Drupal.';
-        $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
-          '@uid' => $uid,
-          '@aura_status' => $aura_status,
-          '@customer_id' => $user['customer_id'],
-        ]);
-        return new JsonResponse($this->utility->getErrorResponse($message, 500));
+        // Check if user aura status was updated successfully in drupal.
+        if (!$updated) {
+          $message = 'Error while trying to update user AURA Status field in Drupal.';
+          $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
+            '@uid' => $uid,
+            '@aura_status' => $aura_status,
+            '@customer_id' => $user['customer_id'],
+          ]);
+          return new JsonResponse($this->utility->getErrorResponse($message, 500));
+        }
       }
 
-      $response = [
-        'status' => TRUE,
+      $responseData = [
+        'status' => $response,
       ];
 
-      return new JsonResponse($response);
+      return new JsonResponse($responseData);
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to update AURA Status for user with customer id @customer_id. Message: @message', [
+      $this->logger->notice('Error while trying to update AURA Status for user with customer id @customer_id. Request Data: @request_data. Message: @message', [
         '@customer_id' => $user['customer_id'],
+        '@request_data' => json_decode($data),
         '@message' => $e->getMessage(),
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));

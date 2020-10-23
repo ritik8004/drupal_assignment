@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class PromotionProductListResource.
+ * Class Promotion Product List Resource.
  *
  * @RestResource(
  *   id = "promotion_product_list",
@@ -209,7 +209,7 @@ class PromotionProductListResource extends ResourceBase {
    */
   public function prepareAndExecuteQuery(int $nid) {
     $index = Index::load(self::SEARCH_API_INDEX_ID);
-    /* @var \Drupal\search_api\Query\QueryInterface $query */
+    /** @var \Drupal\search_api\Query\QueryInterface $query */
     $query = $index->query();
 
     // Change the parse mode for the search.

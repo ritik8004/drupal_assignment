@@ -2,9 +2,9 @@
   Drupal.behaviors.alshaya_options_list_filter = {
     attach: function (context, settings) {
       $('.attribute-option-list-shop-by').each(function () {
-        $(this).find('input').on("keyup", function() {
+        $(this).find('input').on("keyup", function () {
           var value = $(this).val().toLowerCase();
-          $(this).parents('.attribute-option-list-shop-by').find('.attribute-filter-name-list .title').filter(function() {
+          $(this).parents('.attribute-option-list-shop-by').find('.attribute-filter-name-list .title').filter(function () {
             var parent = $(this).parents('li.level-1');
             var noResults = $('.attribute-filter-name-list.no-result-container');
             // By default, show parents and hide no results.

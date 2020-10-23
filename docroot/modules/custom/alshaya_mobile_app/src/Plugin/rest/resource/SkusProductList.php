@@ -259,8 +259,14 @@ class SkusProductList extends ResourceBase {
       'click_and_collect' => [],
     ];
     $data['flags'] = [];
-    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
-    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), alshaya_acm_product_get_flags_status($sku)], TRUE);
+    $data['delivery_options'] = NestedArray::mergeDeepArray([
+      $this->getDeliveryOptionsStatus($sku),
+      $data['delivery_options'],
+    ], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([
+      alshaya_acm_product_get_flags_config(),
+      alshaya_acm_product_get_flags_status($sku),
+    ], TRUE);
 
     $media = $this->skuImagesManager->getProductMedia($sku, 'search');
     $data['images'] = [];
@@ -279,7 +285,7 @@ class SkusProductList extends ResourceBase {
         'text' => $promo_label,
       ];
     }
-    $data['configurable_values'] = $this->getConfigurableValues($sku);
+    $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
     $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
     $this->moduleHandler->alter('alshaya_mobile_app_skus_product_list_data', $data, $sku);
@@ -330,34 +336,6 @@ class SkusProductList extends ResourceBase {
       }
     }
     return $promotions;
-  }
-
-  /**
-   * Wrapper function get configurable values.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param array $attributes
-   *   Array of attributes containing attribute code and value.
-   *
-   * @return array
-   *   Configurable Values.
-   */
-  private function getConfigurableValues(SKUInterface $sku, array $attributes = []): array {
-    if ($sku->bundle() !== 'simple') {
-      return [];
-    }
-
-    $values = $this->skuManager->getConfigurableValues($sku);
-    $attr_values = array_column($attributes, 'value', 'attribute_code');
-    foreach ($values as $attribute_code => &$value) {
-      $value['attribute_code'] = $attribute_code;
-      if ($attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
-        $value['value'] = (string) $attr_value;
-      }
-    }
-
-    return array_values($values);
   }
 
 }

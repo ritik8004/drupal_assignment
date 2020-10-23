@@ -11,3 +11,20 @@
     }
   }
 }
+
+#my-accounts-aura-mobile {
+  @include breakpoint($tablet) {
+    display: none;
+  }
+
+  &:not(:empty) {
+    padding: 1.25rem 0;
+    border-top: 1px solid $primary_border;
+  }
+}
+
+#my-accounts-aura {
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+}

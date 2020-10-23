@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class ParagraphsCustomConfigForm.
+ * Class Paragraphs Custom Config Form.
  */
 class ParagraphsCustomConfigForm extends ConfigFormBase {
 

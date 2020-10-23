@@ -99,6 +99,37 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
   if (!empty($promotion['free_gift_products'])) {
     $node->get('field_free_gift_skus')->setValue($promotion['free_gift_products']);
   }
+
+  $product_queue_utility = \Drupal::service('alshaya_acm_product.product_queue_utility');
+  $is_full_catalog_promotion = empty($promotion['products'])
+    && empty($promotion['action_condition']['conditions'])
+    && empty($promotion['condition']['conditions']);
+  $is_originally_full_catalog_promotion = $node->isNew() ? FALSE : (bool) $node->get('field_acq_promotion_full_catalog')->getString();
+
+  if ($is_originally_full_catalog_promotion !== $is_full_catalog_promotion) {
+    $product_queue_utility->queueAllProducts();
+    if ($is_full_catalog_promotion) {
+      $node->get('field_acq_promotion_full_catalog')->setValue(TRUE);
+    }
+    else {
+      $node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
+    }
+  }
+  elseif ($is_full_catalog_promotion) {
+    // Queue products when promotion label changes for full catalog promotions.
+    foreach ($node->getTranslationLanguages() as $langcode => $language) {
+      $temp_node = ($node->language()->getId() != $langcode)
+        ? $node->getTranslation($langcode)
+        : $node;
+
+      if ($temp_node->get('field_acq_promotion_label')->getString() !== $promotion['processed_promo_labels'][$language->getId()]) {
+        $product_queue_utility->queueAllProducts();
+        // Since all products are already queued, we do not need to apply
+        // further checks.
+        break;
+      }
+    }
+  }
 }
 
 /**
@@ -387,4 +418,16 @@ function alshaya_acm_promotion_alshaya_acm_product_light_product_data_alter(SKU 
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
   $data['freeGiftPromotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift');
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function alshaya_acm_promotion_entity_delete(EntityInterface $entity) {
+  // Queue all products for reindexation when a promotion node applying to
+  // entire catalog is deleted.
+  if (($entity->bundle() === 'acq_promotion')
+    && ($entity->get('field_acq_promotion_full_catalog')->getString())) {
+    \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+  }
 }
