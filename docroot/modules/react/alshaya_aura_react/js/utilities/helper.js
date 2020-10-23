@@ -6,7 +6,9 @@ function getUserAuraStatus() {
   if (typeof drupalSettings.aura !== 'undefined'
     && typeof drupalSettings.aura.userDetails !== 'undefined'
     && ({}).hasOwnProperty.call(drupalSettings.aura.userDetails, 'loyaltyStatus')) {
-    loyaltyStatus = drupalSettings.aura.userDetails.loyaltyStatus || 0;
+    loyaltyStatus = drupalSettings.aura.userDetails.loyaltyStatus
+      ? parseInt(drupalSettings.aura.userDetails.loyaltyStatus, 10)
+      : 0;
   }
 
   return loyaltyStatus;
