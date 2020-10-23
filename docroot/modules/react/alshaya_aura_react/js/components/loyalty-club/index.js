@@ -32,7 +32,9 @@ class LoyaltyClub extends React.Component {
       pointsOnHold,
     } = this.state;
 
-    if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+    const loyaltyStatusInt = parseInt(loyaltyStatus, 10);
+
+    if (loyaltyStatusInt === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
       this.setState({
         wait: false,
       });
@@ -46,6 +48,7 @@ class LoyaltyClub extends React.Component {
       apiData.then((result) => {
         if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
+            wait: false,
             loyaltyStatus: result.data.auraStatus || loyaltyStatus,
             tier: result.data.tier || tier,
             points: result.data.auraPoints || points,
@@ -55,9 +58,6 @@ class LoyaltyClub extends React.Component {
             pointsOnHold: result.data.auraOnHoldPoints || pointsOnHold,
           });
         }
-        this.setState({
-          wait: false,
-        });
       });
     }
   }
