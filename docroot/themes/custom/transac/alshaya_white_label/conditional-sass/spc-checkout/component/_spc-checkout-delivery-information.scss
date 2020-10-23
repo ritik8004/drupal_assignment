@@ -80,4 +80,16 @@
       }
     }
   }
+
+  #delivery-information-error {
+    font-size: 0.75rem;
+    color: $primary_input_inline_error;
+    padding-top: 0.3125rem;
+    display: block;
+    margin: 0;
+
+    @include breakpoint($only-mobile) {
+      margin: 0 0.625rem;
+    }
+  }
 }

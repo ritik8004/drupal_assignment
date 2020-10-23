@@ -1,4 +1,4 @@
-@javascript @guest @cnc @madaPayment @clickCollect @bbwaeprod @vsaeprod @vsaepprod @vssapprod @bbwaepprod @flaeprod @flaepprod @hmaeprod @hmaepprod @vssaprod @vssapprod @hmsaprod @hmsapprod @flsaprod @flsapprod
+@javascript @guest @cnc @madaPayment @clickCollect @vssapprod @bbwsapprod @hmsapprod @flsaprod @vssaprod @bbwsaprod @hmsaprod @flsaprod
 Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest Users
 
   Background:

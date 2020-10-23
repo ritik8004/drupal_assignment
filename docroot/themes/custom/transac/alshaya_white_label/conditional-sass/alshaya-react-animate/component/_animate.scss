@@ -88,4 +88,23 @@ body:not(.ie) {
       transform: translateX(12px);
     }
   }
+
+  .fadeOutVertical {
+    animation-name: fadeOutVertical;
+    animation-duration: 0.3s;
+    animation-fill-mode: backwards;
+  }
+
+  @keyframes fadeOutVertical {
+    0% {
+      opacity: 1;
+      height: auto;
+    }
+
+    to {
+      opacity: 0;
+      height: auto;
+      transform: translate3d(0, -100%, 0);
+    }
+  }
 }

@@ -5,7 +5,7 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  var browserFacetUrl = window.location.pathname;
+  var browserFacetUrl = drupalSettings.alshaya_taxonomy_term_path;
   var setTimeoutConst = null;
 
   Drupal.behaviors.alshayaSearch = {

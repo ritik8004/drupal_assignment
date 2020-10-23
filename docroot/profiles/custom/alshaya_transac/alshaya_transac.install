@@ -16,6 +16,18 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * [5.11.0]Updating the trigger field value in back_to_top settings
+ * to make it visible after the specified value.
+ */
+function alshaya_transac_update_8133() {
+  \Drupal::configFactory()->getEditable('back_to_top.settings')
+    ->set('back_to_top_button_trigger', 650)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.8.0]Installs alshaya_acm_dashboard module if it is not enabled.
  * Installs alshaya_dynamic_yield module for sites which have
  * dynamic_yield enabled.
@@ -901,6 +913,11 @@ function alshaya_transac_install() {
   \Drupal::configFactory()->getEditable('acq_sku.settings')
     ->set('stock_mode', Settings::get('stock_mode'))
     ->save();
+
+  // Set trigger field value in back_to_top settings.
+  \Drupal::configFactory()->getEditable('back_to_top.settings')
+  ->set('back_to_top_button_trigger', 650)
+  ->save();
 }
 
 /**
