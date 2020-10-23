@@ -9,7 +9,7 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Component\Serialization\Json;
 
 /**
- * Class AlshayaAcmCheckoutComAPIHelper.
+ * Api helper for checkout.com upapi.
  *
  * @package Drupal\alshaya_acm_checkoutcom\Helper
  */

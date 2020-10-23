@@ -7,7 +7,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaAcmCheckoutComCommands.
+ * Provides commands for checkout.com upapi.
  *
  * @package Drupal\alshaya_acm_checkoutcom\Commands
  */
