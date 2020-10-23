@@ -19,7 +19,7 @@ class AlshayaAcmCheckoutComAPIHelper {
   /**
    * Config cache expiry for checkout.com upapi (1hr).
    */
-  const CHECKOUTCOM_UPAPI_CONFIG_EXPIRE = 3600;
+  const CHECKOUTCOM_UPAPI_CONFIG_EXPIRY = 3600;
 
   /**
    * Api wrapper.
@@ -111,7 +111,7 @@ class AlshayaAcmCheckoutComAPIHelper {
       if (!empty($configs)) {
         $this->cache->set($cache_key,
           $configs,
-          $this->time->getRequestTime() + self::CHECKOUTCOM_UPAPI_CONFIG_EXPIRE
+          $this->time->getRequestTime() + self::CHECKOUTCOM_UPAPI_CONFIG_EXPIRY
         );
       }
     }
