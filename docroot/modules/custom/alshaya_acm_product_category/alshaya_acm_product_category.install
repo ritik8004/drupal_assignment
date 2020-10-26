@@ -16,15 +16,18 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
- * Create new field (Shop as prefix) for acq_product_category taxonomy.
+ * Create new field (remove shop prefix and remove name from breadcrumb)
+ * for acq_product_category taxonomy.
  */
 function alshaya_acm_product_category_update_8044() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
   $fields = [
-    'field.storage.taxonomy_term.field_remove_shop_as_prefix',
-    'field.field.taxonomy_term.acq_product_category.field_remove_shop_as_prefix',
+    'field.storage.taxonomy_term.field_remove_term_in_breadcrumb',
+    'field.field.taxonomy_term.acq_product_category.field_remove_term_in_breadcrumb',
+    'field.storage.taxonomy_term.field_remove_shop_prefix',
+    'field.field.taxonomy_term.acq_product_category.field_remove_shop_prefix',
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
     'core.entity_view_display.taxonomy_term.acq_product_category.default',
   ];

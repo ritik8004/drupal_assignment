@@ -7,8 +7,11 @@
 
 use Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter\SkuGalleryFormatter;
 use Drupal\block\Entity\Block;
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -482,8 +485,54 @@ function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $conte
     return;
   }
 
-  // For all the category terms we want shop- prefix for L1 only.
-  $alias = '/shop-' . ltrim($alias, '/');
+  $term_id = explode('/', $context['source']);
+
+  if (!empty($term = Term::load($term_id[3])) && $term instanceof TermInterface) {
+    // Remove shop- as prefix from url if true.
+    $is_remove_shop_prefix = $term->get('field_remove_shop_prefix')->getString();
+    if ($is_remove_shop_prefix) {
+      if (strpos($alias, 'shop-') !== false) {
+        $alias = str_replace('shop-', '', $alias);
+      }
+      return;
+    }
+    // For all the category terms we want shop- prefix for L1 only.
+    $alias = '/shop-' . ltrim($alias, '/');
+  }
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ */
+function alshaya_acm_product_category_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
+  // Changing breadcrumb for category terms.
+  $breadcrumb_links =[];
+  if ($route_match->getRouteName() == 'entity.taxonomy_term.canonical'
+     && $route_match->getParameter('taxonomy_term')->bundle() == 'acq_product_category') {
+
+    $breadcrumb_links[] = Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>');
+    $taxonomy_term = $route_match->getParameter('taxonomy_term');
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    // Get all parents of category.
+    $parents = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($taxonomy_term->id());
+    $category_links = [];
+    foreach ($parents as $term) {
+      $remove_term_from_breadcrumb = $term->get('field_remove_term_in_breadcrumb')->getString();
+      if (!$remove_term_from_breadcrumb) {
+        $term = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : NULL;
+        $category_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
+      }
+    }
+    if (!empty($category_links)) {
+      $breadcrumb_links = array_merge($breadcrumb_links, array_reverse($category_links));
+      // Setting breadcrumb links for category term pages.
+      $breadcrumb = new Breadcrumb();
+      // This breadcrumb builder is based on a route parameter, and hence it
+      // depends on the 'route' cache context.
+      $breadcrumb->addCacheContexts(['route']);
+      $breadcrumb->setLinks($breadcrumb_links);
+    }
+  }
 }
 
 /**
