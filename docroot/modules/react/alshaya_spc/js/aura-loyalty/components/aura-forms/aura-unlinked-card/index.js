@@ -36,9 +36,8 @@ class AuraFormUnlinkedCard extends React.Component {
           </button>
         </div>
         <div className="no-link-message">
-          {Drupal.t('Dont have one?')}
           <a href="#" onClick={() => this.notYou()}>
-            {Drupal.t('Sign up now')}
+            {Drupal.t('Not you?')}
           </a>
         </div>
         <div className="spc-aura-link-api-response-message" />

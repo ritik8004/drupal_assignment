@@ -176,6 +176,7 @@ $_aura_account_txt: #31281b;
 $_aura_status_hold: #ff7600;
 $_aura_status_credit: #1da545;
 $_aura_status_debit: #ff3030;
+$_aura_dark_purple: #a3217f;
 
 // Aura Gradients.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -1607,9 +1608,10 @@ $aura-spc-block-bg-desktop: $aura-gradient-1;
 $aura-spc-block-bg-desktop-ar: $aura-gradient-1-ar;
 $aura-block-bg-mobile: $aura-gradient-2;
 $aura-block-bg-mobile-ar: $aura-gradient-2-ar;
-$aura-normal-text: $purple-glory;
-$aura-highlight: $extreme-blush;
+$aura-normal-text: $night-blue;
+$aura-highlight: $aura-purpleTwo;
 $aura-join-link: $aura-gradient-3;
+$aura-join-link-text: $_aura_dark_purple;
 $aura-join-link-ar: $aura-gradient-3-ar;
 $title-blue: $aura-blue;
 $title-pink: $extreme-blush;
@@ -1645,6 +1647,8 @@ $aura-spc-response-message: $_spc-radio-filled;
 $aura-spc-redeem-separator: $darkish-purple;
 $aura-spc-button-text: $darkish-purple;
 $aura-spc-button-bg: $white-five;
+$aura-spc-cart-unlinked-highlight: $aura-purpleTwo;
+$aura-spc-cart-unlinked-desc: $night-blue;
 
 // Aura My Account.
 $aura-loyalty-club-title-1: $aura-blue;

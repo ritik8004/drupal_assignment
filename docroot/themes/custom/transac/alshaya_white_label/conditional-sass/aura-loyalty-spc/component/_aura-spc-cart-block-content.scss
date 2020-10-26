@@ -1,6 +1,7 @@
 .spc-aura-cart-rewards-block {
   position: relative;
   margin-bottom: 2.5rem;
+  font-family: $aura-regular;
 
   .block-content.guest-user {
     background-image: $aura-spc-block-bg-desktop;
@@ -51,6 +52,11 @@
       align-items: center;
       justify-content: center;
       border-color: transparent;
+      cursor: pointer;
+      font-family: $aura-bold;
+      letter-spacing: 0.71px;
+      font-size: 1rem;
+      color: $aura-join-link-text;
 
       html[lang=ar] & {
         background-image: $aura-join-link-ar;
@@ -64,9 +70,11 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 1.5rem;
+      font-family: $aura-regular;
 
       .spc-aura-highlight {
         color: $aura-cart-points;
+        font-family: $aura-bold;
       }
 
       > span:first-child {
@@ -95,10 +103,11 @@
     .spc-aura-points-to-earn {
       margin-bottom: 1.25rem;
       display: block;
+      font-family: $aura-regular;
 
       .spc-aura-highlight {
         color: #772583;
-        font-family: $alshaya-bold;
+        font-family: $aura-bold;
       }
     }
 
@@ -157,7 +166,7 @@
     .no-link-message {
       b,
       a {
-        color: #772583;
+        color: $aura-spc-cart-unlinked-highlight;
       }
 
       a {
@@ -167,9 +176,12 @@
     }
 
     .description {
+      font-family: $aura-regular;
       margin-bottom: 1.25rem;
+      color: $aura-spc-cart-unlinked-desc;
 
       b {
+        font-family: $aura-bold;
         display: block;
       }
     }

@@ -44,7 +44,7 @@ class AuraCartRewards extends React.Component {
         <SectionTitle>{sectionTitle}</SectionTitle>
         {/* Guest */}
         {/* @todo: Update condition. */}
-        <ConditionalView condition={uid < -1}>
+        <ConditionalView condition={uid === 0}>
           <div className="block-content guest-user">
             <PointsToEarnMessage points={points} type="guest-no-card" />
             <div className="actions">
@@ -61,7 +61,7 @@ class AuraCartRewards extends React.Component {
         </ConditionalView>
         {/* Registered with Linked Loyalty Card */}
         {/* @todo: Update condition. */}
-        <ConditionalView condition={uid > 10}>
+        <ConditionalView condition={uid > 0}>
           <div className="block-content registered-user-linked">
             <PointsToEarnMessage points={points} type="register-linked" />
             <div className="actions">
@@ -72,7 +72,7 @@ class AuraCartRewards extends React.Component {
         </ConditionalView>
         {/* Registered with Linked Loyalty Card - Pending Enrollment */}
         {/* @todo: Update condition. */}
-        <ConditionalView condition={uid > 110}>
+        <ConditionalView condition={uid > 1}>
           <div className="block-content registered-user-linked-pending-enrollment">
             <PointsToEarnMessage points={points} type="register-linked-pending" />
             <div className="actions">
@@ -82,7 +82,7 @@ class AuraCartRewards extends React.Component {
         </ConditionalView>
         {/* Registered with Unlinked Loyalty Card */}
         {/* @todo: Update condition. */}
-        <ConditionalView condition={uid === 0}>
+        <ConditionalView condition={uid > 1}>
           <div className="block-content registered-user-unlinked-card">
             <PointsToEarnMessage points={points} type="register-unlinked" />
             <div className="actions">

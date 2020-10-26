@@ -3,6 +3,11 @@
   background: $aura-promotion-item-bg;
   border-radius: 0.625rem;
   color: $aura-promotion-item-txt;
+  font-family: $aura-regular;
+
+  b {
+    font-family: $aura-bold;
+  }
 
   html[lang=ar] & {
     background: $aura-promotion-item-bg-ar;
