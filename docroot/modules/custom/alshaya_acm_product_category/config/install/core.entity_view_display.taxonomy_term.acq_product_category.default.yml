@@ -31,6 +31,7 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_override_target_link
   - field.field.taxonomy_term.acq_product_category.field_target_link
   - field.field.taxonomy_term.acq_product_category.field_category_google
+  - field.field.taxonomy_term.acq_product_category.field_shop_as_prefix
   module:
   - metatag
 id: taxonomy_term.acq_product_category.default
@@ -95,5 +96,6 @@ hidden:
   field_mobile_plp_video_links: true
   field_group_by_sub_categories: true
   field_select_sub_categories_plp: true
+  field_shop_as_prefix: true
   field_plp_group_category_img: true
   field_plp_group_category_desc: true

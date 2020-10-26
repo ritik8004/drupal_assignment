@@ -11,7 +11,10 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\taxonomy\Entity\Term;
 use Drupal\Core\Link;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -149,6 +152,7 @@ function _alshaya_bp_transac_get_product_description($sku_entity) {
  */
 function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInterface $route_match, array $context) {
   // Changing breadcrumb for advance pages.
+  $breadcrumb_links = [];
   if ($route_match->getRouteName() == 'entity.node.canonical'
       && $route_match->getParameter('node')->bundle() == 'advanced_page') {
     $breadcrumb_links[] = Link::createFromRoute(t('Home', [], ['context' => 'breadcrumb']), '<front>');
@@ -187,15 +191,16 @@ function alshaya_bp_transac_system_breadcrumb_alter(Breadcrumb &$breadcrumb, Rou
     // Get all parents of category.
     $tid = $taxonomy_term->id();
     $parents = \Drupal::service('entity_type.manager')->getStorage("taxonomy_term")->loadAllParents($tid);
-
-    // Excluding L1 category term from breadcrumb link.
-    // Current structure for breacrumb is Home > L2 > L3 > L4.
+    // Excluding L1 category term from breadcrumb link only for shop by department.
+    // Current structure for breacrumb is Home (remove shop by department) > L2 > L3 > L4.
     // Refer CORE-23454 for more info.
-    array_pop($parents);
-
+    $remove_term_from_breadcrumb = t('Shop by Department');
+    $category_links = [];
     foreach ($parents as $term) {
-      $term = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : NULL;
-      $category_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
+      if ($term->getName() != $remove_term_from_breadcrumb) {
+        $term = $term->hasTranslation($langcode) ? $term->getTranslation($langcode) : NULL;
+        $category_links[] = Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]);
+      }
     }
 
     if (!empty($category_links)) {
@@ -233,4 +238,29 @@ function _alshaya_bp_transac_set_breadcrumb_links($breadcrumb_links) {
   $breadcrumb->addCacheContexts(['route']);
   $breadcrumb->setLinks($breadcrumb_links);
   return $breadcrumb;
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_bp_transac_pathauto_alias_alter(&$alias, array $context) {
+  if ($context['module'] != 'taxonomy' || $context['bundle'] != ProductCategoryTree::VOCABULARY_ID) {
+    return;
+  }
+
+  $term_id = explode('/', $context['source']);
+
+  if (!empty($term = Term::load($term_id[3])) && $term instanceof TermInterface) {
+    // Remove shop- as prefix from url if true.
+    $is_remove_shop_prefix = $term->get('field_shop_as_prefix')->getString();
+    if ($is_remove_shop_prefix) {
+      if (strpos($alias, 'shop-') !== false) {
+        $alias = str_replace('shop-', '', $alias);
+      }
+    }
+    // Remove shop-department- from url alias.
+    if (strpos($alias, 'shop-department-') !== false) {
+      $alias = str_replace('shop-department-', '', $alias);
+    }
+  }
 }
