@@ -38,7 +38,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile
     - field.field.taxonomy_term.acq_product_category.field_select_sub_categories_plp
-    - field.field.taxonomy_term.acq_product_category.field_shop_as_prefix
+    - field.field.taxonomy_term.acq_product_category.field_remove_shop_as_prefix
     - field.field.taxonomy_term.acq_product_category.field_show_in_lhn
     - field.field.taxonomy_term.acq_product_category.field_target_link
     - field.field.taxonomy_term.acq_product_category.field_term_background_color
@@ -121,7 +121,7 @@ third_party_settings:
         - field_select_sub_categories_plp
         - field_pdp_layout
         - description
-        - field_shop_as_prefix
+        - field_remove_shop_as_prefix
         - path
         - translation
         - field_meta_tags
@@ -630,7 +630,7 @@ content:
     third_party_settings: {  }
     type: options_select
     region: content
-  field_shop_as_prefix:
+  field_remove_shop_as_prefix:
     weight: 9
     settings:
       display_label: true

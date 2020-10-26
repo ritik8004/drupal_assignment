@@ -2,13 +2,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_shop_as_prefix
+    - field.storage.taxonomy_term.field_remove_shop_as_prefix
     - taxonomy.vocabulary.acq_product_category
-id: taxonomy_term.acq_product_category.field_shop_as_prefix
-field_name: field_shop_as_prefix
+id: taxonomy_term.acq_product_category.field_remove_shop_as_prefix
+field_name: field_remove_shop_as_prefix
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Remove (shop-) as prefix'
+label: 'Remove (shop-) as prefix from URL'
 description: ''
 required: false
 translatable: false

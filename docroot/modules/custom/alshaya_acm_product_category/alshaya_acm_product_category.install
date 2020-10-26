@@ -23,8 +23,8 @@ function alshaya_acm_product_category_update_8044() {
   $manager = \Drupal::service('alshaya_config.manager');
 
   $fields = [
-    'field.storage.taxonomy_term.field_shop_as_prefix',
-    'field.field.taxonomy_term.acq_product_category.field_shop_as_prefix',
+    'field.storage.taxonomy_term.field_remove_shop_as_prefix',
+    'field.field.taxonomy_term.acq_product_category.field_remove_shop_as_prefix',
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
     'core.entity_view_display.taxonomy_term.acq_product_category.default',
   ];

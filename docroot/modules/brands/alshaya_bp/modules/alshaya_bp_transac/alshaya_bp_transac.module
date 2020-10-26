@@ -252,7 +252,7 @@ function alshaya_bp_transac_pathauto_alias_alter(&$alias, array $context) {
 
   if (!empty($term = Term::load($term_id[3])) && $term instanceof TermInterface) {
     // Remove shop- as prefix from url if true.
-    $is_remove_shop_prefix = $term->get('field_shop_as_prefix')->getString();
+    $is_remove_shop_prefix = $term->get('field_remove_shop_as_prefix')->getString();
     if ($is_remove_shop_prefix) {
       if (strpos($alias, 'shop-') !== false) {
         $alias = str_replace('shop-', '', $alias);
