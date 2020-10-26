@@ -6,8 +6,8 @@ use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\Component\Datetime\Time;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Site\Settings;
 
 /**
  * Api helper for checkout.com upapi.
@@ -15,11 +15,6 @@ use Drupal\Component\Serialization\Json;
  * @package Drupal\alshaya_acm_checkoutcom\Helper
  */
 class AlshayaAcmCheckoutComAPIHelper {
-
-  /**
-   * Config cache expiry for checkout.com upapi (1hr).
-   */
-  const CHECKOUTCOM_UPAPI_CONFIG_EXPIRY = 3600;
 
   /**
    * Api wrapper.
@@ -43,13 +38,6 @@ class AlshayaAcmCheckoutComAPIHelper {
   protected $logger;
 
   /**
-   * The time service.
-   *
-   * @var \Drupal\Component\Datetime\Time
-   */
-  protected $time;
-
-  /**
    * Cache service.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -65,8 +53,6 @@ class AlshayaAcmCheckoutComAPIHelper {
    *   Config factory.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   Logger factory.
-   * @param \Drupal\Component\Datetime\Time $time
-   *   The time service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache service.
    */
@@ -74,65 +60,66 @@ class AlshayaAcmCheckoutComAPIHelper {
     AlshayaApiWrapper $api_wrapper,
     ConfigFactoryInterface $config_factory,
     LoggerChannelFactory $logger_factory,
-    Time $time,
     CacheBackendInterface $cache
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
     $this->logger = $logger_factory->get('alshaya_acm_checkoutcom');
-    $this->time = $time;
     $this->cache = $cache;
   }
 
   /**
    * Get checkout.com upapi config.
    *
-   * @param string|null $type
-   *   Type of key, public_key, env etc.
    * @param bool $reset
    *   Reset cached data and fetch again.
    *
    * @return array|mixed
    *   Return array of keys.
    */
-  public function getCheckoutcomUpApiConfig(?string $type, $reset = FALSE) {
+  public function getCheckoutcomUpApiConfig($reset = FALSE) {
+    static $configs;
+
+    if (!empty($configs)) {
+      return $configs;
+    }
+
     $cache_key = 'alshaya_acm_checkoutcom:api_configs';
+    $cache_time = (int) Settings::get('checkout_com_upapi_config_cache_time', 5);
+
+    // Disable caching if cache time set to 0 or null in settings.
+    $reset = empty($cache_time) ? TRUE : $reset;
 
     $cache = $reset ? NULL : $this->cache->get($cache_key);
-
-    if (empty($cache) || empty($cache->data)) {
+    if (is_object($cache) && !empty($cache->data)) {
+      $configs = $cache->data;
+    }
+    else {
       $response = $this->apiWrapper->invokeApi(
         'checkoutcomupapi/config',
         [],
         'GET'
       );
+
       $configs = Json::decode($response);
 
-      if (!empty($configs)) {
-        $this->cache->set($cache_key,
-          $configs,
-          $this->time->getRequestTime() + self::CHECKOUTCOM_UPAPI_CONFIG_EXPIRY
-        );
-      }
-    }
-    else {
-      $configs = $cache->data;
-    }
-
-    if (empty($configs)) {
-      if ($reset) {
+      if (empty($configs)) {
         $this->logger->error('Invalid response from checkout.com upapi api, @response', [
           '@response' => Json::encode($configs),
         ]);
-
-        return NULL;
       }
-
-      // Try resetting once.
-      return $this->getCheckoutcomUpApiConfig($type, TRUE);
+      elseif (!empty($configs) && $cache_time > 0) {
+        // Cache only if enabled (cache_time set).
+        $this->cache->set($cache_key, $configs, strtotime("+${cache_time} minutes"));
+      }
     }
 
-    return $type ? $configs[$type] : $configs;
+    // Try resetting once.
+    if (empty($configs) && !($reset)) {
+      return $this->getCheckoutcomUpApiConfig(TRUE);
+    }
+
+    return $configs;
   }
 
 }

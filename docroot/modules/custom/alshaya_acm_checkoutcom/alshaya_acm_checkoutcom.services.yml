@@ -16,5 +16,4 @@ services:
       - '@alshaya_api.api'
       - '@config.factory'
       - '@logger.factory'
-      - '@datetime.time'
       - '@cache.data'

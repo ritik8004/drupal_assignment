@@ -197,11 +197,14 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Exclude payment methods'),
       '#tree' => FALSE,
     ];
+
     $payment_terms = $this->checkoutOptionManager->getDefaultPayment(FALSE);
     $options = [];
     foreach ($payment_terms as $term) {
-      $options[$term->get('field_payment_code')->first()->getString()] = $term->getName();
+      $code = $term->get('field_payment_code')->getString();
+      $options[$code] = $term->getName() . "(${code})";
     }
+
     $form['payment_methods_exclude']['exclude_payment_methods'] = [
       '#type' => 'checkboxes',
       '#options' => $options,

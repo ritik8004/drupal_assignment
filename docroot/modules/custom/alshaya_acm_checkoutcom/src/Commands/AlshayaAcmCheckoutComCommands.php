@@ -52,7 +52,7 @@ class AlshayaAcmCheckoutComCommands extends DrushCommands {
    */
   public function syncCheckoutComConfig() {
     // Reset magento checkout.com config cache.
-    $this->apiHelper->getCheckoutcomUpApiConfig(NULL, TRUE);
+    $this->apiHelper->getCheckoutcomUpApiConfig(TRUE);
     $this->logger->notice('checkout.com upapi config info cache reset.');
   }
 
