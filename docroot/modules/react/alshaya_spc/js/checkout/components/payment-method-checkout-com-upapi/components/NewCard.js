@@ -3,14 +3,14 @@ import Cleave from 'cleave.js/react';
 import ConditionalView from '../../../../common/components/conditional-view';
 import luhn from '../../../../utilities/luhn';
 import CardTypeSVG from '../../../../svg-component/card-type-svg';
-import { CheckoutComContext } from '../../../../context/CheckoutCom';
 import ToolTip from '../../../../utilities/tooltip';
 import CVVToolTipText from '../../cvv-text';
 import getStringMessage from '../../../../utilities/strings';
 import { handleValidationMessage } from '../../../../utilities/form_item_helper';
+import { CheckoutComUpapiContext } from '../../../../context/CheckoutComUpapi';
 
 class NewCard extends React.Component {
-  static contextType = CheckoutComContext;
+  static contextType = CheckoutComUpapiContext;
 
   constructor(props) {
     super(props);
@@ -20,7 +20,7 @@ class NewCard extends React.Component {
 
     const date = new Date();
     this.dateMin = `${date.getMonth() + 1}-${date.getFullYear().toString().substr(-2)}`;
-    this.acceptedCards = drupalSettings.checkoutCom.acceptedCards;
+    this.acceptedCards = drupalSettings.checkoutComUpapi.acceptedCards;
   }
 
   updateCurrentContext = (obj) => {
@@ -190,17 +190,20 @@ class NewCard extends React.Component {
         <div className="spc-card-types-wrapper">
           {cardTypes}
         </div>
-        <ConditionalView
-          condition={
-            window.drupalSettings.user.uid > 0 && drupalSettings.checkoutCom.tokenize === true
-          }
-        >
-          <div className="spc-payment-save-card">
-            <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
-            <label htmlFor="payment-card-save">
-              {Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}
-            </label>
-          </div>
+
+        <ConditionalView condition={window.drupalSettings.user.uid > 0}>
+          <ConditionalView condition={drupalSettings.checkoutComUpapi.tokenize === true}>
+            <div className="spc-payment-save-card">
+              <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
+              <label htmlFor="payment-card-save">
+                {Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}
+              </label>
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={drupalSettings.checkoutComUpapi.tokenize === false}>
+            <input type="hidden" value={0} id="payment-card-save" name="save_card" />
+          </ConditionalView>
         </ConditionalView>
       </>
     );

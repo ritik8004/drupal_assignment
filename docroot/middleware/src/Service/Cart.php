@@ -851,11 +851,7 @@ class Cart {
    *   TRUE if payment methods from checkout.com
    */
   public function isUpapiPaymentMethod(string $payment_method) {
-    $payment_methods = [
-      'checkout_com_upapi_qpay',
-      'checkout_com_upapi_knet',
-    ];
-    return in_array($payment_method, $payment_methods);
+    return strpos($payment_method, 'checkout_com_upapi') !== FALSE;
   }
 
   /**
@@ -893,6 +889,10 @@ class Cart {
         }
 
         throw new \Exception('Failed to initiate K-Net request.', 500);
+
+      case 'checkout_com_upapi':
+        $additional_data = $additional_info;
+        break;
 
       case 'checkout_com':
         $process_3d = FALSE;

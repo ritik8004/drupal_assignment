@@ -1,5 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import axios from 'axios';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
@@ -8,26 +9,26 @@ import {
 import ConditionalView from '../../../common/components/conditional-view';
 import SavedCardsList from './components/SavedCardsList';
 import NewCard from './components/NewCard';
-import { CheckoutComContext } from '../../../context/CheckoutCom';
 import SelectedCard from './components/SelectedCard';
 import { setStorageInfo } from '../../../utilities/storage';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import { handleValidationMessage } from '../../../utilities/form_item_helper';
 import WithModal from '../with-modal';
+import { CheckoutComUpapiContext } from '../../../context/CheckoutComUpapi';
 
 class PaymentMethodCheckoutComUpapi extends React.Component {
-  static contextType = CheckoutComContext;
+  static contextType = CheckoutComUpapiContext;
 
   componentDidMount() {
     const { tokenizedCard } = this.context;
     let activeCard = {};
     if (tokenizedCard !== '') {
-      activeCard = { ...drupalSettings.checkoutCom.tokenizedCards }[tokenizedCard];
+      activeCard = { ...drupalSettings.checkoutComUpapi.tokenizedCards }[tokenizedCard];
     }
 
     this.updateCurrentContext({
-      cvvValid: !(activeCard.mada === true || drupalSettings.checkoutCom.enforce3d === true),
+      cvvValid: !(activeCard.mada === true || drupalSettings.checkoutComUpapi.enforce3d === true),
     });
 
     dispatchCustomEvent('refreshCompletePurchaseSection', {});
@@ -117,17 +118,6 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
       return false;
     }
 
-    if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('Checkout kit not loaded', '', GTM_CONSTANTS.PAYMENT_ERRORS);
-
-      dispatchCustomEvent('spcCheckoutMessageUpdate', {
-        type: 'error',
-        message: getStringMessage('payment_error'),
-      });
-
-      return false;
-    }
-
     showFullScreenLoader();
 
     if (selectedCard === 'existing') {
@@ -138,19 +128,26 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
         : '';
 
       const ccInfo = {
+        type: 'card',
         number,
-        expiryMonth: expiry.split('/')[0],
-        expiryYear: expiry.split('/')[1],
+        expiry_month: expiry.split('/')[0],
+        expiry_year: expiry.split('/')[1],
         cvv,
         udf3,
       };
 
-      window.CheckoutKit.configure({
-        debugMode: drupalSettings.checkoutCom.debugMode,
-        publicKey: drupalSettings.checkoutCom.publicKey,
-      });
+      const { apiUrl, publicKey } = drupalSettings.checkoutComUpapi;
 
-      window.CheckoutKit.createCardToken(ccInfo, this.handleCheckoutResponse);
+      axios.post(apiUrl, ccInfo, {
+        headers: {
+          Authorization: publicKey,
+        },
+      }).then((response) => {
+        this.handleCheckoutResponse(response.data);
+      }).catch((error) => {
+        removeFullScreenLoader();
+        Drupal.logJavascriptError('Checkout.com UPAPI Token', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
+      });
     }
 
     return false;
@@ -158,10 +155,11 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
 
   handleCheckoutResponse = (data) => {
     // Do not process when data has type error.
-    if (data.type === 'error') {
+    if (data.type !== undefined && data.type === 'error') {
       removeFullScreenLoader();
       return;
     }
+
     const { selectedCard } = this.context;
     const { finalisePayment } = this.props;
 
@@ -172,15 +170,16 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
 
     const paymentData = {
       payment: {
-        method: 'checkout_com',
+        method: 'checkout_com_upapi',
         additional_data: { ...data, udf3, card_type: selectedCard },
       },
     };
+
     finalisePayment(paymentData);
   };
 
   onExistingCardSelect = (cardHash, madaCard) => {
-    const cvvValid = !(madaCard === true || drupalSettings.checkoutCom.enforce3d === true);
+    const cvvValid = !(madaCard === true || drupalSettings.checkoutComUpapi.enforce3d === true);
 
     dispatchCustomEvent('closeModal', 'creditCardList');
     this.updateCurrentContext({
@@ -216,7 +215,7 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
 
     let activeCard = {};
     if (tokenizedCard !== '') {
-      activeCard = { ...drupalSettings.checkoutCom.tokenizedCards }[tokenizedCard];
+      activeCard = { ...drupalSettings.checkoutComUpapi.tokenizedCards }[tokenizedCard];
     }
 
     const newCard = (

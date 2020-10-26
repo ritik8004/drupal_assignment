@@ -12,3 +12,10 @@ $settings['checkout_com_accepted_cards'] = [
   'mastercard',
   'diners',
 ];
+
+$settings['checkout_com_upapi_accepted_cards_mapping'] = [
+  'visa' => 'visa',
+  'mastercard' => 'mastercard',
+  'Diners Club International' => 'diners',
+  'AMERICAN EXPRESS' => 'amex',
+];

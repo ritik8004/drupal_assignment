@@ -28,7 +28,8 @@ class CheckoutComUpapiContextProvider extends React.Component {
       ? 'new'
       : selectedCard;
 
-    let tokenizedCard = (hasCards) ? Object.keys({ ...drupalSettings.checkoutCom.tokenizedCards })[0] : '';
+    const { tokenizedCards } = drupalSettings.checkoutComUpapi;
+    let tokenizedCard = (hasCards) ? Object.keys(tokenizedCards)[0] : '';
     tokenizedCard = (tokenizedCard !== '' && storageSelectedCard && storageSelectedCard !== 'new')
       ? storageSelectedCard
       : tokenizedCard;
@@ -40,16 +41,17 @@ class CheckoutComUpapiContextProvider extends React.Component {
     }));
   }
 
-  hasTokenizedCards = () => (
-    drupalSettings.user.uid > 0 && Object.keys(drupalSettings.checkoutCom.tokenizedCards).length > 0
-  );
+  hasTokenizedCards = () => {
+    const { tokenize, tokenizedCards } = drupalSettings.checkoutComUpapi;
+    return (drupalSettings.user.uid > 0 && tokenize && Object.keys(tokenizedCards).length > 0);
+  };
 
   updateState = (newState) => {
     this.setState((prevState) => ({
       ...prevState,
       ...newState,
     }));
-  }
+  };
 
   render() {
     const { children } = this.props;

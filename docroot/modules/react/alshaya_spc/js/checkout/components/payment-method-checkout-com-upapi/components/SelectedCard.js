@@ -20,7 +20,7 @@ const SelectedCard = ({
       {Drupal.t('change')}
     </div>
     <ConditionalView
-      condition={selected && (cardInfo.mada === true || drupalSettings.checkoutCom.enforce3d)}
+      condition={selected && (cardInfo.mada === true || drupalSettings.checkoutComUpapi.enforce3d)}
     >
       <div className="spc-type-textfield spc-type-cvv">
         <input

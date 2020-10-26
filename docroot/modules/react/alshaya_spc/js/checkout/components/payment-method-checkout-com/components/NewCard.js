@@ -190,17 +190,19 @@ class NewCard extends React.Component {
         <div className="spc-card-types-wrapper">
           {cardTypes}
         </div>
-        <ConditionalView
-          condition={
-            window.drupalSettings.user.uid > 0 && drupalSettings.checkoutCom.tokenize === true
-          }
-        >
-          <div className="spc-payment-save-card">
-            <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
-            <label htmlFor="payment-card-save">
-              {Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}
-            </label>
-          </div>
+        <ConditionalView condition={window.drupalSettings.user.uid > 0}>
+          <ConditionalView condition={drupalSettings.checkoutComUpapi.tokenize === true}>
+            <div className="spc-payment-save-card">
+              <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
+              <label htmlFor="payment-card-save">
+                {Drupal.t('Save this card for faster payment next time you shop. (CVV number will not be saved)')}
+              </label>
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={drupalSettings.checkoutComUpapi.tokenize === false}>
+            <input type="hidden" value={0} id="payment-card-save" name="save_card" />
+          </ConditionalView>
         </ConditionalView>
       </>
     );

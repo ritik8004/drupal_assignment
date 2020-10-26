@@ -6,6 +6,7 @@ use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -101,10 +102,20 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
     $api_url = $config['api_url'] ?? 'https://api.sandbox.checkout.com';
     $api_url = trim($api_url, '/');
 
+    $allowed_cards = explode(',', $config['allowed_card_types']);
+    $allowed_cards_mapped = [];
+    $allowed_cards_mapping = Settings::get('checkout_com_upapi_accepted_cards_mapping', []);
+    foreach ($allowed_cards as $allowed_card) {
+      $allowed_cards_mapped[$allowed_card] = $allowed_cards_mapping[strtolower($allowed_card)] ?? '';
+    }
+
     $build['#attached']['drupalSettings']['checkoutComUpapi'] = [
-      'acceptedCards' => explode(',', $config['allowed_card_types']),
+      'acceptedCards' => array_values(array_filter($allowed_cards_mapped)),
       'publicKey' => $config['public_key'],
-      'apiUrl' => $api_url,
+      'apiUrl' => $api_url . '/tokens',
+      'tokenizedCards' => [],
+      'tokenize' => FALSE,
+      'enforce3d' => FALSE,
     ];
 
     $build['#strings']['invalid_card'] = [

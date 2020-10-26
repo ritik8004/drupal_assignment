@@ -4,7 +4,8 @@ import SavedCardItem from './SavedCardItem';
 const SavedCardsList = ({
   closeSavedCardListModal, selected, onExistingCardSelect, onNewCardClick,
 }) => {
-  const cardITems = Object.entries(drupalSettings.checkoutCom.tokenizedCards).map(([key, card]) => (
+  const { tokenizedCards } = drupalSettings.checkoutComUpapi;
+  const cardITems = Object.entries(tokenizedCards).map(([key, card]) => (
     <SavedCardItem
       key={card.public_hash}
       cardInfo={card}
