@@ -32,11 +32,6 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
     });
 
     dispatchCustomEvent('refreshCompletePurchaseSection', {});
-    // Handle api error which triggered on card tokenisation fail.
-    window.CheckoutKit.addEventHandler(
-      window.CheckoutKit.Events.API_ERROR,
-      (event) => this.handleCheckoutKitJsErrors(event.data),
-    );
   }
 
   componentDidUpdate() {
@@ -76,10 +71,6 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
   };
 
   handleCardCvvChange = (event, handler) => {
-    if (window.CheckoutKit === undefined) {
-      Drupal.logJavascriptError('CheckoutKit not available', '', GTM_CONSTANTS.PAYMENT_ERRORS);
-      return;
-    }
     this.labelEffect(event, handler);
     this.cvvValidations(event);
   };
