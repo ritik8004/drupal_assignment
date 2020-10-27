@@ -61,7 +61,7 @@ class AuraCartRewards extends React.Component {
         </ConditionalView>
         {/* Registered with Linked Loyalty Card */}
         {/* @todo: Update condition. */}
-        <ConditionalView condition={uid > 0}>
+        <ConditionalView condition={uid > 1}>
           <div className="block-content registered-user-linked">
             <PointsToEarnMessage points={points} type="register-linked" />
             <div className="actions">

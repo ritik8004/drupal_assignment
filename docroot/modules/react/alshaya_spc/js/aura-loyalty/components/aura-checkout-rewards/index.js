@@ -80,7 +80,7 @@ class AuraCheckoutRewards extends React.Component {
         <SectionTitle>{ sectionTitle }</SectionTitle>
         {/* Guest */}
         {/* @todo: Update condition. */}
-        <ConditionalView condition={uid < 1}>
+        <ConditionalView condition={uid === 0}>
           <div className="block-content guest-user">
             <div className="title">
               <div className="subtitle-1">{ Drupal.t('Earn and redeem as you shop ') }</div>
