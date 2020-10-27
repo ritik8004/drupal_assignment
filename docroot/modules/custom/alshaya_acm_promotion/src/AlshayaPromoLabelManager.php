@@ -606,13 +606,9 @@ class AlshayaPromoLabelManager {
         return [];
       }
 
-      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions, $type);
+      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions);
       if (empty($free_promotion)) {
         return [];
-      }
-
-      if ($type === 'free_gift_api') {
-        return $free_promotion;
       }
 
       $coupon = $free_promotion['#promo_code'] ?? '';
@@ -627,6 +623,15 @@ class AlshayaPromoLabelManager {
       ];
 
       unset($free_promotion['#promo_url']);
+
+      return $free_promotion;
+    }
+    elseif ($view_mode === 'free_gift_api') {
+      if (empty($free_gift_promotions)) {
+        return [];
+      }
+
+      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions, $view_mode);
 
       return $free_promotion;
     }
@@ -905,13 +910,13 @@ class AlshayaPromoLabelManager {
    *
    * @param array $free_gift_promotions
    *   Free Gift promotions.
-   * @param string $type
+   * @param string $view_mode
    *   Type of request.
    *
    * @return array
    *   Promotion data for first available free gift promotion.
    */
-  private function getFreeGiftPromotionData(array $free_gift_promotions, string $type = '') {
+  private function getFreeGiftPromotionData(array $free_gift_promotions, string $view_mode = '') {
     // For free gift promotions, the promo needs to be rendered in a
     // different way.
     foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
@@ -922,7 +927,7 @@ class AlshayaPromoLabelManager {
         continue;
       }
 
-      if ($type === 'free_gift_api') {
+      if ($view_mode === 'free_gift_api') {
         $data = $this->getFreeGiftRaw($promotion_id, $free_gift_promotion, $free_skus);
       }
       else {
