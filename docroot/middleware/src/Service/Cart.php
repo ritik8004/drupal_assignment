@@ -1301,6 +1301,7 @@ class Cart {
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
+    $timeout_settings = $this->settings->getSettings('alshaya_backend_calls_options');
 
     // Check whether order locking is enabled.
     if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
@@ -1320,7 +1321,7 @@ class Cart {
 
     try {
       $request_options = [
-        'timeout' => $checkout_settings['place_order_timeout'],
+        'timeout' => $timeout_settings['magento']['place_order'],
       ];
 
       // We don't pass any payment data in place order call to MDC because its
