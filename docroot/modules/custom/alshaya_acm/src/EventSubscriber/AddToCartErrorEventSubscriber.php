@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AddToCartErrorEventSubscriber.
+ * Class Add To Car Error Event Subscriber.
  *
  * @package Drupal\alshaya_acm\EventSubscriber
  */

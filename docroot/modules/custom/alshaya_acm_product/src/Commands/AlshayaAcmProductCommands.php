@@ -19,7 +19,7 @@ use Drush\Exceptions\UserAbortException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class AlshayaAddressBookCommands.
+ * Class Alshaya Address Product Commands.
  *
  * @package Drupal\alshaya_acm_product\Commands
  */
@@ -657,7 +657,10 @@ class AlshayaAcmProductCommands extends DrushCommands {
    * @usage drush alshaya-delete-unused-media assets
    *   Print the category menu true for en language.
    */
-  public function deleteUnusedMediaFiles($prefix = 'media', array $options = ['batch-size' => 50, 'dry-run' => FALSE]) {
+  public function deleteUnusedMediaFiles($prefix = 'media', array $options = [
+    'batch-size' => 50,
+    'dry-run' => FALSE,
+  ]) {
     $dry_run = (bool) $options['dry-run'];
     $batch_size = (int) $options['batch-size'];
 

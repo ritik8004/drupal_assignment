@@ -4,3 +4,4 @@ alshaya_dynamic_yield.product_modal:
     js/alshaya_dynamic_yield.product_modal.js: {}
   dependencies:
     - core/jquery.once
+    - core/jquery.cookie

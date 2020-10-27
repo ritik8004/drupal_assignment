@@ -68,7 +68,7 @@ class SKUPluginManager extends DefaultPluginManager {
       $plugin = $this->getDefinition($bundle);
     }
     catch (PluginNotFoundException $exception) {
-      \Drupal::logger('acq_sku')->notice(t("Bundle @bundle doesn't appear to 
+      \Drupal::logger('acq_sku')->notice($this->t("Bundle @bundle doesn't appear to 
         have an implementation, please check the plugin id on your implementation 
         of the SKU plugin", ['@bundle' => $bundle]));
     } finally {
@@ -94,7 +94,7 @@ class SKUPluginManager extends DefaultPluginManager {
       $plugin = new $class();
     }
     catch (PluginNotFoundException $exception) {
-      \Drupal::logger('acq_sku')->notice(t("Bundle @bundle doesn't appear to 
+      \Drupal::logger('acq_sku')->notice($this->t("Bundle @bundle doesn't appear to 
         have an implementation, please check the plugin id on your implementation 
         of the SKU plugin", ['@bundle' => $type]));
     } finally {

@@ -253,7 +253,7 @@ class FeatureContext extends CustomMinkContext
         }
         continue;
       }
-      $item->find('css', 'h2.field--name-name a')->click();
+      $this->getSession()->executeScript("jQuery('h2.field--name-name a').get(0).click();");
       break;
     }
   }

@@ -12,7 +12,7 @@ use Drupal\social_auth\Event\UserFieldsEvent;
 use Drupal\social_auth\SocialAuthDataHandler;
 
 /**
- * Class AlshayaSocialHelper.
+ * Class Alshaya Social Helper.
  *
  * @package Drupal\alshaya_social
  */

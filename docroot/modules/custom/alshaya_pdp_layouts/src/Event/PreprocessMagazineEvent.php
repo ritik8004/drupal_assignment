@@ -5,7 +5,7 @@ namespace Drupal\alshaya_pdp_layouts\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class PreprocessMagazineEvent.
+ * Class Preprocess Magazine Event.
  *
  * @package Drupal\alshaya_pdp_layouts
  */

@@ -5,7 +5,7 @@ namespace Drupal\alshaya_performance\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class CacheTagInvalidatedEvent.
+ * Class Cache Tag Invalidated Event.
  *
  * @package Drupal\alshaya_performance
  */

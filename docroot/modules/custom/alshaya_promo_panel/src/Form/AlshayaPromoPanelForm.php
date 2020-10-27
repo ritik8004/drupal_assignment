@@ -94,7 +94,10 @@ class AlshayaPromoPanelForm extends ConfigFormBase {
     $config = $this->config('alshaya_promo_panel.settings');
 
     $current_theme = $this->configFactory->get('system.theme')->get('default');
-    $blocks = $this->blockStorage->loadByProperties(['theme' => $current_theme, 'region' => 'footer_secondary']);
+    $blocks = $this->blockStorage->loadByProperties([
+      'theme' => $current_theme,
+      'region' => 'footer_secondary',
+    ]);
 
     $options = [];
     if (!empty($blocks)) {

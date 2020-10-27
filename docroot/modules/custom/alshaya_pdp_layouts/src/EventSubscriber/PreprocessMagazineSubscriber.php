@@ -8,7 +8,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 
 /**
- * Class PreprocessMagazineSubscriber.
+ * Class Preprocess Magazine Subscriber.
  *
  * @package Drupal\alshaya_pdp_layouts\EventSubscriber
  */

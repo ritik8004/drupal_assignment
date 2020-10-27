@@ -16,7 +16,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Class CustomerCartForm.
+ * Class Customer Cart Form.
  *
  * @package Drupal\acq_cart\Form
  */

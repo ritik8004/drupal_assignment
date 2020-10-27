@@ -7,7 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class StoresFinderConfigForm.
+ * Class Stores Finder Config Form.
  */
 class StoresFinderConfigForm extends ConfigFormBase {
 

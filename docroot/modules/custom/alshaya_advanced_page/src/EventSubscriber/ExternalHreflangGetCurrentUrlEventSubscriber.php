@@ -8,7 +8,7 @@ use Drupal\external_hreflang\Event\ExternalHreflangGetCurrentUrlEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class ExternalHreflangGetCurrentUrlEventSubscriber.
+ * Class External Hreflang GetCurrentUrl EventSubscriber.
  *
  * @package Drupal\alshaya_advanced_page\EventSubscriber
  */
@@ -35,7 +35,10 @@ class ExternalHreflangGetCurrentUrlEventSubscriber implements EventSubscriberInt
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[ExternalHreflangGetCurrentUrlEvent::EVENT_NAME][] = ['onGetCurrentUrlEvent', 100];
+    $events[ExternalHreflangGetCurrentUrlEvent::EVENT_NAME][] = [
+      'onGetCurrentUrlEvent',
+      100,
+    ];
     return $events;
   }
 

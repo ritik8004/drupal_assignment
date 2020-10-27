@@ -5,7 +5,7 @@ namespace Drupal\acq_sku;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class AddToCartErrorEvent.
+ * Class Add To Cart Error Event.
  *
  * @package Drupal\acq_sku
  */

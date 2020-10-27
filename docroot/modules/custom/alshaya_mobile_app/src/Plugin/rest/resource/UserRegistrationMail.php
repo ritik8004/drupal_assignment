@@ -11,7 +11,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 
 /**
- * Class UserRegistrationMail.
+ * Class User Registration Mail.
  *
  * @RestResource(
  *   id = "user_registration_mail",
@@ -104,7 +104,7 @@ class UserRegistrationMail extends ResourceBase {
       return $this->mobileAppUtility->sendStatusResponse($this->t('Invalid data to send an email to user.'));
     }
 
-    /* @var \Drupal\user\Entity\User $user */
+    /** @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($email);
     if ($user instanceof UserInterface) {
       $this->logger->error('User with email @email already exist.', ['@email' => $email]);

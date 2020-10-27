@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
 /**
- * Class AlshayaSeoPathProcessor.
+ * Class Alshaya Seo Path Processor.
  *
  * @package Drupal\alshaya_seo
  */

@@ -133,7 +133,10 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
       // We can change/replace and adjust url again but then,
       // UrlHelper::buildQuery() called by Url()->toString() encodes the url.
       $destination = ['tab' => 'login'];
-      $form['#action'] = Url::fromRoute('<current>', [], ['query' => $destination, 'external' => FALSE])->toString();
+      $form['#action'] = Url::fromRoute('<current>', [], [
+        'query' => $destination,
+        'external' => FALSE,
+      ])->toString();
     }
 
     $form['#attached']['library'][] = 'alshaya_acm_checkout/checkout_flow';

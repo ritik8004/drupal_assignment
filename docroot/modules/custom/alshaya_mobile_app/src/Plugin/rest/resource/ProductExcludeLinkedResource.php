@@ -225,8 +225,14 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ->getGeneratedUrl();
 
     $data = $this->getSkuData($skuEntity, $link);
-    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
-    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), $data['flags']], TRUE);
+    $data['delivery_options'] = NestedArray::mergeDeepArray([
+      $this->getDeliveryOptionsConfig($skuEntity),
+      $data['delivery_options'],
+    ], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([
+      alshaya_acm_product_get_flags_config(),
+      $data['flags'],
+    ], TRUE);
     $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
 
@@ -295,8 +301,14 @@ class ProductExcludeLinkedResource extends ResourceBase {
       'click_and_collect' => [],
     ];
     $data['flags'] = [];
-    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
-    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_status($sku), $data['flags']], TRUE);
+    $data['delivery_options'] = NestedArray::mergeDeepArray([
+      $this->getDeliveryOptionsStatus($sku),
+      $data['delivery_options'],
+    ], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([
+      alshaya_acm_product_get_flags_status($sku),
+      $data['flags'],
+    ], TRUE);
 
     $media_contexts = [
       'pdp' => 'detail',
@@ -345,8 +357,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
         $data['variants'][] = $variant;
       }
 
-      $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
-      $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
+      $data['swatch_data'] = $data['swatch_data'] ?: new \stdClass();
+      $data['cart_combinations'] = $data['cart_combinations'] ?: new \stdClass();
     }
 
     // Allow other modules to alter light product data.

@@ -271,7 +271,7 @@ class ProductOptionsManager {
           $this->termStorage->delete($entities);
         }
         catch (\Exception $e) {
-          $this->logger->error(t('Error occurred while deleting options not available in MDC. Error: @message', [
+          $this->logger->error($this->t('Error occurred while deleting options not available in MDC. Error: @message', [
             '@message' => $e->getMessage(),
           ]));
         }

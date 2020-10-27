@@ -10,7 +10,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 
 /**
- * Class NewsLetterForm.
+ * Class News Letter Form.
  */
 class NewsLetterForm extends FormBase {
 

@@ -148,7 +148,7 @@
                   var cartNotification = jQuery.Event('product-add-to-cart-success', {
                     detail: {
                       productData: productData,
-                      cartData: cart_data,
+                      cartData: response,
                     }
                   });
                   $(form).trigger(cartNotification);

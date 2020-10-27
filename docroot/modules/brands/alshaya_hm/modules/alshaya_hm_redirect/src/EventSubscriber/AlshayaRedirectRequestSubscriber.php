@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
- * Class AlshayaRedirectRequestSubscriber.
+ * Class Alshaya Redirect Request Subscriber.
  */
 class AlshayaRedirectRequestSubscriber implements EventSubscriberInterface {
 

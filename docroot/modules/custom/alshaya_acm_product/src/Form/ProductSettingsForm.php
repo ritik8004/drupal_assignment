@@ -13,7 +13,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_pdp_layouts\PdpLayoutManager;
 
 /**
- * Class ProductSettingsForm.
+ * Class Product Settings Form.
  */
 class ProductSettingsForm extends ConfigFormBase {
 

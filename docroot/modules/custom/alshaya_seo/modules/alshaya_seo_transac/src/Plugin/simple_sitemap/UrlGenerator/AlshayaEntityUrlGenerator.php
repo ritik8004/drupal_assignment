@@ -17,7 +17,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class AlshayaEntityUrlGenerator.
+ * Class Alshaya Entity Url Generator.
  *
  * @package Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator
  *

@@ -29,7 +29,8 @@ class AlshayaAcmKnetServiceProvider implements ServiceProviderInterface {
         ->addArgument(new Reference('acq_cart.cart_storage'))
         ->addArgument(new Reference('alshaya_acm_checkout.checkout_helper'))
         ->addArgument(new Reference('alshaya_acm.cart_helper'))
-        ->addArgument(new Reference('module_handler'));
+        ->addArgument(new Reference('module_handler'))
+        ->addArgument(new Reference('request_stack'));
     }
   }
 

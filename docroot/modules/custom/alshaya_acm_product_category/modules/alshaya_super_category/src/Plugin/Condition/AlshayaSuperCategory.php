@@ -132,7 +132,10 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return ['use_super_category' => FALSE, 'categories' => []] + parent::defaultConfiguration();
+    return [
+      'use_super_category' => FALSE,
+      'categories' => [],
+    ] + parent::defaultConfiguration();
   }
 
   /**

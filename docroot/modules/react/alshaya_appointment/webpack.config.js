@@ -1,4 +1,4 @@
-var path  = require("path");
+var path = require("path");
 var buildPath = '/modules/react/alshaya_appointment/dist/';
 
 var config = {

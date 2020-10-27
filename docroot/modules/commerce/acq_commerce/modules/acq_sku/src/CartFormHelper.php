@@ -5,7 +5,7 @@ namespace Drupal\acq_sku;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class CartFormHelper.
+ * Class Cart Form Helper.
  *
  * @package Drupal\acq_sku
  */

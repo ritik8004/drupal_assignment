@@ -21,7 +21,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class SyncForm.
+ * Class Sync Form.
  */
 class SyncForm extends FormBase {
 

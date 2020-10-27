@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class DynamicYieldSettingsForm.
+ * Class Dynamic Yield Settings Form.
  *
  * @package Drupal\dynamic_yield\Form
  */

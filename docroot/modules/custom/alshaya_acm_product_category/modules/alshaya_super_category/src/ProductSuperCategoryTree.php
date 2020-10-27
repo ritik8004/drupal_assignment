@@ -19,10 +19,9 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
-use Drupal\Core\Path\PathValidatorInterface;
 
 /**
- * Class ProductSuperCategoryTree.
+ * Class Product Super Category Tree.
  */
 class ProductSuperCategoryTree extends ProductCategoryTree {
 
@@ -81,8 +80,6 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   The path alias manager.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   Product Category Helper service object.
-   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
-   *   Path Validator service object.
    */
   public function __construct(ProductCategoryTreeInterface $product_category_tree,
                               RequestStack $request_stack,
@@ -95,12 +92,11 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
                               Connection $connection,
                               ConfigFactoryInterface $config_factory,
                               AliasManagerInterface $alias_manager,
-                              ProductCategoryHelper $product_category_helper,
-                              PathValidatorInterface $path_validator) {
+                              ProductCategoryHelper $product_category_helper) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $request_stack, $current_path, $connection, $product_category_helper, $path_validator);
+    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $request_stack, $current_path, $connection, $product_category_helper);
   }
 
   /**
@@ -232,7 +228,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Return the parent term object or NULL.
    */
   public function getCategoryTermRootParent($term = NULL, $langcode = NULL) {
-    if (empty($term) || !$term instanceof  TermInterface) {
+    if (empty($term) || !$term instanceof TermInterface) {
       $term = $this->getCategoryTermFromRoute();
     }
 

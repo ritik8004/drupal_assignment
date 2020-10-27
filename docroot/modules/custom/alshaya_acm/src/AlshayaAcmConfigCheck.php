@@ -15,7 +15,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\google_tag\Entity\Container;
 
 /**
- * AlshayaAcmConfigCheck.
+ * Alshaya Acm Config Check.
  */
 class AlshayaAcmConfigCheck {
 

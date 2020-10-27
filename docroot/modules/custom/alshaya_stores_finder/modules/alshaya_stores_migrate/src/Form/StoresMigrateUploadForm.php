@@ -11,7 +11,7 @@ use Drupal\migrate\MigrateMessage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class StoresMigrateUploadForm.
+ * Class Stores Migrate Upload Form.
  */
 class StoresMigrateUploadForm extends FormBase {
 

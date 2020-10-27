@@ -78,7 +78,10 @@ class GooglePageSpeedBlock extends BlockBase implements ContainerFactoryPluginIn
     $build['#theme'] = 'google_page_speed_block';
     $build['#block_title'] = $this->label();
     $build['#metrics'] = $this->getMetrics();
-    $build['#attached']['library'] = ['google_page_speed/google-chart-loader', 'google_page_speed/google_page_speed'];
+    $build['#attached']['library'] = [
+      'google_page_speed/google-chart-loader',
+      'google_page_speed/google_page_speed',
+    ];
     return $build;
   }
 

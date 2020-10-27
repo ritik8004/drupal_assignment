@@ -16,6 +16,15 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Allow product category mapping API in shield.
+ */
+function alshaya_acm_update_8016() {
+  _alshaya_acm_exclude_sync_from_shield();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new string translations.
  */
 function alshaya_acm_update_8015() {

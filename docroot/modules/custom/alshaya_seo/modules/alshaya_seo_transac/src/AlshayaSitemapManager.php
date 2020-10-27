@@ -11,7 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Class AlshayaSitemapManager.
+ * Class Alshaya Sitemap Manager.
  *
  * @package Drupal\alshaya_seo_transac
  */

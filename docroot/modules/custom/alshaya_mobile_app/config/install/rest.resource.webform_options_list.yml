@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_mobile_app
+    - webform_rest
+    - alshaya_contact
+    - serialization
+    - simple_oauth
+id: webform_options_list
+plugin_id: webform_options_list
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

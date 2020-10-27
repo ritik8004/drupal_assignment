@@ -51,6 +51,12 @@ body {
       html[lang=ar] & {
         padding-right: 0;
       }
+
+      &:hover,
+      &.is-active {
+        color: $header_secondary_menu_link_mobile;
+        background: $header_secondary_bg_upto_desk;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -62,11 +68,11 @@ body {
       &::before {
         display: none;
       }
-    }
 
-    &:hover,
-    &.is-active {
-      color: $header_secondary_menu_link_hover;
+      &:hover,
+      &.is-active {
+        color: $header_secondary_menu_link_hover;
+      }
     }
   }
 

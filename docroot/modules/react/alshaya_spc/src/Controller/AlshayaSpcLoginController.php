@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Class AlshayaSpcLoginController.
+ * Class Alshaya Spc Login Controller.
  *
  * @package Drupal\alshaya_spc\Controller
  */

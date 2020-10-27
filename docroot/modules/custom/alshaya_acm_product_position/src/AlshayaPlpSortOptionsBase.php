@@ -11,7 +11,7 @@ use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class AlshayaPlpSortOptionsBase.
+ * Class Alshaya Plp Sort Options Base.
  */
 class AlshayaPlpSortOptionsBase {
 
@@ -126,7 +126,7 @@ class AlshayaPlpSortOptionsBase {
         }
       }
       else {
-        /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
+        /** @var \Drupal\taxonomy\TermInterface $route_parameter_value */
         $term = $this->routeMatch->getParameter(self::TERM_ROUTE_PARAM[$route_name]);
       }
 

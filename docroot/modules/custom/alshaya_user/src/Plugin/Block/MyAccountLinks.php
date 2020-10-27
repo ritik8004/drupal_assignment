@@ -362,7 +362,10 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $this->currentUser->id(), 'config:alshaya_user.settings']);
+    return Cache::mergeTags(parent::getCacheTags(), [
+      'user:' . $this->currentUser->id(),
+      'config:alshaya_user.settings',
+    ]);
   }
 
 }

@@ -166,7 +166,7 @@
     var card_expiry_date_year = $('.checkoutcom-credit-card-exp-year-select option:selected').val().toString().trim();
 
     var today = new Date();
-    var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+    var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
     if (lastDayOfMonth.getFullYear() === card_expiry_date_year && lastDayOfMonth.getMonth() > card_expiry_date_month) {
       Drupal.checkoutComShowError($('.checkoutcom-credit-card-exp-year-select').parent(), Drupal.t('Incorrect credit card expiration date'));
@@ -178,7 +178,7 @@
 
   if (typeof CheckoutKit !== 'undefined') {
     // Handle api error which triggered on card tokenisation fail.
-    CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function(event) {
+    CheckoutKit.addEventHandler(CheckoutKit.Events.API_ERROR, function (event) {
       if (event.data.errorCode === '70000') {
         // Adding datalayer for the payment error.
         var label = 'Payment failed';
@@ -214,7 +214,7 @@
   }
 
   // Try to create card token for checkout.com if it's not already generated.
-  $.fn.checkoutComCreateCardToken = function() {
+  $.fn.checkoutComCreateCardToken = function () {
     // Handle case when not able to load JS plugin.
     if (typeof CheckoutKit === 'undefined') {
       Drupal.checkoutComTokenised = false;
@@ -261,7 +261,7 @@
       'expiryYear': $('#cardYear').val(),
       'cvv': $('#cardCvv').val(),
       'udf3': ($('#saveCard').length > 0 && $('#saveCard').val()) ? 'storeInVaultOnSuccess' : ''
-    },function(data){
+    },function (data) {
       if (typeof data.card === 'undefined') {
         Drupal.checkoutComTokenised = false;
       }

@@ -5,7 +5,7 @@ namespace Drupal\acq_commerce;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class UpdateCartErrorEvent.
+ * Class Update Cart Error Event.
  *
  * @package Drupal\acq_commerce
  */

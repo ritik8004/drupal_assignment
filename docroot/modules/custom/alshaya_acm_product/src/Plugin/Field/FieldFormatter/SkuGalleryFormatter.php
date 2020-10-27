@@ -21,6 +21,8 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 
 /**
@@ -123,6 +125,10 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   Module handler service.
    * @param \Drupal\Core\Cache\MemoryCache\MemoryCacheInterface $memory_cache
    *   The memory cache.
+   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $entityDisplayRepository
+   *   The entity display repository service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The EntityTypeManager service.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -137,8 +143,10 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               LanguageManagerInterface $language_manager,
                               SkuPriceHelper $price_helper,
                               ModuleHandler $module_handler,
-                              MemoryCacheInterface $memory_cache) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
+                              MemoryCacheInterface $memory_cache,
+                              EntityDisplayRepositoryInterface $entityDisplayRepository,
+                              EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $entityDisplayRepository, $entity_type_manager);
     $this->skuManager = $skuManager;
     $this->skuImagesManager = $skuImagesManager;
     $this->configFactory = $config_factory;
@@ -339,7 +347,9 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $container->get('language_manager'),
       $container->get('alshaya_acm_product.price_helper'),
       $container->get('module_handler'),
-      $container->get('entity.memory_cache')
+      $container->get('entity.memory_cache'),
+      $container->get('entity_display.repository'),
+      $container->get('entity_type.manager')
     );
   }
 

@@ -8,7 +8,7 @@ use Drupal\Core\Queue\RequeueException;
 use Drupal\Core\Queue\SuspendQueueException;
 
 /**
- * Class QueueHelper.
+ * Class Queue Helper.
  */
 class QueueHelper {
 

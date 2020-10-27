@@ -149,7 +149,7 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function access(AccountInterface $account, $return_as_object = FALSE) {
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $this->routeMatch->getParameter('node');
     return AccessResult::allowedIf($node
       && (empty($node->get('field_display_amp_menu')->getValue())
@@ -162,14 +162,20 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
    */
   public function getCacheTags() {
     $nid = $this->routeMatch->getParameter('node')->id();
-    return Cache::mergeTags(parent::getCacheTags(), ['taxonomy_term:acq_product_category', 'node:' . $nid]);
+    return Cache::mergeTags(parent::getCacheTags(), [
+      'taxonomy_term:acq_product_category',
+      'node:' . $nid,
+    ]);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return parent::getCacheContexts(parent::getCacheContexts(), ['url.path', 'languages']);
+    return parent::getCacheContexts(parent::getCacheContexts(), [
+      'url.path',
+      'languages',
+    ]);
   }
 
 }

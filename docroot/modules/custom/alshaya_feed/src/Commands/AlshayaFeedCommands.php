@@ -7,7 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaFeedCommands.
+ * Class Alshaya Feed Commands.
  *
  * @package Drupal\alshaya_feed\Commands
  */
