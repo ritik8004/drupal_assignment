@@ -547,11 +547,13 @@ class AlshayaPromoLabelManager {
    *   Product.
    * @param string $view_mode
    *   View mode.
+   * @param string $context
+   *   Context - mapp/web.
    *
    * @return array
    *   Promotion render data (generic/dynamic/free).
    */
-  public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode) {
+  public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode, $context = '') {
     // Get promotions for the product.
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
     $displayMode = $view_mode === 'api' ? 'api' : 'links';
@@ -604,9 +606,13 @@ class AlshayaPromoLabelManager {
         return [];
       }
 
-      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions);
+      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions, $context);
       if (empty($free_promotion)) {
         return [];
+      }
+
+      if ($context == 'mapp') {
+        return $free_promotion;
       }
 
       $coupon = $free_promotion['#promo_code'] ?? '';
@@ -621,15 +627,6 @@ class AlshayaPromoLabelManager {
       ];
 
       unset($free_promotion['#promo_url']);
-
-      return $free_promotion;
-    }
-    elseif ($view_mode === 'free_gift_api') {
-      if (empty($free_gift_promotions)) {
-        return [];
-      }
-
-      $free_promotion = $this->getFreeGiftPromotionData($free_gift_promotions, $view_mode);
 
       return $free_promotion;
     }
@@ -696,11 +693,13 @@ class AlshayaPromoLabelManager {
    *   Free gift promotion processed data.
    * @param \Drupal\acq_sku\Entity\SKU[] $free_skus
    *   Array of Free SKUs.
+   * @param string $context
+   *   Context - mapp/web.
    *
    * @return array
    *   Render array.
    */
-  protected function getFreeGiftDisplay($promotion_id, array $free_gift_promotion, array $free_skus) {
+  protected function getFreeGiftDisplay($promotion_id, array $free_gift_promotion, array $free_skus, $context = '') {
     $coupon = $free_gift_promotion['coupon_code'][0]['value'] ?? '';
 
     // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
@@ -710,6 +709,8 @@ class AlshayaPromoLabelManager {
       $free_gift_promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU
       && count($free_skus) > 1
     ) {
+
+      // This will be covered in AB-3710 for mapp.
       $url = Url::fromRoute(
         'alshaya_acm_promotion.free_gifts_list',
         [
@@ -772,6 +773,31 @@ class AlshayaPromoLabelManager {
     }
     else {
       $free_sku_entity = reset($free_skus);
+      $free_sku_media = $this->imagesManager->getFirstImage($free_sku_entity);
+
+      // Context to expose free gift data in mobile api.
+      if ($context == 'mapp') {
+        // If free gift sku has no media, then we check from the default
+        // image from the configuration.
+        if (empty($free_sku_media) && !empty($default_image = $this->imagesManager->getProductDefaultImage())) {
+          $free_sku_image_url = file_create_url($default_image->getFileUri());
+        }
+
+        if ($free_sku_media) {
+          $free_sku_image_url = file_create_url($free_sku_media['drupal_uri']);
+        }
+
+        $return = [
+          'free_sku_code' => $free_sku_entity->getSku(),
+          'free_sku_title' => $free_sku_entity->get('name')->getString(),
+          'promo_title' => $free_gift_promotion['text'],
+          'promo_code' => $free_gift_promotion['coupon_code'],
+          'sku_image' => $free_sku_image_url,
+          'coupon' => $coupon,
+        ];
+
+        return $return;
+      }
 
       $url = Url::fromRoute(
         'alshaya_acm_promotion.free_gift_modal',
@@ -812,8 +838,6 @@ class AlshayaPromoLabelManager {
         '#promo_code' => $free_gift_promotion['coupon_code'],
       ];
 
-      $free_sku_media = $this->imagesManager->getFirstImage($free_sku_entity);
-
       // If free gift sku has no media, then we check from the default
       // image from the configuration.
       if (empty($free_sku_media) && !empty($default_image = $this->imagesManager->getProductDefaultImage())) {
@@ -828,60 +852,6 @@ class AlshayaPromoLabelManager {
         $free_sku_image['#title'] = $this->skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku_entity->label(), '192x168');
         $return['#sku_image'] = $this->renderer->renderPlain($free_sku_image);
       }
-    }
-
-    return $return;
-  }
-
-  /**
-   * Get free gift promotion data to expose in API.
-   *
-   * @param int|string $promotion_id
-   *   Promotion ID.
-   * @param array $free_gift_promotion
-   *   Free gift promotion processed data.
-   * @param \Drupal\acq_sku\Entity\SKU[] $free_skus
-   *   Array of Free SKUs.
-   *
-   * @return array
-   *   Render array.
-   */
-  protected function getFreeGiftRaw($promotion_id, array $free_gift_promotion, array $free_skus) {
-    $coupon = $free_gift_promotion['coupon_code'][0]['value'] ?? '';
-
-    // Promo type 0 => All SKUs below, 1 => One of the SKUs below.
-    // This is for PDP. On PDP we display the list only if there are
-    // more than one free gift available.
-    if (
-      $free_gift_promotion['promo_type'] == SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU
-      && count($free_skus) > 1
-    ) {
-      // This will be covered in AB-3710.
-    }
-    else {
-      $free_sku_entity = reset($free_skus);
-
-      $free_sku_media = $this->imagesManager->getFirstImage($free_sku_entity);
-
-      // If free gift sku has no media, then we check from the default
-      // image from the configuration.
-      if (empty($free_sku_media) && !empty($default_image = $this->imagesManager->getProductDefaultImage())) {
-        $free_sku_image_url = file_create_url($default_image->getFileUri());
-      }
-
-      if ($free_sku_media) {
-        $free_sku_image_url = file_create_url($free_sku_media['drupal_uri']);
-      }
-
-      // Get sku title & image.
-      $return = [
-        'free_sku_code' => $free_sku_entity->getSku(),
-        'free_sku_title' => $free_sku_entity->get('name')->getString(),
-        'promo_title' => $free_gift_promotion['text'],
-        'promo_code' => $free_gift_promotion['coupon_code'],
-        'sku_image' => $free_sku_image_url,
-        'coupon' => $coupon,
-      ];
     }
 
     return $return;
@@ -908,13 +878,13 @@ class AlshayaPromoLabelManager {
    *
    * @param array $free_gift_promotions
    *   Free Gift promotions.
-   * @param string $view_mode
-   *   Type of request.
+   * @param string $context
+   *   Context - mapp/web.
    *
    * @return array
    *   Promotion data for first available free gift promotion.
    */
-  private function getFreeGiftPromotionData(array $free_gift_promotions, string $view_mode = '') {
+  private function getFreeGiftPromotionData(array $free_gift_promotions, $context = '') {
     // For free gift promotions, the promo needs to be rendered in a
     // different way.
     foreach ($free_gift_promotions as $promotion_id => $free_gift_promotion) {
@@ -924,13 +894,7 @@ class AlshayaPromoLabelManager {
       if (empty($free_skus)) {
         continue;
       }
-
-      if ($view_mode === 'free_gift_api') {
-        $data = $this->getFreeGiftRaw($promotion_id, $free_gift_promotion, $free_skus);
-      }
-      else {
-        $data = $this->getFreeGiftDisplay($promotion_id, $free_gift_promotion, $free_skus);
-      }
+      $data = $this->getFreeGiftDisplay($promotion_id, $free_gift_promotion, $free_skus, $context);
 
       // We support displaying only one free gift promotion for now.
       break;
