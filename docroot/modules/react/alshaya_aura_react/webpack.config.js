@@ -5,6 +5,7 @@ var config = {
   entry: {
     loyalty_club: './js/my-loyalty-club',
     my_accounts: './js/my-accounts',
+    header: './js/header',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
