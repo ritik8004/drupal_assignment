@@ -102,11 +102,11 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
     $api_url = $config['api_url'] ?? 'https://api.sandbox.checkout.com';
     $api_url = trim($api_url, '/');
 
-    $allowed_cards = explode(',', $config['allowed_card_types']);
+    $allowed_cards = explode(',', strtolower($config['allowed_card_types']));
     $allowed_cards_mapped = [];
     $allowed_cards_mapping = Settings::get('checkout_com_upapi_accepted_cards_mapping', []);
     foreach ($allowed_cards as $allowed_card) {
-      $allowed_cards_mapped[$allowed_card] = $allowed_cards_mapping[strtolower($allowed_card)] ?? '';
+      $allowed_cards_mapped[$allowed_card] = $allowed_cards_mapping[$allowed_card] ?? '';
     }
 
     $build['#attached']['drupalSettings']['checkoutComUpapi'] = [
@@ -116,6 +116,7 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       'tokenizedCards' => [],
       'tokenize' => FALSE,
       'enforce3d' => FALSE,
+      'processMada' => in_array('mada', $allowed_cards),
     ];
 
     $build['#strings']['invalid_card'] = [

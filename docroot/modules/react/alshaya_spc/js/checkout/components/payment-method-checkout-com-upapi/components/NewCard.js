@@ -189,9 +189,13 @@ class NewCard extends React.Component {
         </div>
         <div className="spc-card-types-wrapper">
           {cardTypes}
+
+          <ConditionalView condition={drupalSettings.checkoutComUpapi.processMada}>
+            <CardTypeSVG key="mada-svg" type="mada" class="mada is-active" />
+          </ConditionalView>
         </div>
 
-        <ConditionalView condition={window.drupalSettings.user.uid > 0}>
+        <ConditionalView condition={drupalSettings.user.uid > 0}>
           <ConditionalView condition={drupalSettings.checkoutComUpapi.tokenize === true}>
             <div className="spc-payment-save-card">
               <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
