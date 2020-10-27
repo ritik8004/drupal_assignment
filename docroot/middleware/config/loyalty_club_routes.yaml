@@ -1,0 +1,34 @@
+loyalty_club.get_customer_points:
+    path: /get/loyalty-club/get-customer-details
+    controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::getCustomerDetails
+    methods: GET
+
+loyalty_club.get_product_points:
+    path: /post/loyalty-club/get-product-points
+    controller: App\Controller\LoyaltyClub\LoyaltyClubController::getProductPoints
+    methods: POST
+
+loyalty_club.search_apc_user:
+    path: /post/loyalty-club/search-apc-user
+    controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::searchApcUser
+    methods: POST
+
+loyalty_club.apc_status_update:
+    path: /post/loyalty-club/apc-status-update
+    controller: App\Controller\LoyaltyClub\LoyaltyClubController::apcStatusUpdate
+    methods: POST
+
+loyalty_club.send_otp:
+    path: /post/loyalty-club/send-otp
+    controller: App\Controller\LoyaltyClub\LoyaltyClubOtpController::sendOtp
+    methods: POST
+
+loyalty_club.verify_otp:
+    path: /post/loyalty-club/verify-otp
+    controller: App\Controller\LoyaltyClub\LoyaltyClubOtpController::verifyOtp
+    methods: POST
+
+loyalty_club.loyalty_club_sign_up:
+    path: /post/loyalty-club/sign-up
+    controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::loyaltyClubSignUp
+    methods: POST

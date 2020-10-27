@@ -83,37 +83,6 @@ payment.payment_error:
   controller: App\Controller\PaymentController::handlePaymentFail
   methods: GET
 
-loyalty_club.get_customer_points:
-    path: /get/loyalty-club/get-customer-details
-    controller: App\Controller\LoyaltyCustomerController::getCustomerDetails
-    methods: GET
-
-loyalty_club.get_product_points:
-    path: /post/loyalty-club/get-product-points
-    controller: App\Controller\LoyaltyClubController::getProductPoints
-    methods: POST
-
-loyalty_club.search_apc_user:
-    path: /post/loyalty-club/search-apc-user
-    controller: App\Controller\LoyaltyCustomerController::searchApcUser
-    methods: POST
-
-loyalty_club.apc_status_update:
-    path: /post/loyalty-club/apc-status-update
-    controller: App\Controller\LoyaltyClubController::apcStatusUpdate
-    methods: POST
-
-loyalty_club.send_otp:
-    path: /post/loyalty-club/send-otp
-    controller: App\Controller\LoyaltyClubOtpController::sendOtp
-    methods: POST
-
-loyalty_club.verify_otp:
-    path: /post/loyalty-club/verify-otp
-    controller: App\Controller\LoyaltyClubOtpController::verifyOtp
-    methods: POST
-
-loyalty_club.loyalty_club_sign_up:
-    path: /post/loyalty-club/sign-up
-    controller: App\Controller\LoyaltyCustomerController::loyaltyClubSignUp
-    methods: POST
+loyalty_club_routes:
+  # Contains all loyalty club related routes.
+  resource: './loyalty_club_routes.yaml'
