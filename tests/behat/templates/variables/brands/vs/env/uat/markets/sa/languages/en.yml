@@ -61,8 +61,6 @@ variables:
   landmark: ''
   postal_code: ''
   mobile: '555555555'
-  anon_email: 'exampleuser@mailinator.com'
-  anon_username: 'Sample User Name'
   store_area: 'Al Aqiq, Riyadh Saudi Arabia'
   language_city_option: 'أم الجماجم'
   language_area_option: 'أم الجماجم'

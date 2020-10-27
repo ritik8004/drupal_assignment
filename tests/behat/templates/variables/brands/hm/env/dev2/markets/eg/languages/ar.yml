@@ -1,7 +1,5 @@
 variables:
   url_base_uri: 'https://hmeg2-dev2.factory.alshaya.com/ar'
-  var_username: 'mitesh@axelerant.com'
-  var_password: 'Alshaya@2017'
   collection_filter: ''
   sort_filter: 'رتب حسب'
   price_filter: 'السعر'
@@ -61,8 +59,6 @@ variables:
   landmark: 'Near Landmark D'
   postal_code: '23456'
   mobile: '1055667788'
-  anon_email: 'exampleuser@mailinator.com'
-  anon_username: 'Sample User Name'
   language_order_confirm_text: 'تأكيد الطلبية'
   language_order_detail: 'order detail'
   language_delivery_type: 'Home delivery'
