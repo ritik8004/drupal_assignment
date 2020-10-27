@@ -773,31 +773,6 @@ class AlshayaPromoLabelManager {
     }
     else {
       $free_sku_entity = reset($free_skus);
-      $free_sku_media = $this->imagesManager->getFirstImage($free_sku_entity);
-
-      // Context to expose free gift data in mobile api.
-      if ($context == 'mapp') {
-        // If free gift sku has no media, then we check from the default
-        // image from the configuration.
-        if (empty($free_sku_media) && !empty($default_image = $this->imagesManager->getProductDefaultImage())) {
-          $free_sku_image_url = file_create_url($default_image->getFileUri());
-        }
-
-        if ($free_sku_media) {
-          $free_sku_image_url = file_create_url($free_sku_media['drupal_uri']);
-        }
-
-        $return = [
-          'free_sku_code' => $free_sku_entity->getSku(),
-          'free_sku_title' => $free_sku_entity->get('name')->getString(),
-          'promo_title' => $free_gift_promotion['text'],
-          'promo_code' => $free_gift_promotion['coupon_code'],
-          'sku_image' => $free_sku_image_url,
-          'coupon' => $coupon,
-        ];
-
-        return $return;
-      }
 
       $url = Url::fromRoute(
         'alshaya_acm_promotion.free_gift_modal',
@@ -838,6 +813,8 @@ class AlshayaPromoLabelManager {
         '#promo_code' => $free_gift_promotion['coupon_code'],
       ];
 
+      $free_sku_media = $this->imagesManager->getFirstImage($free_sku_entity);
+
       // If free gift sku has no media, then we check from the default
       // image from the configuration.
       if (empty($free_sku_media) && !empty($default_image = $this->imagesManager->getProductDefaultImage())) {
@@ -846,11 +823,28 @@ class AlshayaPromoLabelManager {
           'file' => $default_image,
           'drupal_uri' => $default_image->getFileUri(),
         ];
+        $free_sku_image_url = file_create_url($default_image->getFileUri());
       }
 
       if ($free_sku_media) {
         $free_sku_image['#title'] = $this->skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku_entity->label(), '192x168');
         $return['#sku_image'] = $this->renderer->renderPlain($free_sku_image);
+        $free_sku_image_url = file_create_url($free_sku_media['drupal_uri']);
+      }
+
+      // Context to expose free gift data in mobile api.
+      if ($context == 'mapp') {
+
+        $return = [
+          'free_sku_code' => $free_sku_entity->getSku(),
+          'free_sku_title' => $free_sku_entity->get('name')->getString(),
+          'promo_title' => $free_gift_promotion['text'],
+          'promo_code' => $free_gift_promotion['coupon_code'],
+          'sku_image' => $free_sku_image_url,
+          'coupon' => $coupon,
+        ];
+
+        return $return;
       }
     }
 
