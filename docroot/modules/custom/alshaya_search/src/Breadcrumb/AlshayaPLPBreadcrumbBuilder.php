@@ -89,6 +89,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           ],
         ];
       }
+      // Remove term name from breadcrumb if checked for any category.
       $remove_term_from_breadcrumb = $term->get('field_remove_term_in_breadcrumb')->getString();
       if (!$remove_term_from_breadcrumb) {
         // Add term to breadcrumb.
