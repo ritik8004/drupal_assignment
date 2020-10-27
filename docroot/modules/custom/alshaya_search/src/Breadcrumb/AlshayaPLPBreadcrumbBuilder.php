@@ -89,9 +89,12 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           ],
         ];
       }
-
-      // Add term to breadcrumb.
-      $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()], $options));
+      // Remove term name from breadcrumb if checked for any category.
+      $remove_term_from_breadcrumb = $term->get('field_remove_term_in_breadcrumb')->getString();
+      if (!$remove_term_from_breadcrumb) {
+        // Add term to breadcrumb.
+        $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()], $options));
+      }
     }
 
     // Add the current route context in cache.
