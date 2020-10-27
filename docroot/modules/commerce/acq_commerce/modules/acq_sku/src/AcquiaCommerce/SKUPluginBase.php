@@ -75,7 +75,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    * the form validation using form arguments.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->addToCartSubmit($form, $form_state);
+    // Not execute ACM submit handler.
   }
 
   /**
