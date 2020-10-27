@@ -547,13 +547,11 @@ class AlshayaPromoLabelManager {
    *   Product.
    * @param string $view_mode
    *   View mode.
-   * @param string $type
-   *   Request type.
    *
    * @return array
    *   Promotion render data (generic/dynamic/free).
    */
-  public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode, string $type = '') {
+  public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode) {
     // Get promotions for the product.
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
     $displayMode = $view_mode === 'api' ? 'api' : 'links';
