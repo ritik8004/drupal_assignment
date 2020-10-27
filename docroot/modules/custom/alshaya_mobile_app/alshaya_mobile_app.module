@@ -78,12 +78,17 @@ function alshaya_mobile_app_alshaya_acm_product_light_product_data_alter(SKU $sk
         unset($data['promotions'][$key]['promo_node']);
       }
     }
+  }
+}
 
-    // Add deeplink to load free gift sku data from pdp api.
-    if (isset($data['free_gift_promotion']) && !empty($data['free_gift_promotion']['free_sku_code'])) {
-      $free_gift_sku = SKU::loadFromSku($data['free_gift_promotion']['free_sku_code']);
-      $data['free_gift_promotion']['deeplink'] = \Drupal::service('alshaya_mobile_app.utility')->getDeepLink($free_gift_sku, 'free_gift');
-    }
+/**
+ * Implements hook_alshaya_mobile_app_product_exclude_linked_data_alter().
+ */
+function alshaya_mobile_app_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKU $sku) {
+  // Add deeplink to load free gift sku data from pdp api.
+  if (isset($data['free_gift_promotion']) && !empty($data['free_gift_promotion']['free_sku_code'])) {
+    $free_gift_sku = SKU::loadFromSku($data['free_gift_promotion']['free_sku_code']);
+    $data['free_gift_promotion']['deeplink'] = \Drupal::service('alshaya_mobile_app.utility')->getDeepLink($free_gift_sku);
   }
 }
 

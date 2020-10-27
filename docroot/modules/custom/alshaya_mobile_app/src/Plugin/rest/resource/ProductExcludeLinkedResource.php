@@ -17,7 +17,6 @@ use Drupal\rest\ResourceResponse;
 use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -115,13 +114,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $productCategoryHelper;
 
   /**
-   * The request stack service.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -152,8 +144,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   Sku info helper object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   The Product Category helper service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack service.
    */
   public function __construct(
     array $configuration,
@@ -169,8 +159,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ProductOptionsManager $product_options_manager,
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
-    ProductCategoryHelper $product_category_helper,
-    RequestStack $request_stack
+    ProductCategoryHelper $product_category_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -187,7 +176,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->productCategoryHelper = $product_category_helper;
-    $this->requestStack = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -208,8 +196,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('acq_sku.product_options_manager'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
-      $container->get('alshaya_acm_product.category_helper'),
-      $container->get('request_stack')
+      $container->get('alshaya_acm_product.category_helper')
     );
   }
 
@@ -222,12 +209,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   The response containing delivery methods data.
    */
   public function get(string $sku) {
-    $is_sku_free_gift = FALSE;
-    $param = $this->requestStack->query->get('type');
-    if (isset($param) && $param === 'free_gift') {
-      $is_sku_free_gift = TRUE;
-    }
-
     $skuEntity = SKU::loadFromSku($sku);
 
     if (!($skuEntity instanceof SKUInterface)) {
@@ -235,7 +216,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
 
     $link = '';
-    if (!$is_sku_free_gift) {
+    if (!$this->skuManager->isSkuFreeGift($skuEntity)) {
       $node = $this->skuManager->getDisplayNode($sku);
       if (!($node instanceof NodeInterface)) {
         throw (new NotFoundHttpException());
@@ -256,7 +237,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $data['flags'],
     ], TRUE);
 
-    if (!$is_sku_free_gift) {
+    if (!$this->skuManager->isSkuFreeGift($skuEntity)) {
       $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     }
 
