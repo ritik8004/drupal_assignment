@@ -55,7 +55,6 @@ body.aura-header-open .header--wrapper {
     }
 
     @include breakpoint($desktop) {
-      display: none;
       position: absolute;
       width: 100%;
       min-width: 19.6875rem;

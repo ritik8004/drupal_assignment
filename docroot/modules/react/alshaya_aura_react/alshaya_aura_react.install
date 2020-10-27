@@ -22,10 +22,15 @@ function alshaya_aura_react_install() {
     'block.block.aurarewardsheader',
   ];
   \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_aura_react', 'optional');
-  // Set the My Accounts AURA block to appear just below the page title.
   $config_factory = \Drupal::configFactory();
+
+  // Set the My Accounts AURA block to appear just below the page title.
   $page_title_weight = (int) $config_factory->get('block.block.page_title')->get('weight');
   $config_factory->getEditable('block.block.myaccountsaurablock')->set('weight', $page_title_weight + 1)->save();
+
+  // Set the AURA rewards header block to appear just below the welcome user.
+  $welcome_user_weight = (int) $config_factory->get('block.block.welcomeuser')->get('weight');
+  $config_factory->getEditable('block.block.aurarewardsheader')->set('weight', $welcome_user_weight + 1)->save();
 
   // Add translations.
   module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translations');

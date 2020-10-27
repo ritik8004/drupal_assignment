@@ -112,6 +112,7 @@ class AuraHelper {
       'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
       'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
       'mobile_maxlength' => $this->configFactory->get('alshaya_master.mobile_number_settings')->get('maxlength'),
+      'headerLearnMoreLink' => $alshaya_aura_config->get('aura_rewards_header_learn_more_link'),
     ];
 
     return $config;

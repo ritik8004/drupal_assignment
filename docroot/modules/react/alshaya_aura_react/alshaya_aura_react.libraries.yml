@@ -12,7 +12,7 @@ alshaya_aura_my_accounts:
 
 aura_header_library:
   js:
-    assets/js/aura-header.js: {}
+    dist/header.bundle.js: {}
   dependencies:
     - core/drupal
     - core/jquery
