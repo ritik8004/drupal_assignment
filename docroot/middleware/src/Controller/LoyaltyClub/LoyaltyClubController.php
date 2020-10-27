@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\LoyaltyClub;
 
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
