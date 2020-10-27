@@ -85,6 +85,8 @@ class AlshayaAcmCheckoutComAPIHelper {
     }
 
     $cache_key = 'alshaya_acm_checkoutcom:api_configs';
+
+    // Cache time in minutes, set 0 to disable caching.
     $cache_time = (int) Settings::get('checkout_com_upapi_config_cache_time', 5);
 
     // Disable caching if cache time set to 0 or null in settings.
