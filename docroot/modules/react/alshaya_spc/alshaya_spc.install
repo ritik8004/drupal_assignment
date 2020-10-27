@@ -13,6 +13,19 @@ use Drupal\Core\Utility\UpdateException;
 /**
  * Implements hook_update_N().
  *
+ * [5.12.0] Deploy new checkout_com_upapi payment method as disabled.
+ */
+function alshaya_spc_update_8007() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $data = $config->get('exclude_payment_methods');
+  $data['checkout_com_upapi'] = 'checkout_com_upapi';
+  $config->set('exclude_payment_methods', $data);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.8.0] Disable new qpay/knet (checkout.com) payment methods.
  */
 function alshaya_spc_update_8006() {
