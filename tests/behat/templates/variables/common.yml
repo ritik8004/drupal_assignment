@@ -18,14 +18,3 @@ variables:
   spc_mada_visa_card_expiry: '09/21'
   spc_mada_visa_card_cvv: '257'
   spc_mada_password: 'Checkout1!'
-  spc_anon_email: 'sampleUserName@mailinator.com'
-  anon_email: 'exampleuser@mailinator.com'
-  anon_username: 'Sample User Name'
-  spc_user_email: "prachi.nagpal@acquia.com"
-  spc_user_password: "PR4(h!Te3t"
-  spc_new_registered_user_email: 'prachi.nagpal@acquia.com'
-  spc_new_registered_user_password: 'PR4(h!Te3t'
-  spc_user_email_new: "prachi.nagpal@acquia.com"
-  spc_user_password_new: "PR4(h!Te3t"
-  spc_mada_anon_username: 'prachi.nagpal@acquia.com'
-  spc_full_name: 'Prachi Nagpal'

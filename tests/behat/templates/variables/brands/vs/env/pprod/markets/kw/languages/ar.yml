@@ -76,6 +76,4 @@ variables:
   landmark: 'Near Landmark D'
   postal_code: '23456'
   mobile: '55667788'
-  anon_email: 'exampleuser@mailinator.com'
-  anon_username: 'Sample User Name'
   store_area: 'Salmiya'

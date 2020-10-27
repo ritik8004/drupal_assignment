@@ -40,7 +40,7 @@ foreach ($profiles as $profile => $files) {
         $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile, $viewport);
 
         $output = new ConsoleOutput();
-        $output->write("Building features for: $profile", TRUE, Output::VERBOSITY_NORMAL);
+        $output->write("Building $viewport features for: $profile ", TRUE, Output::VERBOSITY_NORMAL);
 
         $behat_config[$profile . '-' . $viewport] = $prepare_behat;
         $feature = new AlshayaFeatureProcess([
