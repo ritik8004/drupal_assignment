@@ -75,20 +75,6 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
     this.cvvValidations(event);
   };
 
-  handleCheckoutKitJsErrors = (data) => {
-    Drupal.logJavascriptError(
-      'Payment failed',
-      `Payment failed with error code ${data.errorCode}`,
-      GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS,
-    );
-    dispatchCustomEvent('spcCheckoutMessageUpdate', {
-      type: 'error',
-      message: (data.errorCode === '70000')
-        ? getStringMessage('transaction_failed')
-        : getStringMessage('payment_error'),
-    });
-  }
-
   validateBeforePlaceOrder = () => {
     const {
       number,
