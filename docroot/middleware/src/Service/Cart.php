@@ -1383,7 +1383,10 @@ class Cart {
         }
       }
 
-      $this->cancelCartReservation($e->getMessage());
+      // UPAPI has cart locking mechanism, we do not need cancel reservation.
+      if (!$this->isUpapiPaymentMethod($data['paymentMethod']['method'])) {
+        $this->cancelCartReservation($e->getMessage());
+      }
 
       $error_message = $e->getCode() > 600
         ? 'Back-end system is down'
