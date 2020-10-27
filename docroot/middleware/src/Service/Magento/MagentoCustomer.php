@@ -3,7 +3,7 @@
 namespace App\Service\Magento;
 
 /**
- * Class MagentoCustomer.
+ * Provides helper functions to get and create cusomer info.
  *
  * @package App\Service\Magento
  */
@@ -60,7 +60,12 @@ class MagentoCustomer {
       'store_id' => $this->magentoInfo->getMagentoStoreId(),
     ];
 
-    return $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_selected_payment'),
+      'json' => (object) $data,
+    ];
+
+    return $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
   }
 
   /**
@@ -74,18 +79,22 @@ class MagentoCustomer {
    */
   public function getCustomerByMail(string $email) {
     $url = 'customers/search';
-    $query['query'] = [
-      'searchCriteria[filterGroups][0][filters][0][field]' => 'email',
-      'searchCriteria[filterGroups][0][filters][0][value]' => $email,
-      'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
-      'searchCriteria[filterGroups][1][filters][0][field]' => 'store_id',
-      'searchCriteria[filterGroups][1][filters][0][value]' => implode(
-        ',', array_values($this->magentoInfo->getMagentoStoreIds())
-      ),
-      'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
+
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('customer_search'),
+      'query' => [
+        'searchCriteria[filterGroups][0][filters][0][field]' => 'email',
+        'searchCriteria[filterGroups][0][filters][0][value]' => $email,
+        'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
+        'searchCriteria[filterGroups][1][filters][0][field]' => 'store_id',
+        'searchCriteria[filterGroups][1][filters][0][value]' => implode(
+          ',', array_values($this->magentoInfo->getMagentoStoreIds())
+        ),
+        'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'in',
+      ],
     ];
 
-    $result = $this->magentoApiWrapper->doRequest('GET', $url, $query);
+    $result = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
 
     return empty($result['items']) ? [] : reset($result['items']);
   }

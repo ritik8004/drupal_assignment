@@ -2,11 +2,12 @@
 
 namespace App\Service\Drupal;
 
+use App\Service\Config\SystemSettings;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class DrupalInfo.
+ * Mainly provides information about the related Drupal site.
  */
 class DrupalInfo {
 
@@ -18,13 +19,26 @@ class DrupalInfo {
   protected $request;
 
   /**
+   * System Settings.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $systemSettings;
+
+  /**
    * DrupalInfo constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
    *   RequestStack Object.
+   * @param \App\Service\Config\SystemSettings $system_settings
+   *   System Settings.
    */
-  public function __construct(RequestStack $request) {
+  public function __construct(
+    RequestStack $request,
+    SystemSettings $system_settings
+  ) {
     $this->request = $request->getCurrentRequest();
+    $this->systemSettings = $system_settings;
   }
 
   /**
@@ -88,6 +102,20 @@ class DrupalInfo {
       ],
       'verify' => FALSE,
     ]));
+  }
+
+  /**
+   * Returns the PHP timeout value for the given path.
+   *
+   * @param string $context
+   *   The context in which the timeout is required.
+   *
+   * @return int
+   *   The timeout time in seconds.
+   */
+  public function getPhpTimeout(string $context) {
+    return $this->systemSettings->getSettings('alshaya_backend_calls_options')['magento'][$context]['timeout']
+        ?? $this->systemSettings->getSettings('alshaya_backend_calls_options')['magento']['default']['timeout'];
   }
 
 }

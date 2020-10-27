@@ -2,10 +2,11 @@
 
 namespace App\Service\CheckoutCom;
 
+use App\Service\Config\SystemSettings;
 use App\Service\Magento\MagentoApiWrapper;
 
 /**
- * Checkout.com Helper.
+ * Provides integration with checkoutcomCheckout.com.
  *
  * @package App\Service\CheckoutCom
  */
@@ -19,13 +20,26 @@ class Helper {
   protected $magentoApi;
 
   /**
+   * Magento API Wrapper.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
+
+  /**
    * Checkout.com Helper constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api
    *   Magento API Wrapper.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
-  public function __construct(MagentoApiWrapper $magento_api) {
+  public function __construct(
+    MagentoApiWrapper $magento_api,
+    SystemSettings $settings
+  ) {
     $this->magentoApi = $magento_api;
+    $this->settings = $settings;
   }
 
   /**
@@ -41,8 +55,11 @@ class Helper {
     static $config;
 
     if (empty($config)) {
+      $request_options = [
+        'timeout' => $this->magentoApi->getMagentoInfo()->getPhpTimeout('checkoutcom_config_get'),
+      ];
       try {
-        $config = $this->magentoApi->doRequest('GET', 'checkoutcom/getConfig');
+        $config = $this->magentoApi->doRequest('GET', 'checkoutcom/getConfig', $request_options);
       }
       catch (\Exception $e) {
         return NULL;
@@ -63,8 +80,13 @@ class Helper {
    */
   public function getCustomerCards(int $customer_id) {
     $url = sprintf('checkoutcom/getTokenList/?customer_id=%d', $customer_id);
+
+    $request_options = [
+      'timeout' => $this->magentoApi->getMagentoInfo()->getPhpTimeout('checkoutcom_token_get'),
+    ];
+
     try {
-      $card_list = $this->magentoApi->doRequest('GET', $url);
+      $card_list = $this->magentoApi->doRequest('GET', $url, $request_options);
     }
     catch (\Exception $e) {
       return NULL;

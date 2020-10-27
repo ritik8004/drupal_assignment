@@ -8,7 +8,7 @@ use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
 
 /**
- * Class MagentoInfo.
+ * Mainly provides Magento connection information.
  */
 class MagentoInfo {
 
@@ -133,6 +133,20 @@ class MagentoInfo {
    */
   public function isCancelReservationEnabled() {
     return $this->systemSettings->getSettings('alshaya_checkout_settings')['cancel_reservation_enabled'] ?? FALSE;
+  }
+
+  /**
+   * Returns the PHP timeout value for the given path.
+   *
+   * @param string $context
+   *   The context in which the timeout is required.
+   *
+   * @return int
+   *   The timeout time in seconds.
+   */
+  public function getPhpTimeout(string $context) {
+    return $this->systemSettings->getSettings('alshaya_backend_calls_options')['magento'][$context]['timeout']
+        ?? $this->systemSettings->getSettings('alshaya_backend_calls_options')['magento']['default']['timeout'];
   }
 
 }
