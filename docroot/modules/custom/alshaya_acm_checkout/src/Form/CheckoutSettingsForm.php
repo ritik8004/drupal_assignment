@@ -202,7 +202,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $options = [];
     foreach ($payment_terms as $term) {
       $code = $term->get('field_payment_code')->getString();
-      $options[$code] = $term->getName() . "(${code})";
+      $options[$code] = $term->getName() . " (${code})";
     }
 
     $form['payment_methods_exclude']['exclude_payment_methods'] = [
