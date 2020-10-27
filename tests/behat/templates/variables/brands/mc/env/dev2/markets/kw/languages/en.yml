@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://mckw-dev2.factory.alshaya.com/en/'
+  url_base_uri: 'https://mckw-dev2.factory.alshaya.com/en'
   var_username: 'mitesh@axelerant.com'
   var_password: 'Alshaya@2017'
   collection_filter: 'Collection'
@@ -46,8 +46,6 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
-  area_option: 'Kuwait City'
-  city_option: ''
   street: 'Street S'
   building: 'Building B'
   locality: 'Block A'
@@ -68,8 +66,6 @@ variables:
   language_order_confirm_text: 'تأكيد الطلبية'
   language_delivery_type: 'خدمة التوصيل للمنزل'
   language_payment_type: 'طريقة الدفع:'
-  language_area_option: 'السالمية'
-  language_city_option: ''
   cart_promotional: ''
   store_area: 'Salmiya'
   cs_payment_type: 'Credit Card/Debit Card'

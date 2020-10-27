@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://flsa2-test.factory.alshaya.com/ar/'
+  url_base_uri: 'https://flsa2-test.factory.alshaya.com/ar'
   language_create_account: 'Create An Account'
   language_sign_in: 'Sign In'
   language_find_store: 'Find a Store'

@@ -53,7 +53,6 @@ variables:
   language_promo_code: 'have a promo code?'
   language_excluding_delivery: 'excluding delivery'
   city_option: ''
-  area_option: 'Andalus'
   street: 'Street A'
   building: 'Building B'
   locality: ''

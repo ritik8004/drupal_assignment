@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://flkw2-test.factory.alshaya.com/en/'
+  url_base_uri: 'https://flkw2-test.factory.alshaya.com/en'
   collection_filter: 'Gender'
   sort_filter: 'sort by'
   price_filter: 'Price'
@@ -44,7 +44,6 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
-  area_option: 'Kuwait City'
   city_option: ''
   street: 'Street S'
   building: 'Building B'
@@ -84,5 +83,3 @@ variables:
   language_delivery_type_text: 'التوصيل متوقع خلال:'
   language_payment_type_text: 'طريقة الدفع:'
   governorate: 'Kuwait City'
-
-

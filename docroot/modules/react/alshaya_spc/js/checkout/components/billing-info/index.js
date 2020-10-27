@@ -79,6 +79,13 @@ export default class BillingInfo extends React.Component {
       }
     });
 
+    // Removing any previously added error messages
+    // from complete purchase validation.
+    const billingAddError = document.getElementById('billing-address-information-error');
+    if (billingAddError !== null) {
+      billingAddError.remove();
+    }
+
     return (
       <div className="spc-billing-information">
         <div className="spc-billing-meta">

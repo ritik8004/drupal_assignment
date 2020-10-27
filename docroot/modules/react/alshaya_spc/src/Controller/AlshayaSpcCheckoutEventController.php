@@ -136,9 +136,6 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
           '@method' => $payment_method,
         ]);
 
-        // Refresh stock for products in cart.
-        $this->spcStockHelper->refreshStockForProductsInCart($cart);
-
         $account = $this->alshayaGetCustomerFromSession();
         if ($account) {
           if (empty($account->get('field_mobile_number')->getString())) {

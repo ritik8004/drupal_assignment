@@ -1095,20 +1095,23 @@ function alshaya_acm_modules_installed($modules) {
  */
 function _alshaya_acm_exclude_sync_from_shield() {
   if (\Drupal::moduleHandler()->moduleExists('shield')) {
+    $config = \Drupal::configFactory()->getEditable('shield.settings');
+
+    $paths = explode(PHP_EOL, $config->get('paths'));
+
     // This list contains all the api urls used to post data to Drupal.
-    $paths = [
+    $paths = array_merge($paths, [
       '/productsync',
       '/productstocksync',
       '/categorysync',
       '/customer/delete',
       '/oauth/token',
       '/rest/session/token',
-    ];
+      '/rest/v1/product-category-mapping',
+    ]);
 
-    \Drupal::getContainer()->get('config.factory')
-      ->getEditable('shield.settings')
-      ->set('paths', implode(PHP_EOL, $paths))
-      ->save();
+    $config->set('paths', implode(PHP_EOL, $paths));
+    $config->save();
   }
 }
 

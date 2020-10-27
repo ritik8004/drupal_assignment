@@ -185,7 +185,7 @@
         }
         else {
           $('html, body').animate({
-            scrollTop: $('.header--wrapper').offset().top
+            scrollTop: 0
           }, 'slow');
 
           setTimeout(function () {
