@@ -1,10 +1,5 @@
-{% if aura_enabled is defined and aura_enabled == 1 %}
-  {% set aura_class = 'aura-enabled' %}
-{% elseif logged_in %}
-  {% set aura_class = '' %}
-{% endif %}
 <div class="main--menu" data-menu-timing="{{ settings.desktop_main_menu_highlight_timing }}">
-<div class="toggle--sign no--desktop {{ aura_class }}">
+<div class="toggle--sign no--desktop">
   <div class="shop one active">{{ 'shop' | t }}</div>
   {% if logged_in and aura_enabled is defined and aura_enabled == 1 %}
     {% include "@alshaya_aura_react/aura-rewards-menu-item.html.twig" %}
@@ -29,16 +24,8 @@
         {{ _self.getlevel1items(level1,level1) }}
       {% endfor %}
     {% endif %}
-  {% if aura_enabled is defined and aura_enabled == 1 %}
-    <div class="no--desktop">
-      <div class="aura-rewards-wrapper">
-        {% include "@alshaya_aura_react/aura-rewards-header-popup.html.twig" %}
-      </div>
-    </div>
-  {% endif %}
   </ul>
 </div>
-
 
 {% macro getlevel1items(level1,level1menu) %}
   {% set promopanel_class = 'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}

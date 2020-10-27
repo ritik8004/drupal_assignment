@@ -45,8 +45,8 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
-    $settings['config'] = $aura_helper->getAuraConfig();
   }
+  $settings['config'] = $aura_helper->getAuraConfig();
 
   $page['#attached']['drupalSettings']['aura'] = $settings;
 }
@@ -81,6 +81,7 @@ function alshaya_aura_react_theme() {
     'aura_rewards_header' => [
       'variables' => [
         'learn_more_link' => '',
+        'strings' => [],
       ],
       'template' => 'aura-rewards-header',
     ],

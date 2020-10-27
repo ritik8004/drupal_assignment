@@ -116,10 +116,15 @@ class AuraFormNewAuraUserModal extends React.Component {
           // Once we get a success response that quick enrollment is done, we close the modal.
           if (result.data.status) {
             const { handleSignUp } = this.props;
-            handleSignUp();
+            handleSignUp(result.data);
             // Close the modals.
             closeNewUserModal();
           }
+        } else {
+          this.setState({
+            messageType: 'error',
+            messageContent: result.data.error_message,
+          });
         }
         removeFullScreenLoader();
       });
