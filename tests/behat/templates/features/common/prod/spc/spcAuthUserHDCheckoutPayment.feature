@@ -4,8 +4,8 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
   Background:
     Given I am on "user/login"
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_user_email}"
-    And I fill in "edit-pass" with "{spc_user_password}"
+    Then I fill in "edit-name" with "{spc_auth_user_email}"
+    And I fill in "edit-pass" with "{spc_auth_user_password}"
     Then I press "edit-submit"
     And I wait 10 seconds
     Then I should be on "/user" page
