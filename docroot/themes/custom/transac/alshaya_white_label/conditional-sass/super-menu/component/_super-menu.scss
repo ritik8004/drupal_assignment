@@ -191,3 +191,10 @@ body.supermenu {
     }
   }
 }
+
+// Hide welcome user title for devices up to tablet
+.c-menu-secondary #block-welcomeuser {
+  @include breakpoint($upto-desktop) {
+    display: none;
+  }
+}
