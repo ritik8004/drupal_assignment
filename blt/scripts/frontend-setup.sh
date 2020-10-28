@@ -79,6 +79,7 @@ do
         cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
         gulp lint:css-with-fail
         gulp lint:js-with-fail
+        gulp lint:module-component-libraries-css-with-fail
       done
     fi
   else
