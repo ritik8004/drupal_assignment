@@ -30,8 +30,16 @@ function removeError(elementId) {
   }
 }
 
+/**
+ * Utility function to get aura localStorage key.
+ */
+function getAuraLocalStorageKey() {
+  return 'aura_data';
+}
+
 export {
   getElementValue,
   showError,
   removeError,
+  getAuraLocalStorageKey,
 };

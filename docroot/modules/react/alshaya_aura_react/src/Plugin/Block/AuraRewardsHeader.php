@@ -2,14 +2,11 @@
 
 namespace Drupal\alshaya_aura_react\Plugin\Block;
 
-use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use GuzzleHttp\ClientInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides 'AURA Rewards Header' block.
@@ -29,32 +26,11 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
   protected $configFactory;
 
   /**
-   * The entity type manager service.
+   * Module handler.
    *
-   * @var \GuzzleHttp\ClientInterface
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $httpClient;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $request;
-
-  /**
-   * Alshaya User Info service object.
-   *
-   * @var \Drupal\alshaya_user\AlshayaUserInfo
-   */
-  protected $userInfo;
-
-  /**
-   * The logger service.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
+  protected $moduleHandler;
 
   /**
    * AuraRewardsHeader constructor.
@@ -67,29 +43,17 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
    *   The plugin implementation definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
-   * @param \GuzzleHttp\ClientInterface $http_client
-   *   The HTTP client service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request
-   *   The request object.
-   * @param \Drupal\alshaya_user\AlshayaUserInfo $user_info
-   *   The user info service.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   The logger service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               ConfigFactoryInterface $config_factory,
-                              ClientInterface $http_client,
-                              RequestStack $request,
-                              AlshayaUserInfo $user_info,
-                              LoggerInterface $logger) {
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
-    $this->httpClient = $http_client;
-    $this->request = $request;
-    $this->userInfo = $user_info;
-    $this->logger = $logger;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -103,10 +67,7 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('http_client'),
-      $container->get('request_stack'),
-      $container->get('alshaya_user.info'),
-      $container->get('logger.channel.alshaya_aura_react')
+      $container->get('module_handler')
     );
   }
 
@@ -114,9 +75,16 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
    * {@inheritdoc}
    */
   public function build() {
+    $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
     return [
       '#theme' => 'aura_rewards_header',
       '#learn_more_link' => $this->configFactory->get('alshaya_aura_react.settings')->get('aura_rewards_header_learn_more_link'),
+      '#strings' => _alshaya_aura_static_strings(),
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/aura-loyalty-forms',
+        ],
+      ],
       '#cache' => [
         'contexts' => [
           'user.roles:anonymous',
