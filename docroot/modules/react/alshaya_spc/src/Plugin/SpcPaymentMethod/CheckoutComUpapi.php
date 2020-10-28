@@ -134,8 +134,8 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       'value' => $this->t('Invalid security code (CVV)'),
     ];
 
-    $build['#strings']['checkout_com_error_info'] = [
-      'key' => 'checkoutcom_upapi_error_info',
+    $build['#strings']['checkout_com_upapi_error_info'] = [
+      'key' => 'checkout_com_upapi_error_info',
       'value' => $this->t('Order ID: @order_id'),
     ];
   }
