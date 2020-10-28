@@ -39,7 +39,8 @@ input[type=radio] {
   }
 }
 
-.payment-method.payment-method-checkout_com {
+.payment-method.payment-method-checkout_com,
+.payment-method.payment-method-checkout_com_upapi {
   .payment-method-bottom-panel {
     .spc-checkout-card-option {
       @include icon('check', after) {
