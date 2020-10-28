@@ -5,7 +5,7 @@ namespace Drupal\acq_sku\Plugin\rest\resource;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\Core\Queue\QueueFactory;
-use Drupal\acq_commerce\Plugin\QueueWorker\CategorySync;
+use Drupal\acq_sku\Plugin\QueueWorker\CategorySync;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
