@@ -10,6 +10,17 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Re-indexing items for updating promo label URLs.
+ */
+function alshaya_search_algolia_update_8006() {
+  $index = Index::load('alshaya_algolia_index');
+  $index->rebuildTracker();
+  $index->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add child categories for algolia menu in lhn.
  */
 function alshaya_search_algolia_update_8005() {
