@@ -696,6 +696,10 @@ class CartController {
                 'additional_data' => [],
               ];
 
+              $this->logger->notice('Calling update payment for finalize exception. Cart id: @cart_id Method: @method', [
+                '@cart_id' => $this->cart->getCartId(),
+                '@method' => $request_content['payment_info']['payment']['method'],
+              ]);
               $updated_cart = $this->cart->updatePayment($payment, $extension);
 
               if (empty($updated_cart)) {
@@ -738,6 +742,10 @@ class CartController {
           $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
         }
 
+        $this->logger->notice('Calling update payment for finalize exception2. Cart id: @cart_id Method: @method', [
+          '@cart_id' => $this->cart->getCartId(),
+          '@method' => $request_content['payment_info']['payment']['method'],
+        ]);
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
 
@@ -754,6 +762,10 @@ class CartController {
           $extension['attempted_payment'] = 1;
         }
 
+        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method', [
+          '@cart_id' => $this->cart->getCartId(),
+          '@method' => $request_content['payment_info']['payment']['method'],
+        ]);
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
 
