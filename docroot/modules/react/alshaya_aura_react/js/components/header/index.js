@@ -12,23 +12,29 @@ import SignUpCompleteHeader from './signup-complete-header';
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    const { isMobile } = this.props;
     const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
         signUpComplete: true,
+        isHeaderModalOpen: !!isMobile,
       };
     } else {
       this.state = {
         signUpComplete: false,
+        isHeaderModalOpen: !!isMobile,
       };
     }
   }
 
   openHeaderModal = () => {
-    this.setState((prevState) => ({
-      isHeaderModalOpen: !prevState.isHeaderModalOpen,
-    }));
+    const { isMobile } = this.props;
+    if (!isMobile) {
+      this.setState((prevState) => ({
+        isHeaderModalOpen: !prevState.isHeaderModalOpen,
+      }));
+    }
   };
 
   handleSignUp = (auraUserDetails) => {
@@ -55,16 +61,23 @@ class Header extends React.Component {
       apc_identifier_number: cardNumber,
     } = this.state;
 
+    const { isMobile } = this.props;
+
     return (
       <>
-        <div className="aura-header-link">
-          <a
-            className="join-aura"
-            onClick={() => this.openHeaderModal()}
-          >
-            <AuraHeaderIcon />
-          </a>
-        </div>
+        {
+          !isMobile
+            && (
+            <div className="aura-header-link">
+              <a
+                className="join-aura"
+                onClick={() => this.openHeaderModal()}
+              >
+                <AuraHeaderIcon />
+              </a>
+            </div>
+            )
+        }
         {
           signUpComplete
             ? (
@@ -72,6 +85,7 @@ class Header extends React.Component {
                 handleNotYou={this.handleNotYou}
                 isHeaderModalOpen={isHeaderModalOpen}
                 cardNumber={cardNumber}
+                isMobile={isMobile}
               />
             )
             : (
