@@ -9,3 +9,11 @@ services:
     arguments: ['@acq_checkoutcom.agent_api', '@config.factory']
     tags:
       - { name: access_check }
+
+  alshaya_acm_checkoutcom.api_helper:
+    class: Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@config.factory'
+      - '@logger.factory'
+      - '@cache.data'

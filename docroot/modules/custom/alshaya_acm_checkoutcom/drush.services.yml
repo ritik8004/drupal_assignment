@@ -1,0 +1,8 @@
+services:
+  alshaya_acm_checkoutcom.commands:
+    class: Drupal\alshaya_acm_checkoutcom\Commands\AlshayaAcmCheckoutComCommands
+    arguments:
+      - '@alshaya_acm_checkoutcom.api_helper'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }

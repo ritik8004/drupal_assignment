@@ -105,9 +105,9 @@ export default class HomeDeliveryInfo extends React.Component {
                     showEditButton
                     headingText={Drupal.t('delivery information')}
                     type="shipping"
-                    showEmail={window.drupalSettings.user.uid === 0}
+                    showEmail={drupalSettings.user.uid === 0}
                     default_val={
-                      window.drupalSettings.user.uid === 0
+                      drupalSettings.user.uid === 0
                         ? this.formatAddressData(address)
                         : null
                     }
