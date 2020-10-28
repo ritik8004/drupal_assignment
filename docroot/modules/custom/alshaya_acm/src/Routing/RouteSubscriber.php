@@ -19,6 +19,7 @@ class RouteSubscriber extends RouteSubscriberBase {
       'rest.csrftoken',
       'rest.stock.GET',
       'oauth2_token.token',
+      'rest.alshaya_acm_product_category_mapping.POST',
     ];
 
     // Allow some rest apis to work in maintenance mode.

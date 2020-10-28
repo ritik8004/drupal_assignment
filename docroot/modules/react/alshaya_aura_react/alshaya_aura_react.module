@@ -45,8 +45,8 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
-    $settings['config'] = $aura_helper->getAuraConfig();
   }
+  $settings['config'] = $aura_helper->getAuraConfig();
 
   $page['#attached']['drupalSettings']['aura'] = $settings;
 }
@@ -81,6 +81,7 @@ function alshaya_aura_react_theme() {
     'aura_rewards_header' => [
       'variables' => [
         'learn_more_link' => '',
+        'strings' => [],
       ],
       'template' => 'aura-rewards-header',
     ],
@@ -176,5 +177,18 @@ function alshaya_aura_react_alshaya_acm_customer_update_account_alter(User $user
       && $customer['extension']['tier_info'] !== $user->get('field_aura_tier')->getString()) {
       $user->set('field_aura_tier', $customer['extension']['tier_info']);
     }
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_order_details_settings_alter().
+ */
+function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings, $order) {
+  if (isset($order['extension_attributes']['apc_accrued_points'])) {
+    $settings['order_details']['accruedPoints'] = $order['extension_attributes']['apc_accrued_points'] ?? 0;
+  }
+
+  if (isset($order['extension_attributes']['apc_redeemed_points'])) {
+    $settings['order_details']['redeemedPoints'] = $order['extension_attributes']['apc_redeemed_points'] ?? 0;
   }
 }

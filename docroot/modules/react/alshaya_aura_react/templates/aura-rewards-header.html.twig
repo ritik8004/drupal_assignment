@@ -1,9 +1,5 @@
-<div class="aura-rewards-wrapper">
-  <div class="aura-header-link">
-    <a href="#">
-      {% include "@alshaya_aura_react/aura-horizontal-color-svg.html.twig" %}
-    </a>
-  </div>
-  {% include "@alshaya_aura_react/aura-rewards-header-popup.html.twig" %}
-  {% include "@alshaya_aura_react/aura-rewards-header-authenticated.html.twig" %}
-</div>
+<div class="aura-rewards-wrapper" id="aura-header-modal"></div>
+
+{% for string in strings %}
+  <input type="hidden" data-string-id="{{ string.key }}" value="{{ string.value }}" />
+{% endfor %}
