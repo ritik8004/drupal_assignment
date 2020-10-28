@@ -28,11 +28,12 @@ class AuraFormRedeemPoints extends React.Component {
     // Convert to money.
     // @todo: Update conversion rate.
     // For now a simple rate of 100 points = 1 currency unit.
+    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     if (e.target.value > 0) {
       const money = e.target.value * 0.01;
       this.setState({
         points: e.target.value,
-        money: `${Drupal.t('KWD')} ${money.toFixed(3)}`,
+        money: `${currencyCode} ${money.toFixed(3)}`,
       });
     } else {
       this.setState({
@@ -88,6 +89,8 @@ class AuraFormRedeemPoints extends React.Component {
       auraTransaction,
     } = this.state;
 
+    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
+
     return (
       <div className="spc-aura-redeem-points-form-wrapper">
         <span className="label">{ Drupal.t('Use your points') }</span>
@@ -102,7 +105,7 @@ class AuraFormRedeemPoints extends React.Component {
               <span className="spc-aura-redeem-points-separator">=</span>
               <AuraRedeemPointsTextField
                 name="spc-aura-redeem-field-amount"
-                placeholder={Drupal.t('KWD 0.000')}
+                placeholder={`${currencyCode} 0.000`}
                 money={money}
                 type="money"
               />
