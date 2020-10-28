@@ -4,12 +4,13 @@ import AuraHeaderIcon from '../../svg-component/aura-header-icon';
 import {
   setStorageInfo,
   getStorageInfo,
-} from '../../utilities/storage';
+} from '../../../../js/utilities/helper';
+import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    const localStorageValues = getStorageInfo();
+    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
@@ -30,7 +31,7 @@ class Header extends React.Component {
 
   handleSignUp = (auraUserDetails) => {
     if (auraUserDetails) {
-      setStorageInfo(auraUserDetails.data);
+      setStorageInfo(auraUserDetails.data, getAuraLocalStorageKey());
       this.setState({
         signUpComplete: true,
       });
