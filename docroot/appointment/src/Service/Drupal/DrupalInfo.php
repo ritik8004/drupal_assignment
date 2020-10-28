@@ -105,7 +105,7 @@ class DrupalInfo {
   }
 
   /**
-   * Returns the PHP timeout value for the given path.
+   * Returns the PHP timeout value for the given context.
    *
    * @param string $context
    *   The context in which the timeout is required.
@@ -114,8 +114,8 @@ class DrupalInfo {
    *   The timeout time in seconds.
    */
   public function getPhpTimeout(string $context) {
-    return $this->systemSettings->getSettings('alshaya_backend_calls_options')['magento'][$context]['timeout']
-        ?? $this->systemSettings->getSettings('alshaya_backend_calls_options')['magento']['default']['timeout'];
+    return $this->systemSettings->getSettings('alshaya_backend_calls_options')['middleware'][$context]['timeout']
+        ?? $this->systemSettings->getSettings('alshaya_backend_calls_options')['middleware']['default']['timeout'];
   }
 
 }

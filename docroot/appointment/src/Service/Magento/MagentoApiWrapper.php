@@ -110,4 +110,14 @@ class MagentoApiWrapper {
     return $result;
   }
 
+  /**
+   * Fetches and returns the Magento info service.
+   *
+   * @return \App\Service\Magento\MagentoInfo
+   *   The magentoInfo service object.
+   */
+  public function getMagentoInfo() {
+    return $this->magentoInfo;
+  }
+
 }
