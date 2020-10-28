@@ -80,6 +80,7 @@ do
         gulp lint:css-with-fail
         gulp lint:js-with-fail
         if (-d $docrootDir/themes/custom/$theme_type_dir/$theme_dir/conditional-sass/)
+        then
           gulp lint:module-component-libraries-css-with-fail
         fi
       done
