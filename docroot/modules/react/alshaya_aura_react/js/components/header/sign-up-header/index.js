@@ -11,6 +11,8 @@ class SignUpHeader extends React.Component {
   }
 
   openOTPModal = () => {
+    const { openHeaderModal } = this.props;
+    openHeaderModal();
     this.setState({
       isOTPModalOpen: true,
     });

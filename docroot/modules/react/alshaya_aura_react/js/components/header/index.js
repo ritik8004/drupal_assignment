@@ -4,8 +4,10 @@ import AuraHeaderIcon from '../../svg-component/aura-header-icon';
 import {
   setStorageInfo,
   getStorageInfo,
+  removeStorageInfo,
 } from '../../../../js/utilities/storage';
 import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
+import SignUpCompleteHeader from './signup-complete-header';
 
 class Header extends React.Component {
   constructor(props) {
@@ -33,18 +35,26 @@ class Header extends React.Component {
     if (auraUserDetails) {
       setStorageInfo(auraUserDetails.data, getAuraLocalStorageKey());
       this.setState({
+        ...auraUserDetails.data,
         signUpComplete: true,
       });
     }
   };
 
+  handleNotYou = () => {
+    removeStorageInfo(getAuraLocalStorageKey());
+    this.setState({
+      signUpComplete: false,
+    });
+  }
+
   render() {
     const {
       signUpComplete,
       isHeaderModalOpen,
+      apc_identifier_number: cardNumber,
     } = this.state;
 
-    // @TODO: Create component for signup complete header and return that instead of null.
     return (
       <>
         <div className="aura-header-link">
@@ -57,11 +67,18 @@ class Header extends React.Component {
         </div>
         {
           signUpComplete
-            ? null
+            ? (
+              <SignUpCompleteHeader
+                handleNotYou={this.handleNotYou}
+                isHeaderModalOpen={isHeaderModalOpen}
+                cardNumber={cardNumber}
+              />
+            )
             : (
               <SignUpHeader
                 handleSignUp={this.handleSignUp}
                 isHeaderModalOpen={isHeaderModalOpen}
+                openHeaderModal={this.openHeaderModal}
               />
             )
         }
