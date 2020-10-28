@@ -4,7 +4,7 @@ import AuraHeaderIcon from '../../svg-component/aura-header-icon';
 import {
   setStorageInfo,
   getStorageInfo,
-} from '../../../../js/utilities/helper';
+} from '../../../../js/utilities/storage';
 import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
 
 class Header extends React.Component {
