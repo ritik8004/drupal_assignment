@@ -1,7 +1,27 @@
 import React from 'react';
 
 const AuraRedeemPointsTextField = (props) => {
-  const { name, placeholder, onChangeCallback } = props;
+  const {
+    name,
+    placeholder,
+    onChangeCallback,
+    money,
+    type,
+  } = props;
+
+  if (type === 'money') {
+    return (
+      <div className={`spc-aura-textfield ${name}-form-item`}>
+        <input
+          placeholder={placeholder}
+          name={name}
+          className={name}
+          defaultValue={money}
+          type="text"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={`spc-aura-textfield ${name}-form-item`}>
