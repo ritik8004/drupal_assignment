@@ -2,9 +2,10 @@
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
-use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
+use Drupal\Core\Queue\QueueFactory;
+use Drupal\acq_commerce\Plugin\QueueWorker\CategorySync;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -34,25 +35,11 @@ class CategorySyncResource extends ResourceBase {
   const CATEGORY_TAXONOMY = 'acq_product_category';
 
   /**
-   * Drupal Entity Type Manager Instance.
+   * Queue factory service.
    *
-   * @var EntityTypeManagerInterface
+   * @var \Drupal\Core\Queue\QueueFactory
    */
-  private $entityManager;
-
-  /**
-   * Drupal Config Factory Instance.
-   *
-   * @var ConfigFactoryInterface
-   */
-  private $configFactory;
-
-  /**
-   * Drupal Entity Query Factory.
-   *
-   * @var QueryFactory
-   */
-  private $queryFactory;
+  protected $queueFactory;
 
   /**
    * Construct.
@@ -67,12 +54,12 @@ class CategorySyncResource extends ResourceBase {
    *   The available serialization formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param \Drupal\acq_sku\CategoryManagerInterface $category_manager
-   *   A CategoryManager instance.
+   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   *   Queue factory service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, CategoryManagerInterface $category_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, QueueFactory $queue_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->categoryManager = $category_manager;
+    $this->queueFactory = $queue_factory;
   }
 
   /**
@@ -85,7 +72,7 @@ class CategorySyncResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get(self::class),
-      $container->get('acq_sku.category_manager')
+      $container->get('queue')
     );
   }
 
@@ -101,14 +88,11 @@ class CategorySyncResource extends ResourceBase {
    *   HTTP Response.
    */
   public function post(array $categories) {
-
-    $response = $this->categoryManager->synchronizeCategory(
-      self::CATEGORY_TAXONOMY,
-      $categories
-    );
-
-    $response['success'] = (bool) ((count($response['created']) > 0) || (count($response['updated']) > 0));
-
+    $queue = $this->queueFactory->get(CategorySync::QUEUE_NAME);
+    // Add flag in queue for category sync.
+    // @see \Drupal\acq_commerce\Plugin\QueueWorker\CategorySync
+    $queue->createItem('category sync');
+    $response['success'] = TRUE;
     return (new ModifiedResourceResponse($response));
   }
 
