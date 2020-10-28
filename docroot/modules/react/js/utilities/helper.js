@@ -15,5 +15,5 @@ function isAuraEnabled() {
 }
 
 export {
-  isAuraEnabled
+  isAuraEnabled,
 };
