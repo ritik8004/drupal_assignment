@@ -458,6 +458,15 @@ class CartController {
     $response['shipping']['address'] = CustomerHelper::formatAddressForFrontend($response['shipping']['address'] ?? []);
     $response['billing_address'] = CustomerHelper::formatAddressForFrontend($data['cart']['billing_address'] ?? []);
 
+    // If payment method is not available in the list, we set the first
+    // available payment method.
+    if (!empty($response['payment']) && !empty($response['payment']['method'])) {
+      $codes = array_column($response['payment']['methods'], 'code');
+      if (!in_array($response['payment']['method'], $codes)) {
+        $response['payment']['method'] = $response['payment']['methods'][0]['code'];
+      }
+    }
+
     return $response;
   }
 
