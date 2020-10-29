@@ -8,18 +8,20 @@ import React from 'react';
  * @param {String} indexName
  *   The current index name.
  */
-const renderWidget = WidgetManager =>
-  class RenderWidget extends React.Component {
-
+const renderWidget = (WidgetManager) => class RenderWidget extends React.Component {
     updateItemCount = (attr, count) => {
-      this.props.filterResult({'attr': attr, count: count});
+      const { filterResult } = this.props;
+      filterResult({ attr, count });
     }
 
     render() {
       return (
-        <WidgetManager {...this.props} itemCount={(attr, count) => this.updateItemCount(attr, count)}/>
+        <WidgetManager
+          {...this.props}
+          itemCount={(attr, count) => this.updateItemCount(attr, count)}
+        />
       );
     }
-  };
+};
 
 export default renderWidget;

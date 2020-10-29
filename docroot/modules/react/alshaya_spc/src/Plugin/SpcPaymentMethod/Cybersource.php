@@ -26,8 +26,6 @@ class Cybersource extends AlshayaSpcPaymentMethodPluginBase {
       'acceptedCards' => Settings::get('cybersource')['accepted_cards'],
     ];
 
-    $build['#attached']['library'][] = 'alshaya_white_label/secure-text';
-
     $build['#strings']['invalid_cybersource_card'] = [
       'key' => 'invalid_cybersource_card',
       'value' => $this->t('Invalid Credit Card number'),

@@ -49,9 +49,9 @@ class PathProcessorPrettyPaths implements InboundPathProcessorInterface, Outboun
     // We remove the facet parameters and then get the term_path.
     // For example: /en/ladies/--color-blue => en/term/10/--color-blue.
     if (stripos($path, '/--', 0) !== FALSE) {
-      $path_alias = substr($path, 0, strrpos($path, '/--'));
+      $path_alias = substr($path, 0, stripos($path, '/--'));
       $term_path = $this->aliasManager->getPathByAlias($path_alias);
-      $query_param = substr($path, strrpos($path, '/--') + 1);
+      $query_param = substr($path, stripos($path, '/--') + 1);
       $path = $term_path . '/' . $query_param;
     }
 

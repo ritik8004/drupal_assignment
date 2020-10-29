@@ -3,7 +3,9 @@ import parse from 'html-react-parser';
 import { connectStateResults } from 'react-instantsearch-dom';
 import { toggleSearchResultsContainer, toggleSortByFilter } from '../../utils';
 
-const NoResults = ({ searchResults, isSearchStalled, searching, searchingForFacetValues }) => {
+const NoResults = ({
+  searchResults, isSearchStalled, searching, searchingForFacetValues,
+}) => {
   if (!searchResults || searchResults.nbHits > 0) {
     return null;
   }

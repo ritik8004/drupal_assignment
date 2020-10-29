@@ -6,6 +6,7 @@ use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_performance\Plugin\QueueWorker\InvalidateCacheTags;
 use Drupal\alshaya_search_api\AlshayaSearchApiDataHelper;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
@@ -87,15 +88,26 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
     if ($node instanceof NodeInterface) {
       $item_id = 'entity:node/' . $node->id() . ':' . $node->language()->getId();
 
-      // Note: This will stop working as soon as we move away from
-      // Search API Database. This seems at-least somewhat far in future so
-      // going ahead with it. We could even invoke Algolia OR Solr Query here.
-      // Load the categories currently indexed for this product.
-      $indexed_category_ids = $this->helper->getIndexedData($item_id, 'field_category');
-      $current_category_ids = array_column($node->get('field_category')->getValue(), 'target_id');
+      $indexed_category_ids = [];
+      $current_category_ids = [];
+
+      // Once we move to Algolia we disable Database Index and we do not
+      // need to invalidate caches for PLPs.
+      if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
+        // Note: This will stop working as soon as we move away from
+        // Search API Database. This seems at-least somewhat far in future so
+        // going ahead with it. We could even invoke Algolia OR Solr Query here.
+        // Load the categories currently indexed for this product.
+        $indexed_category_ids = $this->helper->getIndexedData($item_id, 'field_category');
+        $current_category_ids = array_column($node->get('field_category')->getValue(), 'target_id');
+      }
 
       $indexes = ContentEntity::getIndexesForEntity($node);
       foreach ($indexes as $index) {
+        if ($index->isReadOnly() || !($index->status())) {
+          continue;
+        }
+
         $items = $index->loadItemsMultiple([$item_id]);
         $index->indexSpecificItems($items);
 
@@ -108,22 +120,24 @@ class AlshayaSearchApiProductProcessedEventSubscriber implements EventSubscriber
         }
       }
 
-      // If the product goes OOS, invalidate all the term pages.
-      if ($entity->getPluginInstance()->isProductInStock($entity)) {
-        $categories_to_invalidate = array_merge(
+      if ($current_category_ids || $indexed_category_ids) {
+        // If the product goes OOS, invalidate all the term pages.
+        if ($entity->getPluginInstance()->isProductInStock($entity)) {
+          $categories_to_invalidate = array_merge(
           // If we have new categories - add them for cache invalidation.
-          array_diff($current_category_ids, $indexed_category_ids),
+            array_diff($current_category_ids, $indexed_category_ids),
 
-          // If we have categories removed - add them for cache invalidation.
-          array_diff($indexed_category_ids, $current_category_ids)
-        );
-      }
-      else {
-        $categories_to_invalidate = array_merge($current_category_ids, $indexed_category_ids);
-      }
+            // If we have categories removed - add them for cache invalidation.
+            array_diff($indexed_category_ids, $current_category_ids)
+          );
+        }
+        else {
+          $categories_to_invalidate = array_merge($current_category_ids, $indexed_category_ids);
+        }
 
-      foreach ($categories_to_invalidate ?? [] as $category) {
-        $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $category);
+        foreach ($categories_to_invalidate ?? [] as $category) {
+          $this->queueCacheInvalidation(self::CACHE_TAG_PREFIX . $category);
+        }
       }
     }
   }

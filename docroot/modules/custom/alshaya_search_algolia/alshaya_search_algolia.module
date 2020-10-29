@@ -10,7 +10,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
-use AlgoliaSearch\Client;
 
 /**
  * Implements hook_module_implements_alter().
@@ -42,40 +41,26 @@ function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, In
  * Implements hook_acq_sku_base_fields_updated().
  */
 function alshaya_search_algolia_acq_sku_base_fields_updated(array $fields, $op = 'add') {
-  $backend_config = \Drupal::configFactory()->get('search_api.server.algolia')->get('backend_config');
-  $client_config = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options');
-  $client = new Client($backend_config['application_id'], $backend_config['api_key']);
-  $index_name = $client_config['algolia_index_name'];
-
-  switch ($op) {
-    case 'add':
-      foreach ($fields as $field_code => $field) {
-        if (empty($field['facet'])) {
-          continue;
-        }
-
-        foreach (\Drupal::languageManager()->getLanguages() as $language) {
-          $index = $client->initIndex($index_name . '_' . $language->getId());
-          $settings = $index->getSettings();
-          $settings['attributesForFaceting'][] = 'attr_' . $field_code;
-          $index->setSettings($settings);
-
-          foreach ($settings['replicas'] as $replica) {
-            $replicaIndex = $client->initIndex($replica);
-            $replicaSettings = $replicaIndex->getSettings();
-            $replicaSettings['attributesForFaceting'][] = 'attr_' . $field_code;
-            $replicaIndex->setSettings($replicaSettings);
-          }
-        }
-      }
-
-      break;
-
-    case 'remove':
-      // @TODO: Add code here to remove facet from Algolia settings.
-      break;
+  // For now we support only adding new fields / facets for Algolia.
+  if ($op !== 'add') {
+    return;
   }
 
+  $indexable_fields = array_keys(array_filter($fields, function ($item) {
+    return isset($item['facet']) && $item['facet'];
+  }));
+
+  if (empty($indexable_fields)) {
+    return;
+  }
+
+  array_walk($indexable_fields, function (&$field_code) {
+    $field_code = "attr_{$field_code}";
+  });
+
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $helper */
+  $helper = \Drupal::service('alshaya_search_algolia.index_helper');
+  $helper->addCustomFacetToIndex($indexable_fields);
 }
 
 /**

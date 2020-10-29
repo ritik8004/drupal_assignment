@@ -108,8 +108,6 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
       ? 'alshaya_spc/checkout_sandbox_kit'
       : 'alshaya_spc/checkout_live_kit';
 
-    $build['#attached']['library'][] = 'alshaya_white_label/secure-text';
-
     $build['#strings']['invalid_card'] = [
       'key' => 'invalid_card',
       'value' => $this->t('Invalid Debit / Credit Card number'),

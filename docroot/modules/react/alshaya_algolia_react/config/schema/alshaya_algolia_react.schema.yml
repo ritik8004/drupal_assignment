@@ -8,3 +8,21 @@ alshaya_algolia_react.settings:
       sequence:
         type: string
         label: 'Attribute'
+    local_storage_expire:
+      type: string
+      label: 'Expire time for localStorage.'
+    application_id:
+      type: string
+      label: 'Application id.'
+    search_api_key:
+      type: string
+      label: 'Search api key.'
+    hits:
+      type: integer
+      label: 'Number of results to show.'
+    top_results:
+      type: integer
+      label: 'Number of top results to show for autocomplete.'
+    items_per_page:
+      type: integer
+      label: 'Number of items to show for search results.'
