@@ -303,8 +303,12 @@ class Cart {
 
     $url = sprintf('carts/%d/getCart', $cart_id);
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_get'),
+    ];
+
     try {
-      $updated_cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      $updated_cart = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
 
       if ($updated_cart === FALSE) {
         throw new \Exception('Cart no longer available', 404);
@@ -378,12 +382,21 @@ class Cart {
       }
     }
 
-    $url = $customer_id > 0
-      ? str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts')
-      : 'carts';
+    if ($customer_id > 0) {
+      $url = str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts');
+      $request_options = [
+        'timeout' => $this->magentoInfo->getPhpTimeout('cart_search'),
+      ];
+    }
+    else {
+      $url = 'carts';
+      $request_options = [
+        'timeout' => $this->magentoInfo->getPhpTimeout('cart_create'),
+      ];
+    }
 
     try {
-      $cart_id = (int) $this->magentoApiWrapper->doRequest('POST', $url);
+      $cart_id = (int) $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
 
       // Store cart id in session.
       $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, $cart_id);
@@ -767,7 +780,12 @@ class Cart {
         'store_id' => $this->magentoInfo->getMagentoStoreId(),
       ];
 
-      $result = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      $request_options = [
+        'timeout' => $this->magentoInfo->getPhpTimeout('cart_associate'),
+        'json' => (object) $data,
+      ];
+
+      $result = $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
 
       // After association restore the cart.
       if ($result) {
@@ -1035,8 +1053,13 @@ class Cart {
       unset($data['items'][$key]['variant_sku']);
     }
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_update'),
+      'json' => (object) $data,
+    ];
+
     try {
-      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data], $action);
+      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, $request_options, $action);
       static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;
 
@@ -1189,8 +1212,13 @@ class Cart {
 
     $url = sprintf('carts/%d/estimate-shipping-methods', $this->getCartId());
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_estimate_shipping'),
+      'json' => $data,
+    ];
+
     try {
-      $static[$key] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+      $static[$key] = $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
 
       $static[$key] = array_filter($static[$key], function ($method) {
         return ($method['carrier_code'] !== 'click_and_collect');
@@ -1244,8 +1272,12 @@ class Cart {
 
     $url = sprintf('carts/%d/payment-methods', $this->getCartId());
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_payment_methods'),
+    ];
+
     try {
-      $static[$key] = $this->magentoApiWrapper->doRequest('GET', $url);
+      $static[$key] = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while getting payment methods from MDC. Error message: @message', [
@@ -1269,9 +1301,13 @@ class Cart {
       return $method;
     }
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_selected_payment'),
+    ];
+
     $url = sprintf('carts/%d/selected-payment-method', $this->getCartId());
     try {
-      $result = $this->magentoApiWrapper->doRequest('GET', $url);
+      $result = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
       return $result['method'] ?? NULL;
     }
     catch (\Exception $e) {
@@ -1360,7 +1396,7 @@ class Cart {
 
     try {
       $request_options = [
-        'timeout' => $checkout_settings['place_order_timeout'],
+        'timeout' => $this->magentoInfo->getPhpTimeout('order_place'),
       ];
 
       // We don't pass any payment data in place order call to MDC because its
@@ -1717,8 +1753,12 @@ class Cart {
   public function getCartStores($lat, $lon) {
     $cart_id = $this->getCartId();
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cnc_check'),
+    ];
+
     try {
-      if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, []))) {
+      if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, $request_options))) {
         return $stores;
       }
 
@@ -1756,8 +1796,13 @@ class Cart {
    */
   private function handleCheckoutComRedirection() {
     $url = sprintf('carts/%d/selected-payment-method', $this->getCartId());
+
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_selected_payment'),
+    ];
+
     try {
-      $result = $this->magentoApiWrapper->doRequest('GET', $url);
+      $result = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while getting payment set on cart. Error message: @message', [
