@@ -6,7 +6,7 @@ use GuzzleHttp\TransferStats;
 use Psr\Log\LoggerInterface;
 
 /**
- * Provides integration with Magento.
+ * Class MagentoApiWrapper.
  */
 class MagentoApiWrapper {
 
@@ -76,7 +76,7 @@ class MagentoApiWrapper {
       ));
     };
 
-    $request_options['timeout'] = $request_options['timeout'] ?? $this->magentoInfo->getPhpTimeout('default');
+    $request_options['timeout'] = $request_options['timeout'] ?? 30;
     try {
       $response = $this->magentoInfo->getMagentoApiClient()->request(
         $method,
@@ -108,16 +108,6 @@ class MagentoApiWrapper {
     }
 
     return $result;
-  }
-
-  /**
-   * Fetches and returns the Magento info service.
-   *
-   * @return \App\Service\Magento\MagentoInfo
-   *   The magentoInfo service object.
-   */
-  public function getMagentoInfo() {
-    return $this->magentoInfo;
   }
 
 }

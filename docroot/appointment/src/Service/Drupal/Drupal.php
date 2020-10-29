@@ -9,14 +9,14 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Helper class which interacts Drupal.
+ * Class Drupal.
  */
 class Drupal {
 
   /**
    * Drupal info.
    *
-   * @var \App\Service\Drupal\DrupalInfo
+   * @var \AlshayaMiddleware\Drupal\DrupalInfo
    */
   private $drupalInfo;
 
@@ -44,7 +44,7 @@ class Drupal {
   /**
    * Drupal constructor.
    *
-   * @param \App\Service\Drupal\DrupalInfo $drupal_info
+   * @param \AlshayaMiddleware\Drupal\DrupalInfo $drupal_info
    *   Drupal info service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
@@ -101,8 +101,7 @@ class Drupal {
     };
 
     $request_options['headers']['Host'] = $this->drupalInfo->getDrupalBaseUrl();
-    $request_options['timeout'] = $request_options['timeout'] ?? $this->drupalInfo->getPhpTimeout('default');
-
+    $request_options['timeout'] = $request_options['timeout'] ?? 30;
     return $client->request($method, $url, $request_options);
   }
 

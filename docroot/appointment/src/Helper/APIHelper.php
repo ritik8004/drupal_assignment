@@ -10,7 +10,7 @@ use App\Service\Config\SystemSettings;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class APIHelper methods.
+ * Class APIHelper.
  *
  * @package App\Helper
  */
@@ -164,14 +164,7 @@ class APIHelper {
       $passwordNode = new \SoapVar('<ns2:Password Type="' . $passwordNS . '">' . $password . '</ns2:Password>', XSD_ANYXML);
 
       // Create Username token node and add vars.
-      $usernameTokenNode = new \SoapVar(
-        [$usernameNode, $passwordNode],
-        SOAP_ENC_OBJECT,
-        NULL,
-        $headerNS,
-        'UsernameToken',
-        $headerNS
-      );
+      $usernameTokenNode = new \SoapVar([$usernameNode, $passwordNode], SOAP_ENC_OBJECT, NULL, $headerNS, 'UsernameToken', $headerNS);
 
       // Create security node.
       $securityNode = new \SoapVar([$usernameTokenNode], SOAP_ENC_OBJECT, NULL, $headerNS, 'Security', $headerNS);
@@ -304,7 +297,6 @@ class APIHelper {
           'Authorization' => 'Bearer ' . $token,
           'Content-Type' => 'application/json',
         ],
-        'timeout' => $this->magento->getMagentoInfo()->getPhpTimeout('customer_me_get'),
       ];
 
       $result = $this->magento->doRequest('GET', 'customers/me', $options);
