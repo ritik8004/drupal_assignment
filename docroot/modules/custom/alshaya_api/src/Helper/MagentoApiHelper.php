@@ -2,6 +2,8 @@
 
 namespace Drupal\alshaya_api\Helper;
 
+use Drupal\Core\Site\Settings;
+
 /**
  * Class Magento Api Helper.
  *
@@ -129,6 +131,20 @@ class MagentoApiHelper {
     }
 
     return $data;
+  }
+
+  /**
+   * Returns the PHP timeout value for the given context.
+   *
+   * @param string $context
+   *   The context in which the timeout is required.
+   *
+   * @return int
+   *   The timeout time in seconds.
+   */
+  public function getPhpTimeout(string $context) {
+    return Settings::get('alshaya_backend_calls_options')['drupal'][$context]['timeout']
+        ?? Settings::get('alshaya_backend_calls_options')['drupal']['default']['timeout'];
   }
 
 }
