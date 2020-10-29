@@ -191,7 +191,7 @@ class NewCard extends React.Component {
           {cardTypes}
         </div>
         <ConditionalView condition={drupalSettings.user.uid > 0}>
-          <ConditionalView condition={drupalSettings.checkoutComUpapi.tokenize === true}>
+          <ConditionalView condition={drupalSettings.checkoutCom.tokenize === true}>
             <div className="spc-payment-save-card">
               <input type="checkbox" value={1} id="payment-card-save" name="save_card" />
               <label htmlFor="payment-card-save">
@@ -200,7 +200,7 @@ class NewCard extends React.Component {
             </div>
           </ConditionalView>
 
-          <ConditionalView condition={drupalSettings.checkoutComUpapi.tokenize === false}>
+          <ConditionalView condition={drupalSettings.checkoutCom.tokenize === false}>
             <input type="hidden" value={0} id="payment-card-save" name="save_card" />
           </ConditionalView>
         </ConditionalView>
