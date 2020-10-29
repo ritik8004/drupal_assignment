@@ -39,6 +39,7 @@ services:
     class: Drupal\alshaya_search_api\AlshayaSearchApiDataHelper
     arguments:
       - '@database'
+      - '@entity_type.manager'
 
   alshaya_search_api.listing_settings_subscriber:
     class: Drupal\alshaya_search_api\EventSubscriber\ProductListingSettingsSubscriber

@@ -17,6 +17,14 @@ gtm_algolia:
     - alshaya_seo_transac/gtm
     - core/drupal.debounce
 
+gtm_algolia_plp:
+  version: 1.x
+  js:
+    js/alshaya_seo.gtm.algolia_plp.js: {}
+  dependencies:
+    - alshaya_seo_transac/gtm
+    - core/drupal.debounce
+
 checkout_login:
   version: 1.x
   js:

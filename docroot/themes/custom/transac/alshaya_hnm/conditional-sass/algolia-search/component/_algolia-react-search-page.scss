@@ -1,4 +1,15 @@
 #alshaya-algolia-search {
+  .show-all-filters-algolia {
+    font-family: $hnm-demibold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: $plp_facet_title;
+    font-size: 0.6875rem;
+  }
+}
+
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
   .block-alshaya-category-lhn-block {
     a {
       @include arabic-letter-spacing;
@@ -11,7 +22,8 @@
     }
   }
 
-  .block-facet-blockcategory-facet-search {
+  .block-facet-blockcategory-facet-search,
+  .algolia-plp-category-facet {
     a {
       color: $hnm-black-three;
 
@@ -36,9 +48,18 @@
     }
   }
 
+  .show-all-filters-algolia {
+    @include breakpoint($only-mobile) {
+      height: 2.9375rem;
+    }
+  }
+
   .container-without-product {
-    .block-facet-blockcategory-facet-search + .show-all-filters-algolia {
-      padding: 0 1.25rem;
+    .block-facet-blockcategory-facet-search,
+    .block-facet-blockcategory-facet-plp {
+      & + .show-all-filters-algolia {
+        padding: 0 1.25rem;
+      }
     }
   }
 
@@ -207,40 +228,30 @@
     }
   }
 
-  .c-content__region {
-    .sticky-filter-wrapper {
-      .c-collapse-item {
-        .c-collapse__title {
-          text-transform: uppercase;
-          font-family: $hnm-demibold;
-          color: $plp_facet_title;
-          letter-spacing: 1px;
-          font-size: 0.8125rem;
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        text-transform: uppercase;
+        font-family: $hnm-demibold;
+        color: $plp_facet_title;
+        letter-spacing: 1px;
+        font-size: 0.8125rem;
 
-          @include icon(chevrondown, after) {
-            position: absolute;
-            font-size: 0.4375rem;
-            #{$right}: 1.25rem;
-          }
+        @include icon(chevrondown, after) {
+          position: absolute;
+          font-size: 0.4375rem;
+          #{$right}: 1.25rem;
+        }
 
-          &.active {
+        &.active {
+          color: $default-anchor-link-hover;
+
+          &::after {
             color: $default-anchor-link-hover;
-
-            &::after {
-              color: $default-anchor-link-hover;
-            }
           }
         }
       }
     }
-  }
-
-  .show-all-filters-algolia {
-    font-family: $hnm-demibold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: $plp_facet_title;
-    font-size: 0.6875rem;
   }
 
   #attr_size.size_group_list {
@@ -335,12 +346,17 @@
   }
 
   .block-alshaya-grid-count-block {
+    @include breakpoint($tablet) {
+      width: 22%;
+    }
+
     .grid-buttons {
       .large-col-grid,
       .small-col-grid {
         width: 1.5rem;
         height: 1.5rem;
         display: inline-block;
+        margin-#{$left}: 0.5rem;
 
         svg {
           display: none;
@@ -363,5 +379,9 @@
         }
       }
     }
+  }
+
+  .total-result-count {
+    margin-#{$right}: 1rem;
   }
 }

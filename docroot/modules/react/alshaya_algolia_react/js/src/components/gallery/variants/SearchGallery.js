@@ -1,20 +1,20 @@
 import React from 'react';
-import Slider from "react-slick";
+import Slider from 'react-slick';
 import { updateAfter } from '../../../utils';
 import ImageElement from '../imageHelper/ImageElement';
 
-const SliderElement = props => {
-  return (
-    <ImageElement
-      src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-      data-src={props.src}
-      title={props.title}
-      className="b-lazy"
-      onMouseOver={props.mouseenter.bind(this)}
-      onMouseOut={props.mouseout.bind(this)}
-    />
-  );
-};
+const SliderElement = ({
+  src, title, mouseenter, mouseout,
+}) => (
+  <ImageElement
+    src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
+    data-src={src}
+    title={title}
+    className="b-lazy"
+    onMouseOver={mouseenter}
+    onMouseOut={mouseout}
+  />
+);
 
 const sliderSettings = {
   dots: false,
@@ -28,29 +28,24 @@ const sliderSettings = {
 };
 
 class SearchGallery extends React.PureComponent {
-
-  static defaultProps = {
-    media: [],
-  }
-
   constructor(props) {
     super(props);
     this.mainImageRef = React.createRef();
     this.mainImage = props.media.length > 0 ? props.media[0] : {};
   }
 
-  changeImg = event => {
+  changeImg = (event) => {
     clearTimeout(this.setTimeoutConst);
     this.setTimeoutConst = null;
-    if (event.target.hasAttribute("src") && event.target.getAttribute("src").length > 0) {
-      this.mainImageRef.current.firstChild.src = event.target.getAttribute("src");
+    if (event.target.hasAttribute('src') && event.target.getAttribute('src').length > 0) {
+      this.mainImageRef.current.firstChild.src = event.target.getAttribute('src');
     }
   };
 
-  resetImg = event => {
+  resetImg = () => {
     const obj = this;
-    this.setTimeoutConst = setTimeout(function() {
-      obj.mainImageRef.current.firstChild.src = obj.mainImage.url
+    this.setTimeoutConst = setTimeout(() => {
+      obj.mainImageRef.current.firstChild.src = obj.mainImage.url;
     }, updateAfter);
   };
 
@@ -59,7 +54,7 @@ class SearchGallery extends React.PureComponent {
 
     const origObj = this;
     const thumbnails = [];
-    media.forEach((element, index) => {
+    media.forEach((element) => {
       thumbnails.push((
         <SliderElement
           key={element.url}
@@ -76,12 +71,12 @@ class SearchGallery extends React.PureComponent {
 
     return (
       <div className="alshaya_search_gallery">
-        <div className='alshaya_search_mainimage' ref={this.mainImageRef} data-sku-image={`${mainImageUrl}`}>
+        <div className="alshaya_search_mainimage" ref={this.mainImageRef} data-sku-image={`${mainImageUrl}`}>
           <ImageElement
             src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
             data-src={mainImageUrl}
             title={title}
-            className='b-lazy'
+            className="b-lazy"
           />
         </div>
         <div className="alshaya_search_slider" data-slider-status={sliderStatus}>

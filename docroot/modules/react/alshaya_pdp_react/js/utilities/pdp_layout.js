@@ -114,7 +114,7 @@ export const triggerAddToCart = (
     let maxSaleQty = (context === 'main') ? productData.maxSaleQty : productData.max_sale_qty;
     let maxSaleQtyParent = productData.max_sale_qty_parent;
     const gtmAttributes = productInfo[skuCode].gtm_attributes;
-    let freeGiftPromotion = productInfo[skuCode].freeGiftPromotion;
+    let { freeGiftPromotion } = productInfo[skuCode];
     let options = [];
 
     if (configurableCombinations) {

@@ -1,26 +1,26 @@
-import React from 'react'
+import React from 'react';
 import { connectStats } from 'react-instantsearch-dom';
 
 import ProgressBar from './widgets/ProgressBar';
 import { showLoader, toggleSearchResultsContainer, toggleSortByFilter } from '../../utils';
 
 // Stats with pagination.
-const PaginationStats = connectStats(({nbHits, currentResults}) => {
+const PaginationStats = connectStats(({ nbHits, currentResults }) => {
   toggleSearchResultsContainer();
   toggleSortByFilter('show');
 
   return (
-    <React.Fragment>
+    <>
       <span className="ais-Stats-text">
         {
           Drupal.t('showing @current of @total items', {
             '@current': currentResults,
-            '@total': nbHits
+            '@total': nbHits,
           })
         }
       </span>
-      <ProgressBar completed={((currentResults * 100)/nbHits)}/>
-    </React.Fragment>
+      <ProgressBar completed={((currentResults * 100) / nbHits)} />
+    </>
   );
 });
 
@@ -28,7 +28,7 @@ const Pagination = React.memo((props) => {
   const loadNextCotent = () => {
     showLoader();
     props.refineNext();
-  }
+  };
 
   if (props.results > 0) {
     return (
@@ -40,6 +40,7 @@ const Pagination = React.memo((props) => {
           <li className="pager__item">
             <button
               className="button"
+              type="submit"
               rel="next"
               onClick={() => loadNextCotent()}
             >
@@ -52,8 +53,9 @@ const Pagination = React.memo((props) => {
   }
 
   return (null);
-}, (prevProps, nextProps) => {
-  return (prevProps.results === nextProps.results && prevProps.hasMore === nextProps.hasMore);
-});
+}, (prevProps, nextProps) => (
+  prevProps.results === nextProps.results
+  && prevProps.hasMore === nextProps.hasMore
+));
 
 export default Pagination;

@@ -31,6 +31,8 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
 use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
+use Drupal\search_api\Entity\Index;
+use Drupal\search_api\Query\ConditionGroup;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionInterface;
@@ -1728,19 +1730,40 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-  $terms = _alshaya_master_get_recursive_child_terms($category_id);
-  $arguments = [
-    'tid' => implode('+', $terms),
-  ];
-
   $unique_nodes = [];
   $page = 0;
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $term_details = \Drupal::service('alshaya_acm_product_category.page')->getCurrentSelectedCategory($langcode, $category_id);
+  $index = Index::load('alshaya_algolia_index');
 
   do {
-    $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments, $page);
+    try {
+      $query = $index->query();
+      $query->range($page, $page * $limit);
+      $conditionGroup = new ConditionGroup();
+      $conditionGroup->addCondition('stock', 0, '>');
+      $conditionGroup->addCondition('field_category_name.lvl' . ($term_details['level'] - 1), '"' . $term_details['hierarchy'] . '"');
+      $query->addConditionGroup($conditionGroup);
+      $query->setOption('attributesToRetrieve', ['nid']);
+      $query->setOption('ruleContexts', $term_details['ruleContext']);
+      $results = $query->execute()->getResultItems();
 
-    $nodes = array_map(function ($result) use ($skuManager) {
-      if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
+      $nids = array_map(function ($result) {
+        return $result->getField('nid')->getValues()[0];
+      }, $results);
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_acm_product')->notice('Could not fetch data for carousel from Algolia because of reason: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      return [];
+    }
+
+    $entity_type_manager = \Drupal::service('entity_type.manager')->getStorage('node');
+
+    $nodes = array_map(function ($nid) use ($skuManager, $entity_type_manager) {
+      if (($node = $entity_type_manager->load($nid)) && ($node instanceof NodeInterface)) {
         $color = $node->get('field_product_color')->getString();
 
         if ($color) {
@@ -1749,7 +1772,7 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
 
         return $node;
       }
-    }, $results);
+    }, $nids);
 
     $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $limit);
     foreach ($nodes as $node) {

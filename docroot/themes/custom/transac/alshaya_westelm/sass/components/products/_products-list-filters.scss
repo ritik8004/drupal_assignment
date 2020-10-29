@@ -18,7 +18,8 @@
     text-transform: capitalize;
   }
 
-  .all-filters-algolia {
+  .all-filters-algolia,
+  .all-filters-plp-algolia {
     .filter__foot {
       .facet-clear-all,
       .facet-apply-all {
@@ -34,7 +35,8 @@
 .c-plp .c-content__region {
   // Filter Head
   .all-filters .filter,
-  .all-filters-algolia {
+  .all-filters-algolia,
+  .all-filters-plp-algolia {
     .filter {
       &__head {
         padding: 0 1rem;

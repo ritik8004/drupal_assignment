@@ -19,7 +19,7 @@
     }
   }
 
-  &.block-facet-blockcategory-facet-plp {
+  &.block-facet-blockcategory-facet-plp:not(.algolia-plp-category-facet) {
     @include breakpoint($only-mobile) {
       border: none;
       padding-#{$left}: 1.25rem;
@@ -373,7 +373,7 @@
   }
 }
 
-.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search):not(.block-facet-blockcategory-facet-plp),
 .c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
   ul {
     padding: 0;

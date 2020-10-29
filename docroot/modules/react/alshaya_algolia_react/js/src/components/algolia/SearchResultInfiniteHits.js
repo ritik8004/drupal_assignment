@@ -3,8 +3,9 @@ import connectInfiniteHits from './connectors/connectInfiniteHits';
 import Teaser from '../teaser';
 import { getAlgoliaStorageValues, removeLoader } from '../../utils';
 
-export default connectInfiniteHits(props => {
-  const { hits, hasMore, refineNext } = props;
+export default connectInfiniteHits(({
+  hits, hasMore, refineNext, pageNumber, pageType, children,
+}) => {
   // Create ref to get element after it gets rendered.
   const teaserRef = useRef();
 
@@ -18,10 +19,10 @@ export default connectInfiniteHits(props => {
         }
         removeLoader();
         // Trigger back to search page.
-        window.onpageshow = function(){
-          var storage_value = getAlgoliaStorageValues();
-          if (typeof storage_value !== 'undefined' && storage_value !== null) {
-            Drupal.processBackToSearch(storage_value)
+        window.onpageshow = () => {
+          const storageValue = getAlgoliaStorageValues();
+          if (typeof storageValue !== 'undefined' && storageValue !== null) {
+            Drupal.processBackToSearch(storageValue);
           }
         };
         // Trigger gtm event one time, only when search we have search results.
@@ -29,15 +30,24 @@ export default connectInfiniteHits(props => {
           Drupal.algoliaReact.triggerSearchResultsUpdatedEvent(hits.length);
         }
       }
-    }, [hits]
+    }, [hits],
   );
 
   return (
-    <React.Fragment>
+    <>
       <div className="view-content" ref={teaserRef}>
-        { hits.length > 0 ? hits.map(hit => <Teaser key={hit.objectID} hit={hit} />) : (null) }
+        { hits.length > 0
+          ? hits.map((hit) => (
+            <Teaser
+              key={hit.objectID}
+              hit={hit}
+              pageType={pageType}
+              pageNumber={pageNumber}
+            />
+          ))
+          : (null)}
       </div>
-      { props.children({results: hits.length, hasMore: hasMore, refineNext: refineNext}) }
-    </React.Fragment>
+      { children && children({ results: hits.length, hasMore, refineNext }) }
+    </>
   );
 });
