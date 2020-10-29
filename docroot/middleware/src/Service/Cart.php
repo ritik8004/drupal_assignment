@@ -1302,17 +1302,13 @@ class Cart {
     $settings = $this->settings->getSettings('spc_middleware');
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
-    // Check if last update of our cart is more recent than X minutes.
-    $expiration_time = $checkout_settings['purchase_expiration_time'];
-    $cart_last_updated = strtotime($cart['cart']['updated_at']);
-    $current_time = strtotime(date('Y-m-d H:i:s'));
-    $time_difference = round(abs($current_time - $cart_last_updated) / 60, 2);
-
     // Get cart totals.
     $cart_total = $cart['totals']['grand_total'];
 
-    // If time difference more then call getCart to get fresh data.
-    if ($time_difference > $expiration_time) {
+    $isCartExpired = CartInfoHelper::isCartExpired($cart, $checkout_settings);
+
+    // If cart is expired then call getCart to get fresh cart.
+    if ($isCartExpired) {
       try {
         $cart = $this->getCart();
       }
