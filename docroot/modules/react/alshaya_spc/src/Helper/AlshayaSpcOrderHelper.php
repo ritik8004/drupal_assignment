@@ -429,31 +429,49 @@ class AlshayaSpcOrderHelper {
       ? NULL
       : $this->getProcessedAddress($order['billing']);
 
-    if ($order['payment']['method'] === 'knet') {
-      // @TODO: Get this information from Magento in a better way.
-      $orderDetails['payment']['transactionId'] = $order['payment']['additional_information'][0];
-      $orderDetails['payment']['paymentId'] = $order['payment']['additional_information'][2];
-
-      // @TODO: Get this information from Magento.
-      $orderDetails['payment']['resultCode'] = 'CAPTURED';
+    foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
+      $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
     }
-    elseif ($order['payment']['method'] == 'banktransfer' && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
-      $instructions = $order['extension']['bank_transfer_instructions'];
-      $bank_transfer = [
-        '#theme' => 'banktransfer_payment_details',
-        '#account_number' => $instructions['account_number'],
-        '#address' => $instructions['address'],
-        '#bank_name' => $instructions['bank_name'],
-        '#beneficiary_name' => $instructions['beneficiary_name'],
-        '#branch' => $instructions['branch'],
-        '#iban' => $instructions['iban'],
-        '#swift_code' => $instructions['swift_code'],
-        '#purpose' => $this->t('Purchase of Goods - @order_id', [
-          '@order_id' => $order['increment_id'],
-        ]),
-      ];
 
-      $orderDetails['payment']['bankDetails'] = $this->renderer->renderPlain($bank_transfer);
+    switch ($order['payment']['method']) {
+      case 'knet':
+        $orderDetails['payment']['transactionId'] = $payment_info['transaction_id'];
+        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
+        $orderDetails['payment']['resultCode'] = 'CAPTURED';
+        break;
+
+      case 'checkout_com_upapi_knet':
+        $orderDetails['payment']['transactionId'] = $payment_info['knet_transaction_id'];
+        $orderDetails['payment']['paymentId'] = $payment_info['knet_payment_id'];
+        $orderDetails['payment']['resultCode'] = $payment_info['knet_result'];
+        break;
+
+      case 'checkout_com_upapi_qpay':
+        $orderDetails['payment']['transactionId'] = $payment_info['confirmation_id'];
+        $orderDetails['payment']['paymentId'] = $payment_info['pun'] ?? '';
+        $orderDetails['payment']['resultCode'] = $payment_info['status'];
+        break;
+
+      case 'banktransfer':
+        if (!empty(array_filter($order['extension']['bank_transfer_instructions']))) {
+          $instructions = $order['extension']['bank_transfer_instructions'];
+          $bank_transfer = [
+            '#theme' => 'banktransfer_payment_details',
+            '#account_number' => $instructions['account_number'],
+            '#address' => $instructions['address'],
+            '#bank_name' => $instructions['bank_name'],
+            '#beneficiary_name' => $instructions['beneficiary_name'],
+            '#branch' => $instructions['branch'],
+            '#iban' => $instructions['iban'],
+            '#swift_code' => $instructions['swift_code'],
+            '#purpose' => $this->t('Purchase of Goods - @order_id', [
+              '@order_id' => $order['increment_id'],
+            ]),
+          ];
+
+          $orderDetails['payment']['bankDetails'] = $this->renderer->renderPlain($bank_transfer);
+        }
+        break;
     }
 
     return $orderDetails;
