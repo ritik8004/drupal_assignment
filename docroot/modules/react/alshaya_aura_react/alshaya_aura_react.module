@@ -178,3 +178,10 @@ function _alshaya_aura_react_system_menu_block_account_pre_render(array $build) 
   $build['content']['#prefix'] = '<div id="aura-mobile-header-signin-register"></div>';
   return $build;
 }
+
+/**
+ * Implements hook_preprocess_alshaya_main_menu_level1() for menu template.
+ */
+function alshaya_aura_react_preprocess_alshaya_main_menu_level1(array &$variables) {
+  $variables['aura_enabled'] = 1;
+}
