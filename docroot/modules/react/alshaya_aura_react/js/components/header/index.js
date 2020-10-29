@@ -13,9 +13,14 @@ import {
   getUserAuraTier,
   getAllAuraStatus,
 } from '../../utilities/helper';
-import { getAPIData } from '../../utilities/api/fetchApiData';
+import { getAPIData, postAPIData } from '../../utilities/api/fetchApiData';
 import SignUpHeaderCta from './sign-up-header-cta';
 import Loading from '../../../../alshaya_spc/js/utilities/loading';
+import dispatchCustomEvent from '../../../../js/utilities/events';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../../../../js/utilities/showRemoveFullScreenLoader';
 
 class Header extends React.Component {
   constructor(props) {
@@ -29,6 +34,7 @@ class Header extends React.Component {
       loyaltyStatus: getUserAuraStatus(),
       tier: getUserAuraTier(),
       points: 0,
+      cardNumber: '',
     };
 
     if (!getUserDetails().id) {
@@ -48,6 +54,7 @@ class Header extends React.Component {
       loyaltyStatus,
       tier,
       points,
+      cardNumber,
     } = this.state;
 
     // No API call to fetch points for anonymous users or user with
@@ -73,6 +80,7 @@ class Header extends React.Component {
             loyaltyStatus: userLoyaltyStatus,
             tier: result.data.tier || tier,
             points: result.data.auraPoints || points,
+            cardNumber: result.data.cardNumber || cardNumber,
           });
 
           // If user's loyalty status is APC_LINKED_VERIFIED or APC_LINKED_NOT_VERIFIED,
@@ -87,6 +95,7 @@ class Header extends React.Component {
         this.setState({
           wait: false,
         });
+        dispatchCustomEvent('customerDetailsFetched', result.data);
       });
     }
   }
@@ -101,24 +110,69 @@ class Header extends React.Component {
   };
 
   handleSignUp = (auraUserDetails) => {
-    this.setState({
-      signUpComplete: true,
-    });
+    if (getUserDetails().id) {
+      const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
 
-    // For anonymous users, store aura data in local storage and update state.
-    if (!getUserDetails().id && auraUserDetails) {
-      setStorageInfo(auraUserDetails.data, getAuraLocalStorageKey());
+      dispatchCustomEvent('customerSignedUpHeader', auraStatus);
       this.setState({
-        ...auraUserDetails.data,
+        signUpComplete: true,
+        loyaltyStatus: auraStatus,
       });
+    } else if (auraUserDetails) {
+      // For anonymous users, store aura data in local storage and update state.
+      const auraUserData = {
+        signUpComplete: true,
+        loyaltyStatus: auraUserDetails.data.apc_link,
+        points: auraUserDetails.data.apc_points,
+        cardNumber: auraUserDetails.data.apc_identifier_number,
+        tier: auraUserDetails.data.tier_info,
+        email: auraUserDetails.data.email,
+        mobile: auraUserDetails.data.mobile,
+      };
+      setStorageInfo(auraUserData, getAuraLocalStorageKey());
+      this.setState(auraUserData);
     }
   };
 
   handleNotYou = () => {
-    removeStorageInfo(getAuraLocalStorageKey());
-    this.setState({
-      signUpComplete: false,
-    });
+    if (getUserDetails().id) {
+      const { cardNumber } = this.state;
+      const auraStatus = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
+
+      this.updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
+      dispatchCustomEvent('customerClickedNotYouHeader', auraStatus);
+    } else {
+      removeStorageInfo(getAuraLocalStorageKey());
+      this.setState({
+        signUpComplete: false,
+      });
+    }
+  }
+
+  updateUsersLoyaltyStatus = (cardNumber, auraStatus, link) => {
+    // API call to update user's loyalty status.
+    showFullScreenLoader();
+    const apiUrl = 'post/loyalty-club/apc-status-update';
+    const data = {
+      uid: getUserDetails().id,
+      apcIdentifierId: cardNumber,
+      apcLinkStatus: auraStatus,
+      link,
+    };
+    const apiData = postAPIData(apiUrl, data);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.data !== undefined && result.data.error === undefined) {
+          if (result.data.status) {
+            this.setState({
+              loyaltyStatus: auraStatus,
+            });
+          }
+        }
+        removeFullScreenLoader();
+      });
+    }
   }
 
   render() {
@@ -126,7 +180,7 @@ class Header extends React.Component {
       wait,
       signUpComplete,
       isHeaderModalOpen,
-      apc_identifier_number: cardNumber,
+      cardNumber,
       points,
       loyaltyStatus,
     } = this.state;

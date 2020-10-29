@@ -1,7 +1,6 @@
 import React from 'react';
 import LoyaltyClubBlock from '../loyalty-club/loyalty-club-block';
 import { getUserAuraStatus, getUserAuraTier, getAllAuraStatus } from '../../utilities/helper';
-import { getAPIData } from '../../utilities/api/fetchApiData';
 
 class MyAccount extends React.Component {
   constructor(props) {
@@ -20,7 +19,27 @@ class MyAccount extends React.Component {
   }
 
   componentDidMount() {
-    // API call to get customer points.
+    const {
+      loyaltyStatus,
+    } = this.state;
+
+    if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+      this.setState({
+        wait: false,
+      });
+      return;
+    }
+
+    document.addEventListener('customerDetailsFetched', this.setCustomerDetails, false);
+  }
+
+  setCustomerDetails = (customerDetails) => {
+    if (customerDetails.detail === null) {
+      this.setState({
+        wait: false,
+      });
+      return;
+    }
     const {
       loyaltyStatus,
       tier,
@@ -31,35 +50,27 @@ class MyAccount extends React.Component {
       pointsOnHold,
     } = this.state;
 
-    if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
-      this.setState({
-        wait: false,
-      });
-      return;
-    }
+    const {
+      auraStatus,
+      tier: auraTier,
+      auraPoints,
+      cardNumber: auraCardNumber,
+      auraPointsToExpire,
+      auraPointsExpiryDate,
+      auraOnHoldPoints,
+    } = customerDetails.detail;
 
-    const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
-    const apiData = getAPIData(apiUrl);
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.data !== undefined && result.data.error === undefined) {
-          this.setState({
-            loyaltyStatus: result.data.auraStatus || loyaltyStatus,
-            tier: result.data.tier || tier,
-            points: result.data.auraPoints || points,
-            cardNumber: result.data.cardNumber || cardNumber,
-            expiringPoints: result.data.auraPointsToExpire || expiringPoints,
-            expiryDate: result.data.auraPointsExpiryDate || expiryDate,
-            pointsOnHold: result.data.auraOnHoldPoints || pointsOnHold,
-          });
-        }
-        this.setState({
-          wait: false,
-        });
-      });
-    }
-  }
+    this.setState({
+      wait: false,
+      loyaltyStatus: auraStatus || loyaltyStatus,
+      tier: auraTier || tier,
+      points: auraPoints || points,
+      cardNumber: auraCardNumber || cardNumber,
+      expiringPoints: auraPointsToExpire || expiringPoints,
+      expiryDate: auraPointsExpiryDate || expiryDate,
+      pointsOnHold: auraOnHoldPoints || pointsOnHold,
+    });
+  };
 
   updateLoyaltyStatus = (loyaltyStatus) => {
     this.setState({

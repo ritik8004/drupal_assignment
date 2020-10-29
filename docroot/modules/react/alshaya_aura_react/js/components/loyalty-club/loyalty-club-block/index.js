@@ -12,6 +12,16 @@ import {
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 
 export default class LoyaltyClubBlock extends React.Component {
+  componentDidMount() {
+    document.addEventListener('customerClickedNotYouHeader', this.updateLoyaltyStatus, false);
+    document.addEventListener('customerSignedUpHeader', this.updateLoyaltyStatus, false);
+  }
+
+  updateLoyaltyStatus = (auraStatus) => {
+    const { updateLoyaltyStatus } = this.props;
+    updateLoyaltyStatus(auraStatus.detail);
+  }
+
   handleNotYou = (cardNumber) => {
     this.updateUsersLoyaltyStatus(cardNumber, getAllAuraStatus().APC_NOT_LINKED_NOT_U, 'N');
   }
