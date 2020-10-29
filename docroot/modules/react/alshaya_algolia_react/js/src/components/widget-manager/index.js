@@ -10,14 +10,20 @@ import renderWidget from './RenderWidget';
 const WidgetManager = React.memo((props) => {
   const
     {
-      facet: filter, indexName, itemCount, facet: { name },
+      facet: filter, itemCount, facet: { name },
     } = props;
 
   let currentWidget = '';
   let className = '';
   switch (filter.widget.type) {
     case 'sort_by':
-      currentWidget = <SortByList defaultRefinement={indexName} items={filter.widget.items} />;
+      currentWidget = (
+        <SortByList
+          name={name}
+          defaultRefinement={filter.widget.items[0].value}
+          items={filter.widget.items}
+        />
+      );
       break;
 
     case 'swatch_list':

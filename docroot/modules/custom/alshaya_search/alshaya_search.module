@@ -342,17 +342,29 @@ function _alshaya_search_translate_search_view_config() {
  *
  * @throws \Exception
  */
-function _alshaya_search_resave_indexes(array $indexes = ['product', 'acquia_search_index']) {
+function _alshaya_search_resave_indexes(array $indexes = []) {
+  if (empty($indexes)) {
+    $indexes = ['product', 'acquia_search_index', 'alshaya_algolia_index'];
+  }
+
   foreach ($indexes as $index_name) {
-    // Queue items for re-indexing. Required specifically for search_api_db to
-    // avoid creating tables with numeric prefixes when indexing content.
-    $index = Index::load($index_name);
+    try {
+      // Queue items for re-indexing. Required specifically for search_api_db to
+      // avoid creating tables with numeric prefixes when indexing content.
+      $index = Index::load($index_name);
 
-    // Re-index all items.
-    $index->reindex();
+      // Re-index all items.
+      $index->reindex();
 
-    // Save index to reflect new category field.
-    $index->save();
+      // Save index to reflect new category field.
+      $index->save();
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_search')->warning('Exception occurred while trying to resave index @index : @message', [
+        '@index' => $index_name,
+        '@message' => $e->getMessage(),
+      ]);
+    }
   }
 }
 

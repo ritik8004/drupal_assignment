@@ -1,24 +1,23 @@
-#alshaya-algolia-search {
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
   .c-page-title {
     font-weight: normal;
     font-size: 1.5rem;
   }
 
-  .c-content__region {
-    .sticky-filter-wrapper {
-      .c-collapse-item {
-        .c-collapse__title {
-          font-size: 0.75rem;
-          text-transform: uppercase;
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
 
-          @include facet-arrow(after, down) {
-            #{$right}: 1.25rem;
-          }
+        @include facet-arrow(after, down) {
+          #{$right}: 1.25rem;
+        }
 
-          &.active {
-            &::after {
-              transform: rotate(270deg);
-            }
+        &.active {
+          &::after {
+            transform: rotate(270deg);
           }
         }
       }
