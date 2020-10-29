@@ -131,34 +131,44 @@ class ConductorCategorySyncHelper {
       return;
     }
 
-    // Delete all the data from table.
-    $this->connection->delete(static::TABLE_NAME)->execute();
+    try {
+      // Delete those ids from table.
+      $this->connection->delete(static::TABLE_NAME)
+        ->condition('category_acm_id', $this->catsToProcess, 'IN')
+        ->execute();
 
-    foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
-      // As we sync/update data for multiple stores, reset class variable
-      // for next iteration and filling fresh data.
-      $this->catsToSync = [];
-      if ($store_id) {
-        // Load category data.
-        $categories = [$this->conductorCategoryManager->loadCategoryData($store_id)];
-        $this->iterateRecursive($categories);
+      foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
+        // As we sync/update data for multiple stores, reset class variable
+        // for next iteration and filling fresh data.
+        $this->catsToSync = [];
+        if ($store_id) {
+          // Load category data.
+          $categories = [$this->conductorCategoryManager->loadCategoryData($store_id)];
+          $this->iterateRecursive($categories);
 
-        // If no data to sync.
-        if (empty($this->catsToSync)) {
-          $this->logger->notice('No category data to sync.');
-          continue;
-        }
+          // If no data to sync.
+          if (empty($this->catsToSync)) {
+            $this->logger->notice('No category data to sync.');
+            continue;
+          }
 
-        foreach ($this->catsToSync as $cat_to_sync) {
-          $this->logger->notice('Processing category tree for category: @acm_cat_id and for store: @store', [
-            '@acm_cat_id' => $cat_to_sync['category_id'],
-            '@store' => $langcode,
-          ]);
+          foreach ($this->catsToSync as $cat_to_sync) {
+            $this->logger->notice('Processing category tree for category: @acm_cat_id and for store: @store', [
+              '@acm_cat_id' => $cat_to_sync['category_id'],
+              '@store' => $langcode,
+            ]);
 
-          // Update the category in drupal.
-          $this->conductorCategoryManager->synchronizeCategory('acq_product_category', $cat_to_sync);
+            // Update the category in drupal.
+            $this->conductorCategoryManager->synchronizeCategory('acq_product_category', $cat_to_sync);
+          }
         }
       }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while syncing categories for pull mode for categories: @cat_acm_ids Message: @message', [
+        '@cat_acm_ids' => json_encode($this->catsToProcess),
+        '@message' => $e->getMessage(),
+      ]);
     }
   }
 
