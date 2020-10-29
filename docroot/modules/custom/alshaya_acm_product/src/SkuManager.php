@@ -2863,7 +2863,7 @@ class SkuManager {
     // Get the layout config for these terms.
     $terms_layouts = $this->getFieldPdpLayout($terms);
     foreach ($terms_layouts as $term_layout) {
-      if ($term_layout->field_pdp_layout_value != NULL && $term_layout->field_pdp_layout_value != self::PDP_LAYOUT_INHERIT_KEY) {
+      if ($term_layout->field_pdp_layout_value != self::PDP_LAYOUT_INHERIT_KEY) {
         $applied_layout = $term_layout->field_pdp_layout_value;
         break;
       }
