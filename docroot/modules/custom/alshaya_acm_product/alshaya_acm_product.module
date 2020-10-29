@@ -1742,7 +1742,7 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
       $query->range($page, $page * $limit);
       $conditionGroup = new ConditionGroup();
       $conditionGroup->addCondition('stock', 0, '>');
-      $conditionGroup->addCondition('field_category_name.lvl' . ($term_details['level'] - 1), '"' . $term_details['hierarchy'] . '"');
+      $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
       $query->addConditionGroup($conditionGroup);
       $query->setOption('attributesToRetrieve', ['nid']);
       $query->setOption('ruleContexts', $term_details['ruleContext']);

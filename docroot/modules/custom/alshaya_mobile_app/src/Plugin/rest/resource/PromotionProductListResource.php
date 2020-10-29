@@ -2,17 +2,18 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Url;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\search_api\Entity\Index;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
+use Drupal\search_api\Query\ConditionGroup;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -28,11 +29,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class PromotionProductListResource extends ResourceBase {
-
-  /**
-   * Search API Index ID.
-   */
-  const SEARCH_API_INDEX_ID = 'product';
 
   /**
    * Query parse mode.
@@ -184,6 +180,7 @@ class PromotionProductListResource extends ResourceBase {
         $this->alshayaSearchApiQueryExecute->setFacetsToIgnore(['category_facet_promo']);
         // Prepare response from result set.
         $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+        $response_data['sorts'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
 
         // Filter the empty products.
         $response_data['products'] = array_filter($response_data['products']);
@@ -208,29 +205,76 @@ class PromotionProductListResource extends ResourceBase {
    *   Result set after query execution.
    */
   public function prepareAndExecuteQuery(int $nid) {
-    $index = Index::load(self::SEARCH_API_INDEX_ID);
-    /** @var \Drupal\search_api\Query\QueryInterface $query */
-    $query = $index->query();
+    $storage = $this->entityTypeManager->getStorage('search_api_index');
 
-    // Change the parse mode for the search.
-    $parse_mode = $this->parseModeManager->createInstance(self::PARSE_MODE);
-    $parse_mode->setConjunction(self::PARSE_MODE_CONJUNCTION);
-    $query->setParseMode($parse_mode);
+    if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
+      $index = $storage->load('product');
 
-    // Set facet source.
-    $this->alshayaSearchApiQueryExecute->setFacetSourceId(self::FACET_SOURCE_ID);
-    // Set views display id to use for views.
-    $this->alshayaSearchApiQueryExecute->setViewsDisplayId('block_2');
-    // Set price facet key.
-    $this->alshayaSearchApiQueryExecute->setPriceFacetKey('promotion_price_facet');
-    // Set selling price facet key.
-    $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey('promo_selling_price');
+      /** @var \Drupal\search_api\Query\QueryInterface $query */
+      $query = $index->query();
 
-    // Add condition for promotion node.
-    $query->addCondition('promotion_nid', $nid);
+      // Change the parse mode for the search.
+      $parse_mode = $this->parseModeManager->createInstance(self::PARSE_MODE);
+      $parse_mode->setConjunction(self::PARSE_MODE_CONJUNCTION);
+      $query->setParseMode($parse_mode);
 
-    // Prepare and execute query and pass result set.
-    return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query);
+      // Set facet source.
+      $this->alshayaSearchApiQueryExecute->setFacetSourceId(self::FACET_SOURCE_ID);
+      // Set views display id to use for views.
+      $this->alshayaSearchApiQueryExecute->setViewsDisplayId('block_2');
+      // Set price facet key.
+      $this->alshayaSearchApiQueryExecute->setPriceFacetKey('promotion_price_facet');
+      // Set selling price facet key.
+      $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey('promo_selling_price');
+
+      // Add condition for promotion node.
+      $query->addCondition('promotion_nid', $nid);
+
+      // Prepare and execute query and pass result set.
+      return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'promo');
+    }
+
+    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      $index = $storage->load('alshaya_algolia_index');
+
+      /** @var \Drupal\search_api\Query\QueryInterface $query */
+      $query = $index->query();
+
+      // Set the search api server.
+      $this->alshayaSearchApiQueryExecute->setServerIndex('alshaya_algolia_index');
+      // Set facet source.
+      $this->alshayaSearchApiQueryExecute->setFacetSourceId(SearchPageProductListResource::FACET_SOURCE_ID);
+      // Set the views id.
+      $this->alshayaSearchApiQueryExecute->setViewsId(SearchPageProductListResource::VIEWS_ID);
+      // Set the views display id.
+      $this->alshayaSearchApiQueryExecute->setViewsDisplayId(SearchPageProductListResource::VIEWS_DISPLAY_ID);
+      // Set the price facet key.
+      $this->alshayaSearchApiQueryExecute->setPriceFacetKey(SearchPageProductListResource::PRICE_FACET_KEY);
+      // Set selling price facet key.
+      $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey(SearchPageProductListResource::SELLING_PRICE_FACET_KEY);
+
+      // Change the parse mode for the search.
+      $parse_mode = $this->parseModeManager->createInstance(self::PARSE_MODE);
+      $parse_mode->setConjunction(self::PARSE_MODE_CONJUNCTION);
+      $query->setParseMode($parse_mode);
+
+      $conditionGroup = new ConditionGroup();
+      $conditionGroup->addCondition('stock', 0, '>');
+      $conditionGroup->addCondition('promotion_nid', $nid);
+      $query->addConditionGroup($conditionGroup);
+
+      // Prepare and execute query and pass result set.
+      $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'promo');
+      $response['algolia_data'] = [
+        'filter_field' => 'promotion_nid',
+        'filter_value' => $nid,
+        'rule_contexts' => '',
+      ];
+
+      return $response;
+    }
+
+    throw new \Exception('No backend available to process this request.');
   }
 
   /**
