@@ -111,6 +111,5 @@ $settings['alshaya_backend_calls_options'] = [
     'cart_get' => [
       'timeout' => 10,
     ],
-
   ],
 ];
