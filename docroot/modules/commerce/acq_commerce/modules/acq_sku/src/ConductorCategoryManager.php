@@ -174,31 +174,12 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    */
   public function synchronizeCategory($vocabulary, array $categories) {
     $this->resetResults();
-    $parent = $this->getParentTid($categories['category_id'], $categories['parent_id']);
-    // Recurse the category tree and create / update nodes.
-    $this->syncCategory([$categories], $parent);
-
-    return ($this->results);
-  }
-
-  /**
-   * Get term parent id.
-   *
-   * @param int $acm_cat_id
-   *   ACM category id.
-   * @param mixed $acm_parent_id
-   *   ACM parent id.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface|int|mixed|null
-   *   Term object.
-   */
-  public function getParentTid($acm_cat_id, $acm_parent_id = NULL) {
-    $this->loadVocabulary('acq_product_category');
+    $this->loadVocabulary($vocabulary);
     // If parent is 0, means term will be created at root level.
     $parent = 0;
     $query = $this->queryFactory->get('taxonomy_term');
     $group = $query->andConditionGroup()
-      ->condition('field_commerce_id', $acm_cat_id)
+      ->condition('field_commerce_id', $categories['category_id'])
       ->condition('vid', $this->vocabulary->id());
     $query->condition($group);
 
@@ -214,10 +195,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       // This might be the case of new term which doesn't exist yet. In this
       // case, we need to find the existing parent or new term will be created
       // at root level.
-      if (isset($acm_cat_id)) {
+      if (isset($categories['category_id'])) {
         $query = $this->queryFactory->get('taxonomy_term');
         $group = $query->andConditionGroup()
-          ->condition('field_commerce_id', $acm_parent_id)
+          ->condition('field_commerce_id', $categories['parent_id'])
           ->condition('vid', $this->vocabulary->id());
         $query->condition($group);
 
@@ -229,8 +210,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
       }
     }
+    // Recurse the category tree and create / update nodes.
+    $this->syncCategory([$categories], $parent);
 
-    return $parent;
+    return ($this->results);
   }
 
   /**
@@ -299,7 +282,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    * @param array|null $parent
    *   Parent Category.
    */
-  public function syncCategory(array $categories, $parent = NULL) {
+  private function syncCategory(array $categories, $parent = NULL) {
     /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
     $lock = \Drupal::service('lock.persistent');
 

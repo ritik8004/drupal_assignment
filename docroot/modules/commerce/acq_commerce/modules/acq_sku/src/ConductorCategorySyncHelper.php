@@ -150,15 +150,13 @@ class ConductorCategorySyncHelper {
         }
 
         foreach ($this->catsToSync as $cat_to_sync) {
-          $parent = $this->conductorCategoryManager->getParentTid($cat_to_sync['category_id'], $cat_to_sync['parent_id']);
-          $this->logger->notice('Processing category tree for category: @acm_cat_id and parent: @parent for store: @store', [
+          $this->logger->notice('Processing category tree for category: @acm_cat_id and for store: @store', [
             '@acm_cat_id' => $cat_to_sync['category_id'],
-            '@parent' => ($parent && $parent->id()) ? $parent->id() : 0,
             '@store' => $langcode,
           ]);
 
           // Update the category in drupal.
-          $this->conductorCategoryManager->syncCategory([$cat_to_sync], $parent);
+          $this->conductorCategoryManager->synchronizeCategory('acq_product_category', $cat_to_sync);
         }
       }
     }
