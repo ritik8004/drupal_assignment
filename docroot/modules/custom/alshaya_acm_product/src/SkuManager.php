@@ -2862,15 +2862,21 @@ class SkuManager {
 
     // Get the layout config for these terms.
     $terms_layouts = $this->getFieldPdpLayout($terms);
+    $terms_to_explore = [];
     foreach ($terms_layouts as $term_layout) {
-      if ($term_layout->field_pdp_layout_value != self::PDP_LAYOUT_INHERIT_KEY) {
-        $applied_layout = $term_layout->field_pdp_layout_value;
-        break;
+      if (!empty($term_layout->field_pdp_layout_value)) {
+        if ($term_layout->field_pdp_layout_value == self::PDP_LAYOUT_INHERIT_KEY) {
+          $terms_to_explore[] = $term_layout->tid;
+        }
+        else {
+          $applied_layout = $term_layout->field_pdp_layout_value;
+          break;
+        }
       }
     }
 
     if (empty($applied_layout)) {
-      $parents = $this->getParentsIds($terms_layouts);
+      $parents = $this->getParentsIds($terms_to_explore);
       if (!empty($parents)) {
         $applied_layout = $this->getPdpLayoutFromCategories($parents);
       }
@@ -2892,8 +2898,6 @@ class SkuManager {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'depth_level']);
-    $query->innerJoin('taxonomy_term__parent', 'ttp', 'ttp.entity_id = tfd.tid AND ttp.langcode = tfd.langcode');
-    $query->fields('ttp', ['parent_target_id']);
 
     // Get pdp layout from category.
     $query->leftJoin('taxonomy_term__field_pdp_layout', 'ttfpl', 'ttfpl.entity_id = tfd.tid AND ttfpl.langcode = tfd.langcode');
@@ -2902,7 +2906,6 @@ class SkuManager {
     $query->condition('tfd.vid', 'acq_product_category');
     $query->condition('tfd.tid', $terms, 'IN');
     $query->condition('tfd.langcode', $langcode);
-    $query->isNotNull('ttfpl.field_pdp_layout_value');
     $query->orderBy('tfd.weight', 'ASC');
 
     return $query->execute()->fetchAll();
@@ -2919,13 +2922,15 @@ class SkuManager {
    */
   private function getParentsIds(array $terms) {
     $parents = [];
-    foreach ($terms as $term) {
-      if ($term->parent_target_id != 0) {
-        $parents[] = $term->parent_target_id;
-      }
-    }
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $query = $this->connection->select('taxonomy_term__parent', 'ttp');
+    $query->fields('ttp', ['parent_target_id']);
+    $query->condition('ttp.entity_id', $terms, 'IN');
+    $query->condition('ttp.parent_target_id', 0, '!=');
+    $query->condition('ttp.langcode', $langcode);
+    $parents = $query->execute()->fetchAllKeyed(0, 0);
 
-    return array_unique($parents);
+    return array_values($parents);
   }
 
   /**
