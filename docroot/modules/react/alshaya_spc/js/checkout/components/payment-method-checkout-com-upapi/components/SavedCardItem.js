@@ -9,8 +9,8 @@ const SavedCardItem = ({ cardInfo, selected, onSelect }) => (
           &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;
           {cardInfo.maskedCC}
         </div>
-        <div className={`payment-card--type ${cardInfo.paymentMethod.toLowerCase()}`}>
-          <CardTypeSVG type={cardInfo.paymentMethod.toLowerCase()} class={`${cardInfo.paymentMethod.toLowerCase()} is-active`} />
+        <div className={`payment-card--type ${cardInfo.type}`}>
+          <CardTypeSVG type={cardInfo.type} class={`${cardInfo.type} is-active`} />
         </div>
       </div>
       <div className="payment-card--expiry">
@@ -19,7 +19,7 @@ const SavedCardItem = ({ cardInfo, selected, onSelect }) => (
       </div>
     </div>
     <div className="payment-card--options">
-      <button type="button" onClick={() => onSelect(cardInfo.public_hash, cardInfo.mada)} disabled={selected ? 'disabled' : ''}>
+      <button type="button" onClick={() => onSelect(cardInfo.public_hash)} disabled={selected ? 'disabled' : ''}>
         {selected ? Drupal.t('selected') : Drupal.t('select')}
       </button>
     </div>

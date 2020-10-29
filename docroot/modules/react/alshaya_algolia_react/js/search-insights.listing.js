@@ -8,7 +8,7 @@
 
   Drupal.behaviors.alshayaAlgoliaInsightsListing = {
     attach: function (context) {
-      $('#alshaya-algolia-search').once('alshayaAlgoliaInsights').on('click', '[data-insights-query-id] .product-selected-url', function (event) {
+      $('#alshaya-algolia-search, #alshaya-algolia-plp').once('alshayaAlgoliaInsights').on('click', '[data-insights-query-id] .product-selected-url', function (event) {
         var hit = $(this).closest('[data-insights-query-id]');
         var algolia_clicks = JSON.parse(localStorage.getItem('algolia_search_clicks'));
         if (algolia_clicks === null) {

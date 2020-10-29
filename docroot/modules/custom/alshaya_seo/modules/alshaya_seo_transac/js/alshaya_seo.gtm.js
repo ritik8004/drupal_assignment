@@ -707,11 +707,13 @@ const productRecommendationsSuffix = 'pr-';
         if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
           var section = listName;
           if (listName.indexOf('PLP') > -1) {
-            section = $('h1.c-page-title').text().toLowerCase();
+            // As we have used the same markup to display search results page
+            // title, use the h1 tag inside '#block-page-title' context.
+            section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase();
           }
 
           // Track facet filters.
-          $('li.facet-item').once('js-event').on('click', function () {
+          $('li.facet-item', $('#block-facets-ajax')).once('js-event').on('click', function () {
             var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
               ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');

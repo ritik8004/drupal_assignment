@@ -1,4 +1,14 @@
 #alshaya-algolia-search {
+  .c-content__region {
+    @include breakpoint($desktop) {
+      width: 80%;
+      float: $right;
+    }
+  }
+}
+
+#alshaya-algolia-search,
+#alshaya-algolia-plp {
   .c-page-title {
     text-align: center;
     font-family: $alshaya-bold;
@@ -18,7 +28,8 @@
     }
   }
 
-  .block-facet-blockcategory-facet-search {
+  .block-facet-blockcategory-facet-search,
+  .block-facet-blockcategory-facet-plp {
     @include breakpoint($desktop) {
       margin-top: 0.96875rem !important;
       border: none;
@@ -158,42 +169,27 @@
     }
   }
 
-  .show-all-filters-algolia {
-    @include breakpoint($only-mobile) {
-      height: 3rem;
-      display: flex;
-      align-items: center;
-    }
-  }
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        font-size: 0.875rem;
+        line-height: 2.9375rem;
+        position: relative;
+        padding-#{$right}: 2.6875rem;
+        cursor: pointer;
 
-  .c-content__region {
-    @include breakpoint($desktop) {
-      width: 80%;
-      float: $right;
-    }
+        @include icon(chevrondown, after) {
+          font-size: 1.1875rem;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          #{$right}: 0.6875rem;
+          transition: transform 0.4s ease-in-out;
+        }
 
-    .sticky-filter-wrapper {
-      .c-collapse-item {
-        .c-collapse__title {
-          font-size: 0.875rem;
-          line-height: 2.9375rem;
-          position: relative;
-          padding-#{$right}: 2.6875rem;
-          cursor: pointer;
-
-          @include icon(chevrondown, after) {
-            font-size: 1.1875rem;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            #{$right}: 0.6875rem;
-            transition: transform 0.4s ease-in-out;
-          }
-
-          &.active {
-            &::after {
-              transform: translateY(-50%) rotate(180deg);
-            }
+        &.active {
+          &::after {
+            transform: translateY(-50%) rotate(180deg);
           }
         }
       }
@@ -222,6 +218,14 @@
     .block-alshaya-search-facets-block-all {
       height: 0;
       z-index: 12;
+    }
+  }
+
+  .show-all-filters-algolia {
+    @include breakpoint($only-mobile) {
+      height: 3rem;
+      display: flex;
+      align-items: center;
     }
   }
 }

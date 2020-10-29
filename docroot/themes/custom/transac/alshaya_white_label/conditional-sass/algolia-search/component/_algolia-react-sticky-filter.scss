@@ -1,4 +1,6 @@
-#alshaya-algolia-search {
+#alshaya-algolia-search,
+.block-alshaya-algolia-react-plp,
+.block-alshaya-algolia-react-promotion {
   .filter-fixed-top {
     .show-all-filters-algolia {
       &.empty-category {
@@ -17,7 +19,8 @@
       }
     }
 
-    .block-facet-blockcategory-facet-search {
+    .block-facet-blockcategory-facet-search,
+    .block-facet-blockcategory-facet-plp {
       @include breakpoint($only-mobile) {
         top: 3.625rem;
         z-index: 2;

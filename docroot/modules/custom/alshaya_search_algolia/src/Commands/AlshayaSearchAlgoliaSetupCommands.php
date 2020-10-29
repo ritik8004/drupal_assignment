@@ -42,12 +42,17 @@ class AlshayaSearchAlgoliaSetupCommands extends DrushCommands {
    */
   public function getFacets() {
     $facets = $this->facetManager->getFacetsByFacetSourceId(AlshayaAlgoliaReactAutocomplete::FACET_SOURCE);
-    $facets_to_create = [];
+    $facets_to_create = [
+      'field_category_name',
+      'lhn_category',
+      'promotion_nid',
+    ];
+
     foreach ($facets as $facet) {
       $facets_to_create[$facet->getFieldIdentifier()] = $facet->getFieldIdentifier();
     }
 
-    print_r($facets_to_create);
+    print_r(array_values($facets_to_create));
   }
 
 }

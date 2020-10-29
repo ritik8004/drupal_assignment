@@ -458,6 +458,15 @@ class CartController {
     $response['shipping']['address'] = CustomerHelper::formatAddressForFrontend($response['shipping']['address'] ?? []);
     $response['billing_address'] = CustomerHelper::formatAddressForFrontend($data['cart']['billing_address'] ?? []);
 
+    // If payment method is not available in the list, we set the first
+    // available payment method.
+    if (!empty($response['payment']) && !empty($response['payment']['method'])) {
+      $codes = array_column($response['payment']['methods'], 'code');
+      if (!in_array($response['payment']['method'], $codes)) {
+        $response['payment']['method'] = $response['payment']['methods'][0]['code'];
+      }
+    }
+
     return $response;
   }
 
@@ -738,14 +747,27 @@ class CartController {
           ]);
         }
 
-        if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
-          $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
+        // Additional changes for VAULT.
+        switch ($request_content['payment_info']['payment']['method']) {
+          case 'checkout_com':
+            if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
+              $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
+            }
+            break;
+
+          case 'checkout_com_upapi':
+            if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
+              $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD;
+            }
+            break;
+
         }
 
         $this->logger->notice('Calling update payment for finalize exception2. Cart id: @cart_id Method: @method', [
           '@cart_id' => $this->cart->getCartId(),
           '@method' => $request_content['payment_info']['payment']['method'],
         ]);
+
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
 

@@ -12,16 +12,14 @@ const SelectedCard = ({
   selected = true,
 }) => (
   <div className="spc-checkout-payment-saved-card-preview">
-    <div className="spc-checkout-payment-data" onClick={() => onExistingCardSelect(cardInfo.public_hash, cardInfo.mada)}>
+    <div className="spc-checkout-payment-data" onClick={() => onExistingCardSelect(cardInfo.public_hash)}>
       <div className="spc-checkout-payment-saved-card-number">{`${Drupal.t('card no')}: **** **** **** ${cardInfo.maskedCC}`}</div>
       <div className="spc-checkout-payment-saved-card-expiry">{`${Drupal.t('Expiry')}: ${cardInfo.expirationDate}`}</div>
     </div>
     <div className="spc-add-new-card-btn" onClick={openSavedCardListModal}>
       {Drupal.t('change')}
     </div>
-    <ConditionalView
-      condition={selected && (cardInfo.mada === true || drupalSettings.checkoutComUpapi.enforce3d)}
-    >
+    <ConditionalView condition={selected && drupalSettings.checkoutComUpapi.cvvCheck}>
       <div className="spc-type-textfield spc-type-cvv">
         <input
           type="password"

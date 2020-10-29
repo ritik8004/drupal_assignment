@@ -1,0 +1,23 @@
+#block-alshayaalgoliareactpromotion {
+  #sort_by {
+    margin: 0 0.125rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    .show-all-filters-algolia {
+      flex-direction: row;
+      justify-content: center;
+
+      &::after {
+        position: relative;
+        #{$right}: 0;
+        top: 8%;
+        transform: unset;
+      }
+    }
+  }
+}
+
+#backtotop {
+  border: none;
+}

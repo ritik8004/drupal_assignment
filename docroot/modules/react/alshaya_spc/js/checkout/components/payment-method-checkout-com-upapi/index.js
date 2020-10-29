@@ -21,14 +21,8 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
   static contextType = CheckoutComUpapiContext;
 
   componentDidMount() {
-    const { tokenizedCard } = this.context;
-    let activeCard = {};
-    if (tokenizedCard !== '') {
-      activeCard = { ...drupalSettings.checkoutComUpapi.tokenizedCards }[tokenizedCard];
-    }
-
     this.updateCurrentContext({
-      cvvValid: !(activeCard.mada === true || drupalSettings.checkoutComUpapi.enforce3d === true),
+      cvvValid: !(drupalSettings.checkoutComUpapi.cvvCheck === true),
     });
 
     dispatchCustomEvent('refreshCompletePurchaseSection', {});
@@ -100,17 +94,12 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
     if (selectedCard === 'existing') {
       this.handleCheckoutResponse({ cvv: !cvv ? '' : encodeURIComponent(window.btoa(cvv)), id: tokenizedCard });
     } else {
-      const udf3 = (drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
-        ? 'storeInVaultOnSuccess'
-        : '';
-
       const ccInfo = {
         type: 'card',
         number,
         expiry_month: expiry.split('/')[0],
         expiry_year: expiry.split('/')[1],
         cvv,
-        udf3,
       };
 
       const { apiUrl, publicKey } = drupalSettings.checkoutComUpapi;
@@ -141,22 +130,22 @@ class PaymentMethodCheckoutComUpapi extends React.Component {
     const { finalisePayment } = this.props;
 
     // Set udf3 again here to send it for api request.
-    const udf3 = (selectedCard === 'new' && drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
-      ? 'storeInVaultOnSuccess'
-      : '';
+    const saveCard = (selectedCard === 'new' && drupalSettings.user.uid > 0 && document.getElementById('payment-card-save').checked)
+      ? 1
+      : 0;
 
     const paymentData = {
       payment: {
         method: 'checkout_com_upapi',
-        additional_data: { ...data, udf3, card_type: selectedCard },
+        additional_data: { ...data, save_card: saveCard, card_type: selectedCard },
       },
     };
 
     finalisePayment(paymentData);
   };
 
-  onExistingCardSelect = (cardHash, madaCard) => {
-    const cvvValid = !(madaCard === true || drupalSettings.checkoutComUpapi.enforce3d === true);
+  onExistingCardSelect = (cardHash) => {
+    const cvvValid = !(drupalSettings.checkoutComUpapi.cvvCheck === true);
 
     dispatchCustomEvent('closeModal', 'creditCardList');
     this.updateCurrentContext({

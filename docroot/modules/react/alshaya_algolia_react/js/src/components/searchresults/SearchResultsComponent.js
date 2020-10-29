@@ -24,82 +24,103 @@ import withURLSync from '../url-sync';
 import Pagination from '../algolia/Pagination';
 import HierarchicalMenu from '../algolia/widgets/HierarchicalMenu';
 import Menu from '../algolia/widgets/Menu';
-import { hasCategoryFilter, getAlgoliaStorageValues, getSortedItems, hasSuperCategoryFilter, getSuperCategoryOptionalFilter } from '../../utils';
+import {
+  hasCategoryFilter,
+  getAlgoliaStorageValues,
+  getSortedItems,
+  hasSuperCategoryFilter,
+  getSuperCategoryOptionalFilter,
+} from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
 
 /**
  * Render search results elements facets, filters and sorting etc.
  */
-const SearchResultsComponent = props => {
-  const { query } = props;
-  const _parent = React.createRef();
+const SearchResultsComponent = ({
+  query,
+  searchState,
+  createURL,
+  onSearchStateChange,
+}) => {
+  const parentRef = React.createRef();
   // Do not show out of stock products.
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : '';
-  const indexName = drupalSettings.algoliaSearch.indexName;
+  const { indexName } = drupalSettings.algoliaSearch;
 
   // Get default page to display for back to search,
   // and delete the stored info from local storage.
   const storedvalues = getAlgoliaStorageValues();
-  var defaultpageRender = false;
-  if (storedvalues !== null && typeof storedvalues.page !== null) {
+  let defaultpageRender = false;
+  if (storedvalues !== null && storedvalues.page !== null) {
     defaultpageRender = storedvalues.page;
   }
 
   const optionalFilter = getSuperCategoryOptionalFilter();
-  const maximumDepthLhn = drupalSettings.algoliaSearch.maximumDepthLhn;
-  var attributes = [];
+  const { maximumDepthLhn } = drupalSettings.algoliaSearch;
+  const attributes = [];
   for (let i = 0; i <= maximumDepthLhn; i++) {
     attributes.push(`field_category.lvl${i}`);
   }
 
-  const showCategoryFacets = (event) => {
-    _parent.current.classList.toggle('category-facet-open');
+  const showCategoryFacets = () => {
+    parentRef.current.classList.toggle('category-facet-open');
   };
 
   return (
     <InstantSearch
       searchClient={algoliaSearchClient}
       indexName={indexName}
-      searchState={props.searchState}
-      createURL={props.createURL}
-      onSearchStateChange={props.onSearchStateChange}
+      searchState={searchState}
+      createURL={createURL}
+      onSearchStateChange={onSearchStateChange}
     >
-      <Configure clickAnalytics hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage} filters={stockFilter} query={query}/>
+      <Configure
+        clickAnalytics
+        hitsPerPage={drupalSettings.algoliaSearch.itemsPerPage}
+        filters={stockFilter}
+        query={query}
+      />
       {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}
       <SideBar>
         {hasSuperCategoryFilter() && isDesktop() && (
           <Menu
-            transformItems={items => getSortedItems(items, 'supercategory')}
-            attribute='super_category'
+            transformItems={(items) => getSortedItems(items, 'supercategory')}
+            attribute="super_category"
           />
         )}
         {hasCategoryFilter() && isDesktop() && (
           <HierarchicalMenu
-            transformItems={items => getSortedItems(items, 'category')}
-            attributes = {attributes}
+            transformItems={(items) => getSortedItems(items, 'category')}
+            attributes={attributes}
             facetLevel={1}
-            showParentLevel={true}
+            showParentLevel
           />
         )}
       </SideBar>
       <MainContent>
         <StickyFilter>
           {(callback) => (
-            <React.Fragment>
-              <Filters indexName={indexName} limit={4} callback={(callerProps) => callback(callerProps)}/>
+            <>
+              <Filters
+                indexName={indexName}
+                limit={4}
+                callback={(callerProps) => callback(callerProps)}
+                pageType="search"
+              />
               {!isDesktop() && (
-                <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={_parent}>
-                  {(drupalSettings.algoliaSearch.filters.super_category !== undefined) && (
+                <div className="block-facet-blockcategory-facet-search c-facet c-accordion c-collapse-item non-desktop" ref={parentRef}>
+                  {(drupalSettings.algoliaSearch.search.filters.super_category !== undefined) && (
                     <div>
-                      <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>{Drupal.t('Brands/Category')}
+                      <h3 className="c-facet__title c-accordion__title c-collapse__title" onClick={showCategoryFacets}>
+                        {Drupal.t('Brands/Category')}
                       </h3>
                       <div className="category-facet-wrapper">
                         {hasSuperCategoryFilter() && (
                           <div className="supercategory-facet c-accordion">
-                            <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.filters.super_category.label}</h3>
+                            <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.search.filters.super_category.label}</h3>
                             <Menu
-                              transformItems={items => getSortedItems(items, 'supercategory')}
-                              attribute='super_category'
+                              transformItems={(items) => getSortedItems(items, 'supercategory')}
+                              attribute="super_category"
                             />
                           </div>
                         )}
@@ -107,7 +128,7 @@ const SearchResultsComponent = props => {
                           <div className="c-accordion">
                             <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                             <HierarchicalMenu
-                              transformItems={items => getSortedItems(items, 'category')}
+                              transformItems={(items) => getSortedItems(items, 'category')}
                               attributes={[
                                 'field_category.lvl0',
                                 'field_category.lvl1',
@@ -119,47 +140,55 @@ const SearchResultsComponent = props => {
                       </div>
                     </div>
                   )}
-                  {(drupalSettings.algoliaSearch.filters.super_category === undefined) && (
+                  {(drupalSettings.algoliaSearch.search.filters.super_category === undefined) && (
                     <>
                       <h3 className="c-facet__title c-accordion__title c-collapse__title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                       <HierarchicalMenu
-                        transformItems={items => getSortedItems(items, 'category')}
-                        attributes = {attributes}
+                        transformItems={(items) => getSortedItems(items, 'category')}
+                        attributes={attributes}
                         facetLevel={1}
-                        showParentLevel={true}
+                        showParentLevel
                       />
                     </>
                   )}
                 </div>
               )}
-              <div className={"show-all-filters-algolia hide-for-desktop " + (!hasCategoryFilter() ? 'empty-category' : '')}>
+              <div className={`show-all-filters-algolia hide-for-desktop ${!hasCategoryFilter() ? 'empty-category' : ''}`}>
                 <span className="desktop">{Drupal.t('all filters')}</span>
                 <span className="upto-desktop">{Drupal.t('filter & sort')}</span>
               </div>
-            </React.Fragment>
+            </>
           )}
         </StickyFilter>
-        <AllFilters>
+        <AllFilters wrapperClassName="block-alshaya-search-facets-block-all" AllFilterClass="all-filters-algolia">
           {(callback) => (
-            <Filters indexName={indexName} callback={(callerProps) => callback(callerProps)}/>
+            <Filters
+              indexName={indexName}
+              pageType="search"
+              callback={(callerProps) => callback(callerProps)}
+            />
           )}
         </AllFilters>
         <GridAndCount>
           <Stats
             translations={{
-              stats(nbHits, timeSpentMS) {
-                return Drupal.t('@total items', {'@total': nbHits});
+              stats(nbHits) {
+                return Drupal.t('@total items', { '@total': nbHits });
               },
             }}
           />
         </GridAndCount>
         <SelectedFilters>
           {(callback) => (
-            <CurrentRefinements callback={(callerProps) => callback(callerProps)}/>
+            <CurrentRefinements callback={(callerProps) => callback(callerProps)} />
           )}
         </SelectedFilters>
         <div id="hits" className="c-products-list product-small view-search">
-          <SearchResultInfiniteHits defaultpageRender={defaultpageRender}>
+          <SearchResultInfiniteHits
+            defaultpageRender={defaultpageRender}
+            pageType="search"
+            pageNumber={searchState.page || 1}
+          >
             {(paginationArgs) => (
               <Pagination {...paginationArgs}>{Drupal.t('Load more products')}</Pagination>
             )}

@@ -1,15 +1,17 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.storage.node.field_category
+    - field.storage.node.field_skus
+    - search_api.server.algolia
   module:
+    - taxonomy
     - node
     - acq_sku
     - search_api
     - alshaya_acm_product
     - alshaya_product
-  config:
-    - field.storage.node.field_skus
-    - search_api.server.algolia
 id: alshaya_algolia_index
 name: 'Alshaya Algolia Index'
 description: ''
@@ -32,7 +34,6 @@ field_settings:
       config:
         - field.storage.node.field_skus
       module:
-        - acq_sku
         - acq_sku
   title:
     label: Title

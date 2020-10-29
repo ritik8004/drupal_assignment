@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * Class CybersourceHelper.
+ * Provides Cybersource integration.
  *
  * @package App\Service\Cybersource
  */
@@ -152,7 +152,11 @@ class CybersourceHelper {
     try {
       $endpoint = sprintf('carts/%d/getCybersourceToken/%s', $cart['cart']['id'], $cc_type);
 
-      $token_info = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $request_options = [
+        'timeout' => $this->magentoApiWrapper->getMagentoInfo()->getPhpTimeout('cybersource_token_get'),
+      ];
+
+      $token_info = $this->magentoApiWrapper->doRequest('GET', $endpoint, $request_options);
       // Do some cleaning.
       foreach ($token_info as &$info) {
         if (empty($info)) {
@@ -231,7 +235,13 @@ class CybersourceHelper {
     $endpoint = 'cybersourceapi/processToken';
     try {
       $data = ['response' => $post_data];
-      $this->magentoApiWrapper->doRequest('POST', $endpoint, ['json' => $data]);
+
+      $request_options = [
+        'timeout' => $this->magentoApiWrapper->getMagentoInfo()->getPhpTimeout('cybersource_token_process'),
+        'json' => $data,
+      ];
+
+      $this->magentoApiWrapper->doRequest('POST', $endpoint, $request_options);
     }
     catch (\Exception $e) {
       $this->logger->warning('Invalid response from Magento API while processing token. Cart: @id, Transaction: @uuid, Message: @message', [

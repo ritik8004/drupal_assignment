@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -652,4 +653,24 @@ function alshaya_seo_transac_alshaya_acm_product_recommended_products_data_alter
       $recommended_skus['products'][$sku]['gtm_attributes']['list-position'] = $list_item_position++;
     }
   }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_seo_transac_block_view_alter(array &$build, BlockPluginInterface $block) {
+  if ($block->getPluginId() == 'alshaya_algolia_react_plp') {
+    $build['#pre_render'][] = '_alshaya_seo_transac_alshaya_algolia_react_plp_prerender';
+  }
+}
+
+/**
+ * Pre_render callback for 'alshaya_algolia_react_plp' to attach library.
+ */
+function _alshaya_seo_transac_alshaya_algolia_react_plp_prerender(array $build) {
+  if (!_alshaya_seo_process_gtm()) {
+    return $build;
+  }
+  $build['content']['#attached']['library'][] = 'alshaya_seo_transac/gtm_algolia_plp';
+  return $build;
 }
