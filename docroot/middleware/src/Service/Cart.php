@@ -382,13 +382,18 @@ class Cart {
       }
     }
 
-    $url = $customer_id > 0
-      ? str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts')
-      : 'carts';
-
-    $request_options = [
-      'timeout' => $this->magentoInfo->getPhpTimeout('cart_search'),
-    ];
+    if ($customer_id > 0) {
+      $url = str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts');
+      $request_options = [
+        'timeout' => $this->magentoInfo->getPhpTimeout('cart_search'),
+      ];
+    }
+    else {
+      $url = 'carts';
+      $request_options = [
+        'timeout' => $this->magentoInfo->getPhpTimeout('cart_create'),
+      ];
+    }
 
     try {
       $cart_id = (int) $this->magentoApiWrapper->doRequest('POST', $url, $request_options);

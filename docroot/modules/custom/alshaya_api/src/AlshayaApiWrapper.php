@@ -743,7 +743,12 @@ class AlshayaApiWrapper {
    */
   public function getProductAttributeWithSwatches($attribute_code) {
     $endpoint = 'products/attributes-with-swatches/' . $attribute_code;
-    return $this->invokeApi($endpoint, [], 'GET');
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('product_get'),
+    ];
+
+    return $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
   }
 
   /**
@@ -836,7 +841,12 @@ class AlshayaApiWrapper {
    */
   public function getSku(string $sku) : array {
     $endpoint = 'products/' . urlencode($sku);
-    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('product_get'),
+    ];
+
+    $response = $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     $response = json_decode($response, TRUE);
 
@@ -942,7 +952,7 @@ class AlshayaApiWrapper {
         ],
         'JSON',
         FALSE,
-        $request_options,
+        $request_options
       );
     }
     catch (\Exception $e) {
@@ -1154,7 +1164,7 @@ class AlshayaApiWrapper {
         ],
         'JSON',
         FALSE,
-        $request_options,
+        $request_options
       );
       $response = Json::decode($response);
     }

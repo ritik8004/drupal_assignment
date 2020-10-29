@@ -10,6 +10,9 @@
 // "middleware" indicates the source from where the API call is being made.
 $settings['alshaya_backend_calls_options'] = [
   'middleware' => [
+    'default' => [
+      'timeout' => 30,
+    ],
     'order_place' => [
       'timeout' => 60,
     ],
@@ -67,9 +70,6 @@ $settings['alshaya_backend_calls_options'] = [
     'customer_me_get' => [
       'timeout' => 10,
     ],
-    'default' => [
-      'timeout' => 30,
-    ],
   ],
   'drupal' => [
     'default' => [
@@ -94,6 +94,9 @@ $settings['alshaya_backend_calls_options'] = [
       'timeout' => 10,
     ],
     'stock_get' => [
+      'timeout' => 5,
+    ],
+    'product_get' => [
       'timeout' => 5,
     ],
   ],

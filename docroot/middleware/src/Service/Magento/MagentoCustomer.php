@@ -61,7 +61,7 @@ class MagentoCustomer {
     ];
 
     $request_options = [
-      'timeout' => $this->magentoInfo->getPhpTimeout('cart_selected_payment'),
+      'timeout' => $this->magentoInfo->getPhpTimeout('customer_create'),
       'json' => (object) $data,
     ];
 
