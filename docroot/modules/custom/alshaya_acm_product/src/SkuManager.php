@@ -2838,28 +2838,93 @@ class SkuManager {
 
     // The layout has been overriden at category level.
     elseif (($term_list = $entity->get('field_category')->getValue())) {
-      if ($inner_term = $this->productCategoryHelper->termTreeGroup($term_list)) {
-        $term = $this->termStorage->load($inner_term);
-        if ($term instanceof TermInterface) {
-          $pdp_layout = $term->get('field_pdp_layout')->getString() ?? NULL;
-          if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
-            $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
-            foreach ($taxonomy_parents as $taxonomy_parent) {
-              $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
-              if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
-                $static[$entity->id()] = $pdp_layout;
-                break;
-              }
-            }
-          }
-          else {
-            $static[$entity->id()] = $pdp_layout;
-          }
-        }
+      $terms = array_column($term_list, 'target_id');
+      $applied_layout = $this->getPdpLayoutFromCategories($terms);
+      if ($applied_layout != NULL) {
+        $static[$entity->id()] = $applied_layout;
       }
     }
 
     return $this->getContextFromLayoutKey($context, $static[$entity->id()]);
+  }
+
+  /**
+   * Gets pdp layout from categories.
+   *
+   * @param array $terms
+   *   Terms array tagged to product.
+   *
+   * @return mixed
+   *   PDP layout or null.
+   */
+  private function getPdpLayoutFromCategories(array $terms) {
+    $applied_layout = NULL;
+
+    // Get the layout config for these terms.
+    $terms_layouts = $this->getFieldPdpLayout($terms);
+    $terms_to_explore = [];
+    foreach ($terms_layouts as $term_layout) {
+      if (!empty($term_layout->field_pdp_layout_value)) {
+        if ($term_layout->field_pdp_layout_value == self::PDP_LAYOUT_INHERIT_KEY) {
+          $terms_to_explore[] = $term_layout->entity_id;
+        }
+        else {
+          $applied_layout = $term_layout->field_pdp_layout_value;
+          break;
+        }
+      }
+    }
+
+    if (empty($applied_layout)) {
+      $parents = $this->getParentsIds($terms_to_explore);
+      if (!empty($parents)) {
+        $applied_layout = $this->getPdpLayoutFromCategories($parents);
+      }
+    }
+
+    return $applied_layout;
+  }
+
+  /**
+   * Get term's field pdp layout values and their parents.
+   *
+   * @param array $terms
+   *   Term ids array.
+   *
+   * @return mixed
+   *   Query result.
+   */
+  private function getFieldPdpLayout(array $terms) {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $query = $this->connection->select('taxonomy_term__field_pdp_layout', 'ttfpl');
+    $query->fields('ttfpl', ['entity_id', 'field_pdp_layout_value']);
+    $query->condition('ttfpl.bundle', 'acq_product_category');
+    $query->condition('ttfpl.entity_id', $terms, 'IN');
+    $query->condition('ttfpl.langcode', $langcode);
+
+    return $query->execute()->fetchAll();
+  }
+
+  /**
+   * Get Parent terms from query result.
+   *
+   * @param array $terms
+   *   Terms array from query result.
+   *
+   * @return array
+   *   Parent term ids.
+   */
+  private function getParentsIds(array $terms) {
+    $parents = [];
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $query = $this->connection->select('taxonomy_term__parent', 'ttp');
+    $query->fields('ttp', ['parent_target_id']);
+    $query->condition('ttp.entity_id', $terms, 'IN');
+    $query->condition('ttp.parent_target_id', 0, '!=');
+    $query->condition('ttp.langcode', $langcode);
+    $parents = $query->execute()->fetchAllKeyed(0, 0);
+
+    return array_values($parents);
   }
 
   /**
