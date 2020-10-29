@@ -2866,7 +2866,7 @@ class SkuManager {
     foreach ($terms_layouts as $term_layout) {
       if (!empty($term_layout->field_pdp_layout_value)) {
         if ($term_layout->field_pdp_layout_value == self::PDP_LAYOUT_INHERIT_KEY) {
-          $terms_to_explore[] = $term_layout->tid;
+          $terms_to_explore[] = $term_layout->entity_id;
         }
         else {
           $applied_layout = $term_layout->field_pdp_layout_value;
@@ -2896,17 +2896,11 @@ class SkuManager {
    */
   private function getFieldPdpLayout(array $terms) {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name', 'depth_level']);
-
-    // Get pdp layout from category.
-    $query->leftJoin('taxonomy_term__field_pdp_layout', 'ttfpl', 'ttfpl.entity_id = tfd.tid AND ttfpl.langcode = tfd.langcode');
-    $query->fields('ttfpl', ['field_pdp_layout_value']);
-
-    $query->condition('tfd.vid', 'acq_product_category');
-    $query->condition('tfd.tid', $terms, 'IN');
-    $query->condition('tfd.langcode', $langcode);
-    $query->orderBy('tfd.weight', 'ASC');
+    $query = $this->connection->select('taxonomy_term__field_pdp_layout', 'ttfpl');
+    $query->fields('ttfpl', ['entity_id', 'field_pdp_layout_value']);
+    $query->condition('ttfpl.bundle', 'acq_product_category');
+    $query->condition('ttfpl.entity_id', $terms, 'IN');
+    $query->condition('ttfpl.langcode', $langcode);
 
     return $query->execute()->fetchAll();
   }
