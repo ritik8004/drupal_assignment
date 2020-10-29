@@ -57,6 +57,16 @@ export default class PaymentMethods extends React.Component {
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
         message = getStringMessage('transaction_failed');
+
+        if (paymentErrorInfo.data !== undefined) {
+          const errorData = {};
+          Object.entries(paymentErrorInfo.data).forEach(([key, value]) => {
+            errorData[`@${key}`] = value;
+          });
+
+          const transactionData = getStringMessage(`${paymentErrorInfo.payment_method}_error_info`, errorData);
+          message = parse(`${message}<br/>${transactionData}`);
+        }
       }
 
       // Push error to GA.
