@@ -666,6 +666,39 @@ class CartController {
           ]);
         }
 
+        $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
+
+        // Check if last update of our cart is more recent than X minutes.
+        $expiration_time = $checkout_settings['purchase_expiration_time'];
+        $cart_last_updated = strtotime($cart['cart']['updated_at']);
+        $current_time = strtotime(date('Y-m-d H:i:s'));
+        $time_difference = round(abs($current_time - $cart_last_updated) / 60, 2);
+
+        // Get cart totals.
+        $cart_total = $cart['totals']['grand_total'];
+
+        // If time difference more then call getCart to get fresh data.
+        if ($time_difference > $expiration_time) {
+          try {
+            $cart = $this->cart->getCart();
+          }
+          catch (\Exception $e) {
+            $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
+              '@message' => $e->getMessage(),
+            ]);
+          }
+        }
+
+        $fresh_cart_total = $cart['totals']['grand_total'];
+        // If the totals differ then return with an error message.
+        if ($fresh_cart_total != $cart_total) {
+          $this->logger->error('Error while placing order. Cart totals are mismatching. Cart: @cart, Old Cart total: @cart_total, Fresh Cart total: @fresh_cart_total.', [
+            '@cart' => json_encode($cart),
+            '@cart_total' => $cart_total,
+            '@fresh_cart_total' => $fresh_cart_total,
+          ]);
+        }
+
         // If error.
         if ($is_error) {
           return new JsonResponse([
