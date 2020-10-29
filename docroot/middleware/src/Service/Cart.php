@@ -446,7 +446,7 @@ class Cart {
         ],
       ];
     }
-    $data['items'][] = (object) [
+    $data['items'][] = [
       'sku' => $sku,
       'qty' => $quantity ?? 1,
       'quote_id' => (string) $this->getCartId(),
@@ -1030,9 +1030,9 @@ class Cart {
     // We do not want to send the variant sku values to magento unnecessarily.
     // So we store it separately and remove it from $data.
     $skus = [];
-    foreach ($data['items'] as $key => $item) {
-      $skus[] = $item->variant_sku ?? $item->sku;
-      unset($data['items'][$key]->variant_sku);
+    foreach ($data['items'] ?? [] as $key => $item) {
+      $skus[] = $item['variant_sku'] ?? $item['sku'];
+      unset($data['items'][$key]['variant_sku']);
     }
 
     try {
