@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Qpay payment method for SPC.
@@ -14,4 +15,17 @@ use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
  * )
  */
 class CheckoutComQpay extends AlshayaSpcPaymentMethodPluginBase {
+
+  use StringTranslationTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function processBuild(array &$build) {
+    $build['#strings']['checkout_com_upapi_qpay_error_info'] = [
+      'key' => 'checkout_com_upapi_qpay_error_info',
+      'value' => $this->t('Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code'),
+    ];
+  }
+
 }
