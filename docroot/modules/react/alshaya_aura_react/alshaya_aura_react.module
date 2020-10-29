@@ -85,37 +85,9 @@ function alshaya_aura_react_theme() {
       ],
       'template' => 'aura-rewards-header',
     ],
-    'aura_rewards_header_authenticated' => [
-      'variables' => [
-        'aura_user' => [],
-      ],
-      'template' => 'aura-rewards-header-authenticated',
-    ],
-    'aura_rewards_header_popup' => [
-      'variables' => [],
-      'template' => 'aura-rewards-header-popup',
-    ],
-    'aura_rewards_menu_item' => [
-      'variables' => [
-        'aura_user' => [],
-      ],
-      'template' => 'aura-rewards-menu-item',
-    ],
   ];
 
   return $theme;
-}
-
-/**
- * Implements hook_preprocess_alshaya_main_menu_level1() for menu template.
- */
-function alshaya_aura_react_preprocess_alshaya_main_menu_level1(array &$variables) {
-  $block = Block::load('aurarewardsheader');
-  $block_content = \Drupal::entityTypeManager()
-    ->getViewBuilder('block')
-    ->view($block);
-  $variables['aura_rewards_header'] = $block_content;
-  $variables['aura_enabled'] = 1;
 }
 
 /**
@@ -129,38 +101,6 @@ function alshaya_aura_react_preprocess_html(&$variables) {
       $variables['attributes']['class'][] = 'aura-my-account';
     }
   }
-}
-
-/**
- * Implements hook_block_view_BASE_BLOCK_ID_alter().
- */
-function alshaya_aura_react_block_view_alshaya_my_account_links_alter(&$build, $block) {
-  // We remove the "Welcome @username" text from the mobile menu.
-  if ($block->getPluginId() === 'alshaya_my_account_links') {
-    $build['#pre_render'][] = '_alshaya_aura_react_my_account_block_pre_render';
-  }
-}
-
-/**
- * Pre render callback for building My Account Links block.
- *
- * @param array $build
- *   The block build array.
- *
- * @return array
- *   The altered block build array.
- */
-function _alshaya_aura_react_my_account_block_pre_render(array $build) {
-  unset($build['content']['my_account_title']);
-
-  $build['content']['my_account_my_aura_block_root'] = [
-    '#markup' => '<div id="my-accounts-aura-mobile"></div>',
-    '#weight' => -1,
-  ];
-
-  $build['#attributes']['class'][] = 'aura-enabled';
-
-  return $build;
 }
 
 /**
@@ -191,4 +131,50 @@ function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings,
   if (isset($order['extension_attributes']['apc_redeemed_points'])) {
     $settings['order_details']['redeemedPoints'] = $order['extension_attributes']['apc_redeemed_points'] ?? 0;
   }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function alshaya_aura_react_block_view_alter(&$build, $block) {
+  if ($block->getPluginId() === 'alshaya_my_account_links') {
+    $build['#pre_render'][] = '_alshaya_aura_react_my_account_block_pre_render';
+  }
+  if ($block->getPluginId() === 'system_menu_block:account') {
+    $build['#pre_render'][] = '_alshaya_aura_react_system_menu_block_account_pre_render';
+  }
+}
+
+/**
+ * Pre render callback for building My Account Links block.
+ *
+ * @param array $build
+ *   The block build array.
+ *
+ * @return array
+ *   The altered block build array.
+ */
+function _alshaya_aura_react_my_account_block_pre_render(array $build) {
+  $build['content']['my_account_my_aura_block_root'] = [
+    '#markup' => '<div id="my-accounts-aura-mobile"></div>',
+    '#weight' => -1,
+  ];
+
+  $build['#attributes']['class'][] = 'aura-enabled';
+
+  return $build;
+}
+
+/**
+ * Pre render callback for system_menu_block:account block.
+ *
+ * @param array $build
+ *   The block build array.
+ *
+ * @return array
+ *   The altered block build array.
+ */
+function _alshaya_aura_react_system_menu_block_account_pre_render(array $build) {
+  $build['content']['#prefix'] = '<div id="aura-mobile-header-signin-register"></div>';
+  return $build;
 }
