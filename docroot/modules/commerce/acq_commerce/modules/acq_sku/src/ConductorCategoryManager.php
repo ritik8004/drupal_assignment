@@ -175,6 +175,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   public function synchronizeCategory($vocabulary, array $categories) {
     $this->resetResults();
     $this->loadVocabulary($vocabulary);
+
     // If parent is 0, means term will be created at root level.
     $parent = 0;
     $query = $this->queryFactory->get('taxonomy_term');
@@ -210,6 +211,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
       }
     }
+
     // Recurse the category tree and create / update nodes.
     $this->syncCategory([$categories], $parent);
 
