@@ -150,7 +150,16 @@ class MagentoApiWrapper {
   protected function getProcessedErrorMessage(array $response) {
     $message = $response['message'];
 
-    foreach ($response['parameters'] ?? [] as $name => $value) {
+    $parameters = $response['parameters'] ?? [];
+    if (empty($parameters)) {
+      return $message;
+    }
+
+    if (array_values($parameters) === $parameters) {
+      return vsprintf($message, $parameters);
+    }
+
+    foreach ($parameters as $name => $value) {
       $message = str_replace("%$name", $value, $message);
     }
 
