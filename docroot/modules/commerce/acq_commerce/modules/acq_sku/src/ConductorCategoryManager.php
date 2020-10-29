@@ -195,7 +195,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       // This might be the case of new term which doesn't exist yet. In this
       // case, we need to find the existing parent or new term will be created
       // at root level.
-      if (isset($categories['category_id'])) {
+      if (isset($categories['parent_id'])) {
         $query = $this->queryFactory->get('taxonomy_term');
         $group = $query->andConditionGroup()
           ->condition('field_commerce_id', $categories['parent_id'])
