@@ -747,14 +747,27 @@ class CartController {
           ]);
         }
 
-        if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
-          $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
+        // Additional changes for VAULT.
+        switch ($request_content['payment_info']['payment']['method']) {
+          case 'checkout_com':
+            if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
+              $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
+            }
+            break;
+
+          case 'checkout_com_upapi':
+            if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
+              $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD;
+            }
+            break;
+
         }
 
         $this->logger->notice('Calling update payment for finalize exception2. Cart id: @cart_id Method: @method', [
           '@cart_id' => $this->cart->getCartId(),
           '@method' => $request_content['payment_info']['payment']['method'],
         ]);
+
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
 

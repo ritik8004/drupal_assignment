@@ -1,19 +1,21 @@
 services:
   alshaya_acm_checkoutcom.route_subscriber:
     class: Drupal\alshaya_acm_checkoutcom\Routing\RouteSubscriber
-    arguments: ['@alshaya_acm_checkoutcom.payment_cards_page_access_check']
     tags:
       - { name: event_subscriber }
-  alshaya_acm_checkoutcom.payment_cards_page_access_check:
-    class: Drupal\alshaya_acm_checkoutcom\Access\PaymentCardsPageAccessCheck
-    arguments: ['@acq_checkoutcom.agent_api', '@config.factory']
+
+  cache.checkout_com:
+    class: Drupal\Core\Cache\CacheBackendInterface
     tags:
-      - { name: access_check }
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [checkout_com]
 
   alshaya_acm_checkoutcom.api_helper:
     class: Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper
     arguments:
-      - '@alshaya_api.api'
       - '@config.factory'
-      - '@logger.factory'
-      - '@cache.data'
+      - '@entity_type.manager'
+      - '@current_user'
+      - '@alshaya_api.api'
+      - '@cache.checkout_com'
