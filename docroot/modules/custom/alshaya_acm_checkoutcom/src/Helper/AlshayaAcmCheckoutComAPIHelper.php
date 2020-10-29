@@ -3,10 +3,13 @@
 namespace Drupal\alshaya_acm_checkoutcom\Helper;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Site\Settings;
 
 /**
@@ -15,6 +18,8 @@ use Drupal\Core\Site\Settings;
  * @package Drupal\alshaya_acm_checkoutcom\Helper
  */
 class AlshayaAcmCheckoutComAPIHelper {
+
+  use LoggerChannelTrait;
 
   /**
    * Api wrapper.
@@ -31,6 +36,13 @@ class AlshayaAcmCheckoutComAPIHelper {
   protected $configFactory;
 
   /**
+   * Current user object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * Logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -38,34 +50,47 @@ class AlshayaAcmCheckoutComAPIHelper {
   protected $logger;
 
   /**
-   * Cache service.
+   * Cache backend checkout_com.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $cache;
 
   /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * AlshayaAcmCheckoutComAPIHelper constructor.
    *
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
-   *   Api wrapper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
-   *   Logger factory.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
+   *   Current User.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   Api wrapper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache service.
+   *   Cache backend checkout_com.
    */
   public function __construct(
-    AlshayaApiWrapper $api_wrapper,
     ConfigFactoryInterface $config_factory,
-    LoggerChannelFactory $logger_factory,
+    EntityTypeManagerInterface $entity_type_manager,
+    AccountProxyInterface $account_proxy,
+    AlshayaApiWrapper $api_wrapper,
     CacheBackendInterface $cache
   ) {
-    $this->apiWrapper = $api_wrapper;
     $this->configFactory = $config_factory;
-    $this->logger = $logger_factory->get('alshaya_acm_checkoutcom');
+    $this->entityTypeManager = $entity_type_manager;
+    $this->currentUser = $account_proxy;
+    $this->apiWrapper = $api_wrapper;
     $this->cache = $cache;
+
+    $this->logger = $this->getLogger('AlshayaAcmCheckoutComAPIHelper');
   }
 
   /**
@@ -127,14 +152,17 @@ class AlshayaAcmCheckoutComAPIHelper {
   /**
    * Get saved cards for checkout.com upapi method.
    *
-   * @param int $customer_id
-   *   Customer id.
-   *
    * @return array
    *   Saved cards array if available.
    */
-  public function getSavedCards(int $customer_id) {
+  public function getSavedCards() {
     static $static = [];
+
+    $customer_id = $this->getCustomerId();
+
+    if (empty($customer_id)) {
+      return [];
+    }
 
     if (isset($static[$customer_id])) {
       return $static[$customer_id];
@@ -164,12 +192,83 @@ class AlshayaAcmCheckoutComAPIHelper {
       // Mape the card type to card type machine name.
       $type = strtolower($saved_card['type']);
       $saved_card['type'] = $allowed_cards_mapping[$type] ?? $saved_card['type'];
+      $saved_card['paymentMethod'] = $saved_card['type'];
 
       $saved_cards[$saved_card['public_hash']] = $saved_card;
     }
 
     $static[$customer_id] = $saved_cards;
     return $saved_cards;
+  }
+
+  /**
+   * Delete customer card.
+   *
+   * @param string $public_hash
+   *   Encoded public hash.
+   *
+   * @return bool
+   *   TRUE if card deleted successfully.
+   */
+  public function deleteCustomerCard(string $public_hash) {
+    $cards = $this->getSavedCards();
+    if (empty($cards[$public_hash])) {
+      return FALSE;
+    }
+
+    $hash = base64_decode($public_hash);
+
+    $endpoint = sprintf(
+      'checkoutcomupapi/deleteTokenByCustomerIdAndHash/%s/customerId/%d',
+      $hash,
+      $this->getCustomerId()
+    );
+
+    $response = $this->apiWrapper->invokeApi($endpoint, [], 'DELETE');
+
+    // Invalidate cache for the user to ensure fresh data is displayed.
+    Cache::invalidateTags(['user:' . $this->currentUser->id()]);
+
+    if ($response === 'true') {
+      return TRUE;
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Wrapper function to get Customer ID of the Current User.
+   *
+   * @return int
+   *   Customer ID of the user.
+   */
+  public function getCustomerId() {
+    if ($this->currentUser->isAnonymous()) {
+      return 0;
+    }
+
+    $user = $this->entityTypeManager
+      ->getStorage('user')
+      ->load($this->currentUser->id());
+
+    return (int) $user->get('acq_customer_id')->getString();
+  }
+
+  /**
+   * Get current checkout.com card payment method.
+   *
+   * @return string
+   *   Method code.
+   */
+  public function getCurrentMethod() {
+    $checkout_config = $this->configFactory->get('alshaya_acm_checkout.settings');
+
+    $excluded_methods = $checkout_config->get('exclude_payment_methods');
+    $excluded_methods = array_filter($excluded_methods);
+
+    return in_array('checkout_com_upapi', $excluded_methods)
+      ? 'checkout_com'
+      : 'checkout_com_upapi';
   }
 
 }

@@ -4,7 +4,6 @@ namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
@@ -38,13 +37,6 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
   protected $currentUser;
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container,
@@ -56,8 +48,7 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_checkoutcom.api_helper'),
-      $container->get('current_user'),
-      $container->get('entity_type.manager')
+      $container->get('current_user')
     );
   }
 
@@ -74,20 +65,16 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
    *   API Wrapper.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               AlshayaAcmCheckoutComAPIHelper $api_wrapper,
-                              AccountInterface $current_user,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              AccountInterface $current_user) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->apiWrapper = $api_wrapper;
     $this->currentUser = $current_user;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -124,10 +111,9 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
 
     $tokenize = FALSE;
     $tokenizedCards = [];
-    $customer_id = $this->getCustomerId();
-    if ($config['vault_enabled'] && $customer_id > 0) {
+    if ($config['vault_enabled']) {
       $tokenize = TRUE;
-      $tokenizedCards = $this->apiWrapper->getSavedCards($customer_id);
+      $tokenizedCards = $this->apiWrapper->getSavedCards();
     }
 
     $build['#attached']['drupalSettings']['checkoutComUpapi'] = [
@@ -159,24 +145,6 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       'key' => 'checkout_com_upapi_error_info',
       'value' => $this->t('Order ID: @order_id'),
     ];
-  }
-
-  /**
-   * Wrapper function to get Customer ID of the User.
-   *
-   * @return int
-   *   Customer ID of the user.
-   */
-  protected function getCustomerId() {
-    if ($this->currentUser->isAnonymous()) {
-      return 0;
-    }
-
-    $user = $this->entityTypeManager
-      ->getStorage('user')
-      ->load($this->currentUser->id());
-
-    return (int) $user->get('acq_customer_id')->getString();
   }
 
 }
