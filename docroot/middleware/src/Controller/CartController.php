@@ -667,6 +667,15 @@ class CartController {
           ]);
         }
 
+        // If error.
+        if ($is_error) {
+          return new JsonResponse([
+            'error' => TRUE,
+            'error_code' => 505,
+            'message' => 'Delivery Information is incomplete. Please update and try again.',
+          ]);
+        }
+
         $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
         // Get cart totals.
@@ -680,8 +689,9 @@ class CartController {
             $cart = $this->cart->getCart();
           }
           catch (\Exception $e) {
-            $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
+            $this->logger->error('Error occurred while fetching cart information. Error message: @message, code: @code', [
               '@message' => $e->getMessage(),
+              '@code' => $e->getCode(),
             ]);
           }
         }
@@ -693,15 +703,6 @@ class CartController {
             '@cart' => json_encode($cart),
             '@cart_total' => $cart_total,
             '@fresh_cart_total' => $fresh_cart_total,
-          ]);
-        }
-
-        // If error.
-        if ($is_error) {
-          return new JsonResponse([
-            'error' => TRUE,
-            'error_code' => 505,
-            'message' => 'Delivery Information is incomplete. Please update and try again.',
           ]);
         }
 

@@ -17,6 +17,7 @@ use Drupal\alshaya_master\Helper\SortUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
+use App\Helper\CartInfoHelper;
 
 /**
  * Class Cart methods.
