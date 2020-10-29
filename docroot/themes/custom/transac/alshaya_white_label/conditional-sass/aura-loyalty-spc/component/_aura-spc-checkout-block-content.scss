@@ -11,11 +11,13 @@
     }
 
     .item-wrapper {
-      display: flex;
-      flex-direction: row;
+      .spc-aura-link-card-form-content {
+        display: flex;
+        flex-direction: row;
 
-      @include breakpoint($upto-desktop) {
-        flex-direction: column;
+        @include breakpoint($upto-desktop) {
+          flex-direction: column;
+        }
       }
 
       .spc-aura-link-card-wrapper {
@@ -54,6 +56,10 @@
     font-size: 0.875rem;
 
     &.guest-user {
+      @include breakpoint($only-mobile) {
+        margin: 0 0.5rem;
+      }
+
       > div {
         background: $aura-spc-checkout-block-bg;
         padding: 1.25rem;
@@ -70,7 +76,7 @@
       }
 
       .subtitle-1 {
-        padding-bottom: 0.25rem;
+        padding-bottom: 0.625rem;
         color: $aura-spc-checkout-highlight;
         font-family: $aura-bold;
         font-weight: normal;
@@ -78,6 +84,15 @@
 
       .spc-aura-link-card-form {
         margin-top: 0.3125rem;
+      }
+
+      .aura-form-items-link-card-options {
+        margin-#{$left}: -0.625rem;
+        margin-bottom: 0.5rem;
+
+        > div {
+          padding-#{$right}: 1.25rem;
+        }
       }
     }
 

@@ -90,10 +90,6 @@ class AuraCheckoutRewards extends React.Component {
               <div className="label">{ Drupal.t('Already an Aura member?') }</div>
               <div className="item-wrapper">
                 <AuraFormLinkCard />
-                <div className="sub-text">
-                  <span>{ Drupal.t('Not a member yet?') }</span>
-                  <a href="#">{Drupal.t('Sign up now')}</a>
-                </div>
               </div>
             </div>
           </div>
