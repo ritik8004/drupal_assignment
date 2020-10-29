@@ -9,6 +9,11 @@
   </div>
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
+    {% if aura_enabled is defined and aura_enabled == 1 %}
+      <div class="no--desktop">
+        <div id="aura-mobile-header-shop"></div>
+      </div>
+    {% endif %}
     {% if (menu_type == 'default') or (menu_type == 'menu_dynamic_display') %}
       {% for key1, level1menu in column_tree %}
         {% set level1 = level1menu.l1_object %}

@@ -12,25 +12,25 @@ import SignUpCompleteHeader from './signup-complete-header';
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    const { isMobile } = this.props;
+    const { isNotExpandable } = this.props;
     const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
     if (localStorageValues) {
       this.state = {
         ...localStorageValues,
         signUpComplete: true,
-        isHeaderModalOpen: !!isMobile,
+        isHeaderModalOpen: !!isNotExpandable,
       };
     } else {
       this.state = {
         signUpComplete: false,
-        isHeaderModalOpen: !!isMobile,
+        isHeaderModalOpen: !!isNotExpandable,
       };
     }
   }
 
   openHeaderModal = () => {
-    const { isMobile } = this.props;
-    if (!isMobile) {
+    const { isNotExpandable } = this.props;
+    if (!isNotExpandable) {
       this.setState((prevState) => ({
         isHeaderModalOpen: !prevState.isHeaderModalOpen,
       }));
@@ -61,12 +61,12 @@ class Header extends React.Component {
       apc_identifier_number: cardNumber,
     } = this.state;
 
-    const { isMobile } = this.props;
+    const { isNotExpandable } = this.props;
 
     return (
       <>
         {
-          !isMobile
+          !isNotExpandable
             && (
             <div className="aura-header-link">
               <a
@@ -85,7 +85,7 @@ class Header extends React.Component {
                 handleNotYou={this.handleNotYou}
                 isHeaderModalOpen={isHeaderModalOpen}
                 cardNumber={cardNumber}
-                isMobile={isMobile}
+                isNotExpandable={isNotExpandable}
               />
             )
             : (

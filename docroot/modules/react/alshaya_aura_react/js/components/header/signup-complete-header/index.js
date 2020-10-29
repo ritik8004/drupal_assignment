@@ -6,7 +6,7 @@ const SignUpCompleteHeader = (props) => {
     isHeaderModalOpen,
     handleNotYou,
     cardNumber,
-    isMobile,
+    isNotExpandable,
   } = props;
 
   const { baseUrl, pathPrefix } = drupalSettings.path;
@@ -38,7 +38,7 @@ const SignUpCompleteHeader = (props) => {
             <p>{Drupal.t('To spend your points you will have to sign in or create an account.')}</p>
           </div>
           {
-            !isMobile
+            !isNotExpandable
               && (
               <div className="aura-popup-footer">
                 <a
