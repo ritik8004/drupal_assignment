@@ -109,13 +109,20 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
       $allowed_cards_mapped[$allowed_card] = $allowed_cards_mapping[$allowed_card] ?? '';
     }
 
+    $tokenize = FALSE;
+    $tokenizedCards = [];
+    if ($config['vault_enabled']) {
+      $tokenize = TRUE;
+      $tokenizedCards = $this->apiWrapper->getSavedCards();
+    }
+
     $build['#attached']['drupalSettings']['checkoutComUpapi'] = [
       'acceptedCards' => array_values(array_filter($allowed_cards_mapped)),
       'publicKey' => $config['public_key'],
       'apiUrl' => $api_url . '/tokens',
-      'tokenizedCards' => [],
-      'tokenize' => FALSE,
-      'enforce3d' => FALSE,
+      'tokenizedCards' => $tokenizedCards,
+      'tokenize' => $tokenize,
+      'cvvCheck' => $config['cvv_check'],
       'processMada' => in_array('mada', $allowed_cards),
     ];
 
