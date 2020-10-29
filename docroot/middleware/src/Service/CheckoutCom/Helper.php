@@ -82,7 +82,7 @@ class Helper {
     $url = sprintf('checkoutcom/getTokenList/?customer_id=%d', $customer_id);
 
     $request_options = [
-      'timeout' => $this->magentoApi->getMagentoInfo()->getPhpTimeout('checkoutcom_token_get'),
+      'timeout' => $this->magentoApi->getMagentoInfo()->getPhpTimeout('checkoutcom_token_list'),
     ];
 
     try {

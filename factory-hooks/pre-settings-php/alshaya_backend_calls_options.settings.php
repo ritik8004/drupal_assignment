@@ -58,16 +58,10 @@ $settings['alshaya_backend_calls_options'] = [
     'checkoutcom_config_get' => [
       'timeout' => 10,
     ],
-    'checkoutcom_token_get' => [
-      'timeout' => 5,
-    ],
     'checkoutcom_token_list' => [
       'timeout' => 4,
     ],
     'cnc_check' => [
-      'timeout' => 10,
-    ],
-    'customer_me_get' => [
       'timeout' => 10,
     ],
   ],
@@ -99,5 +93,24 @@ $settings['alshaya_backend_calls_options'] = [
     'product_get' => [
       'timeout' => 5,
     ],
+    'customer_search' => [
+      'timeout' => 5,
+    ],
+    'order_search' => [
+      'timeout' => 10,
+    ],
+    'customer_create' => [
+      'timeout' => 10,
+    ],
+    'cnc_check' => [
+      'timeout' => 10,
+    ],
+    'cart_selected_payment' => [
+      'timeout' => 10,
+    ],
+    'cart_get' => [
+      'timeout' => 10,
+    ],
+
   ],
 ];

@@ -614,7 +614,12 @@ class AlshayaApiWrapper {
     $sku = urlencode($sku);
 
     $endpoint = 'click-and-collect/stores/product/' . $sku . '/lat/' . $lat . '/lon/' . $lon;
-    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('cnc_check'),
+    ];
+
+    $response = $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     $stores = [];
 
@@ -640,7 +645,12 @@ class AlshayaApiWrapper {
    */
   public function getCartStores($cart_id, $lat = NULL, $lon = NULL) {
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
-    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('cnc_check'),
+    ];
+
+    $response = $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     $stores = [];
 
@@ -794,7 +804,12 @@ class AlshayaApiWrapper {
    */
   public function getCartPaymentMethod(int $cart_id) {
     $endpoint = 'carts/' . $cart_id . '/selected-payment-method';
-    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('cart_selected_payment'),
+    ];
+
+    $response = $this->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     if (empty($response)) {
       return '';
@@ -883,7 +898,12 @@ class AlshayaApiWrapper {
    */
   public function getCart(string $cart_id) {
     $endpoint = sprintf('carts/%d/getCart', $cart_id);
-    return $this->invokeApi($endpoint, [], 'GET', TRUE);
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('cart_get'),
+    ];
+
+    return $this->invokeApi($endpoint, [], 'GET', TRUE, $request_options);
   }
 
   /**
@@ -899,7 +919,12 @@ class AlshayaApiWrapper {
    */
   public function updateCart(string $cart_id, array $cart) {
     $endpoint = sprintf('carts/%d/updateCart', $cart_id);
-    return $this->invokeApi($endpoint, $cart, 'JSON');
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('cart_update'),
+    ];
+
+    return $this->invokeApi($endpoint, $cart, 'JSON', FALSE, $request_options);
   }
 
   /**
@@ -1006,8 +1031,13 @@ class AlshayaApiWrapper {
     }
 
     $customer = [];
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('customer_search'),
+    ];
+
     try {
-      $response = $this->invokeApi("customers/search", $query_string_array, 'GET');
+      $response = $this->invokeApi("customers/search", $query_string_array, 'GET', FALSE, $request_options);
       $result = Json::decode($response);
       if (!empty($result['items'])) {
         $customer = MagentoApiResponseHelper::customerFromSearchResult(reset($result['items']));
@@ -1050,10 +1080,19 @@ class AlshayaApiWrapper {
     $opt['json']['customer'] = $this->mdcHelper->cleanCustomerData($opt['json']['customer']);
     $opt['json']['customer'] = MagentoApiRequestHelper::prepareCustomerDataForApi($opt['json']['customer']);
 
+    $request_options = [];
     $method = 'JSON';
     if (!empty($opt['json']['customer']['id'])) {
       $endpoint .= '/' . $opt['json']['customer']['id'];
       $method = 'PUT';
+      $request_options = [
+        'timeout' => $this->mdcHelper->getPhpTimeout('customer_update'),
+      ];
+    }
+    else {
+      $request_options = [
+        'timeout' => $this->mdcHelper->getPhpTimeout('customer_create'),
+      ];
     }
 
     try {
@@ -1068,13 +1107,6 @@ class AlshayaApiWrapper {
         '@method' => $method,
         '@endpoint' => $endpoint,
       ]);
-
-      $request_options = [];
-      if ($method === 'PUT') {
-        $request_options = [
-          'timeout' => $this->mdcHelper->getPhpTimeout('customer_update'),
-        ];
-      }
 
       $response = $this->invokeApi($endpoint, $opt['json'], $method, FALSE, $request_options);
       $response = Json::decode($response);
