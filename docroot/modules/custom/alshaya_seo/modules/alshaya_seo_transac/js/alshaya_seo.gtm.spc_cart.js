@@ -23,7 +23,7 @@
       ecommerce: {
         currencyCode: drupalSettings.alshaya_spc.currency_config.currency_code,
         [action]: {
-          product: []
+          products: []
         }
       }
     };
@@ -34,7 +34,7 @@
     if (productInfo !== null) {
       var productDetails = Drupal.alshayaSeoSpc.gtmProduct(productInfo, product.qty);
       productDetails.metric2 = product.finalPrice;
-      productData.ecommerce[action].product.push(productDetails);
+      productData.ecommerce[action].products.push(productDetails);
       dataLayer.push(productData);
     }
   };
