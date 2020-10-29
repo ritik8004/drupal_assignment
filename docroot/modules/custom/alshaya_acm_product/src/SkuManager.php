@@ -2902,6 +2902,7 @@ class SkuManager {
     $query->condition('tfd.vid', 'acq_product_category');
     $query->condition('tfd.tid', $terms, 'IN');
     $query->condition('tfd.langcode', $langcode);
+    $query->isNotNull('ttfpl.field_pdp_layout_value');
     $query->orderBy('tfd.weight', 'ASC');
 
     return $query->execute()->fetchAll();
