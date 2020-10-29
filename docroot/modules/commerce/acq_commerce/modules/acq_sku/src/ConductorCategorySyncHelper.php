@@ -94,7 +94,6 @@ class ConductorCategorySyncHelper {
    */
   public function createItem($category_id) {
     try {
-      $this->checkAndCreateTable();
       $query = $this->connection->insert(static::TABLE_NAME)
         ->fields([
           'category_acm_id' => $category_id,
@@ -114,9 +113,14 @@ class ConductorCategorySyncHelper {
 
   /**
    * Process the category sync for push.
+   *
+   * Use this function in script/cron to update/sync categories
+   * after push from the magento system.
+   *
+   * Use something like -
+   *   `drush php-eval '\Drupal::service("acq_sku.conductor_cat_sync_helper")->processCatSync()'`
    */
   public function processCatSync() {
-    $this->checkAndCreateTable();
     $this->catsToProcess = $this->connection->select(static::TABLE_NAME, 'tt')
       ->fields('tt', ['category_acm_id'])
       ->execute()
@@ -180,38 +184,6 @@ class ConductorCategorySyncHelper {
         $this->iterateRecursive($category['children']);
       }
     }
-  }
-
-  /**
-   * Check and create table if not.
-   */
-  private function checkAndCreateTable() {
-    if (!$this->connection->schema()->tableExists(static::TABLE_NAME)) {
-      $this->connection->schema()->createTable(static::TABLE_NAME, $this->tableSchema());
-    }
-  }
-
-  /**
-   * Table schema.
-   *
-   * @return array
-   *   Schema of table.
-   */
-  private function tableSchema() {
-    return [
-      'description' => 'Stores acm category ids for push mode category sync.',
-      'fields' => [
-        'category_acm_id' => [
-          'type' => 'varchar_ascii',
-          'length' => 255,
-          'not null' => TRUE,
-          'description' => 'Category acm id.',
-        ],
-      ],
-      'unique keys' => [
-        'unique' => ['category_acm_id'],
-      ],
-    ];
   }
 
 }

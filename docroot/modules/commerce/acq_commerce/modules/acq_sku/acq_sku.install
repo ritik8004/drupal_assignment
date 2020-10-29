@@ -9,7 +9,24 @@ use Drupal\node\Entity\Node;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Creates new table 'category_sync_process' for category push mode sync.
+ */
+function acq_sku_update_8023() {
+  $schema = acq_sku_schema();
+
+  \Drupal::database()
+    ->schema()
+    ->createTable(
+      ConductorCategorySyncHelper::TABLE_NAME,
+      $schema[ConductorCategorySyncHelper::TABLE_NAME]
+    );
+}
 
 /**
  * Implements hook_update_N().
@@ -389,4 +406,28 @@ function _acq_sku_indexes() {
   \Drupal::moduleHandler()->alter('acq_sku_indexes', $indexes);
 
   return $indexes;
+}
+
+/**
+ * Implements hook_schema().
+ */
+function acq_sku_schema() {
+  $schema = [];
+
+  $schema[ConductorCategorySyncHelper::TABLE_NAME] = [
+    'description' => 'Stores acm category ids for push mode category sync.',
+    'fields' => [
+      'category_acm_id' => [
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Category acm id.',
+      ],
+    ],
+    'unique keys' => [
+      'unique' => ['category_acm_id'],
+    ],
+  ];
+
+  return $schema;
 }
