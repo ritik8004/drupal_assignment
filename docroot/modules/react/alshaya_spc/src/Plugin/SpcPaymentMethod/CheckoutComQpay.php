@@ -22,11 +22,6 @@ class CheckoutComQpay extends AlshayaSpcPaymentMethodPluginBase {
    * {@inheritdoc}
    */
   public function processBuild(array &$build) {
-    $build['#strings']['checkout_com_upapi_qpay_error'] = [
-      'key' => 'checkout_com_upapi_qpay_error',
-      'value' => $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code'),
-    ];
-
     $build['#strings']['checkout_com_upapi_qpay_error_info'] = [
       'key' => 'checkout_com_upapi_qpay_error_info',
       'value' => $this->t('Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code'),
