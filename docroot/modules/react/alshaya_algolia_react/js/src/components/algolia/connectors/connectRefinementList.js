@@ -25,7 +25,7 @@ function getCurrentRefinement(props, searchState, context) {
     searchState,
     context,
     `${namespace}.${getId(props)}`,
-    []
+    [],
   );
 
   if (typeof currentRefinement !== 'string') {
@@ -44,7 +44,9 @@ function getValue(name, props, searchState, context) {
   const isAnewValue = currentRefinement.indexOf(name) === -1;
   const nextRefinement = isAnewValue
     ? currentRefinement.concat([name]) // cannot use .push(), it mutates
-    : currentRefinement.filter(selectedValue => selectedValue !== name); // cannot use .splice(), it mutates
+    : currentRefinement.filter(
+      (selectedValue) => selectedValue !== name,
+    ); // cannot use .splice(), it mutates
   return nextRefinement;
 }
 
@@ -74,22 +76,33 @@ function cleanUp(props, searchState, context) {
  * give the user the ability to choose multiple values for a specific facet.
  * @name connectRefinementList
  * @kind connector
- * @requirements The attribute passed to the `attribute` prop must be present in "attributes for faceting"
- * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
+ * @requirements The attribute passed to the `attribute` prop must be present in "attributes for
+ * faceting"
+ * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the
+ * Algolia API.
  * @propType {string} attribute - the name of the attribute in the record
  * @propType {boolean} [searchable=false] - allow search inside values
  * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
- * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
+ * @propType {boolean} [showMore=false] - true if the component should display a button that will
+ * expand the number of items
  * @propType {number} [limit=10] - the minimum number of displayed items
- * @propType {number} [showMoreLimit=20] - the maximun number of displayed items. Only used when showMore is set to `true`
- * @propType {string[]} defaultRefinement - the values of the items selected by default. The searchState of this widget takes the form of a list of `string`s, which correspond to the values of all selected refinements. However, when there are no refinements selected, the value of the searchState is an empty string.
- * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
+ * @propType {number} [showMoreLimit=20] - the maximun number of displayed items. Only used when
+ * showMore is set to `true`
+ * @propType {string[]} defaultRefinement - the values of the items selected by default.
+ * The searchState of this widget takes the form of a list of `string`s, which correspond
+ * to the values of all selected refinements. However, when there are no refinements selected,
+ * the value of the searchState is an empty string.
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for
+ * filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding
+ * search state
  * @providedPropType {string[]} currentRefinement - the refinement currently applied
- * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the RefinementList can display.
+ * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>}
+ * items - the list of items the RefinementList can display.
  * @providedPropType {function} searchForItems - a function to toggle a search inside items values
- * @providedPropType {boolean} isFromSearch - a boolean that says if the `items` props contains facet values from the global search or from the search inside items.
+ * @providedPropType {boolean} isFromSearch - a boolean that says if the `items` props contains
+ * facet values from the global search or from the search inside items.
  * @providedPropType {boolean} canRefine - a boolean that says whether you can refine
  */
 
@@ -105,7 +118,7 @@ export default createConnector({
     limit: PropTypes.number,
     showMoreLimit: PropTypes.number,
     defaultRefinement: PropTypes.arrayOf(
-      PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     ),
     searchable: PropTypes.bool,
     transformItems: PropTypes.func,
@@ -123,25 +136,24 @@ export default createConnector({
     searchState,
     searchResults,
     metadata,
-    searchForFacetValuesResults
+    searchForFacetValuesResults,
   ) {
     const { attribute, searchable } = props;
     const results = getResults(searchResults, this.context);
 
-    const canRefine =
-      Boolean(results) && Boolean(results.getFacetByName(attribute));
+    const canRefine = Boolean(results) && Boolean(results.getFacetByName(attribute));
 
     const isFromSearch = Boolean(
-      searchForFacetValuesResults &&
-        searchForFacetValuesResults[attribute] &&
-        searchForFacetValuesResults.query !== ''
+      searchForFacetValuesResults
+        && searchForFacetValuesResults[attribute]
+        && searchForFacetValuesResults.query !== '',
     );
 
     // Search For Facet Values is not available with derived helper (used for multi index search)
     if (searchable && this.context.multiIndexContext) {
       throw new Error(
-        'react-instantsearch: searching in *List is not available when used inside a' +
-          ' multi index context'
+        'react-instantsearch: searching in *List is not available when used inside a'
+          + ' multi index context',
       );
     }
 
@@ -151,7 +163,7 @@ export default createConnector({
         currentRefinement: getCurrentRefinement(
           props,
           searchState,
-          this.context
+          this.context,
         ),
         canRefine,
         isFromSearch,
@@ -160,27 +172,31 @@ export default createConnector({
     }
 
     // Sort configured attributes by name.
-    const attributes_to_sort_by_name = drupalSettings.algoliaSearch.attributes_to_sort_by_name;
+    const { attributesToSortByName } = drupalSettings.algoliaSearch;
     let sortOrder = sortBy;
 
-    if (attributes_to_sort_by_name && attributes_to_sort_by_name.length && attributes_to_sort_by_name.indexOf(attribute) > -1) {
+    if (
+      attributesToSortByName
+      && attributesToSortByName.length
+      && attributesToSortByName.indexOf(attribute) > -1
+    ) {
       sortOrder = ['isRefined', 'name:asc', 'count:desc'];
     }
 
     const items = isFromSearch
-      ? searchForFacetValuesResults[attribute].map(v => ({
-          label: v.value,
-          value: getValue(v.value, props, searchState, this.context),
-          _highlightResult: { label: { value: v.highlighted } },
-          count: v.count,
-          isRefined: v.isRefined,
-        }))
-      : results.getFacetValues(attribute, { sortBy: sortOrder }).map(v => ({
-          label: v.name,
-          value: getValue(v.name, props, searchState, this.context),
-          count: v.count,
-          isRefined: v.isRefined,
-        }));
+      ? searchForFacetValuesResults[attribute].map((v) => ({
+        label: v.value,
+        value: getValue(v.value, props, searchState, this.context),
+        _highlightResult: { label: { value: v.highlighted } },
+        count: v.count,
+        isRefined: v.isRefined,
+      }))
+      : results.getFacetValues(attribute, { sortBy: sortOrder }).map((v) => ({
+        label: v.name,
+        value: getValue(v.name, props, searchState, this.context),
+        count: v.count,
+        isRefined: v.isRefined,
+      }));
 
     const transformedItems = props.transformItems
       ? props.transformItems(items)
@@ -217,59 +233,59 @@ export default createConnector({
     const addKey = operator === 'and' ? 'addFacet' : 'addDisjunctiveFacet';
     const addRefinementKey = `${addKey}Refinement`;
 
-    searchParameters = searchParameters.setQueryParameters({
+    let finalSearchParameters = searchParameters.setQueryParameters({
       maxValuesPerFacet: Math.max(
         searchParameters.maxValuesPerFacet || 0,
-        getLimit(props)
+        getLimit(props),
       ),
     });
 
-    searchParameters = searchParameters[addKey](attribute);
+    finalSearchParameters = finalSearchParameters[addKey](attribute);
 
     return getCurrentRefinement(props, searchState, this.context).reduce(
       (res, val) => res[addRefinementKey](attribute, val),
-      searchParameters
+      finalSearchParameters,
     );
   },
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const context = this.context;
+    const { context } = this;
     return {
       id,
       index: getIndexId(this.context),
       items:
         getCurrentRefinement(props, searchState, context).length > 0
           ? [
-              {
-                attribute: props.attribute,
-                label: `${props.attribute}: `,
-                currentRefinement: getCurrentRefinement(
-                  props,
-                  searchState,
-                  context
-                ),
-                value: nextState => refine(props, nextState, [], context),
-                items: getCurrentRefinement(props, searchState, context).map(
-                  item => ({
-                    label: `${item}`,
-                    value: nextState => {
-                      const nextSelectedItems = getCurrentRefinement(
-                        props,
-                        nextState,
-                        context
-                      ).filter(other => other !== item);
-                      return refine(
-                        props,
-                        searchState,
-                        nextSelectedItems,
-                        context
-                      );
-                    },
-                  })
-                ),
-              },
-            ]
+            {
+              attribute: props.attribute,
+              label: `${props.attribute}: `,
+              currentRefinement: getCurrentRefinement(
+                props,
+                searchState,
+                context,
+              ),
+              value: (nextState) => refine(props, nextState, [], context),
+              items: getCurrentRefinement(props, searchState, context).map(
+                (item) => ({
+                  label: `${item}`,
+                  value: (nextState) => {
+                    const nextSelectedItems = getCurrentRefinement(
+                      props,
+                      nextState,
+                      context,
+                    ).filter((other) => other !== item);
+                    return refine(
+                      props,
+                      searchState,
+                      nextSelectedItems,
+                      context,
+                    );
+                  },
+                }),
+              ),
+            },
+          ]
           : [],
     };
   },

@@ -4,15 +4,15 @@ autocomplete:
   dependencies:
     - alshaya_algolia_react/vendor
     - alshaya_algolia_react/search_insights_listing
+    - alshaya_algolia_react/algolia_common
 
 vendor:
   js:
     dist/algolia.bundle.js: {}
     js/alshaya_algolia_react.js: {}
-    js/back_to_search.js: {}
   dependencies:
     - alshaya_react/react
-    - alshaya_master/jquery_is_in_viewport
+    - alshaya_algolia_react/back_to_search
     - alshaya_search_api/product_height
 
 search_insights_listing:
@@ -36,3 +36,30 @@ search_insights:
   dependencies:
     - core/drupalSettings
     - core/jquery.cookie
+
+plp:
+  js:
+    dist/plp.js: {}
+    js/alshaya_algolia_plp.js: {}
+  dependencies:
+    - core/drupalSettings
+    - alshaya_algolia_react/algolia_common
+
+algolia_common:
+  js:
+    js/alshaya_algolia_global.js: {}
+  dependencies:
+    - core/jquery
+
+back_to_plp:
+  js:
+    js/back_to_plp.js: {}
+  dependencies:
+    - alshaya_master/jquery_is_in_viewport
+
+back_to_search:
+  js:
+    js/back_to_search.js: {}
+  dependencies:
+    - alshaya_algolia_react/algolia_common
+    - alshaya_master/jquery_is_in_viewport

@@ -8,6 +8,8 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases;
+use Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -15,6 +17,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
@@ -34,6 +37,8 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 class AlshayaAlgoliaIndexHelper {
 
   use StringTranslationTrait;
+
+  const FACET_SOURCE = 'search_api:views_page__search__page';
 
   /**
    * SKU Manager service object.
@@ -138,7 +143,28 @@ class AlshayaAlgoliaIndexHelper {
    *
    * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
    */
-  private $productCategoryTree;
+  protected $productCategoryTree;
+
+  /**
+   * The pretty path helper service.
+   *
+   * @var \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper
+   */
+  protected $alshayaPrettyPathHelper;
+
+  /**
+   * The facet manager.
+   *
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
+   */
+  protected $facetsManager;
+
+  /**
+   * Pretty Path aliases.
+   *
+   * @var \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases
+   */
+  protected $prettyAliases;
 
   /**
    * SkuInfoHelper constructor.
@@ -173,6 +199,12 @@ class AlshayaAlgoliaIndexHelper {
    *   The super category manager service.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $productCategoryTree
    *   Product category tree manager.
+   * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper $pretty_path_helper
+   *   The pretty path helper service.
+   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facets_manager
+   *   The facet manager.
+   * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases $pretty_aliases
+   *   Pretty Aliases.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -192,7 +224,10 @@ class AlshayaAlgoliaIndexHelper {
     SwatchesHelper $swatches_helper,
     LanguageManager $language_manager,
     AlshayaSuperCategoryManager $super_category_manager,
-    ProductCategoryTree $productCategoryTree
+    ProductCategoryTree $productCategoryTree,
+    AlshayaFacetsPrettyPathsHelper $pretty_path_helper,
+    DefaultFacetManager $facets_manager,
+    AlshayaFacetsPrettyAliases $pretty_aliases
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -209,6 +244,9 @@ class AlshayaAlgoliaIndexHelper {
     $this->languageManager = $language_manager;
     $this->superCategoryManager = $super_category_manager;
     $this->productCategoryTree = $productCategoryTree;
+    $this->alshayaPrettyPathHelper = $pretty_path_helper;
+    $this->facetsManager = $facets_manager;
+    $this->prettyAliases = $pretty_aliases;
   }
 
   /**
@@ -244,8 +282,6 @@ class AlshayaAlgoliaIndexHelper {
     // Description.
     $description = $this->skuManager->getDescription($sku, 'full');
     $object['body'] = $this->renderer->renderPlain($description);
-
-    $object['field_category_name'] = $this->getCategoryHierarchy($node, $node->language()->getId());
 
     // Override the config language to the language of the node.
     $language = $this->languageManager->getLanguage($node->language()->getId());
@@ -306,8 +342,15 @@ class AlshayaAlgoliaIndexHelper {
       $promotion['id'] = $nid;
     });
 
-    // Removed 'field_acq_promotion_label' in favour of 'promotions'.
     $object['promotions'] = array_values($promotions);
+
+    foreach ($object['promotions'] ?? [] as $promotionRecord) {
+      // Used for filtering.
+      $object['promotion_nid'][] = $promotionRecord['id'];
+
+      // Used for facets.
+      $object['field_acq_promotion_label'][] = $promotionRecord['text'];
+    }
 
     // Product Images.
     $object['media'] = $this->getMediaItems($sku, $product_color);
@@ -346,6 +389,13 @@ class AlshayaAlgoliaIndexHelper {
     }
     $object['changed'] = $this->dateTime->getRequestTime();
 
+    $category_hierarchy = $this->getCategoryHierarchy($node, $node->language()->getId());
+    $object['field_category_name'] = $category_hierarchy['names'];
+    $object['field_category_aliases'] = $category_hierarchy['aliases'];
+
+    $category_hierarchy = $this->getCategoryHierarchy($node, $node->language()->getId(), TRUE);
+    $object['lhn_category'] = $category_hierarchy['names'];
+
     $langcode = $node->language()->getId();
     $object['field_category'] = $this->getFieldCategoryHierarchy($node, $langcode);
 
@@ -364,6 +414,98 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     $object['is_new'] = $sku->get('attr_is_new')->getString();
+    $this->updatePrettyPathAlias($object);
+    unset($object['field_category_aliases']);
+  }
+
+  /**
+   * Update pretty paths table with facet aliases for given object.
+   *
+   * @param array $object
+   *   The object to be indexed to algolia.
+   */
+  protected function updatePrettyPathAlias(array $object) {
+    $facets = $this->getSearchFacets();
+
+    $field_map = [
+      'field_acq_promotion_label' => 'promotions',
+      'field_category' => 'field_category_aliases',
+    ];
+
+    $langcode = $object['search_api_language'];
+
+    foreach ($facets as $key => $facet_alias) {
+      $field_key = isset($field_map[$key]) ? $field_map[$key] : $key;
+
+      if (empty($object[$field_key])) {
+        continue;
+      }
+
+      // Prepare the field name to get the field alias.
+      $field_name = strpos($key, 'attr') !== FALSE || isset($field_map[$key])
+        ? $key
+        : NULL;
+
+      if (empty($field_name)) {
+        continue;
+      }
+
+      if (is_array($object[$field_key])) {
+        $pure_values = $object[$field_key];
+        array_walk(
+          $pure_values,
+          function (&$item, $key) use ($facets, $field_name, $langcode, $facet_alias) {
+            if (!empty($facets[$field_name])) {
+              $facet_item_value = $item;
+              if (is_array($facet_item_value)) {
+                $facet_item_value = ($field_name == 'field_acq_promotion_label') ? trim($item['text']) : trim($item['value']);
+              }
+
+              if ($facet_alias == 'category') {
+                $this->prettyAliases->addAlias($facet_alias, $facet_item_value, $key, $langcode);
+              }
+              else {
+                $this->alshayaPrettyPathHelper->encodeFacetUrlComponents(
+                  self::FACET_SOURCE,
+                  $facet_alias,
+                  $facet_item_value,
+                  $langcode
+                );
+              }
+            }
+          });
+      }
+      else {
+        $this->alshayaPrettyPathHelper->encodeFacetUrlComponents(
+          self::FACET_SOURCE,
+          $facet_alias,
+          trim($object[$field_key]),
+          $langcode
+        );
+      }
+    }
+  }
+
+  /**
+   * Get the mapping of the facets key and alias.
+   *
+   * @return array
+   *   the array of facet key and alias.
+   */
+  protected function getSearchFacets() {
+    static $static = [];
+
+    if (!empty($static)) {
+      return $static;
+    }
+
+    // Get all facets of the given source.
+    $facets = $this->facetsManager->getFacetsByFacetSourceId(self::FACET_SOURCE);
+    foreach ($facets ?? [] as $facet) {
+      $static[$facet->getFieldIdentifier()] = $facet->getUrlAlias();
+    }
+
+    return $static;
   }
 
   /**
@@ -458,19 +600,27 @@ class AlshayaAlgoliaIndexHelper {
    *   The node object for which we need to prepare hierarchy.
    * @param string $langcode
    *   The language code to use to load terms.
+   * @param bool $only_visible_items
+   *   Display only visible items, true to generate array of items which are
+   *   visible either in main menu or in lhn.
    *
-   * @return array
+   * @return array[]
    *   The array of hierarchy.
    */
-  protected function getCategoryHierarchy(NodeInterface $node, $langcode): array {
+  protected function getCategoryHierarchy(NodeInterface $node, $langcode, $only_visible_items = FALSE): array {
     $categories = $node->get('field_category')->referencedEntities();
 
-    $list = [];
+    $list = $aliases = [];
     foreach ($categories as $category) {
       // Skip the term which is disabled.
       if ($category->get('field_commerce_status')->getString() !== '1') {
         continue;
       }
+
+      if ($only_visible_items && $category->get('field_category_include_menu')->getString() !== '1') {
+        continue;
+      }
+
       $parents = array_reverse($this->termStorage->loadAllParents($category->id()));
       $temp_list = [];
       $i = 0;
@@ -482,8 +632,15 @@ class AlshayaAlgoliaIndexHelper {
         }
 
         $term = $this->entityRepository->getTranslationFromContext($term, $langcode);
+
+        // Skip disabled term or marked as not to visible in menu.
+        if ($only_visible_items && $term->get('field_category_include_menu')->getString() !== '1') {
+          continue;
+        }
+
         $temp_list[] = $term->label();
         $current_value = implode(' > ', $temp_list);
+        $aliases[$term->id()] = $current_value;
 
         if (empty($list[$parent_key]["lvl{$i}"])) {
           $list[$parent_key]["lvl{$i}"] = $current_value;
@@ -511,7 +668,10 @@ class AlshayaAlgoliaIndexHelper {
         }
       }
     }
-    return $flat_hierarchy;
+    return [
+      'names' => $flat_hierarchy,
+      'aliases' => $aliases,
+    ];
   }
 
   /**
@@ -561,7 +721,7 @@ class AlshayaAlgoliaIndexHelper {
     $show_terms_in_lhn = $config->get('show_terms_in_lhn');
 
     foreach ($categories as $category) {
-      // Skip the term which is disabled.
+      // Skip the term which is disabled or not included in menu.
       if ($category->get('field_commerce_status')->getString() !== '1' || $category->get('field_category_include_menu')->getString() !== '1') {
         continue;
       }
@@ -659,7 +819,7 @@ class AlshayaAlgoliaIndexHelper {
       $attr = 'attr_' . $attr;
       if (!empty($object[$attr])) {
         foreach ($object[$attr] as $key => $value) {
-          $swatch = $this->swatchesHelper->getSwatch(substr($attr, 5), $value, $object['search_api_language']);
+          $swatch = $this->swatchesHelper->getSwatch(substr($attr, 5), !empty($value['label']) ? $value['label'] : $value, $object['search_api_language']);
           $swatch_data = [
             'value' => $swatch['name'],
             'label' => $swatch['name'],
@@ -696,40 +856,46 @@ class AlshayaAlgoliaIndexHelper {
   /**
    * Helps to add custom facet to the index.
    *
-   * @param string $attr_name
+   * @param string|array $attributes
    *   The name of the attribute.
    *
    * @throws \Exception
    *   If attribute is already present in the index, then exception is thrown.
    */
-  public function addCustomFacetToIndex(string $attr_name) {
-    // @todo If an entity field is to be added, the function should be modified
+  public function addCustomFacetToIndex($attributes) {
+    $attributes = is_array($attributes) ? $attributes : [$attributes];
+
+    // @TODO If an entity field is to be added, the function should be modified
     // such that $attr_name should have prefix "attr_" as that is the
-    // general sytax that can be seen.
+    // general syntax that can be seen.
     $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
     $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
     $client = new Client($backend_config['application_id'], $backend_config['api_key']);
     $index_name = $client_config['algolia_index_name'];
 
     foreach ($this->languageManager->getLanguages() as $language) {
+      $updated = FALSE;
       $index = $client->initIndex($index_name . '_' . $language->getId());
       $settings = $index->getSettings();
-      if (in_array($attr_name, $settings['attributesForFaceting'])) {
-        throw new \Exception("The attribute $attr_name is already added to the index.");
+
+      foreach ($attributes as $attribute_name) {
+        if (in_array($attribute_name, $settings['attributesForFaceting'])) {
+          $this->logger->error("The attribute $attribute_name is already added to the index.");
+          continue;
+        }
+
+        $settings['attributesForFaceting'][] = $attribute_name;
+        $updated = TRUE;
       }
 
-      $settings['attributesForFaceting'][] = $attr_name;
-      $index->setSettings($settings);
-
-      foreach ($settings['replicas'] as $replica) {
-        $replicaIndex = $client->initIndex($replica);
-        $replicaSettings = $replicaIndex->getSettings();
-        $replicaSettings['attributesForFaceting'][] = $attr_name;
-        $replicaIndex->setSettings($replicaSettings);
+      if ($updated) {
+        $index->setSettings($settings, TRUE);
       }
     }
 
-    $this->logger->notice('Added @attr as an attribute for faceting.', ['@attr' => $attr_name]);
+    $this->logger->notice('Added attribute(s) for faceting: @attributes', [
+      '@attributes' => implode(',', $attributes),
+    ]);
   }
 
 }

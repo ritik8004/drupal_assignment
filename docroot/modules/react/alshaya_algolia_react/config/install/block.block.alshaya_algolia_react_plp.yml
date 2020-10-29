@@ -1,0 +1,27 @@
+langcode: en
+status: false
+dependencies:
+  module:
+    - alshaya_algolia_react
+  theme:
+    - alshaya_white_label
+id: alshaya_algolia_react_plp
+theme: alshaya_white_label
+region: content
+weight: 0
+provider: alshaya_algolia_react
+plugin: alshaya_algolia_react_plp
+settings:
+  id: alshaya_algolia_react_plp
+  label: 'Alshaya Algolia plp'
+  provider: alshaya_algolia_react
+  label_display: '0'
+  items_per_page: '36'
+  application_id: ''
+  search_api_key: ''
+visibility:
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: false
+    context_mapping: {  }

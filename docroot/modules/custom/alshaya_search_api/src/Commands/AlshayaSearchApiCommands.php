@@ -82,6 +82,30 @@ class AlshayaSearchApiCommands extends DrushCommands {
   }
 
   /**
+   * Wrapper function to get active indexes.
+   *
+   * @return \Drupal\search_api\Entity\Index[]
+   *   Enabled and writable indexes array.
+   */
+  private function getIndexes() {
+    static $indexes;
+    if (!empty($indexes)) {
+      return $indexes;
+    }
+
+    $indexes = $this->entityTypeManager->getStorage('search_api_index')->loadMultiple();
+
+    /** @var \Drupal\search_api\Entity\Index $index */
+    foreach ($indexes as $id => $index) {
+      if ($index->isReadOnly() || !($index->status())) {
+        unset($indexes[$id]);
+      }
+    }
+
+    return $indexes;
+  }
+
+  /**
    * Correct index data.
    *
    * @command alshaya_search_api:correct-index-data
@@ -95,29 +119,30 @@ class AlshayaSearchApiCommands extends DrushCommands {
       WHERE n.nid IS NULL");
 
     $item_ids = $query->fetchAll();
-    $indexes = ['acquia_search_index', 'product'];
+    $indexes = array_keys($this->getIndexes());
     $item_ids = array_column($item_ids, 'item_id');
     $this->deleteItems($indexes, $item_ids);
 
     // 2. Delete items from db index which are no longer available in system.
-    $query = $this->connection->query("SELECT item.item_id 
-      FROM search_api_db_product item 
+    if (in_array('product', $indexes)) {
+      $query = $this->connection->query("SELECT item.item_id
+      FROM search_api_db_product item
       LEFT JOIN node ON item.original_nid = node.nid
       WHERE node.nid IS NULL");
 
-    $item_ids = $query->fetchAll();
-    $indexes = ['product'];
-    $item_ids = array_column($item_ids, 'item_id');
+      $item_ids = $query->fetchAll();
+      $item_ids = array_column($item_ids, 'item_id');
 
-    // First add entry in search_api_item if required.
-    $this->addEntryToSearchApiItem($indexes, $item_ids);
-    $this->deleteItems($indexes, $item_ids);
+      // First add entry in search_api_item if required.
+      $this->addEntryToSearchApiItem(['product'], $item_ids);
+      $this->deleteItems(['product'], $item_ids);
+    }
 
     // 3. Re-index items that are missing in specific indexes.
-    foreach (['product', 'acquia_search_index'] as $index) {
-      $query = $this->connection->query("SELECT SQL_NO_CACHE nid, langcode 
-        FROM (SELECT CONCAT('entity:node/', nid, ':', langcode) as iid, nid, langcode, type FROM node_field_data WHERE type = :node_type) AS n 
-        LEFT JOIN search_api_item ON iid=item_id AND index_id = :index 
+    foreach ($indexes as $index) {
+      $query = $this->connection->query("SELECT SQL_NO_CACHE nid, langcode
+        FROM (SELECT CONCAT('entity:node/', nid, ':', langcode) as iid, nid, langcode, type FROM node_field_data WHERE type = :node_type) AS n
+        LEFT JOIN search_api_item ON iid=item_id AND index_id = :index
         WHERE item_id IS NULL", [
           ':node_type' => 'acq_product',
           ':index' => $index,
@@ -131,9 +156,8 @@ class AlshayaSearchApiCommands extends DrushCommands {
         $item_ids[] = $row->nid . ':' . $row->langcode;
       }
 
-      $indexes = [$index];
-      $this->deleteItems($indexes, $item_ids);
-      $this->indexItems($indexes, $item_ids);
+      $this->deleteItems([$index], $item_ids);
+      $this->indexItems([$index], $item_ids);
     }
   }
 
@@ -153,10 +177,17 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *   Process all products to check for corrupt stock data in batches of 50.
    */
   public function correctIndexStockData(array $options = ['batch-size' => 50]) {
+    // We use database index to know corrupt products, once it is disabled
+    // we can't use this function.
+    $indexes = $this->getIndexes();
+    if (!isset($indexes['product'])) {
+      throw new \Exception('Command no longer usable as database index disabled.');
+    }
+
     // Find all index entries for which sku is in stock but index data says OOS
     // OR sku is OOS and index data says in stock.
-    $query = $this->connection->query("SELECT sku.sku, sku.langcode, db.nid, db.stock 
-      FROM {acq_sku_field_data} sku 
+    $query = $this->connection->query("SELECT sku.sku, sku.langcode, db.nid, db.stock
+      FROM {acq_sku_field_data} sku
       LEFT JOIN {search_api_db_product} db ON db.sku = sku.sku AND db.search_api_language = sku.langcode
       WHERE db.nid IS NOT NULL");
 
@@ -202,8 +233,8 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *
    * @aliases index-specified-skus
    *
-   * @usage drush index-specified-skus acquia_search_index --skus="1234,4323" --batch-size=100
-   *   Index specified skus in batches of 100.
+   * @usage drush index-specified-skus acquia_search_index --skus="1234,4323"
+   *   --batch-size=100 Index specified skus in batches of 100.
    */
   public function prioritiseIndexing(string $index_id, array $options = [
     'skus' => NULL,

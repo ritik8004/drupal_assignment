@@ -6,26 +6,26 @@ const Menu = (props) => {
 
   // Setting flag to set 'All' filter to active
   // when no other filters are selected.
-  function noActiveFilters(items) {
-    for (let i=0;i<items.length;i++) {
-      if (items[i].isRefined) {
+  function noActiveFilters(itemsFilter) {
+    for (let i = 0; i < itemsFilter.length; i++) {
+      if (itemsFilter[i].isRefined) {
         return false;
       }
     }
-    return true
+    return true;
   }
 
   return (
     <ul>
-      {items.map(item => (
+      {items.map((item) => (
         <li key={item.label}>
           <a
             href={`#${createURL(item.value)}`}
             className={
-              (item.value === window.Drupal.t('All')? "facet-item " + (noActiveFilters(items) ?
-              'is-active super-category-all' : '') : "facet-item " + (item.isRefined ? 'is-active ' : ''))
+              (item.value === window.Drupal.t('All') ? `facet-item ${noActiveFilters(items)
+                ? 'is-active super-category-all' : ''}` : `facet-item ${item.isRefined ? 'is-active ' : ''}`)
             }
-            onClick={event => {
+            onClick={(event) => {
               event.preventDefault();
               if (item.value === window.Drupal.t('All')) {
                 refine(null);

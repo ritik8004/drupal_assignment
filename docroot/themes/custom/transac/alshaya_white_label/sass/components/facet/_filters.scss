@@ -1,4 +1,4 @@
-.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search):not(.algolia-plp-category-facet),
 .c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
   ul {
     display: none;
@@ -76,7 +76,7 @@
     display: none;
   }
 
-  &.block-facet-blockcategory-facet-plp,
+  &.block-facet-blockcategory-facet-plp:not(.algolia-plp-category-facet),
   &.block-facet-blockcategory-facet-promo {
     @include breakpoint($desktop) {
       display: none !important;
@@ -326,7 +326,8 @@
 .block-alshaya-plp-facets-block-all,
 .block-alshaya-promo-facets-block-all,
 .block-alshaya-productlist-facets-block-all,
-.block-alshaya-search-facets-block-all {
+.block-alshaya-search-facets-block-all,
+.block-alshaya-algolia-plp-facets-block-all {
   float: $left;
   line-height: 2.9375rem;
   margin-#{$left}: 1rem;
@@ -632,7 +633,8 @@
     .block-facet-blockcategory-facet-search,
     > .block-facet-blockcategory-facet-plp,
     > .block-facet-blockcategory-facet-promo,
-    > .block-facet-blockcategory-facet-search {
+    > .block-facet-blockcategory-facet-search,
+    .block-facet-blockcategory-facet-plp {
       position: fixed;
       background: $lhn_sticky-filter-background;
       z-index: 1;
@@ -786,7 +788,7 @@ body {
   }
 }
 
-.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search):not(.algolia-plp-category-facet),
 .c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
   ul {
     .facet-item {
