@@ -891,7 +891,42 @@ class Cart {
         throw new \Exception('Failed to initiate K-Net request.', 500);
 
       case 'checkout_com_upapi':
-        $additional_data = $additional_info;
+        switch ($additional_info['card_type']) {
+          case 'new':
+            $save_card = $additional_info['save_card'] ?? 0;
+            $additional_info['is_active_payment_token_enabler'] = (int) $save_card;
+            $additional_data = $additional_info;
+            break;
+
+          case 'existing':
+            $additional_data = [];
+            if ($this->checkoutComApi->isUpapiCvvCheckRequired()) {
+              if (empty($additional_info['cvv'])) {
+                throw new \Exception('CVV missing for credit/debit card.', 400);
+              }
+
+              $additional_data['cvv'] = $this->customerCards->deocodePublicHash(
+                urldecode($additional_info['cvv'])
+              );
+            }
+
+            $card = $this->customerCards->getGivenCardInfo(
+              'checkout_com_upapi',
+              $this->getCartCustomerId(),
+              $additional_info['id']
+            );
+
+            if (empty($card)) {
+              throw new \Exception('Invalid card token.', 400);
+            }
+
+            $additional_data['public_hash'] = $card['public_hash'];
+            break;
+
+          default:
+            throw new \Exception('Invalid request.', 400);
+
+        }
         break;
 
       case 'checkout_com':
@@ -913,7 +948,12 @@ class Cart {
           $end_point = APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT;
         }
         elseif ($additional_info['card_type'] == 'existing') {
-          $card = $this->customerCards->getGivenCardInfo($this->getCartCustomerId(), $additional_info['id']);
+          $card = $this->customerCards->getGivenCardInfo(
+            'checkout_com',
+            $this->getCartCustomerId(),
+            $additional_info['id']
+          );
+
           if (($card['mada'] || $this->checkoutComApi->is3dForced()) && empty($additional_info['cvv'])) {
             throw new \Exception('Cvv missing for credit/debit card.', 400);
           }

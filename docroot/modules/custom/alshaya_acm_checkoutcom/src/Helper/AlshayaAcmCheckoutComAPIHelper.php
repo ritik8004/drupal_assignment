@@ -124,4 +124,52 @@ class AlshayaAcmCheckoutComAPIHelper {
     return $configs;
   }
 
+  /**
+   * Get saved cards for checkout.com upapi method.
+   *
+   * @param int $customer_id
+   *   Customer id.
+   *
+   * @return array
+   *   Saved cards array if available.
+   */
+  public function getSavedCards(int $customer_id) {
+    static $static = [];
+
+    if (isset($static[$customer_id])) {
+      return $static[$customer_id];
+    }
+
+    $saved_cards = [];
+
+    $endpoint = 'checkoutcomupapi/getTokenList';
+    $data = [
+      'customer_id' => $customer_id,
+    ];
+
+    $allowed_cards_mapping = Settings::get('checkout_com_upapi_accepted_cards_mapping', []);
+
+    $response = $this->apiWrapper->invokeApi($endpoint, $data, 'GET');
+    $response = is_string($response) ? Json::decode($response) : $response;
+
+    $items = $response['items'] ?? [];
+    uasort($items, function ($a, $b) {
+      return (strtotime($a['created_at']) > strtotime($b['created_at'])) ? -1 : 1;
+    });
+
+    foreach ($items as $item) {
+      $saved_card = Json::decode($item['token_details']);
+      $saved_card['public_hash'] = base64_encode($item['public_hash']);
+
+      // Mape the card type to card type machine name.
+      $type = strtolower($saved_card['type']);
+      $saved_card['type'] = $allowed_cards_mapping[$type] ?? $saved_card['type'];
+
+      $saved_cards[$saved_card['public_hash']] = $saved_card;
+    }
+
+    $static[$customer_id] = $saved_cards;
+    return $saved_cards;
+  }
+
 }
