@@ -1856,7 +1856,7 @@ class Cart {
   }
 
   /**
-   * Helper function to check if cart expired.
+   * Helper function to check if cart total valid.
    *
    * @param array $cart
    *   Cart data.
@@ -1864,7 +1864,7 @@ class Cart {
    *   Checkout settings.
    *
    * @return bool
-   *   If cart is expired.
+   *   If cart total is valid.
    */
   public function isCartTotalValid(array $cart, array $checkout_settings) {
     // Get cart totals.
