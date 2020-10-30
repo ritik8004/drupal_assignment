@@ -102,4 +102,28 @@ class AlshayaSearchApiHelper {
     return $query_params;
   }
 
+  /**
+   * Wrapper function to know status of particular index.
+   *
+   * @param string $index_name
+   *   Index name.
+   *
+   * @return bool
+   *   TRUE if Index is enabled and writable.
+   */
+  public static function isIndexEnabled(string $index_name) {
+    static $status = [];
+
+    if (!isset($status[$index_name])) {
+      /** @var \Drupal\search_api\Entity\Index $index */
+      $index = \Drupal::entityTypeManager()
+        ->getStorage('search_api_index')
+        ->load($index_name);
+
+      $status[$index_name] = $index->status() && !($index->isReadOnly());
+    }
+
+    return $status[$index_name];
+  }
+
 }

@@ -23,11 +23,11 @@ const SizeGroupFilter = (
   });
 
   // Moving other at the end of the size filter list.
-  if (groupedItems['other']) {
-    var otherVals = groupedItems['other'];
-    delete groupedItems['other'];
-    if (groupedItems['other'] === undefined) {
-      var otherLabel = Drupal.t('other');
+  if (groupedItems.other) {
+    const otherVals = groupedItems.other;
+    delete groupedItems.other;
+    if (groupedItems.other === undefined) {
+      const otherLabel = Drupal.t('other');
       groupedItems[otherLabel] = [];
       groupedItems[otherLabel] = otherVals;
     }

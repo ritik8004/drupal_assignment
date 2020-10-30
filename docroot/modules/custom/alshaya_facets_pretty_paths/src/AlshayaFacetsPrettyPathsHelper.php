@@ -183,18 +183,24 @@ class AlshayaFacetsPrettyPathsHelper {
    *   Facet alias.
    * @param string $value
    *   Raw element value.
+   * @param string|null $langcode
+   *   The language code.
    *
    * @return string
    *   Encoded element.
    */
-  public function encodeFacetUrlComponents(string $source, string $facet_alias, string $value) {
+  public function encodeFacetUrlComponents(string $source, string $facet_alias, $value, string $langcode = NULL) {
     $attribute_code = $this->getFacetAliasFieldMapping($source)[$facet_alias];
 
     if ($attribute_code === 'field_category') {
       return $value;
     }
 
-    $aliases = $this->prettyAliases->getAliasesForFacet($facet_alias);
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    $aliases = $this->prettyAliases->getAliasesForFacet($facet_alias, $langcode);
     if (isset($aliases[$value])) {
       return $aliases[$value];
     }
@@ -203,7 +209,6 @@ class AlshayaFacetsPrettyPathsHelper {
     $encoded = $value;
 
     $entity_type = 'term';
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
     // We use ids only for category.
     if ($attribute_code == 'field_acq_promotion_label') {
@@ -295,7 +300,7 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     $encoded = strtolower($encoded);
-    $this->prettyAliases->addAlias($facet_alias, $value, $encoded);
+    $this->prettyAliases->addAlias($facet_alias, $value, $encoded, $langcode);
     return $encoded;
   }
 

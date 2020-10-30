@@ -5,25 +5,23 @@ import SingleImageGallery from './variants/SingleImageGallery';
 import { isMobile } from '../../utils';
 
 const Gallery = (props) => {
-  if (typeof props.media === 'undefined') {
+  const { media } = props;
+  if (typeof media === 'undefined') {
     return (null);
   }
 
   if (isMobile()) {
-    return (<SingleImageGallery {...props}/>);
-  }
-  else {
-    if (drupalSettings.reactTeaserView.gallery.showHoverImage) {
-      return (<AssetGallery {...props}/>);
-    }
-    else if (drupalSettings.reactTeaserView.gallery.showThumbnails) {
-      return (<SearchGallery {...props}/>);
-    }
-    else {
-      return (<SingleImageGallery {...props} />);
-    }
+    return (<SingleImageGallery {...props} />);
   }
 
+  if (drupalSettings.reactTeaserView.gallery.showHoverImage) {
+    return (<AssetGallery {...props} />);
+  }
+  if (drupalSettings.reactTeaserView.gallery.showThumbnails) {
+    return (<SearchGallery {...props} />);
+  }
+
+  return (<SingleImageGallery {...props} />);
 };
 
 export default Gallery;
