@@ -2,36 +2,41 @@ import React, { useState, useRef } from 'react';
 import { getFilters } from '../../utils';
 import WidgetManager from '../widget-manager';
 
-export default ({indexName, ...props}) => {
+const Filters = ({ indexName, pageType, ...props }) => {
   const [filterCounts, setfilters] = useState([]);
   const ref = useRef();
-  // Loop through all the filters given in config and prepare an array of filters.
-  var facets = [];
 
+  // Loop through all the filters given in config and prepare an array of filters.
   const updateFilterResult = (itm) => {
     filterCounts[itm.attr] = itm.count;
     setfilters(filterCounts);
-    if (typeof ref.current == 'object' && ref.current !== null) {
+    if (typeof ref.current === 'object' && ref.current !== null) {
       const filters = ref.current.querySelectorAll('.c-collapse-item');
-      let activeFilters = [];
-      filters.forEach(element => {
+      const activeFilters = [];
+      filters.forEach((element) => {
         const children = element.getElementsByTagName('ul')[0];
-
         if (typeof children !== 'undefined' && children.querySelector('li') === null) {
           element.classList.add('hide-facet-block');
-        }
-        else {
+        } else {
           activeFilters.push(element);
           element.classList.remove('hide-facet-block');
         }
       });
 
-      props.callback({activeFilters, filterCounts, ...props});
+      props.callback({ activeFilters, filterCounts, ...props });
     }
-  }
+  };
 
-  getFilters().forEach(facet => {
-    facets.push(<WidgetManager key={facet.identifier} facet={facet} indexName={indexName} filterResult={(test) => updateFilterResult(test)} />);
+  const facets = [];
+  getFilters(pageType).forEach((facet) => {
+    facets.push(
+      <WidgetManager
+        key={facet.identifier}
+        facet={facet}
+        indexName={indexName}
+        filterResult={(test) => updateFilterResult(test)}
+      />,
+    );
   });
 
   return (
@@ -39,4 +44,6 @@ export default ({indexName, ...props}) => {
       {facets}
     </div>
   );
-}
+};
+
+export default Filters;

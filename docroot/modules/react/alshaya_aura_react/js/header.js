@@ -7,7 +7,8 @@ import { getUserDetails } from './utilities/helper';
 
 const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
-if (window.innerWidth < 768) {
+// Upto desktop, show Aura inside hamburger menu.
+if (window.innerWidth < 1024) {
   if (getUserDetails().id) {
     ReactDOM.render(
       <Header loggedInMobile />,
@@ -28,7 +29,7 @@ if (window.innerWidth < 768) {
   }
 } else if (document.querySelector('#aura-header-modal')) {
   ReactDOM.render(
-    <Header />,
+    <Header isDesktop />,
     document.querySelector('#aura-header-modal'),
   );
 }

@@ -31,12 +31,14 @@ class SignUpOtpModal extends React.Component {
     this.setState({
       isNewUserModalOpen: true,
     });
+    document.getElementById('block-alshayamainmenu').classList.add('aura-header-modal-open');
   };
 
   closeNewUserModal = () => {
     this.setState({
       isNewUserModalOpen: false,
     });
+    document.getElementById('block-alshayamainmenu').classList.remove('aura-header-modal-open');
   };
 
   render() {

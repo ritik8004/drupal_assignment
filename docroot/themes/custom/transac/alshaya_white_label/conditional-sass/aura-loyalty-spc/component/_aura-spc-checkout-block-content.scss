@@ -1,7 +1,7 @@
 .spc-aura-checkout-rewards-block {
   .spc-aura-highlight {
     color: $aura-spc-checkout-highlight;
-    font-family: $alshaya-bold;
+    font-family: $aura-bold;
     font-weight: normal;
   }
 
@@ -11,11 +11,13 @@
     }
 
     .item-wrapper {
-      display: flex;
-      flex-direction: row;
+      .spc-aura-link-card-form-content {
+        display: flex;
+        flex-direction: row;
 
-      @include breakpoint($upto-desktop) {
-        flex-direction: column;
+        @include breakpoint($upto-desktop) {
+          flex-direction: column;
+        }
       }
 
       .spc-aura-link-card-wrapper {
@@ -32,7 +34,7 @@
         line-height: 18px;
 
         a {
-          color: #8e227c;
+          color: $aura-spc-checkout-highlight;
           text-decoration: underline;
         }
 
@@ -54,36 +56,62 @@
     font-size: 0.875rem;
 
     &.guest-user {
-      background: $aura-spc-checkout-block-bg;
-      padding: 1.25rem;
+      @include breakpoint($only-mobile) {
+        margin: 0 0.5rem;
+      }
 
-      @include breakpoint($tablet) {
+      > div {
+        background: $aura-spc-checkout-block-bg;
+        padding: 1.25rem;
         border-radius: 0.625rem;
+        font-family: $aura-regular;
       }
 
       .title {
-        padding-bottom: 1.25rem;
+        background-image: $aura-spc-checkout-block-bg-gradient;
+
+        html[lang=ar] & {
+          background-image: $aura-spc-checkout-block-bg-gradient-ar;
+        }
       }
 
       .subtitle-1 {
-        padding-bottom: 0.25rem;
+        padding-bottom: 0.625rem;
         color: $aura-spc-checkout-highlight;
-        font-family: $alshaya-bold;
+        font-family: $aura-bold;
         font-weight: normal;
+      }
+
+      .spc-aura-link-card-form {
+        margin-top: 0.3125rem;
+      }
+
+      .aura-form-items-link-card-options {
+        margin-#{$left}: -0.625rem;
+        margin-bottom: 0.5rem;
+
+        > div {
+          padding-#{$right}: 1.25rem;
+        }
       }
     }
 
     &.registered-user-linked,
     &.registered-user-linked-pending-enrollment {
-      background: $aura-spc-checkout-block-bg;
+      background: $aura-spc-checkout-block-bg-gradient;
       padding: 1.25rem;
+      font-family: $aura-regular;
+
+      html[lang=ar] & {
+        background: $aura-spc-checkout-block-bg-gradient-ar;
+      }
 
       @include breakpoint($tablet) {
         border-radius: 0.625rem;
       }
 
       .spc-aura-highlight {
-        font-family: $alshaya-bold;
+        font-family: $aura-bold;
         font-weight: normal;
         padding: 0 0.25rem;
       }
@@ -93,6 +121,7 @@
   .spc-aura-pending-enrollment-message {
     margin-top: 0.3125rem;
     font-size: 0.875rem;
+    font-family: $aura-regular;
   }
 
   .spc-aura-checkout-messages {

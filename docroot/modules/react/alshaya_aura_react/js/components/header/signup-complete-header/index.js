@@ -1,5 +1,8 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
+import AuraLogo from '../../../svg-component/aura-logo';
+import ConditionalView
+  from '../../../../../alshaya_spc/js/common/components/conditional-view';
 
 const SignUpCompleteHeader = (props) => {
   const {
@@ -15,9 +18,12 @@ const SignUpCompleteHeader = (props) => {
     <>
       { isHeaderModalOpen
         && (
-        <div className="aura-header-popup-wrapper">
+        <div className="aura-header-popup-wrapper sign-up-complete">
           <div className="aura-popup-header card-wrapper">
-            <div className="">
+            <ConditionalView condition={window.innerWidth < 1024}>
+              <AuraLogo stacked="horizontal" />
+            </ConditionalView>
+            <div className="title">
               {Drupal.t('Your Aura card number')}
             </div>
             <Cleave

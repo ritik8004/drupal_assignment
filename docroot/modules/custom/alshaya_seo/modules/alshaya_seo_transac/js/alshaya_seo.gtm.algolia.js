@@ -91,7 +91,7 @@
         event: 'filter',
         siteSection: 'search results',
         filterType: facetTitle,
-        filterValue: Drupal.t(selectedVal.innerHTML),
+        filterValue: selectedVal.innerHTML,
       };
 
       dataLayer.push(data);

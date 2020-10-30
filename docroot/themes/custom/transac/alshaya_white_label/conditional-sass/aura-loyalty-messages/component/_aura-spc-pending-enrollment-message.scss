@@ -3,6 +3,7 @@
   border-radius: 0.625rem;
   color: $aura-spc-pending-enrollment-text;
   background: $aura-spc-cart-block-pending-enrollment;
+  font-family: $aura-regular;
 
   html[lang=ar] & {
     background: $aura-spc-cart-block-pending-enrollment-ar;

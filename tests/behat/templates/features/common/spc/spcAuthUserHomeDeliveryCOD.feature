@@ -4,8 +4,8 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
   Background:
     Given I am on "user/login"
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_user_email}"
-    And I fill in "edit-pass" with "{spc_user_password}"
+    Then I fill in "edit-name" with "{spc_auth_user_email}"
+    And I fill in "edit-pass" with "{spc_auth_user_password}"
     Then I press "edit-submit"
     And I wait 10 seconds
     Then I should be on "/user" page
@@ -55,7 +55,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
-    Then I should see "{spc_user_email}"
+    Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -129,7 +129,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_user_email}"
+    Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -205,7 +205,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_user_email}"
+    Then I should see "{spc_auth_user_email}"
     Then I should see "{language_order_detail}"
 
   @cod @hd @mobile
@@ -255,7 +255,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
-    Then I should see "{spc_user_email}"
+    Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds

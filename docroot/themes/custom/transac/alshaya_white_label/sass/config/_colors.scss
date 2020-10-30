@@ -176,6 +176,7 @@ $_aura_account_txt: #31281b;
 $_aura_status_hold: #ff7600;
 $_aura_status_credit: #1da545;
 $_aura_status_debit: #ff3030;
+$_aura_dark_purple: #a3217f;
 
 // Aura Gradients.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -206,6 +207,14 @@ $aura-gradient-13: linear-gradient(127deg, #efc06e -5%, #e31c79 65%, #772583 109
 $aura-gradient-13-ar: linear-gradient(-127deg, #efc06e -5%, #e31c79 65%, #772583 109%);
 $aura-gradient-14: linear-gradient(109deg, #efc06e -11%, #e31c79 50%, #772583 107%);
 $aura-gradient-14-ar: linear-gradient(-109deg, #efc06e -11%, #e31c79 50%, #772583 107%);
+$aura-gradient-15: linear-gradient(104deg, rgba(239, 192, 110, 0.1) -10%, rgba(227, 28, 121, 0.1) 47%, rgba(119, 37, 131, 0.1) 101%);
+$aura-gradient-15-ar: linear-gradient(-104deg, rgba(239, 192, 110, 0.1) -10%, rgba(227, 28, 121, 0.1) 47%, rgba(119, 37, 131, 0.1) 101%);
+$aura-gradient-16: linear-gradient(112deg, rgba(239, 192, 110, 0.1) -12%, rgba(227, 28, 121, 0.1) 47%, rgba(119, 37, 131, 0.1) 102%);
+$aura-gradient-16-ar: linear-gradient(-112deg, rgba(239, 192, 110, 0.1) -12%, rgba(227, 28, 121, 0.1) 47%, rgba(119, 37, 131, 0.1) 102%);
+$aura-gradient-17: linear-gradient(105deg, #fdf3f1, #fce8f2 51%, #f8eaf5);
+$aura-gradient-17-ar: linear-gradient(105deg, #fdf3f1, #fce8f2 51%, #f8eaf5);
+$aura-gradient-18: linear-gradient(135deg, rgba(119, 37, 131, 1) 4%, rgba(227, 28, 121, 1) 45%, rgba(239, 192, 110, 1) 100%);
+$aura-gradient-18-ar: linear-gradient(135deg, rgba(119, 37, 131, 1) 4%, rgba(227, 28, 121, 1) 45%, rgba(239, 192, 110, 1) 100%);
 $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 $aura-hello-tier: linear-gradient(140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
 $aura-hello-tier-ar: linear-gradient(-140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
@@ -1596,20 +1605,22 @@ $magv2-crossel-upsell-pagination: $brownish-grey;
 $magv2-free-gift: $mothercare-black;
 $magv2-free-gift-modal-cross-icon: $mothercare-black;
 $magv2-free-gift-modal-item-code: $brownish-grey;
-$magv3-breadcrumb-bg: $white-five;
+$magv2-breadcrumb-bg: $white-five;
 
 // Sub brand logo.
 $sub_brand_logo_separator: $_ancestral-water;
 $sub_brand_logo_header_border: $_screeching_white;
 
 // Aura.
+$aura-spc-link-card-radio-label: $_aura_expiry_black;
 $aura-spc-block-bg-desktop: $aura-gradient-1;
 $aura-spc-block-bg-desktop-ar: $aura-gradient-1-ar;
 $aura-block-bg-mobile: $aura-gradient-2;
 $aura-block-bg-mobile-ar: $aura-gradient-2-ar;
-$aura-normal-text: $purple-glory;
-$aura-highlight: $extreme-blush;
+$aura-normal-text: $night-blue;
+$aura-highlight: $aura-purpleTwo;
 $aura-join-link: $aura-gradient-3;
+$aura-join-link-text: $_aura_dark_purple;
 $aura-join-link-ar: $aura-gradient-3-ar;
 $title-blue: $aura-blue;
 $title-pink: $extreme-blush;
@@ -1627,8 +1638,8 @@ $aura-promotion-item-bg: $aura-gradient-4;
 $aura-promotion-item-bg-ar: $aura-gradient-4-ar;
 $aura-expiry-item-txt: $night-blue;
 $aura-expiry-item-bg: $dried-urban;
-$aura-spc-cart-block-pending-enrollment: $aura-gradient-5;
-$aura-spc-cart-block-pending-enrollment-ar: $aura-gradient-5-ar;
+$aura-spc-cart-block-pending-enrollment: $aura-gradient-16;
+$aura-spc-cart-block-pending-enrollment-ar: $aura-gradient-16-ar;
 $aura-spc-pending-enrollment-text: $night-blue;
 $aura-order-confirmation-label: $darkish-purple;
 $aura-order-confirmation-redeem-points: $aura-redeem-points;
@@ -1645,6 +1656,10 @@ $aura-spc-response-message: $_spc-radio-filled;
 $aura-spc-redeem-separator: $darkish-purple;
 $aura-spc-button-text: $darkish-purple;
 $aura-spc-button-bg: $white-five;
+$aura-spc-cart-unlinked-highlight: $aura-purpleTwo;
+$aura-spc-cart-unlinked-desc: $night-blue;
+$aura-spc-checkout-block-bg-gradient: $aura-gradient-15;
+$aura-spc-checkout-block-bg-gradient-ar: $aura-gradient-15-ar;
 
 // Aura My Account.
 $aura-loyalty-club-title-1: $aura-blue;
@@ -1698,3 +1713,14 @@ $aura-form-modal-section-bg: $white-five;
 $aura-modal-submit: $aura-gradient-radial;
 $aura-form-modal-desc-link: $darkish-purple;
 $aura-my-account-aura-nav-link: $aura-purpleTwo;
+
+// Aura Header.
+$aura-hb-menu-aura-tooltip: $aura-gradient-17;
+$aura-hb-menu-aura-tooltip-ar: $aura-gradient-17-ar;
+$aura-hb-tooltip-preview-text: $dark-night-owl;
+$aura-header-sign-link: $mothercare-black;
+$aura-header-card-wrapper-text: $white-five;
+$aura-header-card-wrapper-card-number: $grey-light;
+$aura-header-card-wrapper: $aura-gradient-18;
+$aura-header-card-wrapper-ar: $aura-gradient-18-ar;
+$aura-header-card-body: $dark-night-owl;

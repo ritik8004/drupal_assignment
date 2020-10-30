@@ -364,7 +364,10 @@ function alshaya_advanced_page_block_access(Block $block, $operation, AccountInt
 
   // Hide facet block & product content listing block in case where Drupal has
   // been tricked into thinking the department page as a term page.
-  if (strpos($block_plugin, 'facet_block:') !== FALSE || ($block_plugin === 'views_block:alshaya_product_list-block_1')) {
+  if (strpos($block_plugin, 'facet_block:') !== FALSE
+    || ($block_plugin === 'views_block:alshaya_product_list-block_1')
+    || ($block_plugin === 'alshaya_algolia_react_plp')
+  ) {
     // Not show block for department page.
     $route_object = \Drupal::routeMatch()->getRouteObject();
     return AccessResult::forbiddenIf(!empty($route_object) && !empty($route_object->getOption('_department_page_term')));

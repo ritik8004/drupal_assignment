@@ -30,9 +30,12 @@ class AlshayaConfigValidator implements ConfigurationInterface {
               $key = key($a);
               return !(substr($key, 0, 4) === 'url_')
                      && !(substr($key, 0, 4) === 'var_')
+                     && !(substr($key, 0, 4) === 'spc_')
+                     && !(substr($key, 0, 6) === 'boots_')
+                     && !(substr($key, 0, 8) === 'product_')
                      && !(substr($key, 0, 5) === 'lang_');
             })
-            ->thenInvalid('Invalid key for "%s", use variable with prefix "url_, var_ or lang_".')
+            ->thenInvalid('Invalid key for "%s", use variable with prefix "url_, var_, product_, lang_, spc_ or boots_".')
             ->end()
           ->prototype('variable')->end()
         ->end()

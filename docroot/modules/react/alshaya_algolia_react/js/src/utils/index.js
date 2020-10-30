@@ -6,22 +6,22 @@ export {
   redirectToOtherLang,
   isMobile,
   getAlgoliaStorageValues,
-  searchStateHasFilter
+  searchStateHasFilter,
 } from './QueryStringUtils';
 
 export {
   getPriceRangeLabel,
   calculateDiscount,
-  formatPrice
+  formatPrice,
 } from './PriceHelper';
 
 export {
   contentDiv,
-  searchResultDiv,
+  createSearchResultDiv,
   toggleSearchResultsContainer,
   toggleSortByFilter,
   showLoader,
-  removeLoader
+  removeLoader,
 } from './SearchUtility';
 
 export {
@@ -29,7 +29,8 @@ export {
   hasCategoryFilter,
   getSortedItems,
   hasSuperCategoryFilter,
-  customQueryRedirect
+  facetFieldAlias,
+  customQueryRedirect,
 } from './FilterUtils';
 
 export {
@@ -39,10 +40,11 @@ export {
   setLangRedirect,
   removeLangRedirect,
   getLangRedirect,
-  setClickedItem
+  setClickedItem,
+  storeClickedItem,
 } from './localStorage';
 
 export {
   getSuperCategory,
-  getSuperCategoryOptionalFilter
-} from './SuperCategoryUtility'
+  getSuperCategoryOptionalFilter,
+} from './SuperCategoryUtility';

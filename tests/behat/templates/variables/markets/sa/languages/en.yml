@@ -24,8 +24,6 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
-  anon_email: 'exampleuser@mailinator.com'
-  anon_username: 'Sample User Name'
   order_confirm_text: 'Order Confirmation'
   order_detail: 'order detail'
   delivery_type: 'Home delivery'

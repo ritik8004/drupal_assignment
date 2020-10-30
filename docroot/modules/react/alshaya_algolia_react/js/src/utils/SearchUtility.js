@@ -3,29 +3,33 @@ import { getSearchQuery, getLangRedirect } from './localStorage';
 
 const contentDiv = document.querySelector('.page-standard main');
 const body = document.querySelector('body');
-// Create Search result div wrapper to render results.
-const searchResultDiv = document.createElement('div');
-searchResultDiv.id = 'alshaya-algolia-search';
-searchResultDiv.style.display = 'none';
-contentDiv.parentNode.insertBefore( searchResultDiv, contentDiv.nextSibling );
 
-var pageStandard = document.querySelector('.page-standard');
-var defaultClasses = pageStandard.className;
-var searchClasses = "page-standard c-plp c-plp-only ";
-searchClasses += hasCategoryFilter() ? "l-two--sf l-container" : "l-one--w lhn-without-sidebar l-container";
+const pageStandard = document.querySelector('.page-standard');
+const defaultClasses = pageStandard.className;
+let searchClasses = 'page-standard c-plp c-plp-only ';
+searchClasses += hasCategoryFilter() ? 'l-two--sf l-container' : 'l-one--w lhn-without-sidebar l-container';
+
+// Create Search result div wrapper to render results.
+function createSearchResultDiv() {
+  const searchResultDiv = document.createElement('div');
+  searchResultDiv.id = 'alshaya-algolia-search';
+  searchResultDiv.style.display = 'none';
+  contentDiv.parentNode.insertBefore(searchResultDiv, contentDiv.nextSibling);
+}
 
 function showSearchResultContainer() {
-  Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
-    element.style.display = 'none';
+  Array.prototype.forEach.call(contentDiv.parentNode.children, (element) => {
+    const searchContainerElm = element;
+    searchContainerElm.style.display = 'none';
   });
-  let search_query = getSearchQuery();
+  const searchQuery = getSearchQuery();
+  const searchResultDiv = document.getElementById('alshaya-algolia-search');
 
   // On search page, we always show search results. So need to hide header on VS
   // only when there is search query.
-  if (search_query !== '' && search_query !== null) {
-    body.classList.add("hide-header") ;
-  }
-  else {
+  if (searchQuery !== '' && searchQuery !== null) {
+    body.classList.add('hide-header');
+  } else {
     body.classList.remove('hide-header');
   }
   searchResultDiv.style.display = 'block';
@@ -38,9 +42,11 @@ function hideSearchResultContainer() {
   if (typeof Drupal.blazy !== 'undefined') {
     Drupal.blazy.revalidate();
   }
-  Array.prototype.forEach.call(contentDiv.parentNode.children, element => {
-    element.style.display = null;
+  Array.prototype.forEach.call(contentDiv.parentNode.children, (element) => {
+    const searchContainerElm = element;
+    searchContainerElm.style.display = null;
   });
+  const searchResultDiv = document.getElementById('alshaya-algolia-search');
   body.classList.remove('hide-header');
   searchResultDiv.style.display = 'none';
   searchResultDiv.classList.remove('show-algolia-result');
@@ -51,38 +57,38 @@ function hideSearchResultContainer() {
 function toggleSearchResultsContainer() {
   // When user is on search page, we always want to display search results,
   // As search links are used internally with filters
-  let search_query = getSearchQuery();
+  const searchQuery = getSearchQuery();
   if (drupalSettings.algoliaSearch.showSearchResults) {
     showSearchResultContainer();
-  }
-  else if (search_query === '' || search_query === null) {
+  } else if (searchQuery === '' || searchQuery === null) {
     hideSearchResultContainer();
-  }
-  else {
+  } else {
     showSearchResultContainer();
   }
 }
 
 // Show or hide sort by filter, when no results found.
-function toggleSortByFilter(action) {
-  const searchWrapper = document.getElementById('alshaya-algolia-search');
+function toggleSortByFilter(action, context = 'alshaya-algolia-search') {
+  const searchWrapper = document.getElementById(context);
 
-  if (action == 'hide') {
-    searchWrapper.querySelector('.container-without-product #sort_by').classList.add('hide-facet-block')
+  if (action === 'hide') {
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.add('hide-facet-block');
+  } else {
+    searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-facet-block');
   }
-  else {
-    searchWrapper.querySelector('.container-without-product #sort_by').classList.remove('hide-facet-block')
-  }
-
 }
 
 /**
  * Place ajax fulll screen loader.
  */
 function showLoader() {
-  const loaderDiv = document.createElement( 'div' );
+  let loaderDiv = document.getElementsByClassName('ajax-progress-fullscreen');
+  if (loaderDiv.length > 0) {
+    return;
+  }
+  loaderDiv = document.createElement('div');
   loaderDiv.className = 'ajax-progress ajax-progress-fullscreen';
-  document.body.appendChild( loaderDiv );
+  document.body.appendChild(loaderDiv);
 }
 
 /**
@@ -98,9 +104,9 @@ function removeLoader() {
 
 export {
   contentDiv,
-  searchResultDiv,
+  createSearchResultDiv,
   toggleSearchResultsContainer,
   toggleSortByFilter,
   showLoader,
-  removeLoader
+  removeLoader,
 };

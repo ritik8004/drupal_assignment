@@ -28,7 +28,7 @@ export default class AddressList extends React.Component {
   componentDidMount() {
     this.isComponentMounted = true;
     // If user is logged in, only then get area lists.
-    if (window.drupalSettings.user.uid > 0) {
+    if (drupalSettings.user.uid > 0) {
       const addressList = getUserAddressList();
       if (addressList instanceof Promise) {
         addressList.then((list) => {

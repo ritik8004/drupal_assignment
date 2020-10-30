@@ -1,4 +1,5 @@
-#hits {
+#hits,
+#plp-hits {
   .chrome & {
     // Prevent chrome from interfering with preserving user scroll position.
     // This happens when user clicks load more. Chrome preserves the scroll position of load more

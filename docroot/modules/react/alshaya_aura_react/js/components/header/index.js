@@ -185,7 +185,11 @@ class Header extends React.Component {
       loyaltyStatus,
     } = this.state;
 
-    const { isNotExpandable, loggedInMobile } = this.props;
+    const {
+      isNotExpandable,
+      isDesktop,
+      loggedInMobile
+    } = this.props;
 
     const { id: userId } = getUserDetails();
 
@@ -246,6 +250,8 @@ class Header extends React.Component {
           points={points}
           signUpComplete={signUpComplete}
           loggedInMobile={loggedInMobile}
+          isHeaderModalOpen={isHeaderModalOpen}
+          isDesktop={isDesktop}
         />
         { headerPopUp }
       </>

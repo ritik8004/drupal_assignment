@@ -16,12 +16,14 @@ class SignUpHeader extends React.Component {
     this.setState({
       isOTPModalOpen: true,
     });
+    document.getElementById('block-alshayamainmenu').classList.add('aura-header-modal-open');
   };
 
   closeOTPModal = () => {
     this.setState({
       isOTPModalOpen: false,
     });
+    document.getElementById('block-alshayamainmenu').classList.remove('aura-header-modal-open');
   };
 
   render() {

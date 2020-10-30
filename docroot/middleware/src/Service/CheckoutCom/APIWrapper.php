@@ -7,12 +7,17 @@ use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * APIWrapper class.
+ * API Wrapper for checkout_com payment method.
+ *
+ * @package App\Service\CheckoutCom
  */
 class APIWrapper {
 
   // Magento method, to set for 2d vault (tokenized card) transaction.
   const CHECKOUT_COM_VAULT_METHOD = 'checkout_com_cc_vault';
+
+  // Magento method, to append for UAPAPI vault (tokenized card) transaction.
+  const CHECKOUT_COM_UPAPI_VAULT_METHOD = 'checkout_com_upapi_vault';
 
   // Key that contains redirect url.
   const REDIRECT_URL = 'redirectUrl';
@@ -459,6 +464,17 @@ class APIWrapper {
     // We hard code HTTPS here as varnish request to middleware is always http.
     $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
     return $host . 'checkout-com-error';
+  }
+
+  /**
+   * Get the flag to know if CVV needs to be validated or not.
+   *
+   * @return bool
+   *   TRUE if CVV needs to be validated.
+   */
+  public function isUpapiCvvCheckRequired() {
+    $config = $this->helper->getCheckoutComUpapiConfig();
+    return $config['cvv_check'] ?? TRUE;
   }
 
 }

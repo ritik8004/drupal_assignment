@@ -80,7 +80,7 @@ class AuraCheckoutRewards extends React.Component {
         <SectionTitle>{ sectionTitle }</SectionTitle>
         {/* Guest */}
         {/* @todo: Update condition. */}
-        <ConditionalView condition={uid < 1}>
+        <ConditionalView condition={uid === 0}>
           <div className="block-content guest-user">
             <div className="title">
               <div className="subtitle-1">{ Drupal.t('Earn and redeem as you shop ') }</div>
@@ -90,10 +90,6 @@ class AuraCheckoutRewards extends React.Component {
               <div className="label">{ Drupal.t('Already an Aura member?') }</div>
               <div className="item-wrapper">
                 <AuraFormLinkCard />
-                <div className="sub-text">
-                  <span>{ Drupal.t('Not a member yet?') }</span>
-                  <a href="#">{Drupal.t('Sign up now')}</a>
-                </div>
               </div>
             </div>
           </div>

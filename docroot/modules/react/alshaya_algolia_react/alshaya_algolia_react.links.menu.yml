@@ -1,0 +1,5 @@
+alshaya_algolia_react.algolia_react_config_setting:
+  route_name: alshaya_algolia_react.algolia_react_config_setting
+  title: 'Alshaya React Algolia Configuration'
+  description: 'Configure the settings for React Algoria.'
+  parent: alshaya_master.alshaya_admin

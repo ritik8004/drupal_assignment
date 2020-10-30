@@ -3,33 +3,35 @@ import connectRefinementList from '../connectors/connectRefinementList';
 import SwatchList from './SwatchList';
 
 // Seprate a string by comma to get the label and color code/image/text.
-const ColorFilter = ({ items, refine, searchForItems, isFromSearch, ...props }) => {
-  var searchForm = (null);
+const ColorFilter = ({
+  items, itemCount, refine, searchForItems, isFromSearch, ...props
+}) => {
+  let searchForm = (null);
   if (isFromSearch) {
     searchForm = (
       <li>
         <input
           type="search"
-          onChange={event => searchForItems(event.currentTarget.value)}
+          onChange={(event) => searchForItems(event.currentTarget.value)}
         />
       </li>
     );
   }
 
-  if (typeof props.itemCount != 'undefined') {
-    props.itemCount(props.attribute, items.length);
+  if (typeof itemCount !== 'undefined') {
+    itemCount(props.attribute, items.length);
   }
 
   return (
     <ul>
       {searchForm}
-      {items.map(item => {
-        const [label, swatch_info] = item.label.split(',');
+      {items.map((item) => {
+        const [label, swatchInfo] = item.label.split(',');
         return (
           <li
-          key={item.label}
-          className={"facet-item " + (item.isRefined ? 'is-active' : '')}
-          datadrupalfacetlabel={props.name}
+            key={item.label}
+            className={`facet-item ${item.isRefined ? 'is-active' : ''}`}
+            datadrupalfacetlabel={props.name}
           >
             <a
               href="#"
@@ -38,9 +40,14 @@ const ColorFilter = ({ items, refine, searchForItems, isFromSearch, ...props }) 
                 refine(item.value);
               }}
             >
-              <SwatchList label={label} swatch={swatch_info} />
-              <span className="facet-item__value">{label}
-                <span className="facet-item__count">({item.count})</span>
+              <SwatchList label={label} swatch={swatchInfo} />
+              <span className="facet-item__value">
+                {label}
+                <span className="facet-item__count">
+                  (
+                  {item.count}
+                  )
+                </span>
               </span>
             </a>
           </li>
@@ -48,6 +55,6 @@ const ColorFilter = ({ items, refine, searchForItems, isFromSearch, ...props }) 
       })}
     </ul>
   );
-}
+};
 
 export default connectRefinementList(ColorFilter);
