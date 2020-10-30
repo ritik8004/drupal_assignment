@@ -23,12 +23,29 @@ class AlshayaCustomHook extends BltTasks {
 
     $failed = FALSE;
     $files = explode(PHP_EOL, $arguments['changed_files']);
-    $patterns = [
-      'react/alshaya_spc/js',
-      'react/alshaya_pdp_react/js',
-      'react/alshaya_appointment/js',
-      'react/alshaya_aura_react/js',
-    ];
+
+    $patterns = [];
+
+    $ignoredDirs = ['alshaya_react', 'js', 'dist', 'node_modules'];
+
+    foreach (new \DirectoryIterator($this->getConfigValue('docroot') . '/modules/react') as $subDir) {
+      if ($subDir->isDir()
+        && strpos($subDir->getBasename(), '.') === FALSE
+        && !in_array($subDir->getBasename(), $ignoredDirs)) {
+        $pattern = '/react/' . $subDir->getBasename() . '/js';
+
+        // For module like alshaya_algolia_react we have react files in src.
+        if (is_dir($subDir->getRealPath() . '/src')) {
+          $pattern .= '/src';
+        }
+
+        $patterns[] = $pattern;
+      }
+    }
+
+    // Validate utility files.
+    $patterns[] = '/react/js';
+
     foreach ($files as $file) {
       foreach ($patterns as $pattern) {
         if (strpos($file, $pattern) !== FALSE) {

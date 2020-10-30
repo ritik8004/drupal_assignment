@@ -1,76 +1,82 @@
 import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
-const Swatch = (props) => {
-  const selected_image = props.url + '?selected=' + props.swatch.child_id;
+const Swatch = ({ swatch, url }) => {
+  const selectedImage = `${url}?selected=${swatch.child_id}`;
   return (
-    <a href={selected_image}>
-      <span className='swatch-block swatch-image'>
-        {props.swatch.product_image_url ?
-          <ImageElement data-sku-image={props.swatch.product_image_url} src={props.swatch.image_url} />
-          :
-          <ImageElement src={props.swatch.image_url} />
-        }
+    <a href={selectedImage}>
+      <span className="swatch-block swatch-image">
+        {swatch.product_image_url
+          ? <ImageElement data-sku-image={swatch.product_image_url} src={swatch.image_url} />
+          : <ImageElement src={swatch.image_url} />}
       </span>
     </a>
-  )
-}
+  );
+};
 
-const Swatches = (props) => {
-  if (props.swatches === undefined) {
+const Swatches = ({ swatches, url }) => {
+  if (typeof swatches === 'undefined') {
     return null;
   }
 
   // Display the colors count for mobile only if different variants images
   // being shown in gallery on PLP.
-  const show_variants_thumbnail_plp_gallery = drupalSettings.reactTeaserView.swatches.showVariantsThumbnail;
+  const showVariantsThumbnailPlpGallery = drupalSettings
+    .reactTeaserView.swatches.showVariantsThumbnail;
   // Display the configured number of swatches.
   const limit = drupalSettings.reactTeaserView.swatches.swatchPlpLimit;
-  const total_no_of_swatches = props.swatches.length;
-  const diff = total_no_of_swatches - limit;
+  const totalNoOfSwatches = swatches.length;
+  const diff = totalNoOfSwatches - limit;
 
-  let swatch_more_text = '+ ';
+  let swatchMoreText = '+ ';
   if (diff > 0) {
-    swatch_more_text = (diff === 1) ? swatch_more_text + Drupal.t('1 color') : swatch_more_text + Drupal.t('@swatch_count colors', {'@swatch_count' : diff});
-  }
-  else {
-    swatch_more_text = null;
-  }
-
-  let swatch_color_count;
-  if (total_no_of_swatches > 0) {
-    swatch_color_count = (total_no_of_swatches === 1) ? Drupal.t('1 color') : Drupal.t('@swatch_count colors', {'@swatch_count' : total_no_of_swatches});
-  }
-  else {
-    swatch_color_count = null;
+    swatchMoreText = (diff === 1) ? swatchMoreText + Drupal.t('1 color') : swatchMoreText + Drupal.t('@swatch_count colors', { '@swatch_count': diff });
+  } else {
+    swatchMoreText = null;
   }
 
-  let swatches;
-  if (total_no_of_swatches > 0 && !show_variants_thumbnail_plp_gallery) {
-    swatches = <div className="swatches">
-                {props.swatches.slice(0, limit).map((swatch, key) => <Swatch swatch={swatch} key={key} url={props.url} />)}
-                {(diff > 0) ? <a className="swatch-more-link product-selected-url" href={props.url}>{swatch_more_text}</a> : null}
-              </div>
-  }
-  else if (total_no_of_swatches > 0){
-    swatches =  <div className="swatches">
-                  <div className="swatch-color-count-wrapper mobile-only-block">
-                    <a className="swatch-color-count product-selected-url"
-                      href={props.url}>{swatch_color_count}</a>
-                  </div>
-                </div>
-  }
-  else {
-    swatches = null;
+  let swatchColorCount;
+  if (totalNoOfSwatches > 0) {
+    swatchColorCount = (totalNoOfSwatches === 1) ? Drupal.t('1 color') : Drupal.t('@swatch_count colors', { '@swatch_count': totalNoOfSwatches });
+  } else {
+    swatchColorCount = null;
   }
 
-  return (swatches?
-            <React.Fragment>
-              {swatches}
-            </React.Fragment>
-            :
-            null
-  )
-}
+  let swatcheContainer;
+  if (totalNoOfSwatches > 0 && !showVariantsThumbnailPlpGallery) {
+    swatcheContainer = (
+      <div className="swatches">
+        {swatches.slice(0, limit).map(
+          (swatch) => <Swatch swatch={swatch} key={swatch.id} url={url} />,
+        )}
+        {(diff > 0) ? <a className="swatch-more-link product-selected-url" href={url}>{swatchMoreText}</a> : null}
+      </div>
+    );
+  } else if (totalNoOfSwatches > 0) {
+    swatcheContainer = (
+      <div className="swatches">
+        <div className="swatch-color-count-wrapper mobile-only-block">
+          <a
+            className="swatch-color-count product-selected-url"
+            href={url}
+          >
+            {swatchColorCount}
+          </a>
+        </div>
+      </div>
+    );
+  } else {
+    swatcheContainer = null;
+  }
+
+  return (swatcheContainer
+    ? (
+      <>
+        {swatcheContainer}
+      </>
+    )
+    : null
+  );
+};
 
 export default Swatches;

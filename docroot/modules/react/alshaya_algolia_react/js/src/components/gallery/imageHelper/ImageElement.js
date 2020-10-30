@@ -1,7 +1,9 @@
 import React from 'react';
 
 const ImageElement = (props) => {
-  const {src, title, alt, ...otherProps} = props;
+  const {
+    src, title, alt, ...otherProps
+  } = props;
 
   return (
     <img

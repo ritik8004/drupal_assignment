@@ -1,0 +1,9 @@
+alshaya_facets_pretty_paths.get_pretty_paths:
+  path: '/facets-aliases/{facet_alias}'
+  defaults:
+    _controller: 'Drupal\alshaya_facets_pretty_paths\Controller\AlshayaFacetsPrettyPathsController::getAliases'
+  methods: [GET]
+  requirements:
+#    No access check needed.
+    _access: 'TRUE'
+    _format: 'json'

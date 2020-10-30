@@ -101,4 +101,4 @@ variables:
   payment_type_text: 'payment method:'
   continue_shopping_text: 'continue shopping'
   governorate: ''
-
+  address_area_field: 'Abqaiq'

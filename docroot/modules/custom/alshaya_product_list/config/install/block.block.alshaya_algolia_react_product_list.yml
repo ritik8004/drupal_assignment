@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_algolia_react
+  theme:
+    - alshaya_white_label
+id: alshayaalgoliareactproductlist
+theme: alshaya_white_label
+region: content
+weight: 0
+provider: alshaya_algolia_react
+plugin: alshaya_algolia_react_product_list
+settings:
+  id: alshaya_algolia_react_product_list
+  label: 'Alshaya Algolia Product List'
+  provider: alshaya_algolia_react
+  label_display: '0'
+  items_per_page: '36'
+  application_id: ''
+  search_api_key: ''
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      product_list: product_list
+    negate: false
+    context_mapping: {  }

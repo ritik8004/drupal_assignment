@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\alshaya_search_api\EventSubscriber\AlshayaSearchApiProductProcessedEventSubscriber;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
@@ -75,6 +76,11 @@ function _alshaya_search_api_reindex(array $indexes = []) {
  */
 function alshaya_search_api_node_predelete(EntityInterface $node) {
   if ($node->bundle() !== 'acq_product') {
+    return;
+  }
+
+  // Do nothing if not using database index.
+  if (!AlshayaSearchApiHelper::isIndexEnabled('product')) {
     return;
   }
 

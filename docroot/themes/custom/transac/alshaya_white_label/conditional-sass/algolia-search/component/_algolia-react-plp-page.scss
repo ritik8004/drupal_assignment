@@ -1,0 +1,19 @@
+#alshaya-algolia-plp {
+  .show-all-filters-algolia.empty-category {
+    @include breakpoint($only-mobile) {
+      display: block;
+      height: 2.9375rem;
+      line-height: 2.9375rem;
+
+      &::after {
+        #{$right}: auto;
+      }
+    }
+  }
+
+  .block-alshaya-algolia-plp-facets-block-all {
+    @include breakpoint($only-mobile) {
+      height: 0;
+    }
+  }
+}

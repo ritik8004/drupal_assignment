@@ -72,3 +72,13 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@acq_sku.category_repo'
+
+  alshaya_acm_product_category.page:
+    class: Drupal\alshaya_acm_product_category\Service\ProductCategoryPage
+    arguments:
+      - '@entity_type.manager'
+      - '@path.validator'
+      - '@request_stack'
+      - '@entity.repository'
+      - '@language_manager'
+      - '@config.factory'

@@ -25,7 +25,7 @@
     height: 100%;
   }
 
-  input[type=text] {
+  input.spc-aura-link-card-input {
     border: 1px solid $aura-spc-textbox-border;
     border-radius: 0.25rem 0 0 0.25rem;
     border-#{$right}: 0;

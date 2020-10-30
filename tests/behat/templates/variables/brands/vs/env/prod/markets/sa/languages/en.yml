@@ -94,3 +94,5 @@ variables:
   billing_mobile: '555555555'
   billing_text: 'Billing address:'
   governorate: ''
+  address_area_field: 'Abqaiq'
+

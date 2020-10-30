@@ -21,6 +21,7 @@ class TextField extends React.Component {
       label,
       disabled,
       maxLength,
+      placeholder,
     } = this.props;
     let focusClass = '';
     if (defaultValue !== undefined && defaultValue !== '') {
@@ -37,6 +38,7 @@ class TextField extends React.Component {
             defaultValue={defaultValue}
             onBlur={(e) => this.handleEvent(e, 'blur')}
             className={focusClass}
+            placeholder={placeholder}
           />
           <div className="c-input__bar" />
           <label>{label}</label>
@@ -75,6 +77,7 @@ class TextField extends React.Component {
           onBlur={(e) => this.handleEvent(e, 'blur')}
           className={focusClass}
           maxLength={maxLength}
+          placeholder={placeholder}
         />
         <div className="c-input__bar" />
         <label>{label}</label>

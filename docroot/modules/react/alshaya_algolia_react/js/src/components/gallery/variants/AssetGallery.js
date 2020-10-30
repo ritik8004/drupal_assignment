@@ -1,7 +1,7 @@
 import React from 'react';
 import ImageElement from '../imageHelper/ImageElement';
 
-const AssetGallery = ({media, title}) => {
+const AssetGallery = ({ media, title }) => {
   if (typeof media === 'undefined') {
     return (null);
   }
@@ -14,24 +14,24 @@ const AssetGallery = ({media, title}) => {
 
   return (
     <div className="alshaya_search_gallery">
-      <div className='alshaya_search_mainimage' data-sku-image={`${mainImageUrl}`}>
+      <div className="alshaya_search_mainimage" data-sku-image={`${mainImageUrl}`}>
         <ImageElement
           src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
           data-src={mainImageUrl}
           title={title}
-          className='b-lazy'
+          className="b-lazy"
         />
       </div>
-      <div className='alshaya_search_hoverimage'>
+      <div className="alshaya_search_hoverimage">
         <ImageElement
           src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-          data-src={ typeof hoverImage.url != 'undefined' ? hoverImage.url : '' }
+          data-src={typeof hoverImage.url !== 'undefined' ? hoverImage.url : ''}
           title={title}
-          className='b-lazy'
+          className="b-lazy"
         />
       </div>
     </div>
   );
-}
+};
 
 export default AssetGallery;
