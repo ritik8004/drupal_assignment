@@ -678,7 +678,7 @@ class CartController {
         $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
         // Check if cart total is valid return with an error message.
-        if (!($this->isCartTotalValid($cart, $checkout_settings))) {
+        if (!($this->cart->isCartTotalValid($cart, $checkout_settings))) {
           $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
             '@cart' => json_encode($cart),
           ]);

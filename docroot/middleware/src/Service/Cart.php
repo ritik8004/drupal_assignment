@@ -1866,7 +1866,7 @@ class Cart {
    * @return bool
    *   If cart is expired.
    */
-  public static function isCartTotalValid(array $cart, array $checkout_settings) {
+  public function isCartTotalValid(array $cart, array $checkout_settings) {
     // Get cart totals.
     $cart_total = $cart['totals']['grand_total'];
 
