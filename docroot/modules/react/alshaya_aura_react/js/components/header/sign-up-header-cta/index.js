@@ -10,28 +10,42 @@ const SignUpHeaderCta = (props) => {
     openHeaderModal,
     points,
     signUpComplete,
+    loggedInMobile,
   } = props;
 
   const { baseUrl, pathPrefix } = drupalSettings.path;
 
-  const { id: userId } = getUserDetails();
+  const { id: userId, userName } = getUserDetails();
 
-  let headerMarkup = null;
+  const getHeaderMarkup = () => {
+    // For logged in users.
+    if (userId) {
+      if (loggedInMobile) {
+        return (
+          <div className="aura-logged-in-rewards-header">
+            <div className="account-name">
+              <span className="name">{ userName }</span>
+            </div>
+            <div className="account-points">
+              <span className="points">{`${points} ${Drupal.t('Pts')}`}</span>
+            </div>
+          </div>
+        );
+      }
+      if (signUpComplete) {
+        return (
+          <div className="aura-header-link">
+            <a
+              className="user-points"
+              href={`${baseUrl}${pathPrefix}user/${userId}/loyalty-club`}
+            >
+              <span className="points">{`${points} ${Drupal.t('Pts')}`}</span>
+            </a>
+          </div>
+        );
+      }
 
-  if (userId) {
-    if (signUpComplete) {
-      headerMarkup = (
-        <div className="aura-header-link">
-          <a
-            className="user-points"
-            href={`${baseUrl}${pathPrefix}user/${userId}/loyalty-club`}
-          >
-            <span className="points">{`${points} ${Drupal.t('Pts')}`}</span>
-          </a>
-        </div>
-      );
-    } else {
-      headerMarkup = (
+      return (
         <div className="aura-header-link">
           <a
             className="join-aura"
@@ -42,18 +56,25 @@ const SignUpHeaderCta = (props) => {
         </div>
       );
     }
-  } else if (!isNotExpandable) {
-    headerMarkup = (
-      <div className="aura-header-link">
-        <a
-          className="join-aura"
-          onClick={openHeaderModal}
-        >
-          <AuraHeaderIcon />
-        </a>
-      </div>
-    );
-  }
+
+    // For guest users.
+    if (!isNotExpandable) {
+      return (
+        <div className="aura-header-link">
+          <a
+            className="join-aura"
+            onClick={openHeaderModal}
+          >
+            <AuraHeaderIcon />
+          </a>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const headerMarkup = getHeaderMarkup();
 
   return (
     <>

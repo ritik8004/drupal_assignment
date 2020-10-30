@@ -3,11 +3,17 @@ import ReactDOM from 'react-dom';
 import Header from './components/header';
 import { getStorageInfo } from '../../js/utilities/storage';
 import { getAuraLocalStorageKey } from './utilities/aura_utils';
+import { getUserDetails } from './utilities/helper';
 
 const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
 if (window.innerWidth < 768) {
-  if (localStorageValues !== null) {
+  if (getUserDetails().id) {
+    ReactDOM.render(
+      <Header loggedInMobile />,
+      document.querySelector('#username-points-wrapper-mobile-menu'),
+    );
+  } else if (localStorageValues !== null) {
     if (document.querySelector('#aura-mobile-header-signin-register')) {
       ReactDOM.render(
         <Header isNotExpandable />,

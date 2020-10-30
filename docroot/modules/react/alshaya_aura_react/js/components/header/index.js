@@ -185,7 +185,7 @@ class Header extends React.Component {
       loyaltyStatus,
     } = this.state;
 
-    const { isNotExpandable } = this.props;
+    const { isNotExpandable, loggedInMobile } = this.props;
 
     const { id: userId } = getUserDetails();
 
@@ -199,7 +199,7 @@ class Header extends React.Component {
 
     let headerPopUp = null;
 
-    if (userId) {
+    if (userId && !loggedInMobile) {
       if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_DATA) {
         headerPopUp = (
           <SignUpCompleteHeader
@@ -245,6 +245,7 @@ class Header extends React.Component {
           openHeaderModal={this.openHeaderModal}
           points={points}
           signUpComplete={signUpComplete}
+          loggedInMobile={loggedInMobile}
         />
         { headerPopUp }
       </>

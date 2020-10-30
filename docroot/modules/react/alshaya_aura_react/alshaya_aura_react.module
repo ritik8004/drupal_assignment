@@ -10,6 +10,7 @@ use Drupal\block\Entity\Block;
 use Drupal\alshaya_aura_react\Helper\AuraStatus;
 use Drupal\alshaya_aura_react\Helper\AuraTier;
 use Drupal\user\Entity\User;
+use Drupal\alshaya_user\AlshayaUserInfo;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -24,6 +25,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     $settings['userDetails'] = [
       'id' => $uid,
       'email' => \Drupal::currentUser()->getEmail(),
+      'userName' => AlshayaUserInfo::getFullName($user, ' ') ?? '',
       'loyaltyStatus' => $aura_helper->getUserAuraStatus(),
       'tier' => $aura_helper->getUserAuraTier(),
     ];
