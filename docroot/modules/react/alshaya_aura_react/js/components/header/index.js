@@ -175,36 +175,6 @@ class Header extends React.Component {
     }
   }
 
-  getAuraLabel = (previewClass) => {
-    const { isDesktop } = this.props;
-
-    if (isDesktop) {
-      return (
-        <div className={`aura-header-link ${previewClass}`}>
-          <a
-            className="join-aura"
-            onClick={() => this.openHeaderModal()}
-          >
-            <AuraHeaderIcon />
-          </a>
-        </div>
-      );
-    }
-
-    return (
-      <div className={`aura-header-link ${previewClass}`}>
-        <div className="aura-header-hb-menu-title">
-          <span className="preview-text">{Drupal.t('Say hello to')}</span>
-          <span className="join-aura"><AuraHeaderIcon /></span>
-          <span
-            className="aura-header-hb-menu-expand"
-            onClick={() => this.openHeaderModal()}
-          />
-        </div>
-      </div>
-    );
-  };
-
   render() {
     const {
       wait,
@@ -217,8 +187,8 @@ class Header extends React.Component {
 
     const {
       isNotExpandable,
+      isDesktop,
     } = this.props;
-    const previewClass = isHeaderModalOpen === true ? 'open' : '';
 
     const { id: userId } = getUserDetails();
 
@@ -278,6 +248,8 @@ class Header extends React.Component {
           openHeaderModal={this.openHeaderModal}
           points={points}
           signUpComplete={signUpComplete}
+          isHeaderModalOpen={isHeaderModalOpen}
+          isDesktop={isDesktop}
         />
         { headerPopUp }
       </>
