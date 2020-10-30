@@ -675,14 +675,12 @@ class CartController {
           ]);
         }
 
-        $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
-
         // Check if cart total is valid return with an error message.
-        if (!$this->cart->isCartTotalValid($cart, $checkout_settings)) {
+        if (!$this->cart->isCartTotalValid($cart)) {
           $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
             '@cart' => json_encode($cart),
           ]);
-          return new JsonResponse($this->utility->getErrorResponse('Sorry, something went wrong and we are unable to process your request right now. Please try again later.', 500));
+          return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), '500'));
         }
 
         $extension = [

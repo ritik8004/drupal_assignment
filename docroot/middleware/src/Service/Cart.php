@@ -1303,11 +1303,11 @@ class Cart {
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
     // Check if cart total is valid return with an error message.
-    if (!$this->isCartTotalValid($cart, $checkout_settings)) {
+    if (!$this->isCartTotalValid($cart)) {
       $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Sorry, something went wrong and we are unable to process your request right now. Please try again later.', 500);
+      return $this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), 500);
     }
 
     // Check whether order locking is enabled.
@@ -1860,27 +1860,27 @@ class Cart {
    *
    * @param array $cart
    *   Cart data.
-   * @param array $checkout_settings
-   *   Checkout settings.
    *
    * @return bool
    *   If cart total is valid.
    */
-  public function isCartTotalValid(array $cart, array $checkout_settings) {
+  public function isCartTotalValid(array $cart) {
     // Get cart totals.
     $cart_total = $cart['totals']['grand_total'];
 
-    // Check if last update of our cart is more recent than X minutes.
-    $expiration_time = $checkout_settings['purchase_expiration_time'];
-    $cart_last_updated = isset($cart['cart']['updated_at']) ? $cart['cart']['updated_at'] : $cart['cart']['created_at'];
-    $cart_last_updated_time = strtotime($cart_last_updated);
-    $current_time = strtotime(date('Y-m-d H:i:s'));
-    $time_difference = round(abs($current_time - $cart_last_updated_time) / 60, 2);
+    $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
-    // If time difference more then call getCart to get fresh data.
-    if ($time_difference > $expiration_time) {
+    // Check if last update of our cart is more recent than X minutes.
+    $expiration_time = $checkout_settings['purchase_expiration_time'] * 60;
+    $cart_last_updated = isset($cart['cart']['updated_at']) ? $cart['cart']['updated_at'] : $cart['cart']['created_at'];
+    $cart_expire_time = strtotime($cart_last_updated) + $expiration_time;
+    $current_time = strtotime(date('Y-m-d H:i:s'));
+
+    // Check if cart has expired.
+    if ($cart_expire_time < $current_time) {
       try {
-        $cart = $this->getCart();
+        // Getting fresh cart from api.
+        $cart = $this->getCart(TRUE);
       }
       catch (\Exception $e) {
         $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
