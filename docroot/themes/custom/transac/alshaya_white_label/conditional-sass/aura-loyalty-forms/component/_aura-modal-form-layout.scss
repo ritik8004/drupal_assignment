@@ -30,6 +30,8 @@
         position: absolute;
         #{$right}: 0.1875rem;
         cursor: pointer;
+        background: none;
+        border: none;
 
         @include icon('close') {
           font-size: 3rem;
@@ -44,6 +46,8 @@
       background: $aura-form-modal-section-bg;
 
       .aura-modal-form-items {
+        font-family: $aura-regular;
+        text-align: $left;
         padding: 1.25rem;
       }
 

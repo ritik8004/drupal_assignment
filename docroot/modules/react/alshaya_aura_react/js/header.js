@@ -6,7 +6,8 @@ import { getAuraLocalStorageKey } from './utilities/aura_utils';
 
 const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
-if (window.innerWidth < 768) {
+// Upto desktop, show Aura inside hamburger menu.
+if (window.innerWidth < 1024) {
   if (localStorageValues !== null) {
     if (document.querySelector('#aura-mobile-header-signin-register')) {
       ReactDOM.render(
@@ -22,7 +23,7 @@ if (window.innerWidth < 768) {
   }
 } else if (document.querySelector('#aura-header-modal')) {
   ReactDOM.render(
-    <Header />,
+    <Header isDesktop />,
     document.querySelector('#aura-header-modal'),
   );
 }

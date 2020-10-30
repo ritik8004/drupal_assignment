@@ -204,7 +204,7 @@ class AuraFormSignUpOTPModal extends React.Component {
       <div className="aura-otp-form">
         <div className="aura-modal-header">
           <SectionTitle>{getStringMessage('otp_modal_title')}</SectionTitle>
-          <a className="close" onClick={() => closeOTPModal()} />
+          <button type="button" className="close" onClick={() => closeOTPModal()} />
         </div>
         <div className="aura-modal-form">
           <div className="aura-modal-form-items">

@@ -211,6 +211,10 @@ $aura-gradient-15: linear-gradient(104deg, rgba(239, 192, 110, 0.1) -10%, rgba(2
 $aura-gradient-15-ar: linear-gradient(-104deg, rgba(239, 192, 110, 0.1) -10%, rgba(227, 28, 121, 0.1) 47%, rgba(119, 37, 131, 0.1) 101%);
 $aura-gradient-16: linear-gradient(112deg, rgba(239, 192, 110, 0.1) -12%, rgba(227, 28, 121, 0.1) 47%, rgba(119, 37, 131, 0.1) 102%);
 $aura-gradient-16-ar: linear-gradient(-112deg, rgba(239, 192, 110, 0.1) -12%, rgba(227, 28, 121, 0.1) 47%, rgba(119, 37, 131, 0.1) 102%);
+$aura-gradient-17: linear-gradient(105deg, #fdf3f1, #fce8f2 51%, #f8eaf5);
+$aura-gradient-17-ar: linear-gradient(105deg, #fdf3f1, #fce8f2 51%, #f8eaf5);
+$aura-gradient-18: linear-gradient(135deg, rgba(119, 37, 131, 1) 4%, rgba(227, 28, 121, 1) 45%, rgba(239, 192, 110, 1) 100%);
+$aura-gradient-18-ar: linear-gradient(135deg, rgba(119, 37, 131, 1) 4%, rgba(227, 28, 121, 1) 45%, rgba(239, 192, 110, 1) 100%);
 $aura-gradient-radial: radial-gradient(circle at 59% 168%, #e31c79 0%, #772583 97%, #283266 191%);
 $aura-hello-tier: linear-gradient(140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
 $aura-hello-tier-ar: linear-gradient(-140deg, #efc06e 14%, #e31c79 59%, #772583 100%);
@@ -1709,3 +1713,14 @@ $aura-form-modal-section-bg: $white-five;
 $aura-modal-submit: $aura-gradient-radial;
 $aura-form-modal-desc-link: $darkish-purple;
 $aura-my-account-aura-nav-link: $aura-purpleTwo;
+
+// Aura Header.
+$aura-hb-menu-aura-tooltip: $aura-gradient-17;
+$aura-hb-menu-aura-tooltip-ar: $aura-gradient-17-ar;
+$aura-hb-tooltip-preview-text: $dark-night-owl;
+$aura-header-sign-link: $mothercare-black;
+$aura-header-card-wrapper-text: $white-five;
+$aura-header-card-wrapper-card-number: $grey-light;
+$aura-header-card-wrapper: $aura-gradient-18;
+$aura-header-card-wrapper-ar: $aura-gradient-18-ar;
+$aura-header-card-body: $dark-night-owl;
