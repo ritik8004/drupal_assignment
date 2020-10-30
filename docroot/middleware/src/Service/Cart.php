@@ -17,7 +17,6 @@ use Drupal\alshaya_master\Helper\SortUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
-use App\Helper\CartInfoHelper;
 
 /**
  * Class Cart methods.
@@ -1303,30 +1302,10 @@ class Cart {
     $settings = $this->settings->getSettings('spc_middleware');
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
-    // Get cart totals.
-    $cart_total = $cart['totals']['grand_total'];
-
-    $isCartExpired = CartInfoHelper::isCartExpired($cart, $checkout_settings);
-
-    // If cart is expired then call getCart to get fresh cart.
-    if ($isCartExpired) {
-      try {
-        $cart = $this->getCart();
-      }
-      catch (\Exception $e) {
-        $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
-          '@message' => $e->getMessage(),
-        ]);
-      }
-    }
-
-    $fresh_cart_total = $cart['totals']['grand_total'];
-    // If the totals differ then return with an error message.
-    if ($fresh_cart_total != $cart_total) {
-      $this->logger->error('Error while placing order. Cart totals are mismatching. Cart: @cart, Old Cart total: @cart_total, Fresh Cart total: @fresh_cart_total.', [
+    // Check if cart total is valid return with an error message.
+    if (!($this->isCartTotalValid($cart, $checkout_settings))) {
+      $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
         '@cart' => json_encode($cart),
-        '@cart_total' => $cart_total,
-        '@fresh_cart_total' => $fresh_cart_total,
       ]);
       return $this->utility->getErrorResponse('Sorry, something went wrong and we are unable to process your request right now. Please try again later.', 500);
     }
@@ -1874,6 +1853,49 @@ class Cart {
     }
 
     return implode('||', $message);
+  }
+
+  /**
+   * Helper function to check if cart expired.
+   *
+   * @param array $cart
+   *   Cart data.
+   * @param array $checkout_settings
+   *   Checkout settings.
+   *
+   * @return bool
+   *   If cart is expired.
+   */
+  public static function isCartTotalValid(array $cart, array $checkout_settings) {
+    // Get cart totals.
+    $cart_total = $cart['totals']['grand_total'];
+
+    // Check if last update of our cart is more recent than X minutes.
+    $expiration_time = $checkout_settings['purchase_expiration_time'];
+    $cart_last_updated = isset($cart['cart']['updated_at']) ? $cart['cart']['updated_at'] : $cart['cart']['created_at'];
+    $cart_last_updated_time = strtotime($cart_last_updated);
+    $current_time = strtotime(date('Y-m-d H:i:s'));
+    $time_difference = round(abs($current_time - $cart_last_updated_time) / 60, 2);
+
+    // If time difference more then call getCart to get fresh data.
+    if ($time_difference > $expiration_time) {
+      try {
+        $cart = $this->getCart();
+      }
+      catch (\Exception $e) {
+        $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
+          '@message' => $e->getMessage(),
+        ]);
+      }
+    }
+
+    $fresh_cart_total = $cart['totals']['grand_total'];
+    // If the totals differ then return false.
+    if ($fresh_cart_total != $cart_total) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }

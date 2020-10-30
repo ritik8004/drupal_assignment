@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Helper\CartInfoHelper;
 
 /**
  * Class Cart Controller.
@@ -678,33 +677,11 @@ class CartController {
 
         $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
-        // Get cart totals.
-        $cart_total = $cart['totals']['grand_total'];
-
-        $isCartExpired = CartInfoHelper::isCartExpired($cart, $checkout_settings);
-
-        // If cart is expired then call getCart to get fresh cart.
-        if ($isCartExpired) {
-          try {
-            $cart = $this->cart->getCart();
-          }
-          catch (\Exception $e) {
-            $this->logger->error('Error occurred while fetching cart information. Error message: @message, code: @code', [
-              '@message' => $e->getMessage(),
-              '@code' => $e->getCode(),
-            ]);
-          }
-        }
-
-        $fresh_cart_total = $cart['totals']['grand_total'];
-        // If the totals differ then return with an error message.
-        if ($fresh_cart_total != $cart_total) {
-          $this->logger->error('Error while placing order. Cart totals are mismatching. Cart: @cart, Old Cart total: @cart_total, Fresh Cart total: @fresh_cart_total.', [
+        // Check if cart total is valid return with an error message.
+        if (!($this->isCartTotalValid($cart, $checkout_settings))) {
+          $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
             '@cart' => json_encode($cart),
-            '@cart_total' => $cart_total,
-            '@fresh_cart_total' => $fresh_cart_total,
           ]);
-
           return new JsonResponse($this->utility->getErrorResponse('Sorry, something went wrong and we are unable to process your request right now. Please try again later.', 500));
         }
 
