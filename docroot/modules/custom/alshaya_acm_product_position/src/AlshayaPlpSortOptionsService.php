@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product_position;
 
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -73,6 +74,11 @@ class AlshayaPlpSortOptionsService extends AlshayaPlpSortOptionsBase {
     }
 
     $options = array_filter($options);
+
+    if (!AlshayaSearchApiHelper::isIndexEnabled('product')) {
+      unset($options['stock_quantity']);
+    }
+
     return $options;
   }
 
