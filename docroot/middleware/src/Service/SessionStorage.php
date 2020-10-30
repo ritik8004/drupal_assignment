@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Class SessionStorage.
+ * Class SessionStorage for managing session data.
  *
  * @package App\Service
  */
@@ -74,6 +74,16 @@ class SessionStorage {
     if ($value !== $new_value) {
       $this->session->set($key, $new_value);
     }
+  }
+
+  /**
+   * Checks if the session has started.
+   *
+   * @return bool
+   *   TRUE if session has started else FALSE.
+   */
+  public function isSessionStarted() {
+    return $this->session->isStarted();
   }
 
 }
