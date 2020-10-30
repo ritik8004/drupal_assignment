@@ -24,7 +24,7 @@ import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
 import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
-import { isAuraEnabled } from '../../../../../js/utilities/helper';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 
 window.fetchStore = 'idle';
 
