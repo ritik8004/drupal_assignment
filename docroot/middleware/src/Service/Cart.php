@@ -1328,7 +1328,7 @@ class Cart {
         '@cart_total' => $cart_total,
         '@fresh_cart_total' => $fresh_cart_total,
       ]);
-      return $this->utility->getErrorResponse('Some error occurred while placing order, please try again.', 505);
+      return $this->utility->getErrorResponse('Sorry, something went wrong and we are unable to process your request right now. Please try again later.', 500);
     }
 
     // Check whether order locking is enabled.
