@@ -52,7 +52,37 @@ class Header extends React.Component {
     this.setState({
       signUpComplete: false,
     });
-  }
+  };
+
+  getAuraLabel = (previewClass) => {
+    const { isDesktop } = this.props;
+
+    if (isDesktop) {
+      return (
+        <div className={`aura-header-link ${previewClass}`}>
+          <a
+            className="join-aura"
+            onClick={() => this.openHeaderModal()}
+          >
+            <AuraHeaderIcon />
+          </a>
+        </div>
+      );
+    }
+
+    return (
+      <div className={`aura-header-link ${previewClass}`}>
+        <div className="aura-header-hb-menu-title">
+          <span className="preview-text">{Drupal.t('Say hello to')}</span>
+          <span className="join-aura"><AuraHeaderIcon /></span>
+          <span
+            className="aura-header-hb-menu-expand"
+            onClick={() => this.openHeaderModal()}
+          />
+        </div>
+      </div>
+    );
+  };
 
   render() {
     const {
@@ -61,21 +91,17 @@ class Header extends React.Component {
       apc_identifier_number: cardNumber,
     } = this.state;
 
-    const { isNotExpandable } = this.props;
+    const {
+      isNotExpandable,
+    } = this.props;
+    const previewClass = isHeaderModalOpen === true ? 'open' : '';
 
     return (
       <>
         {
           !isNotExpandable
             && (
-            <div className="aura-header-link">
-              <a
-                className="join-aura"
-                onClick={() => this.openHeaderModal()}
-              >
-                <AuraHeaderIcon />
-              </a>
-            </div>
+              this.getAuraLabel(previewClass)
             )
         }
         {

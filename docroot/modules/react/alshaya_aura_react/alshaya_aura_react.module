@@ -10,6 +10,7 @@ use Drupal\block\Entity\Block;
 use Drupal\alshaya_aura_react\Helper\AuraStatus;
 use Drupal\alshaya_aura_react\Helper\AuraTier;
 use Drupal\user\Entity\User;
+use Drupal\Component\Utility\Html;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -101,6 +102,8 @@ function alshaya_aura_react_preprocess_html(&$variables) {
       $variables['attributes']['class'][] = 'aura-my-account';
     }
   }
+  // Aura Enabled class.
+  $variables['attributes']['class'][] = Html::cleanCssIdentifier('aura-enabled');
 }
 
 /**
