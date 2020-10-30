@@ -20,6 +20,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
+use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Drupal\taxonomy\TermInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
@@ -125,6 +126,13 @@ class AcqSkuDrushCommands extends DrushCommands {
   private $cacheTagsInvalidator;
 
   /**
+   * Category sync helper.
+   *
+   * @var \Drupal\acq_sku\ConductorCategorySyncHelper
+   */
+  private $categorySyncHelper;
+
+  /**
    * AcqSkuDrushCommands constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapperInterface $apiWrapper
@@ -155,6 +163,8 @@ class AcqSkuDrushCommands extends DrushCommands {
    *   Cache Backend Service.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator
    *   Cache Tags invalidator.
+   * @param \Drupal\acq_sku\ConductorCategorySyncHelper $category_sync_helper
+   *   Category sync helper.
    */
   public function __construct(APIWrapperInterface $apiWrapper,
                               I18nHelper $i18nHelper,
@@ -169,7 +179,8 @@ class AcqSkuDrushCommands extends DrushCommands {
                               LanguageManagerInterface $langaugeManager,
                               ModuleHandlerInterface $moduleHandler,
                               CacheBackendInterface $linkedSkuCache,
-                              CacheTagsInvalidatorInterface $cacheTagsInvalidator) {
+                              CacheTagsInvalidatorInterface $cacheTagsInvalidator,
+                              ConductorCategorySyncHelper $category_sync_helper) {
     parent::__construct();
     $this->apiWrapper = $apiWrapper;
     $this->i18nhelper = $i18nHelper;
@@ -185,6 +196,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->moduleHandler = $moduleHandler;
     $this->linkedSkuCache = $linkedSkuCache;
     $this->cacheTagsInvalidator = $cacheTagsInvalidator;
+    $this->categorySyncHelper = $category_sync_helper;
   }
 
   /**
@@ -918,6 +930,22 @@ class AcqSkuDrushCommands extends DrushCommands {
         $sku->save();
       }
     }
+  }
+
+  /**
+   * Command to process category sync data after push from magento.
+   *
+   * @command acq_sku:cat-sync-process
+   *
+   * @usage drush cat-sync-process
+   *   Process categories after push from magento.
+   *
+   * @aliases cat-sync-process
+   */
+  public function catSyncProcess() {
+    $this->logger->notice(dt('Processing category sync for push mode. Please wait ...'));
+    $this->categorySyncHelper->processCatSync();
+    $this->logger->notice(dt('Processing category sync completed.'));
   }
 
 }
