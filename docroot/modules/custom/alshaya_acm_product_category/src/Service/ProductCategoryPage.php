@@ -142,6 +142,7 @@ class ProductCategoryPage {
         'hierarchy' => '',
         'level' => 0,
         'ruleContext' => [],
+        'field' => '',
       ];
     }
 
@@ -168,6 +169,7 @@ class ProductCategoryPage {
       'hierarchy' => implode(' > ', $hierarchy_list),
       'level' => count($temp_list),
       'ruleContext' => array_reverse($temp_list),
+      'category_field' => 'field_category_name.lvl' . (count($temp_list) - 1),
     ];
   }
 
@@ -191,7 +193,7 @@ class ProductCategoryPage {
       [
         'conditions' => [
           [
-            'field_category_name.lvl' . ($term_details['level'] - 1),
+            $term_details['category_field'],
             '"' . $term_details['hierarchy'] . '"',
             '=',
           ],

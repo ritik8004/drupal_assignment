@@ -50,6 +50,7 @@ const PlpApp = ({
     filterOos,
     pageSubType,
     hierarchy: defaultCategoryFilter,
+    category_field: categoryField,
     level: nestedLevel,
     max_category_tree_depth: categoryDepth,
     promotionNodeId,
@@ -65,7 +66,7 @@ const PlpApp = ({
 
   if (pageSubType === 'plp') {
     // Filter for Category product listing page.
-    filters.push(`field_category_name.lvl${nestedLevel - 1}: "${defaultCategoryFilter}"`);
+    filters.push(`${categoryField}: "${defaultCategoryFilter}"`);
   } else if (pageSubType === 'product_option_list') {
     // Filter for product option list page.
     const {
