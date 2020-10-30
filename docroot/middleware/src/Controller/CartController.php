@@ -465,6 +465,13 @@ class CartController {
       if (!in_array($response['payment']['method'], $codes)) {
         $response['payment']['method'] = $response['payment']['methods'][0]['code'];
       }
+
+      // If default also has invalid payment method, we remove it
+      // so that first available payment method will be selected.
+      if (isset($response['payment']['default'])
+        && !in_array($response['payment']['default'], $codes)) {
+        unset($response['payment']['default']);
+      }
     }
 
     return $response;
