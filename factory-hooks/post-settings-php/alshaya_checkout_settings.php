@@ -19,5 +19,5 @@ $settings['alshaya_checkout_settings']['pending_payments']['before'] = 500;
 // Do not check payments initiated before 4 hours.
 $settings['alshaya_checkout_settings']['pending_payments']['after'] = 14400;
 
-// Add purchase expiration time in minutes.
-$settings['alshaya_checkout_settings']['purchase_expiration_time'] = 15;
+// Revalidate total after 15 minutes if purchase not complete.
+$settings['alshaya_checkout_settings']['totals_revalidation_ttl'] = 15;

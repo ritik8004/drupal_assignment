@@ -1871,7 +1871,7 @@ class Cart {
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
     // Check if last update of our cart is more recent than X minutes.
-    $expiration_time = $checkout_settings['purchase_expiration_time'] * 60;
+    $expiration_time = $checkout_settings['totals_revalidation_ttl'] * 60;
     $cart_last_updated = isset($cart['cart']['updated_at']) ? $cart['cart']['updated_at'] : $cart['cart']['created_at'];
     $cart_expire_time = strtotime($cart_last_updated) + $expiration_time;
     $current_time = strtotime(date('Y-m-d H:i:s'));
