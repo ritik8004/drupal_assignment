@@ -16,5 +16,6 @@ services:
       - '@module_handler'
       - '@cache.linked_skus'
       - '@cache_tags.invalidator'
+      - '@acq_sku.conductor_cat_sync_helper'
     tags:
       - { name: drush.command }

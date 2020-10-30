@@ -128,6 +128,7 @@ class ConductorCategorySyncHelper {
 
     // If no category, no need to process.
     if (empty($this->catsToProcess)) {
+      $this->logger->notice('No category to process.');
       return;
     }
 
