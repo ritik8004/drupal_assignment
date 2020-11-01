@@ -161,8 +161,8 @@
                   var freeGiftPromotion = productInfo.freeGiftPromotion;
                   var productDataSKU = productData.sku;
                   var parentSKU = productData.sku;
-                  var maxSaleQty = productData.maxSaleQty;
-                  var maxSaleQtyParent = productData.max_sale_qty_parent;
+                  var maxSaleQty = productInfo.maxSaleQty;
+                  var maxSaleQtyParent = productInfo.max_sale_qty_parent;
                   var gtmAttributes = productInfo.gtm_attributes;
                   var isNonRefundable = productInfo.is_non_refundable;
 
