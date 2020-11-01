@@ -91,12 +91,27 @@
 
   // Helper function to update views output & Ajax facets.
   var updateFacetsView = function (facetLink, facets_blocks, current_dom_id, update_summary_block, settings) {
-    var views_parameters = Drupal.Views.parseQueryString(facetLink.attr('href'));
-    var views_arguments = Drupal.Views.parseViewArgs(facetLink.attr('href'), 'search');
-    views_parameters.q = facetLink.attr('href');
+    var view_instance = Drupal.views.instances['views_dom_id:' + current_dom_id];
+    if (view_instance === undefined) {
+      return;
+    }
+
+    var link = facetLink.attr('href');
+
+    // Replace alias with internal path.
+    if (view_instance.settings.view_raw_path !== undefined) {
+      link = link.replace(
+        view_instance.settings.view_raw_path.alias,
+        view_instance.settings.view_raw_path.internal
+      );
+    }
+
+    var views_parameters = Drupal.Views.parseQueryString(link);
+    var views_arguments = Drupal.Views.parseViewArgs(link, 'search');
+    views_parameters.q = link;
     var views_settings = $.extend(
       {},
-      Drupal.views.instances['views_dom_id:' + current_dom_id].settings,
+      view_instance.settings,
       views_arguments,
       views_parameters
     );
@@ -110,13 +125,11 @@
     }
 
     // Update View.
-    var views_ajax_settings = Drupal.views.instances['views_dom_id:' + current_dom_id].element_settings;
+    var views_ajax_settings = view_instance.element_settings;
     views_ajax_settings.submit = views_settings;
     views_ajax_settings.url = Drupal.url('views/ajax') + '?q=' + facetLink.attr('href');
+
     // Update facet blocks.
-    var q = facetLink.attr('href').split('/');
-    // This is to replace URL Alias with the actual path.
-    var link = settings.views.ajaxViews['views_dom_id:alshaya_product_list_block_1'].view_path + '/' + q[q.length - 2] + '/';
     var facet_settings = {
       url: Drupal.url('facets-block/ajax'),
       type: 'GET',
