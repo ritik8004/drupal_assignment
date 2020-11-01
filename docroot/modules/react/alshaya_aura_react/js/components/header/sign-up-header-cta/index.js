@@ -3,6 +3,7 @@ import AuraHeaderIcon from '../../../svg-component/aura-header-icon';
 import {
   getUserDetails,
 } from '../../../utilities/helper';
+import Points from '../points';
 
 const getAuraLabel = (isDesktop, previewClass, openHeaderModal) => {
   if (isDesktop) {
@@ -39,8 +40,8 @@ const getHeaderMarkup = (props) => {
     points,
     signUpComplete,
     isDesktop,
-    loggedInMobile,
-    isHeaderModalOpen
+    isMobileTab,
+    isHeaderModalOpen,
   } = props;
 
   const { baseUrl, pathPrefix } = drupalSettings.path;
@@ -51,14 +52,17 @@ const getHeaderMarkup = (props) => {
 
   // For logged in users.
   if (userId) {
-    if (loggedInMobile) {
+    if (isMobileTab) {
+      if (!signUpComplete) {
+        return Drupal.t('my account');
+      }
       return (
         <div className="aura-logged-in-rewards-header">
           <div className="account-name">
             <span className="name">{ userName }</span>
           </div>
           <div className="account-points">
-            <span className="points">{`${points} ${Drupal.t('Pts')}`}</span>
+            <Points points={points} />
           </div>
         </div>
       );
@@ -70,17 +74,22 @@ const getHeaderMarkup = (props) => {
             className="user-points"
             href={`${baseUrl}${pathPrefix}user/${userId}/loyalty-club`}
           >
-            <span className="points">{`${points} ${Drupal.t('Pts')}`}</span>
+            <Points points={points} />
           </a>
         </div>
       );
     }
 
     return getAuraLabel(isDesktop, previewClass, openHeaderModal);
-    
   }
 
   // For guest users.
+  if (isMobileTab) {
+    if (!signUpComplete) {
+      return null;
+    }
+    return <Points points={points} />;
+  }
   if (!isNotExpandable) {
     return getAuraLabel(isDesktop, previewClass, openHeaderModal);
   }

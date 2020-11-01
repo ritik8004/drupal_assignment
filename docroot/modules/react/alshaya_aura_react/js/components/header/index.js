@@ -66,6 +66,10 @@ class Header extends React.Component {
       return;
     }
 
+    document.addEventListener('customerClickedNotYouLoyaltyBlock', this.updateLoyaltyStatus, false);
+    document.addEventListener('customerClickedLinkCardLoyaltyBlock', this.updateLoyaltyStatus, false);
+    document.addEventListener('customerSignedUpLoyaltyBlock', this.updateLoyaltyStatus, false);
+
     // API call to get customer points for logged in users.
     const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
     const apiData = getAPIData(apiUrl);
@@ -100,6 +104,17 @@ class Header extends React.Component {
     }
   }
 
+  updateLoyaltyStatus = (auraStatus) => {
+    const stateValues = {
+      loyaltyStatus: auraStatus.detail,
+    };
+
+    if (auraStatus.detail === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
+      stateValues.signUpComplete = true;
+    }
+    this.setState(stateValues);
+  }
+
   openHeaderModal = () => {
     const { isNotExpandable } = this.props;
     if (!isNotExpandable) {
@@ -122,12 +137,12 @@ class Header extends React.Component {
       // For anonymous users, store aura data in local storage and update state.
       const auraUserData = {
         signUpComplete: true,
-        loyaltyStatus: auraUserDetails.data.apc_link,
-        points: auraUserDetails.data.apc_points,
-        cardNumber: auraUserDetails.data.apc_identifier_number,
-        tier: auraUserDetails.data.tier_info,
-        email: auraUserDetails.data.email,
-        mobile: auraUserDetails.data.mobile,
+        loyaltyStatus: auraUserDetails.data.apc_link || 0,
+        points: auraUserDetails.data.apc_points || 0,
+        cardNumber: auraUserDetails.data.apc_identifier_number || '',
+        tier: auraUserDetails.data.tier_info || '',
+        email: auraUserDetails.data.email || '',
+        mobile: auraUserDetails.data.mobile || '',
       };
       setStorageInfo(auraUserData, getAuraLocalStorageKey());
       this.setState(auraUserData);
@@ -188,7 +203,7 @@ class Header extends React.Component {
     const {
       isNotExpandable,
       isDesktop,
-      loggedInMobile
+      isMobileTab,
     } = this.props;
 
     const { id: userId } = getUserDetails();
@@ -203,7 +218,7 @@ class Header extends React.Component {
 
     let headerPopUp = null;
 
-    if (userId && !loggedInMobile) {
+    if (userId && !isMobileTab) {
       if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_DATA) {
         headerPopUp = (
           <SignUpCompleteHeader
@@ -223,13 +238,13 @@ class Header extends React.Component {
           />
         );
       }
-    } else if (signUpComplete) {
+    } else if (signUpComplete && !isMobileTab) {
       headerPopUp = (
         <SignUpCompleteHeader
           handleNotYou={this.handleNotYou}
-          isHeaderModalOpen={isHeaderModalOpen}
+          isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
           cardNumber={cardNumber}
-          isNotExpandable={isNotExpandable}
+          isNotExpandable={signUpComplete ? true : isNotExpandable}
         />
       );
     } else {
@@ -238,6 +253,7 @@ class Header extends React.Component {
           handleSignUp={this.handleSignUp}
           isHeaderModalOpen={isHeaderModalOpen}
           openHeaderModal={this.openHeaderModal}
+          isNotExpandable={isNotExpandable}
         />
       );
     }
@@ -245,11 +261,11 @@ class Header extends React.Component {
     return (
       <>
         <SignUpHeaderCta
-          isNotExpandable={isNotExpandable}
+          isNotExpandable={(!isDesktop && signUpComplete) ? true : isNotExpandable}
           openHeaderModal={this.openHeaderModal}
           points={points}
           signUpComplete={signUpComplete}
-          loggedInMobile={loggedInMobile}
+          isMobileTab={isMobileTab}
           isHeaderModalOpen={isHeaderModalOpen}
           isDesktop={isDesktop}
         />

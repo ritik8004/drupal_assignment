@@ -10,6 +10,7 @@ import {
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export default class LoyaltyClubBlock extends React.Component {
   componentDidMount() {
@@ -23,16 +24,25 @@ export default class LoyaltyClubBlock extends React.Component {
   }
 
   handleNotYou = (cardNumber) => {
-    this.updateUsersLoyaltyStatus(cardNumber, getAllAuraStatus().APC_NOT_LINKED_NOT_U, 'N');
+    const auraStatus = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
+
+    this.updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
+    dispatchCustomEvent('customerClickedNotYouLoyaltyBlock', auraStatus);
   }
 
   handleLinkYourCardClick = (cardNumber) => {
-    this.updateUsersLoyaltyStatus(cardNumber, getAllAuraStatus().APC_LINKED_NOT_VERIFIED, 'Y');
+    const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
+
+    this.updateUsersLoyaltyStatus(cardNumber, auraStatus, 'Y');
+    dispatchCustomEvent('customerClickedLinkCardLoyaltyBlock', auraStatus);
   }
 
   handleSignUp = () => {
     const { updateLoyaltyStatus } = this.props;
-    updateLoyaltyStatus(getAllAuraStatus().APC_LINKED_NOT_VERIFIED);
+    const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
+
+    updateLoyaltyStatus(auraStatus);
+    dispatchCustomEvent('customerSignedUpLoyaltyBlock', auraStatus);
   }
 
   updateUsersLoyaltyStatus = (cardNumber, auraStatus, link) => {
