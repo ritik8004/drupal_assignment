@@ -20,7 +20,7 @@ loyalty_club.apc_status_update:
 
 loyalty_club.send_otp:
     path: /post/loyalty-club/send-otp
-    controller: App\Controller\LoyaltyClub\LoyaltyClubOtpController::sendOtp
+    controller: App\Controller\LoyaltyClub\LoyaltyClubOtpController::sendSignUpOtp
     methods: POST
 
 loyalty_club.verify_otp:
