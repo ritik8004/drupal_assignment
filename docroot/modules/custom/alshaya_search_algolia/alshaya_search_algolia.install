@@ -16,6 +16,7 @@ function alshaya_search_algolia_update_8006() {
   $index = Index::load('alshaya_algolia_index');
   $index->rebuildTracker();
   $index->save();
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
