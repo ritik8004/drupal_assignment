@@ -1,11 +1,24 @@
 import axios from 'axios';
 import {
   getStorageInfo,
-  getInfoFromStorage,
+  getInfoFromStorage, removeCartFromStorage,
 } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
+
+/**
+ * Clear local storage and reload/redirect to cart page.
+ *
+ * @param response
+ *   API Response.
+ */
+export const validateCartResponse = (response) => {
+  if (typeof response.error_code !== 'undefined' && parseInt(response.error_code, 10) === 400) {
+    removeCartFromStorage();
+    window.location.href = Drupal.url('cart');
+  }
+};
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -385,6 +398,8 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
       return;
     }
   }
+
+  validateCartResponse(cartResult);
 
   // If error/exception, show at cart top.
   if (cartResult.error !== undefined) {

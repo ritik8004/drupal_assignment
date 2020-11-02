@@ -35,7 +35,7 @@ class AlshayaCustomHook extends BltTasks {
         $pattern = '/react/' . $subDir->getBasename() . '/js';
 
         // For module like alshaya_algolia_react we have react files in src.
-        if (is_dir($subDir->getRealPath() . '/src')) {
+        if (is_dir($subDir->getRealPath() . '/js/src')) {
           $pattern .= '/src';
         }
 
