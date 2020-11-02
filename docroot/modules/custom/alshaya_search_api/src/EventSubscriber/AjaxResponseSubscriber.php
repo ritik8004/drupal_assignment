@@ -188,6 +188,10 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     $currentPage = intval($request->query->get('page'));
     $query_params['show_on_load'] = ($currentPage + 1) * _alshaya_acm_product_get_items_per_page_on_listing();
 
+    unset($query_params['facet_filter_url']);
+    unset($query_params['view_raw_path']);
+    unset($query_params['view_path']);
+
     $url = Url::fromUserInput($view_url, [
       'query' => $query_params,
     ])->toString(FALSE);
