@@ -13,6 +13,20 @@ class CheckoutConfirmation extends React.Component {
   constructor(props) {
     super(props);
 
+    const currentUrl = window.location.href;
+    const currentTitle = document.title;
+
+    // Push home page in history state.
+    window.history.pushState('', Drupal.t('Home'), Drupal.url(''));
+
+    // Push current page url/title again.
+    window.history.pushState('', currentTitle, currentUrl);
+
+    window.addEventListener('popstate', () => {
+      // Ensure user goes back to home page if tries to use back button.
+      window.location.href = Drupal.url('');
+    });
+
     try {
       if (Cookies.get('middleware_order_placed')) {
         removeCartFromStorage();
