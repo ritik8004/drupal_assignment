@@ -675,14 +675,6 @@ class CartController {
           ]);
         }
 
-        // Check if cart total is valid return with an error message.
-        if (!$this->cart->isCartTotalValid($cart)) {
-          $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
-            '@cart' => json_encode($cart),
-          ]);
-          return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), '500'));
-        }
-
         $extension = [
           'attempted_payment' => 1,
         ];
