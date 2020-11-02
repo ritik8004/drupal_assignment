@@ -85,9 +85,28 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fo
   font-style: normal;
   font-display: swap;
 }
+// Aura Arabic font.
+@font-face {
+  font-family: "Almarai-Bold";
+  src: url('#{$base_theme_fonts_directory_path}/Almarai-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
-$aura-regular: 'PTSans', 'Arial';
-$aura-bold: 'PTSans-Bold', 'Arial';
+@font-face {
+  font-family: "Almarai-Regular";
+  src: url('#{$base_theme_fonts_directory_path}/Almarai-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+$aura-regular: 'PTSans', 'Almarai-Regular', 'Arial';
+$aura-bold: 'PTSans-Bold', 'Almarai-Bold', 'Arial';
+
+$aura-arabic-regular: 'PTSans', 'Almarai-Regular', 'Arial';
+$aura-arabic-bold: 'PTSans-Bold', 'Almarai-Bold', 'Arial';
 
 // Font Family
 $alshaya-bold: 'Mothercare', 'Arial';

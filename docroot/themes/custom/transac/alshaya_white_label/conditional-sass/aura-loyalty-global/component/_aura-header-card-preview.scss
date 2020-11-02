@@ -63,7 +63,8 @@
   }
 }
 
-#aura-mobile-header-signin-register:not(:empty) {
+#aura-mobile-header-signin-register:not(:empty),
+#aura-mobile-header-shop:not(:empty) {
   @include breakpoint($upto-desktop) {
     padding-top: 1.9375rem;
 
