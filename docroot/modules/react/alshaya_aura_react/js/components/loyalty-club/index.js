@@ -2,6 +2,7 @@ import React from 'react';
 import LoyaltyClubBlock from './loyalty-club-block';
 import LoyaltyClubTabs from './loyalty-club-tabs';
 import { getUserAuraStatus, getUserAuraTier, getAllAuraStatus } from '../../utilities/helper';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 class LoyaltyClub extends React.Component {
   constructor(props) {
@@ -32,44 +33,13 @@ class LoyaltyClub extends React.Component {
     }
 
     document.addEventListener('customerDetailsFetched', this.setCustomerDetails, false);
+    document.addEventListener('loyaltyStatusUpdatedFromHeader', this.setCustomerDetails, false);
   }
 
-  setCustomerDetails = (customerDetails) => {
-    if (customerDetails.detail === null) {
-      this.setState({
-        wait: false,
-      });
-      return;
-    }
-    const {
-      loyaltyStatus,
-      tier,
-      points,
-      cardNumber,
-      expiringPoints,
-      expiryDate,
-      pointsOnHold,
-    } = this.state;
-
-    const {
-      auraStatus,
-      tier: auraTier,
-      auraPoints,
-      cardNumber: auraCardNumber,
-      auraPointsToExpire,
-      auraPointsExpiryDate,
-      auraOnHoldPoints,
-    } = customerDetails.detail;
-
+  setCustomerDetails = (data) => {
+    const { stateValues } = data.detail;
     this.setState({
-      wait: false,
-      loyaltyStatus: auraStatus || loyaltyStatus,
-      tier: auraTier || tier,
-      points: auraPoints || points,
-      cardNumber: auraCardNumber || cardNumber,
-      expiringPoints: auraPointsToExpire || expiringPoints,
-      expiryDate: auraPointsExpiryDate || expiryDate,
-      pointsOnHold: auraOnHoldPoints || pointsOnHold,
+      ...stateValues,
     });
   };
 
@@ -77,6 +47,7 @@ class LoyaltyClub extends React.Component {
     this.setState({
       loyaltyStatus,
     });
+    dispatchCustomEvent('loyaltyStatusUpdatedFromLoyaltyBlock', loyaltyStatus);
   }
 
   render() {

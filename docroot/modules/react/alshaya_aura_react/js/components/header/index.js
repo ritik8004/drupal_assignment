@@ -1,26 +1,20 @@
 import React from 'react';
-import SignUpHeader from './sign-up-header';
 import {
-  setStorageInfo,
   getStorageInfo,
-  removeStorageInfo,
 } from '../../../../js/utilities/storage';
 import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
-import SignUpCompleteHeader from './signup-complete-header';
 import {
   getUserDetails,
   getUserAuraStatus,
   getUserAuraTier,
   getAllAuraStatus,
 } from '../../utilities/helper';
-import { getAPIData, postAPIData } from '../../utilities/api/fetchApiData';
-import SignUpHeaderCta from './sign-up-header-cta';
 import Loading from '../../../../alshaya_spc/js/utilities/loading';
-import dispatchCustomEvent from '../../../../js/utilities/events';
 import {
-  showFullScreenLoader,
-  removeFullScreenLoader,
-} from '../../../../js/utilities/showRemoveFullScreenLoader';
+  getCustomerDetails,
+} from '../../utilities/header_helper';
+import HeaderLoggedIn from './header-loggedIn';
+import HeaderGuest from './header-guest';
 
 class Header extends React.Component {
   constructor(props) {
@@ -53,9 +47,17 @@ class Header extends React.Component {
     const {
       loyaltyStatus,
       tier,
-      points,
-      cardNumber,
     } = this.state;
+
+    // Event listener to listen to customer data API call event.
+    document.addEventListener('customerDetailsFetched', this.updateStates, false);
+
+    // Event listener to listen to actions on loyalty blocks of my account and my aura page.
+    document.addEventListener('loyaltyStatusUpdatedFromLoyaltyBlock', this.updateLoyaltyStatus, false);
+
+    // Event listener to listen to actions on different sections of header
+    // like shop tab or sign in/ register tab.
+    document.addEventListener('loyaltyStatusUpdatedFromHeader', this.updateStates, false);
 
     // No API call to fetch points for anonymous users or user with
     // loyalty status APC_NOT_LINKED_NOT_U.
@@ -66,42 +68,16 @@ class Header extends React.Component {
       return;
     }
 
-    document.addEventListener('customerClickedNotYouLoyaltyBlock', this.updateLoyaltyStatus, false);
-    document.addEventListener('customerClickedLinkCardLoyaltyBlock', this.updateLoyaltyStatus, false);
-    document.addEventListener('customerSignedUpLoyaltyBlock', this.updateLoyaltyStatus, false);
+    // Get customer details.
+    getCustomerDetails(tier, loyaltyStatus);
+  }
 
-    // API call to get customer points for logged in users.
-    const apiUrl = `get/loyalty-club/get-customer-details?tier=${tier}&status=${loyaltyStatus}`;
-    const apiData = getAPIData(apiUrl);
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.data !== undefined && result.data.error === undefined) {
-          const userLoyaltyStatus = result.data.auraStatus !== undefined
-            ? result.data.auraStatus : loyaltyStatus;
-
-          this.setState({
-            loyaltyStatus: userLoyaltyStatus,
-            tier: result.data.tier || tier,
-            points: result.data.auraPoints || points,
-            cardNumber: result.data.cardNumber || cardNumber,
-          });
-
-          // If user's loyalty status is APC_LINKED_VERIFIED or APC_LINKED_NOT_VERIFIED,
-          // then sign up is complete for the user and we show points in header.
-          if (userLoyaltyStatus === getAllAuraStatus().APC_LINKED_VERIFIED
-            || userLoyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
-            this.setState({
-              signUpComplete: true,
-            });
-          }
-        }
-        this.setState({
-          wait: false,
-        });
-        dispatchCustomEvent('customerDetailsFetched', result.data);
-      });
-    }
+  // Event listener callback to update header states.
+  updateStates = (data) => {
+    const { stateValues } = data.detail;
+    this.setState({
+      ...stateValues,
+    });
   }
 
   updateLoyaltyStatus = (auraStatus) => {
@@ -124,72 +100,6 @@ class Header extends React.Component {
     }
   };
 
-  handleSignUp = (auraUserDetails) => {
-    if (getUserDetails().id) {
-      const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
-
-      dispatchCustomEvent('customerSignedUpHeader', auraStatus);
-      this.setState({
-        signUpComplete: true,
-        loyaltyStatus: auraStatus,
-      });
-    } else if (auraUserDetails) {
-      // For anonymous users, store aura data in local storage and update state.
-      const auraUserData = {
-        signUpComplete: true,
-        loyaltyStatus: auraUserDetails.data.apc_link || 0,
-        points: auraUserDetails.data.apc_points || 0,
-        cardNumber: auraUserDetails.data.apc_identifier_number || '',
-        tier: auraUserDetails.data.tier_info || '',
-        email: auraUserDetails.data.email || '',
-        mobile: auraUserDetails.data.mobile || '',
-      };
-      setStorageInfo(auraUserData, getAuraLocalStorageKey());
-      this.setState(auraUserData);
-    }
-  };
-
-  handleNotYou = () => {
-    if (getUserDetails().id) {
-      const { cardNumber } = this.state;
-      const auraStatus = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
-
-      this.updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
-      dispatchCustomEvent('customerClickedNotYouHeader', auraStatus);
-    } else {
-      removeStorageInfo(getAuraLocalStorageKey());
-      this.setState({
-        signUpComplete: false,
-      });
-    }
-  }
-
-  updateUsersLoyaltyStatus = (cardNumber, auraStatus, link) => {
-    // API call to update user's loyalty status.
-    showFullScreenLoader();
-    const apiUrl = 'post/loyalty-club/apc-status-update';
-    const data = {
-      uid: getUserDetails().id,
-      apcIdentifierId: cardNumber,
-      apcLinkStatus: auraStatus,
-      link,
-    };
-    const apiData = postAPIData(apiUrl, data);
-
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.data !== undefined && result.data.error === undefined) {
-          if (result.data.status) {
-            this.setState({
-              loyaltyStatus: auraStatus,
-            });
-          }
-        }
-        removeFullScreenLoader();
-      });
-    }
-  }
-
   render() {
     const {
       wait,
@@ -204,6 +114,7 @@ class Header extends React.Component {
       isNotExpandable,
       isDesktop,
       isMobileTab,
+      isHeaderShop,
     } = this.props;
 
     const { id: userId } = getUserDetails();
@@ -216,61 +127,35 @@ class Header extends React.Component {
       );
     }
 
-    let headerPopUp = null;
-
-    if (userId && !isMobileTab) {
-      if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_DATA) {
-        headerPopUp = (
-          <SignUpCompleteHeader
-            handleNotYou={this.handleNotYou}
-            isHeaderModalOpen={isHeaderModalOpen}
-            cardNumber={cardNumber}
-            isNotExpandable={isNotExpandable}
-          />
-        );
-      } else if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NO_DATA
-        || loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
-        headerPopUp = (
-          <SignUpHeader
-            handleSignUp={this.handleSignUp}
-            isHeaderModalOpen={isHeaderModalOpen}
-            openHeaderModal={this.openHeaderModal}
-          />
-        );
-      }
-    } else if (signUpComplete && !isMobileTab) {
-      headerPopUp = (
-        <SignUpCompleteHeader
-          handleNotYou={this.handleNotYou}
-          isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
+    // For logged in users.
+    if (userId) {
+      return (
+        <HeaderLoggedIn
+          loyaltyStatus={loyaltyStatus}
+          points={points}
           cardNumber={cardNumber}
-          isNotExpandable={signUpComplete ? true : isNotExpandable}
-        />
-      );
-    } else {
-      headerPopUp = (
-        <SignUpHeader
-          handleSignUp={this.handleSignUp}
+          isMobileTab={isMobileTab}
+          isDesktop={isDesktop}
           isHeaderModalOpen={isHeaderModalOpen}
           openHeaderModal={this.openHeaderModal}
           isNotExpandable={isNotExpandable}
+          isHeaderShop={isHeaderShop}
+          signUpComplete={signUpComplete}
         />
       );
     }
-
+    // For guest users.
     return (
-      <>
-        <SignUpHeaderCta
-          isNotExpandable={(!isDesktop && signUpComplete) ? true : isNotExpandable}
-          openHeaderModal={this.openHeaderModal}
-          points={points}
-          signUpComplete={signUpComplete}
-          isMobileTab={isMobileTab}
-          isHeaderModalOpen={isHeaderModalOpen}
-          isDesktop={isDesktop}
-        />
-        { headerPopUp }
-      </>
+      <HeaderGuest
+        points={points}
+        cardNumber={cardNumber}
+        isMobileTab={isMobileTab}
+        isDesktop={isDesktop}
+        isHeaderModalOpen={isHeaderModalOpen}
+        openHeaderModal={this.openHeaderModal}
+        isNotExpandable={isNotExpandable}
+        signUpComplete={signUpComplete}
+      />
     );
   }
 }
