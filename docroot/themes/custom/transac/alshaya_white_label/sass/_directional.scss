@@ -101,3 +101,9 @@ $alshaya-arabic-thin: if-ltr($alshaya-arabic-thin, $alshaya-thin);
 $after: if-ltr("after", "before");
 $before: if-ltr("before", "after");
 $campaign-plp-style-1-font: if-ltr($campaign-plp-style-1-font, $campaign-plp-style-1-arabic-font);
+
+// Aura Directional.
+$aura-regular: if-ltr($aura-regular, $aura-arabic-regular);
+$aura-arabic-regular: if-ltr($aura-arabic-regular, $aura-regular);
+$aura-bold: if-ltr($aura-bold, $aura-arabic-bold);
+$aura-arabic-bold: if-ltr($aura-arabic-bold, $aura-bold);
