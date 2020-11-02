@@ -92,14 +92,14 @@
   // Helper function to update views output & Ajax facets.
   var updateFacetsView = function (facetLink, facets_blocks, current_dom_id, update_summary_block, settings) {
     var view_instance = Drupal.views.instances['views_dom_id:' + current_dom_id];
-    if (view_instance === undefined) {
+    if (typeof view_instance === 'undefined') {
       return;
     }
 
     var link = facetLink.attr('href');
 
     // Replace alias with internal path.
-    if (view_instance.settings.view_raw_path !== undefined) {
+    if (typeof view_instance.settings.view_raw_path !== 'undefined') {
       link = link.replace(
         view_instance.settings.view_raw_path.alias,
         view_instance.settings.view_raw_path.internal
