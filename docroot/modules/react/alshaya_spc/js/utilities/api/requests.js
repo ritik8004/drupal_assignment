@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import Cookies from 'js-cookie';
 import {
   cartAvailableInStorage,
   getCartApiUrl,
