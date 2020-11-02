@@ -10,6 +10,73 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Prepare for using Algolia on listing pages.
+ */
+function alshaya_algolia_react_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $helper */
+  $helper = \Drupal::service('alshaya_search_algolia.index_helper');
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fields_manager */
+  $fields_manager = \Drupal::service('acq_sku.fields_manager');
+
+  // Ensure new configurations are added and defaults set.
+  $manager->updateConfigs(
+    ['alshaya_algolia_react.settings'],
+    'alshaya_algolia_react',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  // Install react blocks and update weight.
+  $manager->updateConfigs(
+    [
+      'block.block.alshaya_algolia_react_plp',
+      'block.block.alshayaalgoliareactpromotion',
+    ],
+    'alshaya_algolia_react',
+    'install'
+  );
+
+  // Update block weight of algolia react plp to match what was there for
+  // views plp block.
+  $existing = \Drupal::configFactory()->get('block.block.views_block__alshaya_product_list_block_1');
+  $new = \Drupal::configFactory()->getEditable('block.block.alshaya_algolia_react_plp');
+  $new->set('weight', $existing->get('weight'));
+  $new->save();
+
+  // Update block weight of algolia react promotion to match what was there for
+  // views promotion block.
+  $existing = \Drupal::configFactory()->get('block.block.views_block__alshaya_product_list_block_2');
+  $new = \Drupal::configFactory()->getEditable('block.block.alshayaalgoliareactpromotion');
+  $new->set('weight', $existing->get('weight'));
+  $new->save();
+
+  // Add new facets required for PLP (promotion_nid and lhn_category).
+  $facets = [
+    'field_category_name',
+    'lhn_category',
+    'promotion_nid',
+  ];
+
+  // Ensure no facets are missing from existing sku_base_fields.
+  $fields = $fields_manager->getFieldAdditions();
+  $facet_fields = array_keys(array_filter($fields, function ($item) {
+    return isset($item['facet']) && $item['facet'];
+  }));
+  array_walk($facet_fields, function (&$field_code) {
+    $field_code = "attr_{$field_code}";
+  });
+
+  $facets = array_merge($facets, $facet_fields);
+  $helper->addCustomFacetToIndex($facets);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add config attributes_to_sort_by_name.
  */
 function alshaya_algolia_react_update_8002() {

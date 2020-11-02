@@ -217,7 +217,7 @@
           }
           else {
             // scroll by a single size wrapper.
-            $('.sfb-facets-container').animate({scrollLeft: (DifferenceOfsCupsizewrapper[sliderIndex-1])}, scrollDuration);
+            $('.sfb-facets-container').animate({scrollLeft: (DifferenceOfsCupsizewrapper[sliderIndex - 1])}, scrollDuration);
           }
         });
       }

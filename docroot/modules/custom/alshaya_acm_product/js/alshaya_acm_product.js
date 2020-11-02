@@ -55,7 +55,7 @@
   };
 
   // Force reload on click of browser back button.
-  $(window).on('popstate', function(event) {
+  $(window).on('popstate', function (event) {
     location.reload(true);
   });
 
@@ -78,7 +78,7 @@
    *   The desktop cross sell markup.
    */
   $.fn.updateCrossSell = function (form_id, mobile_markup, desktop_markup) {
-    if ($('input[value="'+form_id+'"]').parents('#drupal-modal').length == 0) {
+    if ($('input[value="' + form_id + '"]').parents('#drupal-modal').length == 0) {
       $('.horizontal-crossell.mobile-only-block').replaceWith(mobile_markup);
       $('.horizontal-crossell.above-mobile-block').replaceWith(desktop_markup);
     }

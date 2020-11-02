@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class KnetSettingsForm.
+ * Class Knet Settings Form.
  */
 class KnetSettingsForm extends ConfigFormBase {
 

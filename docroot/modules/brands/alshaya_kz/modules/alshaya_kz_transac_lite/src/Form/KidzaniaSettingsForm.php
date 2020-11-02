@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class KidzaniaSettingsForm.
+ * Class Kidzania Settings Form.
  *
  * @package Drupal\alshaya_kz_transac_lite\Form
  */

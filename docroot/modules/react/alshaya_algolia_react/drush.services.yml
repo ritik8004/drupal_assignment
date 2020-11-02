@@ -1,0 +1,14 @@
+services:
+  alshaya_algolia_react.commands:
+    class: Drupal\alshaya_algolia_react\Commands\AlshayaAlgoliaReactCommands
+    arguments:
+      - '@logger.factory'
+      - '@facets.manager'
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@database'
+      - '@alshaya_search_algolia.index_helper'
+      - '@alshaya_acm_product.product_queue_utility'
+      - '@event_dispatcher'
+    tags:
+      - { name: drush.command }

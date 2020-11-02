@@ -2,14 +2,13 @@
 
 namespace Drupal\acq_customer\Commands;
 
-use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\user\Entity\User;
 use Drush\Commands\DrushCommands;
-use Drush\Exceptions\UserAbortException;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
+/**
+ * Class Acq Customer Drush Commands.
+ */
 class AcqCustomerDrushCommands extends DrushCommands {
 
   const BATCH_SIZE = 20;
@@ -97,10 +96,10 @@ class AcqCustomerDrushCommands extends DrushCommands {
   /**
    * Push specific customer available in Drupal to upstream system.
    *
-   * @command acq_customer:push-customer
-   *
    * @param string $mail
    *   E-Mail address of the customer to push.
+   *
+   * @command acq_customer:push-customer
    *
    * @validate-module-enabled acq_customer
    *

@@ -8,7 +8,7 @@
         "acquia/acsf-tools": "dev-10.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
-        "acquia/lightning": "^4.0.0",
+        "acquia/lightning": "^4.1",
         "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
@@ -31,6 +31,8 @@
         "drupal/ckeditor_font": "^1.0",
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
+        "drupal/core": "^8.8.10",
+        "drupal/core-composer-scaffold": "^8.8.10",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
         "drupal/default_content": "^1.0@alpha",
@@ -64,6 +66,7 @@
         "drupal/mobile_number": "^1.0@alpha",
         "drupal/paragraphs": "^1.6",
         "drupal/password_policy": "^3.0",
+        "drupal/pathauto": "^1.6",
         "drupal/pcb": "^1.0",
         "drupal/profile": "^1.0@alpha",
         "drupal/queue_unique": "^2.0",
@@ -103,7 +106,7 @@
         "drupal/views_block_filter_block": "^1.0@beta",
         "drupal/views_field_view": "1.0-beta2",
         "drupal/viewsreference": "^1.0",
-        "drupal/webform": "^5.0.0-rc1",
+        "drupal/webform": "^5.22",
         "drupal/webform_rest": "^2.0",
         "drush/drush": "^9.0.0",
         "endroid/qr-code": "^3.6",
@@ -115,10 +118,11 @@
         "symfony/lock": "4.3.*"
     },
     "require-dev": {
+        "drupal/console": "^1.8",
+        "drupal/core-dev": "^8.8.10",
         "drupal/devel": "^2.0.0",
-        "jakoch/phantomjs-installer": "^2.1.1-p07",
         "geerlingguy/drupal-vm": "^5.2.0",
-        "drupal/console": "^1.8"
+        "jakoch/phantomjs-installer": "^2.1.1-p07"
     },
     "repositories": {
         "drupal": {
@@ -245,26 +249,24 @@
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
             },
             "drupal/core": {
-                "Showing taxonomy value in default language only after using in contextual filter in views": "https://www.drupal.org/files/issues/2019-09-28/3084138-87x-9.patch",
+                "Showing taxonomy value in default language only after using in contextual filter in views": "https://www.drupal.org/files/issues/2020-09-26/3084138-16.patch",
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
-                "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
+                "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/2020-09-17/drupal-956186-121-ajax-get.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
-                "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                 "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
                 "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
-                "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
                 "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2019-06-18/views-render_caching_ajax_requests-2500313-49-87x.patch",
                 "Cacheable Ajax response": "https://www.drupal.org/files/issues/2701085-16-cacheable_ajax_response-D83.patch",
-                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2019-10-07/3059836-15.patch",
+                "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2020-09-26/3059836-21.patch",
                 "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
                 "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3.patch",
                 "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
-                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-11-12/3007424-57-8-7-x.patch",
+                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-11-14/3007424-68.patch",
                 "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
-                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-05-08/password-reset-text-1521996-174.patch",
+                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-12-09/password-reset-text-1521996-186.patch",
                 "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2019-06-20/termStorage-loadChildren-sorted-by-weight-3063118-6-D8.6.16.patch",
                 "Config set - drush config:set for other than default collections raises exception": "https://www.drupal.org/files/issues/2019-08-20/drush_cset_for_other_than_default_collections-3011276-6.patch",
                 "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
@@ -273,10 +275,8 @@
                 "CORE-16703 - Use apcu to cache site path in DrupalKernel::findSitePath()": "patches/core/cache_sitepath_apcu.patch",
                 "CORE-14983 - Set new twig_extension_hash_prefix state in invalidate method": "patches/core/set-new-twig_extension_hash_prefix-during-invalidate.patch",
                 "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
-                "CORE-21267 - Test patch for core upgrade": "patches/core/backport-security-update-8.7x.patch",
                 "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
                 "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch",
-                "Updating translations does not clear the JS asset cache so new translations are not loaded" : "https://www.drupal.org/files/issues/2019-10-23/3089764-3.patch",
                 "CORE-24231 - Adding log trace for 500 error on user login page" : "patches/core/traces-for-form-error.patch"
             },
             "drupal/mobile_number": {
@@ -353,7 +353,7 @@
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
             "drupal/r4032login": {
-                "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2019-03-13/2941064-20.patch"
+                "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2020-04-27/2941064-38-complete.patch"
             },
             "drupal/shield": {
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
@@ -439,6 +439,14 @@
         ],
         "patchLevel": {
             "drupal/core": "-p2"
+        },
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "docroot/"
+            },
+            "allowed-packages": [
+                "drupal/core"
+            ]
         }
     },
     "scripts": {

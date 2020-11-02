@@ -5,19 +5,23 @@
         &-title-wrapper {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: flex-start;
+          padding-top: 1.875rem;
+
+          @include breakpoint($only-mobile) {
+            padding-top: 1.25rem;
+          }
         }
 
         &-title {
           font-size: 1.125rem;
           line-height: normal;
           color: $magv2-pdp-title;
-          padding: 2rem 0 0.625rem;
+          padding: 0 0 0.625rem;
           max-width: 16.5rem;
 
           @include breakpoint($only-mobile) {
             font-size: 1rem;
-            padding-top: 1.25rem;
             max-width: 15.25rem;
           }
         }
@@ -109,6 +113,16 @@
               }
             }
           }
+        }
+      }
+    }
+  }
+
+  &-header {
+    .magv2 {
+      &-detail-wrapper {
+        .magv2-pdp-title-wrapper {
+          padding-top: 0;
         }
       }
     }

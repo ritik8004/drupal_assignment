@@ -5,7 +5,7 @@ namespace Drupal\acq_commerce\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class OrderPlacedEvent.
+ * Class Order Placed Event.
  *
  * @package Drupal\acq_commerce\Event
  */

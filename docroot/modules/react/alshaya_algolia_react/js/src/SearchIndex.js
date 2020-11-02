@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import SearchApp from './search/SearchApp';
 
 // Start instant search only after Document ready.
+// eslint-disable-next-line func-names
 (function ($, drupalSettings) {
   // We will trigger search only after activity is started.
   window.algoliaSearchActivityStarted = (typeof drupalSettings.algoliaSearch.showSearchResults === 'undefined')
@@ -10,11 +11,11 @@ import App from './App';
     : drupalSettings.algoliaSearch.showSearchResults;
 
   ReactDOM.render(
-    <App />,
-    document.querySelector('#alshaya-algolia-autocomplete')
+    <SearchApp />,
+    document.querySelector('#alshaya-algolia-autocomplete'),
   );
 
-  $('#alshaya-algolia-autocomplete input[type="search"]').on('mousedown tap focus', function (event) {
+  $('#alshaya-algolia-autocomplete input[type="search"]').on('mousedown tap focus', () => {
     window.algoliaSearchActivityStarted = true;
   });
-})(jQuery, drupalSettings);
+}(jQuery, drupalSettings));

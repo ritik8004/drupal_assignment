@@ -10,7 +10,7 @@ use Acquia\Hmac\Key;
 use GuzzleHttp\HandlerStack;
 
 /**
- * Class ClientFactory.
+ * Class Client Factory.
  *
  * @package Drupal\acq_commerce\Conductor
  *

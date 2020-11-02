@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AlshayaFeedController.
+ * Class Alshaya Feed Controller.
  *
  * @package Drupal\alshaya_feed\Controller
  */

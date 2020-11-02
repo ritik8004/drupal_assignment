@@ -2,10 +2,11 @@
 
 namespace App\Service\CheckoutCom;
 
+use App\Service\Config\SystemSettings;
 use App\Service\Magento\MagentoApiWrapper;
 
 /**
- * Checkout.com Helper.
+ * Helper class for checkout_com paymetn method.
  *
  * @package App\Service\CheckoutCom
  */
@@ -19,13 +20,26 @@ class Helper {
   protected $magentoApi;
 
   /**
+   * Magento API Wrapper.
+   *
+   * @var \App\Service\Config\SystemSettings
+   */
+  protected $settings;
+
+  /**
    * Checkout.com Helper constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api
    *   Magento API Wrapper.
+   * @param \App\Service\Config\SystemSettings $settings
+   *   System Settings service.
    */
-  public function __construct(MagentoApiWrapper $magento_api) {
+  public function __construct(
+    MagentoApiWrapper $magento_api,
+    SystemSettings $settings
+  ) {
     $this->magentoApi = $magento_api;
+    $this->settings = $settings;
   }
 
   /**
@@ -41,8 +55,11 @@ class Helper {
     static $config;
 
     if (empty($config)) {
+      $request_options = [
+        'timeout' => $this->magentoApi->getMagentoInfo()->getPhpTimeout('checkoutcom_config_get'),
+      ];
       try {
-        $config = $this->magentoApi->doRequest('GET', 'checkoutcom/getConfig');
+        $config = $this->magentoApi->doRequest('GET', 'checkoutcom/getConfig', $request_options);
       }
       catch (\Exception $e) {
         return NULL;
@@ -53,18 +70,59 @@ class Helper {
   }
 
   /**
+   * Get data from config for checkout.com upapi.
+   *
+   * @return array
+   *   Return array of keys.
+   */
+  public function getCheckoutComUpapiConfig() {
+    static $config;
+
+    if (empty($config)) {
+      try {
+        $config = $this->magentoApi->doRequest('GET', 'checkoutcomupapi/config');
+      }
+      catch (\Exception $e) {
+        return NULL;
+      }
+    }
+
+    return $config;
+  }
+
+  /**
    * Get saved cards for of given customer.
    *
+   * @param string $method
+   *   Payment method.
    * @param int $customer_id
    *   The customer id.
    *
    * @return array|mixed
    *   Return array of cards.
    */
-  public function getCustomerCards(int $customer_id) {
-    $url = sprintf('checkoutcom/getTokenList/?customer_id=%d', $customer_id);
+  public function getCustomerCards(string $method, int $customer_id) {
+    $request_options = [];
+
+    switch ($method) {
+      case 'checkout_com':
+        $endpoint = 'checkoutcom/getTokenList';
+        $request_options = [
+          'timeout' => $this->magentoApi->getMagentoInfo()->getPhpTimeout('checkoutcom_token_list'),
+        ];
+        break;
+
+      case 'checkout_com_upapi':
+        $endpoint = 'checkoutcomupapi/getTokenList';
+        break;
+
+      default:
+        return NULL;
+    }
+
+    $url = sprintf($endpoint . '?customer_id=%d', $customer_id);
     try {
-      $card_list = $this->magentoApi->doRequest('GET', $url);
+      $card_list = $this->magentoApi->doRequest('GET', $url, $request_options);
     }
     catch (\Exception $e) {
       return NULL;

@@ -2,6 +2,8 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -12,15 +14,15 @@ use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
-use Drupal\search_api\Entity\Index;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
+use Drupal\search_api\Query\ConditionGroup;
 use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\views\Views;
 
 /**
- * Class CategoryProductListResource.
+ * Class Category Product List Resource.
  *
  * @RestResource(
  *   id = "category_product_list",
@@ -31,11 +33,6 @@ use Drupal\views\Views;
  * )
  */
 class CategoryProductListResource extends ResourceBase {
-
-  /**
-   * Search API Index ID.
-   */
-  const SEARCH_API_INDEX_ID = 'product';
 
   /**
    * Query parse mode.
@@ -104,6 +101,13 @@ class CategoryProductListResource extends ResourceBase {
   protected $configFactory;
 
   /**
+   * Product Category Page service.
+   *
+   * @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage
+   */
+  protected $productCategoryPage;
+
+  /**
    * CategoryProductListResource constructor.
    *
    * @param array $configuration
@@ -132,6 +136,8 @@ class CategoryProductListResource extends ResourceBase {
    *   Product category tree.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory object.
+   * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
+   *   Product Category Page service.
    */
   public function __construct(
     array $configuration,
@@ -146,7 +152,8 @@ class CategoryProductListResource extends ResourceBase {
     LanguageManagerInterface $language_manager,
     EntityRepositoryInterface $entity_repository,
     ProductCategoryTree $product_category_tree,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    ProductCategoryPage $product_category_page
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
@@ -157,6 +164,7 @@ class CategoryProductListResource extends ResourceBase {
     $this->entityRepository = $entity_repository;
     $this->productCategoryTree = $product_category_tree;
     $this->configFactory = $config_factory;
+    $this->productCategoryPage = $product_category_page;
   }
 
   /**
@@ -176,7 +184,8 @@ class CategoryProductListResource extends ResourceBase {
       $container->get('language_manager'),
       $container->get('entity.repository'),
       $container->get('alshaya_acm_product_category.product_category_tree'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_acm_product_category.page')
     );
   }
 
@@ -218,7 +227,12 @@ class CategoryProductListResource extends ResourceBase {
     $result_set = $this->prepareAndExecuteQuery($id);
     // Prepare response from result set.
     $response_data = $this->addExtraTermData($term);
+    if (isset($result_set['algolia_data'])) {
+      $response_data['algolia_data'] = $result_set['algolia_data'];
+    }
+
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+    $response_data['sorts'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
 
     // Filter the empty products.
     $response_data['products'] = array_filter($response_data['products']);
@@ -298,25 +312,75 @@ class CategoryProductListResource extends ResourceBase {
    *   Result set after query execution.
    */
   public function prepareAndExecuteQuery(int $tid) {
-    $index = Index::load(self::SEARCH_API_INDEX_ID);
-    /* @var \Drupal\search_api\Query\QueryInterface $query */
-    $query = $index->query();
+    $storage = $this->entityTypeManager->getStorage('search_api_index');
 
-    // Change the parse mode for the search.
-    $parse_mode = $this->parseModeManager->createInstance(self::PARSE_MODE);
-    $parse_mode->setConjunction(self::PARSE_MODE_CONJUNCTION);
-    $query->setParseMode($parse_mode);
+    if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
+      $index = $storage->load('product');
 
-    // Child terms of given term.
-    $terms = _alshaya_master_get_recursive_child_terms($tid);
-    // Add condition for all child terms.
-    $query->addCondition('tid', $terms, 'IN');
+      /** @var \Drupal\search_api\Query\QueryInterface $query */
+      $query = $index->query();
 
-    // Adding tag to query.
-    $query->addTag('category_product_list');
+      // Change the parse mode for the search.
+      $parse_mode = $this->parseModeManager->createInstance(self::PARSE_MODE);
+      $parse_mode->setConjunction(self::PARSE_MODE_CONJUNCTION);
+      $query->setParseMode($parse_mode);
 
-    // Prepare and execute query and pass result set.
-    return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query);
+      // Child terms of given term.
+      $terms = _alshaya_master_get_recursive_child_terms($tid);
+      // Add condition for all child terms.
+      $query->addCondition('tid', $terms, 'IN');
+
+      // Adding tag to query.
+      $query->addTag('category_product_list');
+
+      // Prepare and execute query and pass result set.
+      return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+    }
+
+    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      $index = $storage->load('alshaya_algolia_index');
+
+      /** @var \Drupal\search_api\Query\QueryInterface $query */
+      $query = $index->query();
+
+      // Set the search api server.
+      $this->alshayaSearchApiQueryExecute->setServerIndex('alshaya_algolia_index');
+      // Set facet source.
+      $this->alshayaSearchApiQueryExecute->setFacetSourceId(SearchPageProductListResource::FACET_SOURCE_ID);
+      // Set the views id.
+      $this->alshayaSearchApiQueryExecute->setViewsId(SearchPageProductListResource::VIEWS_ID);
+      // Set the views display id.
+      $this->alshayaSearchApiQueryExecute->setViewsDisplayId(SearchPageProductListResource::VIEWS_DISPLAY_ID);
+      // Set the price facet key.
+      $this->alshayaSearchApiQueryExecute->setPriceFacetKey(SearchPageProductListResource::PRICE_FACET_KEY);
+      // Set selling price facet key.
+      $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey(SearchPageProductListResource::SELLING_PRICE_FACET_KEY);
+
+      // Change the parse mode for the search.
+      $parse_mode = $this->parseModeManager->createInstance(self::PARSE_MODE);
+      $parse_mode->setConjunction(self::PARSE_MODE_CONJUNCTION);
+      $query->setParseMode($parse_mode);
+
+      $term_details = $this->productCategoryPage->getCurrentSelectedCategory(NULL, $tid);
+
+      $conditionGroup = new ConditionGroup();
+      $conditionGroup->addCondition('stock', 0, '>');
+      $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
+      $query->addConditionGroup($conditionGroup);
+      $query->setOption('ruleContexts', $term_details['ruleContext']);
+
+      // Prepare and execute query and pass result set.
+      $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+      $response['algolia_data'] = [
+        'filter_field' => $term_details['category_field'],
+        'filter_value' => $term_details['hierarchy'],
+        'rule_contexts' => $term_details['ruleContext'],
+      ];
+
+      return $response;
+    }
+
+    throw new \Exception('No backend available to process this request.');
   }
 
 }

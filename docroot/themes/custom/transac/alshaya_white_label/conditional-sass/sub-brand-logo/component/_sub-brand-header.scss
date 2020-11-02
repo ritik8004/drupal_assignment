@@ -56,10 +56,10 @@ $header-height: 7.125rem;
 }
 
 @mixin aerieSeparator() {
-  margin-top: -0.4375rem !important;
+  margin-top: -0.25rem !important;
 
-  @include breakpoint($only-mobile) {
-    margin-top: -0.75rem !important;
+  @include breakpoint($upto-desktop) {
+    margin-top: -0.5625rem !important;
   }
 
   &::before {
@@ -73,7 +73,7 @@ $header-height: 7.125rem;
     top: 66%;
 
     @include breakpoint($desktop) {
-      top: 60%;
+      top: 59%;
     }
 
     @include breakpoint($only-tablet) {

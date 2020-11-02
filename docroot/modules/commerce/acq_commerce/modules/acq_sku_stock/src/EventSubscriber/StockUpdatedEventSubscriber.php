@@ -7,7 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class StockUpdatedEventSubscriber.
+ * Class Stock Updated Event Subscriber.
  *
  * @package Drupal\acq_sku_stock\EventSubscriber
  */

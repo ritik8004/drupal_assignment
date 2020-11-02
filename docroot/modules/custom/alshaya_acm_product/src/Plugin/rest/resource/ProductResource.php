@@ -265,8 +265,14 @@ class ProductResource extends ResourceBase {
       $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
     }
 
-    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
-    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_config(), $data['flags']], TRUE);
+    $data['delivery_options'] = NestedArray::mergeDeepArray([
+      $this->getDeliveryOptionsConfig($skuEntity),
+      $data['delivery_options'],
+    ], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([
+      alshaya_acm_product_get_flags_config(),
+      $data['flags'],
+    ], TRUE);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
     // Allow other modules to alter product data.
     $this->moduleHandler->alter('sku_product_info', $data, $skuEntity);
@@ -342,8 +348,14 @@ class ProductResource extends ResourceBase {
       'click_and_collect' => [],
     ];
     $data['flags'] = [];
-    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
-    $data['flags'] = NestedArray::mergeDeepArray([alshaya_acm_product_get_flags_status($sku), $data['flags']], TRUE);
+    $data['delivery_options'] = NestedArray::mergeDeepArray([
+      $this->getDeliveryOptionsStatus($sku),
+      $data['delivery_options'],
+    ], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([
+      alshaya_acm_product_get_flags_status($sku),
+      $data['flags'],
+    ], TRUE);
 
     foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
       $data['linked'][] = [
@@ -435,8 +447,8 @@ class ProductResource extends ResourceBase {
         }
       }
 
-      $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
-      $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
+      $data['swatch_data'] = $data['swatch_data'] ?: new \stdClass();
+      $data['cart_combinations'] = $data['cart_combinations'] ?: new \stdClass();
 
       if ($current_request->query->get('pdp') == 'magazinev2') {
         // Setting configurable combination array.
@@ -504,7 +516,10 @@ class ProductResource extends ResourceBase {
             continue;
           }
 
-          $options = NestedArray::mergeDeepArray([$options, $this->skuManager->getCombinationArray($combination)], TRUE);
+          $options = NestedArray::mergeDeepArray([
+            $options,
+            $this->skuManager->getCombinationArray($combination),
+          ], TRUE);
           $data['configurableCombinations'][$data['sku']]['combinations'] = $options;
 
           // Get the first child from attribute_sku.

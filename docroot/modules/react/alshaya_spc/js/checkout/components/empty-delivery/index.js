@@ -213,7 +213,7 @@ export default class EmptyDeliveryText extends React.Component {
     showFullScreenLoader();
 
     // If logged in user.
-    if (window.drupalSettings.user.uid > 0) {
+    if (drupalSettings.user.uid > 0) {
       addEditAddressToCustomer(e);
     } else {
       checkoutAddressProcess(e);

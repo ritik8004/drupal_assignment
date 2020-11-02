@@ -5,7 +5,7 @@ namespace App\Service\Config;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class SystemSettings.
+ * Class SystemSettings methods.
  *
  * @package App\Service\Config
  */
@@ -81,6 +81,7 @@ class SystemSettings {
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/middleware_auth.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_checkout_settings.php';
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/alshaya_address_fields.php';
+    require_once DRUPAL_ROOT . '/../factory-hooks/pre-settings-php/alshaya_backend_calls_options.settings.php';
 
     // Include overrides.
     require_once DRUPAL_ROOT . '/../factory-hooks/post-settings-php/zzz_overrides.php';

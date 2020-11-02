@@ -47,6 +47,7 @@ function _alshaya_facets_pretty_paths_get_mappings() {
         'selling_price' => 'price_range',
         'actual_color_label_code' => 'color_family',
         'color_family' => 'color_family',
+        'category_facet_search' => 'category',
       ],
     ],
   ];

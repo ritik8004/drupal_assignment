@@ -27,7 +27,7 @@
     }
   };
 
-  Drupal.initialiseData = function() {
+  Drupal.initialiseData = function () {
     urlObject = {
       url: $(this).value,
       data: [0,0,0,0,0,0,0]
@@ -38,7 +38,7 @@
     var time = document.getElementById('gps-time-select').value;
     var getUrls = Drupal.url('google-page-speed/url/' + metric_id + '/' + device + '/' + time);
 
-    $.get(getUrls, function(data, status){
+    $.get(getUrls, function (data, status) {
       if (status === 'success' && data) {
         urlObject.url = data;
         urlObject.metric_id = metric_id;
@@ -66,16 +66,16 @@
 
     var getScores = Drupal.url('google-page-speed/' + urlObject.metric_id + '/' + urlObject.device + '/' + urlObject.time);
 
-    $.get(getScores, function(scoreData, status){
+    $.get(getScores, function (scoreData, status) {
       if (status === 'success' && scoreData) {
         scoreData.forEach(function (element) {
-          element[0] = new Date(element[0]*1000);
+          element[0] = new Date(element[0] * 1000);
           scoreTable.addRow(
             element
           );
         });
 
-        var initState= {selectedValues: []};
+        var initState = {selectedValues: []};
         /**
          * Put the urls into this url table.
          * Skipping column 0 because column 0 contains Date object.

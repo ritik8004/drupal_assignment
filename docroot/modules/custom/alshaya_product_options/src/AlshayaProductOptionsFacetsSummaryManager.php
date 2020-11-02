@@ -16,7 +16,7 @@ use Drupal\facets_summary\Processor\ProcessorPluginManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class AlshayaProductOptionsFacetsSummaryManager.
+ * Class Alshaya Product Options Facets Summary Manager.
  *
  * @package Drupal\alshaya_product_options
  */

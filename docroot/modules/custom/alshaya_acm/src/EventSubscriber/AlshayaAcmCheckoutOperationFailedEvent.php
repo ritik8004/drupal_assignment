@@ -9,7 +9,7 @@ use Drupal\alshaya_acm\Event\AlshayaAcmUpdateCartFailedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AlshayaAcmCheckoutOperationFailedEvent.
+ * Class Alshaya Acm Checkout Operation Failed Event.
  *
  * @package Drupal\alshaya_acm\EventSubscriber
  */

@@ -13,7 +13,7 @@ use Drupal\Core\Utility\Token;
 use libphonenumber\PhoneNumberFormat;
 
 /**
- * Class AlshayaMasterMobileUtilDecorator.
+ * Class Alshaya Master Mobile Util Decorator.
  */
 class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
 
@@ -50,7 +50,10 @@ class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
   /**
    * {@inheritdoc}
    */
-  public function getMobileNumber($number, $country = NULL, $types = [1 => 1, 2 => 2]) {
+  public function getMobileNumber($number, $country = NULL, $types = [
+    1 => 1,
+    2 => 2,
+  ]) {
     // Remove leading zero due to which number is un-recognizable.
     $number = ltrim($number, 0);
 
@@ -77,7 +80,10 @@ class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
    * @return string
    *   Full phone number.
    */
-  public function getPhoneNumberAsString($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
+  public function getPhoneNumberAsString($number, $country = NULL, array $types = [
+    1 => 1,
+    2 => 2,
+  ]) {
     $phone = $this->getMobileNumber($number, $country, $types);
     // If number is invalid, return it as is.
     if (empty($phone)) {
@@ -100,7 +106,10 @@ class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
    * @return string
    *   Mobile number.
    */
-  public function getMobileNumberAsString($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
+  public function getMobileNumberAsString($number, $country = NULL, array $types = [
+    1 => 1,
+    2 => 2,
+  ]) {
     $phone = $this->getMobileNumber($number, $country, $types);
     return $phone->getNationalNumber();
   }
@@ -118,7 +127,10 @@ class AlshayaMasterMobileUtilDecorator extends MobileNumberUtil {
    * @return mixed|string
    *   Formatted mobile number string or empty if it does not exist.
    */
-  public function getFormattedMobileNumber($number, $country = NULL, array $types = [1 => 1, 2 => 2]) {
+  public function getFormattedMobileNumber($number, $country = NULL, array $types = [
+    1 => 1,
+    2 => 2,
+  ]) {
     if (!empty($number) && is_string($number)) {
       return str_replace(' ', ' - ', $this->getPhoneNumberAsString($number, $country, $types));
     }

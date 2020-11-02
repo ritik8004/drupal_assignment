@@ -68,24 +68,28 @@ class CartBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
     $build = [
       '#theme' => 'table',
-      '#header' => [t('Name'), t('Quantity'), t('Price')],
-      '#empty' => t('There are no products in your cart yet.'),
+      '#header' => [$this->t('Name'), $this->t('Quantity'), $this->t('Price')],
+      '#empty' => $this->t('There are no products in your cart yet.'),
       '#rows' => $rows,
     ];
 
     $totals = $cart->totals();
 
-    $build['#rows']['sub'] = ['', t('Subtotal'), $totals['sub']];
+    $build['#rows']['sub'] = ['', $this->t('Subtotal'), $totals['sub']];
 
     if ((float) $totals['tax'] > 0) {
-      $build['#rows']['tax'] = ['', t('Tax'), $totals['tax']];
+      $build['#rows']['tax'] = ['', $this->t('Tax'), $totals['tax']];
     }
 
     if ((float) $totals['discount'] > 0) {
-      $build['#rows']['discount'] = ['', t('Discount'), $totals['discount']];
+      $build['#rows']['discount'] = [
+        '',
+        $this->t('Discount'),
+        $totals['discount'],
+      ];
     }
 
-    $build['#rows']['grand'] = ['', t('Grand Total'), $totals['grand']];
+    $build['#rows']['grand'] = ['', $this->t('Grand Total'), $totals['grand']];
 
     return $build;
   }

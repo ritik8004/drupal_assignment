@@ -11,7 +11,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class AlshayaStaticPageBreadcrumbBuilder.
+ * Class Alshaya Static Page Breadcrumb Builder.
  */
 class AlshayaStaticPageBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 

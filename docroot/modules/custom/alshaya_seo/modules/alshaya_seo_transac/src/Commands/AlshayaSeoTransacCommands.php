@@ -8,7 +8,7 @@ use Drupal\simple_sitemap\Simplesitemap;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaSeoTransacCommands.
+ * Class Alshaya Seo Transac Commands.
  *
  * @package Drupal\alshaya_seo_transac\Commands
  */

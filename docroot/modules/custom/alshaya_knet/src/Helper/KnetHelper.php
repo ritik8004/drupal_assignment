@@ -12,9 +12,10 @@ use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class KnetHelper.
+ * Class Knet Helper.
  *
  * @package Drupal\alshaya_knet\Helper
  */
@@ -72,6 +73,13 @@ class KnetHelper {
   protected $orderId = NULL;
 
   /**
+   * The RequestStack service.
+   *
+   * @var Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $requestStack;
+
+  /**
    * KnetHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -80,15 +88,19 @@ class KnetHelper {
    *   The factory for the temp store object.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
+   * @param Symfony\Component\HttpFoundation\RequestStack $stack
+   *   The request service.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     SharedTempStoreFactory $temp_store_factory,
-    LoggerChannelInterface $logger
+    LoggerChannelInterface $logger,
+    RequestStack $stack
   ) {
     $this->configFactory = $config_factory;
     $this->tempStore = $temp_store_factory->get('knet');
     $this->logger = $logger;
+    $this->requestStack = $stack;
   }
 
   /**
@@ -422,7 +434,8 @@ class KnetHelper {
     $message = $this->t('User either cancelled or response url returned error.');
 
     $message .= PHP_EOL . $this->t('Debug info:') . PHP_EOL;
-    foreach ($_GET as $key => $value) {
+    $message_info = $this->requestStack->getCurrentRequest()->query->get();
+    foreach ($message_info as $key => $value) {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
 

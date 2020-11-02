@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Class OrderPlacedEventSubscriber.
+ * Class Order Placed Event Subscriber.
  *
  * @package Drupal\acq_checkoutcom\EventSubscriber
  */

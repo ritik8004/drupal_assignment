@@ -9,7 +9,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AcqPromotionCommands.
+ * Class Acq Promotion Commands.
  *
  * @package Drupal\acq_promotion\Commands
  */

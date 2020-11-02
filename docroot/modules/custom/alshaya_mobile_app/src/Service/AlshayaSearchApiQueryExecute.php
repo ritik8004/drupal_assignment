@@ -10,7 +10,6 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\search_api\Query\QueryInterface;
-use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\ResultSet;
 use Drupal\views\Views;
 use Drupal\facets\Result\Result;
@@ -24,11 +23,16 @@ use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AlshayaSearchApiQueryExecute.
+ * Class Alshaya Search Api Query Execute.
  */
 class AlshayaSearchApiQueryExecute {
 
   use StringTranslationTrait;
+
+  const ALGOLIA_SORT_KEY_MAPPING = [
+    'name_1' => 'title',
+    'nid' => 'search_api_relevance',
+  ];
 
   /**
    * Filter query string key.
@@ -295,13 +299,15 @@ class AlshayaSearchApiQueryExecute {
    *
    * @param \Drupal\search_api\Query\QueryInterface $query
    *   Search api query object.
+   * @param string $page_type
+   *   Page type.
    * @param string|null $keyword
    *   Search keyword.
    *
    * @return array
    *   Query results.
    */
-  public function prepareExecuteQuery(QueryInterface $query, ?string $keyword = '') {
+  public function prepareExecuteQuery(QueryInterface $query, string $page_type, ?string $keyword = '') {
     // Get all facets for the given facet source.
     $facets = $this->facetManager->getFacetsByFacetSourceId($this->getFacetSourceId());
 
@@ -317,9 +323,13 @@ class AlshayaSearchApiQueryExecute {
     }
 
     // Filter by published nodes as same is done in views.
-    $query->addCondition('status', NodeInterface::PUBLISHED);
-    // Language filter.
-    $query->setLanguages([$this->languageManager->getCurrentLanguage()->getId()]);
+    if ($query->getIndex()->id() !== 'alshaya_algolia_index') {
+      $query->addCondition('status', NodeInterface::PUBLISHED);
+
+      // Language filter.
+      $query->setLanguages([$this->languageManager->getCurrentLanguage()->getId()]);
+    }
+
     // Sort by the stock.
     $query->sort('stock', 'DESC');
 
@@ -369,6 +379,10 @@ class AlshayaSearchApiQueryExecute {
           }
         }
 
+        if ($query->getIndex()->getServerInstance()->id() === 'algolia') {
+          $sort_option[0] = self::ALGOLIA_SORT_KEY_MAPPING[$sort_option[0]] ?? $sort_option[0];
+        }
+
         $query->sort($sort_option[0], $sort_option[1]);
       }
       else {
@@ -379,11 +393,15 @@ class AlshayaSearchApiQueryExecute {
     // If no sort available, use default one.
     else {
       // If promo list page.
-      if ($this->getViewsId() == 'alshaya_product_list' && $this->getViewsDisplayId() == 'block_2') {
+      if ($page_type === 'promo') {
         $default_sort = $this->getPromoDefaultSort();
+        if ($query->getIndex()->getServerInstance()->id() === 'algolia') {
+          $default_sort['key'] = self::ALGOLIA_SORT_KEY_MAPPING[$default_sort['key']] ?? $default_sort['key'];
+        }
+
         $query->sort($default_sort['key'], $default_sort['order']);
       }
-      elseif ($this->getViewsId() == 'search' && $this->getViewsDisplayId() == 'page') {
+      elseif ($page_type === 'search') {
         // If search page, get default sort.
         $default_sort = $this->getSearchPageSortOptions(TRUE);
         $exploded_default_sort = explode(self::SORT_SEPARATOR, $default_sort);
@@ -416,7 +434,7 @@ class AlshayaSearchApiQueryExecute {
           $filter = $query->createConditionGroup('OR', ['facet:' . $filter_key]);
           foreach ($filter_val as $price) {
             $exclude = FALSE;
-            /* @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
+            /** @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
             $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
               'facet' => $this->priceFacet,
               'query' => $query,
@@ -443,7 +461,7 @@ class AlshayaSearchApiQueryExecute {
 
     // Set additional options.
     // (In this case, retrieve facets, if supported by the backend.)
-    $server = Index::load($this->getServerIndex())->getServerInstance();
+    $server = $query->getIndex()->getServerInstance();
     if ($server->supportsFeature('search_api_facets')) {
       $facet_data = [];
       foreach ($facets as $facet) {
@@ -496,7 +514,7 @@ class AlshayaSearchApiQueryExecute {
         $facet_result = $search_api_facets[$facet->id()];
       }
       // For Algolia results come with field identifier.
-      elseif ($search_api_facets[$facet->getFieldIdentifier()]) {
+      elseif (isset($search_api_facets[$facet->getFieldIdentifier()])) {
         $facet_result = $search_api_facets[$facet->getFieldIdentifier()];
       }
 
@@ -567,13 +585,9 @@ class AlshayaSearchApiQueryExecute {
       unset($fr['weight']);
     }
 
-    // Prepare sort data.
-    $sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
-
     // Prepare final result.
     return [
       'filters' => $facet_result,
-      'sort' => $sort_data,
       'default_sort' => $this->defaultSort,
       'products' => $product_data,
       'total' => $this->getResultTotalCount(),
@@ -742,7 +756,7 @@ class AlshayaSearchApiQueryExecute {
     if ($views_id == 'alshaya_product_list') {
       // If promo list page.
       if ($display_id == 'block_2') {
-        $sort_data = $this->getPromoSortOptions();
+        $sort_data = $this->getPromoSortOptions($views_id);
       }
       else {
         // Get sort config.
@@ -781,7 +795,7 @@ class AlshayaSearchApiQueryExecute {
    *   Processed price facet result array.
    */
   public function processPriceFacet(array $price_facet_result) {
-    /* @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
+    /** @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
     $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
       'query' => NULL,
       'facet' => $this->priceFacet,
@@ -789,7 +803,7 @@ class AlshayaSearchApiQueryExecute {
     ]);
 
     // Get price facet build.
-    /* @var \Drupal\facets\Entity\Facet $price_facet_build */
+    /** @var \Drupal\facets\Entity\Facet $price_facet_build */
     $price_facet_build = $alshaya_search_granular->build();
 
     $option_data = [];
@@ -798,7 +812,10 @@ class AlshayaSearchApiQueryExecute {
     ksort($results);
     foreach ($results as $result) {
       // Trim and remove html and newlines from the markup.
-      $display_value = trim(str_replace(["\n", "\r"], ' ', strip_tags($result->getDisplayValue())));
+      $display_value = trim(str_replace([
+        "\n",
+        "\r",
+      ], ' ', strip_tags($result->getDisplayValue())));
       // Remove extra spaces from text.
       $display_value = preg_replace('/\s\s+/', ' ', $display_value);
       $option_data[] = [
@@ -842,7 +859,7 @@ class AlshayaSearchApiQueryExecute {
     $sort_config_labels = array_filter($sort_config_labels);
 
     // Get BEF sort settings from views.
-    $views_storage = Views::getView($this->getViewsId())->storage;
+    $views_storage = Views::getView('search')->storage;
     $bef_sort_settings = $views_storage->getDisplay('default')['display_options']['exposed_form']['options']['bef']['sort']['advanced']['combine_rewrite'];
     $lines = explode("\n", trim($bef_sort_settings));
 
@@ -887,15 +904,18 @@ class AlshayaSearchApiQueryExecute {
   /**
    * Get the sort information of the promo list view.
    *
+   * @param string $views_id
+   *   View ID.
+   *
    * @return array
    *   Sort options for promo list page.
    */
-  public function getPromoSortOptions() {
+  public function getPromoSortOptions(string $views_id) {
     $sort_data = [];
     // Get enabled sort options.
     $enabled_sort_config = array_filter(_alshaya_acm_product_position_get_config());
     // Get and set sort order from the views config.
-    $views_storage = Views::getView($this->getViewsId())->storage;
+    $views_storage = Views::getView($views_id)->storage;
     $views_sort = $views_storage->getDisplay('default')['display_options']['sorts'];
     // Get enabled sort options from config.
     $enabled_sorts = _alshaya_acm_product_position_get_config(TRUE);
@@ -925,7 +945,7 @@ class AlshayaSearchApiQueryExecute {
    *   Default sort.
    */
   public function getPromoDefaultSort() {
-    $views_storage = Views::getView($this->getViewsId())->storage;
+    $views_storage = Views::getView('alshaya_product_list')->storage;
     $views_sort = $views_storage->getDisplay('default')['display_options']['sorts'];
     $enabled_sort_config = _alshaya_acm_product_position_get_config();
 

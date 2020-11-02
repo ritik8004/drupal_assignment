@@ -6,7 +6,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Class FacetAjaxRouteSubscriber.
+ * Class Facet Ajax Route Subscriber.
  *
  * @package Drupal\alshaya_search\Routing
  */

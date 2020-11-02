@@ -9,7 +9,7 @@
       $('.edit-newsletter').on('click', function () {
         // Doing this as we checking class and its not available immediately
         // due to race condition.
-        setTimeout(function() {
+        setTimeout(function () {
           if (!$('form#alshaya-newsletter-subscribe').hasClass('ajax-submit-prevented')) {
             // Start loading
             l.ladda('start');
@@ -43,14 +43,14 @@
       };
 
       //On focus-out from button/email field.
-      $('.block-alshaya-newsletter-subscription button.edit-newsletter, .block-alshaya-newsletter-subscription input[name="email"]').on('focusout', function() {
+      $('.block-alshaya-newsletter-subscription button.edit-newsletter, .block-alshaya-newsletter-subscription input[name="email"]').on('focusout', function () {
         hideNewsLetterError();
       });
 
       /**
        * Hide/Remove error on focus out if email field empty.
        */
-      var hideNewsLetterError = function() {
+      var hideNewsLetterError = function () {
         // If email field is empty.
         if ($('.block-alshaya-newsletter-subscription input[name="email"]').val().length < 1) {
           // If there was an error due to ajax response, then remove it.

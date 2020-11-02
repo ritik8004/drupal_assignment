@@ -14,7 +14,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class AlshayaBrandAssetsCommands.
+ * Class Alshaya Brand Assets Commands.
  *
  * @package Drupal\alshaya_brand\Commands
  */
@@ -78,7 +78,10 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    * @usage drush delete-unused-unavailable-file-entities
    *   Deletes unused assets .
    */
-  public function deleteUnusedUnavailableFileEntities(array $options = ['batch-size' => 50, 'dry-run' => FALSE]) {
+  public function deleteUnusedUnavailableFileEntities(array $options = [
+    'batch-size' => 50,
+    'dry-run' => FALSE,
+  ]) {
     $dry_run = (bool) $options['dry-run'];
     $batch_size = (int) $options['batch-size'];
 
@@ -198,7 +201,10 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
    * @usage drush delete-unused-brand-assets-all-markets
    *   Delete unused assets across markets of a brand.
    */
-  public function deleteUnusedBrandAssetsAllMarkets(array $options = ['batch-size' => 50, 'dry-run' => FALSE]) {
+  public function deleteUnusedBrandAssetsAllMarkets(array $options = [
+    'batch-size' => 50,
+    'dry-run' => FALSE,
+  ]) {
     if (!$this->configFactory->get('alshaya_brand.settings')->get('brand_main_site')) {
       $this->logger()->notice('Skipping as not main site of the brand.');
       return;

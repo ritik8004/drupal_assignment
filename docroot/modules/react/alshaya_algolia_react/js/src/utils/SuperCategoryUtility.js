@@ -5,7 +5,7 @@
  *   The supercategory if found or null.
  */
 function getSuperCategory() {
-  let activeMenuItem = document.querySelector('.main--menu .menu--one__link.active');
+  const activeMenuItem = document.querySelector('.main--menu .menu--one__link.active');
   if (activeMenuItem !== null) {
     return activeMenuItem.getAttribute('data-super-category-label');
   }
@@ -22,10 +22,10 @@ function getSuperCategory() {
   *   The optional filters or null.
   */
 function getSuperCategoryOptionalFilter() {
-  let supercategory = getSuperCategory();
-  let optionalFilter = drupalSettings.superCategory && supercategory
+  const supercategory = getSuperCategory();
+  const optionalFilter = drupalSettings.superCategory && supercategory
     ? `${drupalSettings.superCategory.search_facet}:${supercategory}`
-    : null
+    : null;
 
   return optionalFilter;
 }
@@ -33,5 +33,5 @@ function getSuperCategoryOptionalFilter() {
 
 export {
   getSuperCategory,
-  getSuperCategoryOptionalFilter
-}
+  getSuperCategoryOptionalFilter,
+};

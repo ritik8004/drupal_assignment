@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
- * Class AlshayaAcmProductCategorySettingsForm.
+ * Class Alshaya Acm Product Category Settings Form.
  */
 class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
 

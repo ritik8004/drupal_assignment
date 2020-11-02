@@ -102,3 +102,19 @@ services:
       - '@lock.persistent'
       - '@event_dispatcher'
       - '@logger.factory'
+
+  acq_sku.conductor_cat_sync_helper:
+    class: Drupal\acq_sku\ConductorCategorySyncHelper
+    arguments:
+      - '@database'
+      - '@acq_sku.category_manager'
+      - '@acq_commerce.i18n_helper'
+      - '@logger.factory'
+
+  acq_sku.process_blacklisted_products:
+    class: Drupal\acq_sku\EventSubscriber\AcqSkuProcessBlacklistedProductsSubscriber
+    arguments:
+      - '@database'
+      - '@logger.factory'
+    tags:
+      - { name: 'event_subscriber' }

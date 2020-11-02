@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 const webpack = require('webpack-stream');
 
-gulp.task('default', function() {
+gulp.task('default', function () {
   return gulp.src('js/*.js')
     .pipe(webpack( require('./webpack.config.js') ))
     .pipe(gulp.dest('dist/'));

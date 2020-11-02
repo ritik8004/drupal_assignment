@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku\Entity;
 
+use Drupal\acq_sku\AcqSkuConfig;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -299,7 +300,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   protected function downloadMediaImage(array &$data) {
     $lock_key = '';
-
+    $non_cli_image_download = AcqSkuConfig::get('non_cli_image_download');
+    // Return if it is non CLI request AND if the config value for it is
+    // disabled.
+    if (PHP_SAPI !== 'cli' && !$non_cli_image_download) {
+      return NULL;
+    }
     // If image is blacklisted, block download.
     if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
       return NULL;
@@ -549,7 +555,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
       // If we find more than one, raise a log.
       if (!empty($sku_records) && count($sku_records) > 1) {
-        \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku & lang code: @langcode.', ['@sku' => $sku, '@langcode' => $langcode]);
+        \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku & lang code: @langcode.', [
+          '@sku' => $sku,
+          '@langcode' => $langcode,
+        ]);
       }
 
       // We should always get one, but get first SKU entity for processing just
@@ -576,7 +585,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
       // Don't log for missing translation if flag is set to false.
       elseif ($log_not_found) {
-        \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
+        \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', [
+          '@sku' => $sku,
+          '@langcode' => $langcode,
+        ]);
       }
     }
     return $sku_entity;

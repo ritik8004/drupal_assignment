@@ -75,7 +75,10 @@ class AlshayaOptionsPageController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $libraries = ['alshaya_white_label/optionlist_filter', 'alshaya_options_list/alshaya_options_list_search'];
+    $libraries = [
+      'alshaya_white_label/optionlist_filter',
+      'alshaya_options_list/alshaya_options_list_search',
+    ];
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get current request uri.
     $request = $this->requestStack->getCurrentRequest()->getRequestUri();

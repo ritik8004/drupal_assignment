@@ -5,7 +5,7 @@ namespace Drupal\acq_cart;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
- * Class Cart.
+ * Class Cart methods.
  *
  * @package Drupal\acq_cart
  */

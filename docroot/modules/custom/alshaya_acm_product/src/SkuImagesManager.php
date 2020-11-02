@@ -18,7 +18,7 @@ use Drupal\file\Entity\File;
 use Drupal\Component\Utility\Unicode;
 
 /**
- * Class SkuImagesManager.
+ * Class Sku Images Manager.
  *
  * @package Drupal\alshaya_acm_product
  */

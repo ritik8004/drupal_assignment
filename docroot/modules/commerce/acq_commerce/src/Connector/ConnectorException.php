@@ -3,7 +3,7 @@
 namespace Drupal\acq_commerce\Connector;
 
 /**
- * Class ConnectorException.
+ * Class Connector Exception.
  *
  * @package Drupal\acq_commerce\Connector
  *

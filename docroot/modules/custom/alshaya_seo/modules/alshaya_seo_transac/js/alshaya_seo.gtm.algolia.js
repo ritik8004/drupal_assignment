@@ -40,7 +40,7 @@
     }, 500));
   }, drupalSettings.gtm.algolia_trigger_ga_after));
 
-  Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function(context, eventType) {
+  Drupal.alshaya_seo_gtm_prepare_algolia_product_impression = function (context, eventType) {
     var searchImpressions = [];
 
     $('#alshaya-algolia-search [gtm-type="gtm-product-link"][gtm-view-mode!="full"][gtm-view-mode!="modal"]:not(".impression-processed"):visible').each(function () {
@@ -79,19 +79,19 @@
   }
 
   // Push Filter event to GTM.
-  $('body').once('bind-facet-item-click').on('click','.facet-item', function(event) {
+  $('body').once('bind-facet-item-click').on('click','.facet-item', function (event) {
     if (!$(this).hasClass('is-active')) {
       var selectedVal = document.createElement('div');
       var facetTitle = $(this).attr('datadrupalfacetlabel');
       selectedVal.innerHTML = $(this).find('span.facet-item__value').html();
-      selectedVal.querySelectorAll('span.facet-item__count').forEach(function(item, index){
+      selectedVal.querySelectorAll('span.facet-item__count').forEach(function (item, index) {
         item.parentNode.removeChild(item);
       });
       var data = {
         event: 'filter',
         siteSection: 'search results',
         filterType: facetTitle,
-        filterValue: Drupal.t(selectedVal.innerHTML),
+        filterValue: selectedVal.innerHTML,
       };
 
       dataLayer.push(data);

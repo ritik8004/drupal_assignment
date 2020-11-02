@@ -357,12 +357,15 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     $current_path = $this->currentPath->getPath();
 
     // Get current path alias.
-    $current_path_alias = $this->aliasStorage->load(['source' => $current_path, 'langcode' => $langcode]);
+    $current_path_alias = $this->aliasStorage->load([
+      'source' => $current_path,
+      'langcode' => $langcode,
+    ]);
 
     // Get the active link if any!.
     foreach ($tree as $element) {
       if ($element->inActiveTrail) {
-        // @var $link \Drupal\Core\Menu\MenuLinkInterface
+        /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
         $link = $element->link;
         $active_link = $link->getUrlObject()->toString();
         if (strpos($active_link, $current_path_alias['alias']) !== 0) {

@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class UserResetPassword.
+ * Class User Reset Password.
  *
  * @RestResource(
  *   id = "user_reset_password",

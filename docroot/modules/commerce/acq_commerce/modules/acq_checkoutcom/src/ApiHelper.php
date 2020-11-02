@@ -16,7 +16,7 @@ use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Class ApiHelper.
+ * Class Api Helper.
  */
 class ApiHelper {
 

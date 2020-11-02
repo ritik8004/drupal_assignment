@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\node\NodeInterface;
 
 /**
- * Class ProductUpdatedEventSubscriber.
+ * Class Product Updated Event Subscriber.
  *
  * @package Drupal\alshaya_color_split\EventSubscriber
  */
@@ -48,7 +48,10 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT][] = ['onProductProcessed', 500];
+    $events[ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT][] = [
+      'onProductProcessed',
+      500,
+    ];
     return $events;
   }
 

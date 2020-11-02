@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class ConductorSettingsForm.
+ * Class Conductor Settings Form.
  *
  * @package Drupal\acq_commerce\Form
  *

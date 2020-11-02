@@ -1,1 +1,5 @@
-attributes_to_sort_by_name: []
+local_storage_expire: 60
+max_category_tree_depth: 3
+hits: 4
+top_results: 4
+items_per_page: 36

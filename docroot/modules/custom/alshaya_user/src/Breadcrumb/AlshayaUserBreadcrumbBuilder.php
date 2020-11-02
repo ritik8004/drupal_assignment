@@ -13,7 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class AlshayaUserBreadcrumbBuilder.
+ * Class Alshaya User Breadcrumb Builder.
  */
 class AlshayaUserBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 

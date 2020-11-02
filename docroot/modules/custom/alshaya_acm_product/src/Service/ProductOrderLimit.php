@@ -7,7 +7,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\acq_sku\Entity\SKU;
 
 /**
- * Class ProductOrderLimit.
+ * Class Product Order Limit.
  *
  * @package Drupal\alshaya_acm_product
  */

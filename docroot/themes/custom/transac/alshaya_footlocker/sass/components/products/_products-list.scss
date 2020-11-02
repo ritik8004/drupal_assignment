@@ -77,6 +77,10 @@
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
+      @include breakpoint($tablet) {
+        width: 100%;
+      }
+
       ul {
         @include breakpoint($tablet) {
           border-bottom: 0;
@@ -108,7 +112,8 @@
             @include breakpoint($desktop) {
               &:hover {
                 opacity: 1;
-                background-color: $primary_brand_button;
+                background-color: $primary_btn_bg;
+                font-weight: normal;
 
                 a {
                   color: $primary_btn_text;

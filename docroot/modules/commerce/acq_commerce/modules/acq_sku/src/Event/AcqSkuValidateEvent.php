@@ -9,10 +9,15 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class AcqSkuValidateEvent extends Event {
 
+  /**
+   * Acq sku validate.
+   */
   const ACQ_SKU_VALIDATE = 'acq_sku.validate';
 
   /**
-   * Product data being imported.
+   * Product data.
+   *
+   * @var product
    */
   protected $product;
 
@@ -20,6 +25,7 @@ class AcqSkuValidateEvent extends Event {
    * Constructs an acq sku validator event.
    *
    * @param array $product
+   *   Array of product attributes.
    */
   public function __construct(array $product) {
     $this->product = $product;
@@ -29,16 +35,14 @@ class AcqSkuValidateEvent extends Event {
    * Get the inserted entity.
    *
    * @return array
+   *   Get product value.
    */
   public function getProduct() {
     return $this->product;
   }
 
   /**
-   * Set the product to event object.
-   *
-   * @param array $product
-   *   Array of product attributes.
+   * {@inheritdoc}
    */
   public function setProduct($product) {
     $this->product = $product;

@@ -19,7 +19,7 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\simple_sitemap\Simplesitemap;
 
 /**
- * Class AlshayaImageSitemapGenerator.
+ * Class Alshaya Image Sitemap Generator.
  *
  * @package Drupal\alshaya_image_sitemap
  */
@@ -238,7 +238,10 @@ class AlshayaImageSitemapGenerator {
         }
 
         if (!empty($media)) {
-          $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'https' => TRUE])->toString() . '</loc>';
+          $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], [
+            'absolute' => TRUE,
+            'https' => TRUE,
+          ])->toString() . '</loc>';
           foreach ($languages as $language) {
             $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], [
               'absolute' => TRUE,

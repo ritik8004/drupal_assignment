@@ -40,6 +40,6 @@ $config['search_api.index.acquia_search_index']['options']['algolia_index_name']
 if (!in_array($algolia_env, ['01test', '01uat', '01pprod', '01live'])) {
   $config['search_api.server.algolia']['backend_config']['application_id'] = $settings['algolia_sandbox.settings']['app_id'];
   $config['search_api.server.algolia']['backend_config']['api_key'] = $settings['algolia_sandbox.settings']['write_api_key'];
-  $config['block.block.alshayaalgoliareactautocomplete']['settings']['application_id'] = $settings['algolia_sandbox.settings']['app_id'];
-  $config['block.block.alshayaalgoliareactautocomplete']['settings']['search_api_key'] = $settings['algolia_sandbox.settings']['search_api_key'];
+  $config['alshaya_algolia_react.settings']['application_id'] = $settings['algolia_sandbox.settings']['app_id'];
+  $config['alshaya_algolia_react.settings']['search_api_key'] = $settings['algolia_sandbox.settings']['search_api_key'];
 }

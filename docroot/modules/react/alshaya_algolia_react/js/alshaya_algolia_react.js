@@ -13,18 +13,6 @@
       // Variable to determine facet-item level in category block facet.
       var facet_item_level;
 
-      $(window).on('blazySuccess', function(event, element) {
-        Drupal.plpListingProductTileHeight('row', element);
-      });
-
-      // Close the facets on click anywherer outside.
-      $(window).on('click', function(event) {
-        var facet_block = $('.container-without-product .c-collapse-item');
-        if ($(facet_block).find(event.target).length === 0) {
-          $(facet_block).find('.c-facet__title').removeClass('active');
-          $(facet_block).find('ul').slideUp();
-        }
-      });
       $(window).on('load', function(event) {
         $('body').once('algolia-search').on('click','.sticky-filter-wrapper .c-collapse-item .facet-item', function(event) {
           // All facets except category search block.
@@ -89,10 +77,6 @@
     }
   };
 
-  Drupal.refreshGrids = function() {
-    Drupal.plpListingProductTileHeight('full_page', null);
-  };
-
   Drupal.algoliaReact = Drupal.algoliaReact || {};
 
   // Trigger events when Algolia finishes loading search results.
@@ -102,9 +86,10 @@
 
   // Show all filters blocks.
   Drupal.algoliaReact.facetEffects = function () {
+    var context = $('#alshaya-algolia-search');
     // On clicking facet block title, update the title of block and hide
     // other facets.
-    $('.all-filters-algolia .c-collapse-item').once('algolia-search').on('click', function() {
+    $('.all-filters-algolia .c-collapse-item', context).once('algolia-search').on('click', function() {
       var all_filters = $(this).parents('.all-filters-algolia');
       // Update the title on click of facet.
       var facet_title = $(this).find('h3.c-facet__title').html();
@@ -123,7 +108,7 @@
 
     // On clicking on back button, reset the block title and add class so
     // that facet blocks can be closed.
-    $('.all-filters-algolia .back-facet-list').once('algolia-search').on('click', function() {
+    $('.all-filters-algolia .back-facet-list', context).once('algolia-search').on('click', function() {
       var all_filters = $(this).parents('.all-filters-algolia');
       $('.c-collapse-item', all_filters).find('ul').hide();
       $(this).hide();
@@ -157,35 +142,32 @@
     });
 
     // Add dropdown effect for facets filters.
-    // Condition to attach this on pages except promotion and plps as on those pages we get facets-panel.js with same code.
-    if (!$('body').hasClass('nodetype--acq_promotion') && !$('body').hasClass('plp-page-only')) {
-      if (drupalSettings.superCategory && ($(window).width() > 1023)) {
-        $('.block-facet-blockcategory-facet-search .c-facet__title.c-collapse__title').addClass('active');
-      }
-      $('.c-facet__title.c-collapse__title').once('algolia-search').on('click', function () {
-        if ($(this).hasClass('active')) {
-          $(this).removeClass('active');
-          // We want to run this only on main page facets.
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
-            $(this).siblings('ul').slideUp();
-          }
-        }
-        else {
-          if (!$(this).parent().parent().hasClass('filter__inner') && !$(this).parents().hasClass('c-sidebar-first')) {
-            $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
-            $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
-          }
-
-          $(this).addClass('active');
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
-            $(this).siblings('ul').slideDown();
-          }
-        }
-      });
+    if (drupalSettings.superCategory && ($(window).width() > 1023)) {
+      $('.block-facet-blockcategory-facet-search .c-facet__title.c-collapse__title', context).addClass('active');
     }
+    $('.c-facet__title.c-collapse__title', context).once('algolia-search').on('click', function () {
+      if ($(this).hasClass('active')) {
+        $(this).removeClass('active');
+        // We want to run this only on main page facets.
+        if (!$(this).parent().parent().hasClass('filter__inner')) {
+          $(this).siblings('ul').slideUp();
+        }
+      }
+      else {
+        if (!$(this).parent().parent().hasClass('filter__inner') && !$(this).parents().hasClass('c-sidebar-first')) {
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+        }
 
-    $('.sticky-filter-wrapper .show-all-filters-algolia').once('algolia-search').on('click', function() {
-      $('.all-filters-algolia').addClass('filters-active');
+        $(this).addClass('active');
+        if (!$(this).parent().parent().hasClass('filter__inner')) {
+          $(this).siblings('ul').slideDown();
+        }
+      }
+    });
+
+    $('.sticky-filter-wrapper .show-all-filters-algolia', context).once('algolia-search').on('click', function() {
+      $('.all-filters-algolia', context).addClass('filters-active');
 
       if ($(window).width() > 1023) {
         $('html').addClass('all-filters-overlay');
@@ -194,19 +176,19 @@
         $('body').addClass('mobile--overlay');
       }
 
-      $('.all-filters-algolia .c-collapse-item').removeClass('show-facet');
+      $('.all-filters-algolia .c-collapse-item', context).removeClass('show-facet');
 
-      var active_filter_sort = $('#all-filter-active-facet-sort').val();
+      var active_filter_sort = $('#all-filter-active-facet-sort', context).val();
       // On clicking `all` filters, check if there was filter which selected last.
       if (active_filter_sort.length > 0) {
-        $('.all-filters-algolia #' + active_filter_sort).show();
-        $('.all-filters-algolia #' + active_filter_sort).addClass('show-facet');
+        $('.all-filters-algolia #' + active_filter_sort, context).show();
+        $('.all-filters-algolia #' + active_filter_sort, context).addClass('show-facet');
       }
       else {
-        $('.all-filters-algolia .c-collapse__title.active').parent('.c-collapse-item').addClass('show-facet');
+        $('.all-filters-algolia .c-collapse__title.active', context).parent('.c-collapse-item').addClass('show-facet');
       }
 
-      $('.all-filters-algolia').show();
+      $('.all-filters-algolia', context).show();
     });
 
     $(window).once('reset-filter-class').on('hashchange', function() {
@@ -215,8 +197,8 @@
     });
 
     // Fake facet apply button to close the `all filter`.
-    $('.all-filters-algolia .all-filters-close, .all-filters-algolia .facet-apply-all').once('algolia-search').on('click', function() {
-      $('.all-filters-algolia').removeClass('filters-active');
+    $('.all-filters-algolia .all-filters-close, .all-filters-algolia .facet-apply-all', context).once('algolia-search').on('click', function() {
+      $('.all-filters-algolia', context).removeClass('filters-active');
       $('body').removeClass('mobile--overlay');
       $('html').removeClass('all-filters-overlay');
     });
@@ -226,33 +208,33 @@
    * Make Header sticky on scroll.
    */
   Drupal.algoliaReact.stickyfacetfilter = function () {
-      var algoliaReactFilterPosition = 0;
-      var superCategoryMenuHeight = 0;
-      var position = 0;
-      var filter = $('#alshaya-algolia-search .region__content');
-      var nav = $('.branding__menu');
-      var fixedNavHeight = 0;
+    var algoliaReactFilterPosition = 0;
+    var superCategoryMenuHeight = 0;
+    var position = 0;
+    var filter = $('#alshaya-algolia-search .region__content');
+    var nav = $('.branding__menu');
+    var fixedNavHeight = 0;
 
-      if ($('.show-all-filters-algolia').length > 0) {
-        if ($(window).width() > 1023) {
-          algoliaReactFilterPosition = $('#alshaya-algolia-search .container-without-product').offset().top;
-        } else if ($(window).width() > 767 && $(window).width() < 1024) {
-          algoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top;
-        } else {
-          if ($('.block-alshaya-super-category').length > 0) {
-            superCategoryMenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
-          }
-          if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0) {
-            algoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top - $('.branding__menu').outerHeight() - superCategoryMenuHeight;
-          }
-          fixedNavHeight = nav.outerHeight() + superCategoryMenuHeight;
+    if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0) {
+      if ($(window).width() > 1023) {
+        algoliaReactFilterPosition = $('#alshaya-algolia-search .container-without-product').offset().top;
+      } else if ($(window).width() > 767 && $(window).width() < 1024) {
+        algoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top;
+      } else {
+        if ($('.block-alshaya-super-category').length > 0) {
+          superCategoryMenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
         }
+        if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0) {
+          algoliaReactFilterPosition = $('#alshaya-algolia-search .show-all-filters-algolia').offset().top - $('.branding__menu').outerHeight() - superCategoryMenuHeight;
+        }
+        fixedNavHeight = nav.outerHeight() + superCategoryMenuHeight;
       }
+    }
 
-    if ($('.show-algolia-result').length > 0) {
+    if ($('#alshaya-algolia-search.show-algolia-result').length > 0) {
       $(window).once('algoliaStickyFilter').on('scroll', function () {
         // Sticky filter header.
-        if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0 && $('.show-algolia-result').length > 0) {
+        if ($('#alshaya-algolia-search .show-all-filters-algolia').length > 0 && $('#alshaya-algolia-search.show-algolia-result').length > 0) {
           if ($(this).scrollTop() > algoliaReactFilterPosition) {
             filter.addClass('filter-fixed-top');
             $('body').addClass('header-sticky-filter');
@@ -264,23 +246,6 @@
       });
     }
   };
-
-  /**
-   * Wrapping all the filters inside a div to make it sticky.
-   */
-  function stickyfacetwrapper() {
-    if ($('.show-all-filters-algolia').length > 0) {
-      if ($(window).width() > 767) {
-          var site_brand = $('.site-brand-home').clone();
-          $(site_brand).insertBefore('#alshaya-algolia-search .container-without-product');
-      }
-      else {
-        if ($('.region__content > .all-filters-algolia').length < 1) {
-          $('.all-filters-algolia').insertAfter('#block-page-title');
-        }
-      }
-    }
-  }
 
   Drupal.behaviors.searchSizeGroupFilter = {
     // Opens the selected grand parent filter value using
