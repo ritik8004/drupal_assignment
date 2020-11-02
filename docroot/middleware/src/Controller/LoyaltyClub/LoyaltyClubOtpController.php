@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Magento\MagentoApiWrapper;
+use App\Service\Aura\OtpHelper;
+use App\Service\Aura\SearchHelper;
 
 /**
  * Provides route callbacks for Loyalty Club OTP APIs.
@@ -35,6 +37,20 @@ class LoyaltyClubOtpController {
   protected $magentoApiWrapper;
 
   /**
+   * Service for aura otp helper.
+   *
+   * @var \App\Service\Aura\OtpHelper
+   */
+  protected $auraOtpHelper;
+
+  /**
+   * Service for aura search helper.
+   *
+   * @var \App\Service\Aura\SearchHelper
+   */
+  protected $auraSearchHelper;
+
+  /**
    * LoyaltyClubController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -43,15 +59,23 @@ class LoyaltyClubOtpController {
    *   Utility Service.
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
    *   Magento API wrapper service.
+   * @param \App\Service\Aura\OtpHelper $aura_otp_helper
+   *   Aura otp helper service.
+   * @param \App\Service\Aura\SearchHelper $aura_search_helper
+   *   Aura search helper service.
    */
   public function __construct(
     LoggerInterface $logger,
     Utility $utility,
-    MagentoApiWrapper $magento_api_wrapper
+    MagentoApiWrapper $magento_api_wrapper,
+    OtpHelper $aura_otp_helper,
+    SearchHelper $aura_search_helper
   ) {
     $this->logger = $logger;
     $this->utility = $utility;
     $this->magentoApiWrapper = $magento_api_wrapper;
+    $this->auraOtpHelper = $aura_otp_helper;
+    $this->auraSearchHelper = $aura_search_helper;
   }
 
   /**
@@ -60,30 +84,28 @@ class LoyaltyClubOtpController {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Return API response status.
    */
-  public function sendOtp(Request $request) {
+  public function sendSignUpOtp(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
     $mobile = $request_content['mobile'];
+    $chosenCountryCode = $request_content['chosenCountryCode'];
 
-    if (empty($mobile)) {
-      $this->logger->error('Error while trying to send otp. Mobile number is required.');
-      return new JsonResponse($this->utility->getErrorResponse('Mobile number is required', Response::HTTP_NOT_FOUND));
+    if (empty($chosenCountryCode) || empty($mobile)) {
+      $this->logger->error('Error while trying to send otp. Mobile number and Country code is required.');
+      return new JsonResponse($this->utility->getErrorResponse('Mobile number and Country code is required.', Response::HTTP_NOT_FOUND));
     }
 
-    try {
-      $endpoint = sprintf('/sendotp/phonenumber/%s', $mobile);
-      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
-      $responseData = [
-        'status' => $response,
-      ];
-      return new JsonResponse($responseData);
+    // Call search API to check if given mobile number
+    // is already registered or not.
+    $search_response = $this->auraSearchHelper->search('phone', $chosenCountryCode . $mobile);
+
+    if (!empty($search_response['data']['apc_identifier_number'])) {
+      $this->logger->error('Error while trying to send otp. Mobile number is already registered.');
+      return new JsonResponse($this->utility->getErrorResponse('form_error_mobile_already_registered', 'already_registered'));
     }
-    catch (\Exception $e) {
-      $this->logger->notice('Error while trying to send otp on mobile number @mobile. Message: @message', [
-        '@mobile' => $mobile,
-        '@message' => $e->getMessage(),
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
-    }
+
+    $response_data = $this->auraOtpHelper->sendOtp($mobile);
+
+    return new JsonResponse($response_data);
   }
 
   /**
