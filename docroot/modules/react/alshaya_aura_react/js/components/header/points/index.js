@@ -7,7 +7,7 @@ const Points = (props) => {
   const tierLabel = getUserAuraTierLabel();
   const tierLevel = getUserAuraTier();
 
-  const tierClass = tierLevel ? tierLevel : 'no-tier';
+  const tierClass = tierLevel || 'no-tier';
 
   return (
     <span className={`points ${tierLabel} badge-${tierClass}`}>
