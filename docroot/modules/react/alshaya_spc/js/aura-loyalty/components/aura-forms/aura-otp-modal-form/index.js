@@ -54,7 +54,7 @@ class AuraFormSignUpOTPModal extends React.Component {
     let isValid = true;
 
     if (action === 'send_otp') {
-      const { chosenCountryCode } = this.state;
+      const { chosenCountryCode } = this.props;
       const validationRequest = validateInfo({ mobile: data.userMobile, chosenCountryCode });
       showFullScreenLoader();
       return validationRequest.then((result) => {
@@ -97,8 +97,9 @@ class AuraFormSignUpOTPModal extends React.Component {
       validationRequest.then((valid) => {
         if (valid === true) {
           // API call to send otp.
+          const { chosenCountryCode } = this.props;
           const apiUrl = 'post/loyalty-club/send-otp';
-          const apiData = postAPIData(apiUrl, { mobile: userMobile });
+          const apiData = postAPIData(apiUrl, { mobile: userMobile, chosenCountryCode });
           showFullScreenLoader();
 
           if (apiData instanceof Promise) {
@@ -111,6 +112,11 @@ class AuraFormSignUpOTPModal extends React.Component {
                     otpRequested: true,
                   });
                 }
+              } else if (result.data.error_code === 'already_registered') {
+                this.setState({
+                  messageType: 'error',
+                  messageContent: getStringMessage('form_error_mobile_already_registered'),
+                });
               } else {
                 this.setState({
                   messageType: 'error',
