@@ -34,13 +34,14 @@ class SignUpHeader extends React.Component {
     const {
       isHeaderModalOpen,
       handleSignUp,
+      isNotExpandable,
     } = this.props;
 
     const { headerLearnMoreLink } = getAuraConfig();
 
     return (
       <>
-        { isHeaderModalOpen
+        { isHeaderModalOpen && !isNotExpandable
           && (
           <div className="aura-header-popup-wrapper">
             <div className="aura-popup-header">
