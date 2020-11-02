@@ -2,9 +2,9 @@
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
-use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
+use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -34,25 +34,11 @@ class CategorySyncResource extends ResourceBase {
   const CATEGORY_TAXONOMY = 'acq_product_category';
 
   /**
-   * Drupal Entity Type Manager Instance.
+   * Category sync helper.
    *
-   * @var EntityTypeManagerInterface
+   * @var \Drupal\acq_sku\ConductorCategorySyncHelper
    */
-  private $entityManager;
-
-  /**
-   * Drupal Config Factory Instance.
-   *
-   * @var ConfigFactoryInterface
-   */
-  private $configFactory;
-
-  /**
-   * Drupal Entity Query Factory.
-   *
-   * @var QueryFactory
-   */
-  private $queryFactory;
+  protected $categorySyncHelper;
 
   /**
    * Construct.
@@ -67,12 +53,12 @@ class CategorySyncResource extends ResourceBase {
    *   The available serialization formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param \Drupal\acq_sku\CategoryManagerInterface $category_manager
-   *   A CategoryManager instance.
+   * @param \Drupal\acq_sku\ConductorCategorySyncHelper $category_sync_helper
+   *   Category sync helper.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, CategoryManagerInterface $category_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, ConductorCategorySyncHelper $category_sync_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->categoryManager = $category_manager;
+    $this->categorySyncHelper = $category_sync_helper;
   }
 
   /**
@@ -85,7 +71,7 @@ class CategorySyncResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get(self::class),
-      $container->get('acq_sku.category_manager')
+      $container->get('acq_sku.conductor_cat_sync_helper')
     );
   }
 
@@ -101,14 +87,8 @@ class CategorySyncResource extends ResourceBase {
    *   HTTP Response.
    */
   public function post(array $categories) {
-
-    $response = $this->categoryManager->synchronizeCategory(
-      self::CATEGORY_TAXONOMY,
-      $categories
-    );
-
-    $response['success'] = (bool) ((count($response['created']) > 0) || (count($response['updated']) > 0));
-
+    $this->categorySyncHelper->createItem($categories['category_id']);
+    $response['success'] = TRUE;
     return (new ModifiedResourceResponse($response));
   }
 

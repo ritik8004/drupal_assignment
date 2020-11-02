@@ -305,6 +305,22 @@ variables:
       - 'Home > Basket'
 ```
 
+### Adding a new brand to the suite
+
+Please follow the below instructions to add a new brand into the site.
+1. Inside `variables\brands` directory add brand using naming convention i.e brandname say `aeo`.
+2. Add following directories inside the new brand i.e `env`, `languages`, `markets` and the yaml file i.e `brandname.yml` say `aeo.yml`.
+3. Next, under the brand directory add different environments avialble for the new brand example `dev2, pprod, uat, qa, prod` etc.
+4. Under each environment directory add a folder `markets`. In those add each region available for that brand example `ae`, `sa`, `kw` etc
+5. Under each region you can have two yaml files i.e `en.yml` and `ar.yml` inside the directory `languages` for the langauges
+available and a yaml file i.e say `ae.yml` containing the variables and its values for that brand needed to run the tests.
+6. Inside `bootstrap` directory under the `Drupal` directory add the new brand directory example `aeo`.
+7. Now, add a subcontext file using naming convenstion `brandnameContext.behat.inc` example `aeoContext.behat.inc` or
+make a copy of `bpContext.behat.inc` using naming convenstion `brandnameContext.behat.inc` example `aeoContext.behat.inc`.
+8. Add custom steps for the brand inside this subContext file.
+9. Lastly, add the tags for prod and pprod site based on the tests that you would like to run on production site or preproduction site
+using naming convention i.e `brandnameRegionEnvironment` example `aeoaeprod` in the .feature files that can be found under path `templates\features\common\prod`
+
 ### Inside `/templates/features`
 
 Features folder contains only `*.feature` files and as the name suggests, These
@@ -355,3 +371,54 @@ Here's the directory structure:
     └── ...
 
 ```
+## Running test suite from Local environment to any environment
+
+Please follow the below steps for Running tests on local
+Note: Make sure your chrome browser is at the latest version
+1. `cd tests/behat`
+2. `git pull upstream develop`
+3. `composer install` or `composer update`
+4. `cd bin; npm install`
+5. `cd ..`
+6. In common.yml file add the following variables with the account details you want to run the tests with: (can be use one username/password for all)
+    1. spc_auth_user_email
+    2. spc_auth_user_password
+    3. spc_new_registered_user_email
+    4. spc_new_registered_user_password
+    5. spc_returning_user_email
+    6. spc_returning_user_password
+    7. spc_mada_anon_username
+    8. spc_full_name
+    9. anon_email
+    10. anon_username
+For example :-  anon_username: 'Sample User Name'
+7. Run the following command:
+`./behat-build.sh --rebuild=TRUE`
+8. (In a separate terminal window) run the command-
+`java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar`
+9. Run the scripts using these commands for example for UAT environment:
+    1. For H&M -
+        1. `bin/behat --profile=hm-kw-uat-en-desktop`
+        2. `bin/behat --profile=hm-ae-uat-en-desktop`
+        3. `bin/behat --profile=hm-sa-uat-en-desktop`
+    2. FL
+        1. `bin/behat --profile=fl-kw-uat-en-desktop`
+        2. `bin/behat --profile=fl-sa-uat-en-desktop`
+        3. `bin/behat --profile=fl-ae-uat-en-desktop`
+    Similarly for Prod sites we can use these commands:
+    3. VS
+        1. `bin/behat --profile=vs-ae-prod-en-desktop`
+        2. `bin/behat --profile=vs-sa-prod-en-desktop`
+    4. MC
+        1. `bin/behat --profile=mc-kw-prod-en-desktop`
+        2. `bin/behat --profile=mc-sa-prod-en-desktop`
+        3. `bin/behat --profile=mc-ae-prod-en-desktop`
+    Similarly for pprod sites we can use these commands:
+    5. BBW
+        1. `bin/behat --profile=bbw-kw-pprod-en-desktop`
+        2. `bin/behat --profile=bbw-sa-pprod-en-desktop`
+        3. `bin/behat --profile=bbw-ae-pprod-en-desktop`
+    6. PB
+        1. `bin/behat --profile=pb-kw-pprod-en-desktop`
+        2. `bin/behat --profile=pb-ae-pprod-en-desktop`
+        3. `bin/behat --profile=pb-sa-pprod-en-desktop`

@@ -34,7 +34,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
@@ -91,7 +91,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
@@ -146,7 +146,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
@@ -198,7 +198,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
@@ -255,7 +255,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
@@ -310,7 +310,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |

@@ -53,8 +53,6 @@ variables:
   landmark: ''
   postal_code: ''
   mobile: '555233224'
-  anon_email: 'sampleUserName@mailinator.com'
-  anon_username: 'Sample User Name'
   language_order_confirm_text: 'تأكيد الطلبية'
   language_order_detail: 'Order Detail'
   language_delivery_type: 'Home delivery'

@@ -5,9 +5,10 @@ import {
   getCurrentRefinementValue,
   getIndexId,
   getResults,
-  refineValue
+  refineValue,
 } from '../../../utils/indexUtils';
-const _ = require("lodash");
+
+const _ = require('lodash');
 
 const namespace = 'multiRange';
 
@@ -22,12 +23,12 @@ function getCurrentRefinement(props, searchState, context) {
     context,
     `${namespace}.${getId(props)}`,
     [],
-    currentRefinement => {
+    (currentRefinement) => {
       if (currentRefinement === '') {
         return '';
       }
       return currentRefinement;
-    }
+    },
   );
 }
 
@@ -52,24 +53,22 @@ function refine(props, searchState, nextRefinement, context) {
 // Ex: For a granularity of 5 and value of 9, range = 5-10.
 function getRange(currentvalue, granularity) {
   // Initial values.
-  var startvalue = 0;
-  var stopvalue = granularity;
+  let startvalue = 0;
+  let stopvalue = granularity;
 
   if (currentvalue % granularity) {
     startvalue = currentvalue - (currentvalue % granularity);
-  }
-  else if (currentvalue > 0 ) {
+  } else if (currentvalue > 0) {
     startvalue = currentvalue - (granularity - (currentvalue % granularity));
-  }
-  else {
-    startvalue = currentvalue
+  } else {
+    startvalue = currentvalue;
   }
 
   stopvalue = startvalue + granularity;
 
   return {
-    'start': parseFloat(startvalue),
-    'end': parseFloat(stopvalue),
+    start: parseFloat(startvalue),
+    end: parseFloat(stopvalue),
   };
 }
 
@@ -92,13 +91,13 @@ function stringifyItem(item) {
   if (typeof item.start === 'undefined' && typeof item.end === 'undefined') {
     return '';
   }
-  return (item.start ? item.start : '') + ':' + (item.end ? item.end : '');
+  return `${item.start ? item.start : ''}:${item.end ? item.end : ''}`;
 }
 
 function getLimit(_ref) {
-  var showMore = _ref.showMore,
-      limit = _ref.limit,
-      showMoreLimit = _ref.showMoreLimit;
+  const { showMore } = _ref;
+  const { limit } = _ref;
+  const { showMoreLimit } = _ref;
   return showMore ? showMoreLimit : limit;
 }
 
@@ -117,7 +116,7 @@ export default createConnector({
     attribute: PropTypes.string.isRequired,
     operator: PropTypes.oneOf(['and', 'or']),
     defaultRefinement: PropTypes.arrayOf(
-      PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     ),
     granularity: PropTypes.number,
   },
@@ -126,45 +125,43 @@ export default createConnector({
     operator: 'or',
   },
 
-  getProvidedProps(props, searchState, searchResults, metadata, searchForFacetValuesResults) {
+  getProvidedProps(props, searchState, searchResults) {
     const { attribute, granularity } = props;
     const results = getResults(searchResults, this.context);
 
     const currentRefinement = getCurrentRefinement(
       props,
       searchState,
-      this.context
+      this.context,
     );
 
-    const canRefine =
-      Boolean(results) && Boolean(results.getFacetByName(attribute));
+    const canRefine = Boolean(results) && Boolean(results.getFacetByName(attribute));
 
     if (!canRefine) {
       return {
         items: [],
-        currentRefinement: currentRefinement,
-        canRefine
+        currentRefinement,
+        canRefine,
       };
     }
 
-    var newItems = [];
-    results.getFacetValues(attribute, { sortBy }).forEach(v => {
-      const range = getRange(parseFloat(v.name), parseInt(granularity));
+    const newItems = [];
+    results.getFacetValues(attribute, { sortBy }).forEach((v) => {
+      const range = getRange(parseFloat(v.name), parseInt(granularity, 10));
       const rangeKey = stringifyItem(range);
-      const key = _.findKey(newItems, {label: rangeKey});
+      const key = _.findKey(newItems, { label: rangeKey });
 
       if (typeof key === 'undefined') {
-        var object = {
+        const object = {
           label: rangeKey,
           value: getValue(rangeKey, props, searchState, this.context),
-          sort: range.start == null ? 0 : parseInt(range.start),
-          count: parseInt(v.count),
-          isRefined: rangeKey === currentRefinement
+          sort: range.start == null ? 0 : parseInt(range.start, 10),
+          count: parseInt(v.count, 10),
+          isRefined: rangeKey === currentRefinement,
         };
         newItems.push(object);
-      }
-      else {
-        newItems[key].count = newItems[key].count + parseInt(v.count);
+      } else {
+        newItems[key].count += parseInt(v.count, 10);
       }
     });
 
@@ -185,33 +182,33 @@ export default createConnector({
     return {
       facetName: props.attribute,
       query: nextRefinement,
-      maxFacetHits: getLimit(props)
+      maxFacetHits: getLimit(props),
     };
   },
 
   getSearchParameters(searchParameters, props, searchState) {
     const { attribute } = props;
     const { start, end } = parseItem(
-      getCurrentRefinement(props, searchState, this.context)
+      getCurrentRefinement(props, searchState, this.context),
     );
-    searchParameters = searchParameters.addDisjunctiveFacet(attribute);
+    let finalSearchParameters = searchParameters.addDisjunctiveFacet(attribute);
 
     if (start) {
-      searchParameters = searchParameters.addNumericRefinement(
+      finalSearchParameters = finalSearchParameters.addNumericRefinement(
         attribute,
         '>',
-        start
+        start,
       );
     }
     if (end) {
-      searchParameters = searchParameters.addNumericRefinement(
+      finalSearchParameters = finalSearchParameters.addNumericRefinement(
         attribute,
         '<=',
-        end
+        end,
       );
     }
 
-    return searchParameters;
+    return finalSearchParameters;
   },
 
   cleanUp(props, searchState) {
@@ -229,7 +226,7 @@ export default createConnector({
         label: `${props.attribute}: ${value}`,
         attribute: props.attribute,
         currentRefinement: value,
-        value: nextState => refine(props, nextState, '', this.context),
+        value: (nextState) => refine(props, nextState, '', this.context),
       });
     }
     return { id, index, items };

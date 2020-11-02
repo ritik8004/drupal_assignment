@@ -7,7 +7,7 @@ use App\Service\Magento\MagentoInfo;
 use Drupal\alshaya_acm_customer\HelperTrait\Orders as OrdersHelper;
 
 /**
- * Class Orders.
+ * Provides details about orders made in the site.
  */
 class Orders {
 
@@ -75,7 +75,10 @@ class Orders {
     $query = $this->getOrdersQuery('customer_id', $customer_id);
     $query['searchCriteria']['pageSize'] = 1;
 
-    $requestOptions = ['query' => $query];
+    $requestOptions = [
+      'query' => $query,
+      'timeout' => $this->magentoInfo->getPhpTimeout('order_search'),
+    ];
     $result = $this->magentoApiWrapper->doRequest('GET', 'orders', $requestOptions);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {

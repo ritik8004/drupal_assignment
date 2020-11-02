@@ -13,7 +13,6 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\views\Views;
 use Drupal\user\Entity\Role;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
@@ -782,37 +781,6 @@ function _alshaya_master_get_recursive_child_terms($tid) {
   }
 
   return $terms;
-}
-
-/**
- * Get the results from the views by name and display id.
- *
- * @param string $view_id
- *   View name.
- * @param string $display_id
- *   View display id.
- * @param array $args
- *   Arguments to pass to views.
- * @param int $page
- *   Page number.
- *
- * @return array|\Drupal\views\ResultRow[]
- *   Array of result.
- */
-function _alshaya_master_get_views_result($view_id, $display_id, array $args = [], $page = 0) {
-  $view = Views::getView($view_id);
-  if ($view) {
-    $view->setDisplay($display_id);
-    $view->setArguments($args);
-    $view->preExecute();
-    $view->setCurrentPage($page);
-
-    if ($view->execute()) {
-      return $view->result;
-    }
-  }
-
-  return [];
 }
 
 /**

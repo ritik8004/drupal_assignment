@@ -60,8 +60,6 @@ variables:
   landmark: ''
   postal_code: ''
   mobile: '555555555'
-  anon_email: 'exampleuser@mailinator.com'
-  anon_username: 'Sample User Name'
   store_area: 'Jeddah'
   language_city_option: 'ابو عريش'
   language_area_option: 'العدل'

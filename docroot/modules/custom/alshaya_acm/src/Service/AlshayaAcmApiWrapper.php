@@ -289,7 +289,12 @@ class AlshayaAcmApiWrapper extends APIWrapper {
    */
   public function skuStockCheck($sku) {
     $endpoint = 'stockItems/' . urlencode($sku);
-    $response = $this->alshayaApi->invokeApi($endpoint, [], 'GET');
+
+    $request_options = [
+      'timeout' => $this->alshayaApi->getMagentoApiHelper()->getPhpTimeout('stock_get'),
+    ];
+
+    $response = $this->alshayaApi->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
 
     if (empty($response)) {
       return NULL;

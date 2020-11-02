@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { searchResultDiv } from '../../utils';
 import SearchResultsComponent from './SearchResultsComponent';
 
 /**
@@ -18,23 +17,28 @@ export default class SearchResults extends React.Component {
   componentDidMount() {
     // Append the element into the DOM on mount. We'll render
     // into the modal container element (see the HTML tab).
+    const searchResultDiv = document.getElementById('alshaya-algolia-search');
     searchResultDiv.appendChild(this.el);
   }
 
   // Remove the element from the DOM when we unmount.
   componentWillUnmount() {
+    const searchResultDiv = document.getElementById('alshaya-algolia-search');
     searchResultDiv.removeChild(this.el);
   }
 
   render() {
+    const {
+      query,
+    } = this.props;
     return ReactDOM.createPortal(
-      <React.Fragment>
+      <>
         <div className="block block-core block-page-title-block">
           <h1 className="c-page-title">{Drupal.t('Search results')}</h1>
         </div>
-        <SearchResultsComponent query={this.props.query}/>
-      </React.Fragment>,
-      this.el
+        <SearchResultsComponent query={query} />
+      </>,
+      this.el,
     );
   }
 }
