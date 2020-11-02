@@ -9,7 +9,6 @@
   var replaceState;
 
   $.fn.updateWindowLocation = function (data) {
-    data = Drupal.removeURLParameter(data, 'facet_filter_url');
     replaceState = data;
   };
 

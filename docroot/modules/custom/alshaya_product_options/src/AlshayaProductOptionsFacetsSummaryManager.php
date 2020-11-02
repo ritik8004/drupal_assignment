@@ -76,13 +76,13 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
    * {@inheritdoc}
    */
   public function build(FacetsSummaryInterface $facets_summary) {
-    static $build = NULL;
-    if (!empty($build)) {
-      return $build;
-    }
-
     // Let the facet_manager build the facets.
     $facetsource_id = $facets_summary->getFacetSourceId();
+
+    static $static = NULL;
+    if (isset($static[$facetsource_id])) {
+      return $static[$facetsource_id];
+    }
 
     /** @var \Drupal\facets\Entity\Facet[] $facets */
     $facets = $this->facetManager->getFacetsByFacetSourceId($facetsource_id);
@@ -131,6 +131,7 @@ class AlshayaProductOptionsFacetsSummaryManager extends DefaultFacetsSummaryMana
       $build = $processor->build($facets_summary, $build, $facets);
     }
 
+    $static[$facetsource_id] = $build;
     return $build;
   }
 

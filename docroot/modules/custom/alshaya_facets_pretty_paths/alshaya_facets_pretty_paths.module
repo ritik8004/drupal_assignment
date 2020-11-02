@@ -254,21 +254,54 @@ function alshaya_facets_pretty_paths_language_get_translations() {
  * Implements hook_editor_js_settings_alter().
  */
 function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
-  if (isset($settings['views']['ajaxViews']['views_dom_id:alshaya_product_list_block_1'])) {
-    // This is to replace URL Alias with the actual path.
-    $path = $settings['views']['ajaxViews']['views_dom_id:alshaya_product_list_block_1']['view_path'];
-    $facets_path = explode('/--', $path);
-    $facets = '';
-    if (isset($facets_path[1])) {
-      $facets = '/--' . $facets_path[1];
+  // Replace all aliases with internal paths to ensure we do not face
+  // 404 or 500 when aliases are modified but page is still served from cache
+  // or users haven't reloaded page for older aliases.
+  foreach ($settings['views']['ajaxViews'] ?? [] as $dom_id => $ajax_view) {
+    $view_path = $ajax_view['view_path'];
+
+    $current_request = FALSE;
+    if ($view_path === \Drupal::request()->getRequestUri()) {
+      $current_request = TRUE;
     }
-    $path = explode('/', $facets_path[0]);
-    $language = $path[1];
-    unset($path[1]);
-    $path = implode('/', $path);
-    $path = \Drupal::service('path.alias_manager')->getPathByAlias(rtrim($path, '/'));
-    $path = "/$language" . $path . $facets;
-    $settings['views']['ajaxViews']['views_dom_id:alshaya_product_list_block_1']['view_path'] = $path;
-    $settings['alshaya_taxonomy_term_path'] = $path;
+
+    $view_path = trim($view_path, '/');
+
+    // Remove facets if any before getting internal path.
+    $facets_path = '';
+    if (strpos($view_path, '/--') !== FALSE) {
+      $view_path_parts = explode('/--', $view_path);
+      $view_path = $view_path_parts[0];
+      $facets_path = '--' . $view_path_parts[1];
+    }
+
+    // Remove language before getting internal path.
+    $view_path_parts = explode('/', $view_path);
+    $language = array_shift($view_path_parts);
+    $view_path = implode('/', $view_path_parts);
+
+    $internal_path = \Drupal::service('path.alias_manager')->getPathByAlias('/' . $view_path);
+
+    $path_parts = [
+      $language,
+      trim($internal_path, '/'),
+    ];
+
+    $ajax_view['view_raw_path'] = [
+      'alias' => $view_path,
+      'internal' => trim($internal_path, '/'),
+    ];
+
+    if ($facets_path) {
+      $path_parts[] = $facets_path;
+    }
+
+    $ajax_view['view_path'] = '/' . implode('/', $path_parts) . '/';
+
+    $settings['views']['ajaxViews'][$dom_id] = $ajax_view;
+
+    if ($current_request) {
+      $settings['currentRequestInternalPath'] = $ajax_view['view_path'];
+    }
   }
 }
