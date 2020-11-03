@@ -13,6 +13,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Site\Settings;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
@@ -1051,6 +1052,21 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
 
     $request = \Drupal::request();
     $show_on_load = intval($request->query->get('show_on_load'));
+
+    if ($show_on_load > 0) {
+      if (strpos($request->getRequestUri(), 'views/ajax') !== FALSE) {
+        $request->query->set('show_on_load', NULL);
+        return;
+      }
+
+      // Allow loading max 20 pages, we have 12 per page by default so default
+      // value here would be 240.
+      // Impact: UX + back to PLP till we move to Algolia for listing pages.
+      if ($show_on_load > Settings::get('show_on_load_max', $per_page * 20)) {
+        $request->query->set('show_on_load', NULL);
+        return;
+      }
+    }
 
     // If show on load for some reason is less then items we show by default
     // per page, we ignore the parameter.
