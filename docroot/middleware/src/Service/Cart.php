@@ -1866,7 +1866,7 @@ class Cart {
    */
   public function isCartTotalValid(array $cart) {
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
-    $expiration_time = $checkout_settings['totals_revalidation_ttl'] * 60;
+    $expiration_time = $checkout_settings['totals_revalidation_ttl'];
 
     // Check if last update of our cart is more recent than X minutes.
     $cart_last_updated = isset($cart['cart']['updated_at']) ? $cart['cart']['updated_at'] : $cart['cart']['created_at'];
@@ -1879,7 +1879,7 @@ class Cart {
     }
 
     $cart_expire_time = strtotime($cart_last_updated) + $expiration_time;
-    $current_time = strtotime(date('Y-m-d H:i:s'));
+    $current_time = time();
     if ($cart_expire_time >= $current_time) {
       // Not expired. We assume totals are valid.
       return TRUE;
