@@ -29,7 +29,7 @@
           </elementProp>
           <elementProp name="PDP_URI" elementType="Argument">
             <stringProp name="Argument.name">PDP_URI</stringProp>
-            <stringProp name="Argument.value">en/buy-endless-weekend-car-fragrance-refill.html</stringProp>
+            <stringProp name="Argument.value">en/buy-beautiful-day-shower-gel.html</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="COUNTRY" elementType="Argument">
@@ -1055,7 +1055,7 @@
             <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="d1_order" enabled="true">
               <stringProp name="RegexExtractor.useHeaders">false</stringProp>
               <stringProp name="RegexExtractor.refname">d1_order</stringProp>
-              <stringProp name="RegexExtractor.regex">confirmation\?id=([^&quot;]+)&quot;}</stringProp>
+              <stringProp name="RegexExtractor.regex">confirmation\?id=([^&quot;]+)&quot;</stringProp>
               <stringProp name="RegexExtractor.template"></stringProp>
               <stringProp name="RegexExtractor.default">null</stringProp>
               <stringProp name="RegexExtractor.match_number">1</stringProp>
