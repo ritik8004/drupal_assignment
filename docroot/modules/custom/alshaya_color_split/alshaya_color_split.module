@@ -444,7 +444,7 @@ function alshaya_color_split_alshaya_spc_order_sku_details_alter(array &$data, S
  * Implements hook_alshaya_acm_customer_order_details_alter().
  */
 function alshaya_color_split_alshaya_acm_customer_order_details_alter(array &$order) {
-  if (!isset($order['items']) && empty($order['items'])) {
+  if (!isset($order['items']) || empty($order['items'])) {
     return;
   }
 
