@@ -18,6 +18,7 @@ const HeaderGuest = (props) => {
     isHeaderModalOpen,
     openHeaderModal,
     isNotExpandable,
+    clickedNotYou,
   } = props;
 
   if (isMobileTab === true) {
@@ -40,7 +41,7 @@ const HeaderGuest = (props) => {
           handleNotYou={() => handleNotYou(cardNumber)}
           isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
           cardNumber={cardNumber}
-          noRegisterLinks
+          noRegisterLinks={!isDesktop}
         />
       </>
     );
@@ -58,7 +59,7 @@ const HeaderGuest = (props) => {
         handleSignUp={handleSignUp}
         isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
         openHeaderModal={openHeaderModal}
-        isNotExpandable={isNotExpandable}
+        isNotExpandable={clickedNotYou === true ? false : isNotExpandable}
       />
     </>
   );

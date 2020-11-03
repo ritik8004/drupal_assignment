@@ -122,7 +122,7 @@ function handleNotYou(cardNumber) {
     updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
   } else {
     removeStorageInfo(getAuraLocalStorageKey());
-    dispatchCustomEvent('loyaltyStatusUpdatedFromHeader', { stateValues: { loyaltyStatus: auraStatus, signUpComplete: false } });
+    dispatchCustomEvent('loyaltyStatusUpdatedFromHeader', { stateValues: { loyaltyStatus: auraStatus, signUpComplete: false }, clickedNotYou: true });
   }
 }
 

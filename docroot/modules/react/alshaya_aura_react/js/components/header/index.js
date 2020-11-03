@@ -74,9 +74,15 @@ class Header extends React.Component {
 
   // Event listener callback to update header states.
   updateStates = (data) => {
-    const { stateValues } = data.detail;
+    const { stateValues, clickedNotYou } = data.detail;
+    const states = { ...stateValues };
+
+    if (clickedNotYou === true) {
+      states.clickedNotYou = clickedNotYou;
+    }
+
     this.setState({
-      ...stateValues,
+      ...states,
     });
   }
 
@@ -108,6 +114,7 @@ class Header extends React.Component {
       cardNumber,
       points,
       loyaltyStatus,
+      clickedNotYou,
     } = this.state;
 
     const {
@@ -155,6 +162,7 @@ class Header extends React.Component {
         openHeaderModal={this.openHeaderModal}
         isNotExpandable={isNotExpandable}
         signUpComplete={signUpComplete}
+        clickedNotYou={clickedNotYou}
       />
     );
   }
