@@ -18,15 +18,12 @@
           line-height: normal;
           color: $magv2-pdp-title;
           padding: 0 0 0.625rem;
-          max-width: 16.5rem;
-
-          @include breakpoint($only-mobile) {
-            font-size: 1rem;
-            max-width: 15.25rem;
-          }
         }
 
         &-brand-logo {
+          flex-shrink: 0;
+          margin-#{$left}: 2.5rem;
+
           img {
             max-height: 2.938rem;
             width: auto;
@@ -34,13 +31,10 @@
         }
 
         &-price-wrapper {
-          font-size: 1.125rem;
+          font-size: 1.375rem;
           line-height: normal;
           color: $magv2-price;
-
-          @include breakpoint($only-mobile) {
-            font-size: 1rem;
-          }
+          font-family: $alshaya-bold;
         }
 
         &-price-amount,
@@ -50,7 +44,7 @@
         }
 
         &-price-container {
-          margin-bottom: 1.25rem;
+          margin-bottom: 0.9375rem;
 
           &.has-special-price {
             .magv2-pdp {
@@ -62,10 +56,6 @@
                 margin-bottom: 0.1875rem;
                 display: flex;
                 align-items: center;
-
-                @include breakpoint($only-mobile) {
-                  font-size: 1.125rem;
-                }
 
                 .magv2-pdp-discount-percentage {
                   border-radius: 0.125rem;
@@ -84,6 +74,8 @@
                 display: inline-block;
                 padding-#{$right}: 0.3125rem;
                 text-decoration: line-through;
+                font-size: 1.125rem;
+                font-family: $alshaya-thin;
               }
 
               &-vat-text {
@@ -104,13 +96,9 @@
             align-items: center;
 
             .magv2-pdp-vat-text {
-              font-size: 0.75rem;
+              font-size: 0.875rem;
               color: $magv2-vat-text;
               padding-#{$left}: 0.3125rem;
-
-              @include breakpoint($tablet) {
-                font-size: 0.875rem;
-              }
             }
           }
         }
