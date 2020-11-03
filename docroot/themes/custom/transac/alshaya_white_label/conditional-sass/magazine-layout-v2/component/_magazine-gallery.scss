@@ -61,6 +61,7 @@
           margin-left: auto;
           margin-right: auto;
           float: none;
+          width: calc(50% - 0.625rem);
         }
 
         img {
@@ -79,6 +80,7 @@
         &:last-child:nth-child(odd) {
           margin: 0 auto;
           grid-column: 1/-1;
+          width: calc(50% - 0.625rem);
         }
       }
 
