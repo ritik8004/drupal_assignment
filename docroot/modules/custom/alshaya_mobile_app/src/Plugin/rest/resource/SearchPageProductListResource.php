@@ -158,7 +158,7 @@ class SearchPageProductListResource extends ResourceBase {
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($search_keyword);
     $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-    $response_data['sorts'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID);
+    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID);
 
     // Filter the empty products.
     $response_data['products'] = array_filter($response_data['products']);
