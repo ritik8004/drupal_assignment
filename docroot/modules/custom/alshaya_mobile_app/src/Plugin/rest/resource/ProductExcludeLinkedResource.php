@@ -215,14 +215,17 @@ class ProductExcludeLinkedResource extends ResourceBase {
       throw (new NotFoundHttpException());
     }
 
-    $node = $this->skuManager->getDisplayNode($sku);
-    if (!($node instanceof NodeInterface)) {
-      throw (new NotFoundHttpException());
-    }
+    $link = '';
+    if (!$this->skuManager->isSkuFreeGift($skuEntity)) {
+      $node = $this->skuManager->getDisplayNode($sku);
+      if (!($node instanceof NodeInterface)) {
+        throw (new NotFoundHttpException());
+      }
 
-    $link = $node->toUrl('canonical', ['absolute' => TRUE])
-      ->toString(TRUE)
-      ->getGeneratedUrl();
+      $link = $node->toUrl('canonical', ['absolute' => TRUE])
+        ->toString(TRUE)
+        ->getGeneratedUrl();
+    }
 
     $data = $this->getSkuData($skuEntity, $link);
     $data['delivery_options'] = NestedArray::mergeDeepArray([
@@ -233,7 +236,11 @@ class ProductExcludeLinkedResource extends ResourceBase {
       alshaya_acm_product_get_flags_config(),
       $data['flags'],
     ], TRUE);
-    $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+
+    if (!$this->skuManager->isSkuFreeGift($skuEntity)) {
+      $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+    }
+
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
 
     // Allow other modules to alter product data.
@@ -361,9 +368,11 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $data['cart_combinations'] = $data['cart_combinations'] ?: new \stdClass();
     }
 
-    // Allow other modules to alter light product data.
-    $type = 'full';
-    $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
+    if (!$this->skuManager->isSkuFreeGift($sku)) {
+      // Allow other modules to alter light product data.
+      $type = 'full';
+      $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
+    }
 
     return $data;
   }

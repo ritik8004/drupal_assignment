@@ -52,8 +52,6 @@ variables:
   landmark: ''
   postal_code: ''
   mobile: '55667788'
-  anon_email: 'sampleusername@yopmail.com'
-  anon_username: 'Sample User Name'
   store_area: 'Salmiya'
   language_order_confirm_text: 'تأكيد الطلبية'
   language_order_detail: 'order detail'

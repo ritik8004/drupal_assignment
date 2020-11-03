@@ -71,8 +71,16 @@ function alshaya_product_alshaya_master_post_drupal_install() {
   // Flush all caches.
   drupal_flush_all_caches();
 
-  $index = Index::load('product');
-  $index->save();
+  try {
+    $index = Index::load('product');
+    $index->save();
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('alshaya_product')->warning('Failed to re-save product index : @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+
 }
 
 /**
@@ -86,7 +94,7 @@ function alshaya_product_alshaya_i18n_onetime_translation_add() {
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
 جديدنا تنازلي|جديدنا
 الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ 
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من الأعلى إلى الأدنى
 السعر تصاعدي|السعر من الأدنى إلى الأعلى');
   $product_list_view->set('display.default.display_options.exposed_form.options.sort_asc_label', 'تصاعدي');

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class PaymentController.
+ * PaymentController Class for UPAPI callbacks.
  */
 class PaymentController {
 
@@ -194,10 +194,29 @@ class PaymentController {
     $response = new RedirectResponse('/' . $langcode . '/checkout', 302);
 
     $payment_data = [
-      'status' => self::PAYMENT_FAILED_VALUE,
-      'payment_method' => $payment_method,
       'status' => self::PAYMENT_DECLINED_VALUE,
+      'payment_method' => $payment_method,
+      'message' => $request->query->get('message'),
     ];
+
+    switch ($request->query->get('type')) {
+      case 'knet':
+        $payment_data['data'] = [
+          'transaction_id' => $request->query->get('knet_transaction_id') ?? '',
+          'payment_id' => $request->query->get('knet_payment_id') ?? '',
+          'result_code' => $request->query->get('knet_result') ?? '',
+        ];
+        break;
+
+      case 'qpay';
+        $payment_data['data'] = [
+          'transaction_id' => $request->query->get('confirmation_id') ?? '',
+          'payment_id' => $request->query->get('pun') ?? '',
+          'result_code' => $request->query->get('status_message') ?? $request->query->get('status') ?? '',
+        ];
+        break;
+
+    }
 
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
 

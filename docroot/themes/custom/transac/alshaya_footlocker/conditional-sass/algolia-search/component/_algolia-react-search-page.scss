@@ -1,4 +1,6 @@
-#alshaya-algolia-search {
+#alshaya-algolia-search,
+#block-alshayaalgoliareactpromotion,
+#block-alshaya-algolia-react-plp {
   .c-page-title {
     font-family: $fl-thin;
     font-size: 1.5rem;
@@ -107,35 +109,33 @@
     }
   }
 
-  .c-content__region {
-    .sticky-filter-wrapper {
-      .c-collapse-item {
-        .c-collapse__title {
-          text-transform: uppercase;
-          font-size: 0.875rem;
-          line-height: 2.9375rem;
-          padding-#{$right}: 2.6875rem;
-          color: $algolia_react-facet-item-color;
-        }
+  .sticky-filter-wrapper {
+    .c-collapse-item {
+      .c-collapse__title {
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        line-height: 2.9375rem;
+        padding-#{$right}: 2.6875rem;
+        color: $algolia_react-facet-item-color;
       }
     }
+  }
 
-    .filter-fixed-top {
-      @include breakpoint($tablet) {
-        .sticky-filter-wrapper {
-          .c-collapse-item {
-            .c-collapse__title {
-              color: $lhn_sticky-filter-title;
-            }
-          }
-        }
-
-        .show-all-filters-algolia {
-          color: $lhn_sticky-filter-title;
-
-          &::before {
+  .filter-fixed-top {
+    @include breakpoint($tablet) {
+      .sticky-filter-wrapper {
+        .c-collapse-item {
+          .c-collapse__title {
             color: $lhn_sticky-filter-title;
           }
+        }
+      }
+
+      .show-all-filters-algolia {
+        color: $lhn_sticky-filter-title;
+
+        &::before {
+          color: $lhn_sticky-filter-title;
         }
       }
     }

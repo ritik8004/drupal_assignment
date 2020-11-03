@@ -16,12 +16,15 @@ import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
+import CheckoutComUpapiContextProvider from '../../../context/CheckoutComUpapi';
+import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
     super(props);
 
     this.paymentMethodCheckoutCom = React.createRef();
+    this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodCybersource = React.createRef();
   }
@@ -31,6 +34,10 @@ export default class PaymentMethod extends React.Component {
     // Do additional process for some payment methods.
     if (method.code === 'checkout_com') {
       return this.paymentMethodCheckoutCom.current.validateBeforePlaceOrder();
+    }
+
+    if (method.code === 'checkout_com_upapi') {
+      return this.paymentMethodCheckoutComUpapi.current.validateBeforePlaceOrder();
     }
 
     if (method.code === 'checkout_com_applepay') {
@@ -62,18 +69,32 @@ export default class PaymentMethod extends React.Component {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
-        Drupal.logJavascriptError('finalise payment', result.message, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
-
         if (result.error_code !== undefined) {
-          if (parseInt(result.error_code, 10) === 505) {
+          const errorCode = parseInt(result.error_code, 10);
+          if (errorCode === 505) {
+            Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+
             dispatchCustomEvent('spcCheckoutMessageUpdate', {
               type: 'error',
               message: getStringMessage('shipping_method_error'),
             });
-          } else if (parseInt(result.error_code, 10) === 404) {
+          } else if (errorCode === 500 && result.error_message !== undefined) {
+            Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.PAYMENT_ERRORS);
+
+            dispatchCustomEvent('spcCheckoutMessageUpdate', {
+              type: 'error',
+              message: result.error_message,
+            });
+          } else if (errorCode === 404) {
             // Cart no longer available, redirect user to basket.
             Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
             window.location = Drupal.url('cart');
+          } else {
+            const errorMessage = result.message === undefined
+              ? result.error_message
+              : result.message;
+
+            Drupal.logJavascriptError('finalise payment', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
           }
         }
       } else if (result.cart_id !== undefined && result.cart_id) {
@@ -166,6 +187,18 @@ export default class PaymentMethod extends React.Component {
                   finalisePayment={this.finalisePayment}
                 />
               </CheckoutComContextProvider>
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={(isSelected && method.code === 'checkout_com_upapi')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <CheckoutComUpapiContextProvider>
+                <PaymentMethodCheckoutComUpapi
+                  ref={this.paymentMethodCheckoutComUpapi}
+                  cart={cart}
+                  finalisePayment={this.finalisePayment}
+                />
+              </CheckoutComUpapiContextProvider>
             </div>
           </ConditionalView>
 

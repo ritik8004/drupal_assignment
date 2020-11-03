@@ -395,8 +395,14 @@ class CustomerController extends ControllerBase {
    */
   public function orderDownload(UserInterface $user, $order_id) {
     $endpoint = 'order-manager/invoice/' . $order_id;
+
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_get'),
+    ];
+
     // Request from magento to get invoice.
-    $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
+    $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+
     // If json_decode is not successful, means we have actual file response.
     // Otherwise we have error message which can be decoded by json.
     if (!json_decode($invoice_response)) {

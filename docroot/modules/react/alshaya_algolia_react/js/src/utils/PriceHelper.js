@@ -1,4 +1,15 @@
-export function getPriceRangeLabel(value) {
+const formatPrice = (price) => {
+  const priceParts = [
+    drupalSettings.reactTeaserView.price.currency.toUpperCase(),
+    price.toFixed(drupalSettings.reactTeaserView.price.decimalPoints),
+  ];
+
+  return drupalSettings.reactTeaserView.price.currencyPosition === 'before'
+    ? priceParts.join(' ')
+    : priceParts.reverse().join(' ');
+};
+
+const getPriceRangeLabel = (value) => {
   if (value === '') {
     return (null);
   }
@@ -7,19 +18,19 @@ export function getPriceRangeLabel(value) {
   const startPrice = (startStr !== '') ? parseFloat(startStr) : 0;
   const endPrice = parseFloat(endStr);
 
-  var label = (startStr === '')
-    ? Drupal.t('under @stop', {'@stop': formatPrice(endPrice)})
+  const label = (startStr === '')
+    ? Drupal.t('under @stop', { '@stop': formatPrice(endPrice) })
     : Drupal.t('@start - @stop', {
-        '@start': formatPrice(startPrice),
-        '@stop': formatPrice(endPrice)
-      });
+      '@start': formatPrice(startPrice),
+      '@stop': formatPrice(endPrice),
+    });
 
   return label;
-}
+};
 
-export function calculateDiscount(price, final_price) {
+const calculateDiscount = (price, finalPrice) => {
   const floatPrice = parseFloat(price);
-  const floatFinalPrice = parseFloat(final_price);
+  const floatFinalPrice = parseFloat(finalPrice);
 
   const discount = floatPrice - floatFinalPrice;
   if (floatPrice < 0.1 || floatFinalPrice < 0.1 || discount < 0.1) {
@@ -27,15 +38,10 @@ export function calculateDiscount(price, final_price) {
   }
 
   return parseFloat(Math.round((discount * 100) / floatPrice));
-}
+};
 
-export function formatPrice(price) {
-  const priceParts = [
-    drupalSettings.reactTeaserView.price.currency.toUpperCase(),
-    price.toFixed(drupalSettings.reactTeaserView.price.decimalPoints)
-  ];
-
-  return drupalSettings.reactTeaserView.price.currencyPosition === 'before'
-    ? priceParts.join(' ')
-    : priceParts.reverse().join(' ');
-}
+export {
+  formatPrice,
+  calculateDiscount,
+  getPriceRangeLabel,
+};

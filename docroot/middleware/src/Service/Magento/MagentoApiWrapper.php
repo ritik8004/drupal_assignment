@@ -8,7 +8,7 @@ use GuzzleHttp\Exception\ConnectException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class MagentoApiWrapper.
+ * Provides integration with Magento.
  */
 class MagentoApiWrapper {
 
@@ -89,7 +89,7 @@ class MagentoApiWrapper {
       ));
     };
 
-    $request_options['timeout'] = $request_options['timeout'] ?? 30;
+    $request_options['timeout'] = $request_options['timeout'] ?? $this->magentoInfo->getPhpTimeout('default');
     try {
       $response = $this->magentoInfo->getMagentoApiClient()->request(
         $method,
@@ -150,11 +150,30 @@ class MagentoApiWrapper {
   protected function getProcessedErrorMessage(array $response) {
     $message = $response['message'];
 
-    foreach ($response['parameters'] ?? [] as $name => $value) {
+    $parameters = $response['parameters'] ?? [];
+    if (empty($parameters)) {
+      return $message;
+    }
+
+    if (array_values($parameters) === $parameters) {
+      return vsprintf($message, $parameters);
+    }
+
+    foreach ($parameters as $name => $value) {
       $message = str_replace("%$name", $value, $message);
     }
 
     return $message;
+  }
+
+  /**
+   * Fetches and returns the Magento info service.
+   *
+   * @return \App\Service\Magento\MagentoInfo
+   *   The magentoInfo service object.
+   */
+  public function getMagentoInfo() {
+    return $this->magentoInfo;
   }
 
 }

@@ -124,8 +124,10 @@ const PdpLayout = () => {
       <div className={`magv2-header ${(isMobile ? 'fadeInUp' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
         <PdpHeader
           title={title}
-          finalPrice={finalPrice}
-          pdpProductPrice={priceRaw}
+          finalPrice={parseFloat(finalPrice)
+            .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+          pdpProductPrice={parseFloat(priceRaw)
+            .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
           brandLogo={brandLogo}
           brandLogoAlt={brandLogoAlt}
           brandLogoTitle={brandLogoTitle}
@@ -152,8 +154,10 @@ const PdpLayout = () => {
         <div className="magv2-sidebar">
           <PdpInfo
             title={title}
-            finalPrice={finalPrice}
-            pdpProductPrice={priceRaw}
+            finalPrice={parseFloat(finalPrice)
+              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+            pdpProductPrice={parseFloat(priceRaw)
+              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
             brandLogo={brandLogo}
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
@@ -194,8 +198,10 @@ const PdpLayout = () => {
             pdpDescription={description}
             pdpShortDesc={shortDesc}
             title={title}
-            pdpProductPrice={priceRaw}
-            finalPrice={finalPrice}
+            pdpProductPrice={parseFloat(priceRaw)
+              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+            finalPrice={parseFloat(finalPrice)
+              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
             getPanelData={getPanelData}
             removePanelData={removePanelData}
           />

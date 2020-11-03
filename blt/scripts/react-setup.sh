@@ -48,9 +48,37 @@ then
   cd $docrootDir/modules/react
   npm install
 
+  ignoredDirs=( "node_modules" "alshaya_react" "js" "dist" )
+
+  # Validate utility files.
+  npm run lint $docrootDir/modules/react/js/
+
   # Validate files now.
-  npm run lint alshaya_spc/js/
-  npm run lint alshaya_appointment/js/
+  for subdir in $(find $docrootDir/modules/react -mindepth 1 -maxdepth 1 -type d)
+  do
+    # Ignore some directories which are not react feature modules.
+    ignore=0
+    for ignoredDir in "${ignoredDirs[@]}"
+    do
+      if ([[ $(echo "$subdir" | grep $ignoredDir) ]])
+      then
+        ignore=1
+        break
+      fi
+    done
+
+    if ([ $ignore == 1 ])
+    then
+      continue
+    fi
+
+    if ([ -d "$subdir/js/src" ])
+    then
+      npm run lint $subdir/js/src/
+    else
+      npm run lint $subdir/js/
+    fi
+  done
 else
   echo -en "No need to setup REACT. There is no change in any modules/react."
 fi

@@ -1,0 +1,29 @@
+langcode: en
+status: false
+dependencies:
+  module:
+    - alshaya_algolia_react
+  theme:
+    - alshaya_white_label
+id: alshayaalgoliareactpromotion
+theme: alshaya_white_label
+region: content
+weight: 0
+provider: alshaya_algolia_react
+plugin: alshaya_algolia_react_promotion
+settings:
+  id: alshaya_algolia_react_promotion
+  label: 'Alshaya Algolia promotion'
+  provider: alshaya_algolia_react
+  label_display: '0'
+  items_per_page: '36'
+  application_id: ''
+  search_api_key: ''
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_promotion: acq_promotion
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

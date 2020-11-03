@@ -3,11 +3,15 @@
  * related get, set, remove.
  */
 
+function removeSearchQuery() {
+  localStorage.removeItem('algolia_search_query');
+}
+
 /**
  * Remove search query from local storage to not render search results
  * block when user redirects to another page.
  */
-window.onbeforeunload = function(event) {
+window.onbeforeunload = () => {
   removeSearchQuery();
 };
 
@@ -15,8 +19,8 @@ window.onbeforeunload = function(event) {
  * Remove search query from local storage to not render search results when
  * no #query or #refinement in url.
  */
-window.addEventListener('DOMContentLoaded', (event) => {
-  let query = window.location.hash;
+window.addEventListener('DOMContentLoaded', () => {
+  const query = window.location.hash;
   if (query.indexOf('#query') < 0 && query.indexOf('#refinementList') < 0) {
     removeSearchQuery();
   }
@@ -24,10 +28,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 function setSearchQuery(queryValue) {
   localStorage.setItem('algolia_search_query', queryValue);
-}
-
-function removeSearchQuery() {
-  localStorage.removeItem('algolia_search_query');
 }
 
 function getSearchQuery() {
@@ -46,8 +46,26 @@ function getLangRedirect() {
   return localStorage.getItem('algoliaLangRedirect');
 }
 
-function setClickedItem(storage_details) {
-  localStorage.setItem(window.location.hash, JSON.stringify(storage_details));
+function setClickedItem(storageDetails) {
+  localStorage.setItem(window.location.hash, JSON.stringify(storageDetails));
+}
+
+function storeClickedItem(event, pageType) {
+  const articleNode = event.target.closest('.node--view-mode-search-result');
+  const storageDetails = {
+    sku: articleNode.getAttribute('data-sku'),
+    grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',
+    page: Drupal.algoliaGetActualPageNumber(),
+  };
+
+  if (pageType === 'plp') {
+    localStorage.setItem(
+      `${pageType}:${window.location.pathname}`,
+      JSON.stringify(storageDetails),
+    );
+  } else {
+    setClickedItem(storageDetails);
+  }
 }
 
 export {
@@ -57,5 +75,6 @@ export {
   setLangRedirect,
   removeLangRedirect,
   getLangRedirect,
-  setClickedItem
-}
+  setClickedItem,
+  storeClickedItem,
+};
