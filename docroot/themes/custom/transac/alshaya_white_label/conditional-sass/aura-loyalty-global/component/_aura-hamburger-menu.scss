@@ -22,12 +22,14 @@ body.aura-enabled {
     }
 
     #aura-mobile-header-shop:not(:empty) {
-      border-radius: 0.625rem;
-      background-image: $aura-hb-menu-aura-tooltip;
-      margin: 1.25rem;
+      .aura-header-guest-tooltip {
+        border-radius: 0.625rem;
+        background-image: $aura-hb-menu-aura-tooltip;
+        margin: 1.25rem;
 
-      html[lang=ar] & {
-        background-image: $aura-hb-menu-aura-tooltip-ar;
+        html[lang=ar] & {
+          background-image: $aura-hb-menu-aura-tooltip-ar;
+        }
       }
 
       .aura-header-link {

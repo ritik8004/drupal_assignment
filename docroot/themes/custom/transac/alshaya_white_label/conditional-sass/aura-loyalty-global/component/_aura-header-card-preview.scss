@@ -12,6 +12,10 @@
       align-items: center;
       justify-content: center;
 
+      @include breakpoint($upto-desktop) {
+        margin-top: 1.25rem;
+      }
+
       html[lang=ar] & {
         background-image: $aura-header-card-wrapper-ar;
       }
@@ -64,11 +68,15 @@
   }
 }
 
+#aura-mobile-header-signin-register .aura-header-guest-tooltip:not(:empty) {
+  @include breakpoint($upto-desktop) {
+    padding-top: 1.9375rem;
+  }
+}
+
 #aura-mobile-header-signin-register:not(:empty),
 #aura-mobile-header-shop:not(:empty) {
   @include breakpoint($upto-desktop) {
-    padding-top: 1.9375rem;
-
     @include auraCardPreviewGuest;
 
     + ul.menu {
