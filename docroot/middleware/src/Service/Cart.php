@@ -1888,7 +1888,9 @@ class Cart {
     // Get cart totals.
     $cart_total = $cart['totals']['grand_total'];
     try {
-      $this->logger->info('getting fresh total');
+      $this->logger->info('Getting fresh total for cart @cart_id.', [
+        '@cart_id' => $cart['cart']['id'],
+      ]);
       // Getting fresh cart from api.
       $cart = $this->getCart(TRUE);
     }
