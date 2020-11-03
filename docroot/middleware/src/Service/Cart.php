@@ -1865,37 +1865,43 @@ class Cart {
    *   If cart total is valid.
    */
   public function isCartTotalValid(array $cart) {
-    // Get cart totals.
-    $cart_total = $cart['totals']['grand_total'];
-
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
+    $expiration_time = $checkout_settings['totals_revalidation_ttl'] * 60;
 
     // Check if last update of our cart is more recent than X minutes.
-    $expiration_time = $checkout_settings['totals_revalidation_ttl'] * 60;
     $cart_last_updated = isset($cart['cart']['updated_at']) ? $cart['cart']['updated_at'] : $cart['cart']['created_at'];
+    if (empty($cart_last_updated)) {
+      // Unexpected but in that case we assume it is correct.
+      $this->logger->error('No created_at and updated_at field in the cart @cart_id.', [
+        '@cart_id' => $cart['cart']['id'],
+      ]);
+      return TRUE;
+    }
+
     $cart_expire_time = strtotime($cart_last_updated) + $expiration_time;
     $current_time = strtotime(date('Y-m-d H:i:s'));
+    if ($cart_expire_time >= $current_time) {
+      // Not expired. We assume totals are valid.
+      return TRUE;
+    }
 
-    // Check if cart has expired.
-    if ($cart_expire_time < $current_time) {
-      try {
-        // Getting fresh cart from api.
-        $cart = $this->getCart(TRUE);
-      }
-      catch (\Exception $e) {
-        $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
-          '@message' => $e->getMessage(),
-        ]);
-      }
+    // Get cart totals.
+    $cart_total = $cart['totals']['grand_total'];
+    try {
+      $this->logger->info('getting fresh total');
+      // Getting fresh cart from api.
+      $cart = $this->getCart(TRUE);
+    }
+    catch (\Exception $e) {
+      // Something went wrong. We assume totals are valid.
+      $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return TRUE;
     }
 
     $fresh_cart_total = $cart['totals']['grand_total'];
-    // If the totals differ then return false.
-    if ($fresh_cart_total != $cart_total) {
-      return FALSE;
-    }
-
-    return TRUE;
+    return $fresh_cart_total == $cart_total;
   }
 
 }
