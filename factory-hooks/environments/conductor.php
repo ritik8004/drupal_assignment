@@ -689,6 +689,16 @@ $conductors = [
     'hmac_secret' => 'ZDFmOGM0NDEtNjlmNy00',
     'site_id' => 194,
   ],
+  'aeobh_uat' => [
+    'hmac_id' => 'a53bf12f73ca4a05b0e8d0ad33399237',
+    'hmac_secret' => 'NDNlYmI2Y2ItMmI2Mi00',
+    'site_id' => 302,
+  ],
+  'aeoqa_uat' => [
+    'hmac_id' => '713844a9cc5c4b00b4fe0a21c32362ba',
+    'hmac_secret' => 'MTY3MjFjN2EtY2UwOS00',
+    'site_id' => 303,
+  ],
   'aeokw_prod' => [
     'site_id' => 205,
   ],
@@ -752,6 +762,16 @@ $conductors = [
     'hmac_id' => 'd5cb6eba6f1d4987a0934685e1f87bd5',
     'hmac_secret' => 'YmNkYjJkMTgtZGU4Mi00',
     'site_id' => 248,
+  ],
+  'mubh_uat' => [
+    'hmac_id' => '6f7c8b72bafe47bf9be8d3d9cca40cc2',
+    'hmac_secret' => 'YTlkNjEwOTAtZTNjZS00',
+    'site_id' => 306,
+  ],
+  'muqa_uat' => [
+    'hmac_id' => 'f9a2c0741224406295333b16c87ebc7c',
+    'hmac_secret' => 'NWRkZDI1YmItOWMwNS00',
+    'site_id' => 307,
   ],
   'mukw_prod' => [
     'site_id' => 267,
