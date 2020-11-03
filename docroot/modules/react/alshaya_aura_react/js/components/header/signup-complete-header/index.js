@@ -9,7 +9,7 @@ const SignUpCompleteHeader = (props) => {
     isHeaderModalOpen,
     handleNotYou,
     cardNumber,
-    isNotExpandable,
+    noRegisterLinks,
   } = props;
 
   const { baseUrl, pathPrefix } = drupalSettings.path;
@@ -40,26 +40,28 @@ const SignUpCompleteHeader = (props) => {
               { Drupal.t('Not you?') }
             </div>
           </div>
-          <div className="aura-popup-body">
-            <p>{Drupal.t('To spend your points you will have to sign in or create an account.')}</p>
-          </div>
           {
-            !isNotExpandable
+            !noRegisterLinks
               && (
-              <div className="aura-popup-footer">
-                <a
-                  className="create-an-account"
-                  href={`${baseUrl}${pathPrefix}user/register`}
-                >
-                  {Drupal.t('Create an account')}
-                </a>
-                <a
-                  href={`${baseUrl}${pathPrefix}user/login`}
-                  className="sign-in"
-                >
-                  {Drupal.t('Sign in')}
-                </a>
-              </div>
+                <>
+                  <div className="aura-popup-body">
+                    <p>{Drupal.t('To spend your points you will have to sign in or create an account.')}</p>
+                  </div>
+                  <div className="aura-popup-footer">
+                    <a
+                      className="create-an-account"
+                      href={`${baseUrl}${pathPrefix}user/register`}
+                    >
+                      {Drupal.t('Create an account')}
+                    </a>
+                    <a
+                      href={`${baseUrl}${pathPrefix}user/login`}
+                      className="sign-in"
+                    >
+                      {Drupal.t('Sign in')}
+                    </a>
+                  </div>
+                </>
               )
           }
         </div>
