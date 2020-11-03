@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import parse from 'html-react-parser';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import DescriptionContent from '../pdp-desc-popup-content';
 import ProductDetailSVG from '../../../svg-component/product-detail-svg';
+import { closeModalHelper } from '../../../utilities/pdp_layout';
 
 const PpdDescription = (props) => {
   const {
@@ -32,6 +33,11 @@ const PpdDescription = (props) => {
       />
     );
   };
+
+  useEffect(() => {
+    closeModalHelper('desc-overlay', 'magv2-desc-popup-container', closeModal);
+  },
+  []);
 
   return (
     <div className="magv2-pdp-description-wrapper card fadeInUp" style={{ animationDelay: '0.8s' }}>
