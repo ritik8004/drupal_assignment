@@ -47,7 +47,7 @@ const HeaderGuest = (props) => {
   }
 
   return (
-    <>
+    <div className="aura-header-guest-tooltip">
       <HeaderLoyaltyCta
         isDesktop={isDesktop}
         isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
@@ -60,7 +60,7 @@ const HeaderGuest = (props) => {
         openHeaderModal={openHeaderModal}
         isNotExpandable={isNotExpandable}
       />
-    </>
+    </div>
   );
 };
 
