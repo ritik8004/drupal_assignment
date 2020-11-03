@@ -72,7 +72,7 @@ class ConfigurableProductForm extends React.Component {
       if (/color/.test(key)) {
         const elem = document.querySelector(`#pdp-add-to-cart-form-main #${key}`).querySelectorAll('.active')[0];
         if (elem !== undefined && window.innerWidth < 768) {
-          smoothScrollToActiveSwatch(elem);
+          smoothScrollToActiveSwatch(elem, key);
         }
       }
     });
