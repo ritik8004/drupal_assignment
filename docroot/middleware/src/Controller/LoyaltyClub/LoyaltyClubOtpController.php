@@ -99,7 +99,9 @@ class LoyaltyClubOtpController {
     $search_response = $this->auraSearchHelper->search('phone', $chosenCountryCode . $mobile);
 
     if (!empty($search_response['data']['apc_identifier_number'])) {
-      $this->logger->error('Error while trying to send otp. Mobile number is already registered.');
+      $this->logger->error('Error while trying to send otp. Mobile number @mobile is already registered.', [
+        '@mobile' => $mobile,
+      ]);
       return new JsonResponse($this->utility->getErrorResponse('form_error_mobile_already_registered', 'already_registered'));
     }
 
