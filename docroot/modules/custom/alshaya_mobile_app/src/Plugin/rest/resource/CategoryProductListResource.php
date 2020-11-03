@@ -232,7 +232,7 @@ class CategoryProductListResource extends ResourceBase {
     }
 
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-    $response_data['sorts'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
+    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
 
     // Filter the empty products.
     $response_data['products'] = array_filter($response_data['products']);
