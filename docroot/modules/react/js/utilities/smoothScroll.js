@@ -86,3 +86,20 @@ export const smoothScrollToCurrentDate = () => {
     });
   }
 };
+
+/**
+ * Smooth Scroll to active swatch for mobile.
+ */
+export const smoothScrollToActiveSwatch = (element) => {
+  const elementParent = document.querySelector('#pdp-add-to-cart-form-main #color');
+  const elementLeftOffset = element.offsetLeft;
+  const elementTopOffset = element.offsetTop;
+
+  // Calculating right offset of the element for Arabic.
+  const scrollRight = elementParent.offsetWidth - element.offsetWidth - elementLeftOffset;
+  elementParent.scrollBy({
+    top: elementTopOffset,
+    left: (drupalSettings.path.currentLanguage === 'en') ? elementLeftOffset : -scrollRight,
+    behavior: 'smooth',
+  });
+};

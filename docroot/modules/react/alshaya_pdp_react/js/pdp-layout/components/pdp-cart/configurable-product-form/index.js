@@ -4,6 +4,7 @@ import { addToCartConfigurable } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
+import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoothScroll';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -67,6 +68,14 @@ class ConfigurableProductForm extends React.Component {
     const code = Object.keys(combinations)[0];
     const codeValue = Object.keys(combinations[code])[0];
     this.refreshConfigurables(code, codeValue, null);
+    Object.keys(combinations).forEach((key) => {
+      if (/color/.test(key)) {
+        const elem = document.querySelector(`#pdp-add-to-cart-form-main #${key}`).querySelectorAll('.active')[0];
+        if (elem !== undefined && window.innerWidth < 768) {
+          smoothScrollToActiveSwatch(elem);
+        }
+      }
+    });
   }
 
   // To get available attribute value based on user selection.
