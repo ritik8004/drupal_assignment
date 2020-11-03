@@ -232,7 +232,6 @@
         border-radius: 50%;
         color: $magv2-gallery-popup-cross;
         cursor: pointer;
-        opacity: 0.6;
         z-index: 9;
 
         @include breakpoint($tablet) {
