@@ -286,11 +286,6 @@ class Cart {
    *   Cart data.
    */
   public function getCart($force = FALSE) {
-
-    if (!$this->session->isSessionStarted()) {
-      return NULL;
-    }
-
     if (!empty(static::$cart) && !$force) {
       return static::$cart;
     }
