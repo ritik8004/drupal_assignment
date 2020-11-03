@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -59,6 +60,8 @@ class SkuCarousel extends SKUFieldFormatter implements ContainerFactoryPluginInt
    *   Sku Manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
+   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $entity_display_repository
+   *   Entity Display repository service.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -68,8 +71,9 @@ class SkuCarousel extends SKUFieldFormatter implements ContainerFactoryPluginInt
                               $view_mode,
                               array $third_party_settings,
                               SkuManager $sku_manager,
-                              EntityTypeManagerInterface $entity_type_manager) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
+                              EntityTypeManagerInterface $entity_type_manager,
+                              EntityDisplayRepositoryInterface $entity_display_repository) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings, $entity_display_repository, $entity_type_manager);
     $this->skuManager = $sku_manager;
     $this->nodeViewBuilder = $entity_type_manager->getViewBuilder('node');
   }
@@ -99,7 +103,8 @@ class SkuCarousel extends SKUFieldFormatter implements ContainerFactoryPluginInt
       $configuration['view_mode'],
       $configuration['third_party_settings'],
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('entity_display.repository')
     );
   }
 

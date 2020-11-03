@@ -73,6 +73,12 @@ function alshaya_color_split_acq_sku_configurable_product_configurations_alter(a
   }
 
   foreach ($variants as $variant) {
+    // Don't process / skip  if simple sku as simple skus don't
+    // have `field_configurable_attributes` field.
+    if ($variant->getType() == 'simple') {
+      continue;
+    }
+
     $variant_configurations = unserialize($variant->get('field_configurable_attributes')->getString());
 
     foreach ($variant_configurations as $variant_configurable) {

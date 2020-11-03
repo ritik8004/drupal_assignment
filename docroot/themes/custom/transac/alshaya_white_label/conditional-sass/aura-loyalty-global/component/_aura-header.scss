@@ -201,3 +201,17 @@ body.aura-enabled {
     }
   }
 }
+
+#aura-header-modal {
+  @include breakpoint($desktop) {
+    .aura-header-waiting-wrapper {
+      .spc-loading-container {
+        min-height: 1rem;
+
+        .spc-loader {
+          min-height: 1rem;
+        }
+      }
+    }
+  }
+}

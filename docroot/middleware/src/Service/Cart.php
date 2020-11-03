@@ -1378,6 +1378,14 @@ class Cart {
     $settings = $this->settings->getSettings('spc_middleware');
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
+    // Check if cart total is valid return with an error message.
+    if (!$this->isCartTotalValid($cart)) {
+      $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), 500);
+    }
+
     // Check whether order locking is enabled.
     if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
       $lock_store = new PdoStore($this->connection);
@@ -1930,6 +1938,57 @@ class Cart {
     }
 
     return implode('||', $message);
+  }
+
+  /**
+   * Helper function to check if cart total valid.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   If cart total is valid.
+   */
+  public function isCartTotalValid(array $cart) {
+    $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
+    $expiration_time = $checkout_settings['totals_revalidation_ttl'];
+
+    // Check if last update of our cart is more recent than X minutes.
+    $cart_last_updated = isset($cart['cart']['updated_at']) ? $cart['cart']['updated_at'] : $cart['cart']['created_at'];
+    if (empty($cart_last_updated)) {
+      // Unexpected but in that case we assume it is correct.
+      $this->logger->error('No created_at and updated_at field in the cart @cart_id.', [
+        '@cart_id' => $cart['cart']['id'],
+      ]);
+      return TRUE;
+    }
+
+    $cart_expire_time = strtotime($cart_last_updated) + $expiration_time;
+    $current_time = time();
+    if ($cart_expire_time >= $current_time) {
+      // Not expired. We assume totals are valid.
+      return TRUE;
+    }
+
+    // Get cart totals.
+    $cart_total = $cart['totals']['grand_total'];
+    try {
+      $this->logger->info('Getting fresh total for cart @cart_id.', [
+        '@cart_id' => $cart['cart']['id'],
+      ]);
+      // Getting fresh cart from api.
+      $cart = $this->getCart(TRUE);
+    }
+    catch (\Exception $e) {
+      // Something went wrong. We assume totals are valid.
+      $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return TRUE;
+    }
+
+    $fresh_cart_total = $cart['totals']['grand_total'];
+    return $fresh_cart_total == $cart_total;
   }
 
 }

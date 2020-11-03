@@ -41,7 +41,7 @@ const SignUpCompleteHeader = (props) => {
             </div>
           </div>
           {
-            !noRegisterLinks
+            noRegisterLinks
               && (
                 <>
                   <div className="aura-popup-body">

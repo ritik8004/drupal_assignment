@@ -33,7 +33,7 @@ const HeaderLoggedIn = (props) => {
     }
 
     return (
-      <>
+      <div className="aura-header-guest-tooltip">
         <HeaderLoyaltyCta
           isDesktop={isDesktop}
           isHeaderModalOpen={isHeaderModalOpen}
@@ -44,7 +44,7 @@ const HeaderLoggedIn = (props) => {
           isHeaderModalOpen={isHeaderModalOpen}
           openHeaderModal={openHeaderModal}
         />
-      </>
+      </div>
     );
   } if (loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED
     || loyaltyStatus === getAllAuraStatus().APC_LINKED_VERIFIED) {
