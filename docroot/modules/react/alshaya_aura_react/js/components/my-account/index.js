@@ -31,7 +31,6 @@ class MyAccount extends React.Component {
       this.setState({
         wait: false,
       });
-      return;
     }
   }
 

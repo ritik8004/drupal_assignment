@@ -32,7 +32,6 @@ class LoyaltyClub extends React.Component {
       this.setState({
         wait: false,
       });
-      return;
     }
   }
 
