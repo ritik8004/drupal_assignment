@@ -24,15 +24,15 @@ class MyAccount extends React.Component {
       loyaltyStatus,
     } = this.state;
 
+    document.addEventListener('customerDetailsFetched', this.setCustomerDetails, false);
+    document.addEventListener('loyaltyStatusUpdatedFromHeader', this.setCustomerDetails, false);
+
     if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
       this.setState({
         wait: false,
       });
       return;
     }
-
-    document.addEventListener('customerDetailsFetched', this.setCustomerDetails, false);
-    document.addEventListener('loyaltyStatusUpdatedFromHeader', this.setCustomerDetails, false);
   }
 
   setCustomerDetails = (data) => {
