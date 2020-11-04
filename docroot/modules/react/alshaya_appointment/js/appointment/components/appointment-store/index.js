@@ -557,7 +557,7 @@ export default class AppointmentStore extends React.Component {
               </DeviceView>
               <div
                 id="appointment-map-store-list-view"
-                className="appointment-map-store-list-view"
+                className={(!storeList || storeList.length === 0) ? 'appointment-map-store-list-view empty-store-list' : 'appointment-map-store-list-view'}
                 ref={this.appListView}
               >
                 <StoreList
