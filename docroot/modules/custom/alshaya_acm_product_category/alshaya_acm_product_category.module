@@ -7,8 +7,11 @@
 
 use Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter\SkuGalleryFormatter;
 use Drupal\block\Entity\Block;
+use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
@@ -482,8 +485,20 @@ function alshaya_acm_product_category_pathauto_alias_alter(&$alias, array $conte
     return;
   }
 
-  // For all the category terms we want shop- prefix for L1 only.
-  $alias = '/shop-' . ltrim($alias, '/');
+  $term_id = explode('/', $context['source']);
+
+  if (!empty($term = Term::load($term_id[3])) && $term instanceof TermInterface) {
+    // Remove shop- as prefix from url if true.
+    $is_remove_shop_prefix = $term->get('field_remove_shop_prefix')->getString();
+    if ($is_remove_shop_prefix) {
+      if (strpos($alias, 'shop-') !== false) {
+        $alias = str_replace('shop-', '', $alias);
+      }
+      return;
+    }
+    // For all the category terms we want shop- prefix for L1 only.
+    $alias = '/shop-' . ltrim($alias, '/');
+  }
 }
 
 /**
