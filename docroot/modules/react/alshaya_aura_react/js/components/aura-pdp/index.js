@@ -1,13 +1,13 @@
 import React from 'react';
 import { getUserDetails } from '../../utilities/helper';
 import { getStorageInfo } from '../../../../js/utilities/storage';
+import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
 
 class AuraPDP extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      wait: true,
       productPoints: 0,
       cardNumber: '',
     };
@@ -23,7 +23,7 @@ class AuraPDP extends React.Component {
       const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
       const data = {
         detail: localStorageValues,
-      }
+      };
       this.setCardNumber(data);
     }
   }
