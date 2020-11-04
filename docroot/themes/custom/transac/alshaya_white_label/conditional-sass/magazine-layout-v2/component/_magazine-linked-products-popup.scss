@@ -192,6 +192,10 @@ body.overlay-related-select {
       &-header-wrapper {
         padding: 1.0625rem 1.875rem 0.9375rem;
         text-align: center;
+
+        label {
+          color: $magv2-popup-header-label;
+        }
       }
     }
   }
