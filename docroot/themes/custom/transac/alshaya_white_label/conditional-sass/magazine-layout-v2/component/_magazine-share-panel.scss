@@ -28,6 +28,10 @@
   .sharethis-wrapper {
     text-align: #{$left};
 
+    &:empty {
+      display: none;
+    }
+
     @include breakpoint($only-mobile) {
       margin-top: 0;
     }
