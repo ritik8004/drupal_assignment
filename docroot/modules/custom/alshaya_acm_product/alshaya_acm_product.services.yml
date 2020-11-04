@@ -186,3 +186,9 @@ services:
     class: Drupal\alshaya_acm_product\Service\ProductOrderLimit
     arguments:
       - '@alshaya_acm_product.skumanager'
+
+  alshaya_acm_product.category_products_helper:
+    class: Drupal\alshaya_acm_product\Service\CategoryProductsHelper
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
