@@ -6,6 +6,7 @@ var config = {
     loyalty_club: './js/my-loyalty-club',
     my_accounts: './js/my-accounts',
     header: './js/header',
+    pdp: './js/pdp',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
