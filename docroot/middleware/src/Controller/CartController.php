@@ -493,7 +493,7 @@ class CartController {
     $request_content = json_decode($request->getContent(), TRUE);
 
     // Validate request.
-    if (!$this->validateRequestData($request_content)) {
+    if (empty($request_content) || !$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
       // Setting custom error code for bad response so that
       // we could distinguish this error.
