@@ -1,19 +1,23 @@
 <?php
 
-namespace Drupal\alshaya_acm_product\Service;
+namespace Drupal\alshaya_acm_product_category\Service;
 
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Query\ConditionGroup;
 
 /**
  * Functions to help get products in a category from Indexed Data.
  *
- * @package Drupal\alshaya_acm_product\Service
+ * @package Drupal\alshaya_acm_product_category\Service
  */
 class CategoryProductsHelper {
+
+  use LoggerChannelTrait;
 
   /**
    * Alshaya SKU Manager.
@@ -30,17 +34,39 @@ class CategoryProductsHelper {
   protected $entityTypeManager;
 
   /**
+   * Category listing page helper.
+   *
+   * @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage
+   */
+  protected $productCategoryPage;
+
+  /**
+   * The language manger service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * CategoryProductsHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   Alshaya SKU Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
+   * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryPage $product_category_page
+   *   Category listing page helper.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager service.
    */
   public function __construct(SkuManager $sku_manager,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ProductCategoryPage $product_category_page,
+                              LanguageManagerInterface $language_manager) {
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->productCategoryPage = $product_category_page;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -140,8 +166,8 @@ class CategoryProductsHelper {
   protected function getProductsInCategoryAlgolia(int $category_id, int $limit) {
     $unique_nodes = [];
     $page = 0;
-    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    $term_details = \Drupal::service('alshaya_acm_product_category.page')->getCurrentSelectedCategory($langcode, $category_id);
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory($langcode, $category_id);
 
     $index = $this->entityTypeManager
       ->getStorage('search_api_index')
@@ -164,7 +190,7 @@ class CategoryProductsHelper {
         }, $results);
       }
       catch (\Exception $e) {
-        \Drupal::logger('alshaya_acm_product')->notice('Could not fetch data for carousel from Algolia because of reason: @message', [
+        $this->getLogger('CategoryProductsHelper')->warning('Could not fetch data for carousel from Algolia because of reason: @message', [
           '@message' => $e->getMessage(),
         ]);
 

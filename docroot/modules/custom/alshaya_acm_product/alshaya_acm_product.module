@@ -1743,8 +1743,8 @@ function alshaya_acm_product_query_get_display_node_for_sku_alter(AlterableInter
  *   Array of nodes.
  */
 function _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $limit) {
-  /** @var \Drupal\alshaya_acm_product\Service\CategoryProductsHelper $helper */
-  $helper = \Drupal::service('alshaya_acm_product.category_products_helper');
+  /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $helper */
+  $helper = \Drupal::service('alshaya_acm_product_category.category_products_helper');
   return $helper->getProductsInCategory($category_id, $limit);
 }
 
