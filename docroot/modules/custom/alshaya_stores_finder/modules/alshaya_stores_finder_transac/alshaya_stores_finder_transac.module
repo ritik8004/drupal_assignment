@@ -6,9 +6,13 @@
  */
 
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -99,4 +103,45 @@ function alshaya_stores_finder_transac_form_node_store_form_alter(array &$form, 
 
   // Set the default country.
   $form['field_address']['widget'][0]['address']['#default_value']['country_code'] = _alshaya_custom_get_site_level_country_code();
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_stores_finder_transac_block_access(Block $block, $operation, AccountInterface $account) {
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route !== 'view.stores_finder.page_2') {
+    return AccessResult::neutral();
+  }
+
+  $blocks_to_check = ['exposedformstores_finderpage_1', 'page_title'];
+  $feature_status = \Drupal::config('alshaya_stores_finder_transac.settings')->get('stores_finder_page_status');
+  if ($operation === 'view' && in_array($block->id(), $blocks_to_check)) {
+    return AccessResult::forbiddenIf($feature_status === 0);
+  }
+
+  return AccessResult::neutral();
+}
+
+function alshaya_stores_finder_transac_form_alshaya_stores_finder_settings_alter(array &$form, FormStateInterface $form_state, string $form_id) {
+  $config = \Drupal::config('alshaya_stores_finder_transac.settings');
+  $form['stores_finder_page_status'] = [
+    '#type' => 'select',
+    '#title' => t('Allow user to view and find stores in the stores finder page'),
+    '#required' => TRUE,
+    '#options' => [
+      0 => t('No'),
+      1 => t('Yes'),
+    ],
+    '#default_value' => (int) $config->get('stores_finder_page_status') ?? 1,
+    '#weight' => 0,
+  ];
+  $form['#submit'][] = '_alshaya_stores_finder_transac_store_finder__config_form_submit';
+}
+
+function _alshaya_stores_finder_transac_store_finder__config_form_submit(array &$form, FormStateInterface $form_state) {
+  \Drupal::configFactory()
+    ->getEditable('alshaya_stores_finder_transac.settings')
+    ->set('stores_finder_page_status', (int) $form_state->getValue('stores_finder_page_status'))
+    ->save();
 }

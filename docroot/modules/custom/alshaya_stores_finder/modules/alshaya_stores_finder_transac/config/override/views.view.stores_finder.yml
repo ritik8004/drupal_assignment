@@ -2,4 +2,4 @@ display:
   default:
     display_options:
       access:
-        type: click_collect_feature_status
+        type: stores_finder_page_status
