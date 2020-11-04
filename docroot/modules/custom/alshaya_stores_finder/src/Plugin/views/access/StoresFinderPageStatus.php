@@ -74,6 +74,10 @@ class StoresFinderPageStatus extends Permission {
    * {@inheritdoc}
    */
   public function access(AccountInterface $account) {
+    // Currently there is an issue in Drupal Org which mentions that this access
+    // result gets cached: https://www.drupal.org/project/drupal/issues/2968012.
+    // So for this reason we would need to run drush crf currently to view
+    // the view content again once it is disabled.
     return $account->hasPermission($this->options['perm']) && ($this->getConfig()->get('stores_finder_page_status') != 0);
   }
 
