@@ -1882,7 +1882,8 @@ class Cart {
     }
 
     $cart_expire_time = strtotime($cart_last_updated) + $expiration_time;
-    $current_time = isset($this->cache->get('cached_current_time')) ? $this->cache->get('cached_current_time') : time();
+    $cached_current_time = $this->cache->get('cached_current_time');
+    $current_time = isset($cached_current_time) ? $cached_current_time : time();
     if ($cart_expire_time >= $current_time) {
       // Not expired. We assume totals are valid.
       return TRUE;
