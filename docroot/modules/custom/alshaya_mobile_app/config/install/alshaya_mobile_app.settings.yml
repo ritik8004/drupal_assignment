@@ -11,3 +11,4 @@ static_page_mappings:
   size_guide: 'size-guide-content'
   store_finder: 'store-finder'
 dy_plp_banner_name: 'Generic PLP banners'
+max_product_limit: 50
