@@ -12,6 +12,7 @@ import {
 } from '../storage';
 import i18nMiddleWareUrl from '../i18n_url';
 import dispatchCustomEvent from '../events';
+import { validateCartResponse } from '../checkout_util';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId } = args;
@@ -53,6 +54,8 @@ export const fetchCartData = () => {
         redirectToCart();
         return null;
       }
+
+      validateCartResponse(response.data);
 
       if (response.data.error) {
         redirectToCart();
