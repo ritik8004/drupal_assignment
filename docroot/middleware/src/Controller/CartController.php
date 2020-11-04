@@ -473,6 +473,14 @@ class CartController {
         && !in_array($response['payment']['default'], $codes)) {
         unset($response['payment']['default']);
       }
+
+      if (!empty($response['payment']['method'])) {
+        $response['payment']['method'] = $this->cart->getMethodCodeForFrontend($response['payment']['method']);
+      }
+
+      if (!empty($response['payment']['default'])) {
+        $response['payment']['default'] = $this->cart->getMethodCodeForFrontend($response['payment']['default']);
+      }
     }
 
     return $response;

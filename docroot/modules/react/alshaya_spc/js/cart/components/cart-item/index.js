@@ -16,7 +16,7 @@ import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
 import { getStorageInfo } from '../../../utilities/storage';
-import { isQtyLimitReached } from '../../../utilities/checkout_util';
+import { isQtyLimitReached, validateCartResponse } from '../../../utilities/checkout_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';
@@ -86,6 +86,8 @@ export default class CartItem extends React.Component {
     const cartData = updateCartItemData(action, sku, qty);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
+        validateCartResponse(result);
+
         if (callback !== null) {
           callback();
         }
