@@ -1,0 +1,35 @@
+.magv2-main {
+  .card {
+    .magv2-card-icon-svg {
+      svg {
+        g {
+          g {
+            g {
+              path {
+                fill: $magv2-section-title-color;
+              }
+
+              #Group {
+                g:last-child {
+                  rect {
+                    fill: $magv2-section-title-color;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .magv2-click-n-collect-search-svg {
+      svg {
+        g {
+          path {
+            fill: $magv2-section-title-color;
+          }
+        }
+      }
+    }
+  }
+}
