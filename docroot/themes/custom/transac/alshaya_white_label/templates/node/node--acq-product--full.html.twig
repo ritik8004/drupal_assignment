@@ -81,7 +81,7 @@ set classes = [
             </div>
           {% endif %}
 
-          {% if aura_enabled %}
+          {% if aura_enabled is defined and aura_enabled == 1 %}
             <div id="aura-pdp"></div>
           {% endif %}
 
