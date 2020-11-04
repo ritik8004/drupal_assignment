@@ -368,10 +368,12 @@ function alshaya_stores_finder_block_access(Block $block, $operation, AccountInt
   }
 
   $blocks_to_check = ['exposedformstores_finderpage_1', 'page_title'];
-  $feature_status = \Drupal::config('alshaya_stores_finder_transac.settings')->get('stores_finder_page_status');
+
+  $config = \Drupal::config('alshaya_stores_finder.settings');
+  $feature_status = $config->get('stores_finder_page_status');
   if ($operation === 'view' && in_array($block->id(), $blocks_to_check)) {
-    return AccessResult::forbiddenIf($feature_status === 0);
+    return AccessResult::forbiddenIf($feature_status === 0)->addCacheableDependency($config);
   }
 
-  return AccessResult::neutral();
+  return AccessResult::neutral()->addCacheableDependency($config);
 }
