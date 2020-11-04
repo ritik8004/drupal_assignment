@@ -1882,11 +1882,13 @@ class Cart {
       return TRUE;
     }
 
-    $cart_expire_time = strtotime($cart_last_updated) + $expiration_time;
-    $current_time = isset($cart['cache_time']) ? $cart['cache_time'] : time();
-    if ($cart_expire_time >= $current_time) {
-      // Not expired. We assume totals are valid.
-      return TRUE;
+    if (isset($cart['cache_time'])) {
+      $cart_expire_time = $cart['cache_time'] + $expiration_time;
+      $current_time = time();
+      if ($cart_expire_time >= $current_time) {
+        // Not expired. We assume totals are valid.
+        return TRUE;
+      }
     }
 
     // Get cart totals.
