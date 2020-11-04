@@ -1,5 +1,0 @@
-display:
-  default:
-    display_options:
-      access:
-        type: stores_finder_page_status
