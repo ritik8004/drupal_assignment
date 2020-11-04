@@ -8,7 +8,6 @@ class AuraPDP extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      wait: true,
       productPoints: 0,
       cardNumber: '',
     };
@@ -37,7 +36,7 @@ class AuraPDP extends React.Component {
     this.setState({
       ...states,
     });
-  }
+  };
 
   getToolTipContent = () => Drupal.t('Everytime you shop you will earn Aura points which can then be redeemed for future purchases. Not eligible for accrual when purchased through Aura points.');
 

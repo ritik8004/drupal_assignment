@@ -1,6 +1,4 @@
-import { getStorageInfo } from '../../../js/utilities/storage';
 import {
-  getUserDetails,
   getUserAuraStatus,
   getUserAuraTier,
 } from './helper';
