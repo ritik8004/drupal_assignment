@@ -354,18 +354,9 @@ export default class AppointmentStore extends React.Component {
         Drupal.logJavascriptError('appointment-select-store-getCurrentPosition', error);
       });
     if (navigator && navigator.geolocation) {
-      let userCoords = {};
-      navigator.geolocation.getCurrentPosition(function(position) {
-        userCoords = {
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-        };
-      });
       this.fetchStores(refCoords, true, true);
     }
-    else {
-      return false;
-    }
+    return false;
   };
 
   showOpenMarker = (storeList = null) => {
