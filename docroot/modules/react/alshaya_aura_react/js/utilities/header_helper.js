@@ -8,11 +8,12 @@ import {
   setStorageInfo,
   removeStorageInfo,
 } from '../../../js/utilities/storage';
-import { getAuraLocalStorageKey } from './aura_utils';
+import { getAuraLocalStorageKey, getAuraDetailsDefaultState } from './aura_utils';
 import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../js/utilities/showRemoveFullScreenLoader';
+
 
 /**
  * Helper function to get customer details.
@@ -101,6 +102,7 @@ function updateUsersLoyaltyStatus(cardNumber, auraStatus, link) {
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status) {
           stateValues = {
+            ...getAuraDetailsDefaultState(),
             loyaltyStatus: auraStatus,
             signUpComplete: false,
           };
@@ -122,7 +124,12 @@ function handleNotYou(cardNumber) {
     updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
   } else {
     removeStorageInfo(getAuraLocalStorageKey());
-    dispatchCustomEvent('loyaltyStatusUpdatedFromHeader', { stateValues: { loyaltyStatus: auraStatus, signUpComplete: false }, clickedNotYou: true });
+    const stateValues = {
+      ...getAuraDetailsDefaultState(),
+      loyaltyStatus: auraStatus,
+      signUpComplete: false,
+    };
+    dispatchCustomEvent('loyaltyStatusUpdatedFromHeader', { stateValues, clickedNotYou: true });
   }
 }
 

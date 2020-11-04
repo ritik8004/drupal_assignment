@@ -2,11 +2,9 @@ import React from 'react';
 import {
   getStorageInfo,
 } from '../../../../js/utilities/storage';
-import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
+import { getAuraLocalStorageKey, getAuraDetailsDefaultState } from '../../utilities/aura_utils';
 import {
   getUserDetails,
-  getUserAuraStatus,
-  getUserAuraTier,
   getAllAuraStatus,
 } from '../../utilities/helper';
 import Loading from '../../../../alshaya_spc/js/utilities/loading';
@@ -15,6 +13,7 @@ import {
 } from '../../utilities/header_helper';
 import HeaderLoggedIn from './header-loggedIn';
 import HeaderGuest from './header-guest';
+
 
 class Header extends React.Component {
   constructor(props) {
@@ -25,10 +24,7 @@ class Header extends React.Component {
       wait: true,
       signUpComplete: false,
       isHeaderModalOpen: !!isNotExpandable,
-      loyaltyStatus: getUserAuraStatus(),
-      tier: getUserAuraTier(),
-      points: 0,
-      cardNumber: '',
+      ...getAuraDetailsDefaultState(),
     };
 
     if (!getUserDetails().id) {
@@ -53,7 +49,7 @@ class Header extends React.Component {
     document.addEventListener('customerDetailsFetched', this.updateStates, false);
 
     // Event listener to listen to actions on loyalty blocks of my account and my aura page.
-    document.addEventListener('loyaltyStatusUpdatedFromLoyaltyBlock', this.updateLoyaltyStatus, false);
+    document.addEventListener('loyaltyStatusUpdatedFromLoyaltyBlock', this.updateStates, false);
 
     // Event listener to listen to actions on different sections of header
     // like shop tab or sign in/ register tab.
@@ -81,20 +77,13 @@ class Header extends React.Component {
       states.clickedNotYou = clickedNotYou;
     }
 
+    if (stateValues.loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
+      states.signUpComplete = true;
+    }
+
     this.setState({
       ...states,
     });
-  }
-
-  updateLoyaltyStatus = (auraStatus) => {
-    const stateValues = {
-      loyaltyStatus: auraStatus.detail,
-    };
-
-    if (auraStatus.detail === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
-      stateValues.signUpComplete = true;
-    }
-    this.setState(stateValues);
   }
 
   openHeaderModal = () => {
