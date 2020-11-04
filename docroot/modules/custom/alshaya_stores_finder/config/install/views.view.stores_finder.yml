@@ -28,7 +28,7 @@ display:
     position: 0
     display_options:
       access:
-        type: perm
+        type: stores_finder_page_status
         options:
           perm: 'access content'
       cache:

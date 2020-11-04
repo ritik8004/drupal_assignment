@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_click_collect\Plugin\views\access;
+namespace Drupal\alshaya_stores_finder\Plugin\views\access;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -15,18 +15,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ingroup views_access_plugins
  *
- * @todo Remove this file once the similar "stores_finder_page_status" plugin
- * is moved to prod as this will then no longer be used. This is kept for now
- * since without this there is a missing plugin error on database updates and
- * cache clears.
- *
  * @ViewsAccess(
- *   id = "click_collect_feature_status",
- *   title = @Translation("Click and Collect feature status"),
- *   help = @Translation("Access will be granted to users with the specified permission string and if click and collect feature is enabled.")
+ *   id = "stores_finder_page_status",
+ *   title = @Translation("Stores Finder page status"),
+ *   help = @Translation("Access will be granted to users with the specified permission string and if store finder page status is enabled.")
  * )
  */
-class ClickCollectFeatureStatus extends Permission {
+class StoresFinderPageStatus extends Permission {
 
   /**
    * Config Factory.
@@ -79,7 +74,11 @@ class ClickCollectFeatureStatus extends Permission {
    * {@inheritdoc}
    */
   public function access(AccountInterface $account) {
-    return $account->hasPermission($this->options['perm']) && ($this->getConfig()->get('feature_status') !== 'disabled');
+    // Currently there is an issue in Drupal Org which mentions that this access
+    // result gets cached: https://www.drupal.org/project/drupal/issues/2968012.
+    // So for this reason we would need to run drush crf currently to view
+    // the view content again once it is disabled.
+    return $account->hasPermission($this->options['perm']) && ($this->getConfig()->get('stores_finder_page_status') != 0);
   }
 
   /**
@@ -106,13 +105,13 @@ class ClickCollectFeatureStatus extends Permission {
    * Wrapper function to get config.
    *
    * @return \Drupal\Core\Config\ImmutableConfig
-   *   Click and collect config.
+   *   Stores finder config.
    */
   protected function getConfig() {
     static $config;
 
     if (empty($config)) {
-      $config = $this->configFactory->get('alshaya_click_collect.settings');
+      $config = $this->configFactory->get('alshaya_stores_finder.settings');
     }
 
     return $config;
