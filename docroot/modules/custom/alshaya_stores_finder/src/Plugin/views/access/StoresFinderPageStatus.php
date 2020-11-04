@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_stores_finder_transac\Plugin\views\access;
+namespace Drupal\alshaya_stores_finder\Plugin\views\access;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -107,7 +107,7 @@ class StoresFinderPageStatus extends Permission {
     static $config;
 
     if (empty($config)) {
-      $config = $this->configFactory->get('alshaya_stores_finder_transac.settings');
+      $config = $this->configFactory->get('alshaya_stores_finder.settings');
     }
 
     return $config;

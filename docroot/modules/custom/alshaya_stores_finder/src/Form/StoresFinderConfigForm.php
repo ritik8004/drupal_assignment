@@ -33,6 +33,18 @@ class StoresFinderConfigForm extends ConfigFormBase {
 
     $config = $this->config('alshaya_stores_finder.settings');
 
+    $form['stores_finder_page_status'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Allow user to view and find stores in the stores finder page'),
+      '#required' => TRUE,
+      '#options' => [
+        0 => $this->t('No'),
+        1 => $this->t('Yes'),
+      ],
+      '#default_value' => (int) $config->get('stores_finder_page_status') ?? 1,
+      '#weight' => 0,
+    ];
+
     $form['enable_disable_store_finder_search'] = [
       '#type' => 'radios',
       '#title' => $this->t('Enable or disable store finder search on site'),
@@ -161,6 +173,7 @@ class StoresFinderConfigForm extends ConfigFormBase {
     }
 
     $config = $this->config('alshaya_stores_finder.settings');
+    $config->set('stores_finder_page_status', (int) $form_state->getValue('stores_finder_page_status'));
     $config->set('enable_disable_store_finder_search', $form_state->getValue('enable_disable_store_finder_search'));
     $config->set('load_more_item_limit', $form_state->getValue('load_more_item_limit'));
     $config->set('search_proximity_radius', $form_state->getValue('search_proximity_radius'));
