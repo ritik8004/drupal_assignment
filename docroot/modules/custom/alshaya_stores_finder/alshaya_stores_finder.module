@@ -5,10 +5,13 @@
  * Module file.
  */
 
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_acq_sku_clean_synced_data_alter().
@@ -352,4 +355,25 @@ function alshaya_stores_finder_set_markers($name = '', $type = 'module') {
     ->set('map_marker.active', $active_marker_path)
     ->set('map_marker.in_active', $inactive_icon_path)
     ->save(TRUE);
+}
+
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_stores_finder_block_access(Block $block, $operation, AccountInterface $account) {
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route !== 'view.stores_finder.page_2') {
+    return AccessResult::neutral();
+  }
+
+  $blocks_to_check = ['exposedformstores_finderpage_1', 'page_title'];
+
+  $config = \Drupal::config('alshaya_stores_finder.settings');
+  $feature_status = $config->get('stores_finder_page_status');
+  if ($operation === 'view' && in_array($block->id(), $blocks_to_check)) {
+    return AccessResult::forbiddenIf($feature_status === 0)->addCacheableDependency($config);
+  }
+
+  return AccessResult::neutral()->addCacheableDependency($config);
 }
