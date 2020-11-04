@@ -80,6 +80,11 @@ set classes = [
               <p>{{ content.delivery_in_only_city_text }}</p>
             </div>
           {% endif %}
+
+          {% if aura_enabled %}
+            <div id="aura-pdp"></div>
+          {% endif %}
+
         </div>
       {% endblock %}
 
