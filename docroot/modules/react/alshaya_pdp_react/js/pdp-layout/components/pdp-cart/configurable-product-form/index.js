@@ -65,14 +65,15 @@ class ConfigurableProductForm extends React.Component {
   handleLoad = () => {
     const { configurableCombinations, skuCode } = this.props;
     const { combinations } = configurableCombinations[skuCode];
+    const attributes = configurableCombinations[skuCode].configurables;
     const code = Object.keys(combinations)[0];
     const codeValue = Object.keys(combinations[code])[0];
     this.refreshConfigurables(code, codeValue, null);
-    Object.keys(combinations).forEach((key) => {
-      if (/color/.test(key)) {
-        const elem = document.querySelector(`#pdp-add-to-cart-form-main #${key}`).querySelectorAll('.active')[0];
+    Object.keys(attributes).forEach((key) => {
+      if (attributes[key].isSwatch) {
+        const elem = document.querySelector('#pdp-add-to-cart-form-main .magv2-swatch-attribute').querySelectorAll('.active')[0];
         if (elem !== undefined && window.innerWidth < 768) {
-          smoothScrollToActiveSwatch(elem, key);
+          smoothScrollToActiveSwatch(elem);
         }
       }
     });

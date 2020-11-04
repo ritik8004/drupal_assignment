@@ -91,10 +91,9 @@ export const smoothScrollToCurrentDate = () => {
  * Smooth Scroll to active swatch for mobile.
  *
  * @param {*} element
- * @param {*} key
  */
-export const smoothScrollToActiveSwatch = (element, key) => {
-  const elementParent = document.querySelector(`#pdp-add-to-cart-form-main #${key}`);
+export const smoothScrollToActiveSwatch = (element) => {
+  const elementParent = document.querySelector('#pdp-add-to-cart-form-main .magv2-swatch-attribute');
   const elementLeftOffset = element.offsetLeft;
   const elementTopOffset = element.offsetTop;
 
