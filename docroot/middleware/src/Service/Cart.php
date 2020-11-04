@@ -1104,6 +1104,8 @@ class Cart {
             return $this->updateCart($data);
           }
         }
+
+        return $this->utility->getErrorResponse('', 400);
       }
       else {
         $this->cancelCartReservation($e->getMessage());
@@ -1316,6 +1318,29 @@ class Cart {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Get Method Code for frontend.
+   *
+   * @param string $method
+   *   Payment Method code.
+   *
+   * @return string
+   *   Payment Method code used in frontend.
+   */
+  public function getMethodCodeForFrontend(string $method) {
+    switch ($method) {
+      case APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD:
+        $method = 'checkout_com_upapi';
+        break;
+
+      case APIWrapper::CHECKOUT_COM_VAULT_METHOD:
+        $method = 'checkout_com';
+        break;
+    }
+
+    return $method;
   }
 
   /**
