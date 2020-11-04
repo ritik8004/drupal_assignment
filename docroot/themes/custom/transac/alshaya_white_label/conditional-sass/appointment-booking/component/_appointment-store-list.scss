@@ -148,9 +148,13 @@
     color: $appointment-empty-store-list-text;
     position: relative;
 
+    html[lang=ar] & {
+      padding: 1.125rem 3.375rem 1.25rem 1.8125rem;
+    }
+
     @include icon(warning, before) {
       position: absolute;
-      left: 1.1875rem;
+      #{$left}: 1.1875rem;
       top: 0.75rem;
       font-size: 1.6875rem;
     }
