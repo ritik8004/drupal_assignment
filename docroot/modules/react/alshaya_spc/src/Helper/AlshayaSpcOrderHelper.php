@@ -449,7 +449,8 @@ class AlshayaSpcOrderHelper {
       case 'checkout_com_upapi_qpay':
         $orderDetails['payment']['transactionId'] = $payment_info['confirmation_id'];
         $orderDetails['payment']['paymentId'] = $payment_info['pun'] ?? '';
-        $orderDetails['payment']['resultCode'] = $payment_info['status'];
+        $orderDetails['payment']['resultCode'] = $payment_info['status_message'] ?? $payment_info['status'];
+        $orderDetails['payment']['orderDate'] = alshaya_master_get_site_date_from_api_date($order['created_at'], 'order_date');
         break;
 
       case 'banktransfer':
