@@ -46,9 +46,15 @@ class LanguageManager {
    *   TRUE if language changed.
    */
   public function isLanguageChanged() {
-    $current_language = $this->request->query->get('lang', 'en');
-    $last_known_language = $this->storage->getDataFromSession('language');
+    $current_language = $this->request->query->get('lang', '');
 
+    // Do nothing if no language passed in query.
+    // This can happen on payment success/error urls.
+    if (empty($current_language)) {
+      return FALSE;
+    }
+
+    $last_known_language = $this->storage->getDataFromSession('language');
     if (empty($last_known_language)) {
       $this->storage->updateDataInSession('language', $current_language);
       return FALSE;
