@@ -13,21 +13,6 @@ use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Implements hook_update_N().
- *
- * Adding index 'acq_sku_sku_defaultlangcode' on acq_sku_field_data table.
- */
-function acq_sku_update_8025() {
-  $index = 'acq_sku_sku_defaultlangcode';
-  $data = _acq_sku_indexes()[$index];
-  if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
-    \Drupal::database()
-      ->schema()
-      ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
-  }
-}
-
-/**
  * Set non_cli_image_download.
  */
 function acq_sku_update_8024() {
@@ -419,31 +404,6 @@ function _acq_sku_indexes() {
         'field_configured_skus_value' => [
           'type' => 'varchar',
           'length' => 255,
-          'default' => '',
-        ],
-      ],
-    ],
-  ];
-
-  $indexes['acq_sku_sku_defaultlangcode'] = [
-    'table' => 'acq_sku_field_data',
-    'fields' => [
-      'sku',
-      'default_langcode',
-    ],
-    'spec' => [
-      'fields' => [
-        'sku' => [
-          'type' => 'varchar',
-          // Not making this 255 because drupal core shortens this to 191
-          // and thus index not works.
-          // @see Schema::addIndex() and Schema::getNormalizedIndexes().
-          'length' => 190,
-          'default' => '',
-        ],
-        'default_langcode' => [
-          'type' => 'int',
-          'size' => 'tiny',
           'default' => '',
         ],
       ],
