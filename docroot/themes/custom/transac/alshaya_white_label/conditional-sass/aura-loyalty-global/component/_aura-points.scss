@@ -1,7 +1,20 @@
 .points {
   color: $aura-points-text;
+  height: 1.125rem;
+  border-radius: 0.5625rem;
+  font-size: 0.75rem;
+  font-family: $aura-bold;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
 
-  &.badge-1,
+  .points-post-text {
+    text-transform: uppercase;
+    font-size: 0.5625rem;
+    padding-#{$left}: 3px;
+  }
+
+  &.badge-AuraHello,
   &.badge-no-tier {
     background-image: $aura-hello-tier;
 
@@ -10,7 +23,7 @@
     }
   }
 
-  &.badge-2 {
+  &.badge-AuraStar {
     background-image: $aura-stars-tier;
 
     html[lang=ar] & {
@@ -18,7 +31,8 @@
     }
   }
 
-  &.badge-3 {
+  &.badge-VIP,
+  &.badge-Vip, {
     background-image: $aura-vip-tier;
 
     html[lang=ar] & {

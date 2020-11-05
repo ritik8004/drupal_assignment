@@ -55,7 +55,9 @@ const HeaderLoggedIn = (props) => {
     if (isMobileTab === true) {
       // Remove the username already present in the menu because username will be
       // redundant after this username component is rendered.
-      document.querySelector('.aura-enabled #block-alshayamyaccountlinks-2 > .my-account-title').remove();
+      if (document.querySelector('.aura-enabled #block-alshayamyaccountlinks-2 > .my-account-title')) {
+        document.querySelector('.aura-enabled #block-alshayamyaccountlinks-2 > .my-account-title').remove();
+      }
       return <UserNamePoints points={points} />;
     }
 
