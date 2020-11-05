@@ -28,6 +28,20 @@ export const fetchCartData = () => {
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
 
+  if (drupalSettings.user.uid === 0) {
+    if (!cart) {
+      // No need to process further.
+      return null;
+    }
+    if (cart === 'empty') {
+      // Remove cart storage completely so that next time, above condition is
+      // called and we do not process further.
+      // Also when the user logs in, we need to restore the cart which will only
+      // happen if cart storage is absent.
+      removeCartFromStorage();
+    }
+  }
+
   if (cart === 'empty') {
     return null;
   }
