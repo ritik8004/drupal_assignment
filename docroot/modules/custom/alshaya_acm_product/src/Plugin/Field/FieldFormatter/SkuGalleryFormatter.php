@@ -256,7 +256,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
         foreach ($promotions as $key => $promotion) {
           $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
-          $promotion['url'] = Url::fromRoute('entity.node.canonical', ['node' => $key], ['language' => $this->languageManager->getLanguage($currentLangCode)])->toString();
+          $promotions[$key]['url'] = Url::fromRoute('entity.node.canonical', ['node' => $key], ['language' => $this->languageManager->getLanguage($currentLangCode)])->toString();
           $cache_tags[] = 'node:' . $key;
         }
 
