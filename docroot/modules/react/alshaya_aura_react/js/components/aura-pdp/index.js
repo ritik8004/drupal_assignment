@@ -1,8 +1,8 @@
 import React from 'react';
 import { getUserDetails } from '../../utilities/helper';
 import { getStorageInfo } from '../../../../js/utilities/storage';
-import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
+import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
 
 class AuraPDP extends React.Component {
   constructor(props) {
@@ -14,24 +14,27 @@ class AuraPDP extends React.Component {
   }
 
   componentDidMount() {
-    // @TODO: Check and Move extra code to utility functions.
     // Logged in user.
     if (getUserDetails().id) {
-      document.addEventListener('customerDetailsFetched', this.setCardNumber, false);
+      document.addEventListener('customerDetailsFetched', this.updateStates, false);
     } else {
       // Guest user.
       const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
       const data = {
-        detail: localStorageValues,
+        detail: { stateValues: localStorageValues },
       };
-      this.setCardNumber(data);
+      this.updateStates(data);
     }
+
+    document.addEventListener('loyaltyStatusUpdatedFromHeader', this.updateStates, false);
   }
 
-  setCardNumber = (data) => {
+  updateStates = (data) => {
     const { stateValues } = data.detail;
+    const states = { ...stateValues };
+
     this.setState({
-      cardNumber: stateValues.cardNumber || '',
+      ...states,
     });
   };
 

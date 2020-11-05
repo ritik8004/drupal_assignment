@@ -1,21 +1,15 @@
 import React from 'react';
 import LoyaltyClubBlock from '../loyalty-club/loyalty-club-block';
-import { getUserAuraStatus, getUserAuraTier, getAllAuraStatus } from '../../utilities/helper';
+import { getAllAuraStatus } from '../../utilities/helper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
+import { getAuraDetailsDefaultState } from '../../utilities/aura_utils';
 
 class MyAccount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       wait: true,
-      loyaltyStatus: getUserAuraStatus(),
-      tier: getUserAuraTier(),
-      points: 0,
-      cardNumber: '',
-      pointsOnHold: 0,
-      upgradeMsg: '',
-      expiringPoints: 0,
-      expiryDate: '',
+      ...getAuraDetailsDefaultState(),
     };
   }
 
@@ -42,10 +36,21 @@ class MyAccount extends React.Component {
   };
 
   updateLoyaltyStatus = (loyaltyStatus) => {
-    this.setState({
+    let stateValues = {
       loyaltyStatus,
-    });
-    dispatchCustomEvent('loyaltyStatusUpdatedFromLoyaltyBlock', loyaltyStatus);
+    };
+
+    if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+      stateValues = {
+        ...getAuraDetailsDefaultState(),
+        loyaltyStatus,
+        signUpComplete: false,
+      };
+    }
+
+    this.setState(stateValues);
+
+    dispatchCustomEvent('loyaltyStatusUpdatedFromLoyaltyBlock', { stateValues });
   };
 
   render() {

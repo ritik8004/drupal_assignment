@@ -1,3 +1,8 @@
+import {
+  getUserAuraStatus,
+  getUserAuraTier,
+} from './helper';
+
 /**
  * Utility function to get element value.
  */
@@ -37,9 +42,28 @@ function getAuraLocalStorageKey() {
   return 'aura_data';
 }
 
+/**
+ * Utility function to get aura details default state.
+ */
+function getAuraDetailsDefaultState() {
+  const auraDetails = {
+    loyaltyStatus: getUserAuraStatus(),
+    tier: getUserAuraTier(),
+    points: 0,
+    cardNumber: '',
+    pointsOnHold: 0,
+    upgradeMsg: '',
+    expiringPoints: 0,
+    expiryDate: '',
+  };
+
+  return auraDetails;
+}
+
 export {
   getElementValue,
   showError,
   removeError,
   getAuraLocalStorageKey,
+  getAuraDetailsDefaultState,
 };
