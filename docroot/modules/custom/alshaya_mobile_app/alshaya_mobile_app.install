@@ -18,7 +18,7 @@ use Drupal\user\Entity\User;
  */
 function alshaya_mobile_app_update_8076() {
   $config = \Drupal::configFactory()->getEditable('alshaya_mobile_app.settings');
-  $config->set('max_product_limit', 50)->save();
+  $config->set('max_product_limit', 24)->save();
 }
 
 /**
