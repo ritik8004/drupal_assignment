@@ -353,7 +353,7 @@ export default class AppointmentStore extends React.Component {
         removeFullScreenLoader();
         Drupal.logJavascriptError('appointment-select-store-getCurrentPosition', error);
       });
-    if (navigator && navigator.geolocation) {
+    if (navigator && navigator.geolocation && geo === true) {
       this.fetchStores(refCoords, true, true);
     }
     return false;

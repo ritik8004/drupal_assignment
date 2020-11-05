@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * Update store finder settings.
+ */
+function alshaya_appointment_update_8003() {
+  $configs = [
+    'alshaya_appointment.settings',
+  ];
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs($configs, 'alshaya_appointment', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adds store finder country settings.
  */
 function alshaya_appointment_update_8002() {
