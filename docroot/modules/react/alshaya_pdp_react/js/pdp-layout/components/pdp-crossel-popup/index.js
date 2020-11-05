@@ -11,6 +11,8 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -150,6 +152,9 @@ class CrossellPopupContent extends React.Component {
                 promotions={promotions}
               />
             </div>
+            {isAuraEnabled()
+              ? <AuraPDP />
+              : null}
             {stockStatus ? (
               <PdpCart
                 skuCode={relatedSku}

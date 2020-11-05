@@ -38,6 +38,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-global';
 
   $current_route = \Drupal::routeMatch();
+  $node = $current_route->getParameter('node');
   // Attach aura library on cart/checkout page.
   if (in_array($current_route->getRouteName(), ['acq_cart.cart', 'alshaya_spc.checkout'])) {
     $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc';
@@ -45,8 +46,12 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   elseif ($current_route->getRouteName() === 'alshaya_spc.checkout.confirmation') {
     $page['#attached']['library'][] = 'alshaya_white_label/aura-loyalty-spc-confirmation';
   }
-  elseif ($current_route->getRouteName() === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
+  elseif ($node && $node->bundle() === 'acq_product') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_pdp';
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+    $settings['pdpLayout'] = $pdp_layout;
   }
   elseif ($current_route->getRouteName() === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';

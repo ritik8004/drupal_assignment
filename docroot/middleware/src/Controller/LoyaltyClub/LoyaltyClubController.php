@@ -103,11 +103,11 @@ class LoyaltyClubController {
     ];
 
     try {
-      $endpoint = sprintf('/apc/%s/sales', $request_content['cardNumber']);
+      $endpoint = sprintf('apc/%s/sales', $request_content['cardNumber']);
       $response = $this->magentoApiWrapper->doRequest('POST', $endpoint, ['json' => $data]);
       $responseData = [
         'status' => TRUE,
-        'data' => $response,
+        'apcPoints' => $response['apc_points'] ?? '',
       ];
       return new JsonResponse($responseData);
     }
