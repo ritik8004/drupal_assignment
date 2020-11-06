@@ -26,7 +26,7 @@ class AppointmentJsonResponse extends JsonResponse {
    *   If the data is already a JSON string.
    */
   public function __construct($data = NULL, bool $cache = FALSE, int $status = 200, array $headers = [], bool $json = FALSE) {
-    parent::__construct($data, 200, $headers = [], FALSE);
+    parent::__construct($data, 200, $headers, FALSE);
 
     if ($cache) {
       $this->setMaxAge($_ENV['APPOINTMENT_API_RESPONSE_MAX_AGE']);
