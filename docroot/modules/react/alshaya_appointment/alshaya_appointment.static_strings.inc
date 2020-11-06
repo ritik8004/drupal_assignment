@@ -124,7 +124,7 @@ function _alshaya_appointment_static_strings() {
     ],
     [
       'key' => 'store_not_found',
-      'value' => t('No available stores are available in this area.'),
+      'value' => t('No stores are available in this location. Please try a different area.'),
     ],
     [
       'key' => 'stores_near_me_label',
