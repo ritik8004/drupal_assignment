@@ -213,6 +213,7 @@ class PaymentController {
           'transaction_id' => $request->query->get('confirmation_id') ?? '',
           'payment_id' => $request->query->get('pun') ?? '',
           'result_code' => $request->query->get('status_message') ?? $request->query->get('status') ?? '',
+          'date' => date('d M. Y @ H\hi'),
         ];
         break;
 
