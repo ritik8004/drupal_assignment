@@ -6,7 +6,7 @@ const AssetGallery = ({ media, title }) => {
     return (null);
   }
   // Clone media items, so that .shift() deletes items from
-  // clonned array, keep original array reusable on state change.
+  // cloned array, keep original array reusable on state change.
   const images = [...media];
   const mainImage = images.length > 0 ? images.shift() : {};
   const hoverImage = images.length > 0 ? images.shift() : {};
