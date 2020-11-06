@@ -56,6 +56,14 @@
           float: none;
         }
 
+        &:last-child:nth-child(odd) {
+          clear: both;
+          margin-left: auto;
+          margin-right: auto;
+          float: none;
+          width: calc(50% - 0.625rem);
+        }
+
         img {
           display: block;
         }
@@ -67,6 +75,14 @@
       display: inline-flex;
       cursor: pointer;
       background: $magv2-gallery-bg;
+
+      @include breakpoint($tablet) {
+        &:last-child:nth-child(odd) {
+          margin: 0 auto;
+          grid-column: 1/-1;
+          width: calc(50% - 0.625rem);
+        }
+      }
 
       @include breakpoint($desktop) {
         min-height: 30.375rem;
@@ -216,7 +232,6 @@
         border-radius: 50%;
         color: $magv2-gallery-popup-cross;
         cursor: pointer;
-        opacity: 0.6;
         z-index: 9;
 
         @include breakpoint($tablet) {

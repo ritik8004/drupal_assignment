@@ -251,19 +251,30 @@ function algolia_save_rules($index, $rules) {
   }
 }
 
-function algolia_update_index($client, $index, $settingsSource, $rules) {
+function algolia_update_index($client, $index, $settingsSource, $settingsSourceReplica, $rules) {
   $settings = $index->getSettings();
   $settingsSource['replicas'] = $settings['replicas'];
+  $settingsSource['attributesForFaceting'] = $settings['attributesForFaceting'];
+
   $index->setSettings($settingsSource);
   sleep(1);
 
   unset($settingsSource['replicas']);
 
   foreach ($settings['replicas'] as $replica) {
+    $exploded_replica = explode('_', $replica);
+    array_shift($exploded_replica);
+    array_unshift($exploded_replica, '01live');
+    $replica_key = implode('_', $exploded_replica);
+
+    print $replica . PHP_EOL;
+
     $replicaIndex = $client->initIndex($replica);
     $replicaSettings = $replicaIndex->getSettings();
-    $settingsSource['ranking'] = $replicaSettings['ranking'];
-    $replicaIndex->setSettings($settingsSource);
+
+    $settingsSourceReplica[$replica_key]['attributesForFaceting'] = $replicaSettings['attributesForFaceting'];
+
+    $replicaIndex->setSettings($settingsSourceReplica[$replica_key]);
     sleep(1);
   }
 

@@ -2,16 +2,14 @@
   position: relative;
   width: 100%;
 
-  &::before {
-    content: '';
-    background: url('#{$base_theme_img_directory_path}/icons/new-pdp-click-collect-search-icon.svg') center center no-repeat;
-    width: 1.25rem;
-    height: 1.25rem;
-    display: block;
+  .magv2-click-n-collect-search-svg {
+    height: 34px;
+    width: 34px;
+    display: inline-block;
     position: absolute;
-    margin: 0.9375rem;
-    bottom: 0;
-    #{$left}: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 0.5rem;
   }
 
   input {

@@ -143,9 +143,24 @@
   }
 
   .appointment-store-empty-store-list {
-    padding: 0.625rem 1.25rem 1.25rem;
-    text-align: center;
+    padding: 1.125rem 1.8125rem 1.25rem 3.375rem;
     font-size: 0.875rem;
-    color: $spc-cnc-store-item-text-impress;
+    color: $appointment-empty-store-list-text;
+    position: relative;
+
+    html[lang=ar] & {
+      padding: 1.125rem 3.375rem 1.25rem 1.8125rem;
+    }
+
+    @include icon(warning, before) {
+      position: absolute;
+      #{$left}: 1.1875rem;
+      top: 0.75rem;
+      font-size: 1.6875rem;
+    }
+  }
+
+  &.empty-store-list {
+    padding-top: 0;
   }
 }

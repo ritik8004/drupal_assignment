@@ -23,6 +23,7 @@ use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Url;
 
 /**
  * Plugin implementation of the 'sku_gallery_formatter' formatter.
@@ -254,6 +255,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
         foreach ($promotions as $key => $promotion) {
+          $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
+          $promotions[$key]['url'] = Url::fromRoute('entity.node.canonical', ['node' => $key], ['language' => $this->languageManager->getLanguage($currentLangCode)])->toString();
           $cache_tags[] = 'node:' . $key;
         }
 

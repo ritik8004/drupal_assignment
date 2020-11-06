@@ -44,8 +44,6 @@ variables:
   landmark: ''
   postal_code: ''
   mobile: '55667788'
-  anon_email: 'exampleuser@mailinator.com'
-  anon_username: 'Sample User Name'
   store_area: 'Salmiya'
   cc_mada_payment_type: 'Credit / Debit Card'
   language_cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
