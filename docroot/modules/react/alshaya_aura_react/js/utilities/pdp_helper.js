@@ -1,5 +1,6 @@
 import { postAPIData } from './api/fetchApiData';
 import dispatchCustomEvent from '../../../js/utilities/events';
+import { getProductPrice } from '../../../js/utilities/helper';
 
 /**
  * Helper function to get PDP layout.
@@ -16,22 +17,6 @@ function getPDPLayout() {
   }
 
   return layout;
-}
-
-/**
- * Helper function to get product price from drupalSettings.
- */
-function getProductPrice(productKey, parentSku, variantSku) {
-  let price = '';
-
-  if (typeof drupalSettings[productKey] !== 'undefined'
-    && typeof drupalSettings[productKey][parentSku] !== 'undefined'
-    && typeof drupalSettings[productKey][parentSku].variants !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings[productKey][parentSku].variants, variantSku)) {
-    price = drupalSettings[productKey][parentSku].variants[variantSku].priceRaw || '';
-  }
-
-  return price;
 }
 
 /**

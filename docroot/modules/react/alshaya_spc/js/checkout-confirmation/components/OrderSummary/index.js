@@ -5,7 +5,7 @@ import AuraEarnOrderSummaryItem
   from '../../../aura-loyalty/components/aura-earn-order-summary-item';
 import AuraRedeemOrderSummaryItem
   from '../../../aura-loyalty/components/aura-redeem-order-summary-item';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import {isAuraEnabled} from '../../../../../js/utilities/helper';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;

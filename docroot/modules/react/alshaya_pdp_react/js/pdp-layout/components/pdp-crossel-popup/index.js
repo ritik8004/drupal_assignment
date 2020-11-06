@@ -11,7 +11,7 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
-import isAuraEnabled from '../../../../../js/utilities/helper';
+import { isAuraEnabled } from '../../../../../js/utilities/helper';
 import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 
 class CrossellPopupContent extends React.Component {
