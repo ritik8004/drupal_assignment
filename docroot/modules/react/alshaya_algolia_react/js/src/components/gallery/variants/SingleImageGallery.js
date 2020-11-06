@@ -2,7 +2,12 @@ import React from 'react';
 import ImageElement from '../imageHelper/ImageElement';
 
 const SingleImageGallery = (props) => {
-  const { title, media: images } = props;
+  const { title, media } = props;
+
+  // Clone media items, so that .shift() deletes items from
+  // cloned array, keep original array reusable on state change.
+  const images = [...media];
+
   const mainImage = images.length > 0 ? images.shift() : {};
   const mainImageUrl = typeof mainImage.url !== 'undefined' ? mainImage.url : '';
 
