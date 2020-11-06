@@ -2,14 +2,17 @@ import { postAPIData } from './api/fetchApiData';
 import dispatchCustomEvent from '../../../js/utilities/events';
 
 /**
- * Helper function to get PDP layout from drupalSettings.
+ * Helper function to get PDP layout.
  */
 function getPDPLayout() {
-  let layout = '';
+  let layout = 'pdp';
 
-  if (typeof drupalSettings.aura !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura, 'pdpLayout')) {
-    layout = drupalSettings.aura.pdpLayout;
+  const bodyElement = document.querySelector('body');
+
+  if (bodyElement.classList.contains('magazine-layout')) {
+    layout = 'pdp-magazine'
+  } else if (bodyElement.classList.contains('new-pdp-magazine-layout')) {
+    layout = 'pdp-magazine_v2'
   }
 
   return layout;
