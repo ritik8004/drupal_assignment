@@ -10,9 +10,9 @@ function getPDPLayout() {
   const bodyElement = document.querySelector('body');
 
   if (bodyElement.classList.contains('magazine-layout')) {
-    layout = 'pdp-magazine'
+    layout = 'pdp-magazine';
   } else if (bodyElement.classList.contains('new-pdp-magazine-layout')) {
-    layout = 'pdp-magazine_v2'
+    layout = 'pdp-magazine_v2';
   }
 
   return layout;
