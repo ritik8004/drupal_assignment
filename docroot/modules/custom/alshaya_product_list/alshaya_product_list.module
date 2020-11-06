@@ -14,6 +14,7 @@ use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -244,4 +245,42 @@ function alshaya_product_list_node_presave(NodeInterface $node) {
   }
   // Invalidate option page cache.
   Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
+}
+
+/**
+ * Implememts hook_options_list_resource_response_alter().
+ */
+function alshaya_product_list_options_list_resource_response_alter(&$data) {
+  $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
+  $path_alias_manager = \Drupal::service('path.alias_manager');
+  $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
+  $database = \Drupal::database();
+
+  foreach ($data['options_list']['brand'] ?? [] as $brand_key => $brands_list) {
+    foreach ($brands_list['options_markup']['#option']['terms'] ?? [] as $term_list_key => $term_list) {
+      foreach ($term_list ?? [] as $term_key => $term) {
+        $term_path = preg_replace("/\/$langcode/", '', $term['url']);
+        $internal_path = $path_alias_manager->getPathByAlias($term_path);
+        $url_parts = explode('/', $internal_path);
+        $type = $database->select('node_field_data', 'nfd')
+          ->fields('nfd', ['type'])
+          ->condition('nid', $url_parts[2])
+          ->execute()
+          ->fetchField();
+
+        if ($type === 'product_list') {
+          $redirect_path = $mobile_app_utility->getRedirectUrl("/$langcode" . $internal_path);
+          if (!strpos($internal_path, $redirect_path)) {
+            // Although $redirect_path is an alias, we still get the proper url
+            // object here.
+            $url = Url::fromUri('internal:/' . $redirect_path);
+            $data['options_list']['brand'][$brand_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['deep_link'] = $mobile_app_utility->getDeepLinkFromUrl($url);
+            continue;
+          }
+        }
+        // For consistency, we send this.
+        $data['options_list']['brand'][$brand_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['deep_link'] = NULL;
+      }
+    }
+  }
 }
