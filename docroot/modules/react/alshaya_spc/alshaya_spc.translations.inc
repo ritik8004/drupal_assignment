@@ -264,8 +264,14 @@ function _alshaya_spc_translations() {
   ];
 
   $strings['v2'] = [
+    'Date' => [
+      'ar' => 'تاريخ',
+    ],
     'Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code' => [
       'ar' => 'معرف المعاملة: transaction_id@ معرف الدفع: payment_id@ رمز النتيجة: result_code@',
+    ],
+    'Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code Date: @date' => [
+      'ar' => 'تاريخ: date@ معرف المعاملة: transaction_id@ معرف الدفع: payment_id@ رمز النتيجة: result_code@',
     ],
   ];
 

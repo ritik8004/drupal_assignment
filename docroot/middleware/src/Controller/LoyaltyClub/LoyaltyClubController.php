@@ -83,39 +83,41 @@ class LoyaltyClubController {
    * Returns the loyalty points related data for a product.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   Json response having the key 'apcPoints' for points.
+   *   JSON response.
    */
   public function getProductPoints(Request $request) {
-    // Expecting 'items' array in the request body with each item having
-    // 'sku', 'quantity'(int) and 'price'(int).
-    $items = $request->request->get('items');
-    if (empty($items)) {
-      return new JsonResponse($this->utility->getErrorResponse('No items found in the request body.', Response::HTTP_NOT_FOUND));
+    $request_content = json_decode($request->getContent(), TRUE);
+
+    if (empty($request_content['cardNumber']) || empty($request_content['currencyCode']) || empty($request_content['products'])) {
+      $this->logger->error('Error while trying to get product points. AURA Card number, currency code and product details is required. Request Data: @request_data', [
+        '@request_data' => json_encode($request_content),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('AURA Card number, currency code and product details is required.', Response::HTTP_NOT_FOUND));
     }
 
-    $cart = $this->cart->getCart();
-    if (empty($cart)) {
-      return new JsonResponse($this->utility->getErrorResponse('Cart not found for the user.', Response::HTTP_NOT_FOUND));
+    $data = [
+      'sales' => [
+        'currencyCode' => $request_content['currencyCode'],
+        'products' => $request_content['products'],
+      ],
+    ];
+
+    try {
+      $endpoint = sprintf('/apc/%s/sales', $request_content['cardNumber']);
+      $response = $this->magentoApiWrapper->doRequest('POST', $endpoint, ['json' => $data]);
+      $responseData = [
+        'status' => TRUE,
+        'data' => $response,
+      ];
+      return new JsonResponse($responseData);
     }
-
-    // Hard coded return value for now since MDC not available.
-    return new JsonResponse(['apcPoints' => '2000']);
-
-    // $user_identifier_number = 10;
-    // $endpoint = sprintf('/apc/%s/sales', $user_identifier_number);
-    // try {
-    // $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
-    // return new JsonResponse($response['apcPoints']);
-    // }
-    // catch (\Exception $e) {
-    // $customer_id = $this->drupal->getSessionCustomerInfo()['customer_id'];
-    // $this->logger->notice('Error while trying to fetch product points for
-    // user with customer id @customer_id.', [
-    // '@customer_id' => $customer_id,
-    // ]);
-    // return new JsonResponse('Error while trying to fetch product points',
-    // Response::HTTP_INTERNAL_SERVER_ERROR);
-    // }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to get product points. Request Data: @request_data. Message: @message', [
+        '@request_data' => json_encode($request_content),
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
   }
 
   /**
@@ -174,7 +176,7 @@ class LoyaltyClubController {
           'uid' => $uid,
           'apcLinkStatus' => $aura_status,
         ];
-        $updated = $this->drupal->updateUserAuraInfo($auraData);;
+        $updated = $this->drupal->updateUserAuraInfo($auraData);
 
         // Check if user aura status was updated successfully in drupal.
         if (!$updated) {
@@ -197,7 +199,7 @@ class LoyaltyClubController {
     catch (\Exception $e) {
       $this->logger->notice('Error while trying to update AURA Status for user with customer id @customer_id. Request Data: @request_data. Message: @message', [
         '@customer_id' => $user['customer_id'],
-        '@request_data' => json_decode($data),
+        '@request_data' => json_encode($data),
         '@message' => $e->getMessage(),
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
