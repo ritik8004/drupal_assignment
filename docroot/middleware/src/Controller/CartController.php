@@ -473,6 +473,14 @@ class CartController {
         && !in_array($response['payment']['default'], $codes)) {
         unset($response['payment']['default']);
       }
+
+      if (!empty($response['payment']['method'])) {
+        $response['payment']['method'] = $this->cart->getMethodCodeForFrontend($response['payment']['method']);
+      }
+
+      if (!empty($response['payment']['default'])) {
+        $response['payment']['default'] = $this->cart->getMethodCodeForFrontend($response['payment']['default']);
+      }
     }
 
     return $response;
@@ -493,7 +501,7 @@ class CartController {
     $request_content = json_decode($request->getContent(), TRUE);
 
     // Validate request.
-    if (!$this->validateRequestData($request_content)) {
+    if (empty($request_content) || !$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
       // Setting custom error code for bad response so that
       // we could distinguish this error.

@@ -10,7 +10,7 @@ const Points = (props) => {
   const tierClass = tierLevel || 'no-tier';
 
   return (
-    <span className={`points ${tierLabel} badge-${tierClass}`}>
+    <span className={`points ${tierLabel} badge-${tierClass.replace(/ /g, '')}`}>
       {`${points}`}
       <span className="points-post-text">
         {`${Drupal.t('Pts')}`}

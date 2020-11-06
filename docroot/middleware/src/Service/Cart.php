@@ -148,6 +148,13 @@ class Cart {
   protected $request;
 
   /**
+   * Language Manager.
+   *
+   * @var \App\Service\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -180,6 +187,8 @@ class Cart {
    *   Database connection.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   RequestStack Object.
+   * @param \App\Service\LanguageManager $language_manager
+   *   Language Manager.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -196,7 +205,8 @@ class Cart {
     Orders $orders,
     LoggerInterface $logger,
     Connection $connection,
-    RequestStack $requestStack
+    RequestStack $requestStack,
+    LanguageManager $language_manager
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -213,6 +223,7 @@ class Cart {
     $this->logger = $logger;
     $this->connection = $connection;
     $this->request = $requestStack->getCurrentRequest();
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -1104,6 +1115,8 @@ class Cart {
             return $this->updateCart($data);
           }
         }
+
+        return $this->utility->getErrorResponse('', 400);
       }
       else {
         $this->cancelCartReservation($e->getMessage());
@@ -1296,6 +1309,11 @@ class Cart {
    *   Payment method set on cart.
    */
   public function getPaymentMethodSetOnCart() {
+    // Let the method be set again if user changes the language.
+    if ($this->languageManager->isLanguageChanged()) {
+      return '';
+    }
+
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
     if ($expire > 0 && ($method = $this->cache->get('payment_method'))) {
       return $method;
@@ -1316,6 +1334,29 @@ class Cart {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Get Method Code for frontend.
+   *
+   * @param string $method
+   *   Payment Method code.
+   *
+   * @return string
+   *   Payment Method code used in frontend.
+   */
+  public function getMethodCodeForFrontend(string $method) {
+    switch ($method) {
+      case APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD:
+        $method = 'checkout_com_upapi';
+        break;
+
+      case APIWrapper::CHECKOUT_COM_VAULT_METHOD:
+        $method = 'checkout_com';
+        break;
+    }
+
+    return $method;
   }
 
   /**

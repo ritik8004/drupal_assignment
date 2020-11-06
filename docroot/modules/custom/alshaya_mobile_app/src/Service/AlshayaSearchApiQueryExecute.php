@@ -345,7 +345,8 @@ class AlshayaSearchApiQueryExecute {
       $pager = explode(',', $query_string_parameters[self::PAGER_KEY]);
       $page_offset = (int) $pager[0];
       if (!empty($pager[1]) && is_int((int) $pager[1])) {
-        $page_limit = $pager[1];
+        $upper_limit = $this->getProductMaxLimit();
+        $page_limit = ($upper_limit > $pager[1]) ? $pager[1] : $upper_limit;
       }
     }
     $query->range($page_offset, $page_limit);
@@ -541,6 +542,14 @@ class AlshayaSearchApiQueryExecute {
       'processed_facets' => $this->processedFacetsArray,
       'search_api_results' => $results,
     ];
+  }
+
+  /**
+   * Get the Products max limit.
+   */
+  public function getProductMaxLimit() {
+    $config = $this->configFactory->get('alshaya_mobile_app.settings');
+    return $config->get('max_product_limit') ?? self::PAGER_DEFAULT_LIMIT;
   }
 
   /**
