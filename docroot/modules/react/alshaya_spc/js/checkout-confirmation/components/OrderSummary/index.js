@@ -71,7 +71,7 @@ const OrderSummary = () => {
   }
 
   const {
-    method, transactionId, paymentId, resultCode, bankDetails,
+    method, transactionId, paymentId, resultCode, bankDetails, orderDate,
   } = drupalSettings.order_details.payment;
 
   // Get Billing info.
@@ -120,6 +120,9 @@ const OrderSummary = () => {
         </ConditionalView>
         <ConditionalView condition={resultCode !== undefined && resultCode !== null}>
           <OrderSummaryItem animationDelay="0.7s" label={Drupal.t('Result code')} value={resultCode} />
+        </ConditionalView>
+        <ConditionalView condition={orderDate !== undefined && orderDate !== null}>
+          <OrderSummaryItem animationDelay="0.7s" label={Drupal.t('Date')} value={orderDate} />
         </ConditionalView>
         <ConditionalView condition={bankDetails !== undefined && bankDetails !== null}>
           <OrderSummaryItem
