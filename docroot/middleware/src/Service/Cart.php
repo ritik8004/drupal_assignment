@@ -1869,26 +1869,23 @@ class Cart {
    *   If cart total is valid.
    */
   public function isCartTotalValid(array $cart) {
-    $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
-    $expiration_time = $checkout_settings['totals_revalidation_ttl'];
-
     // Check if last update of our cart is more recent than X minutes.
-    $cart_last_updated = isset($cart['cart']['updated_at']) ? $cart['cart']['updated_at'] : $cart['cart']['created_at'];
-    if (empty($cart_last_updated)) {
+    if (!isset($cart['cache_time'])) {
       // Unexpected but in that case we assume it is correct.
-      $this->logger->error('No created_at and updated_at field in the cart @cart_id.', [
+      $this->logger->error('No cache_time field in the cart @cart_id.', [
         '@cart_id' => $cart['cart']['id'],
       ]);
       return TRUE;
     }
 
-    if (isset($cart['cache_time'])) {
-      $cart_expire_time = $cart['cache_time'] + $expiration_time;
-      $current_time = time();
-      if ($cart_expire_time >= $current_time) {
-        // Not expired. We assume totals are valid.
-        return TRUE;
-      }
+    $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
+    $expiration_time = $checkout_settings['totals_revalidation_ttl'];
+
+    $cart_expire_time = $cart['cache_time'] + $expiration_time;
+    $current_time = time();
+    if ($cart_expire_time >= $current_time) {
+      // Not expired. We assume totals are valid.
+      return TRUE;
     }
 
     // Get cart totals.
