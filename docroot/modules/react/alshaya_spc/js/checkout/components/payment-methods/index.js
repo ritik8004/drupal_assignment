@@ -1,4 +1,5 @@
 import React from 'react';
+import { renderToString } from 'react-dom/server';
 import Cookies from 'js-cookie';
 import parse from 'html-react-parser';
 import SectionTitle from '../../../utilities/section-title';
@@ -12,6 +13,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
+import PriceElement from '../../../utilities/special-price/PriceElement';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -61,7 +63,9 @@ export default class PaymentMethods extends React.Component {
         if (paymentErrorInfo.data !== undefined) {
           const errorData = {};
           Object.entries(paymentErrorInfo.data).forEach(([key, value]) => {
-            errorData[`@${key}`] = value;
+            errorData[`@${key}`] = (key === 'amount')
+              ? renderToString(<PriceElement amount={value} format="string" />)
+              : value;
           });
 
           const transactionData = getStringMessage(`${paymentErrorInfo.payment_method}_error_info`, errorData);

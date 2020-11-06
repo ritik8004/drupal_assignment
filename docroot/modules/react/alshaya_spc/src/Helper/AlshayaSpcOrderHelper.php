@@ -450,7 +450,10 @@ class AlshayaSpcOrderHelper {
         $orderDetails['payment']['transactionId'] = $payment_info['confirmation_id'];
         $orderDetails['payment']['paymentId'] = $payment_info['pun'] ?? '';
         $orderDetails['payment']['resultCode'] = $payment_info['status_message'] ?? $payment_info['status'];
-        $orderDetails['payment']['orderDate'] = alshaya_master_get_site_date_from_api_date($order['created_at'], 'order_date');
+        $orderDetails['payment']['orderDate'] = date(
+          Settings::get('alshaya_checkout_settings')['date_format'],
+          strtotime($order['created_at'])
+        );
         break;
 
       case 'banktransfer':
