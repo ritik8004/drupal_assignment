@@ -29,7 +29,7 @@ class AppointmentJsonResponse extends JsonResponse {
     parent::__construct($data, 200, $headers = [], FALSE);
 
     if ($cache) {
-      $this->setMaxAge(3600);
+      $this->setMaxAge($_ENV['APPOINTMENT_API_RESPONSE_MAX_AGE']);
     }
     else {
       $this->setMaxAge(0);
