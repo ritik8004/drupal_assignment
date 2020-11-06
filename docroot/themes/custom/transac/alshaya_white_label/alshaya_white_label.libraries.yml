@@ -476,3 +476,10 @@ aura-loyalty-myaccount:
     - alshaya_white_label/aura-loyalty-messages
     - alshaya_white_label/aura-loyalty-forms
     - alshaya_white_label/alshaya-react-animate
+
+aura-loyalty-pdp:
+  css:
+    theme:
+      css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/aura-loyalty-tooltip

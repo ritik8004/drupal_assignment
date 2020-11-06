@@ -3,6 +3,7 @@ import { getUserDetails } from '../../utilities/helper';
 import { getStorageInfo } from '../../../../js/utilities/storage';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
 import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
+import Loading from '../../../../alshaya_spc/js/utilities/loading';
 
 class AuraPDP extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class AuraPDP extends React.Component {
     this.state = {
       productPoints: 0,
       cardNumber: '',
+      wait: true,
     };
   }
 
@@ -35,16 +37,34 @@ class AuraPDP extends React.Component {
 
     this.setState({
       ...states,
+      wait: false,
     });
   };
 
   getToolTipContent = () => Drupal.t('Everytime you shop you will earn Aura points which can then be redeemed for future purchases. Not eligible for accrual when purchased through Aura points.');
 
+  getPointsText = (productPoints) => {
+    if (productPoints === 0) {
+      return [
+        <span>{Drupal.t('Earn')}</span>,
+        <b>{productPoints}</b>,
+        <span>{Drupal.t('Aura points')}</span>,
+      ];
+    }
+
+    return <span>{Drupal.t('Earn Aura points')}</span>;
+  };
+
   render() {
     const {
       cardNumber,
       productPoints,
+      wait,
     } = this.state;
+
+    if (wait) {
+      return <Loading />;
+    }
 
     if (!cardNumber) {
       return null;
@@ -53,7 +73,7 @@ class AuraPDP extends React.Component {
     return (
       <div className="aura-pdp-points-section">
         <span className="points-text">
-          { `${Drupal.t('Earn')} ${productPoints} ${Drupal.t('Aura points')}`}
+          { this.getPointsText(productPoints)}
         </span>
         <ToolTip enable question>{ this.getToolTipContent() }</ToolTip>
       </div>
