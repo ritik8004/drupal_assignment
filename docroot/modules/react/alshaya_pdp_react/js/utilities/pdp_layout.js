@@ -69,6 +69,9 @@ export const triggerAddToCart = (
     if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
       cartBtn.classList.remove('magv2-add-to-basket-loader');
       cartBtn.innerHTML = Drupal.t('Add To Bag');
+      if (context === 'main' && window.innerWidth < 768) {
+        document.querySelector('body').classList.remove('overlay-select');
+      }
     }
     if (response.data.error_code === '400') {
       Drupal.alshayaSpc.clearCartData();
