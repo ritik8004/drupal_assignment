@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_hm_images;
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_sku\AcqSkuConfig;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
@@ -335,6 +336,12 @@ class SkuAssetManager {
    *   File entity if image download successful.
    */
   private function downloadPimsAsset(array &$data, string $sku, string $asset_type) {
+    $non_cli_image_download = AcqSkuConfig::get('non_cli_image_download');
+    // Return if it is non CLI request AND if the config value for it is
+    // disabled.
+    if (PHP_SAPI !== 'cli' && !$non_cli_image_download) {
+      return NULL;
+    }
     // If image is blacklisted, block download.
     if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
       return NULL;

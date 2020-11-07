@@ -13,6 +13,14 @@ use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Symfony\Component\Yaml\Yaml;
 
 /**
+ * Set non_cli_image_download.
+ */
+function acq_sku_update_8025() {
+  $config = \Drupal::configFactory()->getEditable('acq_sku.settings');
+  $config->set('non_cli_image_download', 0)->save();
+}
+
+/**
  * Implements hook_update_N().
  *
  * Adding index 'acq_sku_sku_defaultlangcode' on acq_sku_field_data table.
