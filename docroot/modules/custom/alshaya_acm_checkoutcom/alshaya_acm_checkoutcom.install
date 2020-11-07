@@ -10,6 +10,23 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_n().
  *
+ * Update translations of checkout.com upapi payment method.
+ */
+function alshaya_acm_checkoutcom_update_8003() {
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+
+  $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com_upapi', 'Credit / Debit Card');
+  $checkout_com = $checkout_com->hasTranslation('ar')
+    ? $checkout_com->getTranslation('ar')
+    : $checkout_com->addTranslation('ar', []);
+  $checkout_com->setName('البطاقة الائتمانية / البطاقة المصرفية');
+  $checkout_com->save();
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * Update translations of checkout.com related strings.
  * Set the config to allow apple pay not on desktop for now.
  */
@@ -82,7 +99,7 @@ function alshaya_acm_checkoutcom_install() {
   // Make checkout.com default payment method for all country except kw.
   $country_code = mb_strtolower(Settings::get('country_code'));
   $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com', 'Credit / Debit Card');
+  $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com_upapi', 'Credit / Debit Card');
 
   if ($country_code !== 'kw') {
     $checkout_com->get('field_payment_default')->setValue(1);

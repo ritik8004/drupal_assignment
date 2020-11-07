@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 
 /**
- * Class ProductUpdatedEventSubscriber.
+ * Class Product Updated Event Subscriber.
  *
  * @package Drupal\alshaya_hm_images\EventSubscriber
  */

@@ -6,7 +6,7 @@ use App\Service\Config\SystemSettings;
 use GuzzleHttp\Client;
 
 /**
- * Class MagentoInfo.
+ * Mainly provides Magento connection information.
  */
 class MagentoInfo {
 
@@ -86,6 +86,20 @@ class MagentoInfo {
     ]);
 
     return $client;
+  }
+
+  /**
+   * Returns the PHP timeout value for the given context.
+   *
+   * @param string $context
+   *   The context in which the timeout is required.
+   *
+   * @return int
+   *   The timeout time in seconds.
+   */
+  public function getPhpTimeout(string $context) {
+    return $this->systemSettings->getSettings('alshaya_backend_calls_options')['appointment_booking'][$context]['timeout']
+        ?? $this->systemSettings->getSettings('alshaya_backend_calls_options')['appointment_booking']['default']['timeout'];
   }
 
 }

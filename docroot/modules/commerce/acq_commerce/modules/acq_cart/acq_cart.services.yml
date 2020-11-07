@@ -1,7 +1,7 @@
 services:
   acq_cart.cart_storage:
     class: Drupal\acq_cart\CartSessionStorage
-    arguments: ['@session', '@acq_commerce.api', '@logger.factory']
+    arguments: ['@session', '@acq_commerce.api', '@logger.factory', '@request_stack', '@current_user']
   acq_cart.mini_cart:
     class: Drupal\acq_cart\MiniCartManager
     arguments: ['@acq_cart.cart_storage']

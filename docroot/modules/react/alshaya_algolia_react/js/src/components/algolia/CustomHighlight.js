@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { connectHighlight } from 'react-instantsearch-dom';
 import { isMobile } from '../../utils';
 
-const Highlight = ({ highlight, attribute, hit, suffix }) => {
+const Highlight = ({
+  highlight, attribute, hit, suffix,
+}) => {
   const parsedHit = highlight({
     highlightProperty: '_highlightResult',
     attribute,
@@ -13,16 +15,15 @@ const Highlight = ({ highlight, attribute, hit, suffix }) => {
     if (isMobile()) {
       Drupal.blazyRevalidate();
     }
-  }, [hit])
+  }, [hit]);
 
   return (
     <div className="aa-suggestion">
       <span className="suggested-text">
         {parsedHit.map(
-          (part, index) =>
-            part.isHighlighted
-              ? (<span key={index} className="highlighted">{part.value}</span>)
-              : (<span key={index} className="nonHighlighted">{part.value}</span>)
+          (part) => (part.isHighlighted
+            ? (<span key={part.id} className="highlighted">{part.value}</span>)
+            : (<span key={part.id} className="nonHighlighted">{part.value}</span>)),
         )}
       </span>
       {suffix}

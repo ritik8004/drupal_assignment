@@ -48,7 +48,6 @@
     }
   }
 
-
   Drupal.behaviors.sliderBanner = {
     attach: function (context, settings) {
       var options = {
@@ -65,7 +64,6 @@
       var paragraphBanner = $('.paragraph-banner');
       var bannerPanelFieldItem = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content > .field__item');
       var bannerSliderContainer = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content');
-
 
       applyBannerRtl(paragraphBanner, options);
       applyBannerLazyLoad(paragraphBanner);

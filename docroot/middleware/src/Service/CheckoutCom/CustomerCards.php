@@ -5,7 +5,7 @@ namespace App\Service\CheckoutCom;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class CustomerCards.
+ * Wrapper to get Customer Cards.
  */
 class CustomerCards {
 
@@ -42,6 +42,8 @@ class CustomerCards {
   /**
    * Get given card hash info for given customer.
    *
+   * @param string $method
+   *   Payment method.
    * @param int $customer_id
    *   The customer id.
    * @param string $card_hash
@@ -50,8 +52,8 @@ class CustomerCards {
    * @return mixed|null
    *   Return array of card data or null.
    */
-  public function getGivenCardInfo(int $customer_id, string $card_hash) {
-    $cards = $this->getCustomerCards($customer_id);
+  public function getGivenCardInfo(string $method, int $customer_id, string $card_hash) {
+    $cards = $this->getCustomerCards($method, $customer_id);
     $decode_hash = $this->deocodePublicHash($card_hash);
     if (isset($cards[$decode_hash])) {
       // Avoid notices.
@@ -67,8 +69,8 @@ class CustomerCards {
    * @return array
    *   Return array of customer cards or empty array.
    */
-  public function getCustomerCards(int $customer_id) {
-    $response = $this->helper->getCustomerCards($customer_id);
+  public function getCustomerCards(string $method, int $customer_id) {
+    $response = $this->helper->getCustomerCards($method, $customer_id);
 
     if (!empty($response) && isset($response['message'])) {
       $this->logger->error(strtr($response['message'], $response['parameters'] ?? []));

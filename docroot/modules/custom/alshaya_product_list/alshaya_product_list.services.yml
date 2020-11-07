@@ -1,0 +1,17 @@
+services:
+  alshaya_product_list.page_helper:
+    class: Drupal\alshaya_product_list\Service\AlshayaProductListHelper
+    arguments:
+      - '@entity_type.manager'
+      - '@path.validator'
+      - '@request_stack'
+      - '@entity.repository'
+      - '@language_manager'
+      - '@facets.manager'
+      - '@logger.factory'
+  alshaya_product_list.product_list_algolia_event:
+    class: Drupal\alshaya_product_list\EventSubscriber\ProductListAlgoliaBlockEventSubscriber
+    arguments:
+      - '@alshaya_product_list.page_helper'
+    tags:
+      - { name: 'event_subscriber' }

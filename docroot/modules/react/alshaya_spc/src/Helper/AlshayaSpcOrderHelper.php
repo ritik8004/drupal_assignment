@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class AlshayaSpcOrderHelper.
+ * Class Alshaya Spc Order Helper.
  */
 class AlshayaSpcOrderHelper {
 
@@ -302,9 +302,13 @@ class AlshayaSpcOrderHelper {
     $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);
     $skuEntity = SKU::loadFromSku($item['sku']);
-    if (($skuEntity instanceof SKUInterface) && ($node instanceof NodeInterface)) {
+    if ($skuEntity instanceof SKUInterface) {
       $data['title'] = $this->productInfoHelper->getTitle($skuEntity, 'basket');
-      $data['url'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
+
+      if ($node instanceof NodeInterface) {
+        $data['url'] = $node->toUrl('canonical', ['absolute' => FALSE])->toString();
+      }
+
       $data['image'] = $this->getProductDisplayImage($skuEntity, 'cart_thumbnail', 'cart');
       // Check if we can find a parent SKU for this to get proper name.
       if ($this->skuManager->getParentSkuBySku($skuEntity)) {
@@ -425,31 +429,53 @@ class AlshayaSpcOrderHelper {
       ? NULL
       : $this->getProcessedAddress($order['billing']);
 
-    if ($order['payment']['method'] === 'knet') {
-      // @TODO: Get this information from Magento in a better way.
-      $orderDetails['payment']['transactionId'] = $order['payment']['additional_information'][0];
-      $orderDetails['payment']['paymentId'] = $order['payment']['additional_information'][2];
-
-      // @TODO: Get this information from Magento.
-      $orderDetails['payment']['resultCode'] = 'CAPTURED';
+    foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
+      $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
     }
-    elseif ($order['payment']['method'] == 'banktransfer' && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
-      $instructions = $order['extension']['bank_transfer_instructions'];
-      $bank_transfer = [
-        '#theme' => 'banktransfer_payment_details',
-        '#account_number' => $instructions['account_number'],
-        '#address' => $instructions['address'],
-        '#bank_name' => $instructions['bank_name'],
-        '#beneficiary_name' => $instructions['beneficiary_name'],
-        '#branch' => $instructions['branch'],
-        '#iban' => $instructions['iban'],
-        '#swift_code' => $instructions['swift_code'],
-        '#purpose' => $this->t('Purchase of Goods - @order_id', [
-          '@order_id' => $order['increment_id'],
-        ]),
-      ];
 
-      $orderDetails['payment']['bankDetails'] = $this->renderer->renderPlain($bank_transfer);
+    switch ($order['payment']['method']) {
+      case 'knet':
+        $orderDetails['payment']['transactionId'] = $payment_info['transaction_id'];
+        $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
+        $orderDetails['payment']['resultCode'] = 'CAPTURED';
+        break;
+
+      case 'checkout_com_upapi_knet':
+        $orderDetails['payment']['transactionId'] = $payment_info['knet_transaction_id'];
+        $orderDetails['payment']['paymentId'] = $payment_info['knet_payment_id'];
+        $orderDetails['payment']['resultCode'] = $payment_info['knet_result'];
+        break;
+
+      case 'checkout_com_upapi_qpay':
+        $orderDetails['payment']['transactionId'] = $payment_info['confirmation_id'];
+        $orderDetails['payment']['paymentId'] = $payment_info['pun'] ?? '';
+        $orderDetails['payment']['resultCode'] = $payment_info['status_message'] ?? $payment_info['status'];
+        $orderDetails['payment']['orderDate'] = date(
+          Settings::get('alshaya_checkout_settings')['date_format'],
+          strtotime($order['created_at'])
+        );
+        break;
+
+      case 'banktransfer':
+        if (!empty(array_filter($order['extension']['bank_transfer_instructions']))) {
+          $instructions = $order['extension']['bank_transfer_instructions'];
+          $bank_transfer = [
+            '#theme' => 'banktransfer_payment_details',
+            '#account_number' => $instructions['account_number'],
+            '#address' => $instructions['address'],
+            '#bank_name' => $instructions['bank_name'],
+            '#beneficiary_name' => $instructions['beneficiary_name'],
+            '#branch' => $instructions['branch'],
+            '#iban' => $instructions['iban'],
+            '#swift_code' => $instructions['swift_code'],
+            '#purpose' => $this->t('Purchase of Goods - @order_id', [
+              '@order_id' => $order['increment_id'],
+            ]),
+          ];
+
+          $orderDetails['payment']['bankDetails'] = $this->renderer->renderPlain($bank_transfer);
+        }
+        break;
     }
 
     return $orderDetails;

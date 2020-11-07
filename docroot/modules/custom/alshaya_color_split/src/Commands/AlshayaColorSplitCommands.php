@@ -12,7 +12,7 @@ use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
 
 /**
- * Class AlshayaColorSplitCommands.
+ * Class Alshaya Color Split Commands.
  *
  * @package Drupal\alshaya_color_split\Commands
  */

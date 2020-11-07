@@ -72,3 +72,21 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@acq_sku.category_repo'
+
+  alshaya_acm_product_category.page:
+    class: Drupal\alshaya_acm_product_category\Service\ProductCategoryPage
+    arguments:
+      - '@entity_type.manager'
+      - '@path.validator'
+      - '@request_stack'
+      - '@entity.repository'
+      - '@language_manager'
+      - '@config.factory'
+
+  alshaya_acm_product_category.category_products_helper:
+    class: Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
+      - '@alshaya_acm_product_category.page'
+      - '@language_manager'

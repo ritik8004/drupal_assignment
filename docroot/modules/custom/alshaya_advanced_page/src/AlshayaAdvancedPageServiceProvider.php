@@ -9,7 +9,7 @@ use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
 
 /**
- * Class AlshayaAdvancedPageServiceProvider.
+ * Class Alshaya Advanced Page Service Provider.
  */
 class AlshayaAdvancedPageServiceProvider extends ServiceProviderBase implements ServiceModifierInterface {
 

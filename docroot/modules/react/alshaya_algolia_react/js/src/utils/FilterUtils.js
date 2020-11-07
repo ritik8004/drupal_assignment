@@ -1,12 +1,12 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
 /**
  * Get all the filters as array.
  */
-function getAllFilters() {
-  return (typeof drupalSettings.algoliaSearch.filters === 'object')
-    ? Object.values(drupalSettings.algoliaSearch.filters)
-    : drupalSettings.algoliaSearch.filters;
+function getAllFilters(pageType) {
+  return (typeof drupalSettings.algoliaSearch[pageType].filters === 'object')
+    ? Object.values(drupalSettings.algoliaSearch[pageType].filters)
+    : drupalSettings.algoliaSearch[pageType].filters;
 }
 
 /**
@@ -16,11 +16,9 @@ function getAllFilters() {
  * As of now, filtering out field_category and super_category, as it is not
  * displayed anywhere and ideally it will be part of lhn sidebar.
  */
-function getFilters() {
-  let filters = getAllFilters();
-  _.remove(filters, function (filter) {
-    return (filter.identifier === 'field_category' || filter.identifier === 'super_category');
-  });
+function getFilters(pageType) {
+  const filters = getAllFilters(pageType);
+  _.remove(filters, (filter) => (filter.identifier === 'field_category' || filter.identifier === 'super_category'));
   return filters;
 }
 
@@ -31,14 +29,14 @@ function getFilters() {
 function hasCategoryFilter() {
   if (drupalSettings.algoliaSearch.enable_lhn_tree_search) {
     // category hierarchical menu in lhn side.
-    let filters = getAllFilters();
-    const isCategoryPresent = _.findIndex(filters, { 'identifier': 'field_category' });
+    const filters = getAllFilters('search');
+    const isCategoryPresent = _.findIndex(filters, { identifier: 'field_category' });
     if (isCategoryPresent) {
       return (isCategoryPresent >= 0);
     }
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 /**
@@ -49,43 +47,39 @@ function sortItemsByCount(items) {
   let sortedItems = [];
 
   sortedItems = items.slice(0);
-  sortedItems.sort(function(a,b) {
-    return b.count - a.count;
-  });
+  sortedItems.sort((a, b) => b.count - a.count);
 
   return sortedItems;
 }
 
-
 function sortItemsByMegaMenu(items, selector, label) {
-  let sortedItems = [];
+  const sortedItems = [];
 
   // Sort facet items in order of the megamenu.
-  let weight = [];
+  const weight = [];
   // Getting the attribute for L1 items from the menu.
-  let l1MenuItems = document.querySelectorAll(selector);
-  for (let i in l1MenuItems) {
+  const l1MenuItems = document.querySelectorAll(selector);
+  Object.keys(l1MenuItems).forEach((i) => {
     try {
       if (l1MenuItems[i].getAttribute(label) !== null) {
         // Add 10 to allow adding All at top.
-        weight[l1MenuItems[i].getAttribute(label).trim()] = parseInt(i) + 10;
+        weight[l1MenuItems[i].getAttribute(label).trim()] = parseInt(i, 10) + 10;
       }
+    } catch (e) {
+      // Do nothing.
     }
-    catch (e) {
-    }
-  }
-  for (let i in items) {
+  });
+
+  Object.keys(items).forEach((i) => {
     if (weight[items[i].label.trim()] !== undefined) {
       sortedItems[weight[items[i].label]] = items[i];
-    }
-    else if (items[i].label === window.Drupal.t('All')) {
+    } else if (items[i].label === window.Drupal.t('All')) {
       // Use 1 for All to ensure Object.values work properly.
       sortedItems[1] = items[i];
     }
-  }
-  sortedItems = Object.values(Object.keys(sortedItems).reduce((a, c) => (a[c] = sortedItems[c], a), {}));
+  });
 
-  return sortedItems;
+  return Object.values(sortedItems);
 }
 
 function getSortedItems(items, element) {
@@ -100,12 +94,10 @@ function getSortedItems(items, element) {
       // If super category is enabled then we sort the category filters by result count.
       if (document.getElementById('block-supercategorymenu') !== null) {
         sortedItems = sortItemsByCount(items);
-      }
-      else {
+      } else {
         sortedItems = sortItemsByMegaMenu(items, '.menu--one__link', 'title');
       }
       break;
-
     }
     case 'supercategory': {
       if (document.getElementById('block-supercategorymenu') !== null) {
@@ -113,6 +105,8 @@ function getSortedItems(items, element) {
       }
       break;
     }
+    default:
+      break;
   }
 
   return sortedItems;
@@ -126,11 +120,32 @@ function hasSuperCategoryFilter() {
   if (!drupalSettings.algoliaSearch.enable_lhn_tree_search) {
     return false;
   }
-  let filters = getAllFilters();
-  const isSuperCategoryPresent = _.findIndex(filters, { 'identifier': 'super_category' });
+  const filters = getAllFilters('search');
+  const isSuperCategoryPresent = _.findIndex(filters, { identifier: 'super_category' });
   if (isSuperCategoryPresent !== -1) {
     return (isSuperCategoryPresent >= 0);
   }
+  return false;
+}
+
+/**
+ * Return the alias for the given facet key OR return key for the given
+ * facet alias.
+ *
+ * @param {*} key
+ *   The key for which we need result.
+ * @param {*} returnType
+ *   Return type value to return. ("alias" or "key")
+ */
+function facetFieldAlias(key, returnType) {
+  const { filters_alias: filtersAlias } = drupalSettings.algoliaSearch;
+  const { filters } = drupalSettings.algoliaSearch.search;
+
+  const facetField = key.split('.')[0];
+  if (returnType === 'alias') {
+    return filters[facetField].alias;
+  }
+  return filtersAlias[key];
 }
 
 /**
@@ -138,8 +153,8 @@ function hasSuperCategoryFilter() {
  * rules configured in algolia dashboard.
  */
 const customQueryRedirect = (items) => {
-    const match = items.find(data => Boolean(data.redirect));
-    if (match && match.redirect) {
+  const match = items.find((data) => Boolean(data.redirect));
+  if (match && match.redirect) {
     window.location.href = match.redirect;
   }
   return [];
@@ -150,5 +165,6 @@ export {
   hasCategoryFilter,
   getSortedItems,
   hasSuperCategoryFilter,
-  customQueryRedirect
-}
+  facetFieldAlias,
+  customQueryRedirect,
+};

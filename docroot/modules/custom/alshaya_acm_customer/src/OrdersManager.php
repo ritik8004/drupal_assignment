@@ -12,7 +12,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
- * Class OrdersManager.
+ * Class Orders Manager.
  *
  * @TODO: Move all code from utility file to here.
  * Target file alshaya_acm_customer.orders.inc.
@@ -217,7 +217,12 @@ class OrdersManager {
 
     try {
       $query = $this->getOrdersQuery('customer_id', $customer_id);
-      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
+
+      $request_options = [
+        'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
+      ];
+
+      $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
       $result = json_decode($response ?? [], TRUE);
       $orders = $result['items'] ?? [];
       foreach ($orders as $key => $order) {
@@ -274,7 +279,12 @@ class OrdersManager {
 
     $query = $this->getOrdersQuery('customer_id', $customer_id);
     $query['searchCriteria']['pageSize'] = 1;
-    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
+
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
+    ];
+
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
     $result = json_decode($response ?? [], TRUE);
     $count = $result['total_count'] ?? 0;
     $this->countCache->set($cid, $count);
@@ -293,7 +303,12 @@ class OrdersManager {
    */
   public function getOrder(int $order_id) {
     $query = $this->getOrdersQuery('entity_id', $order_id);
-    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
+
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
+    ];
+
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
     $result = json_decode($response ?? [], TRUE);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {
@@ -317,7 +332,11 @@ class OrdersManager {
     $query = $this->getOrdersQuery('customer_id', $customer_id);
     $query['searchCriteria']['pageSize'] = 1;
 
-    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET');
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_search'),
+    ];
+
+    $response = $this->apiWrapper->invokeApi('orders', $query, 'GET', FALSE, $request_options);
     $result = json_decode($response ?? [], TRUE);
     $count = $result['total_count'] ?? 0;
     if (empty($count)) {

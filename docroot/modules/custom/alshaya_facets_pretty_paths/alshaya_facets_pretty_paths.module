@@ -47,6 +47,7 @@ function _alshaya_facets_pretty_paths_get_mappings() {
         'selling_price' => 'price_range',
         'actual_color_label_code' => 'color_family',
         'color_family' => 'color_family',
+        'category_facet_search' => 'category',
       ],
     ],
   ];
@@ -254,10 +255,16 @@ function alshaya_facets_pretty_paths_language_get_translations() {
  * Implements hook_editor_js_settings_alter().
  */
 function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
   // Replace all aliases with internal paths to ensure we do not face
   // 404 or 500 when aliases are modified but page is still served from cache
   // or users haven't reloaded page for older aliases.
   foreach ($settings['views']['ajaxViews'] ?? [] as $dom_id => $ajax_view) {
+    if (strpos($dom_id, 'alshaya_product_list') === FALSE) {
+      continue;
+    }
+
     $view_path = $ajax_view['view_path'];
 
     $current_request = FALSE;
@@ -267,6 +274,13 @@ function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
 
     $view_path = trim($view_path, '/');
 
+    // Remove language.
+    $view_path = str_replace(
+      $language . '/',
+      '',
+      $view_path
+    );
+
     // Remove facets if any before getting internal path.
     $facets_path = '';
     if (strpos($view_path, '/--') !== FALSE) {
@@ -274,11 +288,6 @@ function alshaya_facets_pretty_paths_js_settings_alter(array &$settings) {
       $view_path = $view_path_parts[0];
       $facets_path = '--' . $view_path_parts[1];
     }
-
-    // Remove language before getting internal path.
-    $view_path_parts = explode('/', $view_path);
-    $language = array_shift($view_path_parts);
-    $view_path = implode('/', $view_path_parts);
 
     $internal_path = \Drupal::service('path.alias_manager')->getPathByAlias('/' . $view_path);
 

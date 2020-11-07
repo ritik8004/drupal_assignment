@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Class CartController.
+ * Class Cart Controller.
  */
 class CartController {
 
@@ -458,6 +458,31 @@ class CartController {
     $response['shipping']['address'] = CustomerHelper::formatAddressForFrontend($response['shipping']['address'] ?? []);
     $response['billing_address'] = CustomerHelper::formatAddressForFrontend($data['cart']['billing_address'] ?? []);
 
+    // If payment method is not available in the list, we set the first
+    // available payment method.
+    if (!empty($response['payment'])) {
+      $codes = array_column($response['payment']['methods'], 'code');
+      if (!empty($response['payment']['method'])
+        && !in_array($response['payment']['method'], $codes)) {
+        unset($response['payment']['method']);
+      }
+
+      // If default also has invalid payment method, we remove it
+      // so that first available payment method will be selected.
+      if (!empty($response['payment']['default'])
+        && !in_array($response['payment']['default'], $codes)) {
+        unset($response['payment']['default']);
+      }
+
+      if (!empty($response['payment']['method'])) {
+        $response['payment']['method'] = $this->cart->getMethodCodeForFrontend($response['payment']['method']);
+      }
+
+      if (!empty($response['payment']['default'])) {
+        $response['payment']['default'] = $this->cart->getMethodCodeForFrontend($response['payment']['default']);
+      }
+    }
+
     return $response;
   }
 
@@ -476,7 +501,7 @@ class CartController {
     $request_content = json_decode($request->getContent(), TRUE);
 
     // Validate request.
-    if (!$this->validateRequestData($request_content)) {
+    if (empty($request_content) || !$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
       // Setting custom error code for bad response so that
       // we could distinguish this error.
@@ -696,6 +721,10 @@ class CartController {
                 'additional_data' => [],
               ];
 
+              $this->logger->notice('Calling update payment for finalize exception. Cart id: @cart_id Method: @method', [
+                '@cart_id' => $this->cart->getCartId(),
+                '@method' => $request_content['payment_info']['payment']['method'],
+              ]);
               $updated_cart = $this->cart->updatePayment($payment, $extension);
 
               if (empty($updated_cart)) {
@@ -734,9 +763,26 @@ class CartController {
           ]);
         }
 
-        if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
-          $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
+        // Additional changes for VAULT.
+        switch ($request_content['payment_info']['payment']['method']) {
+          case 'checkout_com':
+            if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
+              $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_VAULT_METHOD;
+            }
+            break;
+
+          case 'checkout_com_upapi':
+            if (!empty($request_content['payment_info']['payment']['additional_data']['public_hash'])) {
+              $request_content['payment_info']['payment']['method'] = APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD;
+            }
+            break;
+
         }
+
+        $this->logger->notice('Calling update payment for finalize exception2. Cart id: @cart_id Method: @method', [
+          '@cart_id' => $this->cart->getCartId(),
+          '@method' => $request_content['payment_info']['payment']['method'],
+        ]);
 
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
@@ -754,6 +800,10 @@ class CartController {
           $extension['attempted_payment'] = 1;
         }
 
+        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method', [
+          '@cart_id' => $this->cart->getCartId(),
+          '@method' => $request_content['payment_info']['payment']['method'],
+        ]);
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
 

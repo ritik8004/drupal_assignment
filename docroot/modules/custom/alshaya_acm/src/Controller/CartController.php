@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * Class CartController.
+ * Class Cart Controller.
  */
 class CartController extends ControllerBase {
 

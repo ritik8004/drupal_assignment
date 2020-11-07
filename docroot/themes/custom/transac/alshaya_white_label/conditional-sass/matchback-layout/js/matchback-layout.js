@@ -119,7 +119,7 @@
         var variantMatchbackSlider = $(this).closest('.cross-sell-product-component-right').siblings('.cross-sell-product-component-left').find('.machbackSlider');
         var zoom_wrap = $(this).closest('.cross-sell-product-component-right').siblings('.cross-sell-product-component-left').find('.imagezoom-wrap')
         zoom_wrap.each(function () {
-          $(this).bind( "click", function() {
+          $(this).bind( "click", function () {
             matchbackZoomModal($(this));
           });
         });

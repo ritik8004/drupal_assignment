@@ -94,6 +94,16 @@ schemas:
           }
         }
       }
+  - GetWebFormOptionsList: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "form_id": {
+            "type": "string"
+          }
+        }
+      }
   - GetOauthToken: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -1867,6 +1877,56 @@ schemas:
                     "default": false
                   },
                 ]
+  /webform-options-list:
+    /{form_id}
+    get:
+      description: Get dropdown/options list configured in alshaya webforms based on form id.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetWebFormOptionsList
+              example: |
+                {
+                  feedback: {
+                    online_shopping: "Online Shopping",
+                    feeback_inquiry: "Feedback Inquiry"
+                  },
+                  type: {
+                    complaint: "Complaint",
+                    inquiry: "Inquiry"
+                  },
+                  reasons: {
+                    reason1: {
+                      order_related: "Order related (Cancelled/Delayed)",
+                      wrong_delivery: "Wrong delivery",
+                      missing_items: "Missing items",
+                      damaged_items: "Damaged items",
+                      refund_not_received: "Refund not received",
+                      others: "Others"
+                    },
+                    reason2: {
+                      order_status: "Order status",
+                      exchange_refund: "Exchange and refund policy",
+                      products: "Products",
+                      others: "Others"
+                    },
+                    reason3: {
+                      alshaya_privileges_club: "Alshaya privileges club",
+                      faulty_items: "Faulty items",
+                      alshaya_card: "Alshaya card",
+                      refund_not_received: "Refund not received",
+                      in_store_services: "In store services",
+                      other: "Others"
+                    },
+                    reason4: {
+                      alshaya_card: "Alshaya card",
+                      alshaya_privileges_club: "Alshaya privileges club",
+                      exchange_refund_policy: "Exchange and refund policy",
+                      others: "Others"
+                    }
+                  }
+                }
   /product:
     /{sku}:
       get:

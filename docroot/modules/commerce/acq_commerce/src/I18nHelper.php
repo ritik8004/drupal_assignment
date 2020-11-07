@@ -7,7 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * Class I18nHelper.
+ * Class I18n Helper.
  */
 class I18nHelper {
 
@@ -117,7 +117,7 @@ class I18nHelper {
     $config = $this->configFactory->get('acq_commerce.currency');
 
     // Get currency with the correct locale.
-    $locale = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    $locale = $this->languageManager->getCurrentLanguage()->getId();
     $currency = \Drupal::service('repository.currency')->get($config->get('currency_code'), $locale, 'en');
     $numberFormat = \Drupal::service('repository.number_format')->get($locale);
     $currencyFormatter = new NumberFormatter($numberFormat, NumberFormatter::CURRENCY);

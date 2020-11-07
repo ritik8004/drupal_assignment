@@ -25,6 +25,7 @@ services:
       - '@acq_commerce.api_helper'
       - '@event_dispatcher'
       - '@lock'
+      - '@module_handler'
 
   acq_commerce.ingest_api:
     class: Drupal\acq_commerce\Conductor\IngestAPIWrapper

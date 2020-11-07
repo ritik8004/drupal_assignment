@@ -19,7 +19,7 @@ use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
 
 /**
- * Class Cart.
+ * Class Cart methods.
  */
 class Cart {
 
@@ -148,6 +148,13 @@ class Cart {
   protected $request;
 
   /**
+   * Language Manager.
+   *
+   * @var \App\Service\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -180,6 +187,8 @@ class Cart {
    *   Database connection.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   RequestStack Object.
+   * @param \App\Service\LanguageManager $language_manager
+   *   Language Manager.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -196,7 +205,8 @@ class Cart {
     Orders $orders,
     LoggerInterface $logger,
     Connection $connection,
-    RequestStack $requestStack
+    RequestStack $requestStack,
+    LanguageManager $language_manager
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -213,6 +223,7 @@ class Cart {
     $this->logger = $logger;
     $this->connection = $connection;
     $this->request = $requestStack->getCurrentRequest();
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -303,8 +314,12 @@ class Cart {
 
     $url = sprintf('carts/%d/getCart', $cart_id);
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_get'),
+    ];
+
     try {
-      $updated_cart = $this->magentoApiWrapper->doRequest('GET', $url);
+      $updated_cart = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
 
       if ($updated_cart === FALSE) {
         throw new \Exception('Cart no longer available', 404);
@@ -378,12 +393,21 @@ class Cart {
       }
     }
 
-    $url = $customer_id > 0
-      ? str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts')
-      : 'carts';
+    if ($customer_id > 0) {
+      $url = str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts');
+      $request_options = [
+        'timeout' => $this->magentoInfo->getPhpTimeout('cart_search'),
+      ];
+    }
+    else {
+      $url = 'carts';
+      $request_options = [
+        'timeout' => $this->magentoInfo->getPhpTimeout('cart_create'),
+      ];
+    }
 
     try {
-      $cart_id = (int) $this->magentoApiWrapper->doRequest('POST', $url);
+      $cart_id = (int) $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
 
       // Store cart id in session.
       $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, $cart_id);
@@ -446,7 +470,7 @@ class Cart {
         ],
       ];
     }
-    $data['items'][] = (object) [
+    $data['items'][] = [
       'sku' => $sku,
       'qty' => $quantity ?? 1,
       'quote_id' => (string) $this->getCartId(),
@@ -767,7 +791,12 @@ class Cart {
         'store_id' => $this->magentoInfo->getMagentoStoreId(),
       ];
 
-      $result = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data]);
+      $request_options = [
+        'timeout' => $this->magentoInfo->getPhpTimeout('cart_associate'),
+        'json' => (object) $data,
+      ];
+
+      $result = $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
 
       // After association restore the cart.
       if ($result) {
@@ -851,11 +880,7 @@ class Cart {
    *   TRUE if payment methods from checkout.com
    */
   public function isUpapiPaymentMethod(string $payment_method) {
-    $payment_methods = [
-      'checkout_com_upapi_qpay',
-      'checkout_com_upapi_knet',
-    ];
-    return in_array($payment_method, $payment_methods);
+    return strpos($payment_method, 'checkout_com_upapi') !== FALSE;
   }
 
   /**
@@ -894,6 +919,45 @@ class Cart {
 
         throw new \Exception('Failed to initiate K-Net request.', 500);
 
+      case 'checkout_com_upapi':
+        switch ($additional_info['card_type']) {
+          case 'new':
+            $save_card = $additional_info['save_card'] ?? 0;
+            $additional_info['is_active_payment_token_enabler'] = (int) $save_card;
+            $additional_data = $additional_info;
+            break;
+
+          case 'existing':
+            $additional_data = [];
+            if ($this->checkoutComApi->isUpapiCvvCheckRequired()) {
+              if (empty($additional_info['cvv'])) {
+                throw new \Exception('CVV missing for credit/debit card.', 400);
+              }
+
+              $additional_data['cvv'] = $this->customerCards->deocodePublicHash(
+                urldecode($additional_info['cvv'])
+              );
+            }
+
+            $card = $this->customerCards->getGivenCardInfo(
+              'checkout_com_upapi',
+              $this->getCartCustomerId(),
+              $additional_info['id']
+            );
+
+            if (empty($card)) {
+              throw new \Exception('Invalid card token.', 400);
+            }
+
+            $additional_data['public_hash'] = $card['public_hash'];
+            break;
+
+          default:
+            throw new \Exception('Invalid request.', 400);
+
+        }
+        break;
+
       case 'checkout_com':
         $process_3d = FALSE;
         $end_point = '';
@@ -913,7 +977,12 @@ class Cart {
           $end_point = APIWrapper::ENDPOINT_AUTHORIZE_PAYMENT;
         }
         elseif ($additional_info['card_type'] == 'existing') {
-          $card = $this->customerCards->getGivenCardInfo($this->getCartCustomerId(), $additional_info['id']);
+          $card = $this->customerCards->getGivenCardInfo(
+            'checkout_com',
+            $this->getCartCustomerId(),
+            $additional_info['id']
+          );
+
           if (($card['mada'] || $this->checkoutComApi->is3dForced()) && empty($additional_info['cvv'])) {
             throw new \Exception('Cvv missing for credit/debit card.', 400);
           }
@@ -990,13 +1059,18 @@ class Cart {
     // We do not want to send the variant sku values to magento unnecessarily.
     // So we store it separately and remove it from $data.
     $skus = [];
-    foreach ($data['items'] as $key => $item) {
-      $skus[] = $item->variant_sku ?? $item->sku;
-      unset($data['items'][$key]->variant_sku);
+    foreach ($data['items'] ?? [] as $key => $item) {
+      $skus[] = $item['variant_sku'] ?? $item['sku'];
+      unset($data['items'][$key]['variant_sku']);
     }
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_update'),
+      'json' => (object) $data,
+    ];
+
     try {
-      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => (object) $data], $action);
+      $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, $request_options, $action);
       static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;
 
@@ -1041,6 +1115,8 @@ class Cart {
             return $this->updateCart($data);
           }
         }
+
+        return $this->utility->getErrorResponse('', 400);
       }
       else {
         $this->cancelCartReservation($e->getMessage());
@@ -1149,8 +1225,13 @@ class Cart {
 
     $url = sprintf('carts/%d/estimate-shipping-methods', $this->getCartId());
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_estimate_shipping'),
+      'json' => $data,
+    ];
+
     try {
-      $static[$key] = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+      $static[$key] = $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
 
       $static[$key] = array_filter($static[$key], function ($method) {
         return ($method['carrier_code'] !== 'click_and_collect');
@@ -1204,8 +1285,12 @@ class Cart {
 
     $url = sprintf('carts/%d/payment-methods', $this->getCartId());
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_payment_methods'),
+    ];
+
     try {
-      $static[$key] = $this->magentoApiWrapper->doRequest('GET', $url);
+      $static[$key] = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while getting payment methods from MDC. Error message: @message', [
@@ -1224,14 +1309,23 @@ class Cart {
    *   Payment method set on cart.
    */
   public function getPaymentMethodSetOnCart() {
+    // Let the method be set again if user changes the language.
+    if ($this->languageManager->isLanguageChanged()) {
+      return '';
+    }
+
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
     if ($expire > 0 && ($method = $this->cache->get('payment_method'))) {
       return $method;
     }
 
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_selected_payment'),
+    ];
+
     $url = sprintf('carts/%d/selected-payment-method', $this->getCartId());
     try {
-      $result = $this->magentoApiWrapper->doRequest('GET', $url);
+      $result = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
       return $result['method'] ?? NULL;
     }
     catch (\Exception $e) {
@@ -1240,6 +1334,29 @@ class Cart {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Get Method Code for frontend.
+   *
+   * @param string $method
+   *   Payment Method code.
+   *
+   * @return string
+   *   Payment Method code used in frontend.
+   */
+  public function getMethodCodeForFrontend(string $method) {
+    switch ($method) {
+      case APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD:
+        $method = 'checkout_com_upapi';
+        break;
+
+      case APIWrapper::CHECKOUT_COM_VAULT_METHOD:
+        $method = 'checkout_com';
+        break;
+    }
+
+    return $method;
   }
 
   /**
@@ -1302,6 +1419,14 @@ class Cart {
     $settings = $this->settings->getSettings('spc_middleware');
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
+    // Check if cart total is valid return with an error message.
+    if (!$this->isCartTotalValid($cart)) {
+      $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), 500);
+    }
+
     // Check whether order locking is enabled.
     if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
       $lock_store = new PdoStore($this->connection);
@@ -1320,7 +1445,7 @@ class Cart {
 
     try {
       $request_options = [
-        'timeout' => $checkout_settings['place_order_timeout'],
+        'timeout' => $this->magentoInfo->getPhpTimeout('order_place'),
       ];
 
       // We don't pass any payment data in place order call to MDC because its
@@ -1383,7 +1508,10 @@ class Cart {
         }
       }
 
-      $this->cancelCartReservation($e->getMessage());
+      // UPAPI has cart locking mechanism, we do not need cancel reservation.
+      if (!$this->isUpapiPaymentMethod($data['paymentMethod']['method'])) {
+        $this->cancelCartReservation($e->getMessage());
+      }
 
       $error_message = $e->getCode() > 600
         ? 'Back-end system is down'
@@ -1674,8 +1802,12 @@ class Cart {
   public function getCartStores($lat, $lon) {
     $cart_id = $this->getCartId();
     $endpoint = 'click-and-collect/stores/cart/' . $cart_id . '/lat/' . $lat . '/lon/' . $lon;
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cnc_check'),
+    ];
+
     try {
-      if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, []))) {
+      if (empty($stores = $this->magentoApiWrapper->doRequest('GET', $endpoint, $request_options))) {
         return $stores;
       }
 
@@ -1713,8 +1845,13 @@ class Cart {
    */
   private function handleCheckoutComRedirection() {
     $url = sprintf('carts/%d/selected-payment-method', $this->getCartId());
+
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_selected_payment'),
+    ];
+
     try {
-      $result = $this->magentoApiWrapper->doRequest('GET', $url);
+      $result = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while getting payment set on cart. Error message: @message', [
@@ -1796,6 +1933,10 @@ class Cart {
   public function setCartInCache(array $cart) {
     $expire = (int) $_ENV['CACHE_CART'];
     if ($expire > 0) {
+      // Add current time to cart array.
+      $current_time = time();
+      $cart['cache_time'] = $current_time;
+      // Store complete cart in cache.
       $this->cache->set('cached_cart', $expire, $cart);
     }
   }
@@ -1842,6 +1983,56 @@ class Cart {
     }
 
     return implode('||', $message);
+  }
+
+  /**
+   * Helper function to check if cart total valid.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   If cart total is valid.
+   */
+  public function isCartTotalValid(array $cart) {
+    // Check if last update of our cart is more recent than X minutes.
+    if (!isset($cart['cache_time'])) {
+      // Unexpected but in that case we assume it is correct.
+      $this->logger->error('No cache_time field in the cart @cart_id.', [
+        '@cart_id' => $cart['cart']['id'],
+      ]);
+      return TRUE;
+    }
+
+    $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
+    $expiration_time = $checkout_settings['totals_revalidation_ttl'];
+
+    $cart_expire_time = $cart['cache_time'] + $expiration_time;
+    $current_time = time();
+    if ($cart_expire_time >= $current_time) {
+      // Not expired. We assume totals are valid.
+      return TRUE;
+    }
+
+    // Get cart totals.
+    $cart_total = $cart['totals']['grand_total'];
+    try {
+      $this->logger->info('Getting fresh total for cart @cart_id.', [
+        '@cart_id' => $cart['cart']['id'],
+      ]);
+      // Getting fresh cart from api.
+      $cart = $this->getCart(TRUE);
+    }
+    catch (\Exception $e) {
+      // Something went wrong. We assume totals are valid.
+      $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return TRUE;
+    }
+
+    $fresh_cart_total = $cart['totals']['grand_total'];
+    return $fresh_cart_total == $cart_total;
   }
 
 }

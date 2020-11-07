@@ -1,6 +1,131 @@
 // Ref: https://github.com/algolia/react-instantsearch/blob/v5.7.0/packages/react-instantsearch-core/src/core/indexUtils.js
-import _objectSpread from "@babel/runtime/helpers/esm/objectSpread";
+import _objectSpread from '@babel/runtime/helpers/esm/objectSpread';
 import omit from 'lodash/omit';
+
+/**
+* As we have copied the file from algolia repo and modified it for our need
+* we may not want to change anything here or change any eslint rule for this.
+*/
+
+// eslint-disable-next-line max-params
+function refineMultiIndexWithNamespace(
+  searchState,
+  nextRefinement,
+  indexId,
+  resetPage,
+  namespace,
+) {
+  const page = resetPage ? { page: 1 } : undefined;
+  const state = searchState.indices && searchState.indices[indexId]
+    ? {
+      ...searchState.indices,
+      [indexId]: {
+        ...searchState.indices[indexId],
+        [namespace]: {
+          ...searchState.indices[indexId][namespace],
+          ...nextRefinement,
+        },
+        page: 1,
+      },
+    }
+    : {
+      ...searchState.indices,
+      [indexId]: {
+        [namespace]: nextRefinement,
+        ...page,
+      },
+    };
+
+  return {
+    ...searchState,
+    indices: state,
+  };
+}
+
+function refineMultiIndex(searchState, nextRefinement, indexId, resetPage) {
+  const page = resetPage ? { page: 1 } : undefined;
+  const state = searchState.indices && searchState.indices[indexId]
+    ? {
+      ...searchState.indices,
+      [indexId]: {
+        ...searchState.indices[indexId],
+        ...nextRefinement,
+        ...page,
+      },
+    }
+    : {
+      ...searchState.indices,
+      [indexId]: {
+        ...nextRefinement,
+        ...page,
+      },
+    };
+
+  return {
+    ...searchState,
+    indices: state,
+  };
+}
+
+function refineSingleIndex(searchState, nextRefinement, resetPage) {
+  const page = resetPage ? { page: 1 } : undefined;
+  return { ...searchState, ...nextRefinement, ...page };
+}
+
+function refineSingleIndexWithNamespace(
+  searchState,
+  nextRefinement,
+  resetPage,
+  namespace,
+) {
+  const page = resetPage ? { page: 1 } : undefined;
+  return {
+    ...searchState,
+    [namespace]: { ...searchState[namespace], ...nextRefinement },
+    ...page,
+  };
+}
+
+function cleanUpValueWithSingleIndex({
+  searchState,
+  id,
+  namespace,
+  attribute,
+}) {
+  if (namespace) {
+    return {
+      ...searchState,
+      [namespace]: omit(searchState[namespace], attribute),
+    };
+  }
+
+  return omit(searchState, id);
+}
+
+function cleanUpValueWithMutliIndex({
+  searchState,
+  indexId,
+  id,
+  namespace,
+  attribute,
+}) {
+  const indexSearchState = searchState.indices[indexId];
+
+  if (namespace && indexSearchState) {
+    return {
+      ...searchState,
+      indices: {
+        ...searchState.indices,
+        [indexId]: {
+          ...indexSearchState,
+          [namespace]: omit(indexSearchState[namespace], attribute),
+        },
+      },
+    };
+  }
+
+  return omit(searchState, `indices.${indexId}.${id}`);
+}
 
 export function getIndexId(context) {
   return context && context.multiIndexContext
@@ -23,130 +148,50 @@ export function hasMultipleIndices(context) {
 
 // eslint-disable-next-line max-params
 export function refineValue(
-  searchState,
+  searchStateParam,
   nextRefinement,
   context,
   resetPage,
-  namespace
+  namespace,
 ) {
+  let searchState = searchStateParam;
+
   if (hasMultipleIndices(context)) {
     const indexId = getIndexId(context);
     return namespace
       ? refineMultiIndexWithNamespace(
-          searchState,
-          nextRefinement,
-          indexId,
-          resetPage,
-          namespace
-        )
+        searchState,
+        nextRefinement,
+        indexId,
+        resetPage,
+        namespace,
+      )
       : refineMultiIndex(searchState, nextRefinement, indexId, resetPage);
-  } else {
-    // When we have a multi index page with shared widgets we should also
-    // reset their page to 1 if the resetPage is provided. Otherwise the
-    // indices will always be reset
-    // see: https://github.com/algolia/react-instantsearch/issues/310
-    // see: https://github.com/algolia/react-instantsearch/issues/637
-    if (searchState.indices && resetPage) {
-      Object.keys(searchState.indices).forEach(targetedIndex => {
-        searchState = refineValue(
-          searchState,
-          { page: 1 },
-          { multiIndexContext: { targetedIndex } },
-          true,
-          namespace
-        );
-      });
-    }
-    return namespace
-      ? refineSingleIndexWithNamespace(
-          searchState,
-          nextRefinement,
-          resetPage,
-          namespace
-        )
-      : refineSingleIndex(searchState, nextRefinement, resetPage);
   }
-}
-
-function refineMultiIndex(searchState, nextRefinement, indexId, resetPage) {
-  const page = resetPage ? { page: 1 } : undefined;
-  const state =
-    searchState.indices && searchState.indices[indexId]
-      ? {
-          ...searchState.indices,
-          [indexId]: {
-            ...searchState.indices[indexId],
-            ...nextRefinement,
-            ...page,
-          },
-        }
-      : {
-          ...searchState.indices,
-          [indexId]: {
-            ...nextRefinement,
-            ...page,
-          },
-        };
-
-  return {
-    ...searchState,
-    indices: state,
-  };
-}
-
-function refineSingleIndex(searchState, nextRefinement, resetPage) {
-  const page = resetPage ? { page: 1 } : undefined;
-  return { ...searchState, ...nextRefinement, ...page };
-}
-
-// eslint-disable-next-line max-params
-function refineMultiIndexWithNamespace(
-  searchState,
-  nextRefinement,
-  indexId,
-  resetPage,
-  namespace
-) {
-  const page = resetPage ? { page: 1 } : undefined;
-  const state =
-    searchState.indices && searchState.indices[indexId]
-      ? {
-          ...searchState.indices,
-          [indexId]: {
-            ...searchState.indices[indexId],
-            [namespace]: {
-              ...searchState.indices[indexId][namespace],
-              ...nextRefinement,
-            },
-            page: 1,
-          },
-        }
-      : {
-          ...searchState.indices,
-          [indexId]: {
-            [namespace]: nextRefinement,
-            ...page,
-          },
-        };
-
-  return {
-    ...searchState,
-    indices: state,
-  };
-}
-
-function refineSingleIndexWithNamespace(
-  searchState,
-  nextRefinement,
-  resetPage,
-  namespace
-) {
-  const page = resetPage ? { page: 1 } : undefined;
-  return {
-    ...searchState,
-    [namespace]: { ...searchState[namespace], ...nextRefinement },
-    ...page,
-  };
+  // When we have a multi index page with shared widgets we should also
+  // reset their page to 1 if the resetPage is provided. Otherwise the
+  // indices will always be reset
+  // see: https://github.com/algolia/react-instantsearch/issues/310
+  // see: https://github.com/algolia/react-instantsearch/issues/637
+  if (searchState.indices && resetPage) {
+    Object.keys(searchState.indices).forEach((targetedIndex) => {
+      searchState = refineValue(
+        searchState,
+        { page: 1 },
+        { multiIndexContext: { targetedIndex } },
+        true,
+        namespace,
+      );
+    });
+  }
+  return namespace
+    ? refineSingleIndexWithNamespace(
+      searchState,
+      nextRefinement,
+      resetPage,
+      namespace,
+    )
+    : refineSingleIndex(searchState, nextRefinement, resetPage);
 }
 
 function getNamespaceAndAttributeName(id) {
@@ -167,29 +212,37 @@ function hasRefinements({
 }) {
   if (multiIndex && namespace) {
     return (
-      searchState.indices &&
-      searchState.indices[indexId] &&
-      searchState.indices[indexId][namespace] &&
-      searchState.indices[indexId][namespace].hasOwnProperty(attributeName)
+      searchState.indices
+      && searchState.indices[indexId]
+      && searchState.indices[indexId][namespace]
+      && Object.prototype.hasOwnProperty.call(
+        searchState.indices[indexId][namespace], attributeName,
+      )
     );
   }
 
   if (multiIndex) {
     return (
-      searchState.indices &&
-      searchState.indices[indexId] &&
-      searchState.indices[indexId].hasOwnProperty(id)
+      searchState.indices
+      && searchState.indices[indexId]
+      && Object.prototype.hasOwnProperty.call(
+        searchState.indices[indexId],
+        id,
+      )
     );
   }
 
   if (namespace) {
     return (
-      searchState[namespace] &&
-      searchState[namespace].hasOwnProperty(attributeName)
+      searchState[namespace]
+      && Object.prototype.hasOwnProperty.call(
+        searchState[namespace],
+        attributeName,
+      )
     );
   }
 
-  return searchState.hasOwnProperty(id);
+  return Object.prototype.hasOwnProperty.call(searchState, id);
 }
 
 function getRefinements({
@@ -218,7 +271,7 @@ export function getCurrentRefinementValue(
   searchState,
   context,
   id,
-  defaultValue
+  defaultValue,
 ) {
   const indexId = getIndexId(context);
   const { namespace, attributeName } = getNamespaceAndAttributeName(id);
@@ -266,62 +319,17 @@ export function cleanUpValue(searchState, context, id) {
   });
 }
 
-function cleanUpValueWithSingleIndex({
-  searchState,
-  id,
-  namespace,
-  attribute,
-}) {
-  if (namespace) {
-    return {
-      ...searchState,
-      [namespace]: omit(searchState[namespace], attribute),
-    };
-  }
-
-  return omit(searchState, id);
-}
-
-function cleanUpValueWithMutliIndex({
-  searchState,
-  indexId,
-  id,
-  namespace,
-  attribute,
-}) {
-  const indexSearchState = searchState.indices[indexId];
-
-  if (namespace && indexSearchState) {
-    return {
-      ...searchState,
-      indices: {
-        ...searchState.indices,
-        [indexId]: {
-          ...indexSearchState,
-          [namespace]: omit(indexSearchState[namespace], attribute),
-        },
-      },
-    };
-  }
-
-  return omit(searchState, `indices.${indexId}.${id}`);
-}
-
 export function addAbsolutePositions(hits, hitsPerPage, page) {
-  return hits.map(function (hit, index) {
-    return _objectSpread({}, hit, {
-      __position: hitsPerPage * page + index + 1
-    });
-  });
+  return hits.map((hit, index) => _objectSpread({}, hit, {
+    __position: hitsPerPage * page + index + 1,
+  }));
 }
 export function addQueryID(hits, queryID) {
   if (!queryID) {
     return hits;
   }
 
-  return hits.map(function (hit) {
-    return _objectSpread({}, hit, {
-      __queryID: queryID
-    });
-  });
+  return hits.map((hit) => _objectSpread({}, hit, {
+    __queryID: queryID,
+  }));
 }

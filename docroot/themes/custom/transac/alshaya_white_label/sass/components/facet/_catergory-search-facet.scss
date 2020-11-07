@@ -65,7 +65,8 @@
 }
 
 .c-content__region {
-  .block-facet-blockcategory-facet-search {
+  .block-facet-blockcategory-facet-search,
+  .algolia-plp-category-facet {
     @include breakpoint($only-mobile) {
       width: 50% !important;
       float: $left;

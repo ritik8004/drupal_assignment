@@ -10,7 +10,7 @@ use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Class AlshayaACMBreadcrumbBuilder.
+ * Class Alshaya ACM Breadcrumb Builder.
  */
 class AlshayaACMBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 

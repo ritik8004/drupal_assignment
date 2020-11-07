@@ -7,7 +7,7 @@ use Drupal\alshaya_performance\Event\CacheTagInvalidatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class CacheTagInvalidatedEventSubscriber.
+ * Class Cache Tag Invalidated Event Subscriber.
  *
  * @package Drupal\alshaya_acm_product_category\EventSubscriber
  */
@@ -35,7 +35,10 @@ class CacheTagInvalidatedEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[CacheTagInvalidatedEvent::PRE_INVALIDATION][] = ['onPreCacheInvalidationEvent', 100];
+    $events[CacheTagInvalidatedEvent::PRE_INVALIDATION][] = [
+      'onPreCacheInvalidationEvent',
+      100,
+    ];
     return $events;
   }
 

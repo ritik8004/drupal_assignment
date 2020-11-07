@@ -13,7 +13,7 @@ use GuzzleHttp\Client;
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 
 /**
- * Class AlshayaSpcCommands.
+ * Class Alshaya Spc Commands.
  *
  * @package Drupal\alshaya_spc\Commands
  */

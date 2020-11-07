@@ -2,8 +2,11 @@
 
 namespace Drupal\alshaya_acm_product_position;
 
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
+use Drupal\taxonomy\TermInterface;
+
 /**
- * Class AlshayaPlpSortOptionsService.
+ * Class Alshaya Plp Sort Options Service.
  */
 class AlshayaPlpSortOptionsService extends AlshayaPlpSortOptionsBase {
 
@@ -53,18 +56,27 @@ class AlshayaPlpSortOptionsService extends AlshayaPlpSortOptionsBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
-  protected function getCurrentPagePlpSortOptions():array {
+  public function getCurrentPagePlpSortOptions():array {
     static $options;
 
     if (!empty($options)) {
       return $options;
     }
 
-    if (($term = $this->getTermForRoute()) && $options = $this->getPlpSortConfigForTerm($term, 'options')) {
-      $options = array_filter($options);
+    $term = $this->getTermForRoute();
+    if ($term instanceof TermInterface) {
+      $options = $this->getPlpSortConfigForTerm($term, 'options');
     }
-    else {
-      $options = array_filter($this->configSortOptions->get('sort_options'));
+
+    // Fallback to config.
+    if (empty($options)) {
+      $options = $this->configSortOptions->get('sort_options');
+    }
+
+    $options = array_filter($options);
+
+    if (!AlshayaSearchApiHelper::isIndexEnabled('product')) {
+      unset($options['stock_quantity']);
     }
 
     return $options;

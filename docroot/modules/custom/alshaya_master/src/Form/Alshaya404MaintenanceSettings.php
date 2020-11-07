@@ -9,11 +9,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
 use Drupal\file\FileUsage\FileUsageInterface;
-use Drupal\image\Entity\ImageStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class Alshaya404MaintenanceSettings.
+ * Class Alshaya 404 Maintenance Settings.
  */
 class Alshaya404MaintenanceSettings extends ConfigFormBase {
 
@@ -203,7 +202,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
    *   Image uri name.
    */
   protected function createImageStyle($image_style, $uri) {
-    $style = ImageStyle::load($image_style);
+    $style = $this->entityTypeManager()->getStorage('image_style')->load($image_style);
     $destination = $style->buildUri($uri);
     $style->createDerivative($uri, $destination);
   }

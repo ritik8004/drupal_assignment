@@ -3,9 +3,10 @@
 namespace Drupal\alshaya_search_api;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Class AlshayaSearchApiDataHelper.
+ * Class Alshaya Search Api Data Helper.
  */
 class AlshayaSearchApiDataHelper {
 
@@ -17,13 +18,24 @@ class AlshayaSearchApiDataHelper {
   protected $connection;
 
   /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * AlshayaSearchApiDataHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    */
-  public function __construct(Connection $connection) {
+  public function __construct(Connection $connection,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->connection = $connection;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -38,6 +50,10 @@ class AlshayaSearchApiDataHelper {
    *   Category IDs indexed for the item.
    */
   public function getIndexedData(string $item_id, string $field): array {
+    if (!AlshayaSearchApiHelper::isIndexEnabled('product')) {
+      throw new \Exception('This is not supported if database index is disabled.');
+    }
+
     try {
       $query = $this->connection->select('search_api_db_product_' . $field, $field);
       $query->addField($field, 'value');
@@ -55,25 +71,11 @@ class AlshayaSearchApiDataHelper {
   /**
    * Get all the products that have value available in the specified field.
    *
-   * @param string $field
-   *   Field for which we want to check.
-   *
-   * @return array
-   *   Array containing all the product SKUs.
+   * This is no longer supported but function is not removed to avoid issues
+   * as it was used once in an update hook.
    */
-  public function getProductsWithDataInField(string $field): array {
-    try {
-      $query = $this->connection->select('search_api_db_product_' . $field, $field);
-      $query->leftJoin('search_api_db_product', 'main', "main.item_id = ${field}.item_id");
-      $query->addField('main', 'sku');
-      $values = $query->execute()->fetchAllKeyed(0, 0);
-    }
-    catch (\Exception $e) {
-      // Do nothing, we may have disabled indexes temporarily.
-      $values = [];
-    }
-
-    return is_array($values) ? array_filter($values) : [];
+  public function getProductsWithDataInField() {
+    throw new \Exception('This is no longer supported.');
   }
 
 }

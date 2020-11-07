@@ -3,7 +3,7 @@
 namespace Drupal\alshaya_spc\Helper;
 
 /**
- * Class SecureText.
+ * Class Secure Text.
  */
 class SecureText {
 

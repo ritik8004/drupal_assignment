@@ -11,7 +11,7 @@ use Drupal\alshaya_acm_product\Service\ProductQueueUtility;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class ProductUpdatedEventSubscriber.
+ * Class Product Updated Event Subscriber.
  *
  * @package Drupal\alshaya_acm_product\EventSubscriber
  */
@@ -52,7 +52,10 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     $events = [];
     $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 900];
     $events[StockUpdatedEvent::EVENT_NAME][] = ['onStockUpdated', -101];
-    $events[PromotionMappingUpdatedEvent::EVENT_NAME][] = ['onPromotionMappingUpdated', 100];
+    $events[PromotionMappingUpdatedEvent::EVENT_NAME][] = [
+      'onPromotionMappingUpdated',
+      100,
+    ];
     return $events;
   }
 

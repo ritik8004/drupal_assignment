@@ -22,3 +22,4 @@ permissions:
   - 'restful get skus_product_list'
   - 'restful get blocks_for_path'
   - 'restful get options_list'
+  - 'restful get webform_options_list'

@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class SearchPageProductListResource.
+ * Class Search Page Product List Resource.
  *
  * @RestResource(
  *   id = "search_page_product_list",
@@ -158,6 +158,7 @@ class SearchPageProductListResource extends ResourceBase {
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($search_keyword);
     $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+    $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID);
 
     // Filter the empty products.
     $response_data['products'] = array_filter($response_data['products']);
@@ -180,7 +181,7 @@ class SearchPageProductListResource extends ResourceBase {
    */
   public function prepareAndExecuteQuery(string $keyword) {
     $index = Index::load(self::SEARCH_API_INDEX_ID);
-    /* @var \Drupal\search_api\Query\QueryInterface $query */
+    /** @var \Drupal\search_api\Query\QueryInterface $query */
     $query = $index->query();
 
     // Set the search api server.
@@ -211,7 +212,7 @@ class SearchPageProductListResource extends ResourceBase {
     $query->setOption('search_api_spellcheck', TRUE);
 
     // Prepare and execute query and pass result set.
-    return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, $keyword);
+    return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'search', $keyword);
   }
 
   /**

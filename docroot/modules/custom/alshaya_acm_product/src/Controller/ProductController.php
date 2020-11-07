@@ -21,12 +21,11 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\image\ImageStyleInterface;
 use Drupal\Core\Extension\ModuleHandler;
 
 /**
- * Class ProductController.
+ * Class Product Controller.
  */
 class ProductController extends ControllerBase {
 
@@ -333,7 +332,7 @@ class ProductController extends ControllerBase {
         $sku_media = $this->skuImageManager->getFirstImage($related_sku_entity);
 
         if (!empty($sku_media['drupal_uri'])) {
-          $image_style = ImageStyle::load('product_zoom_medium_606x504');
+          $image_style = $this->entityTypeManager()->getStorage('image_style')->load('product_zoom_medium_606x504');
           if ($image_style instanceof ImageStyleInterface) {
             $image = $image_style->buildUrl($sku_media['drupal_uri']);
           }

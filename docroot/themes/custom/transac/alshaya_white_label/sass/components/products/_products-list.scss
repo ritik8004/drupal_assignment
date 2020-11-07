@@ -787,14 +787,16 @@ html[lang=ar] {
 .c-products-list {
   .view-alshaya-product-list,
   &.view-search,
-  &.block-views-blockalshaya-product-list-block-1 {
+  &.block-views-blockalshaya-product-list-block-1,
+  &.view-algolia-plp {
     width: 100%;
     clear: both;
   }
 }
 
 .c-products-list {
-  &.view-search {
+  &.view-search,
+  &.view-algolia-plp {
     @include breakpoint($only-mobile) {
       padding-#{$left}: 1.25rem;
       padding-#{$right}: 1.25rem;

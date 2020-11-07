@@ -2,7 +2,8 @@ var path  = require("path");
 
 var config = {
   entry: {
-    autocomplete: './js/src/',
+    autocomplete: './js/src/SearchIndex.js',
+    plp: './js/src/PlpIndex.js',
   },
   mode: 'production',
   output: {

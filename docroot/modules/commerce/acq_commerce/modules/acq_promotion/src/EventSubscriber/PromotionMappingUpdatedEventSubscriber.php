@@ -8,7 +8,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class PromotionMappingUpdatedEventSubscriber.
+ * Class Promotion Mapping Updated Event Subscriber.
  */
 class PromotionMappingUpdatedEventSubscriber implements EventSubscriberInterface {
 
@@ -17,7 +17,10 @@ class PromotionMappingUpdatedEventSubscriber implements EventSubscriberInterface
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[PromotionMappingUpdatedEvent::EVENT_NAME][] = ['onPromotionMappingUpdated', -100];
+    $events[PromotionMappingUpdatedEvent::EVENT_NAME][] = [
+      'onPromotionMappingUpdated',
+      -100,
+    ];
     return $events;
   }
 

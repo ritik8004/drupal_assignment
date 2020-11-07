@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm_product\Service;
 use Drupal\Core\Database\Connection;
 
 /**
- * Class ProductProcessedManager.
+ * Class Product Processed Manager.
  *
  * @package Drupal\alshaya_acm_product\Service
  */

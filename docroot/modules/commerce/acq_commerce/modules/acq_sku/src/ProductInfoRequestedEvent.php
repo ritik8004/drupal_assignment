@@ -6,7 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class ProductInfoRequestedEvent.
+ * Class Product Info Requested Event.
  *
  * @package Drupal\acq_sku
  */

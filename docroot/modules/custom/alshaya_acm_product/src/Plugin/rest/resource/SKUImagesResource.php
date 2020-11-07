@@ -117,12 +117,12 @@ class SKUImagesResource extends ResourceBase {
    */
   public function post(array $request) {
     if (empty($request['skus']) || empty($request['langcode'])) {
-      throw new BadRequestHttpException($this->t('Missing required parameters'));
+      throw new BadRequestHttpException('Missing required parameters');
     }
 
     $langcode = $this->i18nHelper->getLangcodeFromMagentoLanguage($request['langcode']);
     if (empty($langcode)) {
-      throw new BadRequestHttpException($this->t('Invalid language code'));
+      throw new BadRequestHttpException('Invalid language code');
     }
 
     $skus = is_array($request['skus']) ? $request['skus'] : [$request['skus']];
@@ -149,7 +149,9 @@ class SKUImagesResource extends ResourceBase {
     }
 
     if (!empty($skipped_skus)) {
-      $this->logger->notice("Skipped Skus since no parent node for them were found: @skus", ['@skus' => implode(',', $skipped_skus)]);
+      $this->logger->notice("Skipped Skus since no parent node for them were found: @skus", [
+        '@skus' => implode(',', $skipped_skus),
+      ]);
     }
 
     return new ModifiedResourceResponse($response);

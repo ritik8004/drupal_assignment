@@ -12,7 +12,7 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
- * Class ProductReportController.
+ * Class Product Report Controller.
  *
  * @package Drupal\alshaya_acm_product\Controller
  */
@@ -147,7 +147,11 @@ class ProductReportController extends ControllerBase {
     $result = $select->execute();
 
     while (($sku = $result->fetchAssoc()) !== FALSE) {
-      fputcsv($fp, [$sku['field_skus_value'], $sku['TermId'], $sku['TermName']]);
+      fputcsv($fp, [
+        $sku['field_skus_value'],
+        $sku['TermId'],
+        $sku['TermName'],
+      ]);
     }
 
     fclose($fp);

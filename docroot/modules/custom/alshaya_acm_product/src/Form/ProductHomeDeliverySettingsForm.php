@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class ProductHomeDeliverySettingsForm.
+ * Class Product Home Delivery Settings Form.
  */
 class ProductHomeDeliverySettingsForm extends ConfigFormBase {
 

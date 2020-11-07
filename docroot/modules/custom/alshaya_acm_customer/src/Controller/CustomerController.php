@@ -11,7 +11,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\block\Entity\Block;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -194,7 +193,7 @@ class CustomerController extends ControllerBase {
         }
 
         // Load my-account-help block for rendering on order list page.
-        $help_block_entity = Block::load('myaccountneedhelp');
+        $help_block_entity = $this->entityTypeManager()->getStorage('block')->load('myaccountneedhelp');
         if ($help_block_entity) {
           $help_block = $this->entityTypeManager()->getViewBuilder('block')->view($help_block_entity);
         }
@@ -289,10 +288,16 @@ class CustomerController extends ControllerBase {
     // If order invoice is available for download.
     if (!empty($order['extension']['invoice_path'])) {
       // Download invoice link.
-      $build['#download_link'] = Url::fromRoute('alshaya_acm_customer.invoice_download', ['user' => $user->id(), 'order_id' => $order_id]);
+      $build['#download_link'] = Url::fromRoute('alshaya_acm_customer.invoice_download', [
+        'user' => $user->id(),
+        'order_id' => $order_id,
+      ]);
     }
 
-    $build['#print_link'] = Url::fromRoute('alshaya_acm_customer.orders_print', ['user' => $user->id(), 'order_id' => $order_id]);
+    $build['#print_link'] = Url::fromRoute('alshaya_acm_customer.orders_print', [
+      'user' => $user->id(),
+      'order_id' => $order_id,
+    ]);
     $build['#account'] = $account;
     if ($vat_text = $this->config('alshaya_acm_product.settings')->get('vat_text')) {
       $build['#vat_text'] = $vat_text;
@@ -390,8 +395,14 @@ class CustomerController extends ControllerBase {
    */
   public function orderDownload(UserInterface $user, $order_id) {
     $endpoint = 'order-manager/invoice/' . $order_id;
+
+    $request_options = [
+      'timeout' => $this->apiWrapper->getMagentoApiHelper()->getPhpTimeout('order_get'),
+    ];
+
     // Request from magento to get invoice.
-    $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
+    $invoice_response = $this->apiWrapper->invokeApi($endpoint, [], 'GET', FALSE, $request_options);
+
     // If json_decode is not successful, means we have actual file response.
     // Otherwise we have error message which can be decoded by json.
     if (!json_decode($invoice_response)) {

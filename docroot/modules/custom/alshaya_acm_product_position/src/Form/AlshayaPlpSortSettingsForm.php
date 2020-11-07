@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Cache\Cache;
 
 /**
- * Class AlshayaPlpSortSettingsForm.
+ * Class Alshaya Plp Sort Settings Form.
  */
 class AlshayaPlpSortSettingsForm extends ConfigFormBase {
 

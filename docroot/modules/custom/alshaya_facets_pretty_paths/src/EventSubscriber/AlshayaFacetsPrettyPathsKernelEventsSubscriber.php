@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AlshayaFacetsPrettyPathsKernelEventsSubscriber.
+ * Class Alshaya Facets Pretty Paths Kernel EventsSubscriber.
  *
  * @package Drupal\alshaya_facets_pretty_paths\EventSubscriber
  */

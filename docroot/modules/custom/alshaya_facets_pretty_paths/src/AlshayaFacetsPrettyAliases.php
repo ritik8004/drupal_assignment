@@ -7,7 +7,7 @@ use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * Class AlshayaFacetsPrettyAliases.
+ * Class Alshaya Facets Pretty Aliases.
  *
  * @package Drupal\alshaya_facets_pretty_paths
  */
@@ -48,28 +48,32 @@ class AlshayaFacetsPrettyAliases {
    *
    * @param string $facet_alias
    *   Facet alias to get all the filter values and aliases for.
+   * @param string|null $langcode
+   *   The language code.
    *
    * @return array
    *   Aliases array with value as key.
    */
-  public function getAliasesForFacet(string $facet_alias) {
+  public function getAliasesForFacet(string $facet_alias, string $langcode = NULL) {
     $static = &drupal_static(self::ALIAS_TABLE, []);
     if (isset($static[$facet_alias])) {
       return $static[$facet_alias];
     }
 
-    $select = $this->connection->select(self::ALIAS_TABLE);
-    $select->fields(self::ALIAS_TABLE, ['facet_alias', 'value', 'alias']);
-
-    $language = $this->languageManager->getCurrentLanguage()->getId();
-    $select->condition('language', $language);
-
-    $result = $select->execute()->fetchAll();
-    foreach ($result as $row) {
-      $static[$row->facet_alias][$row->value] = $row->alias;
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
 
-    return $static[$facet_alias];
+    $select = $this->connection->select(self::ALIAS_TABLE);
+    $select->fields(self::ALIAS_TABLE, ['facet_alias', 'value', 'alias']);
+    $select->condition('language', $langcode);
+    $result = $select->execute()->fetchAll();
+
+    foreach ($result as $row) {
+      $static[$row->facet_alias][trim($row->value)] = trim($row->alias);
+    }
+
+    return isset($static[$facet_alias]) ? $static[$facet_alias] : [];
   }
 
   /**
@@ -81,9 +85,15 @@ class AlshayaFacetsPrettyAliases {
    *   Facet filter value.
    * @param string $alias
    *   Alias for the filter value.
+   * @param string|null $language
+   *   The language code.
+   *
+   * @throws \Exception
    */
-  public function addAlias(string $facet_alias, string $value, string $alias) {
-    $language = $this->languageManager->getCurrentLanguage()->getId();
+  public function addAlias(string $facet_alias, string $value, string $alias, string $language = NULL) {
+    if (empty($language)) {
+      $language = $this->languageManager->getCurrentLanguage()->getId();
+    }
 
     $data = [
       'value' => $value,

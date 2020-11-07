@@ -244,7 +244,7 @@
       );
     }
     else {
-      $.each(e.detail.items, function(sku_key, cart_item) {
+      $.each(e.detail.items, function (sku_key, cart_item) {
         Drupal.disableLimitExceededProducts(
           cart_item.parent_sku,
           cart_item.sku,
@@ -386,7 +386,7 @@
     var device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
     var selector = (device == 'mobile') ? '.mobile-only-block' : '.above-mobile-block';
     var matchback = $('.horizontal-crossell' + selector);
-    var upsell =  $('.horizontal-upell' + selector);
+    var upsell = $('.horizontal-upell' + selector);
     var related = $('.horizontal-related' + selector);
     var scrollPoint = window.innerHeight + window.pageYOffset;
 
@@ -421,7 +421,7 @@
         ? drupalSettings[productKey][sku]['variants'][selected] : '';
 
       var variantToDisableSelector = selectedInput.closest('.sku-base-form');
-      var orderLimitExceeded =  false;
+      var orderLimitExceeded = false;
       var orderLimitExceededMsg = '<span class="order-qty-limit-msg-inner-wrapper limit-reached">' +
         Drupal.t('Purchase limit has been reached') +
         '</span>';
@@ -452,7 +452,7 @@
             itemQtyInCart = cartProductQtyArg;
           }
           else if (allVariants.length !== 0) {
-            $.each( cart_items, function( item, value ) {
+            $.each( cart_items, function ( item, value ) {
               if ($.inArray( item, allVariants ) >= 0) {
                 itemQtyInCart += value.qty;
               }

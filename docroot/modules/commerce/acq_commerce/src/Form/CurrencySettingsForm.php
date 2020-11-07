@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class CurrencySettingsForm.
+ * Class Currency Settings Form.
  *
  * @package Drupal\acq_commerce\Form
  * @ingroup acq_commerce

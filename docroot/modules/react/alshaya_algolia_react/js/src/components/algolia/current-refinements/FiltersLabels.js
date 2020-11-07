@@ -34,7 +34,9 @@ function selectedFiltersLables(attribute, value, filter) {
 
     case 'size_group_list': {
       selctionSizeText = value.replace(`${attribute}:`, '');
-      selctionText = selctionSizeText.split(drupalSettings.algoliaSearch.sizeGroupSeparator).pop().trim();
+      selctionText = selctionSizeText.split(
+        drupalSettings.algoliaSearch.sizeGroupSeparator,
+      ).pop().trim();
       break;
     }
 
@@ -48,10 +50,11 @@ function selectedFiltersLables(attribute, value, filter) {
 
 export default function FiltersLabels({ attribute, value }) {
   const [attributeName] = attribute.split('.');
+  const name = (attributeName === 'lhn_category') ? 'field_category' : attributeName;
   const label = selectedFiltersLables(
     attribute,
     value,
-    drupalSettings.algoliaSearch.filters[attributeName],
+    drupalSettings.algoliaSearch.search.filters[name],
   );
 
   return (

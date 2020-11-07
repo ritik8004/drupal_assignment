@@ -290,21 +290,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $orderDetails['billing_address'] = render($billing_address);
   }
 
-  if ($order['payment']['method'] == 'banktransfer'
-    && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
-    $orderDetails['banktransfer_payment_details'] = [
-      '#theme' => 'banktransfer_payment_details',
-      '#account_number' => $order['extension']['bank_transfer_instructions']['account_number'],
-      '#address' => $order['extension']['bank_transfer_instructions']['address'],
-      '#bank_name' => $order['extension']['bank_transfer_instructions']['bank_name'],
-      '#beneficiary_name' => $order['extension']['bank_transfer_instructions']['beneficiary_name'],
-      '#branch' => $order['extension']['bank_transfer_instructions']['branch'],
-      '#iban' => $order['extension']['bank_transfer_instructions']['iban'],
-      '#swift_code' => $order['extension']['bank_transfer_instructions']['swift_code'],
-      '#purpose' => t('Purchase of Goods - @order_id', ['@order_id' => $order['increment_id']]),
-    ];
-  }
-
   $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method']);
   $orderDetails['payment_method'] = $payment_method_term->getName();
   $orderDetails['payment_method_code'] = $order['payment']['method'];
@@ -331,13 +316,45 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
 
   // Add transaction & payment details to confirmation data in case of KNET.
-  if (!empty($order['payment'])
-    && ($order['payment']['method'] === 'knet')) {
-    $orderDetails['payment']['transactionId'] = $order['payment']['additional_information'][0];
-    $orderDetails['payment']['paymentId'] = $order['payment']['additional_information'][2];
+  foreach ($order['extension']['payment_additional_info'] ?? [] as $payment_additiona_info) {
+    $payment_info[$payment_additiona_info['key']] = $payment_additiona_info['value'];
+  }
 
-    // @TODO: Get this information from Magento.
-    $orderDetails['payment']['resultCode'] = 'CAPTURED';
+  switch ($order['payment']['method']) {
+    case 'knet':
+      $orderDetails['payment']['transactionId'] = $payment_info['transaction_id'];
+      $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
+      $orderDetails['payment']['resultCode'] = 'CAPTURED';
+      break;
+
+    case 'checkout_com_upapi_knet':
+      $orderDetails['payment']['transactionId'] = $payment_info['knet_transaction_id'];
+      $orderDetails['payment']['paymentId'] = $payment_info['knet_payment_id'];
+      $orderDetails['payment']['resultCode'] = $payment_info['knet_result'];
+      break;
+
+    case 'checkout_com_upapi_qpay':
+      $orderDetails['payment']['transactionId'] = $payment_info['confirmation_id'];
+      $orderDetails['payment']['paymentId'] = $payment_info['pun'] ?? '';
+      $orderDetails['payment']['resultCode'] = $payment_info['status'];
+      break;
+
+    case 'banktransfer':
+      if (!empty(array_filter($order['extension']['bank_transfer_instructions']))) {
+        $orderDetails['banktransfer_payment_details'] = [
+          '#theme' => 'banktransfer_payment_details',
+          '#account_number' => $order['extension']['bank_transfer_instructions']['account_number'],
+          '#address' => $order['extension']['bank_transfer_instructions']['address'],
+          '#bank_name' => $order['extension']['bank_transfer_instructions']['bank_name'],
+          '#beneficiary_name' => $order['extension']['bank_transfer_instructions']['beneficiary_name'],
+          '#branch' => $order['extension']['bank_transfer_instructions']['branch'],
+          '#iban' => $order['extension']['bank_transfer_instructions']['iban'],
+          '#swift_code' => $order['extension']['bank_transfer_instructions']['swift_code'],
+          '#purpose' => t('Purchase of Goods - @order_id', ['@order_id' => $order['increment_id']]),
+        ];
+      }
+      break;
+
   }
 
   return $orderDetails;

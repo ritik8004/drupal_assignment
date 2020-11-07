@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * Class SkuFieldsHelper.
+ * Class Sku Fields Helper.
  *
  * @package Drupal\alshaya_acm_product
  */

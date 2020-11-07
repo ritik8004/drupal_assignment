@@ -7,7 +7,7 @@ use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
 
 /**
- * Class AcqCommerceServiceProvider.
+ * Class Acq Commerce Service Provider.
  */
 class AcqCommerceServiceProvider extends ServiceProviderBase implements ServiceModifierInterface {
 

@@ -7,12 +7,11 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_master\Service\AlshayaEntityHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AlshayaSearchAlgoliaCommands.
+ * Class Alshaya Search Algolia Commands.
  *
  * @package Drupal\alshaya_search_algolia\Commands
  */
@@ -44,7 +43,7 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
     ConfigFactoryInterface $configFactory,
     AlshayaEntityHelper $alshaya_entity_helper
   ) {
-    $this->configFactory = $configFactory->get('alshaya_feed.settings');
+    $this->configFactory = $configFactory;
     $this->alshayaEntityHelper = $alshaya_entity_helper;
   }
 
@@ -126,8 +125,9 @@ class AlshayaSearchAlgoliaCommands extends DrushCommands {
    */
   public static function batchProcess(array $nids, &$context) {
     $context['results']['count'] += count($nids);
-    $app_id = Settings::get('block.block.alshayaalgoliareactautocomplete')['settings']['application_id'];
-    $app_secret_admin = Settings::get('block.block.alshayaalgoliareactautocomplete')['settings']['search_api_key'];
+    $alshaya_algolia_react_setting_values = \Drupal::config('alshaya_algolia_react.settings');
+    $app_id = $alshaya_algolia_react_setting_values->get('application_id');
+    $app_secret_admin = $alshaya_algolia_react_setting_values->get('search_api_key');
     $client = new Client($app_id, $app_secret_admin);
 
     $index_name = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');

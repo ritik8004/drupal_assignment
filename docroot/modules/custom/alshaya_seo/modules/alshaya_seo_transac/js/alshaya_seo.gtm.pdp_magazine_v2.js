@@ -20,7 +20,7 @@
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshayaSeoPdpMagazineV2Gtm.prepareProductImpressions, $('.magv2-pdp-crossell-upsell-wrapper'), drupalSettings, event);
   }, 500));
 
-  $(window).on('load', function() {
+  $(window).on('load', function () {
     // Trigger productDetailView event.
     Drupal.alshayaSeoGtmPushProductDetailView($('#pdp-layout'));
   });
@@ -44,11 +44,11 @@
    * @return array
    *   Array of impressions.
    */
-  Drupal.alshayaSeoPdpMagazineV2Gtm.prepareProductImpressions = function(context, eventType) {
+  Drupal.alshayaSeoPdpMagazineV2Gtm.prepareProductImpressions = function (context, eventType) {
     var listName = Drupal.alshayaSeoPdpMagazineV2Gtm.getRecommendationListName(context);
     var impressions = [];
 
-    context.find('.magv2-pdp-crossell-upsell-image-wrapper:not(".impression-processed")').each(function() {
+    context.find('.magv2-pdp-crossell-upsell-image-wrapper:not(".impression-processed")').each(function () {
       var condition = true;
       condition = $(this).closest('.slick-slide').isElementInViewPort(0, 0);
       if (condition) {
@@ -75,7 +75,7 @@
    * @return string
    *    The list name.
    */
-  Drupal.alshayaSeoPdpMagazineV2Gtm.getRecommendationListName = function(element) {
+  Drupal.alshayaSeoPdpMagazineV2Gtm.getRecommendationListName = function (element) {
     var label = element.closest('.magv2-pdp-crossell-upsell-wrapper').find('.magv2-pdp-crossell-upsell-label').text();
     var listName = $('body').attr('gtm-list-name');
 

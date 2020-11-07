@@ -48,7 +48,7 @@
    * @return string
    *    The list name.
    */
-  Drupal.alshayaSeoGtmProductSlider.getRecommendationListName = function(element) {
+  Drupal.alshayaSeoGtmProductSlider.getRecommendationListName = function (element) {
     var label = element.closest('.views-element-container').siblings('.subtitle').text();
     var listName = $('body').attr('gtm-list-name');
 

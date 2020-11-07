@@ -10,9 +10,10 @@ use Drupal\alshaya_knet\Helper\KnetHelper;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class TicketBookingKnetHelper.
+ * Class Ticket Booking Knet Helper.
  *
  * @package Drupal\alshaya_kz_transac_lite\Helper
  */
@@ -40,6 +41,13 @@ class TicketBookingKnetHelper extends KnetHelper {
   protected $ticketBooking;
 
   /**
+   * The RequestStack service.
+   *
+   * @var Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $requestStack;
+
+  /**
    * TicketBookingKnetHelper constructor.
    *
    * @param \Drupal\alshaya_knet\Helper\KnetHelper $knet_helper
@@ -54,6 +62,8 @@ class TicketBookingKnetHelper extends KnetHelper {
    *   The booking payment.
    * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticket_booking
    *   The ticket booking.
+   * @param Symfony\Component\HttpFoundation\RequestStack $stack
+   *   The request service.
    */
   public function __construct(
     KnetHelper $knet_helper,
@@ -61,12 +71,14 @@ class TicketBookingKnetHelper extends KnetHelper {
     SharedTempStoreFactory $temp_store_factory,
     LoggerChannelFactoryInterface $logger_factory,
     BookingPaymentManager $booking_payment,
-    TicketBookingManager $ticket_booking
+    TicketBookingManager $ticket_booking,
+    RequestStack $stack
   ) {
     parent::__construct($config_factory, $temp_store_factory, $logger_factory->get('alshaya_kz_transac_lite_knet'));
     $this->knetHelper = $knet_helper;
     $this->bookingPayment = $booking_payment;
     $this->ticketBooking = $ticket_booking;
+    $this->requestStack = $stack;
 
   }
 
@@ -81,20 +93,21 @@ class TicketBookingKnetHelper extends KnetHelper {
     }
     $state_key = $response['state_key'];
     $state_data = $this->tempStore->get($state_key);
+    $message_data = $this->requestStack->getCurrentRequest()->request->all();
     // Check if we have data in state available and it matches data in POST.
     if (empty($state_data)
       || $state_data['cart_id'] != $response['quote_id']
       || $state_data['payment_id'] != $response['payment_id']
     ) {
       $this->logger->error('KNET response data dont match data in state variable.<br>POST: @message<br>State: @state', [
-        '@message' => json_encode($_POST),
+        '@message' => json_encode($message_data),
         '@state' => json_encode($state_data),
       ]);
       throw new \Exception();
     }
     if ($state_data['amount'] != $booking['order_total']) {
       $this->logger->error('Currently, amount dont match amount in state variable.<br>POST: @message<br>State: @state', [
-        '@message' => json_encode($_POST),
+        '@message' => json_encode($message_data),
         '@state' => json_encode($state_data),
       ]);
       throw new \Exception();
@@ -184,7 +197,8 @@ class TicketBookingKnetHelper extends KnetHelper {
   public function processKnetError(string $quote_id) {
     $message = $this->t('User either cancelled or response url returned error.');
     $message .= PHP_EOL . $this->t('Debug info:') . PHP_EOL;
-    foreach ($_GET as $key => $value) {
+    $message_info = $this->requestStack->getCurrentRequest()->query->get();
+    foreach ($message_info as $key => $value) {
       $message .= $key . ': ' . $value . PHP_EOL;
     }
     $this->logger->error('KNET payment failed for @quote_id: @message', [

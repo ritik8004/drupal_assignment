@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AlshayaDepartmentPageEventSubscriber.
+ * Class Alshaya Department Page Event Subscriber.
  */
 class AlshayaDepartmentPageEventSubscriber implements EventSubscriberInterface {
 

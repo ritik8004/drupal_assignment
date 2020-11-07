@@ -149,7 +149,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb = new Breadcrumb();
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home', [], ['context' => 'breadcrumb']), '<front>'));
 
-    /* @var \Drupal\node\Entity\Node $node */
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
 
     if ($field_category = $node->get('field_category')) {
@@ -177,9 +177,12 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
               ],
             ];
           }
-
-          // Add term to breadcrumb.
-          $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()], $options));
+          // Remove term name from breadcrumb if checked for any category.
+          $remove_term_from_breadcrumb = $term->get('field_remove_term_in_breadcrumb')->getString();
+          if (!$remove_term_from_breadcrumb) {
+            // Add term to breadcrumb.
+            $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()], $options));
+          }
         }
       }
     }

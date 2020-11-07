@@ -196,7 +196,7 @@ const productRecommendationsSuffix = 'pr-';
         if (cartPage.length !== 0 ||
             cartCheckoutLoginSelector.length !== 0 ||
             cartCheckoutDeliverySelector.length !== 0 ||
-            cartCheckoutPaymentSelector.length !==0) {
+            cartCheckoutPaymentSelector.length !== 0) {
           delete userDetails.privilegeCustomer;
         }
 
@@ -366,7 +366,7 @@ const productRecommendationsSuffix = 'pr-';
       });
 
       // Trigger deliveryOption event for click & collect tab click.
-      cartCheckoutDeliverySelector.find('div[gtm-type="checkout-click-collect"] > a').once('delivery-option-event').on('click', function() {
+      cartCheckoutDeliverySelector.find('div[gtm-type="checkout-click-collect"] > a').once('delivery-option-event').on('click', function () {
         dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
       });
 
@@ -529,7 +529,7 @@ const productRecommendationsSuffix = 'pr-';
         ];
 
         $(deliveryAddressButtons)
-          .each(function() {
+          .each(function () {
             $(this).once('delivery-address').on('click, mousedown', function (e) {
               let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
               dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
@@ -541,7 +541,7 @@ const productRecommendationsSuffix = 'pr-';
       $('body[gtm-container="checkout click and collect page"], body[gtm-container="checkout delivery page"]')
         .find('div[gtm-type="checkout-home-delivery"]:not(.active--tab--head) > a')
         .once('delivery-option-event')
-        .on('click', function() {
+        .on('click', function () {
           dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
         });
 
@@ -605,13 +605,13 @@ const productRecommendationsSuffix = 'pr-';
       /**
        * Helper function to mark position of elements in homepage/PDP slider.
        */
-      $('.view-product-slider', context).once('mark-slider-items-position').each(function() {
+      $('.view-product-slider', context).once('mark-slider-items-position').each(function () {
         var count = 1;
         // In PDP it is seen that slick is already initialized by the time this
         // is executed while in homepage it is not.
         // So to prevent including slick-clones as actual items in our
         // calculations we use the :not pseudo-class.
-        $(this).find('.views-row:not(.slick-cloned)').once('mark-item-position').each(function() {
+        $(this).find('.views-row:not(.slick-cloned)').once('mark-item-position').each(function () {
           $(this).data('list-item-position', count++);
         });
       });
@@ -682,7 +682,6 @@ const productRecommendationsSuffix = 'pr-';
         Drupal.alshaya_seo_gtm_push_promotion_impressions($(this), gtmPageType, 'promotionClick');
       });
 
-
       // Tracking promotion banner on PLP.
       if (listName === 'PLP') {
         if ($('.views-field-field-promotion-banner').length > 0 && (context === document)) {
@@ -708,11 +707,13 @@ const productRecommendationsSuffix = 'pr-';
         if ((listName.indexOf('PLP') > -1) || listName === 'Search Results Page') {
           var section = listName;
           if (listName.indexOf('PLP') > -1) {
-            section = $('h1.c-page-title').text().toLowerCase();
+            // As we have used the same markup to display search results page
+            // title, use the h1 tag inside '#block-page-title' context.
+            section = $('h1.c-page-title', $('#block-page-title')).text().toLowerCase();
           }
 
           // Track facet filters.
-          $('li.facet-item').once('js-event').on('click', function () {
+          $('li.facet-item', $('#block-facets-ajax')).once('js-event').on('click', function () {
             var selectedVal = typeof $(this).find('a').attr('data-drupal-facet-item-label') !== 'undefined'
               ? $(this).find('a').attr('data-drupal-facet-item-label').trim() : '';
             var facetTitle = $(this).find('a').attr('data-drupal-facet-label');
@@ -1240,7 +1241,7 @@ const productRecommendationsSuffix = 'pr-';
    * @param {object} productContext
    *   The jQuery HTML object containing GTM attributes for the product.
    */
-  Drupal.alshayaSeoGtmPushProductDetailView = function(productContext) {
+  Drupal.alshayaSeoGtmPushProductDetailView = function (productContext) {
     var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
     // This is populated only post add to cart.
     product.variant = '';

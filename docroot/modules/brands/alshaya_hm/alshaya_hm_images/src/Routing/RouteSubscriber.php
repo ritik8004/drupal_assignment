@@ -6,7 +6,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Class RouteSubscriber.
+ * Class Route Subscriber.
  *
  * @package Drupal\alshaya_hm_images\Routing
  */
