@@ -46,7 +46,6 @@ class SKUSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $sku_settings = $this->config('acq_sku.settings');
     $sku_settings->set('linked_skus_cache_max_lifetime', $form_state->getValue('linked_skus_cache_max_lifetime'));
-    $sku_settings->set('non_cli_image_download', $form_state->getValue('non_cli_image_download'));
     $sku_settings->save();
   }
 
@@ -71,15 +70,6 @@ class SKUSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Linked SKUs Cache Max Lifetime'),
       '#description' => $this->t("Maximum lifetime for linked skus in seconds."),
       '#default_value' => $sku_settings->get('linked_skus_cache_max_lifetime'),
-    ];
-    $form['non_cli_image_download'] = [
-      '#type' => 'select',
-      '#options' => [
-        '0' => $this->t('DISABLE'),
-        '1' => $this->t('ENABLE'),
-      ],
-      '#title' => $this->t('The Non-CLI image download'),
-      '#default_value' => $sku_settings->get('non_cli_image_download'),
     ];
 
     return $form;
