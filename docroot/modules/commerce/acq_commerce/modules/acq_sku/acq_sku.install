@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Adding index 'acq_sku_sku_defaultlangcode' on acq_sku_field_data table.
  */
-function acq_sku_update_8024() {
+function acq_sku_update_8025() {
   $index = 'acq_sku_sku_defaultlangcode';
   $data = _acq_sku_indexes()[$index];
   if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
@@ -25,6 +25,14 @@ function acq_sku_update_8024() {
       ->schema()
       ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
   }
+}
+
+/**
+ * Set non_cli_image_download.
+ */
+function acq_sku_update_8024() {
+    $config = \Drupal::configFactory()->getEditable('acq_sku.settings');
+    $config->set('non_cli_image_download', 0)->save();
 }
 
 /**
