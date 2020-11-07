@@ -20,5 +20,6 @@ aura_header_library:
 alshaya_aura_pdp:
   js:
     dist/pdp.bundle.js: {}
+    assets/js/productHelper.js: {}
   dependencies:
     - alshaya_react/react

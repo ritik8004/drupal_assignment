@@ -15,7 +15,7 @@ import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
-import { isAuraEnabled } from '../../../../../js/utilities/helper';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 
 const PdpLayout = () => {

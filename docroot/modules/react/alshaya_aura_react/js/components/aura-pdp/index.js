@@ -19,6 +19,8 @@ class AuraPDP extends React.Component {
   componentDidMount() {
     document.addEventListener('loyaltyStatusUpdatedFromHeader', this.loyaltyStatusUpdated, false);
     document.addEventListener('productPointsFetched', this.updateStates, false);
+    document.addEventListener('variantSelectedEvent', this.processVariant, false);
+    document.addEventListener('variantQuantityUpdated', this.processVariant, false);
 
     // Logged in user.
     if (getUserDetails().id) {
@@ -61,11 +63,29 @@ class AuraPDP extends React.Component {
     });
   };
 
-  fetchProductPoints = () => {
-    const { cardNumber } = this.state;
-    if (cardNumber) {
-      getProductPoints(cardNumber);
+  processVariant = (variantDetails) => {
+    const { data } = variantDetails.detail;
+
+    if (data.length !== 0) {
+      this.fetchProductPoints(data);
     }
+  };
+
+  fetchProductPoints = (productDetails) => {
+    const { cardNumber } = this.state;
+
+    if (cardNumber === '' || productDetails.length === 0) {
+      this.setState({
+        wait: false,
+      });
+      return;
+    }
+
+    // Setting wait as true to show loader while waiting for API response.
+    this.setState({
+      wait: true,
+    });
+    getProductPoints(productDetails, cardNumber);
   };
 
   getToolTipContent = () => Drupal.t('Everytime you shop you will earn Aura points which can then be redeemed for future purchases. Not eligible for accrual when purchased through Aura points.');

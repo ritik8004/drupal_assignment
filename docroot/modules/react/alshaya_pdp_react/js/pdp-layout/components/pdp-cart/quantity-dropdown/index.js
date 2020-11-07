@@ -1,4 +1,5 @@
 import React from 'react';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 class QuantityDropdown extends React.Component {
   constructor(props) {
@@ -19,11 +20,29 @@ class QuantityDropdown extends React.Component {
   decrease = (e) => {
     e.preventDefault();
     this.setState((prevState) => ({ qty: prevState.qty - 1 }));
+
+    const { qty } = this.state;
+    this.dispatchQtyUpdateEvent(qty - 1);
   };
 
   increase = (e) => {
     e.preventDefault();
     this.setState((prevState) => ({ qty: prevState.qty + 1 }));
+
+    const { qty } = this.state;
+    this.dispatchQtyUpdateEvent(qty + 1);
+  };
+
+  dispatchQtyUpdateEvent = (qty) => {
+    const { variantSelected, productInfo, skuCode } = this.props;
+    const price = productInfo[skuCode].variants[variantSelected].priceRaw;
+
+    const data = [{
+      code: variantSelected,
+      quantity: qty,
+      amount: price * qty,
+    }];
+    dispatchCustomEvent('variantQuantityUpdated', { data });
   };
 
   render() {
@@ -36,7 +55,7 @@ class QuantityDropdown extends React.Component {
     return (
       <div className="magv2-qty-container">
         <button type="submit" className="magv2-qty-btn magv2-qty-btn--down" onClick={(e) => this.decrease(e)} disabled={isEnabledDecreaseBtn} />
-        <input type="text" id="qty" className="magv2-qty-input" value={qty} readOnly />
+        <input type="text" id="qty" className="magv2-qty-input" value={qty} name="quantity" readOnly />
         <button type="submit" className="magv2-qty-btn magv2-qty-btn--up" onClick={(e) => this.increase(e)} disabled={isEnabledIncreaseBtn} />
       </div>
     );

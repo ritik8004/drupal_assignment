@@ -5,6 +5,7 @@ import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
 import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoothScroll';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -81,7 +82,7 @@ class ConfigurableProductForm extends React.Component {
 
   // To get available attribute value based on user selection.
   refreshConfigurables = (code, codeValue, variantSelected) => {
-    const { configurableCombinations, skuCode } = this.props;
+    const { configurableCombinations, skuCode, productInfo } = this.props;
     const selectedValues = this.selectedValues();
     // Refresh configurables.
     let { combinations } = configurableCombinations[skuCode];
@@ -102,6 +103,16 @@ class ConfigurableProductForm extends React.Component {
         detail: { variant: variantSelected },
       });
       document.querySelector('.sku-base-form').dispatchEvent(event);
+
+      // Dispatching event on variant change to listen in react.
+      const qty = document.querySelector('input[name="quantity"]').value;
+      const price = productInfo[skuCode].variants[variantSelected].priceRaw;
+      const data = [{
+        code: variantSelected,
+        quantity: qty,
+        amount: price * qty,
+      }];
+      dispatchCustomEvent('variantSelectedEvent', { data });
     }
 
     if (typeof combinations[code] === 'undefined') {
@@ -202,9 +213,10 @@ class ConfigurableProductForm extends React.Component {
 
     return (
       <form action="#" className="sku-base-form" method="post" id={`pdp-add-to-cart-form-${context}`} parentsku={skuCode} variantselected={variantSelected} data-sku={skuCode}>
+        <input className="selected-variant-sku" type="hidden" name="selected_variant_sku" value={variantSelected} />
         <div id="add-to-cart-error" className="error" />
         {Object.keys(configurables).map((key) => (
-          <div className={`cart-form-attribute ${key}`} key={key} data-attribute-name={configurables[key].label}>
+          <div className={`cart-form-attribute ${key}`} key={key} data-attribute-name={configurables[key].label} name={`configurables[${key}]`}>
             <CartSelectOption
               configurables={configurables[key]}
               byAttribute={byAttribute}
