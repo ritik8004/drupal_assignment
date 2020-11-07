@@ -13,6 +13,7 @@ class AuraPDP extends React.Component {
       wait: true,
       productPoints: 0,
       cardNumber: '',
+      productDetails: [],
     };
   }
 
@@ -52,7 +53,8 @@ class AuraPDP extends React.Component {
       },
     };
     this.updateStates(stateData);
-    this.fetchProductPoints();
+    const { productDetails } = this.state;
+    this.fetchProductPoints(productDetails);
   };
 
   updateStates = (data) => {
@@ -67,6 +69,9 @@ class AuraPDP extends React.Component {
     const { data } = variantDetails.detail;
 
     if (data.length !== 0) {
+      this.setState({
+        productDetails: data,
+      });
       this.fetchProductPoints(data);
     }
   };
