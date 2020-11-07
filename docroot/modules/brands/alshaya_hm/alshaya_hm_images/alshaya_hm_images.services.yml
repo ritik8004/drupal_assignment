@@ -41,11 +41,3 @@ services:
       - '@alshaya_hm_images.skuassetsmanager'
     tags:
       - { name: 'event_subscriber' }
-  alshaya_hm_images.alshaya_hm_process_blacklisted_products:
-    class: Drupal\alshaya_hm_images\EventSubscriber\AlshayaHMProcessBlacklistedProductsSubscriber
-    arguments:
-      - '@database'
-      - '@alshaya_hm_images.skuassetsmanager'
-      - '@logger.factory'
-    tags:
-      - { name: 'event_subscriber' }

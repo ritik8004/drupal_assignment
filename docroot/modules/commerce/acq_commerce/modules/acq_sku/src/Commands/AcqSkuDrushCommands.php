@@ -24,8 +24,6 @@ use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Drupal\taxonomy\TermInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
-use Drupal\acq_sku\Event\ProcessBlackListedProductsEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Acq Sku Drush Commands.
@@ -135,13 +133,6 @@ class AcqSkuDrushCommands extends DrushCommands {
   private $categorySyncHelper;
 
   /**
-   * Event Dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $dispatcher;
-
-  /**
    * AcqSkuDrushCommands constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapperInterface $apiWrapper
@@ -174,8 +165,6 @@ class AcqSkuDrushCommands extends DrushCommands {
    *   Cache Tags invalidator.
    * @param \Drupal\acq_sku\ConductorCategorySyncHelper $category_sync_helper
    *   Category sync helper.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-   *   Event Dispatcher.
    */
   public function __construct(APIWrapperInterface $apiWrapper,
                               I18nHelper $i18nHelper,
@@ -191,8 +180,7 @@ class AcqSkuDrushCommands extends DrushCommands {
                               ModuleHandlerInterface $moduleHandler,
                               CacheBackendInterface $linkedSkuCache,
                               CacheTagsInvalidatorInterface $cacheTagsInvalidator,
-                              ConductorCategorySyncHelper $category_sync_helper,
-                              EventDispatcherInterface $dispatcher) {
+                              ConductorCategorySyncHelper $category_sync_helper) {
     parent::__construct();
     $this->apiWrapper = $apiWrapper;
     $this->i18nhelper = $i18nHelper;
@@ -209,7 +197,6 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->linkedSkuCache = $linkedSkuCache;
     $this->cacheTagsInvalidator = $cacheTagsInvalidator;
     $this->categorySyncHelper = $category_sync_helper;
-    $this->dispatcher = $dispatcher;
   }
 
   /**
@@ -959,23 +946,6 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->logger->notice(dt('Processing category sync for push mode. Please wait ...'));
     $this->categorySyncHelper->processCatSync();
     $this->logger->notice(dt('Processing category sync completed.'));
-  }
-
-  /**
-   * Drush command that displays the given text.
-   *
-   * @validate-module-enabled acq_sku
-   *
-   * @command acq_sku:process-blacklisted-products
-   *
-   * @aliases acpbp,process-commerce-blacklisted-products
-   *
-   * @usage drush acpbp
-   *   Run a full category synchronization of all available categories.
-   */
-  public function processBlacklistedProduct() {
-    $event = new ProcessBlackListedProductsEvent();
-    $this->dispatcher->dispatch(ProcessBlackListedProductsEvent::EVENT_NAME, $event);
   }
 
 }

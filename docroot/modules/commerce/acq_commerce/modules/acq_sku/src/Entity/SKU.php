@@ -2,7 +2,6 @@
 
 namespace Drupal\acq_sku\Entity;
 
-use Drupal\acq_sku\AcqSkuConfig;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -300,12 +299,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   protected function downloadMediaImage(array &$data) {
     $lock_key = '';
-    $non_cli_image_download = AcqSkuConfig::get('non_cli_image_download');
-    // Return if it is non CLI request AND if the config value for it is
-    // disabled.
-    if (PHP_SAPI !== 'cli' && !$non_cli_image_download) {
-      return NULL;
-    }
+
     // If image is blacklisted, block download.
     if (isset($data['blacklist_expiry']) && time() < $data['blacklist_expiry']) {
       return NULL;
