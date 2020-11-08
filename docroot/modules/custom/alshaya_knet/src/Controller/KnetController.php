@@ -74,7 +74,8 @@ class KnetController extends ControllerBase {
     return new static(
       $container->get('alshaya_knet.helper'),
       $container->get('tempstore.shared'),
-      $container->get('logger.factory')
+      $container->get('logger.factory'),
+      $container->get('request_stack')
     );
   }
 
