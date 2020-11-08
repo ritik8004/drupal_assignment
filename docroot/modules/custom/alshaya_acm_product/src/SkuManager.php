@@ -2875,7 +2875,7 @@ class SkuManager {
       }
     }
 
-    if (empty($applied_layout)) {
+    if (empty($applied_layout) && !empty($terms_to_explore)) {
       $parents = $this->getParentsIds($terms_to_explore);
       if (!empty($parents)) {
         $applied_layout = $this->getPdpLayoutFromCategories($parents);
