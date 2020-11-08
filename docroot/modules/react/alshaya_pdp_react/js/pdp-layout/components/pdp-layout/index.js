@@ -182,7 +182,7 @@ const PdpLayout = () => {
             />
           ) : null}
           {isAuraEnabled()
-            ? <AuraPDP />
+            ? <AuraPDP mode="main" />
             : null}
           {stockStatus ? (
             <PdpCart

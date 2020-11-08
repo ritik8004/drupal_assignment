@@ -9,11 +9,13 @@ import Loading from '../../../../alshaya_spc/js/utilities/loading';
 class AuraPDP extends React.Component {
   constructor(props) {
     super(props);
+    const { mode } = this.props;
     this.state = {
       wait: true,
       productPoints: 0,
       cardNumber: '',
       productDetails: [],
+      context: mode,
     };
   }
 
@@ -58,25 +60,40 @@ class AuraPDP extends React.Component {
   };
 
   updateStates = (data) => {
-    const { stateValues } = data.detail;
+    const { stateValues, context } = data.detail;
+    const { mode } = this.props;
+
+    if (context !== undefined && context !== mode) {
+      return null;
+    }
 
     this.setState({
       ...stateValues,
     });
+
+    return null;
   };
 
   processVariant = (variantDetails) => {
-    const { data } = variantDetails.detail;
+    const { data, context } = variantDetails.detail;
+    const { mode } = this.props;
+
+    if (context !== undefined && context !== mode) {
+      return null;
+    }
 
     if (data.length !== 0) {
       this.setState({
         productDetails: data,
+        context,
       });
-      this.fetchProductPoints(data);
+      this.fetchProductPoints(data, context);
     }
+
+    return null;
   };
 
-  fetchProductPoints = (productDetails) => {
+  fetchProductPoints = (productDetails, context) => {
     const { cardNumber } = this.state;
 
     if (cardNumber === '' || productDetails.length === 0) {
@@ -90,7 +107,7 @@ class AuraPDP extends React.Component {
     this.setState({
       wait: true,
     });
-    getProductPoints(productDetails, cardNumber);
+    getProductPoints(productDetails, cardNumber, context);
   };
 
   getToolTipContent = () => Drupal.t('Everytime you shop you will earn Aura points which can then be redeemed for future purchases. Not eligible for accrual when purchased through Aura points.');
@@ -114,7 +131,13 @@ class AuraPDP extends React.Component {
       wait,
       cardNumber,
       productPoints,
+      context,
     } = this.state;
+    const { mode } = this.props;
+
+    if (context !== mode) {
+      return null;
+    }
 
     if (!isProductBuyable()) {
       return null;

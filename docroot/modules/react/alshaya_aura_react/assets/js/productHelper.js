@@ -3,10 +3,8 @@
 
   Drupal.getSelectedVariantDetails = function (element) {
     var data = []
-    var elementNode = $('[name="' + element +'"]');
-    var form = elementNode.parents('form');
-    var node = elementNode.parents('.entity--type-node');
-
+    var form = element.parents('form');
+    var node = element.parents('.entity--type-node');
     var currentSelectedVariant = $('[name="selected_variant_sku"]', form).val();
     var sku = $(node).attr('data-sku');
 

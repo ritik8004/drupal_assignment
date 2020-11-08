@@ -34,15 +34,19 @@ class QuantityDropdown extends React.Component {
   };
 
   dispatchQtyUpdateEvent = (qty) => {
-    const { variantSelected, productInfo, skuCode } = this.props;
-    const price = productInfo[skuCode].variants[variantSelected].priceRaw;
-
+    const {
+      variantSelected, productInfo, skuCode, context,
+    } = this.props;
+    const priceKey = (context === 'related') ? 'final_price' : 'finalPrice';
+    const price = productInfo[skuCode].variants
+      ? productInfo[skuCode].variants[variantSelected][priceKey]
+      : productInfo[skuCode][priceKey];
     const data = [{
       code: variantSelected,
       quantity: qty,
       amount: price * qty,
     }];
-    dispatchCustomEvent('variantQuantityUpdated', { data });
+    dispatchCustomEvent('variantQuantityUpdated', { data, context });
   };
 
   render() {

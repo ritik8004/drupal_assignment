@@ -4,7 +4,7 @@ import dispatchCustomEvent from '../../../js/utilities/events';
 /**
  * Helper function to get product points.
  */
-function getProductPoints(productDetails, cardNumber) {
+function getProductPoints(productDetails, cardNumber, context) {
   let stateValues = {};
   const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
   const data = {
@@ -26,7 +26,7 @@ function getProductPoints(productDetails, cardNumber) {
         }
       }
       stateValues.wait = false;
-      dispatchCustomEvent('productPointsFetched', { stateValues });
+      dispatchCustomEvent('productPointsFetched', { stateValues, context });
     });
   }
 }

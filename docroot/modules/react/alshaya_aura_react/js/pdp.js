@@ -4,7 +4,14 @@ import AuraPDP from './components/aura-pdp';
 
 if (document.querySelector('#aura-pdp')) {
   ReactDOM.render(
-    <AuraPDP />,
+    <AuraPDP mode="main" />,
     document.querySelector('#aura-pdp'),
+  );
+}
+
+if (document.querySelector('#aura-pdp-modal')) {
+  ReactDOM.render(
+    <AuraPDP mode="related" />,
+    document.querySelector('#aura-pdp-modal'),
   );
 }

@@ -82,7 +82,9 @@ class ConfigurableProductForm extends React.Component {
 
   // To get available attribute value based on user selection.
   refreshConfigurables = (code, codeValue, variantSelected) => {
-    const { configurableCombinations, skuCode, productInfo } = this.props;
+    const {
+      configurableCombinations, skuCode, productInfo, context,
+    } = this.props;
     const selectedValues = this.selectedValues();
     // Refresh configurables.
     let { combinations } = configurableCombinations[skuCode];
@@ -105,14 +107,17 @@ class ConfigurableProductForm extends React.Component {
       document.querySelector('.sku-base-form').dispatchEvent(event);
 
       // Dispatching event on variant change to listen in react.
-      const qty = document.querySelector('input[name="quantity"]').value;
-      const price = productInfo[skuCode].variants[variantSelected].priceRaw;
+      const qty = document.querySelector(`#pdp-add-to-cart-form-${context} input[name="quantity"]`).value;
+      const priceKey = (context === 'related') ? 'final_price' : 'finalPrice';
+      const price = productInfo[skuCode].variants
+        ? productInfo[skuCode].variants[variantSelected][priceKey]
+        : productInfo[skuCode][priceKey];
       const data = [{
         code: variantSelected,
         quantity: qty,
         amount: price * qty,
       }];
-      dispatchCustomEvent('variantSelectedEvent', { data });
+      dispatchCustomEvent('variantSelectedEvent', { data, context });
     }
 
     if (typeof combinations[code] === 'undefined') {
@@ -256,6 +261,7 @@ class ConfigurableProductForm extends React.Component {
             productInfo={productInfo}
             skuCode={skuCode}
             stockQty={stockQty}
+            context={context}
           />
         </div>
         {(checkoutFeatureStatus === 'enabled') ? (

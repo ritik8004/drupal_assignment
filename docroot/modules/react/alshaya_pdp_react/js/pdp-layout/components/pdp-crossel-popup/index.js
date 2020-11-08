@@ -153,7 +153,7 @@ class CrossellPopupContent extends React.Component {
               />
             </div>
             {isAuraEnabled()
-              ? <AuraPDP />
+              ? <AuraPDP mode="related" />
               : null}
             {stockStatus ? (
               <PdpCart
