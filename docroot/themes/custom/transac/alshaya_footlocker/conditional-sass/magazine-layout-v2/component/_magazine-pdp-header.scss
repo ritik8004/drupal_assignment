@@ -7,5 +7,12 @@
         display: block;
       }
     }
+
+    .quantity {
+      @include breakpoint($only-mobile) {
+        top: 1.875rem;
+        #{$left}: -0.3125rem;
+      }
+    }
   }
 }
