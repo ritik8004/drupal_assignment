@@ -131,30 +131,10 @@ function alshaya_color_split_acq_sku_configurable_variants_alter(array &$childre
     return;
   }
 
-  $attribute_code_color_id = AlshayaColorSplitConfig::get('attribute_code_color_id');
+  /** @var \Drupal\alshaya_color_split\AlshayaColorSplitManager $manager */
+  $manager = \Drupal::service('alshaya_color_split.manager');
 
-  // If we do not have any value for style code we do no further processing.
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  $style_code = $skuManager->fetchStyleCode($sku);
-  if (empty($style_code)) {
-    return;
-  }
-
-  // If we we have color already set, we do no further processing.
-  $configurable_attribute_codes = Configurable::getConfigurableAttributeCodes($sku);
-  if (isset($configurable_attribute_codes[$attribute_code_color_id])) {
-    return;
-  }
-
-  $variants = \Drupal::entityTypeManager()
-    ->getStorage('acq_sku')
-    ->loadByProperties([
-      'attr_style_code' => $style_code,
-      'type' => 'configurable',
-    ]);
-
+  $variants = $manager->getProductsInStyle($sku);
   if (empty($variants)) {
     return;
   }
@@ -162,18 +142,7 @@ function alshaya_color_split_acq_sku_configurable_variants_alter(array &$childre
   $children = [];
 
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-  $plugin = $sku->getPluginInstance();
   foreach ($variants as $variant) {
-    if (!$plugin->isProductInStock($variant)) {
-      continue;
-    }
-
-    // Do not merge if configurable attributes are not the same.
-    $variant_attribute_codes = Configurable::getConfigurableAttributeCodes($variant);
-    if ($variant_attribute_codes !== $configurable_attribute_codes) {
-      continue;
-    }
-
     $variant_children = Configurable::getChildSkus($variant);
     foreach ($variant_children as $child_sku_code) {
       $child = SKU::loadFromSku($child_sku_code, $sku->language()->getId());
