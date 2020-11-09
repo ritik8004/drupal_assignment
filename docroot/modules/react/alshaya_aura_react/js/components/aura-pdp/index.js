@@ -22,7 +22,7 @@ class AuraPDP extends React.Component {
   componentDidMount() {
     document.addEventListener('loyaltyStatusUpdatedFromHeader', this.loyaltyStatusUpdated, false);
     document.addEventListener('productPointsFetched', this.updateStates, false);
-    document.addEventListener('productUpdate', this.processVariant, false);
+    document.addEventListener('auraProductUpdate', this.processVariant, false);
 
     // Logged in user.
     if (getUserDetails().id) {

@@ -31,7 +31,7 @@
 
   Drupal.dispatchProductUpdateEvent = function (element) {
     var data = Drupal.getSelectedVariantDetails(element);
-    const event = new CustomEvent('productUpdate', {
+    const event = new CustomEvent('auraProductUpdate', {
       bubbles: true,
       detail: data,
     });

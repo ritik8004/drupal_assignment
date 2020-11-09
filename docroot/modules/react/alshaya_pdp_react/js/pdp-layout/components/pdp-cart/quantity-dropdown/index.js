@@ -1,5 +1,6 @@
 import React from 'react';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import isAuraEnabled from '../../../../../../js/utilities/helper';
 
 class QuantityDropdown extends React.Component {
   constructor(props) {
@@ -38,6 +39,9 @@ class QuantityDropdown extends React.Component {
   };
 
   dispatchUpdateEvent = (qty) => {
+    if (!isAuraEnabled()) {
+      return;
+    }
     const {
       variantSelected, productInfo, skuCode, context,
     } = this.props;
@@ -50,7 +54,7 @@ class QuantityDropdown extends React.Component {
       quantity: qty,
       amount: price * qty,
     }];
-    dispatchCustomEvent('productUpdate', { data, context });
+    dispatchCustomEvent('auraProductUpdate', { data, context });
   };
 
   render() {

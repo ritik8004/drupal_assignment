@@ -6,6 +6,7 @@ import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
 import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoothScroll';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import isAuraEnabled from '../../../../../../js/utilities/helper';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -107,8 +108,10 @@ class ConfigurableProductForm extends React.Component {
       document.querySelector('.sku-base-form').dispatchEvent(event);
     }
 
-    // Dispatch event on variant update.
-    this.dispatchUpdateEvent(variantSelected);
+    // Dispatch event on variant update id aura enabled.
+    if (isAuraEnabled()) {
+      this.dispatchUpdateEvent(variantSelected);
+    }
 
     if (typeof combinations[code] === 'undefined') {
       return;
@@ -149,7 +152,7 @@ class ConfigurableProductForm extends React.Component {
       quantity: qty,
       amount: price * qty,
     }];
-    dispatchCustomEvent('productUpdate', { data, context });
+    dispatchCustomEvent('auraProductUpdate', { data, context });
   };
 
   selectedValues = () => {
