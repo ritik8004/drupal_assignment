@@ -63,7 +63,7 @@ class CrossellPopupContent extends React.Component {
   }
 
   render() {
-    const { closeModal, relatedSku } = this.props;
+    const { closeModal, relatedSku, cardNumber } = this.props;
 
     const url = Drupal.url(`rest/v1/product/${relatedSku}?pdp=magazinev2`);
     const {
@@ -153,7 +153,7 @@ class CrossellPopupContent extends React.Component {
               />
             </div>
             {isAuraEnabled()
-              ? <AuraPDP mode="related" />
+              ? <AuraPDP mode="related" cardNumber={cardNumber} />
               : null}
             {stockStatus ? (
               <PdpCart

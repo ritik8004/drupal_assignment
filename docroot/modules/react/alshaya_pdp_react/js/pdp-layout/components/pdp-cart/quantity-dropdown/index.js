@@ -9,6 +9,10 @@ class QuantityDropdown extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.dispatchUpdateEvent(1);
+  }
+
   componentDidUpdate(prevProps) {
     const { stockQty } = this.props;
     if (prevProps.stockQty !== stockQty) {
@@ -22,7 +26,7 @@ class QuantityDropdown extends React.Component {
     this.setState((prevState) => ({ qty: prevState.qty - 1 }));
 
     const { qty } = this.state;
-    this.dispatchQtyUpdateEvent(qty - 1);
+    this.dispatchUpdateEvent(qty - 1);
   };
 
   increase = (e) => {
@@ -30,10 +34,10 @@ class QuantityDropdown extends React.Component {
     this.setState((prevState) => ({ qty: prevState.qty + 1 }));
 
     const { qty } = this.state;
-    this.dispatchQtyUpdateEvent(qty + 1);
+    this.dispatchUpdateEvent(qty + 1);
   };
 
-  dispatchQtyUpdateEvent = (qty) => {
+  dispatchUpdateEvent = (qty) => {
     const {
       variantSelected, productInfo, skuCode, context,
     } = this.props;
@@ -46,7 +50,7 @@ class QuantityDropdown extends React.Component {
       quantity: qty,
       amount: price * qty,
     }];
-    dispatchCustomEvent('variantQuantityUpdated', { data, context });
+    dispatchCustomEvent('productUpdate', { data, context });
   };
 
   render() {

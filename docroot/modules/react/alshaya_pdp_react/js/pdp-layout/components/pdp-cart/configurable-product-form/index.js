@@ -83,7 +83,7 @@ class ConfigurableProductForm extends React.Component {
   // To get available attribute value based on user selection.
   refreshConfigurables = (code, codeValue, variantSelected) => {
     const {
-      configurableCombinations, skuCode, productInfo, context,
+      configurableCombinations, skuCode,
     } = this.props;
     const selectedValues = this.selectedValues();
     // Refresh configurables.
@@ -105,20 +105,10 @@ class ConfigurableProductForm extends React.Component {
         detail: { variant: variantSelected },
       });
       document.querySelector('.sku-base-form').dispatchEvent(event);
-
-      // Dispatching event on variant change to listen in react.
-      const qty = document.querySelector(`#pdp-add-to-cart-form-${context} input[name="quantity"]`).value;
-      const priceKey = (context === 'related') ? 'final_price' : 'finalPrice';
-      const price = productInfo[skuCode].variants
-        ? productInfo[skuCode].variants[variantSelected][priceKey]
-        : productInfo[skuCode][priceKey];
-      const data = [{
-        code: variantSelected,
-        quantity: qty,
-        amount: price * qty,
-      }];
-      dispatchCustomEvent('variantSelectedEvent', { data, context });
     }
+
+    // Dispatch event on variant update.
+    this.dispatchUpdateEvent(variantSelected);
 
     if (typeof combinations[code] === 'undefined') {
       return;
@@ -141,6 +131,26 @@ class ConfigurableProductForm extends React.Component {
       });
     }
   }
+
+  dispatchUpdateEvent = (variantSelected) => {
+    const {
+      skuCode, productInfo, context, firstChild,
+    } = this.props;
+
+    // Dispatching event on variant change to listen in react.
+    const selectedVariant = variantSelected || firstChild;
+    const qty = document.querySelector(`#pdp-add-to-cart-form-${context} input[name="quantity"]`).value;
+    const priceKey = (context === 'related') ? 'final_price' : 'finalPrice';
+    const price = productInfo[skuCode].variants
+      ? productInfo[skuCode].variants[selectedVariant][priceKey]
+      : productInfo[skuCode][priceKey];
+    const data = [{
+      code: selectedVariant,
+      quantity: qty,
+      amount: price * qty,
+    }];
+    dispatchCustomEvent('productUpdate', { data, context });
+  };
 
   selectedValues = () => {
     const { configurableCombinations, skuCode, context } = this.props;

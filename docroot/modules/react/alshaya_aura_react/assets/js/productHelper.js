@@ -14,6 +14,9 @@
       var productKey = (viewMode === 'matchback')
         ? 'matchback'
         : 'productInfo';
+      var context = (viewMode === 'full')
+        ? 'main'
+        : 'related';
       var variantInfo = drupalSettings[productKey][sku]['variants'][currentSelectedVariant];
       var price = variantInfo ? variantInfo.priceRaw : 0;
       data = [{
@@ -23,7 +26,16 @@
       }];
     }
 
-    return data;
+    return { data, context };
+  };
+
+  Drupal.dispatchProductUpdateEvent = function (element) {
+    var data = Drupal.getSelectedVariantDetails(element);
+    const event = new CustomEvent('productUpdate', {
+      bubbles: true,
+      detail: data,
+    });
+    document.querySelector('.sku-base-form').dispatchEvent(event);
   };
 
 })(jQuery, Drupal, drupalSettings)

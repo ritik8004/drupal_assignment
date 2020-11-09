@@ -81,15 +81,7 @@
             ]
           );
           // Dispatching event on variant change to listen in react.
-          var data = Drupal.getSelectedVariantDetails($(this));
-          var context = ($(this).parents('article.entity--type-node').attr('data-vmode') === 'full')
-            ? 'main'
-            : 'related';
-          const event = new CustomEvent('variantSelectedEvent', {
-            bubbles: true,
-            detail: { data, context },
-          });
-          document.querySelector('.sku-base-form').dispatchEvent(event);
+          Drupal.dispatchProductUpdateEvent($(this));
         }
       });
 
@@ -235,15 +227,7 @@
 
       $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
         // Dispatching event on quantity change to listen in react.
-        var data = Drupal.getSelectedVariantDetails($(this));
-        var context = ($(this).parents('article.entity--type-node').attr('data-vmode') === 'full')
-          ? 'main'
-          : 'related';
-        const event = new CustomEvent('variantQuantityUpdated', {
-          bubbles: true,
-          detail: { data, context },
-        });
-        document.querySelector('.sku-base-form').dispatchEvent(event);
+        Drupal.dispatchProductUpdateEvent($(this));
       });
     }
   };

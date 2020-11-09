@@ -9,11 +9,11 @@ import Loading from '../../../../alshaya_spc/js/utilities/loading';
 class AuraPDP extends React.Component {
   constructor(props) {
     super(props);
-    const { mode } = this.props;
+    const { mode, cardNumber } = this.props;
     this.state = {
       wait: true,
       productPoints: 0,
-      cardNumber: '',
+      cardNumber: cardNumber || '',
       productDetails: [],
       context: mode,
     };
@@ -22,12 +22,14 @@ class AuraPDP extends React.Component {
   componentDidMount() {
     document.addEventListener('loyaltyStatusUpdatedFromHeader', this.loyaltyStatusUpdated, false);
     document.addEventListener('productPointsFetched', this.updateStates, false);
-    document.addEventListener('variantSelectedEvent', this.processVariant, false);
-    document.addEventListener('variantQuantityUpdated', this.processVariant, false);
+    document.addEventListener('productUpdate', this.processVariant, false);
 
     // Logged in user.
     if (getUserDetails().id) {
-      document.addEventListener('customerDetailsFetched', this.loyaltyStatusUpdated, false);
+      const { cardNumber } = this.state;
+      if (cardNumber === '') {
+        document.addEventListener('customerDetailsFetched', this.loyaltyStatusUpdated, false);
+      }
     } else {
       // Guest user.
       const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
