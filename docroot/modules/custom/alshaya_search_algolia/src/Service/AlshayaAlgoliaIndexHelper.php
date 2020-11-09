@@ -894,7 +894,14 @@ class AlshayaAlgoliaIndexHelper {
       }
 
       if ($updated) {
-        $index->setSettings($settings, TRUE);
+        $index->setSettings($settings);
+
+        foreach ($settings['replicas'] as $replica) {
+          $replica_index = $client->initIndex($replica);
+          $replica_settings = $replica_index->getSettings();
+          $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
+          $replica_index->setSettings($replica_settings);
+        }
       }
     }
 
