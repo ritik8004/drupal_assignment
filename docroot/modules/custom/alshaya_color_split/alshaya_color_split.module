@@ -137,8 +137,7 @@ function alshaya_color_split_acq_sku_configurable_variants_alter(array &$childre
   }
 
   // If we we have color already set, we do no further processing.
-  $configurations = unserialize($sku->get('field_configurable_attributes')->getString());
-  $configurable_attribute_codes = array_column($configurations, 'code', 'code');
+  $configurable_attribute_codes = Configurable::getConfigurableAttributeCodes($sku);
   if (isset($configurable_attribute_codes[$attribute_code_color_id])) {
     return;
   }
@@ -163,8 +162,13 @@ function alshaya_color_split_acq_sku_configurable_variants_alter(array &$childre
       continue;
     }
 
-    $variant_children = Configurable::getChildSkus($variant);
+    // Do not merge if configurable attributes are not the same.
+    $variant_attribute_codes = Configurable::getConfigurableAttributeCodes($variant);
+    if ($variant_attribute_codes !== $configurable_attribute_codes) {
+      continue;
+    }
 
+    $variant_children = Configurable::getChildSkus($variant);
     foreach ($variant_children as $child_sku_code) {
       $child = SKU::loadFromSku($child_sku_code, $sku->language()->getId());
       if (!($child instanceof SKU)) {
