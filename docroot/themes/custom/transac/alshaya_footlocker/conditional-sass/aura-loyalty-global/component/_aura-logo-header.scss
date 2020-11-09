@@ -1,0 +1,13 @@
+#block-aurarewardsheader {
+  @include breakpoint($desktop) {
+    #aura-header-modal {
+      svg {
+        g,
+        path {
+          // Footlocker needs a white logo as header is black.
+          fill: #fff;
+        }
+      }
+    }
+  }
+}

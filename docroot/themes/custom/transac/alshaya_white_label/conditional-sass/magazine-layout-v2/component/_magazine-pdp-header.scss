@@ -143,6 +143,7 @@
 
       .magv2-pdp-title {
         @include breakpoint($tablet) {
+          display: block;
           text-align: inherit;
           text-overflow: inherit;
           white-space: inherit;

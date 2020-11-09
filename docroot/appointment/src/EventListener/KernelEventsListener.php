@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
- * Class KernelEventsListener.
+ * Class Kernel Events Listener.
  *
  * @package App\EventListener
  */
@@ -54,10 +54,6 @@ class KernelEventsListener {
     }
 
     $response = $event->getResponse();
-
-    // Disable caching for all the requests.
-    $response->setMaxAge(0);
-    $response->headers->set('cache-control', 'must-revalidate, no-cache, no-store, private');
 
     if ($event->getRequest()->isSecure()) {
       $settings = $this->systemSettings->getSettings('alshaya_security');

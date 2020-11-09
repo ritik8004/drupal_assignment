@@ -163,7 +163,7 @@ class ProductCategoryPage {
 
       $hierarchy_list[] = $term->label();
 
-      $context = strtolower($term_en->label());
+      $context = strtolower(trim($term_en->label()));
 
       // Remove special characters.
       $context = preg_replace("/[^a-zA-Z0-9\s]/", "", $context);
