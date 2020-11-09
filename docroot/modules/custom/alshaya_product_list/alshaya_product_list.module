@@ -268,6 +268,8 @@ function alshaya_product_list_options_list_resource_response_alter(&$data) {
         $url_parts = explode('/', $internal_path);
         // This can happen if proper node url was not found in $term['url'].
         if (!isset($url_parts[2])) {
+          // For consistency, we send this.
+          $data['options_list']['brand'][$brand_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['deep_link'] = NULL;
           continue;
         }
         $type = $database->select('node_field_data', 'nfd')
