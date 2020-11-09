@@ -55,7 +55,32 @@
   }
 
   .magv2 {
+    &-main-contain {
+      position: relative;
+      overflow: auto;
+    }
+
     &-sidebar {
+      &.sidebar-sticky {
+        #{$right}: 1.5rem;
+        position: fixed;
+        top: -2rem;
+
+        &.contain {
+          position: absolute;
+          bottom: 0;
+          top: auto;
+          #{$right}: 0 !important;
+        }
+      }
+
+      @include breakpoint($desktop) {
+        &.sidebar-sticky {
+          #{$right}: calc((100vw - 86.25rem) / 2);
+          width: 24.14rem;
+        }
+      }
+
       .out-of-stock {
         display: block;
         margin: 0 0 1rem;

@@ -76,16 +76,73 @@ const PdpLayout = () => {
   );
 
   const header = useRef();
+  const mainContainer = useRef();
+  const galleryContainer = useRef();
+  const sidebarContainer = useRef();
+  const crosssellContainer = useRef();
+  const addToBagContainer = useRef();
   let content;
 
   const getChildRef = (ref) => {
     content = ref;
   };
 
+  // Sticky Sidebar
+  const sidebarSticky = () => {
+    const sidebarWrapper = sidebarContainer.current;
+    let lastScrollTop = 0;
+    let pageScrollDirection;
+
+    window.addEventListener('scroll', () => {
+      const galleryWrapper = galleryContainer.current;
+      const crosssellWrapper = crosssellContainer.current;
+      const mainContainerWrapper = mainContainer.current;
+
+      // Figure out scroll direction.
+      const currentScrollTop = window.pageYOffset;
+      if (currentScrollTop < lastScrollTop) {
+        pageScrollDirection = 'up';
+      } else {
+        pageScrollDirection = 'down';
+      }
+      lastScrollTop = currentScrollTop;
+
+      // Gallery top.
+      const topPosition = galleryWrapper.offsetTop + 30;
+
+      if (!isMobile) {
+        if (currentScrollTop + sidebarWrapper.offsetHeight > crosssellWrapper.offsetTop) {
+          if (sidebarWrapper.classList.contains('sidebar-sticky')) {
+            sidebarWrapper.classList.add('contain');
+            mainContainerWrapper.classList.add('magv2-main-contain');
+          }
+        } else if (currentScrollTop > topPosition) {
+          if (!sidebarWrapper.classList.contains('sidebar-sticky')) {
+            sidebarWrapper.classList.add('sidebar-sticky');
+          }
+        } else {
+          sidebarWrapper.classList.remove('sidebar-sticky');
+          mainContainerWrapper.classList.remove('magv2-main-contain');
+        }
+
+        if ((currentScrollTop + sidebarWrapper.offsetHeight < crosssellWrapper.offsetTop) && (pageScrollDirection === 'up')) {
+          if (sidebarWrapper.classList.contains('contain')) {
+            sidebarWrapper.classList.remove('contain');
+            mainContainerWrapper.classList.remove('magv2-main-contain');
+            // Remove top and let fixed work as defined for sticky.
+            sidebarWrapper.style.top = '';
+          }
+        }
+      }
+    });
+  };
+
   const showStickyHeader = () => {
     window.addEventListener('scroll', () => {
+      const rect = addToBagContainer.current.getBoundingClientRect();
+
       if ((content !== null) && (content !== undefined)) {
-        if (window.pageYOffset >= content.current.offsetTop + content.current.offsetHeight) {
+        if (rect.bottom < 20) {
           header.current.classList.remove('magv2-pdp-non-sticky-header');
           header.current.classList.add('magv2-pdp-sticky-header');
           header.current.classList.add('fadeInUp');
@@ -103,6 +160,7 @@ const PdpLayout = () => {
   };
 
   useEffect(() => {
+    sidebarSticky();
     showStickyHeader();
   },
   []);
@@ -138,8 +196,8 @@ const PdpLayout = () => {
           context="main"
         />
       </div>
-      <div className="magv2-main">
-        <div className="magv2-content" id="pdp-gallery-refresh">
+      <div className="magv2-main" ref={mainContainer}>
+        <div className="magv2-content" id="pdp-gallery-refresh" style={{ animationDelay: '0.1s' }} ref={galleryContainer}>
           <PdpGallery
             skuCode={skuItemCode}
             pdpGallery={pdpGallery}
@@ -151,7 +209,7 @@ const PdpLayout = () => {
             <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} context="main" />
           </PdpGallery>
         </div>
-        <div className="magv2-sidebar">
+        <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
             title={title}
             finalPrice={parseFloat(finalPrice)
@@ -179,20 +237,22 @@ const PdpLayout = () => {
               freeGiftPromoCode={freeGiftPromoCode}
             />
           ) : null}
-          {stockStatus ? (
-            <PdpCart
-              skuCode={skuItemCode}
-              configurableCombinations={configurableCombinations}
-              productInfo={productInfo}
-              pdpRefresh={pdpRefresh}
-              pdpLabelRefresh={pdpLabelRefresh}
-              childRef={(ref) => (getChildRef(ref))}
-              stockQty={stockQty}
-              firstChild={firstChild}
-              context="main"
-              animatePdpCart
-            />
-          ) : outOfStock}
+          <div className="addtobag-button-wrapper" ref={addToBagContainer}>
+            {stockStatus ? (
+              <PdpCart
+                skuCode={skuItemCode}
+                configurableCombinations={configurableCombinations}
+                productInfo={productInfo}
+                pdpRefresh={pdpRefresh}
+                pdpLabelRefresh={pdpLabelRefresh}
+                childRef={(ref) => (getChildRef(ref))}
+                stockQty={stockQty}
+                firstChild={firstChild}
+                context="main"
+                animatePdpCart
+              />
+            ) : outOfStock}
+          </div>
           <PdpDescription
             skuCode={skuMainCode}
             pdpDescription={description}
@@ -213,7 +273,7 @@ const PdpLayout = () => {
         </div>
       </div>
       {relatedProducts ? (
-        <div className="magv2-pdp-crossell-upsell-wrapper">
+        <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer}>
           {Object.keys(relatedProducts).map((type) => (
             <PdpRelatedProducts
               key={relatedProducts[type]}
