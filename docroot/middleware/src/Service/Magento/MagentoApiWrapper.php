@@ -76,7 +76,6 @@ class MagentoApiWrapper {
         ? $stats->getResponse()->getStatusCode()
         : 0;
 
-      $stats_response = $stats->getResponse();
       $that->logger->info(sprintf(
         'Finished API request %s in %.4f. Response code: %d. Method: %s. Action: %s. X-Cache: %s; X-Cache-Hits: %s; X-Served-By: %s;',
         $stats->getEffectiveUri(),
@@ -84,9 +83,9 @@ class MagentoApiWrapper {
         $code,
         $stats->getRequest()->getMethod(),
         $action,
-        $stats_response ? $stats_response->getHeaderLine('x-cache') : '',
-        $stats_response ? $stats_response->getHeaderLine('x-cache-hits') : '',
-        $stats_response ? $stats_response->getHeaderLine('x-served-by') : ''
+        $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-cache') : '',
+        $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-cache-hits') : '',
+        $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-served-by') : ''
       ));
     };
 
