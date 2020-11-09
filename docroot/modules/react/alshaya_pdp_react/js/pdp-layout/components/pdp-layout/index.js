@@ -108,10 +108,13 @@ const PdpLayout = () => {
 
   useEffect(() => {
     showStickyHeader();
-    document.addEventListener('customerDetailsFetched', (e) => {
-      const { stateValues } = e.detail;
-      setCard(stateValues.cardNumber);
-    });
+
+    if (isAuraEnabled()) {
+      document.addEventListener('customerDetailsFetched', (e) => {
+        const { stateValues } = e.detail;
+        setCard(stateValues.cardNumber);
+      });
+    }
   },
   []);
 

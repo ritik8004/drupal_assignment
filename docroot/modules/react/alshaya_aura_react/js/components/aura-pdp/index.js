@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { getUserDetails } from '../../utilities/helper';
 import { getStorageInfo } from '../../../../js/utilities/storage';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
@@ -23,6 +24,7 @@ class AuraPDP extends React.Component {
     document.addEventListener('loyaltyStatusUpdatedFromHeader', this.loyaltyStatusUpdated, false);
     document.addEventListener('productPointsFetched', this.updateStates, false);
     document.addEventListener('auraProductUpdate', this.processVariant, false);
+    document.addEventListener('auraProductModalLoaded', this.loadModalAuraPoints, false);
 
     // Logged in user.
     if (getUserDetails().id) {
@@ -59,6 +61,16 @@ class AuraPDP extends React.Component {
     this.updateStates(stateData);
     const { productDetails } = this.state;
     this.fetchProductPoints(productDetails);
+  };
+
+  loadModalAuraPoints = () => {
+    if (document.querySelector('#aura-pdp-modal')) {
+      const { cardNumber } = this.state;
+      ReactDOM.render(
+        <AuraPDP mode="related" cardNumber={cardNumber} />,
+        document.querySelector('#aura-pdp-modal'),
+      );
+    }
   };
 
   updateStates = (data) => {

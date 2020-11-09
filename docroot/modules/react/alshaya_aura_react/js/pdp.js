@@ -8,10 +8,3 @@ if (document.querySelector('#aura-pdp')) {
     document.querySelector('#aura-pdp'),
   );
 }
-
-if (document.querySelector('#aura-pdp-modal')) {
-  ReactDOM.render(
-    <AuraPDP mode="related" />,
-    document.querySelector('#aura-pdp-modal'),
-  );
-}

@@ -171,6 +171,17 @@
         modalClasses('product-quick-view', 'pdp-modal-overlay');
       });
 
+      if ($('#aura-pdp-modal').length) {
+        // Dispatch a custom event when modal is loaded to listen in AURA react app.
+        if (drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled === 1) {
+          var event = new CustomEvent('auraProductModalLoaded', {
+            bubbles: true,
+            detail: true
+          });
+          document.dispatchEvent(event);
+        }
+      }
+
       $('.size-guide-link').on('click', function () {
         modalClasses('size-guide', 'sizeguide-modal-overlay');
       });
