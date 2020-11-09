@@ -56,7 +56,6 @@ class SimpleProductForm extends React.Component {
 
     return (
       <form action="#" className="sku-base-form" method="post" id={`pdp-add-to-cart-form-${context}`} parentsku={skuCode} variantselected={variantSelected}>
-        <input className="selected-variant-sku" type="hidden" name="selected_variant_sku" value={variantSelected} />
         <div id="add-to-cart-error" className="error" />
         <div id="product-quantity-dropdown" className="magv2-qty-wrapper">
           <QuantityDropdown
