@@ -155,6 +155,14 @@ class AlshayaColorSplitManager {
         continue;
       }
 
+      // Ignore configurable products without display node.
+      if ($variant->bundle() === 'configurable') {
+        $variant_node_id = $variant->getPluginInstance()->getDisplayNodeId($variant);
+        if (empty($variant_node_id)) {
+          continue;
+        }
+      }
+
       $parent = $variant->bundle() === 'simple'
         ? $sku->getPluginInstance()->getParentSku($variant)
         : $variant;
