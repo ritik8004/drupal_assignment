@@ -83,9 +83,9 @@ class MagentoApiWrapper {
         $code,
         $stats->getRequest()->getMethod(),
         $action,
-        $stats->getResponse()->getHeaderLine('x-cache'),
-        $stats->getResponse()->getHeaderLine('x-cache-hits'),
-        $stats->getResponse()->getHeaderLine('x-served-by')
+        $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-cache') : '',
+        $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-cache-hits') : '',
+        $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-served-by') : ''
       ));
     };
 
