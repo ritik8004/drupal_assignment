@@ -33,7 +33,7 @@ function alshaya_aura_react_install() {
   $config_factory->getEditable('block.block.aurarewardsheader')->set('weight', $welcome_user_weight + 1)->save();
 
   // Add translations.
-  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translations');
+  module_load_include('inc', 'alshaya_aura_react', 'alshaya_aura_react.translation');
   if ($translations = _alshaya_aura_react_translations()) {
     alshaya_i18n_save_translations($translations);
   }
