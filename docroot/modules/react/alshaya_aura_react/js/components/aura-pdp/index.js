@@ -51,6 +51,10 @@ class AuraPDP extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('auraProductUpdate', this.processVariant, false);
+  }
+
   loyaltyStatusUpdated = (data) => {
     const states = { ...data.detail.stateValues };
     states.wait = true;
