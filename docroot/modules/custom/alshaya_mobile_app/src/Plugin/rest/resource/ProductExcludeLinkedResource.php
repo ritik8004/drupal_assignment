@@ -243,11 +243,15 @@ class ProductExcludeLinkedResource extends ResourceBase {
 
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
 
-    // Allow other modules to alter product data.
-    $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity);
-    if (isset($data['grouping_attribute_with_swatch'])) {
-      $data['grouped_variants'] = $this->getGroupedVariants($data);
+    // Get grouped products if current product is in stock.
+    if ($data['stock'] > 0 && $data['in_stock']) {
+      // Allow other modules to alter product data.
+      $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity);
+      if (isset($data['grouping_attribute_with_swatch'])) {
+        $data['grouped_variants'] = $this->getGroupedVariants($data);
+      }
     }
+
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
