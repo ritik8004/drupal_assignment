@@ -15,7 +15,7 @@ import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
-import sticky from '../../../../../js/utilities/stickySiderbar';
+import magv2Sticky from '../../../../../js/utilities/magv2StickySidebar';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -96,7 +96,7 @@ const PdpLayout = () => {
     const galleryWrapper = galleryContainer.current;
 
     if (!isMobile) {
-      sticky(sidebarWrapper, galleryWrapper, crosssellWrapper, mainWrapper);
+      magv2Sticky(sidebarWrapper, galleryWrapper, crosssellWrapper, mainWrapper);
     }
   };
 

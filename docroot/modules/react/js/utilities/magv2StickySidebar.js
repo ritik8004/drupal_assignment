@@ -1,4 +1,4 @@
-const sticky = (sidebar, gallery, crossell, main) => {
+const magv2Sticky = (sidebar, gallery, crossell, main) => {
   const siderbarwrapper = sidebar;
   const gallerycontainer = gallery;
   const crosssellcontainer = crossell;
@@ -56,4 +56,4 @@ const sticky = (sidebar, gallery, crossell, main) => {
   });
 };
 
-export default sticky;
+export default magv2Sticky;
