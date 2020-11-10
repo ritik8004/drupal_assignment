@@ -63,6 +63,7 @@ class SimpleProductForm extends React.Component {
             productInfo={productInfo}
             skuCode={skuCode}
             stockQty={stockQty}
+            context={context}
           />
         </div>
         {(checkoutFeatureStatus === 'enabled') ? (

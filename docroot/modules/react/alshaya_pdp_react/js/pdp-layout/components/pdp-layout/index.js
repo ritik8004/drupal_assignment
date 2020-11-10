@@ -104,8 +104,17 @@ const PdpLayout = () => {
     });
   };
 
+  const [cardNumber, setCard] = useState(null);
+
   useEffect(() => {
     showStickyHeader();
+
+    if (isAuraEnabled()) {
+      document.addEventListener('customerDetailsFetched', (e) => {
+        const { stateValues } = e.detail;
+        setCard(stateValues.cardNumber);
+      });
+    }
   },
   []);
 
@@ -182,7 +191,7 @@ const PdpLayout = () => {
             />
           ) : null}
           {isAuraEnabled()
-            ? <AuraPDP />
+            ? <AuraPDP mode="main" cardNumber={cardNumber} />
             : null}
           {stockStatus ? (
             <PdpCart
@@ -227,6 +236,7 @@ const PdpLayout = () => {
               skuItemCode={skuItemCode}
               getPanelData={getPanelData}
               removePanelData={removePanelData}
+              cardNumber={cardNumber}
             />
           ))}
         </div>

@@ -11,6 +11,8 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import isAuraEnabled from '../../../../../js/utilities/helper';
+import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -61,7 +63,7 @@ class CrossellPopupContent extends React.Component {
   }
 
   render() {
-    const { closeModal, relatedSku } = this.props;
+    const { closeModal, relatedSku, cardNumber } = this.props;
 
     const url = Drupal.url(`rest/v1/product/${relatedSku}?pdp=magazinev2`);
     const {
@@ -150,6 +152,9 @@ class CrossellPopupContent extends React.Component {
                 promotions={promotions}
               />
             </div>
+            {isAuraEnabled()
+              ? <AuraPDP mode="related" cardNumber={cardNumber} />
+              : null}
             {stockStatus ? (
               <PdpCart
                 skuCode={relatedSku}

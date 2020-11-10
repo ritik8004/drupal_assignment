@@ -80,6 +80,10 @@
               code
             ]
           );
+          // Dispatching event on variant change to listen in react.
+          if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled === 1) {
+            Drupal.dispatchProductUpdateEvent($(this));
+          }
         }
       });
 
@@ -223,6 +227,12 @@
         });
       }
 
+      if (drupalSettings.aura !== undefined && drupalSettings.aura.enabled === 1) {
+        $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
+          // Dispatching event on quantity change to listen in react.
+          Drupal.dispatchProductUpdateEvent($(this));
+        });
+      }
     }
   };
 

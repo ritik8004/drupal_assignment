@@ -2,7 +2,6 @@
 
 namespace App\Controller\LoyaltyClub;
 
-use App\Service\Cart;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Utility;
@@ -45,13 +44,6 @@ class LoyaltyClubController {
   protected $utility;
 
   /**
-   * Service for cart interaction.
-   *
-   * @var \App\Service\Cart
-   */
-  protected $cart;
-
-  /**
    * LoyaltyClubController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -62,21 +54,17 @@ class LoyaltyClubController {
    *   Drupal service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
-   * @param \App\Service\Cart $cart
-   *   Cart service.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
     Drupal $drupal,
-    Utility $utility,
-    Cart $cart
+    Utility $utility
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->drupal = $drupal;
     $this->utility = $utility;
-    $this->cart = $cart;
   }
 
   /**
@@ -103,11 +91,11 @@ class LoyaltyClubController {
     ];
 
     try {
-      $endpoint = sprintf('/apc/%s/sales', $request_content['cardNumber']);
+      $endpoint = sprintf('apc/%s/sales', $request_content['cardNumber']);
       $response = $this->magentoApiWrapper->doRequest('POST', $endpoint, ['json' => $data]);
       $responseData = [
         'status' => TRUE,
-        'data' => $response,
+        'apcPoints' => $response['apc_points'] ?? '',
       ];
       return new JsonResponse($responseData);
     }

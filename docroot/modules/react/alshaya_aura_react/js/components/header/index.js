@@ -14,7 +14,6 @@ import {
 import HeaderLoggedIn from './header-loggedIn';
 import HeaderGuest from './header-guest';
 
-
 class Header extends React.Component {
   constructor(props) {
     super(props);
