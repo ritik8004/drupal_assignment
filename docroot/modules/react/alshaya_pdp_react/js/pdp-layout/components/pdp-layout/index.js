@@ -15,6 +15,7 @@ import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
+import sticky from '../../../../../js/utilities/stickySiderbar';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -90,51 +91,13 @@ const PdpLayout = () => {
   // Sticky Sidebar
   const sidebarSticky = () => {
     const sidebarWrapper = sidebarContainer.current;
-    let lastScrollTop = 0;
-    let pageScrollDirection;
+    const mainWrapper = mainContainer.current;
+    const crosssellWrapper = crosssellContainer.current;
+    const galleryWrapper = galleryContainer.current;
 
-    window.addEventListener('scroll', () => {
-      const galleryWrapper = galleryContainer.current;
-      const crosssellWrapper = crosssellContainer.current;
-      const mainContainerWrapper = mainContainer.current;
-
-      // Figure out scroll direction.
-      const currentScrollTop = window.pageYOffset;
-      if (currentScrollTop < lastScrollTop) {
-        pageScrollDirection = 'up';
-      } else {
-        pageScrollDirection = 'down';
-      }
-      lastScrollTop = currentScrollTop;
-
-      // Gallery top.
-      const topPosition = galleryWrapper.offsetTop + 30;
-
-      if (!isMobile) {
-        if (currentScrollTop + sidebarWrapper.offsetHeight > crosssellWrapper.offsetTop) {
-          if (sidebarWrapper.classList.contains('sidebar-sticky')) {
-            sidebarWrapper.classList.add('contain');
-            mainContainerWrapper.classList.add('magv2-main-contain');
-          }
-        } else if (currentScrollTop > topPosition) {
-          if (!sidebarWrapper.classList.contains('sidebar-sticky')) {
-            sidebarWrapper.classList.add('sidebar-sticky');
-          }
-        } else {
-          sidebarWrapper.classList.remove('sidebar-sticky');
-          mainContainerWrapper.classList.remove('magv2-main-contain');
-        }
-
-        if ((currentScrollTop + sidebarWrapper.offsetHeight < crosssellWrapper.offsetTop) && (pageScrollDirection === 'up')) {
-          if (sidebarWrapper.classList.contains('contain')) {
-            sidebarWrapper.classList.remove('contain');
-            mainContainerWrapper.classList.remove('magv2-main-contain');
-            // Remove top and let fixed work as defined for sticky.
-            sidebarWrapper.style.top = '';
-          }
-        }
-      }
-    });
+    if (!isMobile) {
+      sticky(sidebarWrapper, galleryWrapper, crosssellWrapper, mainWrapper);
+    }
   };
 
   const showStickyHeader = () => {
@@ -142,6 +105,7 @@ const PdpLayout = () => {
       const rect = addToBagContainer.current.getBoundingClientRect();
 
       if ((content !== null) && (content !== undefined)) {
+        // Check addToBagContainer is not in viewport & 20 is the margin which we are excluding.
         if (rect.bottom < 20) {
           header.current.classList.remove('magv2-pdp-non-sticky-header');
           header.current.classList.add('magv2-pdp-sticky-header');
@@ -197,7 +161,7 @@ const PdpLayout = () => {
         />
       </div>
       <div className="magv2-main" ref={mainContainer}>
-        <div className="magv2-content" id="pdp-gallery-refresh" style={{ animationDelay: '0.1s' }} ref={galleryContainer}>
+        <div className="magv2-content" id="pdp-gallery-refresh" ref={galleryContainer}>
           <PdpGallery
             skuCode={skuItemCode}
             pdpGallery={pdpGallery}
