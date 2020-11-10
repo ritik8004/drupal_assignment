@@ -85,4 +85,18 @@
     }
   };
 
+  /**
+   * Hide error message once the select2 field
+   * option is selected on contact form.
+   */
+  Drupal.behaviors.contactFormSelect = {
+    attach: function (context, settings) {
+      $('#edit-feedback, #edit-type, #edit-reason1').on('change', function () {
+        if ($(this).val().length > 0) {
+          $(this).siblings('.error').css('display', 'none');
+        }
+      });
+    }
+  };
+
 })(jQuery, Drupal);
