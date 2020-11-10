@@ -24,7 +24,8 @@ class AuraPDP extends React.Component {
     document.addEventListener('loyaltyStatusUpdatedFromHeader', this.loyaltyStatusUpdated, false);
     document.addEventListener('productPointsFetched', this.updateStates, false);
     document.addEventListener('auraProductUpdate', this.processVariant, false);
-    document.addEventListener('auraProductModalLoaded', this.loadModalAuraPoints, false);
+    document.addEventListener('auraProductModalOpened', this.loadModalAuraPoints, false);
+    document.addEventListener('auraProductModalClosed', this.removeModalAuraPoints, false);
 
     // Logged in user.
     if (getUserDetails().id) {
@@ -70,6 +71,12 @@ class AuraPDP extends React.Component {
         <AuraPDP mode="related" cardNumber={cardNumber} />,
         document.querySelector('#aura-pdp-modal'),
       );
+    }
+  };
+
+  removeModalAuraPoints = () => {
+    if (document.querySelector('#aura-pdp-modal')) {
+      ReactDOM.unmountComponentAtNode(document.getElementById('aura-pdp-modal'));
     }
   };
 
