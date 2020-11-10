@@ -85,9 +85,10 @@
     }
   };
 
-  /* Hide error message once the select2 field
-  * option is selected on contact form.
-  */
+  /**
+   * Hide error message once the select2 field
+   * option is selected on contact form.
+   */
   Drupal.behaviors.contactFormSelect = {
     attach: function (context, settings) {
       $('#edit-feedback, #edit-type, #edit-reason1').on('change', function () {
