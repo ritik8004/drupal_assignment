@@ -461,7 +461,7 @@ class AlshayaGtmManager {
       ? count($media['media_items']['images'])
       : 'image not available';
 
-    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
+    $attributes['gtm-price'] = _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
 
     if ($final_price
       && ($original_price !== $final_price)
