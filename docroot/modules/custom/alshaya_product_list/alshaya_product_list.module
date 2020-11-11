@@ -16,7 +16,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
-use function GuzzleHttp\json_encode;
 
 /**
  * Implements hook_search_api_db_query_alter().
