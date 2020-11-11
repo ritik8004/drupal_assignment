@@ -14,7 +14,6 @@ use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -245,65 +244,4 @@ function alshaya_product_list_node_presave(NodeInterface $node) {
   }
   // Invalidate option page cache.
   Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
-}
-
-/**
- * Implememts hook_options_list_resource_response_alter().
- */
-function alshaya_product_list_options_list_resource_response_alter(&$data) {
-  foreach ($data['options_list']['brand'] ?? [] as $brand_key => $brands_list) {
-    foreach ($brands_list['options_markup']['#option']['terms'] ?? [] as $term_list_key => $term_list) {
-      if ($brands_list['group'] ?? NULL) {
-        foreach ($term_list ?? [] as $term_key => $term) {
-          $data['options_list']['brand'][$brand_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['deep_link'] = _alshaya_product_list_get_deep_link($term);
-        }
-      }
-      else {
-        // Here $term_list is actually a single term since there is no grouping.
-        $data['options_list']['brand'][$brand_key]['options_markup']['#option']['terms'][$term_list_key]['deep_link'] = _alshaya_product_list_get_deep_link($term_list);
-      }
-    }
-  }
-}
-
-/**
- * Finds out the deep link for Boutique page.
- *
- * @param array $term
- *   This is obtained on processing the terms of the "options_list" resource.
- *
- * @return null|string
- *   If deep link to the advanced page is found we send it else NULL is sent.
- */
-function _alshaya_product_list_get_deep_link(array $term) {
-  $langcode = \Drupal::service('language_manager')->getCurrentLanguage()->getId();
-  $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
-
-  $term_path = preg_replace("/\/$langcode/", '', $term['url']);
-  $internal_path = \Drupal::service('path.alias_manager')->getPathByAlias($term_path);
-  $url_parts = explode('/', $internal_path);
-  // This can happen if proper node url was not found in $term['url'].
-  if (!isset($url_parts[2])) {
-    // For consistency, we send this.
-    return NULL;
-  }
-
-  $type = \Drupal::database()->select('node_field_data', 'nfd')
-    ->fields('nfd', ['type'])
-    ->condition('nid', $url_parts[2])
-    ->execute()
-    ->fetchField();
-
-  if ($type === 'product_list') {
-    $redirect_path = $mobile_app_utility->getRedirectUrl("/$langcode" . $internal_path);
-    if (!strpos($internal_path, $redirect_path)) {
-      // Although $redirect_path is an alias, we still get the proper url
-      // object here.
-      $url = Url::fromUri('internal:/' . $redirect_path);
-      return $mobile_app_utility->getDeepLinkFromUrl($url);
-    }
-  }
-
-  // For consistency, we send this.
-  return NULL;
 }

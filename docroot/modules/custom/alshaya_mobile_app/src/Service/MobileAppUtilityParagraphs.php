@@ -27,6 +27,7 @@ use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\file\Entity\File;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Database\Connection;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -130,6 +131,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Sku info helper object.
    * @param \Drupal\Core\Block\BlockManagerInterface $block_plugin_manager
    *   Block plugin manager.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database service.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -150,14 +153,16 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     APIWrapper $api_wrapper,
     RedirectRepository $redirect_repository,
     SkuInfoHelper $sku_info_helper,
-    BlockManagerInterface $block_plugin_manager
+    BlockManagerInterface $block_plugin_manager,
+    Connection $database
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
     $this->paragraphBaseFields = $this->entityFieldManager->getBaseFieldDefinitions('paragraph');
     $this->blockPluginManager = $block_plugin_manager;
+    $this->database = $database;
   }
 
   /**
