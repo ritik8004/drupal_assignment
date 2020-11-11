@@ -1154,7 +1154,7 @@ class SkuManager {
    *
    * @todo: Use self::getLabelsData() to get data and prepare images.
    */
-  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
+  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE, string $channel = 'web') {
     static $static_labels_cache = [];
 
     $sku = $sku_entity->getSku();
@@ -1223,7 +1223,13 @@ class SkuManager {
           '#alt' => $data[$text_key],
         ];
 
-        $row['image'] = $this->renderer->renderPlain($image);
+        // For mobile app.
+        if ($channel == 'mapp') {
+          $row['image'] = file_create_url($image['#uri']);
+        }
+        else {
+          $row['image'] = $this->renderer->renderPlain($image);
+        }
         $row['position'] = $data[$position_key];
         $row['text'] = $data[$text_key];
 
@@ -3642,8 +3648,8 @@ class SkuManager {
    * @return array
    *   Labels data.
    */
-  public function getSkuLabels(SKUInterface $sku, string $context): array {
-    $labels = $this->getLabels($sku, $context);
+  public function getSkuLabels(SKUInterface $sku, string $context, string $channel = 'web'): array {
+    $labels = $this->getLabels($sku, $context, FALSE, $channel);
     if (empty($labels)) {
       return [];
     }
