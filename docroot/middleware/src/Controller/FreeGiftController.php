@@ -69,7 +69,6 @@ class FreeGiftController {
     $response = $this->drupal->invokeApi('GET', $url);
     $result = $response->getBody()->getContents();
     $sku_data = json_decode($result, TRUE);
-    $parent_sku = $sku_data['parent_sku'];
     $options = $sku_data['configurable_values'] ?? [];
     $quantity = 1;
     // Update cart with free gift.
