@@ -118,7 +118,7 @@ class AlshayaPlpSortOptionsBase {
         'views.ajax',
       ])
     ) {
-
+      $term = NULL;
       if ($route_name == 'views.ajax') {
         $views_args = UrlHelper::parse($this->requestStack->getCurrentRequest()->getRequestUri());
         if ($views_args['query']['view_name'] == 'alshaya_product_list' && !empty($views_args['query']['view_args'])) {
