@@ -2,7 +2,7 @@
   .account.one,
   .account--logged_in.one {
     @include breakpoint($upto-desktop) {
-      display: flex;
+      display: inline-flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
