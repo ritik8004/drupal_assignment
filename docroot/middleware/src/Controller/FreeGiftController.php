@@ -7,6 +7,7 @@ use App\Service\Drupal\Drupal;
 use App\Service\Magento\CartActions;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Free Gift Controller.
@@ -35,6 +36,13 @@ class FreeGiftController {
   protected $drupal;
 
   /**
+   * Logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
    * CartController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request
@@ -43,13 +51,17 @@ class FreeGiftController {
    *   Cart service.
    * @param \App\Service\Drupal\Drupal $drupal
    *   Drupal service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger service.
    */
   public function __construct(RequestStack $request,
                               Cart $cart,
-                              Drupal $drupal) {
+                              Drupal $drupal,
+                              LoggerInterface $logger) {
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->drupal = $drupal;
+    $this->logger = $logger;
   }
 
   /**
