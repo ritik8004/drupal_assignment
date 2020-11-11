@@ -81,7 +81,7 @@ function handleSignUp(auraUserDetails) {
     setStorageInfo(auraUserData, getAuraLocalStorageKey());
   }
 
-  dispatchCustomEvent('loyaltyStatusUpdatedFromHeader', { stateValues: auraUserData });
+  dispatchCustomEvent('loyaltyStatusUpdated', { stateValues: auraUserData });
 }
 
 function updateUsersLoyaltyStatus(cardNumber, auraStatus, link) {
@@ -108,7 +108,7 @@ function updateUsersLoyaltyStatus(cardNumber, auraStatus, link) {
           };
         }
       }
-      dispatchCustomEvent('loyaltyStatusUpdatedFromHeader', { stateValues });
+      dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
       removeFullScreenLoader();
     });
   }
@@ -129,7 +129,7 @@ function handleNotYou(cardNumber) {
       loyaltyStatus: auraStatus,
       signUpComplete: false,
     };
-    dispatchCustomEvent('loyaltyStatusUpdatedFromHeader', { stateValues, clickedNotYou: true });
+    dispatchCustomEvent('loyaltyStatusUpdated', { stateValues, clickedNotYou: true });
   }
 }
 

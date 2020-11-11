@@ -20,7 +20,7 @@ class LoyaltyClub extends React.Component {
     } = this.state;
 
     document.addEventListener('customerDetailsFetched', this.setCustomerDetails, false);
-    document.addEventListener('loyaltyStatusUpdatedFromHeader', this.setCustomerDetails, false);
+    document.addEventListener('loyaltyStatusUpdated', this.setCustomerDetails, false);
 
     if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
       this.setState({
@@ -51,7 +51,7 @@ class LoyaltyClub extends React.Component {
 
     this.setState(stateValues);
 
-    dispatchCustomEvent('loyaltyStatusUpdatedFromLoyaltyBlock', { stateValues });
+    dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
   };
 
   render() {

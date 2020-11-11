@@ -1,14 +1,16 @@
 import React from 'react';
+import { getAllAuraStatus } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 
 const PointsToEarnMessage = (props) => {
-  const { points, type } = props;
+  const { points, loyaltyStatus } = props;
+  const allAuraStatus = getAllAuraStatus();
 
-  // @todo: Update condition.
   // Guest User & No card.
-  if (type === 'guest-no-card') {
+  if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
+    || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
     const toEarnMessageP1 = `${Drupal.t('Earn')} `;
     const pointsHighlight = `${points} ${Drupal.t('Aura')}`;
-    const toEarnMessageP2 = ` ${Drupal.t('rewards points with this purchase')}`;
+    const toEarnMessageP2 = ` ${Drupal.t('reward points with this purchase')}`;
 
     return (
       <span className="spc-aura-points-to-earn">
@@ -19,9 +21,9 @@ const PointsToEarnMessage = (props) => {
     );
   }
 
-  // @todo: Update condition.
   // Registered User & Linked card.
-  if (type === 'register-linked-pending' || type === 'register-linked') {
+  if (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED
+    || loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
     const toEarnMessage = `${Drupal.t('On completion of this purchase you will earn:')} `;
     const pointsHighlight = `${points} ${Drupal.t('pts')}`;
     return (
@@ -32,9 +34,8 @@ const PointsToEarnMessage = (props) => {
     );
   }
 
-  // @todo: Update condition.
   // Registered User & UnLinked card.
-  if (type === 'register-unlinked') {
+  if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
     const toEarnMessageP1 = `${Drupal.t('Our members will earn')} `;
     const pointsHighlight = `${points} ${Drupal.t('points')}`;
     const toEarnMessageP2 = ` ${Drupal.t('with this purchase')}`;
