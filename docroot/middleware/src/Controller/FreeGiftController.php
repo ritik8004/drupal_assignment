@@ -74,8 +74,36 @@ class FreeGiftController {
     $sku = $this->request->headers->get('sku');
     $promo_code = $this->request->headers->get('promo');
 
+    if (empty($sku) || empty($promo_code)) {
+      $this->logger->error('Missing request header parameters. SKU: @sku, Promo: @promo_code', [
+        '@sku' => $sku,
+        '@promo_code' => $promo_code,
+      ]);
+      $cart = $this->cart->getCart();
+
+      return new JsonResponse($cart);
+    }
+
     // Apply promo code.
     $cart = $this->cart->applyRemovePromo($promo_code, CartActions::CART_APPLY_COUPON);
+    // Condition to check if cart is empty.
+    if (empty($cart)) {
+      $this->logger->error('Cart is empty. Cart: @cart', [
+        '@cart' => json_encode($cart),
+      ]);
+
+      return new JsonResponse($cart);
+    }
+    // Condition to check valid promo code.
+    $json_decoded_cart = json_decode($cart, TRUE);
+    if (empty($cart['totals']['coupon_code'])) {
+      $this->logger->error('Invalid promo code. Cart: @cart, Promo: @promo_code', [
+        '@cart' => json_encode($cart),
+        '@promo_code' => $promo_code,
+      ]);
+
+      return new JsonResponse($cart);
+    }
 
     $url = sprintf('/rest/v1/product/%s', $sku);
     $response = $this->drupal->invokeApi('GET', $url);
