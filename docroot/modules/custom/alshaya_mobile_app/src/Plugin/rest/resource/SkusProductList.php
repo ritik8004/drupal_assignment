@@ -287,7 +287,7 @@ class SkusProductList extends ResourceBase {
     }
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
-    $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
+    $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp', 'mapp');
     $this->moduleHandler->alter('alshaya_mobile_app_skus_product_list_data', $data, $sku);
     return $data;
   }
