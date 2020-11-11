@@ -13,6 +13,24 @@
     @include breakpoint($desktop) {
       width: 72%;
     }
+
+    &.sticky-element {
+      position: fixed !important;
+      top: -1.875rem;
+      #{$left}: 1.875rem;
+      max-width: 62.125rem;
+
+      &.contain {
+        position: absolute !important;
+        bottom: 0;
+        top: auto;
+        #{$left}: 0 !important;
+
+        .magazine__gallery--container-desktop {
+          grid-row-gap: 0;
+        }
+      }
+    }
   }
 
   &-sidebar {
@@ -61,10 +79,11 @@
     }
 
     &-sidebar {
-      &.sidebar-sticky {
-        #{$right}: 1.5rem;
+      &.sticky-element {
+        #{$right}: 1.875rem;
         position: fixed;
         top: -2rem;
+        max-width: 24.12rem;
 
         &.contain {
           position: absolute;

@@ -7,8 +7,8 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
   let pageScrollDirection;
   let lastScrollTop = 0;
 
+  // Helper function for checking scrolling direction.
   const scrollingDirection = () => {
-    // Figure out scroll direction.
     const currentScrollTop = window.pageYOffset;
     if (currentScrollTop < lastScrollTop) {
       pageScrollDirection = 'up';
@@ -20,38 +20,56 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
     return pageScrollDirection;
   };
 
-  window.addEventListener('scroll', () => {
-    // Figure out scroll current scroll position.
-    const currentScrollTop = window.pageYOffset;
+  // Helper function for making the element sticky.
+  const stickyElement = (elem) => {
+    const element = elem;
     const gallerywrapper = gallerycontainer;
     const crosssellwrapper = crosssellcontainer;
     const maincontainerwrapper = maincontainer;
+    let topPosition;
+
+    // Figure out scroll current scroll position.
+    const currentScrollTop = window.pageYOffset;
     const scrollDirection = scrollingDirection();
 
-    // Gallery top.
-    const topPosition = gallerywrapper.offsetTop + 30;
+    // Gallery & Siderbar top.
+    if (gallerywrapper.offsetHeight > siderbarwrapper.offsetHeight) {
+      topPosition = gallerywrapper.offsetTop + 30;
+    } else {
+      topPosition = siderbarwrapper.offsetTop + 30;
+    }
 
-    if (currentScrollTop + siderbarwrapper.offsetHeight > crosssellwrapper.offsetTop) {
-      if (siderbarwrapper.classList.contains('sidebar-sticky')) {
-        siderbarwrapper.classList.add('contain');
+    if (currentScrollTop + element.offsetHeight > crosssellwrapper.offsetTop) {
+      if (element.classList.contains('sticky-element')) {
+        element.classList.add('contain');
         maincontainerwrapper.classList.add('magv2-main-contain');
       }
     } else if (currentScrollTop > topPosition) {
-      if (!siderbarwrapper.classList.contains('sidebar-sticky')) {
-        siderbarwrapper.classList.add('sidebar-sticky');
+      if (!element.classList.contains('sticky-element')) {
+        element.classList.add('sticky-element');
       }
     } else {
-      siderbarwrapper.classList.remove('sidebar-sticky');
-      maincontainerwrapper.classList.remove('magv2-main-contain');
+      element.classList.remove('sticky-element');
+      element.classList.remove('magv2-main-contain');
     }
 
-    if ((currentScrollTop + siderbarwrapper.offsetHeight < crosssellwrapper.offsetTop) && (scrollDirection === 'up')) {
-      if (siderbarwrapper.classList.contains('contain')) {
-        siderbarwrapper.classList.remove('contain');
+    if ((currentScrollTop + element.offsetHeight < crosssellwrapper.offsetTop) && (scrollDirection === 'up')) {
+      if (element.classList.contains('contain')) {
+        element.classList.remove('contain');
         maincontainerwrapper.classList.remove('magv2-main-contain');
         // Remove top and let fixed work as defined for sticky.
-        siderbarwrapper.style.top = '';
+        element.style.top = '';
       }
+    }
+  };
+
+  window.addEventListener('scroll', () => {
+    const galleryWrapper = gallerycontainer;
+
+    if (galleryWrapper.offsetHeight > siderbarwrapper.offsetHeight) {
+      stickyElement(siderbarwrapper);
+    } else {
+      stickyElement(galleryWrapper);
     }
   });
 };
