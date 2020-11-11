@@ -20,7 +20,7 @@
         zoomContainer.addClass('product-zoom-processed');
 
         var lightSlider = $('.acq-content-product #lightSlider');
-        Drupal.productZoomApplyRtl(lightSlider, slickOptions, context);
+        Drupal.productZoomApplyRtl(lightSlider, Drupal.getSlickSliderOptions('slickOptions'), context);
         // Adding class if there is no slider.
         addPagerClass();
 
@@ -38,7 +38,7 @@
           Drupal.hideProductLabelOnVideo($(this), 'mobilegallery__thumbnails__video', true);
         });
 
-        Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
+        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickMobOptions('slickMobileOptions'), context);
         if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
           // Do initial setup again for slick dots.
           Drupal.behaviors.pdpInstagranDots.initialSetup(mobilegallery);
@@ -118,13 +118,13 @@
       if ($(window).width() < 768 && freeGiftsZoomContainer.length > 0 && !freeGiftsZoomContainer.hasClass('free-gifts-product-zoom-processed')) {
         freeGiftsZoomContainer.addClass('free-gifts-product-zoom-processed');
         var mobilegallery = $('#product-image-gallery-mobile', context);
-        Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
+        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickMobOptions('slickMobileOptions'), context);
       }
 
       var modalLightSlider = $('.acq-content-product-modal #lightSlider');
       if (modalLightSlider.length > 0 && !modalLightSlider.hasClass('product-zoom-processed')) {
         modalLightSlider.addClass('product-zoom-processed');
-        Drupal.productZoomApplyRtl(modalLightSlider, slickCSUSOptions, context);
+        Drupal.productZoomApplyRtl(modalLightSlider, Drupal.getSlickOptions('slickCSUSOptions'), context);
 
         $('li a', modalLightSlider).once('bind-js-modal').off('click').on('click', function (e) {
           e.preventDefault();
@@ -380,8 +380,8 @@
     }
 
     var gallery = $('#product-full-screen-gallery');
-    slickModalOptions.currentSlide = currentSlide;
-    Drupal.productZoomApplyRtl(gallery, slickModalOptions, document);
+    Drupal.getSlickModalOptions('slickModalOptions').currentSlide = currentSlide;
+    Drupal.productZoomApplyRtl(gallery, Drupal.getSlickModalOptions('slickModalOptions'), document);
     // Create Instagram Dots.
     if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
       // Do initial setup again for slick dots.
@@ -577,81 +577,105 @@
     }
   };
 
+  Drupal.getSlickOptions = function(slickOption) {
+    switch(slickOption) {
+      case 'slickCSUSOptions':
+        return {
+          slidesToShow: getPDPSliderParameter('slidesToShowCSUS'),
+          vertical: getPDPSliderParameter('vertical'),
+          arrows: true,
+          focusOnSelect: false,
+          centerMode: getPDPSliderParameter('vertical'),
+          infinite: false,
+          touchThreshold: 1000,
+          responsive: [
+            {
+              breakpoint: 1025,
+              settings: {
+                slidesToShow: 3,
+                touchThreshold: 1000,
+                vertical: false,
+                centerMode: false
+              }
+            }
+          ]
+        };
+      break;
+    }
+  };
+
   // Slider - 3 For Mobile - Image Gallery.
-  var slickMobileOptions = {
-    slidesToShow: 1,
-    vertical: false,
-    dots: true,
-    arrows: true,
-    centerMode: false,
-    infinite: false,
-    focusOnSelect: true,
-    touchThreshold: 1000,
-    initialSlide: 0
-  };
-
-  var slickOptions = {
-    slidesToShow: getPDPSliderParameter('slidesToShow'),
-    vertical: getPDPSliderParameter('vertical'),
-    arrows: true,
-    focusOnSelect: false,
-    centerMode: getPDPSliderParameter('vertical'),
-    infinite: false,
-    touchThreshold: 1000,
-    responsive: [
-      {
-        breakpoint: 1025,
-        settings: {
-          slidesToShow: 3,
-          touchThreshold: 1000,
-          vertical: false,
-          centerMode: false
-        }
-      }
-    ]
-  };
-
-  var slickCSUSOptions = {
-    slidesToShow: getPDPSliderParameter('slidesToShowCSUS'),
-    vertical: getPDPSliderParameter('vertical'),
-    arrows: true,
-    focusOnSelect: false,
-    centerMode: getPDPSliderParameter('vertical'),
-    infinite: false,
-    touchThreshold: 1000,
-    responsive: [
-      {
-        breakpoint: 1025,
-        settings: {
-          slidesToShow: 3,
-          touchThreshold: 1000,
-          vertical: false,
-          centerMode: false
-        }
-      }
-    ]
-  };
-
-  var slickModalOptions = {
-    slidesToShow: 1,
-    vertical: false,
-    arrows: true,
-    dots: true,
-    infinite: false,
-    centerMode: false,
-    focusOnSelect: false,
-    touchThreshold: 1000,
-    responsive: [
-      {
-        breakpoint: 1025,
-        settings: {
+  Drupal.getSlickMobOptions = function(slickMobOption) {
+    switch(slickMobOption) {
+      case 'slickMobileOptions':
+        return {
           slidesToShow: 1,
           vertical: false,
+          dots: true,
+          arrows: true,
+          centerMode: false,
+          infinite: false,
+          focusOnSelect: true,
           touchThreshold: 1000,
-          centerMode: false
-        }
-      }
-    ]
+          initialSlide: 0
+        };
+      break;
+    }
+  };
+
+  Drupal.getSlickSliderOptions = function(slickOpt) {
+    switch(slickOpt) {
+      case 'slickOptions':
+        return {
+          slidesToShow: getPDPSliderParameter('slidesToShow'),
+          vertical: getPDPSliderParameter('vertical'),
+          arrows: true,
+          focusOnSelect: false,
+          centerMode: getPDPSliderParameter('vertical'),
+          infinite: false,
+          touchThreshold: 1000,
+          responsive: [
+            {
+              breakpoint: 1025,
+              settings: {
+                slidesToShow: 3,
+                touchThreshold: 1000,
+                vertical: false,
+                centerMode: false
+              }
+            }
+          ]
+        };
+      break;
+    }
+  };
+
+  Drupal.getSlickModalOptions = function(slickModalOption) {
+    switch(slickModalOption) {
+      case 'slickModalOptions':
+        return {
+          slidesToShow: 1,
+          vertical: false,
+          arrows: true,
+          dots: true,
+          infinite: false,
+          centerMode: false,
+          focusOnSelect: false,
+          touchThreshold: 1000,
+          responsive: [
+            {
+              breakpoint: 1025,
+              settings: {
+                slidesToShow: 1,
+                vertical: false,
+                touchThreshold: 1000,
+                centerMode: false
+              }
+            }
+          ]
+        };
+      break;
+    }
   };
 
   var dialogsettings = {
