@@ -1148,6 +1148,8 @@ class SkuManager {
    *   Type of image required - plp or pdp.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
+   * @param string $channel
+   *   Whether web or mapp.
    *
    * @return array
    *   Array of media files.
@@ -3644,6 +3646,8 @@ class SkuManager {
    *   SKU Entity.
    * @param string $context
    *   Context.
+   * @param string $channel
+   *   Whether web or mapp.
    *
    * @return array
    *   Labels data.
