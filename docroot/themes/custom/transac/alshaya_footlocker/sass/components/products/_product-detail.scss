@@ -1,6 +1,12 @@
 // Title wrapper
 .content {
   &__title_wrapper {
+    &:not(.show-sticky-wrapper) {
+      @include breakpoint($only-mobile) {
+        border-bottom: 0;
+      }
+    }
+
     .brand-logo-wrapper {
       float: none;
     }
