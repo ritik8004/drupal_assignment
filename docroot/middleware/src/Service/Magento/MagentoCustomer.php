@@ -2,6 +2,8 @@
 
 namespace App\Service\Magento;
 
+use App\Service\Utility;
+
 /**
  * Provides helper functions to get and create cusomer info.
  *
@@ -24,17 +26,28 @@ class MagentoCustomer {
   protected $magentoApiWrapper;
 
   /**
+   * Utility.
+   *
+   * @var \App\Service\Utility
+   */
+  protected $utility;
+
+  /**
    * Customer constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
    *   Magento info service.
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
    *   Magento API Wrapper.
+   * @param \App\Service\Utility $utility
+   *   Utility service.
    */
   public function __construct(MagentoInfo $magento_info,
-                              MagentoApiWrapper $magento_api_wrapper) {
+                              MagentoApiWrapper $magento_api_wrapper,
+                              Utility $utility) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
+    $this->utility = $utility;
   }
 
   /**
@@ -94,7 +107,12 @@ class MagentoCustomer {
       ],
     ];
 
-    $result = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
+    try {
+      $result = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
+    }
+    catch (\Exception $e) {
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
 
     return empty($result['items']) ? [] : reset($result['items']);
   }

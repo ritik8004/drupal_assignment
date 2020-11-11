@@ -565,6 +565,11 @@ class CartController {
         $cart_customer_id = $this->cart->getCartCustomerId();
         if (empty($uid) && (empty($cart_customer_id) || ($this->cart->getCartCustomerEmail() !== $email))) {
           $customer = $this->magentoCustomer->getCustomerByMail($email);
+
+          if (isset($customer['error'])) {
+            return new JsonResponse($customer);
+          }
+
           if (empty($customer)) {
             try {
               $customer = $this->magentoCustomer->createCustomer(
