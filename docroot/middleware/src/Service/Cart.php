@@ -148,6 +148,13 @@ class Cart {
   protected $request;
 
   /**
+   * Language Manager.
+   *
+   * @var \App\Service\LanguageManager
+   */
+  protected $languageManager;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -180,6 +187,8 @@ class Cart {
    *   Database connection.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   RequestStack Object.
+   * @param \App\Service\LanguageManager $language_manager
+   *   Language Manager.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -196,7 +205,8 @@ class Cart {
     Orders $orders,
     LoggerInterface $logger,
     Connection $connection,
-    RequestStack $requestStack
+    RequestStack $requestStack,
+    LanguageManager $language_manager
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -213,6 +223,7 @@ class Cart {
     $this->logger = $logger;
     $this->connection = $connection;
     $this->request = $requestStack->getCurrentRequest();
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -1104,6 +1115,8 @@ class Cart {
             return $this->updateCart($data);
           }
         }
+
+        return $this->utility->getErrorResponse('', 400);
       }
       else {
         $this->cancelCartReservation($e->getMessage());
@@ -1296,6 +1309,11 @@ class Cart {
    *   Payment method set on cart.
    */
   public function getPaymentMethodSetOnCart() {
+    // Let the method be set again if user changes the language.
+    if ($this->languageManager->isLanguageChanged()) {
+      return '';
+    }
+
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
     if ($expire > 0 && ($method = $this->cache->get('payment_method'))) {
       return $method;
@@ -1316,6 +1334,29 @@ class Cart {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Get Method Code for frontend.
+   *
+   * @param string $method
+   *   Payment Method code.
+   *
+   * @return string
+   *   Payment Method code used in frontend.
+   */
+  public function getMethodCodeForFrontend(string $method) {
+    switch ($method) {
+      case APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD:
+        $method = 'checkout_com_upapi';
+        break;
+
+      case APIWrapper::CHECKOUT_COM_VAULT_METHOD:
+        $method = 'checkout_com';
+        break;
+    }
+
+    return $method;
   }
 
   /**
@@ -1377,6 +1418,14 @@ class Cart {
     $lock = FALSE;
     $settings = $this->settings->getSettings('spc_middleware');
     $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
+
+    // Check if cart total is valid return with an error message.
+    if (!$this->isCartTotalValid($cart)) {
+      $this->logger->error('Error while placing order. Cart total is not valid for cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+      return $this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), 500);
+    }
 
     // Check whether order locking is enabled.
     if (!isset($settings['spc_middleware_lock_place_order']) || $settings['spc_middleware_lock_place_order'] == TRUE) {
@@ -1884,6 +1933,10 @@ class Cart {
   public function setCartInCache(array $cart) {
     $expire = (int) $_ENV['CACHE_CART'];
     if ($expire > 0) {
+      // Add current time to cart array.
+      $current_time = time();
+      $cart['cache_time'] = $current_time;
+      // Store complete cart in cache.
       $this->cache->set('cached_cart', $expire, $cart);
     }
   }
@@ -1930,6 +1983,56 @@ class Cart {
     }
 
     return implode('||', $message);
+  }
+
+  /**
+   * Helper function to check if cart total valid.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   If cart total is valid.
+   */
+  public function isCartTotalValid(array $cart) {
+    // Check if last update of our cart is more recent than X minutes.
+    if (!isset($cart['cache_time'])) {
+      // Unexpected but in that case we assume it is correct.
+      $this->logger->error('No cache_time field in the cart @cart_id.', [
+        '@cart_id' => $cart['cart']['id'],
+      ]);
+      return TRUE;
+    }
+
+    $checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
+    $expiration_time = $checkout_settings['totals_revalidation_ttl'];
+
+    $cart_expire_time = $cart['cache_time'] + $expiration_time;
+    $current_time = time();
+    if ($cart_expire_time >= $current_time) {
+      // Not expired. We assume totals are valid.
+      return TRUE;
+    }
+
+    // Get cart totals.
+    $cart_total = $cart['totals']['grand_total'];
+    try {
+      $this->logger->info('Getting fresh total for cart @cart_id.', [
+        '@cart_id' => $cart['cart']['id'],
+      ]);
+      // Getting fresh cart from api.
+      $cart = $this->getCart(TRUE);
+    }
+    catch (\Exception $e) {
+      // Something went wrong. We assume totals are valid.
+      $this->logger->error('Error occurred while fetching cart information. Exception: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return TRUE;
+    }
+
+    $fresh_cart_total = $cart['totals']['grand_total'];
+    return $fresh_cart_total == $cart_total;
   }
 
 }

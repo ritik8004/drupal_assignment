@@ -14,7 +14,7 @@ const LocationSearchForm = React.forwardRef((props, ref) => (
           className="appointment-type-button store-finder-button"
           id="edit-near-me"
           type="button"
-          onClick={(e) => props.getCurrentPosition(e)}
+          onClick={(e) => props.getCurrentPosition(e, true)}
         >
           {getStringMessage('stores_near_me_label')}
         </button>

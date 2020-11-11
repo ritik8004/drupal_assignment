@@ -462,8 +462,24 @@ class CartController {
     // available payment method.
     if (!empty($response['payment'])) {
       $codes = array_column($response['payment']['methods'], 'code');
-      if (!in_array($response['payment']['method'], $codes)) {
-        $response['payment']['method'] = $response['payment']['methods'][0]['code'];
+      if (!empty($response['payment']['method'])
+        && !in_array($response['payment']['method'], $codes)) {
+        unset($response['payment']['method']);
+      }
+
+      // If default also has invalid payment method, we remove it
+      // so that first available payment method will be selected.
+      if (!empty($response['payment']['default'])
+        && !in_array($response['payment']['default'], $codes)) {
+        unset($response['payment']['default']);
+      }
+
+      if (!empty($response['payment']['method'])) {
+        $response['payment']['method'] = $this->cart->getMethodCodeForFrontend($response['payment']['method']);
+      }
+
+      if (!empty($response['payment']['default'])) {
+        $response['payment']['default'] = $this->cart->getMethodCodeForFrontend($response['payment']['default']);
       }
     }
 
@@ -485,7 +501,7 @@ class CartController {
     $request_content = json_decode($request->getContent(), TRUE);
 
     // Validate request.
-    if (!$this->validateRequestData($request_content)) {
+    if (empty($request_content) || !$this->validateRequestData($request_content)) {
       // Return error response if not valid data.
       // Setting custom error code for bad response so that
       // we could distinguish this error.

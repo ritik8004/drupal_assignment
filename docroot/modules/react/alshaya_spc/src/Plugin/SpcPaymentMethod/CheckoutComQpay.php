@@ -24,7 +24,7 @@ class CheckoutComQpay extends AlshayaSpcPaymentMethodPluginBase {
   public function processBuild(array &$build) {
     $build['#strings']['checkout_com_upapi_qpay_error_info'] = [
       'key' => 'checkout_com_upapi_qpay_error_info',
-      'value' => $this->t('Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code'),
+      'value' => $this->t('Transaction ID: @transaction_id<br>Payment ID: @payment_id<br>Result code: @result_code<br>Amount: @amount<br>Date: @date'),
     ];
   }
 

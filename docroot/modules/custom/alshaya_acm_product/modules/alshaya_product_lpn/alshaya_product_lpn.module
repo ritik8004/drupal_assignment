@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
 
@@ -46,22 +47,12 @@ function alshaya_product_lpn_form_sku_base_form_alter(&$form, FormStateInterface
 function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
   // Get lpn_attribute id from config.
   $lpn_attribute = \Drupal::config('alshaya_product_lpn.settings')->get('lpn_attribute') ?? '';
-  $child_group = [];
 
   if (empty($lpn_attribute)) {
     return;
   }
 
-  $configurations = unserialize($sku->get('field_configurable_attributes')->getString());
-  $configurable_attribute_codes = array_column($configurations, 'code', 'code');
-  $season_codes = [];
-  foreach ($configurations as $configuration) {
-    if ($lpn_attribute == $configuration['code']) {
-      foreach ($configuration['values'] as $value) {
-        $season_codes[$value['value_id']] = $value['label'];
-      }
-    }
-  }
+  $configurable_attribute_codes = Configurable::getConfigurableAttributeCodes($sku);
 
   // Do not process further if we don't have lpn_attribute as
   // configurable_attribute for the product.
@@ -69,48 +60,70 @@ function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$childre
     return;
   }
 
+  $children_flat = [];
+  $season_code_values = [];
+
+  /** @var \Drupal\acq_sku\Entity\SKU $child */
   foreach ($children as $child_sku => $child) {
-    $attributes = $child->get('attributes')->getValue();
-    $attributes = array_column($attributes, 'value', 'key');
-    $season_code = '';
+    $parent = $child->getPluginInstance()->getParentSku($child);
 
-    foreach ($configurable_attribute_codes as $attribute_id) {
-      if ($attribute_id === $lpn_attribute) {
-        $season_code = isset($attributes[$attribute_id]) ? $attributes[$attribute_id] : '';
-        continue;
-      }
-      $children_with_attr[$attribute_id] = $attributes[$attribute_id];
-    }
-
-    if (empty($season_code)) {
+    // Ignore children for which we do not have a parent available yet.
+    if (!($parent instanceof SKU)) {
       continue;
     }
 
-    $attributes_key = implode('-', $children_with_attr);
+    $attributes = $child->get('attributes')->getValue();
+    $attributes = array_column($attributes, 'value', 'key');
 
-    if (array_key_exists($attributes_key, $child_group)) {
-      if (_alshaya_product_lpn_compare_season_codes($season_codes, $child_group[$attributes_key][$lpn_attribute], $season_code)) {
-        // If current product's season_code is smaller than another child's
-        // season code and both have same configurable attributes, then
-        // remove the product with higher season code.
-        unset($children[$child_group[$attributes_key]['sku']]);
-        $child_group[$attributes_key] = [
-          'sku' => $child_sku,
-          $lpn_attribute => $season_code,
-        ];
+    $non_lpn_attribute_values = [];
+    foreach ($configurable_attribute_codes as $code) {
+      if ($code === $lpn_attribute) {
+        continue;
       }
-      else {
-        // If current product's season_code is greater than another child's
-        // season code and both have same configurable attributes, then
-        // remove the current product.
-        unset($children[$child_sku]);
+
+      $non_lpn_attribute_values[$code] = $attributes[$code];
+    }
+
+    $non_lpn_attribute_values = implode('|', $non_lpn_attribute_values);
+
+    // This here will give us the internal id of season code value/label.
+    $child_lpn_key = $attributes[$lpn_attribute];
+
+    if (empty($season_code_values[$child_lpn_key])) {
+      // We will need to do this once for every parent to ensure we consider
+      // different season codes available in same size of different colors.
+      $configurations = unserialize($parent->get('field_configurable_attributes')->getString());
+      foreach ($configurations as $configuration) {
+        if ($lpn_attribute == $configuration['code']) {
+          foreach ($configuration['values'] as $value) {
+            $season_code_values[$value['value_id']] = $value['label'];
+          }
+        }
       }
     }
-    else {
-      $child_group[$attributes_key] = [
-        'sku' => $child_sku,
-        $lpn_attribute => $season_code,
-      ];
+
+    // We need to use the actual label for sorting (201, 202, etc.) instead
+    // of internal ids.
+    $child_lpn_value = $season_code_values[$child_lpn_key];
+
+    // Group children per parent.
+    // We do not want to group color blue size small season 2 with color red
+    // size small season 3.
+    $children_flat[$parent->getSku()][$non_lpn_attribute_values][$child_lpn_value] = $child_sku;
+  }
+
+  foreach ($children_flat as $product_children) {
+    foreach ($product_children as $children_group) {
+      // Sort by season code value.
+      ksort($children_group);
+
+      // We need to show the first in-stock one.
+      array_shift($children_group);
+
+      // Remove all other season code children.
+      foreach ($children_group as $new_season_child) {
+        unset($children[$new_season_child]);
+      }
     }
   }
 }

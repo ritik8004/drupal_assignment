@@ -1,5 +1,0 @@
-display:
-  default:
-    display_options:
-      access:
-        type: click_collect_feature_status

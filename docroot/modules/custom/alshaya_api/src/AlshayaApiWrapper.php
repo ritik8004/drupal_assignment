@@ -244,9 +244,9 @@ class AlshayaApiWrapper {
           $stats->getTransferTime(),
           $code,
           $stats->getRequest()->getMethod(),
-          $stats->getResponse()->getHeaderLine('x-cache'),
-          $stats->getResponse()->getHeaderLine('x-cache-hits'),
-          $stats->getResponse()->getHeaderLine('x-served-by')
+          $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-cache') : '',
+          $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-cache-hits') : '',
+          $stats->hasResponse() ? $stats->getResponse()->getHeaderLine('x-served-by') : ''
         ));
       };
 

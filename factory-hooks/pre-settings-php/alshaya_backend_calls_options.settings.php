@@ -59,7 +59,7 @@ $settings['alshaya_backend_calls_options'] = [
       'timeout' => 10,
     ],
     'checkoutcom_token_list' => [
-      'timeout' => 4,
+      'timeout' => 5,
     ],
     'cnc_check' => [
       'timeout' => 10,

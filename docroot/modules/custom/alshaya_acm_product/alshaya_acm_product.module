@@ -13,6 +13,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Site\Settings;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
@@ -1052,6 +1053,21 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     $request = \Drupal::request();
     $show_on_load = intval($request->query->get('show_on_load'));
 
+    if ($show_on_load > 0) {
+      if (strpos($request->getRequestUri(), 'views/ajax') !== FALSE) {
+        $request->query->set('show_on_load', NULL);
+        return;
+      }
+
+      // Allow loading max 20 pages, we have 12 per page by default so default
+      // value here would be 240.
+      // Impact: UX + back to PLP till we move to Algolia for listing pages.
+      if ($show_on_load > Settings::get('show_on_load_max', $per_page * 20)) {
+        $request->query->set('show_on_load', NULL);
+        return;
+      }
+    }
+
     // If show on load for some reason is less then items we show by default
     // per page, we ignore the parameter.
     if ($show_on_load > $per_page) {
@@ -1727,64 +1743,9 @@ function alshaya_acm_product_query_get_display_node_for_sku_alter(AlterableInter
  *   Array of nodes.
  */
 function _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $limit) {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  $unique_nodes = [];
-  $page = 0;
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $term_details = \Drupal::service('alshaya_acm_product_category.page')->getCurrentSelectedCategory($langcode, $category_id);
-  $index = Index::load('alshaya_algolia_index');
-
-  do {
-    try {
-      $query = $index->query();
-      $query->range($page, $page * $limit);
-      $conditionGroup = new ConditionGroup();
-      $conditionGroup->addCondition('stock', 0, '>');
-      $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
-      $query->addConditionGroup($conditionGroup);
-      $query->setOption('attributesToRetrieve', ['nid']);
-      $query->setOption('ruleContexts', $term_details['ruleContext']);
-      $results = $query->execute()->getResultItems();
-
-      $nids = array_map(function ($result) {
-        return $result->getField('nid')->getValues()[0];
-      }, $results);
-    }
-    catch (\Exception $e) {
-      \Drupal::logger('alshaya_acm_product')->notice('Could not fetch data for carousel from Algolia because of reason: @message', [
-        '@message' => $e->getMessage(),
-      ]);
-
-      return [];
-    }
-
-    $entity_type_manager = \Drupal::service('entity_type.manager')->getStorage('node');
-
-    $nodes = array_map(function ($nid) use ($skuManager, $entity_type_manager) {
-      if (($node = $entity_type_manager->load($nid)) && ($node instanceof NodeInterface)) {
-        $color = $node->get('field_product_color')->getString();
-
-        if ($color) {
-          $node = $skuManager->getDisplayNode($skuManager->getSkuForNode($node), FALSE);
-        }
-
-        return $node;
-      }
-    }, $nids);
-
-    $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $limit);
-    foreach ($nodes as $node) {
-      $unique_nodes[$node->id()] = $node;
-    }
-
-    $page++;
-  } while (!empty($nodes) && count($unique_nodes) < $limit);
-
-  $unique_nodes = array_slice($unique_nodes, 0, $limit);
-
-  return $unique_nodes;
+  /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $helper */
+  $helper = \Drupal::service('alshaya_acm_product_category.category_products_helper');
+  return $helper->getProductsInCategory($category_id, $limit);
 }
 
 /**

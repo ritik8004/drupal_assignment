@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_color_split;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_product_options\SwatchesHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -107,14 +108,34 @@ class AlshayaColorSplitManager {
       return [];
     }
 
+    if ($sku->bundle() === 'simple') {
+      $parent = $sku->getPluginInstance()->getParentSku($sku);
+
+      // If no parent available, we are grouping simple products.
+      $configurable_attribute_codes = $parent instanceof SKU
+        ? Configurable::getConfigurableAttributeCodes($parent)
+        : [];
+    }
+    else {
+      $configurable_attribute_codes = Configurable::getConfigurableAttributeCodes($sku);
+    }
+
+    $attribute_code_color_id = AlshayaColorSplitConfig::get('attribute_code_color_id');
+
+    // If we we have color already set, we do no further processing.
+    if (isset($configurable_attribute_codes[$attribute_code_color_id])) {
+      return [];
+    }
+
+    $langcode = $sku->language()->getId();
+
     $static = &drupal_static(__METHOD__, []);
     $static_key = implode(':', [
       $style_code,
-      $sku->language()->getId(),
+      $langcode,
       (int) $include_oos,
-    ]);
-
-    $langcode = $sku->language()->getId();
+      $sku->bundle(),
+    ] + $configurable_attribute_codes);
 
     if (isset($static[$static_key])) {
       return $static[$static_key];
@@ -134,6 +155,28 @@ class AlshayaColorSplitManager {
         continue;
       }
 
+      // Ignore configurable products without display node.
+      if ($variant->bundle() === 'configurable') {
+        $variant_node_id = $variant->getPluginInstance()->getDisplayNodeId($variant);
+        if (empty($variant_node_id)) {
+          continue;
+        }
+      }
+
+      $parent = $variant->bundle() === 'simple'
+        ? $sku->getPluginInstance()->getParentSku($variant)
+        : $variant;
+
+      // Do not merge if configurable attributes are not the same.
+      // For simple grouping we have stored empty array in this variable above.
+      $parent_attribute_codes = $parent instanceof SKU
+        ? Configurable::getConfigurableAttributeCodes($parent)
+        : [];
+
+      if ($parent_attribute_codes !== $configurable_attribute_codes) {
+        continue;
+      }
+
       $static[$static_key][$variant->getSku()] = SKU::getTranslationFromContext($variant, $langcode);
     }
 
@@ -150,12 +193,7 @@ class AlshayaColorSplitManager {
    *   Style code value if field & value exist, FALSE otherwise.
    */
   public function fetchStyleCode(SKU $sku) {
-    if ($sku->hasField('attr_style_code') &&
-      $style_code = $sku->get('attr_style_code')->getString()) {
-      return $style_code;
-    }
-
-    return FALSE;
+    return $this->skuManager->fetchStyleCode($sku);
   }
 
   /**

@@ -1148,13 +1148,15 @@ class SkuManager {
    *   Type of image required - plp or pdp.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
+   * @param string $channel
+   *   Whether web or mapp.
    *
    * @return array
    *   Array of media files.
    *
    * @todo: Use self::getLabelsData() to get data and prepare images.
    */
-  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
+  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE, string $channel = 'web') {
     static $static_labels_cache = [];
 
     $sku = $sku_entity->getSku();
@@ -1223,7 +1225,13 @@ class SkuManager {
           '#alt' => $data[$text_key],
         ];
 
-        $row['image'] = $this->renderer->renderPlain($image);
+        // For mobile app.
+        if ($channel == 'mapp') {
+          $row['image'] = file_create_url($image['#uri']);
+        }
+        else {
+          $row['image'] = $this->renderer->renderPlain($image);
+        }
         $row['position'] = $data[$position_key];
         $row['text'] = $data[$text_key];
 
@@ -2875,7 +2883,7 @@ class SkuManager {
       }
     }
 
-    if (empty($applied_layout)) {
+    if (empty($applied_layout) && !empty($terms_to_explore)) {
       $parents = $this->getParentsIds($terms_to_explore);
       if (!empty($parents)) {
         $applied_layout = $this->getPdpLayoutFromCategories($parents);
@@ -3638,12 +3646,14 @@ class SkuManager {
    *   SKU Entity.
    * @param string $context
    *   Context.
+   * @param string $channel
+   *   Whether web or mapp.
    *
    * @return array
    *   Labels data.
    */
-  public function getSkuLabels(SKUInterface $sku, string $context): array {
-    $labels = $this->getLabels($sku, $context);
+  public function getSkuLabels(SKUInterface $sku, string $context, string $channel = 'web'): array {
+    $labels = $this->getLabels($sku, $context, FALSE, $channel);
     if (empty($labels)) {
       return [];
     }
@@ -3653,7 +3663,9 @@ class SkuManager {
       $xpath = new \DOMXPath($doc);
       // We are using `data-src` attribute as we are using blazy for images.
       // If blazy is disabled, then we need to revert back to `src` attribute.
-      $promo_image_path = $xpath->evaluate("string(//img/@data-src)");
+      $promo_image_path = $channel == 'mapp'
+        ? $label['image']
+        : $xpath->evaluate("string(//img/@data-src)");
       // Checking if the image path is relative or absolute. If image path is
       // absolute, we are using the same path.
       $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)

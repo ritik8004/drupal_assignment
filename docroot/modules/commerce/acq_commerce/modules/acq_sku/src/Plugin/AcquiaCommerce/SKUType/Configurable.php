@@ -649,6 +649,29 @@ class Configurable extends SKUPluginBase {
   }
 
   /**
+   * Wrapper function to get attribute codes for configurable.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Configurable SKU.
+   *
+   * @return array
+   *   Configurable attribute codes as string.
+   */
+  public static function getConfigurableAttributeCodes(SKU $sku) {
+    $attributes = $sku->get('field_configurable_attributes')->getString();
+    if (empty($attributes)) {
+      return [];
+    }
+
+    $configurations = unserialize($attributes);
+    if (empty($configurations) || !is_array($configurations)) {
+      return [];
+    }
+
+    return array_column($configurations, 'code', 'code');
+  }
+
+  /**
    * Wrapper function to get child skus as string array for configurable.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku

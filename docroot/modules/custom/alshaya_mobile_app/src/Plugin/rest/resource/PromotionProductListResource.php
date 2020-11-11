@@ -180,7 +180,7 @@ class PromotionProductListResource extends ResourceBase {
         $this->alshayaSearchApiQueryExecute->setFacetsToIgnore(['category_facet_promo']);
         // Prepare response from result set.
         $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-        $response_data['sorts'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
+        $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
 
         // Filter the empty products.
         $response_data['products'] = array_filter($response_data['products']);

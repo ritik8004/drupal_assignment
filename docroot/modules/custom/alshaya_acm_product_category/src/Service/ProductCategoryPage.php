@@ -151,7 +151,9 @@ class ProductCategoryPage {
     }
 
     $parents = array_reverse($storage->loadAllParents($term->id()));
-    $temp_list = $context_list = $hierarchy_list = [];
+    $hierarchy_list = [];
+    $context_list = [];
+    $contexts = [];
 
     foreach ($parents as $term) {
       $term = $this->entityRepository->getTranslationFromContext($term, $langcode);
@@ -160,16 +162,30 @@ class ProductCategoryPage {
         : $term;
 
       $hierarchy_list[] = $term->label();
-      $context_list[] = str_replace(' ', '_', strtolower($term_en->label()));
+
+      $context = strtolower(trim($term_en->label()));
+
+      // Remove special characters.
+      $context = preg_replace("/[^a-zA-Z0-9\s]/", "", $context);
+
+      // Ensure duplicate spaces are replaced with single space.
+      // H & M would have become H  M after preg_replace.
+      $context = str_replace('  ', ' ', $context);
+
+      // Replace spaces with underscore.
+      $context = str_replace(' ', '_', $context);
+
+      $context_list[] = $context;
+
       // Merge term name for to use multiple contexts for category pages.
-      $temp_list = array_merge($temp_list, [implode('__', $context_list)]);
+      $contexts[] = implode('__', $context_list);
     }
 
     return [
       'hierarchy' => implode(' > ', $hierarchy_list),
-      'level' => count($temp_list),
-      'ruleContext' => array_reverse($temp_list),
-      'category_field' => 'field_category_name.lvl' . (count($temp_list) - 1),
+      'level' => count($contexts),
+      'ruleContext' => array_reverse($contexts),
+      'category_field' => 'field_category_name.lvl' . (count($contexts) - 1),
     ];
   }
 

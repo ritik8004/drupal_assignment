@@ -15,6 +15,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ingroup views_access_plugins
  *
+ * @todo Remove this file once the similar "stores_finder_page_status" plugin
+ * is moved to prod as this will then no longer be used. This is kept for now
+ * since without this there is a missing plugin error on database updates and
+ * cache clears.
+ *
  * @ViewsAccess(
  *   id = "click_collect_feature_status",
  *   title = @Translation("Click and Collect feature status"),

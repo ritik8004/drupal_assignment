@@ -306,3 +306,16 @@ body {
     }
   }
 }
+
+#alshaya-algolia-search,
+#block-alshaya-algolia-react-plp,
+#block-alshayaalgoliareactpromotion {
+  .filter-fixed-top {
+    .show-all-filters-algolia,
+    .block-facet-blockcategory-facet-search {
+      @include breakpoint($only-mobile) {
+        top: 3rem;
+      }
+    }
+  }
+}

@@ -1429,6 +1429,7 @@ $appointment-store-map-store-name: $_appointment-darkish-blue;
 $appointment-store-item-text: $black;
 $appointment-store-close-icon: $mothercare-black;
 $appointment-timeslot-calendar-disabled: $warm-grey-two;
+$appointment-empty-store-list-text: $_spc-discount-text;
 
 // Magazine V2 PDP
 $magv2-readmore-link: $windows-blue;
@@ -1448,7 +1449,7 @@ $magv2-slick-dots-bg: $white-five;
 $magv2-slick-dots: $white-smoke-light;
 $magv2-gallery-popup-bg: $white-five;
 $magv2-gallery-bg: $white-five;
-$magv2-gallery-popup-cross-bg: $grey-light-two;
+$magv2-gallery-popup-cross-bg: rgba(243, 243, 243, 0.6);
 $magv2-gallery-popup-cross: $mothercare-black;
 $magv2-gallery-slider-bg: $grey-light-two;
 $magv2-slick-dots-active: $marine-blue-two;
@@ -1495,7 +1496,7 @@ $magv2-promo-text: $white-five;
 $magv2-promo-bg: $new-pdp-purple;
 $magv2-promo-label-bg: $new-pdp-blue;
 $magv2-accordion-arrow: $grey-ash;
-$magv2-popup-header-label: $grey-ash;
+$magv2-popup-header-label: $marine-blue;
 $magv2-fb: $facebook-blue;
 $magv2-twitter: $twitter-blue;
 $magv2-whatsapp: $whatsapp-green;
@@ -1512,10 +1513,10 @@ $magv2-cart-notification-title: $brownish-grey;
 $magv2-cart-notification-btn-bg: $pumpkin-orange;
 $magv2-cart-notification-btn-text: $white-five;
 $magv2-click-collect-selected-location: $new-pdp-blue;
-$magv2-mobile-back-arrow: $brownish-grey;
+$magv2-mobile-back-arrow: $marine-blue;
 $magv2-click-collect-search: $brownish-grey;
 $magv2-size-options: $grey-ash;
-$magv2-mobile-size-drawer-label: $brownish-grey;
+$magv2-mobile-size-drawer-label: $marine-blue;
 $magv2-share-icons-default-color: $marine-blue;
 $magv2-click-collect-unavailable-txt: $brownish-grey;
 $magv2-crossel-upsell-pagination: $brownish-grey;
@@ -1523,6 +1524,7 @@ $magv2-free-gift: $mothercare-black;
 $magv2-free-gift-modal-cross-icon: $mothercare-black;
 $magv2-free-gift-modal-item-code: $brownish-grey;
 $magv2-breadcrumb-bg: $white-five;
+$magv2-panel-close-icon: $mothercare-black;
 
 // Sub brand logo.
 $sub_brand_logo_separator: $_ancestral-water;

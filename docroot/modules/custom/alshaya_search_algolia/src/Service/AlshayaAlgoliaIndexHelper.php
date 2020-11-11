@@ -244,6 +244,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->languageManager = $language_manager;
     $this->superCategoryManager = $super_category_manager;
     $this->productCategoryTree = $productCategoryTree;
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
     $this->prettyAliases = $pretty_aliases;
@@ -338,7 +339,11 @@ class AlshayaAlgoliaIndexHelper {
     // Promotions.
     $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
     array_walk($promotions, function (&$promotion, $nid) {
-      $promotion['url'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+      $node = $this->nodeStorage->load($nid);
+      $available_translation_langcode = $node->getTranslationLanguages();
+      foreach ($available_translation_langcode as $langcode => $value) {
+        $promotion['url_' . $langcode] = Url::fromRoute('entity.node.canonical', ['node' => $nid], ['language' => $this->languageManager->getLanguage($langcode)])->toString();
+      }
       $promotion['id'] = $nid;
     });
 
@@ -889,7 +894,14 @@ class AlshayaAlgoliaIndexHelper {
       }
 
       if ($updated) {
-        $index->setSettings($settings, TRUE);
+        $index->setSettings($settings);
+
+        foreach ($settings['replicas'] as $replica) {
+          $replica_index = $client->initIndex($replica);
+          $replica_settings = $replica_index->getSettings();
+          $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
+          $replica_index->setSettings($replica_settings);
+        }
       }
     }
 
