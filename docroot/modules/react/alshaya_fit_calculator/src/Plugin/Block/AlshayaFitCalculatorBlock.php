@@ -3,7 +3,10 @@
 namespace Drupal\alshaya_fit_calculator\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides Fit calculator block.
@@ -13,7 +16,46 @@ use Drupal\Core\Form\FormStateInterface;
  *   admin_label = @Translation("Alshaya fit calculator")
  * )
  */
-class AlshayaFitCalculatorBlock extends BlockBase {
+class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * Node Storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
+   * Constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param string $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
+   */
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              EntityTypeManagerInterface $entityTypeManager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->nodeStorage = $entityTypeManager->getStorage('node');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -26,15 +68,19 @@ class AlshayaFitCalculatorBlock extends BlockBase {
     $form['calculator_values'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Values'),
-      '#description' => $this->t('Json array'),
+      '#description' => $this->t('Json array to calculate the size.'),
       '#default_value' => isset($config['calculator_values']) ? $config['calculator_values'] : '',
     ];
 
+    // URL field for autocomplete from content type static_html.
     $form['size_conversion_html'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Size conversion chart html'),
-      '#description' => $this->t('Html for modal to show size conversion chart'),
-      '#default_value' => isset($config['size_conversion_html']) ? $config['size_conversion_html'] : '',
+      '#type' => 'entity_autocomplete',
+      '#description' => $this->t('Static Html page for size conversion chart.'),
+      '#target_type' => 'node',
+      '#selection_settings' => [
+        'target_bundles' => ['static_html'],
+      ],
+      '#default_value' => isset($config['size_conversion_html']) ? $this->nodeStorage->load($config['size_conversion_html']) : '',
     ];
 
     return $form;
