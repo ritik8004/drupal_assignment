@@ -571,15 +571,14 @@ class CartController {
           }
 
           if (empty($customer)) {
-            try {
-              $customer = $this->magentoCustomer->createCustomer(
-                $email,
-                $shipping_info['static']['firstname'],
-                $shipping_info['static']['lastname']
-              );
-            }
-            catch (\Exception $e) {
-              return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+            $customer = $this->magentoCustomer->createCustomer(
+              $email,
+              $shipping_info['static']['firstname'],
+              $shipping_info['static']['lastname']
+            );
+
+            if (isset($customer['error'])) {
+              return new JsonResponse($customer);
             }
           }
 

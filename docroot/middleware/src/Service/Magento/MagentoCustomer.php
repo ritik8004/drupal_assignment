@@ -61,7 +61,8 @@ class MagentoCustomer {
    *   Last name.
    *
    * @return array
-   *   Customer data.
+   *   Customer data if API call is successful else an array containing the
+   *   error message.
    */
   public function createCustomer(string $email, string $firstname, string $lastname) {
     $url = 'customers';
@@ -78,7 +79,12 @@ class MagentoCustomer {
       'json' => (object) $data,
     ];
 
-    return $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
+    try {
+      return $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
+    }
+    catch (\Exception $e) {
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
   }
 
   /**
@@ -88,7 +94,8 @@ class MagentoCustomer {
    *   Email address.
    *
    * @return array|null
-   *   Customer data if found.
+   *   Customer data if API call is successful else and array containing the
+   *   error message.
    */
   public function getCustomerByMail(string $email) {
     $url = 'customers/search';
