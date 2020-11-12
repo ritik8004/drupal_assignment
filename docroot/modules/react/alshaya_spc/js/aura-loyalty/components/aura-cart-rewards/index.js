@@ -26,6 +26,13 @@ class AuraCartRewards extends React.Component {
 
     if (getUserDetails().id) {
       document.addEventListener('customerDetailsFetched', this.updateStates, false);
+      const { loyaltyStatus } = this.state;
+
+      if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+        this.setState({
+          wait: false,
+        });
+      }
     } else {
       // Guest user.
       const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
