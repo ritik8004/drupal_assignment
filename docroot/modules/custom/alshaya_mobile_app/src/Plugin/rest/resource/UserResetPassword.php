@@ -185,10 +185,9 @@ class UserResetPassword extends ResourceBase {
     }
 
     try {
-      $is_customer = alshaya_acm_customer_is_customer($user);
       // We only update password for non-admin and actual
       // customers on the mdc.
-      if (!empty($new_password) && $is_customer) {
+      if (alshaya_acm_customer_is_customer($user)) {
         $customer_id = $user->get('acq_customer_id')->getString();
         $this->apiWrapper->updateCustomerPass(['customer_id' => $customer_id], $new_password);
         _alshaya_user_password_policy_history_insert_password_hash($user, $new_password);
