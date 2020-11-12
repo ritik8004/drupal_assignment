@@ -5,8 +5,10 @@ import AuraNotLinkedNoData from './components/not-linked-no-data';
 import AuraLinkedVerified from './components/linked-verified';
 import AuraLinkedNotVerified from './components/linked-not-verified';
 import AuraNotLinkedData from './components/not-linked-data';
-import { getAllAuraStatus } from '../../../../../alshaya_aura_react/js/utilities/helper';
-import { getAuraDetailsDefaultState } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getAllAuraStatus, getUserDetails } from '../../../../../alshaya_aura_react/js/utilities/helper';
+import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import Loading from '../../../utilities/loading';
+import { getStorageInfo } from '../../../utilities/storage';
 
 class AuraCartRewards extends React.Component {
   constructor(props) {
@@ -14,19 +16,39 @@ class AuraCartRewards extends React.Component {
     this.state = {
       ...getAuraDetailsDefaultState(),
       productPoints: 0,
+      wait: true,
     };
   }
 
   componentDidMount() {
     // @TODO: Get product points and update in state.
-    document.addEventListener('customerDetailsFetched', this.updateStates, false);
     document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
+
+    if (getUserDetails().id) {
+      document.addEventListener('customerDetailsFetched', this.updateStates, false);
+    } else {
+      // Guest user.
+      const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+
+      if (localStorageValues === null) {
+        this.setState({
+          wait: false,
+        });
+        return;
+      }
+
+      const data = {
+        detail: { stateValues: localStorageValues },
+      };
+      this.updateStates(data);
+    }
   }
 
   updateStates = (data) => {
-    const { stateValues } = data.detail;
+    const states = { ...data.detail.stateValues };
+    states.wait = false;
     this.setState({
-      ...stateValues,
+      ...states,
     });
   };
 
@@ -38,12 +60,17 @@ class AuraCartRewards extends React.Component {
     } = this.props;
 
     const {
+      wait,
       productPoints,
       expiringPoints,
       expiryDate,
       cardNumber,
       loyaltyStatus,
     } = this.state;
+
+    if (wait) {
+      return <Loading />;
+    }
 
     const sectionTitle = (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
       || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U)
