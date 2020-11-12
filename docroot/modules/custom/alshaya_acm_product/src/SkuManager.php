@@ -133,13 +133,6 @@ class SkuManager {
   protected $productLabelsCache;
 
   /**
-   * Cache Backend service for product info.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $productCache;
-
-  /**
    * Config Factory service object.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -286,8 +279,6 @@ class SkuManager {
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
    *   Cache Backend service for product labels.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $product_cache
-   *   Cache Backend service for configurable price info.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
@@ -320,7 +311,6 @@ class SkuManager {
                               ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
-                              CacheBackendInterface $product_cache,
                               SKUFieldsManager $sku_fields_manager,
                               ProductCategoryHelper $product_category_helper,
                               Client $http_client,
@@ -346,7 +336,6 @@ class SkuManager {
     $this->moduleHandler = $module_handler;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
-    $this->productCache = $product_cache;
     $this->skuFieldsManager = $sku_fields_manager;
     $this->productCategoryHelper = $product_category_helper;
     $this->httpClient = $http_client;
@@ -2001,73 +1990,6 @@ class SkuManager {
     $user_input = $form_state->getUserInput();
     $user_input['configurables'] = $selected;
     $form_state->setUserInput($user_input);
-  }
-
-  /**
-   * Get data from Cache for a product.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   * @param string $key
-   *   Key of the data to get from cache.
-   *
-   * @return array|null
-   *   Data if found or null.
-   */
-  public function getProductCachedData(SKU $sku, $key = 'price') {
-    $static = &drupal_static('alshaya_product_cached_data', []);
-
-    $cid = $this->getProductCachedId($sku);
-
-    // Try once in static cache.
-    if (isset($static[$cid], $static[$cid][$key])) {
-      return $static[$cid][$key];
-    }
-
-    // Load from cache.
-    $cache = $this->productCache->get($cid);
-
-    if (isset($cache->data, $cache->data[$key])) {
-      $static[$cid][$key] = $cache->data[$key];
-      return $cache->data[$key];
-    }
-
-    return NULL;
-  }
-
-  /**
-   * Set data into Cache for a product.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   * @param string $key
-   *   Key of the data to get from cache.
-   * @param mixed $value
-   *   Value to set for the provided key.
-   */
-  public function setProductCachedData(SKU $sku, $key, $value) {
-    $cid = $this->getProductCachedId($sku);
-    $cache = $this->productCache->get($cid);
-    $data = $cache->data ?? [];
-    $data[$key] = $value;
-    $this->productCache->set($cid, $data, Cache::PERMANENT, $sku->getCacheTags());
-
-    // Update value in static cache too.
-    $static = &drupal_static('alshaya_product_cached_data', []);
-    $static[$cid][$key] = $value;
-  }
-
-  /**
-   * Get cache id for particular sku and language.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU entity.
-   *
-   * @return string
-   *   Cache key.
-   */
-  public function getProductCachedId(SKU $sku) {
-    return 'alshaya_product:' . $sku->language()->getId() . ':' . $sku->getSku();
   }
 
   /**
