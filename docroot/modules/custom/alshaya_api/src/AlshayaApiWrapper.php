@@ -1166,7 +1166,7 @@ class AlshayaApiWrapper {
    *
    * @throws \Exception
    */
-  protected function updateCustomerPass(array $customer, $password) {
+  public function updateCustomerPass(array $customer, $password) {
     $cid = (int) $customer['customer_id'];
     $password = (string) $password;
 
