@@ -377,7 +377,7 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
  * Implements hook_alshaya_mobile_app_product_exclude_linked_data_alter().
  */
 function alshaya_color_split_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku) {
-  if ($sku->bundle() !== 'simple' || $data['stock'] < 1 || !$data['in_stock']) {
+  if ($sku->bundle() !== 'simple') {
     return;
   }
 
@@ -392,7 +392,7 @@ function alshaya_color_split_alshaya_mobile_app_product_exclude_linked_data_alte
 
   if (!empty($grouping_attribute) && !empty($products_in_style) && $grouping_attribute_with_swatch) {
     foreach ($products_in_style as $grouped_sku) {
-      if ($grouped_sku->getSku() === $sku->getSku()) {
+      if (!isset($data['grouping_attribute_with_swatch'])) {
         $data['grouping_attribute_with_swatch'] = $grouping_attribute_with_swatch;
       }
       $data['grouped_variants'][] = $grouped_sku;
