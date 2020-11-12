@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 
 const PointsExpiryMessage = (props) => {
   const {
@@ -13,7 +14,9 @@ const PointsExpiryMessage = (props) => {
   }
 
   return (
-    <div className="spc-aura-points-expiry-item" dangerouslySetInnerHTML={{ __html: message }} />
+    <div className="spc-aura-points-expiry-item">
+      {parse(message)}
+    </div>
   );
 };
 

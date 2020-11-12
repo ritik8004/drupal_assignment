@@ -32,7 +32,7 @@ export default class AuraMyAccountOldCardFound extends React.Component {
         </div>
         <div className="aura-myaccount-no-linked-card-description old-card-found">
           <div className="header">
-            { Drupal.t('An Aura loyalty card is associate with your email address. It just a takes one click to link.') }
+            { Drupal.t('An Aura loyalty card is associated with your email address. It just takes one click to link.') }
             <span className="bold">{Drupal.t('Do you want to link now?')}</span>
           </div>
           <div className="card-number-wrapper">

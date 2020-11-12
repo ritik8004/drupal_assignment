@@ -47,12 +47,8 @@ class Header extends React.Component {
     // Event listener to listen to customer data API call event.
     document.addEventListener('customerDetailsFetched', this.updateStates, false);
 
-    // Event listener to listen to actions on loyalty blocks of my account and my aura page.
-    document.addEventListener('loyaltyStatusUpdatedFromLoyaltyBlock', this.updateStates, false);
-
-    // Event listener to listen to actions on different sections of header
-    // like shop tab or sign in/ register tab.
-    document.addEventListener('loyaltyStatusUpdatedFromHeader', this.updateStates, false);
+    // Event listener to listen to actions on loyalty blocks.
+    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
 
     // No API call to fetch points for anonymous users or user with
     // loyalty status APC_NOT_LINKED_NOT_U.
