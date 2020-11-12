@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -34,15 +35,15 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
    *   The plugin_id for the plugin instance.
    * @param string $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              EntityTypeManagerInterface $entityTypeManager) {
+                              EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->nodeStorage = $entityTypeManager->getStorage('node');
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
   }
 
   /**
@@ -101,6 +102,13 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
    */
   public function build() {
     $config = $this->getConfiguration();
+    // Remove newline and tabs from string.
+    $sizeData = isset($config['calculator_values']) ? trim(preg_replace('/\s+/', ' ', $config['calculator_values'])) : NULL;
+    $sizeConversionChartUrl = NULL;
+    if (isset($config['size_conversion_html'])) {
+      $url = Url::fromRoute('entity.node.canonical', ['node' => $config['size_conversion_html']]);
+      $sizeConversionChartUrl = $url->toString();
+    }
 
     return [
       '#markup' => '<div id="fit-calculator-container"></div>',
@@ -110,7 +118,8 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
         ],
         'drupalSettings' => [
           'fitCalculator' => [
-            'sizes' => $config['calculator_values'] ?? NULL,
+            'sizeData' => $sizeData,
+            'sizeConversionChartUrl' => $sizeConversionChartUrl,
           ],
         ],
       ],
