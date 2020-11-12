@@ -9,6 +9,12 @@ source_site="$2"
 target_env="$3"
 target_site="$4"
 
+# Remove trailing numbers to get exact site code.
+site_code=${source_site//[0-9]/}
+
+# Remove the last two characters which are always the country code.
+brand_code=${site_code%??}
+
 if [[ -z "$source_env" ]]; then
   echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
   echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
@@ -72,6 +78,10 @@ target_files_folder="$target_root/$target_files_folder"
 echo "Target folder $target_files_folder"
 
 screen -S rsync_${source_site}_${target_site} -dm bash -c "rsync -auv $source_files_folder $target:$target_files_folder"
+
+source_brand_files_folder="${source_root}/sites/g/files/$brand_code"
+target_brand_files_folder="${target_root}/sites/g/files/$brand_code"
+screen -S rsync_brand_${source_site}_${target_site} -dm bash -c "rsync -auv $source_brand_files_folder $target:$target_brand_files_folder"
 
 echo
 echo "Dumping database..."
