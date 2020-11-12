@@ -10,6 +10,7 @@ use App\Service\Aura\CustomerHelper;
 use App\Service\Drupal\Drupal;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\Magento\MagentoApiWrapper;
+use App\Service\Aura\SearchHelper;
 
 /**
  * Provides route callbacks for Loyalty Customer APIs.
@@ -51,6 +52,13 @@ class LoyaltyCustomerController {
   protected $magentoApiWrapper;
 
   /**
+   * Service for aura search helper.
+   *
+   * @var \App\Service\Aura\SearchHelper
+   */
+  protected $auraSearchHelper;
+
+  /**
    * LoyaltyCustomerController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -63,19 +71,23 @@ class LoyaltyCustomerController {
    *   Drupal service.
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
    *   Magento API wrapper service.
+   * @param \App\Service\Aura\SearchHelper $aura_search_helper
+   *   Aura search helper service.
    */
   public function __construct(
     LoggerInterface $logger,
     Utility $utility,
     CustomerHelper $aura_customer_helper,
     Drupal $drupal,
-    MagentoApiWrapper $magento_api_wrapper
+    MagentoApiWrapper $magento_api_wrapper,
+    SearchHelper $aura_search_helper
   ) {
     $this->logger = $logger;
     $this->utility = $utility;
     $this->auraCustomerHelper = $aura_customer_helper;
     $this->drupal = $drupal;
     $this->magentoApiWrapper = $magento_api_wrapper;
+    $this->auraSearchHelper = $aura_search_helper;
   }
 
   /**
@@ -183,6 +195,28 @@ class LoyaltyCustomerController {
       return new JsonResponse($this->utility->getErrorResponse('INVALID_MOBILE_ERROR', 500));
     }
 
+    // Call search API to check if given mobile number
+    // is already registered or not.
+    $search_response = $this->auraSearchHelper->search('phone', $request_content['mobile']);
+
+    if (!empty($search_response['data']['apc_identifier_number'])) {
+      $this->logger->error('Error while trying to do loyalty club sign up. Mobile number @mobile is already registered.', [
+        '@mobile' => $request_content['mobile'],
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('form_error_mobile_already_registered', 'mobile_already_registered'));
+    }
+
+    // Call search API to check if given email
+    // is already registered or not.
+    $search_response = $this->auraSearchHelper->search('email', $request_content['email']);
+
+    if (!empty($search_response['data']['apc_identifier_number'])) {
+      $this->logger->error('Error while trying to do loyalty club sign up. Email address @email is already registered.', [
+        '@email' => $request_content['email'],
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse('form_error_email_already_registered', 'email_already_registered'));
+    }
+
     try {
       // Get user details from session.
       $user = $this->drupal->getSessionCustomerInfo();
@@ -201,7 +235,7 @@ class LoyaltyCustomerController {
           'uid' => $user['uid'],
           'apcLinkStatus' => $response['apc_link'],
         ];
-        $updated = $this->drupal->updateUserAuraInfo($auraData);;
+        $updated = $this->drupal->updateUserAuraInfo($auraData);
 
         // Check if user aura status was updated successfully in drupal.
         if (!$updated) {

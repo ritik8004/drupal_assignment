@@ -120,6 +120,10 @@ class AuraFormNewAuraUserModal extends React.Component {
             // Close the modals.
             closeNewUserModal();
           }
+        } else if (result.data.error_code === 'mobile_already_registered') {
+          showError('new-aura-user-aura-mobile-field-error', getStringMessage('form_error_mobile_already_registered'));
+        } else if (result.data.error_code === 'email_already_registered') {
+          showError('new-aura-user-email-error', getStringMessage('form_error_email_already_registered'));
         } else {
           this.setState({
             messageType: 'error',
