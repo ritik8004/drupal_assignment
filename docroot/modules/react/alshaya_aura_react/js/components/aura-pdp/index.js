@@ -5,14 +5,12 @@ import { getStorageInfo } from '../../../../js/utilities/storage';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
 import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
 import { getProductPoints, isProductBuyable } from '../../utilities/pdp_helper';
-import Loading from '../../../../alshaya_spc/js/utilities/loading';
 
 class AuraPDP extends React.Component {
   constructor(props) {
     super(props);
     const { mode, cardNumber } = this.props;
     this.state = {
-      wait: true,
       productPoints: 0,
       cardNumber: cardNumber || '',
       productDetails: [],
@@ -38,9 +36,6 @@ class AuraPDP extends React.Component {
       const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
 
       if (localStorageValues === null) {
-        this.setState({
-          wait: false,
-        });
         return;
       }
 
@@ -57,7 +52,6 @@ class AuraPDP extends React.Component {
 
   loyaltyStatusUpdated = (data) => {
     const states = { ...data.detail.stateValues };
-    states.wait = true;
     const stateData = {
       detail: {
         stateValues: { ...states },
@@ -122,16 +116,8 @@ class AuraPDP extends React.Component {
     const { cardNumber } = this.state;
 
     if (cardNumber === '' || productDetails.length === 0) {
-      this.setState({
-        wait: false,
-      });
       return;
     }
-
-    // Setting wait as true to show loader while waiting for API response.
-    this.setState({
-      wait: true,
-    });
     getProductPoints(productDetails, cardNumber, context);
   };
 
@@ -153,7 +139,6 @@ class AuraPDP extends React.Component {
 
   render() {
     const {
-      wait,
       cardNumber,
       productPoints,
       context,
@@ -166,10 +151,6 @@ class AuraPDP extends React.Component {
 
     if (!isProductBuyable()) {
       return null;
-    }
-
-    if (wait) {
-      return <Loading />;
     }
 
     if (cardNumber === '' || productPoints === 0) {
