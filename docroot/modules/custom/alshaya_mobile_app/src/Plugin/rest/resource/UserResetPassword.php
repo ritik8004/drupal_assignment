@@ -8,10 +8,10 @@ use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Drupal\user\UserInterface;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use http\Exception\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -66,11 +66,11 @@ class UserResetPassword extends ResourceBase {
   protected $passwordPolicyManager;
 
   /**
-   * Module Handler.
+   * Api wrapper.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
-  protected $moduleHandler;
+  protected $apiWrapper;
 
   /**
    * UserResetPassword constructor.
@@ -95,8 +95,8 @@ class UserResetPassword extends ResourceBase {
    *   DateTime service.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $password_policy_manager
    *   The plugin manager for the password constraints.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module Handler.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   Api wrapper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -108,14 +108,14 @@ class UserResetPassword extends ResourceBase {
                               ConfigFactoryInterface $config_factory,
                               TimeInterface $time,
                               PluginManagerInterface $password_policy_manager,
-                              ModuleHandlerInterface $module_handler) {
+                              AlshayaApiWrapper $api_wrapper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->time = $time;
     $this->passwordPolicyManager = $password_policy_manager;
-    $this->moduleHandler = $module_handler;
+    $this->apiWrapper = $api_wrapper;
   }
 
   /**
@@ -133,7 +133,7 @@ class UserResetPassword extends ResourceBase {
       $container->get('config.factory'),
       $container->get('datetime.time'),
       $container->get('plugin.manager.password_policy.password_constraint'),
-      $container->get('module_handler')
+      $container->get('alshaya_api.api')
     );
   }
 
@@ -185,9 +185,14 @@ class UserResetPassword extends ResourceBase {
     }
 
     try {
-      $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-      alshaya_acm_customer_update_customer_data($user->getEmail(), $new_password);
-      _alshaya_user_password_policy_history_insert_password_hash($user, $new_password);
+      $is_customer = alshaya_acm_customer_is_customer($user);
+      // We only update password for non-admin and actual
+      // customers on the mdc.
+      if (!empty($new_password) && $is_customer) {
+        $customer_id = $user->get('acq_customer_id')->getString();
+        $this->apiWrapper->updateCustomerPass(['customer_id' => $customer_id], $new_password);
+        _alshaya_user_password_policy_history_insert_password_hash($user, $new_password);
+      }
     }
     catch (\Exception $e) {
       return $this->mobileAppUtility->sendStatusResponse($e->getMessage());
