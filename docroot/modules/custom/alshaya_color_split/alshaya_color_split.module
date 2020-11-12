@@ -388,7 +388,6 @@ function alshaya_color_split_alshaya_mobile_app_product_exclude_linked_data_alte
 
   $grouping_attribute = $manager->getGroupingAttribute($sku);
   $products_in_style = $manager->getProductsInStyle($sku);
-  print $sku->getSku();
   $grouping_attribute_with_swatch = \Drupal::config('alshaya_color_split.settings')->get('process_swatch_for_grouping_attributes');
 
   if (!empty($grouping_attribute) && !empty($products_in_style) && $grouping_attribute_with_swatch) {
@@ -401,7 +400,6 @@ function alshaya_color_split_alshaya_mobile_app_product_exclude_linked_data_alte
       $manager->addAttributeSwatchData($data['grouped_variants'][$grouped_sku->getSku()], $grouping_attribute);
     }
   }
-
 }
 
 /**
