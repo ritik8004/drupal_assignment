@@ -30,6 +30,12 @@ expose_user_details_roles:
   webmaster: '0'
   reviewer: '0'
   seo_admin: '0'
+current_user_meta:
+  name: name
+  mail: mail
+  roles: roles
+  created: '0'
+  access: '0'
 expose_user_details_fields: true
 entity_title: entityTitle
 entity_type: entityType
