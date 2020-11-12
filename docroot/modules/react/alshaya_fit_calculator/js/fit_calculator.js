@@ -1,18 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-export default class FitCalculator extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-
-  render() {
-    return (
-      <div>Placeholder...</div>
-    );
-  }
-}
+import FitCalculator from './fit_calculator/components/fit_calculator_form';
 
 ReactDOM.render(
   <FitCalculator />,
