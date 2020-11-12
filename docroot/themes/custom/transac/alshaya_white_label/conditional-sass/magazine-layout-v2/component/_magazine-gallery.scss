@@ -1,9 +1,13 @@
 .nodetype--acq_product {
   .page-wrapper {
     @include breakpoint($tablet) {
-      background-color: $magv2-pdp-bg;
       padding-bottom: 2rem;
     }
+  }
+
+  .page-wrapper,
+  .c-footer {
+    background-color: $magv2-pdp-bg;
   }
 
   @include breakpoint($tablet) {
