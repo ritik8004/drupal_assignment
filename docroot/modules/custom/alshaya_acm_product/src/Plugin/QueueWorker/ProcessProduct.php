@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Plugin\QueueWorker;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
+use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -129,6 +130,10 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     // Invalid cache tags for node and sku.
     $this->cacheTagsInvalidator->invalidateTags($node->getCacheTagsToInvalidate());
     $this->cacheTagsInvalidator->invalidateTags($entity->getCacheTagsToInvalidate());
+
+    // Invalidate our custom cache tags.
+    $sku_tags = ProductCacheManager::getAlshayaProductTags($entity);
+    $this->cacheTagsInvalidator->invalidateTags($sku_tags);
 
     $variants = $entity->bundle() === 'configurable'
       ? Configurable::getChildSkus($entity)

@@ -3,3 +3,4 @@ blacklist:
   - cart
   - profile_list
   - webform_submission_list
+  - alshaya_product
