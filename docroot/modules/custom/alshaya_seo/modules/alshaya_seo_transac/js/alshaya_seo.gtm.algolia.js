@@ -16,6 +16,16 @@
     if (!$('#alshaya-algolia-search').hasClass('show-algolia-result') && !$('#alshaya-algolia-search').is(':visible')) {
       return;
     }
+    // Update the page view for SPA Search page.
+    if (typeof window.DY !== 'undefined') {
+      window.DY.API('spa', {
+        context: {
+          type: 'OTHER',
+          lng: drupalSettings.dynamicYield.lng,
+        },
+        countAsPageview: true,
+      });
+    }
     Drupal.alshaya_seo_gtm_prepare_and_push_product_impression(Drupal.alshaya_seo_gtm_prepare_algolia_product_impression, $('#alshaya-algolia-search'), drupalSettings, event);
     // Avoid triggering again for each page.
     var currentsearch = $('#alshaya-algolia-autocomplete input[name="search"]').val().trim();
