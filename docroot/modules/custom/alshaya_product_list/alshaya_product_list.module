@@ -43,11 +43,12 @@ function alshaya_product_list_search_api_db_query_alter(SelectInterface &$db_que
       $view_url_data = preg_replace('/\/' . $current_language . '/', '', $view_url_data, 1);
       // Remove last `/` from url.
       $view_url_data = rtrim($view_url_data, '/');
-      if ($source_path = \Drupal::service('path.alias_storage')->lookupPathSource($view_url_data, $current_language)) {
+      // Get alias in case view url data is like `/node/1212/`.
+      $alias = \Drupal::service('path.alias_manager')->getAliasByPath($view_url_data);
+      if ($source_path = \Drupal::service('path.alias_storage')->lookupPathSource($alias, $current_language)) {
         // Source path will be like - `/node/1212/` and we need only id.
         $nid = explode('/', $source_path)[2];
       }
-
     }
     elseif ($current_route->getRouteName() == 'entity.node.canonical') {
       $nid = $current_route->getParameter('node')->id();
