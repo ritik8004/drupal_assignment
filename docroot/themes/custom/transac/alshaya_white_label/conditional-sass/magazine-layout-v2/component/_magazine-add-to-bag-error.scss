@@ -1,0 +1,44 @@
+#add-to-cart-error {
+  margin-top: 0.5rem;
+
+  @include breakpoint($only-tablet) {
+    margin-bottom: 0.7rem;
+  }
+
+  @include breakpoint($upto-desktop) {
+    width: 100% !important;
+    margin-#{$right}: 0 !important;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  &:empty {
+    display: none !important;
+  }
+
+  p {
+    background: $primary_input_inline_error;
+    padding: 0.625rem;
+    color: $pdp_error_text;
+    position: relative;
+    padding-#{$left}: 2.313rem;
+    margin: 0;
+
+    @include icon(warning, before) {
+      font-size: 1.4rem;
+      position: absolute;
+      top: 0.3125rem;
+      #{$left}: 0;
+      padding-#{$left}: 0.5625rem;
+    }
+
+    ul {
+      margin: 0;
+      list-style: none;
+      padding-#{$left}: 0;
+    }
+  }
+}
