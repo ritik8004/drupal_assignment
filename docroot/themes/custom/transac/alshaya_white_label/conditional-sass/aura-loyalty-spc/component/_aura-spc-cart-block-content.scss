@@ -3,6 +3,22 @@
   margin-bottom: 2.5rem;
   font-family: $aura-regular;
 
+  .popup-content {
+    .spc-checkout-section-title {
+      font-size: inherit;
+      font-family: inherit;
+      color: inherit;
+      margin: 0;
+    }
+  }
+
+  .spc-checkout-section-title {
+    > span {
+      font-family: $aura-regular;
+      color: $spc-aura-cart-section-title-light;
+    }
+  }
+
   .block-content.guest-user {
     background-image: $aura-spc-block-bg-desktop;
     border-radius: 0.625rem;
