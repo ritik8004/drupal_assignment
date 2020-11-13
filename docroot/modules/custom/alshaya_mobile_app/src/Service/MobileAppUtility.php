@@ -31,6 +31,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\redirect\RedirectRepository;
+use Drupal\Core\Database\Connection;
 
 /**
  * Mobile App Utility Class.
@@ -188,6 +189,13 @@ class MobileAppUtility {
   protected $skuInfoHelper;
 
   /**
+   * Database service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -220,6 +228,8 @@ class MobileAppUtility {
    *   Redirect repository.
    * @param \Drupal\alshaya_acm_product\Service\SkuInfoHelper $sku_info_helper
    *   Sku info helper object.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database service.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -235,7 +245,8 @@ class MobileAppUtility {
                               APIWrapper $api_wrapper,
                               RendererInterface $renderer,
                               RedirectRepository $redirect_repsitory,
-                              SkuInfoHelper $sku_info_helper) {
+                              SkuInfoHelper $sku_info_helper,
+                              Connection $database) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -253,6 +264,7 @@ class MobileAppUtility {
     $this->renderer = $renderer;
     $this->redirectRepository = $redirect_repsitory;
     $this->skuInfoHelper = $sku_info_helper;
+    $this->database = $database;
   }
 
   /**
@@ -912,6 +924,46 @@ class MobileAppUtility {
     }
 
     return $url;
+  }
+
+  /**
+   * Helper function to get the deep link for product list product option.
+   *
+   * @param string $term_url
+   *   The option term url.
+   *
+   * @return null|string
+   *   If deep link to the advanced page is found we send it else NULL is sent.
+   */
+  public function getDeepLinkForProductListProductOption(string $term_url) {
+    $term_path = preg_replace("/\/$this->currentLanguage/", '', $term_url);
+    $internal_path = $this->aliasManager->getPathByAlias($term_path);
+    $url_parts = explode('/', $internal_path);
+    // This can happen if proper node url was not found in $term_url.
+    if (!isset($url_parts[2])) {
+      // For consistency, we send this.
+      return NULL;
+    }
+
+    // Using database query for low overhead as compared to node load.
+    $type = $this->database->select('node_field_data', 'nfd')
+      ->fields('nfd', ['type'])
+      ->condition('nid', $url_parts[2])
+      ->execute()
+      ->fetchField();
+
+    if ($type === 'product_list') {
+      $redirect_path = $this->getRedirectUrl("/$this->currentLanguage" . $internal_path);
+      if (!strpos($internal_path, $redirect_path)) {
+        // Although $redirect_path is an alias, we still get the proper url
+        // object here.
+        $url = Url::fromUri("internal:/$redirect_path");
+        return $this->getDeepLinkFromUrl($url);
+      }
+    }
+
+    // For consistency, we send this.
+    return NULL;
   }
 
 }

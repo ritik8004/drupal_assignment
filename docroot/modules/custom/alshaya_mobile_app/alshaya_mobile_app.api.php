@@ -25,5 +25,15 @@ function hook_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data,
 }
 
 /**
+ * Alter the output of "options_list" resource.
+ *
+ * @param array $data
+ *   The output of the API.
+ */
+function hook_options_list_resource_response_alter(array &$data) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
