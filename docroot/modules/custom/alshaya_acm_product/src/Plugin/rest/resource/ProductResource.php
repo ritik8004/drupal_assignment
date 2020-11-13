@@ -258,22 +258,27 @@ class ProductResource extends ResourceBase {
 
     $data = $this->getSkuData($skuEntity, $link);
 
-    if ($node) {
-      $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
-        '',
-        $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
-      $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+    $current_request = $this->requestStack->getCurrentRequest();
+
+    if ($current_request->query->get('context') != 'cart') {
+      if ($node) {
+        $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
+          '',
+          $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
+        $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
+      }
+
+      $data['delivery_options'] = NestedArray::mergeDeepArray([
+        $this->getDeliveryOptionsConfig($skuEntity),
+        $data['delivery_options'],
+      ], TRUE);
+      $data['flags'] = NestedArray::mergeDeepArray([
+        alshaya_acm_product_get_flags_config(),
+        $data['flags'],
+      ], TRUE);
+      $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
     }
 
-    $data['delivery_options'] = NestedArray::mergeDeepArray([
-      $this->getDeliveryOptionsConfig($skuEntity),
-      $data['delivery_options'],
-    ], TRUE);
-    $data['flags'] = NestedArray::mergeDeepArray([
-      alshaya_acm_product_get_flags_config(),
-      $data['flags'],
-    ], TRUE);
-    $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
     // Allow other modules to alter product data.
     $this->moduleHandler->alter('sku_product_info', $data, $skuEntity);
 
@@ -305,6 +310,7 @@ class ProductResource extends ResourceBase {
    *   Product Data.
    */
   private function getSkuData(SKUInterface $sku, string $link = ''): array {
+    $current_request = $this->requestStack->getCurrentRequest();
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
 
@@ -343,48 +349,59 @@ class ProductResource extends ResourceBase {
       }
     }
 
-    $data['delivery_options'] = [
-      'home_delivery' => [],
-      'click_and_collect' => [],
-    ];
-    $data['flags'] = [];
-    $data['delivery_options'] = NestedArray::mergeDeepArray([
-      $this->getDeliveryOptionsStatus($sku),
-      $data['delivery_options'],
-    ], TRUE);
-    $data['flags'] = NestedArray::mergeDeepArray([
-      alshaya_acm_product_get_flags_status($sku),
-      $data['flags'],
-    ], TRUE);
-
-    foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
-      $data['linked'][] = [
-        'link_type' => $linked_type,
-        'skus' => $this->getLinkedSkus($sku, $linked_type),
+    if ($current_request->query->get('context') != 'cart') {
+      $data['delivery_options'] = [
+        'home_delivery' => [],
+        'click_and_collect' => [],
       ];
-    }
+      $data['flags'] = [];
+      $data['delivery_options'] = NestedArray::mergeDeepArray([
+        $this->getDeliveryOptionsStatus($sku),
+        $data['delivery_options'],
+      ], TRUE);
+      $data['flags'] = NestedArray::mergeDeepArray([
+        alshaya_acm_product_get_flags_status($sku),
+        $data['flags'],
+      ], TRUE);
 
-    $media_contexts = [
-      'pdp' => 'detail',
-      'search' => 'listing',
-      'teaser' => 'teaser',
-    ];
-    foreach ($media_contexts as $key => $context) {
-      $data['media'][] = [
-        'context' => $context,
-        'media' => $this->skuInfoHelper->getMedia($sku, $key),
-      ];
-    }
+      foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
+        $data['linked'][] = [
+          'link_type' => $linked_type,
+          'skus' => $this->getLinkedSkus($sku, $linked_type),
+        ];
+      }
 
-    $label_contexts = [
-      'pdp' => 'detail',
-      'plp' => 'listing',
-    ];
-    foreach ($label_contexts as $key => $context) {
-      $data['labels'][] = [
-        'context' => $context,
-        'labels' => $this->skuManager->getSkuLabels($sku, $key),
+      $media_contexts = [
+        'pdp' => 'detail',
+        'search' => 'listing',
+        'teaser' => 'teaser',
       ];
+      foreach ($media_contexts as $key => $context) {
+        $data['media'][] = [
+          'context' => $context,
+          'media' => $this->skuInfoHelper->getMedia($sku, $key),
+        ];
+      }
+
+      $label_contexts = [
+        'pdp' => 'detail',
+        'plp' => 'listing',
+      ];
+      foreach ($label_contexts as $key => $context) {
+        $data['labels'][] = [
+          'context' => $context,
+          'labels' => $this->skuManager->getSkuLabels($sku, $key),
+        ];
+      }
+
+      // Brand logo data.
+      $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+      $brand_logo = alshaya_acm_product_get_brand_logo($sku);
+      if ($brand_logo) {
+        $data['brand_logo']['image'] = file_create_url($brand_logo['#uri']);
+        $data['brand_logo']['alt'] = file_create_url($brand_logo['#alt']);
+        $data['brand_logo']['title'] = file_create_url($brand_logo['#title']);
+      }
     }
 
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
@@ -399,19 +416,9 @@ class ProductResource extends ResourceBase {
 
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
 
-    // Brand logo data.
-    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-    $brand_logo = alshaya_acm_product_get_brand_logo($sku);
-    if ($brand_logo) {
-      $data['brand_logo']['image'] = file_create_url($brand_logo['#uri']);
-      $data['brand_logo']['alt'] = file_create_url($brand_logo['#alt']);
-      $data['brand_logo']['title'] = file_create_url($brand_logo['#title']);
-    }
-
-    $current_request = $this->requestStack->getCurrentRequest();
     if ($current_request->query->get('pdp') == 'magazinev2') {
       // Set cart image.
-      $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+      $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
       $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
       // Prepare image style url.
       if (!empty($image['#uri'])) {
@@ -421,8 +428,11 @@ class ProductResource extends ResourceBase {
     }
 
     if ($sku->bundle() === 'configurable') {
-      $data['swatch_data'] = $this->getSwatchData($sku);
-      $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
+
+      if ($current_request->get('context') != 'cart') {
+        $data['swatch_data'] = $this->getSwatchData($sku);
+        $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
+      }
 
       foreach ($data['cart_combinations']['by_sku'] ?? [] as $values) {
         $child = SKU::loadFromSku($values['sku']);
@@ -437,7 +447,7 @@ class ProductResource extends ResourceBase {
           $data['variants'][$values['sku']] = $variant;
 
           // Set cart image.
-          $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+          $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
           $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
           // Prepare image style url.
           if (!empty($image['#uri'])) {
@@ -536,9 +546,9 @@ class ProductResource extends ResourceBase {
       }
     }
 
-    if ($current_request->query->get('context')) {
+    if ($current_request->query->get('context') == 'cart') {
       // Adding extra data to the product resource.
-      $this->moduleHandler->loadInclude('alshaya_acm_product.utility', 'inc');
+      $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
       $data['extra_data'] = [];
       $image = alshaya_acm_get_product_display_image($sku, 'cart_thumbnail', 'cart');
       if (!empty($image)) {
