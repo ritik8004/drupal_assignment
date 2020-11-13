@@ -59,6 +59,17 @@ class AuraCartRewards extends React.Component {
     });
   };
 
+  getSectionTitle = (allAuraStatus, loyaltyStatus) => {
+    if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
+      || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
+      return [
+        Drupal.t('Aura Rewards'),
+        <span>{` ${Drupal.t('(Optional)')}`}</span>,
+      ];
+    }
+    return Drupal.t('Aura Rewards');
+  };
+
   render() {
     const allAuraStatus = getAllAuraStatus();
 
@@ -79,14 +90,9 @@ class AuraCartRewards extends React.Component {
       return <Loading />;
     }
 
-    const sectionTitle = (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
-      || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U)
-      ? Drupal.t('Aura Rewards (Optional)')
-      : Drupal.t('Aura Rewards');
-
     return (
       <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
-        <SectionTitle>{sectionTitle}</SectionTitle>
+        <SectionTitle>{this.getSectionTitle(allAuraStatus, loyaltyStatus)}</SectionTitle>
 
         {/* Guest */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
