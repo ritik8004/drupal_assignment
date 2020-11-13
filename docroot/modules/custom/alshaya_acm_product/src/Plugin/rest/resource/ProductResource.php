@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_product\Plugin\rest\resource;
 
 use Drupal\acq_commerce\SKUInterface;
-use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\Core\Url;
@@ -258,26 +257,14 @@ class ProductResource extends ResourceBase {
 
     $data = $this->getSkuData($skuEntity, $link);
 
-    $current_request = $this->requestStack->getCurrentRequest();
-
-    if ($current_request->query->get('context') != 'cart') {
-      if ($node) {
-        $data['relative_link'] = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId() . '/',
-          '',
-          $node->toUrl('canonical', ['absolute' => FALSE])->toString(TRUE)->getGeneratedUrl());
-        $data['categorisations'] = $this->productCategoryHelper->getSkuCategorisations($node);
-      }
-
-      $data['delivery_options'] = NestedArray::mergeDeepArray([
-        $this->getDeliveryOptionsConfig($skuEntity),
-        $data['delivery_options'],
-      ], TRUE);
-      $data['flags'] = NestedArray::mergeDeepArray([
-        alshaya_acm_product_get_flags_config(),
-        $data['flags'],
-      ], TRUE);
-      $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
-    }
+    $data['delivery_options'] = NestedArray::mergeDeepArray([
+      $this->getDeliveryOptionsConfig($skuEntity),
+      $data['delivery_options'],
+    ], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([
+      alshaya_acm_product_get_flags_config(),
+      $data['flags'],
+    ], TRUE);
 
     // Allow other modules to alter product data.
     $this->moduleHandler->alter('sku_product_info', $data, $skuEntity);
@@ -349,28 +336,21 @@ class ProductResource extends ResourceBase {
       }
     }
 
+    $data['delivery_options'] = [
+      'home_delivery' => [],
+      'click_and_collect' => [],
+    ];
+    $data['flags'] = [];
+    $data['delivery_options'] = NestedArray::mergeDeepArray([
+      $this->getDeliveryOptionsStatus($sku),
+      $data['delivery_options'],
+    ], TRUE);
+    $data['flags'] = NestedArray::mergeDeepArray([
+      alshaya_acm_product_get_flags_status($sku),
+      $data['flags'],
+    ], TRUE);
+
     if ($current_request->query->get('context') != 'cart') {
-      $data['delivery_options'] = [
-        'home_delivery' => [],
-        'click_and_collect' => [],
-      ];
-      $data['flags'] = [];
-      $data['delivery_options'] = NestedArray::mergeDeepArray([
-        $this->getDeliveryOptionsStatus($sku),
-        $data['delivery_options'],
-      ], TRUE);
-      $data['flags'] = NestedArray::mergeDeepArray([
-        alshaya_acm_product_get_flags_status($sku),
-        $data['flags'],
-      ], TRUE);
-
-      foreach (AcqSkuLinkedSku::LINKED_SKU_TYPES as $linked_type) {
-        $data['linked'][] = [
-          'link_type' => $linked_type,
-          'skus' => $this->getLinkedSkus($sku, $linked_type),
-        ];
-      }
-
       $media_contexts = [
         'pdp' => 'detail',
         'search' => 'listing',
@@ -429,31 +409,31 @@ class ProductResource extends ResourceBase {
 
     if ($sku->bundle() === 'configurable') {
 
-      if ($current_request->get('context') != 'cart') {
+      if ($current_request->query->get('context') != 'cart') {
         $data['swatch_data'] = $this->getSwatchData($sku);
         $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
-      }
 
-      foreach ($data['cart_combinations']['by_sku'] ?? [] as $values) {
-        $child = SKU::loadFromSku($values['sku']);
-        if (!$child instanceof SKUInterface) {
-          continue;
-        }
-        $variant = $this->getSkuData($child);
-        $variant['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($child, $values['attributes']);
-        $data['variants'][] = $variant;
-
-        if ($current_request->query->get('pdp') == 'magazinev2') {
-          $data['variants'][$values['sku']] = $variant;
-
-          // Set cart image.
-          $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-          $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
-          // Prepare image style url.
-          if (!empty($image['#uri'])) {
-            $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+        foreach ($data['cart_combinations']['by_sku'] ?? [] as $values) {
+          $child = SKU::loadFromSku($values['sku']);
+          if (!$child instanceof SKUInterface) {
+            continue;
           }
-          $data['variants'][$values['sku']]['cart_image'] = is_string($image) ? $image : '';
+          $variant = $this->getSkuData($child);
+          $variant['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($child, $values['attributes']);
+          $data['variants'][] = $variant;
+
+          if ($current_request->query->get('pdp') == 'magazinev2') {
+            $data['variants'][$values['sku']] = $variant;
+
+            // Set cart image.
+            $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+            $image = alshaya_acm_get_product_display_image($child, 'pdp_gallery_thumbnail', 'cart');
+            // Prepare image style url.
+            if (!empty($image['#uri'])) {
+              $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+            }
+            $data['variants'][$values['sku']]['cart_image'] = is_string($image) ? $image : '';
+          }
         }
       }
 
@@ -729,29 +709,6 @@ class ProductResource extends ResourceBase {
       ];
     }
     return $promotions;
-  }
-
-  /**
-   * Get fully loaded linked skus.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param string $linked_type
-   *   Linked type.
-   *
-   * @return array
-   *   Linked SKUs.
-   */
-  private function getLinkedSkus(SKUInterface $sku, string $linked_type) {
-    $return = [];
-    $linkedSkus = $this->skuInfoHelper->getLinkedSkus($sku, $linked_type);
-    foreach (array_keys($linkedSkus) as $linkedSku) {
-      $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-      if ($lightProduct = $this->skuInfoHelper->getLightProduct($linkedSkuEntity)) {
-        $return[] = $lightProduct;
-      }
-    }
-    return $return;
   }
 
   /**
