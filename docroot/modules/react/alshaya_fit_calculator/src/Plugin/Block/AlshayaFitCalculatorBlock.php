@@ -76,7 +76,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     // URL field for autocomplete from content type static_html.
     $form['size_conversion_html'] = [
       '#type' => 'entity_autocomplete',
-      '#description' => $this->t('Static Html page for size conversion chart.'),
+      '#description' => $this->t('Static HTML page for size conversion chart.'),
       '#target_type' => 'node',
       '#selection_settings' => [
         'target_bundles' => ['static_html'],
