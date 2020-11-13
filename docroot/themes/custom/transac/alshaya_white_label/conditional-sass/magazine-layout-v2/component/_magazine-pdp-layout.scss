@@ -18,7 +18,25 @@
       position: fixed !important;
       top: -1.875rem;
       #{$left}: 1.875rem;
-      max-width: 62.125rem;
+
+      @include breakpoint($tablet) {
+        &.sticky-element {
+          max-width: calc((100vw - 3.75rem) * 0.65);
+        }
+      }
+
+      @include breakpoint($desktop) {
+        &.sticky-element {
+          max-width: calc((100vw - 3.75rem) * 0.72);
+        }
+      }
+
+      @include breakpoint($desktop-xl) {
+        &.sticky-element {
+          #{$left}: calc((100vw - 86.25rem) / 2);
+          max-width: calc(86.25rem * 0.72);
+        }
+      }
 
       &.contain {
         position: absolute !important;
@@ -27,7 +45,9 @@
         #{$left}: 0 !important;
 
         .magazine__gallery--container-desktop {
-          grid-row-gap: 0;
+          @include breakpoint($desktop) {
+            grid-row-gap: 0;
+          }
         }
       }
     }
@@ -54,7 +74,7 @@
   }
 }
 
-.new-pdp-magazine-layout {
+.magazine-layout-v2 {
   .c-pdp.l-one--w {
     @include breakpoint($tablet) {
       padding: 0 1.875rem;
@@ -76,6 +96,7 @@
     &-main-contain {
       position: relative;
       overflow: auto;
+      overflow-x: hidden;
     }
 
     &-sidebar {
@@ -83,7 +104,6 @@
         #{$right}: 1.875rem;
         position: fixed;
         top: -2rem;
-        max-width: 24.12rem;
 
         &.contain {
           position: absolute;
@@ -93,10 +113,22 @@
         }
       }
 
+      @include breakpoint($tablet) {
+        &.sticky-element {
+          max-width: calc((100vw - 3.75rem) * 0.35);
+        }
+      }
+
       @include breakpoint($desktop) {
-        &.sidebar-sticky {
+        &.sticky-element {
+          max-width: calc((100vw - 3.75rem) * 0.28);
+        }
+      }
+
+      @include breakpoint($desktop-xl) {
+        &.sticky-element {
           #{$right}: calc((100vw - 86.25rem) / 2);
-          width: 24.14rem;
+          max-width: calc(86.25rem * 0.28);
         }
       }
 
