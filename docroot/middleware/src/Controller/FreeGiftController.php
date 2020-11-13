@@ -65,14 +65,17 @@ class FreeGiftController {
   }
 
   /**
-   * API to allow select free gift item from Drupal.
+   * API to remove free gift item from cart.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Response.
    */
   public function selectFreeGift() {
-    $sku = $this->request->headers->get('sku');
-    $promo_code = $this->request->headers->get('promo');
+    $request_content = json_decode($this->request->getContent(), TRUE);
+    $data = json_decode($request_content['data'], TRUE);
+    $sku = $data['sku'];
+    $promo_code = $data['promo'];
+    $options = $data['configurable_values'];
 
     if (empty($sku) || empty($promo_code)) {
       $this->logger->error('Missing request header parameters. SKU: @sku, Promo: @promo_code', [
@@ -105,11 +108,6 @@ class FreeGiftController {
       return new JsonResponse($cart);
     }
 
-    $url = sprintf('/rest/v1/product/%s', $sku);
-    $response = $this->drupal->invokeApi('GET', $url);
-    $result = $response->getBody()->getContents();
-    $sku_data = json_decode($result, TRUE);
-    $options = $sku_data['configurable_values'] ?? [];
     $quantity = 1;
     // Update cart with free gift.
     $updated_cart = $this->cart->addUpdateRemoveItem($sku, $quantity, CartActions::CART_ADD_ITEM, $options, null);

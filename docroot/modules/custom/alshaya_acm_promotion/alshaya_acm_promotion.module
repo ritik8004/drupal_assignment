@@ -71,6 +71,7 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
       'image' => NULL,
       'url' => NULL,
       'select_link' => NULL,
+      'select_free_gift_id' => NULL,
     ],
   ];
 

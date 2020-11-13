@@ -10,6 +10,8 @@
     </div>
   </a>
   <div class="select-free-gift-link">
-    {{ select_link }}
+    {% if select_link == true %}
+      <a href="#" class="select-free-gift" id={{ select_free_gift_id }}>select</a>
+    {% endif %}
   </div>
 </div>

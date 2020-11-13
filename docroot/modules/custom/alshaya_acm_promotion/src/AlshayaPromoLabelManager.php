@@ -759,6 +759,7 @@ class AlshayaPromoLabelManager {
         ],
         '#promo_url' => $url,
         '#promo_code' => $coupon,
+        '#free_gift_sku' => $free_sku->getSku(),
         '#image' => $free_sku_image ?? NULL,
       ];
 

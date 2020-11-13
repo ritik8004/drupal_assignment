@@ -20,7 +20,6 @@ use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use http\Exception\InvalidArgumentException;
@@ -187,21 +186,8 @@ class PromotionController extends ControllerBase {
             );
           }
 
-          $item['#select_link'] = Link::createFromRoute(
-            $this->t('select'),
-            'alshaya_acm_promotion.select_free_gift',
-            [],
-            [
-              'attributes' => [
-                'class' => ['use-ajax', 'select-free-gift'],
-              ],
-              'query' => [
-                'promotion_id' => $node->id(),
-                'coupon' => $request->query->get('coupon'),
-                'sku' => $free_gift->getSku(),
-              ],
-            ]
-          );
+          $item['#select_link'] = TRUE;
+          $item['#select_free_gift_id'] = 'select-' . $free_gift->bundle() . '-free-gift';
 
           break;
 
@@ -215,6 +201,8 @@ class PromotionController extends ControllerBase {
               'product_teaser'
             );
           }
+
+          $item['#select_free_gift_id'] = 'select-' . $free_gift->bundle() . '-free-gift';
 
           break;
 

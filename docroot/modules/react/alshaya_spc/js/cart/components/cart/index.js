@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
@@ -151,6 +152,57 @@ export default class Cart extends React.Component {
     }
   };
 
+  /**
+   * Select and add free gift item.
+   */
+  selectFreeGift = (codeValue, sku) => {
+    if (codeValue !== undefined) {
+      document.getElementById('promo-code').value = codeValue.trim();
+      document.getElementById('promo-action-button').click();
+      const url = Drupal.url(`rest/v1/product/${sku}`);
+      axios.get(url).then((response) => {
+        if (response.data.length !== 0) {
+          const configurableValues = response.data.configurable_values;
+          const postData = {
+            promo: codeValue,
+            sku,
+            configurable_values: configurableValues,
+          };
+          axios.post('/middleware/public/select-free-gift', {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            data: JSON.stringify(postData),
+          }).then((cartresponse) => {
+            if (cartresponse.data.length !== 0) {
+              this.setState({
+                items: cartresponse.data.cart.items,
+              });
+            }
+          });
+        }
+      });
+    }
+  };
+
+  /**
+   * Add class to body and trigger free gift modal.
+   */
+  openCartFreeGiftModal = (e, coupon, sku) => {
+    const body = document.querySelector('body');
+    body.classList.add('free-gifts-modal-overlay');
+    document.getElementById('spc-free-gift').click();
+    setTimeout(() => {
+      const freeGiftLink = document.getElementById('select-simple-free-gift');
+      if (freeGiftLink !== null) {
+        freeGiftLink.addEventListener('click', () => {
+          this.selectFreeGift(coupon, sku);
+          body.classList.remove('free-gifts-modal-overlay');
+        });
+      }
+    }, 5000);
+  };
+
   render() {
     const {
       wait,
@@ -220,6 +272,8 @@ export default class Cart extends React.Component {
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
               items={items}
               couponCode={couponCode}
+              selectFreeGift={this.selectFreeGift}
+              openCartFreeGiftModal={this.openCartFreeGiftModal}
             />
           </div>
           <div className="spc-sidebar">
