@@ -2,7 +2,7 @@
 #
 # This script migrates given site between stacks.
 #
-# ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2
+# ./scripts/utilities/stack-migration-qa.sh alshaya.01live vskw alshaya2.02live vskw2
 
 source_env="$1"
 source_site="$2"
@@ -16,26 +16,26 @@ site_code=${source_site//[0-9]/}
 brand_code=${site_code%??}
 
 if [[ -z "$source_env" ]]; then
-  echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
+  echo "Usage: ./scripts/utilities/stack-migration-qa.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
+  echo "Example: ./scripts/utilities/stack-migration-qa.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$source_site" ]]; then
-  echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
+  echo "Usage: ./scripts/utilities/stack-migration-qa.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
+  echo "Example: ./scripts/utilities/stack-migration-qa.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$target_env" ]]; then
-  echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
+  echo "Usage: ./scripts/utilities/stack-migration-qa.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
+  echo "Example: ./scripts/utilities/stack-migration-qa.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
 if [[ -z "$target_site" ]]; then
-  echo "Usage: ./scripts/utilities/stack-migration.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
-  echo "Example: ./scripts/utilities/stack-migration.sh alshaya.01live vskw alshaya2.02live vskw2"
+  echo "Usage: ./scripts/utilities/stack-migration-qa.sh SOURCE_ENV SOURCE_SITE_CODE TARGET_ENV TARGET_SITE_CODE"
+  echo "Example: ./scripts/utilities/stack-migration-qa.sh alshaya.01live vskw alshaya2.02live vskw2"
   exit
 fi
 
@@ -62,10 +62,6 @@ target_env=`drush sa $target_alias | grep ac-env | cut -d"'" -f4`
 
 cd $source_root
 
-echo "Enabling maintenance mode"
-echo
-drush -l $source_site.factory.alshaya.com sset system.maintenance_mode TRUE
-
 echo
 echo "Syncing files with target env for $source_site"
 source_files_folder=`drush -l $source_site.factory.alshaya.com status | grep Public | cut -d":" -f 2 | tr -d ' ' | tr -d '\n'`
@@ -80,7 +76,7 @@ echo "Target folder $target_files_folder"
 screen -S rsync_${source_site}_${target_site} -dm bash -c "rsync -auv $source_files_folder $target:$target_files_folder"
 
 source_brand_files_folder="${source_root}/sites/g/files/$brand_code"
-target_brand_files_folder="${target_root}/sites/g/files/$brand_code"
+target_brand_files_folder="${target_root}/sites/g/files/"
 screen -S rsync_brand_${source_site}_${target_site} -dm bash -c "rsync -auv $source_brand_files_folder $target:$target_brand_files_folder"
 
 echo
@@ -105,7 +101,7 @@ echo "Clearing caches for $target_site"
 ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cr"
 
 echo
-echo "Droppping and importing database again for $target_site"
+echo "Dropping and importing database again for $target_site"
 ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com sql-drop -y; drush -l $target_site.factory.alshaya.com sql-cli < /tmp/migrate/$source_site.sql"
 
 echo
@@ -121,10 +117,6 @@ ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com cset sim
 echo
 echo "Update Acquia Subscription"
 ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com ev \"(new \Drupal\acquia_connector\Subscription())->update();\""
-
-echo
-echo "Put copy online"
-ssh $target "cd $target_root; drush -l $target_site.factory.alshaya.com sset system.maintenance_mode FALSE"
 
 echo
 echo "Removing temp directories for sql dumps in source and target envs"
