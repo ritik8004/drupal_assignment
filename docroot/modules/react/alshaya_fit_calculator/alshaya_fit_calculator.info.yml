@@ -1,5 +1,5 @@
 name: Alshaya Fit Calculator
 type: module
-description: 'Module provides block for fit calculator'
+description: 'Provides a block for Fit calculator.'
 package: 'Alshaya'
 core: 8.x
