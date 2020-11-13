@@ -80,7 +80,7 @@ class Drupal {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function invokeApi(string $method, string $url, array $request_options = []) {
+  private function invokeApi(string $method, string $url, array $request_options = []) {
     $client = $this->drupalInfo->getDrupalApiClient();
 
     // Add language code in url.
