@@ -33,6 +33,12 @@ if [[ -z "$target_site" ]]; then
   exit
 fi
 
+# Remove trailing numbers to get exact site code.
+site_code=${source_site//[0-9]/}
+
+# Remove the last two characters which are always the country code.
+brand_code=${site_code%??}
+
 source_alias=`drush sa | grep "$source_env\$"`
 if [[ -z "$source_alias" ]]; then
   echo "Invalid source env $source_env"
@@ -64,8 +70,16 @@ echo "Target folder $target_files_folder"
 
 rsync -auv $source_files_folder $target:$target_files_folder
 
+source_brand_files_folder="${source_root}/sites/g/files/$brand_code"
+target_brand_files_folder="${target_root}/sites/g/files/$brand_code"
+rsync -auv $source_brand_files_folder $target:$target_brand_files_folder
+
 echo
 echo "Copying settings folder from source stack to target stack"
 scp -r ~/settings $target:/home/$target_stack/
+
+echo
+echo "Copying apple pay folder from source stack to target stack"
+scp -r ~/apple-pay-resources $target:/home/$target_stack/
 
 echo
