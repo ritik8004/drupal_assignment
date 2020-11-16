@@ -100,3 +100,26 @@ function alshaya_mobile_app_path_update($path) {
     $mobileAppSettings->set('static_page_mappings.' . $pageKey, ltrim($path['alias'], '/'))->save();
   }
 }
+
+/**
+ * Implememts hook_options_list_resource_response_alter().
+ */
+function alshaya_mobile_app_options_list_resource_response_alter(&$data) {
+  $options = array_keys($data['options_list']);
+  $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
+  foreach ($options as $option_name) {
+    foreach ($data['options_list'][$option_name] ?? [] as $option_name_key => $brands_list) {
+      foreach ($brands_list['options_markup']['#option']['terms'] ?? [] as $term_list_key => $term_list) {
+        if ($brands_list['group'] ?? NULL) {
+          foreach ($term_list ?? [] as $term_key => $term) {
+            $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['deep_link'] = $mobile_app_utility->getDeepLinkForProductListProductOption($term['url']);
+          }
+        }
+        else {
+          // Here $term_list is actually a single term since there is no grouping.
+          $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key]['deep_link'] = $mobile_app_utility->getDeepLinkForProductListProductOption($term_list['url']);
+        }
+      }
+    }
+  }
+}
