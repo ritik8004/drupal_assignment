@@ -43,6 +43,14 @@ class AlshayaSpcStockHelper {
   public function refreshStockForSkus(array $skus) {
     foreach ($skus as $sku) {
       if ($sku_entity = SKU::loadFromSku($sku)) {
+        $plugin = $sku_entity->getPluginInstance();
+        $stock = $plugin->getStock($sku);
+
+        if ($stock === 0) {
+          $response['stock'][$sku] = FALSE;
+          continue;
+        }
+
         try {
           $statuses = $this->refreshStock($sku_entity);
           foreach ($statuses as $sku => $status) {
