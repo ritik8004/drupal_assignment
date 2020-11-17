@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Cache\AppointmentJsonResponse;
 use App\Service\Drupal\Drupal;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,7 +12,7 @@ use App\Helper\APIServicesUrls;
 use App\Helper\XmlAPIHelper;
 
 /**
- * Class ClientServices.
+ * Class Client Services.
  */
 class ClientServices {
   /**
@@ -130,7 +131,7 @@ class ClientServices {
         '@operation' => $request_content['clientExternalId'] ? 'updated' : 'inserted',
       ]);
 
-      return new JsonResponse($clientExternalId);
+      return new AppointmentJsonResponse($clientExternalId);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while @operation client. Message: @message, Data: @params', [
@@ -195,7 +196,7 @@ class ClientServices {
         ];
       }
 
-      return new JsonResponse($clientData);
+      return new AppointmentJsonResponse($clientData);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching client details. Message: @message, User: @user', [

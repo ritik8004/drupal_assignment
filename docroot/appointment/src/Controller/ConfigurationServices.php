@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Cache\AppointmentJsonResponse;
 use App\Cache\Cache;
 use App\Translation\TranslationHelper;
 use Psr\Log\LoggerInterface;
@@ -13,7 +14,7 @@ use App\Helper\XmlAPIHelper;
 use App\Helper\Helper;
 
 /**
- * Class ConfigurationServices.
+ * Class Configuration Services.
  */
 class ConfigurationServices {
   /**
@@ -101,7 +102,7 @@ class ConfigurationServices {
       $langcode = $request->query->get('langcode');
       $item = $this->cache->getItem('programs', $langcode);
       if ($item) {
-        return new JsonResponse($item);
+        return new AppointmentJsonResponse($item, TRUE);
       }
     }
     catch (\ErrorException $e) {
@@ -136,7 +137,7 @@ class ConfigurationServices {
       // Set cache.
       $this->cache->setItem('programs', $programData, $langcode);
 
-      return new JsonResponse($programData);
+      return new AppointmentJsonResponse($programData, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting programs. Message: @message', [
@@ -168,7 +169,7 @@ class ConfigurationServices {
       // Get Activities from cache.
       $item = $this->cache->getItem('activities_' . $program, $langcode);
       if ($item) {
-        return new JsonResponse($item);
+        return new AppointmentJsonResponse($item, TRUE);
       }
 
       $param = [
@@ -195,7 +196,7 @@ class ConfigurationServices {
       // Set activities cache.
       $this->cache->setItem('activities_' . $program, $activityData, $langcode);
 
-      return new JsonResponse($activityData);
+      return new AppointmentJsonResponse($activityData, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting activities. Message: @message', [
@@ -271,7 +272,7 @@ class ConfigurationServices {
         // Return all stores from cache.
         $items = $this->cache->getItem('stores', $langcode);
         if ($items) {
-          return new JsonResponse($items);
+          return new AppointmentJsonResponse($items);
         }
       }
 
@@ -314,7 +315,7 @@ class ConfigurationServices {
         $this->cache->setItem('stores', $storesData, $langcode);
       }
 
-      return new JsonResponse($storesData);
+      return new AppointmentJsonResponse($storesData);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting stores. Message: @message', [
@@ -391,7 +392,7 @@ class ConfigurationServices {
 
       $item = $this->cache->getItem('location_' . $locationExternalId, $langcode);
       if ($item) {
-        return new JsonResponse($item);
+        return new AppointmentJsonResponse($item, TRUE);
       }
 
       $param = [
@@ -411,7 +412,7 @@ class ConfigurationServices {
       );
 
       $this->cache->setItem('location_' . $locationExternalId, $result, $langcode);
-      return new JsonResponse($result);
+      return new AppointmentJsonResponse($result, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching location details. Message: @message', [
@@ -442,7 +443,7 @@ class ConfigurationServices {
       if ($langcode == 'en') {
         $translations = array_flip($translations);
       }
-      return new JsonResponse($translations);
+      return new AppointmentJsonResponse($translations, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while getting translation. Message: @message', [

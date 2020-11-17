@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Cache\AppointmentJsonResponse;
 use App\Helper\APIServicesUrls;
 use App\Cache\Cache;
 use App\Service\Drupal\Drupal;
@@ -15,7 +16,7 @@ use App\Helper\ClientHelper;
 use App\Helper\MessagingHelper;
 
 /**
- * Class AppointmentServices.
+ * Class Appointment Services.
  */
 class AppointmentServices {
   /**
@@ -151,7 +152,7 @@ class AppointmentServices {
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getAvailableNDateTimeSlotsStartFromDate', [$params]);
 
-      return new JsonResponse($result);
+      return new AppointmentJsonResponse($result);
 
     }
     catch (\Exception $e) {
@@ -250,7 +251,7 @@ class AppointmentServices {
           '@userid' => $userId,
         ]);
 
-        return new JsonResponse($bookingId);
+        return new AppointmentJsonResponse($bookingId);
       }
 
       // Rebook appointment.
@@ -307,7 +308,7 @@ class AppointmentServices {
         '@userid' => $userId,
       ]);
 
-      return new JsonResponse($bookingId);
+      return new AppointmentJsonResponse($bookingId);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while booking appointment. Message: @message , Data: @params', [
@@ -399,7 +400,7 @@ class AppointmentServices {
 
       $this->cache->setItemWithTags($cacheKey, $result, $cacheKey, $langcode);
 
-      return new JsonResponse($result);
+      return new AppointmentJsonResponse($result);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching appointments. Message: @message, Client: @client, User: @user', [
@@ -440,7 +441,7 @@ class AppointmentServices {
       $langcode = $request->query->get('langcode');
       $item = $this->cache->getItemByTagAware($cacheKey, $langcode);
       if ($item) {
-        return new JsonResponse($item);
+        return new AppointmentJsonResponse($item);
       }
 
       $param = [
@@ -494,7 +495,7 @@ class AppointmentServices {
       $tag = 'appointment_' . $appointmentId;
       $this->cache->setItemWithTags($cacheKey, $companions, $tag, $langcode);
 
-      return new JsonResponse($companions);
+      return new AppointmentJsonResponse($companions);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching companion details. Message: @message, Appointment: @appointment, User: @user', [
@@ -564,7 +565,7 @@ class AppointmentServices {
         '@userid' => $userId,
       ]);
 
-      return new JsonResponse($result);
+      return new AppointmentJsonResponse($result);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while deleting an appointment. Message: @message, Appointment: @appointment, User: @user', [
@@ -609,7 +610,7 @@ class AppointmentServices {
       $cacheKey = 'questions';
       $item = $this->cache->getItem($cacheKey);
       if ($item) {
-        return new JsonResponse($item);
+        return new AppointmentJsonResponse($item, TRUE);
       }
       $client = $this->apiHelper->getSoapClient($this->serviceUrl);
       $result = $client->__soapCall('getAppointmentQuestionsByCriteria', [$param]);
@@ -628,7 +629,7 @@ class AppointmentServices {
       }
 
       $this->cache->setItem($cacheKey, $questionsData);
-      return new JsonResponse($questionsData);
+      return new AppointmentJsonResponse($questionsData, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while fetching questions. Message: @message', [
@@ -679,7 +680,7 @@ class AppointmentServices {
         if (property_exists($item->return, 'appointment')) {
           $clientExternalId = $item->return->appointment->clientExternalId;
           if ($this->apiHelper->checkifBelongstoUser($user['email']) == $clientExternalId) {
-            return new JsonResponse($item);
+            return new AppointmentJsonResponse($item);
           }
         }
       }
@@ -702,7 +703,7 @@ class AppointmentServices {
           );
 
           $this->cache->setItemWithTags($cacheKey, $appointmentData, $cacheKey, $langcode);
-          return new JsonResponse($appointmentData);
+          return new AppointmentJsonResponse($appointmentData);
         }
       }
 
