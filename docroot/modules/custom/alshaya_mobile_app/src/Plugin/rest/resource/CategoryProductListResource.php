@@ -286,10 +286,12 @@ class CategoryProductListResource extends ResourceBase {
     $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(TRUE);
     $dy_banner = $term->get('field_dy_banner')->getString();
     $default_dy_banner = $this->configFactory->get('alshaya_mobile_app.settings')->get('dy_plp_banner_name');
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory(NULL, $term->id());
     return [
       'id' => (int) $term->id(),
       'label' => $term->label(),
       'path' => $term_url->getGeneratedUrl(),
+      'department_name' => str_replace('>', '|', $term_details['hierarchy']),
       'deeplink' => $this->mobileAppUtility->getDeepLink($term),
       'banner' => $term->get('field_promo_banner_for_mobile')->value ? [] : $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile'),
       'description' => ($desc = $term->get('description')->getValue()) && !empty($desc[0]['value'])
