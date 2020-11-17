@@ -67,11 +67,19 @@ class AlshayaSpcStockHelper {
 
         if ($stock === 0) {
           $response['stock'][$sku] = FALSE;
+          $this->logger->info('Refresh Stock skipped for SKU: @sku.', [
+            '@sku' => $sku,
+          ]);
           continue;
         }
 
         try {
           $statuses = $this->refreshStock($sku_entity);
+
+          $this->logger->info('Refresh Stock triggered for SKU: @sku.', [
+            '@sku' => $sku,
+          ]);
+
           foreach ($statuses as $sku => $status) {
             $response['stock'][$sku] = $status;
           }
@@ -103,30 +111,18 @@ class AlshayaSpcStockHelper {
 
     // Refresh current sku stock.
     $sku_entity->refreshStock();
-    $sku = $sku_entity->getSku();
-
-    $this->logger->info('Refresh Stock triggered for SKU: @sku.', [
-      '@sku' => $sku,
-    ]);
-
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
-    $stock_status[$sku] = $plugin->isProductInStock($sku_entity);
-    $parent_sku = $parent->getSku();
+    $stock_status[$sku_entity->getSku()] = $plugin->isProductInStock($sku_entity);
     // Refresh parent stock once if exists for cart items.
-    if ($parent instanceof SKU && !in_array($parent_sku, $processed_parents)) {
-      $processed_parents[] = $parent_sku;
+    if ($parent instanceof SKU && !in_array($parent->getSku(), $processed_parents)) {
+      $processed_parents[] = $parent->getSku();
       $parent->refreshStock();
-
-      $this->logger->info('Refresh Stock triggered for Parent SKU: @parent_sku.', [
-        '@parent_sku' => $parent_sku,
-      ]);
-
       $plugin = $parent->getPluginInstance();
       $parent_in_stock = $plugin->isProductInStock($parent);
-      if ($stock_status[$sku]
+      if ($stock_status[$sku_entity->getSku()]
         && !$parent_in_stock) {
-        $stock_status[$sku] = FALSE;
+        $stock_status[$sku_entity->getSku()] = FALSE;
       }
     }
 
