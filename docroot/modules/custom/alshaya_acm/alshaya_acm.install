@@ -16,6 +16,17 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Add settings to display upsell and related product on pdp.
+ */
+function alshaya_acm_update_8017() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['alshaya_acm.settings'], 'alshaya_acm');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Allow product category mapping API in shield.
  */
 function alshaya_acm_update_8016() {
