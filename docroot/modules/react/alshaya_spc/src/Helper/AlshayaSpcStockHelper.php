@@ -32,15 +32,6 @@ class AlshayaSpcStockHelper {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('logger.factory')
-    );
-  }
-
-  /**
    * Refresh stock cache and Drupal cache of products in cart.
    *
    * @param mixed $cart
@@ -112,28 +103,30 @@ class AlshayaSpcStockHelper {
 
     // Refresh current sku stock.
     $sku_entity->refreshStock();
+    $sku = $sku_entity->getSku();
 
-    $this->logger->info('Refresh Stock triggered for SKU entity: @sku_entity.', [
-      '@sku_entity' => json_encode($sku_entity),
+    $this->logger->info('Refresh Stock triggered for SKU: @sku.', [
+      '@sku' => $sku,
     ]);
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
-    $stock_status[$sku_entity->getSku()] = $plugin->isProductInStock($sku_entity);
+    $stock_status[$sku] = $plugin->isProductInStock($sku_entity);
+    $parent_sku = $parent->getSku();
     // Refresh parent stock once if exists for cart items.
-    if ($parent instanceof SKU && !in_array($parent->getSku(), $processed_parents)) {
-      $processed_parents[] = $parent->getSku();
+    if ($parent instanceof SKU && !in_array($parent_sku, $processed_parents)) {
+      $processed_parents[] = $parent_sku;
       $parent->refreshStock();
 
-      $this->logger->info('Refresh Stock triggered for SKU entity: @sku_entity.', [
-        '@sku_entity' => json_encode($parent),
+      $this->logger->info('Refresh Stock triggered for Parent SKU: @parent_sku.', [
+        '@parent_sku' => $parent_sku,
       ]);
 
       $plugin = $parent->getPluginInstance();
       $parent_in_stock = $plugin->isProductInStock($parent);
-      if ($stock_status[$sku_entity->getSku()]
+      if ($stock_status[$sku]
         && !$parent_in_stock) {
-        $stock_status[$sku_entity->getSku()] = FALSE;
+        $stock_status[$sku] = FALSE;
       }
     }
 
