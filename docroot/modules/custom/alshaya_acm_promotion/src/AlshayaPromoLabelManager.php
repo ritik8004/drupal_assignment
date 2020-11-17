@@ -759,7 +759,8 @@ class AlshayaPromoLabelManager {
         ],
         '#promo_url' => $url,
         '#promo_code' => $coupon,
-        '#free_gift_sku' => $free_sku->getSku(),
+        '#free_sku_code' => $free_sku->getSku(),
+        '#free_sku_type' => $free_sku->bundle(),
         '#image' => $free_sku_image ?? NULL,
       ];
 
@@ -807,6 +808,7 @@ class AlshayaPromoLabelManager {
         '#theme' => 'free_gift_promotions',
         '#free_sku_entity_id' => $free_sku_entity->id(),
         '#free_sku_code' => $free_sku_entity->getSku(),
+        '#free_sku_type' => $free_sku_entity->bundle(),
         '#free_sku_title' => $free_sku_title,
         '#free_sku_title_raw' => $free_sku_entity->get('name')->getString(),
         '#promo_url' => $url,

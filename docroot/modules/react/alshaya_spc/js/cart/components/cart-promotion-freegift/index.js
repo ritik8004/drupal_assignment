@@ -24,9 +24,9 @@ const CartPromotionFreeGift = ({
     <div className="free-gift-promo">
       <div className="gift-message">
         {Drupal.t('Click')}
-        <span className="coupon-code" onClick={() => selectFreeGift(promo.coupon, promo['#free_gift_sku'])}>{promo.coupon}</span>
+        <span className="coupon-code" onClick={() => selectFreeGift(promo.coupon, promo['#free_sku_code'], promo['#free_sku_type'])}>{promo.coupon}</span>
         {Drupal.t('to get a Free Gift')}
-        <span className="free-gift-title" onClick={(e) => openCartFreeGiftModal(e, promo.coupon, promo['#free_gift_sku'])}>
+        <span className="free-gift-title" onClick={(e) => openCartFreeGiftModal(e, promo.coupon, promo['#free_sku_code'], promo['#free_sku_type'])}>
           {promo.promo_title}
         </span>
         <a

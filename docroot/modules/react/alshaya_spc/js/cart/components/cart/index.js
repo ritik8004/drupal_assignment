@@ -155,18 +155,25 @@ export default class Cart extends React.Component {
   /**
    * Select and add free gift item.
    */
-  selectFreeGift = (codeValue, sku) => {
+  selectFreeGift = (codeValue, sku, type) => {
     if (codeValue !== undefined) {
       document.getElementById('promo-code').value = codeValue.trim();
       document.getElementById('promo-action-button').click();
       const url = Drupal.url(`rest/v1/product/${sku}`);
       axios.get(url).then((response) => {
         if (response.data.length !== 0) {
-          const configurableValues = response.data.configurable_values;
+          let configurableValues = response.data.configurable_values;
+          let variant_sku = '';
+          if (type === 'configurable') {
+            variant_sku = response.data.variants[0].sku;
+            configurableValues = response.data.variants[0].configurable_values;
+          }
           const postData = {
             promo: codeValue,
             sku,
             configurable_values: configurableValues,
+            variant: variant_sku,
+            type,
           };
           axios.post('/middleware/public/select-free-gift', {
             headers: {
@@ -188,7 +195,7 @@ export default class Cart extends React.Component {
   /**
    * Add class to body and trigger free gift modal.
    */
-  openCartFreeGiftModal = (e, coupon, sku) => {
+  openCartFreeGiftModal = (e, coupon, sku, type) => {
     const body = document.querySelector('body');
     body.classList.add('free-gifts-modal-overlay');
     document.getElementById('spc-free-gift').click();
@@ -196,6 +203,14 @@ export default class Cart extends React.Component {
       const freeGiftLink = document.getElementById('select-simple-free-gift');
       if (freeGiftLink !== null) {
         freeGiftLink.addEventListener('click', () => {
+          this.selectFreeGift(coupon, sku);
+          body.classList.remove('free-gifts-modal-overlay');
+        });
+      }
+      const addFreeGiftButton = document.getElementsByClassName('select-free-gift')[1];
+      if (addFreeGiftButton.length !== undefined) {
+        freeGiftLink.addEventListener('click', (e) => {
+          e.preventDefault();
           this.selectFreeGift(coupon, sku);
           body.classList.remove('free-gifts-modal-overlay');
         });

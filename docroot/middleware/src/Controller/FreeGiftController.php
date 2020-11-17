@@ -76,6 +76,7 @@ class FreeGiftController {
     $sku = $data['sku'];
     $promo_code = $data['promo'];
     $options = $data['configurable_values'];
+    $variant = $data['variant'];
 
     if (empty($sku) || empty($promo_code)) {
       $this->logger->error('Missing request header parameters. SKU: @sku, Promo: @promo_code', [
@@ -110,7 +111,7 @@ class FreeGiftController {
 
     $quantity = 1;
     // Update cart with free gift.
-    $updated_cart = $this->cart->addUpdateRemoveItem($sku, $quantity, CartActions::CART_ADD_ITEM, $options, null);
+    $updated_cart = $this->cart->addUpdateRemoveItem($sku, $quantity, CartActions::CART_ADD_ITEM, $options, $variant);
 
     return new JsonResponse($updated_cart);
   }
