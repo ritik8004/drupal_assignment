@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Helper;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Class Alshaya Spc Stock Helper.
@@ -11,6 +12,33 @@ use Drupal\acq_sku\Entity\SKU;
  * @package Drupal\alshaya_spc\Helper
  */
 class AlshayaSpcStockHelper {
+  /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
+   * AlshayaSpcStockHelper constructor.
+   *
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Factory service.
+   */
+  public function __construct(
+    LoggerChannelFactoryInterface $logger_factory
+  ) {
+    $this->logger = $logger_factory->get('alshaya_spc');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('logger.factory')
+    );
+  }
 
   /**
    * Refresh stock cache and Drupal cache of products in cart.
@@ -84,6 +112,11 @@ class AlshayaSpcStockHelper {
 
     // Refresh current sku stock.
     $sku_entity->refreshStock();
+
+    $this->logger->info('Refresh Stock triggered for SKU entity: @sku_entity.', [
+      '@sku_entity' => json_encode($sku_entity),
+    ]);
+
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
     $stock_status[$sku_entity->getSku()] = $plugin->isProductInStock($sku_entity);
@@ -91,6 +124,11 @@ class AlshayaSpcStockHelper {
     if ($parent instanceof SKU && !in_array($parent->getSku(), $processed_parents)) {
       $processed_parents[] = $parent->getSku();
       $parent->refreshStock();
+
+      $this->logger->info('Refresh Stock triggered for SKU entity: @sku_entity.', [
+        '@sku_entity' => json_encode($parent),
+      ]);
+
       $plugin = $parent->getPluginInstance();
       $parent_in_stock = $plugin->isProductInStock($parent);
       if ($stock_status[$sku_entity->getSku()]
