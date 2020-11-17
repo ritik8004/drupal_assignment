@@ -75,11 +75,6 @@ class AlshayaSpcStockHelper {
 
         try {
           $statuses = $this->refreshStock($sku_entity);
-
-          $this->logger->info('Refresh Stock triggered for SKU: @sku.', [
-            '@sku' => $sku,
-          ]);
-
           foreach ($statuses as $sku => $status) {
             $response['stock'][$sku] = $status;
           }
