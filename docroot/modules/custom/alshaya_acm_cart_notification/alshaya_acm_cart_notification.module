@@ -24,6 +24,7 @@ function alshaya_acm_cart_notification_form_sku_base_form_alter(&$form, FormStat
   $form['#attached']['drupalSettings']['show_crosssell_as_matchback'] = (bool) \Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback');
   $form['#attached']['drupalSettings']['display_upsell'] = (bool) \Drupal::config('alshaya_acm.settings')->get('display_upsell');
   $form['#attached']['drupalSettings']['display_related'] = (bool) \Drupal::config('alshaya_acm.settings')->get('display_related');
+  $form['#cache']['tags'] = \Drupal::config('alshaya_acm.settings')->getCacheTags();
 }
 
 /**
