@@ -1,6 +1,6 @@
 alshaya_acm.settings:
   type: config_object
-  label: 'ACM settings'
+  label: 'Alshaya ACM settings'
   mapping:
     api_cache_time:
       type: integer
