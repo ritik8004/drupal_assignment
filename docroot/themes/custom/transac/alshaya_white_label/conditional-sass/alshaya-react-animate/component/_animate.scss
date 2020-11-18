@@ -123,13 +123,11 @@ body:not(.ie) {
     0% {
       opacity: 1;
       height: auto;
-      // transform: translateY(0);
     }
 
     to {
       opacity: 0;
       height: auto;
-      // transform: translateY(-20px);
       transform: translate3d(0, -100%, 0);
     }
   }
