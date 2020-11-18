@@ -490,6 +490,9 @@ class AlshayaSpcController extends ControllerBase {
       'value' => $this->t('Delivery Information is incomplete. Please update and try again.'),
     ];
 
+    $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
+    $strings = array_merge($strings, _alshaya_aura_static_strings());
+
     $build = [
       '#theme' => 'spc_checkout',
       '#areas' => $areas,

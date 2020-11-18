@@ -1,11 +1,16 @@
 import React from 'react';
 import SectionTitle from '../../../utilities/section-title';
 import ConditionalView from '../../../common/components/conditional-view';
-import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getAuraDetailsDefaultState } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { getAllAuraStatus, getUserDetails } from '../../../../../alshaya_aura_react/js/utilities/helper';
 import AuraNotLinkedNoDataCheckout from './components/not-linked-no-data-checkout';
 import AuraLinkedVerifiedCheckout from './components/linked-verified-checkout';
 import AuraLinkedNotVerifiedCheckout from './components/linked-not-verified-checkout';
+import AuraNotLinkedDataCheckout from './components/not-linked-data-checkout';
+import Loading from '../../../utilities/loading';
+import {
+  getCustomerDetails,
+} from '../../../../../alshaya_aura_react/js/utilities/header_helper';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -23,8 +28,22 @@ class AuraCheckoutRewards extends React.Component {
     // Alternatively, it might be just a simple sum of points for each product
     // in cart.
 
-    // Event listener to listen to customer data API call event.
+    const {
+      loyaltyStatus,
+      tier,
+    } = this.state;
+
+    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
     document.addEventListener('customerDetailsFetched', this.updateStates, false);
+
+    // No API call to fetch points for anonymous users or user with
+    // loyalty status APC_NOT_LINKED_NOT_U.
+    if (!getUserDetails().id || loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+      this.setState({
+        wait: false,
+      });
+      return;
+    }
 
     // Get customer details.
     getCustomerDetails(tier, loyaltyStatus);
@@ -38,19 +57,6 @@ class AuraCheckoutRewards extends React.Component {
       ...states,
     });
   };
-
-  // updateStates = (data) => {
-  //   const { stateValues } = data.detail;
-  //   const states = { ...stateValues };
-
-  //   if (stateValues.loyaltyStatus === getAllAuraStatus().APC_LINKED_NOT_VERIFIED) {
-  //     states.signUpComplete = true;
-  //   }
-
-  //   this.setState({
-  //     ...states,
-  //   });
-  // }
 
   getPointsString = (points) => {
     const pointsString = `${points} ${Drupal.t('points')}`;
@@ -85,6 +91,7 @@ class AuraCheckoutRewards extends React.Component {
       expiringPoints,
       expiryDate,
       loyaltyStatus,
+      cardNumber,
     } = this.state;
 
     if (wait) {
@@ -116,6 +123,14 @@ class AuraCheckoutRewards extends React.Component {
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
           <AuraLinkedNotVerifiedCheckout
             pointsInAccount={pointsInAccount}
+            pointsToEarn={pointsToEarn}
+          />
+        </ConditionalView>
+
+        {/* Registered with Unlinked Loyalty Card */}
+        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA}>
+          <AuraNotLinkedDataCheckout
+            cardNumber={cardNumber}
             pointsToEarn={pointsToEarn}
           />
         </ConditionalView>
