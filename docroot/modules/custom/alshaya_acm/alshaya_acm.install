@@ -24,13 +24,7 @@ function alshaya_acm_update_8017() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['alshaya_acm.settings'],
-    'alshaya_acm',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-  $manager->updateConfigs(
-    ['alshaya_acm.cart_config'],
+    ['alshaya_acm.settings', 'alshaya_acm.cart_config'],
     'alshaya_acm',
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
