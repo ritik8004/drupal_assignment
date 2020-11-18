@@ -1,11 +1,13 @@
 diff --git a/google_tag.services.yml b/google_tag.services.yml
-index b5b5251..41c2ccd 100644
+index b5b5251..6d5deb9 100644
 --- a/google_tag.services.yml
 +++ b/google_tag.services.yml
-@@ -2,3 +2,9 @@ services:
+@@ -1,4 +1,10 @@
+ services:
    google_tag.container_manager:
      class: Drupal\google_tag\Entity\ContainerManager
-     arguments: ['@entity_type.manager', '@config.factory', '@file_system', '@cache.data', '@messenger', '@logger.factory']
+-    arguments: ['@entity_type.manager', '@config.factory', '@file_system', '@cache.data', '@messenger', '@logger.factory']
++    arguments: ['@entity_type.manager', '@config.factory', '@file_system', '@cache.google_tag', '@messenger', '@logger.factory']
 +  cache.google_tag:
 +    class: Drupal\Core\Cache\CacheBackendInterface
 +    tags:
@@ -13,18 +15,18 @@ index b5b5251..41c2ccd 100644
 +    factory: cache_factory:get
 +    arguments: [google_tag]
 diff --git a/src/Entity/Container.php b/src/Entity/Container.php
-index e2d5d60..1f74513 100644
+index e2d5d60..8d8684b 100644
 --- a/src/Entity/Container.php
 +++ b/src/Entity/Container.php
-@@ -8,6 +8,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
- use Drupal\Core\Config\Entity\ConfigEntityInterface;
- use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
- use Drupal\Core\StringTranslation\StringTranslationTrait;
-+use Drupal\Core\Cache\Cache;
+@@ -3,6 +3,7 @@
+ namespace Drupal\google_tag\Entity;
  
- /**
-  * Defines the container configuration entity.
-@@ -581,7 +582,19 @@ EOS;
+ use Drupal\Component\Render\FormattableMarkup;
++use Drupal\Core\Cache\Cache;
+ use Drupal\Core\Condition\ConditionPluginCollection;
+ use Drupal\Core\Config\Entity\ConfigEntityBase;
+ use Drupal\Core\Config\Entity\ConfigEntityInterface;
+@@ -581,7 +582,21 @@ EOS;
     *   The tag array.
     */
    public function inlineTag($type, $weight) {
@@ -32,36 +34,31 @@ index e2d5d60..1f74513 100644
 +    // Use google_tag cache bin to get the contents.
 +    // Note: File operations are generally heavier than cache operations and
 +    // additionally we always have an option of memcache on top of this.
-+    $cid = 'google_tag_inline_contents';
-+
-+    if ($cache = $this->getCacheBackend()->get($cid)) {
-+      $contents = $cache->data;
++    if (($contents = $this->getSnippetContents($type))) {
++      // Do nothing.
 +    }
 +    else {
-+      $contents = $this->getSnippetContents($type);
-+
-+      $this->getCacheBackend()->set($cid, $contents, CACHE::PERMANENT, $this->getCacheTags());
++      $uri = $this->snippetURI($type);
++      $url = \Drupal::service('file_system')->realpath($uri);
++      if ($url) {
++        $contents = @file_get_contents($url);
++        \Drupal::service('cache.google_tag')->set($this->snippetCid($type), $contents, Cache::PERMANENT, $this->getCacheTags());
++      }
 +    }
++
      $attachment = [
        $contents ? [
          '#type' => 'html_tag',
-@@ -610,14 +623,27 @@ EOS;
-     // Note: depending on the theme, this may not place the snippet immediately
-     // after the body tag but should be close and it can be altered.
+@@ -617,7 +632,27 @@ EOS;
+     // As markup, core removes the 'style' attribute from the noscript snippet.
+     // With the inline template type, core does not alter the noscript snippet.
  
--    // @see https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!theme.api.php/group/theme_render/8.2.x
--    // The markup is passed through \Drupal\Component\Utility\Xss::filterAdmin()
--    // which strips known vectors while allowing a permissive list of HTML tags
--    // that are not XSS vectors. (e.g., <script> and <style> are not allowed.)
--    // As markup, core removes the 'style' attribute from the noscript snippet.
--    // With the inline template type, core does not alter the noscript snippet.
+-    $contents = $this->getSnippetContents($type);
 +    // Use google_tag cache bin to get the contents.
 +    // Note: File operations are generally heavier than cache operations and
 +    // additionally we always have an option of memcache on top of this.
-+    $cid = 'google_tag_noscript_contents';
-+
-+    if ($cache = $this->getCacheBackend()->get($cid)) {
-+      $contents = $cache->data;
++    if (($contents = $this->getSnippetContents($type))) {
++      // Do nothing.
 +    }
 +    else {
 +      // @see https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Render!theme.api.php/group/theme_render/8.2.x
@@ -70,29 +67,100 @@ index e2d5d60..1f74513 100644
 +      // that are not XSS vectors. (e.g., <script> and <style> are not allowed.)
 +      // As markup, core removes the 'style' attribute from the noscript snippet.
 +      // With the inline template type, core does not alter the noscript snippet.
-+
-+      $contents = $this->getSnippetContents($type);
-+
-+      $this->getCacheBackend()->set($cid, $contents, CACHE::PERMANENT, $this->getCacheTags());
++      $uri = $this->snippetURI($type);
++      $url = \Drupal::service('file_system')->realpath($uri);
++      if ($url) {
++        $contents = @file_get_contents($url);
++        \Drupal::service('cache.google_tag')->set($this->snippetCid($type), $contents, Cache::PERMANENT, $this->getCacheTags());
++      }
 +    }
- 
--    $contents = $this->getSnippetContents($type);
++
      $attachment = $contents ? [
        "google_tag_{$type}_tag__{$this->id()}" => [
          '#type' => 'inline_template',
-@@ -724,4 +750,14 @@ EOS;
-     return $this->conditionPluginManager;
+@@ -638,7 +673,7 @@ EOS;
+    *   The snippet contents.
+    */
+   public function getSnippetContents($type) {
+-    $cache = \Drupal::service('cache.data')->get($this->snippetCid($type));
++    $cache = \Drupal::service('cache.google_tag')->get($this->snippetCid($type));
+     return $cache ? $cache->data : '';
    }
  
-+  /**
-+   * Get cache backend for Google Tag data.
-+   *
-+   * @return \Drupal\Core\Cache\CacheBackendInterface
-+   *   Cache Backend.
-+   */
-+  protected function getCacheBackend() {
-+    return \Drupal::cache('google_tag');
-+  }
+diff --git a/src/Entity/ContainerManager.php b/src/Entity/ContainerManager.php
+index 80fe83e..fffeeb8 100644
+--- a/src/Entity/ContainerManager.php
++++ b/src/Entity/ContainerManager.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\google_tag\Entity;
+ 
+ // use Drupal\google_tag\Entity\ContainerManagerInterface;
++use Drupal\Core\Cache\Cache;
+ use Drupal\Core\Cache\CacheBackendInterface;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+ use Drupal\Core\Config\Entity\ConfigEntityInterface;
+@@ -77,11 +78,6 @@ class ContainerManager implements ContainerManagerInterface {
+    * {@inheritdoc}
+    */
+   public function createAssets(ConfigEntityInterface $container) {
+-    $include_script_as_file = $this->config->get('include_file');
+-    if (!$include_script_as_file) {
+-      return $this->saveSnippets($container);
+-    }
+-
+     $result = TRUE;
+     $directory = $container->snippetDirectory();
+     if (!is_dir($directory) || !_google_tag_is_writable($directory) || !_google_tag_is_executable($directory)) {
+@@ -103,22 +99,14 @@ class ContainerManager implements ContainerManagerInterface {
+    * {@inheritdoc}
+    */
+   public function saveSnippets(ConfigEntityInterface $container) {
+-    $include_script_as_file = $this->config->get('include_file');
+     // Save the altered snippets after hook_google_tag_snippets_alter().
+     $result = TRUE;
+     $snippets = $container->snippets();
+     foreach ($snippets as $type => $snippet) {
+-      if ($include_script_as_file && $type != 'noscript') {
+-        // Write to file.
+-        $uri = $container->snippetURI($type);
+-        $path = $this->fileSystem->saveData($snippet, $uri, FileSystemInterface::EXISTS_REPLACE);
+-        $result = !$path ? FALSE : $result;
+-      }
+-      else {
+-        // Write to cache (noscript is always inline).
+-        $cid = $container->snippetCid($type);
+-        $this->cache->set($cid, $snippet, CacheBackendInterface::CACHE_PERMANENT, $container->getCacheTags());
+-      }
++      $uri = $container->snippetURI($type);
++      $path = $this->fileSystem->saveData($snippet, $uri, FileSystemInterface::EXISTS_REPLACE);
++      $result = !$path ? FALSE : $result;
++      $this->cache->set($container->snippetCid($type), $snippet, Cache::PERMANENT, $container->getCacheTags());
+     }
+     $args = ['@count' => count($snippets), '%container' => $container->get('label')];
+     if (!$result) {
+@@ -290,23 +278,18 @@ class ContainerManager implements ContainerManagerInterface {
+    * {@inheritdoc}
+    */
+   public function findAssets(ConfigEntityInterface $container) {
+-    $include_script_as_file = $this->config->get('include_file');
+     $include_classes = $container->get('include_classes');
+     $types = $include_classes ? ['data_layer', 'script', 'noscript'] : ['script', 'noscript'];
+ 
+     foreach ($types as $type) {
+-      if ($include_script_as_file && $type != 'noscript') {
++      if (!$cache = $this->cache->get($container->snippetCid($type))) {
+         $uri = $container->snippetURI($type);
+         if (!is_file($uri)) {
+           return FALSE;
+         }
+       }
+-      else {
+-        if (!$cache = $this->cache->get($container->snippetCid($type))) {
+-          return FALSE;
+-        }
+-      }
+     }
 +
- }
+     return TRUE;
+   }
  
