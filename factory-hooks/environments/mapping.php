@@ -192,11 +192,27 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'mc_qa',
         'conductor' => 'mckw_dev2',
       ],
+      'dev2' => [
+        'magento' => 'mc_sit',
+        'conductor' => 'mckw_sit_dev2',
+      ],
+      'dev2' => [
+        'magento' => 'mc_oms_pprod',
+        'conductor' => 'mckw_oms_pprod',
+      ],
     ],
     'mcae' => [
       'dev2' => [
         'magento' => 'mc_uat',
         'conductor' => 'mcae_dev2',
+      ],
+      'dev2' => [
+        'magento' => 'mc_sit',
+        'conductor' => 'mcae_sit_dev2',
+      ],
+      'dev2' => [
+        'magento' => 'mc_oms_pprod',
+        'conductor' => 'mcae_oms_pprod',
       ],
       'local' => [
         'magento' => 'mc_uat',
@@ -207,6 +223,14 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev' => [
         'magento' => 'mc_qa',
         'conductor' => 'mcsa_dev',
+      ],
+      'dev2' => [
+        'magento' => 'mc_sit',
+        'conductor' => 'mcsa_sit_dev2',
+      ],
+      'dev2' => [
+        'magento' => 'mc_oms_pprod',
+        'conductor' => 'mcsa_oms_pprod',
       ],
     ],
     'pbkw' => [
@@ -248,17 +272,41 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'we_pprod',
         'conductor' => 'wekw_dev2',
       ],
+      'dev2' => [
+        'magento' => 'we_sit',
+        'conductor' => 'wekw_sit_dev2',
+      ],
+      'dev2' => [
+        'magento' => 'we_oms_uat',
+        'conductor' => 'wekw_oms_uat',
+      ],
     ],
     'wesa' => [
       'dev2' => [
         'magento' => 'we_pprod',
         'conductor' => 'wesa_dev2',
       ],
+      'dev2' => [
+        'magento' => 'we_sit',
+        'conductor' => 'wesa_sit_dev2',
+      ],
+      'dev2' => [
+        'magento' => 'we_oms_uat',
+        'conductor' => 'wesa_oms_uat',
+      ],
     ],
     'weae' => [
       'dev2' => [
         'magento' => 'we_pprod',
         'conductor' => 'weae_dev2',
+      ],
+      'dev2' => [
+        'magento' => 'we_sit',
+        'conductor' => 'weae_sit_dev2',
+      ],
+      'dev2' => [
+        'magento' => 'we_oms_uat',
+        'conductor' => 'weae_oms_uat',
       ],
     ],
     'aeokw' => [
