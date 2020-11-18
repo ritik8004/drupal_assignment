@@ -16,6 +16,7 @@ use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
 use Drupal\search_api\Query\ConditionGroup;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class Promotion Product List Resource.
@@ -271,7 +272,7 @@ class PromotionProductListResource extends ResourceBase {
         'rule_contexts' => '',
       ];
 
-      return $response;
+      return new JsonResponse($response);
     }
 
     throw new \Exception('No backend available to process this request.');

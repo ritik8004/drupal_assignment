@@ -431,9 +431,7 @@ class SkuInfoHelper {
    *   Return the generate url of the entity.
    */
   public function getEntityUrl($entity, $absolute = TRUE) {
-    return $entity->toUrl('canonical', ['absolute' => $absolute])
-      ->toString(TRUE)
-      ->getGeneratedUrl();
+    return $entity->toUrl('canonical', ['absolute' => $absolute])->toString(FALSE);
   }
 
   /**

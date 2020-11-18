@@ -15,7 +15,6 @@ use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
@@ -1137,103 +1136,85 @@ class SkuManager {
    *   Type of image required - plp or pdp.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
-   * @param string $channel
-   *   Whether web or mapp.
    *
    * @return array
    *   Array of media files.
    *
    * @todo: Use self::getLabelsData() to get data and prepare images.
    */
-  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE, string $channel = 'web') {
-    static $static_labels_cache = [];
+  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
+    $cache_key = 'sku_labels_' . $type;
+    $cache = $reset
+      ? NULL
+      : $this->productCacheManager->get($sku_entity, $cache_key);
 
-    $sku = $sku_entity->getSku();
-
-    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
-      return $static_labels_cache[$sku][$type];
+    if (isset($cache)) {
+      return $cache;
     }
 
-    $static_labels_cache[$sku][$type] = [];
-
+    $sku_labels = [];
     $labels_data = $this->getSkuLabel($sku_entity);
 
-    if (empty($labels_data)) {
-      return [];
-    }
-    else {
-      $image_key = $type . '_image';
-      $text_key = $type . '_image_text';
-      $position_key = $type . '_position';
+    $image_key = $type . '_image';
+    $text_key = $type . '_image_text';
+    $position_key = $type . '_position';
 
-      foreach ($labels_data as &$data) {
-        $row = [];
+    foreach ($labels_data ?? [] as &$data) {
+      $row = [];
 
-        // Check if label is available for desired type.
-        if (empty($data[$image_key])) {
+      // Check if label is available for desired type.
+      if (empty($data[$image_key])) {
+        continue;
+      }
+
+      // Check if label is currently active.
+      $from = strtotime($data['from']);
+      $to = strtotime($data['to']);
+
+      // First check if we have date filter.
+      if ($from > 0 && $to > 0) {
+        $now = REQUEST_TIME;
+
+        // Now, check if current date lies between from and to dates.
+        if ($from > $now || $to < $now) {
           continue;
         }
+      }
 
-        // Check if label is currently active.
-        $from = strtotime($data['from']);
-        $to = strtotime($data['to']);
+      $fid = $this->productLabelsCache->get($data[$image_key]);
 
-        // First check if we have date filter.
-        if ($from > 0 && $to > 0) {
-          $now = REQUEST_TIME;
-
-          // Now, check if current date lies between from and to dates.
-          if ($from > $now || $to < $now) {
-            continue;
-          }
+      if (empty($fid)) {
+        try {
+          // Prepare the File object when we access it the first time.
+          $fid = $this->downloadLabelsImage($sku_entity, $data, $image_key);
+          $this->productLabelsCache->set($data[$image_key], $fid, CacheBackendInterface::CACHE_PERMANENT);
         }
-
-        $fid = $this->productLabelsCache->get($data[$image_key]);
-
-        if (empty($fid)) {
-          try {
-            // Prepare the File object when we access it the first time.
-            $fid = $this->downloadLabelsImage($sku_entity, $data, $image_key);
-            $this->productLabelsCache->set($data[$image_key], $fid, CacheBackendInterface::CACHE_PERMANENT);
-          }
-          catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            continue;
-          }
+        catch (\Exception $e) {
+          $this->logger->error($e->getMessage());
+          continue;
         }
-        else {
-          $fid = $fid->data;
-        }
+      }
+      else {
+        $fid = $fid->data;
+      }
 
-        $image_file = $this->fileStorage->load($fid);
+      $image_file = $this->fileStorage->load($fid);
+      $row['image'] = file_create_url($image_file->getFileUri());
 
-        $image = [
-          '#theme' => 'image',
-          '#uri' => $image_file->getFileUri(),
-          '#title' => $data[$text_key],
-          '#alt' => $data[$text_key],
-        ];
+      $row['position'] = $data[$position_key];
+      $row['text'] = $data[$text_key];
 
-        // For mobile app.
-        if ($channel == 'mapp') {
-          $row['image'] = file_create_url($image['#uri']);
-        }
-        else {
-          $row['image'] = $this->renderer->renderPlain($image);
-        }
-        $row['position'] = $data[$position_key];
-        $row['text'] = $data[$text_key];
+      $sku_labels[] = $row;
 
-        $static_labels_cache[$sku][$type][] = $row;
-
-        // Disable subsequent images if flag is true.
-        if ($data['disable_subsequents']) {
-          break;
-        }
+      // Disable subsequent images if flag is true.
+      if ($data['disable_subsequents']) {
+        break;
       }
     }
 
-    return $static_labels_cache[$sku][$type];
+    $this->productCacheManager->set($sku_entity, $cache_key, $sku_labels);
+
+    return $sku_labels;
   }
 
   /**
@@ -2511,6 +2492,12 @@ class SkuManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKUInterface $sku): bool {
+    $cache = $this->productCacheManager->get($sku, 'in_stock');
+
+    if (isset($cache)) {
+      return $cache;
+    }
+
     // For all web requests we don't want to show the products
     // that are not processed yet.
     if (PHP_SAPI != 'cli'
@@ -2530,6 +2517,8 @@ class SkuManager {
       $in_stock = (count($children) > 0);
     }
 
+    $this->productCacheManager->set($sku, 'in_stock', $in_stock);
+
     return $in_stock;
   }
 
@@ -2546,16 +2535,14 @@ class SkuManager {
     $static = &drupal_static(__METHOD__, []);
 
     if (!isset($static[$sku->id()])) {
-      $children = Configurable::getChildSkus($sku);
+      $variants = Configurable::getChildSkus($sku);
 
       // Avoid fatal error because fo faulty data.
-      if (empty($children)) {
+      if (empty($variants)) {
         return [];
       }
 
       $query = $this->connection->select('acq_sku_field_data', 'asfd');
-
-      $variants = Configurable::getChildSkus($sku);
 
       // Check only for children of current parent.
       $query->condition('asfd.sku', $variants, 'IN');
@@ -3568,32 +3555,17 @@ class SkuManager {
    *   SKU Entity.
    * @param string $context
    *   Context.
-   * @param string $channel
-   *   Whether web or mapp.
    *
    * @return array
    *   Labels data.
    */
-  public function getSkuLabels(SKUInterface $sku, string $context, string $channel = 'web'): array {
-    $labels = $this->getLabels($sku, $context, FALSE, $channel);
+  public function getSkuLabels(SKUInterface $sku, string $context): array {
+    $labels = $this->getLabels($sku, $context, FALSE);
+
     if (empty($labels)) {
       return [];
     }
-    foreach ($labels as &$label) {
-      $doc = new \DOMDocument();
-      $doc->loadHTML((string) $label['image']);
-      $xpath = new \DOMXPath($doc);
-      // We are using `data-src` attribute as we are using blazy for images.
-      // If blazy is disabled, then we need to revert back to `src` attribute.
-      $promo_image_path = $channel == 'mapp'
-        ? $label['image']
-        : $xpath->evaluate("string(//img/@data-src)");
-      // Checking if the image path is relative or absolute. If image path is
-      // absolute, we are using the same path.
-      $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)
-        ? $promo_image_path
-        : $this->currentRequest->getSchemeAndHttpHost() . $promo_image_path;
-    }
+
     return $labels;
   }
 
