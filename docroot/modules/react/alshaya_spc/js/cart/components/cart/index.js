@@ -163,16 +163,16 @@ export default class Cart extends React.Component {
       axios.get(url).then((response) => {
         if (response.data.length !== 0) {
           let configurableValues = response.data.configurable_values;
-          let variant_sku = '';
+          let variantSku = '';
           if (type === 'configurable') {
-            variant_sku = response.data.variants[0].sku;
+            variantSku = response.data.variants[0].sku;
             configurableValues = response.data.variants[0].configurable_values;
           }
           const postData = {
             promo: codeValue,
             sku,
             configurable_values: configurableValues,
-            variant: variant_sku,
+            variant: variantSku,
             type,
           };
           axios.post('/middleware/public/select-free-gift', {
@@ -209,9 +209,9 @@ export default class Cart extends React.Component {
       }
       const addFreeGiftButton = document.getElementsByClassName('select-free-gift')[1];
       if (addFreeGiftButton.length !== undefined) {
-        freeGiftLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.selectFreeGift(coupon, sku);
+        freeGiftLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          this.selectFreeGift(coupon, sku, type);
           body.classList.remove('free-gifts-modal-overlay');
         });
       }
