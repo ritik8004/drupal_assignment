@@ -134,8 +134,10 @@ class CrossellPopupContent extends React.Component {
             </PdpGallery>
             <PdpInfo
               title={title}
-              finalPrice={finalPrice}
-              pdpProductPrice={pdpProductPrice}
+              finalPrice={parseFloat(finalPrice)
+                .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+              pdpProductPrice={parseFloat(pdpProductPrice)
+                .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
               brandLogo={brandLogo}
               brandLogoAlt={brandLogoAlt}
               brandLogoTitle={brandLogoTitle}

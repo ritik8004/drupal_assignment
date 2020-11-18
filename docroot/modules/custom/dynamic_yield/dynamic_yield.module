@@ -42,7 +42,12 @@ function dynamic_yield_page_attachments(array &$page) {
 
     // Dispatch the DyPageType event to set the context.
     $event = new DyPageType();
-    \Drupal::service('event_dispatcher')->dispatch(DyPageType::DY_SET_CONTEXT, $event);
+    if (\Drupal::state()->get('system.maintenance_mode')) {
+      $event->setDyContext('OTHER');
+    }
+    else {
+      \Drupal::service('event_dispatcher')->dispatch(DyPageType::DY_SET_CONTEXT, $event);
+    }
     if ($event && $event instanceof DyPageType) {
       $context = [
         'type' => $event->getDyContext(),
@@ -54,6 +59,7 @@ function dynamic_yield_page_attachments(array &$page) {
     }
     // Allow other module to alter the DY context.
     \Drupal::moduleHandler()->alter('dynamic_yield_context', $context['lng']);
+    $page['#attached']['drupalSettings']['dynamicYield']['lng'] = $context['lng'];
     $js = PHP_EOL . 'window.DY = window.DY || {};' . PHP_EOL;
     $js = $js . 'DY.recommendationContext = ' . Json::encode($context) . ';' . PHP_EOL;
     $context_script = [[

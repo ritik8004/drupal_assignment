@@ -129,8 +129,10 @@ export default class PdpCrossellUpsell extends React.PureComponent {
               imageUrl={products[sku].gallery.mediumurl}
               alt={products[sku].gallery.label}
               title={products[sku].title}
-              finalPrice={products[sku].finalPrice}
-              pdpProductPrice={products[sku].priceRaw}
+              finalPrice={parseFloat(products[sku].finalPrice)
+                .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+              pdpProductPrice={parseFloat(products[sku].priceRaw)
+                .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
               productUrl={products[sku].productUrl}
               productLabels={products[sku].productLabels}
               productPromotions={products[sku].promotions}

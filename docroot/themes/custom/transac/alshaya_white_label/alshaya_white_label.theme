@@ -1180,6 +1180,14 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
     '#markup' => $maintenance_text['value'],
   ];
   $variables['maintenance_image'] = '';
+  if (\Drupal::service('module_handler')->moduleExists('dynamic_yield')) {
+    // the function dynamic_yield_page_attachments expects html_head in the
+    // #attached.
+    if (!isset($variables['#attached']['html_head'])) {
+      $variables['#attached']['html_head'] = [];
+    }
+    dynamic_yield_page_attachments($variables);
+  }
   if (!empty($image)) {
     if ($file = file_load($image)) {
       $variables['maintenance_image'] = file_create_url($file->getFileUri());

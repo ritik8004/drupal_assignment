@@ -1270,7 +1270,7 @@ class SkuImagesManager {
    *   Swatches array if found in cache or null.
    */
   private function getSwatchesFromCache(SKU $sku) {
-    $swatches = $this->skuManager->getProductCachedData($sku, 'swatches');
+    $swatches = $this->productCacheManager->get($sku, 'swatches');
 
     foreach ($swatches ?? [] as $index => $swatch) {
       foreach ($swatch as $key => $url) {
@@ -1296,7 +1296,7 @@ class SkuImagesManager {
       }
     }
 
-    $this->skuManager->setProductCachedData($sku, 'swatches', $swatches);
+    $this->productCacheManager->set($sku, 'swatches', $swatches);
   }
 
   /**
