@@ -13,6 +13,18 @@ use Drupal\node\Entity\Node;
 use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
 
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add settings to show / hide crosssell products on cart page.
+ */
+function alshaya_acm_update_8018() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['alshaya_acm.cart_config'], 'alshaya_acm');
+}
+
 /**
  * Implements hook_update_N().
  *
