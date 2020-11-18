@@ -180,10 +180,6 @@
         flex-direction: column;
         justify-content: center;
 
-        @include breakpoint($only-mobile) {
-          touch-action: pan-y pinch-zoom;
-        }
-
         .slick-slider {
           .slick-next,
           .slick-prev {
@@ -249,6 +245,10 @@
     }
 
     .slick-slider {
+      @include breakpoint($only-mobile) {
+        touch-action: pan-y pinch-zoom;
+      }
+
       .slick-next,
       .slick-prev {
         position: fixed;
@@ -344,10 +344,6 @@
 
       .magv2-pdp-image {
         cursor: auto;
-
-        @include breakpoint($only-mobile) {
-          touch-action: pan-y pinch-zoom;
-        }
       }
     }
   }
