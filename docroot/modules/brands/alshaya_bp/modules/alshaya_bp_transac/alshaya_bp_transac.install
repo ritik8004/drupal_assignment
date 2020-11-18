@@ -13,15 +13,50 @@ use Drupal\facets\Entity\Facet;
  * Implements hook_update_N().
  *
  * Update type string => text_area for pil and indications_age_restrictions.
+ * Migrate existing attribute data to the new ones.
  */
 function alshaya_bp_transac_update_8010() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  $attr_to_update_types = ['attr_pil', 'attr_indications_age_restrictions'];
 
-  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
-  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
-  $fieldsManager->resetBaseFields();
+  foreach ($attr_to_update_types as $source_column) {
+    // Fetch and store existing attribute data in temporary variable.
+    $connection = \Drupal::database();
+    $query = $connection->select('acq_sku_field_data', 'asfd');
+    $query->fields('asfd', ['id', 'type', 'langcode', $source_column]);
+    $query->isNotNull('asfd.' . $source_column);
+    $result = $query->execute()->fetchAll();
+
+    /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+    $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+    // First remove the field. This is required or drupal won't allow the change
+    // in storage of the field.
+    $field = str_replace('attr_', '', $source_column);
+    $sku_fields_manager->removeField($field);
+    // remove unsed field from table acq_sku_field_data.
+    $connection->schema()->dropField('acq_sku_field_data', $source_column);
+    // Then re-add the field.
+    $sku_fields_manager->addFields();
+
+    // If data is available in temporary variable, then re-store it in new table.
+    if (!empty($result)) {
+      $destination_table = 'acq_sku_field_data';
+      $destination_column = $source_column . '__value';
+
+      // Updata data for new field.
+      foreach ($result as $rs) {
+        // Update data in new destination attribute.
+        $query = $connection->update($destination_table)->fields([
+          $destination_column => $rs->{$source_column},
+        ])
+        ->condition('id', $rs->id, '=')
+        ->condition('langcode', $rs->langcode, '=');
+        $query->execute();
+      }
+    }
+  }
 }
 
 /**
