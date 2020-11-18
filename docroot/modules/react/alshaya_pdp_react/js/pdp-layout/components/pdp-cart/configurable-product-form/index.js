@@ -27,7 +27,7 @@ class ConfigurableProductForm extends React.Component {
     if (document.getElementById(`add-to-cart-${context}`)) {
       window.addEventListener('load', () => {
         this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
-
+        context.refCartButton(this.button);
         this.addToBagButtonClass(this.button.current.offsetTop);
       });
 

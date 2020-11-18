@@ -89,6 +89,30 @@ body:not(.ie) {
     }
   }
 
+  .fadeInVertical {
+    animation-name: fadeInUp;
+    animation-duration: 0.45s;
+    animation-fill-mode: backwards;
+
+    &.notInMobile {
+      @include breakpoint($only-mobile) {
+        animation: none;
+      }
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .fadeOutVertical {
     animation-name: fadeOutVertical;
     animation-duration: 0.3s;
@@ -99,11 +123,13 @@ body:not(.ie) {
     0% {
       opacity: 1;
       height: auto;
+      // transform: translateY(0);
     }
 
     to {
       opacity: 0;
       height: auto;
+      // transform: translateY(-20px);
       transform: translate3d(0, -100%, 0);
     }
   }
