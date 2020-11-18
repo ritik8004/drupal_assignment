@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
@@ -13,27 +14,27 @@ use Drupal\node\Entity\Node;
 use Drupal\user\Entity\User;
 use Symfony\Component\Yaml\Yaml;
 
-
 /**
  * Implements hook_update_N().
  *
- * Add settings to show / hide crosssell products on cart page.
- */
-function alshaya_acm_update_8018() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(['alshaya_acm.cart_config'], 'alshaya_acm');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add settings to display upsell and related product on pdp.
+ * Add settings to display upsell and related product on pdp
+ * and show / hide cross-sell products on cart page.
  */
 function alshaya_acm_update_8017() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(['alshaya_acm.settings'], 'alshaya_acm');
+  $manager->updateConfigs(
+    ['alshaya_acm.settings'],
+    'alshaya_acm',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+  $manager->updateConfigs(
+    ['alshaya_acm.cart_config'],
+    'alshaya_acm',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
 }
 
 /**
