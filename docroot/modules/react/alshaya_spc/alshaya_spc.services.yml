@@ -47,8 +47,6 @@ services:
 
   alshaya_spc.stock_helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcStockHelper
-    arguments:
-      - '@logger.factory'
 
   alshaya_spc.middleware_access_check:
     class: Drupal\alshaya_spc\Access\MiddlewareAccessCheck
