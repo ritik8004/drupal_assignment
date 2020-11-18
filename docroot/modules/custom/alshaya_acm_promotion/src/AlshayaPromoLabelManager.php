@@ -15,6 +15,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Class Alshaya Promo Label Manager.
@@ -737,6 +738,7 @@ class AlshayaPromoLabelManager {
         if ($this->imagesManager->hasMedia($free_sku)) {
           $free_sku_media = $this->imagesManager->getFirstImage($free_sku);
           $free_sku_image = $this->skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku->label(), '192x168');
+          $free_sku_image['#url'] = ImageStyle::load('192x168')->buildUrl($free_sku_image['#uri']);
           break;
         }
       }

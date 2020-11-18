@@ -65,6 +65,8 @@ const PdpLayout = () => {
     freeGiftImage,
     freeGiftTitle,
     freeGiftPromoCode,
+    freeGiftPromoUrl,
+    freeGiftMessage,
   } = productValues;
 
   const emptyRes = (
@@ -177,6 +179,8 @@ const PdpLayout = () => {
               freeGiftImage={freeGiftImage}
               freeGiftTitle={freeGiftTitle}
               freeGiftPromoCode={freeGiftPromoCode}
+              freeGiftPromoUrl={freeGiftPromoUrl}
+              freeGiftMessage={freeGiftMessage}
             />
           ) : null}
           {stockStatus ? (
