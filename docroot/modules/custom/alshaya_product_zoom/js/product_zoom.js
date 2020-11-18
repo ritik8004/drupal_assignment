@@ -20,7 +20,7 @@
         zoomContainer.addClass('product-zoom-processed');
 
         var lightSlider = $('.acq-content-product #lightSlider');
-        Drupal.productZoomApplyRtl(lightSlider, Drupal.getSlickSliderOptions('slickOptions'), context);
+        Drupal.productZoomApplyRtl(lightSlider, Drupal.getSlickOptions('slickOptions'), context);
         // Adding class if there is no slider.
         addPagerClass();
 
@@ -38,7 +38,7 @@
           Drupal.hideProductLabelOnVideo($(this), 'mobilegallery__thumbnails__video', true);
         });
 
-        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickMobOptions('slickMobileOptions'), context);
+        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), context);
         if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
           // Do initial setup again for slick dots.
           Drupal.behaviors.pdpInstagranDots.initialSetup(mobilegallery);
@@ -118,7 +118,7 @@
       if ($(window).width() < 768 && freeGiftsZoomContainer.length > 0 && !freeGiftsZoomContainer.hasClass('free-gifts-product-zoom-processed')) {
         freeGiftsZoomContainer.addClass('free-gifts-product-zoom-processed');
         var mobilegallery = $('#product-image-gallery-mobile', context);
-        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickMobOptions('slickMobileOptions'), context);
+        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), context);
       }
 
       var modalLightSlider = $('.acq-content-product-modal #lightSlider');
@@ -380,8 +380,8 @@
     }
 
     var gallery = $('#product-full-screen-gallery');
-    Drupal.getSlickModalOptions('slickModalOptions').currentSlide = currentSlide;
-    Drupal.productZoomApplyRtl(gallery, Drupal.getSlickModalOptions('slickModalOptions'), document);
+    Drupal.getSlickOptions('slickModalOptions').currentSlide = currentSlide;
+    Drupal.productZoomApplyRtl(gallery, Drupal.getSlickOptions('slickModalOptions'), document);
     // Create Instagram Dots.
     if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
       // Do initial setup again for slick dots.
@@ -577,7 +577,7 @@
     }
   };
 
-  Drupal.getSlickOptions = function(slickOption) {
+  Drupal.getSlickOptions = function (slickOption) {
     switch(slickOption) {
       case 'slickCSUSOptions':
         return {
@@ -600,13 +600,8 @@
             }
           ]
         };
-      break;
-    }
-  };
 
-  // Slider - 3 For Mobile - Image Gallery.
-  Drupal.getSlickMobOptions = function(slickMobOption) {
-    switch(slickMobOption) {
+      break;
       case 'slickMobileOptions':
         return {
           slidesToShow: 1,
@@ -619,12 +614,8 @@
           touchThreshold: 1000,
           initialSlide: 0
         };
-      break;
-    }
-  };
 
-  Drupal.getSlickSliderOptions = function(slickOpt) {
-    switch(slickOpt) {
+      break;
       case 'slickOptions':
         return {
           slidesToShow: getPDPSliderParameter('slidesToShow'),
@@ -646,12 +637,8 @@
             }
           ]
         };
-      break;
-    }
-  };
 
-  Drupal.getSlickModalOptions = function(slickModalOption) {
-    switch(slickModalOption) {
+      break;
       case 'slickModalOptions':
         return {
           slidesToShow: 1,
@@ -674,6 +661,7 @@
             }
           ]
         };
+
       break;
     }
   };
