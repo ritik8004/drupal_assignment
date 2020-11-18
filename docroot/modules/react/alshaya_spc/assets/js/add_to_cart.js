@@ -142,7 +142,6 @@
                   }
 
                   // Clean error message.
-                  var cleaned_sku = $(form).attr('data-cleaned-sku');
                   $('.error-container-' + cleaned_sku).html('');
 
                   // Trigger the success event for other listeners.
