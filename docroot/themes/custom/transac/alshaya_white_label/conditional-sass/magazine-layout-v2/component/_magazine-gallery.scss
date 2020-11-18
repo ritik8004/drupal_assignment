@@ -32,7 +32,6 @@
   .magazine__gallery--container-desktop {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
     grid-gap: 1.25rem;
 
     @include breakpoint($only-mobile) {
