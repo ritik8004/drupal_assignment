@@ -174,8 +174,7 @@ class DeeplinkResource extends ResourceBase {
       else {
         $redirect_url = $this->mobileAppUtility->getRedirectUrl($alias);
         // Get the internal path of given alias and get route object.
-        // If $redirect_url is "/" or "/?xyz" we dont find its path.
-        $internal_path = (preg_match('/^\/(\?.*)?$/', $redirect_url))
+        $internal_path = ($redirect_url === '/')
           ? $redirect_url
           : $this->aliasManager->getPathByAlias('/' . $redirect_url, $langcode);
       }
