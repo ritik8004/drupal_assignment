@@ -1,19 +1,25 @@
 import React from 'react';
 import SectionTitle from '../../../utilities/section-title';
 import ConditionalView from '../../../common/components/conditional-view';
-import ToolTip from '../../../utilities/tooltip';
-import PointsPromoMessage from '../utilities/points-promo-message';
-import PointsExpiryMessage from '../utilities/points-expiry-message';
-import AuraFormLinkCard from '../aura-forms/aura-link-card-textbox';
-import AuraFormRedeemPoints from '../aura-forms/aura-redeem-points';
-import PendingEnrollmentMessage from '../utilities/pending-enrollment-message';
+import { getAuraDetailsDefaultState } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getAllAuraStatus, getUserDetails } from '../../../../../alshaya_aura_react/js/utilities/helper';
+import AuraNotLinkedNoDataCheckout from './components/not-linked-no-data-checkout';
+import AuraLinkedVerifiedCheckout from './components/linked-verified-checkout';
+import AuraLinkedNotVerifiedCheckout from './components/linked-not-verified-checkout';
+import AuraNotLinkedDataCheckout from './components/not-linked-data-checkout';
+import Loading from '../../../utilities/loading';
+import {
+  getCustomerDetails,
+} from '../../../../../alshaya_aura_react/js/utilities/header_helper';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pointsToEarn: null,
-      pointsInAccount: null,
+      ...getAuraDetailsDefaultState(),
+      pointsToEarn: 0,
+      pointsInAccount: 0,
+      wait: true,
     };
   }
 
@@ -21,19 +27,36 @@ class AuraCheckoutRewards extends React.Component {
     // @todo: API call here to fetch the points user will get based on his cart.
     // Alternatively, it might be just a simple sum of points for each product
     // in cart.
-    this.setState({
-      pointsToEarn: 1200,
-    });
 
-    // Get points for user from his card.
-    // @todo: API call to get points from AURA account for registered.
-    const { uid } = drupalSettings.user;
-    if (uid > 0) {
+    const {
+      loyaltyStatus,
+      tier,
+    } = this.state;
+
+    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
+    document.addEventListener('customerDetailsFetched', this.updateStates, false);
+
+    // No API call to fetch points for anonymous users or user with
+    // loyalty status APC_NOT_LINKED_NOT_U.
+    if (!getUserDetails().id || loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
       this.setState({
-        pointsInAccount: 5000,
+        wait: false,
       });
+      return;
     }
+
+    // Get customer details.
+    getCustomerDetails(tier, loyaltyStatus);
   }
+
+  // Event listener callback to update states.
+  updateStates = (data) => {
+    const states = { ...data.detail.stateValues };
+    states.wait = false;
+    this.setState({
+      ...states,
+    });
+  };
 
   getPointsString = (points) => {
     const pointsString = `${points} ${Drupal.t('points')}`;
@@ -43,102 +66,73 @@ class AuraCheckoutRewards extends React.Component {
     );
   };
 
-  getMembersToEarnMessage = (points) => {
-    const toEarnMessageP1 = `${Drupal.t('Members will earn')} `;
-    const pointsHighlight = this.getPointsString(points);
-    const toEarnMessageP2 = ` ${Drupal.t('with this purchase')}`;
-
-    return (
-      <span className="spc-checkout-aura-points-to-earn">
-        { toEarnMessageP1 }
-        { pointsHighlight }
-        { toEarnMessageP2 }
-      </span>
-    );
+  getSectionTitle = (allAuraStatus, loyaltyStatus) => {
+    if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
+      || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
+      return [
+        Drupal.t('Aura Rewards'),
+        <span>{` ${Drupal.t('(Optional)')}`}</span>,
+      ];
+    }
+    return Drupal.t('Aura Rewards');
   };
 
   render() {
+    const allAuraStatus = getAllAuraStatus();
+
     const {
       animationDelay: animationDelayValue,
     } = this.props;
 
     const {
+      wait,
       pointsToEarn,
       pointsInAccount,
+      expiringPoints,
+      expiryDate,
+      loyaltyStatus,
+      cardNumber,
     } = this.state;
 
-    const tooltip = Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem  the points.');
-
-    const { uid } = drupalSettings.user;
-    let sectionTitle = Drupal.t('Aura Rewards (Optional)');
-    if (uid > 0) {
-      sectionTitle = Drupal.t('Aura Rewards');
+    if (wait) {
+      return <Loading />;
     }
 
     return (
       <div className="spc-aura-checkout-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
-        <SectionTitle>{ sectionTitle }</SectionTitle>
+        <SectionTitle>{ this.getSectionTitle(allAuraStatus, loyaltyStatus) }</SectionTitle>
+
         {/* Guest */}
-        {/* @todo: Update condition. */}
-        <ConditionalView condition={uid === 0}>
-          <div className="block-content guest-user">
-            <div className="title">
-              <div className="subtitle-1">{ Drupal.t('Earn and redeem as you shop ') }</div>
-              <div className="subtitle-2">{ this.getMembersToEarnMessage(pointsToEarn) }</div>
-            </div>
-            <div className="spc-aura-link-card-form">
-              <div className="label">{ Drupal.t('Already an Aura member?') }</div>
-              <div className="item-wrapper">
-                <AuraFormLinkCard />
-              </div>
-            </div>
-          </div>
+        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
+        || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
+        >
+          <AuraNotLinkedNoDataCheckout pointsToEarn={pointsToEarn} />
         </ConditionalView>
+
         {/* Registered User - Linked Card */}
-        {/* @todo: Update condition. */}
-        <ConditionalView condition={uid > 1}>
-          <div className="block-content registered-user-linked">
-            <div className="title">
-              <div className="subtitle-1">
-                { Drupal.t('You Have') }
-                :
-                { this.getPointsString(pointsInAccount) }
-              </div>
-              <div className="subtitle-2">
-                { Drupal.t('You will earn') }
-                :
-                { this.getPointsString(pointsToEarn) }
-                { Drupal.t('with this purchase') }
-                <ToolTip enable question>{ tooltip }</ToolTip>
-              </div>
-            </div>
-          </div>
-          <AuraFormRedeemPoints />
-          <div className="spc-aura-checkout-messages">
-            <PointsPromoMessage />
-            <PointsExpiryMessage points="700" date={Drupal.t('30th June')} />
-          </div>
+        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
+          <AuraLinkedVerifiedCheckout
+            pointsInAccount={pointsInAccount}
+            pointsToEarn={pointsToEarn}
+            expiringPoints={expiringPoints}
+            expiryDate={expiryDate}
+          />
         </ConditionalView>
+
         {/* Registered User - Linked Card - Pending Enrollment */}
-        {/* @todo: Update condition. */}
-        <ConditionalView condition={uid > 1}>
-          <div className="block-content registered-user-linked-pending-enrollment">
-            <div className="title">
-              <div className="subtitle-1">
-                { Drupal.t('You Have') }
-                :
-                { this.getPointsString(pointsInAccount) }
-              </div>
-              <div className="subtitle-2">
-                { Drupal.t('You will earn') }
-                :
-                { this.getPointsString(pointsToEarn) }
-                { Drupal.t('with this purchase') }
-                <ToolTip enable question>{ tooltip }</ToolTip>
-              </div>
-            </div>
-          </div>
-          <PendingEnrollmentMessage />
+        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
+          <AuraLinkedNotVerifiedCheckout
+            pointsInAccount={pointsInAccount}
+            pointsToEarn={pointsToEarn}
+          />
+        </ConditionalView>
+
+        {/* Registered with Unlinked Loyalty Card */}
+        <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA}>
+          <AuraNotLinkedDataCheckout
+            cardNumber={cardNumber}
+            pointsToEarn={pointsToEarn}
+          />
         </ConditionalView>
       </div>
     );

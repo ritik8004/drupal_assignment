@@ -55,6 +55,8 @@ function getAuraDetailsDefaultState() {
     upgradeMsg: '',
     expiringPoints: 0,
     expiryDate: '',
+    email: '',
+    mobile: '',
   };
 
   return auraDetails;

@@ -1,37 +1,111 @@
 import React from 'react';
-import Cleave from 'cleave.js/react';
 import AuraFormLinkCardOptions from '../aura-form-link-card-options';
 import ConditionalView from '../../../../common/components/conditional-view';
-import AuraMobileNumberField from '../aura-mobile-number-field';
-import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import LinkCardOptionEmail from './components/link-card-option-email';
+import LinkCardOptionCard from './components/link-card-option-card';
+import LinkCardOptionMobile from './components/link-card-option-mobile';
+import { handleSignUp, handleSearch, handleNotYou } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
+import SignUpOtpModal from '../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
+import { getAuraDetailsDefaultState } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getUserInput } from '../../utilities/checkout_helper';
+import {
+  showFullScreenLoader,
+} from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class AuraFormLinkCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       linkCardOption: 'card',
+      isOTPModalOpen: false,
+      chosenCountryCode: null,
+      ...getAuraDetailsDefaultState(),
     };
   }
 
-  setChosenCountryCode = () => {
-    // @TODO: Set the chose country code in state.
+  componentDidMount() {
+    document.addEventListener('loyaltyDetailsSearchComplete', this.updateStates, false);
+    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
+  }
+
+  updateStates = (data) => {
+    const { stateValues } = data.detail;
+
+    if (Object.keys(stateValues).length === 0) {
+      this.setState({
+        ...getAuraDetailsDefaultState(),
+      });
+      this.showResponse({
+        type: 'failure',
+        message: Drupal.t('No card found. Please try again.'),
+      });
+      return;
+    }
+
+    this.showResponse({
+      type: 'success',
+      message: Drupal.t('Your loyalty points will be credited to this account.'),
+    });
+
+    this.setState({
+      ...stateValues,
+    });
   };
 
-  /**
-   * Placeholder for callback to call link card API.
-   */
-  linkCard = () => {
-    // Assume all success and return the success message.
-    // @todo: Aura - SPC - Call Link API.
-    // Add some loaders during API call in progress.
-    // Return success failure message.
+  showResponse = (data) => {
     const element = document.querySelector('.spc-aura-link-card-wrapper .spc-aura-link-api-response-message');
-    element.innerHTML = Drupal.t('Your loyalty points will be credited to this account.');
+    element.innerHTML = data.message;
     const submitButton = document.querySelector('.spc-aura-link-card-wrapper .form-items');
-    submitButton.classList.add('success');
+    if (data.type === 'success') {
+      submitButton.classList.add('success');
+    } else {
+      submitButton.classList.remove('success');
+    }
+  };
+
+  openOTPModal = () => {
+    this.setState({
+      isOTPModalOpen: true,
+    });
+  };
+
+  closeOTPModal = () => {
+    this.setState({
+      isOTPModalOpen: false,
+    });
+  };
+
+  setChosenCountryCode = (code) => {
+    this.setState({
+      chosenCountryCode: code,
+    });
+  };
+
+  linkCard = () => {
+    this.showResponse({
+      type: 'failure',
+      message: '',
+    });
+
+    const {
+      linkCardOption,
+      chosenCountryCode,
+    } = this.state;
+
+    const userInput = getUserInput(linkCardOption, chosenCountryCode);
+
+    if (Object.keys(userInput).length !== 0) {
+      showFullScreenLoader();
+      handleSearch(userInput);
+    }
   };
 
   selectOption = (option) => {
+    this.showResponse({
+      type: 'failure',
+      message: '',
+    });
+
     this.setState({
       linkCardOption: option,
     });
@@ -40,12 +114,9 @@ class AuraFormLinkCard extends React.Component {
   render() {
     const {
       linkCardOption,
+      isOTPModalOpen,
+      cardNumber,
     } = this.state;
-
-    const {
-      country_mobile_code: countryMobileCode,
-      mobile_maxlength: countryMobileCodeMaxLength,
-    } = getAuraConfig();
 
     return (
       <>
@@ -57,29 +128,14 @@ class AuraFormLinkCard extends React.Component {
           <div className="spc-aura-link-card-wrapper">
             <div className="form-items">
               <ConditionalView condition={linkCardOption === 'email'}>
-                <input
-                  type="email"
-                  name="spc-aura-link-card-input-email"
-                  className="spc-aura-link-card-input-email spc-aura-link-card-input"
-                  placeholder={Drupal.t('Email address')}
-                />
+                <LinkCardOptionEmail />
               </ConditionalView>
               <ConditionalView condition={linkCardOption === 'card'}>
-                <Cleave
-                  placeholder={Drupal.t('Loyalty card number')}
-                  name="spc-aura-link-card-input-card"
-                  className="spc-aura-link-card-input-card spc-aura-link-card-input"
-                  options={{ blocks: [4, 4, 4, 4] }}
-                />
+                <LinkCardOptionCard />
               </ConditionalView>
               <ConditionalView condition={linkCardOption === 'mobile'}>
-                <AuraMobileNumberField
-                  isDisabled={false}
-                  name="spc-aura-link-card-input-mobile"
-                  countryMobileCode={countryMobileCode}
-                  maxLength={countryMobileCodeMaxLength}
-                  setCountryCode={this.setChosenCountryCode}
-                  onlyMobileFieldPlaceholder={Drupal.t('Mobile number')}
+                <LinkCardOptionMobile
+                  setChosenCountryCode={this.setChosenCountryCode}
                 />
               </ConditionalView>
               <button
@@ -90,13 +146,32 @@ class AuraFormLinkCard extends React.Component {
                 { Drupal.t('Apply') }
               </button>
             </div>
-            <div className="spc-aura-link-api-response-message" />
+            <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
           </div>
           <div className="sub-text">
-            <span>{ Drupal.t('Not a member yet?') }</span>
-            <a href="#">{Drupal.t('Sign up now')}</a>
+            { cardNumber
+              ? (
+                <a onClick={() => handleNotYou(cardNumber)}>
+                  {Drupal.t('Not you?')}
+                </a>
+              )
+              : (
+                <>
+                  <span>{ Drupal.t('Not a member yet?') }</span>
+                  <a
+                    onClick={() => this.openOTPModal()}
+                  >
+                    {Drupal.t('Sign up now')}
+                  </a>
+                </>
+              )}
           </div>
         </div>
+        <SignUpOtpModal
+          isOTPModalOpen={isOTPModalOpen}
+          closeOTPModal={this.closeOTPModal}
+          handleSignUp={handleSignUp}
+        />
       </>
     );
   }

@@ -104,8 +104,39 @@ function handleLinkYourCard(cardNumber) {
   }
 }
 
+/**
+ * Helper function to call APC search API to search aura details
+ * of a customer based on email/card/mobile.
+ */
+function handleSearch(data) {
+  let stateValues = {};
+
+  const apiUrl = 'post/loyalty-club/search-apc-user';
+  const apiData = postAPIData(apiUrl, data);
+
+  if (apiData instanceof Promise) {
+    apiData.then((result) => {
+      if (result.data !== undefined && result.data.error === undefined) {
+        if (result.data.status) {
+          stateValues = {
+            loyaltyStatus: result.data.data.apc_link || 0,
+            points: result.data.data.apc_points || 0,
+            cardNumber: result.data.data.apc_identifier_number || '',
+            tier: result.data.data.tier_info || '',
+            email: result.data.data.email || '',
+            mobile: result.data.data.mobile || '',
+          };
+        }
+      }
+      dispatchCustomEvent('loyaltyDetailsSearchComplete', { stateValues });
+      removeFullScreenLoader();
+    });
+  }
+}
+
 export {
   handleLinkYourCard,
   handleNotYou,
   handleSignUp,
+  handleSearch,
 };
