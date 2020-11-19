@@ -20,7 +20,7 @@ function getUserAuraDetailsDefaultState() {
 /**
  * Utility function to get user input value.
  */
-function getUserInput(linkCardOption) {
+function getUserInput(linkCardOption, chosenCountryCode) {
   let elementValue = {};
 
   if (linkCardOption === 'mobile') {
@@ -33,7 +33,7 @@ function getUserInput(linkCardOption) {
 
     elementValue = {
       type: 'phone',
-      value: mobile,
+      value: chosenCountryCode + mobile,
     };
   } else if (linkCardOption === 'card') {
     const card = getElementValue('spc-aura-link-card-input-card');
@@ -45,7 +45,7 @@ function getUserInput(linkCardOption) {
 
     elementValue = {
       type: 'apcNumber',
-      value: card,
+      value: card.replace(/\s/g, ''),
     };
   } else if (linkCardOption === 'email') {
     const email = getElementValue('spc-aura-link-card-input-email');

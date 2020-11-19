@@ -7,7 +7,6 @@ import LinkCardOptionMobile from './components/link-card-option-mobile';
 import { handleSignUp, handleSearch } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
 import { getUserAuraDetailsDefaultState, getUserInput } from '../../../../../../alshaya_aura_react/js/utilities/checkout_helper';
-import { removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import {
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
@@ -18,7 +17,7 @@ class AuraFormLinkCard extends React.Component {
     this.state = {
       linkCardOption: 'card',
       isOTPModalOpen: false,
-      // chosenCountryCode: null,
+      chosenCountryCode: null,
       ...getUserAuraDetailsDefaultState(),
     };
   }
@@ -74,20 +73,24 @@ class AuraFormLinkCard extends React.Component {
     });
   };
 
-  setChosenCountryCode = () => {
-    // this.setState({
-    //   chosenCountryCode: code,
-    // });
+  setChosenCountryCode = (code) => {
+    this.setState({
+      chosenCountryCode: code,
+    });
   };
 
   linkCard = () => {
-    removeError('spc-aura-link-api-response-message');
+    this.showResponse({
+      type: 'failure',
+      message: '',
+    });
 
     const {
       linkCardOption,
+      chosenCountryCode,
     } = this.state;
 
-    const userInput = getUserInput(linkCardOption);
+    const userInput = getUserInput(linkCardOption, chosenCountryCode);
 
     if (Object.keys(userInput).length !== 0) {
       showFullScreenLoader();
@@ -96,7 +99,11 @@ class AuraFormLinkCard extends React.Component {
   };
 
   selectOption = (option) => {
-    removeError('spc-aura-link-api-response-message');
+    this.showResponse({
+      type: 'failure',
+      message: '',
+    });
+
     this.setState({
       linkCardOption: option,
     });
