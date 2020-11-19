@@ -737,6 +737,7 @@ class AlshayaPromoLabelManager {
         if ($this->imagesManager->hasMedia($free_sku)) {
           $free_sku_media = $this->imagesManager->getFirstImage($free_sku);
           $free_sku_image = $this->skuManager->getSkuImage($free_sku_media['drupal_uri'], $free_sku->label(), '192x168');
+          $free_sku_image['#url'] = $this->entityTypeManager->getStorage('image_style')->load('192x168')->buildUrl($free_sku_image['#uri']);
           break;
         }
       }
