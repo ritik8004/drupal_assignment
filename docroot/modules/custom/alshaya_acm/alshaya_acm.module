@@ -632,7 +632,14 @@ function alshaya_acm_price_format($price, array $promotions = [], $tooltip = '')
     $output['#tooltip'] = $tooltip;
   }
 
-  $render = \Drupal::service('renderer')->renderPlain($output);
+  static $renderer;
+
+  if (empty($renderer)) {
+    /** @var \Drupal\Core\Render\Renderer $renderer */
+    $renderer = \Drupal::service('renderer');
+  }
+
+  $render = $renderer->renderPlain($output);
   return $render;
 }
 
