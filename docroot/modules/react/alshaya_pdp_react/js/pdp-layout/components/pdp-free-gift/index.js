@@ -12,7 +12,6 @@ const PdpFreeGift = ({
   if (freeGiftPromoType === '1') {
     return (
       <>
-        <p>hello</p>
         <div className="free-gift-promotions free-gift-promotions-full-view-mode">
           <div className="free-gift-promo-wrapper free-gift-promo-list">
             <div className="free-gift-image">
@@ -45,7 +44,6 @@ const PdpFreeGift = ({
   }
   return (
     <>
-      <p>chebc</p>
       <div className="free-gift-promotions free-gift-promotions-full-view-mode">
         <div className="free-gift-promo-wrapper free-gift-promo-list">
           <div className="free-gift-image">
