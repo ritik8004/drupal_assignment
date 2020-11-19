@@ -198,7 +198,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
       'dev2' => [
         'magento' => 'mc_oms_pprod',
-        'conductor' => 'mckw_oms_pprod',
+        'conductor' => 'mckw_oms',
       ],
     ],
     'mcae' => [
@@ -212,7 +212,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
       'dev2' => [
         'magento' => 'mc_oms_pprod',
-        'conductor' => 'mcae_oms_pprod',
+        'conductor' => 'mcae_oms',
       ],
       'local' => [
         'magento' => 'mc_uat',
@@ -230,7 +230,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
       'dev2' => [
         'magento' => 'mc_oms_pprod',
-        'conductor' => 'mcsa_oms_pprod',
+        'conductor' => 'mcsa_oms',
       ],
     ],
     'pbkw' => [
@@ -278,7 +278,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
       'dev2' => [
         'magento' => 'we_oms_uat',
-        'conductor' => 'wekw_oms_uat',
+        'conductor' => 'wekw_oms',
       ],
     ],
     'wesa' => [
@@ -292,7 +292,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
       'dev2' => [
         'magento' => 'we_oms_uat',
-        'conductor' => 'wesa_oms_uat',
+        'conductor' => 'wesa_oms',
       ],
     ],
     'weae' => [
@@ -306,7 +306,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
       'dev2' => [
         'magento' => 'we_oms_uat',
-        'conductor' => 'weae_oms_uat',
+        'conductor' => 'weae_oms',
       ],
     ],
     'aeokw' => [
