@@ -227,8 +227,15 @@ class CategoryProductListResource extends ResourceBase {
     $result_set = $this->prepareAndExecuteQuery($id);
     // Prepare response from result set.
     $response_data = $this->addExtraTermData($term);
+
+    if (isset($result_set['department_name'])) {
+      $response_data['department_name'] = $result_set['department_name'];
+    }
     if (isset($result_set['algolia_data'])) {
       $response_data['algolia_data'] = $result_set['algolia_data'];
+    }
+    if (isset($result_set['plp_data'])) {
+      $result_set = $result_set['plp_data'];
     }
 
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
@@ -286,12 +293,10 @@ class CategoryProductListResource extends ResourceBase {
     $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(TRUE);
     $dy_banner = $term->get('field_dy_banner')->getString();
     $default_dy_banner = $this->configFactory->get('alshaya_mobile_app.settings')->get('dy_plp_banner_name');
-    $term_details = $this->productCategoryPage->getCurrentSelectedCategory(NULL, $term->id());
     return [
       'id' => (int) $term->id(),
       'label' => $term->label(),
       'path' => $term_url->getGeneratedUrl(),
-      'department_name' => str_replace('>', '|', $term_details['hierarchy']),
       'deeplink' => $this->mobileAppUtility->getDeepLink($term),
       'banner' => $term->get('field_promo_banner_for_mobile')->value ? [] : $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile'),
       'description' => ($desc = $term->get('description')->getValue()) && !empty($desc[0]['value'])
@@ -315,6 +320,11 @@ class CategoryProductListResource extends ResourceBase {
    */
   public function prepareAndExecuteQuery(int $tid) {
     $storage = $this->entityTypeManager->getStorage('search_api_index');
+    $response = [];
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory(NULL, $tid);
+    if (isset($term_details['hierarchy'])) {
+      $response['department_name'] = str_replace('>', '|', $term_details['hierarchy']);
+    }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
       $index = $storage->load('product');
@@ -336,7 +346,9 @@ class CategoryProductListResource extends ResourceBase {
       $query->addTag('category_product_list');
 
       // Prepare and execute query and pass result set.
-      return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+      $response['plp_data'] = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+
+      return $response;
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
@@ -362,8 +374,6 @@ class CategoryProductListResource extends ResourceBase {
       $parse_mode = $this->parseModeManager->createInstance(self::PARSE_MODE);
       $parse_mode->setConjunction(self::PARSE_MODE_CONJUNCTION);
       $query->setParseMode($parse_mode);
-
-      $term_details = $this->productCategoryPage->getCurrentSelectedCategory(NULL, $tid);
 
       $conditionGroup = new ConditionGroup();
       $conditionGroup->addCondition('stock', 0, '>');
