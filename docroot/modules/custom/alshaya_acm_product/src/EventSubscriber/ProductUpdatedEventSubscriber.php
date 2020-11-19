@@ -81,13 +81,13 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onStockUpdated(StockUpdatedEvent $event) {
-    // Do nothing if stock status not changed.
-    if (!$event->isStockStatusChanged()) {
-      return;
-    }
-
-    $this->queueProductForProcessing($event->getSku());
+    // Stop the propagation as early as possible.
     $event->stopPropagation();
+
+    // Queue the product if stock status changed or we have low quantity.
+    if ($event->isStockStatusChanged() || $event->isLowQuantity()) {
+      $this->queueProductForProcessing($event->getSku());
+    }
   }
 
   /**
