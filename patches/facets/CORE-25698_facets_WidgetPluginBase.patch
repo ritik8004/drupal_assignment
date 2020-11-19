@@ -1,0 +1,45 @@
+--- docroot/modules/contrib/facets/src/Widget/WidgetPluginBase.php	(date 1605712711450)
++++ docroot/modules/contrib/facets/src/Widget/WidgetPluginBase.php	(date 1605712711450)
+@@ -48,25 +48,31 @@
+    * {@inheritdoc}
+    */
+   public function build(FacetInterface $facet) {
++    static $url_object;
++    if (empty($url_object)) {
++      $request = \Drupal::request();
++      $pathinfo = $request->getPathInfo();
++      $url_object = \Drupal::service('path.validator')->getUrlIfValid($pathinfo);
++    }
++
+     $this->facet = $facet;
+
+-    $items = array_map(function (Result $result) use ($facet) {
++    $items = array_map(function (Result $result) use ($facet, $url_object) {
+       if (empty($result->getUrl())) {
+         return $this->buildResultItem($result);
+       }
+       else {
+-        $url = $result->getUrl();
+-        $options = $url->getOptions();
+-        $request = \Drupal::request();
+-        $pathinfo = $request->getPathInfo();
+-        $url_object = \Drupal::service('path.validator')
+-          ->getUrlIfValid($pathinfo);
+-        $route_params = $url_object->getRouteParameters();
+-        $route_name = $url_object->getRouteName();
+-        // Additional check needed if facets are tied up with a block on the page.
+-        if ($url_object->getRouteName() === 'facets.block.ajax') {
++        // Additional check needed if facets are tied up with a block on the page.
++        if ($url_object->getRouteName() === 'facets.block.ajax') {
++          $url = $result->getUrl();
++          $options = $url->getOptions();
++
++          $route_params = $url_object->getRouteParameters();
++          $route_name = $url_object->getRouteName();
++
+           $result->setUrl(new Url($route_name, $route_params, $options));
+         }
++
+         return $this->buildListItems($facet, $result);
+       }
+     }, $facet->getResults());
