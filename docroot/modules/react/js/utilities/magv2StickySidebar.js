@@ -63,6 +63,16 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
     }
   };
 
+  window.addEventListener('load', () => {
+    const galleryWrapper = gallerycontainer;
+
+    if (galleryWrapper.offsetHeight > siderbarwrapper.offsetHeight) {
+      stickyElement(siderbarwrapper);
+    } else {
+      stickyElement(galleryWrapper);
+    }
+  });
+
   window.addEventListener('scroll', () => {
     const galleryWrapper = gallerycontainer;
 

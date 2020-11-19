@@ -71,7 +71,7 @@ echo "Target folder $target_files_folder"
 rsync -auv $source_files_folder $target:$target_files_folder
 
 source_brand_files_folder="${source_root}/sites/g/files/$brand_code"
-target_brand_files_folder="${target_root}/sites/g/files/$brand_code"
+target_brand_files_folder="${target_root}/sites/g/files/"
 rsync -auv $source_brand_files_folder $target:$target_brand_files_folder
 
 echo
