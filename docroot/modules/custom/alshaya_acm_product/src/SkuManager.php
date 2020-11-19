@@ -1199,8 +1199,14 @@ class SkuManager {
       }
 
       $image_file = $this->fileStorage->load($fid);
-      $row['image'] = file_create_url($image_file->getFileUri());
+      $image = [
+        '#theme' => 'image',
+        '#uri' => $image_file->getFileUri(),
+        '#title' => $data[$text_key],
+        '#alt' => $data[$text_key],
+      ];
 
+      $row['image'] = $image;
       $row['position'] = $data[$position_key];
       $row['text'] = $data[$text_key];
 
@@ -3551,6 +3557,8 @@ class SkuManager {
   /**
    * Wrapper function get labels and make the urls absolute.
    *
+   * TO BE used for APIs.
+   *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
    * @param string $context
@@ -3560,10 +3568,18 @@ class SkuManager {
    *   Labels data.
    */
   public function getSkuLabels(SKUInterface $sku, string $context): array {
+    // This function should be used for APIs.
     $labels = $this->getLabels($sku, $context, FALSE);
 
     if (empty($labels)) {
       return [];
+    }
+
+    // Convert render array to absolute image urls.
+    foreach ($labels as &$label) {
+      $label['image'] = is_array($label['image'])
+        ? file_create_url($label['image']['#uri'])
+        : $label['image'];
     }
 
     return $labels;

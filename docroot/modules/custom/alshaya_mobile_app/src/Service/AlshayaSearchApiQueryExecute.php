@@ -654,13 +654,11 @@ class AlshayaSearchApiQueryExecute {
       foreach ($facet_results as $result) {
         // For storing intermediate temporary data.
         if (strpos($key, 'color_family') > -1) {
-          $result
-            ->setDisplayValue(
-              $this
-                ->swatchesHelper
-                ->getSwatch('color_family', $result->getDisplayValue())['name']
-            );
+          $swatch = $this->swatchesHelper->getSwatch('color_family', $result->getDisplayValue());
+          $swatch_value = $swatch['name'] ?? $result->getDisplayValue();
+          $result->setDisplayValue($swatch_value);
         }
+
         $temp_data = [
           'key' => $result->getRawValue(),
           'label' => $result->getDisplayValue(),
