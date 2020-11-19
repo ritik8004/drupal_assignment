@@ -20,7 +20,6 @@ use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\views\Views;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class Category Product List Resource.
@@ -378,7 +377,7 @@ class CategoryProductListResource extends ResourceBase {
         'rule_contexts' => $term_details['ruleContext'],
       ];
 
-      return new JsonResponse($response);
+      return $response;
     }
 
     throw new \Exception('No backend available to process this request.');
