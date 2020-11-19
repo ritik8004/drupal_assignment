@@ -14,6 +14,7 @@ const PdpCart = ({
   context,
   closeModal,
   animatePdpCart,
+  refButton,
 }) => {
   const wrapper = useRef();
 
@@ -41,6 +42,7 @@ const PdpCart = ({
           firstChild={firstChild}
           context={context}
           closeModal={closeModal}
+          refCartButton={(ref) => (refButton(ref))}
         />
       </div>
     );
