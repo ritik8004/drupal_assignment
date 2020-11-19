@@ -231,7 +231,7 @@ export default class Cart extends React.Component {
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
             />
             {isAuraEnabled()
-              ? <AuraCartContainer animationDelay="0.4s" />
+              ? <AuraCartContainer />
               : null}
             <OrderSummaryBlock
               totals={totals}

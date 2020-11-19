@@ -74,10 +74,6 @@ class AuraCartRewards extends React.Component {
     const allAuraStatus = getAllAuraStatus();
 
     const {
-      animationDelay: animationDelayValue,
-    } = this.props;
-
-    const {
       wait,
       productPoints,
       expiringPoints,
@@ -91,7 +87,7 @@ class AuraCartRewards extends React.Component {
     }
 
     return (
-      <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{this.getSectionTitle(allAuraStatus, loyaltyStatus)}</SectionTitle>
 
         {/* Guest */}
