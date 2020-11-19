@@ -20,14 +20,14 @@ class ConfigurableProductForm extends React.Component {
 
   componentDidMount() {
     this.handleLoad();
-    const { context } = this.props;
+    const { context, refCartButton } = this.props;
 
     // Condition to check if add to cart
     // button is available.
     if (document.getElementById(`add-to-cart-${context}`)) {
       window.addEventListener('load', () => {
         this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
-
+        refCartButton(this.button);
         this.addToBagButtonClass(this.button.current.offsetTop);
       });
 
