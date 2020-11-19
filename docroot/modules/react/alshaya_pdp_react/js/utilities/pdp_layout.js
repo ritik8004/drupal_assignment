@@ -231,14 +231,13 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       brandLogoTitle = productInfo[skuItemCode].brandLogo.title
         ? productInfo[skuItemCode].brandLogo.title : null;
     }
+    // free gift promotion variable from parent sku.
     if (productInfo[skuItemCode].freeGiftPromotion !== undefined) {
-      freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#image']
-        ? productInfo[skuItemCode].freeGiftPromotion['#image'] : null;
-      freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion.promo_title
-        ? productInfo[skuItemCode].freeGiftPromotion.promo_title : null;
-      freeGiftPromoCode = productInfo[skuItemCode].freeGiftPromotion['#promo_code'];
-      freeGiftPromoUrl = productInfo[skuItemCode].freeGiftPromotion['#promo_web_url'];
-      freeGiftMessage = productInfo[skuItemCode].freeGiftPromotion['#message']['#markup'];
+      freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#image'] || null;
+      freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion.promo_title || null;
+      freeGiftPromoCode = productInfo[skuItemCode].freeGiftPromotion['#promo_code'] || null;
+      freeGiftPromoUrl = productInfo[skuItemCode].freeGiftPromotion['#promo_web_url'] || null;
+      freeGiftMessage = productInfo[skuItemCode].freeGiftPromotion['#message']['#markup'] || null;
     }
     title = productInfo[skuItemCode].cart_title;
     priceRaw = productInfo[skuItemCode].priceRaw;
@@ -262,14 +261,18 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           stockQty = productInfo[skuItemCode].variants[variant].stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = productInfo[skuItemCode].variants[variant].promotionsRaw;
+          // free gift promotion variable from variant sku.
           if (productInfo[skuItemCode].variants[variant].freeGiftPromotion !== undefined) {
             freeGiftImage = productInfo[skuItemCode].variants[variant].freeGiftPromotion['#image']
-              ? productInfo[skuItemCode].variants[variant].freeGiftPromotion['#image'] : null;
+              || null;
             freeGiftTitle = productInfo[skuItemCode].variants[variant].freeGiftPromotion.promo_title
-              ? productInfo[skuItemCode].variants[variant].freeGiftPromotion.promo_title : null;
-            freeGiftPromoCode = productInfo[skuItemCode].variants[variant].freeGiftPromotion['#promo_code'];
-            freeGiftPromoUrl = productInfo[skuItemCode].variants[variant].freeGiftPromotion['#promo_web_url'];
-            freeGiftMessage = productInfo[skuItemCode].variants[variant].freeGiftPromotion['#message']['#markup'];
+              || null;
+            freeGiftPromoCode = productInfo[skuItemCode].variants[variant].freeGiftPromotion['#promo_code']
+              || null;
+            freeGiftPromoUrl = productInfo[skuItemCode].variants[variant].freeGiftPromotion['#promo_web_url']
+              || null;
+            freeGiftMessage = productInfo[skuItemCode].variants[variant].freeGiftPromotion['#message']['#markup']
+              || null;
           }
         }
       }

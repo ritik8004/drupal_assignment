@@ -110,7 +110,7 @@ class AlshayaPromoLabelManager {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language Manager..
+   *   Language Manager.
    */
   public function __construct(SkuManager $sku_manager,
                               SkuImagesManager $images_manager,

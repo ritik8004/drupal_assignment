@@ -3,21 +3,18 @@ import parse from 'html-react-parser';
 import ConditionalView from '../../../common/components/conditional-view';
 
 const PdpFreeGift = ({
-  freeGiftImage, 
-  freeGiftTitle, 
-  freeGiftPromoCode, 
-  freeGiftPromoUrl,
+  freeGiftImage,
+  freeGiftPromoCode,
   freeGiftMessage,
 }) => (
   <div className="free-gift-promotions free-gift-promotions-full-view-mode">
     <div className="free-gift-promo-wrapper free-gift-promo-list">
       <div className="free-gift-image">
-        <img 
-          src={freeGiftImage['#url']} 
-          alt={freeGiftImage['#alt']} 
-          title={freeGiftImage['#title']} 
-          typeof="foaf:Image" 
-          className="b-lazy b-loaded height-sync-processed" 
+        <img
+          src={freeGiftImage['#url']}
+          alt={freeGiftImage['#alt']}
+          title={freeGiftImage['#title']}
+          typeof="foaf:Image"
         />
       </div>
       <div className="free-gift-wrapper">
@@ -27,11 +24,13 @@ const PdpFreeGift = ({
         <div className="free-gift-message">
           {parse(freeGiftMessage)}
         </div>
-        <div class="free-gift-coupon-code">
-          {Drupal.t('Use code ')}
-          <span class="coupon-code">{freeGiftPromoCode}</span>
-          {Drupal.t('in basket')}
-        </div>
+        <ConditionalView condition={freeGiftPromoCode.length > 0}>
+          <div className="free-gift-coupon-code">
+            {Drupal.t('Use code ')}
+            <span className="coupon-code">{freeGiftPromoCode}</span>
+            {Drupal.t('in basket')}
+          </div>
+        </ConditionalView>
       </div>
     </div>
   </div>
