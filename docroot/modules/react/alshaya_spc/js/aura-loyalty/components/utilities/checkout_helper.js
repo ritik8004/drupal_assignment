@@ -1,21 +1,6 @@
-import { getElementValue, showError } from './aura_utils';
-import getStringMessage from '../../../js/utilities/strings';
-
-/**
- * Utility function to get user's aura details default state.
- */
-function getUserAuraDetailsDefaultState() {
-  const auraDetails = {
-    loyaltyStatus: 0,
-    tier: '',
-    points: 0,
-    cardNumber: '',
-    email: '',
-    mobile: '',
-  };
-
-  return auraDetails;
-}
+/* eslint-disable */
+import { getElementValue, showError } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 /**
  * Utility function to get user input value.
@@ -66,5 +51,4 @@ function getUserInput(linkCardOption, chosenCountryCode) {
 
 export {
   getUserInput,
-  getUserAuraDetailsDefaultState,
 };

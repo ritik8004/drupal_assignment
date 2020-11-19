@@ -105,7 +105,8 @@ function handleLinkYourCard(cardNumber) {
 }
 
 /**
- * Helper function to handle search.
+ * Helper function to call APC search API to search aura details
+ * of a customer based on email/card/mobile.
  */
 function handleSearch(data) {
   let stateValues = {};

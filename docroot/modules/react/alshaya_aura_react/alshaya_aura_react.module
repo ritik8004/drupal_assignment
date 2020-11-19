@@ -201,3 +201,11 @@ function alshaya_aura_react_preprocess_node(&$variables) {
     $variables['aura_enabled'] = 1;
   }
 }
+
+/**
+ * Implements hook_alshaya_spc_checkout_build_alter().
+ */
+function alshaya_aura_react_alshaya_spc_checkout_build_alter(array &$build) {
+  \Drupal::moduleHandler()->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
+  $build['#strings'] = array_merge($build['#strings'], _alshaya_aura_static_strings());
+}

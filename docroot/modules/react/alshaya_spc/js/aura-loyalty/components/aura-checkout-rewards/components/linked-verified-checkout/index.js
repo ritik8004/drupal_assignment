@@ -3,13 +3,12 @@ import PointsExpiryMessage from '../../../utilities/points-expiry-message';
 import AuraFormRedeemPoints from '../../../aura-forms/aura-redeem-points';
 import PointsString from '../../../utilities/points-string';
 import ToolTip from '../../../../../utilities/tooltip';
+import { getTooltipPointsOnHoldMsg } from '../../../utilities/helper';
 
 const AuraLinkedVerifiedCheckout = (props) => {
   const {
     pointsInAccount, pointsToEarn, expiringPoints, expiryDate,
   } = props;
-
-  const tooltip = Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem  the points.');
 
   return (
     <>
@@ -25,7 +24,7 @@ const AuraLinkedVerifiedCheckout = (props) => {
             :
             <PointsString points={pointsToEarn} />
             { Drupal.t('with this purchase') }
-            <ToolTip enable question>{ tooltip }</ToolTip>
+            <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
           </div>
         </div>
       </div>

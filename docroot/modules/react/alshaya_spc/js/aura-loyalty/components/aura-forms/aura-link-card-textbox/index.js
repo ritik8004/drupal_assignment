@@ -4,9 +4,10 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import LinkCardOptionEmail from './components/link-card-option-email';
 import LinkCardOptionCard from './components/link-card-option-card';
 import LinkCardOptionMobile from './components/link-card-option-mobile';
-import { handleSignUp, handleSearch } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
+import { handleSignUp, handleSearch, handleNotYou } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
-import { getUserAuraDetailsDefaultState, getUserInput } from '../../../../../../alshaya_aura_react/js/utilities/checkout_helper';
+import { getAuraDetailsDefaultState } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getUserInput } from '../../utilities/checkout_helper';
 import {
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
@@ -18,12 +19,13 @@ class AuraFormLinkCard extends React.Component {
       linkCardOption: 'card',
       isOTPModalOpen: false,
       chosenCountryCode: null,
-      ...getUserAuraDetailsDefaultState(),
+      ...getAuraDetailsDefaultState(),
     };
   }
 
   componentDidMount() {
     document.addEventListener('loyaltyDetailsSearchComplete', this.updateStates, false);
+    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
   }
 
   updateStates = (data) => {
@@ -31,11 +33,11 @@ class AuraFormLinkCard extends React.Component {
 
     if (Object.keys(stateValues).length === 0) {
       this.setState({
-        ...getUserAuraDetailsDefaultState(),
+        ...getAuraDetailsDefaultState(),
       });
       this.showResponse({
         type: 'failure',
-        message: Drupal.t('No data found. Please try again.'),
+        message: Drupal.t('No card found. Please try again.'),
       });
       return;
     }
@@ -113,6 +115,7 @@ class AuraFormLinkCard extends React.Component {
     const {
       linkCardOption,
       isOTPModalOpen,
+      cardNumber,
     } = this.state;
 
     return (
@@ -146,12 +149,22 @@ class AuraFormLinkCard extends React.Component {
             <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
           </div>
           <div className="sub-text">
-            <span>{ Drupal.t('Not a member yet?') }</span>
-            <a
-              onClick={() => this.openOTPModal()}
-            >
-              {Drupal.t('Sign up now')}
-            </a>
+            { cardNumber
+              ? (
+                <a onClick={() => handleNotYou(cardNumber)}>
+                  {Drupal.t('Not you?')}
+                </a>
+              )
+              : (
+                <>
+                  <span>{ Drupal.t('Not a member yet?') }</span>
+                  <a
+                    onClick={() => this.openOTPModal()}
+                  >
+                    {Drupal.t('Sign up now')}
+                  </a>
+                </>
+              )}
           </div>
         </div>
         <SignUpOtpModal

@@ -2,13 +2,12 @@ import React from 'react';
 import PendingEnrollmentMessage from '../../../utilities/pending-enrollment-message';
 import ToolTip from '../../../../../utilities/tooltip';
 import PointsString from '../../../utilities/points-string';
+import { getTooltipPointsOnHoldMsg } from '../../../utilities/helper';
 
 const AuraLinkedNotVerifiedCheckout = (props) => {
   const {
     pointsInAccount, pointsToEarn,
   } = props;
-
-  const tooltip = Drupal.t('Your points will be credited to your account but will be on-hold status until the return period of 14 days. After that you will be able to redeem  the points.');
 
   return (
     <>
@@ -24,7 +23,7 @@ const AuraLinkedNotVerifiedCheckout = (props) => {
             :
             <PointsString points={pointsToEarn} />
             { Drupal.t('with this purchase') }
-            <ToolTip enable question>{ tooltip }</ToolTip>
+            <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
           </div>
         </div>
       </div>
