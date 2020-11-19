@@ -18,3 +18,6 @@ $settings['alshaya_checkout_settings']['pending_payments']['after'] = 14400;
 
 // Revalidate total after 5 minutes if purchase not complete.
 $settings['alshaya_checkout_settings']['totals_revalidation_ttl'] = 300;
+
+// Flag to specify if we should use Native Magento API or ACM API.
+$settings['alshaya_checkout_settings']['cart_operations_mode'] = 'native';
