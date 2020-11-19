@@ -9,7 +9,7 @@ const PdpFreeGift = ({
   freeGiftPromoType,
   freeGiftTitle,
 }) => {
-  if (freeGiftPromoType === '1') {
+  if (freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
     return (
       <>
         <div className="free-gift-promotions free-gift-promotions-full-view-mode">
