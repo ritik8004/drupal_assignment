@@ -183,6 +183,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
+            'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
         ],

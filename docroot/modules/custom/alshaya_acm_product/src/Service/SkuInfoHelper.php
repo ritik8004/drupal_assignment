@@ -347,7 +347,7 @@ class SkuInfoHelper {
     }
 
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-      $video_url = $media_item['video_url']
+      $video_url = isset($media_item['video_url'])
         ? $media_item['video_url']
         : file_create_url($media_item['drupal_uri']);
 
