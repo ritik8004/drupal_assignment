@@ -232,7 +232,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
         ? productInfo[skuItemCode].brandLogo.title : null;
     }
     // free gift promotion variable from parent sku.
-    if (productInfo[skuItemCode].freeGiftPromotion !== undefined) {
+    if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
       freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#image'] || null;
       freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion.promo_title || null;
       freeGiftPromoCode = productInfo[skuItemCode].freeGiftPromotion['#promo_code'] || null;
@@ -262,7 +262,7 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
           firstChild = configurableCombinations[skuItemCode].firstChild;
           promotions = productInfo[skuItemCode].variants[variant].promotionsRaw;
           // free gift promotion variable from variant sku.
-          if (productInfo[skuItemCode].variants[variant].freeGiftPromotion !== undefined) {
+          if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
             freeGiftImage = productInfo[skuItemCode].variants[variant].freeGiftPromotion['#image']
               || null;
             freeGiftTitle = productInfo[skuItemCode].variants[variant].freeGiftPromotion.promo_title
