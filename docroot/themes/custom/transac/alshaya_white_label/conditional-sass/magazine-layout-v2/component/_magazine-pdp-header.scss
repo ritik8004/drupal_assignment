@@ -334,6 +334,12 @@ html[lang=ar] {
         opacity: 1;
       }
 
+      .magv2-pdp-price {
+        .magv2-pdp-price-wrapper {
+          padding: 0;
+        }
+      }
+
       .back-button {
         background: none;
         #{$left}: -0.3125rem;
