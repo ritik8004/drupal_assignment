@@ -26,6 +26,13 @@
       box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
       margin-bottom: 0.625rem;
 
+      .spc-checkout-section-title {
+        font-family: inherit;
+        font-size: inherit;
+        margin: 0;
+        color: inherit;
+      }
+
       .close {
         position: absolute;
         #{$right}: 0.1875rem;

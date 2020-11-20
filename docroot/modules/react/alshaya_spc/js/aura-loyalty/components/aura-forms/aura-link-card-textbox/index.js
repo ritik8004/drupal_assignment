@@ -56,10 +56,13 @@ class AuraFormLinkCard extends React.Component {
     const element = document.querySelector('.spc-aura-link-card-wrapper .spc-aura-link-api-response-message');
     element.innerHTML = data.message;
     const submitButton = document.querySelector('.spc-aura-link-card-wrapper .form-items');
+    const cardOptions = document.querySelector('.spc-aura-link-card-form .aura-form-items-link-card-options');
     if (data.type === 'success') {
       submitButton.classList.add('success');
+      cardOptions.classList.add('success');
     } else {
       submitButton.classList.remove('success');
+      cardOptions.classList.remove('success');
     }
   };
 

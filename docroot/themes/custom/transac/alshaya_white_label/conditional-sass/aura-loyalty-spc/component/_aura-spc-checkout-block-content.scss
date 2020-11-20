@@ -1,4 +1,27 @@
+@mixin defaultBlockStyles() {
+  background: $aura-spc-checkout-block-bg;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  font-family: $aura-regular;
+}
+
 .spc-aura-checkout-rewards-block {
+  .spc-checkout-aura-points-to-earn,
+  .description,
+  label,
+  .sub-text {
+    color: #121212;
+
+    b {
+      font-family: $aura-bold;
+    }
+
+    b,
+    a {
+      color: $aura-spc-checkout-highlight;
+    }
+  }
+
   .spc-aura-highlight {
     color: $aura-spc-checkout-highlight;
     font-family: $aura-bold;
@@ -6,6 +29,8 @@
   }
 
   .spc-aura-link-card-form {
+    margin-top: 0.3125rem;
+
     .label {
       padding-bottom: 0.625rem;
     }
@@ -36,6 +61,7 @@
         a {
           color: $aura-spc-checkout-highlight;
           text-decoration: underline;
+          cursor: pointer;
         }
 
         @include breakpoint($upto-desktop) {
@@ -55,16 +81,10 @@
   .block-content {
     font-size: 0.875rem;
 
-    &.guest-user {
-      @include breakpoint($only-mobile) {
-        margin: 0 0.5rem;
-      }
-
+    &.guest-user,
+    &.registered-user-unlinked-card {
       > div {
-        background: $aura-spc-checkout-block-bg;
-        padding: 1.25rem;
-        border-radius: 0.625rem;
-        font-family: $aura-regular;
+        @include defaultBlockStyles;
       }
 
       .title {
@@ -81,9 +101,11 @@
         font-family: $aura-bold;
         font-weight: normal;
       }
+    }
 
-      .spc-aura-link-card-form {
-        margin-top: 0.3125rem;
+    &.guest-user {
+      @include breakpoint($only-mobile) {
+        margin: 0 0.5rem;
       }
 
       .aura-form-items-link-card-options {
@@ -92,6 +114,15 @@
 
         > div {
           padding-#{$right}: 1.25rem;
+          cursor: pointer;
+        }
+
+        &.success {
+          > div {
+            pointer-events: none;
+            opacity: 0.4;
+            cursor: none;
+          }
         }
       }
     }
@@ -114,6 +145,64 @@
         font-family: $aura-bold;
         font-weight: normal;
         padding: 0 0.25rem;
+      }
+    }
+
+    &.registered-user-unlinked-card {
+      .spc-aura-unlink-card-wrapper {
+        .description {
+          b {
+            padding-#{$left}: 3px;
+          }
+        }
+
+        .spc-aura-unlink-card-form-content {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-top: 0.75rem;
+
+          a {
+            color: $aura-spc-checkout-highlight;
+            text-decoration: underline;
+          }
+
+          .form-items {
+            display: flex;
+            height: 2.25rem;
+            position: relative;
+            align-items: flex-start;
+            width: 100%;
+
+            input,
+            button {
+              height: 100%;
+            }
+
+            input.spc-aura-link-card-input {
+              border: 1px solid $aura-spc-textbox-border;
+              border-radius: 0.25rem 0 0 0.25rem;
+              border-#{$right}: 0;
+              padding-#{$left}: 0.75rem;
+              width: calc(100% - 6.1875rem);
+
+              &::placeholder {
+                color: $aura-spc-textbox-placeholder;
+              }
+            }
+
+            button.spc-aura-button {
+              width: 6.1875rem;
+              border-radius: 0 0.25rem 0.25rem 0;
+            }
+          }
+
+          .no-link-message {
+            width: 10.9375rem;
+            line-height: 18px;
+            margin-#{$left}: 1.25rem;
+          }
+        }
       }
     }
   }
