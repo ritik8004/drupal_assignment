@@ -761,6 +761,7 @@ class AlshayaPromoLabelManager {
         '#promo_url' => $url,
         '#promo_code' => $coupon,
         '#image' => $free_sku_image ?? NULL,
+        '#promo_type' => $free_gift_promotion['promo_type'],
       ];
 
       if (!empty($free_gift_promotion['coupon_code'])) {
@@ -812,6 +813,7 @@ class AlshayaPromoLabelManager {
         '#promo_url' => $url,
         '#promo_title' => $free_gift_promotion['text'],
         '#promo_code' => $free_gift_promotion['coupon_code'],
+        '#promo_type' => $free_gift_promotion['promo_type'],
       ];
 
       $free_sku_media = $this->imagesManager->getFirstImage($free_sku_entity);
