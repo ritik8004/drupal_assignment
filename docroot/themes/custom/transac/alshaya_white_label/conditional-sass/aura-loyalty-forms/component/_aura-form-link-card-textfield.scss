@@ -18,6 +18,14 @@
         color: $aura-spc-response-message;
       }
     }
+
+    > .spc-aura-link-card-input-mobile-aura-mobile-field {
+      .spc-type-textfield {
+        label {
+          visibility: hidden;
+        }
+      }
+    }
   }
 
   input,
