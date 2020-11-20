@@ -74,7 +74,7 @@ class TicketBookingKnetHelper extends KnetHelper {
     TicketBookingManager $ticket_booking,
     RequestStack $stack
   ) {
-    parent::__construct($config_factory, $temp_store_factory, $logger_factory->get('alshaya_kz_transac_lite_knet'));
+    parent::__construct($config_factory, $temp_store_factory, $logger_factory->get('alshaya_kz_transac_lite_knet'), $stack);
     $this->knetHelper = $knet_helper;
     $this->bookingPayment = $booking_payment;
     $this->ticketBooking = $ticket_booking;
