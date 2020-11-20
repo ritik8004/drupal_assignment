@@ -321,3 +321,12 @@ After finishing CLI debuging it's recommended to disable xdebug back again, to i
 ### Remote debugging from ACSF
 On ACSF dev, dev2 and dev3 environments, xdebug is enabled for remote debugging.
 Follow instructions [here](https://support.acquia.com/hc/en-us/articles/360006231933-How-to-debug-an-Acquia-Cloud-environment-using-PhpStorm-and-Remote-Xdebug) to set up remote debugging on your local PhpStorm to leverage it.
+
+### XHPROF in local
+#### Setup
+Download and add https://www.drupal.org/project/xhprof in docroot/modules/development
+
+#### Usage
+* Enable the module (if not enabled already)
+* Add profile=1 in query string to any URL which you want to profile
+* Check factory-hooks/post-settings-php/xhprof.php for more details on default configuration
