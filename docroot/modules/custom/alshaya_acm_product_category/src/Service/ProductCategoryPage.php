@@ -17,12 +17,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Product category term page service.
  */
 class ProductCategoryPage {
-
-  /**
-   * Product category cache tag.
-   */
-  const PRODUCT_CATEGORY_CACHETAG = 'product-category-page';
-
   /**
    * Entity type manager.
    *
@@ -151,6 +145,20 @@ class ProductCategoryPage {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function getCurrentSelectedCategory(string $langcode = NULL, string $tid = '') {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    $cid = "selected_category_hierarchy:" . $langcode . ":" . $tid;
+
+    if ($selected_term_data = $this->cache->get($cid)) {
+      return $selected_term_data->data;
+    }
+
+    $cache_tags = [
+      'selected_category_hierarchy:' . $tid,
+    ];
+
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $term = empty($tid) ? $term = $this->getTermForRoute() : $storage->load($tid);
 
@@ -162,19 +170,6 @@ class ProductCategoryPage {
         'ruleContext' => [],
         'field' => '',
       ];
-    }
-
-    if (empty($langcode)) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    }
-
-    $cache_tags = [
-      'current_selected_category:' . self::PRODUCT_CATEGORY_CACHETAG,
-    ];
-    $cid = self::PRODUCT_CATEGORY_CACHETAG . ":" . $langcode . ":" . $tid;
-
-    if ($current_term_data = $this->cache->get($cid)) {
-      return $current_term_data->data;
     }
 
     $parents = array_reverse($storage->loadAllParents($term->id()));
@@ -206,6 +201,8 @@ class ProductCategoryPage {
 
       // Merge term name for to use multiple contexts for category pages.
       $contexts[] = implode('__', $context_list);
+
+      $cache_tags = Cache::mergeTags($cache_tags, $term->getCacheTags());
     }
 
     $data = [
