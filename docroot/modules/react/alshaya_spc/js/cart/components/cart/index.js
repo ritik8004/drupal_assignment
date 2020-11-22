@@ -155,40 +155,47 @@ export default class Cart extends React.Component {
   /**
    * Select and add free gift item.
    */
-  selectFreeGift = (codeValue, sku, type) => {
+  selectFreeGift = (codeValue, sku, type, promoType) => {
     if (codeValue !== undefined) {
-      document.getElementById('promo-code').value = codeValue.trim();
-      document.getElementById('promo-action-button').click();
-      const url = Drupal.url(`rest/v1/product/${sku}`);
-      axios.get(url).then((response) => {
-        if (response.data.length !== 0) {
-          let configurableValues = response.data.configurable_values;
-          let variantSku = '';
-          if (type === 'configurable') {
-            variantSku = response.data.variants[0].sku;
-            configurableValues = response.data.variants[0].configurable_values;
-          }
-          const postData = {
-            promo: codeValue,
-            sku,
-            configurable_values: configurableValues,
-            variant: variantSku,
-            type,
-          };
-          axios.post('/middleware/public/select-free-gift', {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            data: JSON.stringify(postData),
-          }).then((cartresponse) => {
-            if (cartresponse.data.length !== 0) {
-              this.setState({
-                items: cartresponse.data.cart.items,
-              });
+      // Open free gift modal for collection free gifts.
+      if (promoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+        const body = document.querySelector('body');
+        body.classList.add('free-gifts-modal-overlay');
+        document.getElementById('spc-free-gift').click();
+      } else {
+        document.getElementById('promo-code').value = codeValue.trim();
+        document.getElementById('promo-action-button').click();
+        const url = Drupal.url(`rest/v1/product/${sku}`);
+        axios.get(url).then((response) => {
+          if (response.data.length !== 0) {
+            let configurableValues = response.data.configurable_values;
+            let variantSku = '';
+            if (type === 'configurable') {
+              variantSku = response.data.variants[0].sku;
+              configurableValues = response.data.variants[0].configurable_values;
             }
-          });
-        }
-      });
+            const postData = {
+              promo: codeValue,
+              sku,
+              configurable_values: configurableValues,
+              variant: variantSku,
+              type,
+            };
+            axios.post('/middleware/public/select-free-gift', {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              data: JSON.stringify(postData),
+            }).then((cartresponse) => {
+              if (cartresponse.data.length !== 0) {
+                this.setState({
+                  items: cartresponse.data.cart.items,
+                });
+              }
+            });
+          }
+        });
+      }
     }
   };
 
@@ -296,6 +303,7 @@ export default class Cart extends React.Component {
               coupon_code={couponCode}
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
+              items={items}
             />
             <OrderSummaryBlock
               totals={totals}
