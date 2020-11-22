@@ -66,6 +66,9 @@ const PdpLayout = () => {
     freeGiftImage,
     freeGiftTitle,
     freeGiftPromoCode,
+    freeGiftPromoUrl,
+    freeGiftMessage,
+    freeGiftPromoType,
   } = productValues;
 
   const emptyRes = (
@@ -199,6 +202,9 @@ const PdpLayout = () => {
               freeGiftImage={freeGiftImage}
               freeGiftTitle={freeGiftTitle}
               freeGiftPromoCode={freeGiftPromoCode}
+              freeGiftPromoUrl={freeGiftPromoUrl}
+              freeGiftMessage={freeGiftMessage}
+              freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
           <div className="addtobag-button-wrapper" ref={addToBagContainer}>

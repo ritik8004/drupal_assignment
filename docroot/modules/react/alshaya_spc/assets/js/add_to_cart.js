@@ -134,9 +134,8 @@
                   form[0].dispatchEvent(cartNotification);
                 }
                 else if (response.cart_id) {
-                  if (response.response_message.status === 'success'
-                    && (typeof response.items[productData.variant] !== 'undefined'
-                      || typeof response.items[productData.parentSku] !== 'undefined')) {
+                  if ((response.response_message === null || response.response_message.status === 'success')
+                    && (typeof response.items[productData.variant] !== 'undefined' || typeof response.items[productData.parentSku] !== 'undefined')) {
                     var cartItem = typeof response.items[productData.variant] !== 'undefined' ? response.items[productData.variant] : response.items[productData.parentSku];
                     productData.totalQty = cartItem.qty;
                   }
