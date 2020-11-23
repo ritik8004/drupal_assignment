@@ -156,7 +156,7 @@ class ProductCategoryPage {
     }
 
     $cache_tags = [
-      'selected_category_hierarchy:' . $tid,
+      'taxonomy_term:' . $tid,
     ];
 
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
