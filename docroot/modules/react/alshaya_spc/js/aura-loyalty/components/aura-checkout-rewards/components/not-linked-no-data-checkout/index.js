@@ -15,7 +15,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
   // State setter for link card component flag.
   enableShowLinkCardMessage = () => {
     // We do this only for registered in users.
-    if (drupalSettings.user.uid === 0) {
+    if (drupalSettings.user.uid > 0) {
       this.setState({
         showLinkCardMessage: true,
       });
