@@ -370,6 +370,9 @@
             "drupal/social_auth_google": {
                 "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-05-06/500-error-on-google-auth-3133754-3.patch"
             },
+            "drupal/social_auth_facebook": {
+                "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-11-23/social_auth_facebook-IdentityProviderException_better_handling-3178401-6.patch"
+            },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
             },
