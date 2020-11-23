@@ -77,10 +77,17 @@ class AuraFormLinkCard extends React.Component {
       message: Drupal.t('Your loyalty points will be credited to this account.'),
     });
 
-    const { cartId } = this.props;
-    const dataForStorage = { cartId, ...searchData };
+    if (searchData) {
+      const { cartId } = this.props;
+      const dataForStorage = { cartId, ...searchData };
 
-    setStorageInfo(dataForStorage, getAuraLocalStorageKey());
+      // Get mobile number without country code to set in storage.
+      if (searchData.key === 'mobile') {
+        dataForStorage.value = searchData.value.substring(3);
+      }
+
+      setStorageInfo(dataForStorage, getAuraLocalStorageKey());
+    }
 
     this.setState({
       ...stateValues,
