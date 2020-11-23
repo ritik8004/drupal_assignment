@@ -171,11 +171,12 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
  */
 function alshaya_acm_product_position_acq_sku_position_sync_category_term_processed($term) {
   // Invalidate cache tags for categories processed during position sync.
-  $tag = 'search_api_list:product:sort_position:' . $term->tid;
+  $tag = 'search_api_list:term:' . $term->tid;
   \Drupal::logger('alshaya_acm_product_position')->notice('Invalidating cache tag @tag', [
     '@tag' => $tag,
   ]);
-  Cache::invalidateTags([$tag]);
+  // Queue cach tag for invalidation.
+  _alshaya_performance_queue_cache_tag_for_invalidation($tag);
 }
 
 /**
