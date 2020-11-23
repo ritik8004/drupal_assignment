@@ -266,7 +266,7 @@
 
       .magv2-button {
         margin: 0;
-        min-width: 23.125rem;
+        min-width: 22.875rem;
         font-size: 1rem;
         font-family: $alshaya-bold;
         padding: 0.625rem 0 0.5625rem;
@@ -332,6 +332,12 @@ html[lang=ar] {
       .magv2-detail-wrapper {
         display: flex;
         opacity: 1;
+      }
+
+      .magv2-pdp-price {
+        .magv2-pdp-price-wrapper {
+          padding: 0;
+        }
       }
 
       .back-button {
