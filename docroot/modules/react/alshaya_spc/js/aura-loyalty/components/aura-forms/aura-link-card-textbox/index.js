@@ -30,6 +30,7 @@ class AuraFormLinkCard extends React.Component {
 
   updateStates = (data) => {
     const { stateValues } = data.detail;
+    const { enableShowLinkCardMessage } = this.props;
 
     if (Object.keys(stateValues).length === 0) {
       this.setState({
@@ -50,10 +51,13 @@ class AuraFormLinkCard extends React.Component {
     this.setState({
       ...stateValues,
     });
+
+    // Set state in parent to show link card component.
+    enableShowLinkCardMessage();
   };
 
   showResponse = (data) => {
-    const element = document.querySelector('.spc-aura-link-card-wrapper .spc-aura-link-api-response-message');
+    const element = document.querySelector('.spc-aura-link-card-form .spc-aura-link-api-response-message');
     element.innerHTML = data.message;
     const submitButton = document.querySelector('.spc-aura-link-card-wrapper .form-items');
     const cardOptions = document.querySelector('.spc-aura-link-card-form .aura-form-items-link-card-options');
@@ -149,7 +153,9 @@ class AuraFormLinkCard extends React.Component {
                 { Drupal.t('Apply') }
               </button>
             </div>
-            <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
+            <ConditionalView condition={window.innerWidth < 768}>
+              <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
+            </ConditionalView>
           </div>
           <div className="sub-text">
             { cardNumber
@@ -170,6 +176,9 @@ class AuraFormLinkCard extends React.Component {
               )}
           </div>
         </div>
+        <ConditionalView condition={window.innerWidth >= 768}>
+          <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
+        </ConditionalView>
         <SignUpOtpModal
           isOTPModalOpen={isOTPModalOpen}
           closeOTPModal={this.closeOTPModal}
