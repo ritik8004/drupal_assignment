@@ -7,7 +7,11 @@ class AuraFormLinkCardOptions extends React.Component {
   }
 
   selectOption = (e) => {
-    const { selectOptionCallback } = this.props;
+    const { selectOptionCallback, cardNumber } = this.props;
+
+    if (cardNumber) {
+      return;
+    }
     // Clear selection.
     document.querySelectorAll('.linking-option-radio').forEach((item) => {
       const element = item;
@@ -22,7 +26,7 @@ class AuraFormLinkCardOptions extends React.Component {
 
     return (
       <div ref={this.optionsRef} className="aura-form-items-link-card-options">
-        <div className="linking-option" onClick={(e) => this.selectOption(e)}>
+        <div key="email" className="linking-option" onClick={(e) => this.selectOption(e)}>
           <input
             type="radio"
             id="email"
@@ -38,14 +42,14 @@ class AuraFormLinkCardOptions extends React.Component {
             {Drupal.t('Email address')}
           </label>
         </div>
-        <div className="linking-option" onClick={(e) => this.selectOption(e)}>
+        <div key="card" className="linking-option" onClick={(e) => this.selectOption(e)}>
           <input
             type="radio"
             id="card"
             name="linking-options"
-            value="card"
+            value="cardNumber"
             className="linking-option-radio"
-            checked={selectedOption === 'card'}
+            checked={selectedOption === 'cardNumber'}
           />
           <label
             className="aura-radio-sim"
@@ -54,7 +58,7 @@ class AuraFormLinkCardOptions extends React.Component {
             {Drupal.t('Card number')}
           </label>
         </div>
-        <div className="linking-option" onClick={(e) => this.selectOption(e)}>
+        <div key="mobile" className="linking-option" onClick={(e) => this.selectOption(e)}>
           <input
             type="radio"
             id="mobile"

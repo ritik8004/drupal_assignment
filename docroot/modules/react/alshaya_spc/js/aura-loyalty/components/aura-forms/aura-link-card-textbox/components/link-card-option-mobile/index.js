@@ -3,7 +3,7 @@ import AuraMobileNumberField from '../../../aura-mobile-number-field';
 import { getAuraConfig } from '../../../../../../../../alshaya_aura_react/js/utilities/helper';
 
 const LinkCardOptionMobile = (props) => {
-  const { setChosenCountryCode } = props;
+  const { setChosenCountryCode, mobile } = props;
   const {
     country_mobile_code: countryMobileCode,
     mobile_maxlength: countryMobileCodeMaxLength,
@@ -17,6 +17,7 @@ const LinkCardOptionMobile = (props) => {
       maxLength={countryMobileCodeMaxLength}
       setCountryCode={setChosenCountryCode}
       onlyMobileFieldPlaceholder={Drupal.t('Mobile number')}
+      defaultValue={mobile}
     />
   );
 };

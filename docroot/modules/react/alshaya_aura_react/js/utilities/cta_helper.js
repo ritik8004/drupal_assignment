@@ -60,6 +60,17 @@ function updateUsersLoyaltyStatus(cardNumber, auraStatus, link) {
 function handleNotYou(cardNumber) {
   let stateValues = {};
   const auraStatus = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
+
+  if (!getUserDetails().id) {
+    stateValues = {
+      ...getAuraDetailsDefaultState(),
+      loyaltyStatus: auraStatus,
+      signUpComplete: false,
+    };
+    dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
+    return;
+  }
+
   showFullScreenLoader();
   const apiData = updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
 
@@ -128,7 +139,7 @@ function handleSearch(data) {
           };
         }
       }
-      dispatchCustomEvent('loyaltyDetailsSearchComplete', { stateValues });
+      dispatchCustomEvent('loyaltyDetailsSearchComplete', { stateValues, searchData: data });
       removeFullScreenLoader();
     });
   }

@@ -17,7 +17,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
   };
 
   render() {
-    const { pointsToEarn } = this.props;
+    const { pointsToEarn, cartId } = this.props;
     return (
       <div className="block-content guest-user">
         <div className="title">
@@ -27,7 +27,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
         <div className="spc-aura-link-card-form">
           <div className="label">{ Drupal.t('Already an Aura member?') }</div>
           <div className="item-wrapper">
-            <AuraFormLinkCard />
+            <AuraFormLinkCard cartId={cartId} />
           </div>
         </div>
       </div>

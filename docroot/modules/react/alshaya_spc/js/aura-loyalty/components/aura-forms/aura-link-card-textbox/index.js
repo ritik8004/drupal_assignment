@@ -6,35 +6,65 @@ import LinkCardOptionCard from './components/link-card-option-card';
 import LinkCardOptionMobile from './components/link-card-option-mobile';
 import { handleSignUp, handleSearch, handleNotYou } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
-import { getAuraDetailsDefaultState } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { getUserInput } from '../../utilities/checkout_helper';
 import {
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import {
+  setStorageInfo,
+  getStorageInfo,
+  removeStorageInfo,
+} from '../../../../../../js/utilities/storage';
 
 class AuraFormLinkCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      linkCardOption: 'card',
+      linkCardOption: 'cardNumber',
       isOTPModalOpen: false,
       chosenCountryCode: null,
+      loyaltyCardLinkedToCart: false,
       ...getAuraDetailsDefaultState(),
     };
   }
 
   componentDidMount() {
-    document.addEventListener('loyaltyDetailsSearchComplete', this.updateStates, false);
-    document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
+    document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
+    document.addEventListener('loyaltyStatusUpdated', this.handleLoyaltyUpdateEvent, false);
+    document.addEventListener('orderPaymentMethod', this.handlePlaceOrderEvent, false);
+
+    // Get data from localStorage.
+    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+
+    if (localStorageValues === null) {
+      return;
+    }
+
+    const { cartId } = this.props;
+
+    if (cartId === localStorageValues.cartId) {
+      const data = {
+        detail: {
+          stateValues: {
+            linkCardOption: localStorageValues.key,
+            [localStorageValues.key]: localStorageValues.value,
+          },
+        },
+      };
+      this.handleSearchEvent(data);
+    }
   }
 
-  updateStates = (data) => {
-    const { stateValues } = data.detail;
+  handleSearchEvent = (data) => {
+    const { stateValues, searchData } = data.detail;
 
     if (Object.keys(stateValues).length === 0) {
       this.setState({
         ...getAuraDetailsDefaultState(),
+        loyaltyCardLinkedToCart: false,
       });
+
       this.showResponse({
         type: 'failure',
         message: Drupal.t('No card found. Please try again.'),
@@ -47,9 +77,35 @@ class AuraFormLinkCard extends React.Component {
       message: Drupal.t('Your loyalty points will be credited to this account.'),
     });
 
+    const { cartId } = this.props;
+    const dataForStorage = { cartId, ...searchData };
+
+    setStorageInfo(dataForStorage, getAuraLocalStorageKey());
+
     this.setState({
       ...stateValues,
+      loyaltyCardLinkedToCart: true,
     });
+  };
+
+  handleLoyaltyUpdateEvent = (data) => {
+    this.showResponse({
+      type: 'failure',
+      message: '',
+    });
+
+    removeStorageInfo(getAuraLocalStorageKey());
+
+    const { stateValues } = data.detail;
+
+    this.setState({
+      ...stateValues,
+      loyaltyCardLinkedToCart: false,
+    });
+  };
+
+  handlePlaceOrderEvent = () => {
+    removeStorageInfo(getAuraLocalStorageKey());
   };
 
   showResponse = (data) => {
@@ -57,12 +113,15 @@ class AuraFormLinkCard extends React.Component {
     element.innerHTML = data.message;
     const submitButton = document.querySelector('.spc-aura-link-card-wrapper .form-items');
     const cardOptions = document.querySelector('.spc-aura-link-card-form .aura-form-items-link-card-options');
+
     if (data.type === 'success') {
       submitButton.classList.add('success');
       cardOptions.classList.add('success');
+      element.classList.remove('error');
     } else {
       submitButton.classList.remove('success');
       cardOptions.classList.remove('success');
+      element.classList.add('error');
     }
   };
 
@@ -84,11 +143,16 @@ class AuraFormLinkCard extends React.Component {
     });
   };
 
-  linkCard = () => {
+  resetStorage = () => {
     this.showResponse({
       type: 'failure',
       message: '',
     });
+    removeStorageInfo(getAuraLocalStorageKey());
+  };
+
+  linkCard = () => {
+    this.resetStorage();
 
     const {
       linkCardOption,
@@ -118,7 +182,10 @@ class AuraFormLinkCard extends React.Component {
     const {
       linkCardOption,
       isOTPModalOpen,
+      loyaltyCardLinkedToCart,
       cardNumber,
+      email,
+      mobile,
     } = this.state;
 
     return (
@@ -126,19 +193,21 @@ class AuraFormLinkCard extends React.Component {
         <AuraFormLinkCardOptions
           selectedOption={linkCardOption}
           selectOptionCallback={this.selectOption}
+          cardNumber={cardNumber}
         />
         <div className="spc-aura-link-card-form-content">
           <div className="spc-aura-link-card-wrapper">
             <div className="form-items">
               <ConditionalView condition={linkCardOption === 'email'}>
-                <LinkCardOptionEmail />
+                <LinkCardOptionEmail email={email} />
               </ConditionalView>
-              <ConditionalView condition={linkCardOption === 'card'}>
-                <LinkCardOptionCard />
+              <ConditionalView condition={linkCardOption === 'cardNumber'}>
+                <LinkCardOptionCard cardNumber={cardNumber} />
               </ConditionalView>
               <ConditionalView condition={linkCardOption === 'mobile'}>
                 <LinkCardOptionMobile
                   setChosenCountryCode={this.setChosenCountryCode}
+                  mobile={mobile}
                 />
               </ConditionalView>
               <button
@@ -152,7 +221,7 @@ class AuraFormLinkCard extends React.Component {
             <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
           </div>
           <div className="sub-text">
-            { cardNumber
+            { loyaltyCardLinkedToCart === true
               ? (
                 <a onClick={() => handleNotYou(cardNumber)}>
                   {Drupal.t('Not you?')}

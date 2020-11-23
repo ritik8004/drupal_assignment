@@ -17,10 +17,11 @@ function getUserInput(linkCardOption, chosenCountryCode) {
     }
 
     elementValue = {
+      key: 'mobile',
       type: 'phone',
       value: chosenCountryCode + mobile,
     };
-  } else if (linkCardOption === 'card') {
+  } else if (linkCardOption === 'cardNumber') {
     const card = getElementValue('spc-aura-link-card-input-card');
 
     if (card.length === 0) {
@@ -29,6 +30,7 @@ function getUserInput(linkCardOption, chosenCountryCode) {
     }
 
     elementValue = {
+      key: 'cardNumber',
       type: 'apcNumber',
       value: card.replace(/\s/g, ''),
     };
@@ -41,6 +43,7 @@ function getUserInput(linkCardOption, chosenCountryCode) {
     }
 
     elementValue = {
+      key: 'email',
       type: 'email',
       value: email,
     };

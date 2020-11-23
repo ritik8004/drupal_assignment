@@ -81,6 +81,7 @@ class AuraCheckoutRewards extends React.Component {
     const allAuraStatus = getAllAuraStatus();
 
     const {
+      cartId,
       animationDelay: animationDelayValue,
     } = this.props;
 
@@ -106,7 +107,7 @@ class AuraCheckoutRewards extends React.Component {
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
         >
-          <AuraNotLinkedNoDataCheckout pointsToEarn={pointsToEarn} />
+          <AuraNotLinkedNoDataCheckout pointsToEarn={pointsToEarn} cartId={cartId} />
         </ConditionalView>
 
         {/* Registered User - Linked Card */}
