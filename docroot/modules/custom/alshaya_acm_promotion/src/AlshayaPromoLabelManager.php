@@ -715,7 +715,7 @@ class AlshayaPromoLabelManager {
         'alshaya_acm_promotion.free_gifts_list',
         [
           'node' => $promotion_id,
-          'js' => 'nojs',
+          'js' => 'ajax',
         ],
         [
           'query' => ['coupon' => $coupon],
@@ -782,7 +782,7 @@ class AlshayaPromoLabelManager {
         'alshaya_acm_promotion.free_gift_modal',
         [
           'acq_sku' => $free_sku_entity->id(),
-          'js' => 'nojs',
+          'js' => 'ajax',
         ],
         [
           'query' => [

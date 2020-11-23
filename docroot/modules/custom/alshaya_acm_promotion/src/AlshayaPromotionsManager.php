@@ -497,7 +497,7 @@ class AlshayaPromotionsManager {
 
       $route_parameters = [
         'node' => $promotion_id,
-        'js' => 'nojs',
+        'js' => 'ajax',
       ];
 
       $options = [

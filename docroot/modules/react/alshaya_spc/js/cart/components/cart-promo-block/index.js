@@ -127,6 +127,7 @@ export default class CartPromoBlock extends React.Component {
           const body = document.querySelector('body');
           body.classList.add('free-gifts-modal-overlay');
           document.getElementById('spc-free-gift').click();
+          document.getElementById('promo-action-button').classList.remove('loading');
         } else {
           // Removing button clicked class.
           document.getElementById('promo-action-button').classList.remove('loading');
