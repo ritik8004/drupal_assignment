@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0f0dc65f3adb82601903b8999e72097",
+    "content-hash": "9b810e52e675eefa072ae9d6fba9d6e1",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11419,6 +11419,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
