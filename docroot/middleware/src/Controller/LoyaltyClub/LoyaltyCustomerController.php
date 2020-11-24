@@ -311,12 +311,12 @@ class LoyaltyCustomerController {
   }
 
   /**
-   * Process Checkout Cart.
+   * Cart Loyalty Update.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Return users loyalty details.
    */
-  public function loyaltyClubProcessCheckoutCart(Request $request) {
+  public function cartLoyaltyUpdate(Request $request) {
     try {
       $request_content = json_decode($request->getContent(), TRUE);
       $type = $request_content['type'];

@@ -63,7 +63,7 @@ function getUserInput(linkCardOption, chosenCountryCode) {
 function processCheckoutCart(data) {
   let stateValues = {};
 
-  const apiUrl = 'post/loyalty-club/process-checkout-cart';
+  const apiUrl = 'cart/loyalty/update';
   const apiData = postAPIData(apiUrl, data);
 
   if (apiData instanceof Promise) {
