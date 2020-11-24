@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44f05a865a1f1874025969128a8f43f4",
+    "content-hash": "9b810e52e675eefa072ae9d6fba9d6e1",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -6071,30 +6071,26 @@
         },
         {
             "name": "drupal/datalayer",
-            "version": "1.0.0-beta1",
+            "version": "1.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/datalayer.git",
-                "reference": "8.x-1.0-beta1"
+                "reference": "8.x-1.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/datalayer-8.x-1.0-beta1.zip",
-                "reference": "8.x-1.0-beta1",
-                "shasum": "972a9720c0a3482b0bb7b31bbe1b45dea4611528"
+                "url": "https://ftp.drupal.org/files/projects/datalayer-8.x-1.0-beta2.zip",
+                "reference": "8.x-1.0-beta2",
+                "shasum": "53723500a8cf6f7e0a1dcc877e769d1bddebf3c6"
             },
             "require": {
-                "drupal/core": "~8.0",
-                "drupal/libraries": "*"
+                "drupal/core": "^8.0 || ^9.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.0-beta1",
-                    "datestamp": "1489803485",
+                    "version": "8.x-1.0-beta2",
+                    "datestamp": "1579986781",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -6107,6 +6103,11 @@
             ],
             "authors": [
                 {
+                    "name": "Josh Lind",
+                    "homepage": "https://www.drupal.org/u/doublejosh",
+                    "role": "Maintainer"
+                },
+                {
                     "name": "bighappyface",
                     "homepage": "https://www.drupal.org/user/2513682"
                 },
@@ -6117,12 +6118,21 @@
                 {
                     "name": "doublejosh",
                     "homepage": "https://www.drupal.org/user/199720"
+                },
+                {
+                    "name": "josephdpurcell",
+                    "homepage": "https://www.drupal.org/user/2944035"
                 }
             ],
             "description": "Output page meta data for client-side availability.",
             "homepage": "https://www.drupal.org/project/datalayer",
+            "keywords": [
+                "Data Layer",
+                "Drupal"
+            ],
             "support": {
-                "source": "https://git.drupalcode.org/project/datalayer"
+                "source": "https://git.drupalcode.org/project/datalayer",
+                "issues": "https://www.drupal.org/project/issues/datalayer"
             }
         },
         {
@@ -11409,6 +11419,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12794,6 +12807,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "8.x-1.0-alpha3",
                     "datestamp": "1578377889",
@@ -13951,7 +13967,8 @@
                 "patches_applied": {
                     "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch",
                     "throws Allowed memory size of xxx bytes exhausted": "https://www.drupal.org/files/issues/2020-07-02/3156154-10.patch",
-                    "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch"
+                    "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch",
+                    "Creation of an unnecessary cache tag entry for each social auth entity": "https://www.drupal.org/files/issues/2020-11-20/3183636-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13976,6 +13993,10 @@
                 {
                     "name": "himanshu-dixit",
                     "homepage": "https://www.drupal.org/user/3513954"
+                },
+                {
+                    "name": "wells",
+                    "homepage": "https://www.drupal.org/user/2452278"
                 }
             ],
             "description": "Social Auth ",
@@ -14018,7 +14039,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-10-30/social_auth_facebook-IdentityProviderException_better_handling-3178401-4.patch"
+                    "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-11-23/social_auth_facebook-IdentityProviderException_better_handling-3178401-6.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

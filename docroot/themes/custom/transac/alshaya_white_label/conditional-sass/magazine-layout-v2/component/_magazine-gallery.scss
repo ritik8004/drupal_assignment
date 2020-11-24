@@ -1,9 +1,13 @@
 .nodetype--acq_product {
   .page-wrapper {
     @include breakpoint($tablet) {
-      background-color: $magv2-pdp-bg;
       padding-bottom: 2rem;
     }
+  }
+
+  .page-wrapper,
+  .c-footer {
+    background-color: $magv2-pdp-bg;
   }
 
   @include breakpoint($tablet) {
@@ -241,6 +245,10 @@
     }
 
     .slick-slider {
+      @include breakpoint($only-mobile) {
+        touch-action: pan-y pinch-zoom;
+      }
+
       .slick-next,
       .slick-prev {
         position: fixed;
@@ -348,6 +356,10 @@ html[lang="ar"] {
         .slick-prev {
           width: auto;
         }
+      }
+
+      .slick-slide {
+        float: left;
       }
     }
   }

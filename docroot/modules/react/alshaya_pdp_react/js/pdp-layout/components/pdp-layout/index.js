@@ -16,6 +16,7 @@ import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
 import magv2Sticky from '../../../../../js/utilities/magv2StickySidebar';
+import magv2StickyHeader from '../../../../../js/utilities/magv2StickyHeader';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -86,9 +87,14 @@ const PdpLayout = () => {
   const crosssellContainer = useRef();
   const addToBagContainer = useRef();
   let content;
+  let buttonRef;
 
   const getChildRef = (ref) => {
     content = ref;
+  };
+
+  const setRef = (ref) => {
+    buttonRef = ref;
   };
 
   // Sticky Sidebar
@@ -103,26 +109,14 @@ const PdpLayout = () => {
     }
   };
 
+  // Sticky Header
   const showStickyHeader = () => {
-    window.addEventListener('scroll', () => {
-      const rect = addToBagContainer.current.getBoundingClientRect();
+    window.addEventListener('load', () => {
+      magv2StickyHeader(buttonRef, header, content, isMobile);
+    });
 
-      if ((content !== null) && (content !== undefined)) {
-        // Check addToBagContainer is not in viewport & 20 is the margin which we are excluding.
-        if (rect.bottom < 20) {
-          header.current.classList.remove('magv2-pdp-non-sticky-header');
-          header.current.classList.add('magv2-pdp-sticky-header');
-          header.current.classList.add('fadeInUp');
-          header.current.classList.remove('fadeOutVertical');
-        } else if (isMobile && window.pageYOffset <= header.current.offsetHeight) {
-          header.current.classList.remove('magv2-pdp-non-sticky-header');
-        } else {
-          header.current.classList.remove('magv2-pdp-sticky-header');
-          header.current.classList.add('magv2-pdp-non-sticky-header');
-          header.current.classList.add('fadeOutVertical');
-          header.current.classList.remove('fadeInUp');
-        }
-      }
+    window.addEventListener('scroll', () => {
+      magv2StickyHeader(buttonRef, header, content, isMobile);
     });
   };
 
@@ -146,7 +140,7 @@ const PdpLayout = () => {
 
   return (skuItemCode) ? (
     <>
-      <div className={`magv2-header ${(isMobile ? 'fadeInUp' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
+      <div className={`magv2-header ${(isMobile ? 'fadeInVertical' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
         <PdpHeader
           title={title}
           finalPrice={parseFloat(finalPrice)
@@ -220,6 +214,7 @@ const PdpLayout = () => {
                 firstChild={firstChild}
                 context="main"
                 animatePdpCart
+                refButton={(ref) => (setRef(ref))}
               />
             ) : outOfStock}
           </div>

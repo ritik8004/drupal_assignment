@@ -19,7 +19,7 @@ const PdpInfo = ({
         className={`magv2-pdp-title-wrapper ${(animateTitlePrice ? 'fadeInUp' : '')}`}
         style={(animateTitlePrice ? { animationDelay: '0.3s' } : null)}
       >
-        <div className="magv2-pdp-title">{title}</div>
+        <div className={`magv2-pdp-title ${(brandLogo ? 'has-brand-logo' : '')}`}>{title}</div>
         {(brandLogo)
           ? <div className="magv2-pdp-brand-logo"><img src={brandLogo} alt={brandLogoAlt} title={brandLogoTitle} /></div>
           : null }
