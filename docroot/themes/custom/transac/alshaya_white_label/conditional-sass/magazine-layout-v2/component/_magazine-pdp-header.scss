@@ -18,6 +18,7 @@
   z-index: 4;
   background: $magv2-sticky-header-bg;
   opacity: 0;
+  box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
 
   @include breakpoint($only-mobile) {
     opacity: initial;
@@ -192,7 +193,6 @@
 
           .magv2-pdp-price-wrapper {
             font-size: 1rem;
-            padding-#{$left}: 0;
           }
         }
 
@@ -202,7 +202,7 @@
 
         .magv2-pdp-price-wrapper {
           font-size: 1.125rem;
-          padding: 0 0.25rem;
+          padding: 0;
           font-family: $alshaya-thin;
         }
 
@@ -316,8 +316,6 @@ html[lang=ar] {
 }
 
 .magv2-pdp-sticky-header {
-  box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
-
   &.magv2-header {
     position: fixed;
     #{$left}: 0;
@@ -332,12 +330,6 @@ html[lang=ar] {
       .magv2-detail-wrapper {
         display: flex;
         opacity: 1;
-      }
-
-      .magv2-pdp-price {
-        .magv2-pdp-price-wrapper {
-          padding: 0;
-        }
       }
 
       .back-button {
