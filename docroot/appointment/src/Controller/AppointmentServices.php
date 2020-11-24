@@ -451,31 +451,27 @@ class AppointmentServices {
       $result = $client->__soapCall('getAppointmentAnswersByAppointmentConfirmationNumber', [$param]);
 
       $companions = [];
-      $k = 0;
       if (!empty($result->return)) {
-
-        // Put FirstName, LastName in for each companion in one array.
-        foreach ($result->return as $item) {
-          if (strstr($item->question, 'First')) {
-            if (property_exists($item, 'answer')) {
-              $companions[$k]['firstName'] = $item->answer;
-              $companions[$k]['customer'] = $k + 1;
+        // Divide array into chunk of 3 as we are getting
+        // question / answer data in group series of 3.
+        foreach (array_chunk($result->return, 3) as $key => $value) {
+          foreach ($value as $item) {
+            // Put FirstName, LastName in for each companion in one array.
+            if (strstr($item->question, 'First')) {
+              if (property_exists($item, 'answer')) {
+                $companions[$key]['firstName'] = $item->answer;
+              }
             }
-          }
-          if (strstr($item->question, 'Last')) {
-            if (property_exists($item, 'answer')) {
-              $companions[$k]['lastName'] = $item->answer;
-              $companions[$k]['customer'] = $k + 1;
+            elseif (strstr($item->question, 'Last')) {
+              if (property_exists($item, 'answer')) {
+                $companions[$key]['lastName'] = $item->answer;
+              }
             }
-          }
-          if (strstr($item->question, 'Date')) {
-            if (property_exists($item, 'answer')) {
-              $companions[$k]['dob'] = $item->answer;
-              $companions[$k]['customer'] = $k + 1;
+            elseif (strstr($item->question, 'Date')) {
+              if (property_exists($item, 'answer')) {
+                $companions[$key]['dob'] = $item->answer;
+              }
             }
-          }
-          if (!empty($companions[$k]['firstName']) && !empty($companions[$k]['lastName']) && !empty($companions[$k]['dob'])) {
-            $k++;
           }
         }
 
