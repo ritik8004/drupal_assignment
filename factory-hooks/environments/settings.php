@@ -133,6 +133,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'tags.twitter_cards_site' => '@hmegypt',
           ],
         ],
+        'uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-NSGRLVC',
+          ],
+        ],
       ],
     ],
     'bbw' => [
@@ -289,6 +294,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'dynamic_yield.settings' => [
               'section_id' => '9876645',
             ],
+          ],
+        ],
+      ],
+      'ae' => [
+        'uat' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KLZ3ZQR',
           ],
         ],
       ],
