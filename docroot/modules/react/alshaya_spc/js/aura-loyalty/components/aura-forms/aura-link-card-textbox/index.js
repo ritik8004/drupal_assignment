@@ -120,7 +120,9 @@ class AuraFormLinkCard extends React.Component {
 
   showResponse = (data) => {
     const element = document.querySelector('.spc-aura-link-card-form .spc-aura-link-api-response-message');
-    element.innerHTML = data.message;
+    if (element) {
+      element.innerHTML = data.message;
+    }
     const submitButton = document.querySelector('.spc-aura-link-card-wrapper .form-items');
     const cardOptions = document.querySelector('.spc-aura-link-card-form .aura-form-items-link-card-options');
 

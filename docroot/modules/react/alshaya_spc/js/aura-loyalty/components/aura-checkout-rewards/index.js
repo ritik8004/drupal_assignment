@@ -1,7 +1,7 @@
 import React from 'react';
 import SectionTitle from '../../../utilities/section-title';
 import ConditionalView from '../../../common/components/conditional-view';
-import { getAuraDetailsDefaultState } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { getAllAuraStatus, getUserDetails } from '../../../../../alshaya_aura_react/js/utilities/helper';
 import AuraNotLinkedNoDataCheckout from './components/not-linked-no-data-checkout';
 import AuraLinkedVerifiedCheckout from './components/linked-verified-checkout';
@@ -11,6 +11,7 @@ import Loading from '../../../utilities/loading';
 import {
   getCustomerDetails,
 } from '../../../../../alshaya_aura_react/js/utilities/header_helper';
+import { getStorageInfo } from '../../../utilities/storage';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -25,28 +26,39 @@ class AuraCheckoutRewards extends React.Component {
 
   componentDidMount() {
     // @todo: API call here to fetch the points user will get based on his cart.
-    // Alternatively, it might be just a simple sum of points for each product
-    // in cart.
-
-    const {
-      loyaltyStatus,
-      tier,
-    } = this.state;
-
     document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
-    document.addEventListener('customerDetailsFetched', this.updateStates, false);
 
-    // No API call to fetch points for anonymous users or user with
-    // loyalty status APC_NOT_LINKED_NOT_U.
-    if (!getUserDetails().id || loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+    // Logged in user.
+    if (getUserDetails().id) {
+      document.addEventListener('customerDetailsFetched', this.updateStates, false);
+      const { loyaltyStatus, tier } = this.state;
+
+      if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
+        this.setState({
+          wait: false,
+        });
+        return;
+      }
+
+      // Get customer details.
+      getCustomerDetails(tier, loyaltyStatus);
+      return;
+    }
+
+    // Guest user.
+    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+
+    if (localStorageValues === null) {
       this.setState({
         wait: false,
       });
       return;
     }
 
-    // Get customer details.
-    getCustomerDetails(tier, loyaltyStatus);
+    const data = {
+      detail: { stateValues: localStorageValues },
+    };
+    this.updateStates(data);
   }
 
   // Event listener callback to update states.
