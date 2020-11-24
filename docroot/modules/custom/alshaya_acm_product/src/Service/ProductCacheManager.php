@@ -69,7 +69,8 @@ class ProductCacheManager {
   public function set(SKU $sku, string $key, $data, ?array $tags = []) {
     $cid = $this->getSkuCacheId($sku, $key);
 
-    $tags = is_array($tags) ? Cache::mergeTags($tags, $sku->getCacheTags()) : $sku->getCacheTags();
+    $sku_tags = self::getAlshayaProductTags($sku);
+    $tags = is_array($tags) ? Cache::mergeTags($tags, $sku_tags) : $sku_tags;
     $this->cache->set($cid, $data, Cache::PERMANENT, $tags);
 
     $static = &drupal_static('alshaya_product_processed_cached', []);
@@ -93,6 +94,23 @@ class ProductCacheManager {
       $sku->language()->getId(),
       $key,
     ]);
+  }
+
+  /**
+   * Get custom cache tags for SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Product.
+   *
+   * @return array|mixed|string|string[]
+   *   Custom cache tags.
+   */
+  public static function getAlshayaProductTags(SKU $sku) {
+    $sku_tags = $sku->getCacheTags();
+    foreach ($sku_tags as &$tag) {
+      $tag = str_replace($sku->getEntityTypeId(), 'alshaya_sku', $tag);
+    }
+    return $sku_tags;
   }
 
 }
