@@ -254,6 +254,22 @@ class AlshayaSpcCommands extends DrushCommands {
           $cart_amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']);
           $payment_info = $this->checkoutComApi->getChargesInfo($payment['unique_id']);
           if (!empty($payment_info['responseCode']) && $payment_info['responseCode'] == '10000') {
+            // For checkout.com we get proper response with exact amount user
+            // was charged. We need to check again if current amount and paid
+            // amount match. For KNET API takes care of validating this amount.
+            if ($cart_amount != $payment_info['value']) {
+              $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment is complete, but amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
+                '@data' => $payment['data'],
+                '@cart_id' => $payment['cart_id'],
+                '@info' => json_encode($payment_info),
+                '@total' => $cart['totals']['grand_total'],
+              ]);
+
+              $this->deletePaymentDataByCartId($payment['cart_id']);
+
+              continue;
+            }
+
             try {
               $update = [];
               $update['extension'] = [
@@ -302,16 +318,6 @@ class AlshayaSpcCommands extends DrushCommands {
           }
           elseif (empty($payment_info['id'])) {
             $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment callback requested with empty token. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
-              '@data' => $payment['data'],
-              '@cart_id' => $payment['cart_id'],
-              '@info' => json_encode($payment_info),
-              '@total' => $cart['totals']['grand_total'],
-            ]);
-
-            $this->deletePaymentDataByCartId($payment['cart_id']);
-          }
-          elseif ($cart_amount != $payment_info['value']) {
-            $this->getLogger('PendingPaymentCheck')->notice('Checkoutcom Payment is complete, but amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, Checkoutcom response: @info', [
               '@data' => $payment['data'],
               '@cart_id' => $payment['cart_id'],
               '@info' => json_encode($payment_info),
