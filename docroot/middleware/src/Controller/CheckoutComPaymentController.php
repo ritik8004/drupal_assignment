@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Service\Config\SystemSettings;
 
 /**
- * Class CheckoutComPaymentController.
+ * Controller for handling Checkout.com responses.
  */
 class CheckoutComPaymentController extends PaymentController {
 
@@ -149,6 +149,14 @@ class CheckoutComPaymentController extends PaymentController {
     $payment_token = $this->request->query->get('cko-payment-token') ?? '';
     $charges = $this->checkoutComApi->getChargesInfo($payment_token);
 
+    $this->logger->info('Checkout.com 3D payment complete for @quote_id.<br>@message', [
+      '@quote_id' => $cart['cart']['id'],
+      '@message' => json_encode($data),
+    ]);
+
+    // Delete the payment data from our custom table now.
+    $this->paymentData->deletePaymentDataByCartId((int) $cart['cart']['id']);
+
     // Validate again.
     if (empty($charges['responseCode']) || $charges['responseCode'] != APIWrapper::SUCCESS) {
       $this->logger->error('3D secure payment came into success but responseCode was not success. Cart id: @id, responseCode: @code, Payment token: @token', [
@@ -170,14 +178,6 @@ class CheckoutComPaymentController extends PaymentController {
 
       return $this->handleCheckoutComError('3D secure payment came into success with proper responseCode but totals do not match.');
     }
-
-    $this->logger->info('Checkout.com 3D payment complete for @quote_id.<br>@message', [
-      '@quote_id' => $cart['cart']['id'],
-      '@message' => json_encode($data),
-    ]);
-
-    // Delete the payment data from our custom table now.
-    $this->paymentData->deletePaymentDataByCartId((int) $cart['cart']['id']);
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
 
