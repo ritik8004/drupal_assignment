@@ -267,7 +267,7 @@ class AlshayaSpcCommands extends DrushCommands {
 
               $this->deletePaymentDataByCartId($payment['cart_id']);
 
-              continue;
+              continue 2;
             }
 
             try {
