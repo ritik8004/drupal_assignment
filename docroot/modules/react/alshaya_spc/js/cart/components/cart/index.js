@@ -154,7 +154,7 @@ export default class Cart extends React.Component {
         promo: coupon,
         sku: variantSku,
         configurable_values: [],
-        variant: variantSku,
+        variant: null,
         type,
         langcode: drupalSettings.path.currentLanguage,
       };

@@ -164,7 +164,7 @@ class PromotionController extends ControllerBase {
       $item['#title']['#markup'] = $free_gift->label();
       $item['#url'] = Url::fromRoute(
         'alshaya_acm_promotion.free_gift_modal',
-        ['acq_sku' => $free_gift->id(), 'js' => 'ajax'],
+        ['acq_sku' => $free_gift->id()],
         [
           'query' => [
             'promotion_id' => $node->id(),
