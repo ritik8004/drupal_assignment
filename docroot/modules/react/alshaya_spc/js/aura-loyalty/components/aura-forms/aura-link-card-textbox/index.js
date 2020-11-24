@@ -4,10 +4,10 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import LinkCardOptionEmail from './components/link-card-option-email';
 import LinkCardOptionCard from './components/link-card-option-card';
 import LinkCardOptionMobile from './components/link-card-option-mobile';
-import { handleSignUp, handleSearch, handleNotYou } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
+import { handleSignUp, handleNotYou } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
 import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
-import { getUserInput } from '../../utilities/checkout_helper';
+import { getUserInput, processCheckoutCart } from '../../utilities/checkout_helper';
 import {
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
@@ -32,7 +32,7 @@ class AuraFormLinkCard extends React.Component {
   componentDidMount() {
     document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
     document.addEventListener('loyaltyStatusUpdated', this.handleLoyaltyUpdateEvent, false);
-    document.addEventListener('orderPaymentMethod', this.handlePlaceOrderEvent, false);
+    document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
 
     // Get data from localStorage.
     const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
@@ -170,7 +170,7 @@ class AuraFormLinkCard extends React.Component {
 
     if (Object.keys(userInput).length !== 0) {
       showFullScreenLoader();
-      handleSearch(userInput);
+      processCheckoutCart(userInput);
     }
   };
 

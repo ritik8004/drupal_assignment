@@ -284,7 +284,6 @@ class LoyaltyCustomerController {
       $request_content = json_decode($request->getContent(), TRUE);
       $type = $request_content['type'];
       $value = $request_content['value'];
-      $responseData = [];
 
       // Check if required data is present in request.
       if (empty($type) || empty($value)) {
@@ -296,27 +295,64 @@ class LoyaltyCustomerController {
 
       $endpoint = sprintf('/customers/apc-search/%s/%s', $type, $value);
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $responseData = [
+        'status' => TRUE,
+        'data' => $response,
+      ];
+      return new JsonResponse($responseData);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to search APC user. Request Data: @data. Message: @message', [
+        '@data' => json_encode($request_content),
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
+  }
 
-      if (!empty($response['apc_identifier_number'])) {
+  /**
+   * Process Checkout Cart.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return users loyalty details.
+   */
+  public function loyaltyClubProcessCheckoutCart(Request $request) {
+    try {
+      $request_content = json_decode($request->getContent(), TRUE);
+      $type = $request_content['type'];
+      $value = $request_content['value'];
+      $responseData = [];
+
+      // Check if required data is present in request.
+      if (empty($type) || empty($value)) {
+        $this->logger->error('Error while trying to process cart to attach loyalty card. Required parameters missing. Request Data: @data', [
+          '@data' => json_encode($request_content),
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('Required parameters missing.', Response::HTTP_NOT_FOUND));
+      }
+
+      $search_response = $this->auraSearchHelper->search($type, $value);
+
+      // When card found for the given user details,
+      // then attach the card to cart.
+      if (!empty($search_response['data']['apc_identifier_number'])) {
         $data['extension'] = (object) [
           'action' => CartActions::CART_REFRESH,
-          'loyalty_card' => $response['apc_identifier_number'],
+          'loyalty_card' => $search_response['data']['apc_identifier_number'],
         ];
 
         $cart_data = $this->cart->updateCart($data);
 
         if (!empty($cart_data['cart']['extension_attributes']['loyalty_card'])) {
-          $responseData = [
-            'status' => TRUE,
-            'data' => $response,
-          ];
+          $search_response['status'] = TRUE;
+          $responseData = $search_response;
         }
       }
 
       return new JsonResponse($responseData);
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to search APC user. Request Data: @data. Message: @message', [
+      $this->logger->notice('Error while trying to process cart to attach loyalty card. Request Data: @data. Message: @message', [
         '@data' => json_encode($request_content),
         '@message' => $e->getMessage(),
       ]);

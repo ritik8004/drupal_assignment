@@ -32,3 +32,8 @@ loyalty_club.loyalty_club_sign_up:
     path: /post/loyalty-club/sign-up
     controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::loyaltyClubSignUp
     methods: POST
+
+loyalty_club.loyalty_club_checkout_process_cart:
+    path: /post/loyalty-club/process-checkout-cart
+    controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::loyaltyClubProcessCheckoutCart
+    methods: POST
