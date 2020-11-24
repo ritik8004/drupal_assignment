@@ -57,6 +57,7 @@ class AuraFormLinkCard extends React.Component {
   }
 
   handleSearchEvent = (data) => {
+    const { enableShowLinkCardMessage } = this.props;
     const { stateValues, searchData } = data.detail;
 
     if (Object.keys(stateValues).length === 0) {
@@ -93,6 +94,8 @@ class AuraFormLinkCard extends React.Component {
       ...stateValues,
       loyaltyCardLinkedToCart: true,
     });
+    // Set state in parent to show link card component.
+    enableShowLinkCardMessage();
   };
 
   handleLoyaltyUpdateEvent = (data) => {
@@ -116,7 +119,7 @@ class AuraFormLinkCard extends React.Component {
   };
 
   showResponse = (data) => {
-    const element = document.querySelector('.spc-aura-link-card-wrapper .spc-aura-link-api-response-message');
+    const element = document.querySelector('.spc-aura-link-card-form .spc-aura-link-api-response-message');
     element.innerHTML = data.message;
     const submitButton = document.querySelector('.spc-aura-link-card-wrapper .form-items');
     const cardOptions = document.querySelector('.spc-aura-link-card-form .aura-form-items-link-card-options');
@@ -225,7 +228,9 @@ class AuraFormLinkCard extends React.Component {
                 { Drupal.t('Apply') }
               </button>
             </div>
-            <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
+            <ConditionalView condition={window.innerWidth < 768}>
+              <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
+            </ConditionalView>
           </div>
           <div className="sub-text">
             { loyaltyCardLinkedToCart === true
@@ -246,6 +251,9 @@ class AuraFormLinkCard extends React.Component {
               )}
           </div>
         </div>
+        <ConditionalView condition={window.innerWidth >= 768}>
+          <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
+        </ConditionalView>
         <SignUpOtpModal
           isOTPModalOpen={isOTPModalOpen}
           closeOTPModal={this.closeOTPModal}
