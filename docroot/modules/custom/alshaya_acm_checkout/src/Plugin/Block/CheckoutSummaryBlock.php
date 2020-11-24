@@ -469,7 +469,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $surcharge_label = '';
 
     // We process surcharge only if enabled.
-    // @TODO: Re-visit when working on CORE-4483.
+    // @todo Re-visit when working on CORE-4483.
     if ($this->checkoutHelper->isSurchargeEnabled()) {
       $cart_totals['grand'] = acq_commerce_get_clean_price($cart_totals['grand']);
 

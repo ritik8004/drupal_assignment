@@ -180,7 +180,7 @@ class ClickCollectController extends ControllerBase {
    *   Return Ajax response with commands.
    */
   public function getCartStoresJson($cart_id, $lat = NULL, $lon = NULL) {
-    // @todo: replace this with:
+    // @todo replace this with:
     // Drupal\alshaya_click_collect\Service\AlshayaClickCollect::getCartStores
     $stores = $this->getCartStores($cart_id, $lat, $lon);
 
