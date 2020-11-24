@@ -1,8 +1,11 @@
 @mixin defaultBlockStyles() {
   background: $aura-spc-checkout-block-bg;
   padding: 1.25rem;
-  border-radius: 0.625rem;
   font-family: $aura-regular;
+
+  @include breakpoint($tablet) {
+    border-radius: 0.625rem;
+  }
 }
 
 .spc-aura-checkout-rewards-block {
@@ -10,7 +13,7 @@
   .description,
   label,
   .sub-text {
-    color: #121212;
+    color: $aura-spc-checkout-text-content;
 
     b {
       font-family: $aura-bold;
@@ -53,9 +56,9 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        justify-content: flex-start;
+        justify-content: center;
         margin-#{$left}: 1.25rem;
-        width: 175px;
+        width: 10.9375rem;
         line-height: 18px;
 
         a {
@@ -69,7 +72,9 @@
           margin-#{$left}: 0;
           width: 100%;
           flex-direction: row;
+        }
 
+        @include breakpoint($tablet) {
           a {
             margin-#{$left}: 0.625rem;
           }
@@ -80,6 +85,7 @@
 
   .block-content {
     font-size: 0.875rem;
+    color: $aura-spc-checkout-text-content;
 
     &.guest-user,
     &.registered-user-unlinked-card {
@@ -104,10 +110,6 @@
     }
 
     &.guest-user {
-      @include breakpoint($only-mobile) {
-        margin: 0 0.5rem;
-      }
-
       .aura-form-items-link-card-options {
         margin-#{$left}: -0.625rem;
         margin-bottom: 0.5rem;
@@ -115,6 +117,10 @@
         > div {
           padding-#{$right}: 1.25rem;
           cursor: pointer;
+
+          label {
+            color: $aura-spc-checkout-text-content;
+          }
         }
 
         &.success {
