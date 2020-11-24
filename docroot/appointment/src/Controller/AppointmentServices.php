@@ -459,26 +459,22 @@ class AppointmentServices {
           if (strstr($item->question, 'First')) {
             if (property_exists($item, 'answer')) {
               $companions[$k]['firstName'] = $item->answer;
-              $companions[$k]['lastName'] = '';
-              $companions[$k]['dob'] = '';
               $companions[$k]['customer'] = $k + 1;
             }
           }
           if (strstr($item->question, 'Last')) {
             if (property_exists($item, 'answer')) {
-              $companions[$k]['firstName'] = $companions[$k]['firstName'];
               $companions[$k]['lastName'] = $item->answer;
-              $companions[$k]['dob'] = '';
               $companions[$k]['customer'] = $k + 1;
             }
           }
           if (strstr($item->question, 'Date')) {
             if (property_exists($item, 'answer')) {
-              $companions[$k]['firstName'] = $companions[$k]['firstName'];
-              $companions[$k]['lastName'] = $companions[$k]['lastName'];
               $companions[$k]['dob'] = $item->answer;
               $companions[$k]['customer'] = $k + 1;
             }
+          }
+          if (!empty($companions[$k]['firstName']) && !empty($companions[$k]['lastName']) && !empty($companions[$k]['dob'])) {
             $k++;
           }
         }
