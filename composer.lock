@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1497d700110008f82452a4060f6b9907",
+    "content-hash": "b8e41f54c8d95bdc40e0be760b4525b0",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11407,6 +11407,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13949,7 +13952,8 @@
                 "patches_applied": {
                     "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch",
                     "throws Allowed memory size of xxx bytes exhausted": "https://www.drupal.org/files/issues/2020-07-02/3156154-10.patch",
-                    "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch"
+                    "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch",
+                    "Creation of an unnecessary cache tag entry for each social auth entity": "https://www.drupal.org/files/issues/2020-11-20/3183636-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
