@@ -22,6 +22,7 @@
 
   @include breakpoint($only-mobile) {
     opacity: initial;
+    box-shadow: none;
   }
 
   &.magv2-pdp-sticky-header {
@@ -316,6 +317,10 @@ html[lang=ar] {
 }
 
 .magv2-pdp-sticky-header {
+  @include breakpoint($only-mobile) {
+    box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+  }
+
   &.magv2-header {
     position: fixed;
     #{$left}: 0;
