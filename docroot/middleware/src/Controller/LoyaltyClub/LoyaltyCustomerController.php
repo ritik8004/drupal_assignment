@@ -11,6 +11,8 @@ use App\Service\Drupal\Drupal;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Aura\SearchHelper;
+use App\Service\Cart;
+use App\Service\Magento\CartActions;
 
 /**
  * Provides route callbacks for Loyalty Customer APIs.
@@ -59,6 +61,13 @@ class LoyaltyCustomerController {
   protected $auraSearchHelper;
 
   /**
+   * Service for cart interaction.
+   *
+   * @var \App\Service\Cart
+   */
+  protected $cart;
+
+  /**
    * LoyaltyCustomerController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -73,6 +82,8 @@ class LoyaltyCustomerController {
    *   Magento API wrapper service.
    * @param \App\Service\Aura\SearchHelper $aura_search_helper
    *   Aura search helper service.
+   * @param \App\Service\Cart $cart
+   *   Cart service.
    */
   public function __construct(
     LoggerInterface $logger,
@@ -80,7 +91,8 @@ class LoyaltyCustomerController {
     CustomerHelper $aura_customer_helper,
     Drupal $drupal,
     MagentoApiWrapper $magento_api_wrapper,
-    SearchHelper $aura_search_helper
+    SearchHelper $aura_search_helper,
+    Cart $cart
   ) {
     $this->logger = $logger;
     $this->utility = $utility;
@@ -88,6 +100,7 @@ class LoyaltyCustomerController {
     $this->drupal = $drupal;
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->auraSearchHelper = $aura_search_helper;
+    $this->cart = $cart;
   }
 
   /**
@@ -290,6 +303,56 @@ class LoyaltyCustomerController {
     }
     catch (\Exception $e) {
       $this->logger->notice('Error while trying to search APC user. Request Data: @data. Message: @message', [
+        '@data' => json_encode($request_content),
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
+  }
+
+  /**
+   * Cart Loyalty Update.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return users loyalty details.
+   */
+  public function cartLoyaltyUpdate(Request $request) {
+    try {
+      $request_content = json_decode($request->getContent(), TRUE);
+      $type = $request_content['type'];
+      $value = $request_content['value'];
+      $responseData = [];
+
+      // Check if required data is present in request.
+      if (empty($type) || empty($value)) {
+        $this->logger->error('Error while trying to process cart to attach loyalty card. Required parameters missing. Request Data: @data', [
+          '@data' => json_encode($request_content),
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('Required parameters missing.', Response::HTTP_NOT_FOUND));
+      }
+
+      $search_response = $this->auraSearchHelper->search($type, $value);
+
+      // When card found for the given user details,
+      // then attach the card to cart.
+      if (!empty($search_response['data']['apc_identifier_number'])) {
+        $data['extension'] = (object) [
+          'action' => CartActions::CART_REFRESH,
+          'loyalty_card' => $search_response['data']['apc_identifier_number'],
+        ];
+
+        $cart_data = $this->cart->updateCart($data);
+
+        if (!empty($cart_data['cart']['extension_attributes']['loyalty_card'])) {
+          $search_response['status'] = TRUE;
+          $responseData = $search_response;
+        }
+      }
+
+      return new JsonResponse($responseData);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to process cart to attach loyalty card. Request Data: @data. Message: @message', [
         '@data' => json_encode($request_content),
         '@message' => $e->getMessage(),
       ]);

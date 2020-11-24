@@ -36,7 +36,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
   };
 
   render() {
-    const { pointsToEarn } = this.props;
+    const { pointsToEarn, cartId } = this.props;
     const { showLinkCardMessage } = this.state;
 
     return (
@@ -50,6 +50,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
           <div className="item-wrapper">
             <AuraFormLinkCard
               enableShowLinkCardMessage={this.enableShowLinkCardMessage}
+              cartId={cartId}
             />
           </div>
         </div>

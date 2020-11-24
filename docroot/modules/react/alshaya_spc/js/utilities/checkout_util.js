@@ -129,6 +129,7 @@ export const placeOrder = (paymentMethod) => {
             return;
           }
 
+          dispatchCustomEvent('orderPlaced', true);
           window.location = Drupal.url(response.data.redirectUrl);
           return;
         }

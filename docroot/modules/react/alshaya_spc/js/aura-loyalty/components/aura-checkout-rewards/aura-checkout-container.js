@@ -3,10 +3,13 @@ import Loading from '../../../utilities/loading';
 
 const AuraCheckoutRedeem = React.lazy(() => import(/* webpackChunkName: 'aura-checkout' */ './index'));
 
-const AuraCheckoutContainer = () => (
-  <React.Suspense fallback={<Loading />}>
-    <AuraCheckoutRedeem animationDelay="0.4s" />
-  </React.Suspense>
-);
+const AuraCheckoutContainer = (props) => {
+  const { cartId } = props;
+  return (
+    <React.Suspense fallback={<Loading />}>
+      <AuraCheckoutRedeem cartId={cartId} animationDelay="0.4s" />
+    </React.Suspense>
+  );
+};
 
 export default AuraCheckoutContainer;
