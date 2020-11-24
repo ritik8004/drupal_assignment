@@ -353,6 +353,9 @@
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
+            "drupal/pathauto": {
+                "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
+            },
             "drupal/r4032login": {
                 "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2020-04-27/2941064-38-complete.patch"
             },
@@ -362,13 +365,14 @@
             "drupal/social_auth": {
                 "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch",
                 "throws Allowed memory size of xxx bytes exhausted": "https://www.drupal.org/files/issues/2020-07-02/3156154-10.patch",
-                "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch"
+                "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch",
+                "Creation of an unnecessary cache tag entry for each social auth entity": "https://www.drupal.org/files/issues/2020-11-20/3183636-4.patch"
             },
             "drupal/social_auth_google": {
                 "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-05-06/500-error-on-google-auth-3133754-3.patch"
             },
             "drupal/social_auth_facebook": {
-                "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-10-30/social_auth_facebook-IdentityProviderException_better_handling-3178401-4.patch"
+                "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-11-23/social_auth_facebook-IdentityProviderException_better_handling-3178401-6.patch"
             },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"

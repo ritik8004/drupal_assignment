@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44779d6aabbb86922b82fed2ef2ca3a6",
+    "content-hash": "92438b98a6d946996c99e20845034a31",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11395,9 +11395,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-1.6",
                     "datestamp": "1575467285",
@@ -11405,6 +11402,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13950,7 +13950,8 @@
                 "patches_applied": {
                     "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch",
                     "throws Allowed memory size of xxx bytes exhausted": "https://www.drupal.org/files/issues/2020-07-02/3156154-10.patch",
-                    "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch"
+                    "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch",
+                    "Creation of an unnecessary cache tag entry for each social auth entity": "https://www.drupal.org/files/issues/2020-11-20/3183636-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -13975,6 +13976,10 @@
                 {
                     "name": "himanshu-dixit",
                     "homepage": "https://www.drupal.org/user/3513954"
+                },
+                {
+                    "name": "wells",
+                    "homepage": "https://www.drupal.org/user/2452278"
                 }
             ],
             "description": "Social Auth ",
@@ -14017,7 +14022,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-10-30/social_auth_facebook-IdentityProviderException_better_handling-3178401-4.patch"
+                    "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-11-23/social_auth_facebook-IdentityProviderException_better_handling-3178401-6.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
