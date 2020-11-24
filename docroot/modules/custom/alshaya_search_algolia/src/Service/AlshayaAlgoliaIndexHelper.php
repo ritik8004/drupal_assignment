@@ -280,6 +280,8 @@ class AlshayaAlgoliaIndexHelper {
       throw new \Exception('SKU not available for language of Node');
     }
 
+    $object['title'] = $this->skuManager->getTitle($sku, 'plp', $object['title']);
+
     // Description.
     $description = $this->skuManager->getDescription($sku, 'full');
     $object['body'] = $this->renderer->renderPlain($description);

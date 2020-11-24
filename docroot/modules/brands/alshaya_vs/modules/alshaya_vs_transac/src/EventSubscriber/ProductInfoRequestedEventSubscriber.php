@@ -63,6 +63,10 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'short_description':
         $this->processShortDescription($event);
         break;
+
+      case 'title':
+        $this->processTitle($event);
+        break;
     }
   }
 
@@ -131,6 +135,30 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     $static[$sku_entity->language()->getId()][$sku_entity->getSku()] = $return;
     return $return;
+  }
+
+  /**
+   * Process title for SKU.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processTitle(ProductInfoRequestedEvent $event) {
+    $sku_entity = $event->getSku();
+    $title = $event->getValue();
+
+    $new = $sku_entity->get('attr_sku_definition')->getString();
+    $collection = $sku_entity->get('attr_product_collection')->getString();
+    $short_description = $sku_entity->label();
+
+    // @see _alshaya_vs_transac_get_title().
+    if ($event->getContext() === 'plp') {
+      $title = $collection;
+      $title .= !empty($new) ? " $new" : '';
+      $title .= !empty($short_description) ? " $short_description" : '';
+    }
+
+    $event->setValue($title);
   }
 
 }

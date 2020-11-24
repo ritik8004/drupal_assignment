@@ -3455,6 +3455,23 @@ class SkuManager {
   }
 
   /**
+   * Get processed title for a sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU.
+   * @param string|null $context
+   *   The context, like pdp/plp etc.
+   * @param string|null $value
+   *   The fallback value for the title field.
+   *
+   * @return mixed
+   *   Title of the product.
+   */
+  public function getTitle(SKUInterface $sku, string $context = NULL, string $value = NULL) {
+    return $this->productInfoHelper->getValue($sku, 'title', $context, $value);
+  }
+
+  /**
    * Get description for a sku.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
