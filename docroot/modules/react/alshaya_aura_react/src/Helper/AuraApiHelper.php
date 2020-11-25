@@ -61,53 +61,54 @@ class AuraApiHelper {
    * @return array
    *   Return array of config values.
    */
-  public function getAuraApiConfig($options) {
+  public function getAuraApiConfig(array $api_keys, bool $reset) {
     static $auraConfigs;
 
     if (!empty($auraConfigs)) {
       return $auraConfigs;
     }
 
-    $auraApiConfigKeys = !empty($options['api_keys'])
-      ? explode(',', $options['api_keys'])
+    $auraApiConfigKeys = !empty($api_keys)
+      ? $api_keys
       : $this->getAuraApiConfigKeys();
 
     foreach ($auraApiConfigKeys as $value) {
       $cache_key = 'alshaya_aura_react:aura_api_configs:' . $value;
-      $cache = $options['reset'] ? NULL : $this->cache->get($cache_key);
+      $cache = $reset ? NULL : $this->cache->get($cache_key);
 
       if (is_object($cache) && !empty($cache->data)) {
         $auraConfigs[$value] = $cache->data;
+        continue;
       }
-      else {
-        $response = $this->apiWrapper->invokeApi('customers/apcDicData/' . $value, [], 'GET');
 
-        // @TODO: Remove hard coded response once API is funtional.
-        $response = [
-          "code" => "APC_CASHBACK_ACCRUAL_RATIO",
-          "items" => [
-            [
-              "code" => "KWD",
-              "order" => 0,
-              "value" => "10",
-            ],
-            [
-              "code" => "SAR",
-              "order" => 1,
-              "value" => "1",
-            ],
+      $response = $this->apiWrapper->invokeApi('customers/apcDicData/' . $value, [], 'GET');
+
+      // @TODO: Remove hard coded response once API is funtional.
+      $response = [
+        "code" => "APC_CASHBACK_ACCRUAL_RATIO",
+        "items" => [
+          [
+            "code" => "KWD",
+            "order" => 0,
+            "value" => "10",
           ],
-        ];
+          [
+            "code" => "SAR",
+            "order" => 1,
+            "value" => "1",
+          ],
+        ],
+      ];
 
-        if (empty($response)) {
-          $this->logger->error('Empty response from aura config api: @api.', [
-            '@api' => $endpoint,
-          ]);
-        }
-
-        $auraConfigs[$value] = $response;
-        $this->cache->set($cache_key, $response, Cache::PERMANENT);
+      if (empty($response)) {
+        $this->logger->error('Empty response from aura config api: @api.', [
+          '@api' => $endpoint,
+        ]);
       }
+
+      $auraConfigs[$value] = $response;
+      $this->cache->set($cache_key, $response, Cache::PERMANENT);
+
     }
 
     return $auraConfigs;

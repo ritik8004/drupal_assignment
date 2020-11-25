@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_aura_react\Commands;
 
 use Drupal\alshaya_aura_react\Helper\AuraApiHelper;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -21,26 +20,15 @@ class AlshayaAuraCommands extends DrushCommands {
   protected $apiHelper;
 
   /**
-   * The logger channel.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
-   */
-  protected $logger;
-
-  /**
    * AlshayaAuraCommands constructor.
    *
    * @param Drupal\alshaya_aura_react\Helper\AuraApiHelper $api_helper
    *   Api helper object.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
-   *   Logger Factory.
    */
   public function __construct(
-    AuraApiHelper $api_helper,
-    LoggerChannelFactoryInterface $logger_factory
+    AuraApiHelper $api_helper
   ) {
     $this->apiHelper = $api_helper;
-    $this->logger = $logger_factory->get('alshaya_aura_react');
   }
 
   /**
@@ -60,11 +48,16 @@ class AlshayaAuraCommands extends DrushCommands {
     'api_keys' => '',
     'reset' => FALSE,
   ]) {
-    $this->apiHelper->getAuraApiConfig($options);
+    $apiKeys = !empty($options['api_keys'])
+      ? explode(',', $options['api_keys'])
+      : [];
+    $this->apiHelper->getAuraApiConfig($apiKeys, $options['reset']);
 
-    $this->logger->notice('Aura API config synced. API Keys: @api_keys.', [
+    // @codingStandardsIgnoreStart
+    \Drupal::logger('alshaya_aura_react')->notice('Aura API config synced. API Keys: @api_keys.', [
       '@api_keys' => $options['api_keys'],
     ]);
+    // @codingStandardsIgnoreEnd
   }
 
 }

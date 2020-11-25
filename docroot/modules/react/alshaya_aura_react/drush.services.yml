@@ -3,6 +3,5 @@ services:
     class: Drupal\alshaya_aura_react\Commands\AlshayaAuraCommands
     arguments:
       - '@alshaya_aura_react.aura_api_helper'
-      - '@logger.factory'
     tags:
       - { name: drush.command }
