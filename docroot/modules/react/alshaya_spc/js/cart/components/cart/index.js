@@ -120,8 +120,11 @@ export default class Cart extends React.Component {
     // Event handle for Dynamic Promotion available.
     document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
 
-    // Event to trigger after free gift modal open.
+    // Event to trigger after free gift detail modal open.
     document.addEventListener('openFreeGiftModalEvent', this.openFreeGiftModal, false);
+
+    // Event to trigger after free gift select modal open.
+    document.addEventListener('selectFreeGiftModalEvent', this.selectFreeGiftModal, false);
   }
 
   componentWillUnmount() {
@@ -136,6 +139,9 @@ export default class Cart extends React.Component {
         this.addFreeGift(freeGiftLink);
       });
     }
+  }
+
+  selectFreeGiftModal = () => {
     const selectFreeGiftLink = document.getElementById('select-add-free-gift');
     if (selectFreeGiftLink !== null) {
       selectFreeGiftLink.addEventListener('click', (event) => {
