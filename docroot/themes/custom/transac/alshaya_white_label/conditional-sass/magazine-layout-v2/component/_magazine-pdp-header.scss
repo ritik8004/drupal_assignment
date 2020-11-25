@@ -354,14 +354,14 @@ html[lang=ar] {
 
       .cart-link {
         background: none;
-        #{$right}: -0.125rem;
+        #{$right}: -0.1875rem;
         top: 50%;
       }
 
       .quantity {
         @include breakpoint($only-mobile) {
           top: 1.625rem;
-          left: 0.125rem;
+          #{$left}: 0.125rem;
         }
       }
     }
