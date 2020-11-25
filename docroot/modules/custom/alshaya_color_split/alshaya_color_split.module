@@ -417,16 +417,21 @@ function alshaya_color_split_alshaya_spc_order_sku_details_alter(array &$data, S
  * Implements hook_alshaya_acm_customer_order_details_alter().
  */
 function alshaya_color_split_alshaya_acm_customer_order_details_alter(array &$order) {
-  if (!isset($order['items'])) {
+  if (!isset($order['items']) || empty($order['items'])) {
     return;
   }
+
   /** @var \Drupal\alshaya_color_split\AlshayaColorSplitManager $manager */
   $manager = \Drupal::service('alshaya_color_split.manager');
   $grouping_attribute_with_swatch = \Drupal::config('alshaya_color_split.settings')->get('process_swatch_for_grouping_attributes');
   if ($grouping_attribute_with_swatch) {
     foreach ($order['items'] as $key => $item) {
-      $sku = SKU::loadFromSku($item['sku']);
-      $order['items'][$key]['attributes'][] = $manager->getGroupingAttributeValues($sku);
+      if (isset($item['sku']) && !empty($item['sku'])) {
+        $sku = SKU::loadFromSku($item['sku']);
+        if ($sku instanceof SKUInterface) {
+          $order['items'][$key]['attributes'][] = $manager->getGroupingAttributeValues($sku);
+        }
+      }
     }
   }
 }
