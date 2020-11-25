@@ -143,6 +143,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'bbw' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-KXQ8P3S',
+          ],
           'social_auth_google.settings' => [
             'client_id' => '979778569503-3a6dfbjcfvm5er41fd4s46d27oqe8efl.apps.googleusercontent.com',
             'client_secret' => 'kSiVHuw6W4AGXnqW_aXWRFS9',
@@ -165,31 +168,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
       ],
-      'ae' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KXQ8P3S',
-          ],
-        ],
-      ],
-      'kw' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KXQ8P3S',
-          ],
-        ],
-      ],
-      'sa' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KXQ8P3S',
-          ],
-        ],
-      ],
     ],
     'fl' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-T8L97TK',
+          ],
           'social_auth_google.settings' => [
             'client_id' => '489743492796-4euishl08asap26893fooomkqgi8ketl.apps.googleusercontent.com',
             'client_secret' => 'mT47obTKfcKzXIJSRcXyjdkx',
@@ -206,31 +191,13 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
           ],
         ],
       ],
-      'ae' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-T8L97TK',
-          ],
-        ],
-      ],
-      'kw' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-T8L97TK',
-          ],
-        ],
-      ],
-      'sa' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-T8L97TK',
-          ],
-        ],
-      ],
     ],
     'pb' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-M793JHJ',
+          ],
           'social_auth_google.settings' => [
             'client_id' => '290156815523-4pqhofs87lrj62gucij8rko1dj61od0q.apps.googleusercontent.com',
             'client_secret' => 'YE8Y9NX3mli9p-ivnstUzBpG',
@@ -244,27 +211,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               "name" => "Pottery Barn",
               "short_name" => "PB",
             ],
-          ],
-        ],
-      ],
-      'ae' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-M793JHJ',
-          ],
-        ],
-      ],
-      'kw' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-M793JHJ',
-          ],
-        ],
-      ],
-      'sa' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-M793JHJ',
           ],
         ],
       ],
@@ -294,13 +240,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
             'dynamic_yield.settings' => [
               'section_id' => '9876645',
             ],
-          ],
-        ],
-      ],
-      'ae' => [
-        'uat' => [
-          'google_tag.container.primary' => [
-            'container_id' => 'GTM-KLZ3ZQR',
           ],
         ],
       ],
@@ -344,6 +283,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'we' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-M6BXN4X',
+          ],
           'algolia_sandbox.settings' => [
             'app_id' => 'W4M368LMN4',
             'write_api_key' => '488027fdb499b2e711f58d169b5c2200',
@@ -355,6 +297,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'aeo' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-PJM7JG2',
+          ],
           'algolia_sandbox.settings' => [
             'app_id' => 'JUO1UFS42Z',
             'write_api_key' => '49c687275158f614123556ff0afaaaa6',
@@ -366,6 +311,9 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'bp' => [
       'default' => [
         'default' => [
+          'google_tag.container.primary' => [
+            'container_id' => 'GTM-5HXC6Q2',
+          ],
           'dynamic_yield.settings' => [
             'section_id' => '9877008',
           ],
@@ -414,7 +362,6 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
       ],
     ],
   ];
-
   // Get the settings following this fallback (from the more generic to the
   // more specific one): default+default+default > site+country+env.
   $settings = [];
