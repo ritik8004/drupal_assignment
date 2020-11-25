@@ -123,7 +123,7 @@ export default class Cart extends React.Component {
     // Event to trigger after free gift detail modal open.
     document.addEventListener('openFreeGiftModalEvent', this.openFreeGiftModal, false);
 
-    // Event to trigger after free gift select modal open.
+    // Event to trigger after free gift listing modal open.
     document.addEventListener('selectFreeGiftModalEvent', this.selectFreeGiftModal, false);
   }
 

@@ -14,7 +14,7 @@
       });
 
       // Create event for select button.
-      var selectButton = document.getElementById('select-add-free-gift');
+      var selectButton = $('.free-gift-listing-modal #select-add-free-gift');
       if (selectButton) {
         var selectFreeGiftModal = new CustomEvent('selectFreeGiftModalEvent', {bubbles: true, detail: {}});
         document.dispatchEvent(selectFreeGiftModal);

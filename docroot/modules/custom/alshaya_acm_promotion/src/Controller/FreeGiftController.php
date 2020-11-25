@@ -103,8 +103,8 @@ class FreeGiftController extends ControllerBase {
       $response->addCommand(new InvokeCommand(NULL, 'openFreeGiftModal'));
       return $response;
     }
-    else {
-      return $build;
-    }
+    
+    return $build;
+    
   }
 }
