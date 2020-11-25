@@ -7,7 +7,6 @@ import PointsUpgradeMessage
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-upgrade-message';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/helper';
-import AuraProgress from '../../../aura-progress';
 
 const AuraMyAccountVerifiedUser = (props) => {
   const {
@@ -63,7 +62,6 @@ const AuraMyAccountVerifiedUser = (props) => {
       </div>
       <PointsUpgradeMessage msg={upgradeMsg} />
       <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
-      <AuraProgress />
     </div>
   );
 };
