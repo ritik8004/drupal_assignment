@@ -177,6 +177,9 @@ $_aura_status_hold: #ff7600;
 $_aura_status_credit: #1da545;
 $_aura_status_debit: #ff3030;
 $_aura_dark_purple: #a3217f;
+$_pinkdoll: #e21c79;
+$blueth-truth: #2d68c4;
+$raining-clouds: #858585;
 
 // Aura Gradients.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -224,6 +227,14 @@ $aura-stars-tier: linear-gradient(146deg, #2d68c4 37%, #481463 107%, #2c0b3d 136
 $aura-stars-tier-ar: linear-gradient(-146deg, #2d68c4 37%, #481463 107%, #2c0b3d 136%);
 $aura-vip-tier: linear-gradient(147deg, #7f2482 8%, #25035a 110%, #160235 166%);
 $aura-vip-tier-ar: linear-gradient(-147deg, #7f2482 8%, #25035a 110%, #160235 166%);
+$aura-progress-hello: linear-gradient(99deg, #efc06e, #e31c79 52%, #772583);
+$aura-progress-hello-ar: linear-gradient(-99deg, #efc06e, #e31c79 52%, #772583);
+$aura-progress-star: linear-gradient(99deg, #2d68c4, #481463 70%, #2c0b3d);
+$aura-progress-star-ar: linear-gradient(99deg, #2d68c4, #481463 70%, #2c0b3d);
+$aura-progress-star-end: linear-gradient(106deg, #2d68c4, #481463 70%, #2c0b3d);
+$aura-progress-star-end-ar: linear-gradient(106deg, #2d68c4, #481463 70%, #2c0b3d);
+$aura-progress-vip-end: linear-gradient(106deg, #7f2482, #25035a 65%, #160235);
+$aura-progress-vip-end-ar: linear-gradient(106deg, #7f2482, #25035a 65%, #160235);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1736,3 +1747,10 @@ $aura-header-card-body: $dark-night-owl;
 
 // Aura PDP.
 $aura-pdp-string: $aura-purpleTwo;
+
+// Aura Progress.
+$aura-progress: $_screeching_white;
+$aura-progress-tier-text: $white-five;
+$aura-progress-under: $_pinkdoll;
+$aura-progress-dot: $blueth-truth;
+$aura-progress-string: $raining-clouds;

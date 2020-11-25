@@ -8,6 +8,7 @@
     padding: 0.625rem 0;
     align-items: center;
     display: inline-grid;
+    font-family: $aura-regular;
     grid-template-columns: 11.8125rem 9rem 8.5625rem 10.0625rem 7.1875rem 10.125rem;
 
     > span.order-id,
@@ -16,7 +17,7 @@
     }
 
     > span.amount,
-    > span.points {
+    > span.aura-points {
       text-align: $right;
       padding-#{$left}: 0.75rem;
     }
@@ -31,7 +32,7 @@
   }
 
   .header-row {
-    font-family: $alshaya-bold;
+    font-family: $aura-bold;
     border-bottom: 1px solid $aura-loyalty-club-border;
   }
 
