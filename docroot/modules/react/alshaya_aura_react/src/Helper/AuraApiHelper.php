@@ -70,7 +70,7 @@ class AuraApiHelper {
 
     $auraApiConfigKeys = !empty($api_keys)
       ? $api_keys
-      : $this->getAuraApiConfigKeys();
+      : AuraDictionaryApiKeys::ALL_DICTONARY_API_KEYS;
 
     foreach ($auraApiConfigKeys as $value) {
       $cache_key = 'alshaya_aura_react:aura_api_configs:' . $value;
@@ -81,7 +81,8 @@ class AuraApiHelper {
         continue;
       }
 
-      $response = $this->apiWrapper->invokeApi('customers/apcDicData/' . $value, [], 'GET');
+      $endpoint = 'customers/apcDicData/' . $value;
+      $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
 
       // @TODO: Remove hard coded response once API is funtional.
       $response = [
@@ -108,26 +109,9 @@ class AuraApiHelper {
 
       $auraConfigs[$value] = $response;
       $this->cache->set($cache_key, $response, Cache::PERMANENT);
-
     }
 
     return $auraConfigs;
-  }
-
-  /**
-   * Get Aura api config keys.
-   *
-   * @return array
-   *   Return array of config values.
-   */
-  private function getAuraApiConfigKeys() {
-    $auraApiConfigKeys = [
-      'APC_CASHBACK_ACCRUAL_RATIO',
-      'APC_CASHBACK_REDEMPTION_RATIO',
-      'EXT_PHONE_PREFIX',
-    ];
-
-    return $auraApiConfigKeys;
   }
 
 }
