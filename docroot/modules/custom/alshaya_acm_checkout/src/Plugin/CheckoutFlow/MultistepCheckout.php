@@ -127,7 +127,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
 
     // For login we want user to start again with checkout after login.
     if ($this->stepId == 'login') {
-      // Todo: This needs to be changed from hardcode value.
+      // @todo This needs to be changed from hardcode value.
       // This is happening because in url, we have not correctly formed query
       // string. Its like '/cart/checkout/login?cart/checkout/login?tab=login'
       // We can change/replace and adjust url again but then,

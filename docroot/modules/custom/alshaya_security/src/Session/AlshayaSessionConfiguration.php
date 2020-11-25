@@ -51,7 +51,7 @@ class AlshayaSessionConfiguration extends SessionConfiguration {
           // Set the cookie back so we have the original cookie back again.
           // If the user upgrades the browser and tries to checkout without
           // original cookie, we will face the same 500.
-          // @TODO: Change it when moving to PHP 7.3 version.Not doing now as
+          // @todo Change it when moving to PHP 7.3 version.Not doing now as
           // we don't have a way to test it.
           $params = session_get_cookie_params();
           $expire = $params['lifetime'] ? REQUEST_TIME + $params['lifetime'] : 0;

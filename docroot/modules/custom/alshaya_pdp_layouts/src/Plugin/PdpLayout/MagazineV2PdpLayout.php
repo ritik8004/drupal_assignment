@@ -171,7 +171,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['drupalSettings']['productInfo'][$sku]['finalPrice'] = _alshaya_acm_format_price_with_decimal((float) $sku_entity->get('final_price')->getString());
 
     // Get the product brand logo.
-    // Todo: To be shifted in the specific brand module.
+    // @todo To be shifted in the specific brand module.
     if (!empty($vars['elements']['brand_logo'])) {
       $vars['#attached']['drupalSettings']['productInfo'][$sku]['brandLogo'] = [
         'logo' => file_create_url($vars['elements']['brand_logo']['#uri']),

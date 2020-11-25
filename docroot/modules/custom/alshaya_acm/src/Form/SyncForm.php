@@ -210,7 +210,7 @@ class SyncForm extends FormBase {
         if (empty(array_filter($form_state->getValue('products_full_languages'), function ($v, $k) {
           return !empty($v);
         }, ARRAY_FILTER_USE_BOTH))) {
-          // @TODO: Check why placing the error on checkboxes does not work.
+          // @todo Check why placing the error on checkboxes does not work.
           $form_state->setErrorByName('products_full_fieldset', $this->t('Please select at least one language.'));
         }
         break;
@@ -281,10 +281,10 @@ class SyncForm extends FormBase {
       case $this->t('Synchronize listed SKUs'):
         $skus = array_map('trim', explode(',', $form_state->getValue('products_list_text')));
         foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
-          // @TODO: Make the chunk size more realistic. Only limitation is the
+          // @todo Make the chunk size more realistic. Only limitation is the
           // length of the query sent to MDC.
           foreach (array_chunk($skus, 6) as $chunk) {
-            // @TODO: Make page size a config. It can be used in multiple places.
+            // @todo Make page size a config. It can be used in multiple places.
             $this->ingestApi->productFullSync($store_id, $langcode, implode(',', $chunk), '', 2);
           }
         }
@@ -374,7 +374,7 @@ class SyncForm extends FormBase {
       '#type' => 'fieldset',
       '#title' => $this->t('Products'),
     ];
-    // @TODO: Check if it is possible to specify the language.
+    // @todo Check if it is possible to specify the language.
     $form['products_fieldset']['products_list_fieldset'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Specific SKUs'),
@@ -430,7 +430,7 @@ class SyncForm extends FormBase {
     ];
 
     // Promotions.
-    // @TODO: Add checkbox to choose between cart and category promotions.
+    // @todo Add checkbox to choose between cart and category promotions.
     $form['promotions_fieldset'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Promotions'),
