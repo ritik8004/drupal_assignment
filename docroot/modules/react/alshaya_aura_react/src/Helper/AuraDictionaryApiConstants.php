@@ -3,9 +3,9 @@
 namespace Drupal\alshaya_aura_react\Helper;
 
 /**
- * Contains aura dictionary api keys.
+ * Contains aura dictionary api configs.
  */
-final class AuraDictionaryApiKeys {
+final class AuraDictionaryApiConstants {
   /**
    * Aura accrual ratio constant.
    */
@@ -24,7 +24,7 @@ final class AuraDictionaryApiKeys {
   /**
    * Contains all the dictionary api keys constants in the class.
    */
-  const ALL_DICTONARY_API_KEYS = [
+  const ALL_DICTONARY_API_CONSTANTS = [
     'CASHBACK_ACCRUAL_RATIO' => self::CASHBACK_ACCRUAL_RATIO,
     'CASHBACK_REDEMPTION_RATIO' => self::CASHBACK_REDEMPTION_RATIO,
     'EXT_PHONE_PREFIX' => self::EXT_PHONE_PREFIX,

@@ -61,22 +61,21 @@ class AuraApiHelper {
    * @return array
    *   Return array of config values.
    */
-  public function getAuraApiConfig(array $api_keys, bool $reset) {
+  public function getAuraApiConfig($configs = [], $reset = FALSE) {
     static $auraConfigs;
 
     if (!empty($auraConfigs)) {
       return $auraConfigs;
     }
 
-    $auraApiConfigKeys = !empty($api_keys)
-      ? $api_keys
-      : AuraDictionaryApiKeys::ALL_DICTONARY_API_KEYS;
+    $auraApiConfig = !empty($configs)
+      ? $configs
+      : AuraDictionaryApiConstants::ALL_DICTONARY_API_CONSTANTS;
 
-    foreach ($auraApiConfigKeys as $value) {
+    foreach ($auraApiConfig as $value) {
       $cache_key = 'alshaya_aura_react:aura_api_configs:' . $value;
-      $cache = $reset ? NULL : $this->cache->get($cache_key);
 
-      if (is_object($cache) && !empty($cache->data)) {
+      if (!$reset && $cache = $this->cache->get($cache_key)) {
         $auraConfigs[$value] = $cache->data;
         continue;
       }
@@ -89,11 +88,6 @@ class AuraApiHelper {
         "code" => "APC_CASHBACK_ACCRUAL_RATIO",
         "items" => [
           [
-            "code" => "KWD",
-            "order" => 0,
-            "value" => "10",
-          ],
-          [
             "code" => "SAR",
             "order" => 1,
             "value" => "1",
@@ -102,7 +96,7 @@ class AuraApiHelper {
       ];
 
       if (empty($response)) {
-        $this->logger->error('Empty response from aura config api: @api.', [
+        $this->logger->error('No data found for api: @api.', [
           '@api' => $endpoint,
         ]);
       }
@@ -112,6 +106,21 @@ class AuraApiHelper {
     }
 
     return $auraConfigs;
+  }
+
+  /**
+   * Get Aura api config from cache.
+   */
+  public function getAuraApiConfigFromCache($key) {
+    $cache_data = NULL;
+    $cache_key = 'alshaya_aura_react:aura_api_configs:' . $key;
+    $cache = $this->cache->get($cache_key);
+
+    if (is_object($cache) && !empty($cache->data)) {
+      $cache_data = $cache->data;
+    }
+
+    return $cache_data;
   }
 
 }

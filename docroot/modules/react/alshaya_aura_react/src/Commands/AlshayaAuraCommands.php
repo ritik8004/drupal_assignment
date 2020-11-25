@@ -41,23 +41,21 @@ class AlshayaAuraCommands extends DrushCommands {
    *
    * @aliases sync-aura-api-config
    * @usage drush sync-aura-api-config
-   * @usage drush sync-aura-api-config --api_keys="APC_CASHBACK_ACCRUAL_RATIO,EXT_PHONE_PREFIX"
-   * @usage drush sync-aura-api-config --api_keys="APC_CASHBACK_REDEMPTION_RATIO" --reset
+   * @usage drush sync-aura-api-config --configs="APC_CASHBACK_ACCRUAL_RATIO,EXT_PHONE_PREFIX"
+   * @usage drush sync-aura-api-config --configs="APC_CASHBACK_REDEMPTION_RATIO" --reset
    */
   public function syncAuraConfig(array $options = [
-    'api_keys' => '',
+    'configs' => '',
     'reset' => FALSE,
   ]) {
-    $apiKeys = !empty($options['api_keys'])
-      ? explode(',', $options['api_keys'])
+    $configs = !empty($options['configs'])
+      ? explode(',', $options['configs'])
       : [];
-    $this->apiHelper->getAuraApiConfig($apiKeys, $options['reset']);
+    $this->apiHelper->getAuraApiConfig($configs, $options['reset']);
 
-    // @codingStandardsIgnoreStart
-    \Drupal::logger('alshaya_aura_react')->notice('Aura API config synced. API Keys: @api_keys.', [
-      '@api_keys' => $options['api_keys'],
+    $this->logger->notice('Aura API config synced. Configs: @configs.', [
+      '@configs' => $options['configs'],
     ]);
-    // @codingStandardsIgnoreEnd
   }
 
 }
