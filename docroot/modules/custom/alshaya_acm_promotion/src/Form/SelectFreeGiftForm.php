@@ -167,7 +167,8 @@ class SelectFreeGiftForm extends FormBase {
     $form['#attributes']['data-sku'] = $sku->getSku();
     $form['#attributes']['class'][] = 'sku-base-form';
 
-    if ($sku->bundle() == 'configurable') {
+    $is_sku_configurable = ($sku->bundle() === 'configurable');
+    if ($is_sku_configurable) {
       $configurables = Configurable::getSortedConfigurableAttributes($sku);
 
       $form['selected_variant_sku'] = [
@@ -234,6 +235,9 @@ class SelectFreeGiftForm extends FormBase {
       $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['bySku'] = $combinations['by_sku'];
       $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['byAttribute'] = $combinations['by_attribute'];
       $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['combinations'] = $combinations['combinations'] ?? [];
+      if ($is_sku_configurable) {
+        $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['configurables'] = $configurables;
+      }
 
       $display_settings = $this->config('alshaya_acm_product.display_settings');
       $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
