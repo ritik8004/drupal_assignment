@@ -364,7 +364,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
         // Restore the cart to revert customer id and email in cart.
         $cart_storage->restoreCart($cart->id());
 
-        // @TODO: Handle create customer errors here.
+        // @todo Handle create customer errors here.
         // Probably just the email error.
         \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
         $error = $this->t('@title does not contain a valid email.', ['@title' => 'Email']);

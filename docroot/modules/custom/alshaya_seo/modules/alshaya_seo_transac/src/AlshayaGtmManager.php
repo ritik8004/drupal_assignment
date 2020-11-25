@@ -339,7 +339,7 @@ class AlshayaGtmManager {
    *   Store Finder service.
    */
   public function setStoreFinderUtility(StoresFinderUtility $storesFinderUtility) {
-    // @TODO: Move this back to normal/constructor once module enabled on prod.
+    // @todo Move this back to normal/constructor once module enabled on prod.
     $this->storeFinder = $storesFinderUtility;
   }
 
@@ -472,7 +472,7 @@ class AlshayaGtmManager {
 
     $attributes['gtm-dimension3'] = $product_type;
 
-    // @TODO: This is supposed to stay blank here?
+    // @todo This is supposed to stay blank here?
     $attributes['gtm-stock'] = '';
 
     // Override values from parent if parent sku available.

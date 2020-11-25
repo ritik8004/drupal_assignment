@@ -444,7 +444,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     $state_key = md5(json_encode($state_data));
     $data = $this->tempStore->get($state_key);
 
-    // @TODO: Confirm message.
+    // @todo Confirm message.
     drupal_set_message($this->t('Sorry, we are unable to process your payment. Please try again with different method or contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $quote_id,
       '@payment_id' => $data['payment_id'],

@@ -79,7 +79,7 @@ class ProductCategoryManager {
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->cache = $cache;
-    // @Todo: Remove this once new MLTA is available.
+    // @todo Remove this once new MLTA is available.
     $this->categoryManagerOld = $category_manager_old;
   }
 
@@ -93,7 +93,7 @@ class ProductCategoryManager {
    */
   public function getCategorizationIds(): array {
     // Use old categorization if enabled.
-    // @Todo: Remove this once old categorization not required.
+    // @todo Remove this once old categorization not required.
     if ($this->isOldCategorizationRuleEnabled()) {
       return $this->categoryManagerOld->getSalesCategoryIds();
     }
@@ -330,7 +330,7 @@ class ProductCategoryManager {
    */
   public function processCategorizationCheckForNode(NodeInterface $node) {
     // Use old categorization if enabled.
-    // @Todo: Remove this once old categorization not required.
+    // @todo Remove this once old categorization not required.
     if ($this->isOldCategorizationRuleEnabled()) {
       return $this->categoryManagerOld->processSalesCategoryCheckForNode($node);
     }
@@ -368,7 +368,7 @@ class ProductCategoryManager {
    */
   public function processSalesCategoryCheckForSku(SKUInterface $sku) {
     // Use old categorization if enabled.
-    // @Todo: Remove this once old categorization not required.
+    // @todo Remove this once old categorization not required.
     if ($this->isOldCategorizationRuleEnabled()) {
       $this->categoryManagerOld->processSalesCategoryCheckForSku($sku);
       return;

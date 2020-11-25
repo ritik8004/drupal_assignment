@@ -1171,7 +1171,7 @@ class SkuManager {
    * @return array
    *   Array of media files.
    *
-   * @todo: Use self::getLabelsData() to get data and prepare images.
+   * @todo Use self::getLabelsData() to get data and prepare images.
    */
   public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
     $cache_key = 'sku_labels_' . $type;
@@ -1340,7 +1340,7 @@ class SkuManager {
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
     // Save the file as file entity.
-    // @TODO: Check for a way to remove old files and file objects.
+    // @todo Check for a way to remove old files and file objects.
     // To be done here and in SKU.php both.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
@@ -1842,7 +1842,7 @@ class SkuManager {
     if (empty($combinations)) {
       // Below code is only for debugging issues around cache having empty data
       // even when there are children in stock.
-      // @TODO: To be removed in: CORE-5271.
+      // @todo To be removed in: CORE-5271.
       // Done for: CORE-5200, CORE-5248.
       if ($this->isProductInStock($sku)) {
         // Log message here to allow debugging further.
@@ -2388,7 +2388,7 @@ class SkuManager {
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
 
-      // @TODO: CORE-13213, temporarily disabling this.
+      // @todo CORE-13213, temporarily disabling this.
       if ($this->isAttributeOptionToExclude($value) && 1 == 2) {
         $configurable['#options_attributes'][$id]['class'][] = 'hidden';
         $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';

@@ -20,7 +20,7 @@ class AlshayaCartPromotionsBlock extends BlockBase {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function build() {
-    // @TODO: Remove the block in future release.
+    // @todo Remove the block in future release.
     // We remove the config during install in alshaya_spc.
     return [];
   }
