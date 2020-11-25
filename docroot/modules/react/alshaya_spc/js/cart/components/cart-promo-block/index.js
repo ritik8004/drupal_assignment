@@ -12,7 +12,7 @@ export default class CartPromoBlock extends React.Component {
       promoApplied: false,
       buttonText: Drupal.t('apply'),
       disabled: false,
-      productInfo: null,
+      productInfo: {},
     };
   }
 
@@ -54,10 +54,14 @@ export default class CartPromoBlock extends React.Component {
    * Call back to get product data from storage.
    */
   productDataCallback = (productData) => {
+    const { productInfo } = this.state;
+    const data = productInfo;
     // If sku info available.
-    if (productData !== null && productData.sku !== undefined) {
+    if (productData.freeGiftPromotion !== null && productData.sku !== undefined) {
+      const freeGiftData = productData.freeGiftPromotion;
+      data[freeGiftData['#promo_code']] = freeGiftData['#promo_type'];
       this.setState({
-        productInfo: productData,
+        productInfo: data,
       });
     }
   };
@@ -186,11 +190,7 @@ export default class CartPromoBlock extends React.Component {
       disabled,
       buttonText,
     } = this.state;
-    let freeGiftPromotion = null;
-    const promoCoupons = {};
-    if (productInfo !== null) {
-      freeGiftPromotion = productInfo.freeGiftPromotion;
-    }
+
     const { inStock, dynamicPromoLabelsCart } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
     let disabledState = false;
@@ -219,19 +219,13 @@ export default class CartPromoBlock extends React.Component {
       }
     }
 
-    // Prepare free gift promp type array.
-    if (freeGiftPromotion !== null) {
-      const freeGifCoupon = freeGiftPromotion['#promo_code'];
-      promoCoupons[freeGifCoupon] = freeGiftPromotion['#promo_type'];
-    }
-
     return (
       <div className="spc-promo-code-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
           <input id="promo-code" disabled={disabledState} type="text" placeholder={Drupal.t('Promo code')} />
           <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
-          <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock, promoCoupons); }}>{buttonText}</button>
+          <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock, productInfo); }}>{buttonText}</button>
           <div id="promo-message" />
           <DynamicPromotionCode code={couponCode} label={couponLabel} />
         </div>
