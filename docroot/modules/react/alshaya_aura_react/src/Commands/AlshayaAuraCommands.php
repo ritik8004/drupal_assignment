@@ -46,13 +46,25 @@ class AlshayaAuraCommands extends DrushCommands {
   /**
    * Syncs aura api config cache.
    *
+   * @param array $options
+   *   Command options.
+   *
    * @command alshaya_aura_react:sync-aura-api-config
    *
    * @aliases sync-aura-api-config
+   * @usage drush sync-aura-api-config
+   * @usage drush sync-aura-api-config --api_keys="APC_CASHBACK_ACCRUAL_RATIO,EXT_PHONE_PREFIX"
+   * @usage drush sync-aura-api-config --api_keys="APC_CASHBACK_REDEMPTION_RATIO" --reset
    */
-  public function syncAuraConfig() {
-    $this->apiHelper->getAuraApiConfig();
-    $this->logger->notice('Aura api config synced.');
+  public function syncAuraConfig(array $options = [
+    'api_keys' => '',
+    'reset' => FALSE,
+  ]) {
+    $this->apiHelper->getAuraApiConfig($options);
+
+    $this->logger->notice('Aura API config synced. API Keys: @api_keys.', [
+      '@api_keys' => $options['api_keys'],
+    ]);
   }
 
 }

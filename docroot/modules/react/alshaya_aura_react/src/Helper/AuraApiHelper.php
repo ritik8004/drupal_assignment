@@ -61,18 +61,20 @@ class AuraApiHelper {
    * @return array
    *   Return array of config values.
    */
-  public function getAuraApiConfig() {
+  public function getAuraApiConfig($options) {
     static $auraConfigs;
 
     if (!empty($auraConfigs)) {
       return $auraConfigs;
     }
 
-    $auraApiConfigKeys = $this->getAuraApiConfigKeys();
+    $auraApiConfigKeys = !empty($options['api_keys'])
+      ? explode(',', $options['api_keys'])
+      : $this->getAuraApiConfigKeys();
 
     foreach ($auraApiConfigKeys as $value) {
       $cache_key = 'alshaya_aura_react:aura_api_configs:' . $value;
-      $cache = $this->cache->get($cache_key);
+      $cache = $options['reset'] ? NULL : $this->cache->get($cache_key);
 
       if (is_object($cache) && !empty($cache->data)) {
         $auraConfigs[$value] = $cache->data;
