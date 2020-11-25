@@ -42,6 +42,17 @@ export default class FitCalculator extends React.Component {
           >
             {Drupal.t('get my size')}
           </button>
+          <div className="size-conversion-link">
+            <a
+              href={drupalSettings.fitCalculator.sizeConversionChartUrl}
+              className="size-guide-link use-ajax"
+              data-dialog-type="dialog"
+              data-dialog-options="{&quot;height&quot;:400,&quot;width&quot;:700}"
+              rel="nofollow"
+            >
+              {Drupal.t('Size Conversion Chart')}
+            </a>
+          </div>
         </div>
       </div>
     );
