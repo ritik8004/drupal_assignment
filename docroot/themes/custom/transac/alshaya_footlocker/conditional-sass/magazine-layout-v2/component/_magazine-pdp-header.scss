@@ -24,3 +24,16 @@
     }
   }
 }
+
+.magv2-pdp-sticky-header {
+  &.magv2-header {
+    .magv2-header-wrapper {
+      .quantity {
+        @include breakpoint($only-mobile) {
+          top: 1.625rem;
+          #{$left}: 0.125rem;
+        }
+      }
+    }
+  }
+}
