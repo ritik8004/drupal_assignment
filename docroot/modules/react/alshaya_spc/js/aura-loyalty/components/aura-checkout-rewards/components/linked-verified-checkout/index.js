@@ -4,11 +4,13 @@ import AuraFormRedeemPoints from '../../../aura-forms/aura-redeem-points';
 import PointsString from '../../../utilities/points-string';
 import ToolTip from '../../../../../utilities/tooltip';
 import { getTooltipPointsOnHoldMsg } from '../../../utilities/helper';
+import { getPointsForPrice } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 const AuraLinkedVerifiedCheckout = (props) => {
   const {
-    pointsInAccount, pointsToEarn, expiringPoints, expiryDate,
+    pointsInAccount, price, expiringPoints, expiryDate,
   } = props;
+  const pointsToEarn = getPointsForPrice(price);
 
   return (
     <>

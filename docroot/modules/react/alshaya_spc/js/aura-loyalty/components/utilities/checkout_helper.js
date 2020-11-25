@@ -1,10 +1,16 @@
-import { getElementValue, showError } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import React from 'react';
+import {
+  getElementValue,
+  showError,
+  getPointsForPrice,
+} from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { postAPIData } from '../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import {
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import PointsString from './points-string';
 
 /**
  * Utility function to get user input value.
@@ -96,7 +102,25 @@ function processCheckoutCart(data) {
   }
 }
 
+/**
+ * Utility function points to earn message.
+ */
+function getMembersToEarnMessage(price) {
+  const toEarnMessageP1 = `${Drupal.t('Members will earn')} `;
+  const toEarnMessageP2 = ` ${Drupal.t('with this purchase')}`;
+  const points = getPointsForPrice(price);
+
+  return (
+    <span className="spc-checkout-aura-points-to-earn">
+      { toEarnMessageP1 }
+      <PointsString points={points} />
+      { toEarnMessageP2 }
+    </span>
+  );
+}
+
 export {
   getUserInput,
   processCheckoutCart,
+  getMembersToEarnMessage,
 };

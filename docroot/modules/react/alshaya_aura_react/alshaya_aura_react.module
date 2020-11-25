@@ -11,6 +11,7 @@ use Drupal\alshaya_aura_react\Helper\AuraTier;
 use Drupal\user\Entity\User;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Component\Utility\Html;
+use Drupal\alshaya_aura_react\Helper\AuraDictionaryApiConstants;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -47,6 +48,8 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route->getRouteName() === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_pdp';
+    $settings['allDictionaryApiConstants'] = AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS;
+    $settings['dictionaryApiData'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig([AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO]);
   }
   elseif ($current_route->getRouteName() === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
@@ -208,4 +211,24 @@ function alshaya_aura_react_preprocess_node(&$variables) {
 function alshaya_aura_react_alshaya_spc_checkout_build_alter(array &$build) {
   \Drupal::moduleHandler()->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
   $build['#strings'] = array_merge($build['#strings'], _alshaya_aura_static_strings());
+  
+  // Add aura dictionary api config in drupalSettings.
+  $build['#attached']['drupalSettings']['aura'] = [
+    'allDictionaryApiConstants' => AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS,
+    'dictionaryApiData' => \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig([
+      AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO,
+      AuraDictionaryApiConstants::CASHBACK_REDEMPTION_RATIO
+    ]),
+  ];
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_aura_react_alshaya_spc_cart_build_alter(array &$build) {
+  // Add aura dictionary api config in drupalSettings.
+  $build['#attached']['drupalSettings']['aura'] = [
+    'allDictionaryApiConstants' => AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS,
+    'dictionaryApiData' => \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig([AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO]),
+  ];
 }

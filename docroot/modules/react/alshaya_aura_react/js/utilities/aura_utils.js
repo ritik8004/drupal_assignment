@@ -1,6 +1,8 @@
 import {
   getUserAuraStatus,
   getUserAuraTier,
+  getAllDictionaryApiConstants,
+  getAuraDictionaryApiConfig,
 } from './helper';
 
 /**
@@ -62,10 +64,34 @@ function getAuraDetailsDefaultState() {
   return auraDetails;
 }
 
+/**
+ * Utility function to get aura points for given price.
+ */
+function getPointsForPrice(price) {
+  const accrualRatioConfigKey = getAllDictionaryApiConstants().CASHBACK_ACCRUAL_RATIO;
+  const accrualRatio = getAuraDictionaryApiConfig()[accrualRatioConfigKey] || 0;
+  const points = accrualRatio ? (price * accrualRatio) : 0;
+
+  return points;
+}
+
+/**
+ * Utility function to get price/currency for given aura points.
+ */
+function getPriceForPoints(points) {
+  const redemptionRatioConfigKey = getAllDictionaryApiConstants().CASHBACK_REDEMPTION_RATIO;
+  const redemptionRatio = getAuraDictionaryApiConfig()[redemptionRatioConfigKey] || 0;
+  const price = redemptionRatio ? (points / redemptionRatio) : 0;
+
+  return price;
+}
+
 export {
   getElementValue,
   showError,
   removeError,
   getAuraLocalStorageKey,
   getAuraDetailsDefaultState,
+  getPointsForPrice,
+  getPriceForPoints,
 };

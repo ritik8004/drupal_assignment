@@ -15,7 +15,6 @@ class AuraCartRewards extends React.Component {
     super(props);
     this.state = {
       ...getAuraDetailsDefaultState(),
-      productPoints: 0,
       wait: true,
     };
   }
@@ -72,10 +71,10 @@ class AuraCartRewards extends React.Component {
 
   render() {
     const allAuraStatus = getAllAuraStatus();
+    const { price } = this.props;
 
     const {
       wait,
-      productPoints,
       expiringPoints,
       expiryDate,
       cardNumber,
@@ -95,7 +94,7 @@ class AuraCartRewards extends React.Component {
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
         >
           <AuraNotLinkedNoData
-            points={productPoints}
+            price={price}
             loyaltyStatus={loyaltyStatus}
           />
         </ConditionalView>
@@ -103,7 +102,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Linked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
           <AuraLinkedVerified
-            points={productPoints}
+            price={price}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
             loyaltyStatus={loyaltyStatus}
@@ -113,7 +112,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Linked Loyalty Card - Pending Enrollment */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
           <AuraLinkedNotVerified
-            points={productPoints}
+            price={price}
             loyaltyStatus={loyaltyStatus}
           />
         </ConditionalView>
@@ -121,7 +120,7 @@ class AuraCartRewards extends React.Component {
         {/* Registered with Unlinked Loyalty Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA}>
           <AuraNotLinkedData
-            points={productPoints}
+            price={price}
             cardNumber={cardNumber}
             loyaltyStatus={loyaltyStatus}
           />

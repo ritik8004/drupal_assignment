@@ -138,6 +138,32 @@ function getAuraConfig() {
   return loyaltyConfig;
 }
 
+/**
+ * Helper function to get all dictionary api constants.
+ */
+function getAllDictionaryApiConstants() {
+  let allDictionaryApiConstants = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'allDictionaryApiConstants')) {
+    allDictionaryApiConstants = drupalSettings.aura.allDictionaryApiConstants;
+  }
+
+  return allDictionaryApiConstants;
+}
+
+/**
+ * Helper function to get aura dictionary api config.
+ */
+function getAuraDictionaryApiConfig() {
+  let dictionaryApiConfig = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'dictionaryApiData')) {
+    dictionaryApiConfig = drupalSettings.aura.dictionaryApiData;
+  }
+
+  return dictionaryApiConfig;
+}
+
 export {
   getUserAuraStatus,
   getUserAuraTier,
@@ -149,4 +175,6 @@ export {
   getUserProfileInfo,
   getUserDetails,
   getAuraConfig,
+  getAllDictionaryApiConstants,
+  getAuraDictionaryApiConfig,
 };

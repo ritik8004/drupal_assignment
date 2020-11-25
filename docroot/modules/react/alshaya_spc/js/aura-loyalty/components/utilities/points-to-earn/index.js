@@ -1,9 +1,11 @@
 import React from 'react';
 import { getAllAuraStatus } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import { getPointsForPrice } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 const PointsToEarnMessage = (props) => {
-  const { points, loyaltyStatus } = props;
+  const { price, loyaltyStatus } = props;
   const allAuraStatus = getAllAuraStatus();
+  const points = getPointsForPrice(price);
 
   // Guest User & No card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
