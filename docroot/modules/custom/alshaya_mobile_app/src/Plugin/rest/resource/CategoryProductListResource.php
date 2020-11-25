@@ -321,7 +321,7 @@ class CategoryProductListResource extends ResourceBase {
   public function prepareAndExecuteQuery(int $tid) {
     $storage = $this->entityTypeManager->getStorage('search_api_index');
     $response = [];
-    $term_details = $this->productCategoryPage->getCurrentSelectedCategory(NULL, $tid);
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid);
     if (isset($term_details['hierarchy'])) {
       $response['department_name'] = str_replace('>', '|', $term_details['hierarchy']);
     }
@@ -382,7 +382,7 @@ class CategoryProductListResource extends ResourceBase {
       $query->setOption('ruleContexts', $term_details['ruleContext']);
 
       // Prepare and execute query and pass result set.
-      $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+      $response['plp_data'] = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
       $response['algolia_data'] = [
         'filter_field' => $term_details['category_field'],
         'filter_value' => $term_details['hierarchy'],
