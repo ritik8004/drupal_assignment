@@ -108,19 +108,4 @@ class AuraApiHelper {
     return $auraConfigs;
   }
 
-  /**
-   * Get Aura api config from cache.
-   */
-  public function getAuraApiConfigFromCache($key) {
-    $cache_data = NULL;
-    $cache_key = 'alshaya_aura_react:aura_api_configs:' . $key;
-    $cache = $this->cache->get($cache_key);
-
-    if (is_object($cache) && !empty($cache->data)) {
-      $cache_data = $cache->data;
-    }
-
-    return $cache_data;
-  }
-
 }
