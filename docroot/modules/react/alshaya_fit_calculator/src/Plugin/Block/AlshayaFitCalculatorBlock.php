@@ -106,7 +106,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     $sizeData = isset($config['calculator_values']) ? trim(preg_replace('/\s+/', ' ', $config['calculator_values'])) : NULL;
     $sizeConversionChartUrl = NULL;
     if (isset($config['size_conversion_html'])) {
-      $url = Url::fromRoute('entity.node.canonical', ['node' => $config['size_conversion_html']]);
+      $url = Url::fromRoute('alshaya_fit_calculator.modal_links', ['node' => $config['size_conversion_html']]);
       $sizeConversionChartUrl = $url->toString();
     }
 
