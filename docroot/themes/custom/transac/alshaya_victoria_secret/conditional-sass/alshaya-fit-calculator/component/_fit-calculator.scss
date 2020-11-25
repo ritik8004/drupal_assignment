@@ -1,0 +1,17 @@
+.fit-calculator-wrapper {
+  .fit-calculator {
+    &-unit-wrapper {
+      label {
+        font-family: $vs-bentonsans-regular;
+      }
+    }
+  }
+
+  &.main-form {
+    .fit-calculator {
+      &-section-title {
+        font-family: $vs-bentonsanscomp-medium;
+      }
+    }
+  }
+}

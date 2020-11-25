@@ -422,3 +422,8 @@ sub-brand-logo:
   css:
     theme:
       css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}
+
+alshaya-fit-calculator:
+  css:
+    theme:
+      css/conditional-sass/alshaya-fit-calculator/alshaya-fit-calculator.ltr.css: {}

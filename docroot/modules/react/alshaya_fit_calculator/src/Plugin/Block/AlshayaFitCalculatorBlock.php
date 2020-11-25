@@ -115,6 +115,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
       '#attached' => [
         'library' => [
           'alshaya_fit_calculator/alshaya_fit_calculator',
+          'alshaya_white_label/alshaya-fit-calculator',
         ],
         'drupalSettings' => [
           'fitCalculator' => [

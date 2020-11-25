@@ -8,6 +8,7 @@ const FitCalculatorRadio = () => (
         value="Inches"
         name="fitCalcMeasurement"
         id="fitCalcMeasurement-inches"
+        checked
       />
       <label htmlFor="fitCalcMeasurement-inches">
         { Drupal.t('Inches') }
