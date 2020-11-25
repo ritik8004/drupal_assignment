@@ -140,7 +140,7 @@ class CustomerController extends ControllerBase {
       $orders = alshaya_acm_customer_get_user_orders($customer_id, 'search', 'filter');
 
       if (empty($orders)) {
-        // @TODO: Check the empty result message.
+        // @todo Check the empty result message.
         if ($this->currentRequest->query->get('search')) {
           $noOrdersFoundMessage['#markup'] = '<div class="no--orders">' . $this->t('Your search yielded no results, please try different text in search.') . '</div>';
         }

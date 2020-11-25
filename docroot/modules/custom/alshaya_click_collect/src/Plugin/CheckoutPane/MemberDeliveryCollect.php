@@ -214,7 +214,7 @@ class MemberDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInte
 
     // Here we have cc_ prefix to ensure validations work fine and don't
     // conflict with address form fields.
-    // @TODO: Verify mobile validation. Check in addressbook (Rohit/Mitesh).
+    // @todo Verify mobile validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['elements']['cc_mobile_number'] = [
       '#type' => 'mobile_number',
       '#title' => $this->t('Mobile Number'),

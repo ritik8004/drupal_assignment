@@ -1143,8 +1143,7 @@ class SkuImagesManager {
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
       $video_data = [];
       if (isset($media_item['video_url'])) {
-        // @TODO:
-        // Receiving video_provider as NULL, should be set to youtube
+        // @todo Receiving video_provider as NULL, should be set to youtube
         // or vimeo. Till then using $type as provider flag.
         $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
         $video_data = [
@@ -1153,9 +1152,9 @@ class SkuImagesManager {
           'video_title' => $media_item['video_title'],
           'video_desc' => $media_item['video_description'],
           'type' => $type,
-          // @TODO: should this be config?
+          // @todo should this be config?
           'width' => 81,
-          // @TODO: should this be config?
+          // @todo should this be config?
           'height' => 81,
         ];
       }

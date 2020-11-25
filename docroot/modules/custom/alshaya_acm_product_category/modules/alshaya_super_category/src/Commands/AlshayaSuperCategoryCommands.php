@@ -117,7 +117,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
       throw new UserAbortException();
     }
 
-    // @todo: Validate the given default_parent exists and from the appropriate
+    // @todo Validate the given default_parent exists and from the appropriate
     // vocabulary and is rootTerm.
     // Determine which default parent to use for main menu.
     $default_parent = $options['default_parent'];

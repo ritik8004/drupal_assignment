@@ -31,7 +31,7 @@
         "drupal/ckeditor_font": "^1.0",
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
-        "drupal/core": "^8.8.10",
+        "drupal/core": "^8.8.11",
         "drupal/core-composer-scaffold": "^8.8.10",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
@@ -119,7 +119,7 @@
     },
     "require-dev": {
         "drupal/console": "^1.8",
-        "drupal/core-dev": "^8.8.10",
+        "drupal/core-dev": "^8.8.11",
         "drupal/devel": "^2.0.0",
         "geerlingguy/drupal-vm": "^5.2.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07"

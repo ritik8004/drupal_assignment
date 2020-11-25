@@ -746,7 +746,7 @@ class AlshayaSpcController extends ControllerBase {
           $status[$key] = TRUE;
           $address_extension_attributes = $data[$key]['extension_attributes'] ?? [];
           $address_custom_attributes = $data[$key]['custom_attributes'] ?? [];
-          // @TODO: Check AlshayaAddressBookManager::validateAddress().
+          // @todo Check AlshayaAddressBookManager::validateAddress().
           // We are using '::validateAddress()' for addressbook validation.
           // We need to check if we can use same for checkout as well.
           // Currenlty we are not doing this because '::validateAddress()'

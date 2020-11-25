@@ -439,7 +439,10 @@ class MobileAppUtility {
       '/' . $alias,
       $this->getAliasLang($alias)
     );
-
+    // Return false if there is no path associated with the alias.
+    if ('/' . $alias === $internal_path) {
+      return FALSE;
+    }
     // Get the parameters, to get node id from internal path.
     $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
     if (empty($params)) {
