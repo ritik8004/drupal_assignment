@@ -225,7 +225,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
 
     // First/Last/Email/Mobile have cc_ prefix to ensure validations work fine
     // and don't conflict with address form fields.
-    // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
+    // @todo Add input validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['elements']['cc_firstname'] = [
       '#type' => 'textfield',
       '#title' => $this->t('First Name'),
@@ -234,7 +234,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#default_value' => $default_firstname,
     ];
 
-    // @TODO: Add input validation. Check in addressbook (Rohit/Mitesh).
+    // @todo Add input validation. Check in addressbook (Rohit/Mitesh).
     $pane_form['selected_store']['elements']['cc_lastname'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Last Name'),
@@ -400,7 +400,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
         $customer = $api_wrapper->createCustomer($customer);
       }
       catch (\Exception $e) {
-        // @TODO: Handle create customer errors here.
+        // @todo Handle create customer errors here.
         // Probably just the email error.
         \Drupal::logger('alshaya_acm_checkout')->error('Error while creating customer for guest cart: @message', ['@message' => $e->getMessage()]);
         $error = $this->t('@title does not contain a valid email.', ['@title' => 'Email']);
