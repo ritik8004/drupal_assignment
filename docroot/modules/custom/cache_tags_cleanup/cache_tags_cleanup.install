@@ -18,7 +18,7 @@ function cache_tags_cleanup_schema() {
         'type' => 'serial',
         'not null' => TRUE,
         'unsigned' => TRUE,
-        'description' => 'The primary identifier for a node.',
+        'description' => 'The primary identifier.',
       ],
       'entity_id' => [
         'type' => 'int',
