@@ -6,3 +6,15 @@ services:
       - '@entity_type.manager'
       - '@mobile_number.util'
       - '@config.factory'
+  alshaya_aura_react.aura_api_helper:
+    class: Drupal\alshaya_aura_react\Helper\AuraApiHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@logger.factory'
+      - '@cache.aura_api_config'
+  cache.aura_api_config:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [aura_api_config]
