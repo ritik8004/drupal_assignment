@@ -191,7 +191,7 @@ const PdpLayout = () => {
             />
           ) : null}
           {isAuraEnabled()
-            ? <AuraPDP mode="main" cardNumber={cardNumber} />
+            ? <AuraPDP mode="main" />
             : null}
           {stockStatus ? (
             <PdpCart

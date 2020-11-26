@@ -135,7 +135,7 @@ class AuraApiHelper {
    *   AURA dictionary api data.
    */
   public function prepareAuraDictionaryApiData() {
-    $aura_dictionary_api_config = \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig();
+    $aura_dictionary_api_config = $this->getAuraApiConfig();
 
     $data = [
       'priceToPointRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO] ?? '',

@@ -49,11 +49,11 @@ class QuantityDropdown extends React.Component {
     const price = productInfo[skuCode].variants
       ? productInfo[skuCode].variants[variantSelected][priceKey]
       : productInfo[skuCode][priceKey];
-    const data = [{
+    const data = {
       code: variantSelected,
       quantity: qty,
       amount: price * qty,
-    }];
+    };
     dispatchCustomEvent('auraProductUpdate', { data, context });
   };
 

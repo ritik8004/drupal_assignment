@@ -66,13 +66,10 @@ export default class PdpCrossellUpsell extends React.PureComponent {
   }
 
   openModal = (relatedSku) => {
-    const { cardNumber } = this.props;
-
     return (
       <CrossellPopupContent
         closeModal={this.closeModal}
         relatedSku={relatedSku}
-        cardNumber={cardNumber}
       />
     );
   };
