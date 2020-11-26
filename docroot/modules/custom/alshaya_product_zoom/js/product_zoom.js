@@ -381,6 +381,7 @@
 
     var gallery = $('#product-full-screen-gallery');
     Drupal.getSlickOptions('slickModalOptions').currentSlide = currentSlide;
+    Drupal.blazy.revalidate();
     Drupal.productZoomApplyRtl(gallery, Drupal.getSlickOptions('slickModalOptions'), document);
     // Create Instagram Dots.
     if (!gallery.find('ul.slick-dots').hasClass('i-dots')) {
