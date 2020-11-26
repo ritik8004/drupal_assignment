@@ -257,13 +257,19 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
 
     foreach ($terms as $term) {
+      $path = Url::fromRoute(
+        'entity.taxonomy_term.canonical',
+        ['taxonomy_term' => $term->tid],
+        $uri_options
+      )->toString(TRUE)->getGeneratedUrl();
+
       $data[$term->tid] = [
         'label' => $term->name,
         'description' => [
           '#markup' => $term->description__value,
         ],
         'id' => $term->tid,
-        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid], $uri_options)->toString(),
+        'path' => $path,
         'active_class' => '',
         'class' => [],
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
@@ -291,7 +297,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       if ($term->field_override_target_link_value) {
         $data[$term->tid]['path'] = UrlHelper::isExternal($term->field_target_link_uri)
           ? $term->field_target_link_uri
-          : Url::fromUri($term->field_target_link_uri, $uri_options)->toString();
+          : Url::fromUri($term->field_target_link_uri, $uri_options)->toString(TRUE)->getGeneratedUrl();
         $data[$term->tid]['class'][] = 'overridden-link';
       }
 
