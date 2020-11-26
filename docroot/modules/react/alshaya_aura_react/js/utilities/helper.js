@@ -138,6 +138,45 @@ function getAuraConfig() {
   return loyaltyConfig;
 }
 
+/**
+ * Helper function to get point to price ratio.
+ */
+function getPointToPriceRatio() {
+  let pointToPriceRatio = 0;
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'pointToPriceRatio')) {
+    pointToPriceRatio = parseInt(drupalSettings.aura.pointToPriceRatio.toString(), 10);
+  }
+
+  return pointToPriceRatio;
+}
+
+/**
+ * Helper function to get price to point ratio.
+ */
+function getPriceToPointRatio() {
+  let priceToPointRatio = 0;
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'priceToPointRatio')) {
+    priceToPointRatio = parseInt(drupalSettings.aura.priceToPointRatio.toString(), 10);
+  }
+
+  return priceToPointRatio;
+}
+
+/**
+ * Helper function to get mobile country code list.
+ */
+function getMobileCountryCodeList() {
+  let mobileCountryCodeList = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'phonePrefixList')) {
+    mobileCountryCodeList = drupalSettings.aura.phonePrefixList;
+  }
+
+  return mobileCountryCodeList;
+}
+
 export {
   getUserAuraStatus,
   getUserAuraTier,
@@ -149,4 +188,7 @@ export {
   getUserProfileInfo,
   getUserDetails,
   getAuraConfig,
+  getPointToPriceRatio,
+  getPriceToPointRatio,
+  getMobileCountryCodeList,
 };

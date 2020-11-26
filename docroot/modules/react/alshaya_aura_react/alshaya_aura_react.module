@@ -47,6 +47,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route->getRouteName() === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_pdp';
+    $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
   }
   elseif ($current_route->getRouteName() === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
@@ -208,4 +209,15 @@ function alshaya_aura_react_preprocess_node(&$variables) {
 function alshaya_aura_react_alshaya_spc_checkout_build_alter(array &$build) {
   \Drupal::moduleHandler()->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
   $build['#strings'] = array_merge($build['#strings'], _alshaya_aura_static_strings());
+
+  // Add aura dictionary api data in drupalSettings.
+  $build['#attached']['drupalSettings']['aura'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData();
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ */
+function alshaya_aura_react_alshaya_spc_cart_build_alter(array &$build) {
+  // Add aura dictionary api data in drupalSettings.
+  $build['#attached']['drupalSettings']['aura'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData();
 }

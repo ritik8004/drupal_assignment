@@ -224,7 +224,12 @@ export default class Checkout extends React.Component {
             </ClicknCollectContextProvider>
 
             {isAuraEnabled()
-              ? <AuraCheckoutContainer cartId={cart.cart.cart_id || ''} />
+              ? (
+                <AuraCheckoutContainer
+                  cartId={cart.cart.cart_id || ''}
+                  price={cart.cart.cart_total || 0}
+                />
+              )
               : null}
 
             <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={cart} />

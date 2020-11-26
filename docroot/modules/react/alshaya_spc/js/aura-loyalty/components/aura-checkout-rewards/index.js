@@ -18,14 +18,12 @@ class AuraCheckoutRewards extends React.Component {
     super(props);
     this.state = {
       ...getAuraDetailsDefaultState(),
-      pointsToEarn: 0,
       pointsInAccount: 0,
       wait: true,
     };
   }
 
   componentDidMount() {
-    // @todo: API call here to fetch the points user will get based on his cart.
     document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
 
     // Logged in user.
@@ -94,12 +92,12 @@ class AuraCheckoutRewards extends React.Component {
 
     const {
       cartId,
+      price,
       animationDelay: animationDelayValue,
     } = this.props;
 
     const {
       wait,
-      pointsToEarn,
       pointsInAccount,
       expiringPoints,
       expiryDate,
@@ -119,14 +117,14 @@ class AuraCheckoutRewards extends React.Component {
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
         >
-          <AuraNotLinkedNoDataCheckout pointsToEarn={pointsToEarn} cartId={cartId} />
+          <AuraNotLinkedNoDataCheckout price={price} cartId={cartId} />
         </ConditionalView>
 
         {/* Registered User - Linked Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
           <AuraLinkedVerifiedCheckout
             pointsInAccount={pointsInAccount}
-            pointsToEarn={pointsToEarn}
+            price={price}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
           />
@@ -136,7 +134,7 @@ class AuraCheckoutRewards extends React.Component {
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
           <AuraLinkedNotVerifiedCheckout
             pointsInAccount={pointsInAccount}
-            pointsToEarn={pointsToEarn}
+            price={price}
           />
         </ConditionalView>
 
@@ -144,7 +142,7 @@ class AuraCheckoutRewards extends React.Component {
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA}>
           <AuraNotLinkedDataCheckout
             cardNumber={cardNumber}
-            pointsToEarn={pointsToEarn}
+            price={price}
           />
         </ConditionalView>
       </div>

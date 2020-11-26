@@ -24,7 +24,7 @@ final class AuraDictionaryApiConstants {
   /**
    * Contains all the dictionary api keys constants in the class.
    */
-  const ALL_DICTONARY_API_CONSTANTS = [
+  const ALL_DICTIONARY_API_CONSTANTS = [
     'CASHBACK_ACCRUAL_RATIO' => self::CASHBACK_ACCRUAL_RATIO,
     'CASHBACK_REDEMPTION_RATIO' => self::CASHBACK_REDEMPTION_RATIO,
     'EXT_PHONE_PREFIX' => self::EXT_PHONE_PREFIX,

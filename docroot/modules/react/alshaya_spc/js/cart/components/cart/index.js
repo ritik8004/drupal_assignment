@@ -167,6 +167,7 @@ export default class Cart extends React.Component {
       actionMessage,
       dynamicPromoLabelsCart,
       dynamicPromoLabelsProduct,
+      amount,
     } = this.state;
 
     let preContentActive = 'hidden';
@@ -231,7 +232,7 @@ export default class Cart extends React.Component {
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
             />
             {isAuraEnabled()
-              ? <AuraCartContainer />
+              ? <AuraCartContainer price={amount} />
               : null}
             <OrderSummaryBlock
               totals={totals}

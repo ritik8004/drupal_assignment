@@ -1,6 +1,8 @@
 import {
   getUserAuraStatus,
   getUserAuraTier,
+  getPointToPriceRatio,
+  getPriceToPointRatio,
 } from './helper';
 
 /**
@@ -62,10 +64,32 @@ function getAuraDetailsDefaultState() {
   return auraDetails;
 }
 
+/**
+ * Utility function to get aura points for given price.
+ */
+function getPointsForPrice(price) {
+  const accrualRatio = getPointToPriceRatio();
+  const points = accrualRatio ? (price * accrualRatio) : 0;
+
+  return points;
+}
+
+/**
+ * Utility function to get price/currency for given aura points.
+ */
+function getPriceForPoints(points) {
+  const redemptionRatio = getPriceToPointRatio();
+  const price = redemptionRatio ? (points / redemptionRatio) : 0;
+
+  return price;
+}
+
 export {
   getElementValue,
   showError,
   removeError,
   getAuraLocalStorageKey,
   getAuraDetailsDefaultState,
+  getPointsForPrice,
+  getPriceForPoints,
 };
