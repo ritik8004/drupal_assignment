@@ -139,29 +139,42 @@ function getAuraConfig() {
 }
 
 /**
- * Helper function to get all dictionary api constants.
+ * Helper function to get point to price ratio.
  */
-function getAllDictionaryApiConstants() {
-  let allDictionaryApiConstants = {};
+function getPointToPriceRatio() {
+  let pointToPriceRatio = 0;
   if (typeof drupalSettings.aura !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura, 'allDictionaryApiConstants')) {
-    allDictionaryApiConstants = drupalSettings.aura.allDictionaryApiConstants;
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'pointToPriceRatio')) {
+    pointToPriceRatio = parseInt(drupalSettings.aura.pointToPriceRatio.toString(), 10);
   }
 
-  return allDictionaryApiConstants;
+  return pointToPriceRatio;
 }
 
 /**
- * Helper function to get aura dictionary api config.
+ * Helper function to get price to point ratio.
  */
-function getAuraDictionaryApiConfig() {
-  let dictionaryApiConfig = {};
+function getPriceToPointRatio() {
+  let priceToPointRatio = 0;
   if (typeof drupalSettings.aura !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura, 'dictionaryApiData')) {
-    dictionaryApiConfig = drupalSettings.aura.dictionaryApiData;
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'priceToPointRatio')) {
+    priceToPointRatio = parseInt(drupalSettings.aura.priceToPointRatio.toString(), 10);
   }
 
-  return dictionaryApiConfig;
+  return priceToPointRatio;
+}
+
+/**
+ * Helper function to get mobile country code list.
+ */
+function getMobileCountryCodeList() {
+  let mobileCountryCodeList = {};
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'phonePrefixList')) {
+    mobileCountryCodeList = drupalSettings.aura.phonePrefixList;
+  }
+
+  return mobileCountryCodeList;
 }
 
 export {
@@ -175,6 +188,7 @@ export {
   getUserProfileInfo,
   getUserDetails,
   getAuraConfig,
-  getAllDictionaryApiConstants,
-  getAuraDictionaryApiConfig,
+  getPointToPriceRatio,
+  getPriceToPointRatio,
+  getMobileCountryCodeList,
 };

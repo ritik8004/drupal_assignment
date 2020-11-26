@@ -87,11 +87,30 @@ class AuraApiHelper {
       $response = [
         "code" => "APC_CASHBACK_ACCRUAL_RATIO",
         "items" => [
-          "code" => "SAR",
-          "order" => 1,
-          "value" => "1",
+          [
+            "code" => "SAR",
+            "order" => 1,
+            "value" => "1",
+          ],
         ],
       ];
+      if ($value === 'EXT_PHONE_PREFIX') {
+        $response = [
+          "code" => "EXT_PHONE_PREFIX",
+          "items" => [
+            [
+              "code" => "+973",
+              "order" => 0,
+              "value" => "+973",
+            ],
+            [
+              "code" => "+966",
+              "order" => 1,
+              "value" => "+966",
+            ],
+          ],
+        ];
+      }
 
       if (empty($response)) {
         $this->logger->error('No data found for api: @api.', [
@@ -100,11 +119,31 @@ class AuraApiHelper {
         continue;
       }
 
-      $auraConfigs[$value] = (int) $response['items']['value'];
+      $data = !empty($response['items']) ? array_column($response['items'], 'value') : [];
+
+      $auraConfigs[$value] = $data;
       $this->cache->set($cache_key, $auraConfigs[$value], Cache::PERMANENT);
     }
 
     return $auraConfigs;
+  }
+
+  /**
+   * Prepare aura dictionary api data.
+   *
+   * @return array
+   *   AURA dictionary api data.
+   */
+  public function prepareAuraDictionaryApiData() {
+    $aura_dictionary_api_config = \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig();
+
+    $data = [
+      'priceToPointRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO] ?? '',
+      'pointToPriceRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::CASHBACK_REDEMPTION_RATIO] ?? '',
+      'phonePrefixList' => $aura_dictionary_api_config[AuraDictionaryApiConstants::EXT_PHONE_PREFIX] ?? '',
+    ];
+
+    return $data;
   }
 
 }
