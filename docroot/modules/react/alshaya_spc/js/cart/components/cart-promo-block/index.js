@@ -12,11 +12,12 @@ export default class CartPromoBlock extends React.Component {
       promoApplied: false,
       buttonText: Drupal.t('apply'),
       disabled: false,
+      productInfo: {},
     };
   }
 
   componentDidMount() {
-    const { coupon_code: couponCode } = this.props;
+    const { coupon_code: couponCode, items } = this.props;
 
     if (couponCode.length > 0) {
       this.setState({
@@ -29,6 +30,11 @@ export default class CartPromoBlock extends React.Component {
     }
 
     document.addEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
+
+    // Get cart items product data.
+    Object.keys(items).forEach((key) => {
+      Drupal.alshayaSpc.getProductData(key, this.productDataCallback);
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -43,6 +49,22 @@ export default class CartPromoBlock extends React.Component {
   componentWillUnmount() {
     document.removeEventListener('spcCartPromoError', this.cartPromoEventErrorHandler, false);
   }
+
+  /**
+   * Call back to get product data from storage.
+   */
+  productDataCallback = (productData) => {
+    const { productInfo } = this.state;
+    const data = productInfo;
+    // If sku info available.
+    if (productData.freeGiftPromotion !== null && productData.sku !== undefined) {
+      const freeGiftData = productData.freeGiftPromotion;
+      data[freeGiftData['#promo_code']] = freeGiftData['#promo_type'];
+      this.setState({
+        productInfo: data,
+      });
+    }
+  };
 
   refreshState = (couponCode) => {
     if (couponCode.length > 0) {
@@ -74,7 +96,7 @@ export default class CartPromoBlock extends React.Component {
     dispatchCustomEvent('spcCartMessageUpdate', {});
   }
 
-  promoAction = (promoApplied, inStock) => {
+  promoAction = (promoApplied, inStock, promoCoupons = null) => {
     // If not in stock.
     if (inStock === false) {
       return;
@@ -101,57 +123,74 @@ export default class CartPromoBlock extends React.Component {
     const cartData = applyRemovePromo(action, promoValue);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
-        // Removing button clicked class.
-        document.getElementById('promo-action-button').classList.remove('loading');
-        document.getElementById('promo-remove-button').classList.remove('loading');
-        // If coupon is not valid.
-        if (result.response_message.status === 'error_coupon') {
-          const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });
-          document.getElementById('promo-message').innerHTML = result.response_message.msg;
-          document.getElementById('promo-message').classList.add('error');
-          document.getElementById('promo-code').classList.add('error');
-          // Dispatch event promoCodeFailed for GTM.
-          document.dispatchEvent(event);
-        } else if (result.response_message.status === 'success') {
-          document.getElementById('promo-message').innerHTML = '';
-          // Initially promoApplied was false, means promo is applied now.
-          if (promoApplied === false) {
-            this.setState({
-              promoApplied: true,
-              buttonText: Drupal.t('applied'),
-              disabled: true,
-            });
-            // Dispatch event promoCodeSuccess for GTM.
-            const event = new CustomEvent('promoCodeSuccess', { bubbles: true, detail: { data: promoValue } });
+        let freeGiftPromoType = '';
+        if (promoCoupons !== null) {
+          freeGiftPromoType = promoCoupons[promoValue];
+        }
+        if (action === 'apply coupon' && freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+          const body = document.querySelector('body');
+          body.classList.add('free-gifts-modal-overlay');
+          document.getElementById('spc-free-gift').click();
+          document.getElementById('promo-action-button').classList.remove('loading');
+        } else {
+          // Removing button clicked class.
+          document.getElementById('promo-action-button').classList.remove('loading');
+          document.getElementById('promo-remove-button').classList.remove('loading');
+          // If coupon is not valid.
+          if (result.response_message.status === 'error_coupon') {
+            const event = new CustomEvent('promoCodeFailed', { bubbles: true, detail: { data: promoValue } });
+            document.getElementById('promo-message').innerHTML = result.response_message.msg;
+            document.getElementById('promo-message').classList.add('error');
+            document.getElementById('promo-code').classList.add('error');
+            // Dispatch event promoCodeFailed for GTM.
             document.dispatchEvent(event);
-          } else {
-            // It means promo is removed.
-            this.setState({
-              promoApplied: false,
-              buttonText: Drupal.t('apply'),
-              disabled: false,
-            });
+          } else if (result.response_message.status === 'success') {
+            document.getElementById('promo-message').innerHTML = '';
+            // Initially promoApplied was false, means promo is applied now.
+            if (promoApplied === false) {
+              this.setState({
+                promoApplied: true,
+                buttonText: Drupal.t('applied'),
+                disabled: true,
+              });
+              // Dispatch event promoCodeSuccess for GTM.
+              const event = new CustomEvent('promoCodeSuccess', { bubbles: true, detail: { data: promoValue } });
+              document.dispatchEvent(event);
+            } else {
+              // It means promo is removed.
+              this.setState({
+                promoApplied: false,
+                buttonText: Drupal.t('apply'),
+                disabled: false,
+              });
 
-            document.getElementById('promo-code').value = '';
+              document.getElementById('promo-code').value = '';
+            }
+
+            // Refreshing mini-cart.
+            const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result } });
+            document.dispatchEvent(miniCartEvent);
+
+            // Refreshing cart components..
+            const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
+            document.dispatchEvent(refreshCartEvent);
           }
 
-          // Refreshing mini-cart.
-          const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => result } });
-          document.dispatchEvent(miniCartEvent);
-
-          // Refreshing cart components..
-          const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => result } });
-          document.dispatchEvent(refreshCartEvent);
+          // Trigger cart update to remove any message on cart.
+          dispatchCustomEvent('spcCartMessageUpdate', {});
         }
-
-        // Trigger cart update to remove any message on cart.
-        dispatchCustomEvent('spcCartMessageUpdate', {});
       });
     }
   };
 
   render() {
-    const { promoApplied, disabled, buttonText } = this.state;
+    const {
+      productInfo,
+      promoApplied,
+      disabled,
+      buttonText,
+    } = this.state;
+
     const { inStock, dynamicPromoLabelsCart } = this.props;
     const promoRemoveActive = promoApplied ? 'active' : '';
     let disabledState = false;
@@ -186,7 +225,7 @@ export default class CartPromoBlock extends React.Component {
         <div className="block-content">
           <input id="promo-code" disabled={disabledState} type="text" placeholder={Drupal.t('Promo code')} />
           <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
-          <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock); }}>{buttonText}</button>
+          <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock, productInfo); }}>{buttonText}</button>
           <div id="promo-message" />
           <DynamicPromotionCode code={couponCode} label={couponLabel} />
         </div>

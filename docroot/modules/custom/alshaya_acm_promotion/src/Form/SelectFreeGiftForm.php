@@ -131,6 +131,8 @@ class SelectFreeGiftForm extends FormBase {
       }
     }
 
+    $parent_sku = $this->skuManager->getParentSkuBySku($sku->getSku());
+
     $form['coupon'] = [
       '#type' => 'hidden',
       '#value' => $coupon,
@@ -149,16 +151,15 @@ class SelectFreeGiftForm extends FormBase {
     $form['select'] = [
       '#type' => 'button',
       '#value' => $this->t('ADD FREE GIFT'),
-      '#ajax' => [
-        'url' => Url::fromRoute('alshaya_acm_promotion.select_free_gift'),
-        'progress' => [
-          'type' => 'throbber',
-          'message' => NULL,
-        ],
-      ],
       '#weight' => 100,
       '#attributes' => [
         'class' => ['select-free-gift'],
+        'id' => 'add-free-gift',
+        'data-variant-sku' => $sku->getSku(),
+        'data-sku-type' => $sku->bundle(),
+        'data-promo-type' => $promo_type,
+        'data-coupon' => $coupon,
+        'data-parent-sku' => $parent_sku ? $parent_sku->getSku() : $sku->getSku(),
       ],
     ];
 

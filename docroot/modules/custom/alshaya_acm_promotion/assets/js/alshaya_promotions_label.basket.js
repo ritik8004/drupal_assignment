@@ -12,6 +12,13 @@
         $('#promo-code').val($(this).attr('data-coupon-code'));
         $('#promo-action-button').trigger('click');
       });
+
+      // Create event for select button.
+      var selectButton = $('.free-gift-listing-modal #select-add-free-gift');
+      if (selectButton) {
+        var selectFreeGiftModal = new CustomEvent('selectFreeGiftModalEvent', {bubbles: true, detail: {}});
+        document.dispatchEvent(selectFreeGiftModal);
+      }
     }
   };
 
