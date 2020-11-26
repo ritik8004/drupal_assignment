@@ -92,7 +92,8 @@ export default class AddressItem extends React.Component {
           cartData = {
             error_message: cartResult.error_message,
           };
-        } else if (cartResult.response_message.status !== 'success') {
+        } else if (typeof cartResult.response_message !== 'undefined'
+            && cartResult.response_message.status !== 'success') {
           cartData = {
             error_message: cartResult.response_message.msg,
           };
