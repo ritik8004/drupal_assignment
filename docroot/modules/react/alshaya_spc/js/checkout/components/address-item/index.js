@@ -92,14 +92,13 @@ export default class AddressItem extends React.Component {
           cartData = {
             error_message: cartResult.error_message,
           };
-        } else if (cartResult.response_message.status === 'error') {
+        } else if (cartResult.response_message.status !== 'success') {
           cartData = {
             error_message: cartResult.response_message.msg,
           };
         } else {
           cartData.cart = cartResult;
         }
-
         // Trigger event to close shipping popups.
         dispatchCustomEvent('refreshCartOnAddress', cartData);
         if (type === 'billing') {

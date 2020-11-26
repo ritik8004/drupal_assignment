@@ -135,7 +135,7 @@ class ContactInfoForm extends React.Component {
             Drupal.logJavascriptError('update-shipping', cartResult.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
             return null;
           }
-          if (cartResult.response_message.status === 'error') {
+          if (cartResult.response_message.status !== 'success') {
             dispatchCustomEvent('addressPopUpError', {
               type: 'error',
               message: cartResult.response_message.msg,
