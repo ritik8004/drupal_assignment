@@ -73,7 +73,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
             <span className="date">{transaction.date}</span>
             <span className="amount">{transaction.amount}</span>
             <span className="type">{transaction.type}</span>
-            <span className={`points style-${transaction.status}`}>{transaction.points}</span>
+            <span className={`aura-points style-${transaction.status}`}>{transaction.points}</span>
             <span className={`status style-${transaction.status}`}>{statusString}</span>
           </div>,
         );
@@ -91,7 +91,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
           <span className="date">{Drupal.t('Date')}</span>
           <span className="amount">{Drupal.t('Order Total')}</span>
           <span className="type">{Drupal.t('Online / Offline')}</span>
-          <span className="points">{Drupal.t('Aura Points')}</span>
+          <span className="aura-points">{Drupal.t('Aura Points')}</span>
           <span className="status">{Drupal.t('Status')}</span>
         </div>
         <div className="reward-activity">

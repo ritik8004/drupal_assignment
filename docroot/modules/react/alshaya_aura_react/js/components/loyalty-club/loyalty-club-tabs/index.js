@@ -10,7 +10,8 @@ class LoyaltyClubTabs extends React.Component {
     const allAuraStatus = getAllAuraStatus();
 
     // We show tabs only for registered & verified AURA user.
-    if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
+    // @TODO: Update condition when we have rewards activity.
+    if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED && 0) {
       // We use this to show the active tab's content on page load.
       const activeTab = document.querySelector('.loyalty-club-tabs .loyalty-tab.active');
       // Get the corresponding content.
@@ -35,7 +36,8 @@ class LoyaltyClubTabs extends React.Component {
     const allAuraStatus = getAllAuraStatus();
 
     // We show tabs only for registered & verified AURA user.
-    if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
+    // @TODO: Update condition when we have rewards activity.
+    if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED && 0) {
       return (
         <>
           <div className="loyalty-club-tabs fadeInUp" style={{ animationDelay: '0.5s' }}>
