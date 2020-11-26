@@ -235,7 +235,9 @@ class CategoryProductListResource extends ResourceBase {
     $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
 
     // Filter the empty products.
-    $response_data['products'] = array_filter($response_data['products']);
+    // Array values being used to re-set the array index
+    // if there any empty item in b/w.
+    $response_data['products'] = array_values(array_filter($response_data['products']));
 
     // Get sub categories for the current term.
     $response_data['sub_categories'] = $this->getSubCategoryData($id);
