@@ -47,7 +47,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
    * @usage drush delete-entity-cachetags
    *   Remove entity cachetags from table.
    */
-  public function deleteCacheTagsEntriesforEntities(array $options = ['batch_size' => 10]) {
+  public function deleteCacheTagsEntriesforEntities(array $options = ['batch_size' => 50]) {
     $query = $this->connection->select('deleted_entity_info', 'de');
     $query->addField('de', 'id');
     $query->addField('de', 'entity_id');
