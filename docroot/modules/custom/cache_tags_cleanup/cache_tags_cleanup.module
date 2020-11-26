@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Cache tags cleanup.
+ *
+ * Add hook delete to add entry to custom table
+ * for all deleted entities.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+
+
+/**
+ * Implements hook_entity_delete().
+ */
+function cache_tags_cleanup_entity_delete(EntityInterface $entity) {
+
+  \Drupal::database()->insert("deleted_entity_info")
+    ->fields([
+      'entity_id' => $entity->id(),
+      'entity_type' => $entity->getEntityTypeId(),
+      'deleted_on' => time(),
+    ])
+    ->execute();
+}

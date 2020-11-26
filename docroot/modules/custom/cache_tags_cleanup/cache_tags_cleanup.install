@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Contains install, uninstall hooks for cache_tags_cleanup module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function cache_tags_cleanup_schema() {
+  $schema = [];
+
+  $schema['deleted_entity_info'] = [
+    'description' => 'Stores entry for deleted entities.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'The primary identifier for a node.',
+      ],
+      'entity_id' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Entity id.',
+      ],
+      'entity_type' => [
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'description' => 'Entity type.',
+      ],
+      'deleted_on' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Unix timestamp of when the entity was deleted.',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}
