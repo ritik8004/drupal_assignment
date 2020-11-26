@@ -22,6 +22,7 @@ class LocalCommand extends BltTasks {
     3 => 'alshaya3bis.01',
     4 => 'alshaya4.04',
     5 => 'alshaya5.05',
+    6 => 'alshaya6tmp.06',
   ];
 
   /**
