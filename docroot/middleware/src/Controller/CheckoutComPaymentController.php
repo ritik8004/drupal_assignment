@@ -345,7 +345,7 @@ class CheckoutComPaymentController extends PaymentController {
       throw new \Exception('/' . $data['data']['langcode'] . '/cart', 302);
     }
 
-    $cart = $this->cart->getCart();
+    $cart = $this->cart->getCart(TRUE);
     if (empty($cart) || !empty($cart['error'])) {
       $this->logger->error('3D secure payment came into @callback but not able to load cart for the payment data. Cart id: @id, responseCode: @code, Payment token: @token', [
         '@id' => $data['cart_id'],
