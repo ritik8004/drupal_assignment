@@ -65,14 +65,12 @@ export default class PdpCrossellUpsell extends React.PureComponent {
     this.slider.slickPrev();
   }
 
-  openModal = (relatedSku) => {
-    return (
-      <CrossellPopupContent
-        closeModal={this.closeModal}
-        relatedSku={relatedSku}
-      />
-    );
-  };
+  openModal = (relatedSku) => (
+    <CrossellPopupContent
+      closeModal={this.closeModal}
+      relatedSku={relatedSku}
+    />
+  );
 
   closeModal = () => {
     const { removePanelData } = this.props;
