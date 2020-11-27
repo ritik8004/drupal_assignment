@@ -12,6 +12,7 @@ services:
       - '@alshaya_api.api'
       - '@logger.factory'
       - '@cache.aura_api_config'
+      - '@mobile_number.util'
   cache.aura_api_config:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
