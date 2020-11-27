@@ -68,7 +68,7 @@ export default class CartPromoBlock extends React.Component {
           code: freeGiftData['#promo_type'],
           skuType: freeGiftData['#free_sku_type'],
         };
-      } else {
+      } else if (freeGiftData['#promo_code'].length > 0) {
         data[freeGiftData['#promo_code'][0].value] = {
           code: freeGiftData['#promo_type'],
           skuType: freeGiftData['#free_sku_type'],
