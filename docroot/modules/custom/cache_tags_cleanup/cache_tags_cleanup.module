@@ -10,13 +10,11 @@
 
 use Drupal\Core\Entity\EntityInterface;
 
-
 /**
  * Implements hook_entity_delete().
  */
 function cache_tags_cleanup_entity_delete(EntityInterface $entity) {
-
-  \Drupal::database()->insert("deleted_entity_info")
+  \Drupal::database()->insert("cache_tags_cleanup_queue")
     ->fields([
       'entity_id' => $entity->id(),
       'entity_type' => $entity->getEntityTypeId(),

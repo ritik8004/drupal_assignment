@@ -11,15 +11,9 @@
 function cache_tags_cleanup_schema() {
   $schema = [];
 
-  $schema['deleted_entity_info'] = [
+  $schema['cache_tags_cleanup_queue'] = [
     'description' => 'Stores entry for deleted entities.',
     'fields' => [
-      'id' => [
-        'type' => 'serial',
-        'not null' => TRUE,
-        'unsigned' => TRUE,
-        'description' => 'The primary identifier.',
-      ],
       'entity_id' => [
         'type' => 'int',
         'unsigned' => TRUE,
@@ -39,7 +33,7 @@ function cache_tags_cleanup_schema() {
         'description' => 'Unix timestamp of when the entity was deleted.',
       ],
     ],
-    'primary key' => ['id'],
+    'primary key' => ['entity_id', 'entity_type'],
   ];
 
   return $schema;
