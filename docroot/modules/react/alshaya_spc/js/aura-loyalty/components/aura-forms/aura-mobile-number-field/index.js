@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import TextField from '../../../../utilities/textfield';
 import getStringMessage from '../../../../utilities/strings';
+import { getProcessedMobileCountryCode } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 class AuraMobileNumberField extends React.Component {
   constructor(props) {
@@ -45,13 +46,6 @@ class AuraMobileNumberField extends React.Component {
     setCountryCode(selectedOption.value);
   };
 
-  // @todo: This should come from MDC or some config.
-  getAvailableCountryCodes = () => [
-    { value: '965', label: '+965' },
-    { value: '966', label: '+966' },
-    { value: '975', label: '+975' },
-  ];
-
   getDefaultValueKey = (options, countryMobileCode) => {
     let index = null;
     options.forEach((value, key) => {
@@ -77,7 +71,7 @@ class AuraMobileNumberField extends React.Component {
       userCountryCode,
     } = this.state;
 
-    const options = this.getAvailableCountryCodes();
+    const options = getProcessedMobileCountryCode();
     // Get default value from config or from what user has chosen.
     const key = userCountryCode === null
       ? this.getDefaultValueKey(options, countryMobileCode)

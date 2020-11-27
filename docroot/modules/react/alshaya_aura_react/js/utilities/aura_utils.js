@@ -3,6 +3,7 @@ import {
   getUserAuraTier,
   getPointToPriceRatio,
   getPriceToPointRatio,
+  getMobileCountryCodeList,
 } from './helper';
 
 /**
@@ -84,6 +85,22 @@ function getPriceForPoints(points) {
   return price;
 }
 
+/**
+ * Utility function to process mobile country code.
+ */
+function getProcessedMobileCountryCode() {
+  const processedCountryCodes = [];
+  const countryCodes = getMobileCountryCodeList();
+
+  if (countryCodes) {
+    countryCodes.forEach((code) => {
+      processedCountryCodes.push({ value: code.replace('+', ''), label: code });
+    });
+  }
+
+  return processedCountryCodes;
+}
+
 export {
   getElementValue,
   showError,
@@ -92,4 +109,5 @@ export {
   getAuraDetailsDefaultState,
   getPointsForPrice,
   getPriceForPoints,
+  getProcessedMobileCountryCode,
 };
