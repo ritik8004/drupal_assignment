@@ -12,6 +12,23 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Update type string => text_area for pil and indications_age_restrictions.
+ * Migrate existing attribute data to the new ones.
+ */
+function alshaya_bp_transac_update_8010() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+
+  $sku_fields_manager->updateFieldType(['attr_pil', 'attr_indications_age_restrictions']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update category term path aliases.
  */
 function alshaya_bp_transac_update_8009() {
