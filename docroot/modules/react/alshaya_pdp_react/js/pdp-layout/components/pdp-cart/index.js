@@ -60,6 +60,7 @@ const PdpCart = ({
         stockQty={stockQty}
         context={context}
         closeModal={closeModal}
+        refCartButton={(ref) => (refButton(ref))}
       />
     </div>
   );
