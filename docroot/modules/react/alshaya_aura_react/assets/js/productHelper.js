@@ -19,11 +19,11 @@
         : 'related';
       var variantInfo = drupalSettings[productKey][sku]['variants'][currentSelectedVariant];
       var price = variantInfo ? variantInfo.priceRaw : 0;
-      data = [{
+      data = {
         code: currentSelectedVariant,
         quantity: quantity,
         amount: price * quantity,
-      }];
+      };
     }
 
     return { data, context };

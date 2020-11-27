@@ -1,72 +1,49 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { getUserDetails } from '../../utilities/helper';
-import { getStorageInfo } from '../../../../js/utilities/storage';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
-import { getAuraLocalStorageKey } from '../../utilities/aura_utils';
-import { getProductPoints, isProductBuyable } from '../../utilities/pdp_helper';
+import { getPointsForPrice } from '../../utilities/aura_utils';
 
 class AuraPDP extends React.Component {
   constructor(props) {
     super(props);
-    const { mode, cardNumber } = this.props;
+    const { mode } = this.props;
+
     this.state = {
-      productPoints: 0,
-      cardNumber: cardNumber || '',
-      productDetails: [],
+      productPoints: this.getInitialProductPoints(mode),
       context: mode,
     };
   }
 
   componentDidMount() {
-    document.addEventListener('loyaltyStatusUpdated', this.loyaltyStatusUpdated, false);
-    document.addEventListener('productPointsFetched', this.updateStates, false);
     document.addEventListener('auraProductUpdate', this.processVariant, false);
     document.addEventListener('auraProductModalOpened', this.loadModalAuraPoints, false);
     document.addEventListener('auraProductModalClosed', this.removeModalAuraPoints, false);
-
-    // Logged in user.
-    if (getUserDetails().id) {
-      const { cardNumber } = this.state;
-      if (cardNumber === '') {
-        document.addEventListener('customerDetailsFetched', this.loyaltyStatusUpdated, false);
-      }
-    } else {
-      // Guest user.
-      const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
-
-      if (localStorageValues === null) {
-        return;
-      }
-
-      const data = {
-        detail: { stateValues: localStorageValues },
-      };
-      this.loyaltyStatusUpdated(data);
-    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('auraProductUpdate', this.processVariant, false);
   }
 
-  loyaltyStatusUpdated = (data) => {
-    const states = { ...data.detail.stateValues };
-    const stateData = {
-      detail: {
-        stateValues: { ...states },
-      },
-    };
-    this.updateStates(stateData);
-    const { productDetails } = this.state;
-    this.fetchProductPoints(productDetails);
+  getInitialProductPoints = (mode) => {
+    let productPoints = 0;
+
+    if (mode === 'main') {
+      productPoints = document.querySelector('.content__title_wrapper .price-amount')
+        ? parseInt(document.querySelector('.content__title_wrapper .price-amount').innerText, 10)
+        : 0;
+    } else if (mode === 'related') {
+      productPoints = document.querySelector('#drupal-modal .price-amount')
+        ? parseInt(document.querySelector('#drupal-modal .price-amount').innerText, 10)
+        : 0;
+    }
+
+    return productPoints;
   };
 
   loadModalAuraPoints = () => {
     if (document.querySelector('#aura-pdp-modal')) {
-      const { cardNumber } = this.state;
       ReactDOM.render(
-        <AuraPDP mode="related" cardNumber={cardNumber} />,
+        <AuraPDP mode="related" />,
         document.querySelector('#aura-pdp-modal'),
       );
     }
@@ -103,22 +80,12 @@ class AuraPDP extends React.Component {
 
     if (data.length !== 0) {
       this.setState({
-        productDetails: data,
+        productPoints: data.amount ? getPointsForPrice(data.amount) : 0,
         context,
       });
-      this.fetchProductPoints(data, context);
     }
 
     return null;
-  };
-
-  fetchProductPoints = (productDetails, context) => {
-    const { cardNumber } = this.state;
-
-    if (cardNumber === '' || productDetails.length === 0) {
-      return;
-    }
-    getProductPoints(productDetails, cardNumber, context);
   };
 
   getToolTipContent = () => Drupal.t('Everytime you shop you will earn Aura points which can then be redeemed for future purchases. Not eligible for accrual when purchased through Aura points.');
@@ -139,7 +106,6 @@ class AuraPDP extends React.Component {
 
   render() {
     const {
-      cardNumber,
       productPoints,
       context,
     } = this.state;
@@ -149,11 +115,7 @@ class AuraPDP extends React.Component {
       return null;
     }
 
-    if (!isProductBuyable()) {
-      return null;
-    }
-
-    if (cardNumber === '' || productPoints === 0) {
+    if (productPoints === 0) {
       return null;
     }
 

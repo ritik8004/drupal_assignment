@@ -147,11 +147,11 @@ class ConfigurableProductForm extends React.Component {
     const price = productInfo[skuCode].variants
       ? productInfo[skuCode].variants[selectedVariant][priceKey]
       : productInfo[skuCode][priceKey];
-    const data = [{
+    const data = {
       code: selectedVariant,
       quantity: qty,
       amount: price * qty,
-    }];
+    };
     dispatchCustomEvent('auraProductUpdate', { data, context });
   };
 
