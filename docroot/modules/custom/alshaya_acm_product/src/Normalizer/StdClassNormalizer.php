@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_mobile_app\Normalizer;
+namespace Drupal\alshaya_acm_product\Normalizer;
 
 use Drupal\serialization\Normalizer\NormalizerBase;
 

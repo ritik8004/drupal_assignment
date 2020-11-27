@@ -60,8 +60,3 @@ services:
       - '@alshaya_acm_product.price_helper'
       - '@alshaya_product_options.swatches'
       - '@config.factory'
-  alshaya_mobile_app.stdclass_normalizer:
-    class: Drupal\alshaya_mobile_app\Normalizer\StdClassNormalizer
-    arguments: ['\stdClass']
-    tags:
-      - { name: normalizer, priority: 20 }
