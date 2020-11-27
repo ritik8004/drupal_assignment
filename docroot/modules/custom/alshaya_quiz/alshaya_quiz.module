@@ -1,5 +1,9 @@
 <?php
 
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Language\LanguageInterface;
+
 /**
  * @file
  * Contains code to auto-populate allowed values for Product Attributes for alshaya_quiz.
@@ -12,4 +16,85 @@
  */
 function alshaya_quiz_preprocess_decoupled_component_block(array &$variables) {
   $variables['attributes']['class'][] = "block-quiz";
+}
+
+/**
+ * Set dynamic allowed values for the product_category field.
+ *
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field definition.
+ * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
+ *   The entity being created if applicable.
+ * @param bool $cacheable
+ *   Boolean indicating if the results are cacheable.
+ *
+ * @return array
+ *   An array of possible key and value options.
+ *
+ * @todo Add 'Product Category' allowed values in the field 
+ *   of Answers Content type.
+ */
+function alshaya_quiz_allowed_product_category_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  
+  $category_options = ["Bras", "Sports Bras"];
+  $product_category_options = [];
+  foreach ($category_options as $key => $value) {
+    $product_category_options[$key] = $value;
+  }
+
+  return $product_category_options;
+}
+
+/**
+ * Set dynamic allowed values for the padding field.
+ *
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field definition.
+ * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
+ *   The entity being created if applicable.
+ * @param bool $cacheable
+ *   Boolean indicating if the results are cacheable.
+ *
+ * @return array
+ *   An array of possible key and value options.
+ *
+ * @todo Add 'padding' allowed values in the field 
+ *   of Answers Content type.
+ */
+function alshaya_quiz_allowed_padding_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  
+  $options = ["Unlined", "Lightly lined", "Push up"];
+  $padding_options = [];
+  foreach ($options as $key => $value) {
+    $padding_options[$key] = $value;
+  }
+
+  return $padding_options;
+}
+
+/**
+ * Set dynamic allowed values for the bra_coverage field.
+ *
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field definition.
+ * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
+ *   The entity being created if applicable.
+ * @param bool $cacheable
+ *   Boolean indicating if the results are cacheable.
+ *
+ * @return array
+ *   An array of possible key and value options.
+ *
+ * @todo Add 'bra coverage' allowed values in the field 
+ *   of Answers Content type.
+ */
+function alshaya_quiz_allowed_bra_coverage_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  
+  $options = ["Full coverage", "Demi", "Plunge"];
+  $bra_coverage_options = [];
+  foreach ($options as $key => $value) {
+    $bra_coverage_options[$key] = $value;
+  }
+
+  return $bra_coverage_options;
 }

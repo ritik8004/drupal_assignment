@@ -9,7 +9,11 @@ third_party_settings:
     parent: ''
 name: Question
 type: question
+<<<<<<< 828567682c35ff2a3b180053b5bf4d9f7ad633ed
 description: 'This is used to add a question for a Quiz.'
+=======
+description: 'This is used to add a question for a Style Finder Quiz.'
+>>>>>>> CORE-25497: Added Quiz module for the Style Finder Quiz Section.
 help: ''
 new_revision: true
 preview_mode: 1
