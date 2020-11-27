@@ -24,7 +24,7 @@ function cache_tags_cleanup_entity_delete(EntityInterface $entity) {
 	    ->execute();
     }
 	catch (\Exception $e) {
-	  $logger = \Drupal::logger('cache_tags_cleanup')->error('Exception while inserting data into cache_tags_cleanup_queue. Message: @message.', [
+	  \Drupal::logger('cache_tags_cleanup')->error('Exception while inserting data into cache_tags_cleanup_queue. Message: @message.', [
 	    '@message' => $e->getMessage(),
 	  ]);
 	}

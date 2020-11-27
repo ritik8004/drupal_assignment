@@ -73,7 +73,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
 
     if ($verbose) {
       foreach ($entities as $entity) {
-        $this->logger->notice(dt("Cache tags found for deleted entity:@entity_id and entity_type:@entity_type", [
+        $this->logger->notice(dt('Cache tags found for deleted entity:@entity_id and entity_type:@entity_type', [
           '@entity_id' => $entity->entity_id,
           '@entity_type' => $entity->entity_type,
         ]));
@@ -106,7 +106,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
       }
     }
 
-    $message = dt('Cache tags clean up completed for all deleted entities.');
+    $message = 'Cache tags clean up completed for all deleted entities.';
     $this->logger->notice($message);
   }
 
