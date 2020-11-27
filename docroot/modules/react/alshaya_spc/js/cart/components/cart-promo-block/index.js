@@ -57,9 +57,23 @@ export default class CartPromoBlock extends React.Component {
     const { productInfo } = this.state;
     const data = productInfo;
     // If sku info available.
-    if (productData.freeGiftPromotion !== null && productData.sku !== undefined) {
+    if (
+      productData.freeGiftPromotion !== null
+      && productData.sku !== undefined
+      && Object.keys(productData.freeGiftPromotion).length > 0
+    ) {
       const freeGiftData = productData.freeGiftPromotion;
-      data[freeGiftData['#promo_code']] = freeGiftData['#promo_type'];
+      if (freeGiftData['#promo_type'] === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+        data[freeGiftData['#promo_code']] = {
+          code: freeGiftData['#promo_type'],
+          skuType: freeGiftData['#free_sku_type'],
+        };
+      } else {
+        data[freeGiftData['#promo_code'][0].value] = {
+          code: freeGiftData['#promo_type'],
+          skuType: freeGiftData['#free_sku_type'],
+        };
+      }
       this.setState({
         productInfo: data,
       });
@@ -121,16 +135,20 @@ export default class CartPromoBlock extends React.Component {
     }
 
     const cartData = applyRemovePromo(action, promoValue);
+    const { openCartFreeGiftModal } = this.props;
     if (cartData instanceof Promise) {
       cartData.then((result) => {
-        let freeGiftPromoType = '';
+        let freeGiftPromo = '';
         if (promoCoupons !== null) {
-          freeGiftPromoType = promoCoupons[promoValue];
+          freeGiftPromo = promoCoupons[promoValue];
         }
-        if (action === 'apply coupon' && freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+        if (action === 'apply coupon' && freeGiftPromo.code === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
           const body = document.querySelector('body');
           body.classList.add('free-gifts-modal-overlay');
           document.getElementById('spc-free-gift').click();
+          document.getElementById('promo-action-button').classList.remove('loading');
+        } else if (action === 'apply coupon' && freeGiftPromo.code === 'FREE_GIFT_SUB_TYPE_ALL_SKUS' && freeGiftPromo.skuType === 'configurable') {
+          openCartFreeGiftModal();
           document.getElementById('promo-action-button').classList.remove('loading');
         } else {
           // Removing button clicked class.
