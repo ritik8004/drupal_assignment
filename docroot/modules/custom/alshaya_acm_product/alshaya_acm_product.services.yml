@@ -179,3 +179,9 @@ services:
     class: Drupal\alshaya_acm_product\Service\ProductOrderLimit
     arguments:
       - '@alshaya_acm_product.skumanager'
+
+  alshaya_acm_product.stdclass_normalizer:
+    class: Drupal\alshaya_acm_product\Normalizer\StdClassNormalizer
+    arguments: ['\stdClass']
+    tags:
+      - { name: normalizer, priority: 20 }
