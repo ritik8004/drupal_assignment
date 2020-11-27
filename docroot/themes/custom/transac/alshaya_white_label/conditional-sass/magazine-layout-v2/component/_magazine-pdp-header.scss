@@ -267,7 +267,6 @@
 
       .magv2-button {
         margin: 0;
-        min-width: 22.875rem;
         font-size: 1rem;
         font-family: $alshaya-bold;
         padding: 0.625rem 0 0.5625rem;
@@ -275,10 +274,6 @@
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: 1.875rem;
-
-        .magv2-button {
-          min-width: 9.375rem;
-        }
       }
     }
 
