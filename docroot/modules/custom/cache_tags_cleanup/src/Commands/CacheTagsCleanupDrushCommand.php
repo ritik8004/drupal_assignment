@@ -64,20 +64,29 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
     $query->innerJoin('cachetags', 'ct', "ct.tag=concat(de.entity_type, ':', de.entity_id)");
     $entities = $query->execute()->fetchAll();
 
+    $verbose = $options['verbose'] ?? FALSE;
+
     if (empty($entities)) {
-      $this->yell('No entity found in cache_tags_cleanup_queue which matches entry in cachetags table.');
+      $this->logger->notice('No entity found in cache_tags_cleanup_queue which matches entry in cachetags table.');
       return;
     }
 
-    if (!$this->io()->confirm(dt('Do you want to delete entries from cachetags for all deleted entities?'))) {
+    if ($verbose) {
+      foreach ($entities as $entity) {
+        $this->logger->notice(dt("Cache tags found for deleted entity:@entity_id and entity_type:@entity_type", [
+          '@entity_id' => $entity->entity_id,
+          '@entity_type' => $entity->entity_type,
+        ]));
+      }
+    }
+    if (!$this->io()->confirm(dt('Total @count cache tags entries found for deleted entities. Do you want to delete them?', ['@count' => count($entities)]))) {
       throw new UserAbortException();
     }
 
     $chunk_size = (int) $options['chunk_size'];
-
     $entity_chunks = array_chunk($entities, $chunk_size);
 
-    foreach ($entity_chunks as $key => $entity_chunk) {
+    foreach ($entity_chunks as $entity_chunk) {
       // Cleaning up each entity chunk one by one.
       foreach ($entity_chunk as $entity) {
         $cache_tag = $entity->entity_type . ':' . $entity->entity_id;
@@ -90,22 +99,15 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
         $query->condition('entity_id', $entity->entity_id, 'like');
         $query->condition('entity_type', $entity->entity_type, 'like');
         $query->execute();
-        $this->logger->info('Deleted cache tag entry for entity id @id and entity type @type.', [
+        $this->logger->notice(dt('Deleted cache tag entry for entity id:@id and entity type:@type.', [
           '@id' => $entity->entity_id,
           '@type' => $entity->entity_type,
-        ]);
+        ]));
       }
-      $this->io()->writeln(dt('Deleted chunk @key of @total entity cache tags',
-        [
-          '@key' => $key + 1,
-          '@total' => count($entity_chunks),
-        ]
-      ));
     }
 
     $message = dt('Cache tags clean up completed for all deleted entities.');
-
-    $this->io()->writeln($message);
+    $this->logger->notice($message);
   }
 
 }

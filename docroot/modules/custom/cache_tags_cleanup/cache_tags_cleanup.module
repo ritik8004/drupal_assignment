@@ -14,11 +14,18 @@ use Drupal\Core\Entity\EntityInterface;
  * Implements hook_entity_delete().
  */
 function cache_tags_cleanup_entity_delete(EntityInterface $entity) {
-  \Drupal::database()->insert("cache_tags_cleanup_queue")
-    ->fields([
-      'entity_id' => $entity->id(),
-      'entity_type' => $entity->getEntityTypeId(),
-      'deleted_on' => time(),
-    ])
-    ->execute();
+	try {
+		\Drupal::database()->insert("cache_tags_cleanup_queue")
+	    ->fields([
+	      'entity_id' => $entity->id(),
+	      'entity_type' => $entity->getEntityTypeId(),
+	      'deleted_on' => time(),
+	    ])
+	    ->execute();
+    }
+	catch (\Exception $e) {
+	  $this->logger->error('Exception while inserting data into cache_tags_cleanup_queue. Message: @message.', [
+	    '@message' => $e->getMessage(),
+	  ]);
+	}
 }
