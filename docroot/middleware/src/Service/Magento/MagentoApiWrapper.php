@@ -106,6 +106,9 @@ class MagentoApiWrapper {
       if ($response->getStatusCode() > 500) {
         throw new \Exception('Back-end system is down', 600);
       }
+      elseif ($action === 'native' && $response->getStatusCode() == 404) {
+        throw new \Exception('', 404);
+      }
       elseif ($response->getStatusCode() !== 200) {
         if (empty($result)) {
           $this->logger->error('Error while doing MDC api. Response result is empty. Status code: @code', [
