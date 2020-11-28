@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_aura_react\Helper;
+namespace Drupal\alshaya_aura_react\Constants;
 
 /**
  * Contains aura dictionary api configs.

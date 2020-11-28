@@ -6,6 +6,7 @@ services:
       - '@entity_type.manager'
       - '@mobile_number.util'
       - '@config.factory'
+      - '@alshaya_aura_react.aura_api_helper'
   alshaya_aura_react.aura_api_helper:
     class: Drupal\alshaya_aura_react\Helper\AuraApiHelper
     arguments:

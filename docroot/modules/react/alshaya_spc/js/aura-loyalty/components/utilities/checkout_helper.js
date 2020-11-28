@@ -32,9 +32,11 @@ function getUserInput(linkCardOption, chosenCountryCode) {
       value: chosenCountryCode + mobile,
     };
   } else if (linkCardOption === 'cardNumber') {
-    const card = getElementValue('spc-aura-link-card-input-card');
+    const card = getElementValue('spc-aura-link-card-input-card')
+      ? getElementValue('spc-aura-link-card-input-card').replace(/\s/g, '')
+      : '';
 
-    if (card.length === 0) {
+    if (card.length === 0 || card.match(/^[0-9]+$/) === null) {
       showError('spc-aura-link-api-response-message', getStringMessage('form_error_card'));
       return {};
     }
@@ -42,7 +44,7 @@ function getUserInput(linkCardOption, chosenCountryCode) {
     elementValue = {
       key: 'cardNumber',
       type: 'apcNumber',
-      value: card.replace(/\s/g, ''),
+      value: card,
     };
   } else if (linkCardOption === 'email') {
     const email = getElementValue('spc-aura-link-card-input-email');

@@ -1,9 +1,10 @@
+import _isEmpty from 'lodash/isEmpty';
 import {
   getUserAuraStatus,
   getUserAuraTier,
   getPointToPriceRatio,
   getPriceToPointRatio,
-  getMobileCountryCodeList,
+  getAuraConfig,
 } from './helper';
 
 /**
@@ -90,10 +91,10 @@ function getPriceForPoints(points) {
  */
 function getProcessedMobileCountryCode() {
   const processedCountryCodes = [];
-  const countryCodes = getMobileCountryCodeList();
+  const { phonePrefixList } = getAuraConfig();
 
-  if (countryCodes) {
-    countryCodes.forEach((code) => {
+  if (!_isEmpty(phonePrefixList)) {
+    phonePrefixList.forEach((code) => {
       processedCountryCodes.push({ value: code.replace('+', ''), label: code });
     });
   }

@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
 
 /**
  * Helper class for Aura.
@@ -46,6 +47,13 @@ class AuraHelper {
   protected $configFactory;
 
   /**
+   * The api helper object.
+   *
+   * @var Drupal\alshaya_aura_react\Helper\AuraApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * AuraHelper constructor.
    *
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
@@ -56,17 +64,21 @@ class AuraHelper {
    *   Mobile utility.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param Drupal\alshaya_aura_react\Helper\AuraApiHelper $api_helper
+   *   Api helper object.
    */
   public function __construct(
     AccountProxyInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
     MobileNumberUtilInterface $mobile_util,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    AuraApiHelper $api_helper
   ) {
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
     $this->mobileUtil = $mobile_util;
     $this->configFactory = $config_factory;
+    $this->apiHelper = $api_helper;
   }
 
   /**
@@ -106,13 +118,16 @@ class AuraHelper {
   public function getAuraConfig() {
     $country_code = _alshaya_custom_get_site_level_country_code();
     $alshaya_aura_config = $this->configFactory->get('alshaya_aura_react.settings');
+    $country_mobile_code = $this->mobileUtil->getCountryCode($country_code);
+    $dictionary_api_mobile_country_code_list = $this->apiHelper->getAuraApiConfig([AuraDictionaryApiConstants::EXT_PHONE_PREFIX]);
 
     $config = [
       'appStoreLink' => $alshaya_aura_config->get('aura_app_store_link'),
       'googlePlayLink' => $alshaya_aura_config->get('aura_google_play_link'),
-      'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+      'country_mobile_code' => $country_mobile_code,
       'mobile_maxlength' => $this->configFactory->get('alshaya_master.mobile_number_settings')->get('maxlength'),
       'headerLearnMoreLink' => $alshaya_aura_config->get('aura_rewards_header_learn_more_link'),
+      'phonePrefixList' => $dictionary_api_mobile_country_code_list[AuraDictionaryApiConstants::EXT_PHONE_PREFIX] ?? ['+' . $country_mobile_code],
     ];
 
     return $config;
