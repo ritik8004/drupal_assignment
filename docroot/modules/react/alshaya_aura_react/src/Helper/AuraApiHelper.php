@@ -147,13 +147,11 @@ class AuraApiHelper {
    *   AURA dictionary api data.
    */
   public function prepareAuraDictionaryApiData() {
-    $country_code = _alshaya_custom_get_site_level_country_code();
     $aura_dictionary_api_config = $this->getAuraApiConfig();
 
     $data = [
       'priceToPointRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO] ?? '',
       'pointToPriceRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::CASHBACK_REDEMPTION_RATIO] ?? '',
-      'phonePrefixList' => $aura_dictionary_api_config[AuraDictionaryApiConstants::EXT_PHONE_PREFIX] ?? ['+' . $this->mobileUtil->getCountryCode($country_code)],
     ];
 
     return $data;

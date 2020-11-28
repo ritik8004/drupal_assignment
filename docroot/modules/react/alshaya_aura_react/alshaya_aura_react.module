@@ -6,8 +6,8 @@
  */
 
 use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
-use Drupal\alshaya_aura_react\Helper\AuraStatus;
-use Drupal\alshaya_aura_react\Helper\AuraTier;
+use Drupal\alshaya_aura_react\Constants\AuraStatus;
+use Drupal\alshaya_aura_react\Constants\AuraTier;
 use Drupal\user\Entity\User;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Component\Utility\Html;

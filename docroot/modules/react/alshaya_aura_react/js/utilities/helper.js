@@ -164,19 +164,6 @@ function getPriceToPointRatio() {
   return priceToPointRatio;
 }
 
-/**
- * Helper function to get mobile country code list.
- */
-function getMobileCountryCodeList() {
-  let mobileCountryCodeList = {};
-  if (typeof drupalSettings.aura !== 'undefined'
-    && ({}).hasOwnProperty.call(drupalSettings.aura, 'phonePrefixList')) {
-    mobileCountryCodeList = drupalSettings.aura.phonePrefixList;
-  }
-
-  return mobileCountryCodeList;
-}
-
 export {
   getUserAuraStatus,
   getUserAuraTier,
@@ -190,5 +177,4 @@ export {
   getAuraConfig,
   getPointToPriceRatio,
   getPriceToPointRatio,
-  getMobileCountryCodeList,
 };

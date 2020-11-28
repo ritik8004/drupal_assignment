@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_aura_react\Helper;
+namespace Drupal\alshaya_aura_react\Constants;
 
 /**
  * Constains all aura status constants.
