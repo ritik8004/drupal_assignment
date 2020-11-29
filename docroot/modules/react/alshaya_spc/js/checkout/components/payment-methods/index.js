@@ -14,6 +14,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import validateCartResponse from '../../../utilities/validation_util';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -231,6 +232,7 @@ export default class PaymentMethods extends React.Component {
     const cartUpdate = addPaymentMethodInCart('update payment', data);
     if (cartUpdate instanceof Promise) {
       cartUpdate.then((result) => {
+        validateCartResponse(result);
         const paymentDiv = document.getElementById(`payment-method-${method}`);
         if (paymentDiv === null) {
           this.selectDefault();
