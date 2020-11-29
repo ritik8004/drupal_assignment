@@ -130,7 +130,8 @@ export default class PaymentMethods extends React.Component {
 
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
-        || paymentMethods[cart.cart.payment.default] !== undefined) {
+        && cart.cart.payment.default !== null
+        && paymentMethods[cart.cart.payment.default] !== undefined) {
         this.changePaymentMethod(cart.cart.payment.default);
         return;
       }
