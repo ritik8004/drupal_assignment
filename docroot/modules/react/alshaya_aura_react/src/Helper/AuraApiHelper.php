@@ -7,6 +7,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
+use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
 
 /**
  * Helper class for Aura APIs.
