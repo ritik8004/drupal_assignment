@@ -276,18 +276,4 @@ class Drupal {
     return json_decode($result, TRUE);
   }
 
-  /**
-   * Get payment methods from Drupal.
-   *
-   * @return array
-   *   Payment Methods array.
-   *
-   * @throws \GuzzleHttp\Exception\GuzzleException
-   */
-  public function getAvailablePaymentMethods() {
-    $response = $this->invokeApi('GET', '/rest/v1/payment-methods');
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
-  }
-
 }
