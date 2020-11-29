@@ -258,20 +258,23 @@ class AlshayaSpcOrderHelper {
       Settings::get('alshaya_api.settings')['consumer_secret']
     ), TRUE);
 
-    if (empty($data['order_id']) || !is_numeric($data['order_id']) || empty($data['email'])) {
+    $data_email = strtolower(trim($data['email'] ?? ''));
+    if (empty($data['order_id']) || !is_numeric($data['order_id']) || empty($data_email)) {
       throw new NotFoundHttpException();
     }
 
     // Security checks.
-    if ($this->currentUser->isAuthenticated() && $this->currentUser->getEmail() !== $data['email']) {
+    $current_user_email = strtolower(trim($this->currentUser->getEmail()));
+    if ($this->currentUser->isAuthenticated() && $current_user_email !== $data_email) {
       throw new AccessDeniedHttpException();
     }
-    elseif ($this->currentUser->isAnonymous() && !empty(user_load_by_mail($data['email']))) {
+    elseif ($this->currentUser->isAnonymous() && !empty(user_load_by_mail($data_email))) {
       throw new AccessDeniedHttpException();
     }
 
     $order = $this->ordersManager->getOrder($data['order_id']);
-    if (empty($order) || $order['email'] != $data['email']) {
+    $order_email = strtolower(trim($order['email'] ?? ''));
+    if (empty($order) || $order_email !== $data_email) {
       throw new AccessDeniedHttpException();
     }
 

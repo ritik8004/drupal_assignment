@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Service\Config\SystemSettings;
 
 /**
- * Class KnetPaymentController.
+ * Contains callback methods for Knet Payment.
  */
 class KnetPaymentController extends PaymentController {
 
@@ -385,7 +385,7 @@ class KnetPaymentController extends PaymentController {
       throw new \Exception('/' . $data['data']['langcode'] . '/checkout', 302);
     }
 
-    $cart = $this->cart->getCart();
+    $cart = $this->cart->getCart(TRUE);
     if (empty($cart) || !empty($cart['error'])) {
       $this->logger->error('KNET @callback callback requested but not able to load cart for the payment data. Data: @message', [
         '@message' => json_encode($data),
