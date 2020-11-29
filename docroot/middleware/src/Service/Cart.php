@@ -1346,6 +1346,28 @@ class Cart {
       return $static[$key];
     }
 
+    // Get payment methods from Drupal.
+    try {
+      $drupal_methods = $this->drupal->getAvailablePaymentMethods();
+    }
+    catch (\Exception $e) {
+      $this->logger->warning('Error while getting payment methods from Drupal. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      return $this->utility->getErrorResponse(
+        $this->utility->getDefaultErrorMessage(),
+        $e->getCode()
+      );
+    }
+
+    $available_methods = [];
+    foreach ($drupal_methods as $drupal_method) {
+      if ($drupal_method['visibility']) {
+        $available_methods[] = $drupal_method['code'];
+      }
+    }
+
     $url = sprintf('carts/%d/payment-methods', $this->getCartId());
 
     $request_options = [
@@ -1353,7 +1375,7 @@ class Cart {
     ];
 
     try {
-      $static[$key] = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
+      $magento_methods = $this->magentoApiWrapper->doRequest('GET', $url, $request_options);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while getting payment methods from MDC. Error message: @message', [
@@ -1361,6 +1383,14 @@ class Cart {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+
+    foreach ($magento_methods as $index => $method) {
+      if (!in_array($method['code'], $available_methods)) {
+        unset($magento_methods[$index]);
+      }
+    }
+
+    $static[$key] = array_values($magento_methods);
 
     return $static[$key];
   }
