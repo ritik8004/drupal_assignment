@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
+namespace Drupal\alshaya_acm_checkout\Plugin\rest\resource;
 
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
