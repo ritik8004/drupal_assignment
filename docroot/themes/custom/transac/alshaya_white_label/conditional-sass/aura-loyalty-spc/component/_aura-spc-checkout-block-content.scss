@@ -25,6 +25,11 @@
     }
   }
 
+  > .spc-loading-container {
+    background: white;
+    min-height: 2rem;
+  }
+
   .spc-aura-highlight {
     color: $aura-spc-checkout-highlight;
     font-family: $aura-bold;
