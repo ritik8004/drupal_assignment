@@ -3,6 +3,11 @@
   margin-bottom: 2.5rem;
   font-family: $aura-regular;
 
+  > .spc-loading-container {
+    background: white;
+    min-height: 2rem;
+  }
+
   .popup-content {
     .spc-checkout-section-title {
       font-size: inherit;

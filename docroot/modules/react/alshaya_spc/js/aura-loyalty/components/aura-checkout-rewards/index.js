@@ -106,7 +106,12 @@ class AuraCheckoutRewards extends React.Component {
     } = this.state;
 
     if (wait) {
-      return <Loading />;
+      return (
+        <div className="spc-aura-checkout-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
+          <SectionTitle>{ this.getSectionTitle(allAuraStatus, loyaltyStatus) }</SectionTitle>
+          <Loading />
+        </div>
+      );
     }
 
     return (

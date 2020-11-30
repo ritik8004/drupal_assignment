@@ -82,7 +82,12 @@ class AuraCartRewards extends React.Component {
     } = this.state;
 
     if (wait) {
-      return <Loading />;
+      return (
+        <div className="spc-aura-cart-rewards-block fadeInUp" style={{ animationDelay: '0.4s' }}>
+          <SectionTitle>{this.getSectionTitle(allAuraStatus, loyaltyStatus)}</SectionTitle>
+          <Loading />
+        </div>
+      );
     }
 
     return (
