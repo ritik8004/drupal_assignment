@@ -31,7 +31,7 @@
         "drupal/ckeditor_font": "^1.0",
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
-        "drupal/core": "^8.8.11",
+        "drupal/core": "^8.8.12",
         "drupal/core-composer-scaffold": "^8.8.10",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
