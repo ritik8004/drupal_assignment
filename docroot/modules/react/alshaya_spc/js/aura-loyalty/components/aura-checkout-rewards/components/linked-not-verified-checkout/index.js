@@ -3,13 +3,13 @@ import PendingEnrollmentMessage from '../../../utilities/pending-enrollment-mess
 import ToolTip from '../../../../../utilities/tooltip';
 import PointsString from '../../../utilities/points-string';
 import { getTooltipPointsOnHoldMsg } from '../../../utilities/helper';
-import { getPointsForPrice } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getPriceToPoint } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 const AuraLinkedNotVerifiedCheckout = (props) => {
   const {
     pointsInAccount, price,
   } = props;
-  const pointsToEarn = getPointsForPrice(price);
+  const pointsToEarn = getPriceToPoint(price);
 
   return (
     <>

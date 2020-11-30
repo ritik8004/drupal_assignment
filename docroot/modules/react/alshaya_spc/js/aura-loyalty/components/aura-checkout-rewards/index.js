@@ -18,7 +18,6 @@ class AuraCheckoutRewards extends React.Component {
     super(props);
     this.state = {
       ...getAuraDetailsDefaultState(),
-      pointsInAccount: 0,
       wait: true,
     };
   }
@@ -98,7 +97,7 @@ class AuraCheckoutRewards extends React.Component {
 
     const {
       wait,
-      pointsInAccount,
+      points,
       expiringPoints,
       expiryDate,
       loyaltyStatus,
@@ -128,7 +127,7 @@ class AuraCheckoutRewards extends React.Component {
         {/* Registered User - Linked Card */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED}>
           <AuraLinkedVerifiedCheckout
-            pointsInAccount={pointsInAccount}
+            pointsInAccount={points}
             price={price}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
@@ -138,7 +137,7 @@ class AuraCheckoutRewards extends React.Component {
         {/* Registered User - Linked Card - Pending Enrollment */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED}>
           <AuraLinkedNotVerifiedCheckout
-            pointsInAccount={pointsInAccount}
+            pointsInAccount={points}
             price={price}
           />
         </ConditionalView>

@@ -90,5 +90,9 @@ function _alshaya_aura_static_strings() {
       'key' => 'form_error_card',
       'value' => t('Please enter card number.'),
     ],
+    [
+      'key' => 'form_error_points',
+      'value' => t('Please enter points.'),
+    ],
   ];
 }

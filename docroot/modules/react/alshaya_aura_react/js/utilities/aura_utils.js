@@ -69,8 +69,8 @@ function getAuraDetailsDefaultState() {
 /**
  * Utility function to get aura points for given price.
  */
-function getPointsForPrice(price) {
-  const accrualRatio = getPointToPriceRatio();
+function getPriceToPoint(price) {
+  const accrualRatio = getPriceToPointRatio();
   const points = accrualRatio ? (price * accrualRatio) : 0;
 
   return points;
@@ -79,8 +79,8 @@ function getPointsForPrice(price) {
 /**
  * Utility function to get price/currency for given aura points.
  */
-function getPriceForPoints(points) {
-  const redemptionRatio = getPriceToPointRatio();
+function getPointToPrice(points) {
+  const redemptionRatio = getPointToPriceRatio();
   const price = redemptionRatio ? (points / redemptionRatio) : 0;
 
   return price;
@@ -108,7 +108,7 @@ export {
   removeError,
   getAuraLocalStorageKey,
   getAuraDetailsDefaultState,
-  getPointsForPrice,
-  getPriceForPoints,
+  getPriceToPoint,
+  getPointToPrice,
   getProcessedMobileCountryCode,
 };

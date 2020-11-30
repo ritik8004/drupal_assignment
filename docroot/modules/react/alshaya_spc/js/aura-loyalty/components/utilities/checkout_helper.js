@@ -2,7 +2,7 @@ import React from 'react';
 import {
   getElementValue,
   showError,
-  getPointsForPrice,
+  getPriceToPoint,
 } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../../js/utilities/strings';
 import { postAPIData } from '../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
@@ -110,7 +110,7 @@ function processCheckoutCart(data) {
 function getMembersToEarnMessage(price) {
   const toEarnMessageP1 = `${Drupal.t('Members will earn')} `;
   const toEarnMessageP2 = ` ${Drupal.t('with this purchase')}`;
-  const points = getPointsForPrice(price);
+  const points = getPriceToPoint(price);
 
   return (
     <span className="spc-checkout-aura-points-to-earn">

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
-import { getPointsForPrice } from '../../utilities/aura_utils';
+import { getPriceToPoint } from '../../utilities/aura_utils';
 
 class AuraPDP extends React.Component {
   constructor(props) {
@@ -80,7 +80,7 @@ class AuraPDP extends React.Component {
 
     if (data.length !== 0) {
       this.setState({
-        productPoints: data.amount ? getPointsForPrice(data.amount) : 0,
+        productPoints: data.amount ? getPriceToPoint(data.amount) : 0,
         context,
       });
     }
