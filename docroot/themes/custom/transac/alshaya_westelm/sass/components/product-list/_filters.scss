@@ -8,7 +8,9 @@
       padding-#{$right}: 1.875rem;
 
       @include breakpoint($desktop) {
-        @include facet-arrow(after, down);
+        @include facet-arrow(after, down) {
+          #{$right}: 1rem;
+        }
 
         &.active {
           &::after {
