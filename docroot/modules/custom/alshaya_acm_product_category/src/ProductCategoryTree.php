@@ -232,7 +232,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @return array
    *   Processed term data.
    */
-  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
+  protected function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
     $language = $this->languageManager->getLanguage($langcode);
     $uri_options = ['language' => $language];
 

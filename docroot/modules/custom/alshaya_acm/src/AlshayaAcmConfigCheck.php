@@ -319,6 +319,8 @@ class AlshayaAcmConfigCheck {
     $this->languageManager->getLanguageConfigOverride('ar', 'acq_commerce.currency')
       ->set('currency_code', $this->alshayaCountryManager->getCurrencyCode($expected_country_code, 'ar'))
       ->save();
+    // Update mapping config.
+    $this->configManager->updateConfigs(['alshaya_i18n.locale_mappings'], 'alshaya_i18n');
   }
 
 }

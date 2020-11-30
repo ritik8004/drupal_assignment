@@ -8,6 +8,38 @@
 use Drupal\search_api\Entity\Index;
 use Drupal\user\Entity\Role;
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\facets\Entity\FacetSource;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove unwanted facet config translations.
+ */
+function alshaya_search_update_8034() {
+  /** @var \Drupal\facets\FacetManager\DefaultFacetManager $service */
+  $facet_manager = \Drupal::service('facets.manager');
+  $facetsources = FacetSource::loadMultiple();
+  foreach ($facetsources as $facetsource) {
+    // Get all the facets of a facetsource.
+    $facets = $facet_manager->getFacetsByFacetSourceId($facetsource->getName());
+    foreach ($facets as $facet) {
+      // Get config name of facet.
+      $config_name = $facet->getConfigDependencyName();
+      $langcodes = \Drupal::languageManager()->getLanguages();
+      $langcodesList = array_keys($langcodes);
+      foreach ($langcodesList as $langCode) {
+        // Making sure we delete all config translations to avoid warnings.
+        // Check CORE-19138 for more info.
+        if ($langCode != 'en') {
+          $config_translation = \Drupal::languageManager()->getLanguageConfigOverride($langCode, $config_name);
+          if (!$config_translation->isNew()) {
+            $config_translation->delete();
+          }
+        }
+      }
+    }
+  }
+}
 
 /**
  * Implements hook_update_N().

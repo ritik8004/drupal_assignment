@@ -88,7 +88,7 @@ class ProductCategoryManagerOld {
 
     // Drupal cache.
     $cache = $this->cache->get(self::CATEGORIZATION_IDS_CACHE_TAG);
-    if ($cache && $cache->data) {
+    if ($cache && is_array($cache->data)) {
       $salesCategoryIds = $cache->data;
       return $salesCategoryIds;
     }

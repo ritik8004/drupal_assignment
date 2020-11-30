@@ -205,12 +205,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     // Get all child terms for the given parent.
     $term_data = $this->getCategoryTree($langcode, 0, FALSE, FALSE);
 
-    $cache_tags = [
-      self::CACHE_TAG,
-      self::VOCABULARY_ID,
-    ];
-
-    $this->cache->set($cid, $term_data, Cache::PERMANENT, $cache_tags);
+    $this->cache->set($cid, $term_data, Cache::PERMANENT, [self::CACHE_TAG]);
     return $term_data;
   }
 
