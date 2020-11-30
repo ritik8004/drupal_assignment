@@ -4,13 +4,13 @@ import AuraFormRedeemPoints from '../../../aura-forms/aura-redeem-points';
 import PointsString from '../../../utilities/points-string';
 import ToolTip from '../../../../../utilities/tooltip';
 import { getTooltipPointsOnHoldMsg } from '../../../utilities/helper';
-import { getPointsForPrice } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getPriceToPoint } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 
 const AuraLinkedVerifiedCheckout = (props) => {
   const {
     pointsInAccount, price, expiringPoints, expiryDate,
   } = props;
-  const pointsToEarn = getPointsForPrice(price);
+  const pointsToEarn = getPriceToPoint(price);
 
   return (
     <>
@@ -30,7 +30,7 @@ const AuraLinkedVerifiedCheckout = (props) => {
           </div>
         </div>
       </div>
-      <AuraFormRedeemPoints />
+      <AuraFormRedeemPoints pointsInAccount={pointsInAccount} />
       <div className="spc-aura-checkout-messages">
         <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
       </div>

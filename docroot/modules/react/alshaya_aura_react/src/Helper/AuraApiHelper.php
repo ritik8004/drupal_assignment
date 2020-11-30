@@ -124,6 +124,18 @@ class AuraApiHelper {
           ],
         ];
       }
+      if ($value === 'APC_CASHBACK_REDEMPTION_RATIO') {
+        $response = [
+          "code" => "APC_CASHBACK_REDEMPTION_RATIO",
+          "items" => [
+            [
+              "code" => "SAR",
+              "order" => 1,
+              "value" => "50",
+            ],
+          ],
+        ];
+      }
 
       if (empty($response)) {
         $this->logger->error('No data found for api: @api.', [

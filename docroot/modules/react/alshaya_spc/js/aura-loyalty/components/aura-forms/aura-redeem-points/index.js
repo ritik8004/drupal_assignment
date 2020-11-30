@@ -1,6 +1,8 @@
 import React from 'react';
 import AuraRedeemPointsTextField from '../aura-redeem-textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
+import { getPointToPrice, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import getStringMessage from '../../../../utilities/strings';
 
 class AuraFormRedeemPoints extends React.Component {
   constructor(props) {
@@ -14,6 +16,7 @@ class AuraFormRedeemPoints extends React.Component {
   }
 
   convertPointsToMoney = (e) => {
+    removeError('spc-aura-link-api-response-message');
     // @todo: Run some proper validations, for now just checking length.
     if (e.target.value.length >= 1) {
       this.setState({
@@ -26,11 +29,9 @@ class AuraFormRedeemPoints extends React.Component {
     }
 
     // Convert to money.
-    // @todo: Update conversion rate.
-    // For now a simple rate of 100 points = 1 currency unit.
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     if (e.target.value > 0) {
-      const money = e.target.value * 0.01;
+      const money = getPointToPrice(e.target.value);
       this.setState({
         points: e.target.value,
         money: `${currencyCode} ${money.toFixed(3)}`,
@@ -44,6 +45,19 @@ class AuraFormRedeemPoints extends React.Component {
   };
 
   redeemPoints = () => {
+    const { points } = this.state;
+    const { pointsInAccount } = this.props;
+
+    if (points === null) {
+      showError('spc-aura-link-api-response-message', getStringMessage('form_error_points'));
+      return;
+    }
+
+    if (points > pointsInAccount) {
+      showError('spc-aura-link-api-response-message', `${Drupal.t('You can redeem maximum')} ${pointsInAccount} ${Drupal.t('points')}`);
+      return;
+    }
+
     // @todo: Call API to do a AURA transaction against the order.
     this.setState({
       auraTransaction: true,
@@ -56,6 +70,7 @@ class AuraFormRedeemPoints extends React.Component {
     // @todo: Call API to do undo AURA transaction against the order.
     this.setState({
       auraTransaction: false,
+      enableSubmit: false,
       points: null,
       money: null,
     });
@@ -70,16 +85,16 @@ class AuraFormRedeemPoints extends React.Component {
       auraTransaction,
     } = this.state;
 
-    if (auraTransaction) {
-      return [
-        <span className="spc-aura-highlight">{`${points} ${Drupal.t('points')}`}</span>,
-        <span className="spc-aura-redeem-text">{`${Drupal.t('worth')}`}</span>,
-        <span className="spc-aura-highlight">{`${money}`}</span>,
-        <span className="spc-aura-redeem-text">{`${Drupal.t('have been successfully redeemed')}`}</span>,
-      ];
+    if (!auraTransaction || points === null || money === null) {
+      return null;
     }
 
-    return null;
+    return [
+      <span key="points" className="spc-aura-highlight">{`${points} ${Drupal.t('points')}`}</span>,
+      <span key="worth" className="spc-aura-redeem-text">{`${Drupal.t('worth')}`}</span>,
+      <span key="money" className="spc-aura-highlight">{`${money}`}</span>,
+      <span key="redeemed" className="spc-aura-redeem-text">{`${Drupal.t('have been successfully redeemed')}`}</span>,
+    ];
   }
 
   render() {
@@ -134,7 +149,7 @@ class AuraFormRedeemPoints extends React.Component {
             </button>
           </ConditionalView>
         </div>
-        <div className="spc-aura-link-api-response-message" />
+        <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
       </div>
     );
   }
