@@ -188,6 +188,7 @@
       a {
         text-decoration: underline;
         padding-#{$left}: 0.5rem;
+        cursor: pointer;
       }
     }
 
@@ -204,6 +205,10 @@
 
     .no-link-message {
       margin-top: 1.25rem;
+
+      a {
+        cursor: pointer;
+      }
     }
   }
 }
