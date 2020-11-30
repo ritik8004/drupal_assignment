@@ -207,6 +207,10 @@
             width: 10.9375rem;
             line-height: 18px;
             margin-#{$left}: 1.25rem;
+
+            a {
+              cursor: pointer;
+            }
           }
         }
       }
