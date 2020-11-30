@@ -88,21 +88,31 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
 
     foreach ($entity_chunks as $entity_chunk) {
       // Cleaning up each entity chunk one by one.
+      $cachetags_collection = [];
       foreach ($entity_chunk as $entity) {
-        $cache_tag = $entity->entity_type . ':' . $entity->entity_id;
-        // Delete obsolete cachetags.
-        $query = $this->connection->delete('cachetags');
-        $query->condition('tag', $cache_tag, 'like');
-        $query->execute();
-        // Delete entries from cache_tags_cleanup_queue table.
-        $query = $this->connection->delete('cache_tags_cleanup_queue');
-        $query->condition('entity_id', $entity->entity_id, 'like');
-        $query->condition('entity_type', $entity->entity_type, 'like');
-        $query->execute();
-        $this->logger->notice(dt('Deleted cache tag entry for entity id:@id and entity type:@type.', [
+        $cachetags_collection['entity_ids'][] = $entity->entity_id;
+        $cachetags_collection['entity_types'][] = $entity->entity_type;
+        $cachetags_collection['cachetags'][] = $entity->entity_type . ':' . $entity->entity_id;
+        $this->logger->notice(dt('Deleting cache tag entry for entity id:@id and entity type:@type.', [
           '@id' => $entity->entity_id,
           '@type' => $entity->entity_type,
         ]));
+      }
+      try {
+        // Delete obsolete cachetags.
+        $query = $query = $this->connection->delete('cachetags');
+        $query->condition('tag', $cachetags_collection['cachetags'], 'IN');
+        $query->execute();
+        // Delete entries from cache_tags_cleanup_queue table.
+        $query = $this->connection->delete('cache_tags_cleanup_queue');
+        $query->condition('entity_id', $cachetags_collection['entity_ids'], 'IN');
+        $query->condition('entity_type', $cachetags_collection['entity_types'], 'IN');
+        $query->execute();
+      }
+      catch (\Exception $e) {
+        $this->logger->error('Exception while deleting data from cache_tags table. Message: @message.', [
+          '@message' => $e->getMessage(),
+        ]);
       }
     }
 
