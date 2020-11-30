@@ -2,10 +2,30 @@
   @include breakpoint($desktop) {
     #aura-header-modal {
       svg {
-        g,
-        path {
-          // Footlocker needs a white logo as header is black.
-          fill: #fff;
+        // Footlocker needs a white logo as header is black.
+        .letter {
+          fill: #bcc9ff;
+        }
+
+        .circle {
+          fill: url(#gradient2);
+        }
+      }
+
+      .join-aura {
+        &:hover {
+          background: #fff;
+
+          svg {
+            // Footlocker needs a white logo as header is black.
+            .letter {
+              fill: #1e2749;
+            }
+
+            .circle {
+              fill: url(#gradient1);
+            }
+          }
         }
       }
     }

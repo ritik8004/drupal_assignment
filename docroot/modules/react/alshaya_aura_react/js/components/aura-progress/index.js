@@ -82,6 +82,7 @@ class AuraProgress extends React.Component {
           nextTierThreshold={nextTierThreshold}
           showDotClass={showDotClass}
           nextTierLabel={nextTierLabel}
+          progressRatio={progressRatio}
         />
       </div>
     );
