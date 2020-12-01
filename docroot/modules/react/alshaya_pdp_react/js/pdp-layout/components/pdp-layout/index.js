@@ -17,6 +17,8 @@ import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
 import isAuraEnabled from '../../../../../js/utilities/helper';
 import AuraPDP from '../../../../../alshaya_aura_react/js/components/aura-pdp';
+import magv2Sticky from '../../../../../js/utilities/magv2StickySidebar';
+import magv2StickyHeader from '../../../../../js/utilities/magv2StickyHeader';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -67,6 +69,9 @@ const PdpLayout = () => {
     freeGiftImage,
     freeGiftTitle,
     freeGiftPromoCode,
+    freeGiftPromoUrl,
+    freeGiftMessage,
+    freeGiftPromoType,
   } = productValues;
 
   const emptyRes = (
@@ -78,35 +83,49 @@ const PdpLayout = () => {
   );
 
   const header = useRef();
+  const mainContainer = useRef();
+  const galleryContainer = useRef();
+  const sidebarContainer = useRef();
+  const crosssellContainer = useRef();
+  const addToBagContainer = useRef();
   let content;
+  let buttonRef;
 
   const getChildRef = (ref) => {
     content = ref;
   };
 
+  const setRef = (ref) => {
+    buttonRef = ref;
+  };
+
+  // Sticky Sidebar
+  const sidebarSticky = () => {
+    const sidebarWrapper = sidebarContainer.current;
+    const mainWrapper = mainContainer.current;
+    const crosssellWrapper = crosssellContainer.current;
+    const galleryWrapper = galleryContainer.current;
+
+    if (!isMobile) {
+      magv2Sticky(sidebarWrapper, galleryWrapper, crosssellWrapper, mainWrapper);
+    }
+  };
+
+  // Sticky Header
   const showStickyHeader = () => {
+    window.addEventListener('load', () => {
+      magv2StickyHeader(buttonRef, header, content, isMobile);
+    });
+
     window.addEventListener('scroll', () => {
-      if ((content !== null) && (content !== undefined)) {
-        if (window.pageYOffset >= content.current.offsetTop + content.current.offsetHeight) {
-          header.current.classList.remove('magv2-pdp-non-sticky-header');
-          header.current.classList.add('magv2-pdp-sticky-header');
-          header.current.classList.add('fadeInUp');
-          header.current.classList.remove('fadeOutVertical');
-        } else if (isMobile && window.pageYOffset <= header.current.offsetHeight) {
-          header.current.classList.remove('magv2-pdp-non-sticky-header');
-        } else {
-          header.current.classList.remove('magv2-pdp-sticky-header');
-          header.current.classList.add('magv2-pdp-non-sticky-header');
-          header.current.classList.add('fadeOutVertical');
-          header.current.classList.remove('fadeInUp');
-        }
-      }
+      magv2StickyHeader(buttonRef, header, content, isMobile);
     });
   };
 
   const [cardNumber, setCard] = useState(null);
 
   useEffect(() => {
+    sidebarSticky();
     showStickyHeader();
 
     if (isAuraEnabled()) {
@@ -132,7 +151,7 @@ const PdpLayout = () => {
 
   return (skuItemCode) ? (
     <>
-      <div className={`magv2-header ${(isMobile ? 'fadeInUp' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
+      <div className={`magv2-header ${(isMobile ? 'fadeInVertical' : '')}`} style={{ animationDelay: '0.3s' }} ref={header}>
         <PdpHeader
           title={title}
           finalPrice={parseFloat(finalPrice)
@@ -149,8 +168,8 @@ const PdpLayout = () => {
           context="main"
         />
       </div>
-      <div className="magv2-main">
-        <div className="magv2-content" id="pdp-gallery-refresh">
+      <div className="magv2-main" ref={mainContainer}>
+        <div className="magv2-content" id="pdp-gallery-refresh" ref={galleryContainer}>
           <PdpGallery
             skuCode={skuItemCode}
             pdpGallery={pdpGallery}
@@ -162,7 +181,7 @@ const PdpLayout = () => {
             <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} context="main" />
           </PdpGallery>
         </div>
-        <div className="magv2-sidebar">
+        <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
             title={title}
             finalPrice={parseFloat(finalPrice)
@@ -188,25 +207,31 @@ const PdpLayout = () => {
               freeGiftImage={freeGiftImage}
               freeGiftTitle={freeGiftTitle}
               freeGiftPromoCode={freeGiftPromoCode}
+              freeGiftPromoUrl={freeGiftPromoUrl}
+              freeGiftMessage={freeGiftMessage}
+              freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
           {isAuraEnabled()
             ? <AuraPDP mode="main" />
             : null}
-          {stockStatus ? (
-            <PdpCart
-              skuCode={skuItemCode}
-              configurableCombinations={configurableCombinations}
-              productInfo={productInfo}
-              pdpRefresh={pdpRefresh}
-              pdpLabelRefresh={pdpLabelRefresh}
-              childRef={(ref) => (getChildRef(ref))}
-              stockQty={stockQty}
-              firstChild={firstChild}
-              context="main"
-              animatePdpCart
-            />
-          ) : outOfStock}
+          <div className="addtobag-button-wrapper" ref={addToBagContainer}>
+            {stockStatus ? (
+              <PdpCart
+                skuCode={skuItemCode}
+                configurableCombinations={configurableCombinations}
+                productInfo={productInfo}
+                pdpRefresh={pdpRefresh}
+                pdpLabelRefresh={pdpLabelRefresh}
+                childRef={(ref) => (getChildRef(ref))}
+                stockQty={stockQty}
+                firstChild={firstChild}
+                context="main"
+                animatePdpCart
+                refButton={(ref) => (setRef(ref))}
+              />
+            ) : outOfStock}
+          </div>
           <PdpDescription
             skuCode={skuMainCode}
             pdpDescription={description}
@@ -227,7 +252,7 @@ const PdpLayout = () => {
         </div>
       </div>
       {relatedProducts ? (
-        <div className="magv2-pdp-crossell-upsell-wrapper">
+        <div className="magv2-pdp-crossell-upsell-wrapper" ref={crosssellContainer}>
           {Object.keys(relatedProducts).map((type) => (
             <PdpRelatedProducts
               key={relatedProducts[type]}

@@ -339,7 +339,7 @@ class AlshayaGtmManager {
    *   Store Finder service.
    */
   public function setStoreFinderUtility(StoresFinderUtility $storesFinderUtility) {
-    // @TODO: Move this back to normal/constructor once module enabled on prod.
+    // @todo Move this back to normal/constructor once module enabled on prod.
     $this->storeFinder = $storesFinderUtility;
   }
 
@@ -461,7 +461,7 @@ class AlshayaGtmManager {
       ? count($media['media_items']['images'])
       : 'image not available';
 
-    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
+    $attributes['gtm-price'] = _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
 
     if ($final_price
       && ($original_price !== $final_price)
@@ -472,7 +472,7 @@ class AlshayaGtmManager {
 
     $attributes['gtm-dimension3'] = $product_type;
 
-    // @TODO: This is supposed to stay blank here?
+    // @todo This is supposed to stay blank here?
     $attributes['gtm-stock'] = '';
 
     // Override values from parent if parent sku available.

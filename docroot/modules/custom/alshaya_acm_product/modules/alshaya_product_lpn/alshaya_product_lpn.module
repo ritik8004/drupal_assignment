@@ -67,6 +67,11 @@ function alshaya_product_lpn_acq_sku_configurable_variants_alter(array &$childre
   foreach ($children as $child_sku => $child) {
     $parent = $child->getPluginInstance()->getParentSku($child);
 
+    // Ignore children for which we do not have a parent available yet.
+    if (!($parent instanceof SKU)) {
+      continue;
+    }
+
     $attributes = $child->get('attributes')->getValue();
     $attributes = array_column($attributes, 'value', 'key');
 

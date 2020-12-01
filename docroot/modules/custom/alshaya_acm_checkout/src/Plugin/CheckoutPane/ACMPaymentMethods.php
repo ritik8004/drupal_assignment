@@ -71,7 +71,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
     $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
 
-    // @TODO: After the payment details are entered, prevent this form from
+    // @todo After the payment details are entered, prevent this form from
     // showing again if a user navigates back to this step or present an option
     // for the user to cancel the last payment method and enter a new one.
     $cart = $this->getCart();
@@ -132,7 +132,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // Since introduction of Surcharge, we inform Magento about selected
     // payment method even before user does place order. By default we select
     // a payment method, we inform Magento about that here.
-    // @TODO: Re-visit when working on CORE-4483.
+    // @todo Re-visit when working on CORE-4483.
     if (empty($cart_payment)) {
       $isSurchargeEnabled = $this->getCheckoutHelper()->isSurchargeEnabled();
 

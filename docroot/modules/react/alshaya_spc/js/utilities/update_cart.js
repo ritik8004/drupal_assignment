@@ -4,6 +4,7 @@ import { cartAvailableInStorage } from './get_cart';
 import i18nMiddleWareUrl from './i18n_url';
 import { getInfoFromStorage } from './storage';
 import dispatchCustomEvent from './events';
+import validateCartResponse from './validation_util';
 
 /**
  * Get the middleware update cart endpoint.
@@ -43,7 +44,10 @@ export const applyRemovePromo = (action, promoCode) => {
     promo: promoCode,
     cart_id: cart,
   })
-    .then((response) => response.data, (error) => {
+    .then((response) => {
+      validateCartResponse(response.data);
+      return response.data;
+    }, (error) => {
       // Processing of error here.
       Drupal.logJavascriptError('apply-remove-promo', error, GTM_CONSTANTS.CART_ERRORS);
     });

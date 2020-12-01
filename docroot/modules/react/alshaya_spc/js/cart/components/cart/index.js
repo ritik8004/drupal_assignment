@@ -244,7 +244,8 @@ export default class Cart extends React.Component {
           </div>
         </div>
         <div className="spc-post-content">
-          <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} items={items} />
+          {drupalSettings.alshaya_spc.display_cart_crosssell
+            && <CartRecommendedProducts sectionTitle={Drupal.t('you may also like')} items={items} />}
         </div>
         <div className="spc-footer">
           <VatFooterText />

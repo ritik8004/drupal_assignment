@@ -169,6 +169,11 @@ class CartController {
       $data = $this->cart->getCart();
     }
 
+    if (empty($data)) {
+      $this->logger->error('Cart is no longer available.');
+      return new JsonResponse(['error' => TRUE]);
+    }
+
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {
@@ -256,7 +261,7 @@ class CartController {
         $this->cart->setCartId($cart_id);
       }
       else {
-        // @TODO: Remove this "else" part and getAcmCartId() when we
+        // @todo Remove this "else" part and getAcmCartId() when we
         // uninstall alshaya_acm module.
         $info = $this->drupal->getAcmCartId();
         // Set the cart_id in current session, if Drupal api returns the
@@ -506,11 +511,16 @@ class CartController {
     $request_content = json_decode($request->getContent(), TRUE);
 
     // Validate request.
-    if (empty($request_content) || !$this->validateRequestData($request_content)) {
+    if (empty($request_content)) {
       // Return error response if not valid data.
       // Setting custom error code for bad response so that
       // we could distinguish this error.
-      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), '400'));
+      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), '500'));
+    }
+
+    $validation_response = $this->validateRequestData($request_content);
+    if ($validation_response !== 200) {
+      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), $validation_response));
     }
 
     $action = $request_content['action'];
@@ -570,16 +580,20 @@ class CartController {
         $cart_customer_id = $this->cart->getCartCustomerId();
         if (empty($uid) && (empty($cart_customer_id) || ($this->cart->getCartCustomerEmail() !== $email))) {
           $customer = $this->magentoCustomer->getCustomerByMail($email);
+
+          if (isset($customer['error'])) {
+            return new JsonResponse($customer);
+          }
+
           if (empty($customer)) {
-            try {
-              $customer = $this->magentoCustomer->createCustomer(
-                $email,
-                $shipping_info['static']['firstname'],
-                $shipping_info['static']['lastname']
-              );
-            }
-            catch (\Exception $e) {
-              return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+            $customer = $this->magentoCustomer->createCustomer(
+              $email,
+              $shipping_info['static']['firstname'],
+              $shipping_info['static']['lastname']
+            );
+
+            if (isset($customer['error'])) {
+              return new JsonResponse($customer);
             }
           }
 
@@ -885,20 +899,20 @@ class CartController {
    * @param array $request_content
    *   Request data.
    *
-   * @return bool
-   *   Valid request or not.
+   * @return int
+   *   200 if valid, other error codes if otherwise.
    */
   private function validateRequestData(array $request_content) {
     // If action info or cart id not available.
     if (empty($request_content['action'])) {
       $this->logger->error('Cart update operation not containing any action.');
-      return FALSE;
+      return 400;
     }
 
     // For new cart request, we don't need any further validations.
     if ($request_content['action'] === CartActions::CART_ADD_ITEM
       && empty($request_content['cart_id'])) {
-      return TRUE;
+      return 200;
     }
 
     // For any cart update operation, cart should be available in session.
@@ -906,7 +920,7 @@ class CartController {
       $this->logger->error('Trying to do cart update operation while cart is not available in session. Data: @request_data', [
         '@request_data' => json_encode($request_content),
       ]);
-      return FALSE;
+      return 404;
     }
 
     // Backend validation.
@@ -915,8 +929,8 @@ class CartController {
     $cart_customer_id = $this->cart->getCartCustomerId();
     if ($uid > 0) {
       if (empty($cart_customer_id)) {
-        // @TODO: Check if we should associate cart and proceed.
-        return FALSE;
+        // @todo Check if we should associate cart and proceed.
+        return 400;
       }
 
       // This is serious.
@@ -925,11 +939,11 @@ class CartController {
           '@session_customer_id' => $session_customer_id,
           '@cart_customer_id' => $cart_customer_id,
         ]);
-        return FALSE;
+        return 400;
       }
     }
 
-    return TRUE;
+    return 200;
   }
 
   /**

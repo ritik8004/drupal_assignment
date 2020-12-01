@@ -14,7 +14,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 /**
  * Class Orders Manager.
  *
- * @TODO: Move all code from utility file to here.
+ * @todo Move all code from utility file to here.
  * Target file alshaya_acm_customer.orders.inc.
  *
  * @package Drupal\alshaya_acm_customer

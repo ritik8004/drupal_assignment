@@ -158,7 +158,7 @@ class AlshayaSuperCategory extends ConditionPluginBase implements ContainerFacto
       return TRUE;
     }
 
-    // @todo: check why this context is not working in block.
+    // @todo check why this context is not working in block.
     // $term = $this->getContextValue('taxonomy_term');
     $parent = $this->productCategoryTree->getCategoryTermRequired();
     if (count($parent) > 0) {

@@ -403,7 +403,7 @@ class AlshayaApiWrapper {
 
     // We have not been able to open the stream.
     if (!$handle) {
-      // @TODO: Add some logs.
+      // @todo Add some logs.
       return $mskus;
     }
 
@@ -526,7 +526,7 @@ class AlshayaApiWrapper {
             'direction' => 'ASC',
           ],
         ],
-        // @TODO: Make page size configurable. Arbitrary value for now.
+        // @todo Make page size configurable. Arbitrary value for now.
         'pageSize' => 50,
       ],
       'fields' => 'items[sku]',
@@ -1166,7 +1166,7 @@ class AlshayaApiWrapper {
    *
    * @throws \Exception
    */
-  protected function updateCustomerPass(array $customer, $password) {
+  public function updateCustomerPass(array $customer, $password) {
     $cid = (int) $customer['customer_id'];
     $password = (string) $password;
 

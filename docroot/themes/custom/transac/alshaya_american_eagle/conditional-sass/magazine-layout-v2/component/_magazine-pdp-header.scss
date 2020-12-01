@@ -25,13 +25,13 @@
   body.sub-brand-logo {
     &:not(.frontpage) {
       &:not(.alias--cart-login) {
-        &.new-pdp-magazine-layout {
+        &.magazine-layout-v2 {
           margin-top: 3.5rem;
         }
       }
     }
 
-    &.new-pdp-magazine-layout {
+    &.magazine-layout-v2 {
       #block-alshayareactcartminicartblock {
         display: block;
         position: relative;

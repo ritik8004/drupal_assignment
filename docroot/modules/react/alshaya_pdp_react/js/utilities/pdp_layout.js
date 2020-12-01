@@ -207,9 +207,10 @@ export const triggerAddToCart = (
 export const getProductValues = (skuItemCode, variant, setVariant) => {
   let brandLogo; let brandLogoAlt; let
     brandLogoTitle; let freeGiftImage;
+  let freeGiftPromoUrl; let freeGiftMessage;
   let freeGiftTitle; let freeGiftPromoCode = null;
+  let freeGiftPromoType;
   let configurableCombinations = '';
-
   const { productInfo } = drupalSettings;
   const { variants } = productInfo[skuItemCode];
   const { stockStatus } = productInfo[skuItemCode];
@@ -231,12 +232,26 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
       brandLogoTitle = productInfo[skuItemCode].brandLogo.title
         ? productInfo[skuItemCode].brandLogo.title : null;
     }
-    if (productInfo[skuItemCode].freeGiftPromotion !== undefined) {
-      freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#sku_image']
-        ? productInfo[skuItemCode].freeGiftPromotion['#sku_image'] : null;
-      freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion['#free_sku_title']
-        ? productInfo[skuItemCode].freeGiftPromotion['#free_sku_title'] : null;
-      freeGiftPromoCode = productInfo[skuItemCode].freeGiftPromotion['#promo_code'];
+    // free gift promotion variable from parent sku.
+    if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
+      freeGiftPromoType = productInfo[skuItemCode].freeGiftPromotion['#promo_type'];
+      if (freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+        freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#image'] || null;
+        freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion.promo_title || null;
+        freeGiftPromoCode = productInfo[skuItemCode].freeGiftPromotion['#promo_code'] || null;
+        freeGiftPromoUrl = productInfo[skuItemCode].freeGiftPromotion['#promo_web_url'] || null;
+        freeGiftMessage = productInfo[skuItemCode].freeGiftPromotion['#message']
+          ? productInfo[skuItemCode].freeGiftPromotion['#message']['#markup']
+          : null;
+      } else {
+        freeGiftImage = productInfo[skuItemCode].freeGiftPromotion['#sku_image']
+          ? productInfo[skuItemCode].freeGiftPromotion['#sku_image']
+          : null;
+        freeGiftTitle = productInfo[skuItemCode].freeGiftPromotion['#free_sku_title']
+          ? productInfo[skuItemCode].freeGiftPromotion['#free_sku_title']
+          : null;
+        freeGiftPromoCode = productInfo[skuItemCode].freeGiftPromotion['#promo_code'];
+      }
     }
     title = productInfo[skuItemCode].cart_title;
     priceRaw = productInfo[skuItemCode].priceRaw;
@@ -252,14 +267,40 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
         if (variant == null) {
           setVariant(configurableCombinations[skuItemCode].firstChild);
         } else {
-          title = productInfo[skuItemCode].variants[variant].cart_title;
-          priceRaw = productInfo[skuItemCode].variants[variant].priceRaw;
-          finalPrice = productInfo[skuItemCode].variants[variant].finalPrice;
-          pdpGallery = productInfo[skuItemCode].variants[variant].rawGallery;
+          const variantInfo = productInfo[skuItemCode].variants[variant];
+          title = variantInfo.cart_title;
+          priceRaw = variantInfo.priceRaw;
+          finalPrice = variantInfo.finalPrice;
+          pdpGallery = variantInfo.rawGallery;
           labels = productLabels[variant];
-          stockQty = productInfo[skuItemCode].variants[variant].stock.qty;
+          stockQty = variantInfo.stock.qty;
           firstChild = configurableCombinations[skuItemCode].firstChild;
-          promotions = productInfo[skuItemCode].variants[variant].promotionsRaw;
+          promotions = variantInfo.promotionsRaw;
+          // free gift promotion variable from variant sku.
+          if (productInfo[skuItemCode].freeGiftPromotion.length !== 0) {
+            freeGiftPromoType = variantInfo.freeGiftPromotion['#promo_type'];
+            if (freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
+              freeGiftImage = variantInfo.freeGiftPromotion['#image']
+                || null;
+              freeGiftTitle = variantInfo.freeGiftPromotion.promo_title
+                || null;
+              freeGiftPromoCode = variantInfo.freeGiftPromotion['#promo_code']
+                || null;
+              freeGiftPromoUrl = variantInfo.freeGiftPromotion['#promo_web_url']
+                || null;
+              freeGiftMessage = variantInfo.freeGiftPromotion['#message']
+                ? variantInfo.freeGiftPromotion['#message']['#markup']
+                : null;
+            } else {
+              freeGiftImage = variantInfo.freeGiftPromotion['#sku_image']
+                ? variantInfo.freeGiftPromotion['#sku_image']
+                : null;
+              freeGiftTitle = variantInfo.freeGiftPromotion['#free_sku_title']
+                ? variantInfo.freeGiftPromotion['#free_sku_title']
+                : null;
+              freeGiftPromoCode = variantInfo.freeGiftPromotion['#promo_code'];
+            }
+          }
         }
       }
     }
@@ -292,6 +333,9 @@ export const getProductValues = (skuItemCode, variant, setVariant) => {
     freeGiftImage,
     freeGiftTitle,
     freeGiftPromoCode,
+    freeGiftPromoUrl,
+    freeGiftMessage,
+    freeGiftPromoType,
   };
 };
 

@@ -135,6 +135,16 @@ class ContactInfoForm extends React.Component {
             Drupal.logJavascriptError('update-shipping', cartResult.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
             return null;
           }
+          if (typeof cartResult.response_message !== 'undefined'
+              && cartResult.response_message.status !== 'success') {
+            dispatchCustomEvent('addressPopUpError', {
+              type: 'error',
+              message: cartResult.response_message.msg,
+              showDismissButton: false,
+            });
+            Drupal.logJavascriptError('update-shipping', cartResult.response_message.msg, GTM_CONSTANTS.CHECKOUT_ERRORS);
+            return null;
+          }
 
           updateContactInfo(formData.static);
           dispatchCustomEvent('refreshCartOnCnCSelect', { cart: cartResult });

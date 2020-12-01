@@ -65,7 +65,7 @@ const productRecommendationsSuffix = 'pr-';
 
         // Since markup is different for magazine v2 layout, we fetch values
         // differently.
-        if ($('body').hasClass('new-pdp-magazine-layout')) {
+        if ($('body').hasClass('magazine-layout-v2')) {
           quantity = parseInt($('.magv2-qty-container .magv2-qty-input', $(this)).val());
           if (addedProduct.attr('gtm-sku-type') === 'configurable') {
             selectedVariant = $(this).attr('variantselected');

@@ -162,6 +162,9 @@ console/
 # Ignore install script override for devs.
 install-site-dev.sh
 
+# Ignore modules used only in local (like xhprof)
+docroot/modules/development
+
 # Ignore new files created after composer install.
 docroot/.gitignore
 docroot/.htaccess.orig
