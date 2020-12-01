@@ -2,7 +2,9 @@
   .fit-calculator {
     &-unit-wrapper {
       label {
-        font-family: $vs-bentonsans-regular;
+        @include breakpoint($tablet) {
+          font-family: $vs-regular;
+        }
       }
     }
   }

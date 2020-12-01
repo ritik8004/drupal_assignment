@@ -1,7 +1,7 @@
 @mixin fit-calc-placeholder-label() {
   font-size: 0.6875rem;
   line-height: normal;
-  color: $appointment-input-label;
+  color: $fit-calc-input-label;
   position: absolute;
   #{$left}: 0.625rem;
   top: 50%;
@@ -56,7 +56,7 @@
   input[type=text] {
     height: 3.125rem;
     border: 1px solid $fit-calc-select-border;
-    font-size: 0.875rem;
+    font-size: 1rem;
     width: 100%;
     padding: 1.25rem 0.625rem 0.625rem;
     color: $fit-calc-form-input;
@@ -68,10 +68,12 @@
     text-transform: capitalize;
   }
 
+  input:focus:not(.focus) {
+    border: 1px solid $fit-calc-form-input;
+  }
+
   input:focus,
   input.focus {
-    border: 1px solid $fit-calc-form-input;
-
     & ~ label {
       @include fit-calc-placeholder-active;
     }
