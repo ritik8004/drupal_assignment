@@ -1,9 +1,5 @@
 <?php
 
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\Core\Language\LanguageInterface;
-
 /**
  * @file
  * Contains code to auto-populate allowed values for Product Attributes for alshaya_quiz.
