@@ -68,10 +68,12 @@
     text-transform: capitalize;
   }
 
+  input:focus:not(.focus) {
+    border: 1px solid $fit-calc-form-input;
+  }
+
   input:focus,
   input.focus {
-    border: 1px solid $fit-calc-form-input;
-
     & ~ label {
       @include fit-calc-placeholder-active;
     }
