@@ -18,6 +18,10 @@ import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
+import {
+  showFullScreenLoader,
+  removeFullScreenLoader,
+} from '../../../utilities/checkout_util';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -137,6 +141,7 @@ export default class Cart extends React.Component {
       freeGiftLink.addEventListener('click', (event) => {
         event.preventDefault();
         this.addFreeGift(freeGiftLink);
+        showFullScreenLoader();
       });
     }
   }
@@ -147,6 +152,7 @@ export default class Cart extends React.Component {
       selectFreeGiftLink.addEventListener('click', (event) => {
         event.preventDefault();
         this.addFreeGift(selectFreeGiftLink);
+        showFullScreenLoader();
       });
     }
   }
@@ -221,6 +227,7 @@ export default class Cart extends React.Component {
         if (closeModal !== undefined) {
           closeModal.click();
         }
+        removeFullScreenLoader();
       }
     });
   }
