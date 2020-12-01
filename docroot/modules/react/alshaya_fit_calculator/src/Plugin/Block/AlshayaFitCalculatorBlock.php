@@ -109,7 +109,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     $form['measurement_field'] = [
       '#type' => 'select',
       '#title' => $this->t('Fit calculaor for Advanced page or size guide modal.'),
-      '#description' => $this->t('Fit Calculator is for advanced-page or size-guide.'),
+      '#description' => $this->t('Fit calculator is for advanced page or size guide modal.'),
       '#options' => [
         'main-form' => $this->t('Advanced-page'),
         'size-guide-calculator' => $this->t('Size guide modal'),
