@@ -68,47 +68,6 @@ class LoyaltyClubController {
   }
 
   /**
-   * Returns the loyalty points related data for a product.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   JSON response.
-   */
-  public function getProductPoints(Request $request) {
-    $request_content = json_decode($request->getContent(), TRUE);
-
-    if (empty($request_content['cardNumber']) || empty($request_content['currencyCode']) || empty($request_content['products'])) {
-      $this->logger->error('Error while trying to get product points. AURA Card number, currency code and product details is required. Request Data: @request_data', [
-        '@request_data' => json_encode($request_content),
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse('AURA Card number, currency code and product details is required.', Response::HTTP_NOT_FOUND));
-    }
-
-    $data = [
-      'sales' => [
-        'currencyCode' => $request_content['currencyCode'],
-        'products' => $request_content['products'],
-      ],
-    ];
-
-    try {
-      $endpoint = sprintf('apc/%s/sales', $request_content['cardNumber']);
-      $response = $this->magentoApiWrapper->doRequest('POST', $endpoint, ['json' => $data]);
-      $responseData = [
-        'status' => TRUE,
-        'apcPoints' => $response['apc_points'] ?? '',
-      ];
-      return new JsonResponse($responseData);
-    }
-    catch (\Exception $e) {
-      $this->logger->notice('Error while trying to get product points. Request Data: @request_data. Message: @message', [
-        '@request_data' => json_encode($request_content),
-        '@message' => $e->getMessage(),
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
-    }
-  }
-
-  /**
    * Update User's AURA Status.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse

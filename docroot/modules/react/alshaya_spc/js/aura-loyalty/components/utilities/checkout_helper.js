@@ -37,7 +37,7 @@ function getUserInput(linkCardOption, chosenCountryCode) {
       : '';
 
     if (card.length === 0 || card.match(/^[0-9]+$/) === null) {
-      showError('spc-aura-link-api-response-message', getStringMessage('form_error_card'));
+      showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_card'));
       return {};
     }
 

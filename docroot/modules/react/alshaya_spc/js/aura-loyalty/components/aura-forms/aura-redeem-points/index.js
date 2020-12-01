@@ -49,7 +49,7 @@ class AuraFormRedeemPoints extends React.Component {
     const { pointsInAccount } = this.props;
 
     if (points === null) {
-      showError('spc-aura-link-api-response-message', getStringMessage('form_error_points'));
+      showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_points'));
       return;
     }
 
