@@ -144,6 +144,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function processTitle(ProductInfoRequestedEvent $event) {
+    $context = $event->getContext();
     $sku_entity = $event->getSku();
     $title = $event->getValue();
 
@@ -151,8 +152,11 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $collection = $sku_entity->get('attr_product_collection')->getString();
     $short_description = $sku_entity->label();
 
-    // @see _alshaya_vs_transac_get_title().
-    if ($event->getContext() === 'plp') {
+    if ($context === 'pdp' || $context === 'modal') {
+      $title = '<span class="title--sub">' . $collection . '</span>';
+      $title .= '<span class="title--main">' . $new . ' ' . $short_description . '</span>';
+    }
+    else {
       $title = $collection;
       // $new can contain only empty spaces and we do not need that.
       $title .= preg_match('/^\s*$/', $new) ? '' : " $new";
