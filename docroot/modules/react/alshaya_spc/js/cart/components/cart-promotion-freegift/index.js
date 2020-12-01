@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
+import { selectFreeGift, openCartFreeGiftModal } from '../../../utilities/free_gift_util';
+
 const CartPromotionFreeGift = ({
   promo,
   couponCode,
-  selectFreeGift,
-  openCartFreeGiftModal,
 }) => {
   useEffect(() => {
     Drupal.ajax.bindAjaxLinks(document.body);

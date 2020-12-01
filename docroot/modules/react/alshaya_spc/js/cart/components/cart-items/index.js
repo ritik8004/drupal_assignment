@@ -60,8 +60,6 @@ export default class CartItems extends React.Component {
       items,
       dynamicPromoLabelsProduct,
       couponCode,
-      selectFreeGift,
-      openCartFreeGiftModal,
     } = this.props;
     const productItems = [];
 
@@ -88,8 +86,6 @@ export default class CartItems extends React.Component {
           qtyLimit={productQtyLimit}
           productPromotion={productPromotion}
           couponCode={couponCode}
-          selectFreeGift={selectFreeGift}
-          openCartFreeGiftModal={openCartFreeGiftModal}
         />,
       );
     });
