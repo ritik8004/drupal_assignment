@@ -1,4 +1,11 @@
 .aura-enabled .toggle--sign {
+  .aura-logged-in-rewards-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
   .account.one,
   .account--logged_in.one {
     @include breakpoint($upto-desktop) {
