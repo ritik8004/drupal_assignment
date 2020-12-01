@@ -76,12 +76,24 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     // URL field for autocomplete from content type static_html.
     $form['size_conversion_html'] = [
       '#type' => 'entity_autocomplete',
+      '#title' => $this->t('Size conversion chart page.'),
       '#description' => $this->t('Static HTML page for size conversion chart.'),
       '#target_type' => 'node',
       '#selection_settings' => [
         'target_bundles' => ['static_html'],
       ],
       '#default_value' => isset($config['size_conversion_html']) ? $this->nodeStorage->load($config['size_conversion_html']) : '',
+    ];
+
+    $form['measurement_field'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Fit calculaor for Advanced page or size guide modal.'),
+      '#description' => $this->t('Fit Calculator is for advanced-page or size-guide.'),
+      '#options' => [
+        'main-form' => $this->t('Advanced-page'),
+        'size-guide-calculator' => $this->t('Size guide modal'),
+      ],
+      '#default_value' => isset($config['measurement_field']) ? $config['measurement_field'] : 'main-form',
     ];
 
     return $form;
@@ -95,6 +107,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     $values = $form_state->getValues();
     $this->configuration['calculator_values'] = $values['calculator_values'];
     $this->configuration['size_conversion_html'] = $values['size_conversion_html'];
+    $this->configuration['measurement_field'] = $values['measurement_field'];
   }
 
   /**
@@ -121,6 +134,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
           'fitCalculator' => [
             'sizeData' => $sizeData,
             'sizeConversionChartUrl' => $sizeConversionChartUrl,
+            'measurementField' => $config['measurement_field'] ?? 'main-form',
           ],
         ],
       ],

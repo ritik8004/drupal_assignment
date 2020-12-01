@@ -31,9 +31,9 @@ export default class FitCalculatorSelect extends React.Component {
         onMenuClose={this.onMenuClose}
         options={options}
         value={options.inches}
-        defaultValue={options.inches}
+        defaultValue={options[0]}
         isSearchable={false}
-        name="fit"
+        name="fitCalcMeasurement"
       />
     );
   }

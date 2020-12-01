@@ -5,7 +5,7 @@ const FitCalculatorRadio = () => (
     <div className="fit-calculator-measurement-list fadeInUp">
       <input
         type="radio"
-        value="Inches"
+        value="inches"
         name="fitCalcMeasurement"
         id="fitCalcMeasurement-inches"
         checked
@@ -17,7 +17,7 @@ const FitCalculatorRadio = () => (
     <div className="fit-calculator-measurement-list fadeInUp">
       <input
         type="radio"
-        value="Centimeters"
+        value="centimeters"
         name="fitCalcMeasurement"
         id="fitCalcMeasurement-centimeters"
       />
