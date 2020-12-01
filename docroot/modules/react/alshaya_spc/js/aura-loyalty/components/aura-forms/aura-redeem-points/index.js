@@ -3,6 +3,8 @@ import AuraRedeemPointsTextField from '../aura-redeem-textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
 import { getPointToPrice, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
+import { redeemAuraPoints } from '../../utilities/checkout_helper';
+import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 
 class AuraFormRedeemPoints extends React.Component {
   constructor(props) {
@@ -14,6 +16,31 @@ class AuraFormRedeemPoints extends React.Component {
       auraTransaction: false,
     };
   }
+
+  componentDidMount() {
+    document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
+  }
+
+  handleRedeemPointsEvent = (data) => {
+    const { stateValues, action } = data.detail;
+
+    if (action === 'set points') {
+      stateValues.auraTransaction = true;
+      // Add a class for FE purposes.
+      document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
+    } else if (action === 'remove points') {
+      stateValues.auraTransaction = false;
+      stateValues.enableSubmit = false;
+      stateValues.points = null;
+      stateValues.money = null;
+      // Remove class.
+      document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.remove('redeemed');
+    }
+
+    this.setState({
+      ...stateValues,
+    });
+  };
 
   convertPointsToMoney = (e) => {
     removeError('spc-aura-link-api-response-message');
@@ -29,12 +56,11 @@ class AuraFormRedeemPoints extends React.Component {
     }
 
     // Convert to money.
-    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     if (e.target.value > 0) {
       const money = getPointToPrice(e.target.value);
       this.setState({
         points: e.target.value,
-        money: `${currencyCode} ${money.toFixed(3)}`,
+        money: `${money.toFixed(3)}`,
       });
     } else {
       this.setState({
@@ -45,8 +71,9 @@ class AuraFormRedeemPoints extends React.Component {
   };
 
   redeemPoints = () => {
-    const { points } = this.state;
-    const { pointsInAccount } = this.props;
+    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
+    const { points, money } = this.state;
+    const { pointsInAccount, cardNumber } = this.props;
 
     if (points === null) {
       showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_points'));
@@ -58,27 +85,31 @@ class AuraFormRedeemPoints extends React.Component {
       return;
     }
 
-    // @todo: Call API to do a AURA transaction against the order.
-    this.setState({
-      auraTransaction: true,
-    });
-    // Add a class for FE purposes.
-    document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
+    // Call API to redeem aura points.
+    const data = {
+      action: 'set points',
+      userId: getUserDetails().id || 0,
+      redeemPoints: points,
+      moneyValue: money,
+      currencyCode,
+      cardNumber,
+    };
+    redeemAuraPoints(data);
   };
 
   undoRedeemPoints = () => {
-    // @todo: Call API to do undo AURA transaction against the order.
-    this.setState({
-      auraTransaction: false,
-      enableSubmit: false,
-      points: null,
-      money: null,
-    });
-    // Remove class.
-    document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.remove('redeemed');
+    const { cardNumber } = this.props;
+    // Call API to undo redeem aura points.
+    const data = {
+      action: 'remove points',
+      userId: getUserDetails().id || 0,
+      cardNumber,
+    };
+    redeemAuraPoints(data);
   }
 
   getPointsRedeemedMessage = () => {
+    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     const {
       points,
       money,
@@ -92,7 +123,7 @@ class AuraFormRedeemPoints extends React.Component {
     return [
       <span key="points" className="spc-aura-highlight">{`${points} ${Drupal.t('points')}`}</span>,
       <span key="worth" className="spc-aura-redeem-text">{`${Drupal.t('worth')}`}</span>,
-      <span key="money" className="spc-aura-highlight">{`${money}`}</span>,
+      <span key="money" className="spc-aura-highlight">{`${currencyCode} ${money}`}</span>,
       <span key="redeemed" className="spc-aura-redeem-text">{`${Drupal.t('have been successfully redeemed')}`}</span>,
     ];
   }
@@ -122,6 +153,7 @@ class AuraFormRedeemPoints extends React.Component {
                 name="spc-aura-redeem-field-amount"
                 placeholder={`${currencyCode} 0.000`}
                 money={money}
+                currencyCode={currencyCode}
                 type="money"
               />
             </ConditionalView>

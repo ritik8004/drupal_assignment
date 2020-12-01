@@ -121,8 +121,36 @@ function getMembersToEarnMessage(price) {
   );
 }
 
+/**
+ * Helper function to redeem points.
+ */
+function redeemAuraPoints(data) {
+  let stateValues = {};
+
+  const apiUrl = 'post/loyalty-club/process-redemption';
+  const apiData = postAPIData(apiUrl, data);
+
+  if (apiData instanceof Promise) {
+    apiData.then((result) => {
+      if (result.data !== undefined && result.data.error === undefined) {
+        if (result.data.status) {
+          stateValues = {
+            base_grand_total: result.data.data.base_grand_total || '',
+            discount_amount: result.data.data.discount_amount || '',
+            shipping_incl_tax: result.data.data.shipping_incl_tax || '',
+            subtotal_incl_tax: result.data.data.subtotal_incl_tax || '',
+          };
+        }
+      }
+      dispatchCustomEvent('auraRedeemPointsApiInvoked', { stateValues, action: data.action });
+      removeFullScreenLoader();
+    });
+  }
+}
+
 export {
   getUserInput,
   processCheckoutCart,
   getMembersToEarnMessage,
+  redeemAuraPoints,
 };

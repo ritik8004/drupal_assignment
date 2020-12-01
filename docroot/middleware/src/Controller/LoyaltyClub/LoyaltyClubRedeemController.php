@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Cart;
+use App\Service\Drupal\Drupal;
+use App\Service\Aura\RedemptionHelper;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -44,6 +46,20 @@ class LoyaltyClubRedeemController {
   protected $cart;
 
   /**
+   * Drupal service.
+   *
+   * @var \App\Service\Drupal\Drupal
+   */
+  protected $drupal;
+
+  /**
+   * RedemptionHelper service.
+   *
+   * @var \App\Service\Aura\RedemptionHelper
+   */
+  protected $redemptionHelper;
+
+  /**
    * LoyaltyClubRedeemController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -54,17 +70,25 @@ class LoyaltyClubRedeemController {
    *   Utility Service.
    * @param \App\Service\Cart $cart
    *   Cart service.
+   * @param \App\Service\Drupal\Drupal $drupal
+   *   Drupal service.
+   * @param \App\Service\Aura\RedemptionHelper $redemption_helper
+   *   Drupal service.
    */
   public function __construct(
-    MagentoApiWrapper $magento_api_wrapper,
-    LoggerInterface $logger,
-    Utility $utility,
-    Cart $cart
-  ) {
+      MagentoApiWrapper $magento_api_wrapper,
+      LoggerInterface $logger,
+      Utility $utility,
+      Cart $cart,
+      Drupal $drupal,
+      RedemptionHelper $redemption_helper
+    ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->utility = $utility;
     $this->cart = $cart;
+    $this->drupal = $drupal;
+    $this->redemptionHelper = $redemption_helper;
   }
 
   /**
@@ -73,7 +97,10 @@ class LoyaltyClubRedeemController {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   Return success/failure response.
    */
-  public function redeemPoints(Request $request) {
+  public function processRedemption(Request $request) {
+    $responseData = [];
+    $request_content = json_decode($request->getContent(), TRUE);
+
     $cart_id = $this->cart->getCartId();
     if (!$cart_id) {
       $message = 'Error while trying to redeem aura points. Cart is not available for the user.';
@@ -81,25 +108,10 @@ class LoyaltyClubRedeemController {
       return new JsonResponse($this->utility->getErrorResponse($message, Response::HTTP_NOT_FOUND));
     }
 
-    $request_content = json_decode($request->getContent(), TRUE);
-    $data = [
-      'redeemAuraPoints' => [
-        'action' => 'set points',
-        'quote_id' => $cart_id ?? '',
-        'redeem_points' => $request_content['redeemPoints'] ?? '',
-        'converted_money_value' => $request_content['moneyValue'] ?? '',
-        'currencyCode' => $request_content['currencyCode'] ?? '',
-        'payment_method' => 'aura_payment',
-      ],
-    ];
-
     // Check if required data is present in request.
-    if (empty($data['redeemAuraPoints']['redeem_points'])
-      || empty($data['redeemAuraPoints']['converted_money_value'])
-      || empty($data['redeemAuraPoints']['currencyCode'])
-      || empty($request_content['cardNumber'])
+    if (empty($request_content['cardNumber'])
       || empty($request_content['userId'])) {
-      $message = 'Error while trying to redeem aura points. Redeem Points, Converted Money Value, Currency Code, Card Number and User Id is required.';
+      $message = 'Error while trying to redeem aura points. Card Number and User Id is required.';
       $this->logger->error($message . 'Data: @request_data', [
         '@request_data' => json_encode($data),
       ]);
@@ -127,23 +139,17 @@ class LoyaltyClubRedeemController {
         return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
       }
 
-      // API Call to redeem points.
-      $url = sprintf('apc/%d/redeem-points', $request_content['cardNumber']);
-      // $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
-      $responseData = [];
+      $redeemPointsRequestData = $this->prepareRedeemPointsRequestData($request_content, $cart_id);
 
-      // @TODO: Remove hard coded response once API starts working.
-      if (!empty($response)) {
-        $responseData = [
-          'status' => TRUE,
-          'data' => [
-            'base_grand_total' => $response['base_grand_total'] ?? '',
-            'discount_amount' => $response['discount_amount'] ?? '',
-            'shipping_incl_tax' => $response['shipping_incl_tax'] ?? '',
-            'subtotal_incl_tax' => $response['subtotal_incl_tax'] ?? '',
-          ],
-        ];
+      if (empty($redeemPointsRequestData) || !empty($redeemPointsRequestData['error'])) {
+        $this->logger->error('Error while trying to create redeem points request data. Request data: @request_data.', [
+          '@request_data' => json_encode($redeemPointsRequestData),
+        ]);
+        return new JsonResponse($redeemPointsRequestData);
       }
+
+      // API call to redeem points.
+      $responseData = $this->redemptionHelper->redeemPoints($request_content['cardNumber'], $redeemPointsRequestData);
 
       return new JsonResponse($responseData);
     }
@@ -154,6 +160,53 @@ class LoyaltyClubRedeemController {
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
     }
+  }
+
+  /**
+   * Prepare request data based on action.
+   *
+   * @return array
+   *   Array of request data/ error message.
+   */
+  public function prepareRedeemPointsRequestData($request_content, $cart_id) {
+    $data = [];
+    if (!empty($request_content['action']) && $request_content['action'] === 'remove points') {
+      $data = [
+        'redeemAuraPoints' => [
+          'action' => 'remove points',
+          'quote_id' => $cart_id ?? '',
+        ],
+      ];
+      return $data;
+    }
+
+    if (!empty($request_content['action']) && $request_content['action'] === 'set points') {
+      $data = [
+        'redeemAuraPoints' => [
+          'action' => 'set points',
+          'quote_id' => $cart_id ?? '',
+          'redeem_points' => $request_content['redeemPoints'] ?? '',
+          'converted_money_value' => $request_content['moneyValue'] ?? '',
+          'currencyCode' => $request_content['currencyCode'] ?? '',
+          'payment_method' => 'aura_payment',
+        ],
+      ];
+
+      // Check if required data is present in request.
+      if (empty($data['redeemAuraPoints']['redeem_points'])
+        || empty($data['redeemAuraPoints']['converted_money_value'])
+        || empty($data['redeemAuraPoints']['currencyCode'])) {
+        $message = 'Error while trying to redeem aura points. Redeem Points, Converted Money Value and Currency Code is required.';
+        $this->logger->error($message . 'Data: @request_data', [
+          '@request_data' => json_encode($data),
+        ]);
+        return $this->utility->getErrorResponse($message, Response::HTTP_NOT_FOUND);
+      }
+
+      return $data;
+    }
+
+    return $data;
   }
 
 }

@@ -6,6 +6,7 @@ const AuraRedeemPointsTextField = (props) => {
     placeholder,
     onChangeCallback,
     money,
+    currencyCode,
     type,
   } = props;
 
@@ -16,7 +17,7 @@ const AuraRedeemPointsTextField = (props) => {
           placeholder={placeholder}
           name={name}
           className={name}
-          defaultValue={money}
+          defaultValue={money ? `${currencyCode} ${money}` : ''}
           type="text"
         />
       </div>

@@ -34,6 +34,6 @@ cart.loyalty_update:
     methods: POST
 
 loyalty_club.redeem-points:
-    path: /post/loyalty-club/redeem-points
-    controller: App\Controller\LoyaltyClub\LoyaltyClubRedeemController::redeemPoints
+    path: /post/loyalty-club/process-redemption
+    controller: App\Controller\LoyaltyClub\LoyaltyClubRedeemController::processRedemption
     methods: POST
