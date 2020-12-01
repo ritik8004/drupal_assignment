@@ -26,6 +26,11 @@
           document.dispatchEvent(productDetailFreeGiftModal);
         }
       });
+
+      $.fn.openFreeGiftModal = function () {
+        var openFreeGiftModalEvent = new CustomEvent('openFreeGiftModalEvent', {bubbles: true, detail: {}});
+        document.dispatchEvent(openFreeGiftModalEvent);
+      };
     }
   };
 

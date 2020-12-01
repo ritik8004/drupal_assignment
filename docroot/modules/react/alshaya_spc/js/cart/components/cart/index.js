@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 
 import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
@@ -18,10 +17,7 @@ import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
-import {
-  showFullScreenLoader,
-  removeFullScreenLoader,
-} from '../../../utilities/checkout_util';
+import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -125,111 +121,14 @@ export default class Cart extends React.Component {
     document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
 
     // Event to trigger after free gift detail modal open.
-    document.addEventListener('openFreeGiftModalEvent', this.openFreeGiftModal, false);
+    document.addEventListener('openFreeGiftModalEvent', openFreeGiftModal, false);
 
     // Event to trigger after free gift listing modal open.
-    document.addEventListener('selectFreeGiftModalEvent', this.selectFreeGiftModal, false);
+    document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
-  }
-
-  openFreeGiftModal = () => {
-    const freeGiftLink = document.getElementById('add-free-gift');
-    if (freeGiftLink !== null) {
-      freeGiftLink.addEventListener('click', (event) => {
-        event.preventDefault();
-        this.addFreeGift(freeGiftLink);
-        showFullScreenLoader();
-      });
-    }
-  }
-
-  selectFreeGiftModal = () => {
-    const selectFreeGiftLink = document.getElementById('select-add-free-gift');
-    if (selectFreeGiftLink !== null) {
-      selectFreeGiftLink.addEventListener('click', (event) => {
-        event.preventDefault();
-        this.addFreeGift(selectFreeGiftLink);
-        showFullScreenLoader();
-      });
-    }
-  }
-
-  addFreeGift = (freeGiftLink) => {
-    const freeGiftMainSku = freeGiftLink.getAttribute('data-variant-sku');
-    const coupon = freeGiftLink.getAttribute('data-coupon');
-    const type = freeGiftLink.getAttribute('data-sku-type');
-    let postData = {};
-
-    if (type === 'simple') {
-      postData = {
-        promo: coupon,
-        sku: freeGiftMainSku,
-        configurable_values: [],
-        variant: null,
-        type,
-        langcode: drupalSettings.path.currentLanguage,
-      };
-    } else {
-      const configurableValues = [];
-      const form = freeGiftLink.closest('form');
-      const currentSelectedVariant = form
-        .querySelector('[name="selected_variant_sku"]')
-        .getAttribute('value');
-
-      Object.keys(
-        drupalSettings.configurableCombinations[freeGiftMainSku].configurables,
-      ).forEach((key) => {
-        const option = {
-          option_id:
-            drupalSettings.configurableCombinations[freeGiftMainSku]
-              .configurables[key].attribute_id,
-          option_value: form.querySelector(`[data-configurable-code="${key}"]`).value,
-        };
-
-        // Skipping the psudo attributes.
-        if (
-          drupalSettings.psudo_attribute === undefined
-          || drupalSettings.psudo_attribute !== option.option_id
-        ) {
-          configurableValues.push(option);
-        }
-      });
-
-      postData = {
-        promo: coupon,
-        sku: freeGiftMainSku,
-        configurable_values: configurableValues,
-        variant: currentSelectedVariant,
-        type,
-        langcode: drupalSettings.path.currentLanguage,
-      };
-    }
-    axios.post('/middleware/public/select-free-gift', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: JSON.stringify(postData),
-    }).then((cartresponse) => {
-      if (cartresponse.data.length !== 0) {
-        // Refreshing mini-cart.
-        const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartresponse.data } });
-        document.dispatchEvent(miniCartEvent);
-
-        // Refreshing cart components..
-        const refreshCartEvent = new CustomEvent('refreshCart', { bubbles: true, detail: { data: () => cartresponse.data } });
-        document.dispatchEvent(refreshCartEvent);
-
-        // Closing the modal window.
-        const closeModal = document.querySelector('.ui-dialog-titlebar-close');
-        if (closeModal !== undefined) {
-          closeModal.click();
-        }
-        removeFullScreenLoader();
-      }
-    });
   }
 
   saveDynamicPromotions = (event) => {
@@ -259,33 +158,6 @@ export default class Cart extends React.Component {
     }
   };
 
-  /**
-   * Select and add free gift item.
-   */
-  selectFreeGift = (codeValue, sku, skuType, promoType) => {
-    if (codeValue !== undefined) {
-      // Open free gift modal for collection free gifts.
-      if (promoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
-        const body = document.querySelector('body');
-        body.classList.add('free-gifts-modal-overlay');
-        document.getElementById('spc-free-gift').click();
-      } else if ((promoType === 'FREE_GIFT_SUB_TYPE_ALL_SKUS') && (skuType === 'configurable')) {
-        this.openCartFreeGiftModal();
-      } else {
-        document.getElementById('promo-code').value = codeValue.trim();
-        document.getElementById('promo-action-button').click();
-      }
-    }
-  };
-
-  /**
-   * Add class to body and trigger free gift modal.
-   */
-  openCartFreeGiftModal = () => {
-    const body = document.querySelector('body');
-    body.classList.add('free-gifts-modal-overlay');
-    document.getElementById('spc-free-gift').click();
-  };
 
   render() {
     const {
@@ -357,7 +229,6 @@ export default class Cart extends React.Component {
               items={items}
               couponCode={couponCode}
               selectFreeGift={this.selectFreeGift}
-              openCartFreeGiftModal={this.openCartFreeGiftModal}
             />
           </div>
           <div className="spc-sidebar">
@@ -366,7 +237,6 @@ export default class Cart extends React.Component {
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
               items={items}
-              openCartFreeGiftModal={this.openCartFreeGiftModal}
             />
             <OrderSummaryBlock
               totals={totals}
