@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import FitCalculatorTitle from '../../../utilities/fit-calculator-title';
 import TextField from '../../../utilities/textfield';
 import FitCalculatorSelect from '../../../utilities/fit-calculator-select';
@@ -14,6 +15,15 @@ export default class FitCalculator extends React.Component {
       errorMessage: false,
       resultSize: false,
     };
+  }
+
+  componentDidMount() {
+    document.addEventListener('fitCalculator', () => {
+      ReactDOM.render(
+        <FitCalculator />,
+        document.querySelector('#fit-cal-modal'),
+      );
+    });
   }
 
   handleSubmit = (e) => {
