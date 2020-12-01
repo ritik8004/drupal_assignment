@@ -3,11 +3,6 @@ loyalty_club.get_customer_points:
     controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::getCustomerDetails
     methods: GET
 
-loyalty_club.get_product_points:
-    path: /post/loyalty-club/get-product-points
-    controller: App\Controller\LoyaltyClub\LoyaltyClubController::getProductPoints
-    methods: POST
-
 loyalty_club.search_apc_user:
     path: /post/loyalty-club/search-apc-user
     controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::searchApcUser
@@ -36,4 +31,9 @@ loyalty_club.loyalty_club_sign_up:
 cart.loyalty_update:
     path: /cart/loyalty/update
     controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::cartLoyaltyUpdate
+    methods: POST
+
+loyalty_club.redeem-points:
+    path: /post/loyalty-club/redeem-points
+    controller: App\Controller\LoyaltyClub\LoyaltyClubRedeemController::redeemPoints
     methods: POST

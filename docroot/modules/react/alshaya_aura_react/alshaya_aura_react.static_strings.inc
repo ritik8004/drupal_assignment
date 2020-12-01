@@ -87,11 +87,11 @@ function _alshaya_aura_static_strings() {
       'value' => t('Email address is already registered.'),
     ],
     [
-      'key' => 'form_error_card',
+      'key' => 'form_error_empty_card',
       'value' => t('Please enter card number.'),
     ],
     [
-      'key' => 'form_error_points',
+      'key' => 'form_error_empty_points',
       'value' => t('Please enter points.'),
     ],
   ];
