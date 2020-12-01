@@ -154,8 +154,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     // @see _alshaya_vs_transac_get_title().
     if ($event->getContext() === 'plp') {
       $title = $collection;
-      $title .= !empty($new) ? " $new" : '';
-      $title .= !empty($short_description) ? " $short_description" : '';
+      // $new can contain only empty spaces and we do not need that.
+      $title .= preg_match('/^\s*$/', $new) ? '' : " $new";
+      $title .= empty($short_description) ? '' : " $short_description";
     }
 
     $event->setValue($title);
