@@ -5,6 +5,7 @@ namespace Drupal\alshaya_search_algolia\Service;
 use AlgoliaSearch\Client;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -167,6 +168,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $prettyAliases;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -205,6 +213,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The facet manager.
    * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases $pretty_aliases
    *   Pretty Aliases.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -227,7 +237,8 @@ class AlshayaAlgoliaIndexHelper {
     ProductCategoryTree $productCategoryTree,
     AlshayaFacetsPrettyPathsHelper $pretty_path_helper,
     DefaultFacetManager $facets_manager,
-    AlshayaFacetsPrettyAliases $pretty_aliases
+    AlshayaFacetsPrettyAliases $pretty_aliases,
+    ProductInfoHelper $product_info_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -248,6 +259,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
     $this->prettyAliases = $pretty_aliases;
+    $this->productInfoHelper = $product_info_helper;
   }
 
   /**
@@ -280,7 +292,8 @@ class AlshayaAlgoliaIndexHelper {
       throw new \Exception('SKU not available for language of Node');
     }
 
-    $object['title'] = $this->skuManager->getTitle($sku, 'plp', $object['title']);
+    // Get processed title for a node.
+    $object['title'] = $this->productInfoHelper->getValue($sku, 'title', 'plp', $object['title']);
 
     // Description.
     $description = $this->skuManager->getDescription($sku, 'full');
