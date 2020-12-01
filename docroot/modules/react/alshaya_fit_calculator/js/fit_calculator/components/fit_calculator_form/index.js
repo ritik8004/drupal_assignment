@@ -11,14 +11,13 @@ export default class FitCalculator extends React.Component {
     this.state = {
       bandSizeLabel: Drupal.t('band size'),
       burstSizeLabel: Drupal.t('burst size'),
-      errorMessage: Drupal.t('Sorry, we don\u2019t carry your size yet but we are always working to expand our collections.'),
-      message: '',
+      errorMessage: false,
+      resultSize: false,
     };
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { errorMessage } = this.state;
     // Get form field elements.
     const unit = e.target.elements.fitCalcMeasurement.value;
     const bandSize = e.target.elements.band_size;
@@ -33,7 +32,7 @@ export default class FitCalculator extends React.Component {
     const burstSizeValue = Math.round(burstSize.value);
 
     // Checks if input is valid.
-    if (this.checkIfValidInput(bandSizeValue, burstSizeValue, errorMessage) === false) {
+    if (this.checkIfValidInput(bandSizeValue, burstSizeValue) === false) {
       return false;
     }
 
@@ -43,7 +42,8 @@ export default class FitCalculator extends React.Component {
       sizeData = JSON.parse(drupalSettings.fitCalculator.sizeData);
     } catch (error) {
       this.setState({
-        message: errorMessage,
+        errorMessage: true,
+        resultSize: false,
       });
       throw (error);
     }
@@ -52,6 +52,12 @@ export default class FitCalculator extends React.Component {
     if (this.checkIfSizeExists(sizeData, unit, bandSizeValue, burstSizeValue) === false) {
       return false;
     }
+
+    // Show result and link to PLP page if size is available.
+    this.setState({
+      resultSize: sizeData[unit][bandSizeValue][burstSizeValue],
+      errorMessage: false,
+    });
     return true;
   };
 
@@ -82,10 +88,10 @@ export default class FitCalculator extends React.Component {
    * Checks if input are valid.
    */
   checkIfValidInput = (bandSizeValue, burstSizeValue) => {
-    const { errorMessage } = this.state;
     if (Number.isNaN(bandSizeValue) || Number.isNaN(burstSizeValue)) {
       this.setState({
-        message: errorMessage,
+        errorMessage: true,
+        resultSize: false,
       });
       return false;
     }
@@ -96,15 +102,16 @@ export default class FitCalculator extends React.Component {
    * Checks if size data available.
    */
   checkIfSizeExists = (sizeData, unit, bandSizeValue, burstSizeValue) => {
-    const { errorMessage } = this.state;
     if (sizeData[unit][bandSizeValue] === undefined) {
       this.setState({
-        message: errorMessage,
+        errorMessage: true,
+        resultSize: false,
       });
       return false;
     } if (sizeData[unit][bandSizeValue][burstSizeValue] === undefined) {
       this.setState({
-        message: errorMessage,
+        errorMessage: true,
+        resultSize: false,
       });
       return false;
     }
@@ -113,12 +120,13 @@ export default class FitCalculator extends React.Component {
 
   render() {
     const {
-      message,
+      errorMessage,
       bandSizeLabel,
       burstSizeLabel,
+      resultSize,
     } = this.state;
 
-    const { measurementField } = drupalSettings.fitCalculator;
+    const { measurementField, plpPage } = drupalSettings.fitCalculator;
 
     return (
       <>
@@ -165,9 +173,24 @@ export default class FitCalculator extends React.Component {
               </div>
             </div>
             <div className="message-area">
-              <div className="sucess-error-message">
-                {message}
-              </div>
+              { errorMessage
+                && (
+                <div className="error-message">
+                  { Drupal.t('Sorry, we don\u2019t carry your size yet but we are always working to expand our collections.') }
+                </div>
+                )}
+              { resultSize
+                && (
+                <div className="success-message">
+                  <span>{Drupal.t('Your size is ')}</span>
+                  <span className="result">{resultSize}</span>
+                  <a
+                    href={`${plpPage}--size-${resultSize.toLowerCase()}`}
+                  >
+                    {Drupal.t('shop your size')}
+                  </a>
+                </div>
+                )}
             </div>
             <div className="fit-calculator-size-conversion-chart">
               <a

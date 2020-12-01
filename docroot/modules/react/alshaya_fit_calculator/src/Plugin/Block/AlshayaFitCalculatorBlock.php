@@ -27,6 +27,13 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
   protected $nodeStorage;
 
   /**
+   * Term Storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -44,6 +51,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
                               EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
   }
 
   /**
@@ -96,6 +104,17 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
       '#default_value' => isset($config['measurement_field']) ? $config['measurement_field'] : 'main-form',
     ];
 
+    $form['plp_page'] = [
+      '#type' => 'entity_autocomplete',
+      '#title' => $this->t('Provide PLP page.'),
+      '#description' => $this->t('PLP page for link in calculator result with filter.'),
+      '#target_type' => 'taxonomy_term',
+      '#selection_settings' => [
+        'target_bundles' => ['acq_product_category'],
+      ],
+      '#default_value' => isset($config['plp_page']) ? $this->termStorage->load($config['plp_page']) : '',
+    ];
+
     return $form;
   }
 
@@ -108,6 +127,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     $this->configuration['calculator_values'] = $values['calculator_values'];
     $this->configuration['size_conversion_html'] = $values['size_conversion_html'];
     $this->configuration['measurement_field'] = $values['measurement_field'];
+    $this->configuration['plp_page'] = $values['plp_page'];
   }
 
   /**
@@ -122,6 +142,11 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
       $url = Url::fromRoute('alshaya_fit_calculator.modal_links', ['node' => $config['size_conversion_html']]);
       $sizeConversionChartUrl = $url->toString();
     }
+    $plp_page = NULL;
+    if (isset($config['plp_page'])) {
+      $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $config['plp_page']]);
+      $plp_page = $url->toString();
+    }
 
     return [
       '#markup' => '<div id="fit-calculator-container"></div>',
@@ -135,6 +160,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
             'sizeData' => $sizeData,
             'sizeConversionChartUrl' => $sizeConversionChartUrl,
             'measurementField' => $config['measurement_field'] ?? 'main-form',
+            'plpPage' => $plp_page,
           ],
         ],
       ],
