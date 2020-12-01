@@ -491,6 +491,10 @@ class Cart {
             $this->nativeOperations->removeItem($cart_id, $item['item_id']);
           }
           catch (\Exception $e) {
+            if ($e->getCode() == 404) {
+              $this->removeCartFromSession();
+            }
+
             return $this->returnExistingCartWithError($e);
           }
 
@@ -516,7 +520,12 @@ class Cart {
           catch (\Exception $e) {
             $exception_type = $this->exceptionType($e->getMessage());
 
-            if ($exception_type === 'OOS') {
+            if ($e->getCode() == 404) {
+              $this->removeCartFromSession();
+              $this->createCart($this->getDrupalInfo('customer_id'));
+              return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+            }
+            elseif ($exception_type === 'OOS') {
               $this->refreshStock([$sku, $variant_sku]);
             }
 
@@ -1700,7 +1709,7 @@ class Cart {
    *   Cleaned cart data as JSON string.
    */
   public function getCartDataToLog(array $cart) {
-    // TODO: Remove sensitive info.
+    // @todo Fix problem remove sensitive info here.
     return json_encode($cart);
   }
 
