@@ -208,7 +208,7 @@ class ProductController extends ControllerBase {
 
     $build['modal_content'] = [
       '#type' => 'inline_template',
-      '#template' => '<div class="modal-content">{{ modal_content }}</div>',
+      '#template' => '<div class="modal-content">{{ modal_content }}<div id="fit-cal-modal"></div></div>',
       '#context' => [
         'modal_content' => $content,
       ],

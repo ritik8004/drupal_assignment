@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides Fit calculator block.
@@ -34,6 +35,13 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
   protected $termStorage;
 
   /**
+   * Request Stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -42,14 +50,18 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
    *   The plugin_id for the plugin instance.
    * @param string $plugin_definition
    *   The plugin implementation definition.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
+                              RequestStack $request_stack,
                               EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->requestStack = $request_stack;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
   }
@@ -62,6 +74,7 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('request_stack'),
       $container->get('entity_type.manager')
     );
   }
@@ -138,18 +151,25 @@ class AlshayaFitCalculatorBlock extends BlockBase implements ContainerFactoryPlu
     // Remove newline and tabs from string.
     $sizeData = isset($config['calculator_values']) ? trim(preg_replace('/\s+/', ' ', $config['calculator_values'])) : NULL;
     $sizeConversionChartUrl = NULL;
-    if (isset($config['size_conversion_html'])) {
+    if (isset($config['size_conversion_html']) && !empty($config['size_conversion_html'])) {
       $url = Url::fromRoute('alshaya_fit_calculator.modal_links', ['node' => $config['size_conversion_html']]);
       $sizeConversionChartUrl = $url->toString();
     }
     $plp_page = NULL;
-    if (isset($config['plp_page'])) {
+    if (isset($config['plp_page']) && !empty($config['size_conversion_html'])) {
       $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $config['plp_page']]);
       $plp_page = $url->toString();
     }
 
+    if (strstr($this->requestStack->getCurrentRequest()->getRequestUri(), 'modal-link-views')) {
+      $markup = '<div id="fit-cal-modal"></div>';
+    }
+    else {
+      $markup = '<div id="fit-calculator-container"></div>';
+    }
+
     return [
-      '#markup' => '<div id="fit-calculator-container"></div>',
+      '#markup' => $markup,
       '#attached' => [
         'library' => [
           'alshaya_fit_calculator/alshaya_fit_calculator',
