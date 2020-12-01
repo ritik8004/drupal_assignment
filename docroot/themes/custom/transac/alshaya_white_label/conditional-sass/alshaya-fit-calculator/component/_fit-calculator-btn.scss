@@ -5,6 +5,7 @@
       font-size: 0.9375rem;
       letter-spacing: 0.125rem;
       background: $fit-calc-btn-bg;
+      padding: 0;
 
       @include breakpoint($tablet) {
         width: 30.5%;
