@@ -666,7 +666,7 @@ $magentos = [
     ],
   ],
   'we_oms_uat' => [
-    'url' => 'https://wes-uatoms.store.alshaya.com/',
+    'url' => 'https://wes-uatoms.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => '4xtw4osc8e7fv45cy187xhhobr6xt59e',
       'consumer_secret' => '3b5nydivhlbwm6v29ekyhv3v8v2s2pl4',
