@@ -96,7 +96,7 @@ class AuraApiHelper {
       $endpoint = 'customers/apcDicData/' . $value;
       $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
 
-      // @TODO: Remove hard coded response once API is funtional.
+      // @todo: Remove hard coded response once API is funtional.
       $response = [
         "code" => "APC_CASHBACK_ACCRUAL_RATIO",
         "items" => [
