@@ -26,6 +26,15 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 7, 'ar' => 6],
     ],
+    'eg' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 13, 'ar' => 12],
+    ],
   ],
   'mc_upgrade' => [
     'url' => 'http://magento-upgrade-kb5pcqa-z3gmkbwmwrl4g.eu.magentosite.cloud',
@@ -80,6 +89,15 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 19, 'ar' => 22],
     ],
+    'eg' => [
+      'store_id' => ['en' => 27, 'ar' => 24],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 33, 'ar' => 30],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 39, 'ar' => 36],
+    ],
   ],
   'mc_oms_uat' => [
     'url' => 'https://mc-uat2.store.alshaya.com',
@@ -128,6 +146,9 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 19, 'ar' => 22],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 27, 'ar' => 24],
     ],
   ],
   // H&M.

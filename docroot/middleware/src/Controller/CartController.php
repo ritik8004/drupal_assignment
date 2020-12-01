@@ -169,6 +169,11 @@ class CartController {
       $data = $this->cart->getCart();
     }
 
+    if (empty($data)) {
+      $this->logger->error('Cart is no longer available.');
+      return new JsonResponse(['error' => TRUE]);
+    }
+
     // If there is any exception/error, return as is with exception message
     // without processing further.
     if (!empty($data['error'])) {

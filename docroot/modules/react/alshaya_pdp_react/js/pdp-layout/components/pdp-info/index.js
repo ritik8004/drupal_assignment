@@ -11,7 +11,7 @@ const PdpInfo = ({
     discountPercantage = Math.round(((pdpProductPrice - finalPrice) / pdpProductPrice) * 100);
   }
 
-  const specialPriceClass = (finalPrice < pdpProductPrice) ? 'has-special-price' : '';
+  const specialPriceClass = (parseInt(finalPrice, 10) < parseInt(pdpProductPrice, 10)) ? 'has-special-price' : '';
 
   return (
     <div className={(shortDetail ? 'magv2-compact-detail-wrapper' : 'magv2-detail-wrapper')}>
@@ -29,7 +29,7 @@ const PdpInfo = ({
         style={(animateTitlePrice ? { animationDelay: '0.4s' } : null)}
       >
         <div className={`magv2-pdp-price-container ${specialPriceClass}`}>
-          {(finalPrice < pdpProductPrice)
+          {(parseInt(finalPrice, 10) < parseInt(pdpProductPrice, 10))
             ? (
               <div className="magv2-pdp-final-price-wrapper">
                 <span className="magv2-pdp-final-price-currency suffix">{drupalSettings.alshaya_spc.currency_config.currency_code}</span>

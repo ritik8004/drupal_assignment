@@ -124,6 +124,42 @@ $conductors = [
     'hmac_secret' => 'ZDA5OWNhYWItNGE3ZS00',
     'site_id' => 322,
   ],
+  // Mothercare EG
+  'mceg_qa' => [
+    'hmac_id' => '8e3ed7928ee9496b85ffa3a751c09b1d',
+    'hmac_secret' => 'MWJiYTk5ZmItYzIwMC00',
+    'site_id' => 329,
+  ],
+  'mceg_uat' => [
+    'hmac_id' => '875016aa86534444912555dfd067c5b8',
+    'hmac_secret' => 'NmRlNDE4ZjItMDc5My00',
+    'site_id' => 333,
+  ],
+  'mceg_prod' => [
+    'site_id' => 332,
+  ],
+  // Mothercare BH
+  'mcbh_qa' => [
+    'hmac_id' => '474c019c19324a5dbcd873bcb1ea049f',
+    'hmac_secret' => 'YzY5YTBkYTgtODc5OC00',
+    'site_id' => 330,
+  ],
+  'mcbh_uat' => [
+    'hmac_id' => '6295db5028ac4bac8f6f380f81e15a02',
+    'hmac_secret' => 'NmFiYjBlYmMtYjg5YS00',
+    'site_id' => 334,
+  ],
+  // Mothercare QA
+  'mcqa_qa' => [
+    'hmac_id' => 'c2fa8f89aa554f778aeeec073ab89810',
+    'hmac_secret' => 'ODllNzYwNjAtNzk2My00',
+    'site_id' => 331,
+  ],
+  'mcqa_uat' => [
+    'hmac_id' => 'bfae4a74e1d449ed8e8f0ecbd637b1d4',
+    'hmac_secret' => 'YTNlNjZhOGMtYTBmOS00',
+    'site_id' => 335,
+  ],
   // H&M KW.
   'hmkw_dev' => [
     'hmac_id' => '875cffda19304dfe88ae6aaadb065909',

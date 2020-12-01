@@ -289,7 +289,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    * @return array
    *   Return array of filters.
    *
-   * @todo: this is temporary way to get filters, work on it to make something
+   * @todo this is temporary way to get filters, work on it to make something
    * solid on which we can rely.
    */
   protected function getFilters($index_name, $page_type) {

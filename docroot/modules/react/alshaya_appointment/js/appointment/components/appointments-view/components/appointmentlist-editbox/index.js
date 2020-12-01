@@ -37,7 +37,7 @@ export default class AppointmentEditBox extends React.Component {
             </p>
           </div>,
         );
-        j += j;
+        j += 1;
       }
     }
 

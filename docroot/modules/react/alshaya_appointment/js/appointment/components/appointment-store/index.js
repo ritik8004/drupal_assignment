@@ -40,7 +40,7 @@ const StoreMap = React.lazy(async () => {
   });
   return import('./components/store-map');
 });
-window.fetchStore = 'idle';
+window.fetchStore = 'finished';
 
 export default class AppointmentStore extends React.Component {
   constructor(props) {
@@ -78,7 +78,7 @@ export default class AppointmentStore extends React.Component {
     } = this.state;
     document.addEventListener('placeAutocomplete', this.initiatePlaceAutocomplete);
     if (refCoords !== null && storeList.length === 0) {
-      this.fetchStores(refCoords, null, false);
+      this.getCurrentPosition(null, false);
     } else {
       dispatchCustomEvent('placeAutocomplete', true);
     }
@@ -291,12 +291,12 @@ export default class AppointmentStore extends React.Component {
   };
 
   changeNearMeButtonStatus = (status) => {
-    if (status === 'active') {
+    if (status === 'active' && this.nearMeBtn !== null) {
       this.nearMeBtn.classList.add('active');
       this.nearMeBtn.disabled = true;
       return;
     }
-    if (status === 'in-active') {
+    if (status === 'in-active' && this.nearMeBtn !== null) {
       this.nearMeBtn.classList.remove('active');
       this.nearMeBtn.disabled = false;
     }
@@ -305,12 +305,14 @@ export default class AppointmentStore extends React.Component {
   /**
    * Get current location coordinates.
    */
-  getCurrentPosition = (e) => {
+  getCurrentPosition = (e, geo) => {
     if (e) {
       e.preventDefault();
     }
     const { refCoords } = this.state;
-    this.searchplaceInput.value = '';
+    if (this.searchplaceInput !== null) {
+      this.searchplaceInput.value = '';
+    }
     this.changeNearMeButtonStatus('active');
     showFullScreenLoader();
     getLocationAccess()
@@ -335,7 +337,7 @@ export default class AppointmentStore extends React.Component {
             removeFullScreenLoader();
             return;
           }
-          this.fetchStores(userCoords, true);
+          this.fetchStores(userCoords, true, geo);
         },
         () => {
           const defaultMapCenter = getDefaultMapCenter();
@@ -344,13 +346,16 @@ export default class AppointmentStore extends React.Component {
             return;
           }
           this.changeNearMeButtonStatus('in-active');
-          this.fetchStores(defaultMapCenter, false);
+          this.fetchStores(defaultMapCenter, true, true);
         },
       )
       .catch((error) => {
         removeFullScreenLoader();
         Drupal.logJavascriptError('appointment-select-store-getCurrentPosition', error);
       });
+    if (navigator && navigator.geolocation && geo === true) {
+      this.fetchStores(refCoords, true, true);
+    }
     return false;
   };
 
@@ -552,7 +557,7 @@ export default class AppointmentStore extends React.Component {
               </DeviceView>
               <div
                 id="appointment-map-store-list-view"
-                className="appointment-map-store-list-view"
+                className={(!storeList || storeList.length === 0) ? 'appointment-map-store-list-view empty-store-list' : 'appointment-map-store-list-view'}
                 ref={this.appListView}
               >
                 <StoreList

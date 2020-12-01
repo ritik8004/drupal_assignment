@@ -60,6 +60,10 @@
               border-radius: 0;
               top: 2.75rem;
               #{$right}: 1.375rem;
+
+              html[lang='ar'] & {
+                transform: rotate(0deg);
+              }
             }
           }
 
@@ -68,6 +72,10 @@
               border-radius: 0;
               top: 2.75rem;
               #{$right}: 0.625rem;
+
+              html[lang='ar'] & {
+                transform: rotate(180deg);
+              }
             }
           }
         }

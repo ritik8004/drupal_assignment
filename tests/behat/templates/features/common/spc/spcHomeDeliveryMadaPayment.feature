@@ -32,7 +32,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
@@ -67,7 +67,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
-    Then I should see "{spc_anon_email}"
+    Then I should see "{anon_email}"
     Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -125,7 +125,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
@@ -160,12 +160,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_anon_email}"
+    Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_anon_email}"
+    Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -223,7 +223,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
@@ -282,7 +282,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
@@ -317,7 +317,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
-    Then I should see "{spc_anon_email}"
+    Then I should see "{anon_email}"
     Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -375,7 +375,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |
@@ -410,12 +410,12 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_anon_email}"
+    Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_anon_email}"
+    Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -473,7 +473,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {spc_anon_email}    |
+      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
       | spc-area-select-selected-city | {language_city_option} |

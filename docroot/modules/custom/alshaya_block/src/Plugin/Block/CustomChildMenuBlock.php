@@ -182,13 +182,13 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       '#open' => TRUE,
     ];
 
-    // @todo: Add a select list to select the menu type.
+    // @todo Add a select list to select the menu type.
     $form['child_item']['menu_item'] = [
       '#type' => 'container',
       '#attributes' => ['id' => 'type-dependent-set'],
     ];
 
-    // @todo: Add ajax call with select menu type to get the menu type from
+    // @todo Add ajax call with select menu type to get the menu type from
     // select value.
     if (!empty($this->configuration['menu_name'])) {
       $menu_type = $this->configuration['menu_name'];
@@ -347,7 +347,7 @@ class CustomChildMenuBlock extends BlockBase implements ContainerFactoryPluginIn
   protected function getCheckCurrentPathBelongsToMenu() {
     // Get current language code.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    // @todo: Make the menu name "main" dynamic.
+    // @todo Make the menu name "main" dynamic.
     // Get the main menu tree to get the current active path.
     $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters('main');
     $parameters->setTopLevelOnly();

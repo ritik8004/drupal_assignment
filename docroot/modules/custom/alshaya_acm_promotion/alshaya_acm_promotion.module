@@ -325,11 +325,12 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
 
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotionsManager */
   $promotionsManager = \Drupal::service('alshaya_acm_promotion.manager');
-
-  $pdp_layout = $skuManager->getPdpLayout($entity, 'modal');
   try {
     $skuForGallery = $promotionsManager->getSkuForFreeGiftGallery($entity);
-    $build['gallery'] = $skuImagesManager->getGallery($skuForGallery, $pdp_layout);
+    $gallery = $skuImagesManager->getGallery($skuForGallery, 'pdp');
+    $build['gallery']['#markup'] = !empty($gallery)
+      ? \Drupal::service('renderer')->renderPlain($gallery)
+      : '';
   }
   catch (\Exception $e) {
     $build['gallery'] = [];

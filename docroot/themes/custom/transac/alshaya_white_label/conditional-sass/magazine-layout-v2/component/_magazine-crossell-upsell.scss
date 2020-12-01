@@ -22,7 +22,7 @@
         flex-direction: column-reverse;
         align-items: end;
         justify-content: flex-end;
-        padding: 0.625rem 1.25rem;
+        padding: 0.625rem 1.25rem 1.5625rem;
 
         .magv2-pdp {
           &-final-price-wrapper,
@@ -75,19 +75,20 @@
             font-size: 1rem;
             line-height: 1.375rem;
             margin-bottom: 0;
-            padding: 0 0 1.25rem;
+            padding: 0;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
+            width: 100%;
 
             @include breakpoint($only-mobile) {
               max-width: 12.5rem;
-              padding-bottom: 2.3125rem;
             }
           }
 
           &-title-wrapper {
             width: 100%;
+            padding-top: 0;
           }
 
           &-price {
@@ -191,7 +192,11 @@
       }
 
       .magv2-detail-wrapper + .promotions-full-view-mode {
-        margin-top: -1.25rem;
+        margin-top: -0.9375rem;
+
+        &:empty {
+          display: none;
+        }
 
         @include breakpoint($only-mobile) {
           margin-top: -2.5rem;

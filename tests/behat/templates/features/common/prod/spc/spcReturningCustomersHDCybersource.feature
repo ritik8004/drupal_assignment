@@ -24,8 +24,8 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     And I wait for the page to load
     Then I should be on "/cart/login" page
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_user_email}"
-    And I fill in "edit-pass" with "{spc_user_password}"
+    Then I fill in "edit-name" with "{spc_returning_user_email}"
+    And I fill in "edit-pass" with "{spc_returning_user_password}"
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
@@ -77,8 +77,8 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_user_email}"
-    And I fill in "edit-pass" with "{spc_user_password}"
+    Then I fill in "edit-name" with "{spc_returning_user_email}"
+    And I fill in "edit-pass" with "{spc_returning_user_password}"
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
@@ -128,8 +128,8 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_user_email}"
-    And I fill in "edit-pass" with "{spc_user_password}"
+    Then I fill in "edit-name" with "{spc_returning_user_email}"
+    And I fill in "edit-pass" with "{spc_returning_user_password}"
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
