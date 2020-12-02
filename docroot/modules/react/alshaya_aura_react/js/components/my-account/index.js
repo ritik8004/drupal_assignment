@@ -64,6 +64,8 @@ class MyAccount extends React.Component {
       expiryDate,
       pointsOnHold,
       upgradeMsg,
+      firstName,
+      lastName,
     } = this.state;
 
     return (
@@ -77,6 +79,8 @@ class MyAccount extends React.Component {
         expiryDate={expiryDate}
         pointsOnHold={pointsOnHold}
         upgradeMsg={upgradeMsg}
+        firstName={firstName}
+        lastName={lastName}
         updateLoyaltyStatus={this.updateLoyaltyStatus}
       />
     );

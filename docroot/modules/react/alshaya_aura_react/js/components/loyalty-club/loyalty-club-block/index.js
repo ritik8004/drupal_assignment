@@ -65,6 +65,8 @@ export default class LoyaltyClubBlock extends React.Component {
       expiryDate,
       pointsOnHold,
       upgradeMsg,
+      firstName,
+      lastName,
     } = this.props;
 
     if (wait) {
@@ -108,6 +110,8 @@ export default class LoyaltyClubBlock extends React.Component {
             pointsOnHold={pointsOnHold}
             upgradeMsg={upgradeMsg}
             cardNumber={cardNumber}
+            firstName={firstName}
+            lastName={lastName}
           />
         );
       }

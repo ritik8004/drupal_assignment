@@ -100,13 +100,11 @@ function getLoyaltyBenefitsContent() {
 /**
  * Get User Profile info.
  */
-function getUserProfileInfo() {
-  const { userName } = drupalSettings.userDetails;
+function getUserProfileInfo(firstName, lastName) {
   const userInfo = {};
-  if (userName.length > 0) {
-    const parts = userName.split(' ');
-    userInfo.profileName = userName;
-    userInfo.avatar = `${parts[0].charAt(0)}${parts[1].charAt(0)}`;
+  if (firstName && firstName.length > 0) {
+    userInfo.profileName = `${firstName} ${lastName}`;
+    userInfo.avatar = `${firstName.charAt(0)}${lastName ? lastName.charAt(0) : ''}`;
   }
 
   return userInfo;
