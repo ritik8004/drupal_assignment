@@ -7,6 +7,8 @@ import AuraFormSignUpOTPModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-otp-modal-form';
 import AuraFormNewAuraUserModal
   from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-new-aura-user-form';
+import AuraFormLinkCardOTPModal
+  from '../../../../../../alshaya_spc/js/aura-loyalty/components/aura-forms/aura-link-card-otp-modal-form';
 
 class AuraMyAccountNoLinkedCard extends React.Component {
   constructor(props) {
@@ -16,6 +18,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
       isNewUserModalOpen: false,
       chosenCountryCode: null,
       chosenUserMobile: null,
+      isLinkCardModalOpen: false,
     };
   }
 
@@ -48,6 +51,18 @@ class AuraMyAccountNoLinkedCard extends React.Component {
     });
   };
 
+  openLinkCardModal = () => {
+    this.setState({
+      isLinkCardModalOpen: true,
+    });
+  };
+
+  closeLinkCardModal = () => {
+    this.setState({
+      isLinkCardModalOpen: false,
+    });
+  };
+
   openNewUserModal = () => {
     this.setState({
       isNewUserModalOpen: true,
@@ -66,6 +81,7 @@ class AuraMyAccountNoLinkedCard extends React.Component {
       isNewUserModalOpen,
       chosenCountryCode,
       chosenUserMobile,
+      isLinkCardModalOpen,
     } = this.state;
     const { handleSignUp } = this.props;
 
@@ -82,7 +98,10 @@ class AuraMyAccountNoLinkedCard extends React.Component {
         <div className="aura-myaccount-no-linked-card-description no-card-found">
           <div className="link-your-card">
             { Drupal.t('Already AURA Member?') }
-            <div className="btn">
+            <div
+              className="btn"
+              onClick={() => this.openLinkCardModal()}
+            >
               { Drupal.t('Link your card') }
             </div>
           </div>
@@ -120,6 +139,16 @@ class AuraMyAccountNoLinkedCard extends React.Component {
                 chosenUserMobile={chosenUserMobile}
                 closeNewUserModal={() => this.closeNewUserModal()}
                 handleSignUp={handleSignUp}
+              />
+            </Popup>
+            <Popup
+              className="aura-modal-form link-card-otp-modal"
+              open={isLinkCardModalOpen}
+              closeOnEscape={false}
+              closeOnDocumentClick={false}
+            >
+              <AuraFormLinkCardOTPModal
+                closeLinkCardOTPModal={() => this.closeLinkCardModal()}
               />
             </Popup>
           </div>
