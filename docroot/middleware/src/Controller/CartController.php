@@ -253,7 +253,7 @@ class CartController {
       $info = $this->drupal->getSessionCustomerInfo();
       if (!empty($info['customer_id'])) {
         $cart_id = $this->cart->createCart($info['customer_id']);
-        if (!isset($cart_id['error'])) {
+        if (is_int($cart_id)) {
           $this->cart->setCartId($cart_id);
         }
       }
