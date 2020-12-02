@@ -121,7 +121,8 @@ function alshaya_vs_transac_node_load($nodes) {
 
       if ($sku instanceof SKU) {
         // This is done for all Meta title, Page title.
-        $node->setTitle(_alshaya_vs_transac_get_title($sku, 'meta'));
+        $title = \Drupal::service('acq_sku.product_info_helper')->getValue($sku, 'title', 'meta', $node->getTitle());
+        $node->setTitle($title);
       }
     }
   }
@@ -131,7 +132,7 @@ function alshaya_vs_transac_node_load($nodes) {
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
-  $title = _alshaya_vs_transac_get_title($sku, $context);
+  $title = \Drupal::service('acq_sku.product_info_helper')->getValue($sku, 'title', $context, $sku->label());
 
   if ($context == 'search') {
     $build['#product_label'] = [
@@ -149,32 +150,6 @@ function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
       '#markup' => $title,
     ];
   }
-}
-
-/**
- * Get the concatenated title based on context.
- *
- * @param \Drupal\acq_commerce\SKUInterface $sku
- *   SKU Entity.
- * @param string $context
- *   Context to get the title for.
- *
- * @return string
- *   Title.
- */
-function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
-  $new = $sku->get('attr_sku_definition')->getString();
-  $collection = $sku->get('attr_product_collection')->getString();
-  $short_description = $sku->label();
-  if ($context === 'pdp' || $context === 'modal') {
-    $title = '<span class="title--sub">' . $collection . '</span>';
-    $title .= '<span class="title--main">' . $new . ' ' . $short_description . '</span>';
-  }
-  else {
-    $title = implode(' ', [$new, $collection, $short_description]);
-  }
-
-  return $title;
 }
 
 /**
