@@ -2,7 +2,7 @@ import React from 'react';
 import {
   handleSignUp,
   handleNotYou,
-} from '../../../utilities/header_helper';
+} from '../../../utilities/cta_helper';
 import HeaderLoyaltyCta from '../header-loyalty-cta';
 import SignUpHeader from '../sign-up-header';
 import SignUpCompleteHeader from '../signup-complete-header';

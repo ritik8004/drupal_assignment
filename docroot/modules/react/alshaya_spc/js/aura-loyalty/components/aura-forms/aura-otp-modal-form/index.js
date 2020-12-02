@@ -115,6 +115,11 @@ class AuraFormSignUpOTPModal extends React.Component {
                   }
                 } else if (result.data.error_code === 'already_registered') {
                   showError('otp-aura-mobile-field-error', getStringMessage('form_error_mobile_already_registered'));
+                } else {
+                  this.setState({
+                    messageType: 'error',
+                    messageContent: result.data.error_message,
+                  });
                 }
               } else {
                 this.setState({
