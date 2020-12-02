@@ -6,6 +6,22 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update metatags info for brand pages.
+ */
+function alshaya_product_list_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'metatag.metatag_defaults.node__product_list',
+    ],
+    'alshaya_product_list'
+  );
+}
+
+/**
  * Create facets and their blocks for product list page.
  *
  * Implements hook_install().
