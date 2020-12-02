@@ -179,6 +179,7 @@ class AlshayaSpcController extends ControllerBase {
         'drupalSettings' => [
           'item_code_label' => $this->t('Item code'),
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
           'global_error_message' => _alshaya_spc_global_error_message(),
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
