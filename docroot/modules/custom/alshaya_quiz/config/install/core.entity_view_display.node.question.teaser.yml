@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.question.field_actions
+    - field.field.node.question.field_answer
+    - field.field.node.question.field_correct
+    - field.field.node.question.field_error
+    - field.field.node.question.field_explanation
+    - field.field.node.question.field_instruction
+    - field.field.node.question.field_question_group
+    - field.field.node.question.field_references
+    - node.type.question
+  module:
+    - user
+id: node.question.teaser
+targetEntityType: node
+bundle: question
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_actions: true
+  field_answer: true
+  field_correct: true
+  field_error: true
+  field_explanation: true
+  field_instruction: true
+  field_question_group: true
+  field_references: true
+  langcode: true
+  search_api_excerpt: true
+  shariff_field: true

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+third_party_settings:
+  wsf_roles:
+    group: content_classification
+name: 'Question Group'
+vid: question_group
+description: 'This is used to create a group of questions in the Alshaya quiz.'
+weight: 0
