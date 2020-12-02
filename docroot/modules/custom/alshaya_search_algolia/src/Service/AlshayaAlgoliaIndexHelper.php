@@ -925,4 +925,63 @@ class AlshayaAlgoliaIndexHelper {
     ]);
   }
 
+  /**
+   * Helps to update/remove replicas index in algolia.
+   *
+   * @param array $sorts
+   *   The list of the fields to be used in sort index.
+   */
+  public function updateReplicaIndex(array $sorts) {
+    $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
+    $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
+    $client = new Client($backend_config['application_id'], $backend_config['api_key']);
+    $index_name = $client_config['algolia_index_name'];
+
+    foreach ($this->languageManager->getLanguages() as $language) {
+      $index = $client->initIndex($index_name . '_' . $language->getId());
+      $name = $index_name . '_' . $language->getId();
+      $settings = $index->getSettings();
+      unset($settings['replicas']);
+      $ranking = $settings['ranking'];
+
+      foreach ($sorts as $sort) {
+        $replica = $name . '_' . implode('_', $sort);
+        $settings['replicas'][] = $replica;
+      }
+
+      $index->setSettings($settings, TRUE);
+
+      foreach ($sorts as $sort) {
+        $replica = $name . '_' . implode('_', $sort);
+        $replica_index = $client->initIndex($replica);
+        $replica_settings = $replica_index->getSettings();
+        $replica_settings['ranking'] = [
+          'desc(stock)',
+          $sort['direction'] . '(' . $sort['field'] . ')',
+        ] + $ranking;
+        $replica_index->setSettings($replica_settings);
+      }
+    }
+  }
+
+  /**
+   * Helps to prepare fields to create replicas.
+   *
+   * @param array $sort_options
+   *   The list of options.
+   */
+  public function prepareFieldsToSort(array $sort_options) {
+    $sorts = [];
+    foreach ($sort_options as $value) {
+      if ($value !== 0) {
+        if ($value != 'created') {
+          $sorts[] = ['field' => $value, 'direction' => 'asc'];
+        }
+        $sorts[] = ['field' => $value, 'direction' => 'desc'];
+      }
+    }
+
+    return $sorts;
+  }
+
 }
