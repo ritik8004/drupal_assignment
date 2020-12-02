@@ -139,7 +139,7 @@ class LoyaltyClubRedeemController {
         return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
       }
 
-      $redeemPointsRequestData = $this->prepareRedeemPointsRequestData($request_content, $cart_id);
+      $redeemPointsRequestData = $this->redemptionHelper->prepareRedeemPointsRequestData($request_content, $cart_id);
 
       if (empty($redeemPointsRequestData) || !empty($redeemPointsRequestData['error'])) {
         $this->logger->error('Error while trying to create redeem points request data. Request data: @request_data.', [
@@ -160,53 +160,6 @@ class LoyaltyClubRedeemController {
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
     }
-  }
-
-  /**
-   * Prepare request data based on action.
-   *
-   * @return array
-   *   Array of request data/ error message.
-   */
-  public function prepareRedeemPointsRequestData($request_content, $cart_id) {
-    $data = [];
-    if (!empty($request_content['action']) && $request_content['action'] === 'remove points') {
-      $data = [
-        'redeemAuraPoints' => [
-          'action' => 'remove points',
-          'quote_id' => $cart_id ?? '',
-        ],
-      ];
-      return $data;
-    }
-
-    if (!empty($request_content['action']) && $request_content['action'] === 'set points') {
-      $data = [
-        'redeemAuraPoints' => [
-          'action' => 'set points',
-          'quote_id' => $cart_id ?? '',
-          'redeem_points' => $request_content['redeemPoints'] ?? '',
-          'converted_money_value' => $request_content['moneyValue'] ?? '',
-          'currencyCode' => $request_content['currencyCode'] ?? '',
-          'payment_method' => 'aura_payment',
-        ],
-      ];
-
-      // Check if required data is present in request.
-      if (empty($data['redeemAuraPoints']['redeem_points'])
-        || empty($data['redeemAuraPoints']['converted_money_value'])
-        || empty($data['redeemAuraPoints']['currencyCode'])) {
-        $message = 'Error while trying to redeem aura points. Redeem Points, Converted Money Value and Currency Code is required.';
-        $this->logger->error($message . 'Data: @request_data', [
-          '@request_data' => json_encode($data),
-        ]);
-        return $this->utility->getErrorResponse($message, Response::HTTP_NOT_FOUND);
-      }
-
-      return $data;
-    }
-
-    return $data;
   }
 
 }
