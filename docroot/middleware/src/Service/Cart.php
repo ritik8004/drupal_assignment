@@ -155,6 +155,13 @@ class Cart {
   protected $languageManager;
 
   /**
+   * Cart Native Operations wrapper.
+   *
+   * @var \App\Service\CartOperationsNative
+   */
+  protected $nativeOperations;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -189,6 +196,8 @@ class Cart {
    *   RequestStack Object.
    * @param \App\Service\LanguageManager $language_manager
    *   Language Manager.
+   * @param \App\Service\CartOperationsNative $native_operations
+   *   Cart Native Operations wrapper.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -206,7 +215,8 @@ class Cart {
     LoggerInterface $logger,
     Connection $connection,
     RequestStack $requestStack,
-    LanguageManager $language_manager
+    LanguageManager $language_manager,
+    CartOperationsNative $native_operations
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -224,6 +234,7 @@ class Cart {
     $this->connection = $connection;
     $this->request = $requestStack->getCurrentRequest();
     $this->languageManager = $language_manager;
+    $this->nativeOperations = $native_operations;
   }
 
   /**
@@ -448,32 +459,90 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = [], string $variant_sku = NULL) {
+    $cart_id = (int) $this->getCartId();
+    $mode = $this->settings->getSettings('alshaya_checkout_settings')['cart_operations_mode'];
+
     $option_data = [];
 
-    if ($action == CartActions::CART_REMOVE_ITEM) {
-      $item = $this->getCartItem($sku);
+    $item = $this->getCartItem($variant_sku ?? $sku);
 
+    if ($action === CartActions::CART_REMOVE_ITEM && empty($item)) {
       // Do nothing if item no longer available.
-      if (empty($item)) {
-        return $this->getCart();
-      }
+      return $this->getCart();
+    }
+    elseif ($action === CartActions::CART_UPDATE_ITEM && empty($item)) {
+      // Do nothing if item no longer available.
+      return $this->getCart();
     }
 
     // If options data available.
     if (!empty($options)) {
-      foreach ($options as &$op) {
-        $op = (object) $op;
-      }
       $option_data = [
-        'extension_attributes' => (object) [
+        'extension_attributes' => [
           'configurable_item_options' => $options,
         ],
       ];
     }
+
+    if ($mode === 'native') {
+      switch ($action) {
+        case CartActions::CART_REMOVE_ITEM:
+          try {
+            $this->nativeOperations->removeItem($cart_id, $item['item_id']);
+          }
+          catch (\Exception $e) {
+            if ($e->getCode() == 404) {
+              $this->removeCartFromSession();
+            }
+
+            return $this->returnExistingCartWithError($e);
+          }
+
+          break;
+
+        default:
+          $cart_item = [
+            'sku' => $sku,
+            'qty' => $quantity ?? 1,
+            'product_option' => $option_data,
+            'quote_id' => $cart_id,
+          ];
+
+          // Set the cart item id to ensure we set new quantity
+          // instead of adding it.
+          if ($action === CartActions::CART_UPDATE_ITEM) {
+            $cart_item['item_id'] = $item['item_id'];
+          }
+
+          try {
+            $this->nativeOperations->addUpdateCartItem($cart_id, $cart_item);
+          }
+          catch (\Exception $e) {
+            $exception_type = $this->exceptionType($e->getMessage());
+
+            if ($e->getCode() == 404) {
+              $this->removeCartFromSession();
+              $this->createCart($this->getDrupalInfo('customer_id'));
+              return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+            }
+            elseif ($exception_type === 'OOS') {
+              $this->refreshStock([$sku, $variant_sku]);
+            }
+
+            return $this->returnExistingCartWithError($e);
+          }
+
+          break;
+      }
+
+      // Get fresh cart and return.
+      return $this->getCart(TRUE);
+    }
+
     $data['items'][] = [
       'sku' => $sku,
       'qty' => $quantity ?? 1,
-      'quote_id' => (string) $this->getCartId(),
+      'quote_id' => $cart_id,
       'product_option' => (object) $option_data,
       'variant_sku' => $variant_sku,
     ];
@@ -1127,6 +1196,7 @@ class Cart {
 
       // Check the exception type from drupal.
       $exception_type = $this->exceptionType($e->getMessage());
+
       // We want to throw error for add to cart action, to display errors
       // if api fails. (We don't need to return cart object as we only care
       // about error whenever we are on pdp / Add to cart form.)
@@ -1152,15 +1222,8 @@ class Cart {
         if (!empty($cart['cart']['id']) && !empty($cart['cart']['items'])) {
           $skus = array_merge($skus, array_column($cart['cart']['items'], 'sku'));
         }
-        $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
-          'skus' => $skus,
-        ]);
 
-        if ($response['status'] == TRUE) {
-          if (!empty($response['data']['stock'])) {
-            self::$stockInfo = $response['data']['stock'];
-          }
-        }
+        $this->refreshStock($skus);
       }
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
@@ -1646,7 +1709,7 @@ class Cart {
    *   Cleaned cart data as JSON string.
    */
   public function getCartDataToLog(array $cart) {
-    // TODO: Remove sensitive info.
+    // @todo Fix problem remove sensitive info here.
     return json_encode($cart);
   }
 
@@ -2033,6 +2096,62 @@ class Cart {
 
     $fresh_cart_total = $cart['totals']['grand_total'];
     return $fresh_cart_total == $cart_total;
+  }
+
+  /**
+   * Wrapper function to trigger refresh stock event of Drupal.
+   *
+   * @param array $skus
+   *   SKUs for which we need to refresh stock.
+   */
+  protected function refreshStock(array $skus) {
+    $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
+      'skus' => $skus,
+    ]);
+
+    if ($response['status'] == TRUE) {
+      if (!empty($response['data']['stock'])) {
+        self::$stockInfo = $response['data']['stock'];
+      }
+    }
+  }
+
+  /**
+   * Wrapper function to get existing cart with error info.
+   *
+   * @param \Exception $e
+   *   Exception to get error info from.
+   *
+   * @return array
+   *   Cart array with error info.
+   */
+  protected function returnExistingCartWithError(\Exception $e) {
+    $old_cart = $this->getCart() ?? [];
+
+    $old_cart['error'] = TRUE;
+    $old_cart['error_code'] = (int) $e->getCode();
+    $old_cart['error_message'] = $e->getMessage();
+
+    $old_cart['response_message'][1] = 'error';
+    $old_cart['response_message'][0] = $e->getMessage();
+
+    return $old_cart;
+  }
+
+  /**
+   * Return user id from current session.
+   *
+   * @return int|null
+   *   Return user id or null.
+   */
+  protected function getDrupalInfo(string $key) {
+    static $info = NULL;
+
+    if (empty($info)) {
+      $info = $this->drupal->getSessionCustomerInfo();
+    }
+
+    return $info[$key] ?? NULL;
   }
 
 }

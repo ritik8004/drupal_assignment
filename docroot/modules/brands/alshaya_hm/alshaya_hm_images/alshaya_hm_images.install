@@ -6,6 +6,49 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\acq_sku\Entity\SKU;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove broken LP images from skus.
+ */
+function alshaya_hm_images_update_8013() {
+  $query = 'select distinct sku from acq_sku_field_data where attr_assets__value like CONCAT(\'%\', (select fid from file_managed where filename like \'%assets-lp-shared%\') ,\'%\')';
+  $skus = \Drupal::database()->query($query)->fetchCol();
+  // If there are skus with wrong data for LP.
+  if (!empty($skus)) {
+    \Drupal::logger('alshaya_hm_images')->notice('Fixing assets for skus: @skus', [
+      '@skus' => implode(', ', $skus),
+    ]);
+    foreach ($skus as $sku) {
+      try {
+        $sku_entity = SKU::loadFromSku($sku);
+        $assets = unserialize($sku_entity->get('attr_assets')->first()->getString());
+        foreach ($assets as &$asset) {
+          // Unset fid and uri.
+          if (isset($asset['fid']) && $asset['drupal_uri'] && $asset['drupal_uri'] == 'brand://assets-lp-shared//') {
+            unset($asset['fid']);
+            unset($asset['drupal_uri']);
+          }
+        }
+
+        // Save sku with updated assets value.
+        $sku_entity->get('attr_assets')->setValue(serialize($assets));
+        $sku_entity->save();
+        \Drupal::logger('alshaya_hm_images')->notice('Processed assets for sku: @sku', [
+          '@sku' => $sku,
+        ]);
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('alshaya_hm_images')->notice('Error while processing assets for sku: @sku. Error: @message', [
+          '@sku' => $sku,
+          '@message' => $e->getMessage(),
+        ]);
+      }
+    }
+  }
+}
 
 /**
  * Implements hook_update_N().

@@ -21,6 +21,23 @@ class LocalCommand extends BltTasks {
     2 => 'alshaya2.02',
     3 => 'alshaya3bis.01',
     4 => 'alshaya4.04',
+    5 => 'alshaya5.05',
+    6 => 'alshaya6tmp.06',
+  ];
+
+  /**
+   * Environments list.
+   *
+   * @var string[]
+   */
+  protected $envs = [
+    'dev',
+    'dev2',
+    'dev3',
+    'qa2',
+    'test',
+    'uat',
+    'pprod',
   ];
 
   /**
@@ -403,6 +420,60 @@ class LocalCommand extends BltTasks {
       $country = substr($site, -2);
       $brand = substr($site, 0, -2);
       $this->_exec("php tests/apis/conductor_v2/pauseQueues.php $env $brand $country resume");
+    }
+  }
+
+  /**
+   * CRF for all sites on all stacks of given ENV.
+   *
+   * @param string $env
+   *   Environment code.
+   *
+   * @command local:crf
+   *
+   * @description Do drush crf on all sites on all stacks of given ENV.
+   */
+  public function crf(string $env) {
+    if (!in_array($env, $this->envs)) {
+      $this->yell('Invalid environment name.');
+      return;
+    }
+
+    foreach ($this->stacks as $stack) {
+      $task = $this->taskDrush();
+      $task->interactive(FALSE);
+      $task->drush('sfml crf')
+        ->alias($stack . $env)
+        ->printOutput(TRUE);
+      $result = $task->run();
+      $this->io()->writeln($result->getMessage());
+    }
+  }
+
+  /**
+   * UPDB for all sites on all stacks of given ENV.
+   *
+   * @param string $env
+   *   Environment code.
+   *
+   * @command local:updb
+   *
+   * @description Do drush updb on all sites on all stacks of given ENV.
+   */
+  public function updb(string $env) {
+    if (!in_array($env, $this->envs)) {
+      $this->yell('Invalid environment name.');
+      return;
+    }
+
+    foreach ($this->stacks as $stack) {
+      $task = $this->taskDrush();
+      $task->interactive(FALSE);
+      $task->drush('sfml updb')
+        ->alias($stack . $env)
+        ->printOutput(TRUE);
+      $result = $task->run();
+      $this->io()->writeln($result->getMessage());
     }
   }
 

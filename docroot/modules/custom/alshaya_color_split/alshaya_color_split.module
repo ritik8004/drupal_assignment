@@ -380,6 +380,7 @@ function alshaya_color_split_alshaya_mobile_app_product_exclude_linked_data_alte
   if ($sku->bundle() !== 'simple') {
     return;
   }
+
   /** @var \Drupal\alshaya_acm_product\SkuInfoHelper $sku_info_helper */
   $sku_info_helper = \Drupal::service('alshaya_acm_product.sku_info');
   /** @var \Drupal\alshaya_color_split\AlshayaColorSplitManager $manager */
@@ -391,7 +392,7 @@ function alshaya_color_split_alshaya_mobile_app_product_exclude_linked_data_alte
 
   if (!empty($grouping_attribute) && !empty($products_in_style) && $grouping_attribute_with_swatch) {
     foreach ($products_in_style as $grouped_sku) {
-      if ($grouped_sku->getSku() === $sku->getSku()) {
+      if (!isset($data['grouping_attribute_with_swatch'])) {
         $data['grouping_attribute_with_swatch'] = $grouping_attribute_with_swatch;
       }
       $data['grouped_variants'][] = $grouped_sku;
@@ -417,16 +418,21 @@ function alshaya_color_split_alshaya_spc_order_sku_details_alter(array &$data, S
  * Implements hook_alshaya_acm_customer_order_details_alter().
  */
 function alshaya_color_split_alshaya_acm_customer_order_details_alter(array &$order) {
-  if (!isset($order['items'])) {
+  if (!isset($order['items']) || empty($order['items'])) {
     return;
   }
+
   /** @var \Drupal\alshaya_color_split\AlshayaColorSplitManager $manager */
   $manager = \Drupal::service('alshaya_color_split.manager');
   $grouping_attribute_with_swatch = \Drupal::config('alshaya_color_split.settings')->get('process_swatch_for_grouping_attributes');
   if ($grouping_attribute_with_swatch) {
     foreach ($order['items'] as $key => $item) {
-      $sku = SKU::loadFromSku($item['sku']);
-      $order['items'][$key]['attributes'][] = $manager->getGroupingAttributeValues($sku);
+      if (isset($item['sku']) && !empty($item['sku'])) {
+        $sku = SKU::loadFromSku($item['sku']);
+        if ($sku instanceof SKUInterface) {
+          $order['items'][$key]['attributes'][] = $manager->getGroupingAttributeValues($sku);
+        }
+      }
     }
   }
 }

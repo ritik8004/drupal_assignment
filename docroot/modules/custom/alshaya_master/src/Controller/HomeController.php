@@ -19,7 +19,7 @@ class HomeController extends ControllerBase {
     $build = [];
 
     // Get entity details to show from config.
-    // @TODO: Create admin inteface to select the entity for home page.
+    // @todo Create admin inteface to select the entity for home page.
     $entityDetails = $this->config('alshaya_master.home')->get('entity');
 
     if (!empty($entityDetails)) {

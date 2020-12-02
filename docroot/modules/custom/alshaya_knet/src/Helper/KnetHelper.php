@@ -151,7 +151,7 @@ class KnetHelper {
       $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
       $pipe->setKnetUrl($knet_creds['knet_url']);
 
-      // @TODO: When removing support for old toolkit use only AR.
+      // @todo When removing support for old toolkit use only AR.
       if ($knetSettings->get('knet_language_code') == 'ARA') {
         $pipe->setLanguage('AR');
       }

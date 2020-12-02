@@ -232,7 +232,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @return array
    *   Processed term data.
    */
-  public function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
+  protected function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
     $language = $this->languageManager->getLanguage($langcode);
     $uri_options = ['language' => $language];
 
@@ -257,13 +257,19 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
 
     foreach ($terms as $term) {
+      $path = Url::fromRoute(
+        'entity.taxonomy_term.canonical',
+        ['taxonomy_term' => $term->tid],
+        $uri_options
+      )->toString(TRUE)->getGeneratedUrl();
+
       $data[$term->tid] = [
         'label' => $term->name,
         'description' => [
           '#markup' => $term->description__value,
         ],
         'id' => $term->tid,
-        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid], $uri_options)->toString(TRUE)->getGeneratedUrl(),
+        'path' => $path,
         'active_class' => '',
         'class' => [],
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,

@@ -735,13 +735,13 @@ class AlshayaApiCommands extends DrushCommands {
 
           // Acquire lock to ensure parallel processes are executed
           // sequentially.
-          // @TODO: These 8 lines might be duplicated in multiple places. We
+          // @todo These 8 lines might be duplicated in multiple places. We
           // may want to create a utility service in alshaya_performance.
           do {
             $lock_acquired = $this->lock->acquire($lock_key);
 
             // Sleep for half a second before trying again.
-            // @TODO: Move this 0.5s to a config variable.
+            // @todo Move this 0.5s to a config variable.
             if (!$lock_acquired) {
               usleep(500000);
             }
@@ -1154,8 +1154,8 @@ class AlshayaApiCommands extends DrushCommands {
           // We split the list of SKUs in small chunk to avoid any issue. This
           // is only to send the request to Conductor.
           foreach (array_chunk(str_replace("'", '', $stock_mismatch_sync[$type]), $chunk_size) as $chunk) {
-            // @TODO: Make page size a config. It can be used in multiple places.
-            // @TODO: It seems there is nothing being logged when fullSync is
+            // @todo Make page size a config. It can be used in multiple places.
+            // @todo It seems there is nothing being logged when fullSync is
             // launched.
             $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
@@ -1174,8 +1174,8 @@ class AlshayaApiCommands extends DrushCommands {
           // We split the list of SKUs in small chunk to avoid any issue. This
           // is only to send the request to Conductor.
           foreach (array_chunk(str_replace("'", '', $price_mismatch_sync[$type]), $chunk_size) as $chunk) {
-            // @TODO: Make page size a config. It can be used in multiple places.
-            // @TODO: It seems there is nothing being logged when fullSync is
+            // @todo Make page size a config. It can be used in multiple places.
+            // @todo It seems there is nothing being logged when fullSync is
             // launched.
             $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
@@ -1198,8 +1198,8 @@ class AlshayaApiCommands extends DrushCommands {
           // We split the list of SKUs in small chunk to avoid any issue. This
           // is only to send the request to Conductor.
           foreach (array_chunk(str_replace("'", '', $missing[$type]['all']), $chunk_size) as $chunk) {
-            // @TODO: Make page size a config. It can be used in multiple places.
-            // @TODO: It seems there is nothing being logged when fullSync is
+            // @todo Make page size a config. It can be used in multiple places.
+            // @todo It seems there is nothing being logged when fullSync is
             // launched.
             $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
@@ -1223,8 +1223,8 @@ class AlshayaApiCommands extends DrushCommands {
           // We split the list of SKUs in small chunk to avoid any issue. This
           // is only to send the request to Conductor.
           foreach (array_chunk(str_replace("'", '', $to_be_deleted[$type]['all']), $chunk_size) as $chunk) {
-            // @TODO: Make page size a config. It can be used in multiple places.
-            // @TODO: It seems there is nothing being logged when fullSync is
+            // @todo Make page size a config. It can be used in multiple places.
+            // @todo It seems there is nothing being logged when fullSync is
             // launched.
             $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
@@ -1243,7 +1243,7 @@ class AlshayaApiCommands extends DrushCommands {
     }
 
     // Delete additional SKUs.
-    // @TODO: Some of the code to delete node + sku is duplicate from
+    // @todo Some of the code to delete node + sku is duplicate from
     // ProductSyncResource::post(). We might want a service to do that task and
     // remove code duplication.
     foreach ($types as $type) {
@@ -1264,13 +1264,13 @@ class AlshayaApiCommands extends DrushCommands {
 
               // Acquire lock to ensure parallel processes are executed
               // sequentially.
-              // @TODO: These 8 lines might be duplicated in multiple places. We
+              // @todo These 8 lines might be duplicated in multiple places. We
               // may want to create a utility service in alshaya_performance.
               do {
                 $lock_acquired = $this->lock->acquire($lock_key);
 
                 // Sleep for half a second before trying again.
-                // @TODO: Move this 0.5s to a config variable.
+                // @todo Move this 0.5s to a config variable.
                 if (!$lock_acquired) {
                   usleep(500000);
                 }

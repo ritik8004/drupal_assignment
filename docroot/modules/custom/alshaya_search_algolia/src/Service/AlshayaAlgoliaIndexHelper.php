@@ -870,7 +870,7 @@ class AlshayaAlgoliaIndexHelper {
   public function addCustomFacetToIndex($attributes) {
     $attributes = is_array($attributes) ? $attributes : [$attributes];
 
-    // @TODO If an entity field is to be added, the function should be modified
+    // @todo If an entity field is to be added, the function should be modified
     // such that $attr_name should have prefix "attr_" as that is the
     // general syntax that can be seen.
     $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');

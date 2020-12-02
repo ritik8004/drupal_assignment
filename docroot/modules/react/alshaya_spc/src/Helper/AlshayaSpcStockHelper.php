@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Helper;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Class Alshaya Spc Stock Helper.
@@ -11,6 +12,24 @@ use Drupal\acq_sku\Entity\SKU;
  * @package Drupal\alshaya_spc\Helper
  */
 class AlshayaSpcStockHelper {
+  /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
+   * AlshayaSpcStockHelper constructor.
+   *
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Factory service.
+   */
+  public function __construct(
+    LoggerChannelFactoryInterface $logger_factory
+  ) {
+    $this->logger = $logger_factory->get('alshaya_spc');
+  }
 
   /**
    * Refresh stock cache and Drupal cache of products in cart.
@@ -43,6 +62,17 @@ class AlshayaSpcStockHelper {
   public function refreshStockForSkus(array $skus) {
     foreach ($skus as $sku) {
       if ($sku_entity = SKU::loadFromSku($sku)) {
+        $plugin = $sku_entity->getPluginInstance();
+        $stock = $plugin->getStock($sku);
+
+        if ($stock === 0) {
+          $response['stock'][$sku] = FALSE;
+          $this->logger->info('Refresh Stock skipped for SKU: @sku.', [
+            '@sku' => $sku,
+          ]);
+          continue;
+        }
+
         try {
           $statuses = $this->refreshStock($sku_entity);
           foreach ($statuses as $sku => $status) {

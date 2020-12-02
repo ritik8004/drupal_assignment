@@ -276,16 +276,20 @@ class ProductController extends ControllerBase {
         }
       }
       elseif ($type === 'upsell') {
-        $data = [
-          'section_title' => $this->t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
-          'views_display_id' => 'block_product_slider',
-        ];
+        if ($this->acmConfig->get('display_upsell')) {
+          $data = [
+            'section_title' => $this->t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
+            'views_display_id' => 'block_product_slider',
+          ];
+        }
       }
       elseif ($type === 'related') {
-        $data = [
-          'section_title' => $this->t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
-          'views_display_id' => 'block_product_slider',
-        ];
+        if ($this->acmConfig->get('display_related')) {
+          $data = [
+            'section_title' => $this->t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
+            'views_display_id' => 'block_product_slider',
+          ];
+        }
       }
 
       if (!empty($data)) {

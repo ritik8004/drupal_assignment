@@ -45,7 +45,6 @@ services:
       - '@module_handler'
       - '@cache.alshaya'
       - '@cache.product_labels'
-      - '@cache.alshaya_product'
       - '@acq_sku.fields_manager'
       - '@alshaya_acm_product.category_helper'
       - '@http_client'
@@ -99,12 +98,6 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [product_labels]
-  cache.alshaya_product:
-    class: Drupal\Core\Cache\CacheBackendInterface
-    tags:
-      - { name: cache.bin, default_backend: cache.backend.permanent_database }
-    factory: cache_factory:get
-    arguments: [alshaya_product]
   cache.product_processed_data:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
@@ -186,3 +179,9 @@ services:
     class: Drupal\alshaya_acm_product\Service\ProductOrderLimit
     arguments:
       - '@alshaya_acm_product.skumanager'
+
+  alshaya_acm_product.stdclass_normalizer:
+    class: Drupal\alshaya_acm_product\Normalizer\StdClassNormalizer
+    arguments: ['\stdClass']
+    tags:
+      - { name: normalizer, priority: 20 }

@@ -235,6 +235,7 @@ $aura-progress-star-end: linear-gradient(106deg, #2d68c4, #481463 70%, #2c0b3d);
 $aura-progress-star-end-ar: linear-gradient(106deg, #2d68c4, #481463 70%, #2c0b3d);
 $aura-progress-vip-end: linear-gradient(106deg, #7f2482, #25035a 65%, #160235);
 $aura-progress-vip-end-ar: linear-gradient(106deg, #7f2482, #25035a 65%, #160235);
+$pinterest-red: #bc091d;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1528,7 +1529,7 @@ $appointment-timeslot-calendar-disabled: $warm-grey-two;
 $appointment-empty-store-list-text: $_spc-discount-text;
 
 // Magazine V2 PDP
-$magv2-readmore-link: $windows-blue;
+$magv2-readmore-link: $new-pdp-blue;
 $magv2-text: $brownish-grey;
 $magv2-special-price: $new_red;
 $magv2-price: $black;
@@ -1546,7 +1547,7 @@ $magv2-slick-dots: $white-smoke-light;
 $magv2-gallery-popup-bg: $white-five;
 $magv2-gallery-bg: $white-five;
 $magv2-gallery-popup-cross-bg: rgba(243, 243, 243, 0.6);
-$magv2-gallery-popup-cross: $mothercare-black;
+$magv2-gallery-popup-cross: $marine-blue;
 $magv2-gallery-slider-bg: $grey-light-two;
 $magv2-slick-dots-active: $marine-blue-two;
 $magv2-icon-bg: $grey-light-two;
@@ -1621,6 +1622,7 @@ $magv2-free-gift-modal-cross-icon: $mothercare-black;
 $magv2-free-gift-modal-item-code: $brownish-grey;
 $magv2-breadcrumb-bg: $white-five;
 $magv2-panel-close-icon: $mothercare-black;
+$magv2-pinterest-share-icon-hover: $pinterest-red;
 
 // Sub brand logo.
 $sub_brand_logo_separator: $_ancestral-water;

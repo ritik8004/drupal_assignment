@@ -11,12 +11,14 @@ class SimpleProductForm extends React.Component {
   }
 
   componentDidMount() {
+    const { refCartButton } = this.props;
+
     // Condition to check if add to cart
     // button is available.
     if (document.getElementById('add-to-cart-main')) {
       window.addEventListener('load', () => {
         this.button.current.setAttribute('data-top-offset', this.button.current.offsetTop);
-
+        refCartButton(this.button);
         this.addToBagButtonClass(this.button.current.offsetTop);
       });
 

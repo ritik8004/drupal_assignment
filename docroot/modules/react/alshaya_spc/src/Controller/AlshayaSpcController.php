@@ -183,6 +183,7 @@ class AlshayaSpcController extends ControllerBase {
           'alshaya_spc' => [
             'max_cart_qty' => $cart_config->get('max_cart_qty'),
             'cart_storage_expiration' => $cart_config->get('cart_storage_expiration') ?? 15,
+            'display_cart_crosssell' => $cart_config->get('display_cart_crosssell') ?? TRUE,
             'lng' => AlshayaI18nLanguages::getLocale($langcode),
           ],
         ],
@@ -755,7 +756,7 @@ class AlshayaSpcController extends ControllerBase {
           $status[$key] = TRUE;
           $address_extension_attributes = $data[$key]['extension_attributes'] ?? [];
           $address_custom_attributes = $data[$key]['custom_attributes'] ?? [];
-          // @TODO: Check AlshayaAddressBookManager::validateAddress().
+          // @todo Check AlshayaAddressBookManager::validateAddress().
           // We are using '::validateAddress()' for addressbook validation.
           // We need to check if we can use same for checkout as well.
           // Currenlty we are not doing this because '::validateAddress()'
