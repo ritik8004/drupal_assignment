@@ -128,6 +128,12 @@ export default class FitCalculator extends React.Component {
     return true;
   }
 
+  openCartFitCalcLinkModal = () => {
+    const body = document.querySelector('body');
+    body.classList.add('sizeguide-modal-overlay', 'overlay-fit-calc-link-modal');
+    document.getElementById('fit-calc-link-modal').click();
+  };
+
   render() {
     const {
       errorMessage,
@@ -203,15 +209,17 @@ export default class FitCalculator extends React.Component {
                 )}
             </div>
             <div className="fit-calculator-size-conversion-chart">
+              <span className="fit-calc-link" onClick={(e) => this.openCartFitCalcLinkModal(e)}>
+                {Drupal.t('Size Conversion Chart')}
+              </span>
               <a
+                id="fit-calc-link-modal"
                 href={drupalSettings.fitCalculator.sizeConversionChartUrl}
-                className="size-guide-link use-ajax"
+                className="size-guide-link use-ajax fit-calc-link"
                 data-dialog-type="dialog"
                 data-dialog-options="{&quot;height&quot;:400,&quot;width&quot;:700}"
                 rel="nofollow"
-              >
-                {Drupal.t('Size Conversion Chart')}
-              </a>
+              />
             </div>
           </form>
         </div>
