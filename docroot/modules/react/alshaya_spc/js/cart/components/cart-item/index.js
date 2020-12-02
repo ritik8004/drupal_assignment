@@ -309,7 +309,8 @@ export default class CartItem extends React.Component {
                   || (itemErrorMsg !== undefined && isQtyLimitReached(itemErrorMsg) >= 0))
               }
               showAlert={
-                parseInt(maxSaleQty, 10) !== 0
+                !drupalSettings.hide_max_qty_limit_message
+                && parseInt(maxSaleQty, 10) !== 0
                 && parseInt(currentQtyLimit, 10) < parseInt(maxSaleQty, 10)
               }
               errMsg={itemErrorMsg}
