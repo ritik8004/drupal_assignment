@@ -333,6 +333,19 @@ function alshaya_bp_transac_update_8001() {
 }
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_bp_transac_update_dependencies() {
+  return [
+    'alshaya_bp_transac' => [
+      '8012' => [
+        'alshaya_acm' => '8018',
+      ],
+    ],
+  ];
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_bp_transac_install() {
