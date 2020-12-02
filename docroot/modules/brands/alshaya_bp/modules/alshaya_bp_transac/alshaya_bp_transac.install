@@ -12,6 +12,17 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Set hide_max_qty_limit_message => true to hide max qty limit on pdp/cart.
+ */
+function alshaya_bp_transac_update_8012() {
+  \Drupal::configFactory()->getEditable('alshaya_acm.settings')
+    ->set('hide_max_qty_limit_message', TRUE)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable sorting option for brand attribute using aloglia.
  */
 function alshaya_bp_transac_update_8011() {
