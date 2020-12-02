@@ -253,7 +253,9 @@ class CartController {
       $info = $this->drupal->getSessionCustomerInfo();
       if (!empty($info['customer_id'])) {
         $cart_id = $this->cart->createCart($info['customer_id']);
-        $this->cart->setCartId($cart_id);
+        if (!isset($cart_id['error'])) {
+          $this->cart->setCartId($cart_id);
+        }
       }
       else {
         // @todo Remove this "else" part and getAcmCartId() when we
