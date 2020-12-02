@@ -44,6 +44,10 @@ class AuraFormLinkCardOTPModal extends React.Component {
     closeLinkCardOTPModal();
   };
 
+  setChosenCountryCode = () => {
+    // @TODO: The mobile field component needs this.
+  };
+
   selectOption = (option) => {
     this.setState({
       linkCardOption: option,
@@ -120,6 +124,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
                 </ConditionalView>
                 <ConditionalView condition={linkCardOption === 'mobile'}>
                   <LinkCardOptionMobile
+                    setChosenCountryCode={this.setChosenCountryCode}
                     mobile={mobile}
                   />
                 </ConditionalView>
