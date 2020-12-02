@@ -97,19 +97,19 @@ class RedemptionHelper {
    *   Array of data/ error message.
    */
   public function prepareRedeemPointsData($data, $cart_id) {
-    $data = [];
+    $processed_data = [];
     if (!empty($data['action']) && $data['action'] === 'remove points') {
-      $data = [
+      $processed_data = [
         'redeemAuraPoints' => [
           'action' => 'remove points',
           'quote_id' => $cart_id ?? '',
         ],
       ];
-      return $data;
+      return $processed_data;
     }
 
     if (!empty($data['action']) && $data['action'] === 'set points') {
-      $data = [
+      $processed_data = [
         'redeemAuraPoints' => [
           'action' => 'set points',
           'quote_id' => $cart_id ?? '',
@@ -131,10 +131,10 @@ class RedemptionHelper {
         return $this->utility->getErrorResponse($message, Response::HTTP_NOT_FOUND);
       }
 
-      return $data;
+      return $processed_data;
     }
 
-    return $data;
+    return $processed_data;
   }
 
 }
