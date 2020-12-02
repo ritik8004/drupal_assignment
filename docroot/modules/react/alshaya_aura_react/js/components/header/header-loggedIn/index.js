@@ -6,7 +6,7 @@ import UserNamePoints from '../user-name-points';
 import {
   handleSignUp,
   handleNotYou,
-} from '../../../utilities/header_helper';
+} from '../../../utilities/cta_helper';
 import HeaderLoyaltyCta from '../header-loyalty-cta';
 import SignUpHeader from '../sign-up-header';
 import LoggedInLinked from '../loggedIn-linked';

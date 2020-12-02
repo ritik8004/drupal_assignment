@@ -266,7 +266,7 @@ class LoyaltyCustomerController {
     }
     catch (\Exception $e) {
       $this->logger->notice('Error while trying to do loyalty club sign up. Request Data: @data, Message: @message', [
-        '@data' => $request_content,
+        '@data' => json_encode($request_content),
         '@message' => $e->getMessage(),
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));

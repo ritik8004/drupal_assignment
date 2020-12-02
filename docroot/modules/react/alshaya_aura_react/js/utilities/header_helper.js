@@ -1,19 +1,9 @@
-import { getAPIData, postAPIData } from './api/fetchApiData';
+/*eslint-disable */
+import { getAPIData } from './api/fetchApiData';
 import {
   getAllAuraStatus,
-  getUserDetails,
 } from './helper';
 import dispatchCustomEvent from '../../../js/utilities/events';
-import {
-  setStorageInfo,
-  removeStorageInfo,
-} from '../../../js/utilities/storage';
-import { getAuraLocalStorageKey, getAuraDetailsDefaultState } from './aura_utils';
-import {
-  showFullScreenLoader,
-  removeFullScreenLoader,
-} from '../../../js/utilities/showRemoveFullScreenLoader';
-
 
 /**
  * Helper function to get customer details.
@@ -58,85 +48,6 @@ function getCustomerDetails(tier, loyaltyStatus) {
   }
 }
 
-/**
- * Helper function to handle signup from header.
- */
-function handleSignUp(auraUserDetails) {
-  const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
-  let auraUserData = {
-    signUpComplete: true,
-  };
-
-  if (getUserDetails().id) {
-    auraUserData.loyaltyStatus = auraStatus;
-  } else if (auraUserDetails) {
-    // For anonymous users, store aura data in local storage and update state.
-    auraUserData = {
-      signUpComplete: true,
-      loyaltyStatus: auraUserDetails.data.apc_link || 0,
-      points: auraUserDetails.data.apc_points || 0,
-      cardNumber: auraUserDetails.data.apc_identifier_number || '',
-      tier: auraUserDetails.data.tier_info || '',
-      email: auraUserDetails.data.email || '',
-      mobile: auraUserDetails.data.mobile || '',
-    };
-    setStorageInfo(auraUserData, getAuraLocalStorageKey());
-  }
-
-  dispatchCustomEvent('loyaltyStatusUpdated', { stateValues: auraUserData });
-}
-
-function updateUsersLoyaltyStatus(cardNumber, auraStatus, link) {
-  // API call to update user's loyalty status.
-  showFullScreenLoader();
-  let stateValues = {};
-  const apiUrl = 'post/loyalty-club/apc-status-update';
-  const data = {
-    uid: getUserDetails().id,
-    apcIdentifierId: cardNumber,
-    apcLinkStatus: auraStatus,
-    link,
-  };
-  const apiData = postAPIData(apiUrl, data);
-
-  if (apiData instanceof Promise) {
-    apiData.then((result) => {
-      if (result.data !== undefined && result.data.error === undefined) {
-        if (result.data.status) {
-          stateValues = {
-            ...getAuraDetailsDefaultState(),
-            loyaltyStatus: auraStatus,
-            signUpComplete: false,
-          };
-        }
-      }
-      dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
-      removeFullScreenLoader();
-    });
-  }
-}
-
-/**
- * Helper function to handle not you click from header.
- */
-function handleNotYou(cardNumber) {
-  const auraStatus = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
-
-  if (getUserDetails().id) {
-    updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
-  } else {
-    removeStorageInfo(getAuraLocalStorageKey());
-    const stateValues = {
-      ...getAuraDetailsDefaultState(),
-      loyaltyStatus: auraStatus,
-      signUpComplete: false,
-    };
-    dispatchCustomEvent('loyaltyStatusUpdated', { stateValues, clickedNotYou: true });
-  }
-}
-
 export {
   getCustomerDetails,
-  handleSignUp,
-  handleNotYou,
 };

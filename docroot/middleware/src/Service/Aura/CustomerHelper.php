@@ -8,7 +8,7 @@ use App\Service\Utility;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class CustomerHelper.
+ * Helper to prepare customer data and api calls.
  *
  * @package App\Service\Aura
  */
@@ -84,6 +84,8 @@ class CustomerHelper {
           'auraStatus' => $response['apc_link'] ?? '',
           'auraPoints' => $response['apc_points'] ?? 0,
           'phoneNumber' => $response['apc_phone_number'] ?? '',
+          'firstName' => $response['apc_first_name'] ?? '',
+          'lastName' => $response['apc_last_name'] ?? '',
         ];
       }
 

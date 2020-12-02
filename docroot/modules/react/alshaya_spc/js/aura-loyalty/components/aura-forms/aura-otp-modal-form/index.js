@@ -104,16 +104,23 @@ class AuraFormSignUpOTPModal extends React.Component {
 
           if (apiData instanceof Promise) {
             apiData.then((result) => {
-              if (result.data !== undefined && result.data.error === undefined) {
-                // Once we get a success response that OTP is sent, we update state,
-                // to show the otp fields.
-                if (result.data.status) {
+              if (result.data !== undefined) {
+                if (result.data.error === undefined) {
+                  // Once we get a success response that OTP is sent, we update state,
+                  // to show the otp fields.
+                  if (result.data.status) {
+                    this.setState({
+                      otpRequested: true,
+                    });
+                  }
+                } else if (result.data.error_code === 'already_registered') {
+                  showError('otp-aura-mobile-field-error', getStringMessage('form_error_mobile_already_registered'));
+                } else {
                   this.setState({
-                    otpRequested: true,
+                    messageType: 'error',
+                    messageContent: result.data.error_message,
                   });
                 }
-              } else if (result.data.error_code === 'already_registered') {
-                showError('otp-aura-mobile-field-error', getStringMessage('form_error_mobile_already_registered'));
               } else {
                 this.setState({
                   messageType: 'error',
