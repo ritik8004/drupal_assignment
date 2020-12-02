@@ -131,6 +131,7 @@ class AuraCheckoutRewards extends React.Component {
             price={price}
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
+            cardNumber={cardNumber}
           />
         </ConditionalView>
 
