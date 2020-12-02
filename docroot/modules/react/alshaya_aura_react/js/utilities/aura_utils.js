@@ -104,6 +104,71 @@ function getProcessedMobileCountryCode() {
   return processedCountryCodes;
 }
 
+/**
+ * Utility function to add inline loader.
+ */
+function addInlineLoader(selector) {
+  const element = document.querySelectorAll(selector);
+
+  if (element.length > 0) {
+    element.forEach((el) => {
+      el.classList.add('loading');
+    });
+  }
+}
+
+/**
+ * Utility function to hide inline loader.
+ */
+function removeInlineLoader(selector) {
+  const element = document.querySelectorAll(selector);
+
+  if (element.length > 0) {
+    element.forEach((el) => {
+      el.classList.remove('loading');
+    });
+  }
+}
+
+/**
+ * Utility function to show inline error.
+ */
+function showInlineError(selector, msg) {
+  const element = document.querySelectorAll(selector);
+
+  if (element.length > 0) {
+    element.forEach((el) => {
+      const e = el;
+      e.innerHTML = msg;
+      e.classList.add('error');
+    });
+  }
+}
+
+/**
+ * Utility function to hide inline error.
+ */
+function removeInlineError(selector) {
+  const element = document.querySelectorAll(selector);
+
+  if (element.length > 0) {
+    element.forEach((el) => {
+      const e = el;
+      e.innerHTML = '';
+      e.classList.remove('error');
+    });
+  }
+}
+
+/**
+ * Utility function to get not you label.
+ */
+function getNotYouLabel(notYouFailed) {
+  const label = (notYouFailed === true) ? Drupal.t('Try again') : Drupal.t('Not you?');
+
+  return label;
+}
+
 export {
   getElementValue,
   showError,
@@ -113,4 +178,9 @@ export {
   getPriceToPoint,
   getPointToPrice,
   getProcessedMobileCountryCode,
+  addInlineLoader,
+  removeInlineLoader,
+  showInlineError,
+  removeInlineError,
+  getNotYouLabel,
 };

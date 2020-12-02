@@ -11,6 +11,8 @@ class LoyaltyClub extends React.Component {
     this.state = {
       wait: true,
       ...getAuraDetailsDefaultState(),
+      notYouFailed: false,
+      linkCardFailed: false,
     };
   }
 
@@ -67,6 +69,8 @@ class LoyaltyClub extends React.Component {
       upgradeMsg,
       firstName,
       lastName,
+      notYouFailed,
+      linkCardFailed,
     } = this.state;
 
     return (
@@ -83,6 +87,8 @@ class LoyaltyClub extends React.Component {
           upgradeMsg={upgradeMsg}
           firstName={firstName}
           lastName={lastName}
+          notYouFailed={notYouFailed}
+          linkCardFailed={linkCardFailed}
           updateLoyaltyStatus={this.updateLoyaltyStatus}
         />
         <LoyaltyClubTabs loyaltyStatus={loyaltyStatus} />

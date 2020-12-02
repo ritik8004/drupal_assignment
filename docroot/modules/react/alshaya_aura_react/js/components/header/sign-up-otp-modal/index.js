@@ -57,7 +57,6 @@ class SignUpOtpModal extends React.Component {
     const {
       isOTPModalOpen,
       closeOTPModal,
-      handleSignUp,
     } = this.props;
 
     return (
@@ -86,7 +85,6 @@ class SignUpOtpModal extends React.Component {
             chosenCountryCode={chosenCountryCode}
             chosenUserMobile={chosenUserMobile}
             closeNewUserModal={() => this.closeNewUserModal()}
-            handleSignUp={handleSignUp}
           />
         </Popup>
       </>

@@ -161,11 +161,11 @@ class LoyaltyCustomerController {
     if ($updateDrupal && !empty($response_data)) {
       $updatedData = [];
 
-      if ((int) $status !== $response_data['auraStatus']) {
+      if ($response_data['auraStatus'] && (int) $status !== $response_data['auraStatus']) {
         $updatedData['apcLinkStatus'] = $response_data['auraStatus'];
       }
 
-      if ($tier !== $response_data['tier']) {
+      if ($response_data['tier'] && $tier !== $response_data['tier']) {
         $updatedData['tier'] = $response_data['tier'];
       }
 

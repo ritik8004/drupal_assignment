@@ -7,11 +7,14 @@ import dispatchCustomEvent from '../../../js/utilities/events';
 import {
   setStorageInfo,
 } from '../../../js/utilities/storage';
-import { getAuraLocalStorageKey, getAuraDetailsDefaultState } from './aura_utils';
 import {
-  showFullScreenLoader,
-  removeFullScreenLoader,
-} from '../../../js/utilities/showRemoveFullScreenLoader';
+  getAuraLocalStorageKey,
+  getAuraDetailsDefaultState,
+  addInlineLoader,
+  removeInlineLoader,
+  showInlineError,
+  removeInlineError,
+} from './aura_utils';
 
 /**
  * Helper function to handle signup from header.
@@ -71,7 +74,8 @@ function handleNotYou(cardNumber) {
     return;
   }
 
-  showFullScreenLoader();
+  removeInlineError('.error-placeholder');
+  addInlineLoader('.not-you-loader-placeholder');
   const apiData = updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
 
   if (apiData instanceof Promise) {
@@ -84,9 +88,14 @@ function handleNotYou(cardNumber) {
             signUpComplete: false,
           };
         }
+      } else {
+        stateValues = {
+          notYouFailed: true,
+        };
+        showInlineError('.error-placeholder', Drupal.t('Unexpected error occured.'));
       }
       dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
-      removeFullScreenLoader();
+      removeInlineLoader('.not-you-loader-placeholder');
     });
   }
 }
@@ -97,7 +106,8 @@ function handleNotYou(cardNumber) {
 function handleLinkYourCard(cardNumber) {
   let stateValues = {};
   const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
-  showFullScreenLoader();
+  removeInlineError('.error-placeholder');
+  addInlineLoader('.link-card-loader-placeholder');
   const apiData = updateUsersLoyaltyStatus(cardNumber, auraStatus, 'Y');
 
   if (apiData instanceof Promise) {
@@ -108,13 +118,17 @@ function handleLinkYourCard(cardNumber) {
             loyaltyStatus: auraStatus,
           };
         }
+      } else {
+        stateValues = {
+          linkCardFailed: true,
+        };
+        showInlineError('.error-placeholder', Drupal.t('Unexpected error occured.'));
       }
       dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
-      removeFullScreenLoader();
+      removeInlineLoader('.link-card-loader-placeholder');
     });
   }
 }
-
 
 export {
   handleLinkYourCard,

@@ -39,7 +39,6 @@ class SignUpHeader extends React.Component {
 
     const {
       isHeaderModalOpen,
-      handleSignUp,
       isNotExpandable,
     } = this.props;
 
@@ -80,7 +79,6 @@ class SignUpHeader extends React.Component {
         <SignUpOtpModal
           isOTPModalOpen={isOTPModalOpen}
           closeOTPModal={this.closeOTPModal}
-          handleSignUp={handleSignUp}
         />
       </>
     );
