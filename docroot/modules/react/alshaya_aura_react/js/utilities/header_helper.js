@@ -38,6 +38,8 @@ function getCustomerDetails(tier, loyaltyStatus) {
           expiringPoints: result.data.auraPointsToExpire || 0,
           expiryDate: result.data.auraPointsExpiryDate || '',
           pointsOnHold: result.data.auraOnHoldPoints || 0,
+          firstName: result.data.firstName || '',
+          lastName: result.data.lastName || '',
         };
 
         // If user's loyalty status is APC_LINKED_VERIFIED or

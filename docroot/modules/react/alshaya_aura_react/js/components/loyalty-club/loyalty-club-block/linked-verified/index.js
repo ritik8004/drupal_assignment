@@ -17,9 +17,11 @@ const AuraMyAccountVerifiedUser = (props) => {
     upgradeMsg,
     expiringPoints,
     expiryDate,
+    firstName,
+    lastName,
   } = props;
 
-  const profileInfo = getUserProfileInfo();
+  const profileInfo = getUserProfileInfo(firstName, lastName);
 
   return (
     <div className="aura-card-linked-verified-wrapper fadeInUp">

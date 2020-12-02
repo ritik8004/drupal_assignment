@@ -61,6 +61,8 @@ function getAuraDetailsDefaultState() {
     expiryDate: '',
     email: '',
     mobile: '',
+    firstName: '',
+    lastName: '',
   };
 
   return auraDetails;
