@@ -82,7 +82,8 @@
 }
 
 .aura-otp-form,
-.aura-new-user-form {
+.aura-new-user-form,
+.aura-guest-user-link-card-otp-form {
   @include breakpoint($only-mobile) {
     .aura-modal-form {
       height: calc(100vh - 3.5rem);

@@ -79,7 +79,7 @@
           flex-direction: row;
         }
 
-        @include breakpoint($tablet) {
+        @include breakpoint($only-mobile) {
           a {
             margin-#{$left}: 0.625rem;
           }
