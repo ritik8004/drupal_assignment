@@ -91,14 +91,14 @@ class RedemptionHelper {
   }
 
   /**
-   * Prepare request data based on action.
+   * Prepare data based on action for redeem points.
    *
    * @return array
-   *   Array of request data/ error message.
+   *   Array of data/ error message.
    */
-  public function prepareRedeemPointsRequestData($request_content, $cart_id) {
+  public function prepareRedeemPointsData($data, $cart_id) {
     $data = [];
-    if (!empty($request_content['action']) && $request_content['action'] === 'remove points') {
+    if (!empty($data['action']) && $data['action'] === 'remove points') {
       $data = [
         'redeemAuraPoints' => [
           'action' => 'remove points',
@@ -108,14 +108,14 @@ class RedemptionHelper {
       return $data;
     }
 
-    if (!empty($request_content['action']) && $request_content['action'] === 'set points') {
+    if (!empty($data['action']) && $data['action'] === 'set points') {
       $data = [
         'redeemAuraPoints' => [
           'action' => 'set points',
           'quote_id' => $cart_id ?? '',
-          'redeem_points' => $request_content['redeemPoints'] ?? '',
-          'converted_money_value' => $request_content['moneyValue'] ?? '',
-          'currencyCode' => $request_content['currencyCode'] ?? '',
+          'redeem_points' => $data['redeemPoints'] ?? '',
+          'converted_money_value' => $data['moneyValue'] ?? '',
+          'currencyCode' => $data['currencyCode'] ?? '',
           'payment_method' => 'aura_payment',
         ],
       ];

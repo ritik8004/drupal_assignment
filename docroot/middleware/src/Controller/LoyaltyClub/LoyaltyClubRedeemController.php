@@ -139,7 +139,7 @@ class LoyaltyClubRedeemController {
         return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
       }
 
-      $redeemPointsRequestData = $this->redemptionHelper->prepareRedeemPointsRequestData($request_content, $cart_id);
+      $redeemPointsRequestData = $this->redemptionHelper->prepareRedeemPointsData($request_content, $cart_id);
 
       if (empty($redeemPointsRequestData) || !empty($redeemPointsRequestData['error'])) {
         $this->logger->error('Error while trying to create redeem points request data. Request data: @request_data.', [
