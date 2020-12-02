@@ -87,8 +87,6 @@ class FreeGiftController {
     $data = json_decode($request_content['data'], TRUE);
     $sku = $data['sku'];
     $promo_code = $data['promo'];
-    $options = $data['configurable_values'] ?? [];
-    $variant = $data['variant'] ?? null;
     $langcode = $data['langcode'];
 
     if (empty($sku) || empty($promo_code) || empty($langcode)) {
@@ -98,45 +96,41 @@ class FreeGiftController {
         '@langcode' => $langcode,
       ]);
       $cart = $this->cart->getCart();
-      
-      $processed_cart_data = $this->cart->getProcessedCartData($cart, $langcode);
-      return new JsonResponse($processed_cart_data);
+    }
+    else {
+      // Apply promo code.
+      $cart = $this->cart->applyRemovePromo($promo_code, CartActions::CART_APPLY_COUPON);
+      // Condition to check if cart is empty.
+      if (empty($cart)) {
+        $this->logger->error('Cart is empty. Cart: @cart', [
+          '@cart' => json_encode($cart),
+        ]);
+      }
+      // Condition to check valid promo code.
+      else if (empty($cart['totals']['coupon_code'])) {
+        $this->logger->error('Invalid promo code. Cart: @cart, Promo: @promo_code', [
+          '@cart' => json_encode($cart),
+          '@promo_code' => $promo_code,
+        ]);
+      }
+      else {
+        $quantity = 1;
+        // Update cart with free gift.
+        $options = $data['configurable_values'] ?? [];
+        $variant = $data['variant'] ?? null;
+        $updated_cart = $this->cart->addUpdateRemoveItem($sku, $quantity, CartActions::CART_ADD_ITEM, $options, $variant);
+        if (empty($updated_cart)) {
+          $this->logger->error('Update cart failed. Cart: @cart', [
+            '@cart' => json_encode($cart),
+          ]);
+        }
+        else {
+          $cart = $updated_cart;
+        }
+      }
     }
 
-    // Apply promo code.
-    $cart = $this->cart->applyRemovePromo($promo_code, CartActions::CART_APPLY_COUPON);
-    // Condition to check if cart is empty.
-    if (empty($cart)) {
-      $this->logger->error('Cart is empty. Cart: @cart', [
-        '@cart' => json_encode($cart),
-      ]);
-
-      $processed_cart_data = $this->cart->getProcessedCartData($cart, $langcode);
-      return new JsonResponse($processed_cart_data);
-    }
-    // Condition to check valid promo code.
-    if (empty($cart['totals']['coupon_code'])) {
-      $this->logger->error('Invalid promo code. Cart: @cart, Promo: @promo_code', [
-        '@cart' => json_encode($cart),
-        '@promo_code' => $promo_code,
-      ]);
-      $processed_cart_data = $this->cart->getProcessedCartData($cart, $langcode);
-      return new JsonResponse($processed_cart_data);
-    }
-
-    $quantity = 1;
-    // Update cart with free gift.
-    $updated_cart = $this->cart->addUpdateRemoveItem($sku, $quantity, CartActions::CART_ADD_ITEM, $options, $variant);
-    if (empty($updated_cart)) {
-      $this->logger->error('Update cart failed. Cart: @cart', [
-        '@cart' => json_encode($cart),
-      ]);
-
-      $processed_cart_data = $this->cart->getProcessedCartData($cart, $langcode);
-      return new JsonResponse($processed_cart_data);
-    }
-    $processed_cart_data = $this->cart->getProcessedCartData($updated_cart, $langcode);
-
+    $processed_cart_data = $this->cart->getProcessedCartData($cart, $langcode);
     return new JsonResponse($processed_cart_data);
   }
 
