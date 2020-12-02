@@ -71,8 +71,8 @@ class SearchHelper {
       return $responseData;
     }
     catch (\Exception $e) {
-      $this->logger->notice('Error while trying to search APC user. Request Data: @data. Message: @message', [
-        '@data' => json_encode($request_content),
+      $this->logger->notice('Error while trying to search APC user. Endpoint: @endpoint. Message: @message', [
+        '@endpoint' => $endpoint,
         '@message' => $e->getMessage(),
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());

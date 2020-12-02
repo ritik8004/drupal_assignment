@@ -79,6 +79,10 @@ function _alshaya_aura_static_strings() {
       'value' => t('Error in sending OTP. Please try again.'),
     ],
     [
+      'key' => 'form_error_sign_up_failed_message',
+      'value' => t('Error in sign up. Please try again.'),
+    ],
+    [
       'key' => 'form_error_mobile_already_registered',
       'value' => t('Mobile Number is already registered.'),
     ],

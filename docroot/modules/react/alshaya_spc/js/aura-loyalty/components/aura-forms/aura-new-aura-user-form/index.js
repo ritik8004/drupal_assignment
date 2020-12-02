@@ -11,6 +11,7 @@ import {
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import AuraFormModalMessage from '../aura-form-modal-message';
+import { handleSignUp } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 
 class AuraFormNewAuraUserModal extends React.Component {
   constructor(props) {
@@ -112,22 +113,23 @@ class AuraFormNewAuraUserModal extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.data !== undefined && result.data.error === undefined) {
-          // Once we get a success response that quick enrollment is done, we close the modal.
-          if (result.data.status) {
-            const { handleSignUp } = this.props;
-            handleSignUp(result.data);
-            // Close the modals.
-            closeNewUserModal();
+        if (result.data !== undefined) {
+          if (result.data.error === undefined) {
+            // Once we get a success response that quick enrollment is done, we close the modal.
+            if (result.data.status) {
+              handleSignUp(result.data);
+              // Close the modals.
+              closeNewUserModal();
+            }
+          } else if (result.data.error_code === 'mobile_already_registered') {
+            showError('new-aura-user-aura-mobile-field-error', getStringMessage('form_error_mobile_already_registered'));
+          } else if (result.data.error_code === 'email_already_registered') {
+            showError('new-aura-user-email-error', getStringMessage('form_error_email_already_registered'));
           }
-        } else if (result.data.error_code === 'mobile_already_registered') {
-          showError('new-aura-user-aura-mobile-field-error', getStringMessage('form_error_mobile_already_registered'));
-        } else if (result.data.error_code === 'email_already_registered') {
-          showError('new-aura-user-email-error', getStringMessage('form_error_email_already_registered'));
         } else {
           this.setState({
             messageType: 'error',
-            messageContent: result.data.error_message,
+            messageContent: getStringMessage('form_error_sign_up_failed_message'),
           });
         }
         removeFullScreenLoader();
