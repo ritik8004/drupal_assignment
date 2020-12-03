@@ -199,7 +199,10 @@ export default class FitCalculator extends React.Component {
                 && (
                 <div className="success-message">
                   <span>{Drupal.t('Your size is ')}</span>
-                  <span className="result">{resultSize}</span>
+                  <span className="result">
+                    {resultSize}
+                    .
+                  </span>
                   <a
                     href={`${plpPage}--size-${resultSize.toLowerCase()}`}
                   >

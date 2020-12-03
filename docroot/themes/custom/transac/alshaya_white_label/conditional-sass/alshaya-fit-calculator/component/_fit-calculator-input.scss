@@ -52,30 +52,49 @@
 }
 
 // Type = Text.
-.fitCalc-type-textfield {
-  input[type=text] {
-    height: 3.125rem;
-    border: 1px solid $fit-calc-select-border;
-    font-size: 1rem;
-    width: 100%;
-    padding: 1.25rem 0.625rem 0.625rem;
-    color: $fit-calc-form-input;
-  }
+#fit-calculator-container {
+  .fitCalc-type-textfield {
+    input[type=text] {
+      height: 3.125rem;
+      border: 1px solid $fit-calc-select-border;
+      font-size: 1rem;
+      width: 100%;
+      padding: 1.25rem 0.625rem 0.625rem;
+      color: $fit-calc-form-input;
+      background-color: $fit-calc-input-bg;
+    }
 
-  label {
-    @include fit-calc-placeholder-label;
+    label {
+      @include fit-calc-placeholder-label;
 
-    text-transform: capitalize;
-  }
+      text-transform: capitalize;
+    }
 
-  input:focus:not(.focus) {
-    border: 1px solid $fit-calc-form-input;
-  }
+    input:focus:not(.focus):not(.empty) {
+      border: 1px solid $fit-calc-form-input;
+    }
 
-  input:focus,
-  input.focus {
-    & ~ label {
-      @include fit-calc-placeholder-active;
+    input:focus,
+    input.focus {
+      & ~ label {
+        @include fit-calc-placeholder-active;
+      }
+    }
+
+    input.empty,
+    input.empty:focus {
+      border-color: $fit-calc-empty-input;
+      color: $fit-calc-empty-input;
+
+      label {
+        color: $fit-calc-empty-input;
+      }
+    }
+
+    input.empty {
+      & ~ label {
+        color: $fit-calc-empty-input;
+      }
     }
   }
 }

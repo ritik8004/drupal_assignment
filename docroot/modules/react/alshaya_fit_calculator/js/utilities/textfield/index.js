@@ -20,7 +20,6 @@ const TextField = ({ name, label, focusClass }) => {
         name={name}
         className={focusClass}
       />
-      <div className="c-input__bar" />
       <label>{label}</label>
     </div>
   );
