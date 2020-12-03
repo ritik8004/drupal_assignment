@@ -86,7 +86,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
   public function blockSubmit($form, FormStateInterface $form_state) {
     parent::blockSubmit($form, $form_state);
     $values = $form_state->getValues();
-    $this->configuration['reference_quiz_node_id'] = $values['reference_quiz_node_id'][0]["target_id"];
+    $this->configuration['reference_quiz_node_id'] = $values['reference_quiz_node_id'];
   }
 
   /**
