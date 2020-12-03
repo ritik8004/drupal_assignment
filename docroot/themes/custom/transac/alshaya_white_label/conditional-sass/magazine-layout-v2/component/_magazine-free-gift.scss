@@ -17,4 +17,16 @@
       color: $magv2-free-gift-modal-item-code;
     }
   }
+
+  &.free-gifts-modal-overlay {
+    .ui-dialog {
+      #drupal-modal {
+        .content__sidebar {
+          @include breakpoint($only-mobile) {
+            z-index: 3;
+          }
+        }
+      }
+    }
+  }
 }
