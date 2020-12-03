@@ -75,7 +75,7 @@ function handleNotYou(cardNumber) {
   }
 
   removeInlineError('.error-placeholder');
-  addInlineLoader('.not-you-loader-placeholder');
+  addInlineLoader('.not-you-wrapper');
   const apiData = updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
 
   if (apiData instanceof Promise) {
@@ -95,7 +95,7 @@ function handleNotYou(cardNumber) {
         showInlineError('.error-placeholder', Drupal.t('Unexpected error occured.'));
       }
       dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
-      removeInlineLoader('.not-you-loader-placeholder');
+      removeInlineLoader('.not-you-wrapper');
     });
   }
 }
@@ -107,7 +107,7 @@ function handleLinkYourCard(cardNumber) {
   let stateValues = {};
   const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
   removeInlineError('.error-placeholder');
-  addInlineLoader('.link-card-loader-placeholder');
+  addInlineLoader('.link-card-wrapper');
   const apiData = updateUsersLoyaltyStatus(cardNumber, auraStatus, 'Y');
 
   if (apiData instanceof Promise) {
@@ -125,7 +125,7 @@ function handleLinkYourCard(cardNumber) {
         showInlineError('.error-placeholder', Drupal.t('Unexpected error occured.'));
       }
       dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
-      removeInlineLoader('.link-card-loader-placeholder');
+      removeInlineLoader('.link-card-wrapper');
     });
   }
 }

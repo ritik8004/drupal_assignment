@@ -30,3 +30,59 @@
     min-height: 3rem;
   }
 }
+
+.not-you-wrapper {
+  .error-placeholder:not(:empty) {
+    color: $aura-my-account-error-text;
+    font-size: 0.875rem;
+    font-family: $aura-regular;
+    background: $aura-my-account-error-bg;
+    border-radius: 0.125rem;
+    padding: 0.125rem 0.5rem;
+
+    @include breakpoint($desktop) {
+      margin-#{$left}: 1.875rem;
+    }
+
+    @include breakpoint($upto-desktop) {
+      margin-top: 1rem;
+
+      + .not-you {
+        margin-top: 1rem !important;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.link-card-wrapper,
+.not-you-wrapper {
+  &.loading {
+    position: relative;
+
+    > .link-your-card,
+    > .not-you {
+      visibility: hidden;
+    }
+
+    .link-card-loader-placeholder,
+    .not-you-loader-placeholder {
+      color: transparent;
+      background: transparent url(#{$base_theme_loader_img_directory_path}) center center no-repeat;
+      background-size: contain;
+      // Prevent clicks and selection.
+      pointer-events: none;
+      user-select: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      #{$left}: 50%;
+
+      html[lang=ar] & {
+        transform: translateY(-50%) translateX(50%);
+      }
+    }
+  }
+}

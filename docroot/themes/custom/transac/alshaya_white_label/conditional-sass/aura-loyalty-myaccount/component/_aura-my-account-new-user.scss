@@ -55,6 +55,10 @@
 
   &.old-card-found {
     padding: 1.875rem 2.5rem;
+
+    @include breakpoint($tablet) {
+      padding: 1.875rem 1rem 1.875rem 2.5rem;
+    }
   }
 
   &.old-card-found .aura-logo {
