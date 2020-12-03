@@ -37,6 +37,11 @@ $conductors = [
     'hmac_secret' => 'ZDk0ZWZkZWItOTI1ZC00',
     'site_id' => 326,
   ],
+  'mckw_training_dev2' => [
+    'hmac_id' => '1ac051388031460d87f37a8fe468adab',
+    'hmac_secret' => 'MzMxZGI2ZGEtMmUwYS00',
+    'site_id' => 336,
+  ],
   'mckw_uat' => [
     'hmac_id' => '47f687a22e044b6ea273411e0af86d26',
     'hmac_secret' => 'NTZhY2Y4MDktN2NjNi00',
@@ -67,6 +72,11 @@ $conductors = [
     'hmac_id' => '1adc0d83a22c403fbc88ccd70f0fd49a',
     'hmac_secret' => 'ZTgyYzgyNjgtMTA2OC00',
     'site_id' => 327,
+  ],
+  'mcsa_training_dev2' => [
+    'hmac_id' => 'c00010d08dc0461ebfd26ebc13ff11ea',
+    'hmac_secret' => 'OTlhMDZiYTQtYjZiMS00',
+    'site_id' => 337,
   ],
   'mcsa_qa' => [
     'hmac_id' => '57ec2ca3b0d54828a264ab529b7fab39',
@@ -108,6 +118,11 @@ $conductors = [
     'hmac_id' => '8a3e004cd7cb4faabf62f732c4d1af26',
     'hmac_secret' => 'ZTEwMDM3OTctM2M5Ni00',
     'site_id' => 328,
+  ],
+  'mcae_training_dev2' => [
+    'hmac_id' => '06a406bdf7004c39b678ca7fbbbda29b',
+    'hmac_secret' => 'ZmIwMzI0MDMtZGY4OC00',
+    'site_id' => 338,
   ],
   'mcae_uat' => [
     'hmac_id' => '843bb58e8fff4c37bdfa17675497c80e',
@@ -750,20 +765,40 @@ $conductors = [
     'hmac_secret' => 'NTlmNDJlNTQtMmZiOS00',
     'site_id' => 298,
   ],
+  'aeokw_training_dev2' => [
+    'hmac_id' => '19ca57995e874f5ca12d4c7d2903b146',
+    'hmac_secret' => 'OTk1MDI2NWEtNmEzMC00',
+    'site_id' => 339,
+  ],
   'aeosa_dev2' => [
     'hmac_id' => '2ecf6e3ec6584060a042ae52c473ad75',
     'hmac_secret' => 'NTJiNGQxNGUtNjU4Yi00',
     'site_id' => 299,
+  ],
+  'aeosa_training_dev2' => [
+    'hmac_id' => '3a70375559eb421cbe12e432ae400f39',
+    'hmac_secret' => 'N2Y5Yjk5NmUtM2Y4Zi00',
+    'site_id' => 340,
   ],
   'aeoae_dev2' => [
     'hmac_id' => 'ead40d01c41f40beb52d8a7f76d516f3',
     'hmac_secret' => 'ODNiY2UyZTAtZDNiYy00',
     'site_id' => 300,
   ],
+  'aeoae_training_dev2' => [
+    'hmac_id' => '0b09f76c1bad4589a2c7d4ab5cf5132f',
+    'hmac_secret' => 'MDdjZjI5OTUtYTgwZC00',
+    'site_id' => 341,
+  ],
   'aeoeg_dev2' => [
     'hmac_id' => '2c884817dc954e7194165a06f54144ae',
     'hmac_secret' => 'YWY2MDBmNjEtZGE2OS00',
     'site_id' => 301,
+  ],
+  'aeoeg_training_dev2' => [
+    'hmac_id' => 'cc9a92e6ca6d43fa9e9bf5dc4dd1563d',
+    'hmac_secret' => 'YTNkZTc0Y2UtNDVmNS00',
+    'site_id' => 342,
   ],
   'aeokw_qa' => [
     'hmac_id' => 'e6c4af7406bb4694a0caa108409617d9',
