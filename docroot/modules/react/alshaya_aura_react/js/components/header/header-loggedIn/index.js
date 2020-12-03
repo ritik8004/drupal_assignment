@@ -3,10 +3,6 @@ import {
   getAllAuraStatus,
 } from '../../../utilities/helper';
 import UserNamePoints from '../user-name-points';
-import {
-  handleSignUp,
-  handleNotYou,
-} from '../../../utilities/cta_helper';
 import HeaderLoyaltyCta from '../header-loyalty-cta';
 import SignUpHeader from '../sign-up-header';
 import LoggedInLinked from '../loggedIn-linked';
@@ -24,6 +20,7 @@ const HeaderLoggedIn = (props) => {
     isNotExpandable,
     isHeaderShop,
     signUpComplete,
+    notYouFailed,
   } = props;
 
   if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NO_DATA
@@ -40,7 +37,6 @@ const HeaderLoggedIn = (props) => {
           openHeaderModal={openHeaderModal}
         />
         <SignUpHeader
-          handleSignUp={handleSignUp}
           isHeaderModalOpen={isHeaderModalOpen}
           openHeaderModal={openHeaderModal}
         />
@@ -85,9 +81,9 @@ const HeaderLoggedIn = (props) => {
         />
         <SignUpCompleteHeader
           isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
-          handleNotYou={() => handleNotYou(cardNumber)}
           cardNumber={cardNumber}
           noRegisterLinks
+          notYouFailed={notYouFailed}
         />
       </>
     );

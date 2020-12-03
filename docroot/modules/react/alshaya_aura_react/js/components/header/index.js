@@ -99,6 +99,7 @@ class Header extends React.Component {
       points,
       loyaltyStatus,
       clickedNotYou,
+      notYouFailed,
     } = this.state;
 
     const {
@@ -132,6 +133,7 @@ class Header extends React.Component {
           isNotExpandable={isNotExpandable}
           isHeaderShop={isHeaderShop}
           signUpComplete={signUpComplete}
+          notYouFailed={notYouFailed}
         />
       );
     }
@@ -147,6 +149,7 @@ class Header extends React.Component {
         isNotExpandable={isNotExpandable}
         signUpComplete={signUpComplete}
         clickedNotYou={clickedNotYou}
+        notYouFailed={notYouFailed}
       />
     );
   }

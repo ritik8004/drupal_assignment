@@ -20,6 +20,8 @@ const LoyaltyClubBlock = (props) => {
     upgradeMsg,
     firstName,
     lastName,
+    notYouFailed,
+    linkCardFailed,
   } = props;
 
   if (wait) {
@@ -45,6 +47,8 @@ const LoyaltyClubBlock = (props) => {
       return (
         <AuraMyAccountOldCardFound
           cardNumber={cardNumber}
+          notYouFailed={notYouFailed}
+          linkCardFailed={linkCardFailed}
         />
       );
     }

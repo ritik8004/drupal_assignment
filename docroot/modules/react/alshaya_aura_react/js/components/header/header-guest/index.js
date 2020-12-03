@@ -1,8 +1,4 @@
 import React from 'react';
-import {
-  handleSignUp,
-  handleNotYou,
-} from '../../../utilities/cta_helper';
 import HeaderLoyaltyCta from '../header-loyalty-cta';
 import SignUpHeader from '../sign-up-header';
 import SignUpCompleteHeader from '../signup-complete-header';
@@ -19,6 +15,7 @@ const HeaderGuest = (props) => {
     openHeaderModal,
     isNotExpandable,
     clickedNotYou,
+    notYouFailed,
   } = props;
 
   if (isMobileTab === true) {
@@ -38,10 +35,10 @@ const HeaderGuest = (props) => {
           isNotExpandable={!isDesktop && signUpComplete ? true : isNotExpandable}
         />
         <SignUpCompleteHeader
-          handleNotYou={() => handleNotYou(cardNumber)}
           isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
           cardNumber={cardNumber}
           noRegisterLinks={!isDesktop}
+          notYouFailed={notYouFailed}
         />
       </>
     );
@@ -56,7 +53,6 @@ const HeaderGuest = (props) => {
         isNotExpandable={!isDesktop && signUpComplete ? true : isNotExpandable}
       />
       <SignUpHeader
-        handleSignUp={handleSignUp}
         isHeaderModalOpen={!isDesktop && signUpComplete ? true : isHeaderModalOpen}
         openHeaderModal={openHeaderModal}
         isNotExpandable={clickedNotYou === true ? false : isNotExpandable}
