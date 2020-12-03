@@ -79,4 +79,53 @@ class SearchHelper {
     }
   }
 
+  /**
+   * Search based on type of input to get user details.
+   *
+   * @return array
+   *   Return API response/error.
+   */
+  public function searchUserDetails($input) {
+    if ($input['type'] === 'email') {
+      if (empty($input['value']) || !filter_var($input['value'], FILTER_VALIDATE_EMAIL)) {
+        $this->logger->error('Error while trying search user details. Email is missing/invalid. Data: @data', [
+          '@data' => json_encode($input),
+        ]);
+        return $this->utility->getErrorResponse('INVALID_EMAIL', 500);
+      }
+      // Call search api to get mobile number to send otp.
+      $search_response = $this->search('email', $input['value']);
+
+      return $search_response;
+    }
+
+    if ($input['type'] === 'cardNumber') {
+      if (empty($input['value']) || !preg_match('/^\d+$/', $input['value'])) {
+        $this->logger->error('Error while trying search user details. Card number is missing/invalid. Data: @data', [
+          '@data' => json_encode($input),
+        ]);
+        return $this->utility->getErrorResponse('INVALID_CARDNUMBER', 500);
+      }
+      // Call search api to get mobile number to send otp.
+      $search_response = $this->search('apcNumber', $input['value']);
+
+      return $search_response;
+    }
+
+    if ($input['type'] === 'mobile') {
+      if (empty($input['value']) || !preg_match('/^\d+$/', $input['value'])) {
+        $this->logger->error('Error while trying search user details. Card number is missing/invalid. Data: @data', [
+          '@data' => json_encode($input),
+        ]);
+        return $this->utility->getErrorResponse('INVALID_MOBILE_ERROR', 500);
+      }
+      // Call search api to verify mobile number to send otp.
+      $search_response = $this->search('phone', $input['value']);
+
+      return $search_response;
+    }
+
+    return [];
+  }
+
 }

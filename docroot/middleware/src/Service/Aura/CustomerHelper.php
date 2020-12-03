@@ -6,6 +6,7 @@ use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Helper to prepare customer data and api calls.
@@ -161,6 +162,44 @@ class CustomerHelper {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Prepare data for aura user status update.
+   *
+   * @return array
+   *   Array of data/ error message.
+   */
+  public function prepareAuraUserStatusUpdateData($data) {
+    $processed_data = [];
+
+    if (empty($data['uid']) || empty($data['apcIdentifierId']) || empty($data['link'])) {
+      $this->logger->error('Error while trying to prepare data for updating user AURA Status. User Id, AURA Card number and Link value is required. Data: @request_data', [
+        '@request_data' => json_encode($data),
+      ]);
+      return $this->utility->getErrorResponse('User Id, AURA Card number and Link value is required.', Response::HTTP_NOT_FOUND);
+    }
+
+    $processed_data = [
+      'statusUpdate' => [
+        'apcIdentifierId' => $data['apcIdentifierId'],
+        'link' => $data['link'],
+      ],
+    ];
+
+    if (!empty($data['type']) && $data['type'] === 'withOtp') {
+      if (empty($data['otp']) || empty($data['phoneNumber'])) {
+        $this->logger->error('Error while trying to prepare data for updating user AURA Status. OTP and mobile number is required. Data: @request_data', [
+          '@request_data' => json_encode($data),
+        ]);
+        return $this->utility->getErrorResponse('OTP and mobile number is required.', Response::HTTP_NOT_FOUND);
+      }
+
+      $processed_data['statusUpdate']['otp'] = $data['otp'];
+      $processed_data['statusUpdate']['phoneNumber'] = $data['mobile'];
+    }
+
+    return $processed_data;
   }
 
 }

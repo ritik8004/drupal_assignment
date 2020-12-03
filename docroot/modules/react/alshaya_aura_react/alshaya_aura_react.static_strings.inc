@@ -98,5 +98,9 @@ function _alshaya_aura_static_strings() {
       'key' => 'form_error_empty_points',
       'value' => t('Please enter points.'),
     ],
+    [
+      'key' => 'form_error_mobile_not_found',
+      'value' => t('Mobile number not found to send OTP.'),
+    ],
   ];
 }

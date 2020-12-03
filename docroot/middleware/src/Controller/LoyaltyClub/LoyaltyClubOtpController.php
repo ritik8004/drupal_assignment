@@ -144,4 +144,42 @@ class LoyaltyClubOtpController {
     }
   }
 
+  /**
+   * Send Link card OTP.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return API response status.
+   */
+  public function sendLinkCardOtp(Request $request) {
+    $response_data = [];
+    $request_content = json_decode($request->getContent(), TRUE);
+
+    if (!empty($request_content['type'])) {
+      $search_response = $this->auraSearchHelper->searchUserDetails($request_content);
+
+      if (!empty($search_response['error'])) {
+        $this->logger->error('Error while trying to search mobile number to send link card OTP. Request Data: @data', [
+          '@data' => json_encode($request_content),
+        ]);
+        return new JsonResponse($search_response);
+      }
+
+      if (empty($search_response['data']['mobile'])) {
+        $this->logger->error('Error while trying to send link card OTP. Mobile number not found. Request Data: @data', [
+          '@data' => json_encode($request_content),
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('form_error_mobile_not_found', Response::HTTP_NOT_FOUND));
+      }
+
+      $response_data = $this->auraOtpHelper->sendOtp($search_response['data']['mobile']);
+
+      if (!empty($response_data['status'])) {
+        $response_data['mobile'] = $search_response['data']['mobile'];
+        $response_data['cardNumber'] = $search_response['data']['apc_identifier_number'];
+      }
+    }
+
+    return new JsonResponse($response_data);
+  }
+
 }

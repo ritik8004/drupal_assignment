@@ -11,6 +11,24 @@ import LinkCardOptionCard
 import LinkCardOptionMobile
   from '../aura-link-card-textbox/components/link-card-option-mobile';
 import TextField from '../../../../utilities/textfield';
+import {
+  getElementValueByType,
+  validateElementValueByType,
+  getInlineErrorSelector,
+  validateMobile,
+  resetInputElement,
+} from '../../utilities/link_card_otp_helper';
+import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
+import {
+  removeFullScreenLoader,
+  showFullScreenLoader,
+} from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import {
+  showError,
+  removeError,
+  getElementValue,
+} from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { handleManualLinkYourCard } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 
 class AuraFormLinkCardOTPModal extends React.Component {
   constructor(props) {
@@ -26,31 +44,125 @@ class AuraFormLinkCardOTPModal extends React.Component {
     };
   }
 
-  // Send OTP to the user.
-  sendOtp = () => {
-    // @todo: send otp.
+  componentDidMount() {
+    const { closeLinkCardOTPModal } = this.props;
+    document.addEventListener('loyaltyStatusUpdated', closeLinkCardOTPModal, false);
+  }
+
+  processLinkCardSendOtp = () => {
+    this.resetModalMessages();
+    const { linkCardOption } = this.state;
+    const { chosenCountryCode } = this.props;
+    const selectedElementValue = getElementValueByType(linkCardOption);
+    const elementDetails = {
+      type: linkCardOption,
+      value: selectedElementValue,
+    };
+
+    const hasError = validateElementValueByType(elementDetails);
+
+    if (hasError === true) {
+      return;
+    }
+
+    if (linkCardOption !== 'mobile') {
+      this.setState({
+        [linkCardOption]: selectedElementValue,
+      });
+
+      this.sendOtp({ type: linkCardOption, value: selectedElementValue });
+      return;
+    }
+
+    const data = {
+      mobile: selectedElementValue,
+      chosenCountryCode,
+    };
+    const validationRequest = validateMobile(linkCardOption, data);
+
+    if (validationRequest instanceof Promise) {
+      validationRequest.then((valid) => {
+        if (valid === false) {
+          return;
+        }
+        removeError(getInlineErrorSelector(linkCardOption));
+        this.setState({
+          [linkCardOption]: chosenCountryCode + selectedElementValue,
+        });
+
+        this.sendOtp({ type: linkCardOption, value: chosenCountryCode + selectedElementValue });
+      });
+    }
+  };
+
+  resetModalMessages = () => {
+    // Reset/Remove if any message is displayed.
     this.setState({
-      otpRequested: true,
+      messageType: null,
+      messageContent: null,
     });
   };
 
-  verifyOtp = () => {
-    const {
-      closeLinkCardOTPModal,
-    } = this.props;
+  // Send OTP to the user.
+  sendOtp = (data) => {
+    const { linkCardOption } = this.state;
+    removeError(getInlineErrorSelector(linkCardOption));
+    resetInputElement('otp');
+    const apiUrl = 'post/loyalty-club/send-link-card-otp';
+    const apiData = postAPIData(apiUrl, data);
+    showFullScreenLoader();
 
-    // @todo: verify otp and link card.
-    // Close Modal.
-    closeLinkCardOTPModal();
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.data !== undefined) {
+          if (result.data.error === undefined) {
+            // Once we get a success response that OTP is sent, we update state,
+            // to show the otp fields.
+            if (result.data.status) {
+              this.setState({
+                otpRequested: true,
+                mobile: result.data.mobile || null,
+                cardNumber: result.data.cardNumber || null,
+              });
+              document.querySelector('.aura-form-items-link-card-options').classList.add('disabled');
+            }
+          } else {
+            showError(getInlineErrorSelector(data.type), result.data.error_message);
+          }
+        } else {
+          this.setState({
+            messageType: 'error',
+            messageContent: getStringMessage('form_error_send_otp_failed_message'),
+          });
+        }
+        removeFullScreenLoader();
+      });
+    }
   };
 
-  setChosenCountryCode = () => {
-    // @TODO: The mobile field component needs this.
+  verifyOtpAndLink = () => {
+    this.resetModalMessages();
+    const { mobile, cardNumber } = this.state;
+    const otp = getElementValue('otp');
+
+    if (otp.length === 0) {
+      showError('otp-error', getStringMessage('form_error_otp'));
+      return;
+    }
+
+    removeError('otp-error');
+    handleManualLinkYourCard(cardNumber, mobile, otp);
   };
 
   selectOption = (option) => {
+    // Reset input elements.
+    resetInputElement();
+
     this.setState({
       linkCardOption: option,
+      cardNumber: null,
+      email: null,
+      mobile: null,
     });
   };
 
@@ -74,6 +186,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
   render() {
     const {
       closeLinkCardOTPModal,
+      setChosenCountryCode,
     } = this.props;
 
     const {
@@ -124,7 +237,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
                 </ConditionalView>
                 <ConditionalView condition={linkCardOption === 'mobile'}>
                   <LinkCardOptionMobile
-                    setChosenCountryCode={this.setChosenCountryCode}
+                    setChosenCountryCode={setChosenCountryCode}
                     mobile={mobile}
                   />
                 </ConditionalView>
@@ -148,19 +261,19 @@ class AuraFormLinkCardOTPModal extends React.Component {
               <ConditionalView condition={otpRequested === true}>
                 <span
                   className="resend-otp"
-                  onClick={() => this.sendOtp()}
+                  onClick={() => this.processLinkCardSendOtp()}
                 >
                   {getStringMessage('resend_code')}
                 </span>
               </ConditionalView>
             </div>
             <ConditionalView condition={otpRequested === false}>
-              <div className="aura-modal-form-submit" onClick={() => this.sendOtp()}>
+              <div className="aura-modal-form-submit" onClick={() => this.processLinkCardSendOtp()}>
                 {submitButtonText}
               </div>
             </ConditionalView>
             <ConditionalView condition={otpRequested === true}>
-              <div className="aura-modal-form-submit" onClick={() => this.verifyOtp()}>
+              <div className="aura-modal-form-submit" onClick={() => this.verifyOtpAndLink()}>
                 {submitButtonText}
               </div>
             </ConditionalView>

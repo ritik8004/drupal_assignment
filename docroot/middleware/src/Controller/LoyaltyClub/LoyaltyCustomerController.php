@@ -189,21 +189,21 @@ class LoyaltyCustomerController {
 
     if (empty($request_content['firstname']) || empty($request_content['lastname'])) {
       $this->logger->error('Error while trying to do loyalty club sign up. First name and last name is required. Data: @data', [
-        '@data' => $request_content,
+        '@data' => json_encode($request_content),
       ]);
       return new JsonResponse($this->utility->getErrorResponse('INVALID_NAME_ERROR', 500));
     }
 
     if (empty($request_content['email']) || !filter_var($request_content['email'], FILTER_VALIDATE_EMAIL)) {
       $this->logger->error('Error while trying to do loyalty club sign up. Email is missing/invalid. Data: @data', [
-        '@data' => $request_content,
+        '@data' => json_encode($request_content),
       ]);
       return new JsonResponse($this->utility->getErrorResponse('INVALID_EMAIL', 500));
     }
 
     if (empty($request_content['mobile']) || !preg_match('/^\+[0-9]+$/', $request_content['mobile'])) {
       $this->logger->error('Error while trying to do loyalty club sign up. Mobile number is missing/invalid. Data: @data', [
-        '@data' => $request_content,
+        '@data' => json_encode($request_content),
       ]);
       return new JsonResponse($this->utility->getErrorResponse('INVALID_MOBILE_ERROR', 500));
     }
