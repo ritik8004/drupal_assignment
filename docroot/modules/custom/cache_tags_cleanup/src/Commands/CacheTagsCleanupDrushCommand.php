@@ -72,6 +72,12 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
     $verbose = $options['verbose'] ?? FALSE;
     // Getting all entity types.
     $entity_types = array_keys($this->entityManager->getDefinitions());
+    $batch = [
+      'operations' => [],
+      'init_message' => dt('Processing all cachetags for which entities are deleted.'),
+      'progress_message' => dt('Completed @current step of @total.'),
+      'error_message' => dt('Failed to check for cachetags data.'),
+    ];
     foreach ($entity_types as $entity_type) {
       $count = 0;
       $cache_tags = [];
@@ -86,47 +92,65 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
       if (!empty($cache_tags)) {
         $chunk_size = (int) $options['chunk_size'];
         $cache_tags_chunks = array_chunk($cache_tags, $chunk_size);
+
+        $chunk_count = 1;
         foreach ($cache_tags_chunks as $chunk) {
-          foreach ($chunk as $cache_tag) {
-            $split = explode(":", $cache_tag);
-            $id = $split[1];
-            if (is_numeric($id)) {
-              $type = $split[0];
-              $entitystorage = $this->entityManager->getStorage($type);
-              $entity = $entitystorage->load($id);
-              if (!isset($entity)) {
-                $count++;
-                try {
-                  // Delete obsolete cachetags.
-                  $query = $query = $this->connection->delete('cachetags');
-                  $query->condition('tag', $cache_tag, '=');
-                  $query->execute();
-                  if ($verbose) {
-                    $this->logger->notice(dt('Cachetag entry deleted for entity @id and type @type.', [
-                      '@id' => $id,
-                      '@type' => $type,
-                    ]));
-                  }
-                }
-                catch (\Exception $e) {
-                  $this->logger->error('Exception while deleting data from cache_tags table. Message: @message.', [
-                    '@message' => $e->getMessage(),
-                  ]);
-                }
-              }
-            }
-          }
-        }
-        if ($count > 0) {
-          $this->logger->notice(dt('Cache tags clean up completed for all entities of type @type. Total count:@count', [
-            '@type' => $entity_type,
-            '@count' => $count,
-          ]));
+          $batch['operations'][] = [
+            [__CLASS__, 'deleteCacheTagsforDeletedEntities'],
+            [$chunk, $entity_type, $chunk_count, $verbose],
+          ];
+          $chunk_count++;
         }
       }
     }
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
     if ($count == 0) {
       $this->logger->notice('Cache tags table does not have any entries anymore for deleted entities.');
+    }
+  }
+
+  /**
+   * Batch callback for deleteCacheTagsforDeletedEntities.
+   *
+   * @param array $chunk
+   *   Cachetags entities to process.
+   * @param string $verbose
+   *   Verbose adds details to command execution.
+   */
+  public static function deleteCacheTagsforDeletedEntities(array $chunk, $verbose) {
+    $entity_manager = \Drupal::entityManager();
+    $count = 0;
+    foreach ($chunk as $cache_tag) {
+      $split = explode(":", $cache_tag);
+      $id = $split[1];
+      if (is_numeric($id)) {
+        $type = $split[0];
+        $entitystorage = $entity_manager->getStorage($type);
+        $entity = $entitystorage->load($id);
+        if (!isset($entity)) {
+          $count++;
+          try {
+            // Delete obsolete cachetags.
+            $query = $query = \Drupal::database()->delete('cachetags');
+            $query->condition('tag', $cache_tag, '=');
+            $query->execute();
+            if ($verbose) {
+              \Drupal::logger('cache_tags_cleanup')->notice(dt('Cachetag entry deleted for entity @id and type @type.', [
+                '@id' => $id,
+                '@type' => $type,
+              ]));
+            }
+          }
+          catch (\Exception $e) {
+            \Drupal::logger('cache_tags_cleanup')->error('Exception while deleting data from cache_tags table. Message: @message.', [
+              '@message' => $e->getMessage(),
+            ]);
+          }
+        }
+      }
     }
   }
 
