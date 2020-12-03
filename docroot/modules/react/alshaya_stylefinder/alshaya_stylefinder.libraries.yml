@@ -1,0 +1,5 @@
+alshaya_stylefinder:
+  js:
+    dist/stylefinder.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

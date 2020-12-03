@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.quiz.field_actions
+    - field.field.node.quiz.field_disclaimer
+    - field.field.node.quiz.field_instruction
+    - field.field.node.quiz.field_quiz_question
+    - field.field.node.quiz.field_quiz_type
+    - field.field.node.quiz.field_references
+    - field.field.node.quiz.field_result
+    - node.type.quiz
+  module:
+    - user
+id: node.quiz.teaser
+targetEntityType: node
+bundle: quiz
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_actions: true
+  field_disclaimer: true
+  field_instruction: true
+  field_quiz_question: true
+  field_quiz_type: true
+  field_references: true
+  field_result: true
+  langcode: true
+  search_api_excerpt: true
+  shariff_field: true

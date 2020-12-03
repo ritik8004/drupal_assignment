@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_result
+    - node.type.quiz
+    - node.type.result
+id: node.quiz.field_result
+field_name: field_result
+entity_type: node
+bundle: quiz
+label: Result
+description: "<p>Please refer to the following example for the Result field. The <em>[RESULT]</em> and <em>[TOTAL]</em> tokens will be replaced by actual values.</p>\r\n<p><em>You got [RESULT] out of [TOTAL]</em></p>"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      result: result
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

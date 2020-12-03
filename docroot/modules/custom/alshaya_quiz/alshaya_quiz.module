@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Contains code to auto-populate allowed values for Product Attributes for alshaya_quiz.
+ */
+
+/**
+ * Implements hook_preprocess_hook().
+ *
+ * {@inheritdoc}
+ */
+function alshaya_quiz_preprocess_decoupled_component_block(array &$variables) {
+  $variables['attributes']['class'][] = "block-quiz";
+}

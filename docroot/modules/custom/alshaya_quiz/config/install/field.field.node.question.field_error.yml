@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_error
+    - node.type.question
+id: node.question.field_error
+field_name: field_error
+entity_type: node
+bundle: question
+label: Error
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
