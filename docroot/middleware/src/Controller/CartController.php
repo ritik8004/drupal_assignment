@@ -256,6 +256,11 @@ class CartController {
         if (is_int($cart_id)) {
           $this->cart->setCartId($cart_id);
         }
+        else {
+          $this->logger->notice('Could not restore cart for customer with ID @customer.', [
+            '@customer' => $info['customer_id'],
+          ]);
+        }
       }
       else {
         // @todo Remove this "else" part and getAcmCartId() when we
