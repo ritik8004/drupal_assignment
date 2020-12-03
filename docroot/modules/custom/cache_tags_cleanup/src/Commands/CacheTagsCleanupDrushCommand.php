@@ -75,7 +75,6 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
     $batch = [
       'operations' => [],
       'init_message' => dt('Processing all cachetags for which entities are deleted.'),
-      'progress_message' => dt('Completed @current step of @total.'),
       'error_message' => dt('Failed to check for cachetags data.'),
     ];
     foreach ($entity_types as $entity_type) {
