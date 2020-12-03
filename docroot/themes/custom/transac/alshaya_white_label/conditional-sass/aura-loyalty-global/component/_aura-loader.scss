@@ -33,10 +33,10 @@
 
 .not-you-wrapper {
   .error-placeholder:not(:empty) {
-    color: white;
+    color: $aura-my-account-error-text;
     font-size: 0.875rem;
     font-family: $aura-regular;
-    background: red;
+    background: $aura-my-account-error-bg;
     border-radius: 0.125rem;
     padding: 0.125rem 0.5rem;
 
