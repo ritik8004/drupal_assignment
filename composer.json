@@ -279,7 +279,8 @@
                 "CORE-14778 - Make subquery table alias more informative": "https://www.drupal.org/files/issues/2020-05-26/3142927-2.patch",
                 "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
                 "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch",
-                "CORE-24231 - Adding log trace for 500 error on user login page" : "patches/core/traces-for-form-error.patch"
+                "CORE-24231 - Adding log trace for 500 error on user login page" : "patches/core/traces-for-form-error.patch",
+                "CORE-26181 - Drupal alters SVG fill path with broken base url and breaks SVG CSS": "https://www.drupal.org/files/issues/2020-11-04/2362643-72.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
