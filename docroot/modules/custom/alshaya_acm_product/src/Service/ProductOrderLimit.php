@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Service;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class Product Order Limit.
@@ -23,15 +24,26 @@ class ProductOrderLimit {
   protected $skuManager;
 
   /**
+   * Config Factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
   public function __construct(
-    SkuManager $sku_manager
+    SkuManager $sku_manager,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->skuManager = $sku_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -47,6 +59,7 @@ class ProductOrderLimit {
    */
   public function maxSaleQtyMessage($max_sale_qty, $limit_exceeded = FALSE) {
     $order_limit_msg = '';
+    $hide_max_qty_limit_message = $this->configFactory->get('alshaya_acm.settings')->get('hide_max_qty_limit_message');
 
     if ($limit_exceeded) {
       $build = [
@@ -56,7 +69,7 @@ class ProductOrderLimit {
       ];
       $order_limit_msg = render($build);
     }
-    elseif (!empty($max_sale_qty)) {
+    elseif (!empty($max_sale_qty) && !$hide_max_qty_limit_message) {
       $build = [
         '#theme' => 'product_order_quantity_limit',
         '#message' => $this->t('Limited to @max_sale_qty per customer', ['@max_sale_qty' => $max_sale_qty]),

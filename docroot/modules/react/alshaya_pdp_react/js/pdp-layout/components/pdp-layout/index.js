@@ -123,6 +123,24 @@ const PdpLayout = () => {
   };
 
   const [cardNumber, setCard] = useState(null);
+  const stickyButton = () => {
+    const headerButton = () => {
+      if ((buttonRef !== null) && (buttonRef !== undefined)) {
+        const buttonWidth = buttonRef.current.offsetWidth;
+        const stickyHederButton = document.querySelector('#sticky-header-btn button');
+        stickyHederButton.style.width = `${buttonWidth}px`;
+      }
+    };
+
+    window.addEventListener('load', () => {
+      headerButton();
+    });
+
+    window.addEventListener('resize', () => {
+      headerButton();
+    });
+  };
+
 
   useEffect(() => {
     sidebarSticky();
@@ -134,6 +152,7 @@ const PdpLayout = () => {
         setCard(stateValues.cardNumber);
       });
     }
+    stickyButton();
   },
   []);
 
