@@ -236,3 +236,18 @@
     }
   }
 }
+
+.nodetype--acq_product {
+  #fit-calculator-container {
+    display: none;
+  }
+
+  #fit-cal-modal {
+    max-width: 43.75rem;
+    margin: 0 auto;
+
+    .fit-calculator-size-conversion-chart {
+      display: none;
+    }
+  }
+}
