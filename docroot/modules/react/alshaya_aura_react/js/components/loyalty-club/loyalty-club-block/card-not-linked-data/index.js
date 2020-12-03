@@ -4,9 +4,10 @@ import ConditionalView
   from '../../../../../../alshaya_spc/js/common/components/conditional-view';
 import AuraLogo from '../../../../svg-component/aura-logo';
 import { handleNotYou, handleLinkYourCard } from '../../../../utilities/cta_helper';
+import { getNotYouLabel } from '../../../../utilities/aura_utils';
 
 const AuraMyAccountOldCardFound = (props) => {
-  const { cardNumber } = props;
+  const { cardNumber, notYouFailed } = props;
 
   return (
     <div className="aura-myaccount-no-linked-card-wrapper old-card-found fadeInUp">
@@ -31,17 +32,24 @@ const AuraMyAccountOldCardFound = (props) => {
             value={cardNumber}
             options={{ blocks: [4, 4, 4, 4] }}
           />
-          <div
-            className="link-your-card"
-            onClick={() => handleLinkYourCard(cardNumber)}
-          >
-            { Drupal.t('Link your card') }
+          <div className="link-card-wrapper">
+            <div className="link-card-loader-placeholder" />
+            <div
+              className="link-your-card"
+              onClick={() => handleLinkYourCard(cardNumber)}
+            >
+              { Drupal.t('Link your card') }
+            </div>
           </div>
-          <div
-            className="not-you"
-            onClick={() => handleNotYou(cardNumber)}
-          >
-            { Drupal.t('Not you?') }
+          <div className="not-you-wrapper">
+            <div className="not-you-loader-placeholder" />
+            <div className="error-placeholder" />
+            <div
+              className="not-you"
+              onClick={() => handleNotYou(cardNumber)}
+            >
+              { getNotYouLabel(notYouFailed) }
+            </div>
           </div>
         </div>
       </div>

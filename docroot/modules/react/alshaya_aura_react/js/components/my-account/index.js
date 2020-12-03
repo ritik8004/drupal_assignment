@@ -10,6 +10,8 @@ class MyAccount extends React.Component {
     this.state = {
       wait: true,
       ...getAuraDetailsDefaultState(),
+      notYouFailed: false,
+      linkCardFailed: false,
     };
   }
 
@@ -66,6 +68,8 @@ class MyAccount extends React.Component {
       upgradeMsg,
       firstName,
       lastName,
+      notYouFailed,
+      linkCardFailed,
     } = this.state;
 
     return (
@@ -81,6 +85,8 @@ class MyAccount extends React.Component {
         upgradeMsg={upgradeMsg}
         firstName={firstName}
         lastName={lastName}
+        notYouFailed={notYouFailed}
+        linkCardFailed={linkCardFailed}
         updateLoyaltyStatus={this.updateLoyaltyStatus}
       />
     );

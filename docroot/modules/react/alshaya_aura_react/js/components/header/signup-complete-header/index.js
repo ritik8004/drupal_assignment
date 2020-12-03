@@ -3,13 +3,15 @@ import Cleave from 'cleave.js/react';
 import AuraLogo from '../../../svg-component/aura-logo';
 import ConditionalView
   from '../../../../../alshaya_spc/js/common/components/conditional-view';
+import { handleNotYou } from '../../../utilities/cta_helper';
+import { getNotYouLabel } from '../../../utilities/aura_utils';
 
 const SignUpCompleteHeader = (props) => {
   const {
     isHeaderModalOpen,
-    handleNotYou,
     cardNumber,
     noRegisterLinks,
+    notYouFailed,
   } = props;
 
   const { baseUrl, pathPrefix } = drupalSettings.path;
@@ -33,11 +35,15 @@ const SignUpCompleteHeader = (props) => {
               value={cardNumber}
               options={{ blocks: [4, 4, 4, 4] }}
             />
-            <div
-              className="not-you"
-              onClick={handleNotYou}
-            >
-              { Drupal.t('Not you?') }
+            <div className="not-you-wrapper">
+              <div className="not-you-loader-placeholder" />
+              <div className="error-placeholder" />
+              <div
+                className="not-you"
+                onClick={() => handleNotYou(cardNumber)}
+              >
+                { getNotYouLabel(notYouFailed) }
+              </div>
             </div>
           </div>
           {
