@@ -67,7 +67,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
    * @usage drush delete-entity-cachetags
    *   Remove entity cachetags from table.
    */
-  public function deleteCacheTagsEntriesforEntities(array $options = ['chunk_size' => 50]) {
+  public function deleteEntityCacheTags(array $options = ['chunk_size' => 50]) {
 
     $verbose = $options['verbose'] ?? FALSE;
     // Getting all entity types.
