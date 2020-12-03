@@ -760,8 +760,10 @@ class CartController {
     }
 
     // For new cart request, we don't need any further validations.
+    // Or if request has cart id but cart not exist in session,
+    // create new cart for the user.
     if ($request_content['action'] === CartActions::CART_ADD_ITEM
-      && empty($request_content['cart_id'])) {
+      && (empty($request_content['cart_id']) || !$this->cart->getCartId())) {
       return 200;
     }
 
