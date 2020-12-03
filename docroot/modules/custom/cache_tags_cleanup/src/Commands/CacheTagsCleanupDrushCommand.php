@@ -93,13 +93,11 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
         $chunk_size = (int) $options['chunk_size'];
         $cache_tags_chunks = array_chunk($cache_tags, $chunk_size);
 
-        $chunk_count = 1;
         foreach ($cache_tags_chunks as $chunk) {
           $batch['operations'][] = [
             [__CLASS__, 'deleteCacheTagsforDeletedEntities'],
-            [$chunk, $entity_type, $chunk_count, $verbose],
+            [$chunk, $verbose],
           ];
-          $chunk_count++;
         }
       }
     }
