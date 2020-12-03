@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: node__product_list
+label: 'Content: Product List'
+tags:
+  title: 'Shop [node:title] products online at the best price | [site:name]'
+  og_title: 'Shop [node:title] products online at the best price | [site:name]'
+  description: 'Shop [node:title] products collection at [site:name]. A wide range of [node:title] wellness and healthcare items to meet all demands in  [alshaya_seo:city1] and [alshaya_seo:city2]'
+  og_description: 'Shop [node:title] products collection at [site:name]. A wide range of [node:title] wellness and healthcare items to meet all demands in  [alshaya_seo:city1] and [alshaya_seo:city2]'
