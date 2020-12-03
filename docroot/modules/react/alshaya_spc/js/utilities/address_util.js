@@ -526,6 +526,16 @@ export const checkoutAddressProcess = (e) => {
           });
           return;
         }
+        if (typeof cartResult.response_message !== 'undefined'
+            && cartResult.response_message.status !== 'success') {
+          dispatchCustomEvent('addressPopUpError', {
+            type: 'error',
+            message: cartResult.response_message.msg,
+            showDismissButton: false,
+          });
+
+          return;
+        }
 
         const cartData = { cart: cartResult };
 
