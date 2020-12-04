@@ -99,8 +99,7 @@ export const triggerAddToCart = (
     // Dispatch event so that handlers can process it.
     form.dispatchEvent(cartNotification);
   } else if (response.data.cart_id) {
-    if (response.data.response_message.status === 'success'
-        && (typeof response.data.items[productData.variant] !== 'undefined'
+    if ((typeof response.data.items[productData.variant] !== 'undefined'
           || typeof response.data.items[productData.parentSku] !== 'undefined')) {
       const cartItem = typeof response.data.items[productData.variant] !== 'undefined' ? response.data.items[productData.variant] : response.data.items[productData.parentSku];
       productData.totalQty = cartItem.qty;
