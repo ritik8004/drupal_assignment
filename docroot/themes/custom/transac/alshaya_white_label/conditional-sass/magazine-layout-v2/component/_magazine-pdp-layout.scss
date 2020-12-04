@@ -68,7 +68,7 @@
   }
 }
 
-.new-pdp-magazine-layout {
+.magazine-layout-v2 {
   .c-pdp.l-one--w {
     @include breakpoint($tablet) {
       padding: 0 1.875rem;
@@ -146,7 +146,7 @@
       @include breakpoint($tablet) {
         max-width: 90rem;
         margin: 0 auto;
-        padding: 1.25rem 1.875rem;
+        padding: 0.90625rem 1.875rem;
       }
     }
   }
