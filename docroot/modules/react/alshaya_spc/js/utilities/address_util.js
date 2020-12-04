@@ -346,10 +346,16 @@ export const addEditAddressToCustomer = (e) => {
                   removeFullScreenLoader();
 
                   // If error, no need to process.
-                  if (cartResult.error !== undefined) {
+                  if ((cartResult.error !== undefined)
+                    || (typeof cartResult.response_message !== 'undefined'
+                    && cartResult.response_message.status !== 'success')
+                  ) {
+                    const responseErrorMessage = (typeof cartResult.error_message !== 'undefined')
+                      ? cartResult.error_message
+                      : cartResult.response_message.msg;
                     dispatchCustomEvent('addressPopUpError', {
                       type: 'error',
-                      message: cartResult.error_message,
+                      message: responseErrorMessage,
                       showDismissButton: false,
                     });
 
