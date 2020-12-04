@@ -1,67 +1,45 @@
 import React from 'react';
 import {
-  getElementValue,
-  showError,
   getPriceToPoint,
 } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
-import getStringMessage from '../../../../../js/utilities/strings';
 import { postAPIData } from '../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
 import {
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import PointsString from './points-string';
+import { getElementValueByType } from './link_card_sign_up_modal_helper';
+import { validateElementValueByType } from './validation_helper';
 
 /**
  * Utility function to get user input value.
  */
 function getUserInput(linkCardOption, chosenCountryCode) {
-  let elementValue = {};
-
-  if (linkCardOption === 'mobile') {
-    const mobile = getElementValue('spc-aura-link-card-input-mobile-mobile-number');
-
-    if (mobile.length === 0 || mobile.match(/^[0-9]+$/) === null) {
-      showError('spc-aura-link-api-response-message', getStringMessage('form_error_mobile_number'));
-      return {};
-    }
-
-    elementValue = {
-      key: 'mobile',
-      type: 'phone',
-      value: chosenCountryCode + mobile,
-    };
-  } else if (linkCardOption === 'cardNumber') {
-    const card = getElementValue('spc-aura-link-card-input-card')
-      ? getElementValue('spc-aura-link-card-input-card').replace(/\s/g, '')
-      : '';
-
-    if (card.length === 0 || card.match(/^[0-9]+$/) === null) {
-      showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_card'));
-      return {};
-    }
-
-    elementValue = {
-      key: 'cardNumber',
-      type: 'apcNumber',
-      value: card,
-    };
-  } else if (linkCardOption === 'email') {
-    const email = getElementValue('spc-aura-link-card-input-email');
-
-    if (email.length === 0 || email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) === null) {
-      showError('spc-aura-link-api-response-message', getStringMessage('form_error_email'));
-      return {};
-    }
-
-    elementValue = {
-      key: 'email',
-      type: 'email',
-      value: email,
-    };
+  if (validateElementValueByType(linkCardOption) === false) {
+    return {};
   }
 
-  return elementValue;
+  const element = {
+    key: linkCardOption,
+    type: linkCardOption,
+    value: getElementValueByType(linkCardOption),
+  };
+
+  if (linkCardOption === 'mobile' || linkCardOption === 'mobileCheckout') {
+    element.type = 'phone';
+    element.value = chosenCountryCode + element.value;
+  }
+
+  if (linkCardOption === 'emailCheckout') {
+    element.key = 'email';
+    element.type = 'email';
+  }
+
+  if (linkCardOption === 'cardNumber' || linkCardOption === 'cardNumberCheckout') {
+    element.type = 'apcNumber';
+  }
+
+  return element;
 }
 
 /**

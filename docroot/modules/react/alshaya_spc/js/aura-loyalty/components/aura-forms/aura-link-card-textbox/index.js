@@ -171,7 +171,7 @@ class AuraFormLinkCard extends React.Component {
       chosenCountryCode,
     } = this.state;
 
-    const userInput = getUserInput(linkCardOption, chosenCountryCode);
+    const userInput = getUserInput(`${linkCardOption}Checkout`, chosenCountryCode);
 
     if (Object.keys(userInput).length !== 0) {
       showFullScreenLoader();

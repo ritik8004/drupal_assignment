@@ -13,11 +13,10 @@ import LinkCardOptionMobile
 import TextField from '../../../../utilities/textfield';
 import {
   getElementValueByType,
-  validateElementValueByType,
   getInlineErrorSelector,
-  validateMobile,
   resetInputElement,
-} from '../../utilities/link_card_otp_helper';
+} from '../../utilities/link_card_sign_up_modal_helper';
+import { validateMobile, validateElementValueByType } from '../../utilities/validation_helper';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import {
   removeFullScreenLoader,
@@ -52,18 +51,14 @@ class AuraFormLinkCardOTPModal extends React.Component {
   processLinkCardSendOtp = () => {
     this.resetModalMessages();
     const { linkCardOption } = this.state;
-    const { chosenCountryCode } = this.props;
-    const selectedElementValue = getElementValueByType(linkCardOption);
-    const elementDetails = {
-      type: linkCardOption,
-      value: selectedElementValue,
-    };
+    const isValid = validateElementValueByType(linkCardOption);
 
-    const hasError = validateElementValueByType(elementDetails);
-
-    if (hasError === true) {
+    if (isValid === false) {
       return;
     }
+
+    const selectedElementValue = getElementValueByType(linkCardOption);
+    const { chosenCountryCode } = this.props;
 
     if (linkCardOption !== 'mobile') {
       this.setState({
@@ -85,7 +80,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
         if (valid === false) {
           return;
         }
-        removeError(getInlineErrorSelector(linkCardOption));
+        removeError(getInlineErrorSelector(linkCardOption)[linkCardOption]);
         this.setState({
           [linkCardOption]: chosenCountryCode + selectedElementValue,
         });
@@ -106,7 +101,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
   // Send OTP to the user.
   sendOtp = (data) => {
     const { linkCardOption } = this.state;
-    removeError(getInlineErrorSelector(linkCardOption));
+    removeError(getInlineErrorSelector(linkCardOption)[linkCardOption]);
     resetInputElement('otp');
     const apiUrl = 'post/loyalty-club/send-link-card-otp';
     const apiData = postAPIData(apiUrl, data);
@@ -126,15 +121,22 @@ class AuraFormLinkCardOTPModal extends React.Component {
               });
               document.querySelector('.aura-form-items-link-card-options').classList.add('disabled');
             }
-          } else {
-            showError(getInlineErrorSelector(data.type), result.data.error_message);
+            removeFullScreenLoader();
+            return;
           }
-        } else {
-          this.setState({
-            messageType: 'error',
-            messageContent: getStringMessage('form_error_send_otp_failed_message'),
-          });
+
+          showError(
+            getInlineErrorSelector(linkCardOption)[linkCardOption],
+            getStringMessage(result.data.error_message),
+          );
+          removeFullScreenLoader();
+          return;
         }
+
+        this.setState({
+          messageType: 'error',
+          messageContent: getStringMessage('form_error_send_otp_failed_message'),
+        });
         removeFullScreenLoader();
       });
     }
@@ -146,11 +148,11 @@ class AuraFormLinkCardOTPModal extends React.Component {
     const otp = getElementValue('otp');
 
     if (otp.length === 0) {
-      showError('otp-error', getStringMessage('form_error_otp'));
+      showError(getInlineErrorSelector('otp').otp, getStringMessage('form_error_otp'));
       return;
     }
 
-    removeError('otp-error');
+    removeError(getInlineErrorSelector('otp').otp);
     handleManualLinkYourCard(cardNumber, mobile, otp);
   };
 

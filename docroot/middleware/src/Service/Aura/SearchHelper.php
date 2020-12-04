@@ -35,6 +35,13 @@ class SearchHelper {
   protected $utility;
 
   /**
+   * Validation Helper service.
+   *
+   * @var \App\Service\Aura\ValidationHelper
+   */
+  protected $validationHelper;
+
+  /**
    * SearchHelper constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -43,15 +50,19 @@ class SearchHelper {
    *   Logger service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Aura\ValidationHelper $validation_helper
+   *   Validation Helper service.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
-    Utility $utility
+    Utility $utility,
+    ValidationHelper $validation_helper
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->utility = $utility;
+    $this->validationHelper = $validation_helper;
   }
 
   /**
@@ -86,41 +97,41 @@ class SearchHelper {
    *   Return API response/error.
    */
   public function searchUserDetails($input) {
+    $validation = $this->validationHelper->validateInput($input['type'], $input['value']);
+
+    if (!empty($validation['error'])) {
+      return $validation;
+    }
+
     if ($input['type'] === 'email') {
-      if (empty($input['value']) || !filter_var($input['value'], FILTER_VALIDATE_EMAIL)) {
-        $this->logger->error('Error while trying search user details. Email is missing/invalid. Data: @data', [
-          '@data' => json_encode($input),
-        ]);
-        return $this->utility->getErrorResponse('INVALID_EMAIL', 500);
-      }
       // Call search api to get mobile number to send otp.
       $search_response = $this->search('email', $input['value']);
+
+      if (!empty($search_response['error'])) {
+        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_EMAIL');
+      }
 
       return $search_response;
     }
 
     if ($input['type'] === 'cardNumber') {
-      if (empty($input['value']) || !preg_match('/^\d+$/', $input['value'])) {
-        $this->logger->error('Error while trying search user details. Card number is missing/invalid. Data: @data', [
-          '@data' => json_encode($input),
-        ]);
-        return $this->utility->getErrorResponse('INVALID_CARDNUMBER', 500);
-      }
       // Call search api to get mobile number to send otp.
       $search_response = $this->search('apcNumber', $input['value']);
+
+      if (!empty($search_response['error'])) {
+        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_CARDNUMBER');
+      }
 
       return $search_response;
     }
 
     if ($input['type'] === 'mobile') {
-      if (empty($input['value']) || !preg_match('/^\d+$/', $input['value'])) {
-        $this->logger->error('Error while trying search user details. Card number is missing/invalid. Data: @data', [
-          '@data' => json_encode($input),
-        ]);
-        return $this->utility->getErrorResponse('INVALID_MOBILE_ERROR', 500);
-      }
       // Call search api to verify mobile number to send otp.
       $search_response = $this->search('phone', $input['value']);
+
+      if (!empty($search_response['error'])) {
+        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_MOBILE_ERROR');
+      }
 
       return $search_response;
     }

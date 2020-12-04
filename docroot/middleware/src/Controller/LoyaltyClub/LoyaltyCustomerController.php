@@ -13,6 +13,7 @@ use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Aura\SearchHelper;
 use App\Service\Cart;
 use App\Service\Magento\CartActions;
+use App\Service\Aura\ValidationHelper;
 
 /**
  * Provides route callbacks for Loyalty Customer APIs.
@@ -68,6 +69,13 @@ class LoyaltyCustomerController {
   protected $cart;
 
   /**
+   * Validation Helper service.
+   *
+   * @var \App\Service\Aura\ValidationHelper
+   */
+  protected $validationHelper;
+
+  /**
    * LoyaltyCustomerController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -84,6 +92,8 @@ class LoyaltyCustomerController {
    *   Aura search helper service.
    * @param \App\Service\Cart $cart
    *   Cart service.
+   * @param \App\Service\Aura\ValidationHelper $validation_helper
+   *   Validation Helper service.
    */
   public function __construct(
     LoggerInterface $logger,
@@ -92,7 +102,8 @@ class LoyaltyCustomerController {
     Drupal $drupal,
     MagentoApiWrapper $magento_api_wrapper,
     SearchHelper $aura_search_helper,
-    Cart $cart
+    Cart $cart,
+    ValidationHelper $validation_helper
   ) {
     $this->logger = $logger;
     $this->utility = $utility;
@@ -101,6 +112,7 @@ class LoyaltyCustomerController {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->auraSearchHelper = $aura_search_helper;
     $this->cart = $cart;
+    $this->validationHelper = $validation_helper;
   }
 
   /**
@@ -194,18 +206,16 @@ class LoyaltyCustomerController {
       return new JsonResponse($this->utility->getErrorResponse('INVALID_NAME_ERROR', 500));
     }
 
-    if (empty($request_content['email']) || !filter_var($request_content['email'], FILTER_VALIDATE_EMAIL)) {
-      $this->logger->error('Error while trying to do loyalty club sign up. Email is missing/invalid. Data: @data', [
-        '@data' => json_encode($request_content),
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse('INVALID_EMAIL', 500));
+    $validation = $this->validationHelper->validateInput('email', $request_content['email']);
+
+    if (!empty($validation['error'])) {
+      return new JsonResponse($validation);
     }
 
-    if (empty($request_content['mobile']) || !preg_match('/^\+[0-9]+$/', $request_content['mobile'])) {
-      $this->logger->error('Error while trying to do loyalty club sign up. Mobile number is missing/invalid. Data: @data', [
-        '@data' => json_encode($request_content),
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse('INVALID_MOBILE_ERROR', 500));
+    $validation = $this->validationHelper->validateInput('mobile', $request_content['mobile']);
+
+    if (!empty($validation['error'])) {
+      return new JsonResponse($validation);
     }
 
     // Call search API to check if given mobile number

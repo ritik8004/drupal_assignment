@@ -2,17 +2,23 @@ import React from 'react';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
-import { validateInfo } from '../../../../utilities/checkout_util';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import getStringMessage from '../../../../utilities/strings';
 import AuraMobileNumberField from '../aura-mobile-number-field';
-import { getElementValue, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import AuraFormModalMessage from '../aura-form-modal-message';
+import {
+  resetInputElement,
+  resetInlineError,
+  getElementValueByType,
+  getInlineErrorSelector,
+} from '../../utilities/link_card_sign_up_modal_helper';
+import { validateMobile, validateElementValueByType } from '../../utilities/validation_helper';
 
 class AuraFormSignUpOTPModal extends React.Component {
   constructor(props) {
@@ -24,15 +30,6 @@ class AuraFormSignUpOTPModal extends React.Component {
     };
   }
 
-  getOtpModalData = () => {
-    const otpModalData = {
-      mobile: getElementValue('otp-mobile-number'),
-      otp: getElementValue('otp'),
-    };
-
-    return otpModalData;
-  };
-
   resetModalMessages = () => {
     // Reset/Remove if any message is displayed.
     this.setState({
@@ -41,63 +38,34 @@ class AuraFormSignUpOTPModal extends React.Component {
     });
   };
 
-  resetModalField = (elementId) => {
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.value = '';
-      removeError(`${elementId}-error`);
-    }
-  };
-
-  // Verify OTP and show error.
-  validateMobileOtp = (data, action) => {
-    let isValid = true;
-
-    if (action === 'send_otp') {
-      const { chosenCountryCode } = this.props;
-      const validationRequest = validateInfo({ mobile: data.userMobile, chosenCountryCode });
-      showFullScreenLoader();
-      return validationRequest.then((result) => {
-        if (result.status === 200 && result.data.status) {
-          // If not valid mobile number.
-          if (result.data.mobile === false) {
-            showError('otp-aura-mobile-field-error', getStringMessage('form_error_valid_mobile_number'));
-            isValid = false;
-          } else {
-            // If valid mobile number, remove error message.
-            removeError('otp-aura-mobile-field-error');
-          }
-        }
-        removeFullScreenLoader();
-        return isValid;
-      });
-    }
-    return isValid;
-  };
-
   // Send OTP to the user.
   sendOtp = () => {
     this.resetModalMessages();
-    this.resetModalField('otp');
-    const { mobile: userMobile } = this.getOtpModalData();
+    resetInputElement('otp');
+    resetInlineError('otp');
+    const userMobile = getElementValueByType('signUpOtpMobile');
     const {
       setChosenUserMobile,
+      chosenCountryCode,
     } = this.props;
 
     setChosenUserMobile(userMobile);
+    const isValid = validateElementValueByType('signUpOtpMobile');
 
-    if (userMobile.length === 0 || userMobile.match(/^[0-9]+$/) === null) {
-      showError('otp-aura-mobile-field-error', getStringMessage('form_error_mobile_number'));
+    if (isValid === false) {
       return;
     }
 
     // Call API to check if mobile number is valid.
-    const validationRequest = this.validateMobileOtp({ userMobile }, 'send_otp');
+    const data = {
+      mobile: userMobile,
+      chosenCountryCode,
+    };
+    const validationRequest = validateMobile('signUpOtpMobile', data);
     if (validationRequest instanceof Promise) {
       validationRequest.then((valid) => {
         if (valid === true) {
           // API call to send otp.
-          const { chosenCountryCode } = this.props;
           const apiUrl = 'post/loyalty-club/send-otp';
           const apiData = postAPIData(apiUrl, { mobile: userMobile, chosenCountryCode });
           showFullScreenLoader();
@@ -114,7 +82,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                     });
                   }
                 } else if (result.data.error_code === 'already_registered') {
-                  showError('otp-aura-mobile-field-error', getStringMessage('form_error_mobile_already_registered'));
+                  showError(getInlineErrorSelector('signUpOtpMobile').signUpOtpMobile, getStringMessage('form_error_mobile_already_registered'));
                 } else {
                   this.setState({
                     messageType: 'error',
@@ -138,19 +106,19 @@ class AuraFormSignUpOTPModal extends React.Component {
   // Verify OTP from user.
   verifyOtp = () => {
     this.resetModalMessages();
-    const { otp, mobile } = this.getOtpModalData();
-
+    const mobile = getElementValueByType('signUpOtpMobile');
+    const otp = getElementValueByType('otp');
     const {
       closeOTPModal,
       openNewUserModal,
     } = this.props;
 
     if (otp.length === 0) {
-      showError('otp-error', getStringMessage('form_error_otp'));
+      showError(getInlineErrorSelector('otp').otp, getStringMessage('form_error_otp'));
       return;
     }
 
-    removeError('otp-error');
+    removeError(getInlineErrorSelector('otp').otp);
     // API call to verify otp.
     const apiUrl = 'post/loyalty-club/verify-otp';
     const apiData = postAPIData(apiUrl, { mobile, otp });
@@ -167,7 +135,7 @@ class AuraFormSignUpOTPModal extends React.Component {
             // Open modal for the new user.
             openNewUserModal();
           }
-          showError('otp-error', getStringMessage('form_error_invalid_otp'));
+          showError(getInlineErrorSelector('otp').otp, getStringMessage('form_error_invalid_otp'));
         }
         removeFullScreenLoader();
       });

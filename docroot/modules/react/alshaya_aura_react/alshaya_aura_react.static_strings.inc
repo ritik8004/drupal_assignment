@@ -100,7 +100,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'form_error_mobile_not_found',
-      'value' => t('Mobile number not found to send OTP.'),
+      'value' => t('No mobile number found. Please try again.'),
     ],
   ];
 }
