@@ -183,11 +183,28 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
       }
     }
 
+    // To fetch the choice of Answer node.
+    $choice = NULL;
+    if (!empty($answer_node->field_choice_4->target_id)) {
+      $term_id = $answer_node->field_choice_4->target_id;
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
+      $choice = $term->name->value;
+      $answer_details['choice'] = $choice;
+    }
+    else {
+      if ($answer_node->field_choice_1->value) {
+        $answer_details['choice'] = $answer_node->field_choice_1->value ?? NULL;
+      }
+      if ($answer_node->field_choice_2->value) {
+        $answer_details['choice'] = $answer_node->field_choice_2->value ?? NULL;
+      }
+      if ($answer_node->field_choice_3->value) {
+        $answer_details['choice'] = $answer_node->field_choice_3->value ?? NULL;
+      }
+    }
+
     $answer_details['title'] = $answer_node->title->value;
     $answer_details['description'] = strip_tags($answer_node->field_answer_summary->value) ?? NULL;
-    $answer_details['choice_1'] = $answer_node->field_choice_1->value ?? NULL;
-    $answer_details['choice_2'] = $answer_node->field_choice_2->value ?? NULL;
-    $answer_details['choice_3'] = $answer_node->field_choice_3->value ?? NULL;
     $answer_details['image_url'] = $imageSrc;
     $answer_details['question'] = $next_ques_details;
     return $answer_details;

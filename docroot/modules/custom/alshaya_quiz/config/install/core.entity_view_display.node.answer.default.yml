@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.answer.field_product_image
     - field.field.node.answer.field_result
     - field.field.node.answer.field_choice_1
+    - field.field.node.answer.field_choice_4
     - node.type.answer
   module:
     - options
@@ -95,6 +96,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: list_default
+    region: content
+  field_choice_4:
+    weight: 9
+    label: above
+    settings:
+    link: true
+    third_party_settings: {  }
+    type: entity_reference_label
     region: content
 hidden:
   langcode: true
