@@ -140,6 +140,9 @@ $_appointment-delete-red: #e82d35;
 $_ancestral-water: #d0d0d0;
 $_screeching_white: #eee;
 $pinterest-red: #bc091d;
+$_stylefinder-pink-bg: #f7afca;
+$_stylefinder-pink-active-bg: #ef5f96;
+$_stylefinder-active-lining-text: #d91560;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1552,3 +1555,8 @@ $fit-calc-empty-input: $red-error;
 $fit-calc-input-bg: $white-five;
 $fit-calc-result: $scarlet;
 $fit-calc-selected-radio: $scarlet;
+
+// Style Finder.
+$stylefinder-title: $mothercare-black;
+$stylefinder-type-bg: $_stylefinder-pink-bg;
+$stylefinder-type-active-bg: $_stylefinder-pink-active-bg;
