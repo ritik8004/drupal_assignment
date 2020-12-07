@@ -88,6 +88,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
       $deleted_entities = [];
       $entity_ids = [];
       $cachetags_ids = [];
+
       // Query to get all cachetags of a particulae entity type.
       $query = $this->connection->select('cachetags', 'ct');
       $query->addField('ct', 'tag');
@@ -103,7 +104,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
 
       // Get all entity ids from a entity type.
       $entity_ids = $this->queryFactory->get($entity_type)->execute();
-      // print_r(($entity_ids));.
+
       // Find all entities which exists in cachetags
       // but not in entity table.
       $deleted_entities = array_diff($cachetags_ids, $entity_ids);
