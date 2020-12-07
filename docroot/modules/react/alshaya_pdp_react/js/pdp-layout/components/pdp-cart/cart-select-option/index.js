@@ -2,6 +2,7 @@ import React from 'react';
 import GroupSelectOption from '../group-select-option';
 import NonGroupSelectOption from '../non-group-select-option';
 import SwatchSelectOption from '../swatch-select-option';
+import { closeModalHelper } from '../../../../utilities/pdp_layout';
 
 class CartSelectOption extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class CartSelectOption extends React.Component {
     const {
       configurableCombinations, skuCode, configurables, context,
     } = this.props;
+
     const { firstChild } = configurableCombinations[skuCode];
     const { code } = configurables;
     const value = configurableCombinations[skuCode].bySku[firstChild][code];
@@ -45,6 +47,10 @@ class CartSelectOption extends React.Component {
         selected: value,
       });
     }
+
+    const currentContext = this;
+
+    closeModalHelper(['overlay-select', 'overlay-related-select'], ['magv2-select-popup-container', 'magv2-crossell-popup-container'], currentContext.closeModal);
   }
 
   // To get the option values of the

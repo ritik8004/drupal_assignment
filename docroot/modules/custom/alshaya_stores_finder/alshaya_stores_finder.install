@@ -11,6 +11,25 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update().
  *
+ * [5.13.0]Re-saves configs related to store finder.
+ */
+function alshaya_stores_finder_update_8110() {
+  // Add the newly added key to the config.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_stores_finder.settings',],
+    'alshaya_stores_finder',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+
+  $manager->updateConfigs(['views.view.stores_finder'], 'alshaya_stores_finder');
+}
+
+/**
+ * Implements hook_update().
+ *
  * Update the store finder config to store country center and zoom settings.
  */
 function alshaya_stores_finder_update_8109() {

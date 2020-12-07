@@ -2,6 +2,7 @@ import React from 'react';
 import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import setupAccordionHeight from '../../../utilities/sidebarCardUtils';
+import HomeDeliverySVG from '../../../svg-component/hd-svg';
 
 class PdpStandardDelivery extends React.Component {
   constructor(props) {
@@ -49,6 +50,9 @@ class PdpStandardDelivery extends React.Component {
           onClick={() => this.showHomeDeliveryBlock()}
         >
           <PdpSectionTitle>
+            <span className="magv2-card-icon-svg">
+              <HomeDeliverySVG />
+            </span>
             {homeDelivery.title}
           </PdpSectionTitle>
           <div className="magv2-accordion" />

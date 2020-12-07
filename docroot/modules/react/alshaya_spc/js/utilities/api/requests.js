@@ -12,7 +12,7 @@ import {
 } from '../storage';
 import i18nMiddleWareUrl from '../i18n_url';
 import dispatchCustomEvent from '../events';
-import { validateCartResponse } from '../checkout_util';
+import validateCartResponse from '../validation_util';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId } = args;

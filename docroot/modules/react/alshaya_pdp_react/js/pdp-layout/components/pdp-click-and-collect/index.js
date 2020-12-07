@@ -7,6 +7,7 @@ import { fetchAvailableStores } from '../../../utilities/pdp_layout';
 import setupAccordionHeight from '../../../utilities/sidebarCardUtils';
 import ClickCollectStoreDetail from '../pdp-click-and-collect-store-detail';
 import ConditionalView from '../../../common/components/conditional-view';
+import ClickCollectSVG from '../../../svg-component/cc-svg';
 
 export default class PdpClickCollect extends React.PureComponent {
   constructor(props) {
@@ -173,6 +174,9 @@ export default class PdpClickCollect extends React.PureComponent {
             onClick={() => this.showClickCollectContent()}
           >
             <PdpSectionTitle>
+              <span className="magv2-card-icon-svg">
+                <ClickCollectSVG />
+              </span>
               {Drupal.t('click & collect')}
             </PdpSectionTitle>
             <div className="magv2-accordion" />
@@ -221,6 +225,9 @@ export default class PdpClickCollect extends React.PureComponent {
           onClick={() => this.showClickCollectContent()}
         >
           <PdpSectionTitle>
+            <span className="magv2-card-icon-svg">
+              <ClickCollectSVG />
+            </span>
             {Drupal.t('click & collect')}
           </PdpSectionTitle>
           <div className="magv2-accordion" />

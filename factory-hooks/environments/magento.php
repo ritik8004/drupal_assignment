@@ -26,9 +26,54 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 7, 'ar' => 6],
     ],
+    'eg' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 13, 'ar' => 12],
+    ],
   ],
   'mc_upgrade' => [
     'url' => 'http://magento-upgrade-kb5pcqa-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
+      'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
+      'access_token' => '5um6y5nxl3oqms9qw0jai36qkryrrocg',
+      'access_token_secret' => '4cfruica5gbgdn2eq269ndl5rccubslc',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 3],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+  ],
+  'mc_sit' => [
+    'url' => 'https://mc-sit.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
+      'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
+      'access_token' => '5um6y5nxl3oqms9qw0jai36qkryrrocg',
+      'access_token_secret' => '4cfruica5gbgdn2eq269ndl5rccubslc',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 3],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+  ],
+  'mc_training' => [
+    'url' => 'https://mc-training.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
       'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
@@ -62,6 +107,51 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 19, 'ar' => 22],
     ],
+    'eg' => [
+      'store_id' => ['en' => 27, 'ar' => 24],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 33, 'ar' => 30],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 39, 'ar' => 36],
+    ],
+  ],
+  'mc_oms_uat' => [
+    'url' => 'https://mc-uat2.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
+      'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
+      'access_token' => '5um6y5nxl3oqms9qw0jai36qkryrrocg',
+      'access_token_secret' => '4cfruica5gbgdn2eq269ndl5rccubslc',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 3],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+  ],
+  'mc_oms_pprod' => [
+    'url' => 'https://mc-pprod.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
+      'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
+      'access_token' => '5um6y5nxl3oqms9qw0jai36qkryrrocg',
+      'access_token_secret' => '4cfruica5gbgdn2eq269ndl5rccubslc',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 3],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
   ],
   'mc_prod' => [
     'url' => 'https://mcmena.store.alshaya.com',
@@ -74,6 +164,9 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 19, 'ar' => 22],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 27, 'ar' => 24],
     ],
   ],
   // H&M.
@@ -515,6 +608,24 @@ $magentos = [
     ],
   ],
   // Westelm.
+  'we_sit' => [
+    'url' => 'https://wes-sit.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '4xtw4osc8e7fv45cy187xhhobr6xt59e',
+      'consumer_secret' => '3b5nydivhlbwm6v29ekyhv3v8v2s2pl4',
+      'access_token' => 'm8cgs2h1dj4zqvx1qy8293aygeu7zcar',
+      'access_token_secret' => '4mocc81s1pnejkm57fimdjw49mqcz4rl',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+  ],
   'we_qa' => [
     'url' => 'https://integration-5ojmyuq-xj72gv64n7kci.eu-3.magentosite.cloud',
     'magento_secrets' => [
@@ -552,6 +663,24 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 21, 'ar' => 18],
+    ],
+  ],
+  'we_oms_uat' => [
+    'url' => 'https://wes-uatoms.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => '4xtw4osc8e7fv45cy187xhhobr6xt59e',
+      'consumer_secret' => '3b5nydivhlbwm6v29ekyhv3v8v2s2pl4',
+      'access_token' => 'm8cgs2h1dj4zqvx1qy8293aygeu7zcar',
+      'access_token_secret' => '4mocc81s1pnejkm57fimdjw49mqcz4rl',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
     ],
   ],
   'we_pprod' => [
@@ -607,6 +736,27 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
+  'aeo_training' => [
+    'url' => 'https://aeo-training.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'ydzr7xpvfjlzbwvce9tza471n7juuwhe',
+      'consumer_secret' => 'tqseptjwftwhrua330kjem7jnurclhbx',
+      'access_token' => 'ofsq77eipss5gshgvj931q603ij7eiqw',
+      'access_token_secret' => '24phqz567kp2fkt86tocb6exkwcittmq',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 16],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 4, 'ar' => 7],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 10, 'ar' => 13],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 22, 'ar' => 19],
     ],
   ],
   'aeo_uat' => [

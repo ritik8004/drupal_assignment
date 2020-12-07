@@ -2,7 +2,7 @@
   z-index: 999;
   position: absolute;
   top: 3.4rem;
-  #{$right}: -0.35rem;
+  #{$right}: 0.875rem;
 
   &.has--notification::before {
     content: '';

@@ -1,6 +1,7 @@
 .c-plp .c-content__region {
   .all-filters,
-  .all-filters-algolia {
+  .all-filters-algolia,
+  .all-filters-plp-algolia {
     .filter {
       &__foot {
         .facet-all-clear,
@@ -20,6 +21,20 @@
                   text-decoration: none;
                   text-transform: none;
                 }
+              }
+            }
+          }
+
+          &.has-link {
+            .block-facets-summary-blockfilter-bar-plp {
+              padding-top: 0;
+
+              @include breakpoint($desktop) {
+                width: 100%;
+              }
+
+              .clear-all a {
+                color: $plp_clear_all_btn_text;
               }
             }
           }

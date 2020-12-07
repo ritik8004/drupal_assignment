@@ -4,6 +4,7 @@ import { addToCartConfigurable } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
+import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoothScroll';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -64,9 +65,18 @@ class ConfigurableProductForm extends React.Component {
   handleLoad = () => {
     const { configurableCombinations, skuCode } = this.props;
     const { combinations } = configurableCombinations[skuCode];
+    const attributes = configurableCombinations[skuCode].configurables;
     const code = Object.keys(combinations)[0];
     const codeValue = Object.keys(combinations[code])[0];
     this.refreshConfigurables(code, codeValue, null);
+    Object.keys(attributes).forEach((key) => {
+      if (attributes[key].isSwatch) {
+        const elem = document.querySelector('#pdp-add-to-cart-form-main .magv2-swatch-attribute').querySelectorAll('.active')[0];
+        if (elem !== undefined && window.innerWidth < 768) {
+          smoothScrollToActiveSwatch(elem);
+        }
+      }
+    });
   }
 
   // To get available attribute value based on user selection.

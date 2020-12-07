@@ -37,7 +37,7 @@
     <div class="promotions">
       {% for id, promotion in promotions %}
         <span class="sku-promotion-item">
-          <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
+          <a class="sku-promotion-link" href="{{ promotion.url }}">
             {{ promotion.text }}
           </a>
         </span>

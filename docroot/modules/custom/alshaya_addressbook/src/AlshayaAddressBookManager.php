@@ -327,7 +327,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       alshaya_acm_customer_update_user_data($account, $updated_customer);
 
       // This is not reliable but only solution available.
-      // @TODO: Try and find a better solution for this.
+      // @todo Try and find a better solution for this.
       if ($address_index !== FALSE) {
         $updated_address = $updated_customer['addresses'][$address_index];
       }
@@ -448,7 +448,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       }
     }
 
-    // @TODO: Get this corrected in Magento if possible.
+    // @todo Get this corrected in Magento if possible.
     if (empty($address['country_id'])) {
       $address['country_id'] = _alshaya_custom_get_site_level_country_code();
     }
@@ -705,7 +705,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         }
       }
 
-      // @TODO: CORE-2332 - Fix this properly, possibly in Magento.
+      // @todo CORE-2332 - Fix this properly, possibly in Magento.
       // City is Magento core field but we don't use it at all.
       // But this is required by Cybersource so we need proper value.
       // For now, we copy value of Area to City.

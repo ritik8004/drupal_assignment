@@ -96,7 +96,7 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
       ];
 
       // We don't want to show shipping in billing for CC.
-      // @TODO: Re-visit when working on CORE-4483.
+      // @todo Re-visit when working on CORE-4483.
       if ($is_same) {
         $billing_info['address'] = [];
       }

@@ -15,10 +15,10 @@ const SelectedStore = ({ store, open, closePanel }) => {
    * Show error on popup.
    */
   const handleAddressPopUpError = (e) => {
-    if (didUnmount || !store) {
+    const { type, message } = e.detail;
+    if ((type !== 'error') && (didUnmount || !store)) {
       return;
     }
-    const { type, message } = e.detail;
     setMsgType(type);
     setErrorMessage(message);
     // Scroll to error.

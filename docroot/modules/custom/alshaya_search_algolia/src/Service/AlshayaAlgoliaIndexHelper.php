@@ -244,6 +244,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->languageManager = $language_manager;
     $this->superCategoryManager = $super_category_manager;
     $this->productCategoryTree = $productCategoryTree;
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
     $this->prettyAliases = $pretty_aliases;
@@ -338,7 +339,11 @@ class AlshayaAlgoliaIndexHelper {
     // Promotions.
     $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
     array_walk($promotions, function (&$promotion, $nid) {
-      $promotion['url'] = Url::fromRoute('entity.node.canonical', ['node' => $nid])->toString();
+      $node = $this->nodeStorage->load($nid);
+      $available_translation_langcode = $node->getTranslationLanguages();
+      foreach ($available_translation_langcode as $langcode => $value) {
+        $promotion['url_' . $langcode] = Url::fromRoute('entity.node.canonical', ['node' => $nid], ['language' => $this->languageManager->getLanguage($langcode)])->toString();
+      }
       $promotion['id'] = $nid;
     });
 
@@ -865,7 +870,7 @@ class AlshayaAlgoliaIndexHelper {
   public function addCustomFacetToIndex($attributes) {
     $attributes = is_array($attributes) ? $attributes : [$attributes];
 
-    // @TODO If an entity field is to be added, the function should be modified
+    // @todo If an entity field is to be added, the function should be modified
     // such that $attr_name should have prefix "attr_" as that is the
     // general syntax that can be seen.
     $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
@@ -889,7 +894,14 @@ class AlshayaAlgoliaIndexHelper {
       }
 
       if ($updated) {
-        $index->setSettings($settings, TRUE);
+        $index->setSettings($settings);
+
+        foreach ($settings['replicas'] as $replica) {
+          $replica_index = $client->initIndex($replica);
+          $replica_settings = $replica_index->getSettings();
+          $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
+          $replica_index->setSettings($replica_settings);
+        }
       }
     }
 

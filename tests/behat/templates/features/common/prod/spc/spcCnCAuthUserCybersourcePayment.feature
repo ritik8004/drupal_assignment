@@ -24,8 +24,8 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait for the page to load
     Then I should be on "/cart/login" page
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_user_email_new}"
-    And I fill in "edit-pass" with "{spc_user_password_new}"
+    Then I fill in "edit-name" with "{spc_auth_user_email}"
+    And I fill in "edit-pass" with "{spc_auth_user_password}"
     Then I press "edit-submit"
     And I wait for AJAX to finish
     And I wait 20 seconds
@@ -78,8 +78,8 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_user_email_new}"
-    And I fill in "edit-pass" with "{spc_user_password_new}"
+    Then I fill in "edit-name" with "{spc_auth_user_email}"
+    And I fill in "edit-pass" with "{spc_auth_user_password}"
     Then I press "edit-submit"
     And I wait for AJAX to finish
     And I wait 20 seconds
@@ -130,8 +130,8 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait for the page to load
     Then I should be on "/{language_short}/cart/login" page
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_user_email_new}"
-    And I fill in "edit-pass" with "{spc_user_password_new}"
+    Then I fill in "edit-name" with "{spc_auth_user_email}"
+    And I fill in "edit-pass" with "{spc_auth_user_password}"
     Then I press "edit-submit"
     And I wait for AJAX to finish
     And I wait 20 seconds

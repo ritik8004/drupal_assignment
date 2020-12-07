@@ -15,7 +15,6 @@ use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
@@ -131,13 +130,6 @@ class SkuManager {
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $productLabelsCache;
-
-  /**
-   * Cache Backend service for product info.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $productCache;
 
   /**
    * Config Factory service object.
@@ -286,8 +278,6 @@ class SkuManager {
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
    *   Cache Backend service for product labels.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $product_cache
-   *   Cache Backend service for configurable price info.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
@@ -320,7 +310,6 @@ class SkuManager {
                               ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
-                              CacheBackendInterface $product_cache,
                               SKUFieldsManager $sku_fields_manager,
                               ProductCategoryHelper $product_category_helper,
                               Client $http_client,
@@ -346,7 +335,6 @@ class SkuManager {
     $this->moduleHandler = $module_handler;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
-    $this->productCache = $product_cache;
     $this->skuFieldsManager = $sku_fields_manager;
     $this->productCategoryHelper = $product_category_helper;
     $this->httpClient = $http_client;
@@ -820,12 +808,19 @@ class SkuManager {
    *   Promotion Types.
    *
    * @return array
-   *   List of Promotion Nodes.
+   *   List of Promotion Nids.
    */
   public function getSkuPromotions(SKU $sku, array $types = [
     'cart',
     'category',
   ]) {
+    // Get promotions for the product.
+    $cache_key = 'promotion_ids_' . implode('-', $types);
+    $promotion_nids = $this->productCacheManager->get($sku, $cache_key);
+
+    if (is_array($promotion_nids)) {
+      return $promotion_nids;
+    }
     $skus = [$sku->getSku()];
 
     if ($sku->bundle() == 'simple') {
@@ -837,32 +832,9 @@ class SkuManager {
       }
     }
 
-    $query = $this->connection->select('node__field_acq_promotion_rule_id', 'node_field');
-    $query->fields('node_field', ['entity_id']);
-    $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
-    $query->condition('mapping.sku', $skus, 'IN');
-    $promotion_nids = $query->execute()->fetchCol();
-
-    if ($full_catalog_promo_nids = $this->cache->get('full_catalog_promo_nids_list')) {
-      $full_catalog_promo_nids = $full_catalog_promo_nids->data;
-    }
-    else {
-      // Fetch promotion nodes which apply to the entire catalog of products.
-      $query = $this->connection->select('node', 'n');
-      $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
-      $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
-      $query->fields('n', ['nid']);
-      $query->distinct();
-      $full_catalog_promo_nids = $query->execute()->fetchCol();
-
-      $promotion_cache_tags = array_map(function ($nid) {
-        return "node:$nid";
-      }, $full_catalog_promo_nids);
-      // Adding list cache tag considering addition/deletion of promotion nodes.
-      $promotion_cache_tags[] = 'node_type:acq_promotion';
-      $this->cache->set('full_catalog_promo_nids_list', $full_catalog_promo_nids, CacheBackendInterface::CACHE_PERMANENT, $promotion_cache_tags);
-    }
-
+    // Get all the promotions for the product.
+    $promotion_nids = $this->fetchPromotionBySkus($skus);
+    $full_catalog_promo_nids = $this->fetchFullCatalogPromotion();
     $promotion_nids = array_merge($promotion_nids, $full_catalog_promo_nids);
 
     if (!empty($promotion_nids)) {
@@ -873,10 +845,57 @@ class SkuManager {
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
       $query->exists('field_acq_promotion_label');
-      return $query->execute();
+      $promotion_nids = $query->execute();
     }
+    $promotion_cache_tags[] = 'node_type:acq_promotion';
+    $this->productCacheManager->set($sku, $cache_key, $promotion_nids, $promotion_cache_tags);
+    return $promotion_nids;
+  }
 
-    return [];
+  /**
+   * Fetch promotion applicable to an array of skus.
+   *
+   * @param array $skus
+   *   Product SKU.
+   *
+   * @return array
+   *   List of promotion node ids.
+   */
+  protected function fetchPromotionBySkus(array $skus) {
+    $query = $this->connection->select('node__field_acq_promotion_rule_id', 'node_field');
+    $query->fields('node_field', ['entity_id']);
+    $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
+    $query->condition('mapping.sku', $skus, 'IN');
+    return $query->execute()->fetchCol();
+  }
+
+  /**
+   * Fetch promotion applicable to entire catalog.
+   *
+   * @return array
+   *   List of promotion node ids.
+   */
+  protected function fetchFullCatalogPromotion() {
+    if ($full_catalog_promo_nids = $this->cache->get('full_catalog_promo_nids_list')) {
+      return $full_catalog_promo_nids->data;
+    }
+    // Fetch promotion nodes which apply to the entire catalog of products.
+    $query = $this->connection->select('node', 'n');
+    $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
+    $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
+    $query->fields('n', ['nid']);
+    $query->distinct();
+    $full_catalog_promo_nids = $query->execute()->fetchCol();
+
+    $promotion_cache_tags = array_map(function ($nid) {
+      return "node:$nid";
+    }, $full_catalog_promo_nids);
+
+    // Adding list cache tag considering addition/deletion of promotion
+    // nodes.
+    $promotion_cache_tags[] = 'node_type:acq_promotion';
+    $this->cache->set('full_catalog_promo_nids_list', $full_catalog_promo_nids, CacheBackendInterface::CACHE_PERMANENT, $promotion_cache_tags);
+    return $full_catalog_promo_nids;
   }
 
   /**
@@ -1148,103 +1167,91 @@ class SkuManager {
    *   Type of image required - plp or pdp.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
-   * @param string $channel
-   *   Whether web or mapp.
    *
    * @return array
    *   Array of media files.
    *
-   * @todo: Use self::getLabelsData() to get data and prepare images.
+   * @todo Use self::getLabelsData() to get data and prepare images.
    */
-  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE, string $channel = 'web') {
-    static $static_labels_cache = [];
+  public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
+    $cache_key = 'sku_labels_' . $type;
+    $cache = $reset
+      ? NULL
+      : $this->productCacheManager->get($sku_entity, $cache_key);
 
-    $sku = $sku_entity->getSku();
-
-    if (!$reset && !empty($static_labels_cache[$sku][$type])) {
-      return $static_labels_cache[$sku][$type];
+    if (isset($cache)) {
+      return $cache;
     }
 
-    $static_labels_cache[$sku][$type] = [];
-
+    $sku_labels = [];
     $labels_data = $this->getSkuLabel($sku_entity);
 
-    if (empty($labels_data)) {
-      return [];
-    }
-    else {
-      $image_key = $type . '_image';
-      $text_key = $type . '_image_text';
-      $position_key = $type . '_position';
+    $image_key = $type . '_image';
+    $text_key = $type . '_image_text';
+    $position_key = $type . '_position';
 
-      foreach ($labels_data as &$data) {
-        $row = [];
+    foreach ($labels_data ?? [] as &$data) {
+      $row = [];
 
-        // Check if label is available for desired type.
-        if (empty($data[$image_key])) {
+      // Check if label is available for desired type.
+      if (empty($data[$image_key])) {
+        continue;
+      }
+
+      // Check if label is currently active.
+      $from = strtotime($data['from']);
+      $to = strtotime($data['to']);
+
+      // First check if we have date filter.
+      if ($from > 0 && $to > 0) {
+        $now = REQUEST_TIME;
+
+        // Now, check if current date lies between from and to dates.
+        if ($from > $now || $to < $now) {
           continue;
         }
+      }
 
-        // Check if label is currently active.
-        $from = strtotime($data['from']);
-        $to = strtotime($data['to']);
+      $fid = $this->productLabelsCache->get($data[$image_key]);
 
-        // First check if we have date filter.
-        if ($from > 0 && $to > 0) {
-          $now = REQUEST_TIME;
-
-          // Now, check if current date lies between from and to dates.
-          if ($from > $now || $to < $now) {
-            continue;
-          }
+      if (empty($fid)) {
+        try {
+          // Prepare the File object when we access it the first time.
+          $fid = $this->downloadLabelsImage($sku_entity, $data, $image_key);
+          $this->productLabelsCache->set($data[$image_key], $fid, CacheBackendInterface::CACHE_PERMANENT);
         }
-
-        $fid = $this->productLabelsCache->get($data[$image_key]);
-
-        if (empty($fid)) {
-          try {
-            // Prepare the File object when we access it the first time.
-            $fid = $this->downloadLabelsImage($sku_entity, $data, $image_key);
-            $this->productLabelsCache->set($data[$image_key], $fid, CacheBackendInterface::CACHE_PERMANENT);
-          }
-          catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            continue;
-          }
+        catch (\Exception $e) {
+          $this->logger->error($e->getMessage());
+          continue;
         }
-        else {
-          $fid = $fid->data;
-        }
+      }
+      else {
+        $fid = $fid->data;
+      }
 
-        $image_file = $this->fileStorage->load($fid);
+      $image_file = $this->fileStorage->load($fid);
+      $image = [
+        '#theme' => 'image',
+        '#uri' => $image_file->getFileUri(),
+        '#title' => $data[$text_key],
+        '#alt' => $data[$text_key],
+      ];
 
-        $image = [
-          '#theme' => 'image',
-          '#uri' => $image_file->getFileUri(),
-          '#title' => $data[$text_key],
-          '#alt' => $data[$text_key],
-        ];
+      $row['image'] = $image;
+      $row['position'] = $data[$position_key];
+      $row['text'] = $data[$text_key];
 
-        // For mobile app.
-        if ($channel == 'mapp') {
-          $row['image'] = file_create_url($image['#uri']);
-        }
-        else {
-          $row['image'] = $this->renderer->renderPlain($image);
-        }
-        $row['position'] = $data[$position_key];
-        $row['text'] = $data[$text_key];
+      $sku_labels[] = $row;
 
-        $static_labels_cache[$sku][$type][] = $row;
-
-        // Disable subsequent images if flag is true.
-        if ($data['disable_subsequents']) {
-          break;
-        }
+      // Disable subsequent images if flag is true.
+      if ($data['disable_subsequents']) {
+        break;
       }
     }
 
-    return $static_labels_cache[$sku][$type];
+    $this->productCacheManager->set($sku_entity, $cache_key, $sku_labels);
+
+    return $sku_labels;
   }
 
   /**
@@ -1333,7 +1340,7 @@ class SkuManager {
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
     // Save the file as file entity.
-    // @TODO: Check for a way to remove old files and file objects.
+    // @todo Check for a way to remove old files and file objects.
     // To be done here and in SKU.php both.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
@@ -1835,7 +1842,7 @@ class SkuManager {
     if (empty($combinations)) {
       // Below code is only for debugging issues around cache having empty data
       // even when there are children in stock.
-      // @TODO: To be removed in: CORE-5271.
+      // @todo To be removed in: CORE-5271.
       // Done for: CORE-5200, CORE-5248.
       if ($this->isProductInStock($sku)) {
         // Log message here to allow debugging further.
@@ -2001,73 +2008,6 @@ class SkuManager {
     $user_input = $form_state->getUserInput();
     $user_input['configurables'] = $selected;
     $form_state->setUserInput($user_input);
-  }
-
-  /**
-   * Get data from Cache for a product.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   * @param string $key
-   *   Key of the data to get from cache.
-   *
-   * @return array|null
-   *   Data if found or null.
-   */
-  public function getProductCachedData(SKU $sku, $key = 'price') {
-    $static = &drupal_static('alshaya_product_cached_data', []);
-
-    $cid = $this->getProductCachedId($sku);
-
-    // Try once in static cache.
-    if (isset($static[$cid], $static[$cid][$key])) {
-      return $static[$cid][$key];
-    }
-
-    // Load from cache.
-    $cache = $this->productCache->get($cid);
-
-    if (isset($cache->data, $cache->data[$key])) {
-      $static[$cid][$key] = $cache->data[$key];
-      return $cache->data[$key];
-    }
-
-    return NULL;
-  }
-
-  /**
-   * Set data into Cache for a product.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   * @param string $key
-   *   Key of the data to get from cache.
-   * @param mixed $value
-   *   Value to set for the provided key.
-   */
-  public function setProductCachedData(SKU $sku, $key, $value) {
-    $cid = $this->getProductCachedId($sku);
-    $cache = $this->productCache->get($cid);
-    $data = $cache->data ?? [];
-    $data[$key] = $value;
-    $this->productCache->set($cid, $data, Cache::PERMANENT, $sku->getCacheTags());
-
-    // Update value in static cache too.
-    $static = &drupal_static('alshaya_product_cached_data', []);
-    $static[$cid][$key] = $value;
-  }
-
-  /**
-   * Get cache id for particular sku and language.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU entity.
-   *
-   * @return string
-   *   Cache key.
-   */
-  public function getProductCachedId(SKU $sku) {
-    return 'alshaya_product:' . $sku->language()->getId() . ':' . $sku->getSku();
   }
 
   /**
@@ -2448,7 +2388,7 @@ class SkuManager {
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
 
-      // @TODO: CORE-13213, temporarily disabling this.
+      // @todo CORE-13213, temporarily disabling this.
       if ($this->isAttributeOptionToExclude($value) && 1 == 2) {
         $configurable['#options_attributes'][$id]['class'][] = 'hidden';
         $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';
@@ -2589,6 +2529,12 @@ class SkuManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKUInterface $sku): bool {
+    $cache = $this->productCacheManager->get($sku, 'in_stock');
+
+    if (isset($cache)) {
+      return $cache;
+    }
+
     // For all web requests we don't want to show the products
     // that are not processed yet.
     if (PHP_SAPI != 'cli'
@@ -2608,6 +2554,8 @@ class SkuManager {
       $in_stock = (count($children) > 0);
     }
 
+    $this->productCacheManager->set($sku, 'in_stock', $in_stock);
+
     return $in_stock;
   }
 
@@ -2624,16 +2572,14 @@ class SkuManager {
     $static = &drupal_static(__METHOD__, []);
 
     if (!isset($static[$sku->id()])) {
-      $children = Configurable::getChildSkus($sku);
+      $variants = Configurable::getChildSkus($sku);
 
       // Avoid fatal error because fo faulty data.
-      if (empty($children)) {
+      if (empty($variants)) {
         return [];
       }
 
       $query = $this->connection->select('acq_sku_field_data', 'asfd');
-
-      $variants = Configurable::getChildSkus($sku);
 
       // Check only for children of current parent.
       $query->condition('asfd.sku', $variants, 'IN');
@@ -3642,36 +3588,31 @@ class SkuManager {
   /**
    * Wrapper function get labels and make the urls absolute.
    *
+   * TO BE used for APIs.
+   *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
    * @param string $context
    *   Context.
-   * @param string $channel
-   *   Whether web or mapp.
    *
    * @return array
    *   Labels data.
    */
-  public function getSkuLabels(SKUInterface $sku, string $context, string $channel = 'web'): array {
-    $labels = $this->getLabels($sku, $context, FALSE, $channel);
+  public function getSkuLabels(SKUInterface $sku, string $context): array {
+    // This function should be used for APIs.
+    $labels = $this->getLabels($sku, $context, FALSE);
+
     if (empty($labels)) {
       return [];
     }
+
+    // Convert render array to absolute image urls.
     foreach ($labels as &$label) {
-      $doc = new \DOMDocument();
-      $doc->loadHTML((string) $label['image']);
-      $xpath = new \DOMXPath($doc);
-      // We are using `data-src` attribute as we are using blazy for images.
-      // If blazy is disabled, then we need to revert back to `src` attribute.
-      $promo_image_path = $channel == 'mapp'
-        ? $label['image']
-        : $xpath->evaluate("string(//img/@data-src)");
-      // Checking if the image path is relative or absolute. If image path is
-      // absolute, we are using the same path.
-      $label['image'] = UrlHelper::isValid($promo_image_path, TRUE)
-        ? $promo_image_path
-        : $this->currentRequest->getSchemeAndHttpHost() . $promo_image_path;
+      $label['image'] = is_array($label['image'])
+        ? file_create_url($label['image']['#uri'])
+        : $label['image'];
     }
+
     return $labels;
   }
 

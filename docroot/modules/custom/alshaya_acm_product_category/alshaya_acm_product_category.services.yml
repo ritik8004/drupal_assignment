@@ -82,6 +82,7 @@ services:
       - '@entity.repository'
       - '@language_manager'
       - '@config.factory'
+      - '@cache.data'
 
   alshaya_acm_product_category.category_products_helper:
     class: Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper

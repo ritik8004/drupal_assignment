@@ -428,7 +428,7 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Print the category menu true for en language.
    */
   public function printCategoryTreeMenu($langcode) {
-    $tree = $this->productCategoryTree->getCategoryTree($langcode);
+    $tree = $this->productCategoryTree->getCategoryTreeCached($langcode);
 
     foreach ($tree as $level1) {
       $this->output->writeln($level1['label']);

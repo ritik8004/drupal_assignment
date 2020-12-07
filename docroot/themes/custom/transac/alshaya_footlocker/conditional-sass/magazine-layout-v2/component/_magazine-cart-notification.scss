@@ -1,11 +1,4 @@
 #magv2_cart_notification {
-  top: 3.3125rem;
-  #{$right}: 0.875rem;
-
-  html[lang=ar] & {
-    top: 3.3125rem;
-  }
-
   &.has--notification::before {
     width: 0.75rem;
     height: 0.75rem;

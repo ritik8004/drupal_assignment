@@ -44,18 +44,20 @@ function acq_commerce_theme($existing, $type, $theme, $path) {
  *   - price: a price value.
  */
 function template_preprocess_acq_commerce_price(array &$variables) {
-  // Fetch the config.
-  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+  static $config_data;
 
-  // Fetch the currency format from the config factor.
-  $variables['currency_format'] = $config->get('currency_code');
+  if (empty($config_data)) {
+    $config = \Drupal::configFactory()->get('acq_commerce.currency');
+    $config_data['currency_format'] = $config->get('currency_code');
+    $config_data['currency_code_position'] = $config->get('currency_code_position');
+    $config_data['decimal_points'] = $config->get('decimal_points');
+  }
 
-  // Fetch the currency code position.
-  $variables['currency_code_position'] = $config->get('currency_code_position');
+  $variables['currency_format'] = $config_data['currency_format'];
+  $variables['currency_code_position'] = $config_data['currency_code_position'];
 
   $variables['price'] = acq_commerce_get_clean_price($variables['price']);
-
-  $variables['price'] = number_format($variables['price'], $config->get('decimal_points'));
+  $variables['price'] = number_format($variables['price'], $config_data['decimal_points']);
 
   // To invalidate the cache on currency config update.
   $variables['#cache']['tags'][] = 'config:acq_commerce.currency';

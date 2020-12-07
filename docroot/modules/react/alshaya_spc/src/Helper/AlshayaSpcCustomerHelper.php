@@ -332,7 +332,7 @@ class AlshayaSpcCustomerHelper {
       if (!empty($customer) && !empty($customer['customer_id'])) {
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
 
-        // @TODO: Remove this condition when we uninstall alshaya_acm module.
+        // @todo Remove this condition when we uninstall alshaya_acm module.
         $cart_id = $this->spcCookies->getSessionCartId();
         if (empty($cart_id) && !empty($customer['extension']['cart_id'])) {
           // @phpcs:ignore

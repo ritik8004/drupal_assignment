@@ -227,15 +227,24 @@ class CategoryProductListResource extends ResourceBase {
     $result_set = $this->prepareAndExecuteQuery($id);
     // Prepare response from result set.
     $response_data = $this->addExtraTermData($term);
+
+    if (isset($result_set['department_name'])) {
+      $response_data['department_name'] = $result_set['department_name'];
+    }
     if (isset($result_set['algolia_data'])) {
       $response_data['algolia_data'] = $result_set['algolia_data'];
+    }
+    if (isset($result_set['plp_data'])) {
+      $result_set = $result_set['plp_data'];
     }
 
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
     $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
 
     // Filter the empty products.
-    $response_data['products'] = array_filter($response_data['products']);
+    // Array values being used to re-set the array index
+    // if there any empty item in b/w.
+    $response_data['products'] = array_values(array_filter($response_data['products']));
 
     // Get sub categories for the current term.
     $response_data['sub_categories'] = $this->getSubCategoryData($id);
@@ -313,6 +322,11 @@ class CategoryProductListResource extends ResourceBase {
    */
   public function prepareAndExecuteQuery(int $tid) {
     $storage = $this->entityTypeManager->getStorage('search_api_index');
+    $response = [];
+    $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid);
+    if (isset($term_details['hierarchy'])) {
+      $response['department_name'] = str_replace('>', '|', $term_details['hierarchy']);
+    }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('product')) {
       $index = $storage->load('product');
@@ -334,7 +348,9 @@ class CategoryProductListResource extends ResourceBase {
       $query->addTag('category_product_list');
 
       // Prepare and execute query and pass result set.
-      return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+      $response['plp_data'] = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+
+      return $response;
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
@@ -361,8 +377,6 @@ class CategoryProductListResource extends ResourceBase {
       $parse_mode->setConjunction(self::PARSE_MODE_CONJUNCTION);
       $query->setParseMode($parse_mode);
 
-      $term_details = $this->productCategoryPage->getCurrentSelectedCategory(NULL, $tid);
-
       $conditionGroup = new ConditionGroup();
       $conditionGroup->addCondition('stock', 0, '>');
       $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
@@ -370,7 +384,7 @@ class CategoryProductListResource extends ResourceBase {
       $query->setOption('ruleContexts', $term_details['ruleContext']);
 
       // Prepare and execute query and pass result set.
-      $response = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
+      $response['plp_data'] = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');
       $response['algolia_data'] = [
         'filter_field' => $term_details['category_field'],
         'filter_value' => $term_details['hierarchy'],

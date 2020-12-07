@@ -134,6 +134,7 @@
     var gallery = $('#product-full-screen-gallery');
     var currentSlide = $('.pdp-image.clicked').attr('data-image-index');
     slickModalOptions.initialSlide = currentSlide;
+    Drupal.blazy.revalidate();
     Drupal.productZoomApplyRtl(gallery, slickModalOptions, document);
 
     // Create Instagram Dots.
@@ -293,6 +294,7 @@
     var gallery = $('#product-image-gallery-mob');
     var currentSlide = $('.pdp-image.clicked').attr('data-image-index');
     slickMobileModalOptions.initialSlide = parseInt(currentSlide);
+    Drupal.blazy.revalidate();
     Drupal.productZoomApplyRtl(gallery, slickMobileModalOptions, document);
 
     // Create Instagram Dots.
