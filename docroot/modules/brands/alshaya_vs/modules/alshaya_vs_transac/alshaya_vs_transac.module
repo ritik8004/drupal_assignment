@@ -308,11 +308,16 @@ function alshaya_vs_transac_preprocess_acq_sku__free_gift(&$variables) {
  */
 function alshaya_vs_quiz_allowed_choice_1_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
   ->loadByProperties(['field_sku_attribute_code' => 'product_category', 'vid' => 'sku_product_option']);
   $options = [];
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   foreach ($terms as $term) {
-    $options[] = $term->name->value;
+    if($term->hasTranslation($lang)){
+      $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
+      $options[] = $translated_terms->getName();
+    }
   }
   $product_category_options = [];
   foreach ($options as $key => $value) {
@@ -337,12 +342,16 @@ function alshaya_vs_quiz_allowed_choice_1_values(FieldStorageConfig $definition,
  *
  */
 function alshaya_vs_quiz_allowed_choice_2_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  
+
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
   ->loadByProperties(['field_sku_attribute_code' => 'padding', 'vid' => 'sku_product_option']);
   $options = [];
   foreach ($terms as $term) {
-    $options[] = $term->name->value;
+    if($term->hasTranslation($lang)){
+      $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
+      $options[] = $translated_terms->getName();
+    }
   }
   $padding_options = [];
   foreach ($options as $key => $value) {
@@ -367,11 +376,16 @@ function alshaya_vs_quiz_allowed_choice_2_values(FieldStorageConfig $definition,
  *
  */
 function alshaya_vs_quiz_allowed_choice_3_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
   ->loadByProperties(['field_sku_attribute_code' => 'bra_coverage', 'vid' => 'sku_product_option']);
   $options = [];
   foreach ($terms as $term) {
-    $options[] = $term->name->value;
+    if($term->hasTranslation($lang)){
+      $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
+      $options[] = $translated_terms->getName();
+    }
   }
   $bra_coverage_options = [];
   foreach ($options as $key => $value) {
