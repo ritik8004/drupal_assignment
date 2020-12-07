@@ -98,6 +98,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
       '#attached' => [
         'library' => [
           'alshaya_stylefinder/alshaya_stylefinder',
+          'alshaya_white_label/alshaya-stylefinder',
         ],
       ],
     ];

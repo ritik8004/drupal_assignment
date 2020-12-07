@@ -1,0 +1,46 @@
+.style-finder-step-coverage-wrapper {
+  margin-top: 3.125rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 4.6875rem;
+    max-width: 34.375rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  li {
+    padding-top: 0.625rem;
+
+    &.active {
+      .style-finder-list-image {
+        opacity: 1;
+      }
+
+      .style-finder-list-text {
+        display: block;
+      }
+    }
+  }
+
+  .style-finder {
+    &-list-image {
+      margin: 0 0.5625rem;
+      opacity: 0.5;
+
+      @include breakpoint($tablet) {
+        margin: 0 0.875rem;
+      }
+    }
+
+    &-list-title {
+      font-size: 1.125rem;
+      line-height: normal;
+      text-transform: uppercase;
+      padding-bottom: 0.625rem;
+    }
+
+    &-list-text {
+      display: none;
+    }
+  }
+}
