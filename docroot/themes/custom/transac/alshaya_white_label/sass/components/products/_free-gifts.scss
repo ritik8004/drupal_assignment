@@ -784,6 +784,16 @@ body:not(.ie) {
   }
 }
 
+body.free-gift-promo-list-overlay {
+  &.free-gift-detail-modal {
+    .ui-dialog {
+      #drupal-modal {
+        overflow-x: auto;
+      }
+    }
+  }
+}
+
 .free-gift-promo-list-overlay,
 .free-gifts-modal-overlay {
   .slick-slider {
