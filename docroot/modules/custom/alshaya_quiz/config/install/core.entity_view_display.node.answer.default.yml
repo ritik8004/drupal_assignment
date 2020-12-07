@@ -3,14 +3,12 @@ status: true
 dependencies:
   config:
     - field.field.node.answer.field_answer_summary
-    - field.field.node.answer.field_choice_3
-    - field.field.node.answer.field_instruction
-    - field.field.node.answer.field_next_question
-    - field.field.node.answer.field_choice_2
-    - field.field.node.answer.field_product_image
-    - field.field.node.answer.field_result
     - field.field.node.answer.field_choice_1
+    - field.field.node.answer.field_choice_2
+    - field.field.node.answer.field_choice_3
     - field.field.node.answer.field_choice_4
+    - field.field.node.answer.field_next_question
+    - field.field.node.answer.field_product_image
     - node.type.answer
   module:
     - options
@@ -23,28 +21,43 @@ bundle: answer
 mode: default
 content:
   field_answer_summary:
-    weight: 103
+    weight: 3
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
-  field_choice_3:
-    weight: 107
+  field_choice_1:
+    weight: 4
     label: above
     settings: {  }
     third_party_settings: {  }
     type: list_default
     region: content
-  field_instruction:
-    weight: 102
+  field_choice_2:
+    weight: 6
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    type: list_default
+    region: content
+  field_choice_3:
+    weight: 5
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_choice_4:
+    weight: 7
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
     region: content
   field_next_question:
-    weight: 101
+    weight: 8
     label: above
     settings:
       link: true
@@ -53,7 +66,7 @@ content:
     type: entity_reference_entity_view
     region: content
   field_product_image:
-    weight: 105
+    weight: 2
     label: above
     settings:
       svg_attributes:
@@ -65,46 +78,16 @@ content:
     third_party_settings: {  }
     type: image
     region: content
-  field_result:
-    weight: 104
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    type: entity_reference_label
-    region: content
-  field_choice_1:
-    weight: 106
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: list_default
-    region: content
   links:
-    weight: 100
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
   sharethis:
-    weight: 10
+    weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
-  field_choice_2:
-    weight: 108
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    type: list_default
-    region: content
-  field_choice_4:
-    weight: 9
-    label: above
-    settings:
-    link: true
-    third_party_settings: {  }
-    type: entity_reference_label
-    region: content
 hidden:
   langcode: true
   search_api_excerpt: true

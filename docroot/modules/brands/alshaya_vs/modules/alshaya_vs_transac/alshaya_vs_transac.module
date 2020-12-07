@@ -305,15 +305,18 @@ function alshaya_vs_transac_preprocess_acq_sku__free_gift(&$variables) {
  * @return array
  *   An array of possible key and value options.
  *
- * @todo Add 'Product Category' allowed values in the field 
- *   of Answers Content type.
  */
 function alshaya_vs_quiz_allowed_choice_1_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   
-  $category_options = ["Bras", "Sports Bras"];
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+  ->loadByProperties(['field_sku_attribute_code' => 'product_category', 'vid' => 'sku_product_option']);
+  $options = [];
+  foreach ($terms as $term) {
+    $options[] = $term->name->value;
+  }
   $product_category_options = [];
-  foreach ($category_options as $key => $value) {
-    $product_category_options[$key] = $value;
+  foreach ($options as $key => $value) {
+    $product_category_options[$value] = $value;
   }
 
   return $product_category_options;
@@ -332,15 +335,18 @@ function alshaya_vs_quiz_allowed_choice_1_values(FieldStorageConfig $definition,
  * @return array
  *   An array of possible key and value options.
  *
- * @todo Add 'padding' allowed values in the field 
- *   of Answers Content type.
  */
 function alshaya_vs_quiz_allowed_choice_2_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   
-  $options = ["Unlined", "Lightly lined", "Push up"];
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+  ->loadByProperties(['field_sku_attribute_code' => 'padding', 'vid' => 'sku_product_option']);
+  $options = [];
+  foreach ($terms as $term) {
+    $options[] = $term->name->value;
+  }
   $padding_options = [];
   foreach ($options as $key => $value) {
-    $padding_options[$key] = $value;
+    $padding_options[$value] = $value;
   }
 
   return $padding_options;
@@ -359,15 +365,17 @@ function alshaya_vs_quiz_allowed_choice_2_values(FieldStorageConfig $definition,
  * @return array
  *   An array of possible key and value options.
  *
- * @todo Add 'bra coverage' allowed values in the field 
- *   of Answers Content type.
  */
 function alshaya_vs_quiz_allowed_choice_3_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  
-  $options = ["Full coverage", "Demi", "Plunge"];
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+  ->loadByProperties(['field_sku_attribute_code' => 'bra_coverage', 'vid' => 'sku_product_option']);
+  $options = [];
+  foreach ($terms as $term) {
+    $options[] = $term->name->value;
+  }
   $bra_coverage_options = [];
   foreach ($options as $key => $value) {
-    $bra_coverage_options[$key] = $value;
+    $bra_coverage_options[$value] = $value;
   }
 
   return $bra_coverage_options;
