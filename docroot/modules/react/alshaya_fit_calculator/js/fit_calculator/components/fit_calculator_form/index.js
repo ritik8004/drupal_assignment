@@ -11,7 +11,7 @@ export default class FitCalculator extends React.Component {
     super();
     this.state = {
       bandSizeLabel: Drupal.t('band size'),
-      burstSizeLabel: Drupal.t('burst size'),
+      bustSizeLabel: Drupal.t('bust size'),
       errorMessage: false,
       resultSize: false,
     };
@@ -31,18 +31,18 @@ export default class FitCalculator extends React.Component {
     // Get form field elements.
     const unit = e.target.elements.fitCalcMeasurement.value;
     const bandSize = e.target.elements.band_size;
-    const burstSize = e.target.elements.burst_size;
+    const bustSize = e.target.elements.bust_size;
 
     // If empty fields then set placeholder and class.
-    if (this.checkFieldEmpty(bandSize, burstSize) === false) {
+    if (this.checkFieldEmpty(bandSize, bustSize) === false) {
       return false;
     }
 
     const bandSizeValue = Math.round(bandSize.value);
-    const burstSizeValue = Math.round(burstSize.value);
+    const bustSizeValue = Math.round(bustSize.value);
 
     // Checks if input is valid.
-    if (this.checkIfValidInput(bandSizeValue, burstSizeValue) === false) {
+    if (this.checkIfValidInput(bandSizeValue, bustSizeValue) === false) {
       return false;
     }
 
@@ -59,13 +59,13 @@ export default class FitCalculator extends React.Component {
     }
 
     // Check if size exists.
-    if (this.checkIfSizeExists(sizeData, unit, bandSizeValue, burstSizeValue) === false) {
+    if (this.checkIfSizeExists(sizeData, unit, bandSizeValue, bustSizeValue) === false) {
       return false;
     }
 
     // Show result and link to PLP page if size is available.
     this.setState({
-      resultSize: sizeData[unit][bandSizeValue][burstSizeValue],
+      resultSize: sizeData[unit][bandSizeValue][bustSizeValue],
       errorMessage: false,
     });
     return true;
@@ -74,7 +74,7 @@ export default class FitCalculator extends React.Component {
   /**
    * Checks if field are empty.
    */
-  checkFieldEmpty = (bandSize, burstSize) => {
+  checkFieldEmpty = (bandSize, bustSize) => {
     if (bandSize.value === '') {
       this.setState({
         bandSizeLabel: Drupal.t('Please enter band size'),
@@ -83,12 +83,12 @@ export default class FitCalculator extends React.Component {
       bandSize.classList.add('empty');
       return false;
     }
-    if (burstSize.value === '') {
+    if (bustSize.value === '') {
       this.setState({
-        burstSizeLabel: Drupal.t('Please enter burst size'),
+        bustSizeLabel: Drupal.t('Please enter bust size'),
       });
-      burstSize.focus();
-      burstSize.classList.add('empty');
+      bustSize.focus();
+      bustSize.classList.add('empty');
       return false;
     }
     return true;
@@ -97,8 +97,8 @@ export default class FitCalculator extends React.Component {
   /**
    * Checks if input are valid.
    */
-  checkIfValidInput = (bandSizeValue, burstSizeValue) => {
-    if (Number.isNaN(bandSizeValue) || Number.isNaN(burstSizeValue)) {
+  checkIfValidInput = (bandSizeValue, bustSizeValue) => {
+    if (Number.isNaN(bandSizeValue) || Number.isNaN(bustSizeValue)) {
       this.setState({
         errorMessage: true,
         resultSize: false,
@@ -111,14 +111,14 @@ export default class FitCalculator extends React.Component {
   /**
    * Checks if size data available.
    */
-  checkIfSizeExists = (sizeData, unit, bandSizeValue, burstSizeValue) => {
+  checkIfSizeExists = (sizeData, unit, bandSizeValue, bustSizeValue) => {
     if (sizeData[unit][bandSizeValue] === undefined) {
       this.setState({
         errorMessage: true,
         resultSize: false,
       });
       return false;
-    } if (sizeData[unit][bandSizeValue][burstSizeValue] === undefined) {
+    } if (sizeData[unit][bandSizeValue][bustSizeValue] === undefined) {
       this.setState({
         errorMessage: true,
         resultSize: false,
@@ -138,7 +138,7 @@ export default class FitCalculator extends React.Component {
     const {
       errorMessage,
       bandSizeLabel,
-      burstSizeLabel,
+      bustSizeLabel,
       resultSize,
     } = this.state;
 
@@ -175,8 +175,8 @@ export default class FitCalculator extends React.Component {
                   focusClass="band-size-input"
                 />
                 <TextField
-                  name="burst_size"
-                  label={burstSizeLabel}
+                  name="bust_size"
+                  label={bustSizeLabel}
                   focusClass="bust-size-input"
                 />
                 <button
