@@ -308,20 +308,10 @@ function alshaya_vs_transac_preprocess_acq_sku__free_gift(&$variables) {
  */
 function alshaya_vs_quiz_allowed_choice_1_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
   
-  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $product_category_options = [];
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
   ->loadByProperties(['field_sku_attribute_code' => 'product_category', 'vid' => 'sku_product_option']);
-  $options = [];
-  foreach ($terms as $term) {
-    if($term->hasTranslation($lang)){
-      $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
-      $options[] = $translated_terms->getName();
-    }
-  }
-  $product_category_options = [];
-  foreach ($options as $key => $value) {
-    $product_category_options[$value] = $value;
-  }
+  $product_category_options = alshaya_vs_quiz_translated_terms($terms);
 
   return $product_category_options;
 }
@@ -341,21 +331,10 @@ function alshaya_vs_quiz_allowed_choice_1_values(FieldStorageConfig $definition,
  *
  */
 function alshaya_vs_quiz_allowed_choice_2_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-
-  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $padding_options = [];
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
   ->loadByProperties(['field_sku_attribute_code' => 'padding', 'vid' => 'sku_product_option']);
-  $options = [];
-  foreach ($terms as $term) {
-    if($term->hasTranslation($lang)){
-      $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
-      $options[] = $translated_terms->getName();
-    }
-  }
-  $padding_options = [];
-  foreach ($options as $key => $value) {
-    $padding_options[$value] = $value;
-  }
+  $padding_options = alshaya_vs_quiz_translated_terms($terms);
 
   return $padding_options;
 }
@@ -375,10 +354,16 @@ function alshaya_vs_quiz_allowed_choice_2_values(FieldStorageConfig $definition,
  *
  */
 function alshaya_vs_quiz_allowed_choice_3_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-
-  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $bra_coverage_options = [];
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
   ->loadByProperties(['field_sku_attribute_code' => 'bra_coverage', 'vid' => 'sku_product_option']);
+  $bra_coverage_options = alshaya_vs_quiz_translated_terms($terms);
+
+  return $bra_coverage_options;
+}
+
+function alshaya_vs_quiz_translated_terms($terms) {
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $options = [];
   foreach ($terms as $term) {
     if($term->hasTranslation($lang)){
@@ -386,10 +371,9 @@ function alshaya_vs_quiz_allowed_choice_3_values(FieldStorageConfig $definition,
       $options[] = $translated_terms->getName();
     }
   }
-  $bra_coverage_options = [];
+  $option_list = [];
   foreach ($options as $key => $value) {
-    $bra_coverage_options[$value] = $value;
+    $option_list[$value] = $value;
   }
-
-  return $bra_coverage_options;
+  return $option_list;
 }
