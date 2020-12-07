@@ -4,8 +4,7 @@ dependencies:
   config:
     - field.storage.node.field_references
     - node.type.question
-  module:
-    - text
+    - taxonomy.vocabulary.acq_product_category
 id: node.question.field_references
 field_name: field_references
 entity_type: node
@@ -14,8 +13,17 @@ label: References
 description: ''
 required: false
 translatable: true
-skip_translation_check: null
+skip_translation_check: 0
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: text_long
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      acq_product_category: acq_product_category
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
