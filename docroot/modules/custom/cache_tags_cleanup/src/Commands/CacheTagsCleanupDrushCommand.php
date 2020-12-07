@@ -80,11 +80,11 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
    */
   public function deleteEntityCacheTags(array $options = ['chunk_size' => 50]) {
     $verbose = $options['verbose'] ?? FALSE;
+    $chunk_size = (int) $options['chunk_size'];
 
     // Getting all entity types.
     $entity_types = array_keys($this->entityManager->getDefinitions());
     foreach ($entity_types as $entity_type) {
-      $verbose = $options['verbose'] ?? FALSE;
       $deleted_entities = [];
       $entity_ids = [];
       $cachetags_ids = [];
@@ -115,7 +115,6 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
         ]));
       }
 
-      $chunk_size = (int) $options['chunk_size'];
       $cache_tags_chunks = array_chunk($deleted_entities, $chunk_size);
       $cachetags_collection = [];
       foreach ($cache_tags_chunks as $entity_chunk) {
