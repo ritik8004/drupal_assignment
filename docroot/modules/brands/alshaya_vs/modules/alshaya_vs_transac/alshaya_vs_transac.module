@@ -362,6 +362,14 @@ function alshaya_vs_quiz_allowed_choice_3_values(FieldStorageConfig $definition,
   return $bra_coverage_options;
 }
 
+/**
+ * Custom Function to get translated terms of the passed array of terms
+ * @param  array $terms
+ *   List of terms of respective attribute code.
+ *   
+ * @return array
+ *   Array of translated terms
+ */
 function alshaya_vs_quiz_translated_terms($terms) {
   $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $options = [];
