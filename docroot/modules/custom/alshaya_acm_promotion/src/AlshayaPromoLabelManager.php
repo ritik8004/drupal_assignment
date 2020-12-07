@@ -685,7 +685,7 @@ class AlshayaPromoLabelManager {
   }
 
   /**
-   * Get free gift promotion data to display.
+   * Get the free gift promotion data to display.
    *
    * @param int|string $promotion_id
    *   Promotion ID.
