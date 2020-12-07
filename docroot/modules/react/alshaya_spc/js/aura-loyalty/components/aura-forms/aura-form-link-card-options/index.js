@@ -7,11 +7,8 @@ class AuraFormLinkCardOptions extends React.Component {
   }
 
   selectOption = (e) => {
-    const { selectOptionCallback, cardNumber } = this.props;
+    const { selectOptionCallback } = this.props;
 
-    if (cardNumber) {
-      return;
-    }
     // Clear selection.
     document.querySelectorAll('.linking-option-radio').forEach((item) => {
       const element = item;

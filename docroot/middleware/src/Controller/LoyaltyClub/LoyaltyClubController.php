@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Service\Aura\CustomerHelper;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -44,6 +45,13 @@ class LoyaltyClubController {
   protected $utility;
 
   /**
+   * Service for aura customer.
+   *
+   * @var \App\Service\Aura\CustomerHelper
+   */
+  protected $auraCustomerHelper;
+
+  /**
    * LoyaltyClubController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -54,17 +62,21 @@ class LoyaltyClubController {
    *   Drupal service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Aura\CustomerHelper $aura_customer_helper
+   *   Aura customer helper service.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
     Drupal $drupal,
-    Utility $utility
+    Utility $utility,
+    CustomerHelper $aura_customer_helper
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->drupal = $drupal;
     $this->utility = $utility;
+    $this->auraCustomerHelper = $aura_customer_helper;
   }
 
   /**
@@ -75,22 +87,7 @@ class LoyaltyClubController {
    */
   public function apcStatusUpdate(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
-    $uid = $request_content['uid'];
-    $aura_status = $request_content['apcLinkStatus'];
-    $data = [
-      'statusUpdate' => [
-        'apcIdentifierId' => $request_content['apcIdentifierId'],
-        'link' => $request_content['link'],
-      ],
-    ];
-
-    // Check if required data is present in request.
-    if (empty($data['statusUpdate']['apcIdentifierId']) || empty($data['statusUpdate']['link'])) {
-      $this->logger->error('Error while trying to update user AURA Status. AURA Card number and Link value is required. Data: @request_data', [
-        '@request_data' => json_encode($data),
-      ]);
-      return new JsonResponse($this->utility->getErrorResponse('AURA Card number and Link value is required.', Response::HTTP_NOT_FOUND));
-    }
+    $data = $this->auraCustomerHelper->prepareAuraUserStatusUpdateData($request_content);
 
     try {
       // Get user details from session.
@@ -99,15 +96,15 @@ class LoyaltyClubController {
       // Check if we have user in session.
       if (empty($user)) {
         $this->logger->error('Error while trying to update user AURA Status. No user available in session. User id from request: @uid.', [
-          '@uid' => $uid,
+          '@uid' => $request_content['uid'],
         ]);
         return new JsonResponse($this->utility->getErrorResponse('No user available in session', Response::HTTP_NOT_FOUND));
       }
 
       // Check if uid in the request matches the one in session.
-      if ($user['uid'] !== $uid) {
+      if ($user['uid'] !== $request_content['uid']) {
         $this->logger->error("Error while trying to update user AURA Status. User id in request doesn't match the one in session. User id from request: @req_uid. User id in session: @session_uid.", [
-          '@req_uid' => $uid,
+          '@req_uid' => $request_content['uid'],
           '@session_uid' => $user['uid'],
         ]);
         return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
@@ -120,8 +117,8 @@ class LoyaltyClubController {
       // On API success, update the user AURA Status in Drupal.
       if ($response) {
         $auraData = [
-          'uid' => $uid,
-          'apcLinkStatus' => $aura_status,
+          'uid' => $request_content['uid'],
+          'apcLinkStatus' => $request_content['apcLinkStatus'],
         ];
         $updated = $this->drupal->updateUserAuraInfo($auraData);
 
@@ -129,8 +126,8 @@ class LoyaltyClubController {
         if (!$updated) {
           $message = 'Error while trying to update user AURA Status field in Drupal.';
           $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
-            '@uid' => $uid,
-            '@aura_status' => $aura_status,
+            '@uid' => $request_content['uid'],
+            '@aura_status' => $request_content['apcLinkStatus'],
             '@customer_id' => $user['customer_id'],
           ]);
           return new JsonResponse($this->utility->getErrorResponse($message, 500));

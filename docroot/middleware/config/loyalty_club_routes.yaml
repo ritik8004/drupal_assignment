@@ -33,7 +33,13 @@ cart.loyalty_update:
     controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::cartLoyaltyUpdate
     methods: POST
 
-loyalty_club.redeem-points:
+loyalty_club.redeem_points:
     path: /post/loyalty-club/process-redemption
     controller: App\Controller\LoyaltyClub\LoyaltyClubRedeemController::processRedemption
     methods: POST
+
+loyalty_club.send_link_card_otp:
+    path: /post/loyalty-club/send-link-card-otp
+    controller: App\Controller\LoyaltyClub\LoyaltyClubOtpController::sendLinkCardOtp
+    methods: POST
+

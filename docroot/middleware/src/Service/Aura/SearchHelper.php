@@ -35,6 +35,13 @@ class SearchHelper {
   protected $utility;
 
   /**
+   * Validation Helper service.
+   *
+   * @var \App\Service\Aura\ValidationHelper
+   */
+  protected $validationHelper;
+
+  /**
    * SearchHelper constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -43,15 +50,19 @@ class SearchHelper {
    *   Logger service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Aura\ValidationHelper $validation_helper
+   *   Validation Helper service.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
-    Utility $utility
+    Utility $utility,
+    ValidationHelper $validation_helper
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->utility = $utility;
+    $this->validationHelper = $validation_helper;
   }
 
   /**
@@ -77,6 +88,55 @@ class SearchHelper {
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Search based on type of input to get user details.
+   *
+   * @return array
+   *   Return API response/error.
+   */
+  public function searchUserDetails($input) {
+    $validation = $this->validationHelper->validateInput($input['type'], $input['value']);
+
+    if (!empty($validation['error'])) {
+      return $validation;
+    }
+
+    if ($input['type'] === 'email') {
+      // Call search api to get mobile number to send otp.
+      $search_response = $this->search('email', $input['value']);
+
+      if (!empty($search_response['error'])) {
+        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_EMAIL');
+      }
+
+      return $search_response;
+    }
+
+    if ($input['type'] === 'cardNumber') {
+      // Call search api to get mobile number to send otp.
+      $search_response = $this->search('apcNumber', $input['value']);
+
+      if (!empty($search_response['error'])) {
+        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_CARDNUMBER');
+      }
+
+      return $search_response;
+    }
+
+    if ($input['type'] === 'mobile') {
+      // Call search api to verify mobile number to send otp.
+      $search_response = $this->search('phone', $input['value']);
+
+      if (!empty($search_response['error'])) {
+        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_MOBILE_ERROR');
+      }
+
+      return $search_response;
+    }
+
+    return [];
   }
 
 }

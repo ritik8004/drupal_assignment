@@ -2,7 +2,7 @@ import React from 'react';
 import SectionTitle from '../../../../utilities/section-title';
 import TextField from '../../../../utilities/textfield';
 import AuraMobileNumberField from '../aura-mobile-number-field';
-import { getElementValue, showError, removeError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { showError } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
 import { getAuraConfig, getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { postAPIData } from '../../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
@@ -12,6 +12,11 @@ import {
 } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import AuraFormModalMessage from '../aura-form-modal-message';
 import { handleSignUp } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
+import {
+  getElementValueByType,
+  getInlineErrorSelector,
+} from '../../utilities/link_card_sign_up_modal_helper';
+import { validateElementValueByType } from '../../utilities/validation_helper';
 
 class AuraFormNewAuraUserModal extends React.Component {
   constructor(props) {
@@ -36,54 +41,25 @@ class AuraFormNewAuraUserModal extends React.Component {
   }
 
   // Validate enrollment data.
-  validateEnrollmentData = (enrollmentData) => {
+  validateEnrollmentData = () => {
     let hasError = false;
 
     // Validate mobile.
-    if (enrollmentData.mobile.length === 0 || enrollmentData.mobile.match(/^[0-9]+$/) === null) {
-      showError('new-aura-user-mobile-number', getStringMessage('form_error_mobile_number'));
+    if (validateElementValueByType('signUpMobile') === false) {
       hasError = true;
-    } else {
-      removeError('new-aura-user-mobile-number');
     }
 
     // Validate full name.
-    if (enrollmentData.fullName.length === 0) {
-      showError('new-aura-user-full-name-error', getStringMessage('form_error_full_name'));
+    if (validateElementValueByType('fullName') === false) {
       hasError = true;
-    } else {
-      let splitedName = enrollmentData.fullName.split(' ');
-      splitedName = splitedName.filter((s) => (
-        (s.trim().length > 0
-        && (s !== '\\n' && s !== '\\t' && s !== '\\r'))));
-
-      if (splitedName.length === 1) {
-        showError('new-aura-user-full-name-error', getStringMessage('form_error_full_name'));
-        hasError = true;
-      } else {
-        removeError('new-aura-user-full-name-error');
-      }
     }
 
     // Validate email.
-    if (enrollmentData.email.length === 0 || enrollmentData.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) === null) {
-      showError('new-aura-user-email-error', getStringMessage('form_error_email'));
+    if (validateElementValueByType('signUpEmail') === false) {
       hasError = true;
-    } else {
-      removeError('new-aura-user-email-error');
     }
 
     return hasError;
-  };
-
-  getEnrollmentData = () => {
-    const enrollmentData = {
-      fullName: getElementValue('new-aura-user-full-name'),
-      mobile: getElementValue('new-aura-user-mobile-number'),
-      email: document.getElementsByName('new-aura-user-email')[0].value,
-    };
-
-    return enrollmentData;
   };
 
   registerUser = () => {
@@ -91,9 +67,7 @@ class AuraFormNewAuraUserModal extends React.Component {
       closeNewUserModal,
     } = this.props;
 
-    const enrollmentData = this.getEnrollmentData();
-
-    const hasError = this.validateEnrollmentData(enrollmentData);
+    const hasError = this.validateEnrollmentData();
 
     if (hasError) {
       return;
@@ -101,12 +75,12 @@ class AuraFormNewAuraUserModal extends React.Component {
 
     // API call to do quick enrollment.
     const apiUrl = 'post/loyalty-club/sign-up';
-    const splitName = enrollmentData.fullName.split(' ');
+    const splitName = getElementValueByType('fullName').split(' ');
     const data = {
       firstname: splitName[0],
       lastname: splitName[1],
-      email: enrollmentData.email,
-      mobile: `+${this.getCountryMobileCode()}${enrollmentData.mobile}`,
+      email: getElementValueByType('signUpEmail'),
+      mobile: `+${this.getCountryMobileCode()}${getElementValueByType('signUpMobile')}`,
     };
     const apiData = postAPIData(apiUrl, data);
     showFullScreenLoader();
@@ -121,22 +95,35 @@ class AuraFormNewAuraUserModal extends React.Component {
               // Close the modals.
               closeNewUserModal();
             }
-          } else if (result.data.error_code === 'mobile_already_registered') {
-            showError('new-aura-user-aura-mobile-field-error', getStringMessage('form_error_mobile_already_registered'));
-          } else if (result.data.error_code === 'email_already_registered') {
-            showError('new-aura-user-email-error', getStringMessage('form_error_email_already_registered'));
-          } else {
-            this.setState({
-              messageType: 'error',
-              messageContent: result.data.error_message,
-            });
+            removeFullScreenLoader();
+            return;
           }
-        } else {
+
+          if (result.data.error_code === 'mobile_already_registered') {
+            showError(getInlineErrorSelector('signUpMobile').signUpMobile, getStringMessage('form_error_mobile_already_registered'));
+            removeFullScreenLoader();
+            return;
+          }
+
+          if (result.data.error_code === 'email_already_registered') {
+            showError(getInlineErrorSelector('signUpEmail').signUpEmail, getStringMessage('form_error_email_already_registered'));
+            removeFullScreenLoader();
+            return;
+          }
+
           this.setState({
             messageType: 'error',
-            messageContent: getStringMessage('form_error_sign_up_failed_message'),
+            messageContent: result.data.error_message,
           });
+          removeFullScreenLoader();
+          return;
         }
+
+        this.setState({
+          messageType: 'error',
+          messageContent: getStringMessage('form_error_sign_up_failed_message'),
+        });
+
         removeFullScreenLoader();
       });
     }
