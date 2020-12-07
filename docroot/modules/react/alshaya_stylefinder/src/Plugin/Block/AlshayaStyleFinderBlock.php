@@ -71,7 +71,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
       '#target_type' => 'node',
       '#title' => $this->t('Create a quiz'),
       '#description' => $this->t('Allows to create a quiz.'),
-      '#default_value' => isset($config['reference_quiz_node_id']) ? $this->entityTypeManager->getStorage('node')->load($config['reference_quiz_node_id']) : '',
+      '#default_value' => isset($config['reference_quiz_node_id']) ? $this->entityTypeManager->getStorage('node')->load($config['reference_quiz_node_id'][0]['target_id']) : '',
       '#tags' => TRUE,
       '#selection_settings' => [
         'target_bundles' => ['quiz'],
@@ -95,7 +95,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
    */
   public function build() {
     $config = $this->getConfiguration();
-    $quiz_node_id = $config['reference_quiz_node_id'];
+    $quiz_node_id = $config['reference_quiz_node_id'][0]['target_id'];
     $quizDetails = [];
     $cache_tags = [];
     if (!empty($quiz_node_id)) {
