@@ -312,7 +312,6 @@ function alshaya_vs_quiz_allowed_choice_1_values(FieldStorageConfig $definition,
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
   ->loadByProperties(['field_sku_attribute_code' => 'product_category', 'vid' => 'sku_product_option']);
   $options = [];
-  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   foreach ($terms as $term) {
     if($term->hasTranslation($lang)){
       $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
