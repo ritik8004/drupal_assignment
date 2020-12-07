@@ -109,7 +109,6 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
         $question_details[$ques_nid] = $this->quizQuestionDetails($ques_nid);
       }
       $quizDetails['question'] = $question_details;
-      $quizDetails = json_encode($quizDetails);
     }
     return [
       '#markup' => '<div id="style-finder-container"></div>',
