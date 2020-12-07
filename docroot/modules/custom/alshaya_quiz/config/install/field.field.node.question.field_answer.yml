@@ -12,8 +12,8 @@ bundle: question
 label: Answer
 description: ''
 required: true
-translatable: false
-skip_translation_check: null
+translatable: true
+skip_translation_check: 0
 default_value: {  }
 default_value_callback: ''
 settings:
