@@ -7,3 +7,4 @@ services:
       - '@database'
       - '@logger.factory'
       - '@entity.manager'
+      - '@entity.query'
