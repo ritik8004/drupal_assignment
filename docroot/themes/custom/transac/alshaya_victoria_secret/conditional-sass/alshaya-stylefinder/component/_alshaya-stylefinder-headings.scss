@@ -1,8 +1,8 @@
 .style-finder {
   &-title {
-    font-family: $vs-bentonsans-medium;
+    font-family: $vs-bentonsanscomp-medium;
 
-    @include breakpoint($mobile) {
+    @include breakpoint($desktop) {
       font-family: $alshaya-bold;
     }
   }
