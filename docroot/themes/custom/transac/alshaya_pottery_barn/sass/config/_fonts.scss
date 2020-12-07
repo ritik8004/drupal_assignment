@@ -110,6 +110,48 @@ $cairo: 'Cairo';
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'FranklinGothicLTPro-BkCm';
+  src: url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeutrafaceDisplay-Light";
+  src: url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Canela-Thin";
+  src: url("#{$base_theme_fonts_directory_path}/Canela-Thin.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 // Theme specific font family
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
