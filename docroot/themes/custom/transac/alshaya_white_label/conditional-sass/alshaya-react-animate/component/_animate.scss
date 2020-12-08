@@ -90,8 +90,9 @@ body:not(.ie) {
   }
 
   .fadeInVertical {
-    animation-name: fadeInUp;
+    animation-name: fadeInVertical;
     animation-duration: 0.45s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.5, 1);
     animation-fill-mode: backwards;
 
     &.notInMobile {
@@ -101,10 +102,10 @@ body:not(.ie) {
     }
   }
 
-  @keyframes fadeInUp {
+  @keyframes fadeInVertical {
     0% {
       opacity: 0;
-      transform: translateY(-20px);
+      transform: translateY(-100%);
     }
 
     100% {
@@ -115,20 +116,20 @@ body:not(.ie) {
 
   .fadeOutVertical {
     animation-name: fadeOutVertical;
-    animation-duration: 0.3s;
+    animation-duration: 0.45s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: backwards;
   }
 
   @keyframes fadeOutVertical {
     0% {
       opacity: 1;
-      height: auto;
+      transform: translateY(0);
     }
 
     to {
       opacity: 0;
-      height: auto;
-      transform: translate3d(0, -100%, 0);
+      transform: translateY(-100%);
     }
   }
 }
