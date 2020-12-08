@@ -1,6 +1,7 @@
 .style-finder-type-list {
   li {
     font-size: 1rem;
+    color: $style-finder-cateogory-text;
     line-height: 1.25rem;
     letter-spacing: 1px;
     padding: 0.625rem 0;
@@ -9,6 +10,14 @@
     background: $stylefinder-type-bg;
     text-transform: uppercase;
     position: relative;
+
+    &:first-child {
+      margin-#{$left}: 0;
+    }
+
+    &:last-child {
+      margin-#{$right}: 0;
+    }
 
     &.active {
       background: $stylefinder-type-active-bg;
