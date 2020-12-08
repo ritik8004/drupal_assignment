@@ -4,6 +4,7 @@ import { applyRemovePromo } from '../../../utilities/update_cart';
 import SectionTitle from '../../../utilities/section-title';
 import dispatchCustomEvent from '../../../utilities/events';
 import DynamicPromotionCode from './DynamicPromotionCode';
+import { openCartFreeGiftModal } from '../../../utilities/free_gift_util';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -135,7 +136,6 @@ export default class CartPromoBlock extends React.Component {
     }
 
     const cartData = applyRemovePromo(action, promoValue);
-    const { openCartFreeGiftModal } = this.props;
     if (cartData instanceof Promise) {
       cartData.then((result) => {
         let freeGiftPromo = '';
