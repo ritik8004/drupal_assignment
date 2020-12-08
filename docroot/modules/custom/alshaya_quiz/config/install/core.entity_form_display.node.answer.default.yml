@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.answer.field_product_image
     - field.field.node.answer.field_result
     - field.field.node.answer.field_choice_1
+    - field.field.node.answer.field_choice_4
     - node.type.answer
   module:
     - content_moderation
@@ -103,6 +104,16 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
+    region: content
+  field_choice_4:
+    weight: 26
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
     region: content
   moderation_state:
     type: moderation_state_default
