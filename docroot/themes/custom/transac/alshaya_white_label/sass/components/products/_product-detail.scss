@@ -185,6 +185,12 @@
   }
 
   &__title_wrapper {
+    &:not(.show-sticky-wrapper) {
+      @include breakpoint($only-mobile) {
+        border-bottom: 0;
+      }
+    }
+
     @include breakpoint($only-mobile) {
       padding: 0 0.5rem;
     }
