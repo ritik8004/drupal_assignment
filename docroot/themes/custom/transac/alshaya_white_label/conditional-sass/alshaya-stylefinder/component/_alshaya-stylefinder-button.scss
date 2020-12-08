@@ -17,5 +17,10 @@
     padding: 0.9375rem 1.875rem;
     text-transform: uppercase;
     white-space: nowrap;
+    color: $stylefinder-button-text;
+
+    &:hover {
+      color: $stylefinder-button-text;
+    }
   }
 }
