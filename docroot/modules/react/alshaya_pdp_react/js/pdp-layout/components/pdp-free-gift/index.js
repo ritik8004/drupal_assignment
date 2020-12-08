@@ -9,14 +9,6 @@ const PdpFreeGift = ({
   freeGiftPromoType,
   freeGiftTitle,
 }) => {
-  const freeGiftImageMarkup = freeGiftImage
-    ? (
-      <div className="free-gift-image">
-        {parse(freeGiftImage)}
-      </div>
-    )
-    : null;
-
   if (freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
     return (
       <>
@@ -50,6 +42,15 @@ const PdpFreeGift = ({
       </>
     );
   }
+
+  const freeGiftImageMarkup = freeGiftImage
+    ? (
+      <div className="free-gift-image">
+        {parse(freeGiftImage)}
+      </div>
+    )
+    : null;
+
   return (
     <>
       <div className="free-gift-promotions free-gift-promotions-full-view-mode">
