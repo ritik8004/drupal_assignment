@@ -22,6 +22,9 @@ export default class StyleFinder extends React.Component {
     });
   }
 
+  /**
+   * Gets parent li tag to set active.
+   */
   findAncestor = (el, cls) => {
     const element = el;
     let e = el;
@@ -31,7 +34,11 @@ export default class StyleFinder extends React.Component {
     return (el === null) ? element : e;
   }
 
+  /**
+   * Handle user Choice on every step.
+   */
   handleStepSubmit = (e, answer, choice, counter) => {
+    // Set choice as active.
     e.preventDefault();
     const element = this.findAncestor(e.target, 'list-item');
     if (element !== undefined) {
@@ -40,18 +47,25 @@ export default class StyleFinder extends React.Component {
       });
       element.classList.add('active');
     }
+
+    // Get step and selected answer from state.
     let { step, answerSelected } = this.state;
     step.length = counter;
     answerSelected.length = counter - 1;
+
+    // Push answer choice to the state.
     this.setState((state) => {
       answerSelected = state.answerSelected.concat(choice);
       return {
         answerSelected,
       };
     });
+
+    // Get next question step choice.
     const stepDetails = step[step.length - 1];
     if (stepDetails.answer[answer].question !== undefined
       && stepDetails.answer[answer].question.length > 0) {
+      // Push the next question to the state for render.
       this.setState((state) => {
         step = state.step.concat(stepDetails.answer[answer].question[0]);
         return {
@@ -59,12 +73,16 @@ export default class StyleFinder extends React.Component {
         };
       });
     } else {
+      // Update state if questions end.
       this.setState({
         step,
       });
     }
   };
 
+  /**
+   * Renders Option list for every step.
+   */
   renderStep = (stepDetails, counter) => {
     const { answer } = stepDetails;
     let optionListClass = 'style-finder-lining-list';
@@ -118,6 +136,8 @@ export default class StyleFinder extends React.Component {
   render() {
     const { quizDetails } = drupalSettings.styleFinder;
     const { step } = this.state;
+
+    // Prepare steps for render.
     const otherSteps = [];
     let j = 1;
     if (step.length > 0) {
