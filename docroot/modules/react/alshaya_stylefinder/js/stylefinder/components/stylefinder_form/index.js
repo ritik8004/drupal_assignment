@@ -14,6 +14,9 @@ export default class StyleFinder extends React.Component {
     };
   }
 
+  /**
+   * Add Step 1 details from drupalSettings to state.
+   */
   componentDidMount() {
     const { quizDetails } = drupalSettings.styleFinder;
     const step = [quizDetails.question[0]];
