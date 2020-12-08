@@ -229,8 +229,8 @@
       @include icon(close, before) {
         font-size: 2.875rem;
         position: fixed;
-        top: 1.75rem;
-        #{$right}: 1.75rem;
+        top: 0.95rem;
+        #{$right}: 1.25rem;
         background: $magv2-gallery-popup-cross-bg;
         border-radius: 50%;
         color: $magv2-gallery-popup-cross;
@@ -270,7 +270,7 @@
       }
 
       .slick-prev {
-        #{$left}: 0.5rem;
+        #{$left}: 0.25rem;
         #{$right}: auto;
         height: 3rem;
         width: 3rem;
@@ -295,7 +295,7 @@
       }
 
       .slick-next {
-        #{$right}: 0.5rem;
+        #{$right}: 0.25rem;
         height: 3rem;
         width: 3rem;
 
