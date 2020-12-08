@@ -52,6 +52,8 @@ class CybersourceAPIWrapper extends APIWrapper {
    *   Event Dispatcher.
    * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Lock service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(ClientFactory $client_factory,
                               ConfigFactoryInterface $config_factory,
