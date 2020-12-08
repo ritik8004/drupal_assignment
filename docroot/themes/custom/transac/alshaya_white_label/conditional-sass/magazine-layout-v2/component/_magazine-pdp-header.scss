@@ -43,7 +43,7 @@
     @include breakpoint($only-mobile) {
       opacity: initial;
       top: -50%;
-      transform: translateY(-20%);
+      transform: translateY(-100%);
       transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
