@@ -162,7 +162,7 @@ export default class StyleFinder extends React.Component {
         </div>
         {otherSteps.map((item) => item)}
         <div className="see-more">
-          <a href="#" className="see-more-bra">See More Styles</a>
+          <a href="#" className="see-more-bra">{Drupal.t('See More Styles')}</a>
         </div>
       </section>
     );
