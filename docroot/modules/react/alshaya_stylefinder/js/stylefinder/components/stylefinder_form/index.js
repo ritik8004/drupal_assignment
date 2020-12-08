@@ -164,6 +164,9 @@ export default class StyleFinder extends React.Component {
         <div className="see-more">
           <a href="#" className="see-more-bra">See More Styles</a>
         </div>
+        <div className="see-more">
+          <a href="#" className="see-more-bra">See More Styles</a>
+        </div>
       </section>
     );
   }
