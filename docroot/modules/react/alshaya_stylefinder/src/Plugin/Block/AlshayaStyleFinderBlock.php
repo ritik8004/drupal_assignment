@@ -106,7 +106,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
       $quizDetails['quiz_type'] = $quiz_node->field_quiz_type->value ?? NULL;
       foreach ($quiz_node->field_quiz_question as $question) {
         $ques_nid = $question->target_id;
-        $question_details[$ques_nid] = $this->quizQuestionDetails($ques_nid);
+        $question_details[] = $this->quizQuestionDetails($ques_nid);
       }
       $quizDetails['question'] = $question_details;
     }
@@ -186,7 +186,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     if (!empty($next_question)) {
       foreach ($next_question as $next_ques) {
         $next_ques_nid = $next_ques['target_id'];
-        $next_ques_details[$next_ques_nid] = $this->quizQuestionDetails($next_ques_nid);
+        $next_ques_details[] = $this->quizQuestionDetails($next_ques_nid);
       }
     }
 
@@ -214,6 +214,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     $answer_details['description'] = strip_tags($answer_node->field_answer_summary->value) ?? NULL;
     $answer_details['image_url'] = $imageSrc;
     $answer_details['question'] = $next_ques_details;
+    $answer_details['nid'] = $answer_node->id();
     return $answer_details;
   }
 
