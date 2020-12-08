@@ -5,7 +5,15 @@ dependencies:
     - field.storage.node.field_instruction
     - node.type.question
   module:
+    - allowed_formats
     - text
+third_party_settings:
+  allowed_formats:
+    rich_text: rich_text
+    full_text: '0'
+    limited_options: '0'
+    mail_text: '0'
+    plain_text: '0'
 id: node.question.field_instruction
 field_name: field_instruction
 entity_type: node
@@ -14,7 +22,7 @@ label: Instruction
 description: ''
 required: false
 translatable: true
-skip_translation_check: null
+skip_translation_check: 0
 default_value: {  }
 default_value_callback: ''
 settings: {  }

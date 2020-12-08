@@ -13,8 +13,8 @@ bundle: quiz
 label: Type
 description: ''
 required: true
-translatable: false
-skip_translation_check: null
+translatable: true
+skip_translation_check: 0
 default_value:
   -
     value: linear
