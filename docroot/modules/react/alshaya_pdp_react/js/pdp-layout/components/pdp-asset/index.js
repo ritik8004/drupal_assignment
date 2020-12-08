@@ -43,8 +43,6 @@ export default class PdpAsset extends React.Component {
       type, imageZoomUrl, imageUrl, alt, title, viewport, index, children,
     } = this.props;
 
-    const animationOffset = `${index * 0.25}s`;
-
     if (type === 'image' && viewport !== 'mobile') {
       return (
         <figure
@@ -55,7 +53,6 @@ export default class PdpAsset extends React.Component {
           onClick={this.openFullScreenView}
           data-scale="2"
           data-index={index}
-          style={{ animationDelay: animationOffset }}
         >
           {children}
           <img
