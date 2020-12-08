@@ -147,7 +147,14 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
       $answer_details[$answer_nid] = $this->quizAnswerDetails($answer_nid);
     }
     $question_details['answer'] = $answer_details;
-    $question_details['see_more_reference'] = strip_tags($question_node->field_references->value) ?? NULL;
+    if (!empty($question_node->field_references->target_id)) {
+      $term_id = $question_node->field_references->target_id;
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
+      if (!$term->get('path')->isEmpty()) {
+        $term_alias = $term->get('path')->alias;
+      }
+    }
+    $question_details['see_more_reference'] = $term_alias ?? NULL;
     return $question_details;
   }
 
@@ -187,7 +194,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     if (!empty($answer_node->field_choice_4->target_id)) {
       $term_id = $answer_node->field_choice_4->target_id;
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
-      $choice = $term->name->value;
+      $choice = $term->getName();
       $answer_details['choice'] = $choice;
     }
     else {
