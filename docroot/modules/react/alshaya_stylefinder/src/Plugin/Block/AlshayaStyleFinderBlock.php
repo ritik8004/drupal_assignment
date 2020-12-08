@@ -253,11 +253,12 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
         }
       }
 
-    $answer_details['title'] = $answer_node->title->value;
-    $answer_details['description'] = strip_tags($answer_node->field_answer_summary->value) ?? NULL;
-    $answer_details['image_url'] = $imageSrc;
-    $answer_details['question'] = $next_ques_details;
-    $answer_details['nid'] = $answer_node->id();
+      $answer_details['title'] = $answer_node->title->value;
+      $answer_details['description'] = strip_tags($answer_node->field_answer_summary->value) ?? NULL;
+      $answer_details['image_url'] = $imageSrc;
+      $answer_details['question'] = $next_ques_details;
+      $answer_details['nid'] = $answer_node->id();
+    }
     return $answer_details;
   }
 
