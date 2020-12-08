@@ -9,6 +9,14 @@ const PdpFreeGift = ({
   freeGiftPromoType,
   freeGiftTitle,
 }) => {
+  const freeGiftImageMarkup = freeGiftImage
+    ? (
+      <div className="free-gift-image">
+        {parse(freeGiftImage)}
+      </div>
+    )
+    : null;
+
   if (freeGiftPromoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
     return (
       <>
@@ -46,9 +54,7 @@ const PdpFreeGift = ({
     <>
       <div className="free-gift-promotions free-gift-promotions-full-view-mode">
         <div className="free-gift-promo-wrapper free-gift-promo-list">
-          <div className="free-gift-image">
-            {parse(freeGiftImage)}
-          </div>
+          {freeGiftImageMarkup}
           <div className="free-gift-wrapper">
             <div className="free-gift-title">
               {Drupal.t('Free Gift')}
