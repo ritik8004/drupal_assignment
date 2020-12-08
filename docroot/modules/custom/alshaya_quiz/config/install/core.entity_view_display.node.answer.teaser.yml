@@ -4,14 +4,12 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.answer.field_answer_summary
-    - field.field.node.answer.field_choice_3
-    - field.field.node.answer.field_instruction
-    - field.field.node.answer.field_next_question
-    - field.field.node.answer.field_choice_2
-    - field.field.node.answer.field_product_image
-    - field.field.node.answer.field_result
     - field.field.node.answer.field_choice_1
+    - field.field.node.answer.field_choice_2
+    - field.field.node.answer.field_choice_3
     - field.field.node.answer.field_choice_4
+    - field.field.node.answer.field_next_question
+    - field.field.node.answer.field_product_image
     - node.type.answer
   module:
     - user
@@ -32,14 +30,12 @@ content:
     region: content
 hidden:
   field_answer_summary: true
-  field_choice_3: true
-  field_instruction: true
-  field_next_question: true
-  field_choice_2: true
-  field_product_image: true
-  field_result: true
   field_choice_1: true
+  field_choice_2: true
+  field_choice_3: true
   field_choice_4: true
+  field_next_question: true
+  field_product_image: true
   langcode: true
   search_api_excerpt: true
   shariff_field: true

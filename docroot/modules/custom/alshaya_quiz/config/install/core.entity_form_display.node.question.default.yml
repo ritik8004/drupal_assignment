@@ -2,16 +2,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.question.field_actions
     - field.field.node.question.field_answer
-    - field.field.node.question.field_correct
-    - field.field.node.question.field_error
-    - field.field.node.question.field_explanation
     - field.field.node.question.field_instruction
-    - field.field.node.question.field_question_group
     - field.field.node.question.field_references
     - node.type.question
   module:
+    - content_moderation
     - inline_entity_form
     - text
 id: node.question.default
@@ -19,14 +15,8 @@ targetEntityType: node
 bundle: question
 mode: default
 content:
-  field_actions:
-    weight: 5
-    settings: {  }
-    third_party_settings: {  }
-    type: options_buttons
-    region: content
   field_answer:
-    weight: 8
+    weight: 3
     settings:
       form_mode: default
       label_singular: ''
@@ -38,67 +28,51 @@ content:
       override_labels: false
       collapsed: false
       allow_duplicate: false
+      revision: false
     third_party_settings: {  }
     type: inline_entity_form_complex
     region: content
-  field_correct:
-    weight: 10
-    settings:
-      match_operator: CONTAINS
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: entity_reference_autocomplete
-    region: content
-  field_error:
-    weight: 4
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
-    region: content
-  field_explanation:
-    weight: 6
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_instruction:
-    weight: 2
+    weight: 1
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
     type: text_textarea
-    region: content
-  field_question_group:
-    weight: 3
-    settings:
-      width: 100%
-      autocomplete: true
-      match_operator: CONTAINS
-      match_limit: 10
-    third_party_settings: {  }
-    type: entity_reference_autocomplete
     region: content
   field_references:
-    weight: 7
+    weight: 2
     settings:
-      rows: 5
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
+    type: entity_reference_autocomplete
     region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 6
+    settings: {  }
+    region: content
+    third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 1
+    weight: 0
     region: content
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  translation:
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  url_redirects:
+    weight: 5
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

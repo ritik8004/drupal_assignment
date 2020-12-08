@@ -2,11 +2,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - node.type.result
-id: node.result.promote
+    - node.type.answer
+id: node.answer.promote
 field_name: promote
 entity_type: node
-bundle: result
+bundle: answer
 label: 'Promoted to front page'
 description: ''
 required: false
