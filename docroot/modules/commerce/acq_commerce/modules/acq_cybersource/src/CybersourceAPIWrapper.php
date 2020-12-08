@@ -14,6 +14,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Cybersource API Wrapper class.
@@ -26,6 +27,13 @@ class CybersourceAPIWrapper extends APIWrapper {
    * @var \Drupal\acq_commerce\APIHelper
    */
   protected $helper;
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * Constructor.
@@ -51,8 +59,9 @@ class CybersourceAPIWrapper extends APIWrapper {
                               I18nHelper $i18n_helper,
                               APIHelper $api_helper,
                               EventDispatcherInterface $dispatcher,
-                              LockBackendInterface $lock) {
-    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper, $api_helper, $dispatcher, $lock);
+                              LockBackendInterface $lock,
+                              ModuleHandlerInterface $module_handler) {
+    parent::__construct($client_factory, $config_factory, $logger_factory, $i18n_helper, $api_helper, $dispatcher, $lock, $module_handler);
     // To avoid issues in merging ACM code, not changing from private to
     // protected in base class.
     $this->helper = $api_helper;
