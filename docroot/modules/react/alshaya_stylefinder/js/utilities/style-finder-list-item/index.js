@@ -6,9 +6,9 @@ export default class StyleFinderListItem extends React.Component {
     this.state = {};
   }
 
-  handleStepSubmit = (e, answer, choice, counter) => {
+  handleStepSubmit = (e, answer, attrCode, choice, counter) => {
     const { handleStepSubmit } = this.props;
-    handleStepSubmit(e, answer, choice, counter);
+    handleStepSubmit(e, answer, attrCode, choice, counter);
   };
 
   render() {
@@ -19,7 +19,12 @@ export default class StyleFinderListItem extends React.Component {
         {answer
           && (
           <li
-            onClick={(e) => this.handleStepSubmit(e, answer.nid, answer.choice, counter)}
+            onClick={(e) => this.handleStepSubmit(
+              e,
+              answer.nid,
+              answer.attrCode,
+              answer.choice, counter,
+            )}
             className="list-item style-finder-list-item"
           >
             <div className="style-finder-list-image">
