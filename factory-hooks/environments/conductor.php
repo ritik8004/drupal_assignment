@@ -452,6 +452,11 @@ $conductors = [
     'site_id' => 87,
   ],
   // BathBodyWorks Egypt.
+  'bbweg_dev' => [
+    'hmac_id' => '253eac3a6dc9430f96a93a264204719b',
+    'hmac_secret' => 'M2YyMjJkNjUtYTBmYy00',
+    'site_id' => 353,
+  ],
   'bbweg_qa' => [
     'hmac_id' => '4d7962f023c54bbdb9ea5b6811cbb5af',
     'hmac_secret' => 'MWRmZGI4ZTMtYzM0MS00',
@@ -815,6 +820,11 @@ $conductors = [
     'hmac_secret' => 'MDdjZjI5OTUtYTgwZC00',
     'site_id' => 341,
   ],
+  'aeoeg_dev' => [
+    'hmac_id' => 'ac4f9df7e8e5494c9cc37daa5864db31',
+    'hmac_secret' => 'YTdjNzhmZTUtNmJkOC00',
+    'site_id' => 350,
+  ],
   'aeoeg_dev2' => [
     'hmac_id' => '2c884817dc954e7194165a06f54144ae',
     'hmac_secret' => 'YWY2MDBmNjEtZGE2OS00',
@@ -845,10 +855,20 @@ $conductors = [
     'hmac_secret' => 'YzdkOTIyYjItNzc3ZS00',
     'site_id' => 177,
   ],
+  'aeobh_dev' => [
+    'hmac_id' => '8ef32b6f28354c7c911063154c2eb6fa',
+    'hmac_secret' => 'ZjFkYjU2ZTMtMjRiNi00',
+    'site_id' => 351,
+  ],
   'aeobh_qa' => [
     'hmac_id' => 'f14b7223639249f085dc42ca7944ad46',
     'hmac_secret' => 'NjllNDg4NmItMzUyNi00',
     'site_id' => 343,
+  ],
+  'aeoqa_dev' => [
+    'hmac_id' => '1fb0a82ce141405bb695be86542dcc68',
+    'hmac_secret' => 'N2I3OGU4NTctNGI3My00',
+    'site_id' => 352,
   ],
   'aeoqa_qa' => [
     'hmac_id' => '7203b241292f4d2db96141d4fbd16adc',
