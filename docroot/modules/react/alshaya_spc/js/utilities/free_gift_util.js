@@ -12,6 +12,7 @@ export const addFreeGift = (freeGiftLink) => {
   const freeGiftMainSku = freeGiftLink.getAttribute('data-variant-sku');
   const coupon = freeGiftLink.getAttribute('data-coupon');
   const type = freeGiftLink.getAttribute('data-sku-type');
+  const promoRuleId = freeGiftLink.getAttribute('data-promo-rule-id');
   let postData = {};
 
   if (type === 'simple') {
@@ -22,6 +23,7 @@ export const addFreeGift = (freeGiftLink) => {
       variant: null,
       type,
       langcode: drupalSettings.path.currentLanguage,
+      promoRuleId,
     };
   } else {
     const configurableValues = [];
@@ -56,6 +58,7 @@ export const addFreeGift = (freeGiftLink) => {
       variant: currentSelectedVariant,
       type,
       langcode: drupalSettings.path.currentLanguage,
+      promoRuleId,
     };
   }
   axios.post('/middleware/public/select-free-gift', {

@@ -2224,11 +2224,12 @@ class Cart {
           // If total price of item matches discount, we mark as free.
           if ($item['item_id'] == $total_item['item_id']) {
             // Final price to use.
-            $data['items'][$item['sku']]['finalPrice'] = $total_item['price_incl_tax'];
+            // For the free gift the key 'price_incl_tax' is missing.
+            $data['items'][$item['sku']]['finalPrice'] = $total_item['price_incl_tax'] ?? $total_item['base_price'];
 
             // Free Item is only for free gift products which are having
             // price 0, rest all are free but still via different rules.
-            if ($total_item['price_incl_tax'] == 0
+            if ($total_item['base_price'] == 0
                 && isset($total_item['extension_attributes'], $total_item['extension_attributes']['amasty_promo'])) {
               $data['items'][$item['sku']]['freeItem'] = TRUE;
             }

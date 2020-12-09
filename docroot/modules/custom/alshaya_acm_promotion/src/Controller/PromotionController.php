@@ -180,6 +180,13 @@ class PromotionController extends ControllerBase {
       switch ($free_gift->bundle()) {
         case 'simple':
           $sku_media = $this->imagesManager->getFirstImage($free_gift, 'plp', TRUE);
+
+          // Getting the promo rule id.
+          $promotion = $this->entityTypeManager()->getStorage('node')->load($node->id());
+          if ($promotion instanceof NodeInterface) {
+            $promo_rule_id = $promotion->get('field_acq_promotion_rule_id')->getString();
+          }
+
           if ($sku_media) {
             $item['#image'] = $this->skuManager->getSkuImage(
               $sku_media['drupal_uri'],
@@ -200,6 +207,7 @@ class PromotionController extends ControllerBase {
                 'data-sku-type' => $free_gift->bundle(),
                 'data-coupon' => $request->query->get('coupon'),
                 'data-parent-sku' => $parent_sku ? $parent_sku->getSku() : $free_gift->getSku(),
+                'data-promo-rule-id' => $promo_rule_id ?? NULL,
               ],
             ]
           );
