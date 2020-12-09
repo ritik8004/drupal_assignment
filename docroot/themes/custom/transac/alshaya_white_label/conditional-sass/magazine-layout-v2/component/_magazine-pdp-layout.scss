@@ -16,7 +16,7 @@
 
     &.sticky-element {
       position: fixed !important;
-      top: -1.875rem;
+      top: 0;
       #{$left}: 1.875rem;
 
       @include breakpoint($tablet) {
@@ -97,7 +97,7 @@
       &.sticky-element {
         #{$right}: 1.875rem;
         position: fixed;
-        top: -2rem;
+        top: 0;
 
         &.contain {
           position: absolute;

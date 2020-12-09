@@ -32,6 +32,8 @@
       background: $magv2-sticky-header-bg;
       opacity: initial;
       top: 0;
+      transform: translateY(0%);
+      transition: all 0.45s cubic-bezier(0.4, 0, 0.8, 1);
     }
   }
 
@@ -39,7 +41,10 @@
     opacity: 0;
 
     @include breakpoint($only-mobile) {
-      transition: all 0.3s ease-out;
+      opacity: initial;
+      top: -50%;
+      transform: translateY(-100%);
+      transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 

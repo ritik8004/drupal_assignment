@@ -203,10 +203,8 @@ const PdpLayout = () => {
         <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
             title={title}
-            finalPrice={parseFloat(finalPrice)
-              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
-            pdpProductPrice={parseFloat(priceRaw)
-              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+            finalPrice={finalPrice}
+            pdpProductPrice={priceRaw}
             brandLogo={brandLogo}
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
