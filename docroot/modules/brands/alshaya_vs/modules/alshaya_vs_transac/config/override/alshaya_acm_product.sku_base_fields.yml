@@ -6,8 +6,6 @@ fields:
     configurable: 1
   padding:
     label: 'Padding'
-    type: 'string'
   bra_coverage:
     label: 'Bra Coverage'
     description: 'Bra Coverage.'
-    type: 'string'
