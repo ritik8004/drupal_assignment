@@ -257,14 +257,9 @@ class CartController {
     if (empty($this->cart->getCartId())) {
       $info = $this->drupal->getSessionCustomerInfo();
       if (!empty($info['customer_id'])) {
-        $cart_id = $this->cart->createCart($info['customer_id']);
-        if (is_int($cart_id)) {
+        $cart_id = $this->cart->searchCart($info['customer_id']);
+        if ($cart_id > 0) {
           $this->cart->setCartId($cart_id);
-        }
-        else {
-          $this->logger->notice('Could not restore cart for customer with ID @customer.', [
-            '@customer' => $info['customer_id'],
-          ]);
         }
       }
       else {
