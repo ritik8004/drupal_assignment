@@ -268,7 +268,7 @@ export default class StyleFinder extends React.Component {
         {otherSteps.map((item) => item)}
         <div className="style-finder-heading-wrapper">
           <StyleFinderSteps>
-            {Drupal.t('suggestions for you')}
+            {Drupal.t('Suggestions for you')}
           </StyleFinderSteps>
           <ConditionalView condition={(Object.keys(productRecommendation).length === 0)
           && (productRecommendation !== false)}
