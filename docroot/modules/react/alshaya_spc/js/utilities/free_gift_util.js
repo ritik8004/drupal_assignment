@@ -12,6 +12,7 @@ export const addFreeGift = (freeGiftLink) => {
   const freeGiftMainSku = freeGiftLink.getAttribute('data-variant-sku');
   const coupon = freeGiftLink.getAttribute('data-coupon');
   const type = freeGiftLink.getAttribute('data-sku-type');
+  const promoRuleId = freeGiftLink.getAttribute('data-promo-rule-id');
   let postData = {};
 
   if (type === 'simple') {
@@ -22,6 +23,7 @@ export const addFreeGift = (freeGiftLink) => {
       variant: null,
       type,
       langcode: drupalSettings.path.currentLanguage,
+      promoRuleId,
     };
   } else {
     const configurableValues = [];
@@ -56,6 +58,7 @@ export const addFreeGift = (freeGiftLink) => {
       variant: currentSelectedVariant,
       type,
       langcode: drupalSettings.path.currentLanguage,
+      promoRuleId,
     };
   }
   axios.post('/middleware/public/select-free-gift', {
@@ -75,7 +78,7 @@ export const addFreeGift = (freeGiftLink) => {
 
       // Closing the modal window.
       const closeModal = document.querySelector('.ui-dialog-titlebar-close');
-      if (closeModal !== undefined) {
+      if (closeModal !== undefined || closeModal !== null) {
         closeModal.click();
       }
       removeFullScreenLoader();
@@ -100,15 +103,10 @@ export const openFreeGiftModal = () => {
 /**
  * Open free gift listing modal.
  */
-export const selectFreeGiftModal = () => {
-  const selectFreeGiftLink = document.getElementById('select-add-free-gift');
-  if (selectFreeGiftLink !== null) {
-    selectFreeGiftLink.addEventListener('click', (event) => {
-      event.preventDefault();
-      addFreeGift(selectFreeGiftLink);
-      showFullScreenLoader();
-    });
-  }
+export const selectFreeGiftModal = (e) => {
+  const selectFreeGiftLink = e.detail.data();
+  addFreeGift(selectFreeGiftLink);
+  showFullScreenLoader();
 };
 
 /**

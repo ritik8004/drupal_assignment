@@ -88,6 +88,8 @@ class FreeGiftController {
     $sku = $data['sku'];
     $promo_code = $data['promo'];
     $langcode = $data['langcode'];
+    $promo_rule_id = $data['promoRuleId'];
+    $sku_type = $data['type'];
 
     if (empty($sku) || empty($promo_code) || empty($langcode)) {
       $this->logger->error('Missing request header parameters. SKU: @sku, Promo: @promo_code, Langcode: @langcode', [
@@ -117,8 +119,47 @@ class FreeGiftController {
         $quantity = 1;
         // Update cart with free gift.
         $options = $data['configurable_values'] ?? [];
+
+        // If options data available.
+        if (!empty($options)) {
+          $option_data = [
+            'extension_attributes' => [
+              'configurable_item_options' => $options,
+            ],
+          ];
+        }
         $variant = $data['variant'] ?? null;
-        $updated_cart = $this->cart->addUpdateRemoveItem($sku, $quantity, CartActions::CART_ADD_ITEM, $options, $variant);
+        if ($sku_type == 'simple') {
+          $data['items'][] = [
+            'sku' => $data['sku'],
+            'qty' => 1,
+            'product_type' => $sku_type,
+            'extension_attributes' => [
+              'promo_rule_id' => $promo_rule_id
+            ],
+          ];
+          $data['extension'] = (object) [
+            'action' => 'add item',
+          ];
+        } else {
+           $data['items'][] = [
+              'sku' => $data['sku'],
+              'qty' => 1,
+              'product_type' => $sku_type,
+              'product_option' => (object) $option_data,
+              'variant_sku' => $variant,
+              'extension_attributes' => [
+               'promo_rule_id' => $promo_rule_id
+              ],
+            ];
+            $data['extension'] = (object) [
+              'action' => 'add item',
+           ];
+        }
+
+
+        $updated_cart = $this->cart->updateCart($data);
+
         if (empty($updated_cart)) {
           $this->logger->error('Update cart failed. Cart: @cart', [
             '@cart' => json_encode($cart),
