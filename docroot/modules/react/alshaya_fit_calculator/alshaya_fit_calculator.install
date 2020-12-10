@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use \Drupal\block\Entity\Block;
+
+/**
+ * Add Fit calculator block on PDP for size-guide modal
+ * in default theme.
+ *
+ * Implements hook_install().
+ */
+function alshaya_fit_calculator_install() {
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  $block_settings = [
+    'id' => 'alshayafitcalculator',
+    'theme' => $current_theme,
+    'region' => 'content',
+    'weight' => 0,
+    'provider' => null,
+    'plugin' => "alshaya_fit_calculator",
+    'settings' => [
+      "id" => "alshaya_fit_calculator",
+      "label" => "Alshaya fit calculator",
+      "provider" => "alshaya_fit_calculator",
+      "label_display" => "0",
+      "calculator_values" => "",
+      "size_conversion_html" => "",
+      "measurement_field" => "size-guide-calculator",
+      "plp_page" => "",
+    ],
+    'visibility' => [
+      'entity_bundle:node' => [
+        'id' => 'entity_bundle:node',
+        'bundles' => [
+          'acq_product' => 'acq_product',
+        ],
+        'negate' => false,
+        'context_mapping' => [
+          'node' => '@node.node_route_context:node',
+        ],
+      ],
+    ],
+  ];
+  $block = Block::create($block_settings);
+  $block->save();
+}

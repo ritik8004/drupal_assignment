@@ -208,7 +208,7 @@ class ProductController extends ControllerBase {
 
     $build['modal_content'] = [
       '#type' => 'inline_template',
-      '#template' => '<div class="modal-content">{{ modal_content }}<div id="fit-cal-modal"></div></div>',
+      '#template' => '<div class="modal-content">{{ modal_content }}</div>',
       '#context' => [
         'modal_content' => $content,
       ],
@@ -219,6 +219,10 @@ class ProductController extends ControllerBase {
         'params' => $this->request->query->all(),
       ];
     }
+
+    // Allow other modules to alter build.
+    $this->moduleHandler->alter('alshaya_acm_product_modal_build', $build);
+
     return $build;
   }
 
