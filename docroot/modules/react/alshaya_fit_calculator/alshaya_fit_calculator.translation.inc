@@ -11,37 +11,37 @@
 function _alshaya_fit_calculator_translations() {
   return [
     'The Perfect Fit Calculator' => [
-      'ar' => '',
+      'ar' => 'حاسبة المقاس المثالي',
     ],
     'Show measurements in:' => [
-      'ar' => '',
+      'ar' => 'تُظهر المقاسات كالتالي:',
     ],
     'Inches' => [
-      'ar' => '',
+      'ar' => 'بوصات',
     ],
     'Centimeters' => [
-      'ar' => '',
+      'ar' => 'سنتيمترات',
     ],
     'band size' => [
-      'ar' => '',
+      'ar' => 'محيط أسفل الصدر',
     ],
     'burst size' => [
-      'ar' => '',
+      'ar' => 'محيط منتصف الصدر',
     ],
     'get my size' => [
-      'ar' => '',
+      'ar' => 'احصلي على مقاسك',
     ],
     'Sorry, we don\u2019t carry your size yet but we are always working to expand our collections.' => [
-      'ar' => '',
+      'ar' => 'عذراً، مقاسك غير متوفر لدينا بعد لكننا نعمل دائماً على توسيع تشكيلاتنا',
     ],
     'Your size is ' => [
-      'ar' => '',
+      'ar' => 'مقاسك هو',
     ],
     'shop your size' => [
-      'ar' => '',
+      'ar' => 'تسوقي حسب مقاسك',
     ],
     'Size Conversion Chart' => [
-      'ar' => '',
+      'ar' => 'جدول تحويل المقاسات',
     ],
   ];
 }
