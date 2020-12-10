@@ -22,7 +22,7 @@ function alshaya_quiz_preprocess_decoupled_component_block(array &$variables) {
  */
 function _alshaya_quiz_get_translated_terms($attribute) {
   $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
-    ->loadByProperties(['field_sku_attribute_code' => 'padding', 'vid' => 'sku_product_option']);
+    ->loadByProperties(['field_sku_attribute_code' => $attribute, 'vid' => 'sku_product_option']);
   $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $options = [];
   foreach ($terms as $term) {
