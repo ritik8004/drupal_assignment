@@ -56,7 +56,11 @@ export default class CartItems extends React.Component {
   };
 
   render() {
-    const { items, dynamicPromoLabelsProduct, couponCode } = this.props;
+    const {
+      items,
+      dynamicPromoLabelsProduct,
+      couponCode,
+    } = this.props;
     const productItems = [];
 
     const skus = {};

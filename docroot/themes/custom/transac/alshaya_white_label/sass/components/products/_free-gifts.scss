@@ -754,7 +754,7 @@ body:not(.ie) {
   }
 }
 
-.free-gift-promo-list-overlay:not(.free-gift-detail-modal) {
+.free-gifts-modal-overlay:not(.free-gift-detail-modal) {
   &.path--cart {
     .ui-dialog {
       @include breakpoint($tablet) {
