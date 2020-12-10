@@ -20,7 +20,9 @@ function alshaya_quiz_preprocess_decoupled_component_block(array &$variables) {
  * @return array
  *   Array of translated terms
  */
-function _alshaya_quiz_get_translated_terms($terms) {
+function _alshaya_quiz_get_translated_terms($attribute) {
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+    ->loadByProperties(['field_sku_attribute_code' => 'padding', 'vid' => 'sku_product_option']);
   $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $options = [];
   foreach ($terms as $term) {
@@ -51,11 +53,7 @@ function _alshaya_quiz_get_translated_terms($terms) {
  *
  */
 function alshaya_quiz_allowed_product_category_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
-    ->loadByProperties(['field_sku_attribute_code' => 'product_category', 'vid' => 'sku_product_option']);
-  $product_category_options = _alshaya_quiz_get_translated_terms($terms);
-
-  return $product_category_options;
+  return _alshaya_quiz_get_translated_terms('product_category');
 }
 
 /**
@@ -73,11 +71,7 @@ function alshaya_quiz_allowed_product_category_values(FieldStorageConfig $defini
  *
  */
 function alshaya_quiz_allowed_padding_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
-    ->loadByProperties(['field_sku_attribute_code' => 'padding', 'vid' => 'sku_product_option']);
-  $padding_options = _alshaya_quiz_get_translated_terms($terms);
-
-  return $padding_options;
+  return _alshaya_quiz_get_translated_terms('padding');
 }
 
 /**
@@ -95,9 +89,5 @@ function alshaya_quiz_allowed_padding_values(FieldStorageConfig $definition, Con
  *
  */
 function alshaya_quiz_allowed_bra_coverage_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
-    ->loadByProperties(['field_sku_attribute_code' => 'bra_coverage', 'vid' => 'sku_product_option']);
-  $bra_coverage_options = _alshaya_quiz_get_translated_terms($terms);
-
-  return $bra_coverage_options;
+  return _alshaya_quiz_get_translated_terms('bra_coverage');
 }
