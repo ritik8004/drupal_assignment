@@ -52,7 +52,8 @@
 }
 
 // Type = Text.
-#fit-calculator-container {
+#fit-calculator-container,
+#fit-cal-modal {
   .fitCalc-type-textfield {
     input[type=text] {
       height: 3.125rem;
