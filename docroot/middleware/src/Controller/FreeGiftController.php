@@ -119,7 +119,7 @@ class FreeGiftController {
         $quantity = 1;
         // Update cart with free gift.
         $options = $data['configurable_values'] ?? [];
-        
+
         // If options data available.
         if (!empty($options)) {
           $option_data = [
@@ -129,20 +129,34 @@ class FreeGiftController {
           ];
         }
         $variant = $data['variant'] ?? null;
+        if ($sku_type == 'simple') {
+          $data['items'][] = [
+            'sku' => $data['sku'],
+            'qty' => 1,
+            'product_type' => $sku_type,
+            'extension_attributes' => [
+              'promo_rule_id' => $promo_rule_id
+            ],
+          ];
+          $data['extension'] = (object) [
+            'action' => 'add item',
+          ];
+        } else {
+           $data['items'][] = [
+              'sku' => $data['sku'],
+              'qty' => 1,
+              'product_type' => $sku_type,
+              'product_option' => (object) $option_data,
+              'variant_sku' => $variant,
+              'extension_attributes' => [
+               'promo_rule_id' => $promo_rule_id
+              ],
+            ];
+            $data['extension'] = (object) [
+              'action' => 'add item',
+           ];
+        }
 
-        $data['items'][] = [
-          'sku' => $data['sku'],
-          'qty' => 1,
-          'product_type' => $sku_type,
-          'product_option' => (object) $option_data,
-          'variant_sku' => $variant,
-          'extension_attributes' => [
-            'promo_rule_id' => $promo_rule_id
-          ],
-        ];
-        $data['extension'] = (object) [
-          'action' => 'add item',
-        ];
 
         $updated_cart = $this->cart->updateCart($data);
 

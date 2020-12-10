@@ -182,10 +182,7 @@ class PromotionController extends ControllerBase {
           $sku_media = $this->imagesManager->getFirstImage($free_gift, 'plp', TRUE);
 
           // Getting the promo rule id.
-          $promotion = $this->entityTypeManager()->getStorage('node')->load($node->id());
-          if ($promotion instanceof NodeInterface) {
-            $promo_rule_id = $promotion->get('field_acq_promotion_rule_id')->getString();
-          }
+          $promo_rule_id = $node->get('field_acq_promotion_rule_id')->getString();
 
           if ($sku_media) {
             $item['#image'] = $this->skuManager->getSkuImage(

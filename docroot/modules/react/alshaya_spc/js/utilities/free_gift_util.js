@@ -78,7 +78,7 @@ export const addFreeGift = (freeGiftLink) => {
 
       // Closing the modal window.
       const closeModal = document.querySelector('.ui-dialog-titlebar-close');
-      if (closeModal !== undefined) {
+      if (closeModal !== undefined || closeModal !== null) {
         closeModal.click();
       }
       removeFullScreenLoader();
@@ -103,15 +103,10 @@ export const openFreeGiftModal = () => {
 /**
  * Open free gift listing modal.
  */
-export const selectFreeGiftModal = () => {
-  const selectFreeGiftLink = document.getElementById('select-add-free-gift');
-  if (selectFreeGiftLink !== null) {
-    selectFreeGiftLink.addEventListener('click', (event) => {
-      event.preventDefault();
-      addFreeGift(selectFreeGiftLink);
-      showFullScreenLoader();
-    });
-  }
+export const selectFreeGiftModal = (e) => {
+  const selectFreeGiftLink = e.detail.data();
+  addFreeGift(selectFreeGiftLink);
+  showFullScreenLoader();
 };
 
 /**
