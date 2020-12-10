@@ -103,6 +103,30 @@
           e.preventDefault();
         });
       }
+
+      $('.sku-base-form').on('variant-selected', function (event, variant, code) {
+        // We do not want to attach this event for variant change of PDP
+        // product.
+        if (!$(this).parents('#drupal-modal')) {
+          return ;
+        }
+        const sku = $(this).attr('data-sku');
+        const selected = $('[name="selected_variant_sku"]', $(this)).val();
+        const productKey = 'productInfo';
+        const variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+
+        if (typeof variantInfo === 'undefined') {
+          return;
+        }
+
+        const freeGiftWrapper = $(this).closest('article');
+        if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
+          Drupal.updateGallery(freeGiftWrapper, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
+        }
+        else {
+          Drupal.updateGallery(freeGiftWrapper, variantInfo.layout, variantInfo.gallery);
+        }
+      });
     }
   };
 
