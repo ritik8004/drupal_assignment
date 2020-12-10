@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Ajax\InvokeCommand;
 
 /**
  * Class Free Gift Controller.
@@ -86,30 +87,24 @@ class FreeGiftController extends ControllerBase {
   /**
    * Page callback for the modal.
    */
-  public function viewProduct(Request $request, $acq_sku, $js) {
+  public function viewProduct(Request $request, $acq_sku) {
     $sku = $this->skuManager->loadSkuById((int) $acq_sku);
 
     if (!($sku instanceof SKUInterface)) {
       throw new NotFoundHttpException();
     }
 
-    if ($js === 'ajax') {
-      $view_builder = $this->entityTypeManager()->getViewBuilder($sku->getEntityTypeId());
-      $build = $view_builder->view($sku, 'free_gift');
+    $view_builder = $this->entityTypeManager()->getViewBuilder($sku->getEntityTypeId());
+    $build = $view_builder->view($sku, 'free_gift');
 
-      if ($request->query->get('back')) {
-        $response = new AjaxResponse();
-        $response->addCommand(new HtmlCommand('#drupal-modal', $build));
-        return $response;
-      }
-      else {
-        return $build;
-      }
-
+    if ($request->query->get('back')) {
+      $response = new AjaxResponse();
+      $response->addCommand(new HtmlCommand('#drupal-modal', $build));
+      $response->addCommand(new InvokeCommand(NULL, 'openFreeGiftModal'));
+      return $response;
     }
-
-    $response = new RedirectResponse(Url::fromRoute('entity.acq_sku.canonical', ['acq_sku' => $sku->id()])->toString());
-    $response->send();
-    exit;
+    
+    return $build;
+    
   }
 }
