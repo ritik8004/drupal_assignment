@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
-import { applyCode, openCartFreeGiftModal } from '../../../utilities/checkout_util';
 
-const CartPromotionFreeGift = ({ promo, couponCode }) => {
+import { selectFreeGift, openCartFreeGiftModal } from '../../../utilities/free_gift_util';
+
+const CartPromotionFreeGift = ({
+  promo,
+  couponCode,
+}) => {
   useEffect(() => {
     Drupal.ajax.bindAjaxLinks(document.body);
   }, [couponCode, promo]);
@@ -20,9 +24,9 @@ const CartPromotionFreeGift = ({ promo, couponCode }) => {
     <div className="free-gift-promo">
       <div className="gift-message">
         {Drupal.t('Click')}
-        <span className="coupon-code" onClick={(e) => applyCode(e)}>{promo.coupon}</span>
+        <span className="coupon-code" onClick={() => selectFreeGift(promo.coupon, promo['#free_sku_code'], promo['#free_sku_type'], promo['#promo_type'])}>{promo.coupon}</span>
         {Drupal.t('to get a Free Gift')}
-        <span className="free-gift-title" onClick={(e) => openCartFreeGiftModal(e)}>
+        <span className="free-gift-title" onClick={() => openCartFreeGiftModal()}>
           {promo.promo_title}
         </span>
         <a

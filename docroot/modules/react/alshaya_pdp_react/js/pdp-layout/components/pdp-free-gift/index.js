@@ -42,13 +42,20 @@ const PdpFreeGift = ({
       </>
     );
   }
+
+  const freeGiftImageMarkup = freeGiftImage
+    ? (
+      <div className="free-gift-image">
+        {parse(freeGiftImage)}
+      </div>
+    )
+    : null;
+
   return (
     <>
       <div className="free-gift-promotions free-gift-promotions-full-view-mode">
         <div className="free-gift-promo-wrapper free-gift-promo-list">
-          <div className="free-gift-image">
-            {parse(freeGiftImage)}
-          </div>
+          {freeGiftImageMarkup}
           <div className="free-gift-wrapper">
             <div className="free-gift-title">
               {Drupal.t('Free Gift')}

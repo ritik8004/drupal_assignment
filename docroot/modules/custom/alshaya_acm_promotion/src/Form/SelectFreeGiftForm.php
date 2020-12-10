@@ -124,12 +124,15 @@ class SelectFreeGiftForm extends FormBase {
     if ($promotion_node = $this->nodeStorage->load($promotion_id)) {
       $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
       $promo_type = $data['extension']['promo_type'] ?? SkuManager::FREE_GIFT_SUB_TYPE_ALL_SKUS;
+      $promo_rule_id = $promotion_node->get('field_acq_promotion_rule_id')->getString();
 
       // Return empty form for single auto add free gift.
       if ($promo_type != SkuManager::FREE_GIFT_SUB_TYPE_ONE_SKU) {
         return $form;
       }
     }
+
+    $parent_sku = $this->skuManager->getParentSkuBySku($sku->getSku());
 
     $form['coupon'] = [
       '#type' => 'hidden',
@@ -149,16 +152,16 @@ class SelectFreeGiftForm extends FormBase {
     $form['select'] = [
       '#type' => 'button',
       '#value' => $this->t('ADD FREE GIFT'),
-      '#ajax' => [
-        'url' => Url::fromRoute('alshaya_acm_promotion.select_free_gift'),
-        'progress' => [
-          'type' => 'throbber',
-          'message' => NULL,
-        ],
-      ],
       '#weight' => 100,
       '#attributes' => [
         'class' => ['select-free-gift'],
+        'id' => 'add-free-gift',
+        'data-variant-sku' => $sku->getSku(),
+        'data-sku-type' => $sku->bundle(),
+        'data-promo-type' => $promo_type,
+        'data-coupon' => $coupon,
+        'data-parent-sku' => $parent_sku ? $parent_sku->getSku() : $sku->getSku(),
+        'data-promo-rule-id' => $promo_rule_id ?? null,
       ],
     ];
 
@@ -166,7 +169,8 @@ class SelectFreeGiftForm extends FormBase {
     $form['#attributes']['data-sku'] = $sku->getSku();
     $form['#attributes']['class'][] = 'sku-base-form';
 
-    if ($sku->bundle() == 'configurable') {
+    $is_sku_configurable = ($sku->bundle() === 'configurable');
+    if ($is_sku_configurable) {
       $configurables = Configurable::getSortedConfigurableAttributes($sku);
 
       $form['selected_variant_sku'] = [
@@ -233,6 +237,9 @@ class SelectFreeGiftForm extends FormBase {
       $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['bySku'] = $combinations['by_sku'];
       $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['byAttribute'] = $combinations['by_attribute'];
       $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['combinations'] = $combinations['combinations'] ?? [];
+      if ($is_sku_configurable) {
+        $form['#attached']['drupalSettings']['configurableCombinations'][$sku->getSku()]['configurables'] = $configurables;
+      }
 
       $display_settings = $this->config('alshaya_acm_product.display_settings');
       $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');

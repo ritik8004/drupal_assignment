@@ -291,4 +291,5 @@
       }
     }
   };
+
 })(jQuery, Drupal, drupalSettings);

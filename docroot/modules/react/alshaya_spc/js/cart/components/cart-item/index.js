@@ -181,6 +181,7 @@ export default class CartItem extends React.Component {
       animationOffset,
       productPromotion,
       couponCode,
+      selectFreeGift,
     } = this.props;
 
     const {
@@ -289,6 +290,7 @@ export default class CartItem extends React.Component {
               promo={freeGiftPromotion}
               sku={sku}
               couponCode={couponCode}
+              selectFreeGift={selectFreeGift}
             />
           </ConditionalView>
         </div>
