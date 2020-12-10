@@ -11,6 +11,7 @@ export default class StyleFinder extends React.Component {
     this.state = {
       step: [],
       answerSelected: [],
+      seeMoreUrl: '',
     };
   }
 
@@ -64,6 +65,13 @@ export default class StyleFinder extends React.Component {
       };
     });
 
+    // Get see more style url.
+    const seeMore = step[counter - 1].answer[answer].see_more_reference;
+    if (seeMore) {
+      this.setState({
+        seeMoreUrl: seeMore,
+      });
+    }
     // Get next question step choice.
     const stepDetails = step[step.length - 1];
     if (stepDetails.answer[answer].question !== undefined
@@ -138,7 +146,7 @@ export default class StyleFinder extends React.Component {
 
   render() {
     const { quizDetails } = drupalSettings.styleFinder;
-    const { step } = this.state;
+    const { step, seeMoreUrl } = this.state;
 
     // Prepare steps for render.
     const otherSteps = [];
@@ -162,7 +170,9 @@ export default class StyleFinder extends React.Component {
         </div>
         {otherSteps.map((item) => item)}
         <div className="see-more">
-          <a href="#" className="see-more-bra">{Drupal.t('See More Styles')}</a>
+          {(seeMoreUrl)
+            ? (<a href={seeMoreUrl} className="see-more-bra">{Drupal.t('See More Styles')}</a>)
+            : (<a href="#" className="see-more-bra">{Drupal.t('See More Styles')}</a>)}
         </div>
       </section>
     );
