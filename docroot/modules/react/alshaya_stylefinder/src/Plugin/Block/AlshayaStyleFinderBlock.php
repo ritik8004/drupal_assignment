@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides Style Finder block.
@@ -181,14 +182,6 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
         $answer_details[$answer_nid] = $this->quizAnswerDetails($answer_nid);
       }
       $question_details['answer'] = $answer_details;
-      if (!empty($question_node->field_references->target_id)) {
-        $term_id = $question_node->field_references->target_id;
-        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
-        if (!$term->get('path')->isEmpty()) {
-          $term_alias = $term->get('path')->alias;
-        }
-      }
-      $question_details['see_more_reference'] = $term_alias ?? NULL;
     }
     return $question_details;
   }
@@ -252,6 +245,16 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
           $answer_details['choice'] = $answer_node->field_choice_3->value ?? NULL;
         }
       }
+
+      if (!empty($answer_node->field_references->target_id)) {
+        $term_id = $answer_node->field_references->target_id;
+        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
+        $referenceurl = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term_id])->toString();
+        if ($referenceurl) {
+          $term_alias = $referenceurl;
+        }
+      }
+      $answer_details['see_more_reference'] = $term_alias ?? NULL;
 
       $answer_details['title'] = $answer_node->title->value;
       $answer_details['description'] = strip_tags($answer_node->field_answer_summary->value) ?? NULL;

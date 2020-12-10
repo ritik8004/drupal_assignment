@@ -3,12 +3,12 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_references
-    - node.type.question
+    - node.type.answer
     - taxonomy.vocabulary.acq_product_category
-id: node.question.field_references
+id: node.answer.field_references
 field_name: field_references
 entity_type: node
-bundle: question
+bundle: answer
 label: References
 description: ''
 required: false
@@ -25,5 +25,5 @@ settings:
       field: name
       direction: asc
     auto_create: false
-    auto_create_bundle: ''
+    auto_create_bundle: acq_product_category
 field_type: entity_reference
