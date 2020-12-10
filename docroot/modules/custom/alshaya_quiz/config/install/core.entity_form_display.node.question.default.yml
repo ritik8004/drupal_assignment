@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.field.node.question.field_answer
     - field.field.node.question.field_instruction
-    - field.field.node.question.field_references
     - node.type.question
   module:
     - content_moderation
@@ -39,16 +38,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: text_textarea
-    region: content
-  field_references:
-    weight: 2
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: entity_reference_autocomplete
     region: content
   moderation_state:
     type: moderation_state_default

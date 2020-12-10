@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.answer.field_choice_4
     - field.field.node.answer.field_next_question
     - field.field.node.answer.field_product_image
+    - field.field.node.answer.field_references
     - node.type.answer
   module:
     - user
@@ -36,6 +37,7 @@ hidden:
   field_choice_4: true
   field_next_question: true
   field_product_image: true
+  field_references: true
   langcode: true
   search_api_excerpt: true
   shariff_field: true
