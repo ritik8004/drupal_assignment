@@ -12,9 +12,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -290,98 +287,4 @@ function alshaya_vs_transac_alshaya_get_currency_code_alter(&$currency) {
  */
 function alshaya_vs_transac_preprocess_acq_sku__free_gift(&$variables) {
   $variables['sku']['subtitle'] = $variables['sku_entity']->get('attr_product_collection')->getString();
-}
-
-/**
- * Set dynamic allowed values for the product_category field.
- *
- * @param \Drupal\field\Entity\FieldStorageConfig $definition
- *   The field definition.
- * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
- *   The entity being created if applicable.
- * @param bool $cacheable
- *   Boolean indicating if the results are cacheable.
- *
- * @return array
- *   An array of possible key and value options.
- *
- */
-function alshaya_vs_quiz_allowed_choice_1_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  
-  $product_category_options = [];
-  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
-  ->loadByProperties(['field_sku_attribute_code' => 'product_category', 'vid' => 'sku_product_option']);
-  $product_category_options = alshaya_vs_quiz_translated_terms($terms);
-
-  return $product_category_options;
-}
-
-/**
- * Set dynamic allowed values for the padding field.
- *
- * @param \Drupal\field\Entity\FieldStorageConfig $definition
- *   The field definition.
- * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
- *   The entity being created if applicable.
- * @param bool $cacheable
- *   Boolean indicating if the results are cacheable.
- *
- * @return array
- *   An array of possible key and value options.
- *
- */
-function alshaya_vs_quiz_allowed_choice_2_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  $padding_options = [];
-  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
-  ->loadByProperties(['field_sku_attribute_code' => 'padding', 'vid' => 'sku_product_option']);
-  $padding_options = alshaya_vs_quiz_translated_terms($terms);
-
-  return $padding_options;
-}
-
-/**
- * Set dynamic allowed values for the bra_coverage field.
- *
- * @param \Drupal\field\Entity\FieldStorageConfig $definition
- *   The field definition.
- * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
- *   The entity being created if applicable.
- * @param bool $cacheable
- *   Boolean indicating if the results are cacheable.
- *
- * @return array
- *   An array of possible key and value options.
- *
- */
-function alshaya_vs_quiz_allowed_choice_3_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  $bra_coverage_options = [];
-  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
-  ->loadByProperties(['field_sku_attribute_code' => 'bra_coverage', 'vid' => 'sku_product_option']);
-  $bra_coverage_options = alshaya_vs_quiz_translated_terms($terms);
-
-  return $bra_coverage_options;
-}
-
-/**
- * Custom Function to get translated terms of the passed array of terms
- * @param  array $terms
- *   List of terms of respective attribute code.
- *   
- * @return array
- *   Array of translated terms
- */
-function alshaya_vs_quiz_translated_terms($terms) {
-  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $options = [];
-  foreach ($terms as $term) {
-    if($term->hasTranslation($lang)){
-      $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
-      $options[] = $translated_terms->getName();
-    }
-  }
-  $option_list = [];
-  foreach ($options as $key => $value) {
-    $option_list[$value] = $value;
-  }
-  return $option_list;
 }
