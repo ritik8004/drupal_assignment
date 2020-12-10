@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides Style Finder block.
@@ -248,9 +249,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
       if (!empty($answer_node->field_references->target_id)) {
         $term_id = $answer_node->field_references->target_id;
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
-        $language = $this->languageManager->getCurrentLanguage();
-        $options = ['language' => $language];
-        $referenceurl = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term_id], $options)->toString();
+        $referenceurl = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term_id])->toString();
         if ($referenceurl) {
           $term_alias = $referenceurl;
         }
