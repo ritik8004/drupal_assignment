@@ -1,0 +1,5 @@
+alshaya_fit_calculator:
+  js:
+    dist/fit_calculator.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

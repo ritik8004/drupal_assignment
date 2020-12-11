@@ -1,0 +1,26 @@
+.style-finder {
+  &-title {
+    font-family: $vs-bentonsanscomp-medium;
+
+    @include breakpoint($desktop) {
+      font-family: $alshaya-bold;
+    }
+  }
+
+  &-sub-title {
+    font-family: $alshaya-cursive-regular;
+    font-size: 2.5rem;
+    transform: rotate(-2.5deg);
+    margin-top: 1.5rem;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.5px;
+
+    @include breakpoint($tablet) {
+      font-size: 3.125rem;
+    }
+
+    html[lang='ar'] & {
+      transform: rotate(0deg);
+    }
+  }
+}

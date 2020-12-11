@@ -1,0 +1,48 @@
+.fit-calculator-wrapper {
+  .message-area {
+    .success-message {
+      line-height: normal;
+      text-align: center;
+      padding-top: 0.9375rem;
+
+      span {
+        font-size: 0.875rem;
+
+        &.result {
+          margin-#{$right}: 0.3125rem;
+          color: $fit-calc-result;
+        }
+      }
+
+      a {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        color: $fit-calc-link;
+        position: relative;
+        padding-#{$right}: 0.9375rem;
+
+        @include icon('chevrondown') {
+          font-size: 1.25rem;
+          position: absolute;
+          top: 42%;
+          transform: translateY(-50%) rotate(-90deg);
+          transition: transform 0.125s ease-in-out;
+          color: $fit-calc-select-dropdown-color;
+          #{$right}: 0;
+          bottom: 0;
+
+          html[lang=ar] & {
+            transform: translateY(-50%) rotate(90deg);
+            #{$right}: 0.1875rem;
+          }
+        }
+      }
+    }
+  }
+
+  &.size-guide-calculator {
+    .success-message {
+      text-align: $left;
+    }
+  }
+}

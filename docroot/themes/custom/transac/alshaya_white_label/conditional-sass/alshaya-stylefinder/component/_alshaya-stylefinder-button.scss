@@ -1,0 +1,26 @@
+.see-more {
+  margin-top: 4.5rem;
+  text-align: center;
+
+  @include breakpoint($only-mobile) {
+    margin-top: 1.875rem;
+  }
+
+  .see-more-bra {
+    cursor: pointer;
+    background-color: $stylefinder-button-bg;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    max-width: 10.9375rem;
+    margin: 0 auto;
+    padding: 0.9375rem 1.875rem;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: $stylefinder-button-text;
+
+    &:hover {
+      color: $stylefinder-button-text;
+    }
+  }
+}

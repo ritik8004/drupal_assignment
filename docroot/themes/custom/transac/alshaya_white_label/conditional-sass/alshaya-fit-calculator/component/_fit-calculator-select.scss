@@ -1,0 +1,132 @@
+.fit-calculator-select {
+  &.open {
+    .fitCalcSelect__indicator {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+
+    .fitCalcSelect__control {
+      border-bottom-color: transparent;
+    }
+  }
+
+  &.invalid {
+    .fitCalcSelect__control {
+      border: 0.125rem solid $spc-checkout-error-message-background;
+    }
+  }
+
+  .fitCalcSelect__control {
+    border: 1px solid $fit-calc-select-border;
+    border-radius: 0;
+    height: 3.125rem;
+    font-size: 0.875rem;
+    box-shadow: none;
+    cursor: pointer;
+
+    &:hover {
+      border: 1px solid $fit-calc-select-border;
+    }
+
+    > div:nth-child(2) {
+      .fitCalcSelect__indicator-separator {
+        display: none;
+      }
+
+      .fitCalcSelect__indicator {
+        color: $fit-calc-select-text;
+        background: $spc-select-arrow-bg;
+        padding: 0 0.5rem;
+        border-#{$left}: 1px solid $fit-calc-select-border;
+
+        svg {
+          transition: transform 0.3s ease-in-out;
+        }
+      }
+    }
+
+    .fitCalcSelect__single-value {
+      color: $fit-calc-select-color;
+    }
+  }
+
+  .fitCalcSelect__menu {
+    margin: 0;
+    box-shadow: none;
+
+    .fitCalcSelect__menu-list {
+      padding: 0;
+      border: 1px solid $fit-calc-select-border;
+      border-top-width: 0;
+
+      > div {
+        color: $fit-calc-select-text;
+        border-top: 1px solid $fit-calc-select-border-separator;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        background: $fit-calc-select_bg;
+        cursor: pointer;
+        padding: 0.75rem;
+
+        @include arabic-letter-spacing;
+
+        &:hover,
+        &.fitCalcSelect__option--is-selected {
+          background: $fit-calc-select_bg_hover;
+        }
+      }
+    }
+  }
+
+  .fitCalcSelect__control {
+    .fitCalcSelect__dropdown-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include icon('chevrondown') {
+        font-size: 1.25rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.125s ease-in-out;
+        color: $fit-calc-select-dropdown-color;
+      }
+
+      svg {
+        visibility: hidden;
+      }
+    }
+
+    &--menu-is-open {
+      .fitCalcSelect__dropdown-indicator {
+        &::before {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+    }
+  }
+}
+
+.appointment-type-select {
+  @include breakpoint($tablet) {
+    width: 19.25rem;
+  }
+}
+
+.appointment-companion-select {
+  @include breakpoint($tablet) {
+    width: 4.875rem;
+  }
+}
+
+html[lang=ar] {
+  .appointment-companion-wrapper {
+    .fitCalcSelect__value-container {
+      input {
+        position: static;
+      }
+    }
+  }
+}
