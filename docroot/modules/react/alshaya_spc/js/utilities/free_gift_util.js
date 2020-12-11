@@ -89,14 +89,11 @@ export const addFreeGift = (freeGiftLink) => {
 /**
  * Open free gift product detail modal.
  */
-export const openFreeGiftModal = () => {
-  const freeGiftLink = document.getElementById('add-free-gift');
+export const openFreeGiftModal = (e) => {
+  const freeGiftLink = e.detail.data();
   if (freeGiftLink !== null) {
-    freeGiftLink.addEventListener('click', (event) => {
-      event.preventDefault();
-      addFreeGift(freeGiftLink);
-      showFullScreenLoader();
-    });
+    addFreeGift(freeGiftLink);
+    showFullScreenLoader();
   }
 };
 
