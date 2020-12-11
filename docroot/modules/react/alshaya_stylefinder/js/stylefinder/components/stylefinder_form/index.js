@@ -1,9 +1,13 @@
 import React from 'react';
+import Slider from 'react-slick';
 import StyleFinderTitle from '../../../utilities/style-finder-title';
 import StyleFinderDesc from '../../../utilities/style-finder-description';
 import StyleFinderSteps from '../../../utilities/style-finder-steps';
 import StyleFinderSubTitle from '../../../utilities/style-finder-subtitle';
 import StyleFinderListItem from '../../../utilities/style-finder-list-item';
+import ConditionalView from '../../../common/components/conditional-view';
+import StyleFinderProduct from '../stylefinder-product';
+import styleFinderDyApi from '../../../utilities/style-finder-dy';
 
 export default class StyleFinder extends React.Component {
   constructor() {
@@ -11,6 +15,7 @@ export default class StyleFinder extends React.Component {
     this.state = {
       step: [],
       answerSelected: [],
+      productRecommendation: {},
       seeMoreUrl: '',
     };
   }
@@ -24,6 +29,20 @@ export default class StyleFinder extends React.Component {
     this.setState({
       step,
     });
+    document.addEventListener('dyGetProductRecommendation', this.getProducts, false);
+  }
+
+  getProducts = (event) => {
+    if (event !== undefined) {
+      const { productData } = event.detail;
+      let productRecommendation = false;
+      if (Object.keys(productData.strategies[0].items).length > 0) {
+        productRecommendation = productData;
+      }
+      this.setState({
+        productRecommendation,
+      });
+    }
   }
 
   /**
@@ -41,7 +60,7 @@ export default class StyleFinder extends React.Component {
   /**
    * Handle user Choice on every step.
    */
-  handleStepSubmit = (e, answer, choice, counter) => {
+  handleStepSubmit = (e, answer, attrCode, choice, counter) => {
     // Set choice as active.
     e.preventDefault();
     const element = this.findAncestor(e.target, 'list-item');
@@ -53,16 +72,16 @@ export default class StyleFinder extends React.Component {
     }
 
     // Get step and selected answer from state.
-    let { step, answerSelected } = this.state;
+    const { step, answerSelected } = this.state;
     step.length = counter;
     answerSelected.length = counter - 1;
-
+    answerSelected.push({
+      attrCode,
+      choice,
+    });
     // Push answer choice to the state.
-    this.setState((state) => {
-      answerSelected = state.answerSelected.concat(choice);
-      return {
-        answerSelected,
-      };
+    this.setState({
+      answerSelected,
     });
 
     // Get see more style url.
@@ -77,17 +96,46 @@ export default class StyleFinder extends React.Component {
     if (stepDetails.answer[answer].question !== undefined
       && stepDetails.answer[answer].question.length > 0) {
       // Push the next question to the state for render.
-      this.setState((state) => {
-        step = state.step.concat(stepDetails.answer[answer].question[0]);
-        return {
-          step,
-        };
+      step.push(stepDetails.answer[answer].question[0]);
+      this.setState({
+        step,
+      });
+      this.setState({
+        productRecommendation: {},
       });
     } else {
       // Update state if questions end.
       this.setState({
         step,
       });
+
+      // Filter Rule.
+      let realtimeRules = [];
+
+      // Filter rule conditions based on selections.
+      const conditions = [];
+      answerSelected.forEach((item) => {
+        const condition = {
+          field: item.attrCode, // Condition
+          arguments: [{
+            action: 'IS', // Action type IS / IS_NOT / CONTAINS / EQ / GT / GTE / LT / LTE
+            value: item.choice, // Value of condition
+          }],
+        };
+        conditions.push(condition);
+      });
+
+      realtimeRules = [{
+        id: -1,
+        query: {
+          conditions,
+        },
+        type: 'include', // Include or exclude
+        slots: [], // Position in widget
+      }];
+
+      // DY API for Product recommendation with real time rules.
+      styleFinderDyApi(realtimeRules);
     }
   };
 
@@ -115,7 +163,12 @@ export default class StyleFinder extends React.Component {
           <li
             className="list-item"
             key={index.nid}
-            onClick={(e) => this.handleStepSubmit(e, index, answer[index].choice, 1)}
+            onClick={(e) => this.handleStepSubmit(
+              e,
+              index,
+              answer[index].attrCode,
+              answer[index].choice, 1,
+            )}
           >
             {answer[index].title}
           </li>
@@ -124,7 +177,7 @@ export default class StyleFinder extends React.Component {
     } else if (counter === 2) {
       optionListClass = 'style-finder-lining-list';
     } else if (counter === 3) {
-      optionListClass = 'style-finder-bra-coverage-list';
+      optionListClass = 'style-finder-step-coverage-wrapper';
     }
 
     return (
@@ -144,9 +197,17 @@ export default class StyleFinder extends React.Component {
     );
   }
 
+  next = () => {
+    this.slider.slickNext();
+  }
+
+  previous = () => {
+    this.slider.slickPrev();
+  }
+
   render() {
     const { quizDetails } = drupalSettings.styleFinder;
-    const { step, seeMoreUrl } = this.state;
+    const { step, productRecommendation, seeMoreUrl } = this.state;
 
     // Prepare steps for render.
     const otherSteps = [];
@@ -156,6 +217,21 @@ export default class StyleFinder extends React.Component {
         otherSteps.push(this.renderStep(step[i], j));
         j += 1;
       }
+    }
+
+    const settings = {
+      className: 'center',
+      centerMode: true,
+      infinite: true,
+      centerPadding: '60px',
+      slidesToShow: 3,
+      speed: 500,
+    };
+    let items = [];
+    let startegyId = '';
+    if (Object.keys(productRecommendation).length > 0) {
+      items = productRecommendation.strategies[0].items;
+      startegyId = productRecommendation.wId;
     }
 
     return (
@@ -169,6 +245,64 @@ export default class StyleFinder extends React.Component {
           </StyleFinderDesc>
         </div>
         {otherSteps.map((item) => item)}
+        <div className="style-finder-heading-wrapper">
+          <StyleFinderSteps>
+            {Drupal.t('Suggestions for you')}
+          </StyleFinderSteps>
+          <ConditionalView condition={(Object.keys(productRecommendation).length === 0)
+          && (productRecommendation !== false)}
+          >
+            <div id="bf-results-placeholder">
+              <ul>
+                <li className="bf-msg">
+                  <div className="bf-msg-copy">
+                    <p>{Drupal.t('You’re so close!')}</p>
+                    <p>{Drupal.t('Complete the steps above to find your perfect bra.')}</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </ConditionalView>
+          <ConditionalView condition={(productRecommendation === false)}>
+            <div id="bf-results-placeholder">
+              <ul>
+                <li className="bf-msg">
+                  <div className="bf-msg-copy">
+                    <p>{Drupal.t('No recommendations found.')}</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </ConditionalView>
+          <ConditionalView condition={(Object.keys(productRecommendation).length > 0)}>
+            <span>{Drupal.t('Here are the personalized bra styles we think you’ll love!')}</span>
+            <div
+              className="dy-products"
+              data-dy-widget-id={productRecommendation.wId}
+              data-dy-feed-id={productRecommendation.fId}
+            >
+              <Slider ref={(c) => { this.slider = c; }} {...settings} className="products-slider">
+                {
+                  items.map((item) => (
+                    <StyleFinderProduct
+                      key={item.sku}
+                      item={item}
+                      strategyId={startegyId}
+                    />
+                  ))
+                }
+              </Slider>
+              <div style={{ textAlign: 'center' }}>
+                <button type="button" className="button" onClick={() => this.previous}>
+                  Previous
+                </button>
+                <button type="button" className="button" onClick={() => this.next}>
+                  Next
+                </button>
+              </div>
+            </div>
+          </ConditionalView>
+        </div>
         <div className="see-more">
           {(seeMoreUrl)
             ? (<a href={seeMoreUrl} className="see-more-bra">{Drupal.t('See More Styles')}</a>)

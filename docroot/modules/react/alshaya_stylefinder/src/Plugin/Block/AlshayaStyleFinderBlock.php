@@ -102,6 +102,13 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
         'target_bundles' => ['quiz'],
       ],
     ];
+    $form['dy_strategy_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('DY Strategy Id'),
+      '#required' => TRUE,
+      '#description' => $this->t('Dynamic Yield Strategy Id. Required for product recommendations.'),
+      '#default_value' => isset($config['dy_strategy_id']) ? $config['dy_strategy_id'] : '',
+    ];
 
     return $form;
   }
@@ -113,6 +120,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
     parent::blockSubmit($form, $form_state);
     $values = $form_state->getValues();
     $this->configuration['reference_quiz_node_id'] = $values['reference_quiz_node_id'];
+    $this->configuration['dy_strategy_id'] = $values['dy_strategy_id'];
   }
 
   /**
@@ -150,6 +158,7 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
         'drupalSettings' => [
           'styleFinder' => [
             'quizDetails' => $quizDetails,
+            'dyStrategyId' => $config['dy_strategy_id'],
           ],
         ],
       ],
@@ -233,16 +242,20 @@ class AlshayaStyleFinderBlock extends BlockBase implements ContainerFactoryPlugi
 
         $choice = $taxonomy_term_trans->getName();
         $answer_details['choice'] = $choice;
+        $answer_details['attrCode'] = $taxonomy_term_trans->get('field_sku_attribute_code')->value;
       }
       else {
         if ($answer_node->field_choice_1->value) {
           $answer_details['choice'] = $answer_node->field_choice_1->value ?? NULL;
+          $answer_details['attrCode'] = 'product_category';
         }
         if ($answer_node->field_choice_2->value) {
           $answer_details['choice'] = $answer_node->field_choice_2->value ?? NULL;
+          $answer_details['attrCode'] = 'padding';
         }
         if ($answer_node->field_choice_3->value) {
           $answer_details['choice'] = $answer_node->field_choice_3->value ?? NULL;
+          $answer_details['attrCode'] = 'bra_coverage';
         }
       }
 

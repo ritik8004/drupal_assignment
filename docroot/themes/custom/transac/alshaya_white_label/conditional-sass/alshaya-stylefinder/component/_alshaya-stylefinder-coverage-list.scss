@@ -4,8 +4,8 @@
   @include breakpoint($tablet) {
     margin-top: 4.6875rem;
     max-width: 34.375rem;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   li {
