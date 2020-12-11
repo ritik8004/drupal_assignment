@@ -39,7 +39,7 @@ function _alshaya_quiz_get_translated_terms($attribute) {
 }
 
 /**
- * Set dynamic allowed values for the product_category field.
+ * Set dynamic allowed values for the choice 1 field.
  *
  * @param \Drupal\field\Entity\FieldStorageConfig $definition
  *   The field definition.
@@ -58,7 +58,7 @@ function alshaya_quiz_allowed_choice_1_values(FieldStorageConfig $definition, Co
 }
 
 /**
- * Set dynamic allowed values for the padding field.
+ * Set dynamic allowed values for the choice 2 field.
  *
  * @param \Drupal\field\Entity\FieldStorageConfig $definition
  *   The field definition.
@@ -77,7 +77,7 @@ function alshaya_quiz_allowed_choice_2_values(FieldStorageConfig $definition, Co
 }
 
 /**
- * Set dynamic allowed values for the bra_coverage field.
+ * Set dynamic allowed values for the choice 3 field.
  *
  * @param \Drupal\field\Entity\FieldStorageConfig $definition
  *   The field definition.
