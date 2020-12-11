@@ -108,18 +108,18 @@
         // We do not want to attach this event for variant change of PDP
         // product.
         if (!$(this).parents('#drupal-modal')) {
-          return ;
+          return;
         }
-        const sku = $(this).attr('data-sku');
-        const selected = $('[name="selected_variant_sku"]', $(this)).val();
-        const productKey = 'productInfo';
-        const variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+        var sku = $(this).attr('data-sku');
+        var selected = $('[name="selected_variant_sku"]', $(this)).val();
+        var productKey = 'productInfo';
+        var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
 
         if (typeof variantInfo === 'undefined') {
           return;
         }
 
-        const freeGiftWrapper = $(this).closest('article');
+        var freeGiftWrapper = $(this).closest('article');
         if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
           Drupal.updateGallery(freeGiftWrapper, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
         }
