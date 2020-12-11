@@ -31,10 +31,7 @@ function _alshaya_quiz_get_translated_terms($attribute) {
       $options[] = $translated_terms->getName();
     }
   }
-  $option_list = [];
-  foreach ($options as $key => $value) {
-    $option_list[$value] = $value;
-  }
+  $option_list = array_combine($options, $options);
   return $option_list;
 }
 
