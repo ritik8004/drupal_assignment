@@ -548,6 +548,21 @@ class ProductResource extends ResourceBase {
         }
       }
 
+      if ($this->skuManager->isSkuFreeGift($sku)) {
+        $configurable_values = alshaya_acm_product_get_sku_configurable_values($sku);
+        if (!empty($configurable_values)) {
+          $formatted_configurable_values = [];
+          foreach ($configurable_values as $attribute_id => $configurable_value) {
+            $formatted_configurable_values[] = [
+              'label' => $configurable_value['label'],
+              'value' => $configurable_value['value'],
+              'attribute_id' => $attribute_id,
+            ];
+          }
+          $data['configurable_values'] = $formatted_configurable_values;
+        }
+      }
+
       // Removing media if context set as we don't require and to
       // make response light.
       unset($data['media']);
