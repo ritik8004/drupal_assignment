@@ -134,6 +134,21 @@ export default class StyleFinder extends React.Component {
         slots: [], // Position in widget
       }];
 
+      realtimeRules = [{
+        "id": -1,
+        "query": {
+          "conditions": [{
+            "field": "product_category", // Condition
+            "arguments": [{
+              "action": "IS", // Action type IS / IS_NOT / CONTAINS / EQ / GT / GTE / LT / LTE
+              "value": "Juice-Fragrance" // Value of condition
+            }]
+          }]
+        },
+        "type": "include", // Include or exclude
+        "slots": [] // Position in widget
+      }];
+
       // DY API for Product recommendation with real time rules.
       styleFinderDyApi(realtimeRules);
     }
