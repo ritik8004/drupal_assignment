@@ -1,6 +1,6 @@
 /**
  * @file
- * Alshaya Promotions Label Manager.
+ * Alshaya Add Free Gift JS.
  */
 
 (function ($, Drupal) {
