@@ -52,8 +52,9 @@ function _alshaya_quiz_get_translated_terms($attribute) {
  *   An array of possible key and value options.
  *
  */
-function alshaya_quiz_allowed_product_category_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  return _alshaya_quiz_get_translated_terms('product_category');
+function alshaya_quiz_allowed_choice_1_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
+  return _alshaya_quiz_get_translated_terms($attribute['choice_1_attribute']);
 }
 
 /**
@@ -70,8 +71,9 @@ function alshaya_quiz_allowed_product_category_values(FieldStorageConfig $defini
  *   An array of possible key and value options.
  *
  */
-function alshaya_quiz_allowed_padding_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  return _alshaya_quiz_get_translated_terms('padding');
+function alshaya_quiz_allowed_choice_2_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
+  return _alshaya_quiz_get_translated_terms($attribute['choice_2_attribute']);
 }
 
 /**
@@ -88,6 +90,7 @@ function alshaya_quiz_allowed_padding_values(FieldStorageConfig $definition, Con
  *   An array of possible key and value options.
  *
  */
-function alshaya_quiz_allowed_bra_coverage_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
-  return _alshaya_quiz_get_translated_terms('bra_coverage');
+function alshaya_quiz_allowed_choice_3_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
+  return _alshaya_quiz_get_translated_terms($attribute['choice_3_attribute']);
 }
