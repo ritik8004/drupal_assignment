@@ -5,9 +5,9 @@ import StyleFinderDesc from '../../../utilities/style-finder-description';
 import StyleFinderSteps from '../../../utilities/style-finder-steps';
 import StyleFinderSubTitle from '../../../utilities/style-finder-subtitle';
 import StyleFinderListItem from '../../../utilities/style-finder-list-item';
-import dispatchCustomEvent from '../../../../../js/utilities/events';
 import ConditionalView from '../../../common/components/conditional-view';
 import StyleFinderProduct from '../stylefinder-product';
+import styleFinderDyApi from '../../../utilities/style-finder-dy';
 
 export default class StyleFinder extends React.Component {
   constructor() {
@@ -135,18 +135,7 @@ export default class StyleFinder extends React.Component {
       }];
 
       // DY API for Product recommendation with real time rules.
-      const { dyStrategyId } = drupalSettings.styleFinder;
-      window.DYO.recommendations.getRcomData(dyStrategyId,
-        { maxProducts: 50, realtimeRules }, (err, data) => {
-          let error = false;
-          if (err) {
-            error = true;
-          }
-          dispatchCustomEvent('dyGetProductRecommendation', {
-            productData: data,
-            error,
-          });
-        });
+      styleFinderDyApi(realtimeRules);
     }
   };
 
