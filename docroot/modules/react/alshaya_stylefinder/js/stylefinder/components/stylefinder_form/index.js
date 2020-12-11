@@ -197,14 +197,6 @@ export default class StyleFinder extends React.Component {
     );
   }
 
-  next = () => {
-    this.slider.slickNext();
-  }
-
-  previous = () => {
-    this.slider.slickPrev();
-  }
-
   render() {
     const { quizDetails } = drupalSettings.styleFinder;
     const { step, productRecommendation, seeMoreUrl } = this.state;
@@ -222,10 +214,22 @@ export default class StyleFinder extends React.Component {
     const settings = {
       className: 'center',
       centerMode: true,
-      infinite: true,
-      centerPadding: '60px',
-      slidesToShow: 3,
+      infinite: false,
+      centerPadding: '50px',
+      slidesToShow: 5,
       speed: 500,
+      variableWidth: true,
+      arrows: true,
+      responsive: [
+        {
+          breakpoint: 640,
+          settings: {
+            infinite: false,
+            slidesToShow: 3,
+            arrows: false,
+          },
+        },
+      ],
     };
     let items = [];
     let startegyId = '';
@@ -245,7 +249,7 @@ export default class StyleFinder extends React.Component {
           </StyleFinderDesc>
         </div>
         {otherSteps.map((item) => item)}
-        <div className="style-finder-heading-wrapper">
+        <div className="style-finder-heading-wrapper style-finder-suggestion-wrapper">
           <StyleFinderSteps>
             {Drupal.t('Suggestions for you')}
           </StyleFinderSteps>
@@ -253,13 +257,19 @@ export default class StyleFinder extends React.Component {
           && (productRecommendation !== false)}
           >
             <div id="bf-results-placeholder">
-              <ul>
+              <ul className="style-finder-list">
+                <li />
+                <li />
+                <li />
                 <li className="bf-msg">
                   <div className="bf-msg-copy">
                     <p>{Drupal.t('You’re so close!')}</p>
                     <p>{Drupal.t('Complete the steps above to find your perfect bra.')}</p>
                   </div>
                 </li>
+                <li />
+                <li />
+                <li />
               </ul>
             </div>
           </ConditionalView>
@@ -292,14 +302,6 @@ export default class StyleFinder extends React.Component {
                   ))
                 }
               </Slider>
-              <div style={{ textAlign: 'center' }}>
-                <button type="button" className="button" onClick={() => this.previous}>
-                  Previous
-                </button>
-                <button type="button" className="button" onClick={() => this.next}>
-                  Next
-                </button>
-              </div>
             </div>
           </ConditionalView>
         </div>
