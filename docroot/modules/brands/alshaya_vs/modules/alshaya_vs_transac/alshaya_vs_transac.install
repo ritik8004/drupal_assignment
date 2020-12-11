@@ -14,7 +14,7 @@ use Drupal\Component\Utility\Unicode;
  *
  * Adds lining and coverage fields in the sku base field existing config.
  */
-function alshaya_vs_transac_update_8016() {
+function alshaya_vs_transac_update_8014() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     [
