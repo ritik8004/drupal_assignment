@@ -8,20 +8,14 @@
     width: 100%;
     margin: 0 auto;
     padding: 0;
+    height: 15rem;
 
     li {
       margin: 0 !important;
       outline: 0 none;
       transform: scale3d(0.85, 0.85, 1);
-      background-color: #d3d3d3;
+      background-color: $stylefinder-card-bg;
       flex: 0 0 11.25rem;
-
-      &::before {
-        content: "";
-        display: block;
-        width: 100%;
-        padding-bottom: 133.21429%;
-      }
 
       &:nth-child(-n+2),
       &:nth-last-of-type(-n+2) {
@@ -51,7 +45,7 @@
           #{$right}: 0.125rem;
           bottom: 0.125rem;
           #{$left}: 0.125rem;
-          border: 0.1875rem solid #fff;
+          border: 0.1875rem solid $stylefinder-card-border;
         }
 
         .bf-msg-copy {
@@ -108,15 +102,15 @@
         width: 2.125rem;
         height: 2.125rem;
         padding: 0;
-        background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzMgMzMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTYuNSIgY3k9IjE2LjUiIHI9IjE2LjUiIGZpbGw9IiNlZDc1YWIiLz48L3N2Zz4=);
-        background-repeat: no-repeat;
+        background-color: $stylefinder-slider-navigation;
+        border-radius: 50%;
         display: inline-block !important;
         z-index: 2;
         margin: auto;
 
         &.slick-disabled {
           cursor: default;
-          background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzMgMzMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTYuNSIgY3k9IjE2LjUiIHI9IjE2LjUiIGZpbGw9IiNmYWM1ZGMiLz48L3N2Zz4=);
+          opacity: 0.4;
         }
 
         &::before {
@@ -142,7 +136,7 @@
           &::after {
             transform: translateX(-50%) translateX(-0.125rem) translateY(-50%);
             border-width: 0.5625rem 0.75rem 0.5625rem 0;
-            border-color: transparent #fff transparent transparent;
+            border-color: transparent $stylefinder-slider-arrow transparent transparent;
           }
         }
 
@@ -153,7 +147,7 @@
           &::after {
             transform: translateX(-50%) translateX(0.125rem) translateY(-50%);
             border-width: 0.5625rem 0 0.5625rem 0.75rem;
-            border-color: transparent transparent transparent #fff;
+            border-color: transparent transparent transparent $stylefinder-slider-arrow;
           }
         }
       }
@@ -202,10 +196,10 @@
           }
 
           a {
-            color: black;
+            color: $stylefinder-slider-text;
 
             &:hover {
-              color: black;
+              color: $stylefinder-slider-text;
             }
           }
         }

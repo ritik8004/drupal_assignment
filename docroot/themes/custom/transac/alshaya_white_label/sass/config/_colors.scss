@@ -143,6 +143,7 @@ $pinterest-red: #bc091d;
 $_stylefinder-pink-bg: #f7afca;
 $_stylefinder-pink-active-bg: #ef5f96;
 $_stylefinder-active-lining-text: #d91560;
+$_stylefinder-default-card-gray: #d3d3d3;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1565,3 +1566,8 @@ $stylefinder-steps: $mothercare-black;
 $style-finder-cateogory-text: $mothercare-black;
 $stylefinder-button-bg: $_stylefinder-pink-bg;
 $stylefinder-button-text: $mothercare-black;
+$stylefinder-card-bg: $_stylefinder-default-card-gray;
+$stylefinder-card-border: $white-five;
+$stylefinder-slider-arrow: $white-five;
+$stylefinder-slider-text: $mothercare-black;
+$stylefinder-slider-navigation: $_stylefinder-pink-active-bg;
