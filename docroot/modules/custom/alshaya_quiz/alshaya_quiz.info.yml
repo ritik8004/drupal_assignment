@@ -1,0 +1,7 @@
+name: Alshaya Quiz
+type: module
+description: Provides content types for building a quiz.
+core_version_requirement: ^8.8 || ^9
+package: alshaya
+dependencies:
+  - inline_entity_form:inline_entity_form

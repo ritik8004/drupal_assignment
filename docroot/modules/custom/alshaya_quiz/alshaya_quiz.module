@@ -1,0 +1,93 @@
+<?php
+
+use \Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_preprocess_hook().
+ *
+ * {@inheritdoc}
+ */
+function alshaya_quiz_preprocess_decoupled_component_block(array &$variables) {
+  $variables['attributes']['class'][] = "block-quiz";
+}
+
+/**
+ * Custom Function to get translated terms of the passed array of terms
+ * @param  array $terms
+ *   List of terms of respective attribute code.
+ *
+ * @return array
+ *   Array of translated terms
+ */
+function _alshaya_quiz_get_translated_terms($attribute) {
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+    ->loadByProperties(['field_sku_attribute_code' => $attribute, 'vid' => 'sku_product_option']);
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $options = [];
+  foreach ($terms as $term) {
+    if($term->hasTranslation($lang)){
+      $translated_terms = \Drupal::service('entity.repository')->getTranslationFromContext($term, $lang);
+      $options[] = $translated_terms->getName();
+    }
+  }
+  $option_list = array_combine($options, $options);
+  return $option_list;
+}
+
+/**
+ * Set dynamic allowed values for the choice 1 field.
+ *
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field definition.
+ * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
+ *   The entity being created if applicable.
+ * @param bool $cacheable
+ *   Boolean indicating if the results are cacheable.
+ *
+ * @return array
+ *   An array of possible key and value options.
+ *
+ */
+function alshaya_quiz_allowed_choice_1_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
+  return _alshaya_quiz_get_translated_terms($attribute['choice_1_attribute']);
+}
+
+/**
+ * Set dynamic allowed values for the choice 2 field.
+ *
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field definition.
+ * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
+ *   The entity being created if applicable.
+ * @param bool $cacheable
+ *   Boolean indicating if the results are cacheable.
+ *
+ * @return array
+ *   An array of possible key and value options.
+ *
+ */
+function alshaya_quiz_allowed_choice_2_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
+  return _alshaya_quiz_get_translated_terms($attribute['choice_2_attribute']);
+}
+
+/**
+ * Set dynamic allowed values for the choice 3 field.
+ *
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field definition.
+ * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
+ *   The entity being created if applicable.
+ * @param bool $cacheable
+ *   Boolean indicating if the results are cacheable.
+ *
+ * @return array
+ *   An array of possible key and value options.
+ *
+ */
+function alshaya_quiz_allowed_choice_3_values(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+  $attribute = \Drupal::configFactory()->get('alshaya_quiz.settings')->get('attributes');
+  return _alshaya_quiz_get_translated_terms($attribute['choice_3_attribute']);
+}
