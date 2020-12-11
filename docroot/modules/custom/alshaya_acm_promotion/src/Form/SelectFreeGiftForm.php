@@ -165,6 +165,8 @@ class SelectFreeGiftForm extends FormBase {
       ],
     ];
 
+    $form['#attached']['library'][] = 'alshaya_acm_product/add_free_gift_promotions';
+
     // Required for common js to get applied.
     $form['#attributes']['data-sku'] = $sku->getSku();
     $form['#attributes']['class'][] = 'sku-base-form';
