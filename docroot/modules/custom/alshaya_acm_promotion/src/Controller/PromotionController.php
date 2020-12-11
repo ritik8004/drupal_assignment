@@ -237,6 +237,8 @@ class PromotionController extends ControllerBase {
       '#items' => $items,
     ];
 
+    $build['#attached']['library'][] = 'alshaya_acm_product/add_free_gift_promotions';
+
     if ($request->query->get('replace')) {
       $response = new AjaxResponse();
       $response->addCommand(new HtmlCommand('#drupal-modal', $build));
