@@ -23,7 +23,11 @@ export default class StyleFinderProduct extends React.Component {
       >
         <div data-dy-product-id={item.sku} data-dy-strategy-id={startegyId}>
           <img src={item.image_url} />
-          <span>{item.name}</span>
+          <div className="bf-slide-copy">
+            <div className="bf-slide-copy-inner">
+              {item.name}
+            </div>
+          </div>
         </div>
       </a>
     );
