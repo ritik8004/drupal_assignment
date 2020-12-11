@@ -15,7 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Ajax\InvokeCommand;
 
 /**
  * Class Free Gift Controller.
@@ -100,7 +99,6 @@ class FreeGiftController extends ControllerBase {
     if ($request->query->get('back')) {
       $response = new AjaxResponse();
       $response->addCommand(new HtmlCommand('#drupal-modal', $build));
-      $response->addCommand(new InvokeCommand(NULL, 'openFreeGiftModal'));
       return $response;
     }
     
