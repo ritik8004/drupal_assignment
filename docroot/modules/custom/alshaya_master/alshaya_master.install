@@ -11,6 +11,48 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add free gift translations.
+ */
+function alshaya_master_update_8043() {
+  $strings = [
+    'One item of choice from' => [
+      'ar' => 'قطعة واحدة للاختيار من',
+    ],
+    'with this product' => [
+      'ar' => 'مع هذا المنتج',
+    ],
+    'Use code' => [
+      'ar' => 'استخدم الرمز',
+    ],
+    'in basket' => [
+      'ar' => 'في سلة التسوق',
+    ],
+    'Back to Collection' => [
+      'ar' => 'العودة إلى التشكيلة',
+    ],
+    'Free Gift' => [
+      'ar' => 'هدية مجانية',
+    ],
+    'Add Free Gift' => [
+      'ar' => 'أضف هدية مجانية',
+    ],
+    'One item of choice from @link with this product' => [
+      'ar' => 'قطعة واحدة للاختيار من @link مع هذا المنتج',
+    ],
+    'Use code ' => [
+      'ar' => 'استخدم الرمز',
+    ],
+    'Click' => [
+      'ar' => 'اختر',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update Seckit config to remove Generator meta and header.
  */
 function alshaya_master_update_8042() {
