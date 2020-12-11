@@ -168,7 +168,6 @@
 
         .bf-slide-copy {
           position: relative;
-          #{$left}: -9999px;
           transform: translateX(-50%);
           width: 100vw;
           overflow: hidden;
