@@ -96,7 +96,7 @@
     .slick-slider {
       padding-bottom: 3.75rem;
 
-      @include breakpoint($upto-mobile-landscape) {
+      @include breakpoint($only-mobile) {
         padding-bottom: 0;
       }
 
@@ -180,7 +180,7 @@
             margin: 0.25rem auto;
             text-align: center;
 
-            @include breakpoint($upto-mobile-landscape) {
+            @include breakpoint($only-mobile) {
               font-size: 0.75rem;
               line-height: 1.4;
             }
