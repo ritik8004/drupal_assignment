@@ -18,8 +18,6 @@ export default class StyleFinder extends React.Component {
       productRecommendation: {},
       seeMoreUrl: '',
     };
-    this.next = this.next.bind(this);
-    this.previous = this.previous.bind(this);
   }
 
   /**
@@ -36,21 +34,14 @@ export default class StyleFinder extends React.Component {
 
   getProducts = (event) => {
     if (event !== undefined) {
-      const { productData, error } = event.detail;
-      if (error) {
-        this.setState({
-          productRecommendation: false,
-        });
-      }
+      const { productData } = event.detail;
+      let productRecommendation = false;
       if (Object.keys(productData.strategies[0].items).length > 0) {
-        this.setState({
-          productRecommendation: productData,
-        });
-      } else {
-        this.setState({
-          productRecommendation: false,
-        });
+        productRecommendation = productData;
       }
+      this.setState({
+        productRecommendation,
+      });
     }
   }
 
@@ -84,11 +75,10 @@ export default class StyleFinder extends React.Component {
     const { step, answerSelected } = this.state;
     step.length = counter;
     answerSelected.length = counter - 1;
-    const selected = {
+    answerSelected.push({
       attrCode,
       choice,
-    };
-    answerSelected.push(selected);
+    });
     // Push answer choice to the state.
     this.setState({
       answerSelected,
@@ -314,10 +304,10 @@ export default class StyleFinder extends React.Component {
                 }
               </Slider>
               <div style={{ textAlign: 'center' }}>
-                <button type="button" className="button" onClick={this.previous}>
+                <button type="button" className="button" onClick={() => this.previous}>
                   Previous
                 </button>
-                <button type="button" className="button" onClick={this.next}>
+                <button type="button" className="button" onClick={() => this.next}>
                   Next
                 </button>
               </div>
