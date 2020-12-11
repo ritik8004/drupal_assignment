@@ -9,8 +9,8 @@ id: node.answer.field_choice_4
 field_name: field_choice_4
 entity_type: node
 bundle: answer
-label: 'Choice 4'
-description: ''
+label: 'Answer choice'
+description: 'Overrides any option selected from above fields.'
 required: false
 translatable: true
 skip_translation_check: 0

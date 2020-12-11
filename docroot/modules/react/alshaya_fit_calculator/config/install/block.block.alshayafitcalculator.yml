@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_fit_calculator
   theme:
-    - alshaya_victoria_secret
+    - alshaya_white_label
 id: alshayafitcalculator
-theme: alshaya_victoria_secret
+theme: alshaya_white_label
 region: content
 weight: 0
 provider: null

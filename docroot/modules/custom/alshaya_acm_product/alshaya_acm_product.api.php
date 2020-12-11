@@ -123,5 +123,15 @@ function hook_alshaya_acm_product_recommended_products_data_alter(string $type, 
 }
 
 /**
+ * Allow other modules to change the build array for PDP size-guide modal.
+ *
+ * @param array $build
+ *   Reference to the build array.
+ */
+function hook_alshaya_acm_product_modal_build_alter(array &$build) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
