@@ -16,28 +16,3 @@
     }
   }
 }
-
-.c-plp .c-content__region {
-  .all-filters,
-  .all-filters-algolia {
-    .filter__foot {
-      .facet-all-clear,
-      .facet-clear-all {
-        .block-facets-summary-blockfilter {
-          &-bar-promotions,
-          &-bar-plp,
-          &-bar-productlist,
-          &-bar {
-            ul {
-              li {
-                &.clear-all {
-                  margin-bottom: 0;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}

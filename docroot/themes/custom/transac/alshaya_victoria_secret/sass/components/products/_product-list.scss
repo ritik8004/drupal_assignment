@@ -209,10 +209,6 @@
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
-      @include breakpoint($tablet) {
-        width: 100%;
-      }
-
       ul {
         border-bottom: none;
         margin-bottom: 0;
