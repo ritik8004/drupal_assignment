@@ -13,6 +13,21 @@ use Drupal\Core\Config\FileStorage;
  *
  * Add free gift translations.
  */
+function alshaya_master_update_8044() {
+  $strings = [
+    'Use code <span class="coupon-code">@coupon</span> in basket' => [
+      'ar' => 'استخدم الرمز <span class="coupon-code">@coupon</span> في سلة التسوق',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add free gift translations.
+ */
 function alshaya_master_update_8043() {
   $strings = [
     'One item of choice from' => [
@@ -2075,6 +2090,9 @@ function alshaya_master_install() {
     ],
     'Click' => [
       'ar' => 'اختر',
+    ],
+    'Use code <span class="coupon-code">@coupon</span> in basket' => [
+      'ar' => 'استخدم الرمز <span class="coupon-code">@coupon</span> في سلة التسوق',
     ],
   ];
 
