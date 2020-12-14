@@ -1,4 +1,4 @@
-.new-pdp-magazine-layout {
+.magazine-layout-v2 {
   .branding__menu {
     @include breakpoint($only-mobile) {
       display: none;
@@ -18,26 +18,43 @@
   z-index: 4;
   background: $magv2-sticky-header-bg;
   opacity: 0;
+  box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+
+  @include breakpoint($only-mobile) {
+    opacity: initial;
+    box-shadow: none;
+  }
 
   &.magv2-pdp-sticky-header {
     opacity: 1;
 
     @include breakpoint($only-mobile) {
       background: $magv2-sticky-header-bg;
+      opacity: initial;
+      top: 0;
+      transform: translateY(0%);
+      transition: all 0.45s cubic-bezier(0.4, 0, 0.8, 1);
     }
   }
 
   &.magv2-pdp-non-sticky-header {
     opacity: 0;
+
+    @include breakpoint($only-mobile) {
+      opacity: initial;
+      top: -50%;
+      transform: translateY(-100%);
+      transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
   }
 
   @include breakpoint($only-mobile) {
-    padding: 0 0.6875rem;
+    padding: 0 1.25rem;
     display: flex;
     flex-direction: column;
     background: transparent;
     opacity: 1;
-    transition: background 0.5s ease-out;
+    transition: all 0.3s ease-out;
   }
 
   .magv2-header-wrapper {
@@ -46,6 +63,7 @@
 
     @include breakpoint($only-mobile) {
       height: 3.5rem;
+      position: relative;
     }
 
     .magv2-pdp-brand-logo {
@@ -72,17 +90,19 @@
 
     .back-button {
       float: #{$left};
+      background: $magv2-icon-bg;
+      border-radius: 50%;
+      padding: 0.375rem;
+      position: absolute;
+      #{$left}: 0;
+      top: 0.9375rem;
 
       @include icon(arrowup, after) {
         display: block;
         font-size: 2.125rem;
-        height: 2.875rem;
+        height: 2.125rem;
         transform: rotate(-90deg);
-        width: 2.875rem;
-        background: $magv2-icon-bg;
-        border-radius: 50%;
-        padding-#{$left}: 0.3125rem;
-        padding-top: 0.3125rem;
+        width: 2.125rem;
         color: $magv2-mobile-back-arrow;
       }
     }
@@ -143,6 +163,7 @@
 
       .magv2-pdp-title {
         @include breakpoint($tablet) {
+          display: block;
           text-align: inherit;
           text-overflow: inherit;
           white-space: inherit;
@@ -150,7 +171,7 @@
           margin-#{$right}: 3.75rem;
           line-height: 1.31;
           max-width: 13.438rem;
-          padding: 0;
+          padding: 0.25rem 0;
           font-family: $alshaya-thin;
         }
 
@@ -168,6 +189,7 @@
       @include breakpoint($tablet) {
         margin-#{$right}: 3.75rem;
         max-width: 13.125rem;
+        padding: 0.25rem 0;
 
         .has-special-price {
           .magv2-pdp-final-price-wrapper {
@@ -176,7 +198,6 @@
 
           .magv2-pdp-price-wrapper {
             font-size: 1rem;
-            padding-#{$left}: 0;
           }
         }
 
@@ -186,7 +207,7 @@
 
         .magv2-pdp-price-wrapper {
           font-size: 1.125rem;
-          padding: 0 0.25rem;
+          padding: 0;
           font-family: $alshaya-thin;
         }
 
@@ -226,37 +247,37 @@
       background: $magv2-icon-bg;
       border-radius: 50%;
       float: #{$right};
+      padding: 0.375rem;
 
       &::before {
         content: '';
         background: url('#{$base_theme_img_directory_path}/icons/basket.svg') center center no-repeat;
         display: block;
-        height: 2.875rem;
-        width: 2.875rem;
+        height: 2.125rem;
+        width: 2.125rem;
       }
 
       @include breakpoint($only-mobile) {
-        position: relative;
+        position: absolute;
+        #{$right}: 0;
+        top: 0.625rem;
+        transform: translateY(-50%);
       }
     }
 
     #sticky-header-btn {
       margin-#{$left}: 3.75rem;
+      padding: 0.34375rem 0;
 
       .magv2-button {
         margin: 0;
-        min-width: 18.75rem;
         font-size: 1rem;
         font-family: $alshaya-bold;
-        padding: 0.6875rem 0 0.625rem;
+        padding: 0.625rem 0 0.5625rem;
       }
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: 1.875rem;
-
-        .magv2-button {
-          min-width: 9.375rem;
-        }
       }
     }
 
@@ -267,12 +288,12 @@
         background: $primary_minicart_quantity_bg;
         color: $primary_minicart_quantity_text;
         text-align: center;
-        top: 1.5rem;
-        #{$left}: 0;
+        top: 2rem;
+        #{$left}: -0.5rem;
         border-radius: 50%;
         padding: 0;
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 1.1875rem;
+        height: 1.1875rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -295,12 +316,18 @@ html[lang=ar] {
 }
 
 .magv2-pdp-sticky-header {
-  box-shadow: 0.3125rem -0.3125rem 0.625rem $magv2-sticky-header-box-shadow;
+  @include breakpoint($only-mobile) {
+    box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+  }
 
   &.magv2-header {
     position: fixed;
     #{$left}: 0;
     top: 0;
+
+    @include breakpoint($only-mobile) {
+      padding: 0 0.6875rem;
+    }
 
     .magv2-header-wrapper {
       .magv2-compact-detail-wrapper,
@@ -310,17 +337,31 @@ html[lang=ar] {
       }
 
       .back-button {
-        &::after {
-          background: none;
-        }
+        background: none;
+        #{$left}: -0.3125rem;
+        transform: translateY(-50%);
+        top: 50%;
       }
 
       .back-button + .magv2-compact-detail-wrapper {
         width: 80%;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+        }
       }
 
       .cart-link {
         background: none;
+        #{$right}: -0.1875rem;
+        top: 50%;
+      }
+
+      .quantity {
+        @include breakpoint($only-mobile) {
+          top: 1.625rem;
+          #{$left}: 0.125rem;
+        }
       }
     }
   }

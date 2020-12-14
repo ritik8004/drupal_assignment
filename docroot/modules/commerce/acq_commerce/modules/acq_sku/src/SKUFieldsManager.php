@@ -9,6 +9,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Psr\Log\LoggerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Database\Connection;
 
 /**
  * Class SKU Fields Manager.
@@ -55,6 +56,13 @@ class SKUFieldsManager {
   private $logger;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  private $connection;
+
+  /**
    * SKUFieldsManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -67,17 +75,21 @@ class SKUFieldsManager {
    *   The Entity Definition Update Manager service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The Logger.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database connection.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleHandlerInterface $module_handler,
                               EntityTypeManagerInterface $entity_type_manager,
                               EntityDefinitionUpdateManagerInterface $entity_definition_update_manager,
-                              LoggerInterface $logger) {
+                              LoggerInterface $logger,
+                              Connection $connection) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityDefinitionUpdateManager = $entity_definition_update_manager;
     $this->logger = $logger;
+    $this->connection = $connection;
   }
 
   /**
@@ -215,6 +227,56 @@ class SKUFieldsManager {
 
     if ($apply_updates) {
       $this->entityDefinitionUpdateManager->applyUpdates();
+    }
+  }
+
+  /**
+   * Update field type for existing attribute.
+   *
+   * @param array $attributes
+   *   List of product attributes.
+   */
+  public function updateFieldType(array $attributes) {
+    foreach ($attributes as $source_column) {
+      try {
+        // Fetch and store existing attribute data in temporary variable.
+        $query = $this->connection->select('acq_sku_field_data', 'asfd');
+        $query->fields('asfd', ['id', 'type', 'langcode', $source_column]);
+        $query->isNotNull('asfd.' . $source_column);
+        $result = $query->execute()->fetchAll();
+
+        // First remove the field. This is required or drupal won't allow
+        // the change in storage of the field.
+        $field = str_replace('attr_', '', $source_column);
+        $this->removeField($field);
+        // Remove unsed field from table acq_sku_field_data.
+        $this->connection->schema()->dropField('acq_sku_field_data', $source_column);
+        // Then re-add the field.
+        $this->addFields();
+
+        // If data is available in temporary variable,
+        // then re-store it in new table.
+        if (!empty($result)) {
+          $destination_table = 'acq_sku_field_data';
+          $destination_column = $source_column . '__value';
+
+          // Updata data for new field.
+          foreach ($result as $rs) {
+            // Update data in new destination attribute.
+            $query = $this->connection->update($destination_table)->fields([
+              $destination_column => $rs->{$source_column},
+            ])
+              ->condition('id', $rs->id, '=')
+              ->condition('langcode', $rs->langcode, '=');
+            $query->execute();
+          }
+        }
+      }
+      catch (\Exception $e) {
+        $this->logger->warning('Failed to migrate records for updated fields: @message', [
+          '@message' => $e->getMessage(),
+        ]);
+      }
     }
   }
 

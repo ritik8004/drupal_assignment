@@ -34,7 +34,7 @@
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   // Filter Head
-  .all-filters .filter,
+  .all-filters,
   .all-filters-algolia,
   .all-filters-plp-algolia {
     .filter {
@@ -67,6 +67,7 @@
       &__inner {
         .block-views-exposed-filter-blockalshaya-product-list-block-1,
         .block-views-exposed-filter-blockalshaya-product-list-block-2,
+        .block-views-exposed-filter-blockalshaya-product-list-block-3,
         .block-views-exposed-filter-blocksearch-page {
           fieldset.form-wrapper {
             .fieldset-wrapper .form-item {
@@ -80,14 +81,12 @@
               padding: 1rem 2rem 0.9375rem;
 
               .sort-for-label {
-                @include breakpoint($upto-tablet) {
-                  top: 1rem;
-                  color: $plp_sort_for_label;
-                  font-size: 0.75rem;
-                }
+                top: 1rem;
+                color: $plp_sort_for_label;
+                font-size: 0.75rem;
               }
 
-              @include facet-arrow(after, false) {
+              @include facet-arrow(after, #{$right}) {
                 #{$right}: 1.25rem;
               }
             }
@@ -103,6 +102,13 @@
           @include facet-arrow(after, false) {
             #{$right}: 1.25rem;
             top: 1.375rem;
+          }
+
+          .selected-facets {
+            .title {
+              font-size: 0.75rem;
+              color: $plp_sort_for_label;
+            }
           }
         }
       }

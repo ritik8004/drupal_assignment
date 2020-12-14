@@ -33,3 +33,4 @@ exclude:
   - moderation_sidebar
   - update
   - image_widget_crop
+  - dblog

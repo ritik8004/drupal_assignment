@@ -102,7 +102,13 @@
           display: none;
         }
 
+        @include breakpoint($tablet) {
+          padding-top: 0;
+        }
+
         @include breakpoint($only-mobile) {
+          padding-top: 1.25rem;
+
           @include select-wrapper(100%);
 
           select.form-select {

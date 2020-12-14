@@ -165,7 +165,10 @@ class CheckoutComPaymentController extends PaymentController {
         '@token' => $payment_token,
       ]);
 
-      return $this->handleCheckoutComError('3D secure payment came into success but responseCode was not success.');
+      return $this->handleError(
+        '3D secure payment came into success but responseCode was not success.',
+        $data
+      );
     }
 
     $amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']);
@@ -176,7 +179,10 @@ class CheckoutComPaymentController extends PaymentController {
         '@total' => $amount,
       ]);
 
-      return $this->handleCheckoutComError('3D secure payment came into success with proper responseCode but totals do not match.');
+      return $this->handleError(
+        '3D secure payment came into success with proper responseCode but totals do not match.',
+        $data
+      );
     }
 
     $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
@@ -243,8 +249,36 @@ class CheckoutComPaymentController extends PaymentController {
    */
   public function handleCheckoutComError(string $message = NULL) {
     try {
-      $this->cart->cancelCartReservation($message ? $message : '3d checkout.com request failed.');
       $data = $this->validateCheckoutComRequest('error');
+      return $this->handleError($message, $data);
+    }
+    catch (\Exception $e) {
+      if ($e->getCode() === 302) {
+        return new RedirectResponse($e->getMessage(), 302);
+      }
+
+      throw $e;
+    }
+  }
+
+  /**
+   * Handle checkout.com payment error (in success or error callback).
+   *
+   * @param string|null $message
+   *   The message to send with cancel cart reservation.
+   * @param array $data
+   *   Payment Data.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirect to cart or checkout page.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  protected function handleError(string $message = NULL, array $data) {
+    $message = $message ? $message : '3d checkout.com request failed.';
+
+    try {
+      $this->cart->cancelCartReservation($message);
     }
     catch (\Exception $e) {
       if ($e->getCode() === 302) {
@@ -254,11 +288,12 @@ class CheckoutComPaymentController extends PaymentController {
       throw $e;
     }
 
-    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $payment_data = [
       'status' => self::PAYMENT_DECLINED_VALUE,
       'payment_method' => 'checkoutcom',
     ];
+
+    $response = new RedirectResponse('/' . $data['data']['langcode'] . '/checkout', 302);
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
     return $response;
   }

@@ -12,7 +12,8 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
- * Adds lining and coverage fields in the sku base field existing config.
+ * [5.14.0] Adds lining and coverage fields in the sku base field existing config.
+ * [5.14.0] Reindex to udpate the processed node titles.
  */
 function alshaya_vs_transac_update_8013() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -24,7 +25,10 @@ function alshaya_vs_transac_update_8013() {
     'override',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+
   \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
