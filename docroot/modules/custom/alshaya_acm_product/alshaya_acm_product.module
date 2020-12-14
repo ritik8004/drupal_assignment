@@ -1797,7 +1797,7 @@ function _alshaya_acm_product_configurable_option_value_callback(&$element, $inp
 function alshaya_acm_product_acq_sku_configurable_variants_alter(array &$children, $sku) {
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $is_free_gift_being_processed = drupal_static('is_free_gift_being_processed', TRUE);
+  $is_free_gift_being_processed = &drupal_static('is_free_gift_being_processed', FALSE);
 
   foreach ($children as $child_sku_code => $child) {
     // Do not display free gifts or OOS variants on PDP view.
