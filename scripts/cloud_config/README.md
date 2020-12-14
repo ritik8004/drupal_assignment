@@ -68,7 +68,7 @@ We can get server machine name of environment by running this command -
 php scripts/cloud_config/getWebServers.php [environment_uuid]
 ```
 
-Here we pass environment_id as argument and output will be server name.
+Here we pass environment_uuid as argument and output will be server name.
 
 ### Copy cron tasks from one environment to another 
 
