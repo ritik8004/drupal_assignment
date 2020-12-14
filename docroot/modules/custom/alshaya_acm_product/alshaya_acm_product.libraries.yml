@@ -49,3 +49,11 @@ sharethis:
     - core/jquery.once
     - core/drupalSettings
     - alshaya_master/jquery_is_in_viewport
+
+add_free_gift_promotions:
+  version: 1.x
+  js:
+    js/alshaya_acm_product.addfreegift.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

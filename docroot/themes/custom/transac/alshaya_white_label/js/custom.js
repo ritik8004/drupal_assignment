@@ -296,4 +296,5 @@
       }
     }
   };
+
 })(jQuery, Drupal, drupalSettings);

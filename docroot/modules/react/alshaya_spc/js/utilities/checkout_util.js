@@ -558,12 +558,3 @@ export const applyCode = (e) => {
     document.getElementById('promo-action-button').click();
   }
 };
-
-/**
- * Add class to body and trigger free gift modal.
- */
-export const openCartFreeGiftModal = () => {
-  const body = document.querySelector('body');
-  body.classList.add('free-gifts-modal-overlay');
-  document.getElementById('spc-free-gift').click();
-};

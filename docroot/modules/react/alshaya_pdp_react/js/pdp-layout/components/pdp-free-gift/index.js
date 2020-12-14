@@ -42,13 +42,20 @@ const PdpFreeGift = ({
       </>
     );
   }
+
+  const freeGiftImageMarkup = freeGiftImage
+    ? (
+      <div className="free-gift-image">
+        {parse(freeGiftImage)}
+      </div>
+    )
+    : null;
+
   return (
     <>
       <div className="free-gift-promotions free-gift-promotions-full-view-mode">
         <div className="free-gift-promo-wrapper free-gift-promo-list">
-          <div className="free-gift-image">
-            {parse(freeGiftImage)}
-          </div>
+          {freeGiftImageMarkup}
           <div className="free-gift-wrapper">
             <div className="free-gift-title">
               {Drupal.t('Free Gift')}
@@ -60,7 +67,7 @@ const PdpFreeGift = ({
             </div>
             <ConditionalView condition={freeGiftPromoCode.length > 0}>
               <div className="free-gift-coupon-code">
-                {Drupal.t('Use Code')}
+                {Drupal.t('Use code')}
                 {freeGiftPromoCode.map((code, i) => (
                   <span className="coupon-code" key={i.toString()}>{ code.value }</span>
                 ))}

@@ -411,15 +411,15 @@
           .slick-prev {
             @include icon(chevron#{$left});
 
-            #{$left}: 0;
-            #{$right}: auto !important;
+            left: 0;
+            right: auto !important;
           }
 
           .slick-next {
             @include icon(chevron#{$right});
 
-            #{$right}: 0;
-            #{$left}: auto !important;
+            right: 0;
+            left: auto !important;
           }
         }
       }
