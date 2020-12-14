@@ -1,9 +1,10 @@
 .see-more {
-  margin-top: 4.5rem;
+  margin-top: 1.875rem;
+  margin-bottom: 1.875rem;
   text-align: center;
 
-  @include breakpoint($only-mobile) {
-    margin-top: 1.875rem;
+  @include breakpoint($desktop) {
+    margin-top: 4.5rem;
   }
 
   .see-more-bra {
