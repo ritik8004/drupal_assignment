@@ -5,10 +5,16 @@
     display: flex;
     justify-content: center;
     list-style: none;
-    width: 100%;
     margin: 0 auto;
     padding: 0;
     height: 15rem;
+    overflow-x: hidden;
+    width: 100vw;
+    position: relative;
+    #{$left}: 50%;
+    #{$right}: 50%;
+    margin-#{$left}: -50vw;
+    margin-#{$right}: -50vw;
 
     li {
       margin: 0 !important;
