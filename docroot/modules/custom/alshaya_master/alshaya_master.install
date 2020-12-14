@@ -45,6 +45,9 @@ function alshaya_master_update_8043() {
     'Click' => [
       'ar' => 'اختر',
     ],
+    'Use code <span class="coupon-code">@coupon</span> in basket' => [
+      'ar' => 'استخدم الرمز <span class="coupon-code">@coupon</span> في سلة التسوق',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -2075,6 +2078,9 @@ function alshaya_master_install() {
     ],
     'Click' => [
       'ar' => 'اختر',
+    ],
+    'Use code <span class="coupon-code">@coupon</span> in basket' => [
+      'ar' => 'استخدم الرمز <span class="coupon-code">@coupon</span> في سلة التسوق',
     ],
   ];
 
