@@ -4,7 +4,7 @@ Scripts for cron activities on Acquia Cloud.
 Acquia cloud allows us to create/manage cron jobs by calling APIs through php scripts.
 This file lists certain commands which are helpful to manage cron activities.
 
-# Get Credentials first
+### Get Credentials first
 
 To perform any operation, the first step is to get the credentials from acquia cloud and store them in a settings file. Here are the detailed steps - 
 
@@ -30,7 +30,7 @@ php scripts/cloud_config/getApplications.php
 
 It will list down all stacks consisting of application uuid and application name.
 
-# Get all environments of a particular application
+### Get all environments of a particular application
 
 We can get all the environments available under a particular stack by running this command - 
 ```
@@ -40,7 +40,7 @@ php scripts/cloud_config/getEnvironments.php [application_uuid]
 Here we pass application_uuid as argument and output we get is list of all environments with environment uuid and
 environment name.
 
-# Create a cron job
+### Create a cron job
 
 We can create a cron job by running script in createCron.php. We require to pass environment uuid, cron command, cron frequency, cron label and cron server id as arguments. Command - 
 ```
@@ -53,7 +53,7 @@ Here is an example command -
 php scripts/cloud_config/createCron.php ["5268-aa9e"] "/var/www/html/${AH_SITE_NAME}/scripts/cron/cron_flock.sh drush-delete-entity-cachetags acsf-tools-ml 'delete-entity-cachetags'" "0 0 * * 0" "Delete Entity Cachetags"
 ```
 
-# Get all cron tasks of environment
+### Get all cron tasks of environment
 
 We can list all cron tasks of a particular environment by simply passing environment uuid as argument. Here is the
 command for that - 
@@ -61,7 +61,7 @@ command for that -
 php scripts/cloud_config/getCronTasks.php [environment_uuid]
 ```
 
-# Get webserver name of environment
+### Get webserver name of environment
 
 We can get server machine name of environment by running this command - 
 ```
@@ -70,7 +70,7 @@ php scripts/cloud_config/getWebServers.php [environment_uuid]
 
 Here we pass environment_id as argument and output will be server name.
 
-# Copy cron tasks from one environment to another 
+### Copy cron tasks from one environment to another 
 
 We can copy all cron tasks of one environment to another environment of a particular stack by running this command  -
 ```
