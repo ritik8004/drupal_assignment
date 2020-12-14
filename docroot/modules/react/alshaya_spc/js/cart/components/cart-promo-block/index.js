@@ -147,7 +147,7 @@ export default class CartPromoBlock extends React.Component {
         if (freeGiftPromo !== undefined && action === 'apply coupon' && freeGiftPromo.code === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
           const body = document.querySelector('body');
           body.classList.add('free-gifts-modal-overlay');
-          document.getElementById(getCartFreeGiftModalId(promoCoupons.skuCode)).click();
+          document.getElementById(getCartFreeGiftModalId(freeGiftPromo.skuCode)).click();
           document.getElementById('promo-action-button').classList.remove('loading');
         } else if (freeGiftPromo !== undefined && action === 'apply coupon' && freeGiftPromo.code === 'FREE_GIFT_SUB_TYPE_ALL_SKUS' && freeGiftPromo.skuType === 'configurable') {
           openCartFreeGiftModal(freeGiftPromo.skuCode);
