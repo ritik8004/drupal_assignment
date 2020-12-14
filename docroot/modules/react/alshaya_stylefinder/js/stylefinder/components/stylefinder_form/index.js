@@ -222,7 +222,7 @@ export default class StyleFinder extends React.Component {
       arrows: true,
       responsive: [
         {
-          breakpoint: 767,
+          breakpoint: 991,
           settings: {
             infinite: false,
             slidesToShow: 3,
