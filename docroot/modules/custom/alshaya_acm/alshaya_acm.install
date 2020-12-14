@@ -17,6 +17,17 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Set hide_max_qty_limit_message => false.
+ */
+function alshaya_acm_update_8018() {
+  \Drupal::configFactory()->getEditable('alshaya_acm.settings')
+    ->set('hide_max_qty_limit_message', FALSE)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add settings to display upsell and related product on pdp
  * and show / hide cross-sell products on cart page.
  */

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_search_algolia\Service;
 use AlgoliaSearch\Client;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -167,6 +168,13 @@ class AlshayaAlgoliaIndexHelper {
   protected $prettyAliases;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
    * SkuInfoHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -205,6 +213,8 @@ class AlshayaAlgoliaIndexHelper {
    *   The facet manager.
    * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyAliases $pretty_aliases
    *   Pretty Aliases.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -227,7 +237,8 @@ class AlshayaAlgoliaIndexHelper {
     ProductCategoryTree $productCategoryTree,
     AlshayaFacetsPrettyPathsHelper $pretty_path_helper,
     DefaultFacetManager $facets_manager,
-    AlshayaFacetsPrettyAliases $pretty_aliases
+    AlshayaFacetsPrettyAliases $pretty_aliases,
+    ProductInfoHelper $product_info_helper
   ) {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -248,6 +259,7 @@ class AlshayaAlgoliaIndexHelper {
     $this->alshayaPrettyPathHelper = $pretty_path_helper;
     $this->facetsManager = $facets_manager;
     $this->prettyAliases = $pretty_aliases;
+    $this->productInfoHelper = $product_info_helper;
   }
 
   /**
@@ -279,6 +291,9 @@ class AlshayaAlgoliaIndexHelper {
     elseif ($sku->language()->getId() != $node->language()->getId()) {
       throw new \Exception('SKU not available for language of Node');
     }
+
+    // Get processed title for a node.
+    $object['title'] = $this->productInfoHelper->getValue($sku, 'title', 'plp', $object['title']);
 
     // Description.
     $description = $this->skuManager->getDescription($sku, 'full');
@@ -908,6 +923,65 @@ class AlshayaAlgoliaIndexHelper {
     $this->logger->notice('Added attribute(s) for faceting: @attributes', [
       '@attributes' => implode(',', $attributes),
     ]);
+  }
+
+  /**
+   * Helps to update/remove replicas index in algolia.
+   *
+   * @param array $sorts
+   *   The list of the fields to be used in sort index.
+   */
+  public function updateReplicaIndex(array $sorts) {
+    $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
+    $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
+    $client = new Client($backend_config['application_id'], $backend_config['api_key']);
+    $index_name = $client_config['algolia_index_name'];
+
+    foreach ($this->languageManager->getLanguages() as $language) {
+      $index = $client->initIndex($index_name . '_' . $language->getId());
+      $name = $index_name . '_' . $language->getId();
+      $settings = $index->getSettings();
+      unset($settings['replicas']);
+      $ranking = $settings['ranking'];
+
+      foreach ($sorts as $sort) {
+        $replica = $name . '_' . implode('_', $sort);
+        $settings['replicas'][] = $replica;
+      }
+
+      $index->setSettings($settings, TRUE);
+
+      foreach ($sorts as $sort) {
+        $replica = $name . '_' . implode('_', $sort);
+        $replica_index = $client->initIndex($replica);
+        $replica_settings = $replica_index->getSettings();
+        $replica_settings['ranking'] = [
+          'desc(stock)',
+          $sort['direction'] . '(' . $sort['field'] . ')',
+        ] + $ranking;
+        $replica_index->setSettings($replica_settings);
+      }
+    }
+  }
+
+  /**
+   * Helps to prepare fields to create replicas.
+   *
+   * @param array $sort_options
+   *   The list of options.
+   */
+  public function prepareFieldsToSort(array $sort_options) {
+    $sorts = [];
+    foreach ($sort_options as $value) {
+      if ($value !== 0) {
+        if ($value != 'created') {
+          $sorts[] = ['field' => $value, 'direction' => 'asc'];
+        }
+        $sorts[] = ['field' => $value, 'direction' => 'desc'];
+      }
+    }
+
+    return $sorts;
   }
 
 }

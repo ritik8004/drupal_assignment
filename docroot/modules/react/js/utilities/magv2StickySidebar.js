@@ -34,12 +34,12 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
 
     // Gallery & Siderbar top.
     if (gallerywrapper.offsetHeight > siderbarwrapper.offsetHeight) {
-      topPosition = gallerywrapper.offsetTop + 30;
+      topPosition = gallerywrapper.offsetTop;
     } else {
-      topPosition = siderbarwrapper.offsetTop + 30;
+      topPosition = siderbarwrapper.offsetTop;
     }
 
-    if (currentScrollTop + element.offsetHeight > crosssellwrapper.offsetTop) {
+    if (currentScrollTop + element.offsetHeight > (crosssellwrapper.offsetTop)) {
       if (element.classList.contains('sticky-element')) {
         element.classList.add('contain');
         maincontainerwrapper.classList.add('magv2-main-contain');
@@ -53,7 +53,7 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
       element.classList.remove('magv2-main-contain');
     }
 
-    if ((currentScrollTop + element.offsetHeight < crosssellwrapper.offsetTop) && (scrollDirection === 'up')) {
+    if ((currentScrollTop + element.offsetHeight < (crosssellwrapper.offsetTop)) && (scrollDirection === 'up')) {
       if (element.classList.contains('contain')) {
         element.classList.remove('contain');
         maincontainerwrapper.classList.remove('magv2-main-contain');
@@ -62,6 +62,16 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
       }
     }
   };
+
+  window.addEventListener('load', () => {
+    const galleryWrapper = gallerycontainer;
+
+    if (galleryWrapper.offsetHeight > siderbarwrapper.offsetHeight) {
+      stickyElement(siderbarwrapper);
+    } else {
+      stickyElement(galleryWrapper);
+    }
+  });
 
   window.addEventListener('scroll', () => {
     const galleryWrapper = gallerycontainer;

@@ -299,7 +299,58 @@ class Cart {
   }
 
   /**
-   * Get cart by cart id.
+   * Search for active cart for a customer.
+   *
+   * @return int|null
+   *   Cart id if available or null.
+   */
+  public function searchCart(int $customer_id) {
+    // Sanity check, we need to do this only for customers (not for guest).
+    if (!($customer_id > 0)) {
+      return NULL;
+    }
+
+    $endpoint = 'carts/search';
+
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_search'),
+      'query' => [
+        'searchCriteria[filterGroups][0][filters][0][field]' => 'customer_id',
+        'searchCriteria[filterGroups][0][filters][0][value]' => $customer_id,
+        'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
+      ],
+    ];
+
+    try {
+      $result = $this->magentoApiWrapper->doRequest('GET', $endpoint, $request_options);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error occurred while trying to search for customer cart. Error: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      return NULL;
+    }
+
+    if (empty($result['items'])) {
+      return NULL;
+    }
+
+    $cart_ids = array_column($result['items'], 'id');
+
+    // Ideally we should have only one.
+    if (count($cart_ids) > 1) {
+      $this->logger->warning('Got multiple cart ids in response when doing search. IDs: @ids', [
+        '@ids' => implode(',', $cart_ids),
+      ]);
+    }
+
+    // Take the first cart id from response.
+    return reset($cart_ids);
+  }
+
+  /**
+   * Get cart for cart id in session.
    *
    * @param bool $force
    *   True to load data from api, false from cache.
@@ -404,18 +455,13 @@ class Cart {
       }
     }
 
-    if ($customer_id > 0) {
-      $url = str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts');
-      $request_options = [
-        'timeout' => $this->magentoInfo->getPhpTimeout('cart_search'),
-      ];
-    }
-    else {
-      $url = 'carts';
-      $request_options = [
-        'timeout' => $this->magentoInfo->getPhpTimeout('cart_create'),
-      ];
-    }
+    $url = ($customer_id > 0)
+      ? str_replace('{customerId}', $customer_id, 'customers/{customerId}/carts')
+      : 'carts';
+
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_create'),
+    ];
 
     try {
       $cart_id = (int) $this->magentoApiWrapper->doRequest('POST', $url, $request_options);

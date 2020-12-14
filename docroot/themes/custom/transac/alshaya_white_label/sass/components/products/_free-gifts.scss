@@ -185,6 +185,14 @@
           }
         }
       }
+
+      #product-zoom-container {
+        .img-wrap {
+          .product-image-zoom-placeholder-content {
+            background-color: transparent;
+          }
+        }
+      }
     }
   }
 
@@ -779,6 +787,16 @@ body:not(.ie) {
         .slick-arrow {
           top: 42% !important;
         }
+      }
+    }
+  }
+}
+
+body {
+  &.free-gift-detail-modal {
+    .ui-dialog {
+      #drupal-modal {
+        overflow-x: auto;
       }
     }
   }

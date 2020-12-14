@@ -186,7 +186,7 @@ class MagazineDetailPage extends ResourceBase {
       'path' => $node_url->getGeneratedUrl(),
     ];
     if ($node->get('field_magazine_hero_image')->getValue()) {
-      $response_data['image'] = $this->mobileAppUtility->getImages($node, 'field_magazine_hero_image');
+      $response_data['image'] = $this->mobileAppUtility->getImages($node, 'field_magazine_hero_image', 'magazine_article_hero');
     }
     if ($node->hasField('field_magazine_category') && $node->field_magazine_category) {
       $magazine_category = $node->get('field_magazine_category')->referencedEntities();

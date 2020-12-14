@@ -3,9 +3,7 @@
     .magv2 {
       &-pdp {
         &-title-wrapper {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
+          display: block;
           padding-top: 1.875rem;
 
           @include breakpoint($only-mobile) {
@@ -14,6 +12,7 @@
         }
 
         &-title {
+          display: inline-block;
           font-size: 1.125rem;
           line-height: normal;
           color: $magv2-pdp-title;
@@ -21,7 +20,7 @@
         }
 
         &-brand-logo {
-          flex-shrink: 0;
+          float: $right;
           margin-#{$left}: 2.5rem;
 
           img {
@@ -112,6 +111,28 @@
         .magv2-pdp-title-wrapper {
           padding-top: 0;
         }
+      }
+    }
+  }
+}
+
+.magv2-sidebar,
+.magv2-crossell-popup-content-wrapper {
+  .magv2-detail-wrapper {
+    .magv2-pdp {
+      &-title {
+        &.has-brand-logo {
+          display: inline-block;
+          width: calc(100% - 5.625rem);
+        }
+
+        &-wrapper {
+          display: block;
+        }
+      }
+
+      &-brand-logo {
+        float: $right;
       }
     }
   }

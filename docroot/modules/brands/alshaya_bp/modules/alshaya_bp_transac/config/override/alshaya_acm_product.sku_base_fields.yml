@@ -62,11 +62,11 @@ fields:
   indications_age_restrictions:
     label: 'Indications/Age restrictions'
     description: 'Part of description.'
-    type: 'string'
+    type: 'text_long'
   pil:
     label: 'PIL'
     description: 'Part of description.'
-    type: 'string'
+    type: 'text_long'
   body_area:
     label: 'Body Area'
     type: 'text_long'

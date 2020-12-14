@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_search_algolia\Commands;
 
-use Drupal\alshaya_algolia_react\Plugin\Block\AlshayaAlgoliaReactAutocomplete;
+use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drush\Commands\DrushCommands;
 
@@ -41,7 +41,7 @@ class AlshayaSearchAlgoliaSetupCommands extends DrushCommands {
    *   Create facets for the site.
    */
   public function getFacets() {
-    $facets = $this->facetManager->getFacetsByFacetSourceId(AlshayaAlgoliaReactAutocomplete::FACET_SOURCE);
+    $facets = $this->facetManager->getFacetsByFacetSourceId(AlshayaAlgoliaReactConfig::FACET_SOURCE);
     $facets_to_create = [
       'field_category_name',
       'lhn_category',
