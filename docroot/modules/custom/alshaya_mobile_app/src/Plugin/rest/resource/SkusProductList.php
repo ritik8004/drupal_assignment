@@ -289,6 +289,11 @@ class SkusProductList extends ResourceBase {
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
     $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
     $this->moduleHandler->alter('alshaya_mobile_app_skus_product_list_data', $data, $sku);
+    if (!$this->skuManager->isSkuFreeGift($sku)) {
+      // Allow other modules to alter light product data.
+      $type = 'full';
+      $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
+    }
     return $data;
   }
 
