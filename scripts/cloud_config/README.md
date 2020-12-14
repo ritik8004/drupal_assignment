@@ -21,7 +21,7 @@ $_clientId = [client_id];
 $_clientSecret = ['client_secret'];
 ```
 
-# Get all applications/stacks 
+### Get all applications/stacks 
 
 We can get all the stack available in acquia cloud by running this command - 
 ```
