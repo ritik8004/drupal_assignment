@@ -24,14 +24,18 @@ $_clientSecret = 'f4KOhAdDiQan2I82zYS8JPZ61apA2kiAkqUoo62y/us=';
 #Get all applications/stacks - 
 
 We can get all the stack available in acquia cloud by running this command - 
-```php scripts/cloud_config/getApplications.php```
+```
+php scripts/cloud_config/getApplications.php
+```
 
 It will list down all stacks consisting of application id and application name.
 
 #Get all environments of a particular application - 
 
 We can get all the environments available under a particular stack by running this command - 
-```php scripts/cloud_config/getEnvironments.php [application_id]```
+```
+php scripts/cloud_config/getEnvironments.php [application_id]
+```
 
 Here we pass application_id as argument and output we get is list of all environments with environment id and
 environment name. Example - 
@@ -39,27 +43,37 @@ environment name. Example -
 #Create a cron job - 
 
 We can create a cron job by running script in createCron.php. We require to pass environment_id, command, frequency and job name as arguments. Command - 
-```php scripts/cloud_config/createCron.php [environment_id] [command] [frequency] [job_name]```
+```
+php scripts/cloud_config/createCron.php [environment_id] [command] [frequency] [job_name]
+```
 
 Here is an example command - 
-```php scripts/cloud_config/createCron.php "5268-06063c00-aa9e-4b90-bba3-20b9fe0b1913" "/var/www/html/${AH_SITE_NAME}/scripts/cron/cron_flock.sh drush-delete-entity-cachetags acsf-tools-ml 'delete-entity-cachetags'" "0 0 * * 0" "Delete Entity Cachetags"```
+```
+php scripts/cloud_config/createCron.php "5268-06063c00-aa9e-4b90-bba3-20b9fe0b1913" "/var/www/html/${AH_SITE_NAME}/scripts/cron/cron_flock.sh drush-delete-entity-cachetags acsf-tools-ml 'delete-entity-cachetags'" "0 0 * * 0" "Delete Entity Cachetags"
+```
 
 #Get all cron tasks of environment- 
 
 We can list all cron tasks of a particular environment by simply passing environment id as argument. Here is the
 command for that - 
-```php scripts/cloud_config/getCronTasks.php "4186-ebc04ed7-2045-4339-97d9-a56b3eb19e2a"```
+```
+php scripts/cloud_config/getCronTasks.php "4186-ebc04ed7-2045-4339-97d9-a56b3eb19e2a"
+```
 
 #Get webserver name of environment - 
 
 We can get server machine name of environment by running this command - 
-```php scripts/cloud_config/getWebServers.php [environment_id]```
+```
+php scripts/cloud_config/getWebServers.php [environment_id]
+```
 
 Here we pass environment_id as argument and output will be server name.
 
 #Copy cron tasks from one environment to another - 
 
 We can copy all cron tasks of one environment to another environment of a particular stack by running this command  -
-```php scripts/cloud_config/copyCronTasks.php [source_env_id] [target_env_id]```
+```
+php scripts/cloud_config/copyCronTasks.php [source_env_id] [target_env_id]
+```
 
 Here source_env_id is environment id from where we are copying and target_env_id is environment id to which we want cron jobs to be copied in.
