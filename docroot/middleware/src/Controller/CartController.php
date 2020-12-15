@@ -488,11 +488,11 @@ class CartController {
           }
           else {
             $shipping_methods = $this->cart->getHomeDeliveryShippingMethods($shipping_data);
+          }
 
-            // If no shipping method.
-            if (empty($shipping_methods)) {
-              return new JsonResponse(['error' => TRUE]);
-            }
+          // If no shipping method.
+          if (empty($shipping_methods) || isset($shipping_methods['error'])) {
+            return new JsonResponse(['error' => TRUE]);
           }
 
           $shipping_info['carrier_info'] = [

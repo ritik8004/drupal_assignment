@@ -1320,6 +1320,11 @@ class Cart {
       return [];
     }
 
+    // Remove unwanted data from request.
+    if (isset($data['address']['extension_attributes'])) {
+      unset($data['address']['extension_attributes']);
+    }
+
     $key = md5(json_encode($data['address']));
     if (isset($static[$key])) {
       return $static[$key];
@@ -1336,7 +1341,7 @@ class Cart {
 
     $request_options = [
       'timeout' => $this->magentoInfo->getPhpTimeout('cart_estimate_shipping'),
-      'json' => $data,
+      'json' => ['address' => $data['address']],
     ];
 
     try {
