@@ -4,3 +4,8 @@ fields:
   color:
     facet: 0
     configurable: 1
+  padding:
+    label: 'Padding'
+  bra_coverage:
+    label: 'Bra Coverage'
+    description: 'Bra Coverage.'

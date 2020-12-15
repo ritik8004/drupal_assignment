@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_quiz_type
+    - node.type.quiz
+  module:
+    - options
+id: node.quiz.field_quiz_type
+field_name: field_quiz_type
+entity_type: node
+bundle: quiz
+label: Type
+description: ''
+required: true
+translatable: true
+skip_translation_check: 0
+default_value:
+  -
+    value: linear
+default_value_callback: ''
+settings: {  }
+field_type: list_string

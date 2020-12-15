@@ -1,0 +1,108 @@
+@mixin fit-calc-placeholder-label() {
+  font-size: 0.6875rem;
+  line-height: normal;
+  color: $fit-calc-input-label;
+  position: absolute;
+  #{$left}: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+@mixin fit-calc-placeholder-active() {
+  transform: translateY(-150%);
+  color: $fit-calc-form-input;
+  z-index: 1;
+
+  html[lang=ar] & {
+    transform: translateY(-110%);
+  }
+}
+
+.fitCalc-type-textfield {
+  position: relative;
+}
+
+.fit-calculator-wrapper.main-form {
+  .fitCalc-type-textfield {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1.25rem;
+    }
+
+    @include breakpoint($tablet) {
+      width: 30.5%;
+      margin-#{$right}: 1.5625rem;
+    }
+  }
+}
+
+.fit-calculator-wrapper.size-guide-calculator {
+  .fitCalc-type-textfield {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.625rem;
+      width: calc((100% - 0.625rem) / 2);
+
+      &:first-child {
+        margin-#{$right}: 0.625rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      width: 11.25rem;
+      margin-#{$right}: 0.625rem;
+    }
+  }
+}
+
+// Type = Text.
+#fit-calculator-container,
+#fit-cal-modal {
+  .fitCalc-type-textfield {
+    input[type=text] {
+      border: 1px solid $fit-calc-select-border;
+      font-size: 1rem;
+      width: 100%;
+      padding: 1.1875rem 0.625rem 0.625rem;
+      color: $fit-calc-form-input;
+      background-color: $fit-calc-input-bg;
+
+      html[lang=ar] & {
+        line-height: 1.125rem;
+      }
+    }
+
+    label {
+      @include fit-calc-placeholder-label;
+
+      text-transform: capitalize;
+    }
+
+    input:focus:not(.focus):not(.empty) {
+      border: 1px solid $fit-calc-form-input;
+    }
+
+    input:focus,
+    input.focus {
+      & ~ label {
+        @include fit-calc-placeholder-active;
+      }
+    }
+
+    input.empty,
+    input.empty:focus {
+      border-color: $fit-calc-empty-input;
+      color: $fit-calc-empty-input;
+
+      label {
+        color: $fit-calc-empty-input;
+      }
+    }
+
+    input.empty {
+      & ~ label {
+        color: $fit-calc-empty-input;
+      }
+    }
+  }
+}

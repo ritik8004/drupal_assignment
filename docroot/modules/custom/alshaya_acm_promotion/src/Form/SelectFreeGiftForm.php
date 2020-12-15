@@ -165,12 +165,16 @@ class SelectFreeGiftForm extends FormBase {
       ],
     ];
 
+    $form['#attached']['library'][] = 'alshaya_acm_product/add_free_gift_promotions';
+
     // Required for common js to get applied.
     $form['#attributes']['data-sku'] = $sku->getSku();
     $form['#attributes']['class'][] = 'sku-base-form';
 
     $is_sku_configurable = ($sku->bundle() === 'configurable');
     if ($is_sku_configurable) {
+      // @see alshaya_acm_product_acq_sku_configurable_variants_alter().
+      $is_free_gift_being_processed = &drupal_static('is_free_gift_being_processed', TRUE);
       $configurables = Configurable::getSortedConfigurableAttributes($sku);
 
       $form['selected_variant_sku'] = [
@@ -243,6 +247,7 @@ class SelectFreeGiftForm extends FormBase {
 
       $display_settings = $this->config('alshaya_acm_product.display_settings');
       $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
+      $is_free_gift_being_processed = FALSE;
     }
 
     return $form;

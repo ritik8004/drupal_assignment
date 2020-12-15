@@ -89,14 +89,11 @@ export const addFreeGift = (freeGiftLink) => {
 /**
  * Open free gift product detail modal.
  */
-export const openFreeGiftModal = () => {
-  const freeGiftLink = document.getElementById('add-free-gift');
+export const openFreeGiftModal = (e) => {
+  const freeGiftLink = e.detail.data();
   if (freeGiftLink !== null) {
-    freeGiftLink.addEventListener('click', (event) => {
-      event.preventDefault();
-      addFreeGift(freeGiftLink);
-      showFullScreenLoader();
-    });
+    addFreeGift(freeGiftLink);
+    showFullScreenLoader();
   }
 };
 
@@ -110,12 +107,23 @@ export const selectFreeGiftModal = (e) => {
 };
 
 /**
+ * Get id of cart free gift modal link.
+ */
+export const getCartFreeGiftModalId = (skuCode) => {
+  const id = skuCode
+    ? `spc-free-gift-${skuCode.replace(/\s+/g, '')}`
+    : 'spc-free-gift';
+
+  return id;
+};
+
+/**
  * Add class to body and trigger free gift modal.
  */
-export const openCartFreeGiftModal = () => {
+export const openCartFreeGiftModal = (sku) => {
   const body = document.querySelector('body');
   body.classList.add('free-gifts-modal-overlay');
-  document.getElementById('spc-free-gift').click();
+  document.getElementById(getCartFreeGiftModalId(sku)).click();
 };
 
 /**
@@ -127,9 +135,9 @@ export const selectFreeGift = (codeValue, sku, skuType, promoType) => {
     if (promoType === 'FREE_GIFT_SUB_TYPE_ONE_SKU') {
       const body = document.querySelector('body');
       body.classList.add('free-gifts-modal-overlay');
-      document.getElementById('spc-free-gift').click();
+      document.getElementById(getCartFreeGiftModalId(sku)).click();
     } else if ((promoType === 'FREE_GIFT_SUB_TYPE_ALL_SKUS') && (skuType === 'configurable')) {
-      openCartFreeGiftModal();
+      openCartFreeGiftModal(sku);
     } else {
       document.getElementById('promo-code').value = codeValue.trim();
       document.getElementById('promo-action-button').click();

@@ -67,7 +67,7 @@ const PdpFreeGift = ({
             </div>
             <ConditionalView condition={freeGiftPromoCode.length > 0}>
               <div className="free-gift-coupon-code">
-                {Drupal.t('Use Code')}
+                {Drupal.t('Use code')}
                 {freeGiftPromoCode.map((code, i) => (
                   <span className="coupon-code" key={i.toString()}>{ code.value }</span>
                 ))}

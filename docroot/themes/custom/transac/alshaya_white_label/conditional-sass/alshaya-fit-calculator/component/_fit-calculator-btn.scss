@@ -1,0 +1,42 @@
+.fit-calculator-wrapper {
+  &.main-form {
+    .fit-calculator-button {
+      height: 3.75rem;
+      font-size: 0.9375rem;
+      letter-spacing: 0.125rem;
+      background: $fit-calc-btn-bg;
+      padding: 0;
+
+      @include breakpoint($tablet) {
+        width: 30.5%;
+      }
+    }
+  }
+
+  &.size-guide-calculator {
+    .fit-calculator-button {
+      font-size: 1.1875rem;
+      font-weight: 700;
+      line-height: 1.3125rem;
+      letter-spacing: 0.1781rem;
+      padding: 0.625rem 2.5rem;
+      background: $fit-calc-size-guide-btn-bg;
+
+      @include breakpoint($tablet) {
+        width: auto;
+      }
+    }
+  }
+}
+
+.fit-calculator-button {
+  font-family: $alshaya-bold;
+  color: $fit-calc-btn-text;
+  width: 100%;
+  text-transform: uppercase;
+  border: none;
+
+  @include breakpoint($only-mobile) {
+    margin: 0.625rem 0;
+  }
+}

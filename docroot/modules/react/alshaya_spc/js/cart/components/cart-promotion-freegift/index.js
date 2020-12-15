@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { selectFreeGift, openCartFreeGiftModal } from '../../../utilities/free_gift_util';
+import { selectFreeGift, openCartFreeGiftModal, getCartFreeGiftModalId } from '../../../utilities/free_gift_util';
 
 const CartPromotionFreeGift = ({
   promo,
@@ -26,11 +26,11 @@ const CartPromotionFreeGift = ({
         {Drupal.t('Click')}
         <span className="coupon-code" onClick={() => selectFreeGift(promo.coupon, promo['#free_sku_code'], promo['#free_sku_type'], promo['#promo_type'])}>{promo.coupon}</span>
         {Drupal.t('to get a Free Gift')}
-        <span className="free-gift-title" onClick={() => openCartFreeGiftModal()}>
+        <span className="free-gift-title" onClick={() => openCartFreeGiftModal(promo['#free_sku_code'])}>
           {promo.promo_title}
         </span>
         <a
-          id="spc-free-gift"
+          id={getCartFreeGiftModalId(promo['#free_sku_code'])}
           className="use-ajax visually-hidden"
           data-dialog-type="modal"
           href={promo.promo_web_url}

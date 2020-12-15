@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_answer
+    - node.type.answer
+    - node.type.question
+id: node.question.field_answer
+field_name: field_answer
+entity_type: node
+bundle: question
+label: Answer
+description: ''
+required: true
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      answer: answer
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
