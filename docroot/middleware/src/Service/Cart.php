@@ -1479,14 +1479,27 @@ class Cart {
    */
   public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
-    $cart = $this->getCart();
+    // Fetch fresh cart from magento.
+    $cart_data = $this->getCart(TRUE);
+
+    $error_code = CartErrorCodes::CART_ORDER_PLACEMENT_ERROR;
+
+    // If cart has an OOS item.
+    if (is_array($cart_data)
+      && $this->isCartHasOosItem($cart_data)) {
+      $this->logger->error('Error while placing order. Cart has an OOS item. Cart: @cart.', [
+        '@cart' => json_encode($cart_data),
+      ]);
+
+      return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
+    }
 
     // Check if shiping method is present else throw error.
     if (empty($cart['shipping']['method'])) {
       $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // Check if shipping address not have custom attributes.
@@ -1494,7 +1507,7 @@ class Cart {
       $this->logger->error('Error while placing order. Shipping address not contains all info. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If address extension attributes doesn't contain all the required fields
@@ -1503,7 +1516,7 @@ class Cart {
       $this->logger->error('Error while placing order. Shipping address not contains all address extension attributes. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If first/last name not available in shipping address.
@@ -1512,7 +1525,7 @@ class Cart {
       $this->logger->error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If first/last name not available in billing address.
@@ -1521,7 +1534,7 @@ class Cart {
       $this->logger->error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     $lock = FALSE;
@@ -1632,6 +1645,33 @@ class Cart {
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Checks if cart has OOS item or not by item level attribute.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   TRUE if cart has an OOS item.
+   */
+  public function isCartHasOosItem(array $cart) {
+    if (!empty($cart['cart']['items'])) {
+      foreach ($cart['cart']['items'] as $item) {
+        // If error at item level.
+        if (!empty($item['extension_attributes'])
+          && !empty($item['extension_attributes']['error_message'])) {
+          $exception_type = $this->exceptionType($item['extension_attributes']['error_message']);
+          // If OOS error message.
+          if (!empty($exception_type) && $exception_type == 'OOS') {
+            return TRUE;
+          }
+        }
+      }
+    }
+
+    return FALSE;
   }
 
   /**
