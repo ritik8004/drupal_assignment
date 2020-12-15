@@ -211,21 +211,27 @@ export default class StyleFinder extends React.Component {
       }
     }
 
+    const { currentLanguage } = drupalSettings.path;
+
     const settings = {
       className: 'center',
       centerMode: true,
       infinite: false,
       centerPadding: '50px',
-      slidesToShow: 5,
       speed: 500,
       variableWidth: true,
       arrows: true,
+      rtl: (currentLanguage === 'ar'),
       responsive: [
         {
           breakpoint: 991,
           settings: {
-            infinite: false,
-            slidesToShow: 3,
+            arrows: true,
+          },
+        },
+        {
+          breakpoint: 767,
+          settings: {
             arrows: false,
           },
         },
