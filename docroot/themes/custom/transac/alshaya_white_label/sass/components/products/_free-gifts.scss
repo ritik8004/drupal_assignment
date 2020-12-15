@@ -909,3 +909,17 @@ body {
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  #product-full-screen-gallery-container {
+    #product-full-screen-gallery {
+      .slick-dots {
+        button {
+          &::before {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
