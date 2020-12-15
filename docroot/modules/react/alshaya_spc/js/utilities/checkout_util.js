@@ -7,6 +7,7 @@ import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
+import { redirectToCart } from './get_cart';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -14,9 +15,7 @@ import validateCartResponse from './validation_util';
  * @param status
  */
 export const controlAddressFormCTA = (status) => {
-  const addressCTA = document.getElementsByClassName('spc-address-form-submit');
-  // While we expect only one CTA. We loop just to ensure we dont break anything
-  // if we get multiple, what we are doing is harmless for out of focus CTAs.
+  const addressCTA = document.getElementsByClassName('spc-address-form-submit');  // if we get multiple, what we are doing is harmless for out of focus CTAs.
   if (addressCTA.length > 0) {
     switch (status) {
       case 'disable':
@@ -125,7 +124,7 @@ export const placeOrder = (paymentMethod) => {
         if (response.data.error !== undefined
           && parseInt(response.data.error_code, 10) === 506) {
           Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.CHECKOUT_ERRORS);
-          window.location = Drupal.url('cart');
+          redirectToCart();
           return;
         }
 

@@ -1479,8 +1479,10 @@ class Cart {
    */
   public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
-    // Fetch fresh cart fro magento.
+    // Fetch fresh cart from magento.
     $cart_data = $this->getCart(TRUE);
+
+    $error_code = CartErrorCodes::CART_ORDER_PLACEMENT_ERROR;
 
     // If cart has an OOS item.
     if (is_array($cart_data)
@@ -1497,7 +1499,7 @@ class Cart {
       $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // Check if shipping address not have custom attributes.
@@ -1505,7 +1507,7 @@ class Cart {
       $this->logger->error('Error while placing order. Shipping address not contains all info. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If address extension attributes doesn't contain all the required fields
@@ -1514,7 +1516,7 @@ class Cart {
       $this->logger->error('Error while placing order. Shipping address not contains all address extension attributes. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If first/last name not available in shipping address.
@@ -1523,7 +1525,7 @@ class Cart {
       $this->logger->error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If first/last name not available in billing address.
@@ -1532,7 +1534,7 @@ class Cart {
       $this->logger->error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     $lock = FALSE;
@@ -1656,12 +1658,12 @@ class Cart {
    */
   public function isCartHasOosItem(array $cart) {
     $cart_has_oos_item = FALSE;
-    if (!empty($cart_items = $cart['cart']['items'])) {
-      foreach ($cart_items as $item) {
+    if (!empty($cart['cart']['items'])) {
+      foreach ($cart['cart']['items'] as $item) {
         // If error at item level.
         if (!empty($item['extension_attributes'])
-          && !empty($error_message = $item['extension_attributes']['error_message'])) {
-          $exception_type = $this->exceptionType($error_message);
+          && !empty($item['extension_attributes']['error_message'])) {
+          $exception_type = $this->exceptionType($item['extension_attributes']['error_message']);
           // If OOS error message.
           if (!empty($exception_type) && $exception_type == 'OOS') {
             $cart_has_oos_item = TRUE;

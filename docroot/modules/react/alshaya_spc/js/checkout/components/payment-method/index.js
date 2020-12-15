@@ -18,6 +18,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import CheckoutComUpapiContextProvider from '../../../context/CheckoutComUpapi';
 import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi';
+import { redirectToCart } from '../../../utilities/get_cart';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -81,7 +82,8 @@ export default class PaymentMethod extends React.Component {
           } else if (errorCode === 506) {
             // If cart has OOS item.
             Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
-            window.location = Drupal.url('cart');
+            redirectToCart();
+            return;
           } else if (errorCode === 500 && result.error_message !== undefined) {
             Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.PAYMENT_ERRORS);
 

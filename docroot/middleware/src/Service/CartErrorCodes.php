@@ -14,4 +14,9 @@ final class CartErrorCodes {
    */
   const CART_HAS_OOS_ITEM = 506;
 
+  /**
+   * Error code on order placement.
+   */
+  const CART_ORDER_PLACEMENT_ERROR = 505;
+
 }

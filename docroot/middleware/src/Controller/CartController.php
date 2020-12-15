@@ -527,7 +527,7 @@ class CartController {
         $is_error = FALSE;
 
         $error_message = 'Delivery Information is incomplete. Please update and try again.';
-        $error_code = 505;
+        $error_code = CartErrorCodes::CART_ORDER_PLACEMENT_ERROR;
 
         if (is_array($cart)
           && $this->cart->isCartHasOosItem($cart)) {
