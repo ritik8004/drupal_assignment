@@ -35,7 +35,7 @@ $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR 
 
 $stack_file = $settings_path . '.php';
 if (file_exists($stack_file)) {
-  include_once $stack_file;
+  include $stack_file;
 }
 
 $brand_country_file = $settings_path . '-' . $acsf_site_code . $country_code . '.php';
