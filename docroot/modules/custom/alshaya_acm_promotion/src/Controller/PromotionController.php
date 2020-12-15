@@ -20,8 +20,8 @@ use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\Core\Link;
 use Drupal\node\NodeInterface;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -164,7 +164,7 @@ class PromotionController extends ControllerBase {
       $item['#title']['#markup'] = $free_gift->label();
       $item['#url'] = Url::fromRoute(
         'alshaya_acm_promotion.free_gift_modal',
-        ['acq_sku' => $free_gift->id(), 'js' => 'nojs'],
+        ['acq_sku' => $free_gift->id()],
         [
           'query' => [
             'promotion_id' => $node->id(),
@@ -175,10 +175,15 @@ class PromotionController extends ControllerBase {
       );
 
       $item['#theme'] = 'free_gift_item';
+      $parent_sku = $this->skuManager->getParentSkuBySku($free_gift->getSku());
 
       switch ($free_gift->bundle()) {
         case 'simple':
           $sku_media = $this->imagesManager->getFirstImage($free_gift, 'plp', TRUE);
+
+          // Getting the promo rule id.
+          $promo_rule_id = $node->get('field_acq_promotion_rule_id')->getString();
+
           if ($sku_media) {
             $item['#image'] = $this->skuManager->getSkuImage(
               $sku_media['drupal_uri'],
@@ -193,12 +198,13 @@ class PromotionController extends ControllerBase {
             [],
             [
               'attributes' => [
-                'class' => ['use-ajax', 'select-free-gift'],
-              ],
-              'query' => [
-                'promotion_id' => $node->id(),
-                'coupon' => $request->query->get('coupon'),
-                'sku' => $free_gift->getSku(),
+                'class' => ['select-free-gift'],
+                'id' => 'select-add-free-gift',
+                'data-variant-sku' => $free_gift->getSku(),
+                'data-sku-type' => $free_gift->bundle(),
+                'data-coupon' => $request->query->get('coupon'),
+                'data-parent-sku' => $parent_sku ? $parent_sku->getSku() : $free_gift->getSku(),
+                'data-promo-rule-id' => $promo_rule_id ?? NULL,
               ],
             ]
           );
@@ -230,6 +236,8 @@ class PromotionController extends ControllerBase {
       '#theme' => 'item_list',
       '#items' => $items,
     ];
+
+    $build['#attached']['library'][] = 'alshaya_acm_product/add_free_gift_promotions';
 
     if ($request->query->get('replace')) {
       $response = new AjaxResponse();

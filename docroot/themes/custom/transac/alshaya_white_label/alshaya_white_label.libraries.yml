@@ -484,3 +484,13 @@ aura-loyalty-pdp:
       css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: {}
   dependencies:
     - alshaya_white_label/aura-loyalty-tooltip
+
+alshaya-fit-calculator:
+  css:
+    theme:
+      css/conditional-sass/alshaya-fit-calculator/alshaya-fit-calculator.ltr.css: {}
+
+alshaya-stylefinder:
+  css:
+    theme:
+      css/conditional-sass/alshaya-stylefinder/alshaya-stylefinder.ltr.css: {}

@@ -183,6 +183,11 @@
 
       $('.size-guide-link').on('click', function () {
         modalClasses('size-guide', 'sizeguide-modal-overlay');
+        setTimeout(function () {
+          // Dispatch event to render fit calculator react component.
+          var event = new CustomEvent('fitCalculator', {bubbles: true, detail: {}});
+          document.dispatchEvent(event);
+        }, 2000);
       });
 
       // To bind ajax for dynamic component which in our case is size-guide link inside related products panel.

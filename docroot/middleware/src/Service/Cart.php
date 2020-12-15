@@ -2185,12 +2185,144 @@ class Cart {
   }
 
   /**
+   * Process cart data.
+   *
+   * @param array $cart_data
+   *   Cart data.
+   * @param string $langcode
+   *   Langcode.
+   *
+   * @return array
+   *   Processed data.
+   */
+  public function getProcessedCartData(array $cart_data, string $langcode = NULL) {
+    $data = [];
+
+    $data['cart_id'] = $cart_data['cart']['id'];
+    $data['uid'] = $this->getDrupalInfo('uid') ?: 0;
+    $data['langcode'] = $langcode ?? $this->request->query->get('lang', 'en');
+    $data['customer'] = $cart_data['customer'] ?? NULL;
+
+    $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
+    $data['appliedRules'] = $cart_data['cart']['applied_rule_ids'] ?? [];
+
+    $data['items_qty'] = $cart_data['cart']['items_qty'];
+    $data['cart_total'] = $cart_data['totals']['base_grand_total'] ?? 0;
+    $data['minicart_total'] = $data['cart_total'];
+    $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
+    $data['totals'] = [
+      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'] ?? 0,
+      'base_grand_total' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'base_grand_total_without_surcharge' => $cart_data['totals']['base_grand_total'] ?? 0,
+      'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
+      'surcharge' => 0,
+    ];
+
+    if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
+      // We use null to show "Excluding Delivery".
+      $data['totals']['shipping_incl_tax'] = NULL;
+    }
+    elseif ($cart_data['shipping']['type'] !== 'click_and_collect') {
+      // For click_n_collect we don't want to show this line at all.
+      $data['totals']['shipping_incl_tax'] = $cart_data['totals']['shipping_incl_tax'] ?? 0;
+    }
+
+    if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
+      $data['totals']['surcharge'] = $data['surcharge']['amount'];
+    }
+
+    // We don't show surcharge amount on cart total and on mini cart.
+    if ($data['totals']['surcharge'] > 0) {
+      $data['totals']['base_grand_total_without_surcharge'] -= $data['totals']['surcharge'];
+      $data['minicart_total'] -= $data['totals']['surcharge'];
+    }
+
+    $data['response_message'] = NULL;
+    // Set the status message if we get from magento.
+    if (!empty($cart_data['response_message'])) {
+      $data['response_message'] = [
+        'status' => $cart_data['response_message'][1],
+        'msg' => $cart_data['response_message'][0],
+      ];
+    }
+
+    // For determining global OOS for cart.
+    $data['in_stock'] = TRUE;
+    // If there are any error at cart item level.
+    $data['is_error'] = FALSE;
+
+    try {
+      $data['items'] = [];
+      foreach ($cart_data['cart']['items'] as $item) {
+        $data['items'][$item['sku']]['title'] = $item['name'];
+        $data['items'][$item['sku']]['qty'] = $item['qty'];
+        $data['items'][$item['sku']]['price'] = $item['price'];
+        $data['items'][$item['sku']]['sku'] = $item['sku'];
+        $data['items'][$item['sku']]['id'] = $item['item_id'];
+        if (isset($item['extension_attributes'], $item['extension_attributes']['error_message'])) {
+          $data['items'][$item['sku']]['error_msg'] = $item['extension_attributes']['error_message'];
+          $data['is_error'] = TRUE;
+        }
+
+        // This is to determine whether item to be shown free or not in cart.
+        $data['items'][$item['sku']]['freeItem'] = FALSE;
+        foreach ($cart_data['totals']['items'] as $total_item) {
+          // If total price of item matches discount, we mark as free.
+          if ($item['item_id'] == $total_item['item_id']) {
+            // Final price to use.
+            // For the free gift the key 'price_incl_tax' is missing.
+            $data['items'][$item['sku']]['finalPrice'] = $total_item['price_incl_tax'] ?? $total_item['base_price'];
+
+            // Free Item is only for free gift products which are having
+            // price 0, rest all are free but still via different rules.
+            if ($total_item['base_price'] == 0
+                && isset($total_item['extension_attributes'], $total_item['extension_attributes']['amasty_promo'])) {
+              $data['items'][$item['sku']]['freeItem'] = TRUE;
+            }
+            break;
+          }
+        }
+
+        // Get stock data.
+        $stockInfo = $this->drupal->getCartItemDrupalStock($item['sku']);
+        $data['items'][$item['sku']]['in_stock'] = $stockInfo['in_stock'];
+        $data['items'][$item['sku']]['stock'] = $stockInfo['stock'];
+
+        // If info is available in static array, means this we get from
+        // the cart update operation. We use that.
+        if (!empty(self::$stockInfo)
+          && isset(self::$stockInfo[$item['sku']])
+          && !self::$stockInfo[$item['sku']]) {
+          $data['items'][$item['sku']]['in_stock'] = FALSE;
+          $data['items'][$item['sku']]['stock'] = 0;
+        }
+
+        // If any item is OOS.
+        if (!$data['items'][$item['sku']]['in_stock'] || $data['items'][$item['sku']]['stock'] == 0) {
+          $data['in_stock'] = FALSE;
+        }
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while processing cart data. Error message: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+
+    // Whether cart is stale or not.
+    $data['stale_cart'] = $cart_data['stale_cart'] ?? FALSE;
+
+    return $data;
+  }
+
+  /**
    * Return user id from current session.
    *
    * @return int|null
    *   Return user id or null.
    */
-  protected function getDrupalInfo(string $key) {
+  public function getDrupalInfo(string $key) {
     static $info = NULL;
 
     if (empty($info)) {

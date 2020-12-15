@@ -219,6 +219,10 @@ class ProductController extends ControllerBase {
         'params' => $this->request->query->all(),
       ];
     }
+
+    // Allow other modules to alter build.
+    $this->moduleHandler->alter('alshaya_acm_product_modal_build', $build);
+
     return $build;
   }
 

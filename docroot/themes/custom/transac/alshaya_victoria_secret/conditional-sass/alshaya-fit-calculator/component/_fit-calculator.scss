@@ -1,0 +1,19 @@
+.fit-calculator-wrapper {
+  .fit-calculator {
+    &-unit-wrapper {
+      label {
+        @include breakpoint($tablet) {
+          font-family: $vs-regular;
+        }
+      }
+    }
+  }
+
+  &.main-form {
+    .fit-calculator {
+      &-section-title {
+        font-family: $vs-bentonsanscomp-medium;
+      }
+    }
+  }
+}

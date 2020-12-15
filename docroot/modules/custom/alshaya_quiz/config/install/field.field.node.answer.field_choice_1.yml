@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_choice_1
+    - node.type.answer
+  module:
+    - options
+id: node.answer.field_choice_1
+field_name: field_choice_1
+entity_type: node
+bundle: answer
+label: 'Choice 1'
+description: ''
+required: false
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
