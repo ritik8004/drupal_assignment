@@ -18,3 +18,19 @@ body {
     }
   }
 }
+
+@include breakpoint($desktop) {
+  .free-gifts-modal-overlay {
+    .slick-track {
+      li.slick-slide {
+        .free-gift-view {
+          a:hover {
+            &::after {
+              content: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}

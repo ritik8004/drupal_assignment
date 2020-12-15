@@ -94,7 +94,8 @@
   }
 
   #drupal-modal,
-  div[id^="drupal-dialog-alshaya-acm-productpdp-modal-links-"] {
+  div[id^="drupal-dialog-alshaya-acm-productpdp-modal-links-"],
+  div[id^="drupal-dialog-alshaya-fit-calculatormodal-links-"] {
     background: $modal_bg;
     padding: 1.5em;
     overflow-x: hidden;
@@ -109,8 +110,17 @@
     }
   }
 
-  div[id^="drupal-dialog-alshaya-acm-productpdp-modal-links-"] {
+  div[id^="drupal-dialog-alshaya-acm-productpdp-modal-links-"],
+  div[id^="drupal-dialog-alshaya-fit-calculatormodal-links-"] {
     overflow: scroll;
+  }
+
+  div[id^="drupal-dialog-alshaya-fit-calculatormodal-links-"] {
+    header {
+      a span {
+        display: none;
+      }
+    }
   }
 }
 

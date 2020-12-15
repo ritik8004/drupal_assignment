@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_choice_4
+    - node.type.answer
+    - taxonomy.vocabulary.sku_product_option
+id: node.answer.field_choice_4
+field_name: field_choice_4
+entity_type: node
+bundle: answer
+label: 'Answer choice'
+description: 'Overrides any option selected from above fields.'
+required: false
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      sku_product_option: sku_product_option
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
