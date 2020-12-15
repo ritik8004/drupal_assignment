@@ -15,7 +15,9 @@ import { redirectToCart } from './get_cart';
  * @param status
  */
 export const controlAddressFormCTA = (status) => {
-  const addressCTA = document.getElementsByClassName('spc-address-form-submit');  // if we get multiple, what we are doing is harmless for out of focus CTAs.
+  const addressCTA = document.getElementsByClassName('spc-address-form-submit');
+  // While we expect only one CTA. We loop just to ensure we dont break anything
+  // if we get multiple, what we are doing is harmless for out of focus CTAs.
   if (addressCTA.length > 0) {
     switch (status) {
       case 'disable':
