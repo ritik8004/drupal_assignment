@@ -1485,15 +1485,15 @@ class Cart {
   public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
     // Fetch fresh cart from magento.
-    $cart_data = $this->getCart(TRUE);
+    $cart = $this->getCart(TRUE);
 
     $error_code = CartErrorCodes::CART_ORDER_PLACEMENT_ERROR;
 
     // If cart has an OOS item.
-    if (is_array($cart_data)
-      && $this->isCartHasOosItem($cart_data)) {
+    if (is_array($cart)
+      && $this->isCartHasOosItem($cart)) {
       $this->logger->error('Error while placing order. Cart has an OOS item. Cart: @cart.', [
-        '@cart' => json_encode($cart_data),
+        '@cart' => json_encode($cart),
       ]);
 
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
