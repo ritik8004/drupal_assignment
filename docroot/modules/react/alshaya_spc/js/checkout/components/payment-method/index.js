@@ -83,7 +83,6 @@ export default class PaymentMethod extends React.Component {
             // If cart has OOS item.
             Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.CHECKOUT_ERRORS);
             redirectToCart();
-            return;
           } else if (errorCode === 500 && result.error_message !== undefined) {
             Drupal.logJavascriptError('finalise payment', result.error_message, GTM_CONSTANTS.PAYMENT_ERRORS);
 

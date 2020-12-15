@@ -1657,7 +1657,6 @@ class Cart {
    *   TRUE if cart has an OOS item.
    */
   public function isCartHasOosItem(array $cart) {
-    $cart_has_oos_item = FALSE;
     if (!empty($cart['cart']['items'])) {
       foreach ($cart['cart']['items'] as $item) {
         // If error at item level.
@@ -1666,14 +1665,13 @@ class Cart {
           $exception_type = $this->exceptionType($item['extension_attributes']['error_message']);
           // If OOS error message.
           if (!empty($exception_type) && $exception_type == 'OOS') {
-            $cart_has_oos_item = TRUE;
-            break;
+            return TRUE;
           }
         }
       }
     }
 
-    return $cart_has_oos_item;
+    return FALSE;
   }
 
   /**
