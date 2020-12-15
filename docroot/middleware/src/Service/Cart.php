@@ -1479,7 +1479,18 @@ class Cart {
    */
   public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
-    $cart = $this->getCart();
+    // Fetch fresh cart fro magento.
+    $cart_data = $this->getCart(TRUE);
+
+    // If cart has an OOS item.
+    if (is_array($cart_data)
+      && $this->isCartHasOosItem($cart_data)) {
+      $this->logger->error('Error while placing order. Cart has an OOS item. Cart: @cart.', [
+        '@cart' => json_encode($cart_data),
+      ]);
+
+      return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
+    }
 
     // Check if shiping method is present else throw error.
     if (empty($cart['shipping']['method'])) {
@@ -1632,6 +1643,35 @@ class Cart {
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Checks if cart has OOS item or not by item level attribute.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   TRUE if cart has an OOS item.
+   */
+  public function isCartHasOosItem(array $cart) {
+    $cart_has_oos_item = FALSE;
+    if (!empty($cart_items = $cart['cart']['items'])) {
+      foreach ($cart_items as $item) {
+        // If error at item level.
+        if (!empty($item['extension_attributes'])
+          && !empty($error_message = $item['extension_attributes']['error_message'])) {
+          $exception_type = $this->exceptionType($error_message);
+          // If OOS error message.
+          if (!empty($exception_type) && $exception_type == 'OOS') {
+            $cart_has_oos_item = TRUE;
+            break;
+          }
+        }
+      }
+    }
+
+    return $cart_has_oos_item;
   }
 
   /**

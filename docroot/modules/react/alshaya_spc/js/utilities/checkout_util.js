@@ -121,6 +121,14 @@ export const placeOrder = (paymentMethod) => {
           return;
         }
 
+        // If cart has some OOS item.
+        if (response.data.error !== undefined
+          && parseInt(response.data.error_code, 10) === 506) {
+          Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.CHECKOUT_ERRORS);
+          window.location = Drupal.url('cart');
+          return;
+        }
+
         if (response.data.error && response.data.redirectUrl !== undefined) {
           Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           window.location = response.data.redirectUrl;
