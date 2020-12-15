@@ -17,7 +17,7 @@
           {% else %}
             <li>
               <a href="{{ thumbs.fullurl }}" class="imagegallery__thumbnails__image a-gallery">
-                <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                <img class="b-lazy" src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
               </a>
             </li>
           {% endif %}

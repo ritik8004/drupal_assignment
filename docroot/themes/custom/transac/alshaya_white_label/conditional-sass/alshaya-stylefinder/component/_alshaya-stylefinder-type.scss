@@ -1,0 +1,43 @@
+.style-finder-type-list {
+  li {
+    font-size: 1rem;
+    color: $style-finder-cateogory-text;
+    line-height: 1.25rem;
+    letter-spacing: 1px;
+    padding: 0.625rem 0;
+    margin: 0.3125rem;
+    flex: 50%;
+    background: $stylefinder-type-bg;
+    text-transform: uppercase;
+    position: relative;
+
+    &:first-child {
+      margin-#{$left}: 0;
+    }
+
+    &:last-child {
+      margin-#{$right}: 0;
+    }
+
+    &.active {
+      background: $stylefinder-type-active-bg;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        #{$left}: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-color: $stylefinder-type-active-bg transparent transparent;
+        border-style: solid;
+        border-width: 0.75rem 0.625rem 0;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      max-width: 12.5rem;
+    }
+  }
+}

@@ -1,24 +1,12 @@
 import axios from 'axios';
 import {
   getStorageInfo,
-  getInfoFromStorage, removeCartFromStorage,
+  getInfoFromStorage,
 } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
-
-/**
- * Clear local storage and reload/redirect to cart page.
- *
- * @param response
- *   API Response.
- */
-export const validateCartResponse = (response) => {
-  if (typeof response.error_code !== 'undefined' && parseInt(response.error_code, 10) === 400) {
-    removeCartFromStorage();
-    window.location.href = Drupal.url('cart');
-  }
-};
+import validateCartResponse from './validation_util';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -569,13 +557,4 @@ export const applyCode = (e) => {
     document.getElementById('promo-code').value = codeValue.trim();
     document.getElementById('promo-action-button').click();
   }
-};
-
-/**
- * Add class to body and trigger free gift modal.
- */
-export const openCartFreeGiftModal = () => {
-  const body = document.querySelector('body');
-  body.classList.add('free-gifts-modal-overlay');
-  document.getElementById('spc-free-gift').click();
 };

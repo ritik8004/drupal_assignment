@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import Cookies from 'js-cookie';
 import {
   cartAvailableInStorage,
   getCartApiUrl,
@@ -11,7 +12,7 @@ import {
 } from '../storage';
 import i18nMiddleWareUrl from '../i18n_url';
 import dispatchCustomEvent from '../events';
-import { validateCartResponse } from '../checkout_util';
+import validateCartResponse from '../validation_util';
 
 export const fetchClicknCollectStores = (args) => {
   const { coords, cartId } = args;
@@ -26,22 +27,19 @@ export const fetchClicknCollectStores = (args) => {
 };
 
 export const fetchCartData = () => {
+  // If session cookie not exists, no need to process/check.
+  // @TODO: Remove Cookies.get('Drupal.visitor.acq_cart_id') check when we
+  // uninstall alshaya_acm module.
+  if (drupalSettings.user.uid === 0
+    && !Cookies.get('PHPSESSID')
+    && !Cookies.get('Drupal.visitor.acq_cart_id')
+  ) {
+    removeCartFromStorage();
+    return null;
+  }
+
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
-
-  if (drupalSettings.user.uid === 0) {
-    if (!cart) {
-      // No need to process further.
-      return null;
-    }
-    if (cart === 'empty') {
-      // Remove cart storage completely so that next time, above condition is
-      // called and we do not process further.
-      // Also when the user logs in, we need to restore the cart which will only
-      // happen if cart storage is absent.
-      removeCartFromStorage();
-    }
-  }
 
   if (cart === 'empty') {
     return null;
@@ -134,6 +132,11 @@ export const fetchCartData = () => {
 export const fetchCartDataForCheckout = () => {
   // Remove cart data from storage every-time we land on checkout page.
   removeCartFromStorage();
+
+  // If session cookie not exists, no need to process/check.
+  if (drupalSettings.user.uid === 0 && !Cookies.get('PHPSESSID')) {
+    return null;
+  }
 
   // Prepare api url.
   const apiUrl = getCartForCheckoutApiUrl();

@@ -1,0 +1,16 @@
+.fit-calculator-wrapper {
+  .message-area {
+    .error-message {
+      font-size: 0.6875rem;
+      line-height: normal;
+      text-align: center;
+      padding-top: 0.9375rem;
+    }
+  }
+
+  &.size-guide-calculator {
+    .error-message {
+      text-align: $left;
+    }
+  }
+}

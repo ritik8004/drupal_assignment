@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_acm_product_category\Service;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -15,7 +17,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Product category term page service.
  */
 class ProductCategoryPage {
-
   /**
    * Entity type manager.
    *
@@ -59,6 +60,13 @@ class ProductCategoryPage {
   protected $configFactory;
 
   /**
+   * Cache Backend service for alshaya.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * ProductCategoryTermId constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -73,6 +81,8 @@ class ProductCategoryPage {
    *   The language manager service.
    * @param \Drupal\Core\Config\ConfigFactory $config_factory
    *   The config factory service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The cache backend service.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_manager,
@@ -80,7 +90,8 @@ class ProductCategoryPage {
     RequestStack $requestStack,
     EntityRepositoryInterface $entity_repository,
     LanguageManagerInterface $language_manager,
-    ConfigFactory $config_factory
+    ConfigFactory $config_factory,
+    CacheBackendInterface $cache
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->pathValidator = $pathValidator;
@@ -88,6 +99,7 @@ class ProductCategoryPage {
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
+    $this->cache = $cache;
   }
 
   /**
@@ -133,6 +145,10 @@ class ProductCategoryPage {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function getCurrentSelectedCategory(string $langcode = NULL, string $tid = '') {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $term = empty($tid) ? $term = $this->getTermForRoute() : $storage->load($tid);
 
@@ -146,9 +162,15 @@ class ProductCategoryPage {
       ];
     }
 
-    if (empty($langcode)) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $cid = "selected_category_hierarchy:" . $langcode . ":" . $term->id();
+
+    if ($selected_term_data = $this->cache->get($cid)) {
+      return $selected_term_data->data;
     }
+
+    $cache_tags = [
+      'taxonomy_term:' . $tid,
+    ];
 
     $parents = array_reverse($storage->loadAllParents($term->id()));
     $hierarchy_list = [];
@@ -179,14 +201,20 @@ class ProductCategoryPage {
 
       // Merge term name for to use multiple contexts for category pages.
       $contexts[] = implode('__', $context_list);
+
+      $cache_tags = Cache::mergeTags($cache_tags, $term->getCacheTags());
     }
 
-    return [
+    $data = [
       'hierarchy' => implode(' > ', $hierarchy_list),
       'level' => count($contexts),
       'ruleContext' => array_reverse($contexts),
       'category_field' => 'field_category_name.lvl' . (count($contexts) - 1),
     ];
+
+    $this->cache->set($cid, $data, Cache::PERMANENT, $cache_tags);
+
+    return $data;
   }
 
   /**

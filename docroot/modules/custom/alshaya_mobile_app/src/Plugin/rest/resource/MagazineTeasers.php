@@ -161,7 +161,7 @@ class MagazineTeasers extends ResourceBase {
           $response_data['date'] = format_date(strtotime($magazine_date), 'magazine_date', '', NULL, $this->currentLanguage);
         }
         if ($entity->get('field_magazine_homepage_image')->getValue()) {
-          $response_data['image'] = $this->mobileAppUtility->getImages($entity, 'field_magazine_homepage_image');
+          $response_data['image'] = $this->mobileAppUtility->getImages($entity, 'field_magazine_homepage_image', 'magazine_article_listing');
         }
         if ($entity->hasField('field_magazine_category') && !empty($entity->field_magazine_category)) {
           $magazine_category_entity = $entity->get('field_magazine_category')->referencedEntities();

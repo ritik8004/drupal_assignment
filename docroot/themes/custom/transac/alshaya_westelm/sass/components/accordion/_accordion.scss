@@ -11,10 +11,7 @@
 .c-facet.c-accordion .c-accordion__title {
   @include facet-arrow(after, down) {
     top: 1.25rem;
-
-    @include breakpoint($upto-desktop) {
-      #{$right}: 1rem;
-    }
+    #{$right}: 1rem;
   }
 
   &.active {

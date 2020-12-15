@@ -1,0 +1,11 @@
+alshaya_fit_calculator.modal_links:
+  path: '/modal-link/{node}'
+  defaults:
+    _controller: '\Drupal\alshaya_fit_calculator\Controller\ModalController::getModalLinkView'
+    _title: 'Size Conversion Chart'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      user:
+        type: entity:node

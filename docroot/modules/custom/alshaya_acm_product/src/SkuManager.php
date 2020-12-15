@@ -808,12 +808,19 @@ class SkuManager {
    *   Promotion Types.
    *
    * @return array
-   *   List of Promotion Nodes.
+   *   List of Promotion Nids.
    */
   public function getSkuPromotions(SKU $sku, array $types = [
     'cart',
     'category',
   ]) {
+    // Get promotions for the product.
+    $cache_key = 'promotion_ids_' . implode('-', $types);
+    $promotion_nids = $this->productCacheManager->get($sku, $cache_key);
+
+    if (is_array($promotion_nids)) {
+      return $promotion_nids;
+    }
     $skus = [$sku->getSku()];
 
     if ($sku->bundle() == 'simple') {
@@ -825,32 +832,9 @@ class SkuManager {
       }
     }
 
-    $query = $this->connection->select('node__field_acq_promotion_rule_id', 'node_field');
-    $query->fields('node_field', ['entity_id']);
-    $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
-    $query->condition('mapping.sku', $skus, 'IN');
-    $promotion_nids = $query->execute()->fetchCol();
-
-    if ($full_catalog_promo_nids = $this->cache->get('full_catalog_promo_nids_list')) {
-      $full_catalog_promo_nids = $full_catalog_promo_nids->data;
-    }
-    else {
-      // Fetch promotion nodes which apply to the entire catalog of products.
-      $query = $this->connection->select('node', 'n');
-      $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
-      $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
-      $query->fields('n', ['nid']);
-      $query->distinct();
-      $full_catalog_promo_nids = $query->execute()->fetchCol();
-
-      $promotion_cache_tags = array_map(function ($nid) {
-        return "node:$nid";
-      }, $full_catalog_promo_nids);
-      // Adding list cache tag considering addition/deletion of promotion nodes.
-      $promotion_cache_tags[] = 'node_type:acq_promotion';
-      $this->cache->set('full_catalog_promo_nids_list', $full_catalog_promo_nids, CacheBackendInterface::CACHE_PERMANENT, $promotion_cache_tags);
-    }
-
+    // Get all the promotions for the product.
+    $promotion_nids = $this->fetchPromotionBySkus($skus);
+    $full_catalog_promo_nids = $this->fetchFullCatalogPromotion();
     $promotion_nids = array_merge($promotion_nids, $full_catalog_promo_nids);
 
     if (!empty($promotion_nids)) {
@@ -861,10 +845,57 @@ class SkuManager {
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
       $query->exists('field_acq_promotion_label');
-      return $query->execute();
+      $promotion_nids = $query->execute();
     }
+    $promotion_cache_tags[] = 'node_type:acq_promotion';
+    $this->productCacheManager->set($sku, $cache_key, $promotion_nids, $promotion_cache_tags);
+    return $promotion_nids;
+  }
 
-    return [];
+  /**
+   * Fetch promotion applicable to an array of skus.
+   *
+   * @param array $skus
+   *   Product SKU.
+   *
+   * @return array
+   *   List of promotion node ids.
+   */
+  protected function fetchPromotionBySkus(array $skus) {
+    $query = $this->connection->select('node__field_acq_promotion_rule_id', 'node_field');
+    $query->fields('node_field', ['entity_id']);
+    $query->join('acq_sku_promotion', 'mapping', 'mapping.rule_id = node_field.field_acq_promotion_rule_id_value');
+    $query->condition('mapping.sku', $skus, 'IN');
+    return $query->execute()->fetchCol();
+  }
+
+  /**
+   * Fetch promotion applicable to entire catalog.
+   *
+   * @return array
+   *   List of promotion node ids.
+   */
+  protected function fetchFullCatalogPromotion() {
+    if ($full_catalog_promo_nids = $this->cache->get('full_catalog_promo_nids_list')) {
+      return $full_catalog_promo_nids->data;
+    }
+    // Fetch promotion nodes which apply to the entire catalog of products.
+    $query = $this->connection->select('node', 'n');
+    $query->join('node__field_acq_promotion_full_catalog', 'full_catalog', 'full_catalog.entity_id = n.nid');
+    $query->condition('full_catalog.field_acq_promotion_full_catalog_value', 1);
+    $query->fields('n', ['nid']);
+    $query->distinct();
+    $full_catalog_promo_nids = $query->execute()->fetchCol();
+
+    $promotion_cache_tags = array_map(function ($nid) {
+      return "node:$nid";
+    }, $full_catalog_promo_nids);
+
+    // Adding list cache tag considering addition/deletion of promotion
+    // nodes.
+    $promotion_cache_tags[] = 'node_type:acq_promotion';
+    $this->cache->set('full_catalog_promo_nids_list', $full_catalog_promo_nids, CacheBackendInterface::CACHE_PERMANENT, $promotion_cache_tags);
+    return $full_catalog_promo_nids;
   }
 
   /**
@@ -1140,7 +1171,7 @@ class SkuManager {
    * @return array
    *   Array of media files.
    *
-   * @todo: Use self::getLabelsData() to get data and prepare images.
+   * @todo Use self::getLabelsData() to get data and prepare images.
    */
   public function getLabels(SKU $sku_entity, $type = 'plp', $reset = FALSE) {
     $cache_key = 'sku_labels_' . $type;
@@ -1309,7 +1340,7 @@ class SkuManager {
     file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
 
     // Save the file as file entity.
-    // @TODO: Check for a way to remove old files and file objects.
+    // @todo Check for a way to remove old files and file objects.
     // To be done here and in SKU.php both.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
@@ -1811,7 +1842,7 @@ class SkuManager {
     if (empty($combinations)) {
       // Below code is only for debugging issues around cache having empty data
       // even when there are children in stock.
-      // @TODO: To be removed in: CORE-5271.
+      // @todo To be removed in: CORE-5271.
       // Done for: CORE-5200, CORE-5248.
       if ($this->isProductInStock($sku)) {
         // Log message here to allow debugging further.
@@ -2357,7 +2388,7 @@ class SkuManager {
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
 
-      // @TODO: CORE-13213, temporarily disabling this.
+      // @todo CORE-13213, temporarily disabling this.
       if ($this->isAttributeOptionToExclude($value) && 1 == 2) {
         $configurable['#options_attributes'][$id]['class'][] = 'hidden';
         $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';

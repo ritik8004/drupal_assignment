@@ -209,7 +209,7 @@ class CheckoutHelper {
     // Once we reach here, we clear cart related cache.
     Cache::invalidateTags(['cart:' . $cart->id()]);
 
-    // @TODO: Remove the fix when we get the full order details.
+    // @todo Remove the fix when we get the full order details.
     if (isset($response['order_id'])) {
       $order_id = $response['order_id'];
     }
@@ -605,7 +605,7 @@ class CheckoutHelper {
     }
 
     if (!empty($address['region'])) {
-      // TODO: We may just require region and not region_id, need to verify.
+      // @todo We may just require region and not region_id, need to verify.
       $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country_id']);
       $address['region'] = $address['region_id'];
     }

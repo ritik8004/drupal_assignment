@@ -69,6 +69,7 @@ const PdpLayout = () => {
     freeGiftPromoCode,
     freeGiftPromoUrl,
     freeGiftMessage,
+    freeGiftPromoType,
   } = productValues;
 
   const emptyRes = (
@@ -119,9 +120,29 @@ const PdpLayout = () => {
     });
   };
 
+  const stickyButton = () => {
+    const headerButton = () => {
+      if ((buttonRef !== null) && (buttonRef !== undefined)) {
+        const buttonWidth = buttonRef.current.offsetWidth;
+        const stickyHederButton = document.querySelector('#sticky-header-btn button');
+        stickyHederButton.style.width = `${buttonWidth}px`;
+      }
+    };
+
+    window.addEventListener('load', () => {
+      headerButton();
+    });
+
+    window.addEventListener('resize', () => {
+      headerButton();
+    });
+  };
+
+
   useEffect(() => {
     sidebarSticky();
     showStickyHeader();
+    stickyButton();
   },
   []);
 
@@ -172,10 +193,8 @@ const PdpLayout = () => {
         <div className="magv2-sidebar" ref={sidebarContainer}>
           <PdpInfo
             title={title}
-            finalPrice={parseFloat(finalPrice)
-              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
-            pdpProductPrice={parseFloat(priceRaw)
-              .toFixed(drupalSettings.reactTeaserView.price.decimalPoints)}
+            finalPrice={finalPrice}
+            pdpProductPrice={priceRaw}
             brandLogo={brandLogo}
             brandLogoAlt={brandLogoAlt}
             brandLogoTitle={brandLogoTitle}
@@ -197,6 +216,7 @@ const PdpLayout = () => {
               freeGiftPromoCode={freeGiftPromoCode}
               freeGiftPromoUrl={freeGiftPromoUrl}
               freeGiftMessage={freeGiftMessage}
+              freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
           <div className="addtobag-button-wrapper" ref={addToBagContainer}>

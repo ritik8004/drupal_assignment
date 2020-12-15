@@ -31,7 +31,7 @@
         "drupal/ckeditor_font": "^1.0",
         "drupal/clientside_validation": "^1.0-rc4",
         "drupal/components": "^1.0",
-        "drupal/core": "^8.8.10",
+        "drupal/core": "^8.8.12",
         "drupal/core-composer-scaffold": "^8.8.10",
         "drupal/datalayer": "^1.0@beta",
         "drupal/date_popup": "^1.0",
@@ -119,7 +119,7 @@
     },
     "require-dev": {
         "drupal/console": "^1.8",
-        "drupal/core-dev": "^8.8.10",
+        "drupal/core-dev": "^8.8.11",
         "drupal/devel": "^2.0.0",
         "geerlingguy/drupal-vm": "^5.2.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07"
@@ -244,7 +244,8 @@
                 "Improve performance for taxonomy hierarchical facets": "https://www.drupal.org/files/issues/2019-01-30/3005018-8.patch",
                 "Improve facets hierarchy processor performance": "https://www.drupal.org/files/issues/2020-02-12/3095601-8.patch",
                 "CORE-16705 Resolve undefined index" : "https://www.drupal.org/files/issues/2020-04-15/undefined-index-settings-3127730-1.patch",
-                "CORE-25698 improve performance": "patches/facets/CORE-25698_facets_WidgetPluginBase.patch"
+                "CORE-25698 improve performance": "patches/facets/CORE-25698_facets_WidgetPluginBase.patch",
+                "Fix Facets Summary Block Deriver definitions getter": "https://www.drupal.org/files/issues/2018-07-17/facets-summary_block_deriver_fix-2986243-02.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -267,7 +268,7 @@
                 "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-11-14/3007424-68.patch",
                 "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
-                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2019-12-09/password-reset-text-1521996-186.patch",
+                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2020-11-29/1521996-218.patch",
                 "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2019-06-20/termStorage-loadChildren-sorted-by-weight-3063118-6-D8.6.16.patch",
                 "Config set - drush config:set for other than default collections raises exception": "https://www.drupal.org/files/issues/2019-08-20/drush_cset_for_other_than_default_collections-3011276-6.patch",
                 "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
@@ -353,6 +354,9 @@
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
+            "drupal/pathauto": {
+                "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
+            },
             "drupal/r4032login": {
                 "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2020-04-27/2941064-38-complete.patch"
             },
@@ -362,13 +366,14 @@
             "drupal/social_auth": {
                 "Social auth displays two error messages": "https://www.drupal.org/files/issues/2020-06-08/3146558-6.patch",
                 "throws Allowed memory size of xxx bytes exhausted": "https://www.drupal.org/files/issues/2020-07-02/3156154-10.patch",
-                "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch"
+                "add drush command": "patches/social_auth/social-auth-encryptions-drush-command.patch",
+                "Creation of an unnecessary cache tag entry for each social auth entity": "https://www.drupal.org/files/issues/2020-11-20/3183636-4.patch"
             },
             "drupal/social_auth_google": {
                 "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-05-06/500-error-on-google-auth-3133754-3.patch"
             },
             "drupal/social_auth_facebook": {
-                "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-10-30/social_auth_facebook-IdentityProviderException_better_handling-3178401-4.patch"
+                "Resolve 500 error for access token": "https://www.drupal.org/files/issues/2020-11-23/social_auth_facebook-IdentityProviderException_better_handling-3178401-6.patch"
             },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"

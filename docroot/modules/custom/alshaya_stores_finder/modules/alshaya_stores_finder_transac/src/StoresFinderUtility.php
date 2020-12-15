@@ -419,7 +419,7 @@ class StoresFinderUtility {
       if (isset($store['address']) && !empty($store['address'])) {
         $address = $this->addressBookManager->getAddressArrayFromRawMagentoAddress($store['address']);
 
-        // @TODO: Check if this can be removed from magento.
+        // @todo Check if this can be removed from magento.
         unset($address['family_name']);
         unset($address['given_name']);
 

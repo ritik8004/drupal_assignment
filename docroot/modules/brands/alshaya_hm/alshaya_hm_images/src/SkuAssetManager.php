@@ -462,6 +462,11 @@ class SkuAssetManager {
       return NULL;
     }
 
+    // We expect FilePath to be string only.
+    if (!is_string($asset['Data']['FilePath'])) {
+      return NULL;
+    }
+
     // Prepare the directory path.
     $directory = 'brand://assets-lp-shared/' . trim(dirname($asset['Data']['FilePath']), '/');
     $target = $directory . DIRECTORY_SEPARATOR . basename($asset['Data']['FilePath']);

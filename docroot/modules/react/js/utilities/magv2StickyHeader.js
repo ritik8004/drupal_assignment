@@ -8,14 +8,18 @@ const magv2StickyHeader = (buttonRef, header, content, isMobile) => {
         header.current.classList.remove('magv2-pdp-non-sticky-header');
         header.current.classList.add('magv2-pdp-sticky-header');
         header.current.classList.add('fadeInVertical');
-        header.current.classList.remove('fadeOutVertical');
+        if (!isMobile) {
+          header.current.classList.remove('fadeOutVertical');
+        }
       } else if (isMobile && window.pageYOffset <= header.current.offsetHeight) {
         header.current.classList.remove('magv2-pdp-non-sticky-header');
       } else {
         header.current.classList.remove('magv2-pdp-sticky-header');
         header.current.classList.add('magv2-pdp-non-sticky-header');
-        header.current.classList.add('fadeOutVertical');
         header.current.classList.remove('fadeInVertical');
+        if (!isMobile) {
+          header.current.classList.add('fadeOutVertical');
+        }
       }
     }
   }

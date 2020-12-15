@@ -79,7 +79,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
       'default_value' => $this->moduleHandler->moduleExists('alshaya_arabic'),
     ];
 
-    // @TODO: This is just an example for now and could be removed going
+    // @todo This is just an example for now and could be removed going
     // forward. By default language switcher doesn't show up if there is only
     // one language.
     $config['alshaya_i18n'] = [
@@ -88,7 +88,7 @@ class AlshayaConfigFeaturesForm extends ConfigFormBase {
       'default_value' => $this->moduleHandler->moduleExists('alshaya_i18n'),
     ];
 
-    // @TODO: Below is just an example of type variable. It is not fully
+    // @todo Below is just an example of type variable. It is not fully
     // functional as of now.
     //  @codingStandardsIgnoreStart
     //  $config['home_banner'] = [

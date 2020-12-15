@@ -4,7 +4,6 @@ namespace Drupal\alshaya_super_category\Plugin\Block;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
@@ -144,10 +143,12 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       return [];
     }
 
-    // Get all child terms for the given parent.
-    $term_data_en = $this->productCategoryTree->getCategoryTree('en', 0, FALSE, FALSE);
-
     $current_language = $this->languageManager->getCurrentLanguage()->getId();
+
+    // Get all the terms data in English for preparing label.
+    $term_data_en = ($current_language !== 'en')
+      ? $this->productCategoryTree->getCategoryRootTerms('en')
+      : $term_data;
 
     // Add class for all terms.
     foreach ($term_data as $term_id => &$term_info) {
@@ -168,8 +169,8 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
         }
       }
 
-      $term_info_en = ($current_language !== 'en') ? $term_data_en[$term_id] : $term_info;
-      $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
+      $term_info_en = $term_data_en[$term_id];
+      $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(mb_strtolower($term_info_en['label']));
     }
 
     // Set the default parent from settings.

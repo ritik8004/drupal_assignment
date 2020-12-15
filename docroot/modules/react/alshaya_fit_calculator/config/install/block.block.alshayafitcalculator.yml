@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_fit_calculator
+  theme:
+    - alshaya_white_label
+id: alshayafitcalculator
+theme: alshaya_white_label
+region: content
+weight: 0
+provider: null
+plugin: alshaya_fit_calculator
+settings:
+  id: alshaya_fit_calculator
+  label: 'Alshaya fit calculator'
+  provider: alshaya_fit_calculator
+  label_display: '0'
+  calculator_values: ''
+  size_conversion_html: ''
+  measurement_field: size-guide-calculator
+  plp_page: ''
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_product: acq_product
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

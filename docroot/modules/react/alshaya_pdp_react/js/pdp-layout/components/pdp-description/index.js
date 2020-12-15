@@ -14,7 +14,9 @@ const PpdDescription = (props) => {
 
   const closeModal = () => {
     document.querySelector('body').classList.remove('desc-overlay');
-    removePanelData();
+    setTimeout(() => {
+      removePanelData();
+    }, 400);
   };
 
   const openModal = () => {

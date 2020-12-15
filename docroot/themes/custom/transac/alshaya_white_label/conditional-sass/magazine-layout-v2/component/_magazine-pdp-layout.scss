@@ -16,24 +16,24 @@
 
     &.sticky-element {
       position: fixed !important;
-      top: -1.875rem;
+      top: 0;
       #{$left}: 1.875rem;
 
       @include breakpoint($tablet) {
         &.sticky-element {
-          max-width: calc((100vw - 3.75rem) * 0.65);
+          max-width: calc((100% - 3.75rem) * 0.65);
         }
       }
 
       @include breakpoint($desktop) {
         &.sticky-element {
-          max-width: calc((100vw - 3.75rem) * 0.72);
+          max-width: calc((100% - 3.75rem) * 0.72);
         }
       }
 
       @include breakpoint($desktop-xl) {
         &.sticky-element {
-          #{$left}: calc((100vw - 86.25rem) / 2);
+          #{$left}: calc((100% - 86.25rem) / 2);
           max-width: calc(86.25rem * 0.72);
         }
       }
@@ -43,6 +43,14 @@
         bottom: 0;
         top: auto;
         #{$left}: 0 !important;
+
+        @include breakpoint($tablet) {
+          max-width: 65%;
+        }
+
+        @include breakpoint($desktop) {
+          max-width: 72%;
+        }
       }
     }
   }
@@ -97,31 +105,39 @@
       &.sticky-element {
         #{$right}: 1.875rem;
         position: fixed;
-        top: -2rem;
+        top: 0;
 
         &.contain {
           position: absolute;
           bottom: 0;
           top: auto;
           #{$right}: 0 !important;
+
+          @include breakpoint($tablet) {
+            max-width: 35%;
+          }
+
+          @include breakpoint($desktop) {
+            max-width: 28%;
+          }
         }
       }
 
       @include breakpoint($tablet) {
         &.sticky-element {
-          max-width: calc((100vw - 3.75rem) * 0.35);
+          max-width: calc((100% - 3.75rem) * 0.35);
         }
       }
 
       @include breakpoint($desktop) {
         &.sticky-element {
-          max-width: calc((100vw - 3.75rem) * 0.28);
+          max-width: calc((100% - 3.75rem) * 0.28);
         }
       }
 
       @include breakpoint($desktop-xl) {
         &.sticky-element {
-          #{$right}: calc((100vw - 86.25rem) / 2);
+          #{$right}: calc((100% - 86.25rem) / 2);
           max-width: calc(86.25rem * 0.28);
         }
       }

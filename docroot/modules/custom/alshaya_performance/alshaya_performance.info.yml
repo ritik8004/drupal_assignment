@@ -8,3 +8,4 @@ dependencies:
   - memcache:memcache
   - queue_unique:queue_unique
   - sessions_expire:sessions_expire
+  - cache_tags_cleanup:cache_tags_cleanup

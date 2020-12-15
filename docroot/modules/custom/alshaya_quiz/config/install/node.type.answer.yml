@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Answer
+type: answer
+description: 'Answer is used to add an answer to the quiz questions.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

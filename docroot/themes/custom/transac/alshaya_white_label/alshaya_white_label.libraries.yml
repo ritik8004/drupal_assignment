@@ -316,6 +316,7 @@ free_gifts:
     - core/jquery
     - alshaya_white_label/slick
     - alshaya_product_zoom/cloud_zoom_common
+    - alshaya_product_zoom/cloud_zoom_pdp_gallery
 
 app-navigation-links:
   css:
@@ -421,3 +422,13 @@ sub-brand-logo:
   css:
     theme:
       css/conditional-sass/sub-brand-logo/sub-brand-logo.ltr.css: {}
+
+alshaya-fit-calculator:
+  css:
+    theme:
+      css/conditional-sass/alshaya-fit-calculator/alshaya-fit-calculator.ltr.css: {}
+
+alshaya-stylefinder:
+  css:
+    theme:
+      css/conditional-sass/alshaya-stylefinder/alshaya-stylefinder.ltr.css: {}
