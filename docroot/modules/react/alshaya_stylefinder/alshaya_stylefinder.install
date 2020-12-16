@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_stylefinder_install() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_stylefinder', 'alshaya_stylefinder.translation');
+  if ($translations = _alshaya_stylefinder_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}

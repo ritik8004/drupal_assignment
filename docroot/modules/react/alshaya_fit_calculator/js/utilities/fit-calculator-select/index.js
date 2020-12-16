@@ -18,8 +18,8 @@ export default class FitCalculatorSelect extends React.Component {
 
   render() {
     const options = [
-      { value: 'inches', label: 'Inches' },
-      { value: 'centimeters', label: 'Centimeters' },
+      { value: 'inches', label: Drupal.t('Inches') },
+      { value: 'centimeters', label: Drupal.t('Centimeters') },
     ];
 
     return (
