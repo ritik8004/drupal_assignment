@@ -91,7 +91,7 @@ class CheckoutDefaults {
    */
   public function applyDefaults(array $data, $uid) {
     if (!empty($data['shipping']['method'])) {
-      //return $data;
+      return $data;
     }
 
     // Get last order only for Drupal Customers.
