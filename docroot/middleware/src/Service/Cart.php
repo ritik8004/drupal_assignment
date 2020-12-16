@@ -1389,13 +1389,15 @@ class Cart {
     $data['city'] = $address['city'] ?? '';
     $data['telephone'] = $address['telephone'] ?? '';
     $data['custom_attributes'] = [];
-    if (!empty($address['custom_attributes'])) {
-      foreach ($address['custom_attributes'] as $attribute) {
-        $data['custom_attributes'][] = [
-          'attribute_code' => $attribute['attribute_code'],
-          'value' => $attribute['value'],
-        ];
+    foreach ($address['custom_attributes'] ?? [] as $attribute) {
+      if (empty($attribute['value'])) {
+        continue;
       }
+
+      $data['custom_attributes'][] = [
+        'attribute_code' => $attribute['attribute_code'],
+        'value' => $attribute['value'],
+      ];
     }
 
     // If custom attributes not available, we check for extension attributes.
