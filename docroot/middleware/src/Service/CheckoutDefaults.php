@@ -91,7 +91,7 @@ class CheckoutDefaults {
    */
   public function applyDefaults(array $data, $uid) {
     if (!empty($data['shipping']['method'])) {
-      return $data;
+      //return $data;
     }
 
     // Get last order only for Drupal Customers.
@@ -116,12 +116,18 @@ class CheckoutDefaults {
     // Select default address from address book if available.
     if ($address = $this->getDefaultAddress($data)) {
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
-      if (count($methods)) {
+      if (count($methods) && !isset($methods['error'])) {
         $this->logger->notice('Setting shipping/billing address from user address book. Address: @address Cart: @cart_id', [
           '@address' => json_encode($address),
           '@cart_id' => $this->cart->getCartId(),
         ]);
-        return $this->selectHd($address, reset($methods), $address);
+        $cart_data = $this->selectHd($address, reset($methods), $address);
+        // Set shipping methods.
+        if ($cart_data && !empty($cart_data['shipping'])) {
+          $cart_data['shipping']['methods'] = $methods;
+        }
+
+        return $cart_data;
       }
     }
 
@@ -129,12 +135,18 @@ class CheckoutDefaults {
     if (isset($data['shipping']['address'], $data['shipping']['address']['country_id'])) {
       $address = $data['shipping']['address'];
       $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
-      if (count($methods)) {
+      if (count($methods) && !isset($methods['error'])) {
         $this->logger->notice('Setting shipping/billing address from already available in cart. Address: @address Cart: @cart_id', [
           '@address' => json_encode($address),
           '@cart_id' => $this->cart->getCartId(),
         ]);
-        return $this->selectHd($address, reset($methods), $address);
+        $cart_data = $this->selectHd($address, reset($methods), $address);
+        // Set shipping methods.
+        if ($cart_data && !empty($cart_data['shipping'])) {
+          $cart_data['shipping']['methods'] = $methods;
+        }
+
+        return $cart_data;
       }
     }
 
@@ -183,7 +195,13 @@ class CheckoutDefaults {
         $this->logger->notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', [
           '@cart_id' => $this->cart->getCartId(),
         ]);
-        return $this->selectHd($address, $method, $order['billing_commerce_address']);
+        $cart_data = $this->selectHd($address, $method, $order['billing_commerce_address']);
+        // Set shipping methods.
+        if ($cart_data && !empty($cart_data['shipping'])) {
+          $cart_data['shipping']['methods'] = $methods;
+        }
+
+        return $cart_data;
       }
     }
 

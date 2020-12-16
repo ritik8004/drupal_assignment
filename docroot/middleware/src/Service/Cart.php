@@ -1320,8 +1320,6 @@ class Cart {
       return [];
     }
 
-    $cart_id = $this->getCartId();
-
     // Remove unwanted data from request.
     if (isset($data['address']['extension_attributes'])) {
       unset($data['address']['extension_attributes']);
@@ -1332,22 +1330,14 @@ class Cart {
       return $static[$key];
     }
 
-    // Store shipping estimates in static cache for given cart to avoid
-    // multiple mdc api calls in single request.
-    $cart_shipping_estimate_key = 'cart_shipping_estimate_' . $cart_id;
-    if (isset($static[$cart_shipping_estimate_key])) {
-      return $static[$cart_shipping_estimate_key];
-    }
-
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_DELIVERY_METHODS'];
     $cache = $expire > 0 ? $this->cache->get('delivery_methods') : NULL;
     if (isset($cache) && $cache['key'] === $key) {
       $static[$key] = $cache['methods'];
-      $static[$cart_shipping_estimate_key] = $cache['methods'];
       return $static[$key];
     }
 
-    $url = sprintf('carts/%d/estimate-shipping-methods', $cart_id);
+    $url = sprintf('carts/%d/estimate-shipping-methods', $this->getCartId());
 
     $request_options = [
       'timeout' => $this->magentoInfo->getPhpTimeout('cart_estimate_shipping'),
@@ -1371,7 +1361,6 @@ class Cart {
     // Resetting the array keys or key might not start with 0 if first method is
     // cnc related and we filter it out.
     $static[$key] = array_values($static[$key]);
-    $static[$cart_shipping_estimate_key] = $static[$key];
 
     $cache = [
       'key' => $key,

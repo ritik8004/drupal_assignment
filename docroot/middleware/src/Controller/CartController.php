@@ -481,6 +481,7 @@ class CartController {
 
           // If carrier info available in request, use that
           // instead getting shipping methods.
+          $hd_shipping_methods = [];
           if (!empty($carrier_info)) {
             $shipping_methods[] = [
               'carrier_code' => $carrier_info['carrier'],
@@ -489,6 +490,7 @@ class CartController {
           }
           else {
             $shipping_methods = $this->cart->getHomeDeliveryShippingMethods($shipping_data);
+            $hd_shipping_methods = $shipping_methods;
           }
 
           // If no shipping method.
@@ -507,6 +509,9 @@ class CartController {
             '@cart_id' => $this->cart->getCartId(),
           ]);
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
+          if ($cart && !empty($cart['shipping']) && !empty($hd_shipping_methods)) {
+            $cart['shipping']['methods'] = $hd_shipping_methods;
+          }
         }
         break;
 
