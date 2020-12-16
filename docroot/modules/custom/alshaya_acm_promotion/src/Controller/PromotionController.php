@@ -176,7 +176,7 @@ class PromotionController extends ControllerBase {
       switch ($free_gift->bundle()) {
         case 'simple':
           if (!$this->skuManager->getStockQuantity($free_gift)) {
-            break;
+            continue 2;
           }
 
           $sku_media = $this->imagesManager->getFirstImage($free_gift, 'plp', TRUE);
@@ -213,7 +213,7 @@ class PromotionController extends ControllerBase {
 
         case 'configurable':
           if (!$this->promotionsManager->getAvailableFreeGiftChildren($free_gift)) {
-            break;
+            continue 2;
           }
           $sku_for_gallery = $this->promotionsManager->getSkuForFreeGiftGallery($free_gift);
           $sku_media = $this->imagesManager->getFirstImage($sku_for_gallery, 'plp', TRUE);
