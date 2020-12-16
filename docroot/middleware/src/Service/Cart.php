@@ -1320,12 +1320,10 @@ class Cart {
       return [];
     }
 
-    // Remove unwanted data from request.
-    if (isset($data['address']['extension_attributes'])) {
-      unset($data['address']['extension_attributes']);
-    }
+    // Prepare address data for api call.
+    $formatted_address = $this->formatShippingEstimatesAddress($data['address']);
 
-    $key = md5(json_encode($data['address']));
+    $key = md5(json_encode($formatted_address));
     if (isset($static[$key])) {
       return $static[$key];
     }
@@ -1341,7 +1339,7 @@ class Cart {
 
     $request_options = [
       'timeout' => $this->magentoInfo->getPhpTimeout('cart_estimate_shipping'),
-      'json' => ['address' => $data['address']],
+      'json' => ['address' => $formatted_address],
     ];
 
     try {
@@ -1371,6 +1369,48 @@ class Cart {
       $this->cache->set('delivery_methods', $expire, $cache);
     }
     return $static[$key];
+  }
+
+  /**
+   * Format address structure for shipping estimates api.
+   *
+   * @param array $address
+   *   Address array.
+   *
+   * @return array
+   *   Formatted address array.
+   */
+  private function formatShippingEstimatesAddress(array $address) {
+    $data = [];
+    $data['firstname'] = $address['firstname'] ?? '';
+    $data['lastname'] = $address['lastname'] ?? '';
+    $data['email'] = $address['email'] ?? '';
+    $data['country_id'] = $address['country_id'] ?? '';
+    $data['city'] = $address['city'] ?? '';
+    $data['telephone'] = $address['telephone'] ?? '';
+    $data['custom_attributes'] = [];
+    foreach ($address['custom_attributes'] ?? [] as $attribute) {
+      if (empty($attribute['value'])) {
+        continue;
+      }
+
+      $data['custom_attributes'][] = [
+        'attribute_code' => $attribute['attribute_code'],
+        'value' => $attribute['value'],
+      ];
+    }
+
+    // If custom attributes not available, we check for extension attributes.
+    if (empty($data['custom_attributes']) && !empty($address['extension_attributes'])) {
+      foreach ($address['extension_attributes'] as $code => $value) {
+        $data['custom_attributes'][] = [
+          'attribute_code' => $code,
+          'value' => $value,
+        ];
+      }
+    }
+
+    return $data;
   }
 
   /**
