@@ -286,7 +286,13 @@ class CartController {
         && !empty($data['shipping']['address'])
         && $data["shipping"]["type"] !== 'click_and_collect'
     ) {
-      $data['shipping']['methods'] = $this->cart->getHomeDeliveryShippingMethods($data['shipping']);
+      $shipping_methods = $this->cart->getHomeDeliveryShippingMethods($data['shipping']);
+
+      if (isset($shipping_methods['error'])) {
+        return $shipping_methods;
+      }
+
+      $data['shipping']['methods'] = $shipping_methods;
     }
 
     if (empty($data['payment']['methods']) && !empty($data['shipping']['method'])) {
