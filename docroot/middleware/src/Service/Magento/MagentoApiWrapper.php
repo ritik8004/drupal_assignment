@@ -122,6 +122,9 @@ class MagentoApiWrapper {
           $this->logger->error('Error while doing MDC api call. Error message: @message', [
             '@message' => $message,
           ]);
+          if (($response->getStatusCode() === 400) && (isset($result['code'])) && ($result['code'] == 9010)) {
+            throw new \Exception($message, $result['code']);
+          }
           throw new \Exception($message, 500);
         }
         elseif (!empty($result['messages']) && !empty($result['messages']['error'])) {

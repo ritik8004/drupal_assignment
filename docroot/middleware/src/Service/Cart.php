@@ -1343,14 +1343,22 @@ class Cart {
     ];
 
     try {
-      $static[$key] = $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
+      $shipping_estimates = $this->magentoApiWrapper->doRequest('POST', $url, $request_options);
 
-      $static[$key] = array_filter($static[$key], function ($method) {
-        return ($method['carrier_code'] !== 'click_and_collect');
-      });
+      foreach ($shipping_estimates as $i => $shipping_estimate) {
+        if (isset($shipping_estimate['code']) && ($shipping_estimate['code'] == 9010)) {
+          return $this->utility->getErrorResponse($shipping_estimate['message'], $shipping_estimate['code']);
+        }
+
+        if ($shipping_estimate['carrier_code'] == 'click_and_collect') {
+          unset($shipping_estimates[$i]);
+        }
+      }
+      $static[$key] = $shipping_estimates;
     }
     catch (\Exception $e) {
-      $this->logger->error('Error while getting shipping methods for HD. Error message: @message', [
+      $this->logger->error('Error while getting shipping methods for HD. Error code: @code message: @message', [
+        '@code' => $e->getCode(),
         '@message' => $e->getMessage(),
       ]);
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());

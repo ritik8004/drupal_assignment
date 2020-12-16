@@ -6,7 +6,7 @@ import {
 import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
-import validateCartResponse from './validation_util';
+import { validateCartResponse, validateMiddlewareResponse } from './validation_util';
 import { redirectToCart } from './get_cart';
 
 /**
@@ -211,6 +211,7 @@ export const addShippingInCart = (action, data) => {
           return null;
         }
 
+        validateMiddlewareResponse(response.data);
         // If there is no error on shipping update.
         if (response.data.error === undefined) {
           setBillingFlagInStorage(response.data);

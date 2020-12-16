@@ -1,3 +1,4 @@
+import { redirectToCart } from './get_cart';
 import { removeCartFromStorage } from './storage';
 
 /**
@@ -6,7 +7,7 @@ import { removeCartFromStorage } from './storage';
  * @param response
  *   API Response.
  */
-const validateCartResponse = (response) => {
+export const validateCartResponse = (response) => {
   if (typeof response.error_code === 'undefined') {
     return;
   }
@@ -19,4 +20,20 @@ const validateCartResponse = (response) => {
   }
 };
 
-export default validateCartResponse;
+/**
+ * Redirect to cart page on invalid response code.
+ *
+ * @param response
+ *   API Response.
+ */
+export const validateMiddlewareResponse = (response) => {
+  if (typeof response.error_code === 'undefined') {
+    return;
+  }
+
+  const errorCode = parseInt(response.error_code, 10);
+
+  if (errorCode === 9010) {
+    redirectToCart();
+  }
+};

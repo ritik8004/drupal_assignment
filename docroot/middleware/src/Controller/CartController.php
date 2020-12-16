@@ -501,6 +501,16 @@ class CartController {
 
           // If no shipping method.
           if (empty($shipping_methods) || isset($shipping_methods['error'])) {
+            if (isset($shipping_methods['error']) && ($shipping_methods['error_code'] == 9010)) {
+              $this->logger->notice('Error while shipping update manual for HD. Data: @data Address: @address Cart: @cart_id Error message: @error_message', [
+                '@address' => json_encode($shipping_info),
+                '@data' => json_encode($request_content),
+                '@cart_id' => $this->cart->getCartId(),
+                '@error_message' => $shipping_methods['error_message'],
+              ]);
+              return new JsonResponse($shipping_methods);
+            }
+
             return new JsonResponse(['error' => TRUE]);
           }
 
