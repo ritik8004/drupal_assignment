@@ -34,6 +34,9 @@ export const validateMiddlewareResponse = (response) => {
   const errorCode = parseInt(response.error_code, 10);
 
   if (errorCode === 9010) {
+    if (typeof response.error_message !== 'undefined') {
+      localStorage.setItem('middlewareErrorResponseMessage', response.error_message);
+    }
     redirectToCart();
   }
 };

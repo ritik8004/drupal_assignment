@@ -88,9 +88,15 @@ export default class Cart extends React.Component {
           message: data.message.message,
         });
       } else if (data.in_stock === false) {
+        let message = localStorage.getItem('middlewareErrorResponseMessage');
+        if (message) {
+          localStorage.removeItem('middlewareErrorResponseMessage');
+        } else {
+          message = Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
+        }
         this.setState({
           messageType: 'error',
-          message: Drupal.t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.'),
+          message,
         });
       } else if (data.message === undefined && data.in_stock) {
         this.setState((prevState) => {
