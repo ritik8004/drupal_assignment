@@ -100,11 +100,17 @@
         padding-bottom: 0;
       }
 
+      .slick-slide {
+        html[lang=ar] & {
+          float: left;
+        }
+      }
+
       .slick-arrow {
         position: absolute;
         bottom: 0;
-        #{$left}: 0;
-        #{$right}: 0;
+        left: 0;
+        right: 0;
         width: 2.125rem;
         height: 2.125rem;
         padding: 0;
@@ -137,23 +143,31 @@
 
         &.slick-prev {
           z-index: 2;
-          #{$left}: -4.0625rem;
+          left: -4.0625rem;
 
           &::after {
             transform: translateX(-50%) translateX(-0.125rem) translateY(-50%);
             border-width: 0.5625rem 0.75rem 0.5625rem 0;
             border-color: transparent $stylefinder-slider-arrow transparent transparent;
+
+            html[lang=ar] & {
+              transform: translateX(-50%) translateX(0.525rem) translateY(-50%);
+            }
           }
         }
 
         &.slick-next {
           z-index: 2;
-          #{$right}: -4.0625rem;
+          right: -4.0625rem;
 
           &::after {
             transform: translateX(-50%) translateX(0.125rem) translateY(-50%);
             border-width: 0.5625rem 0 0.5625rem 0.75rem;
             border-color: transparent transparent transparent $stylefinder-slider-arrow;
+
+            html[lang=ar] & {
+              transform: translateX(-50%) translateX(0.825rem) translateY(-50%);
+            }
           }
         }
       }
@@ -197,7 +211,7 @@
 
           .bf-slide-copy {
             opacity: 1;
-            #{$left}: 50%;
+            left: 50%;
             transition: opacity 0.1s 0.5s;
           }
 
