@@ -121,13 +121,7 @@ class CheckoutDefaults {
           '@address' => json_encode($address),
           '@cart_id' => $this->cart->getCartId(),
         ]);
-        $cart_data = $this->selectHd($address, reset($methods), $address);
-        // Set shipping methods.
-        if ($cart_data && !empty($cart_data['shipping'])) {
-          $cart_data['shipping']['methods'] = $methods;
-        }
-
-        return $cart_data;
+        return $this->selectHd($address, reset($methods), $address, $methods);
       }
     }
 
@@ -140,13 +134,7 @@ class CheckoutDefaults {
           '@address' => json_encode($address),
           '@cart_id' => $this->cart->getCartId(),
         ]);
-        $cart_data = $this->selectHd($address, reset($methods), $address);
-        // Set shipping methods.
-        if ($cart_data && !empty($cart_data['shipping'])) {
-          $cart_data['shipping']['methods'] = $methods;
-        }
-
-        return $cart_data;
+        return $this->selectHd($address, reset($methods), $address, $methods);
       }
     }
 
@@ -195,13 +183,7 @@ class CheckoutDefaults {
         $this->logger->notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', [
           '@cart_id' => $this->cart->getCartId(),
         ]);
-        $cart_data = $this->selectHd($address, $method, $order['billing_commerce_address']);
-        // Set shipping methods.
-        if ($cart_data && !empty($cart_data['shipping'])) {
-          $cart_data['shipping']['methods'] = $methods;
-        }
-
-        return $cart_data;
+        return $this->selectHd($address, reset($methods), $address, $methods);
       }
     }
 
@@ -271,13 +253,15 @@ class CheckoutDefaults {
    *   Payment method.
    * @param array $billing
    *   Billing address.
+   * @param array $shipping_methods
+   *   Shipping methods.
    *
    * @return array|bool
    *   FALSE if something went wrong, updated cart data otherwise.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  private function selectHd(array $address, array $method, array $billing) {
+  private function selectHd(array $address, array $method, array $billing, array $shipping_methods = []) {
     $shipping_data = [
       'customer_address_id' => $address['id'] ?? $address['customer_address_id'] ?? 0,
       'address' => $address,
@@ -313,6 +297,11 @@ class CheckoutDefaults {
       return FALSE;
     }
 
+    // Set shipping methods.
+    if ($updated && !empty($updated['shipping']) && !empty($shipping_methods)) {
+      $cart_data['shipping']['methods'] = $updated;
+    }
+
     // Not use/assign default billing address if customer_address_id
     // is not available.
     if (empty($billing['customer_address_id'])) {
@@ -336,6 +325,11 @@ class CheckoutDefaults {
     // If billing update has error.
     if (isset($updated['error'])) {
       return FALSE;
+    }
+
+    // Set shipping methods.
+    if ($updated && !empty($updated['shipping']) && !empty($shipping_methods)) {
+      $cart_data['shipping']['methods'] = $updated;
     }
 
     return $updated;
