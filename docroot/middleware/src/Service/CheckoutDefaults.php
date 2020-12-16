@@ -91,7 +91,7 @@ class CheckoutDefaults {
    */
   public function applyDefaults(array $data, $uid) {
     if (!empty($data['shipping']['method'])) {
-      return $data;
+      //return $data;
     }
 
     // Get last order only for Drupal Customers.
@@ -299,7 +299,7 @@ class CheckoutDefaults {
 
     // Set shipping methods.
     if ($updated && !empty($updated['shipping']) && !empty($shipping_methods)) {
-      $cart_data['shipping']['methods'] = $updated;
+      $updated['shipping']['methods'] = $shipping_methods;
     }
 
     // Not use/assign default billing address if customer_address_id
@@ -329,7 +329,7 @@ class CheckoutDefaults {
 
     // Set shipping methods.
     if ($updated && !empty($updated['shipping']) && !empty($shipping_methods)) {
-      $cart_data['shipping']['methods'] = $updated;
+      $updated['shipping']['methods'] = $shipping_methods;
     }
 
     return $updated;
