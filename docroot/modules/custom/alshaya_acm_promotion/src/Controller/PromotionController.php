@@ -154,10 +154,6 @@ class PromotionController extends ControllerBase {
 
     /** @var \Drupal\acq_sku\Entity\SKU $free_gift */
     foreach ($free_gifts as $free_gift) {
-      if (!$this->skuManager->getStockQuantity($free_gift)) {
-        continue;
-      }
-
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $free_gift->getCacheTags());
 
       $item = [];
@@ -179,6 +175,10 @@ class PromotionController extends ControllerBase {
 
       switch ($free_gift->bundle()) {
         case 'simple':
+          if (!$this->skuManager->getStockQuantity($free_gift)) {
+            continue 2;
+          }
+
           $sku_media = $this->imagesManager->getFirstImage($free_gift, 'plp', TRUE);
 
           // Getting the promo rule id.
@@ -212,6 +212,9 @@ class PromotionController extends ControllerBase {
           break;
 
         case 'configurable':
+          if (!$this->promotionsManager->getAvailableFreeGiftChildren($free_gift)) {
+            continue 2;
+          }
           $sku_for_gallery = $this->promotionsManager->getSkuForFreeGiftGallery($free_gift);
           $sku_media = $this->imagesManager->getFirstImage($sku_for_gallery, 'plp', TRUE);
           if ($sku_media) {
