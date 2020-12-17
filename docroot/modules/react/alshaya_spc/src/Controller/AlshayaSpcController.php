@@ -754,7 +754,9 @@ class AlshayaSpcController extends ControllerBase {
           // doesn't do any validation for area/city field which is the
           // actual requirement here.
           // Iterate over each configured address field.
-          foreach (_alshaya_spc_get_address_fields() as $field => $address_field) {
+          $address_keys_filled = [];
+          $spc_address_fields = _alshaya_spc_get_address_fields();
+          foreach ($spc_address_fields as $field => $address_field) {
             // If field is available and is either area/city.
             $val_to_validate = NULL;
             // FLag to determine if city/area field value filled.
@@ -763,6 +765,7 @@ class AlshayaSpcController extends ControllerBase {
               && ($field == 'administrative_area' || $field == 'area_parent')) {
               $val_to_validate = $address_extension_attributes[$address_field['key']];
               $city_area_field = TRUE;
+              $address_keys_filled[$field] = $val_to_validate;
             }
             elseif (!empty($address_custom_attributes)) {
               foreach ($address_custom_attributes as $attr) {
@@ -770,6 +773,7 @@ class AlshayaSpcController extends ControllerBase {
                   && ($field == 'administrative_area' || $field == 'area_parent')) {
                   $val_to_validate = $attr['value'];
                   $city_area_field = TRUE;
+                  $address_keys_filled[$field] = $val_to_validate;
                   break;
                 }
               }
@@ -787,6 +791,18 @@ class AlshayaSpcController extends ControllerBase {
             catch (\Exception $e) {
               $status[$key] = FALSE;
               break;
+            }
+          }
+
+          // We check here only when all validations are passed above.
+          if ($status[$key]) {
+            // If address structure has area_parent / administrative_area but
+            // address don't contains both of them.
+            if (isset($spc_address_fields['area_parent']) && empty($address_keys_filled['area_parent'])) {
+              $status[$key] = FALSE;
+            }
+            elseif (isset($spc_address_fields['administrative_area']) && empty($address_keys_filled['administrative_area'])) {
+              $status[$key] = FALSE;
             }
           }
           break;
