@@ -2536,9 +2536,10 @@ class SkuManager {
     }
 
     // For all web requests we don't want to show the products
-    // that are not processed yet.
+    // that are not processed yet except for free gifts.
     if (PHP_SAPI != 'cli'
-      && !($this->productProcessedManager->isProductProcessed($sku->getSku()))) {
+      && !($this->productProcessedManager->isProductProcessed($sku->getSku()))
+      && !($this->isSkuFreeGift($sku))) {
       return FALSE;
     }
 
