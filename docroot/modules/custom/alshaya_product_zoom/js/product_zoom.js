@@ -36,6 +36,7 @@
         mobilegallery.on('afterChange', function (event, slick) {
           // Hide Labels on video slides.
           Drupal.hideProductLabelOnVideo($(this), 'mobilegallery__thumbnails__video', true);
+          Drupal.blazy.revalidate();
         });
 
         Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), context);
@@ -117,8 +118,14 @@
       var freeGiftsZoomContainer = $('.acq-content-product-modal #product-zoom-container');
       if ($(window).width() < 768 && freeGiftsZoomContainer.length > 0 && !freeGiftsZoomContainer.hasClass('free-gifts-product-zoom-processed')) {
         freeGiftsZoomContainer.addClass('free-gifts-product-zoom-processed');
-        var mobilegallery = $('#product-image-gallery-mobile', context);
-        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), context);
+        var mobilegallery = $('#product-image-gallery-mobile', freeGiftsZoomContainer);
+        Drupal.blazy.revalidate();
+        Drupal.productZoomApplyRtl(mobilegallery, Drupal.getSlickOptions('slickMobileOptions'), freeGiftsZoomContainer);
+        if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
+          // Do initial setup again for slick dots.
+          Drupal.behaviors.pdpInstagranDots.initialSetup(mobilegallery);
+          Drupal.attachBehaviors(freeGiftsZoomContainer);
+        }
       }
 
       var modalLightSlider = $('.acq-content-product-modal #lightSlider');
