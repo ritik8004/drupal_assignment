@@ -500,8 +500,13 @@ class CartController {
           }
 
           // If no shipping method.
-          if (empty($shipping_methods) || isset($shipping_methods['error'])) {
-            return new JsonResponse(['error' => TRUE]);
+          if (isset($shipping_methods['error'])) {
+            $this->logger->notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', [
+              '@data' => json_encode($request_content),
+              '@cart_id' => $this->cart->getCartId(),
+              '@error_message' => $shipping_methods['error_message'],
+            ]);
+            return new JsonResponse($shipping_methods);
           }
 
           $shipping_info['carrier_info'] = [
