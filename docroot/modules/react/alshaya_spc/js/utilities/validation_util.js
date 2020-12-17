@@ -7,7 +7,7 @@ import { removeCartFromStorage } from './storage';
  * @param response
  *   API Response.
  */
-export const validateCartResponse = (response) => {
+const validateCartResponse = (response) => {
   if (typeof response.error_code === 'undefined') {
     return;
   }
@@ -17,26 +17,12 @@ export const validateCartResponse = (response) => {
   if (errorCode === 400 || errorCode === 404) {
     removeCartFromStorage();
     window.location.href = Drupal.url('cart');
-  }
-};
-
-/**
- * Redirect to cart page on invalid response code.
- *
- * @param response
- *   API Response.
- */
-export const validateMiddlewareResponse = (response) => {
-  if (typeof response.error_code === 'undefined') {
-    return;
-  }
-
-  const errorCode = parseInt(response.error_code, 10);
-
-  if (errorCode === 9010) {
+  } else if (errorCode === 9010) {
     if (typeof response.error_message !== 'undefined') {
-      localStorage.setItem('middlewareErrorResponseMessage', response.error_message);
+      localStorage.setItem('stockErrorResponseMessage', response.error_message);
     }
     redirectToCart();
   }
 };
+
+export default validateCartResponse;

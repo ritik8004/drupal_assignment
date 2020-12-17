@@ -17,7 +17,7 @@ import DynamicPromotionProductItem
 import CartItemFree from '../cart-item-free';
 import { getStorageInfo } from '../../../utilities/storage';
 import { isQtyLimitReached } from '../../../utilities/checkout_util';
-import { validateCartResponse } from '../../../utilities/validation_util';
+import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import CartPromotionFreeGift from '../cart-promotion-freegift';
 import ConditionalView from '../../../common/components/conditional-view';

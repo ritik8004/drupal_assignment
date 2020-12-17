@@ -2,6 +2,7 @@
 
 namespace App\Service\Magento;
 
+use App\Service\CartErrorCodes;
 use App\Service\Utility;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\ConnectException;
@@ -122,9 +123,16 @@ class MagentoApiWrapper {
           $this->logger->error('Error while doing MDC api call. Error message: @message', [
             '@message' => $message,
           ]);
-          if (($response->getStatusCode() === 400) && (isset($result['code'])) && ($result['code'] == 9010)) {
+
+          // The following case happens when there is a stock mismatch between
+          // Magento and OMS.
+          if (($response->getStatusCode() === 400)
+            && (isset($result['code']))
+            && ($result['code'] == CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH)
+          ) {
             throw new \Exception($message, $result['code']);
           }
+
           throw new \Exception($message, 500);
         }
         elseif (!empty($result['messages']) && !empty($result['messages']['error'])) {
