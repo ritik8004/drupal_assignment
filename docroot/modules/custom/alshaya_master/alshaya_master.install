@@ -33,7 +33,13 @@ function alshaya_master_update_8043() {
     'Free Gift' => [
       'ar' => 'هدية مجانية',
     ],
+    'FREE GIFT' => [
+      'ar' => 'هدية مجانية',
+    ],
     'Add Free Gift' => [
+      'ar' => 'أضف هدية مجانية',
+    ],
+    'ADD FREE GIFT' => [
       'ar' => 'أضف هدية مجانية',
     ],
     'One item of choice from @link with this product' => [
@@ -50,6 +56,9 @@ function alshaya_master_update_8043() {
     ],
     'Use Code ' => [
       'ar' => 'استخدم الرمز',
+    ],
+    'to get a Free Gift' => [
+      'ar' => 'للحصول على هدية مجانية'
     ],
   ];
 
@@ -2070,7 +2079,13 @@ function alshaya_master_install() {
     'Free Gift' => [
       'ar' => 'هدية مجانية',
     ],
+    'FREE GIFT' => [
+      'ar' => 'هدية مجانية',
+    ],
     'Add Free Gift' => [
+      'ar' => 'أضف هدية مجانية',
+    ],
+    'ADD FREE GIFT' => [
       'ar' => 'أضف هدية مجانية',
     ],
     'One item of choice from @link with this product' => [
@@ -2087,6 +2102,9 @@ function alshaya_master_install() {
     ],
     'Use Code' => [
       'ar' => 'استخدم الرمز',
+    ],
+    'to get a Free Gift' => [
+      'ar' => 'للحصول على هدية مجانية'
     ],
   ];
 
