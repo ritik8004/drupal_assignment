@@ -82,6 +82,9 @@ export default class AddressItem extends React.Component {
 
     if (cartInfo instanceof Promise) {
       cartInfo.then((cartResult) => {
+        // if (!cartResult) {
+        //   return;
+        // }
         // Remove loader.
         removeFullScreenLoader();
 

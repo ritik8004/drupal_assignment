@@ -87,7 +87,9 @@ export default class CartItem extends React.Component {
     const cartData = updateCartItemData(action, sku, qty);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
-        validateCartResponse(result);
+        if (!validateCartResponse(result)) {
+          return null;
+        }
 
         if (callback !== null) {
           callback();
@@ -156,6 +158,8 @@ export default class CartItem extends React.Component {
             callable(productSku);
           });
         }
+
+        return null;
       });
     }
   }
