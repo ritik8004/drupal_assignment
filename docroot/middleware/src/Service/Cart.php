@@ -318,6 +318,9 @@ class Cart {
         'searchCriteria[filterGroups][0][filters][0][field]' => 'customer_id',
         'searchCriteria[filterGroups][0][filters][0][value]' => $customer_id,
         'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
+        'searchCriteria[filterGroups][1][filters][0][field]' => 'is_active',
+        'searchCriteria[filterGroups][1][filters][0][value]' => 1,
+        'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'eq',
       ],
     ];
 
