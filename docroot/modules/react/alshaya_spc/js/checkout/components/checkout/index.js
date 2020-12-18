@@ -23,6 +23,7 @@ import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
+import validateCartResponse from '../../../utilities/validation_util';
 
 window.fetchStore = 'idle';
 
@@ -46,6 +47,10 @@ export default class Checkout extends React.Component {
       const cartData = fetchCartDataForCheckout();
       if (cartData instanceof Promise) {
         cartData.then((result) => {
+          if (!validateCartResponse(result)) {
+            return;
+          }
+
           if (result === undefined
             || result === null) {
             redirectToCart();
