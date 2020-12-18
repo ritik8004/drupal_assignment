@@ -137,6 +137,13 @@ export default class CartPromoBlock extends React.Component {
       document.getElementById('promo-remove-button').classList.add('loading');
     }
 
+    // Remove any promo coupons errors on promo
+    // coupon application success.
+    const promoError = document.querySelector('#promo-message.error');
+    if (promoError !== null) {
+      promoError.outerHTML = '<div id="promo-message" />';
+    }
+
     const cartData = applyRemovePromo(action, promoValue);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
@@ -239,11 +246,25 @@ export default class CartPromoBlock extends React.Component {
       }
     }
 
+    // Remove any promo coupons errors on promo
+    // coupon application success.
+    if (promoApplied) {
+      const promoError = document.querySelector('#promo-message.error');
+      if (promoError !== null) {
+        promoError.outerHTML = '<div id="promo-message" />';
+      }
+    }
+
     return (
       <div className="spc-promo-code-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
-          <input id="promo-code" disabled={disabledState} type="text" placeholder={Drupal.t('Promo code')} />
+          <input
+            id="promo-code"
+            disabled={disabledState}
+            type="text"
+            placeholder={Drupal.t('Promo code')}
+          />
           <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
           <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock, productInfo); }}>{buttonText}</button>
           <div id="promo-message" />
