@@ -203,6 +203,15 @@ export default class CartPromoBlock extends React.Component {
     }
   };
 
+  handlePromoInputChange = () => {
+    // Remove any promo coupons errors on promo
+    // coupon application success.
+    const promoError = document.querySelector('#promo-message.error');
+    if (promoError !== null) {
+      promoError.outerHTML = '<div id="promo-message" />';
+    }
+  };
+
   render() {
     const {
       productInfo,
@@ -252,7 +261,13 @@ export default class CartPromoBlock extends React.Component {
       <div className="spc-promo-code-block fadeInUp" style={{ animationDelay: '0.4s' }}>
         <SectionTitle>{Drupal.t('have a promo code?')}</SectionTitle>
         <div className="block-content">
-          <input id="promo-code" disabled={disabledState} type="text" placeholder={Drupal.t('Promo code')} />
+          <input
+            id="promo-code"
+            disabled={disabledState}
+            type="text"
+            placeholder={Drupal.t('Promo code')}
+            onChange={this.handlePromoInputChange}
+          />
           <button id="promo-remove-button" type="button" className={`promo-remove ${promoRemoveActive}`} onClick={() => { this.promoAction(promoApplied, inStock); }}>{Drupal.t('Remove')}</button>
           <button id="promo-action-button" type="button" disabled={disabledState} className="promo-submit" onClick={() => { this.promoAction(promoApplied, inStock, productInfo); }}>{buttonText}</button>
           <div id="promo-message" />
