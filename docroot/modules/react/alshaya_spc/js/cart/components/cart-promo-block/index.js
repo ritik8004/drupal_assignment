@@ -137,13 +137,6 @@ export default class CartPromoBlock extends React.Component {
       document.getElementById('promo-remove-button').classList.add('loading');
     }
 
-    // Remove any promo coupons errors on promo
-    // coupon application success.
-    const promoError = document.querySelector('#promo-message.error');
-    if (promoError !== null) {
-      promoError.outerHTML = '<div id="promo-message" />';
-    }
-
     const cartData = applyRemovePromo(action, promoValue);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
