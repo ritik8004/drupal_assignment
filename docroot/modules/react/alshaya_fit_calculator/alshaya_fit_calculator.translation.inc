@@ -25,7 +25,7 @@ function _alshaya_fit_calculator_translations() {
     'band size' => [
       'ar' => 'محيط أسفل الصدر',
     ],
-    'burst size' => [
+    'bust size' => [
       'ar' => 'محيط منتصف الصدر',
     ],
     'get my size' => [

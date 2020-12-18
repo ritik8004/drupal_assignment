@@ -232,7 +232,9 @@ export default class PaymentMethods extends React.Component {
     const cartUpdate = addPaymentMethodInCart('update payment', data);
     if (cartUpdate instanceof Promise) {
       cartUpdate.then((result) => {
-        validateCartResponse(result);
+        if (!validateCartResponse(result)) {
+          return;
+        }
         const paymentDiv = document.getElementById(`payment-method-${method}`);
         if (paymentDiv === null) {
           this.selectDefault();

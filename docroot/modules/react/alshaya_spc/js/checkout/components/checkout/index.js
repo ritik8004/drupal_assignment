@@ -25,6 +25,7 @@ import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
 import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
 import isAuraEnabled from '../../../../../js/utilities/helper';
+import validateCartResponse from '../../../utilities/validation_util';
 
 window.fetchStore = 'idle';
 
@@ -48,6 +49,10 @@ export default class Checkout extends React.Component {
       const cartData = fetchCartDataForCheckout();
       if (cartData instanceof Promise) {
         cartData.then((result) => {
+          if (!validateCartResponse(result)) {
+            return;
+          }
+
           if (result === undefined
             || result === null) {
             redirectToCart();

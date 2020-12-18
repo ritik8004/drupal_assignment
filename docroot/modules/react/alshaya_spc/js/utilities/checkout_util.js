@@ -212,6 +212,9 @@ export const addShippingInCart = (action, data) => {
           return null;
         }
 
+        if (!validateCartResponse(response.data)) {
+          return null;
+        }
         // If there is no error on shipping update.
         if (response.data.error === undefined) {
           setBillingFlagInStorage(response.data);
@@ -397,7 +400,9 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
     }
   }
 
-  validateCartResponse(cartResult);
+  if (!validateCartResponse(cartResult)) {
+    return;
+  }
 
   // If error/exception, show at cart top.
   if (cartResult.error !== undefined) {
