@@ -4,6 +4,7 @@ import { cartAvailableInStorage } from './get_cart';
 import i18nMiddleWareUrl from './i18n_url';
 import { getInfoFromStorage } from './storage';
 import dispatchCustomEvent from './events';
+import validateCartResponse from './validation_util';
 
 /**
  * Get the middleware update cart endpoint.
@@ -110,7 +111,12 @@ export const addPaymentMethodInCart = (action, data) => {
   return axios.post(apiUrl, {
     action,
     payment_info: data,
-  }).then((response) => response.data, (error) => {
+  }).then((response) => {
+    if (!validateCartResponse(response.data)) {
+      return null;
+    }
+    return response.data;
+  }, (error) => {
     // Processing of error here.
     Drupal.logJavascriptError('add-payment-method-in-cart', error, GTM_CONSTANTS.PAYMENT_ERRORS);
   });
