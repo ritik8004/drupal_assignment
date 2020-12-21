@@ -1,0 +1,29 @@
+.style-finder-list.style-finder-lining-list {
+  @include breakpoint($tablet) {
+    max-width: 34.375rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  li {
+    flex: 33%;
+    padding-top: 0.625rem;
+
+    &.active {
+      .style-finder-list-title {
+        color: $_stylefinder-active-lining-text;
+      }
+    }
+  }
+
+  .style-finder-list-image {
+    margin-bottom: 2rem;
+  }
+
+  .style-finder-list-title {
+    font-size: 1.25rem;
+    line-height: normal;
+    text-transform: uppercase;
+    padding-bottom: 0.625rem;
+  }
+}

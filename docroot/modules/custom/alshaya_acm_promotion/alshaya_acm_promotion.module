@@ -429,6 +429,15 @@ function alshaya_acm_promotion_alshaya_acm_product_light_product_data_alter(SKU 
 }
 
 /**
+ * Implements hook_alshaya_mobile_app_skus_product_list_data_alter().
+ */
+function alshaya_acm_promotion_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
+  $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
+  $data['free_gift_promotion'] = $promoLabelManager->getPromotionLabelForProductDetail($sku, 'free_gift', 'mapp');
+}
+
+/**
  * Implements hook_entity_delete().
  */
 function alshaya_acm_promotion_entity_delete(EntityInterface $entity) {

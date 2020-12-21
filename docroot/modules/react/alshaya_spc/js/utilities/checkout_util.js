@@ -7,6 +7,7 @@ import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
+import { redirectToCart } from './get_cart';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -118,6 +119,14 @@ export const placeOrder = (paymentMethod) => {
           }
 
           window.location = Drupal.url(response.data.redirectUrl);
+          return;
+        }
+
+        // If cart has some OOS item.
+        if (response.data.error !== undefined
+          && parseInt(response.data.error_code, 10) === 506) {
+          Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.CHECKOUT_ERRORS);
+          redirectToCart();
           return;
         }
 
@@ -557,13 +566,4 @@ export const applyCode = (e) => {
     document.getElementById('promo-code').value = codeValue.trim();
     document.getElementById('promo-action-button').click();
   }
-};
-
-/**
- * Add class to body and trigger free gift modal.
- */
-export const openCartFreeGiftModal = () => {
-  const body = document.querySelector('body');
-  body.classList.add('free-gifts-modal-overlay');
-  document.getElementById('spc-free-gift').click();
 };

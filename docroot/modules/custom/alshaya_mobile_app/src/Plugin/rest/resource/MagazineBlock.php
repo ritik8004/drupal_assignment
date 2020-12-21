@@ -152,7 +152,7 @@ class MagazineBlock extends ResourceBase {
       $magazine_block['url'] = $magazine_entity_url->getGeneratedUrl();
       $magazine_block['deeplink'] = $this->mobileAppUtility->getDeepLink($magazine_entity);
       if ($magazine_entity->get('field_magazine_homepage_image')->getValue()) {
-        $magazine_block['image'] = $this->mobileAppUtility->getImages($magazine_entity, 'field_magazine_homepage_image');
+        $magazine_block['image'] = $this->mobileAppUtility->getImages($magazine_entity, 'field_magazine_homepage_image', 'magazine_article_home');
       }
       if ($magazine_entity->hasField('field_magazine_category') && !empty($magazine_entity->field_magazine_category)) {
         $magazine_category_obj = $magazine_entity->get('field_magazine_category')->referencedEntities();

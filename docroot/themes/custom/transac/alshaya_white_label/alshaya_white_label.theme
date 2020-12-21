@@ -120,7 +120,7 @@ function alshaya_white_label_preprocess_html(&$variables) {
       }
 
       if ($pdp_layout == 'pdp-magazine_v2') {
-        $variables['attributes']['class'][] = 'new-pdp-magazine-layout';
+        $variables['attributes']['class'][] = 'magazine-layout-v2';
       }
     }
   }

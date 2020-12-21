@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78c3d058ada3522ddf5da0fb1851b511",
+    "content-hash": "1493f5ab0c2f87e0048e40f55ebc2761",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -5782,6 +5782,7 @@
                     "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
                     "CORE-8488 - Add log trace for 500 error": "patches/core/missing-handler-check-cache.patch",
                     "CORE-24231 - Adding log trace for 500 error on user login page": "patches/core/traces-for-form-error.patch",
+                    "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2019-11-05/1356276-531-8.8.x-4.patch",
                     "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch",
@@ -6078,26 +6079,25 @@
         },
         {
             "name": "drupal/datalayer",
-            "version": "1.0.0-beta1",
+            "version": "1.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/datalayer.git",
-                "reference": "8.x-1.0-beta1"
+                "reference": "8.x-1.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/datalayer-8.x-1.0-beta1.zip",
-                "reference": "8.x-1.0-beta1",
-                "shasum": "972a9720c0a3482b0bb7b31bbe1b45dea4611528"
+                "url": "https://ftp.drupal.org/files/projects/datalayer-8.x-1.0-beta2.zip",
+                "reference": "8.x-1.0-beta2",
+                "shasum": "53723500a8cf6f7e0a1dcc877e769d1bddebf3c6"
             },
             "require": {
-                "drupal/core": "~8.0",
-                "drupal/libraries": "*"
+                "drupal/core": "^8.0 || ^9.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta1",
+                    "version": "8.x-1.0-beta2",
                     "datestamp": "1579986781",
                     "security-coverage": {
                         "status": "not-covered",
@@ -6111,8 +6111,9 @@
             ],
             "authors": [
                 {
-                    "name": "WidgetsBurritos",
-                    "homepage": "https://www.drupal.org/user/2508346"
+                    "name": "Josh Lind",
+                    "homepage": "https://www.drupal.org/u/doublejosh",
+                    "role": "Maintainer"
                 },
                 {
                     "name": "bighappyface",
@@ -6133,8 +6134,13 @@
             ],
             "description": "Output page meta data for client-side availability.",
             "homepage": "https://www.drupal.org/project/datalayer",
+            "keywords": [
+                "Data Layer",
+                "Drupal"
+            ],
             "support": {
-                "source": "https://git.drupalcode.org/project/datalayer"
+                "source": "https://git.drupalcode.org/project/datalayer",
+                "issues": "https://www.drupal.org/project/issues/datalayer"
             }
         },
         {

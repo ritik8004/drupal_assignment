@@ -1,0 +1,28 @@
+.style-finder {
+  &-step-wrapper {
+    text-align: center;
+
+    @include breakpoint($only-mobile) {
+      margin: 1.5rem 0;
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: 1.5rem;
+    }
+
+    &.style-finder-step-coverage-wrapper {
+      margin-top: 4.5rem;
+    }
+  }
+
+  &-steps {
+    font-size: 1.5rem;
+    line-height: normal;
+    text-transform: uppercase;
+    color: $stylefinder-steps;
+
+    @include breakpoint($tablet) {
+      line-height: 1.8125rem;
+    }
+  }
+}

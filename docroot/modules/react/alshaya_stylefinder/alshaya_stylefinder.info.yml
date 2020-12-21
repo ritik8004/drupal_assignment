@@ -1,0 +1,7 @@
+name: Alshaya Style Finder
+type: module
+description: 'Provides a block(s) and integrations for Style Finder.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_quiz:alshaya_quiz

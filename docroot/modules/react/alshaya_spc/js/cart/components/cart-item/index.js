@@ -181,6 +181,7 @@ export default class CartItem extends React.Component {
       animationOffset,
       productPromotion,
       couponCode,
+      selectFreeGift,
     } = this.props;
 
     const {
@@ -289,6 +290,7 @@ export default class CartItem extends React.Component {
               promo={freeGiftPromotion}
               sku={sku}
               couponCode={couponCode}
+              selectFreeGift={selectFreeGift}
             />
           </ConditionalView>
         </div>
@@ -305,7 +307,8 @@ export default class CartItem extends React.Component {
                   || (itemErrorMsg !== undefined && isQtyLimitReached(itemErrorMsg) >= 0))
               }
               showAlert={
-                parseInt(maxSaleQty, 10) !== 0
+                !drupalSettings.hide_max_qty_limit_message
+                && parseInt(maxSaleQty, 10) !== 0
                 && parseInt(currentQtyLimit, 10) < parseInt(maxSaleQty, 10)
               }
               errMsg={itemErrorMsg}

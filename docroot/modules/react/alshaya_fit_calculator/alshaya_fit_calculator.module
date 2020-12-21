@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Add Id selector for react render in size-guide modal.
+ *
+ * Implements hook_alshaya_acm_product_modal_build_alter().
+ */
+function alshaya_fit_calculator_alshaya_acm_product_modal_build_alter(array &$build) {
+  // Add id selector for fit calculator render in modal.
+  $build['modal_content']['#template'] = '<div class="modal-content">{{ modal_content }}<div id="fit-cal-modal"></div></div>';
+}

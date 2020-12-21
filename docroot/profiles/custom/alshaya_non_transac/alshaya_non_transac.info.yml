@@ -33,3 +33,4 @@ exclude:
   - lightning_scheduler
   - moderation_sidebar
   - update
+  - dblog

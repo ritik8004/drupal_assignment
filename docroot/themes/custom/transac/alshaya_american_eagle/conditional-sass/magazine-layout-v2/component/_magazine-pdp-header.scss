@@ -10,6 +10,7 @@
           width: 1rem;
           height: 1rem;
           top: 1.1rem;
+          #{$left}: 0;
           background: 0 0;
           padding-top: 0;
           #{$right}: 0;
@@ -24,19 +25,31 @@
   body.sub-brand-logo {
     &:not(.frontpage) {
       &:not(.alias--cart-login) {
-        &.new-pdp-magazine-layout {
+        &.magazine-layout-v2 {
           margin-top: 3.5rem;
         }
       }
     }
 
-    &.new-pdp-magazine-layout {
+    &.magazine-layout-v2 {
       #block-alshayareactcartminicartblock {
         display: block;
         position: relative;
         top: unset;
         width: auto;
         height: auto;
+      }
+    }
+  }
+}
+
+.magv2-pdp-sticky-header {
+  .magv2-header-wrapper {
+    .cart-link {
+      .quantity {
+        @include breakpoint($only-mobile) {
+          top: 0.75rem;
+        }
       }
     }
   }

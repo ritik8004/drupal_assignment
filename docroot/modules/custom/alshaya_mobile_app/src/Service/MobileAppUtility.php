@@ -481,26 +481,29 @@ class MobileAppUtility {
    *   The entity object.
    * @param string $field_name
    *   The field name from which it needs to create images array.
-   * @param string $label
-   *   (optional) The label.
-   * @param string $type
-   *   (optional) The type of the field.
+   * @param string $image_style
+   *   (optional) The image style to apply.
    *
    * @return array
    *   The array containing information of images if image cardinality
    *   is greater then 1, otherwise return the first image array.
    */
-  public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
+  public function getImages($entity, $field_name, string $image_style = NULL) {
     if (!$entity->hasField($field_name)) {
       return [];
     }
 
     $images = [];
     if (!empty($entity->get($field_name)->getValue())) {
+      $image_style = empty($image_style) ? NULL : $this->entityTypeManager->getStorage('image_style')->load($image_style);
       foreach ($entity->get($field_name)->getValue() as $key => $value) {
         if (($file = $entity->get($field_name)->get($key)->entity) && $file instanceof FileInterface) {
+          $file_path = $image_style
+            ? $image_style->buildUrl($file->getFileUri())
+            : file_create_url($file->getFileUri());
+
           $images[] = [
-            'url' => file_create_url($file->getFileUri()),
+            'url' => $file_path,
             'width' => (int) $value['width'],
             'height' => (int) $value['height'],
           ];
@@ -805,6 +808,10 @@ class MobileAppUtility {
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
         /** @var \Drupal\user\Entity\User $user */
         $user = alshaya_acm_customer_create_drupal_user($customer);
+
+        $user->set('preferred_langcode', $this->currentLanguage);
+        $user->save();
+
         if ($block) {
           $user->block();
           $user->save();

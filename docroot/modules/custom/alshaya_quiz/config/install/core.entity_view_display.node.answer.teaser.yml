@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.answer.field_answer_summary
+    - field.field.node.answer.field_choice_1
+    - field.field.node.answer.field_choice_2
+    - field.field.node.answer.field_choice_3
+    - field.field.node.answer.field_choice_4
+    - field.field.node.answer.field_next_question
+    - field.field.node.answer.field_product_image
+    - field.field.node.answer.field_references
+    - node.type.answer
+  module:
+    - user
+id: node.answer.teaser
+targetEntityType: node
+bundle: answer
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  sharethis:
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_answer_summary: true
+  field_choice_1: true
+  field_choice_2: true
+  field_choice_3: true
+  field_choice_4: true
+  field_next_question: true
+  field_product_image: true
+  field_references: true
+  langcode: true
+  search_api_excerpt: true
+  shariff_field: true

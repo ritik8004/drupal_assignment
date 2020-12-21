@@ -10,6 +10,8 @@
     </div>
   </a>
   <div class="select-free-gift-link">
-    {{ select_link }}
+    {% if select_link %}
+      {{ select_link }}
+    {% endif %}
   </div>
 </div>

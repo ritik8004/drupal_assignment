@@ -17,6 +17,7 @@ import { fetchCartData } from '../../../utilities/api/requests';
 import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-labels-utility';
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
+import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -118,6 +119,12 @@ export default class Cart extends React.Component {
 
     // Event handle for Dynamic Promotion available.
     document.addEventListener('applyDynamicPromotions', this.saveDynamicPromotions, false);
+
+    // Event to trigger after free gift detail modal open.
+    document.addEventListener('openFreeGiftModalEvent', openFreeGiftModal, false);
+
+    // Event to trigger after free gift listing modal open.
+    document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
   }
 
   componentWillUnmount() {
@@ -150,6 +157,7 @@ export default class Cart extends React.Component {
       smoothScrollTo('.spc-pre-content');
     }
   };
+
 
   render() {
     const {
@@ -220,6 +228,7 @@ export default class Cart extends React.Component {
               dynamicPromoLabelsProduct={dynamicPromoLabelsProduct}
               items={items}
               couponCode={couponCode}
+              selectFreeGift={this.selectFreeGift}
             />
           </div>
           <div className="spc-sidebar">
@@ -227,6 +236,7 @@ export default class Cart extends React.Component {
               coupon_code={couponCode}
               inStock={inStock}
               dynamicPromoLabelsCart={dynamicPromoLabelsCart}
+              items={items}
             />
             <OrderSummaryBlock
               totals={totals}

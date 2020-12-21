@@ -1,0 +1,52 @@
+.style-finder-list.style-finder-step-coverage-wrapper {
+  margin-top: 3.125rem;
+
+  @include breakpoint($tablet) {
+    margin-top: 4.6875rem;
+    max-width: 34.375rem;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  li {
+    padding-top: 0.625rem;
+    flex: 1;
+
+    &.active {
+      .style-finder-list-image {
+        opacity: 1;
+      }
+
+      .style-finder-list-text {
+        display: block;
+      }
+    }
+  }
+
+  .style-finder {
+    &-list-image {
+      margin: 0 0.5625rem 1.25rem;
+      opacity: 0.5;
+      transition: opacity 0.3s ease-in-out;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      @include breakpoint($tablet) {
+        margin: 0 0.875rem 2.5rem;
+      }
+    }
+
+    &-list-title {
+      font-size: 1.125rem;
+      line-height: normal;
+      text-transform: uppercase;
+      padding-bottom: 0.625rem;
+    }
+
+    &-list-text {
+      display: none;
+    }
+  }
+}

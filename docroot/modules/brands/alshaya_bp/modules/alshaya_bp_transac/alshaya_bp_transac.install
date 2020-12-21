@@ -12,6 +12,34 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Set hide_max_qty_limit_message => true to hide max qty limit on pdp/cart.
+ */
+function alshaya_bp_transac_update_8011() {
+  \Drupal::configFactory()->getEditable('alshaya_acm.settings')
+    ->set('hide_max_qty_limit_message', TRUE)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update type string => text_area for pil and indications_age_restrictions.
+ * Migrate existing attribute data to the new ones.
+ */
+function alshaya_bp_transac_update_8010() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+
+  $sku_fields_manager->updateFieldType(['attr_pil', 'attr_indications_age_restrictions']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update category term path aliases.
  */
 function alshaya_bp_transac_update_8009() {
@@ -252,6 +280,19 @@ function alshaya_bp_transac_update_8001() {
     ['alshaya_acm_product.settings'],
     'alshaya_acm_product'
   );
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_bp_transac_update_dependencies() {
+  return [
+    'alshaya_bp_transac' => [
+      '8012' => [
+        'alshaya_acm' => '8018',
+      ],
+    ],
+  ];
 }
 
 /**

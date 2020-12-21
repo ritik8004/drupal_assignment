@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Helper\CustomerHelper;
+use App\Service\CartErrorCodes;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\CheckoutDefaults;
 use App\Service\Config\SystemSettings;
@@ -130,22 +131,6 @@ class CartController {
   }
 
   /**
-   * Return user id from current session.
-   *
-   * @return int|null
-   *   Return user id or null.
-   */
-  protected function getDrupalInfo(string $key) {
-    static $info = NULL;
-
-    if (empty($info)) {
-      $info = $this->drupal->getSessionCustomerInfo();
-    }
-
-    return $info[$key] ?? NULL;
-  }
-
-  /**
    * Get cart data.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -164,7 +149,7 @@ class CartController {
 
     // Check customer email And check drupal session customer id to validate,
     // if current cart is associated with logged in user or not.
-    if (empty($data['customer']['email']) && $customer_id = $this->getDrupalInfo('customer_id')) {
+    if (empty($data['customer']['email']) && $customer_id = $this->cart->getDrupalInfo('customer_id')) {
       $this->cart->associateCartToCustomer($customer_id);
       $data = $this->cart->getCart();
     }
@@ -186,7 +171,7 @@ class CartController {
     }
 
     // Here we will do the processing of cart to make it in required format.
-    $data = $this->getProcessedCartData($data);
+    $data = $this->cart->getProcessedCartData($data);
     return new JsonResponse($data);
   }
 
@@ -210,7 +195,7 @@ class CartController {
 
     // Check customer email And check drupal session customer id to validate,
     // if current cart is associated with logged in user or not.
-    $sessionCustomerId = $this->getDrupalInfo('customer_id');
+    $sessionCustomerId = $this->cart->getDrupalInfo('customer_id');
     if ($sessionCustomerId && (empty($data['customer']['id']) || $data['customer']['id'] != $sessionCustomerId)) {
       $this->cart->associateCartToCustomer($sessionCustomerId, TRUE);
       $data = $this->cart->getCart();
@@ -252,8 +237,10 @@ class CartController {
     if (empty($this->cart->getCartId())) {
       $info = $this->drupal->getSessionCustomerInfo();
       if (!empty($info['customer_id'])) {
-        $cart_id = $this->cart->createCart($info['customer_id']);
-        $this->cart->setCartId($cart_id);
+        $cart_id = $this->cart->searchCart($info['customer_id']);
+        if ($cart_id > 0) {
+          $this->cart->setCartId($cart_id);
+        }
       }
       else {
         // @todo Remove this "else" part and getAcmCartId() when we
@@ -269,135 +256,6 @@ class CartController {
     }
 
     return $this->getCart();
-  }
-
-  /**
-   * Process cart data.
-   *
-   * @param array $cart_data
-   *   Cart data.
-   *
-   * @return array
-   *   Processed data.
-   */
-  private function getProcessedCartData(array $cart_data) {
-    $data = [];
-
-    $data['cart_id'] = $cart_data['cart']['id'];
-    $data['uid'] = $this->getDrupalInfo('uid') ?: 0;
-    $data['langcode'] = $this->request->query->get('lang', 'en');
-    $data['customer'] = $cart_data['customer'] ?? NULL;
-
-    $data['coupon_code'] = $cart_data['totals']['coupon_code'] ?? '';
-    $data['appliedRules'] = $cart_data['cart']['applied_rule_ids'] ?? [];
-
-    $data['items_qty'] = $cart_data['cart']['items_qty'];
-    $data['cart_total'] = $cart_data['totals']['base_grand_total'] ?? 0;
-    $data['minicart_total'] = $data['cart_total'];
-    $data['surcharge'] = $cart_data['cart']['extension_attributes']['surcharge'] ?? [];
-    $data['totals'] = [
-      'subtotal_incl_tax' => $cart_data['totals']['subtotal_incl_tax'] ?? 0,
-      'base_grand_total' => $cart_data['totals']['base_grand_total'] ?? 0,
-      'base_grand_total_without_surcharge' => $cart_data['totals']['base_grand_total'] ?? 0,
-      'discount_amount' => $cart_data['totals']['discount_amount'] ?? 0,
-      'surcharge' => 0,
-    ];
-
-    if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
-      // We use null to show "Excluding Delivery".
-      $data['totals']['shipping_incl_tax'] = NULL;
-    }
-    elseif ($cart_data['shipping']['type'] !== 'click_and_collect') {
-      // For click_n_collect we don't want to show this line at all.
-      $data['totals']['shipping_incl_tax'] = $cart_data['totals']['shipping_incl_tax'] ?? 0;
-    }
-
-    if (is_array($data['surcharge']) && !empty($data['surcharge']) && $data['surcharge']['amount'] > 0 && $data['surcharge']['is_applied']) {
-      $data['totals']['surcharge'] = $data['surcharge']['amount'];
-    }
-
-    // We don't show surcharge amount on cart total and on mini cart.
-    if ($data['totals']['surcharge'] > 0) {
-      $data['totals']['base_grand_total_without_surcharge'] -= $data['totals']['surcharge'];
-      $data['minicart_total'] -= $data['totals']['surcharge'];
-    }
-
-    $data['response_message'] = NULL;
-    // Set the status message if we get from magento.
-    if (!empty($cart_data['response_message'])) {
-      $data['response_message'] = [
-        'status' => $cart_data['response_message'][1],
-        'msg' => $cart_data['response_message'][0],
-      ];
-    }
-
-    // For determining global OOS for cart.
-    $data['in_stock'] = TRUE;
-    // If there are any error at cart item level.
-    $data['is_error'] = FALSE;
-
-    try {
-      $data['items'] = [];
-      foreach ($cart_data['cart']['items'] as $item) {
-        $data['items'][$item['sku']]['title'] = $item['name'];
-        $data['items'][$item['sku']]['qty'] = $item['qty'];
-        $data['items'][$item['sku']]['price'] = $item['price'];
-        $data['items'][$item['sku']]['sku'] = $item['sku'];
-        $data['items'][$item['sku']]['id'] = $item['item_id'];
-        if (isset($item['extension_attributes'], $item['extension_attributes']['error_message'])) {
-          $data['items'][$item['sku']]['error_msg'] = $item['extension_attributes']['error_message'];
-          $data['is_error'] = TRUE;
-        }
-
-        // This is to determine whether item to be shown free or not in cart.
-        $data['items'][$item['sku']]['freeItem'] = FALSE;
-        foreach ($cart_data['totals']['items'] as $total_item) {
-          // If total price of item matches discount, we mark as free.
-          if ($item['item_id'] == $total_item['item_id']) {
-            // Final price to use.
-            $data['items'][$item['sku']]['finalPrice'] = $total_item['price_incl_tax'];
-
-            // Free Item is only for free gift products which are having
-            // price 0, rest all are free but still via different rules.
-            if ($total_item['price_incl_tax'] == 0
-                && isset($total_item['extension_attributes'], $total_item['extension_attributes']['amasty_promo'])) {
-              $data['items'][$item['sku']]['freeItem'] = TRUE;
-            }
-            break;
-          }
-        }
-
-        // Get stock data.
-        $stockInfo = $this->drupal->getCartItemDrupalStock($item['sku']);
-        $data['items'][$item['sku']]['in_stock'] = $stockInfo['in_stock'];
-        $data['items'][$item['sku']]['stock'] = $stockInfo['stock'];
-
-        // If info is available in static array, means this we get from
-        // the cart update operation. We use that.
-        if (!empty(Cart::$stockInfo)
-          && isset(Cart::$stockInfo[$item['sku']])
-          && !Cart::$stockInfo[$item['sku']]) {
-          $data['items'][$item['sku']]['in_stock'] = FALSE;
-          $data['items'][$item['sku']]['stock'] = 0;
-        }
-
-        // If any item is OOS.
-        if (!$data['items'][$item['sku']]['in_stock'] || $data['items'][$item['sku']]['stock'] == 0) {
-          $data['in_stock'] = FALSE;
-        }
-      }
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error while processing cart data. Error message: @message', [
-        '@message' => $e->getMessage(),
-      ]);
-      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
-    }
-
-    // Whether cart is stale or not.
-    $data['stale_cart'] = $cart_data['stale_cart'] ?? FALSE;
-
-    return $data;
   }
 
   /**
@@ -418,7 +276,7 @@ class CartController {
     $cnc_status = $this->cart->getCncStatusForCart($data);
 
     // Here we will do the processing of cart to make it in required format.
-    $uid = $this->getDrupalInfo('uid') ?: 0;
+    $uid = $this->cart->getDrupalInfo('uid') ?: 0;
 
     if ($updated = $this->checkoutDefaults->applyDefaults($data, $uid)) {
       $data = $updated;
@@ -437,7 +295,7 @@ class CartController {
     }
 
     // Re-use the processing done for cart page.
-    $response = $this->getProcessedCartData($data);
+    $response = $this->cart->getProcessedCartData($data);
 
     $response['cnc_enabled'] = $cnc_status;
 
@@ -536,7 +394,7 @@ class CartController {
             }
 
             // Associate cart to customer.
-            $customer_id = $this->getDrupalInfo('customer_id');
+            $customer_id = $this->cart->getDrupalInfo('customer_id');
             if ($customer_id > 0) {
               $this->cart->associateCartToCustomer($customer_id);
             }
@@ -571,7 +429,7 @@ class CartController {
         $email = $shipping_info['static']['email'];
 
         // Cart customer validations.
-        $uid = (int) $this->getDrupalInfo('uid');
+        $uid = (int) $this->cart->getDrupalInfo('uid');
         $cart_customer_id = $this->cart->getCartCustomerId();
         if (empty($uid) && (empty($cart_customer_id) || ($this->cart->getCartCustomerEmail() !== $email))) {
           $customer = $this->magentoCustomer->getCustomerByMail($email);
@@ -623,6 +481,7 @@ class CartController {
 
           // If carrier info available in request, use that
           // instead getting shipping methods.
+          $hd_shipping_methods = [];
           if (!empty($carrier_info)) {
             $shipping_methods[] = [
               'carrier_code' => $carrier_info['carrier'],
@@ -631,6 +490,7 @@ class CartController {
           }
           else {
             $shipping_methods = $this->cart->getHomeDeliveryShippingMethods($shipping_data);
+            $hd_shipping_methods = $shipping_methods;
           }
 
           // If no shipping method.
@@ -649,6 +509,9 @@ class CartController {
             '@cart_id' => $this->cart->getCartId(),
           ]);
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
+          if ($cart && !empty($cart['shipping']) && !empty($hd_shipping_methods)) {
+            $cart['shipping']['methods'] = $hd_shipping_methods;
+          }
         }
         break;
 
@@ -664,10 +527,25 @@ class CartController {
         break;
 
       case CartActions::CART_PAYMENT_FINALISE:
-        $cart = $this->cart->getCart();
+        // Fetch fresh cart from magento.
+        $cart = $this->cart->getCart(TRUE);
         $is_error = FALSE;
+
+        $error_message = 'Delivery Information is incomplete. Please update and try again.';
+        $error_code = CartErrorCodes::CART_ORDER_PLACEMENT_ERROR;
+
+        if (is_array($cart)
+          && $this->cart->isCartHasOosItem($cart)) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. Cart has an OOS item. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+
+          $error_message = 'Cart contains some items which are not in stock.';
+          $error_code = CartErrorCodes::CART_HAS_OOS_ITEM;
+        }
         // Check if shipping method is present else throw error.
-        if (empty($cart['shipping']['method'])) {
+        elseif (empty($cart['shipping']['method'])) {
           $is_error = TRUE;
           $this->logger->error('Error while finalizing payment. No shipping method available. Cart: @cart.', [
             '@cart' => json_encode($cart),
@@ -709,8 +587,8 @@ class CartController {
         if ($is_error) {
           return new JsonResponse([
             'error' => TRUE,
-            'error_code' => 505,
-            'message' => 'Delivery Information is incomplete. Please update and try again.',
+            'error_code' => $error_code,
+            'message' => $error_message,
           ]);
         }
 
@@ -803,7 +681,7 @@ class CartController {
 
       case CartActions::CART_PAYMENT_UPDATE:
         $extension = [];
-        $user_id = $this->getDrupalInfo('uid');
+        $user_id = $this->cart->getDrupalInfo('uid');
         if (isset($request_content['payment_info']['payment']['analytics'])) {
           $extension['ga_client_id'] = $request_content['payment_info']['payment']['analytics']['clientId'] ?? '';
           $extension['tracking_id'] = $request_content['payment_info']['payment']['analytics']['trackingId'] ?? '';
@@ -845,7 +723,7 @@ class CartController {
     // Here we will do the processing of cart to make it in required format.
     $cart = in_array($action, CartActions::CART_CHECKOUT_ACTIONS)
       ? $this->getProcessedCheckoutData($cart)
-      : $this->getProcessedCartData($cart);
+      : $this->cart->getProcessedCartData($cart);
 
     return new JsonResponse($cart);
   }
@@ -921,8 +799,8 @@ class CartController {
     }
 
     // Backend validation.
-    $uid = (int) $this->getDrupalInfo('uid');
-    $session_customer_id = $this->getDrupalInfo('customer_id');
+    $uid = (int) $this->cart->getDrupalInfo('uid');
+    $session_customer_id = $this->cart->getDrupalInfo('customer_id');
     $cart_customer_id = $this->cart->getCartCustomerId();
     if ($uid > 0) {
       if (empty($cart_customer_id)) {
