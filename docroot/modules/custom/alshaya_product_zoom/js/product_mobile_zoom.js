@@ -89,6 +89,10 @@
         var mobileDialog = Drupal.dialog(element, dialogsettings);
 
         $('#product-image-gallery-mobile li', context).once('mobile-gallery').on('click', function () {
+          if ($(this).closest('.slick-dots').length === 1) {
+            return;
+          }
+
           if (!$(this).hasClass('mobilegallery__thumbnails__video')) {
             $('body').addClass('pdp-modal-overlay');
             mobileDialog.show();
