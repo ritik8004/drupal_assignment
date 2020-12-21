@@ -149,16 +149,6 @@ class ProductCategoryPage {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
 
-    $cid = "selected_category_hierarchy:" . $langcode . ":" . $tid;
-
-    if ($selected_term_data = $this->cache->get($cid)) {
-      return $selected_term_data->data;
-    }
-
-    $cache_tags = [
-      'taxonomy_term:' . $tid,
-    ];
-
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $term = empty($tid) ? $term = $this->getTermForRoute() : $storage->load($tid);
 
@@ -171,6 +161,16 @@ class ProductCategoryPage {
         'field' => '',
       ];
     }
+
+    $cid = "selected_category_hierarchy:" . $langcode . ":" . $term->id();
+
+    if ($selected_term_data = $this->cache->get($cid)) {
+      return $selected_term_data->data;
+    }
+
+    $cache_tags = [
+      'taxonomy_term:' . $term->id(),
+    ];
 
     $parents = array_reverse($storage->loadAllParents($term->id()));
     $hierarchy_list = [];
