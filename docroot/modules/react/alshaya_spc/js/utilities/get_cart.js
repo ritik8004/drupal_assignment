@@ -47,7 +47,5 @@ export const cartAvailableInStorage = () => {
 export const redirectToCart = () => {
   if (window.location.pathname.search(/checkout/i) >= 0) {
     window.location = Drupal.url('cart');
-    return true;
   }
-  return false;
 };

@@ -5,7 +5,6 @@ import SectionTitle from '../../../utilities/section-title';
 import dispatchCustomEvent from '../../../utilities/events';
 import DynamicPromotionCode from './DynamicPromotionCode';
 import { openCartFreeGiftModal, getCartFreeGiftModalId } from '../../../utilities/free_gift_util';
-import validateCartResponse from '../../../utilities/validation_util';
 
 export default class CartPromoBlock extends React.Component {
   constructor(props) {
@@ -141,27 +140,6 @@ export default class CartPromoBlock extends React.Component {
     const cartData = applyRemovePromo(action, promoValue);
     if (cartData instanceof Promise) {
       cartData.then((result) => {
-        if (!validateCartResponse(result)) {
-          dispatchCustomEvent('spcCartMessageUpdate', {
-            type: 'error',
-            message: result.error_message,
-          });
-          this.setState({
-            promoApplied: false,
-            buttonText: Drupal.t('apply'),
-            disabled: false,
-          });
-
-          if (promoApplied !== true) {
-            document.getElementById('promo-action-button').classList.remove('loading');
-            document.getElementById('promo-code').value = '';
-          } else {
-            document.getElementById('promo-remove-button').classList.remove('loading');
-          }
-
-          return;
-        }
-
         let freeGiftPromo = '';
         if (promoCoupons !== null) {
           freeGiftPromo = promoCoupons[promoValue];
