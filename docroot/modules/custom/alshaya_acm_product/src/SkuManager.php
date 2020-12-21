@@ -2539,7 +2539,7 @@ class SkuManager {
     // that are not processed yet except for free gifts.
     if (PHP_SAPI != 'cli'
       && !($this->isSkuFreeGift($sku))
-      && !($this->productProcessedManager->isProductProcessed($sku->getSku())) {
+      && !($this->productProcessedManager->isProductProcessed($sku->getSku()))) {
       return FALSE;
     }
 
