@@ -8,7 +8,6 @@
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -222,11 +221,4 @@ function alshaya_bp_transac_pathauto_alias_alter(&$alias, array $context) {
   if (strpos($alias, 'shop-department-') !== false) {
     $alias = str_replace('shop-department-', '', $alias);
   }
-}
-
-/**
- * Implements hook_alshaya_srp_sort_settings_form_alter().
- */
-function alshaya_bp_transac_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['sort_options']['#options']['attr_brand'] = t('Brand');
 }

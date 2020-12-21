@@ -55,7 +55,9 @@ export const fetchCartData = () => {
         return null;
       }
 
-      validateCartResponse(response.data);
+      if (!validateCartResponse(response.data)) {
+        return null;
+      }
 
       if (response.data.error) {
         redirectToCart();

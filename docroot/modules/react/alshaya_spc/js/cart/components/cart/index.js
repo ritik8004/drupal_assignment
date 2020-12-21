@@ -84,7 +84,14 @@ export default class Cart extends React.Component {
       }
 
       // To show the success/error message on cart top.
-      if (data.message !== undefined) {
+      const stockErrorMessage = localStorage.getItem('stockErrorResponseMessage');
+      if (stockErrorMessage) {
+        localStorage.removeItem('stockErrorResponseMessage');
+        this.setState({
+          messageType: 'error',
+          message: stockErrorMessage,
+        });
+      } else if (data.message !== undefined) {
         this.setState({
           messageType: data.message.type,
           message: data.message.message,

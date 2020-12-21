@@ -808,6 +808,10 @@ class MobileAppUtility {
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
         /** @var \Drupal\user\Entity\User $user */
         $user = alshaya_acm_customer_create_drupal_user($customer);
+
+        $user->set('preferred_langcode', $this->currentLanguage);
+        $user->save();
+
         if ($block) {
           $user->block();
           $user->save();

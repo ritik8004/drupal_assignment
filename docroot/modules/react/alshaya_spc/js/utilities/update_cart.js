@@ -33,6 +33,13 @@ export const applyRemovePromo = (action, promoCode) => {
     return null;
   }
 
+  // Remove any promo coupons errors on promo
+  // coupon application success.
+  const promoError = document.querySelector('#promo-message.error');
+  if (promoError !== null) {
+    promoError.outerHTML = '<div id="promo-message" />';
+  }
+
   if (!Number.isInteger(cart)) {
     cart = cart.cart_id;
   }
