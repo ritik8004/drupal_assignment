@@ -520,6 +520,9 @@ export const checkoutAddressProcess = (e) => {
     const cartInfo = addShippingInCart('update shipping', formData);
     if (cartInfo instanceof Promise) {
       cartInfo.then((cartResult) => {
+        if (!cartResult) {
+          return;
+        }
         // Remove the loader.
         removeFullScreenLoader();
 
