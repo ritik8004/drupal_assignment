@@ -20,13 +20,13 @@ const validateCartResponse = (response) => {
     return false;
   }
   if (errorCode === 9010) {
+    const isNotCartPage = redirectToCart();
     // This will happen in case of stock mismatch scenario between Magento and
     // OMS. In that case we redirect to cart page and show the error message
     // recived in the response.
-    if (typeof response.error_message !== 'undefined') {
+    if (isNotCartPage && (typeof response.error_message !== 'undefined')) {
       localStorage.setItem('stockErrorResponseMessage', response.error_message);
     }
-    redirectToCart();
     return false;
   }
   return true;

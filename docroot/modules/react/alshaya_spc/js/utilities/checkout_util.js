@@ -399,12 +399,8 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
     }
   }
 
-  if (!validateCartResponse(cartResult)) {
-    return;
-  }
-
   // If error/exception, show at cart top.
-  if (cartResult.error !== undefined) {
+  if (!validateCartResponse(cartResult)) {
     dispatchCustomEvent('spcCartMessageUpdate', {
       type: 'error',
       message: cartResult.error_message,
