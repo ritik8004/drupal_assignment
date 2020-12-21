@@ -25,6 +25,7 @@ const validateCartResponse = (response) => {
     // OMS. In that case we redirect to cart page and show the error message
     // recived in the response.
     if (isNotCartPage && (typeof response.error_message !== 'undefined')) {
+      removeCartFromStorage();
       localStorage.setItem('stockErrorResponseMessage', response.error_message);
     }
     return false;

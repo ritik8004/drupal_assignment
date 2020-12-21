@@ -690,6 +690,9 @@ export const processBillingUpdateFromForm = (e, shipping) => {
               const cartData = addBillingInCart('update billing', formData);
               if (cartData instanceof Promise) {
                 cartData.then((cartResult) => {
+                  if (!cartResult) {
+                    return;
+                  }
                   // Remove loader.
                   removeFullScreenLoader();
 
