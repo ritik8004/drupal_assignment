@@ -520,6 +520,9 @@ export const checkoutAddressProcess = (e) => {
     const cartInfo = addShippingInCart('update shipping', formData);
     if (cartInfo instanceof Promise) {
       cartInfo.then((cartResult) => {
+        if (!cartResult) {
+          return;
+        }
         // Remove the loader.
         removeFullScreenLoader();
 
@@ -690,6 +693,9 @@ export const processBillingUpdateFromForm = (e, shipping) => {
               const cartData = addBillingInCart('update billing', formData);
               if (cartData instanceof Promise) {
                 cartData.then((cartResult) => {
+                  if (!cartResult) {
+                    return;
+                  }
                   // Remove loader.
                   removeFullScreenLoader();
 
