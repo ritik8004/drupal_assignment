@@ -248,7 +248,12 @@ export const addBillingInCart = (action, data) => {
       billing_info: data,
     })
     .then(
-      (response) => response.data,
+      (response) => {
+        if (!validateCartResponse(response.data)) {
+          return null;
+        }
+        return response.data;
+      },
       () => ({
         error: true,
         error_message: getStringMessage('global_error'),
