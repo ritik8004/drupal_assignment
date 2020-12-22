@@ -65,7 +65,10 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         break;
 
       case 'title':
-        $this->processTitle($event);
+        // Only for algolia.
+        if ($event->getContext() == 'plp') {
+          $this->processTitle($event);
+        }
         break;
     }
   }
