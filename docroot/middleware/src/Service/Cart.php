@@ -1210,9 +1210,10 @@ class Cart {
     catch (\Exception $e) {
       static::$cart = NULL;
 
-      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message', [
+      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message, Code: @code.', [
         '@action' => $action,
         '@message' => $e->getMessage(),
+        '@code' => $e->getCode(),
       ]);
 
       $is_add_to_cart = ($action == CartActions::CART_ADD_ITEM);
