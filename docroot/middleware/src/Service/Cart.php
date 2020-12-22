@@ -1238,6 +1238,10 @@ class Cart {
         $this->cancelCartReservation($e->getMessage());
       }
 
+      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+        $this->resetCartCache();
+      }
+
       // Get cart object if already not available.
       $cart = !empty($cart) ? $cart : $this->getCart();
 
