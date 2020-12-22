@@ -30,7 +30,8 @@ export const restoreCartApiUrl = () => i18nMiddleWareUrl('cart/restore');
 export const applyRemovePromo = (action, promoCode) => {
   let cart = cartAvailableInStorage();
   if (cart === false) {
-    window.location.reload();
+    const currentUrl = window.location.href;
+    window.location.href = currentUrl;
   }
 
   // Remove any promo coupons errors on promo
@@ -66,7 +67,8 @@ export const updateCartItemData = (action, sku, quantity) => {
   if (cart === false
     || cart === null
     || cart === 'empty') {
-    window.location.reload();
+    const currentUrl = window.location.href;
+    window.location.href = currentUrl;
   }
 
   if (!Number.isInteger(cart)) {
