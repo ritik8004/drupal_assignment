@@ -40,6 +40,7 @@ repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
 server_root="/var/www/html/$AH_SITE_NAME"
 docroot="${server_root}/docroot"
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
+deployment_identifier=$(cat "$server_root/deployment_identifier")
 
 if [[ "$AH_SITE_ENVIRONMENT" == *"live"* ]]
 then
@@ -56,154 +57,21 @@ log_message()
   echo
 }
 
-log_message_and_details()
-{
-  message=$1
-  echo "$message. Date `date`, Tag $tag, Stack $stack" | tee -a ${log_file}
-  echo
-}
-
 log_message "============================================"
-log_message_and_details "Starting deployment in mode $mode"
+log_message "Tag to deploy: $tag"
+log_message "Tag currently deployed: $deployment_identifier"
 log_message "Deployment Branch: $branch"
 log_message "Repo: $repo"
 log_message "Docroot: $docroot"
 log_message "Log file: $log_file"
 log_message "Base URI: $base_uri"
 
-backup_directory="${HOME}/${AH_SITE_ENVIRONMENT}/backup/pre-$tag"
-directory="${HOME}/${AH_SITE_ENVIRONMENT}/repo"
-
-# Create folder and clone if not available
-if [ ! -d "$directory/$stack" ]
+echo
+read -p "Please confirm details above and say proceed to start the release: " proceed
+echo
+if [ "$proceed" = "proceed" ]
 then
-  log_message_and_details "Repo directory $directory not available, creating and cloning"
-
-  mkdir -p $directory
-  cd $directory
-  git clone $repo &>> ${log_file}
-
-  if [ $? -ne 0 ]
-  then
-    log_message_and_details "Failed to clone repo, aborting"
-    exit
-  else
-    log_message_and_details "Repo cloned successfully"
-  fi
+  screen -dm bash -c "cd $HOME; ./deployment/deploy_tag_final.sh main-DO-NOT-TOUCH $tag $mode";
+else
+  log_message "Release aborted."
 fi
-
-if [ ! -d "$directory/$stack" ]
-then
-  log_message_and_details "Repo directory not available still, aborting"
-  exit
-fi
-
-cd "$directory/$stack"
-
-# Fetch all tags.
-log_message_and_details "Fetching tags"
-git fetch origin --tags &>> ${log_file}
-
-# Validate if tag exists.
-if [ ! $(git tag -l "$tag") ]; then
-  log_message_and_details "Error: Tag not found, aborting"
-  exit
-fi
-
-# Checkout deployment branch used for deployment.
-log_message_and_details "Checkout $branch"
-git checkout $branch &>> ${log_file}
-if [ $? -ne 0 ]
-then
-  log_message_and_details "Failed to checkout branch $branch, aborting"
-  exit
-fi
-
-# Reset the code to match the tag.
-log_message_and_details "Reset to $tag"
-git reset --hard $tag &>> ${log_file}
-if [ $? -ne 0 ]
-then
-  log_message_and_details "Failed to reset to tag, aborting"
-  exit
-fi
-
-if [ "$mode" = "prep" ]
-then
-  log_message_and_details "Release preparation completed"
-  exit
-fi
-
-# Taking backup now.
-log_message_and_details "Take DB backup"
-mkdir -p "$backup_directory"
-drush --root=$docroot acsf-tools-dump --result-folder=$backup_directory -y -v --gzip &>> ${log_file}
-if [ $? -ne 0 ]
-then
-  log_message_and_details "Failed to take backup, aborting"
-  exit
-fi
-
-# Enable maintenance mode if mode is updb.
-if [ "$mode" = "updb" ]
-then
-  log_message_and_details "Turning maintenance on"
-  drush --root=$docroot sfmlc alshaya-enable-maintenance &>> ${log_file}
-  if [ $? -ne 0 ]
-  then
-    log_message_and_details "Failed to enable maintenance mode, aborting"
-    exit
-  fi
-fi
-
-# Force the push to avoid issues with previous commit history.
-log_message_and_details "Pushing changes"
-git push origin $branch --force &>> ${log_file}
-if [ $? -ne 0 ]
-then
-  log_message_and_details "Failed to deploy code, aborting"
-  exit
-fi
-
-# Wait for code to be available on server before moving forward.
-deployment_identifier=$(cat "$server_root/deployment_identifier")
-while [ "${deployment_identifier}" != "${tag}" ]
-do
-  log_message_and_details "Waiting for code to be deployed on server (current=$deployment_identifier)"
-  sleep 5
-  deployment_identifier=$(cat "$server_root/deployment_identifier")
-done
-
-log_message_and_details "Code deployment finished"
-# 5 more seconds as it tends to be a problem with commands on first site.
-sleep 5
-
-if [ "$mode" = "updb" ]
-then
-  log_message_and_details "Running updates"
-  for site in `drush --root=$docroot acsf-tools-list | grep -v " "`
-  do
-    log_message_and_details "Running updates on $site"
-    drush --root=$docroot -l "${site}${base_uri}" updb -y &>> ${log_file}
-    if [ $? -ne 0 ]
-    then
-      log_message_and_details "$site: UPDB FAILED, site kept offline still, please check logs"
-    else
-      drush --root=$docroot -l "${site}${base_uri}" alshaya-disable-maintenance &>> ${log_file}
-      log_message_and_details "$site: UPDB done and site put back online"
-
-      drush --root=$docroot -l "${site}${base_uri}" cr -y &>> ${log_file}
-      log_message_and_details "$site: CR done"
-    fi
-  done
-
-  drush --root=$docroot cc drush -y &>> ${log_file}
-fi
-
-if [ "$mode" = "hotfix_crf" ]
-then
-  log_message_and_details "Doing CRF now as requested"
-  drush --root=$docroot sfml crf --delay=20 &>> ${log_file}
-fi
-
-log_message_and_details "Release completed"
