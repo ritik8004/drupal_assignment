@@ -32,6 +32,7 @@ export const applyRemovePromo = (action, promoCode) => {
   if (cart === false) {
     const currentUrl = window.location.href;
     window.location.href = currentUrl;
+    return null;
   }
 
   // Remove any promo coupons errors on promo
@@ -69,6 +70,7 @@ export const updateCartItemData = (action, sku, quantity) => {
     || cart === 'empty') {
     const currentUrl = window.location.href;
     window.location.href = currentUrl;
+    return null;
   }
 
   if (!Number.isInteger(cart)) {
