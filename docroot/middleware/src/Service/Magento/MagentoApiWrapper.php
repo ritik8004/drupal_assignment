@@ -120,9 +120,12 @@ class MagentoApiWrapper {
         }
         elseif (!empty($result['message'])) {
           $message = $this->getProcessedErrorMessage($result);
+
           // Log the error message.
-          $this->logger->error('Error while doing MDC api call. Error message: @message', [
+          $this->logger->error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', [
             '@message' => $message,
+            '@result_code' => $result['code'] ?? '-',
+            '@response_code' => $response->getStatusCode(),
           ]);
 
           // The following case happens when there is a stock mismatch between
