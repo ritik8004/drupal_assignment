@@ -9,6 +9,15 @@ import dispatchCustomEvent from './events';
  *   API Response.
  */
 const validateCartResponse = (response) => {
+  if ((typeof response.response_message !== 'undefined'
+    && response.response_message !== null
+    && response.response_message.status === 'json_error'
+    && response.response_message.msg === 'OOS')
+  ) {
+    redirectToCart();
+    return false;
+  }
+
   if (typeof response.error_code === 'undefined') {
     return true;
   }
