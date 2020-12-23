@@ -2161,10 +2161,15 @@ class Cart {
    *   Prepared error message.
    */
   private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
+    $order_id = '';
+    if (isset($cart['cart'], $cart['cart']['extension_attributes'])) {
+      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    }
+
     $message[] = 'exception:' . $exception_message;
     $message[] = 'api:' . $api;
     $message[] = 'double_check_done:' . $double_check_done;
-    $message[] = 'order_id:' . $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    $message[] = 'order_id:' . $order_id;
     $message[] = 'cart_id:' . $cart['cart']['id'];
     $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
 
