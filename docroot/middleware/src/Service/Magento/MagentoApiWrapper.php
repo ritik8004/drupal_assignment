@@ -130,7 +130,7 @@ class MagentoApiWrapper {
             && (isset($result['code']))
             && ($result['code'] == CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH)
           ) {
-            throw new \Exception($message, $result['code']);
+            throw new \Exception($message, CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH);
           }
 
           throw new \Exception($message, 500);
