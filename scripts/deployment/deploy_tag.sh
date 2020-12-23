@@ -72,6 +72,8 @@ echo
 if [ "$proceed" = "proceed" ]
 then
   screen -dm bash -c "cd $HOME; ./deployment/deploy_tag_final.sh main-DO-NOT-TOUCH $tag $mode";
+  echo "Release started, please tail the logs to watch for the updates."
+  echo
 else
   log_message "Release aborted."
 fi
