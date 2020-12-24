@@ -228,4 +228,3 @@ function alshaya_bp_transac_pathauto_alias_alter(&$alias, array $context) {
 function alshaya_bp_transac_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['sort_options']['#options']['attr_brand'] = t('Brand');
 }
-

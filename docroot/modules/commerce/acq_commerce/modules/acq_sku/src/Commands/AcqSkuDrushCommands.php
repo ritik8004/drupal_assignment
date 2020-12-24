@@ -681,12 +681,17 @@ class AcqSkuDrushCommands extends DrushCommands {
       $query->condition('vid', $categories, 'IN');
       $cat_entities = $query->execute();
       foreach ($cat_entities as $entity_id) {
+        // Keep categories mapped in I&A pages.
+        $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($entity_id);
+        if ($termStorage->hasField('field_remove_shop_prefix') && $termStorage->get('field_remove_shop_prefix')->getString()) {
+          \Drupal::logger('acq_sku')->warning('Taxonomy: @id', ['@id' => $entity_id]);
+          continue;
+        }
         $context['sandbox']['results'][] = [
           'type' => 'taxonomy_term',
           'entity_id' => $entity_id,
         ];
       }
-
       // Allow other modules to add data to be deleted when cleaning up.
       \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context);
 
