@@ -6,3 +6,4 @@ dependencies:
 hidden:
   field_alshaya_promotion_subtype: true
   field_acq_promotion_full_catalog: true
+  field_acq_promotion_context: true
