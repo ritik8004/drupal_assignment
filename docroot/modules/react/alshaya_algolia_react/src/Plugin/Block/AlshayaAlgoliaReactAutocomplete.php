@@ -167,10 +167,11 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
           }
 
           $data['weight'] = $subcategory->getWeight();
-          $data['description'] = $subcategory->get('field_plp_group_category_desc')->value ?? '';
+          $data['description'] = $subcategory->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '';
 
           $value = $subcategory->get('field_plp_group_category_img')->getValue()[0] ?? [];
-          if (!empty($value) && ($image = $this->fileStorage->load($value['target_id'])) instanceof FileInterface) {
+          $image = (!empty($value)) ? $this->fileStorage->load($value['target_id']) : NULL;
+          if ($image instanceof FileInterface) {
             $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
             $data['image']['alt'] = $value['alt'];
           }
@@ -178,9 +179,9 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
           $subcategories[$subcategory->id()] = $data;
         }
         uasort($subcategories, [Utility::class, 'weightArraySort']);
+        $algoliaSearch['subCategories'] = $subcategories;
       }
     }
-    $algoliaSearch['subCategories'] = $subcategories;
 
     return [
       '#type' => 'markup',
