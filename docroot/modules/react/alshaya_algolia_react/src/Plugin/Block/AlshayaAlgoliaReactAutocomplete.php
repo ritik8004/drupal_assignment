@@ -7,6 +7,11 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\file\FileInterface;
+use Drupal\alshaya_custom\Utility;
 
 /**
  * Provides a block to display 'autocomplete block' for mobile.
@@ -35,6 +40,20 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
   protected $alshayaAlgoliaReactConfig;
 
   /**
+   * Product category tree.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   */
+  protected $productCategoryTree;
+
+  /**
+   * Term storage object.
+   *
+   * @var \Drupal\taxonomy\TermStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
@@ -47,17 +66,26 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
    *   The config factory.
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
    *   Alshaya Algolia React Config.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
+   *   Product category tree.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     ConfigFactoryInterface $config_factory,
-    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
+    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config,
+    ProductCategoryTree $product_category_tree,
+    EntityTypeManagerInterface $entity_type_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->alshayaAlgoliaReactConfig = $alshaya_algolia_react_config;
+    $this->productCategoryTree = $product_category_tree;
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->fileStorage = $entity_type_manager->getStorage('file');
   }
 
   /**
@@ -74,7 +102,9 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('alshaya_algoila_react.alshaya_algolia_react_config')
+      $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
+      $container->get('alshaya_acm_product_category.product_category_tree'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -117,6 +147,41 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
+
+    // Get sub categories information.
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface) {
+      $group_sub_category_enabled = $term->get('field_group_by_sub_categories')->getValue();
+      if ($group_sub_category_enabled) {
+        $sub_categories = $term->get('field_select_sub_categories_plp')->getValue();
+        $subcategories = [];
+        foreach ($sub_categories as $term_id) {
+          $subcategory = $this->termStorage->load($term_id['value']);
+
+          $data = [];
+          $data['tid'] = $subcategory->id();
+
+          $data['title'] = $subcategory->get('field_plp_group_category_title')->getString();
+          if (empty($data['title'])) {
+            $data['title'] = $subcategory->label();
+          }
+
+          $data['weight'] = $subcategory->getWeight();
+          $data['description'] = $subcategory->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '';
+
+          $value = $subcategory->get('field_plp_group_category_img')->getValue()[0] ?? [];
+          $image = (!empty($value)) ? $this->fileStorage->load($value['target_id']) : NULL;
+          if ($image instanceof FileInterface) {
+            $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
+            $data['image']['alt'] = $value['alt'];
+          }
+
+          $subcategories[$subcategory->id()] = $data;
+        }
+        uasort($subcategories, [Utility::class, 'weightArraySort']);
+        $algoliaSearch['subCategories'] = $subcategories;
+      }
+    }
 
     return [
       '#type' => 'markup',
