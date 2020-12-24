@@ -897,6 +897,16 @@ class Cart {
    */
   public function associateCartToCustomer(int $customer_id, bool $reset_cart = FALSE) {
     $cart_id = $this->getCartId();
+
+    // If cart id not available in session, don't process further.
+    if (empty($cart_id)) {
+      $this->logger->error('Trying to associate cart to the customer: @customer_id but cart is not available in session.', [
+        '@customer_id' => $customer_id,
+      ]);
+
+      return FALSE;
+    }
+
     if ($reset_cart) {
       $this->getRestoredCart();
     }
