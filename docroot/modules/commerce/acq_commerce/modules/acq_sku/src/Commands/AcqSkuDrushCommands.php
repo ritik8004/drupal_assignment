@@ -684,7 +684,6 @@ class AcqSkuDrushCommands extends DrushCommands {
         // Keep categories mapped in I&A pages.
         $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($entity_id);
         if ($termStorage->hasField('field_remove_shop_prefix') && $termStorage->get('field_remove_shop_prefix')->getString()) {
-          \Drupal::logger('acq_sku')->warning('Taxonomy: @id', ['@id' => $entity_id]);
           continue;
         }
         $context['sandbox']['results'][] = [
