@@ -5,32 +5,9 @@
  * Contains install hooks for acq_promotion.
  */
 
-use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Symfony\Component\Yaml\Yaml;
-
-/**
- * Implements hook_update_N().
- *
- * Add a new field for Promotion context.
- */
-function acq_promotion_update_8004() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $fields = [
-    'field.storage.node.field_acq_promotion_context',
-    'field.field.node.acq_promotion.field_acq_promotion_context',
-    'core.entity_form_display.node.acq_promotion.default',
-    'core.entity_view_display.node.acq_promotion.default',
-  ];
-  $manager->updateConfigs(
-    $fields,
-    'acq_promotion',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
-  );
-}
 
 /**
  * Implements hook_update_N().

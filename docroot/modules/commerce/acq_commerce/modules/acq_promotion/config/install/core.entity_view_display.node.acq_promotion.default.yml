@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.field.node.acq_promotion.field_acq_promotion_action
     - field.field.node.acq_promotion.field_acq_promotion_banner
-    - field.field.node.acq_promotion.field_acq_promotion_context
     - field.field.node.acq_promotion.field_acq_promotion_data
     - field.field.node.acq_promotion.field_acq_promotion_description
     - field.field.node.acq_promotion.field_acq_promotion_disc_type

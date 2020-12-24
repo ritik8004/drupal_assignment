@@ -4,7 +4,6 @@ dependencies:
   config:
     - field.field.node.acq_promotion.field_acq_promotion_action
     - field.field.node.acq_promotion.field_acq_promotion_banner
-    - field.field.node.acq_promotion.field_acq_promotion_context
     - field.field.node.acq_promotion.field_acq_promotion_data
     - field.field.node.acq_promotion.field_acq_promotion_description
     - field.field.node.acq_promotion.field_acq_promotion_disc_type
@@ -45,12 +44,6 @@ content:
       preview_image_style: thumbnail
       progress_indicator: throbber
     third_party_settings: {  }
-    region: content
-  field_acq_promotion_context:
-    weight: 124
-    settings: {  }
-    third_party_settings: {  }
-    type: options_select
     region: content
   field_acq_promotion_sort_order:
     type: string_textfield
