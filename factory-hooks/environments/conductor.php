@@ -269,6 +269,24 @@ $conductors = [
     'hmac_secret' => 'OWI0YzNmMjMtNmNkOS00',
     'site_id' => 145,
   ],
+  // H&M BH.
+  'hmbh_uat' => [
+    'hmac_id' => '8fda8750ba7940f4ab1b27c7219b9f0f',
+    'hmac_secret' => 'MmRjZjczY2QtN2U4OC00',
+    'site_id' => 354,
+  ],
+  'hmbh_prod' => [
+    'site_id' => 356,
+  ],
+  // H&M QA.
+  'hmqa_uat' => [
+    'hmac_id' => 'cfcd0d13ce9d4a28941a37d7481b980d',
+    'hmac_secret' => 'OTZjMDBiYzUtNmE3MS00',
+    'site_id' => 355,
+  ],
+  'hmqa_prod' => [
+    'site_id' => 357,
+  ],
   // Pottery Barn KW.
   'pbkw_dev2' => [
     'hmac_id' => 'ec5997a86c504abb882545513877c234',
