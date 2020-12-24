@@ -16,20 +16,20 @@
  *
  * @code
  * To check for mismatch for multiple facet filters:
- * drush -l local.alshaya-hmae.com scr tests/apis/algolia/removeObsoleteIndexedAlgoliaData.php -- "" "field_category.lvl0:Ladies1,field_category.lvl0:All"
+ * drush -l local.alshaya-hmae.com scr ../scripts/utilities/removeObsoleteIndexedAlgoliaData.php -- "" "field_category.lvl0:Ladies1,field_category.lvl0:All"
  *
  * To delete mismatching skus from Algolia index for multiple facet filters:
- * drush -l local.alshaya-hmae.com scr tests/apis/algolia/removeObsoleteIndexedAlgoliaData.php -- "delete" "field_category.lvl0:Ladies1,field_category.lvl0:All"
+ * drush -l local.alshaya-hmae.com scr ../scripts/utilities/removeObsoleteIndexedAlgoliaData.php -- "delete" "field_category.lvl0:Ladies1,field_category.lvl0:All"
  *
  * To check for mismatch with no facet filters:
- * drush -l local.alshaya-hmae.com scr tests/apis/algolia/removeObsoleteIndexedAlgoliaData.php
+ * drush -l local.alshaya-hmae.com scr ../scripts/utilities/removeObsoleteIndexedAlgoliaData.php
  *
  * To delete mismatching skus from Algolia index for multiple facet filters:
- * drush -l local.alshaya-hmae.com scr tests/apis/algolia/removeObsoleteIndexedAlgoliaData.php -- "delete"
+ * drush -l local.alshaya-hmae.com scr ../scripts/utilities/removeObsoleteIndexedAlgoliaData.php -- "delete"
  * @endcode
  */
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use AlgoliaSearch\Client;
 
