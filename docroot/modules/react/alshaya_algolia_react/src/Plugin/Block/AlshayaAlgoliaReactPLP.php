@@ -171,6 +171,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
           $subcategories[$subcategory->id()] = $data;
         }
         uasort($subcategories, [Utility::class, 'weightArraySort']);
+
         $algoliaSearch['subCategories'] = $subcategories;
       }
     }
