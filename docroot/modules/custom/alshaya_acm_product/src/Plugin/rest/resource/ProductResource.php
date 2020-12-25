@@ -386,7 +386,9 @@ class ProductResource extends ResourceBase {
 
     $data['attributes'] = $this->skuInfoHelper->getAttributes($sku);
 
-    $data['promotions'] = $this->getPromotions($sku);
+    // The Promotion context has been hard coded as this api will only be used
+    // by the web.
+    $data['promotions'] = $this->getPromotions($sku, 'web');
     $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
     if ($promo_label) {
       $data['promotions'][] = [
@@ -701,13 +703,15 @@ class ProductResource extends ResourceBase {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array
    *   Promotions.
    */
-  private function getPromotions(SKUInterface $sku): array {
+  private function getPromotions(SKUInterface $sku, $context = ''): array {
     $promotions = [];
-    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
+    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', TRUE, $context);
     foreach ($promotions_data as $nid => $promotion) {
       $this->cache['tags'][] = 'node:' . $nid;
 

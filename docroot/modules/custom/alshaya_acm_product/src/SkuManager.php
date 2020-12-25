@@ -806,6 +806,8 @@ class SkuManager {
    *   Product SKU.
    * @param array $types
    *   Promotion Types.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array
    *   List of Promotion Nids.
@@ -813,9 +815,9 @@ class SkuManager {
   public function getSkuPromotions(SKU $sku, array $types = [
     'cart',
     'category',
-  ]) {
+  ], $context = '') {
     // Get promotions for the product.
-    $cache_key = 'promotion_ids_' . implode('-', $types);
+    $cache_key = 'promotion_ids_' . implode('-', $types) . '_' . $context;
     $promotion_nids = $this->productCacheManager->get($sku, $cache_key);
 
     if (is_array($promotion_nids)) {
@@ -844,6 +846,9 @@ class SkuManager {
       $query->condition('nid', $promotion_nids, 'IN');
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
+      if (!empty($context)) {
+        $query->condition('field_acq_promotion_context', $context);
+      }
       $query->exists('field_acq_promotion_label');
       $promotion_nids = $query->execute();
     }
@@ -913,6 +918,8 @@ class SkuManager {
    *   Product view mode for which promotion is being rendered.
    * @param bool $check_parent
    *   Flag to specify if we should check parent sku or not.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
@@ -922,7 +929,8 @@ class SkuManager {
                                            $view_mode,
                                            array $types = ['cart', 'category'],
                                            $product_view_mode = NULL,
-                                           $check_parent = TRUE) {
+                                           $check_parent = TRUE,
+                                           $context = '') {
     $promos = [];
     $view_mode_original = $view_mode;
 
@@ -1023,7 +1031,7 @@ class SkuManager {
     if (empty($promos) && $check_parent) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
         if ($parentSku->getSku() != $sku->getSku()) {
-          return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode, FALSE);
+          return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode, FALSE, $context);
         }
       }
     }
@@ -1044,6 +1052,8 @@ class SkuManager {
    *   Product view mode for which promotion is being rendered.
    * @param bool $check_parent
    *   Flag to specify if we should check parent sku or not.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
@@ -1052,9 +1062,10 @@ class SkuManager {
                                          $view_mode,
                                          array $types = ['cart', 'category'],
                                          $product_view_mode = NULL,
-                                         $check_parent = TRUE) {
+                                         $check_parent = TRUE,
+                                         $context = '') {
     $promos = [];
-    $promotion_nodes = $this->getSkuPromotions($sku, $types);
+    $promotion_nodes = $this->getSkuPromotions($sku, $types, $context);
     if (!empty($promotion_nodes)) {
       $promos = $this->preparePromotionsDisplay($sku, $promotion_nodes, $view_mode, $types, $product_view_mode, $check_parent);
     }
@@ -3622,13 +3633,15 @@ class SkuManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array
    *   Promotions.
    */
-  public function getPromotions(SKUInterface $sku) {
+  public function getPromotions(SKUInterface $sku, $context = '') {
     $promotions = [];
-    $promotions_data = $this->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
+    $promotions_data = $this->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE, $context);
     foreach ($promotions_data as $nid => $promotion) {
       $promotions[] = [
         'text' => $promotion['text'],

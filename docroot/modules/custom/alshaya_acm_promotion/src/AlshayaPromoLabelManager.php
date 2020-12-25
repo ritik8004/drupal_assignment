@@ -15,6 +15,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class Alshaya Promo Label Manager.
@@ -111,6 +112,8 @@ class AlshayaPromoLabelManager {
    *   Renderer.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    */
   public function __construct(SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
@@ -119,7 +122,8 @@ class AlshayaPromoLabelManager {
                               ConfigFactoryInterface $configFactory,
                               AlshayaPromotionsManager $promotions_manager,
                               RendererInterface $renderer,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              RequestStack $request_stack) {
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->entityTypeManager = $entity_type_manager;
@@ -128,6 +132,7 @@ class AlshayaPromoLabelManager {
     $this->promoManager = $promotions_manager;
     $this->renderer = $renderer;
     $this->languageManager = $language_manager;
+    $this->currentRequest = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -152,6 +157,23 @@ class AlshayaPromoLabelManager {
    */
   public function isDynamicLabelsEnabled() {
     return $this->configFactory->get('alshaya_acm_promotion.settings')->get('dynamic_labels');
+  }
+
+  /**
+   * Validates & fetches promotion context from the request.
+   *
+   * @return string
+   *   Context - web/app.
+   */
+  public function getPromotionContext() {
+    $context = $this->currentRequest->query->get('context');
+    if (empty($context) || $context == 'web') {
+      return 'web';
+    }
+    if ($context == 'mapp' || $context == 'app') {
+      return 'app';
+    }
+    return 'web';
   }
 
   /**
@@ -555,9 +577,9 @@ class AlshayaPromoLabelManager {
    */
   public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode, $context = '') {
     // Get promotions for the product.
-    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
+    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart'], $context);
     $displayMode = $view_mode === 'api' ? 'api' : 'links';
-    $promotions = $this->skuManager->preparePromotionsDisplay($sku, $promotion_nodes, $displayMode, ['cart'], 'full');
+    $promotions = $this->skuManager->preparePromotionsDisplay($sku, $promotion_nodes, $displayMode, ['cart'], 'full', TRUE, $context);
 
     // Return early if no promotions found for product in context.
     if (empty($promotions)) {
@@ -611,7 +633,7 @@ class AlshayaPromoLabelManager {
         return [];
       }
 
-      if ($context == 'mapp') {
+      if ($context == 'app') {
         return $free_promotion;
       }
 
@@ -694,7 +716,7 @@ class AlshayaPromoLabelManager {
    * @param \Drupal\acq_sku\Entity\SKU[] $free_skus
    *   Array of Free SKUs.
    * @param string $context
-   *   Context - mapp/web.
+   *   Context - app/web.
    *
    * @return array
    *   Render array.
@@ -837,7 +859,7 @@ class AlshayaPromoLabelManager {
       }
 
       // Context to expose free gift data in mobile api.
-      if ($context == 'mapp') {
+      if ($context == 'app') {
 
         $return = [
           'free_sku_code' => $free_sku_entity->getSku(),
@@ -877,7 +899,7 @@ class AlshayaPromoLabelManager {
    * @param array $free_gift_promotions
    *   Free Gift promotions.
    * @param string $context
-   *   Context - mapp/web.
+   *   Context - app/web.
    *
    * @return array
    *   Promotion data for first available free gift promotion.
