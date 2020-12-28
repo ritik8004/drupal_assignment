@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { makeFacetAliasApiRequest } from '../../utils/requests';
 import { facetFieldAlias } from '../../utils';
+import SubCategoryContent from '../subcategory';
+import ConditionalView from '../../../common/components/conditional-view';
 
 /**
  * Sticky filters.
  */
 const StickyFilterWrapper = React.forwardRef(({ callback }, ref) => {
   const [filters, setFilters] = useState([]);
+  const { subCategories } = drupalSettings.algoliaSearch;
 
   const filtersCallBack = ({ activeFilters, limit }) => {
     // Make api call to get facet values alias to update facets  pretty paths,
@@ -44,6 +47,17 @@ const StickyFilterWrapper = React.forwardRef(({ callback }, ref) => {
   return (
     <div className="sticky-filter-wrapper">
       <div className="container-without-product" ref={ref}>
+        <ConditionalView condition={subCategories}>
+          <div id="block-subcategoryblock" className="block-alshaya-sub-category-block">
+            <div className="plp-subcategory-block">
+              {Object.keys(subCategories).map((id) => (
+                <SubCategoryContent
+                  category={subCategories[id]}
+                />
+              ))}
+            </div>
+          </div>
+        </ConditionalView>
         {callback(filtersCallBack)}
       </div>
     </div>
