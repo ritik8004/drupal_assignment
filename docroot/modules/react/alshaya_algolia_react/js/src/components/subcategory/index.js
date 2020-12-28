@@ -1,0 +1,21 @@
+import React from 'react';
+import ImageElement from '../gallery/imageHelper/ImageElement';
+
+const SubCategoryContent = ({ category }) => (
+  <a href={`#${category.title}`}>
+    <div className="sub-category">
+      <div className="sub-category-image">
+        <ImageElement
+          src={category.image.url}
+          alt={category.image.alt}
+          title={category.title}
+        />
+      </div>
+      <div className="sub-category-title">
+        {category.title}
+      </div>
+    </div>
+  </a>
+);
+
+export default SubCategoryContent;
