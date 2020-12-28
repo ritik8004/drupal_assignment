@@ -1018,6 +1018,12 @@ class SkuManager {
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           break;
       }
+      if (!empty($promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue())) {
+        foreach ($promotion_context as $val) {
+          $value[] = $val['value'];
+        }
+        $promos[$promotion_node->id()]['context'] = $value;
+      }
     }
 
     // For configurable products there are many rules like rules on product
