@@ -157,13 +157,13 @@
    * Make Header sticky on scroll.
    */
   Drupal.algoliaReactPLP.stickyfacetfilter = function () {
-    let algoliaReactFilterPosition = 0;
-    let superCategoryMenuHeight = 0;
-    const nav = $('.branding__menu');
-    let fixedNavHeight = 0;
-    const context = $('#alshaya-algolia-plp');
-    const subCategoryBlock = $('.block-alshaya-sub-category-block');
-    const filter = $('#alshaya-algolia-plp');
+    var algoliaReactFilterPosition = 0;
+    var superCategoryMenuHeight = 0;
+    var nav = $('.branding__menu');
+    var fixedNavHeight = 0;
+    var context = $('#alshaya-algolia-plp');
+    var subCategoryBlock = $('.block-alshaya-sub-category-block');
+    var filter = $('#alshaya-algolia-plp');
 
     if ($('.show-all-filters-algolia', context).length > 0) {
       if ($(window).width() > 1023) {
@@ -202,63 +202,65 @@
         }
       }
 
-      if ($(window).width() < 1024) {
-        if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
-          if (this.oldScroll > this.pageYOffset) {
-            // Action to perform when we scrolling up.
-            if (!subCategoryBlock.hasClass('mobile-sticky-sub-category') && subCategoryBlock.length > 0) {
-              // Tablet.
-              if ($(window).width() > 767) {
-                subCategoryBlock.removeClass('anti-ghosting');
-                subCategoryBlock.addClass('anti-ghosting-done');
+      if (subCategoryBlock.length > 0) {
+        if ($(window).width() < 1024) {
+          if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
+            if (this.oldScroll > this.pageYOffset) {
+              // Action to perform when we scrolling up.
+              if (!subCategoryBlock.hasClass('mobile-sticky-sub-category') && subCategoryBlock.length > 0) {
+                // Tablet.
+                if ($(window).width() > 767) {
+                  subCategoryBlock.removeClass('anti-ghosting');
+                  subCategoryBlock.addClass('anti-ghosting-done');
+                }
+                // This small delay to ensure the entry animations works.
+                setTimeout(() => {
+                  subCategoryBlock.addClass('mobile-sticky-sub-category');
+                }, 5);
               }
-              // This small delay to ensure the entry animations works.
-              setTimeout(() => {
-                subCategoryBlock.addClass('mobile-sticky-sub-category');
-              }, 5);
+            } else {
+              // Action to perform when we are scrolling down.
+              if (subCategoryBlock.hasClass('mobile-sticky-sub-category')) {
+                subCategoryBlock.removeClass('mobile-sticky-sub-category');
+              }
             }
           } else {
-            // Action to perform when we are scrolling down.
             if (subCategoryBlock.hasClass('mobile-sticky-sub-category')) {
               subCategoryBlock.removeClass('mobile-sticky-sub-category');
             }
           }
+          this.oldScroll = this.pageYOffset;
         } else {
-          if (subCategoryBlock.hasClass('mobile-sticky-sub-category')) {
-            subCategoryBlock.removeClass('mobile-sticky-sub-category');
-          }
-        }
-        this.oldScroll = this.pageYOffset;
-      } else {
-        if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && subCategoryBlock.length > 0) {
-          if (this.oldScroll > this.pageYOffset) {
-            // Action to perform when we scrolling up.
-            if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-              if ($(this).width() > 1024 && subCategoryBlock.length > 0) {
-                subCategoryBlock.removeClass('anti-ghosting');
-                subCategoryBlock.addClass('anti-ghosting-done');
-                // This small delay to ensure the entry animations works.
-                setTimeout(() => {
+          if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && subCategoryBlock.length > 0) {
+            if (this.oldScroll > this.pageYOffset) {
+              // Action to perform when we scrolling up.
+              if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                if ($(this).width() > 1024 && subCategoryBlock.length > 0) {
+                  subCategoryBlock.removeClass('anti-ghosting');
+                  subCategoryBlock.addClass('anti-ghosting-done');
+                  // This small delay to ensure the entry animations works.
+                  setTimeout(() => {
+                    $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  }, 5);
+                } else {
                   $('.sticky-filter-wrapper').addClass('show-sub-category');
-                }, 5);
-              } else {
-                $('.sticky-filter-wrapper').addClass('show-sub-category');
+                }
+              }
+            } else {
+              if (this.oldScroll < this.pageYOffset || this.oldScroll !== this.pageYOffset) {
+                // Action to perform when we are scrolling down.
+                if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                  $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                }
               }
             }
           } else {
-            if (this.oldScroll < this.pageYOffset || this.oldScroll !== this.pageYOffset) {
-              // Action to perform when we are scrolling down.
-              if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-                $('.sticky-filter-wrapper').removeClass('show-sub-category');
-              }
+            if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+              $('.sticky-filter-wrapper').removeClass('show-sub-category');
             }
           }
-        } else {
-          if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
-            $('.sticky-filter-wrapper').removeClass('show-sub-category');
-          }
+          this.oldScroll = this.pageYOffset;
         }
-        this.oldScroll = this.pageYOffset;
       }
     });
   };
