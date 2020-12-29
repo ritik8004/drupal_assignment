@@ -139,7 +139,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       if ($store_id) {
         // Load Conductor Category data.
-        $categories = [$this->loadCategoryData($store_id)];
+        $categories = [$this->loadCategoryData($langcode)];
 
         if ($debug && !empty($debug_dir)) {
           // Export category data into file.
@@ -229,17 +229,9 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   }
 
   /**
-   * LoadCategoryData.
-   *
-   * Load the commerce backend category data from Conductor.
-   *
-   * @param int $store_id
-   *   Store id for which we should get categories.
-   *
-   * @return array
-   *   Array of categories.
+   * {@inheritDoc}
    */
-  public function loadCategoryData($store_id) {
+  public function loadCategoryData(string $langcode) {
     return $this->apiHelper->getCategories();
   }
 

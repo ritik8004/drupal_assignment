@@ -42,4 +42,15 @@ interface CategoryManagerInterface {
    */
   public function synchronizeCategory($vocabulary, array $categories);
 
+  /**
+   * Loads the category data from Mangento.
+   *
+   * @param string $langcode
+   *   Store id for which we should get categories.
+   *
+   * @return array
+   *   Array of categories.
+   */
+  public function loadCategoryData(string $langcode);
+
 }
