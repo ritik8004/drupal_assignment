@@ -84,6 +84,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   private $connection;
 
   /**
+   * Api helper object.
+   *
+   * @var \Drupal\acq_sku\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -102,8 +109,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Module handler service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
+   * @param \Drupal\acq_sku\ApiHelper $api_helper
+   *   The api helper object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler, Connection $connection) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler, Connection $connection, ApiHelper $api_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
@@ -113,6 +122,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->i18nHelper = $i18n_helper;
     $this->modulehandler = $moduleHandler;
     $this->connection = $connection;
+    $this->apiHelper = $api_helper;
   }
 
   /**
@@ -230,8 +240,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Array of categories.
    */
   public function loadCategoryData($store_id) {
-    $this->apiWrapper->updateStoreContext($store_id);
-    return $this->apiWrapper->getCategories();
+    return $this->apiHelper->getCategories();
   }
 
   /**
