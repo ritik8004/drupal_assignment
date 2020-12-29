@@ -125,11 +125,3 @@ services:
     class: Drupal\acq_sku\ApiHelper
     arguments:
       - '@alshaya_api.api'
-      - '@config.factory'
-      - '@user.data'
-      - '@logger.factory'
-      - '@cache.data'
-      - '@datetime.time'
-      - '@date.formatter'
-      - '@entity_type.manager'
-      - '@messenger'
