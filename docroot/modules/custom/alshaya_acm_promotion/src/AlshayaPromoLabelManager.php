@@ -271,8 +271,8 @@ class AlshayaPromoLabelManager {
    */
   public function getCurrentSkuPromos(SKU $sku, $view_mode) {
     $promos = [];
-
-    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
+    $context = $this->getPromotionContext();
+    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart'], $context);
 
     foreach ($promotion_nodes as $promotion_node) {
       if (is_numeric($promotion_node)) {
