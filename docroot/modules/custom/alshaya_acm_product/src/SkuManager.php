@@ -1016,13 +1016,14 @@ class SkuManager {
           }
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
+          if (!empty($promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue())) {
+            $value = [];
+            foreach ($promotion_context as $val) {
+              $value[] = $val['value'];
+            }
+            $promos[$promotion_node->id()]['context'] = $value;
+          }
           break;
-      }
-      if (!empty($promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue())) {
-        foreach ($promotion_context as $val) {
-          $value[] = $val['value'];
-        }
-        $promos[$promotion_node->id()]['context'] = $value;
       }
     }
 
