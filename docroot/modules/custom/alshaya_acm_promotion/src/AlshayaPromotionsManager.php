@@ -104,6 +104,13 @@ class AlshayaPromotionsManager {
   protected $alshayaAcmPromotionCache;
 
   /**
+   * Alshaya Promotions Label Manager.
+   *
+   * @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
+   */
+  protected $promoLabelManager;
+
+  /**
    * AlshayaPromotionsManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -122,6 +129,8 @@ class AlshayaPromotionsManager {
    *   Promotion Plugin Manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $alshayaAcmPromotionCache
    *   Alshaya Acm Promotion Cache Bin.
+   * @param \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
+   *   Alshaya Promo Label Manager.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager,
                               LanguageManager $languageManager,
@@ -130,7 +139,8 @@ class AlshayaPromotionsManager {
                               SkuImagesManager $images_manager,
                               AcqPromotionsManager $acq_promotions_manager,
                               AcqPromotionPluginManager $acqPromotionPluginManager,
-                              CacheBackendInterface $alshayaAcmPromotionCache) {
+                              CacheBackendInterface $alshayaAcmPromotionCache,
+                              AlshayaPromoLabelManager $alshayaPromoLabelManager) {
     $this->nodeStorage = $entityTypeManager->getStorage('node');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
@@ -139,6 +149,7 @@ class AlshayaPromotionsManager {
     $this->acqPromotionsManager = $acq_promotions_manager;
     $this->acqPromotionPluginManager = $acqPromotionPluginManager;
     $this->alshayaAcmPromotionCache = $alshayaAcmPromotionCache;
+    $this->promoLabelManager = $alshayaPromoLabelManager;
   }
 
   /**
@@ -343,13 +354,17 @@ class AlshayaPromotionsManager {
         }
       }
     }
-
+    $context = $this->promoLabelManager->getPromotionContext();
     // Load all the promotions of the three specific types we check below.
     // We load only published promotions.
     $subTypePromotions = $this->getAllPromotions([
       [
         'field' => 'status',
         'value' => NodeInterface::PUBLISHED,
+      ],
+      [
+        'field' => 'field_acq_promotion_context',
+        'value' => $context,
       ],
       [
         'field' => 'field_alshaya_promotion_subtype',
