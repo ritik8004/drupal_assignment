@@ -15,7 +15,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class Alshaya Promo Label Manager.
@@ -94,6 +93,13 @@ class AlshayaPromoLabelManager {
   protected $languageManager;
 
   /**
+   * Alshaya Promotions Context Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   */
+  protected $promoContextManager;
+
+  /**
    * AlshayaPromoLabelManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -112,8 +118,8 @@ class AlshayaPromoLabelManager {
    *   Renderer.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   Request stack.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
    */
   public function __construct(SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
@@ -123,7 +129,7 @@ class AlshayaPromoLabelManager {
                               AlshayaPromotionsManager $promotions_manager,
                               RendererInterface $renderer,
                               LanguageManagerInterface $language_manager,
-                              RequestStack $request_stack) {
+                              AlshayaPromoContextManager $alshayaPromoContextManager) {
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->entityTypeManager = $entity_type_manager;
@@ -132,7 +138,7 @@ class AlshayaPromoLabelManager {
     $this->promoManager = $promotions_manager;
     $this->renderer = $renderer;
     $this->languageManager = $language_manager;
-    $this->currentRequest = $request_stack->getCurrentRequest();
+    $this->promoContextManager = $alshayaPromoContextManager;
   }
 
   /**
@@ -157,23 +163,6 @@ class AlshayaPromoLabelManager {
    */
   public function isDynamicLabelsEnabled() {
     return $this->configFactory->get('alshaya_acm_promotion.settings')->get('dynamic_labels');
-  }
-
-  /**
-   * Validates & fetches promotion context from the request.
-   *
-   * @return string
-   *   Context - web/app.
-   */
-  public function getPromotionContext() {
-    $context = $this->currentRequest->query->get('context');
-    if (empty($context) || $context == 'web') {
-      return 'web';
-    }
-    if ($context == 'mapp' || $context == 'app') {
-      return 'app';
-    }
-    return 'web';
   }
 
   /**
@@ -271,7 +260,7 @@ class AlshayaPromoLabelManager {
    */
   public function getCurrentSkuPromos(SKU $sku, $view_mode) {
     $promos = [];
-    $context = $this->getPromotionContext();
+    $context = $this->promoContextManager->getPromotionContext();
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart'], $context);
 
     foreach ($promotion_nodes as $promotion_node) {

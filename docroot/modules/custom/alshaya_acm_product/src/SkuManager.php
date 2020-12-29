@@ -9,7 +9,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
-use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\alshaya_config\AlshayaArrayUtils;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
@@ -251,11 +250,11 @@ class SkuManager {
   protected $productProcessedManager;
 
   /**
-   * Alshaya Promotions Label Manager.
+   * Alshaya Promotions Context Manager.
    *
-   * @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
    */
-  protected $promoLabelManager;
+  protected $promoContextManager;
 
   /**
    * SkuManager constructor.
@@ -304,8 +303,8 @@ class SkuManager {
    *   Alshaya array utility service.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
-   * @param \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
-   *   Alshaya Promo Label Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -329,7 +328,7 @@ class SkuManager {
                               ProductCacheManager $product_cache_manager,
                               AlshayaArrayUtils $alshayaArrayUtils,
                               ProductProcessedManager $product_processed_manager,
-                              AlshayaPromoLabelManager $alshayaPromoLabelManager) {
+                              AlshayaPromoContextManager $alshayaPromoContextManager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -355,7 +354,7 @@ class SkuManager {
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
     $this->productProcessedManager = $product_processed_manager;
-    $this->promoLabelManager = $alshayaPromoLabelManager;
+    $this->promoContextManager = $alshayaPromoContextManager;
   }
 
   /**
@@ -1028,12 +1027,9 @@ class SkuManager {
           }
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
-          if (!empty($promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue())) {
-            $value = [];
-            foreach ($promotion_context as $val) {
-              $value[] = $val['value'];
-            }
-            $promos[$promotion_node->id()]['context'] = $value;
+          $promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue();
+          if (!empty($promotion_context)) {
+            $promos[$promotion_node->id()]['context'] = array_column($promotion_context, 'value');
           }
           break;
       }
@@ -1085,7 +1081,7 @@ class SkuManager {
                                          $context = '') {
     $promos = [];
     if (empty($context)) {
-      $context = $this->promoLabelManager->getPromotionContext();
+      $context = $this->promoContextManager->getPromotionContext();
     }
     $promotion_nodes = $this->getSkuPromotions($sku, $types, $context);
     if (!empty($promotion_nodes)) {
@@ -3655,15 +3651,13 @@ class SkuManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
-   * @param string $context
-   *   Promotion context.
    *
    * @return array
    *   Promotions.
    */
-  public function getPromotions(SKUInterface $sku, $context = '') {
+  public function getPromotions(SKUInterface $sku) {
     $promotions = [];
-    $promotions_data = $this->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE, $context);
+    $promotions_data = $this->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
     foreach ($promotions_data as $nid => $promotion) {
       $promotions[] = [
         'text' => $promotion['text'],

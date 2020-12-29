@@ -374,6 +374,7 @@ class PromotionController extends ControllerBase {
       'contexts' => [
         'session',
         'languages',
+        'url.query_args:context',
       ],
     ];
 

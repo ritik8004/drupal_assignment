@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_acm_promotion\Plugin\rest\resource;
 
-use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -73,11 +73,11 @@ class PromotionsResource extends ResourceBase {
   protected $moduleHandler;
 
   /**
-   * Alshaya Promotions Label Manager.
+   * Alshaya Promotions Context Manager.
    *
-   * @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
    */
-  protected $promoLabelManager;
+  protected $promoContextManager;
 
   /**
    * PromotionsResource constructor.
@@ -102,8 +102,8 @@ class PromotionsResource extends ResourceBase {
    *   The database connection.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
-   * @param \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
-   *   Alshaya Promo Label Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -115,14 +115,14 @@ class PromotionsResource extends ResourceBase {
                               EntityRepositoryInterface $entity_repository,
                               Connection $connection,
                               ModuleHandlerInterface $module_handler,
-                              AlshayaPromoLabelManager $alshayaPromoLabelManager) {
+                              AlshayaPromoContextManager $alshayaPromoContextManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
     $this->connection = $connection;
     $this->moduleHandler = $module_handler;
-    $this->promoLabelManager = $alshayaPromoLabelManager;
+    $this->promoContextManager = $alshayaPromoContextManager;
   }
 
   /**
@@ -140,7 +140,7 @@ class PromotionsResource extends ResourceBase {
       $container->get('entity.repository'),
       $container->get('database'),
       $container->get('module_handler'),
-      $container->get('alshaya_acm_promotion.label_manager')
+      $container->get('alshaya_acm_product.context_manager')
     );
   }
 
@@ -177,7 +177,7 @@ class PromotionsResource extends ResourceBase {
    */
   public function get() {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $context = $this->promoLabelManager->getPromotionContext();
+    $context = $this->promoContextManager->getPromotionContext();
     $nids = $this->getAllPromotions($langcode, $context);
     $response_data = [];
 
