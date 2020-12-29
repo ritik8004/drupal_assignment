@@ -232,7 +232,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    * {@inheritDoc}
    */
   public function loadCategoryData(string $langcode) {
-    return $this->apiHelper->getCategories();
+    return $this->apiHelper->getCategories($langcode);
   }
 
   /**

@@ -32,10 +32,14 @@ class ApiHelper {
   /**
    * Calls Magento API to fetch categories.
    *
+   * @param string $langcode
+   *   The langcode.
+   *
    * @return array
    *   The processed categories data.
    */
-  public function getCategories() {
+  public function getCategories(string $langcode) {
+    $this->apiWrapper->updateStoreContext($langcode);
     // Call Magento categories API.
     $categories_data = $this->apiWrapper->invokeApi(
       'categories/extended',
