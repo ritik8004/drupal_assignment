@@ -9,6 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
+use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\alshaya_config\AlshayaArrayUtils;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
@@ -250,6 +251,13 @@ class SkuManager {
   protected $productProcessedManager;
 
   /**
+   * Alshaya Promotions Label Manager.
+   *
+   * @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager
+   */
+  protected $promoLabelManager;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -296,6 +304,8 @@ class SkuManager {
    *   Alshaya array utility service.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
+   * @param \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $alshayaPromoLabelManager
+   *   Alshaya Promo Label Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -318,7 +328,8 @@ class SkuManager {
                               ProductInfoHelper $product_info_helper,
                               ProductCacheManager $product_cache_manager,
                               AlshayaArrayUtils $alshayaArrayUtils,
-                              ProductProcessedManager $product_processed_manager) {
+                              ProductProcessedManager $product_processed_manager,
+                              AlshayaPromoLabelManager $alshayaPromoLabelManager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -344,6 +355,7 @@ class SkuManager {
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
     $this->productProcessedManager = $product_processed_manager;
+    $this->promoLabelManager = $alshayaPromoLabelManager;
   }
 
   /**
@@ -1072,6 +1084,9 @@ class SkuManager {
                                          $check_parent = TRUE,
                                          $context = '') {
     $promos = [];
+    if (empty($context)) {
+      $context = $this->promoLabelManager->getPromotionContext();
+    }
     $promotion_nodes = $this->getSkuPromotions($sku, $types, $context);
     if (!empty($promotion_nodes)) {
       $promos = $this->preparePromotionsDisplay($sku, $promotion_nodes, $view_mode, $types, $product_view_mode, $check_parent);
