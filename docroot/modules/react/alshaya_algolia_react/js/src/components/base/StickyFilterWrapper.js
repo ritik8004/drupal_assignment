@@ -47,10 +47,10 @@ const StickyFilterWrapper = React.forwardRef(({ callback }, ref) => {
   return (
     <div className="sticky-filter-wrapper">
       <div className="container-without-product" ref={ref}>
-        <ConditionalView condition={subCategories}>
+        <ConditionalView condition={subCategories !== undefined}>
           <div id="block-subcategoryblock" className="block-alshaya-sub-category-block">
             <div className="plp-subcategory-block">
-              {Object.keys(subCategories).map((id) => (
+              {Object.keys(subCategories || {}).map((id) => (
                 <SubCategoryContent
                   category={subCategories[id]}
                 />
