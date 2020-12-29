@@ -55,18 +55,31 @@ const PlpApp = ({
     max_category_tree_depth: categoryDepth,
     promotionNodeId,
     ruleContext,
+    subCategories,
   } = drupalSettings.algoliaSearch;
 
   const filters = [];
+  let finalFilter = '';
+  let filterOperator = ' AND ';
 
   // Do not show out of stock products.
   if (filterOos === true) {
-    filters.push('stock > 0');
+    finalFilter = '(stock > 0) AND ';
   }
 
   if (pageSubType === 'plp') {
-    // Filter for Category product listing page.
-    filters.push(`${categoryField}: "${defaultCategoryFilter}"`);
+    if (subCategories.length !== 0) {
+      filterOperator = ' OR ';
+      // Set all the filters selected in sub category.
+      Object.keys(subCategories).forEach((key) => {
+        const subCategoryField = subCategories[key].category.category_field;
+        const defaultSubCategoryFilter = subCategories[key].category.hierarchy;
+        filters.push(`${subCategoryField}: "${defaultSubCategoryFilter}"`);
+      });
+    } else {
+      // Filter for Category product listing page.
+      filters.push(`${categoryField}: "${defaultCategoryFilter}"`);
+    }
   } else if (pageSubType === 'product_option_list') {
     // Filter for product option list page.
     const {
@@ -91,6 +104,9 @@ const PlpApp = ({
   }
 
   const defaultpageRender = getBackToPlpPage(pageType);
+
+  finalFilter = `${finalFilter}(${filters.join(filterOperator)})`;
+
   return (
     <InstantSearch
       searchClient={searchClient}
@@ -102,7 +118,7 @@ const PlpApp = ({
       <Configure
         clickAnalytics
         hitsPerPage={itemsPerPage}
-        filters={filters.join(' AND ')}
+        filters={finalFilter}
         ruleContexts={ruleContext}
         optionalFilters={optionalFilter}
       />
