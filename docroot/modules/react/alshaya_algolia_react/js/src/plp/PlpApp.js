@@ -61,6 +61,7 @@ const PlpApp = ({
   const filters = [];
   let finalFilter = '';
   let filterOperator = ' AND ';
+  let groupEnabled = false;
 
   // Do not show out of stock products.
   if (filterOos === true) {
@@ -70,6 +71,7 @@ const PlpApp = ({
   if (pageSubType === 'plp') {
     if (subCategories.length !== 0) {
       filterOperator = ' OR ';
+      groupEnabled = true;
       // Set all the filters selected in sub category.
       Object.keys(subCategories).forEach((key) => {
         const subCategoryField = subCategories[key].category.category_field;
@@ -117,7 +119,7 @@ const PlpApp = ({
     >
       <Configure
         clickAnalytics
-        hitsPerPage={itemsPerPage}
+        hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
         filters={finalFilter}
         ruleContexts={ruleContext}
         optionalFilters={optionalFilter}

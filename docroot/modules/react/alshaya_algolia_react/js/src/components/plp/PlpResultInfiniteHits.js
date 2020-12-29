@@ -32,7 +32,7 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
   const results = [];
   const items = [];
   const { subCategories } = drupalSettings.algoliaSearch;
-  if (subCategories !== 0) {
+  if (subCategories !== undefined) {
     groupEnabled = true;
     Object.keys(subCategories).forEach((key) => {
       const categoryField = subCategories[key].category.category_field;
@@ -46,7 +46,8 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
       // Check to match the items with sub categories
       Object.keys(hits).forEach((index) => {
         const level = categoryField.split('.')[1];
-        const hierarchies = hits[index].lhn_category[level];
+        const field = categoryField.split('.')[0];
+        const hierarchies = hits[index][field][level];
         if (hierarchies.includes(hierarchy)) {
           items[key].push(hits[index]);
         }
@@ -79,8 +80,16 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
     <div className="group-enabled">
       {Object.keys(results).map((key) => (
         <>
-          <p>{results[key].title}</p>
-          <p>{results[key].desc}</p>
+          <div className="sub-category-title-block">
+            { results[key].hits.length > 0
+              ? (
+                <>
+                  <p className="sub-category-title">{results[key].title}</p>
+                  <p className="sub-category-desc">{results[key].desc}</p>
+                </>
+              )
+              : (null)}
+          </div>
           <div className="view-content" ref={teaserRef}>
             { results[key].hits.length > 0
               ? results[key].hits.map((hit) => (
