@@ -52,7 +52,13 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
           items[key].push(hits[index]);
         }
       });
-      results[key].hits = items[key];
+
+      // Unset sub category if hits is empty.
+      if (items[key].length !== 0) {
+        results[key].hits = items[key];
+      } else {
+        results.splice(key, 1);
+      }
     });
   }
 
@@ -81,14 +87,8 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
       {Object.keys(results).map((key) => (
         <>
           <div className="sub-category-title-block">
-            { results[key].hits.length > 0
-              ? (
-                <>
-                  <p className="sub-category-title">{results[key].title}</p>
-                  <p className="sub-category-desc">{results[key].desc}</p>
-                </>
-              )
-              : (null)}
+            <p className="sub-category-title">{results[key].title}</p>
+            <p className="sub-category-desc">{results[key].desc}</p>
           </div>
           <div className="view-content" ref={teaserRef}>
             { results[key].hits.length > 0
