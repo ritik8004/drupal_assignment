@@ -203,7 +203,7 @@ class CartController {
 
     // If there is any exception/error, return as is with exception message
     // without processing further.
-    if (!empty($data['error'])) {
+    if (empty($data) || !empty($data['error'])) {
       $this->logger->error('Error while getting cart:@cart_id Error:@error', [
         '@cart_id' => $cart_id,
         '@error' => json_encode($data),
@@ -768,7 +768,7 @@ class CartController {
       $response = [
         'success' => TRUE,
         'redirectUrl' => $result['redirect_url'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
-        'isAbsoluteUrl' => $result['redirect_url'] ? TRUE : FALSE,
+        'isAbsoluteUrl' => isset($result['redirect_url']),
       ];
 
       return new JsonResponse($response);

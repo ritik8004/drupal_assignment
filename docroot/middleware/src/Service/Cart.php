@@ -897,6 +897,16 @@ class Cart {
    */
   public function associateCartToCustomer(int $customer_id, bool $reset_cart = FALSE) {
     $cart_id = $this->getCartId();
+
+    // If cart id not available in session, don't process further.
+    if (empty($cart_id)) {
+      $this->logger->error('Trying to associate cart to the customer: @customer_id but cart is not available in session.', [
+        '@customer_id' => $customer_id,
+      ]);
+
+      return FALSE;
+    }
+
     if ($reset_cart) {
       $this->getRestoredCart();
     }
@@ -1213,9 +1223,10 @@ class Cart {
     catch (\Exception $e) {
       static::$cart = NULL;
 
-      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message', [
+      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message, Code: @code.', [
         '@action' => $action,
         '@message' => $e->getMessage(),
+        '@code' => $e->getCode(),
       ]);
 
       $is_add_to_cart = ($action == CartActions::CART_ADD_ITEM);
@@ -1238,6 +1249,10 @@ class Cart {
       }
       else {
         $this->cancelCartReservation($e->getMessage());
+      }
+
+      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+        $this->resetCartCache();
       }
 
       // Get cart object if already not available.
@@ -2156,10 +2171,15 @@ class Cart {
    *   Prepared error message.
    */
   private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
+    $order_id = '';
+    if (isset($cart['cart'], $cart['cart']['extension_attributes'])) {
+      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    }
+
     $message[] = 'exception:' . $exception_message;
     $message[] = 'api:' . $api;
     $message[] = 'double_check_done:' . $double_check_done;
-    $message[] = 'order_id:' . $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    $message[] = 'order_id:' . $order_id;
     $message[] = 'cart_id:' . $cart['cart']['id'];
     $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
 

@@ -28,3 +28,14 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .block-alshaya-algolia-react-plp {
+    .filter-fixed-top {
+      .block-alshaya-sub-category-block ~ .block-facet-blockcategory-facet-plp,
+      .block-alshaya-sub-category-block ~ .show-all-filters-algolia {
+        top: 2.625rem;
+      }
+    }
+  }
+}
