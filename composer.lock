@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1493f5ab0c2f87e0048e40f55ebc2761",
+    "content-hash": "c2d18d7aa497f97a02a32afdf630b095",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -5783,6 +5783,7 @@
                     "CORE-8488 - Add log trace for 500 error": "patches/core/missing-handler-check-cache.patch",
                     "CORE-24231 - Adding log trace for 500 error on user login page": "patches/core/traces-for-form-error.patch",
                     "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
+                    "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2019-11-05/1356276-531-8.8.x-4.patch",
                     "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch",
