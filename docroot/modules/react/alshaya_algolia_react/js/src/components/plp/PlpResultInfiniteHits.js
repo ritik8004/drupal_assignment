@@ -86,29 +86,27 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
     <div className="grouping-enabled">
       <div className="view-alshaya-product-list">
         <div className="view-content">
-          <div className="views-infinite-scroll-content-wrapper">
-            {Object.keys(results).map((key) => (
-              <div className={`term-header ${subCategories[key].title.replace(' ', '-').toLowerCase()}`} ref={teaserRef} id={subCategories[key].tid}>
-                <div className="term-title">{results[key].title}</div>
-                <div className="term-desc">{results[key].desc}</div>
-                { results[key].hits.length > 0
-                  ? results[key].hits.map((hit) => (
-                    <Teaser
-                      key={hit.objectID}
-                      hit={hit}
-                      gtmContainer={gtmContainer}
-                      pageType={pageType}
-                    />
-                  ))
-                  : (null)}
-              </div>
-            ))}
-            {children && children({
-              results: hits.length,
-              hasMore,
-              refineNext,
-            })}
-          </div>
+          {Object.keys(results).map((key) => (
+            <div className={`term-header ${subCategories[key].title.replace(' ', '-').toLowerCase()}`} ref={teaserRef} id={subCategories[key].tid}>
+              <div className="term-title">{results[key].title}</div>
+              <div className="term-desc">{results[key].desc}</div>
+              { results[key].hits.length > 0
+                ? results[key].hits.map((hit) => (
+                  <Teaser
+                    key={hit.objectID}
+                    hit={hit}
+                    gtmContainer={gtmContainer}
+                    pageType={pageType}
+                  />
+                ))
+                : (null)}
+            </div>
+          ))}
+          {children && children({
+            results: hits.length,
+            hasMore,
+            refineNext,
+          })}
         </div>
       </div>
     </div>

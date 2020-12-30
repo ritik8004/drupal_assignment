@@ -6,9 +6,6 @@
 (function ($, Drupal) {
   'use strict';
 
-  // Global variable to set scroll position to be used in viewsScrollTop command.
-  var exposedViewOffset;
-
   /**
    * Animate & Scroll to subcategory header.
    *
@@ -85,42 +82,6 @@
           $(this).show();
         }
       });
-    }
-  };
-
-  Drupal.behaviors.subCategoryFilterSelectionScroll = {
-    attach: function (context) {
-      var plpBanner = $('.subcategory-listing-enabled .view-id-plp_promotional_banner', context);
-      var superCategoryMenu = $('.subcategory-listing-enabled .block-alshaya-super-category-menu', context);
-      var mobileNavigationMenu = $('.subcategory-listing-enabled .menu--mobile-navigation', context);
-      $(window).once('html').on('load', function () {
-        // To get the offset top of plp_subcategory_block,
-        // using banner offset top + banner height because
-        // plp_subcategory_block’s offset top will keep changing.
-        if ($(window).width() < 768) {
-          exposedViewOffset = plpBanner.height() + plpBanner.offset().top - superCategoryMenu.height() - mobileNavigationMenu.height();
-        } else {
-          exposedViewOffset = plpBanner.height() + plpBanner.offset().top;
-        }
-      });
-    }
-  };
-
-  // Overriding Drupal core Views scroll to top ajax command specific to panty guide.
-  Drupal.AjaxCommands.prototype.viewsScrollTop = function (ajax, response) {
-    if (response) {
-      var offset = $(response.selector).offset();
-      if (typeof offset !== 'undefined') {
-        var scrollTarget = response.selector;
-        while ($(scrollTarget).scrollTop() === 0 && $(scrollTarget).parent()) {
-          scrollTarget = $(scrollTarget).parent();
-        }
-        if ((offset.top - 10 < $(scrollTarget).scrollTop())) {
-          $('html, body').animate({
-            scrollTop: exposedViewOffset
-          }, 500);
-        }
-      }
     }
   };
 })(jQuery, Drupal);
