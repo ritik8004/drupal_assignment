@@ -2,8 +2,8 @@ import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
 const SubCategoryContent = ({ category }) => (
-  <a href={`#${category.title}`}>
-    <div className="sub-category">
+  <a href={`#${category.title.replace(' ', '-').toLowerCase()}`}>
+    <div className="sub-category" data-tid={category.tid}>
       <div className="sub-category-image">
         <ImageElement
           src={category.image.url}
