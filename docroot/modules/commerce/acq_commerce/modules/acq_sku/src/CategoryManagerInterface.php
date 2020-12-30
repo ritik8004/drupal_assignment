@@ -46,7 +46,7 @@ interface CategoryManagerInterface {
    * Loads the category data from Mangento.
    *
    * @param string $langcode
-   *   Store id for which we should get categories.
+   *   The langcode for which we should get categories.
    *
    * @return array
    *   Array of categories.
