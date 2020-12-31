@@ -160,7 +160,7 @@ class CheckoutDefaults {
 
       // We get a string value if store node is not present in Drupal. So in
       // that case we do not proceed.
-      if (!is_array($store)) {
+      if (!is_array($store) || !isset($store['lat']) || !isset($store['lng'])) {
         return FALSE;
       }
 
