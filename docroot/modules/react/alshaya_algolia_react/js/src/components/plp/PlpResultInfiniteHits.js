@@ -58,6 +58,20 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
         results[key].hits = items[key];
       }
     });
+
+    if (hits.length !== 0) {
+      const subcategory = document.querySelectorAll('#block-subcategoryblock .plp-subcategory-block a');
+
+      for (let i = 0; i < subcategory.length; i++) {
+        const pid = subcategory[i].querySelector('.sub-category').getAttribute('data-tid');
+
+        if (results[pid] === undefined) {
+          subcategory[i].classList.add('visually-hidden');
+        } else {
+          subcategory[i].classList.remove('visually-hidden');
+        }
+      }
+    }
   }
 
   return (!groupEnabled) ? (
