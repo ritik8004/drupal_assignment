@@ -19,6 +19,8 @@ import CurrentRefinements from '../components/algolia/current-refinements';
 import withPlpUrlAliasSync from '../components/url-sync/withPlpUrlAliasSync';
 import PLPHierarchicalMenu from '../components/algolia/widgets/PLPHierarchicalMenu';
 import PLPNoResults from '../components/algolia/PLPNoResults';
+import SubCategoryContent from '../components/subcategory';
+import ConditionalView from '../../common/components/conditional-view';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -127,6 +129,19 @@ const PlpApp = ({
       <PlpStickyFilter>
         {(callback) => (
           <>
+            {(pageSubType === 'plp') ? (
+              <ConditionalView condition={subCategories !== undefined}>
+                <div id="block-subcategoryblock" className="block-alshaya-sub-category-block">
+                  <div className="plp-subcategory-block">
+                    {Object.keys(subCategories || {}).map((id) => (
+                      <SubCategoryContent
+                        category={subCategories[id]}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </ConditionalView>
+            ) : null}
             <Filters
               indexName={indexName}
               limit={4}
