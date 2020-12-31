@@ -68,20 +68,6 @@
       if ($('#block-subcategoryblock').length > 0) {
         $('body').addClass('subcategory-listing-enabled');
       }
-
-      // Hide the divs that do not have results.
-      $('div.plp-subcategory-block').find('div.sub-category').each(function () {
-        var tid = $(this).attr('data-tid');
-        if ($('div#' + tid).length === 0) {
-          // Hide sub category links when filtering and no data
-          // available for a term.
-          $(this).hide();
-        } else {
-          // Hide sub category links when removing filters and data
-          // available now.
-          $(this).show();
-        }
-      });
     }
   };
 })(jQuery, Drupal);
