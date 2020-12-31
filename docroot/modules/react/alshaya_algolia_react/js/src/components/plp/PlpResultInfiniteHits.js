@@ -49,7 +49,6 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
         }
       });
 
-      // Unset sub category if hits is empty.
       if (items[key].length !== 0) {
         // Creating the array with sub category key.
         results[key] = {};
