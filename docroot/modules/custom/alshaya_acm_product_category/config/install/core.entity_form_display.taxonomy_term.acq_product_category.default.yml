@@ -132,6 +132,9 @@ third_party_settings:
         - field_meta_tags
         - field_pdp_image_slider_position
         - field_dy_banner
+        - field_show_on_department_page
+        - field_display_view_all
+        - field_cta
       parent_name: group_taxonomy_fields
       weight: 0
       format_type: tab
@@ -378,7 +381,7 @@ content:
     type: options_select
     region: content
   field_cta:
-    weight: 103
+    weight: 19
     settings:
       size: 60
       placeholder: ''
@@ -393,7 +396,7 @@ content:
     type: boolean_checkbox
     region: content
   field_display_view_all:
-    weight: 102
+    weight: 18
     settings:
       display_label: true
     third_party_settings: {  }
@@ -672,7 +675,7 @@ content:
       display_label: true
     third_party_settings: {  }
   field_show_on_department_page:
-    weight: 101
+    weight: 17
     settings:
       display_label: true
     third_party_settings: {  }
