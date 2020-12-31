@@ -133,7 +133,6 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     ];
 
     $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory($lang));
-
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
@@ -167,6 +166,9 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
             $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
             $data['image']['alt'] = $value['alt'];
           }
+
+          // Get category level informartion.
+          $data['category'] = $this->productCategoryPage->getCurrentSelectedCategory($lang, $subcategory->id());
 
           $subcategories[$subcategory->id()] = $data;
         }
