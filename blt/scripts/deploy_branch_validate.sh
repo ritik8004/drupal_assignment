@@ -2,6 +2,13 @@
 
 set -ev
 
+# Run this script only for merge.
+if [[ ! ($TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false") ]]
+then
+  echo "Not a TRAVIS MERGE Build, aborting."
+  exit 0
+fi
+
 if [[ ! $TRAVIS_BRANCH =~ ^revert-.* ]]; then
   # We can force a build using:
   # branch=xxx
@@ -9,7 +16,7 @@ if [[ ! $TRAVIS_BRANCH =~ ^revert-.* ]]; then
   # git checkout $branch
   # git reset --hard upstream/$branch
   # git commit --allow-empty -m "BUILD REQUEST" -n
-  # git push upstream $branch 
+  # git push upstream $branch
   if [ "$TRAVIS_COMMIT_MESSAGE" = "BUILD REQUEST" ]; then
     echo "Forced build request"
   else
@@ -30,13 +37,14 @@ if [[ ! $TRAVIS_BRANCH =~ ^revert-.* ]]; then
 
     if [ ! "$branch" = "$deployed_branch" ] ; then
       echo ">>>>>>> We don't deploy because $branch is not deployed anywhere.";
-      exit
+      exit 1
     fi
   fi
 
-  source $BLT_DIR/scripts/travis/deploy_branch;
+  exit 0
 else
   echo ">>>>>>> We don't deploy because it is a revert branch.";
+  exit 1
 fi
 
 set +v
