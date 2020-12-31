@@ -75,18 +75,44 @@ class ApiHelper {
 
     return [
       'category_id' => (int) ($category['id'] ?? 0),
-      'parent_id'   => (int) ($category['parent_id'] ?? 0),
-      'store_id'    => (int) ($category['store_id'] ?? 0),
-      'name'        => (string) ($category['name'] ?? ''),
+      'parent_id' => (int) ($category['parent_id'] ?? 0),
+      'store_id' => (int) ($category['store_id'] ?? 0),
+      'name' => (string) ($category['name'] ?? ''),
       'description' => (string) ($category['description'] ?? ''),
-      'position'    => (int) ($category['position'] ?? 0),
-      'level'       => (int) ($category['level'] ?? 0),
-      'in_menu'     => (bool) ($category['include_in_menu'] ?? TRUE),
-      'is_active'   => (bool) ($category['is_active'] ?? TRUE),
+      'position' => (int) ($category['position'] ?? 0),
+      'level' => (int) ($category['level'] ?? 0),
+      'in_menu' => (bool) ($category['include_in_menu'] ?? TRUE),
+      'is_active' => (bool) ($category['is_active'] ?? TRUE),
       'product_ids' => [],
-      'children'    => $children_data,
-      'extension'   => [],
+      'children' => $children_data,
+      'extension' => [],
+      'custom_attributes' => $this->processCustomAttributes($category['custom_attributes']),
     ];
+  }
+
+  /**
+   * Arranges the category custom attributes to a easily accessible structure.
+   *
+   * @param array $custom_attributes
+   *   The custom attributes of category.
+   *
+   * @return array
+   *   The restructured custom attributes or empty array.
+   */
+  private function processCustomAttributes(array $custom_attributes = []) {
+    if (empty($custom_attributes)) {
+      return $custom_attributes;
+    }
+
+    $arranged_custom_attributes = [];
+    foreach ($custom_attributes as $custom_attribute) {
+      $arranged_custom_attributes[$custom_attribute['attribute_code']] = [
+        'name' => $custom_attribute['name'],
+        'value' => $custom_attribute['value'],
+      ];
+    }
+
+    return $arranged_custom_attributes;
   }
 
 }
