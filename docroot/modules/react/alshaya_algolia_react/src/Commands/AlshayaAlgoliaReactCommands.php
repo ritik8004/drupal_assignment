@@ -210,6 +210,13 @@ class AlshayaAlgoliaReactCommands extends DrushCommands {
       $promotion_block->save();
     }
 
+    // Update status of sub category block.
+    $sub_category_block = $block_storage->load('subcategoryblock');
+    if ($sub_category_block instanceof BlockInterface) {
+      $sub_category_block->setStatus(!$enable);
+      $sub_category_block->save();
+    }
+
     // Truncate alias table as we are going to update aliases for algolia plp.
     $this->connection->truncate(AlshayaFacetsPrettyAliases::ALIAS_TABLE)->execute();
 
