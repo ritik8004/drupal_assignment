@@ -129,19 +129,17 @@ const PlpApp = ({
       <PlpStickyFilter>
         {(callback) => (
           <>
-            {(pageSubType === 'plp') ? (
-              <ConditionalView condition={subCategories !== undefined}>
-                <div id="block-subcategoryblock" className="block-alshaya-sub-category-block">
-                  <div className="plp-subcategory-block">
-                    {Object.keys(subCategories || {}).map((id) => (
-                      <SubCategoryContent
-                        category={subCategories[id]}
-                      />
-                    ))}
-                  </div>
+            <ConditionalView condition={(subCategories !== undefined) && (pageSubType === 'plp')}>
+              <div id="block-subcategoryblock" className="block-alshaya-sub-category-block">
+                <div className="plp-subcategory-block">
+                  {Object.keys(subCategories || {}).map((id) => (
+                    <SubCategoryContent
+                      category={subCategories[id]}
+                    />
+                  ))}
                 </div>
-              </ConditionalView>
-            ) : null}
+              </div>
+            </ConditionalView>
             <Filters
               indexName={indexName}
               limit={4}

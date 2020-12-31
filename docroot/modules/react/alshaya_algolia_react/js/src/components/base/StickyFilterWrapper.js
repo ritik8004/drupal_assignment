@@ -7,7 +7,6 @@ import { facetFieldAlias } from '../../utils';
  */
 const StickyFilterWrapper = React.forwardRef(({ callback }, ref) => {
   const [filters, setFilters] = useState([]);
-  const { subCategories } = drupalSettings.algoliaSearch;
 
   const filtersCallBack = ({ activeFilters, limit }) => {
     // Make api call to get facet values alias to update facets  pretty paths,
