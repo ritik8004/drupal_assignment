@@ -37,12 +37,8 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
     Object.keys(subCategories).forEach((key) => {
       const categoryField = subCategories[key].category.category_field;
       const { hierarchy } = subCategories[key].category;
-      // Creating the array with sub category key.
-      results[key] = {};
+
       items[key] = [];
-      results[key].title = subCategories[key].title;
-      results[key].desc = subCategories[key].description;
-      results[key].hits = [];
       // Check to match the items with sub categories
       Object.keys(hits).forEach((index) => {
         const level = categoryField.split('.')[1];
@@ -55,9 +51,12 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
 
       // Unset sub category if hits is empty.
       if (items[key].length !== 0) {
+        // Creating the array with sub category key.
+        results[key] = {};
+        results[key].title = subCategories[key].title;
+        results[key].desc = subCategories[key].description;
+        results[key].hits = [];
         results[key].hits = items[key];
-      } else {
-        results.splice(key, 1);
       }
     });
   }
