@@ -93,7 +93,7 @@ class NewCard extends React.Component {
       valid = false;
     } else {
       const date = new Date();
-      const century = parseInt(`${date.getFullYear().toString().substr(2)}00`, 10);
+      const century = date.getFullYear().toString().substr(-2);
       date.setFullYear(century + dateParts[1], dateParts[0], 1);
       const today = new Date();
       if (date < today) {
