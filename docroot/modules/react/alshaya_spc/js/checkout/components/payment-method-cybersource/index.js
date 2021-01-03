@@ -131,7 +131,7 @@ class PaymentMethodCybersource extends React.Component {
       valid = false;
     } else {
       const date = new Date();
-      const century = parseInt(`${date.getFullYear().toString().substr(2)}00`, 10);
+      const century = date.getFullYear().toString().substr(0, 2);
       date.setFullYear(century + dateParts[1], dateParts[0], 1);
       const today = new Date();
       if (date < today) {
@@ -221,7 +221,7 @@ class PaymentMethodCybersource extends React.Component {
 
       const expiryInfo = expiry.split('/');
       const date = new Date();
-      const century = parseInt(`${date.getFullYear().toString().substr(2)}00`, 10);
+      const century = date.getFullYear().toString().substr(0, 2);
       response.data.data.card_expiry_date = `${expiryInfo[0].toString()}-${(century + parseInt(expiryInfo[1], 10)).toString()}`;
 
       const cybersourceForm = document.getElementById('cybersource_form_to_iframe');
