@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\block\BlockInterface;
 use Drupal\Core\Cache\CacheableMetadata;
@@ -56,6 +57,13 @@ class CartPromotionsResource extends ResourceBase {
   protected $apiWrapper;
 
   /**
+   * Alshaya Promotions Context Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   */
+  protected $promoContextManager;
+
+  /**
    * CartPromotionsResource constructor.
    *
    * @param array $configuration
@@ -76,6 +84,8 @@ class CartPromotionsResource extends ResourceBase {
    *   The entity type manager.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   ApiWrapper object.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -85,12 +95,14 @@ class CartPromotionsResource extends ResourceBase {
                               MobileAppUtility $mobile_app_utility,
                               AlshayaPromotionsManager $alshaya_acm_promotion_manager,
                               EntityTypeManagerInterface $entity_type_manager,
-                              APIWrapper $api_wrapper) {
+                              APIWrapper $api_wrapper,
+                              AlshayaPromoContextManager $alshayaPromoContextManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->alshayaAcmPromotionManager = $alshaya_acm_promotion_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->apiWrapper = $api_wrapper;
+    $this->promoContextManager = $alshayaPromoContextManager;
   }
 
   /**
@@ -106,7 +118,8 @@ class CartPromotionsResource extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('alshaya_acm_promotion.manager'),
       $container->get('entity_type.manager'),
-      $container->get('acq_commerce.api')
+      $container->get('acq_commerce.api'),
+      $container->get('alshaya_acm_product.context_manager')
     );
   }
 
@@ -146,7 +159,8 @@ class CartPromotionsResource extends ResourceBase {
       $cart = $this->apiWrapper->getCart($cart_id);
       $cartRulesApplied = $cart['cart_rules'];
 
-      $promotions = $this->alshayaAcmPromotionManager->getAllCartPromotions($selected_promotions, $cartRulesApplied);
+      $context = $this->promoContextManager->getPromotionContext();
+      $promotions = $this->alshayaAcmPromotionManager->getAllCartPromotions($selected_promotions, $cartRulesApplied, $context);
 
       $response = new ResourceResponse($promotions);
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
