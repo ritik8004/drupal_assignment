@@ -39,7 +39,7 @@ repo="$stack@svn-25.enterprise-g1.hosting.acquia.com:$stack.git"
 
 server_root="/var/www/html/$AH_SITE_NAME"
 docroot="${server_root}/docroot"
-slack_file="$HOME/deployment/post_to_slack.sh"
+slack_file="${server_root}/scripts/deployment/post_to_slack.sh"
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
 deployment_identifier=$(cat "$server_root/deployment_identifier")
 
