@@ -86,7 +86,7 @@ class ApiHelper {
       'product_ids' => [],
       'children' => $children_data,
       'extension' => [],
-      'custom_attributes' => $this->processCustomAttributes($category['custom_attributes']),
+      'custom_attributes' => $this->processCustomAttributes($category['custom_attributes'] ?? []),
     ];
   }
 
