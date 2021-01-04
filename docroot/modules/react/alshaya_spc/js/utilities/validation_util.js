@@ -44,6 +44,15 @@ const validateCartResponse = (response) => {
 
   // If back-end system is down or having errors.
   if (errorCode >= 500) {
+    // For OOS error, we redirect to cart page.
+    if (errorCode === 506) {
+      if (typeof response.message !== 'undefined') {
+        Drupal.logJavascriptError('finalise payment', response.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+      }
+      redirectToCart();
+      return false;
+    }
+
     dispatchCustomEvent('spcCheckoutMessageUpdate', {
       type: 'error',
       message: drupalSettings.global_error_message,
