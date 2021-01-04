@@ -2261,7 +2261,7 @@ class Cart {
    * @param array $skus
    *   SKUs for which we need to refresh stock.
    */
-  protected function refreshStock(array $skus) {
+  public function refreshStock(array $skus) {
     $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
       'skus' => $skus,
     ]);

@@ -552,6 +552,9 @@ class CartController {
             '@cart' => json_encode($cart),
           ]);
 
+          $skus = array_column($cart['cart']['items'], 'sku');
+          $this->cart->refreshStock($skus);
+
           $error_message = 'Cart contains some items which are not in stock.';
           $error_code = CartErrorCodes::CART_HAS_OOS_ITEM;
         }
