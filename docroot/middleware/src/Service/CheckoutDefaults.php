@@ -158,6 +158,12 @@ class CheckoutDefaults {
     if (strpos($order['shipping']['method'], 'click_and_collect') === 0) {
       $store = $this->drupal->getStoreInfo($order['shipping']['extension_attributes']['store_code']);
 
+      // We get a string value if store node is not present in Drupal. So in
+      // that case we do not proceed.
+      if (!is_array($store) || !isset($store['lat']) || !isset($store['lng'])) {
+        return FALSE;
+      }
+
       // Get the stores list via Drupal only to ensure we get other validations
       // and configuration checks applied, for eg. if CNC is disabled complete
       // from Drupal Config.
