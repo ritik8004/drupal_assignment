@@ -586,6 +586,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->condition('tfd.langcode', $langcode);
     $query->condition('tfd.vid', $vid);
     $query->orderBy('tfd.weight', 'ASC');
+
+    // Allow other modules to alter the query.
+    $query->addTag('product_category_child_terms');
+
     return $query->execute()->fetchAll();
   }
 
