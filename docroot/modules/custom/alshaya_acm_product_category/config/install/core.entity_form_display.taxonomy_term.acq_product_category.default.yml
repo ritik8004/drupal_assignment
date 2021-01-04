@@ -9,7 +9,9 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
     - field.field.taxonomy_term.acq_product_category.field_commerce_id
     - field.field.taxonomy_term.acq_product_category.field_commerce_status
+    - field.field.taxonomy_term.acq_product_category.field_cta
     - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
+    - field.field.taxonomy_term.acq_product_category.field_display_view_all
     - field.field.taxonomy_term.acq_product_category.field_dy_banner
     - field.field.taxonomy_term.acq_product_category.field_group_by_sub_categories
     - field.field.taxonomy_term.acq_product_category.field_icon
@@ -41,6 +43,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_remove_shop_prefix
     - field.field.taxonomy_term.acq_product_category.field_remove_term_in_breadcrumb
     - field.field.taxonomy_term.acq_product_category.field_show_in_lhn
+    - field.field.taxonomy_term.acq_product_category.field_show_on_department_page
     - field.field.taxonomy_term.acq_product_category.field_target_link
     - field.field.taxonomy_term.acq_product_category.field_term_background_color
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
@@ -129,6 +132,9 @@ third_party_settings:
         - field_meta_tags
         - field_pdp_image_slider_position
         - field_dy_banner
+        - field_show_on_department_page
+        - field_display_view_all
+        - field_cta
       parent_name: group_taxonomy_fields
       weight: 0
       format_type: tab
@@ -374,8 +380,23 @@ content:
     third_party_settings: {  }
     type: options_select
     region: content
+  field_cta:
+    weight: 19
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_display_as_clickable_link:
     weight: 21
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_display_view_all:
+    weight: 18
     settings:
       display_label: true
     third_party_settings: {  }
@@ -653,6 +674,13 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
+  field_show_on_department_page:
+    weight: 17
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   field_size_guide_anchor:
     type: string_textfield
     weight: 0

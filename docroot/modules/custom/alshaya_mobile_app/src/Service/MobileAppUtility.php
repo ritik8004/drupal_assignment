@@ -675,6 +675,9 @@ class MobileAppUtility {
         'path' => $path,
         'deeplink' => $deeplink,
         'include_in_menu' => (bool) $term->include_in_menu,
+        'show_on_dpt' => (int) $term->show_on_dept,
+        'cta' => $term->cta,
+        'display_view_all' => (int) $term->display_view_all,
       ];
 
       if (is_object($file = $this->productCategoryTree->getMobileBanner($term->tid, $langcode))
