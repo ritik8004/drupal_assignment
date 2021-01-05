@@ -41,6 +41,7 @@ server_root="/var/www/html/$AH_SITE_NAME"
 docroot="${server_root}/docroot"
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
 deployment_identifier=$(cat "$server_root/deployment_identifier")
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 if [[ "$AH_SITE_ENVIRONMENT" == *"live"* ]]
 then
@@ -65,13 +66,14 @@ log_message "Repo: $repo"
 log_message "Docroot: $docroot"
 log_message "Log file: $log_file"
 log_message "Base URI: $base_uri"
+log_message "Script Directory: $current_dir"
 
 echo
 read -p "Please confirm details above and say proceed to start the release: " proceed
 echo
 if [ "$proceed" = "proceed" ]
 then
-  screen -dm bash -c "cd $server_root; ./scripts/deployment/deploy_tag_final.sh main-DO-NOT-TOUCH $tag $mode";
+  screen -dm bash -c "cd $script_dir; ./deploy_tag_final.sh main-DO-NOT-TOUCH $tag $mode";
   echo "Release started, please tail the logs to watch for the updates."
   echo
 else
