@@ -36,11 +36,13 @@
   {% if promotions %}
     <div class="promotions">
       {% for id, promotion in promotions %}
-        <span class="sku-promotion-item">
-          <a class="sku-promotion-link" href="{{ promotion.url }}">
-            {{ promotion.text }}
-          </a>
-        </span>
+        {% if ((promotion.context is empty) or ('web' in promotion.context)) %}
+          <span class="sku-promotion-item">
+            <a class="sku-promotion-link" href="{{ promotion.url }}">
+              {{ promotion.text }}
+            </a>
+          </span>
+        {% endif %}
       {% endfor %}
     </div>
   {% endif %}

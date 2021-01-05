@@ -374,6 +374,7 @@ class PromotionController extends ControllerBase {
       'contexts' => [
         'session',
         'languages',
+        'url.query_args:context',
       ],
     ];
 
@@ -394,6 +395,10 @@ class PromotionController extends ControllerBase {
     Cache::mergeTags($cache_array['tags'], $sku->getCacheTags());
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 
+    // We use app as default here as we have updated web code and APP
+    // code will be updated later to pass the value all the time.
+    // So if someone invokes this without the context, we use app as default.
+    AlshayaPromoContextManager::updateDefaultContext('app');
     $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
     $response = new CacheableJsonResponse(['label' => $label]);
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
@@ -424,7 +429,10 @@ class PromotionController extends ControllerBase {
 
     // Add cache metadata from cart.
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
-
+    // We use app as default here as we have updated web code and APP
+    // code will be updated later to pass the value all the time.
+    // So if someone invokes this without the context, we use app as default.
+    AlshayaPromoContextManager::updateDefaultContext('app');
     $productLabels = [];
     foreach ($cart->getItems() as $item) {
       $productLabels[$item['sku']]['sku'] = $item['sku'];
