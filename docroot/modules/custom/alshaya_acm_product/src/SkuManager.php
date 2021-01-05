@@ -1028,6 +1028,7 @@ class SkuManager {
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
           $promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue();
+          $promos[$promotion_node->id()]['context'] = ['web', 'app'];
           if (!empty($promotion_context)) {
             $promos[$promotion_node->id()]['context'] = array_column($promotion_context, 'value');
           }
