@@ -572,6 +572,9 @@ class Cart {
             if ($e->getCode() == 404) {
               $this->removeCartFromSession();
               $this->createCart($this->getDrupalInfo('customer_id'));
+              // Get fresh cart.
+              static::$cart = NULL;
+              $this->getCart(TRUE);
               return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
             }
             elseif ($exception_type === 'OOS') {
