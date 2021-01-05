@@ -1,38 +1,4 @@
 html[lang=ar] {
-  .delivery-options-tooltip-wrapper .tooltip--head::after {
-    position: absolute;
-
-    @include breakpoint($mobile) {
-      top: -0.1rem;
-    }
-
-    @include breakpoint($only-tablet) {
-      left: -0.4rem;
-    }
-
-    @include breakpoint($desktop) {
-      top: 0;
-    }
-  }
-
-  .delivery-options-tooltip-wrapper .tooltip {
-    #{$left}: -4.9rem;
-
-    @include breakpoint($desktop) {
-      right: 3.9rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      #{$left}: -1.9rem;
-    }
-
-    @include breakpoint (($only-tablet) (orientation landscape)) {
-      #{$left}: -2.3rem;
-    }
-  }
-}
-
-html[lang=ar] {
   header {
     .block-cart-mini-block,
     .block-alshaya-react-mini-cart {
@@ -40,20 +6,6 @@ html[lang=ar] {
       .quantity {
         font-family: $arial-nodir;
       }
-    }
-  }
-}
-
-// Sticky submit buttons in checkout.
-.path--cart {
-  &.alias--cart .edit-update,
-  &.alias--cart .edit-checkout,
-  &.alias--cart-checkout-delivery main form .form-actions .form-submit,
-  &.alias--cart-checkout-payment main form .form-actions .form-submit {
-    @include breakpoint($only-mobile) {
-      @include stickyButton();
-
-      height: 3.5rem;
     }
   }
 }
