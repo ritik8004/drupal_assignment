@@ -5,7 +5,13 @@ set -ev
 # Run this script only for merge.
 if [[ ! ($TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false") ]]
 then
-  echo "Not a TRAVIS MERGE Build, aborting."
+  echo "Not a TRAVIS MERGE Build, no validation required."
+  exit 0
+fi
+
+if [ ! "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]
+then
+  echo "TRAVIS Build request for tag, no validation required."
   exit 0
 fi
 
@@ -19,29 +25,26 @@ if [[ ! $TRAVIS_BRANCH =~ ^revert-.* ]]; then
   # git push upstream $branch
   if [ "$TRAVIS_COMMIT_MESSAGE" = "BUILD REQUEST" ]; then
     echo "Forced build request"
-  else
-    echo "username=$acsf_api_username" > $HOME/acsf_api_settings
-    echo "api_key=$acsf_api_key" >> $HOME/acsf_api_settings
-
-    deployed_branches=$(${BUILD_DIR}/scripts/git_cleanup/get-deployed-branches.sh | cut -d' ' -f2)
-    echo "Deployed branches:"
-    echo $deployed_branches
-    echo
-
-    branch="$TRAVIS_BRANCH-build"
-    for deployed_branch in $deployed_branches ; do
-      if [ "$branch" = "$deployed_branch" ] ; then
-        break
-      fi
-    done
-
-    if [ ! "$branch" = "$deployed_branch" ] ; then
-      echo ">>>>>>> We don't deploy because $branch is not deployed anywhere.";
-      exit 1
-    fi
+    exit 0
   fi
 
-  exit 0
+  echo "username=$acsf_api_username" > $HOME/acsf_api_settings
+  echo "api_key=$acsf_api_key" >> $HOME/acsf_api_settings
+
+  deployed_branches=$(${BUILD_DIR}/scripts/git_cleanup/get-deployed-branches.sh | cut -d' ' -f2)
+  echo "Deployed branches:"
+  echo $deployed_branches
+  echo
+
+  branch="$TRAVIS_BRANCH-build"
+  for deployed_branch in $deployed_branches ; do
+    if [ "$branch" = "$deployed_branch" ] ; then
+      exit 0
+    fi
+  done
+
+  echo ">>>>>>> We don't deploy because $branch is not deployed anywhere.";
+  exit 1
 else
   echo ">>>>>>> We don't deploy because it is a revert branch.";
   exit 1
