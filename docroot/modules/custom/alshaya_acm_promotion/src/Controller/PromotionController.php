@@ -27,6 +27,7 @@ use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Class Promotion Controller.
