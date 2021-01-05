@@ -24,15 +24,21 @@ class AlshayaPromoContextManager {
   /**
    * Validates & fetches promotion context from the request.
    *
+   * @param string $default
+   *   Default Context - app/web.
+   *
    * @return string
    *   Context - web/app.
    */
-  public function getPromotionContext() {
+  public function getPromotionContext($default = 'web') {
     $context = $this->currentRequest->query->get('context');
     if ($context == 'mapp' || $context == 'app') {
       return 'app';
     }
-    return 'web';
+    if ($context == 'web') {
+      return 'web';
+    }
+    return $default;
   }
 
 }

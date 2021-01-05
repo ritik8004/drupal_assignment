@@ -395,7 +395,7 @@ class PromotionController extends ControllerBase {
     Cache::mergeTags($cache_array['tags'], $sku->getCacheTags());
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 
-    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
+    $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku, 'app');
     $response = new CacheableJsonResponse(['label' => $label]);
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
     return $response;
@@ -429,7 +429,7 @@ class PromotionController extends ControllerBase {
     $productLabels = [];
     foreach ($cart->getItems() as $item) {
       $productLabels[$item['sku']]['sku'] = $item['sku'];
-      $productLabels[$item['sku']]['labels'] = $this->promoLabelManager->getCurrentSkuPromos($item['entity'], 'api');
+      $productLabels[$item['sku']]['labels'] = $this->promoLabelManager->getCurrentSkuPromos($item['entity'], 'api', 'app');
     }
 
     $cartLabels = [

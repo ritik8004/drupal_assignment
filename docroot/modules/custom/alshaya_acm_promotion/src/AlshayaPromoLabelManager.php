@@ -238,12 +238,20 @@ class AlshayaPromoLabelManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product SKU.
+   * @param string $default_context
+   *   Default Context - app/web.
    *
    * @return string
    *   Dynamic Promotion Label or NULL.
    */
-  public function getSkuPromoDynamicLabel(SKU $sku) {
-    $promos = $this->getCurrentSkuPromos($sku, 'links');
+  public function getSkuPromoDynamicLabel(SKU $sku, $default_context = '') {
+    if (!empty($default_context)) {
+      $promos = $this->getCurrentSkuPromos($sku, 'links', $default_context);
+    }
+    else {
+      $promos = $this->getCurrentSkuPromos($sku, 'links');
+    }
+
     return is_array($promos) ? implode('<br>', $promos) : '';
   }
 
@@ -254,13 +262,21 @@ class AlshayaPromoLabelManager {
    *   Product SKU.
    * @param string $view_mode
    *   Links or default.
+   * @param string $default_context
+   *   Default Context - app/web.
    *
    * @return array
    *   List of promotions.
    */
-  public function getCurrentSkuPromos(SKU $sku, $view_mode) {
+  public function getCurrentSkuPromos(SKU $sku, $view_mode, $default_context = '') {
     $promos = [];
-    $context = $this->promoContextManager->getPromotionContext();
+    if (!empty($default_context)) {
+      $context = $this->promoContextManager->getPromotionContext($default_context);
+    }
+    else {
+      $context = $this->promoContextManager->getPromotionContext();
+    }
+
     $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart'], $context);
 
     foreach ($promotion_nodes as $promotion_node) {
