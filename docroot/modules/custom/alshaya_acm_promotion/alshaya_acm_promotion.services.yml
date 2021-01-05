@@ -21,6 +21,7 @@ services:
       - '@alshaya_acm_promotion.manager'
       - '@renderer'
       - '@language_manager'
+      - '@alshaya_acm_product.context_manager'
   cache.alshaya_acm_promotion:
     class: Drupal\Core\Cache\CacheInterface
     tags:
