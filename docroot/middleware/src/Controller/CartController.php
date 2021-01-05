@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\EventListener\StockEventListener;
 use App\Helper\CustomerHelper;
 use App\Service\CartErrorCodes;
 use App\Service\CheckoutCom\APIWrapper;
@@ -553,7 +554,9 @@ class CartController {
           ]);
 
           $skus = array_column($cart['cart']['items'], 'sku');
-          $this->cart->refreshStock($skus);
+          foreach ($skus as $sku) {
+            StockEventListener::$oosSkus[] = $sku;
+          }
 
           $error_message = 'Cart contains some items which are not in stock.';
           $error_code = CartErrorCodes::CART_HAS_OOS_ITEM;

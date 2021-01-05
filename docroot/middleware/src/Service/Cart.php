@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\EventListener\StockEventListener;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Drupal\Drupal;
@@ -1555,7 +1556,9 @@ class Cart {
       ]);
 
       $skus = array_column($cart['cart']['items'], 'sku');
-      $this->refreshStock($skus);
+      foreach ($skus as $sku) {
+        StockEventListener::$oosSkus[] = $sku;
+      }
 
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
     }
@@ -2261,7 +2264,7 @@ class Cart {
    * @param array $skus
    *   SKUs for which we need to refresh stock.
    */
-  public function refreshStock(array $skus) {
+  protected function refreshStock(array $skus) {
     $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
       'skus' => $skus,
     ]);
