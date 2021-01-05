@@ -54,6 +54,7 @@ services:
       - '@alshaya_acm_product.cache_manager'
       - '@alshaya.alshaya_array_utils'
       - '@alshaya_acm_product.product_processed_manager'
+      - '@alshaya_acm_product.context_manager'
   alshaya_acm_product.add_to_cart_form_helper:
     class: Drupal\alshaya_acm_product\Service\AddToCartFormHelper
     arguments:
@@ -186,3 +187,7 @@ services:
     arguments: ['\stdClass']
     tags:
       - { name: normalizer, priority: 20 }
+  alshaya_acm_product.context_manager:
+    class: Drupal\alshaya_acm_product\AlshayaPromoContextManager
+    arguments:
+      - '@request_stack'
