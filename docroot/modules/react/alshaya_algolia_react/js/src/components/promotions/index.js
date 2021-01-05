@@ -11,7 +11,7 @@ const Promotion = ({ promotion }) => (
 const Promotions = ({ promotions }) => {
   const promotionList = (promotions)
     ? promotions.map((promotion) => {
-      if (!promotion.context.length || promotion.context.includes('web') || typeof promotion.context === 'undefined') {
+      if (typeof promotion.context === 'undefined' || promotion.context.includes('web') || !promotion.context.length) {
         return <Promotion key={promotion.text} promotion={promotion} />;
       }
       return '';

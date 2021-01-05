@@ -15,6 +15,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Class Alshaya Promo Label Manager.
