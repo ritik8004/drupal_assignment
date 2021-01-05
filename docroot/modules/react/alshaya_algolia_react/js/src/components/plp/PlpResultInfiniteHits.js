@@ -103,14 +103,18 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
               <div className="term-title">{results[key].title}</div>
               <div className="term-desc">{results[key].desc}</div>
               { results[key].hits.length > 0
-                ? results[key].hits.map((hit) => (
-                  <Teaser
-                    key={hit.objectID}
-                    hit={hit}
-                    gtmContainer={gtmContainer}
-                    pageType={pageType}
-                  />
-                ))
+                ? (
+                  <div>
+                    { results[key].hits.map((hit) => (
+                      <Teaser
+                        key={hit.objectID}
+                        hit={hit}
+                        gtmContainer={gtmContainer}
+                        pageType={pageType}
+                      />
+                    ))}
+                  </div>
+                )
                 : (null)}
             </div>
           ))}
