@@ -1,8 +1,8 @@
 diff --git a/core/lib/Drupal/Core/DrupalKernel.php b/core/lib/Drupal/Core/DrupalKernel.php
-index 7c9fb6c8..1711e278 100644
+index ada9efec84..9951b1df2e 100644
 --- a/core/lib/Drupal/Core/DrupalKernel.php
 +++ b/core/lib/Drupal/Core/DrupalKernel.php
-@@ -401,6 +401,17 @@ public static function findSitePath(Request $request, $require_settings = TRUE,
+@@ -402,6 +402,17 @@ public static function findSitePath(Request $request, $require_settings = TRUE,
      $sites = [];
      include $app_root . '/sites/sites.php';
  
@@ -20,23 +20,23 @@ index 7c9fb6c8..1711e278 100644
      $uri = explode('/', $script_name);
      $server = explode('.', implode('.', array_reverse(explode(':', rtrim($http_host, '.')))));
      for ($i = count($uri) - 1; $i > 0; $i--) {
-@@ -410,11 +421,46 @@ public static function findSitePath(Request $request, $require_settings = TRUE,
+@@ -411,13 +422,49 @@ public static function findSitePath(Request $request, $require_settings = TRUE,
            $dir = $sites[$dir];
          }
          if (file_exists($app_root . '/sites/' . $dir . '/settings.php') || (!$require_settings && file_exists($app_root . '/sites/' . $dir))) {
 -          return "sites/$dir";
 +          $path = "sites/$dir";
-+          static::storeValue($storage_key, $path);
++          // In site-factory, files are in 'g' directory.
++          if (strpos($path, 'sites/g/files') !== FALSE) {
++            static::storeValue($storage_key, $path);
++          }
 +          return $path;
          }
        }
      }
--    return 'sites/default';
-+    $path = "sites/default";
-+    static::storeValue($storage_key, $path);
-+    return $path;
-+  }
-+
+     return 'sites/default';
+   }
+ 
 +  /**
 +   * Try to cache a value.
 +   *
@@ -66,6 +66,8 @@ index 7c9fb6c8..1711e278 100644
 +    }
 +
 +    return NULL;
-   }
- 
++  }
++
    /**
+    * {@inheritdoc}
+    */
