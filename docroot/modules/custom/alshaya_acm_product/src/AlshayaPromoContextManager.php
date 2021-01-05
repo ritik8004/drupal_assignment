@@ -12,6 +12,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class AlshayaPromoContextManager {
 
   /**
+   * Default Context.
+   *
+   * @var string
+   */
+  protected static $context = 'web';
+
+  /**
    * AlshayaPromoLabelManager constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -22,15 +29,22 @@ class AlshayaPromoContextManager {
   }
 
   /**
-   * Validates & fetches promotion context from the request.
+   * Set Default context.
    *
-   * @param string $default
-   *   Default Context - app/web.
+   * @param string $context
+   *   Default context.
+   */
+  public static function updateDefaultContext(string $context) {
+    self::$context = $context;
+  }
+
+  /**
+   * Validates & fetches promotion context from the request.
    *
    * @return string
    *   Context - web/app.
    */
-  public function getPromotionContext($default = 'web') {
+  public function getPromotionContext() {
     $context = $this->currentRequest->query->get('context');
     if ($context == 'mapp' || $context == 'app') {
       return 'app';
@@ -38,7 +52,7 @@ class AlshayaPromoContextManager {
     if ($context == 'web') {
       return 'web';
     }
-    return $default;
+    return self::$context;
   }
 
 }
