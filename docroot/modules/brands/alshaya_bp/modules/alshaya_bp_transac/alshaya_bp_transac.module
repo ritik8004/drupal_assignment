@@ -228,3 +228,20 @@ function alshaya_bp_transac_pathauto_alias_alter(&$alias, array $context) {
 function alshaya_bp_transac_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['sort_options']['#options']['attr_brand'] = t('Brand');
 }
+
+/**
+ * Implements hook_acq_sku_clean_synced_data_alter().
+ */
+function alshaya_bp_transac_acq_sku_clean_synced_data_alter($context) {
+  foreach ($context['sandbox']['results'] as $key => $data) {
+    if ($data['type'] == 'taxonomy_term') {
+      // Keep categories mapped in I&A pages.
+      $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($data['entity_id']);
+      if ($termStorage->get('vid')->getString() == 'acq_product_category'
+        && $termStorage->hasField('field_remove_shop_prefix')
+        && $termStorage->get('field_remove_shop_prefix')->getString()) {
+        unset($context['sandbox']['results'][$key]);
+      }
+    }
+  }
+}
