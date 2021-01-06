@@ -10,7 +10,7 @@ import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_spc/js/aura
 
 const AuraMyAccountVerifiedUser = (props) => {
   const {
-    tier,
+    tierName,
     points,
     cardNumber,
     pointsOnHold,
@@ -47,7 +47,7 @@ const AuraMyAccountVerifiedUser = (props) => {
         <div className="aura-card-linked-verified-description">
           <div className="aura-tier">
             <label>{Drupal.t('Status')}</label>
-            <span className="aura-blend">{ tier }</span>
+            <span className="aura-blend">{ tierName }</span>
           </div>
           <div className="aura-points">
             <label>{Drupal.t('Point balance')}</label>

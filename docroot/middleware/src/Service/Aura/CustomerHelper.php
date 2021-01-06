@@ -149,7 +149,8 @@ class CustomerHelper {
 
       if (is_array($response)) {
         $response_data = [
-          'tier' => $response['tier_info'] ?? '',
+          'tier' => $response['tier_code'] ?? '',
+          'tierName' => $response['tier_info'] ?? '',
         ];
       }
 

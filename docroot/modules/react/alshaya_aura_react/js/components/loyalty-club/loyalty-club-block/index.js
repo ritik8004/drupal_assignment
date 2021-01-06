@@ -11,7 +11,7 @@ const LoyaltyClubBlock = (props) => {
   const {
     wait,
     loyaltyStatus,
-    tier,
+    tierName,
     points,
     cardNumber,
     expiringPoints,
@@ -56,7 +56,7 @@ const LoyaltyClubBlock = (props) => {
     if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
       return (
         <AuraMyAccountVerifiedUser
-          tier={tier}
+          tierName={tierName}
           points={points}
           expiringPoints={expiringPoints}
           expiryDate={expiryDate}
