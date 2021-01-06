@@ -571,9 +571,13 @@ class Cart {
 
             if ($e->getCode() == 404) {
               $this->removeCartFromSession();
-              $this->createCart($this->getDrupalInfo('customer_id'));
+              $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
+
+              if (!empty($new_cart['error'])) {
+                return $this->returnExistingCartWithError($e);
+              }
+
               // Get fresh cart.
-              static::$cart = NULL;
               $this->getCart(TRUE);
               return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
             }
@@ -1999,6 +2003,7 @@ class Cart {
     $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
     $this->cache->delete('cached_cart');
     $this->resetCartCache();
+    static::$cart = NULL;
   }
 
   /**
