@@ -14,35 +14,6 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
- * Mark all indexed data for re-indexation to get the barcode data indexed.
- */
-function alshaya_mobile_app_update_8077() {
-  _alshaya_search_api_reindex();
-}
-
-/**
- * Implements hook_update_dependencies().
- *
- * This is to ensure alshaya_mobile_app_update_8077 runs after
- * alshaya_acm_product_update_8065.
- */
-function alshaya_mobile_app_update_dependencies() {
-  // Adding this dependency only for mobile application brands.
-  $modulehandler = \Drupal::service("module_handler");
-  if ($modulehandler->moduleExists("alshaya_acm_product")) {
-    return [
-      'alshaya_mobile_app' => [
-        '8077' => [
-          'alshaya_acm_product' => '8065',
-        ],
-      ],
-    ];
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Set the default value for the max_product_limit.
  */
 function alshaya_mobile_app_update_8076() {
