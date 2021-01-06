@@ -3,6 +3,7 @@ import connectInfiniteHits from '../algolia/connectors/connectInfiniteHits';
 import Teaser from '../teaser';
 import { removeLoader } from '../../utils';
 import ImageElement from '../gallery/imageHelper/ImageElement';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const PlpResultInfiniteHits = connectInfiniteHits(({
   hits, hasMore, refineNext, children = null, gtmContainer, pageType,
@@ -53,7 +54,7 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
       if (items[key].length !== 0) {
         // Creating the array with sub category key.
         results[key] = {};
-        results[key].image = subCategories[key].image;
+        results[key].image = subCategories[key].image || {};
         results[key].title = subCategories[key].title;
         results[key].desc = subCategories[key].description;
         results[key].hits = [];
@@ -102,32 +103,29 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
         <div className="view-content">
           {Object.keys(results).map((key) => (
             <div className={`term-header ${subCategories[key].title.replace(' ', '-').toLowerCase()}`} ref={teaserRef} id={subCategories[key].tid}>
-              {(results[key].image)
-                ? (
-                  <div className="term-image">
-                    <ImageElement
-                      src={results[key].image.url}
-                      alt={results[key].image.alt}
-                      title={results[key].title}
-                    />
-                  </div>
-                ) : (null)}
+              <ConditionalView condition={results[key].image}>
+                <div className="term-image">
+                  <ImageElement
+                    src={results[key].image.url}
+                    alt={results[key].image.alt}
+                    title={results[key].title}
+                  />
+                </div>
+              </ConditionalView>
               <div className="term-title">{results[key].title}</div>
               <div className="term-desc">{results[key].desc}</div>
-              { results[key].hits.length > 0
-                ? (
-                  <div>
-                    { results[key].hits.map((hit) => (
-                      <Teaser
-                        key={hit.objectID}
-                        hit={hit}
-                        gtmContainer={gtmContainer}
-                        pageType={pageType}
-                      />
-                    ))}
-                  </div>
-                )
-                : (null)}
+              <ConditionalView condition={results[key].hits.length > 0}>
+                <div>
+                  { results[key].hits.map((hit) => (
+                    <Teaser
+                      key={hit.objectID}
+                      hit={hit}
+                      gtmContainer={gtmContainer}
+                      pageType={pageType}
+                    />
+                  ))}
+                </div>
+              </ConditionalView>
             </div>
           ))}
           {children && children({
