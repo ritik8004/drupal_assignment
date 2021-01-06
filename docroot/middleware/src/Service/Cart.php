@@ -571,15 +571,20 @@ class Cart {
 
             if ($e->getCode() == 404) {
               $this->removeCartFromSession();
-              $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
 
-              if (!empty($new_cart['error'])) {
-                return $this->returnExistingCartWithError($e);
+              if ($action === CartActions::CART_ADD_ITEM) {
+                $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
+
+                if (!empty($new_cart['error'])) {
+                  return $new_cart;
+                }
+
+                // Get fresh cart.
+                $this->getCart(TRUE);
+                return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
               }
 
-              // Get fresh cart.
-              $this->getCart(TRUE);
-              return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+              return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             elseif ($exception_type === 'OOS') {
               $this->refreshStock([$sku, $variant_sku]);
