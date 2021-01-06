@@ -170,7 +170,7 @@ class CheckoutDefaults {
       $availableStores = $this->cart->getCartStores($store['lat'], $store['lng']);
       $availableStoreCodes = array_column($availableStores ?? [], 'code');
       $store_key = array_search($store['code'], $availableStoreCodes);
-      if ($store_key >= 0) {
+      if (($store_key !== FALSE) && ($store_key >= 0)) {
         return $this->selectCnc($availableStores[$store_key], $address, $order['billing_commerce_address']);
       }
 
