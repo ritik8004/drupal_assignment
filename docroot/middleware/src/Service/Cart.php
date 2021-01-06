@@ -2047,6 +2047,8 @@ class Cart {
         '@response' => $e->getMessage(),
       ]);
     }
+
+    return [];
   }
 
   /**
