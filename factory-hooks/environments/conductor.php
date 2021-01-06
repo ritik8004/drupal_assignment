@@ -770,6 +770,21 @@ $conductors = [
     'hmac_secret' => 'MTU1NmJiZTItM2M1ZC00',
     'site_id' => 325,
   ],
+  'weeg_uat' => [
+    'hmac_id' => '6b29131cfb114895ab0bedd65411b11f',
+    'hmac_secret' => 'NDM5Mzg2MDctNWFhNy00',
+    'site_id' => 360,
+  ],
+  'webh_uat' => [
+    'hmac_id' => 'b81b50e0e69f4bf1a91ae7f8d953664c',
+    'hmac_secret' => 'MTUxYjdmZTMtNWQ3MS00',
+    'site_id' => 358,
+  ],
+  'weqa_uat' => [
+    'hmac_id' => '3942d2d6cd8e47e2bf00f78048e6b445',
+    'hmac_secret' => 'OGFlMzc1NGYtZjdmNi00',
+    'site_id' => 359,
+  ],
   'wekw_prod' => [
     'site_id' => 183,
   ],
@@ -781,6 +796,12 @@ $conductors = [
   ],
   'weeg_prod' => [
     'site_id' => 186,
+  ],
+  'webh_prod' => [
+    'site_id' => 361,
+  ],
+  'weqa_prod' => [
+    'site_id' => 362,
   ],
   // American Eagle Outfitters.
   'aeokw_dev' => [
