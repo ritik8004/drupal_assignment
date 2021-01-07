@@ -13,6 +13,7 @@ $message_types = [
   'Some of the products are out of stock.' => 'OOS',
   'Not all of your products are available in the requested quantity.' => 'OOS',
   "We don't have as many" => 'OOS',
+  "The requested qty is not available" => 'not_enough',
   'هذا المنتج غير متوفر في المخزن.' => 'OOS',
   'بعض المنتجات غير متوفرة بالمخزن.' => 'OOS',
   'بعض المنتجات غير متوفرة بالمخزن.' => 'OOS',

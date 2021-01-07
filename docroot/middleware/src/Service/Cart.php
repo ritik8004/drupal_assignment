@@ -590,6 +590,9 @@ class Cart {
             elseif ($exception_type === 'OOS') {
               $this->refreshStock([$sku, $variant_sku]);
             }
+            elseif ($exception_type === 'not_enough') {
+              StockEventListener::matchStockQuantity([$cart_item]);
+            }
 
             return $this->returnExistingCartWithError($e);
           }

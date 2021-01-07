@@ -124,4 +124,32 @@ class AlshayaSpcStockHelper {
     return $stock_status;
   }
 
+  /**
+   * Refreshes stock for skus whose quantity is less in Drupal.
+   *
+   * @param array $stock_mismatch_skus_data
+   *   Array of sku data, keyed by sku with the quantity in the value.
+   *
+   * @return array
+   *   The stock status of all skus or empty array if nothing is updated.
+   */
+  public function smartRefreshStockForSkus(array $stock_mismatch_skus_data) {
+    $skus_to_refresh_stock = [];
+    foreach ($stock_mismatch_skus_data as $sku => $sku_data) {
+      $sku_entity = SKU::loadFromSku($sku);
+      if (empty($sku_entity)) {
+        continue;
+      }
+
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku_entity->getPluginInstance();
+      $stock = $plugin->getStock($sku_entity);
+      if (!empty($stock) && ($stock['quantity'] < $sku_data['qty'])) {
+        $skus_to_refresh_stock[] = $sku;
+      }
+    }
+
+    return $this->refreshStockForSkus($skus_to_refresh_stock);
+  }
+
 }
