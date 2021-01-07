@@ -1223,9 +1223,10 @@ class Cart {
     catch (\Exception $e) {
       static::$cart = NULL;
 
-      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message', [
+      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message, Code: @code.', [
         '@action' => $action,
         '@message' => $e->getMessage(),
+        '@code' => $e->getCode(),
       ]);
 
       $is_add_to_cart = ($action == CartActions::CART_ADD_ITEM);
@@ -1248,6 +1249,10 @@ class Cart {
       }
       else {
         $this->cancelCartReservation($e->getMessage());
+      }
+
+      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+        $this->resetCartCache();
       }
 
       // Get cart object if already not available.
@@ -2042,6 +2047,8 @@ class Cart {
         '@response' => $e->getMessage(),
       ]);
     }
+
+    return [];
   }
 
   /**
@@ -2166,10 +2173,15 @@ class Cart {
    *   Prepared error message.
    */
   private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
+    $order_id = '';
+    if (isset($cart['cart'], $cart['cart']['extension_attributes'])) {
+      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    }
+
     $message[] = 'exception:' . $exception_message;
     $message[] = 'api:' . $api;
     $message[] = 'double_check_done:' . $double_check_done;
-    $message[] = 'order_id:' . $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    $message[] = 'order_id:' . $order_id;
     $message[] = 'cart_id:' . $cart['cart']['id'];
     $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
 
