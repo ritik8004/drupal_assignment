@@ -114,7 +114,6 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
     else {
       $node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
     }
-    return;
   }
   else {
     $queuing_required = 0;
@@ -130,7 +129,7 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
     }
 
     if (!$queuing_required) {
-      //check if context has changed
+      // check if context has changed
       $promotion_context = $node->get('field_acq_promotion_context')->getValue();
       if (!empty($promotion_context)) {
         $promotion_context = array_column($promotion_context, 'value');
@@ -142,21 +141,23 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
       }
     }
 
-    if ($is_full_catalog_promotion && $queuing_required) {
-      // Queue products when promotion label/context changes for full catalog promotions.
-      $product_queue_utility->queueAllProducts();
-      // Since all products are already queued, we do not need to apply
-      // further checks.
-    }
-    elseif ($queuing_required) {
-      /** @var \Drupal\acq_promotion\AcqPromotionsManager $promotion_manager */
-      $promotion_manager = \Drupal::service('acq_promotion.promotions_manager');
-      //Fetch the Associated SKUs
-      $skus = $promotion_manager->getSkusForPromotion($promotion['rule_id']);
+    if ($queuing_required) {
+      if ($is_full_catalog_promotion) {
+        // Queue products when promotion label/context changes for full catalog promotions.
+        $product_queue_utility->queueAllProducts();
+        // Since all products are already queued, we do not need to apply
+        // further checks.
+      }
+      else {
+        /** @var \Drupal\acq_promotion\AcqPromotionsManager $promotion_manager */
+        $promotion_manager = \Drupal::service('acq_promotion.promotions_manager');
+        // Fetch the Associated SKUs
+        $skus = $promotion_manager->getSkusForPromotion($promotion['rule_id']);
 
-      // Queue associated skus when promotion label/context changes.
-      if (!empty($skus)) {
-        $product_queue_utility->queueAvailableProductsForSkus($skus);
+        // Queue associated SKUs when promotion label/context changes.
+        if (!empty($skus)) {
+          $product_queue_utility->queueAvailableProductsForSkus($skus);
+        }
       }
     }
   }
