@@ -27,6 +27,7 @@ use http\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Class Promotion Controller.
@@ -154,10 +155,6 @@ class PromotionController extends ControllerBase {
 
     /** @var \Drupal\acq_sku\Entity\SKU $free_gift */
     foreach ($free_gifts as $free_gift) {
-      if (!$this->skuManager->getStockQuantity($free_gift)) {
-        continue;
-      }
-
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $free_gift->getCacheTags());
 
       $item = [];
@@ -179,6 +176,10 @@ class PromotionController extends ControllerBase {
 
       switch ($free_gift->bundle()) {
         case 'simple':
+          if (!$this->skuManager->getStockQuantity($free_gift)) {
+            continue 2;
+          }
+
           $sku_media = $this->imagesManager->getFirstImage($free_gift, 'plp', TRUE);
 
           // Getting the promo rule id.
@@ -212,6 +213,9 @@ class PromotionController extends ControllerBase {
           break;
 
         case 'configurable':
+          if (!$this->promotionsManager->getAvailableFreeGiftChildren($free_gift)) {
+            continue 2;
+          }
           $sku_for_gallery = $this->promotionsManager->getSkuForFreeGiftGallery($free_gift);
           $sku_media = $this->imagesManager->getFirstImage($sku_for_gallery, 'plp', TRUE);
           if ($sku_media) {
@@ -371,6 +375,7 @@ class PromotionController extends ControllerBase {
       'contexts' => [
         'session',
         'languages',
+        'url.query_args:context',
       ],
     ];
 
@@ -391,6 +396,10 @@ class PromotionController extends ControllerBase {
     Cache::mergeTags($cache_array['tags'], $sku->getCacheTags());
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
 
+    // We use app as default here as we have updated web code and APP
+    // code will be updated later to pass the value all the time.
+    // So if someone invokes this without the context, we use app as default.
+    AlshayaPromoContextManager::updateDefaultContext('app');
     $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
     $response = new CacheableJsonResponse(['label' => $label]);
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
@@ -421,7 +430,10 @@ class PromotionController extends ControllerBase {
 
     // Add cache metadata from cart.
     Cache::mergeTags($cache_array['tags'], $cart->getCacheTags());
-
+    // We use app as default here as we have updated web code and APP
+    // code will be updated later to pass the value all the time.
+    // So if someone invokes this without the context, we use app as default.
+    AlshayaPromoContextManager::updateDefaultContext('app');
     $productLabels = [];
     foreach ($cart->getItems() as $item) {
       $productLabels[$item['sku']]['sku'] = $item['sku'];

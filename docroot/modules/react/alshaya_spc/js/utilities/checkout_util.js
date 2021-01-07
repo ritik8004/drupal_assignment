@@ -7,6 +7,7 @@ import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
+import { redirectToCart } from './get_cart';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -121,6 +122,14 @@ export const placeOrder = (paymentMethod) => {
           return;
         }
 
+        // If cart has some OOS item.
+        if (response.data.error !== undefined
+          && parseInt(response.data.error_code, 10) === 506) {
+          Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.CHECKOUT_ERRORS);
+          redirectToCart();
+          return;
+        }
+
         if (response.data.error && response.data.redirectUrl !== undefined) {
           Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           window.location = response.data.redirectUrl;
@@ -202,6 +211,9 @@ export const addShippingInCart = (action, data) => {
           return null;
         }
 
+        if (!validateCartResponse(response.data)) {
+          return null;
+        }
         // If there is no error on shipping update.
         if (response.data.error === undefined) {
           setBillingFlagInStorage(response.data);
@@ -236,7 +248,12 @@ export const addBillingInCart = (action, data) => {
       billing_info: data,
     })
     .then(
-      (response) => response.data,
+      (response) => {
+        if (!validateCartResponse(response.data)) {
+          return null;
+        }
+        return response.data;
+      },
       () => ({
         error: true,
         error_message: getStringMessage('global_error'),
@@ -387,7 +404,9 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
     }
   }
 
-  validateCartResponse(cartResult);
+  if (!validateCartResponse(cartResult)) {
+    return;
+  }
 
   // If error/exception, show at cart top.
   if (cartResult.error !== undefined) {

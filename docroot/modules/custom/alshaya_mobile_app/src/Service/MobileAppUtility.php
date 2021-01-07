@@ -675,6 +675,9 @@ class MobileAppUtility {
         'path' => $path,
         'deeplink' => $deeplink,
         'include_in_menu' => (bool) $term->include_in_menu,
+        'show_on_dpt' => isset($term->show_on_dept) ? (int) $term->show_on_dept : NULL,
+        'cta' => $term->cta ?? NULL ,
+        'display_view_all' => isset($term->display_view_all) ? (int) $term->display_view_all : NULL,
       ];
 
       if (is_object($file = $this->productCategoryTree->getMobileBanner($term->tid, $langcode))
@@ -808,6 +811,10 @@ class MobileAppUtility {
         $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
         /** @var \Drupal\user\Entity\User $user */
         $user = alshaya_acm_customer_create_drupal_user($customer);
+
+        $user->set('preferred_langcode', $this->currentLanguage);
+        $user->save();
+
         if ($block) {
           $user->block();
           $user->save();

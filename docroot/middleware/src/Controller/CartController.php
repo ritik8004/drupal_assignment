@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\EventListener\StockEventListener;
 use App\Helper\CustomerHelper;
+use App\Service\CartErrorCodes;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\CheckoutDefaults;
 use App\Service\Config\SystemSettings;
@@ -202,7 +204,7 @@ class CartController {
 
     // If there is any exception/error, return as is with exception message
     // without processing further.
-    if (!empty($data['error'])) {
+    if (empty($data) || !empty($data['error'])) {
       $this->logger->error('Error while getting cart:@cart_id Error:@error', [
         '@cart_id' => $cart_id,
         '@error' => json_encode($data),
@@ -285,7 +287,13 @@ class CartController {
         && !empty($data['shipping']['address'])
         && $data["shipping"]["type"] !== 'click_and_collect'
     ) {
-      $data['shipping']['methods'] = $this->cart->getHomeDeliveryShippingMethods($data['shipping']);
+      $shipping_methods = $this->cart->getHomeDeliveryShippingMethods($data['shipping']);
+
+      if (isset($shipping_methods['error'])) {
+        return $shipping_methods;
+      }
+
+      $data['shipping']['methods'] = $shipping_methods;
     }
 
     if (empty($data['payment']['methods']) && !empty($data['shipping']['method'])) {
@@ -480,6 +488,7 @@ class CartController {
 
           // If carrier info available in request, use that
           // instead getting shipping methods.
+          $hd_shipping_methods = [];
           if (!empty($carrier_info)) {
             $shipping_methods[] = [
               'carrier_code' => $carrier_info['carrier'],
@@ -488,11 +497,17 @@ class CartController {
           }
           else {
             $shipping_methods = $this->cart->getHomeDeliveryShippingMethods($shipping_data);
+            $hd_shipping_methods = $shipping_methods;
+          }
 
-            // If no shipping method.
-            if (empty($shipping_methods)) {
-              return new JsonResponse(['error' => TRUE]);
-            }
+          // If no shipping method.
+          if (isset($shipping_methods['error'])) {
+            $this->logger->notice('Error while shipping update manual for HD. Data: @data Cart: @cart_id Error message: @error_message', [
+              '@data' => json_encode($request_content),
+              '@cart_id' => $this->cart->getCartId(),
+              '@error_message' => $shipping_methods['error_message'],
+            ]);
+            return new JsonResponse($shipping_methods);
           }
 
           $shipping_info['carrier_info'] = [
@@ -506,6 +521,9 @@ class CartController {
             '@cart_id' => $this->cart->getCartId(),
           ]);
           $cart = $this->cart->addShippingInfo($shipping_info, $action, $update_billing);
+          if ($cart && !empty($cart['shipping']) && !empty($hd_shipping_methods)) {
+            $cart['shipping']['methods'] = $hd_shipping_methods;
+          }
         }
         break;
 
@@ -521,10 +539,30 @@ class CartController {
         break;
 
       case CartActions::CART_PAYMENT_FINALISE:
-        $cart = $this->cart->getCart();
+        // Fetch fresh cart from magento.
+        $cart = $this->cart->getCart(TRUE);
         $is_error = FALSE;
+
+        $error_message = 'Delivery Information is incomplete. Please update and try again.';
+        $error_code = CartErrorCodes::CART_ORDER_PLACEMENT_ERROR;
+
+        if (is_array($cart)
+          && $this->cart->isCartHasOosItem($cart)) {
+          $is_error = TRUE;
+          $this->logger->error('Error while finalizing payment. Cart has an OOS item. Cart: @cart.', [
+            '@cart' => json_encode($cart),
+          ]);
+
+          $skus = array_column($cart['cart']['items'], 'sku');
+          foreach ($skus as $sku) {
+            StockEventListener::$oosSkus[] = $sku;
+          }
+
+          $error_message = 'Cart contains some items which are not in stock.';
+          $error_code = CartErrorCodes::CART_HAS_OOS_ITEM;
+        }
         // Check if shipping method is present else throw error.
-        if (empty($cart['shipping']['method'])) {
+        elseif (empty($cart['shipping']['method'])) {
           $is_error = TRUE;
           $this->logger->error('Error while finalizing payment. No shipping method available. Cart: @cart.', [
             '@cart' => json_encode($cart),
@@ -566,8 +604,8 @@ class CartController {
         if ($is_error) {
           return new JsonResponse([
             'error' => TRUE,
-            'error_code' => 505,
-            'message' => 'Delivery Information is incomplete. Please update and try again.',
+            'error_code' => $error_code,
+            'message' => $error_message,
           ]);
         }
 
@@ -736,7 +774,7 @@ class CartController {
       $response = [
         'success' => TRUE,
         'redirectUrl' => $result['redirect_url'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
-        'isAbsoluteUrl' => $result['redirect_url'] ? TRUE : FALSE,
+        'isAbsoluteUrl' => isset($result['redirect_url']),
       ];
 
       return new JsonResponse($response);

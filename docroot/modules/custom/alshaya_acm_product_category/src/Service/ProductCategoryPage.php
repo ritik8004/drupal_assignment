@@ -169,7 +169,7 @@ class ProductCategoryPage {
     }
 
     $cache_tags = [
-      'taxonomy_term:' . $tid,
+      'taxonomy_term:' . $term->id(),
     ];
 
     $parents = array_reverse($storage->loadAllParents($term->id()));

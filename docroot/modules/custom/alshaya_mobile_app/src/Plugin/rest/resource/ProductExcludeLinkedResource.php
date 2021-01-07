@@ -22,6 +22,7 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a resource to get product details excliding linked products.
@@ -114,6 +115,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
   protected $productCategoryHelper;
 
   /**
+   * The request stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -144,6 +152,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   Sku info helper object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   The Product Category helper service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack service.
    */
   public function __construct(
     array $configuration,
@@ -159,7 +169,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     ProductOptionsManager $product_options_manager,
     ModuleHandlerInterface $module_handler,
     SkuInfoHelper $sku_info_helper,
-    ProductCategoryHelper $product_category_helper
+    ProductCategoryHelper $product_category_helper,
+    RequestStack $request_stack
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -176,6 +187,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $this->moduleHandler = $module_handler;
     $this->skuInfoHelper = $sku_info_helper;
     $this->productCategoryHelper = $product_category_helper;
+    $this->requestStack = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -196,7 +208,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
       $container->get('acq_sku.product_options_manager'),
       $container->get('module_handler'),
       $container->get('alshaya_acm_product.sku_info'),
-      $container->get('alshaya_acm_product.category_helper')
+      $container->get('alshaya_acm_product.category_helper'),
+      $container->get('request_stack')
     );
   }
 
@@ -227,7 +240,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
         ->getGeneratedUrl();
     }
 
-    $data = $this->getSkuData($skuEntity, $link);
+    $with_parent_details = (bool) $this->requestStack->query->get('with_parent_details');
+
+    $data = $this->getSkuData($skuEntity, $link, $with_parent_details);
     $data['delivery_options'] = NestedArray::mergeDeepArray([
       $this->getDeliveryOptionsConfig($skuEntity),
       $data['delivery_options'],
@@ -244,9 +259,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
 
     // Allow other modules to alter product data.
-    $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity);
+    $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity, $with_parent_details);
     if (isset($data['grouping_attribute_with_swatch'])) {
-      $data['grouped_variants'] = $this->getGroupedVariants($data);
+      $data['grouped_variants'] = $this->getGroupedVariants($data, $with_parent_details);
     }
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
@@ -258,6 +273,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
     if (!empty($this->cache['tags'])) {
       $cacheableMetadata->addCacheTags($this->cache['tags']);
     }
+
+    $cacheableMetadata->addCacheContexts(['url.query_args']);
 
     $response->addCacheableDependency($cacheableMetadata);
 
@@ -271,11 +288,13 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *   SKU Entity.
    * @param string $link
    *   Product link if main product.
+   * @param bool $with_parent_details
+   *   Flag to identify whether to get parent details or not.
    *
    * @return array
    *   Product Data.
    */
-  private function getSkuData(SKUInterface $sku, string $link = ''): array {
+  private function getSkuData(SKUInterface $sku, string $link = '', bool $with_parent_details = FALSE): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
 
@@ -299,6 +318,11 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
     $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
+
+    if ($with_parent_details === TRUE) {
+      $plugin = $sku->getPluginInstance();
+      $data['parent_max_sale_qty'] = $parent_sku ? (int) $plugin->getMaxSaleQty($parent_sku) : NULL;
+    }
 
     if ($sku->get('attr_brand_logo')->getString()) {
       $data['brand_logo'] = $this->getBrandLogo($sku);
@@ -359,7 +383,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
         if (!$child instanceof SKUInterface) {
           continue;
         }
-        $variant = $this->getSkuData($child);
+        $variant = $this->getSkuData($child, '', $with_parent_details);
         $variant['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($child, $values['attributes']);
         $data['variants'][] = $variant;
       }
@@ -382,18 +406,20 @@ class ProductExcludeLinkedResource extends ResourceBase {
    *
    * @param array $data
    *   Array of product data.
+   * @param bool $with_parent_details
+   *   Flag to identify whether to get parent details or not.
    *
    * @return array
    *   Grouping products for pdp.
    */
-  private function getGroupedVariants(array &$data) {
+  private function getGroupedVariants(array &$data, bool $with_parent_details) {
     $grouped_variants = [];
     if (!empty($data['grouped_variants'])) {
       foreach ($data['grouped_variants'] as $grouped_sku) {
         if (!$grouped_sku instanceof SKUInterface) {
           continue;
         }
-        $variant = $this->getSkuData($grouped_sku);
+        $variant = $this->getSkuData($grouped_sku, '', $with_parent_details);
         if (isset($data['grouped_variants'][$grouped_sku->getSku()]['attributes'])) {
           $variant['attributes'] = $data['grouped_variants'][$grouped_sku->getSku()]['attributes'];
         }
@@ -553,7 +579,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
    */
   private function getPromotions(SKUInterface $sku): array {
     $promotions = [];
-    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
+    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', TRUE, 'app');
     foreach ($promotions_data as $nid => $promotion) {
       $this->cache['tags'][] = 'node:' . $nid;
       $promotion_node = $this->nodeStorage->load($nid);

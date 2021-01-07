@@ -229,6 +229,12 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 30, 'ar' => 27],
     ],
+    'bh' => [
+      'store_id' => ['en' => 35, 'ar' => 32],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 41, 'ar' => 38],
+    ],
     'magento_secrets' => [
       'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
       'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
@@ -251,6 +257,12 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 30, 'ar' => 27],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 36, 'ar' => 33],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 42, 'ar' => 39],
     ],
   ],
   'hm_mapp' => [
@@ -673,6 +685,12 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 21, 'ar' => 18],
     ],
+    'bh' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
   ],
   'we_oms_uat' => [
     'url' => 'https://wes-uatoms.store.alshaya.com',
@@ -724,6 +742,12 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 20, 'ar' => 17],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 26, 'ar' => 23],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
     ],
   ],
   'aeo_qa' => [

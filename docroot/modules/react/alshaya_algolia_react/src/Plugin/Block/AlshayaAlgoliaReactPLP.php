@@ -7,6 +7,12 @@ use Drupal\alshaya_algolia_react\AlshayaAlgoliaReactBlockBase;
 use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\file\FileInterface;
+use Drupal\alshaya_custom\Utility;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides a block to display 'plp' results.
@@ -42,6 +48,27 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
   protected $alshayaAlgoliaReactConfig;
 
   /**
+   * Product category tree.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   */
+  protected $productCategoryTree;
+
+  /**
+   * Term storage object.
+   *
+   * @var \Drupal\taxonomy\TermStorageInterface
+   */
+  protected $termStorage;
+
+  /**
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
@@ -54,17 +81,30 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
    *   Product category page service.
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
    *   Alshaya Algolia React Config.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
+   *   Product category tree.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     ProductCategoryPage $product_category_page,
-    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
+    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config,
+    ProductCategoryTree $product_category_tree,
+    EntityTypeManagerInterface $entity_type_manager,
+    LanguageManagerInterface $language_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryPage = $product_category_page;
     $this->alshayaAlgoliaReactConfig = $alshaya_algolia_react_config;
+    $this->productCategoryTree = $product_category_tree;
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -81,7 +121,10 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product_category.page'),
-      $container->get('alshaya_algoila_react.alshaya_algolia_react_config')
+      $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
+      $container->get('alshaya_acm_product_category.product_category_tree'),
+      $container->get('entity_type.manager'),
+      $container->get('language_manager')
     );
   }
 
@@ -103,12 +146,56 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     ];
 
     $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory($lang));
-
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
     $algoliaSearch['pageSubType'] = 'plp';
+
+    // Get sub categories information.
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+    $current_language = $this->languageManager->getCurrentLanguage()->getId();
+    if ($term instanceof TermInterface) {
+      $group_sub_category_enabled = $term->get('field_group_by_sub_categories')->getValue();
+      if ($group_sub_category_enabled) {
+        $sub_categories = $term->get('field_select_sub_categories_plp')->getValue();
+        $subcategories = [];
+        foreach ($sub_categories as $term_id) {
+          $subcategory = $this->termStorage->load($term_id['value']);
+
+          // Get current language translation if available.
+          if ($subcategory->hasTranslation($current_language)) {
+            $subcategory = $subcategory->getTranslation($current_language);
+          }
+
+          $data = [];
+          $data['tid'] = $subcategory->id();
+
+          $data['title'] = $subcategory->get('field_plp_group_category_title')->getString();
+          if (empty($data['title'])) {
+            $data['title'] = $subcategory->label();
+          }
+
+          $data['weight'] = $subcategory->getWeight();
+          $data['description'] = $subcategory->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '';
+
+          $value = $subcategory->get('field_plp_group_category_img')->getValue()[0] ?? [];
+          $image = (!empty($value)) ? $this->fileStorage->load($value['target_id']) : NULL;
+          if ($image instanceof FileInterface) {
+            $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
+            $data['image']['alt'] = $value['alt'];
+          }
+
+          // Get category level informartion.
+          $data['category'] = $this->productCategoryPage->getCurrentSelectedCategory($lang, $subcategory->id());
+
+          $subcategories[$subcategory->id()] = $data;
+        }
+        uasort($subcategories, [Utility::class, 'weightArraySort']);
+
+        $algoliaSearch['subCategories'] = $subcategories;
+      }
+    }
 
     return [
       '#type' => 'markup',

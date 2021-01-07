@@ -29,8 +29,18 @@ export const restoreCartApiUrl = () => i18nMiddleWareUrl('cart/restore');
  */
 export const applyRemovePromo = (action, promoCode) => {
   let cart = cartAvailableInStorage();
-  if (cart === false) {
+  if (cart === false
+    || cart === null
+    || cart === 'empty') {
+    window.location.href = Drupal.url('cart');
     return null;
+  }
+
+  // Remove any promo coupons errors on promo
+  // coupon application success.
+  const promoError = document.querySelector('#promo-message.error');
+  if (promoError !== null) {
+    promoError.outerHTML = '<div id="promo-message" />';
   }
 
   if (!Number.isInteger(cart)) {
@@ -59,6 +69,7 @@ export const updateCartItemData = (action, sku, quantity) => {
   if (cart === false
     || cart === null
     || cart === 'empty') {
+    window.location.href = Drupal.url('cart');
     return null;
   }
 
@@ -107,7 +118,15 @@ export const addPaymentMethodInCart = (action, data) => {
   return axios.post(apiUrl, {
     action,
     payment_info: data,
-  }).then((response) => response.data, (error) => {
+  }).then((response) => {
+    if (!validateCartResponse(response.data)) {
+      if (typeof response.data.message !== 'undefined') {
+        Drupal.logJavascriptError(action, response.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+      }
+      return null;
+    }
+    return response.data;
+  }, (error) => {
     // Processing of error here.
     Drupal.logJavascriptError('add-payment-method-in-cart', error, GTM_CONSTANTS.PAYMENT_ERRORS);
   });

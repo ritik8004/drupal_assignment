@@ -2,6 +2,7 @@
 
 namespace App\Service\Magento;
 
+use App\Service\CartErrorCodes;
 use App\Service\Utility;
 use GuzzleHttp\TransferStats;
 use GuzzleHttp\Exception\ConnectException;
@@ -90,6 +91,7 @@ class MagentoApiWrapper {
     };
 
     $request_options['timeout'] = $request_options['timeout'] ?? $this->magentoInfo->getPhpTimeout('default');
+    $request_options['headers']['Alshaya-Channel'] = 'web';
     try {
       $response = $this->magentoInfo->getMagentoApiClient()->request(
         $method,
@@ -118,10 +120,23 @@ class MagentoApiWrapper {
         }
         elseif (!empty($result['message'])) {
           $message = $this->getProcessedErrorMessage($result);
+
           // Log the error message.
-          $this->logger->error('Error while doing MDC api call. Error message: @message', [
+          $this->logger->error('Error while doing MDC api call. Error message: @message, Code: @result_code, Response code: @response_code.', [
             '@message' => $message,
+            '@result_code' => $result['code'] ?? '-',
+            '@response_code' => $response->getStatusCode(),
           ]);
+
+          // The following case happens when there is a stock mismatch between
+          // Magento and OMS.
+          if (($response->getStatusCode() === 400)
+            && (isset($result['code']))
+            && ($result['code'] == CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH)
+          ) {
+            throw new \Exception($message, CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH);
+          }
+
           throw new \Exception($message, 500);
         }
         elseif (!empty($result['messages']) && !empty($result['messages']['error'])) {

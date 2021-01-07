@@ -615,7 +615,8 @@
       padding: 0.5rem 0;
     }
 
-    .form-type-configurable-select-group {
+    .form-type-configurable-select-group,
+    .configurable-select {
       @include breakpoint($desktop) {
         max-width: none;
       }
@@ -633,7 +634,28 @@
           top: -0.1875rem;
         }
       }
+    }
 
+    .configurable-select {
+      @include breakpoint($only-mobile) {
+        position: relative;
+        padding-top: 1.25rem !important;
+
+        @include select-wrapper(100%);
+
+        &::after {
+          top: 1.25rem;
+        }
+
+        select.form-select {
+          @include select-style(100%);
+
+          width: 100%;
+        }
+      }
+    }
+
+    .form-type-configurable-select-group {
       .group-wrapper {
         .group {
           @include breakpoint($only-mobile) {
@@ -741,7 +763,7 @@
       }
 
       @include breakpoint($desktop) {
-        padding: calc((100vh - 40rem) / 2) calc((100vw - 60.13rem) / 2) !important;
+        padding: calc((100vh - 34.75rem) / 2) calc((100vw - 60.13rem) / 2) !important;
       }
     }
 
@@ -884,6 +906,20 @@ body {
   &.free-gifts-modal-overlay:not(.free-gift-detail-modal) {
     .ui-dialog #drupal-modal {
       height: auto !important;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  #product-full-screen-gallery-container {
+    #product-full-screen-gallery {
+      .slick-dots {
+        button {
+          &::before {
+            display: none;
+          }
+        }
+      }
     }
   }
 }

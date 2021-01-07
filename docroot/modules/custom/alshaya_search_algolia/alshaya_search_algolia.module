@@ -158,8 +158,9 @@ function alshaya_search_algolia_alshaya_search_filter_link_alter(&$link, array &
   $link = '/' . $langcode . '/search#refinementList[attr_' . $data['attribute_code'] . '][0]=';
 }
 
+
 /**
- * Implements hook_srp_sort_settings_form_alter(). 
+ * Implements hook_srp_sort_settings_form_alter().
  */
 function alshaya_search_algolia_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['#submit'][] = '_alshaya_search_algolia_sort_settings_submit';

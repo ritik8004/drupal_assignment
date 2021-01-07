@@ -106,7 +106,8 @@ class CartPromotionsResource extends ResourceBase {
       $container->get('alshaya_mobile_app.utility'),
       $container->get('alshaya_acm_promotion.manager'),
       $container->get('entity_type.manager'),
-      $container->get('acq_commerce.api')
+      $container->get('acq_commerce.api'),
+      $container->get('alshaya_acm_product.context_manager')
     );
   }
 
@@ -146,11 +147,14 @@ class CartPromotionsResource extends ResourceBase {
       $cart = $this->apiWrapper->getCart($cart_id);
       $cartRulesApplied = $cart['cart_rules'];
 
-      $promotions = $this->alshayaAcmPromotionManager->getAllCartPromotions($selected_promotions, $cartRulesApplied);
+      $promotions = $this->alshayaAcmPromotionManager->getAllCartPromotions($selected_promotions, $cartRulesApplied, 'app');
 
       $response = new ResourceResponse($promotions);
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
         '#cache' => [
+          'contexts' => [
+            'url.query_args:context',
+          ],
           'tags' => [
             'node_type:acq_promotion',
             'cart:' . $cart_id,

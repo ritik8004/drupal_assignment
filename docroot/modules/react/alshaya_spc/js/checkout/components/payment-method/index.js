@@ -67,6 +67,9 @@ export default class PaymentMethod extends React.Component {
 
   finalisePayment = (paymentData) => {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
+      if (!result) {
+        return;
+      }
       if (result.error !== undefined && result.error) {
         removeFullScreenLoader();
         if (result.error_code !== undefined) {

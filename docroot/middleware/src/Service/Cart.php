@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\EventListener\StockEventListener;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Drupal\Drupal;
@@ -318,6 +319,9 @@ class Cart {
         'searchCriteria[filterGroups][0][filters][0][field]' => 'customer_id',
         'searchCriteria[filterGroups][0][filters][0][value]' => $customer_id,
         'searchCriteria[filterGroups][0][filters][0][condition_type]' => 'eq',
+        'searchCriteria[filterGroups][1][filters][0][field]' => 'is_active',
+        'searchCriteria[filterGroups][1][filters][0][value]' => 1,
+        'searchCriteria[filterGroups][1][filters][0][condition_type]' => 'eq',
       ],
     ];
 
@@ -568,8 +572,20 @@ class Cart {
 
             if ($e->getCode() == 404) {
               $this->removeCartFromSession();
-              $this->createCart($this->getDrupalInfo('customer_id'));
-              return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+
+              if ($action === CartActions::CART_ADD_ITEM) {
+                $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
+
+                if (!empty($new_cart['error'])) {
+                  return $new_cart;
+                }
+
+                // Get fresh cart.
+                $this->getCart(TRUE);
+                return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+              }
+
+              return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             elseif ($exception_type === 'OOS') {
               $this->refreshStock([$sku, $variant_sku]);
@@ -894,6 +910,16 @@ class Cart {
    */
   public function associateCartToCustomer(int $customer_id, bool $reset_cart = FALSE) {
     $cart_id = $this->getCartId();
+
+    // If cart id not available in session, don't process further.
+    if (empty($cart_id)) {
+      $this->logger->error('Trying to associate cart to the customer: @customer_id but cart is not available in session.', [
+        '@customer_id' => $customer_id,
+      ]);
+
+      return FALSE;
+    }
+
     if ($reset_cart) {
       $this->getRestoredCart();
     }
@@ -1210,9 +1236,10 @@ class Cart {
     catch (\Exception $e) {
       static::$cart = NULL;
 
-      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message', [
+      $this->logger->error('Error while updating cart on MDC for action @action. Error message: @message, Code: @code.', [
         '@action' => $action,
         '@message' => $e->getMessage(),
+        '@code' => $e->getCode(),
       ]);
 
       $is_add_to_cart = ($action == CartActions::CART_ADD_ITEM);
@@ -1235,6 +1262,10 @@ class Cart {
       }
       else {
         $this->cancelCartReservation($e->getMessage());
+      }
+
+      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+        $this->resetCartCache();
       }
 
       // Get cart object if already not available.
@@ -1320,7 +1351,10 @@ class Cart {
       return [];
     }
 
-    $key = md5(json_encode($data['address']));
+    // Prepare address data for api call.
+    $formatted_address = $this->formatShippingEstimatesAddress($data['address']);
+
+    $key = md5(json_encode($formatted_address));
     if (isset($static[$key])) {
       return $static[$key];
     }
@@ -1336,7 +1370,7 @@ class Cart {
 
     $request_options = [
       'timeout' => $this->magentoInfo->getPhpTimeout('cart_estimate_shipping'),
-      'json' => $data,
+      'json' => ['address' => $formatted_address],
     ];
 
     try {
@@ -1366,6 +1400,48 @@ class Cart {
       $this->cache->set('delivery_methods', $expire, $cache);
     }
     return $static[$key];
+  }
+
+  /**
+   * Format address structure for shipping estimates api.
+   *
+   * @param array $address
+   *   Address array.
+   *
+   * @return array
+   *   Formatted address array.
+   */
+  private function formatShippingEstimatesAddress(array $address) {
+    $data = [];
+    $data['firstname'] = $address['firstname'] ?? '';
+    $data['lastname'] = $address['lastname'] ?? '';
+    $data['email'] = $address['email'] ?? '';
+    $data['country_id'] = $address['country_id'] ?? '';
+    $data['city'] = $address['city'] ?? '';
+    $data['telephone'] = $address['telephone'] ?? '';
+    $data['custom_attributes'] = [];
+    foreach ($address['custom_attributes'] ?? [] as $attribute) {
+      if (empty($attribute['value'])) {
+        continue;
+      }
+
+      $data['custom_attributes'][] = [
+        'attribute_code' => $attribute['attribute_code'],
+        'value' => $attribute['value'],
+      ];
+    }
+
+    // If custom attributes not available, we check for extension attributes.
+    if (empty($data['custom_attributes']) && !empty($address['extension_attributes'])) {
+      foreach ($address['extension_attributes'] as $code => $value) {
+        $data['custom_attributes'][] = [
+          'attribute_code' => $code,
+          'value' => $value,
+        ];
+      }
+    }
+
+    return $data;
   }
 
   /**
@@ -1479,14 +1555,32 @@ class Cart {
    */
   public function placeOrder(array $data) {
     $url = sprintf('carts/%d/order', $this->getCartId());
-    $cart = $this->getCart();
+    // Fetch fresh cart from magento.
+    $cart = $this->getCart(TRUE);
+
+    $error_code = CartErrorCodes::CART_ORDER_PLACEMENT_ERROR;
+
+    // If cart has an OOS item.
+    if (is_array($cart)
+      && $this->isCartHasOosItem($cart)) {
+      $this->logger->error('Error while placing order. Cart has an OOS item. Cart: @cart.', [
+        '@cart' => json_encode($cart),
+      ]);
+
+      $skus = array_column($cart['cart']['items'], 'sku');
+      foreach ($skus as $sku) {
+        StockEventListener::$oosSkus[] = $sku;
+      }
+
+      return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
+    }
 
     // Check if shiping method is present else throw error.
     if (empty($cart['shipping']['method'])) {
       $this->logger->error('Error while placing order. No shipping method available. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // Check if shipping address not have custom attributes.
@@ -1494,7 +1588,7 @@ class Cart {
       $this->logger->error('Error while placing order. Shipping address not contains all info. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If address extension attributes doesn't contain all the required fields
@@ -1503,7 +1597,7 @@ class Cart {
       $this->logger->error('Error while placing order. Shipping address not contains all address extension attributes. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If first/last name not available in shipping address.
@@ -1512,7 +1606,7 @@ class Cart {
       $this->logger->error('Error while placing order. First name or Last name not available in cart for shipping address. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     // If first/last name not available in billing address.
@@ -1521,7 +1615,7 @@ class Cart {
       $this->logger->error('Error while placing order. First name or Last name not available in cart for billing address. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
-      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', 505);
+      return $this->utility->getErrorResponse('Delivery Information is incomplete. Please update and try again.', $error_code);
     }
 
     $lock = FALSE;
@@ -1632,6 +1726,33 @@ class Cart {
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
     }
+  }
+
+  /**
+   * Checks if cart has OOS item or not by item level attribute.
+   *
+   * @param array $cart
+   *   Cart data.
+   *
+   * @return bool
+   *   TRUE if cart has an OOS item.
+   */
+  public function isCartHasOosItem(array $cart) {
+    if (!empty($cart['cart']['items'])) {
+      foreach ($cart['cart']['items'] as $item) {
+        // If error at item level.
+        if (!empty($item['extension_attributes'])
+          && !empty($item['extension_attributes']['error_message'])) {
+          $exception_type = $this->exceptionType($item['extension_attributes']['error_message']);
+          // If OOS error message.
+          if (!empty($exception_type) && $exception_type == 'OOS') {
+            return TRUE;
+          }
+        }
+      }
+    }
+
+    return FALSE;
   }
 
   /**
@@ -1893,6 +2014,7 @@ class Cart {
     $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
     $this->cache->delete('cached_cart');
     $this->resetCartCache();
+    static::$cart = NULL;
   }
 
   /**
@@ -1944,6 +2066,8 @@ class Cart {
         '@response' => $e->getMessage(),
       ]);
     }
+
+    return [];
   }
 
   /**
@@ -2068,10 +2192,15 @@ class Cart {
    *   Prepared error message.
    */
   private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
+    $order_id = '';
+    if (isset($cart['cart'], $cart['cart']['extension_attributes'])) {
+      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    }
+
     $message[] = 'exception:' . $exception_message;
     $message[] = 'api:' . $api;
     $message[] = 'double_check_done:' . $double_check_done;
-    $message[] = 'order_id:' . $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    $message[] = 'order_id:' . $order_id;
     $message[] = 'cart_id:' . $cart['cart']['id'];
     $message[] = 'amount_paid:' . $cart['totals']['base_grand_total'];
 
