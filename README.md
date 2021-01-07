@@ -1,3 +1,4 @@
+
 # Alshaya
 
 ACSF D8 commerce project with Magento integration done via Acquia Conductor.
@@ -288,6 +289,8 @@ bin/behat --@tagname --profile=mcuat
 ### Debugging with xdebug
 
 A recommended IDE for debugging is PhpStorm. However, if you use another IDE, you should be able to apply the guidelines below with some tweaks.
+
+> *NOTE: XDEBUG Port configured in VM is 9002*
 
 #### Browser-based debugging
 
