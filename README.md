@@ -70,7 +70,7 @@ To prepare your local env:
   * `composer clear-cache`
   * `composer install`
   * `composer blt-alias`
-  * `blt vm`
+  * `vagrant up`
   * `vagrant ssh` to ssh into your vm
   * `blt blt:init:git-hooks`
   * `blt blt:init:settings`
@@ -86,6 +86,8 @@ To prepare your local env:
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
   * To do any change in VCL do it in `conf/varnish-4.vcl`, do `vagrant ssh` and run `sh box/scripts/configure-varnish.sh`
+
+Check for known issues during setup check here: https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/589004885/Developer+Handbook#DeveloperHandbook-LocalWorkarounds
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
