@@ -29,7 +29,10 @@ export const restoreCartApiUrl = () => i18nMiddleWareUrl('cart/restore');
  */
 export const applyRemovePromo = (action, promoCode) => {
   let cart = cartAvailableInStorage();
-  if (cart === false) {
+  if (cart === false
+    || cart === null
+    || cart === 'empty') {
+    window.location.href = Drupal.url('cart');
     return null;
   }
 
@@ -66,6 +69,7 @@ export const updateCartItemData = (action, sku, quantity) => {
   if (cart === false
     || cart === null
     || cart === 'empty') {
+    window.location.href = Drupal.url('cart');
     return null;
   }
 

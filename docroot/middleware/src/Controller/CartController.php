@@ -768,7 +768,7 @@ class CartController {
       $response = [
         'success' => TRUE,
         'redirectUrl' => $result['redirect_url'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
-        'isAbsoluteUrl' => $result['redirect_url'] ? TRUE : FALSE,
+        'isAbsoluteUrl' => isset($result['redirect_url']),
       ];
 
       return new JsonResponse($response);

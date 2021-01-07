@@ -91,6 +91,7 @@ class MagentoApiWrapper {
     };
 
     $request_options['timeout'] = $request_options['timeout'] ?? $this->magentoInfo->getPhpTimeout('default');
+    $request_options['headers']['Alshaya-Channel'] = 'web';
     try {
       $response = $this->magentoInfo->getMagentoApiClient()->request(
         $method,

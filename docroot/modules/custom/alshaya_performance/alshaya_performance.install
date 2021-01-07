@@ -10,6 +10,17 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * [5.13.0]Installs cache_tags_cleanup module if it is not enabled.
+ */
+function alshaya_performance_update_8007() {
+  if (!(\Drupal::moduleHandler()->moduleExists('cache_tags_cleanup'))) {
+    \Drupal::service('module_installer')->install(['cache_tags_cleanup']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Blacklist alshaya_product cache tags.
  */
 function alshaya_performance_update_8006() {

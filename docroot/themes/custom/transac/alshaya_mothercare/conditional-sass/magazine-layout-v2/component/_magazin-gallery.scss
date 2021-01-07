@@ -1,0 +1,21 @@
+.magv2-header {
+  .magv2-header-wrapper {
+    .cart-link {
+      @include breakpoint($only-mobile) {
+        height: 2.875rem;
+        width: 2.875rem;
+
+        &::before {
+          width: 1.4375rem;
+          height: 1.25rem;
+          background-size: contain;
+          position: absolute;
+          margin: 0 auto;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+  }
+}

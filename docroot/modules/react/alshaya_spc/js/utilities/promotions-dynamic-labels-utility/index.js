@@ -14,7 +14,7 @@ const PromotionsDynamicLabelsUtil = {
       return;
     }
 
-    let apiUrl = Drupal.url('promotions/dynamic-label-cart');
+    let apiUrl = Drupal.url('promotions/dynamic-label-cart?context=web');
     // We set cacheable=1 so it is always treated as anonymous user request.
     apiUrl = `${apiUrl}?cacheable=1&${Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData)}`;
 

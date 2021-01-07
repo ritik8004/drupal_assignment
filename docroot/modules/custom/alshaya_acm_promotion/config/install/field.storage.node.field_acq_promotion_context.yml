@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_acq_promotion_context
+field_name: field_acq_promotion_context
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: web
+      label: Web
+    -
+      value: app
+      label: 'Mobile App'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
