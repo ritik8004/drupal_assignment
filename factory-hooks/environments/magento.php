@@ -734,6 +734,12 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 21, 'ar' => 18],
     ],
+    'bh' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
   ],
   'we_oms_uat' => [
     'url' => 'https://wes-uatoms.store.alshaya.com',
@@ -785,6 +791,12 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 20, 'ar' => 17],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 26, 'ar' => 23],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
     ],
   ],
   'aeo_qa' => [

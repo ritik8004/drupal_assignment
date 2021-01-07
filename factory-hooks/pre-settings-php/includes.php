@@ -142,7 +142,13 @@ if ($env == 'local') {
 elseif ($env == 'travis') {
   $soauth_key_dir = '/home/travis/build/acquia-pso/alshaya/private/';
   $soauth_key_name = 'travis_acm';
-  // set default value for travis enviornment.
+}
+else {
+  $soauth_key_dir = $settings['server_home_dir'] . '/simple-oauth/' . $env . '/';
+}
+
+if ($env == 'local' || $env == 'travis') {
+  // set default value for local and travis enviornment.
   // secret settings file. See `post-settings/zzz_overrides`.
   $settings['alshaya_custom_shield_default_pass'] = 'travis';
   $settings['alshaya_acm_user_password'] = 'travis';
@@ -154,9 +160,6 @@ elseif ($env == 'travis') {
   $settings['alshaya_magento_soauth_client_secret'] = 'travis';
   $settings['alshaya_mobile_app_soauth_client_uuid'] = 'f2fc9587-9308-4801-87d9-e67767d4ae50';
   $settings['alshaya_mobile_app_soauth_client_secret'] = 'travis';
-}
-else {
-  $soauth_key_dir = $settings['server_home_dir'] . '/simple-oauth/' . $env . '/';
 }
 
 $settings['alshaya_acm_soauth_public_key'] = $soauth_key_dir . $soauth_key_name . '.pub';

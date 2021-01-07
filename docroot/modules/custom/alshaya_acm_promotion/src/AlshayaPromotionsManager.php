@@ -319,11 +319,13 @@ class AlshayaPromotionsManager {
    *   An array of selected promotions.
    * @param array $cartRulesApplied
    *   An array of rules applied on the cart.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array
    *   Array of all cart promotions.
    */
-  public function getAllCartPromotions(array $selected_promotions, array $cartRulesApplied) {
+  public function getAllCartPromotions(array $selected_promotions, array $cartRulesApplied, $context = '') {
     $promotions = [];
     if (!empty($selected_promotions)) {
       foreach ($selected_promotions as $promotion_rule_id) {
@@ -344,9 +346,7 @@ class AlshayaPromotionsManager {
       }
     }
 
-    // Load all the promotions of the three specific types we check below.
-    // We load only published promotions.
-    $subTypePromotions = $this->getAllPromotions([
+    $conditions = [
       [
         'field' => 'status',
         'value' => NodeInterface::PUBLISHED,
@@ -361,7 +361,18 @@ class AlshayaPromotionsManager {
         ],
         'operator' => 'IN',
       ],
-    ]);
+    ];
+
+    if (!empty($context)) {
+      $conditions[] = [
+        'field' => 'field_acq_promotion_context',
+        'value' => $context,
+      ];
+    }
+
+    // Load all the promotions of the three specific types we check below.
+    // We load only published promotions.
+    $subTypePromotions = $this->getAllPromotions($conditions);
 
     foreach ($subTypePromotions as $subTypePromotion) {
       $message = '';

@@ -19,6 +19,8 @@ import CurrentRefinements from '../components/algolia/current-refinements';
 import withPlpUrlAliasSync from '../components/url-sync/withPlpUrlAliasSync';
 import PLPHierarchicalMenu from '../components/algolia/widgets/PLPHierarchicalMenu';
 import PLPNoResults from '../components/algolia/PLPNoResults';
+import SubCategoryContent from '../components/subcategory';
+import ConditionalView from '../../common/components/conditional-view';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -55,18 +57,33 @@ const PlpApp = ({
     max_category_tree_depth: categoryDepth,
     promotionNodeId,
     ruleContext,
+    subCategories,
   } = drupalSettings.algoliaSearch;
 
   const filters = [];
+  let finalFilter = '';
+  let filterOperator = ' AND ';
+  let groupEnabled = false;
 
   // Do not show out of stock products.
   if (filterOos === true) {
-    filters.push('stock > 0');
+    finalFilter = '(stock > 0) AND ';
   }
 
   if (pageSubType === 'plp') {
-    // Filter for Category product listing page.
-    filters.push(`${categoryField}: "${defaultCategoryFilter}"`);
+    if (subCategories.length !== 0) {
+      filterOperator = ' OR ';
+      groupEnabled = true;
+      // Set all the filters selected in sub category.
+      Object.keys(subCategories).forEach((key) => {
+        const subCategoryField = subCategories[key].category.category_field;
+        const defaultSubCategoryFilter = subCategories[key].category.hierarchy;
+        filters.push(`${subCategoryField}: "${defaultSubCategoryFilter}"`);
+      });
+    } else {
+      // Filter for Category product listing page.
+      filters.push(`${categoryField}: "${defaultCategoryFilter}"`);
+    }
   } else if (pageSubType === 'product_option_list') {
     // Filter for product option list page.
     const {
@@ -91,6 +108,9 @@ const PlpApp = ({
   }
 
   const defaultpageRender = getBackToPlpPage(pageType);
+
+  finalFilter = `${finalFilter}(${filters.join(filterOperator)})`;
+
   return (
     <InstantSearch
       searchClient={searchClient}
@@ -101,14 +121,25 @@ const PlpApp = ({
     >
       <Configure
         clickAnalytics
-        hitsPerPage={itemsPerPage}
-        filters={filters.join(' AND ')}
+        hitsPerPage={groupEnabled ? 1000 : itemsPerPage}
+        filters={finalFilter}
         ruleContexts={ruleContext}
         optionalFilters={optionalFilter}
       />
       <PlpStickyFilter>
         {(callback) => (
           <>
+            <ConditionalView condition={(subCategories.length !== 0) && (pageSubType === 'plp')}>
+              <div id="block-subcategoryblock" className="block-alshaya-sub-category-block">
+                <div className="plp-subcategory-block">
+                  {Object.keys(subCategories || {}).map((id) => (
+                    <SubCategoryContent
+                      category={subCategories[id]}
+                    />
+                  ))}
+                </div>
+              </div>
+            </ConditionalView>
             <Filters
               indexName={indexName}
               limit={4}

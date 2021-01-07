@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\EventListener\StockEventListener;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Drupal\Drupal;
@@ -571,8 +572,20 @@ class Cart {
 
             if ($e->getCode() == 404) {
               $this->removeCartFromSession();
-              $this->createCart($this->getDrupalInfo('customer_id'));
-              return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+
+              if ($action === CartActions::CART_ADD_ITEM) {
+                $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
+
+                if (!empty($new_cart['error'])) {
+                  return $new_cart;
+                }
+
+                // Get fresh cart.
+                $this->getCart(TRUE);
+                return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+              }
+
+              return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             elseif ($exception_type === 'OOS') {
               $this->refreshStock([$sku, $variant_sku]);
@@ -1555,7 +1568,9 @@ class Cart {
       ]);
 
       $skus = array_column($cart['cart']['items'], 'sku');
-      $this->refreshStock($skus);
+      foreach ($skus as $sku) {
+        StockEventListener::$oosSkus[] = $sku;
+      }
 
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
     }
@@ -1999,6 +2014,7 @@ class Cart {
     $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
     $this->cache->delete('cached_cart');
     $this->resetCartCache();
+    static::$cart = NULL;
   }
 
   /**
@@ -2050,6 +2066,8 @@ class Cart {
         '@response' => $e->getMessage(),
       ]);
     }
+
+    return [];
   }
 
   /**
