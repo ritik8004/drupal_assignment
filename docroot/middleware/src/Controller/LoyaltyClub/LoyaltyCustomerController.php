@@ -245,6 +245,10 @@ class LoyaltyCustomerController {
       $user = $this->drupal->getSessionCustomerInfo();
       $data['customer'] = array_merge($request_content, ['isVerified' => 'Y']);
 
+      if (!empty($user['customer_id'])) {
+        $data['customer']['customerId'] = $user['customer_id'];
+      }
+
       $url = 'customers/quick-enrollment';
       $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
       $responseData = [
