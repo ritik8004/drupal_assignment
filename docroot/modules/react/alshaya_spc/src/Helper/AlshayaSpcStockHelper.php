@@ -135,7 +135,7 @@ class AlshayaSpcStockHelper {
    */
   public function refreshStockForSkusOnDeficiency(array $stock_mismatch_skus_data) {
     $skus_to_refresh_stock = [];
-    foreach ($stock_mismatch_skus_data as $sku => $sku_data) {
+    foreach ($stock_mismatch_skus_data as $sku => $user_requested_quantity) {
       $sku_entity = SKU::loadFromSku($sku);
       if (empty($sku_entity)) {
         continue;
@@ -144,7 +144,7 @@ class AlshayaSpcStockHelper {
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
       $plugin = $sku_entity->getPluginInstance();
       $stock = $plugin->getStock($sku_entity);
-      if (!empty($stock) && ($stock['quantity'] < $sku_data['qty'])) {
+      if (!empty($stock) && ($stock['quantity'] < $user_requested_quantity)) {
         $skus_to_refresh_stock[] = $sku;
       }
     }

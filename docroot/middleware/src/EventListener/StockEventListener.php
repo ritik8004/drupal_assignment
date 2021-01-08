@@ -88,9 +88,7 @@ class StockEventListener {
     }
 
     foreach ($skus_data as $data) {
-      self::$stockMismatchSkusData[$data['sku']] = [
-        'qty' => $data['qty'],
-      ];
+      self::$stockMismatchSkusData[$data['sku']] = $data['qty'];
     }
   }
 
