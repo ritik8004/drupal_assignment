@@ -397,6 +397,11 @@ class AlshayaAlgoliaIndexHelper {
       $object['attr_style'] = $attr_style;
     }
 
+    $attr_barcode = $sku->get('attr_aims_barcode')->getString();
+    if ($attr_barcode) {
+      $object['attr_aims_barcode'] = $attr_barcode;
+    }
+
     $object['url'] = $this->skuInfoHelper->getEntityUrl($node, FALSE);
     // Convert to array to always send key to index event with empty array.
     $object['product_labels'] = (array) $this->skuManager->getLabelsData($sku, 'plp');
