@@ -8,6 +8,8 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_alshaya_click_and_collect_config_alter().
@@ -120,6 +122,38 @@ function alshaya_mobile_app_options_list_resource_response_alter(&$data) {
           $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key]['deep_link'] = $mobile_app_utility->getDeepLinkForProductListProductOption($term_list['url']);
         }
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_query_TAG_NAME_alter().
+ */
+function alshaya_mobile_app_query_product_category_child_terms_alter(AlterableInterface $query) {
+  // Add cta field.
+  $query->leftJoin('taxonomy_term__field_cta', 'cta', 'cta.entity_id=tfd.tid');
+  $query->addField('cta', 'field_cta_value', 'cta');
+  // Add view all field.
+  $query->leftJoin('taxonomy_term__field_display_view_all', 'display_view_all', 'display_view_all.entity_id=tfd.tid');
+  $query->addField('display_view_all', 'field_display_view_all_value', 'display_view_all');
+  // Add show on dept. page field.
+  $query->leftJoin('taxonomy_term__field_show_on_department_page', 'show_on_dept', 'show_on_dept.entity_id=tfd.tid');
+  $query->addField('show_on_dept', 'field_show_on_department_page_value', 'show_on_dept');
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_alter().
+ */
+function alshaya_mobile_app_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
+  if (!empty($category['custom_attributes'])) {
+    if (isset($category['custom_attributes']['cta'])) {
+      $term->get('field_cta')->setValue($category['custom_attributes']['cta']['value']);
+    }
+    if (isset($category['custom_attributes']['display_view_all'])) {
+      $term->get('field_display_view_all')->setValue($category['custom_attributes']['display_view_all']['value']);
+    }
+    if (isset($category['custom_attributes']['show_on_dpt'])) {
+      $term->get('field_show_on_department_page')->setValue($category['custom_attributes']['show_on_dpt']['value']);
     }
   }
 }
