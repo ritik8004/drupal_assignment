@@ -128,7 +128,7 @@ class PaymentController {
       $this->logger->error('Payment method could not found. Detail: @details', [
         '@details' => json_encode($payment_method),
       ]);
-      $payment_method = 'NOT FOUND';
+      $payment_method = 'NOT_FOUND';
     }
 
     // If Payment-method is not selected by user.
@@ -193,7 +193,7 @@ class PaymentController {
       $this->logger->error('Payment method could not found. Detail: @details', [
         '@details' => json_encode($payment_method),
       ]);
-      $payment_method = 'NOT FOUND';
+      $payment_method = 'NOT_FOUND';
     }
 
     // If Payment-method is not selected by user.
