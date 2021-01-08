@@ -4,7 +4,7 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import LinkCardOptionEmail from './components/link-card-option-email';
 import LinkCardOptionCard from './components/link-card-option-card';
 import LinkCardOptionMobile from './components/link-card-option-mobile';
-import { handleSignUp, handleNotYou } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
+import { handleSignUp } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
 import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { getUserInput, processCheckoutCart } from '../../utilities/checkout_helper';
@@ -31,7 +31,7 @@ class AuraFormLinkCard extends React.Component {
 
   componentDidMount() {
     document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
-    document.addEventListener('loyaltyStatusUpdated', this.handleLoyaltyUpdateEvent, false);
+    document.addEventListener('loyaltyCardRemovedFromCart', this.handleLoyaltyCardUnset, false);
     document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
 
     // Get data from localStorage.
@@ -98,13 +98,8 @@ class AuraFormLinkCard extends React.Component {
     enableShowLinkCardMessage();
   };
 
-  handleLoyaltyUpdateEvent = (data) => {
-    this.showResponse({
-      type: 'failure',
-      message: '',
-    });
-
-    removeStorageInfo(getAuraLocalStorageKey());
+  handleLoyaltyCardUnset = (data) => {
+    this.resetStorage();
 
     const { stateValues } = data.detail;
 
@@ -175,8 +170,13 @@ class AuraFormLinkCard extends React.Component {
 
     if (Object.keys(userInput).length !== 0) {
       showFullScreenLoader();
-      processCheckoutCart(userInput);
+      processCheckoutCart({ ...userInput, action: 'set' });
     }
+  };
+
+  unLinkCard = () => {
+    showFullScreenLoader();
+    processCheckoutCart({ action: 'unset' });
   };
 
   selectOption = (option) => {
@@ -237,7 +237,7 @@ class AuraFormLinkCard extends React.Component {
           <div className="sub-text">
             { loyaltyCardLinkedToCart === true
               ? (
-                <a onClick={() => handleNotYou(cardNumber)}>
+                <a onClick={() => this.unLinkCard()}>
                   {Drupal.t('Not you?')}
                 </a>
               )
