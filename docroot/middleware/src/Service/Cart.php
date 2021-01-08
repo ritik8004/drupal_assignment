@@ -1489,20 +1489,17 @@ class Cart {
   /**
    * Get the payment method set on cart.
    *
-   * @param bool $get_expired
-   *   Flag whether we return expired data or not.
-   *
    * @return string
    *   Payment method set on cart.
    */
-  public function getPaymentMethodSetOnCart(bool $get_expired = FALSE) {
+  public function getPaymentMethodSetOnCart() {
     // Let the method be set again if user changes the language.
     if ($this->languageManager->isLanguageChanged()) {
       return '';
     }
 
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
-    if ($expire > 0 && ($method = $this->cache->get('payment_method', $get_expired))) {
+    if ($expire > 0 && ($method = $this->cache->get('payment_method'))) {
       return $method;
     }
 

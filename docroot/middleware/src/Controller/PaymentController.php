@@ -121,15 +121,7 @@ class PaymentController {
     }
 
     $cart = $this->cart->getCart();
-    $payment_method = $this->cart->getPaymentMethodSetOnCart(TRUE);
-
-    // If payment method is not string but array.
-    if (is_array($payment_method)) {
-      $this->logger->error('Payment method could not found. Detail: @details', [
-        '@details' => json_encode($payment_method),
-      ]);
-      $payment_method = 'NOT_FOUND';
-    }
+    $payment_method = $this->cart->getPaymentMethodSetOnCart();
 
     // If Payment-method is not selected by user.
     if (!$payment_method) {
@@ -186,7 +178,7 @@ class PaymentController {
     }
 
     $cart = $this->cart->getCart();
-    $payment_method = $this->cart->getPaymentMethodSetOnCart(TRUE);
+    $payment_method = $this->cart->getPaymentMethodSetOnCart();
 
     // If payment method is not string but array.
     if (is_array($payment_method)) {
