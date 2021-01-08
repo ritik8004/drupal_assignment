@@ -121,7 +121,16 @@ class PaymentController {
     }
 
     $cart = $this->cart->getCart();
-    $payment_method = $this->cart->getPaymentMethodSetOnCart();
+    $payment_method = $this->cart->getPaymentMethodSetOnCart(TRUE);
+
+    // If payment method is not string but array.
+    if (is_array($payment_method)) {
+      $this->logger->error('Payment method could not found. Detail: @details', [
+        '@details' => json_encode($payment_method),
+      ]);
+      $payment_method = 'NOT FOUND';
+    }
+
     // If Payment-method is not selected by user.
     if (!$payment_method) {
       $this->logger->error('User trying to access success url directly. Payment method is not set on cart. Order-Id: @order_id Cart: @cart', [
@@ -177,7 +186,16 @@ class PaymentController {
     }
 
     $cart = $this->cart->getCart();
-    $payment_method = $this->cart->getPaymentMethodSetOnCart();
+    $payment_method = $this->cart->getPaymentMethodSetOnCart(TRUE);
+
+    // If payment method is not string but array.
+    if (is_array($payment_method)) {
+      $this->logger->error('Payment method could not found. Detail: @details', [
+        '@details' => json_encode($payment_method),
+      ]);
+      $payment_method = 'NOT FOUND';
+    }
+
     // If Payment-method is not selected by user.
     if (!$payment_method) {
       $this->logger->error('User trying to access fail url directly. Payment method is not set on cart. Cart: @cart', [
