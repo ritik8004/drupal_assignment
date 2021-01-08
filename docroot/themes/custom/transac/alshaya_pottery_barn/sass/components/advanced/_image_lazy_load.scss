@@ -2,7 +2,6 @@
   transition: opacity 500ms ease-in-out;
   max-width: 100%;
   opacity: 1;
-  // min-height: 460px;
 
   &::before {
     content: "";
@@ -20,22 +19,3 @@
     }
   }
 }
-
-// .b-lazy {
-//   &.b-loaded {
-//     &.height-sync-processed {
-//       min-height: auto;
-//     }
-//   }
-// }
-
-// .b-loaded {
-//   &::before {
-//     content: "";
-//     display: block;
-//     width: 100%;
-//     min-height: 25rem;
-//     background: rgba(0, 0, 0, 0.02) url('#{$base_theme_img_directory_path}/assets/loader-new.svg') no-repeat center;
-//     background-size: 1rem;
-//   }
-// }
