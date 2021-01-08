@@ -6,6 +6,7 @@ use App\Helper\CookieHelper;
 use App\Service\Cart;
 use Psr\Log\LoggerInterface;
 use App\Service\Config\SystemSettings;
+use App\Service\Orders;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -58,6 +59,13 @@ class PaymentController {
   protected $cart;
 
   /**
+   * Order service.
+   *
+   * @var \App\Service\Orders
+   */
+  protected $order;
+
+  /**
    * PaymentController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -66,13 +74,17 @@ class PaymentController {
    *   System Settings service.
    * @param \App\Service\Cart $cart
    *   Cart service.
+   * @param \App\Service\Orders $order
+   *   Order service.
    */
   public function __construct(LoggerInterface $logger,
                               SystemSettings $settings,
-                              Cart $cart) {
+                              Cart $cart,
+                              Orders $order) {
     $this->logger = $logger;
     $this->settings = $settings;
     $this->cart = $cart;
+    $this->order = $order;
   }
 
   /**
@@ -121,7 +133,18 @@ class PaymentController {
     }
 
     $cart = $this->cart->getCart();
-    $payment_method = $this->cart->getPaymentMethodSetOnCart();
+
+    // Check and get order details from MDC.
+    $order = $this->order->getOrderById($order_id);
+    // If order not available in magento.
+    if (!$order) {
+      $this->logger->error('User is trying to access success url directly as order is not available for the orderId: @order_id.', [
+        '@order_id' => $order_id,
+      ]);
+      return $redirect;
+    }
+
+    $payment_method = $order['payment']['method'];
 
     // If Payment-method is not selected by user.
     if (!$payment_method) {
