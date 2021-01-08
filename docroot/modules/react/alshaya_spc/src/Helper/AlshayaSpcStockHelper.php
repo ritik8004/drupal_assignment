@@ -133,7 +133,7 @@ class AlshayaSpcStockHelper {
    * @return array
    *   The stock status of all skus or empty array if nothing is updated.
    */
-  public function smartRefreshStockForSkus(array $stock_mismatch_skus_data) {
+  public function refreshStockForSkusOnDeficiency(array $stock_mismatch_skus_data) {
     $skus_to_refresh_stock = [];
     foreach ($stock_mismatch_skus_data as $sku => $sku_data) {
       $sku_entity = SKU::loadFromSku($sku);

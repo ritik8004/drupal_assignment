@@ -184,11 +184,11 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
           ];
         }
 
-      case 'smart refresh stock':
+      case 'refresh stock on deficiency':
         if (empty($stock_mismatch_skus_data)) {
           throw new BadRequestHttpException('Missing required parameters');
         }
-        $stock = $this->spcStockHelper->smartRefreshStockForSkus($stock_mismatch_skus_data);
+        $stock = $this->spcStockHelper->refreshStockForSkusOnDeficiency($stock_mismatch_skus_data);
         if (!empty($stock)) {
           $response = [
             'status' => TRUE,

@@ -108,11 +108,11 @@ class StockEventListener {
     if (!empty(self::$stockMismatchSkusData)) {
       $request = $event->getRequest();
       $this->requestStack->push($request);
-      $this->drupal->triggerCheckoutEvent('smart refresh stock', [
+      $this->drupal->triggerCheckoutEvent('refresh stock on deficiency', [
         'stock_mismatch_skus_data' => self::$stockMismatchSkusData,
       ]);
       $this->requestStack->pop($request);
-      $this->logger->notice('Smart stock refresh done for skus @skus.', [
+      $this->logger->notice('Stock refresh on deficiency done for skus @skus.', [
         '@skus' => implode(',', array_keys(self::$stockMismatchSkusData)),
       ]);
     }
