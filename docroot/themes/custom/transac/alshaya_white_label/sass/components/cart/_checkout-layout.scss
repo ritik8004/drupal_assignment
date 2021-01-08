@@ -1,0 +1,49 @@
+.block-customer-service-block {
+  font-family: $alshaya-bold;
+  font-weight: normal;
+  text-transform: lowercase;
+  font-size: 0.6875rem;
+  padding: 1.375rem 1.5rem;
+
+  p {
+    color: $checkout_footer_txt;
+  }
+
+  .light {
+    font-family: $alshaya-thin;
+    color: $checkout_footer_light_txt;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+
+    .light {
+      font-family: $alshaya-bold;
+      font-weight: normal;
+      color: $checkout_footer_txt;
+      line-height: 1.5;
+    }
+
+    html[lang=ar] & {
+      line-height: 1.5;
+    }
+  }
+
+  h3 {
+    color: $checkout_section_titles;
+    margin-bottom: 0.8rem;
+  }
+
+  @include breakpoint($tablet) {
+    font-size: 0.875rem;
+  }
+
+  @include breakpoint($desktop) {
+    padding: 1.25rem 8.0625rem 3.25rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+    padding: 1rem;
+  }
+}
