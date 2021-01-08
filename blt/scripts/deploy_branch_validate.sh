@@ -2,14 +2,20 @@
 
 set -ev
 
+echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
+echo "TRAVIS_TAG: $TRAVIS_TAG"
+echo "TRAVIS_COMMIT_MESSAGE: $TRAVIS_COMMIT_MESSAGE"
+echo "TRAVIS_PULL_REQUEST: $TRAVIS_PULL_REQUEST"
+echo ""
+
 # Run this script only for merge.
-if [[ ! ($TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false") ]]
+if [ ! "$TRAVIS_PULL_REQUEST" = "false" ]
 then
   echo "Not a TRAVIS MERGE Build, no validation required."
   exit 0
 fi
 
-if [ ! "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]
+if [ ! "$TRAVIS_TAG" = "" ]
 then
   echo "TRAVIS Build request for tag, no validation required."
   exit 0
