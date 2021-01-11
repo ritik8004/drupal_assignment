@@ -1827,6 +1827,10 @@ class Cart {
    *
    * @return array
    *   Final status array.
+   *
+   * @todo Remove the usage of cart object and pass full order object as arg.
+   * Rather using cart object, pass full order object instead just order id
+   * and use all the required info from there.
    */
   public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();

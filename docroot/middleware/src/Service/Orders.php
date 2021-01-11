@@ -89,4 +89,26 @@ class Orders {
     return $this->cleanupOrder($order);
   }
 
+  /**
+   * Get order from magento by order id.
+   *
+   * @param int $order_id
+   *   Order id.
+   *
+   * @return array|bool
+   *   Order array or false if not found.
+   */
+  public function getOrderById(int $order_id) {
+    $url = $url = sprintf('orders/%d', $order_id);
+    try {
+      $result = $this->magentoApiWrapper->doRequest('GET', $url);
+      return $result;
+    }
+    catch (\Exception $e) {
+      return FALSE;
+    }
+
+    return FALSE;
+  }
+
 }
