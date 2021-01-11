@@ -341,7 +341,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'hierarchy';
           }
           elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
-            $context = $this->promoContextManager->getDefaultContext();
+            $context = $this->promoContextManager->getPromotionContext();
             $identifier = "field_acq_promotion_label.$context";
           }
           else {
