@@ -39,6 +39,16 @@ class AlshayaPromoContextManager {
   }
 
   /**
+   * Get Default context.
+   *
+   * @return string
+   *   Context - web/app.
+   */
+  public function getDefaultContext() {
+    return self::$context;
+  }
+
+  /**
    * Validates & fetches promotion context from the request.
    *
    * @return string

@@ -466,8 +466,12 @@ class AlshayaSearchApiQueryExecute {
     if ($server->supportsFeature('search_api_facets')) {
       $facet_data = [];
       foreach ($facets as $facet) {
+        $identifier = $facet->getFieldIdentifier();
+        if ($identifier == 'field_acq_promotion_label') {
+          $identifier = 'field_acq_promotion_label.app';
+        }
         $facet_data[$facet->id()] = [
-          'field' => $facet->getFieldIdentifier(),
+          'field' => $identifier,
           'limit' => $facet->getHardLimit(),
           'operator' => $facet->getQueryOperator(),
           'min_count' => $facet->getMinCount(),

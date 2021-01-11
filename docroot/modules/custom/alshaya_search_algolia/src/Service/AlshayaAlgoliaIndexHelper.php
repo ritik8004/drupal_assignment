@@ -370,10 +370,10 @@ class AlshayaAlgoliaIndexHelper {
 
       // Used for facets.
       if (in_array('web', $promotionRecord['context'])) {
-        $object['field_acq_promotion_label']['web'] = $promotionRecord['text'];
+        $object['field_acq_promotion_label']['web'][] = $promotionRecord['text'];
       }
       if (in_array('app', $promotionRecord['context'])) {
-        $object['field_acq_promotion_label']['app'] = $promotionRecord['text'];
+        $object['field_acq_promotion_label']['app'][] = $promotionRecord['text'];
       }
     }
 
