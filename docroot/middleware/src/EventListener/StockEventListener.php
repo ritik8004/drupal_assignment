@@ -17,9 +17,9 @@ class StockEventListener {
   /**
    * One dimensional array of OOS sku values.
    *
-   * @var array
+   * @var bool
    */
-  public static $oosSkus = [];
+  public static $oos = FALSE;
 
   /**
    * Contains SKU and stock data.
@@ -72,23 +72,13 @@ class StockEventListener {
   /**
    * Sets the static array so that it can be processed later.
    *
-   * @param array $skus_data
+   * @param array $sku_data
    *   Array containing arrays of sku and its quantity.
    */
-  public static function matchStockQuantity(array $skus_data) {
+  public static function matchStockQuantity(array $sku_data) {
     // Check if the array format is correct.
-    foreach ($skus_data as $key => $data) {
-      if (!isset($data['sku']) || !isset($data['qty'])) {
-        unset($skus_data[$key]);
-      }
-    }
-    // If empty, nothing to do.
-    if (empty($skus_data)) {
-      return;
-    }
-
-    foreach ($skus_data as $data) {
-      self::$stockMismatchSkusData[$data['sku']] = $data['qty'];
+    foreach ($sku_data as $sku => $quantity) {
+      self::$stockMismatchSkusData[$sku] = $quantity;
     }
   }
 
@@ -106,26 +96,16 @@ class StockEventListener {
     if (!empty(self::$stockMismatchSkusData)) {
       $request = $event->getRequest();
       $this->requestStack->push($request);
-      $this->drupal->triggerCheckoutEvent('refresh stock on deficiency', [
-        'stock_mismatch_skus_data' => self::$stockMismatchSkusData,
+      $this->drupal->triggerCheckoutEvent('refresh stock', [
+        'data' => [
+          'skus_data' => self::$stockMismatchSkusData,
+          'oos' => self::$oos,
+        ],
       ]);
       $this->requestStack->pop($request);
-      $this->logger->notice('Stock refresh on deficiency done for skus @skus.', [
+      $this->logger->notice('Stock refresh done for skus @skus.', [
         '@skus' => implode(',', array_keys(self::$stockMismatchSkusData)),
       ]);
-    }
-
-    if (!empty(self::$oosSkus)) {
-      // OOS products have been detected. So refresh stock for them.
-      // When we trigger the checkout event, we do not get the request object by
-      // default. So we set the current request object here so that it can be
-      // utilized there to fetch cookies etc.
-      $request = $event->getRequest();
-      $this->requestStack->push($request);
-      $this->drupal->triggerCheckoutEvent('refresh stock', [
-        'skus' => self::$oosSkus,
-      ]);
-      $this->requestStack->pop($request);
     }
   }
 

@@ -111,9 +111,8 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
   public function checkoutEvent(Request $request) {
     $action = $request->request->get('action');
     $cart = $request->request->get('cart');
-    $skus = $request->request->get('skus');
-    $stock_mismatch_skus_data = $request->request->get('stock_mismatch_skus_data');
-    if (empty($action) || (empty($cart) && empty($skus) && empty($stock_mismatch_skus_data))) {
+    $skus_data = $request->request->get('data');
+    if (empty($action) || (empty($cart) && empty($skus_data))) {
       throw new BadRequestHttpException('Missing required parameters');
     }
 
@@ -175,20 +174,13 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         break;
 
       case 'refresh stock':
-        $stock = $this->spcStockHelper->refreshStockForSkus($skus);
-
-        if (!empty($stock)) {
-          $response = [
-            'status' => TRUE,
-            'data' => $stock,
-          ];
+        if ($skus_data['oos']) {
+          $stock = $this->spcStockHelper->refreshStockForSkus(array_keys($skus_data['skus_data']));
+        }
+        else {
+          $stock = $this->spcStockHelper->refreshStockForSkusOnDeficiency($skus_data['skus_data']);
         }
 
-      case 'refresh stock on deficiency':
-        if (empty($stock_mismatch_skus_data)) {
-          throw new BadRequestHttpException('Missing required parameters');
-        }
-        $stock = $this->spcStockHelper->refreshStockForSkusOnDeficiency($stock_mismatch_skus_data);
         if (!empty($stock)) {
           $response = [
             'status' => TRUE,
