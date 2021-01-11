@@ -168,6 +168,12 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 27, 'ar' => 24],
     ],
+    'bh' => [
+      'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 38, 'ar' => 35],
+    ],
   ],
   // H&M.
   'hm_lpn' => [
