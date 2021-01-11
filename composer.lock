@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2d18d7aa497f97a02a32afdf630b095",
+    "content-hash": "23235ce04dbb3ac325edf129fbc88c87",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -10225,6 +10225,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "metatag_get_default_tags() does not revert config override language": "https://www.drupal.org/files/issues/2020-01-31/metatag-default-config-3108052-6.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
