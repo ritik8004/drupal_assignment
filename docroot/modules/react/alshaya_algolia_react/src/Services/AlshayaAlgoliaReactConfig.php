@@ -328,6 +328,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $identifier = 'field_category';
             $widget['type'] = 'hierarchy';
           }
+          elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
+            $identifier = 'field_acq_promotion_label.web';
+          }
           else {
             $identifier = $facet->getFieldIdentifier();
           }
