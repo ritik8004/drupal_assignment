@@ -16,6 +16,7 @@ import {
   getStorageInfo,
   removeStorageInfo,
 } from '../../../../../../js/utilities/storage';
+import getStringMessage from '../../../../utilities/strings';
 
 class AuraFormLinkCard extends React.Component {
   constructor(props) {
@@ -60,15 +61,24 @@ class AuraFormLinkCard extends React.Component {
     const { enableShowLinkCardMessage } = this.props;
     const { stateValues, searchData } = data.detail;
 
-    if (Object.keys(stateValues).length === 0) {
+    if (stateValues.error === true) {
       this.setState({
         ...getAuraDetailsDefaultState(),
         loyaltyCardLinkedToCart: false,
       });
 
+      let message = '';
+      if (stateValues.error_code === 'NO_CARD_FOUND') {
+        message = Drupal.t('No card found. Please try again.');
+      } else if (stateValues.error_code === 'MISSING_DATA') {
+        message = getStringMessage(stateValues.error_message) || '';
+      } else {
+        message = Drupal.t('Something went wrong. Please try again.');
+      }
+
       this.showResponse({
         type: 'failure',
-        message: Drupal.t('No card found. Please try again.'),
+        message,
       });
       return;
     }
@@ -158,7 +168,7 @@ class AuraFormLinkCard extends React.Component {
     removeStorageInfo(getAuraLocalStorageKey());
   };
 
-  linkCard = () => {
+  addCard = () => {
     this.resetStorage();
 
     const {
@@ -170,13 +180,13 @@ class AuraFormLinkCard extends React.Component {
 
     if (Object.keys(userInput).length !== 0) {
       showFullScreenLoader();
-      processCheckoutCart({ ...userInput, action: 'set' });
+      processCheckoutCart({ ...userInput, action: 'add' });
     }
   };
 
-  unLinkCard = () => {
+  removeCard = () => {
     showFullScreenLoader();
-    processCheckoutCart({ action: 'unset' });
+    processCheckoutCart({ action: 'remove' });
   };
 
   selectOption = (option) => {
@@ -225,7 +235,7 @@ class AuraFormLinkCard extends React.Component {
               <button
                 type="submit"
                 className="spc-aura-link-card-submit spc-aura-button"
-                onClick={() => this.linkCard()}
+                onClick={() => this.addCard()}
               >
                 { Drupal.t('Apply') }
               </button>
@@ -237,7 +247,7 @@ class AuraFormLinkCard extends React.Component {
           <div className="sub-text">
             { loyaltyCardLinkedToCart === true
               ? (
-                <a onClick={() => this.unLinkCard()}>
+                <a onClick={() => this.removeCard()}>
                   {Drupal.t('Not you?')}
                 </a>
               )

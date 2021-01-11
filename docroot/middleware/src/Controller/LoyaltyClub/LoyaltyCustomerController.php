@@ -13,6 +13,7 @@ use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Aura\SearchHelper;
 use App\Service\Cart;
 use App\Service\Aura\ValidationHelper;
+use App\Service\Aura\AuraErrorCodes;
 
 /**
  * Provides route callbacks for Loyalty Customer APIs.
@@ -328,48 +329,36 @@ class LoyaltyCustomerController {
   public function updateLoyaltyCard(Request $request) {
     try {
       $request_content = json_decode($request->getContent(), TRUE);
-      $type = $request_content['type'];
-      $value = $request_content['value'];
       $responseData = [];
 
-      // Check if action is set in request.
+      // Check if action is not empty.
       if (empty($request_content['action'])) {
-        $this->logger->error('Error while trying to set loyalty card in cart. Action key `set/unset` is missing. Request Data: @data', [
+        $this->logger->error('Error while trying to set loyalty card in cart. Action key `add/remove` is missing. Request Data: @data', [
           '@data' => json_encode($request_content),
         ]);
-        return new JsonResponse($this->utility->getErrorResponse('Action key `set/unset` is missing.', Response::HTTP_NOT_FOUND));
+        return new JsonResponse($this->utility->getErrorResponse('Action key `add/remove` is missing.', Response::HTTP_NOT_FOUND));
       }
 
-      // For unset action.
-      if ($request_content['action'] === 'unset') {
-        $cart_id = $this->cart->getCartId();
-
-        if (empty($cart_id)) {
-          $this->logger->error('Error while trying to set loyalty card in cart. Cart id not available.');
-          return new JsonResponse($this->utility->getErrorResponse('Cart id not available.', Response::HTTP_NOT_FOUND));
-        }
-
-        $data = [
-          'quote_id' => $cart_id,
-          'identifier_no' => '',
-        ];
-
-        $response = $this->auraCustomerHelper->setLoyaltyCard($data);
-        $responseData = [
-          'status' => $response,
-        ];
-
-        return new JsonResponse($responseData);
-      }
-
-      // Check if required data is present in request for set action.
-      if ($request_content['action'] === 'set' && (empty($type) || empty($value))) {
+      // Check if required data is present in request for `add` action.
+      if ($request_content['action'] === 'add' && (empty($request_content['type']) || empty($request_content['value']))) {
         $this->logger->error('Error while trying to set loyalty card in cart. Required parameters missing. Request Data: @data', [
           '@data' => json_encode($request_content),
         ]);
-        return new JsonResponse($this->utility->getErrorResponse('Required parameters missing.', Response::HTTP_NOT_FOUND));
+
+        if ($request_content['type'] === 'email') {
+          $error = AuraErrorCodes::EMPTY_EMAIL;
+        }
+        elseif ($request_content['type'] === 'apcNumber') {
+          $error = AuraErrorCodes::EMPTY_CARD;
+        }
+        elseif ($request_content['type'] === 'phone') {
+          $error = AuraErrorCodes::EMPTY_MOBILE;
+        }
+
+        return new JsonResponse($this->utility->getErrorResponse($error ?? '', 'MISSING_DATA'));
       }
 
+      // Get cart id from session.
       $cart_id = $this->cart->getCartId();
 
       if (empty($cart_id)) {
@@ -377,24 +366,29 @@ class LoyaltyCustomerController {
         return new JsonResponse($this->utility->getErrorResponse('Cart id not available.', Response::HTTP_NOT_FOUND));
       }
 
-      $search_response = $this->auraSearchHelper->search($type, $value);
-
-      if (empty($search_response['data']['apc_identifier_number'])) {
-        $this->logger->error('Error while trying to set loyalty card in cart. No card found. Request Data: @data.', [
-          '@data' => json_encode($request_content),
-        ]);
-        return new JsonResponse($this->utility->getErrorResponse('No card found.', Response::HTTP_NOT_FOUND));
-      }
-
+      // Request Data.
       $data = [
         'quote_id' => $cart_id,
-        'identifier_no' => $search_response['data']['apc_identifier_number'],
+        'identifier_no' => '',
       ];
+
+      if ($request_content['action'] === 'add') {
+        $search_response = $this->auraSearchHelper->search($request_content['type'], $request_content['value']);
+
+        if (empty($search_response['data']['apc_identifier_number'])) {
+          $this->logger->error('Error while trying to set loyalty card in cart. No card found. Request Data: @data.', [
+            '@data' => json_encode($request_content),
+          ]);
+          return new JsonResponse($this->utility->getErrorResponse('No card found. Please try again.', AuraErrorCodes::NO_CARD_FOUND));
+        }
+
+        $data['identifier_no'] = $search_response['data']['apc_identifier_number'];
+      }
 
       $response = $this->auraCustomerHelper->setLoyaltyCard($data);
       $responseData = [
         'status' => $response,
-        'data' => $search_response['data'],
+        'data' => $search_response['data'] ?? [],
       ];
 
       return new JsonResponse($responseData);

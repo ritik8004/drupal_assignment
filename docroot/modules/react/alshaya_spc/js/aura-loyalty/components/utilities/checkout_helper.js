@@ -45,7 +45,7 @@ function getUserInput(linkCardOption, chosenCountryCode) {
 
 /**
  * Helper function to search loyalty details based on
- * user input and set/unset the card to cart.
+ * user input and add/remove the card from cart.
  */
 function processCheckoutCart(data) {
   let stateValues = {};
@@ -57,8 +57,8 @@ function processCheckoutCart(data) {
     apiData.then((result) => {
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status) {
-          // For unset action.
-          if (data.action !== undefined && data.action === 'unset') {
+          // For remove action.
+          if (data.action !== undefined && data.action === 'remove') {
             stateValues = {
               ...getAuraDetailsDefaultState(),
             };
@@ -68,7 +68,7 @@ function processCheckoutCart(data) {
             return;
           }
 
-          // For set action.
+          // For add action.
           let mobile; let
             userCountryCode = '';
 
@@ -88,6 +88,8 @@ function processCheckoutCart(data) {
             userCountryCode,
           };
         }
+      } else {
+        stateValues = result.data;
       }
       dispatchCustomEvent('loyaltyDetailsSearchComplete', { stateValues, searchData: data });
       removeFullScreenLoader();
