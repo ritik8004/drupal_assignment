@@ -99,6 +99,8 @@ class CheckoutComPaymentController extends PaymentController {
    *   Utility Service.
    * @param \App\Service\Config\SystemSettings $settings
    *   System Settings service.
+   * @param \App\Service\Orders $order
+   *   Order service.
    */
   public function __construct(
     RequestStack $request,
@@ -109,9 +111,10 @@ class CheckoutComPaymentController extends PaymentController {
     LoggerInterface $logger,
     SessionStorage $session,
     Utility $utility,
-    SystemSettings $settings
+    SystemSettings $settings,
+    Orders $order
   ) {
-    parent::__construct($logger, $settings, $cart);
+    parent::__construct($logger, $settings, $cart, $order);
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->checkoutComApi = $checkout_com_api;
