@@ -10,6 +10,7 @@ use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Class Search Page Product List Resource.
@@ -157,6 +158,9 @@ class SearchPageProductListResource extends ResourceBase {
 
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($search_keyword);
+
+    AlshayaPromoContextManager::updateDefaultContext('app');
+
     $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
     $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData(self::VIEWS_ID, self::VIEWS_DISPLAY_ID);
 

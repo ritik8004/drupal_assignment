@@ -369,7 +369,12 @@ class AlshayaAlgoliaIndexHelper {
       $object['promotion_nid'][] = $promotionRecord['id'];
 
       // Used for facets.
-      $object['field_acq_promotion_label'][] = $promotionRecord['text'];
+      if (in_array('web', $promotionRecord['context'])) {
+        $object['field_acq_promotion_label']['web'][] = $promotionRecord['text'];
+      }
+      if (in_array('app', $promotionRecord['context'])) {
+        $object['field_acq_promotion_label']['app'][] = $promotionRecord['text'];
+      }
     }
 
     // Product Images.
