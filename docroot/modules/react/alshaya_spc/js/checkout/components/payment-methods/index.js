@@ -14,6 +14,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import isAuraEnabled from '../../../../../js/utilities/helper';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -96,6 +97,15 @@ export default class PaymentMethods extends React.Component {
     const { cart } = this.props;
 
     if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
+      return false;
+    }
+
+    // We disable the other payment methods when full payment is done by aura points.
+    const { loyaltyPaymentData } = this.props;
+    if (isAuraEnabled()
+      && loyaltyPaymentData !== null
+      && loyaltyPaymentData.paidWithAura !== 0
+      && loyaltyPaymentData.balancePayable === 0) {
       return false;
     }
 

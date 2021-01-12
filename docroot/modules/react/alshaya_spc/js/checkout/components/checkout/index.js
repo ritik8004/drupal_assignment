@@ -40,6 +40,7 @@ export default class Checkout extends React.Component {
       cart: null,
       messageType: null,
       errorSuccessMessage: null,
+      loyaltyPaymentData: null,
     };
   }
 
@@ -97,6 +98,13 @@ export default class Checkout extends React.Component {
           // Get promo info.
           if (typeof result.error === 'undefined') {
             PromotionsDynamicLabelsUtil.apply(result);
+          }
+
+          if (isAuraEnabled()) {
+            document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
+            this.setState({
+              loyaltyPaymentData: cart.loyalty || null,
+            });
           }
         });
       } else {
@@ -190,12 +198,34 @@ export default class Checkout extends React.Component {
     );
   };
 
+  handleRedeemPointsEvent = (data) => {
+    const { stateValues, action } = data.detail;
+
+    if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
+      return;
+    }
+
+    if (action === 'set points') {
+      this.setState({
+        loyaltyPaymentData: { ...stateValues },
+      });
+      return;
+    }
+
+    if (action === 'remove points') {
+      this.setState({
+        loyaltyPaymentData: null,
+      });
+    }
+  };
+
   render() {
     const {
       wait,
       cart,
       errorSuccessMessage,
       messageType,
+      loyaltyPaymentData,
     } = this.state;
     // While page loads and all info available.
 
@@ -233,11 +263,17 @@ export default class Checkout extends React.Component {
                 <AuraCheckoutContainer
                   cartId={cart.cart.cart_id || ''}
                   price={cart.cart.cart_total || 0}
+                  loyaltyPaymentData={loyaltyPaymentData}
                 />
               )
               : null}
 
-            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={cart} />
+            <PaymentMethods
+              ref={this.paymentMethods}
+              refreshCart={this.refreshCart}
+              cart={cart}
+              loyaltyPaymentData={loyaltyPaymentData}
+            />
 
             {billingComponent}
 
@@ -264,6 +300,7 @@ export default class Checkout extends React.Component {
               show_checkout_button={false}
               animationDelay="0.4s"
               context="checkout"
+              loyaltyPaymentData={loyaltyPaymentData}
             />
           </div>
         </div>

@@ -113,12 +113,13 @@ function redeemAuraPoints(data) {
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status) {
           stateValues = {
-            base_grand_total: result.data.data.base_grand_total || '',
-            discount_amount: result.data.data.discount_amount || '',
-            shipping_incl_tax: result.data.data.shipping_incl_tax || '',
-            subtotal_incl_tax: result.data.data.subtotal_incl_tax || '',
+            balancePayable: result.data.data.balancePayable,
+            paidWithAura: result.data.data.paidWithAura,
+            balancePoints: result.data.data.balancePoints,
           };
         }
+      } else {
+        stateValues = result.data || { error: true };
       }
       dispatchCustomEvent('auraRedeemPointsApiInvoked', { stateValues, action: data.action });
       removeFullScreenLoader();
