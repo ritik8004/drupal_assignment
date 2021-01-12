@@ -106,9 +106,9 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
       <ConditionalView condition={groupEnabled}>
         <div className="grouping-enabled">
           <div className="view-alshaya-product-list">
-            <div className="view-content">
+            <div className="view-content" ref={teaserRef}>
               {Object.keys(results).map((key) => (
-                <div className={`term-header ${subCategories[key].title.replace(' ', '-').toLowerCase()}`} ref={teaserRef} id={subCategories[key].tid}>
+                <div className={`term-header ${subCategories[key].title.replace(' ', '-').toLowerCase()}`} id={subCategories[key].tid}>
 
                   <ConditionalView condition={results[key].image}>
                     <div className="term-image">
