@@ -4,7 +4,7 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import LinkCardOptionEmail from './components/link-card-option-email';
 import LinkCardOptionCard from './components/link-card-option-card';
 import LinkCardOptionMobile from './components/link-card-option-mobile';
-import { handleSignUp, handleNotYou } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
+import { handleSignUp } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
 import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { getUserInput, processCheckoutCart } from '../../utilities/checkout_helper';
@@ -16,6 +16,7 @@ import {
   getStorageInfo,
   removeStorageInfo,
 } from '../../../../../../js/utilities/storage';
+import getStringMessage from '../../../../utilities/strings';
 
 class AuraFormLinkCard extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class AuraFormLinkCard extends React.Component {
 
   componentDidMount() {
     document.addEventListener('loyaltyDetailsSearchComplete', this.handleSearchEvent, false);
-    document.addEventListener('loyaltyStatusUpdated', this.handleLoyaltyUpdateEvent, false);
+    document.addEventListener('loyaltyCardRemovedFromCart', this.handleLoyaltyCardUnset, false);
     document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
 
     // Get data from localStorage.
@@ -60,15 +61,24 @@ class AuraFormLinkCard extends React.Component {
     const { enableShowLinkCardMessage } = this.props;
     const { stateValues, searchData } = data.detail;
 
-    if (Object.keys(stateValues).length === 0) {
+    if (stateValues.error === true) {
       this.setState({
         ...getAuraDetailsDefaultState(),
         loyaltyCardLinkedToCart: false,
       });
 
+      let message = '';
+      if (stateValues.error_code === 'NO_CARD_FOUND') {
+        message = Drupal.t('No card found. Please try again.');
+      } else if (stateValues.error_code === 'MISSING_DATA') {
+        message = getStringMessage(stateValues.error_message) || '';
+      } else {
+        message = Drupal.t('Something went wrong. Please try again.');
+      }
+
       this.showResponse({
         type: 'failure',
-        message: Drupal.t('No card found. Please try again.'),
+        message,
       });
       return;
     }
@@ -98,13 +108,8 @@ class AuraFormLinkCard extends React.Component {
     enableShowLinkCardMessage();
   };
 
-  handleLoyaltyUpdateEvent = (data) => {
-    this.showResponse({
-      type: 'failure',
-      message: '',
-    });
-
-    removeStorageInfo(getAuraLocalStorageKey());
+  handleLoyaltyCardUnset = (data) => {
+    this.resetStorage();
 
     const { stateValues } = data.detail;
 
@@ -163,7 +168,7 @@ class AuraFormLinkCard extends React.Component {
     removeStorageInfo(getAuraLocalStorageKey());
   };
 
-  linkCard = () => {
+  addCard = () => {
     this.resetStorage();
 
     const {
@@ -175,8 +180,13 @@ class AuraFormLinkCard extends React.Component {
 
     if (Object.keys(userInput).length !== 0) {
       showFullScreenLoader();
-      processCheckoutCart(userInput);
+      processCheckoutCart({ ...userInput, action: 'add' });
     }
+  };
+
+  removeCard = () => {
+    showFullScreenLoader();
+    processCheckoutCart({ action: 'remove' });
   };
 
   selectOption = (option) => {
@@ -225,7 +235,7 @@ class AuraFormLinkCard extends React.Component {
               <button
                 type="submit"
                 className="spc-aura-link-card-submit spc-aura-button"
-                onClick={() => this.linkCard()}
+                onClick={() => this.addCard()}
               >
                 { Drupal.t('Apply') }
               </button>
@@ -237,7 +247,7 @@ class AuraFormLinkCard extends React.Component {
           <div className="sub-text">
             { loyaltyCardLinkedToCart === true
               ? (
-                <a onClick={() => handleNotYou(cardNumber)}>
+                <a onClick={() => this.removeCard()}>
                   {Drupal.t('Not you?')}
                 </a>
               )
