@@ -203,4 +203,30 @@ class CustomerHelper {
     return $processed_data;
   }
 
+  /**
+   * Set loyalty card in cart.
+   *
+   * @return array
+   *   API response status.
+   */
+  public function setLoyaltyCard($data) {
+    try {
+      $endpoint = 'apc/set-loyalty-card';
+      $response = $this->magentoApiWrapper->doRequest('POST', $endpoint, ['json' => $data]);
+
+      $response_data = [
+        'status' => $response,
+      ];
+
+      return $response_data;
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to set loyalty card in cart. Request Data: @data. Message: @message.', [
+        '@data' => $data,
+        '@message' => $e->getMessage(),
+      ]);
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
 }

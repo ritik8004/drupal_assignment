@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   getPriceToPoint,
+  getAuraDetailsDefaultState,
 } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { postAPIData } from '../../../../../alshaya_aura_react/js/utilities/api/fetchApiData';
 import dispatchCustomEvent from '../../../../../js/utilities/events';
@@ -44,18 +45,30 @@ function getUserInput(linkCardOption, chosenCountryCode) {
 
 /**
  * Helper function to search loyalty details based on
- * user input and attach the card to cart.
+ * user input and add/remove the card from cart.
  */
 function processCheckoutCart(data) {
   let stateValues = {};
 
-  const apiUrl = 'cart/loyalty/update';
+  const apiUrl = 'post/loyalty-club/update-loyalty-card';
   const apiData = postAPIData(apiUrl, data);
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status) {
+          // For remove action.
+          if (data.action !== undefined && data.action === 'remove') {
+            stateValues = {
+              ...getAuraDetailsDefaultState(),
+            };
+
+            dispatchCustomEvent('loyaltyCardRemovedFromCart', { stateValues });
+            removeFullScreenLoader();
+            return;
+          }
+
+          // For add action.
           let mobile; let
             userCountryCode = '';
 
@@ -69,12 +82,14 @@ function processCheckoutCart(data) {
             loyaltyStatus: result.data.data.apc_link || 0,
             points: result.data.data.apc_points || 0,
             cardNumber: result.data.data.apc_identifier_number || '',
-            tier: result.data.data.tier_info || '',
+            tier: result.data.data.tier_code || '',
             email: result.data.data.email || '',
             mobile,
             userCountryCode,
           };
         }
+      } else {
+        stateValues = result.data;
       }
       dispatchCustomEvent('loyaltyDetailsSearchComplete', { stateValues, searchData: data });
       removeFullScreenLoader();

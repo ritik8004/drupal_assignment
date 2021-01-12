@@ -28,9 +28,9 @@ loyalty_club.loyalty_club_sign_up:
     controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::loyaltyClubSignUp
     methods: POST
 
-cart.loyalty_update:
-    path: /cart/loyalty/update
-    controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::cartLoyaltyUpdate
+loyalty_club.update_loyalty_card_in_cart:
+    path: /post/loyalty-club/update-loyalty-card
+    controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::updateLoyaltyCard
     methods: POST
 
 loyalty_club.redeem_points:
