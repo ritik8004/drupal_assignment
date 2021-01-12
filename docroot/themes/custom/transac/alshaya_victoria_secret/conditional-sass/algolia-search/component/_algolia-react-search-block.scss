@@ -21,7 +21,7 @@
   }
 
   .algolia-search-cleartext-icon {
-    top: 0.5rem;
+    top: 0.25rem;
     #{$right}: 0.5rem;
 
     @include breakpoint($only-tablet) {
@@ -85,6 +85,7 @@
       border-radius: 0;
       background: $white-smoke-light;
       padding: 0.4375rem;
+      height: 3.375rem;
 
       @include breakpoint($only-mobile) {
         margin: 0;
@@ -92,6 +93,7 @@
         padding-#{$left}: 3rem !important;
         border-width: 0 0 0.0625rem !important;
         border-color: $algolia-auto-complete-border !important;
+        height: 2.875rem;
       }
 
       @include breakpoint($only-tablet) {
@@ -99,7 +101,6 @@
       }
 
       @include breakpoint($upto-desktop) {
-        height: 3.375rem;
         border: 0.5rem solid $nero;
         line-height: 1.25rem;
       }
@@ -147,7 +148,7 @@
     .react-autosuggest__container {
       &::after {
         @include breakpoint($only-mobile) {
-          top: 0.25rem;
+          top: 0;
           #{$right}: unset;
           #{$left}: 0.25rem;
           opacity: 1;
@@ -261,7 +262,7 @@
 body {
   &:not(.no-sticky-algolia-search-bar) {
     @include breakpoint($only-mobile) {
-      margin-top: 9rem;
+      margin-top: 8.5rem;
     }
 
     .block-alshaya-algolia-react-autocomplete {
@@ -292,7 +293,7 @@ body {
     .algolia-search-back-icon {
       @include breakpoint($only-mobile) {
         #{$left}: 0;
-        top: 0.5rem;
+        top: 0.25rem;
       }
     }
   }
@@ -346,7 +347,7 @@ body {
   &:not(.frontpage) {
     &.hide-header {
       @include breakpoint($only-mobile) {
-        margin-top: 3.375rem;
+        margin-top: 2.375rem;
       }
 
       .block-alshaya-super-category-menu,
