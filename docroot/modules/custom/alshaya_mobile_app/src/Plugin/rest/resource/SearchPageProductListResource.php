@@ -159,9 +159,6 @@ class SearchPageProductListResource extends ResourceBase {
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($search_keyword);
 
-    // This API is used by both MAPP and WEB, considering there should not be
-    // any change at MAPP side, we are setting up default context as APP
-    // any invocation from WEB should specifically pass web as context.
     AlshayaPromoContextManager::updateDefaultContext('app');
 
     $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);

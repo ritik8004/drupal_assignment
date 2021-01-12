@@ -239,9 +239,6 @@ class CategoryProductListResource extends ResourceBase {
       $result_set = $result_set['plp_data'];
     }
 
-    // This API is used by both MAPP and WEB, considering there should not be
-    // any change at MAPP side, we are setting up default context as APP
-    // any invocation from WEB should specifically pass web as context.
     AlshayaPromoContextManager::updateDefaultContext('app');
 
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);

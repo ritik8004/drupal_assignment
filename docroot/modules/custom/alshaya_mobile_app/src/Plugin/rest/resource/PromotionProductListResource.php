@@ -180,9 +180,6 @@ class PromotionProductListResource extends ResourceBase {
         // Make response data similar to web site.
         $this->alshayaSearchApiQueryExecute->setFacetsToIgnore(['category_facet_promo']);
 
-        // This API is used by both MAPP and WEB, considering there should not
-        // be any change at MAPP side, we are setting up default context as APP
-        // any invocation from WEB should specifically pass web as context.
         AlshayaPromoContextManager::updateDefaultContext('app');
 
         // Prepare response from result set.
