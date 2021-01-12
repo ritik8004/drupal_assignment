@@ -114,6 +114,15 @@ class AuraFormLinkCard extends React.Component {
     });
   };
 
+  notYouLinkHandler = () => {
+    // We clear input values from the state.
+    const { cardNumber } = this.state;
+    handleNotYou(cardNumber);
+    // We clear input values from the form.
+    const input = document.querySelector('.spc-aura-link-card-wrapper .form-items input:not(:read-only)');
+    input.value = '';
+  };
+
   handlePlaceOrderEvent = () => {
     removeStorageInfo(getAuraLocalStorageKey());
   };
@@ -237,7 +246,7 @@ class AuraFormLinkCard extends React.Component {
           <div className="sub-text">
             { loyaltyCardLinkedToCart === true
               ? (
-                <a onClick={() => handleNotYou(cardNumber)}>
+                <a onClick={() => this.notYouLinkHandler()}>
                   {Drupal.t('Not you?')}
                 </a>
               )

@@ -80,7 +80,7 @@ class AuraCheckoutRewards extends React.Component {
       || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
       return [
         Drupal.t('Aura Rewards'),
-        <span>{` ${Drupal.t('(Optional)')}`}</span>,
+        <span key="aura-checkout-title">{` ${Drupal.t('(Optional)')}`}</span>,
       ];
     }
     return Drupal.t('Aura Rewards');
