@@ -466,8 +466,16 @@ class AlshayaSearchApiQueryExecute {
     if ($server->supportsFeature('search_api_facets')) {
       $facet_data = [];
       foreach ($facets as $facet) {
+        $identifier = $facet->getFieldIdentifier();
+        // Need to change the facet identifier only if the index is
+        // alshaya_algolia_index.
+        if ($query->getIndex()->id() === 'alshaya_algolia_index') {
+          if ($identifier == 'field_acq_promotion_label') {
+            $identifier = 'field_acq_promotion_label.app';
+          }
+        }
         $facet_data[$facet->id()] = [
-          'field' => $facet->getFieldIdentifier(),
+          'field' => $identifier,
           'limit' => $facet->getHardLimit(),
           'operator' => $facet->getQueryOperator(),
           'min_count' => $facet->getMinCount(),
