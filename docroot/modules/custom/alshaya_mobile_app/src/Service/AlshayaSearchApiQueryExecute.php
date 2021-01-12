@@ -467,8 +467,12 @@ class AlshayaSearchApiQueryExecute {
       $facet_data = [];
       foreach ($facets as $facet) {
         $identifier = $facet->getFieldIdentifier();
-        if ($identifier == 'field_acq_promotion_label') {
-          $identifier = 'field_acq_promotion_label.app';
+        // Need to change the facet identifier only if the index is
+        // alshaya_algolia_index.
+        if ($query->getIndex()->id() === 'alshaya_algolia_index') {
+          if ($identifier == 'field_acq_promotion_label') {
+            $identifier = 'field_acq_promotion_label.app';
+          }
         }
         $facet_data[$facet->id()] = [
           'field' => $identifier,
