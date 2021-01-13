@@ -102,8 +102,8 @@ class StockEventListener {
         ],
       ]);
       $this->requestStack->pop($request);
-      $this->logger->notice('Stock refresh done for skus @skus.', [
-        '@skus' => implode(',', array_keys(self::$stockMismatchSkusData)),
+      $this->logger->notice('Stock refresh has been done for the following skus with quantity: @skus.', [
+        '@skus' => json_encode(self::$stockMismatchSkusData),
       ]);
     }
   }
