@@ -337,16 +337,15 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
           if ($facet->getFieldIdentifier() === 'field_category') {
             // For category we have index hierarchy in field_category
             // so, updating field_name and type for react.
-            $label = $identifier = 'field_category';
+            $identifier = 'field_category';
             $widget['type'] = 'hierarchy';
           }
           elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
             $context = $this->promoContextManager->getPromotionContext();
             $identifier = "field_acq_promotion_label.$context";
-            $label = 'field_acq_promotion_label';
           }
           else {
-            $label = $identifier = $facet->getFieldIdentifier();
+            $identifier = $facet->getFieldIdentifier();
           }
 
           // For HNM we are using "size_group_list" widget type
@@ -357,7 +356,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'checkbox';
           }
 
-          $filter_facets[$label] = [
+          $filter_facets[explode('.', $identifier)[0]] = [
             'identifier' => $identifier,
             'label' => $block->label(),
             'name' => $facet->getName(),
