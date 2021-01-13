@@ -34,7 +34,7 @@ const validateCartResponse = (response) => {
   }
 
   // If back-end system is down or having errors.
-  if (errorCode >= 500) {
+  if ((errorCode >= 500) && (window.location.pathname.search(/checkout/i) >= 0)) {
     dispatchCustomEvent('spcCheckoutMessageUpdate', {
       type: 'error',
       message: drupalSettings.global_error_message,
