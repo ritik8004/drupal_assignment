@@ -356,7 +356,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'checkbox';
           }
 
-          $filter_facets[$identifier] = [
+          $filter_facets[explode('.', $identifier)[0]] = [
             'identifier' => $identifier,
             'label' => $block->label(),
             'name' => $facet->getName(),
