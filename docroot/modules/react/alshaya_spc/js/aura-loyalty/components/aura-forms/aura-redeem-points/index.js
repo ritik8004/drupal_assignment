@@ -11,6 +11,7 @@ import getStringMessage from '../../../../utilities/strings';
 import { redeemAuraPoints } from '../../utilities/checkout_helper';
 import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+import PriceElement from '../../../../utilities/special-price/PriceElement';
 
 class AuraFormRedeemPoints extends React.Component {
   constructor(props) {
@@ -26,15 +27,15 @@ class AuraFormRedeemPoints extends React.Component {
   componentDidMount() {
     document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
 
-    const { loyaltyPaymentData } = this.props;
+    const { totals } = this.props;
 
-    if (loyaltyPaymentData === undefined || loyaltyPaymentData === null) {
+    if (totals === undefined || totals === null) {
       return;
     }
 
     this.setState({
-      money: loyaltyPaymentData.paidWithAura ? `${loyaltyPaymentData.paidWithAura.toFixed(3)}` : null,
-      points: getPriceToPoint(loyaltyPaymentData.paidWithAura) || null,
+      money: totals.paidWithAura || null,
+      points: getPriceToPoint(totals.paidWithAura) || null,
       auraTransaction: true,
     });
     // Add a class for FE purposes.
@@ -45,7 +46,8 @@ class AuraFormRedeemPoints extends React.Component {
     const { stateValues, action } = data.detail;
 
     if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
-      showError('spc-aura-link-api-response-message', Drupal.t('Something went wrong, please try again later.'));
+      showError('spc-aura-link-api-response-message', drupalSettings.global_error_message);
+      // Reset redemption input fields to initial value.
       this.resetInputs();
       return;
     }
@@ -55,6 +57,7 @@ class AuraFormRedeemPoints extends React.Component {
       // Add a class for FE purposes.
       document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
     } else if (action === 'remove points') {
+      // Reset redemption input fields to initial value.
       this.resetInputs();
       // Remove class.
       document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.remove('redeemed');
@@ -80,10 +83,9 @@ class AuraFormRedeemPoints extends React.Component {
 
     // Convert to money.
     if (e.target.value > 0) {
-      const money = getPointToPrice(e.target.value);
       this.setState({
         points: e.target.value,
-        money: `${money.toFixed(3)}`,
+        money: getPointToPrice(e.target.value),
       });
     } else {
       this.setState({
@@ -135,6 +137,7 @@ class AuraFormRedeemPoints extends React.Component {
     redeemAuraPoints(data);
   }
 
+  // Reset redemption input fields to initial value.
   resetInputs = () => {
     this.setState({
       auraTransaction: false,
@@ -145,7 +148,6 @@ class AuraFormRedeemPoints extends React.Component {
   }
 
   getPointsRedeemedMessage = () => {
-    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     const {
       points,
       money,
@@ -159,7 +161,7 @@ class AuraFormRedeemPoints extends React.Component {
     return [
       <span key="points" className="spc-aura-highlight">{`${points} ${Drupal.t('points')}`}</span>,
       <span key="worth" className="spc-aura-redeem-text">{`${Drupal.t('worth')}`}</span>,
-      <span key="money" className="spc-aura-highlight">{`${currencyCode} ${money}`}</span>,
+      <span key="money" className="spc-aura-highlight"><PriceElement amount={money} /></span>,
       <span key="redeemed" className="spc-aura-redeem-text">{`${Drupal.t('have been successfully redeemed')}`}</span>,
     ];
   }

@@ -92,7 +92,7 @@ class AuraCheckoutRewards extends React.Component {
     const {
       cartId,
       price,
-      loyaltyPaymentData,
+      totals,
       animationDelay: animationDelayValue,
     } = this.props;
 
@@ -133,7 +133,7 @@ class AuraCheckoutRewards extends React.Component {
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
             cardNumber={cardNumber}
-            loyaltyPaymentData={loyaltyPaymentData}
+            totals={totals}
           />
         </ConditionalView>
 

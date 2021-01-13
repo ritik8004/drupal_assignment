@@ -4,7 +4,7 @@ import VatText from '../vat-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
-import CheckoutOrderSummary from '../../aura-loyalty/components/aura-checkout-rewards/components/checkout-order-summary';
+import AuraCheckoutOrderSummary from '../../aura-loyalty/components/aura-checkout-rewards/components/aura-checkout-order-summary';
 import isAuraEnabled from '../../../../js/utilities/helper';
 
 class TotalLineItems extends React.Component {
@@ -63,7 +63,7 @@ class TotalLineItems extends React.Component {
   };
 
   render() {
-    const { totals, isCartPage, loyaltyPaymentData } = this.props;
+    const { totals, isCartPage } = this.props;
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
@@ -122,7 +122,7 @@ class TotalLineItems extends React.Component {
           </div>
         </div>
         {isAuraEnabled()
-          ? <CheckoutOrderSummary loyaltyPaymentData={loyaltyPaymentData} />
+          ? <AuraCheckoutOrderSummary totals={totals} />
           : null}
       </div>
     );

@@ -223,19 +223,6 @@ class CartController {
 
     $response = $this->getProcessedCheckoutData($data);
 
-    // Add loyalty details if present in response.
-    if (!empty($data['totals']['total_segments'])) {
-      $aura_payment_key = array_search('aura_payment', array_column($data['totals']['total_segments'], 'code'));
-      $response['loyalty']['paidWithAura'] = $aura_payment_key
-        ? $data['totals']['total_segments'][$aura_payment_key]['value']
-        : 0;
-
-      $balance_payable_key = array_search('balance_payable', array_column($data['totals']['total_segments'], 'code'));
-      $response['loyalty']['balancePayable'] = $aura_payment_key
-        ? $data['totals']['total_segments'][$balance_payable_key]['value']
-        : 0;
-    }
-
     return new JsonResponse($response);
   }
 

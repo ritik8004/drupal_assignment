@@ -40,7 +40,6 @@ const OrderSummaryBlock = ({
   animationDelay: animationDelayValue,
   context,
   couponCode,
-  loyaltyPaymentData,
 }) => {
   const orderSummaryTitle = Drupal.t('Order Summary');
   const continueCheckoutLink = (window.drupalSettings.user.uid === 0) ? 'cart/login' : 'checkout';
@@ -71,7 +70,6 @@ const OrderSummaryBlock = ({
         <TotalLineItems
           totals={totals}
           isCartPage={showCheckoutButton}
-          loyaltyPaymentData={loyaltyPaymentData}
         />
         {/* To Be used on cart page only. */}
         {showCheckoutButton
