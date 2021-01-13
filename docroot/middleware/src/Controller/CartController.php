@@ -555,7 +555,7 @@ class CartController {
 
           $skus = array_column($cart['cart']['items'], 'sku');
           foreach ($skus as $sku) {
-            StockEventListener::matchStockQuantity([$sku => 0]);
+            StockEventListener::matchStockQuantity($sku);
           }
           StockEventListener::$oos = TRUE;
 

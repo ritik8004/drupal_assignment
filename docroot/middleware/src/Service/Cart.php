@@ -591,7 +591,7 @@ class Cart {
               $this->refreshStock([$sku, $variant_sku]);
             }
             elseif ($exception_type === 'not_enough') {
-              StockEventListener::matchStockQuantity([$sku => $quantity]);
+              StockEventListener::matchStockQuantity($sku, $quantity);
             }
 
             return $this->returnExistingCartWithError($e);
@@ -1572,7 +1572,7 @@ class Cart {
 
       $skus = array_column($cart['cart']['items'], 'sku');
       foreach ($skus as $sku) {
-        StockEventListener::matchStockQuantity([$sku => 0]);
+        StockEventListener::matchStockQuantity($sku);
       }
       StockEventListener::$oos = TRUE;
 

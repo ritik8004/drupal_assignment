@@ -72,14 +72,13 @@ class StockEventListener {
   /**
    * Sets the static array so that it can be processed later.
    *
-   * @param array $sku_data
-   *   Array containing arrays of sku and its quantity.
+   * @param string $sku
+   *   The SKU value.
+   * @param int $quantity
+   *   The quantity of the SKU.
    */
-  public static function matchStockQuantity(array $sku_data) {
-    // Check if the array format is correct.
-    foreach ($sku_data as $sku => $quantity) {
-      self::$stockMismatchSkusData[$sku] = $quantity;
-    }
+  public static function matchStockQuantity(string $sku, int $quantity = 0) {
+    self::$stockMismatchSkusData[$sku] = $quantity;
   }
 
   /**
