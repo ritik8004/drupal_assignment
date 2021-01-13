@@ -260,11 +260,7 @@ export default class Checkout extends React.Component {
               )
               : null}
 
-            <PaymentMethods
-              ref={this.paymentMethods}
-              refreshCart={this.refreshCart}
-              cart={cart}
-            />
+            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={cart} />
 
             {billingComponent}
 
