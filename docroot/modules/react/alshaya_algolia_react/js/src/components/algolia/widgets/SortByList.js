@@ -10,6 +10,8 @@ const SortByList = ({ items, refine, name }) => (
         datadrupalfacetlabel={name}
         onClick={(event) => {
           event.preventDefault();
+          // return if user selects selected sort option.
+          if (item.isRefined) return;
           refine(item.value);
         }}
       >
