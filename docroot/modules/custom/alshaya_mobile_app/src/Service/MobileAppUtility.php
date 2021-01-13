@@ -623,7 +623,7 @@ class MobileAppUtility {
     foreach ($terms as $term) {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
-      $this->termTags[] = "term:{$term->tid}";
+      $this->termTags[] = "taxonomy_term:{$term->tid}";
 
       $path = $term_url->getGeneratedUrl();
       $deeplink = $this->getDeepLink($term);
