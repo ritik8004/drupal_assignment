@@ -130,7 +130,7 @@ class AlshayaCloudPurger extends AcquiaCloudPurger {
             if (is_array($poolopt) && count($poolopt)) {
               $opt = array_merge($poolopt, $opt);
             }
-            return $this->client->requestAsync('BAN', 'http://' . str_replace(':', '.', $ipv4) . '/tags', $opt);
+            return $this->client->requestAsync('BAN', 'http://' . $ipv4 . '.enterprise-g1.hosting.acquia.com/tags', $opt);
           };
         }
       }
