@@ -64,6 +64,7 @@ class ConfigForm extends ConfigFormBase {
     $ip_addresses = $this->acquiaPurgeHostingInfo->getBalancerAddresses();
     if (!empty($ip_addresses)) {
       foreach ($ip_addresses as $value) {
+        $value = gethostbyaddr($value);
         $options[str_replace('.', '-', $value)] = $value;
       }
     }
