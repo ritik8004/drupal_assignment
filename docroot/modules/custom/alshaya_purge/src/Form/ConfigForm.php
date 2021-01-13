@@ -65,7 +65,7 @@ class ConfigForm extends ConfigFormBase {
     if (!empty($ip_addresses)) {
       foreach ($ip_addresses as $value) {
         $value = gethostbyaddr($value);
-        $options[str_replace('.', '-', $value)] = $value;
+        $options[str_replace('.', ':', $value)] = $value;
       }
     }
     if (!empty($options)) {
