@@ -29,13 +29,13 @@ class AuraFormRedeemPoints extends React.Component {
 
     const { totals } = this.props;
 
-    if (totals === undefined || totals === null) {
+    if (totals.paidWithAura === undefined || totals.paidWithAura === null) {
       return;
     }
 
     this.setState({
-      money: totals.paidWithAura || null,
-      points: getPriceToPoint(totals.paidWithAura) || null,
+      money: totals.paidWithAura,
+      points: getPriceToPoint(totals.paidWithAura),
       auraTransaction: true,
     });
     // Add a class for FE purposes.
