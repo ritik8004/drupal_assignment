@@ -65,6 +65,8 @@ class ConfigForm extends ConfigFormBase {
     if (!empty($ip_addresses)) {
       foreach ($ip_addresses as $value) {
         $value = gethostbyaddr($value);
+        // Replacing all the occurrences of '.' with ':', as Drupal checkboxes
+        // does not supoort '.' in the key.
         $options[str_replace('.', ':', $value)] = $value;
       }
     }
