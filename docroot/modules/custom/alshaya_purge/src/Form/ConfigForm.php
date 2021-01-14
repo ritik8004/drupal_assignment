@@ -64,8 +64,8 @@ class ConfigForm extends ConfigFormBase {
     $ip_addresses = $this->acquiaPurgeHostingInfo->getBalancerAddresses();
     if (!empty($ip_addresses)) {
       foreach ($ip_addresses as $value) {
-        $value = str_replace('.enterprise-g1.hosting.acquia.com', '', gethostbyaddr($value));
-        $options[$value] = $value;
+        $value = gethostbyaddr($value);
+        $options[str_replace('.', ':', $value)] = $value;
       }
     }
     if (!empty($options)) {
@@ -75,7 +75,7 @@ class ConfigForm extends ConfigFormBase {
         '#options' => $options,
         '#required' => TRUE,
         '#description' => $this->t('This site should be configured to target particular Load Balancers.'),
-        '#default_value' => $config->get('ipv4_addresses'),
+        '#default_value' => $config->get('hostnames'),
       ];
     }
     else {
@@ -91,7 +91,7 @@ class ConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_purge.settings');
-    $config->set('ipv4_addresses', array_filter($form_state->getValue('storage_method')));
+    $config->set('hostnames', array_filter($form_state->getValue('storage_method')));
     $config->save();
     return parent::submitForm($form, $form_state);
   }
