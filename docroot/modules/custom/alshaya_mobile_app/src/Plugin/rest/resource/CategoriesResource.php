@@ -109,9 +109,12 @@ class CategoriesResource extends ResourceBase {
       }
     }
 
+    // Cache for this API will get cleared when the main menu cache tag is
+    // invalidated. This prevents unnecessary invalidations of this API and
+    // overload on the system when any term gets updated.
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
-        'tags' => array_merge($this->mobileAppUtility->cacheableTermTags(), [ProductCategoryTree::CACHE_TAG]),
+        'tags' => [ProductCategoryTree::CACHE_TAG],
       ],
     ]));
   }
