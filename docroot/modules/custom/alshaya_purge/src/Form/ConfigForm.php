@@ -64,8 +64,10 @@ class ConfigForm extends ConfigFormBase {
     $ip_addresses = $this->acquiaPurgeHostingInfo->getBalancerAddresses();
     if (!empty($ip_addresses)) {
       foreach ($ip_addresses as $value) {
-        $value = str_replace('.enterprise-g1.hosting.acquia.com', '', gethostbyaddr($value));
-        $options[$value] = $value;
+        $value = gethostbyaddr($value);
+        // Replacing all the occurrences of '.' with ':', as Drupal checkboxes
+        // does not supoort '.' in the key.
+        $options[str_replace('.', ':', $value)] = $value;
       }
     }
     if (!empty($options)) {
@@ -75,7 +77,7 @@ class ConfigForm extends ConfigFormBase {
         '#options' => $options,
         '#required' => TRUE,
         '#description' => $this->t('This site should be configured to target particular Load Balancers.'),
-        '#default_value' => $config->get('ipv4_addresses'),
+        '#default_value' => str_replace('.', ':', $config->get('hostnames')),
       ];
     }
     else {
@@ -91,7 +93,13 @@ class ConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_purge.settings');
-    $config->set('ipv4_addresses', array_filter($form_state->getValue('storage_method')));
+    $hostnames = [];
+    foreach ($form_state->getValue('storage_method') as $value) {
+      if (!empty($value)) {
+        $hostnames[] = str_replace(':', '.', $value);
+      }
+    }
+    $config->set('hostnames', $hostnames);
     $config->save();
     return parent::submitForm($form, $form_state);
   }
