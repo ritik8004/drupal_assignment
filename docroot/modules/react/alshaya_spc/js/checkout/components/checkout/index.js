@@ -98,6 +98,11 @@ export default class Checkout extends React.Component {
           if (typeof result.error === 'undefined') {
             PromotionsDynamicLabelsUtil.apply(result);
           }
+
+          // If aura is enabled, we add a listner to track aura points being redeemed.
+          if (isAuraEnabled()) {
+            document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
+          }
         });
       } else {
         redirectToCart();
@@ -190,6 +195,23 @@ export default class Checkout extends React.Component {
     );
   };
 
+  // Event listener callback to add aura details in cart data.
+  handleRedeemPointsEvent = (data) => {
+    const { cart } = this.state;
+    const { stateValues } = data.detail;
+
+    if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
+      return;
+    }
+
+    const auraUpdatedCartData = cart;
+
+    auraUpdatedCartData.cart.totals = { ...auraUpdatedCartData.cart.totals, ...stateValues };
+    this.setState({
+      cart: { ...auraUpdatedCartData },
+    });
+  };
+
   render() {
     const {
       wait,
@@ -233,6 +255,7 @@ export default class Checkout extends React.Component {
                 <AuraCheckoutContainer
                   cartId={cart.cart.cart_id || ''}
                   price={cart.cart.cart_total || 0}
+                  totals={cart.cart.totals}
                 />
               )
               : null}

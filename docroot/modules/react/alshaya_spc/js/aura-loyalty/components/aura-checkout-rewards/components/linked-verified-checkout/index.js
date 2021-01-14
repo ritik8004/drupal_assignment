@@ -8,7 +8,12 @@ import { getPriceToPoint } from '../../../../../../../alshaya_aura_react/js/util
 
 const AuraLinkedVerifiedCheckout = (props) => {
   const {
-    pointsInAccount, price, expiringPoints, expiryDate, cardNumber,
+    pointsInAccount,
+    price,
+    expiringPoints,
+    expiryDate,
+    cardNumber,
+    totals,
   } = props;
   const pointsToEarn = getPriceToPoint(price);
 
@@ -33,6 +38,7 @@ const AuraLinkedVerifiedCheckout = (props) => {
       <AuraFormRedeemPoints
         pointsInAccount={pointsInAccount}
         cardNumber={cardNumber}
+        totals={totals}
       />
       <div className="spc-aura-checkout-messages">
         <PointsExpiryMessage points={expiringPoints} date={expiryDate} />

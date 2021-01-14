@@ -2351,6 +2351,24 @@ class Cart {
       'surcharge' => 0,
     ];
 
+    // Add aura payment details if present to cart.
+    if (!empty($cart_data['totals']['total_segments'])) {
+      $aura_payment_key = array_search('aura_payment', array_column($cart_data['totals']['total_segments'], 'code'));
+
+      if ($aura_payment_key) {
+        $data['totals']['paidWithAura'] = $aura_payment_key
+          ? $cart_data['totals']['total_segments'][$aura_payment_key]['value']
+          : 0;
+      }
+
+      $balance_payable_key = array_search('balance_payable', array_column($cart_data['totals']['total_segments'], 'code'));
+      if ($balance_payable_key) {
+        $data['totals']['balancePayable'] = $aura_payment_key
+          ? $cart_data['totals']['total_segments'][$balance_payable_key]['value']
+          : 0;
+      }
+    }
+
     if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
       // We use null to show "Excluding Delivery".
       $data['totals']['shipping_incl_tax'] = NULL;

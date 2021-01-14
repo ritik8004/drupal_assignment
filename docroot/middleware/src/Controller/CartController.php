@@ -223,11 +223,6 @@ class CartController {
 
     $response = $this->getProcessedCheckoutData($data);
 
-    // Add loyalty details if present in response.
-    if (!empty($data['cart']['extension_attributes']['loyalty_card'])) {
-      $response['loyalty']['loyalty_card'] = $data['cart']['extension_attributes']['loyalty_card'];
-    }
-
     return new JsonResponse($response);
   }
 

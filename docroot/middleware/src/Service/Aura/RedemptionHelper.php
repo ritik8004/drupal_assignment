@@ -5,6 +5,7 @@ namespace App\Service\Aura;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Helper for aura otp related APIs.
@@ -64,21 +65,19 @@ class RedemptionHelper {
     try {
       // API Call to redeem points.
       $url = sprintf('apc/%d/redeem-points', $cardNumber);
-      // $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
+      $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
       $responseData = [];
 
-      // @todo Remove hard coded response once API starts working.
-      // if (!empty($response)) {
-      $responseData = [
-        'status' => TRUE,
-        'data' => [
-          'base_grand_total' => $response['base_grand_total'] ?? '',
-          'discount_amount' => $response['discount_amount'] ?? '',
-          'shipping_incl_tax' => $response['shipping_incl_tax'] ?? '',
-          'subtotal_incl_tax' => $response['subtotal_incl_tax'] ?? '',
-        ],
-      ];
-      // }
+      if (!empty($response)) {
+        $responseData = [
+          'status' => TRUE,
+          'data' => [
+            'paidWithAura' => $response['redeem_response']['cashback_deducted_value'] ?? 0,
+            'balancePayable' => $response['redeem_response']['balance_payable'] ?? 0,
+            'balancePoints' => $response['redeem_response']['house_hold_balance'] ?? 0,
+          ],
+        ];
+      }
       return $responseData;
     }
     catch (\Exception $e) {
@@ -100,7 +99,7 @@ class RedemptionHelper {
     $processed_data = [];
     if (!empty($data['action']) && $data['action'] === 'remove points') {
       $processed_data = [
-        'redeemAuraPoints' => [
+        'redeemPoints' => [
           'action' => 'remove points',
           'quote_id' => $cart_id ?? '',
         ],
@@ -110,7 +109,7 @@ class RedemptionHelper {
 
     if (!empty($data['action']) && $data['action'] === 'set points') {
       $processed_data = [
-        'redeemAuraPoints' => [
+        'redeemPoints' => [
           'action' => 'set points',
           'quote_id' => $cart_id ?? '',
           'redeem_points' => $data['redeemPoints'] ?? '',
@@ -121,9 +120,9 @@ class RedemptionHelper {
       ];
 
       // Check if required data is present in request.
-      if (empty($data['redeemAuraPoints']['redeem_points'])
-        || empty($data['redeemAuraPoints']['converted_money_value'])
-        || empty($data['redeemAuraPoints']['currencyCode'])) {
+      if (empty($processed_data['redeemPoints']['redeem_points'])
+        || empty($processed_data['redeemPoints']['converted_money_value'])
+        || empty($processed_data['redeemPoints']['currencyCode'])) {
         $message = 'Error while trying to redeem aura points. Redeem Points, Converted Money Value and Currency Code is required.';
         $this->logger->error($message . 'Data: @request_data', [
           '@request_data' => json_encode($data),

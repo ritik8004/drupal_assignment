@@ -67,7 +67,10 @@ const OrderSummaryBlock = ({
       <div className="block-content">
         {/* To Be used later on Checkout Delivery pages. */}
         <div className="products" />
-        <TotalLineItems totals={totals} isCartPage={showCheckoutButton} />
+        <TotalLineItems
+          totals={totals}
+          isCartPage={showCheckoutButton}
+        />
         {/* To Be used on cart page only. */}
         {showCheckoutButton
         && (
