@@ -8,6 +8,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Helper class for Aura APIs.
@@ -95,47 +96,7 @@ class AuraApiHelper {
 
       $endpoint = 'customers/apcDicData/' . $value;
       $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
-
-      // @todo Remove hard coded response once API is funtional.
-      $response = [
-        "code" => "APC_CASHBACK_ACCRUAL_RATIO",
-        "items" => [
-          [
-            "code" => "SAR",
-            "order" => 1,
-            "value" => "1",
-          ],
-        ],
-      ];
-      if ($value === 'EXT_PHONE_PREFIX') {
-        $response = [
-          "code" => "EXT_PHONE_PREFIX",
-          "items" => [
-            [
-              "code" => "+973",
-              "order" => 0,
-              "value" => "+973",
-            ],
-            [
-              "code" => "+966",
-              "order" => 1,
-              "value" => "+966",
-            ],
-          ],
-        ];
-      }
-      if ($value === 'APC_CASHBACK_REDEMPTION_RATIO') {
-        $response = [
-          "code" => "APC_CASHBACK_REDEMPTION_RATIO",
-          "items" => [
-            [
-              "code" => "SAR",
-              "order" => 1,
-              "value" => "50",
-            ],
-          ],
-        ];
-      }
+      $response = is_string($response) ? Json::decode($response) : $response;
 
       if (empty($response)) {
         $this->logger->error('No data found for api: @api.', [
