@@ -76,7 +76,7 @@ function getPriceToPoint(price) {
   const accrualRatio = getPriceToPointRatio();
   const points = accrualRatio ? (price * accrualRatio) : 0;
 
-  return points;
+  return Math.round(points);
 }
 
 /**

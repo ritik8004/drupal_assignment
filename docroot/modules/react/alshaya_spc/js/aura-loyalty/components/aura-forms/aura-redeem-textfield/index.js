@@ -11,13 +11,23 @@ const AuraRedeemPointsTextField = (props) => {
   } = props;
 
   if (type === 'money') {
+    const { currency_config: currencyConfig } = drupalSettings.alshaya_spc;
+    const formattedMoneyValue = money
+      ? parseFloat(money).toLocaleString(
+        undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: currencyConfig.decimal_points,
+        },
+      )
+      : '';
+
     return (
       <div className={`spc-aura-textfield ${name}-form-item`}>
         <input
           placeholder={placeholder}
           name={name}
           className={name}
-          defaultValue={money ? `${currencyCode} ${money}` : ''}
+          defaultValue={formattedMoneyValue ? `${currencyCode} ${formattedMoneyValue}` : ''}
           type="text"
         />
       </div>
