@@ -77,7 +77,7 @@ class ConfigForm extends ConfigFormBase {
         '#options' => $options,
         '#required' => TRUE,
         '#description' => $this->t('This site should be configured to target particular Load Balancers.'),
-        '#default_value' => $config->get('hostnames'),
+        '#default_value' => str_replace('.', ':', $config->get('hostnames')),
       ];
     }
     else {
@@ -93,7 +93,13 @@ class ConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_purge.settings');
-    $config->set('hostnames', array_filter($form_state->getValue('storage_method')));
+    $hostnames = [];
+    foreach ($form_state->getValue('storage_method') as $value) {
+      if (!empty($value)) {
+        $hostnames[] = str_replace(':', '.', $value);
+      }
+    }
+    $config->set('hostnames', $hostnames);
     $config->save();
     return parent::submitForm($form, $form_state);
   }
