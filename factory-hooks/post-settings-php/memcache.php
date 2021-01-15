@@ -77,6 +77,9 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // @see factory-hooks/post-settings-php/includes.php.
     if (!isset($settings['cache']['bins'])) {
       $settings['cache']['bins']['config'] = 'cache.backend.memcache';
+      // Use database for these bins.
+      $settings['cache']['bins']['bootstrap'] = 'cache.backend.database';
+      $settings['cache']['bins']['discovery'] = 'cache.backend.database';
     }
 
     // Use memcache as the default bin.
@@ -90,10 +93,6 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     $settings['cache']['bins']['google_tag'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['alshaya_acm_promotion'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['pretty_paths'] = 'cache.backend.permanent_memcache';
-
-    // Use database for these bins.
-    $settings['cache']['bins']['bootstrap'] = 'cache.backend.database';
-    $settings['cache']['bins']['discovery'] = 'cache.backend.database';
 
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;
