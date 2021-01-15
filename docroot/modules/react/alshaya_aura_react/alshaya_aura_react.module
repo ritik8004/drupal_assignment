@@ -11,6 +11,7 @@ use Drupal\alshaya_aura_react\Constants\AuraTier;
 use Drupal\user\Entity\User;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -151,6 +152,10 @@ function alshaya_aura_react_block_view_alter(&$build, $block) {
   if ($block->getPluginId() === 'system_menu_block:account') {
     $build['#pre_render'][] = '_alshaya_aura_react_system_menu_block_account_pre_render';
   }
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical'
+    && $block->getPluginId() === 'page_title_block') {
+    $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
+  }
 }
 
 /**
@@ -184,6 +189,30 @@ function _alshaya_aura_react_my_account_block_pre_render(array $build) {
  */
 function _alshaya_aura_react_system_menu_block_account_pre_render(array $build) {
   $build['content']['#prefix'] = '<div id="aura-mobile-header-signin-register"></div>';
+  return $build;
+}
+
+/**
+ * Pre render callback for page_title_block block.
+ *
+ * @param array $build
+ *   The block build array.
+ *
+ * @return array
+ *   The altered block build array.
+ */
+function _alshaya_aura_react_page_title_pre_render(array $build) {
+  $edit_account = [
+    '#type' => 'link',
+    '#title' => t('edit account details'),
+    '#url' => Url::fromRoute('entity.user.edit_form', ['user' => \Drupal::currentUser()->id()]),
+    '#attributes' => [
+      'class' => ['button', 'button-wide', 'edit-account'],
+    ],
+  ];
+
+  $build['content']['#suffix'] = \Drupal::service('renderer')->render($edit_account);
+
   return $build;
 }
 
