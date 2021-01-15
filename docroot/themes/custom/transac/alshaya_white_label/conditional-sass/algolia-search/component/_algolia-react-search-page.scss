@@ -35,6 +35,14 @@
       border: none;
     }
 
+    .c-accordion__title.c-collapse__title {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 100%;
+      display: block;
+    }
+
     a {
       font-family: $alshaya-thin;
       font-weight: normal;
@@ -343,7 +351,8 @@ body[class^="super-category"] {
           > div {
             > h3.c-accordion__title {
               border-bottom: 0.0625rem solid $category_facet_border_mobile;
-              box-sizing: content-box;
+              height: 3rem;
+              line-height: 3rem;
             }
           }
 
@@ -410,7 +419,7 @@ body[class^="super-category"] {
                 box-sizing: border-box;
 
                 &.active {
-                  background: none;
+                  background: $lhn_sticky-filter-background;
                 }
               }
             }
