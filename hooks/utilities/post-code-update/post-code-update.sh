@@ -45,7 +45,7 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   echo "Change in install file detected, executing updb."
 
   if [ $slack == 1 ]; then
-    curl -X POST --data-urlencode "payload={\"username\": \"${AH_SITE_NAME}\", \"text\": \"Clearing drupal cache to reflect FE changes on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+    curl -X POST --data-urlencode "payload={\"username\": \"${AH_SITE_NAME}\", \"text\": \"Executing drupal updates on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
   fi
   drush acsf-tools-ml updb
 elif echo $(cat ../git-diff.txt) | grep "\.scss\|\.js\|\.twig\|\.theme"; then
