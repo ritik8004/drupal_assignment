@@ -1,0 +1,7 @@
+name: Alshaya bazaarvoice module
+type: module
+description: 'Implements bazaarvoice reviews and ratings feature.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_react:alshaya_react
