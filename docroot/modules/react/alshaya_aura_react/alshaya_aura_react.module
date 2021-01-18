@@ -194,9 +194,7 @@ function _alshaya_aura_react_system_menu_block_account_pre_render(array $build) 
 function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
   // Add edit account link beside page title block.
   if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
-    if ($block->getPluginId() === 'page_title_block') {
-      $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
-    }
+    $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
   }
 }
 
