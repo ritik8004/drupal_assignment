@@ -109,7 +109,7 @@ class AlshayaLoyaltyController extends ControllerBase {
    * Returns page title.
    */
   public function getLoyaltyClubTitle() {
-    return $this->t('My Aura');
+    return $this->t('My AURA');
   }
 
 }

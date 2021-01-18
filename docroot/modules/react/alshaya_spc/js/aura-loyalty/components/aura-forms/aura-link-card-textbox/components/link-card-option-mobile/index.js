@@ -16,7 +16,7 @@ const LinkCardOptionMobile = (props) => {
       countryMobileCode={countryMobileCode}
       maxLength={countryMobileCodeMaxLength}
       setCountryCode={setChosenCountryCode}
-      onlyMobileFieldPlaceholder={Drupal.t('Mobile number')}
+      onlyMobileFieldPlaceholder={Drupal.t('Mobile Number')}
       defaultValue={mobile}
     />
   );
