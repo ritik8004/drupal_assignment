@@ -62,7 +62,7 @@
         callback(data, extraData);
       }
       catch(e) {
-        Drupal.logJavascriptError('getLocalStorageProductData fail', e, GTM_CONSTANTS.CHECKOUT_ERRORS);
+        Drupal.logJavascriptError('getLocalStorageProductData fail', e, GTM_CONSTANTS.CART_ERRORS);
       }
       return true;
     }
