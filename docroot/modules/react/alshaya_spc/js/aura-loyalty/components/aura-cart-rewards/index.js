@@ -62,11 +62,11 @@ class AuraCartRewards extends React.Component {
     if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
       || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
       return [
-        Drupal.t('Aura Rewards'),
+        Drupal.t('Aura rewards'),
         <span key="aura-cart-title">{` ${Drupal.t('(Optional)')}`}</span>,
       ];
     }
-    return Drupal.t('Aura Rewards');
+    return Drupal.t('Aura rewards');
   };
 
   render() {

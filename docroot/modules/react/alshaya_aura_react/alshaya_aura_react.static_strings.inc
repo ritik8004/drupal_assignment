@@ -24,15 +24,15 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'otp_send_message',
-      'value' => t('We have sent the One Time Pin to your mobile number.'),
+      'value' => t('We’ve sent the one time PIN to your mobile number.'),
     ],
     [
       'key' => 'didnt_receive_otp_message',
-      'value' => t('Didn’t receive the One Time Pin?'),
+      'value' => t('Didn’t receive your one time PIN?'),
     ],
     [
       'key' => 'send_otp_helptext',
-      'value' => t('We will send a One Time Pin to your mobile number.'),
+      'value' => t('We’ll send a one time PIN to your mobile number.'),
     ],
     [
       'key' => 'verify',
@@ -44,11 +44,11 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'otp_modal_title',
-      'value' => t('Say hello to Aura'),
+      'value' => t('Say hello to AURA'),
     ],
     [
       'key' => 'resend_code',
-      'value' => t('Resend Code'),
+      'value' => t('Resend code'),
     ],
     [
       'key' => 'mobile_label',
@@ -56,7 +56,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'otp_label',
-      'value' => t('One Time Pin'),
+      'value' => t('One time PIN'),
     ],
     [
       'key' => 'form_error_full_name',
@@ -72,7 +72,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'form_error_invalid_otp',
-      'value' => t('OTP is not valid.'),
+      'value' => t('The OTP is not valid. Please try again.'),
     ],
     [
       'key' => 'form_error_send_otp_failed_message',
@@ -84,11 +84,11 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'form_error_mobile_already_registered',
-      'value' => t('Mobile Number is already registered.'),
+      'value' => t('This mobile number is already registered.'),
     ],
     [
       'key' => 'form_error_email_already_registered',
-      'value' => t('Email address is already registered.'),
+      'value' => t('This email address is already registered.'),
     ],
     [
       'key' => 'form_error_empty_card',
