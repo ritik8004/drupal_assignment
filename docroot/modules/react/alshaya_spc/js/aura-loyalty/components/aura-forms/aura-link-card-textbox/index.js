@@ -45,11 +45,14 @@ class AuraFormLinkCard extends React.Component {
     const { cartId } = this.props;
 
     if (cartId === localStorageValues.cartId) {
+      const key = localStorageValues.type === 'apcNumber'
+        ? 'cardNumber'
+        : localStorageValues.key;
       const data = {
         detail: {
           stateValues: {
-            linkCardOption: localStorageValues.key,
-            [localStorageValues.key]: localStorageValues.value,
+            linkCardOption: key,
+            [key]: localStorageValues.value,
           },
         },
       };
