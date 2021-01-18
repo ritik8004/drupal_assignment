@@ -72,7 +72,7 @@ const Teaser = ({
               <a href={`${hit.url}`} className="product-selected-url">
                 <div className="aa-suggestion">
                   <span className="suggested-text">
-                    {hit.title}
+                    {Parser(hit.title)}
                   </span>
                 </div>
               </a>
