@@ -72,8 +72,8 @@
       float: $left;
       display: block !important;
       margin: 0 !important;
-      border-bottom: 0.0625rem solid $plp_all_filter_item_border;
-      border-#{$right}: 0.0625rem solid $plp_all_filter_item_border;
+      border-bottom: 0.0625rem solid $plp_mobile_separator;
+      border-#{$right}: 0.0625rem solid $plp_mobile_separator;
     }
 
     @include breakpoint($only-tablet) {
