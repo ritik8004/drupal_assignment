@@ -1,5 +1,5 @@
 alshaya_bazaarvoice.bazaarvoice_settings:
   route_name: alshaya_bazaarvoice.bazaarvoice_config
-  title: 'Alshaya bazaarvoice settings'
-  description: 'Configure bazaarvoice settings.'
+  title: 'Alshaya BazaarVoice settings'
+  description: 'Configure BazaarVoice settings.'
   parent: alshaya_master.alshaya_admin

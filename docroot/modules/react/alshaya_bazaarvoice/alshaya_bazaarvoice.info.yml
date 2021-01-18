@@ -1,6 +1,6 @@
-name: Alshaya bazaarvoice module
+name: Alshaya BazaarVoice
 type: module
-description: 'Implements bazaarvoice reviews and ratings feature.'
+description: 'Provides integration with BazaarVoice.'
 package: 'Alshaya'
 core: 8.x
 dependencies:
