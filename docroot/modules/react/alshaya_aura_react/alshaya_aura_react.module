@@ -152,9 +152,13 @@ function alshaya_aura_react_block_view_alter(&$build, $block) {
   if ($block->getPluginId() === 'system_menu_block:account') {
     $build['#pre_render'][] = '_alshaya_aura_react_system_menu_block_account_pre_render';
   }
-  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical'
-    && $block->getPluginId() === 'page_title_block') {
-    $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
+    if ($block->getPluginId() === 'alshaya_user_recent_orders') {
+      $build['#pre_render'][] = '_alshaya_aura_react_user_recent_orders_pre_render';
+    }
+    if ($block->getPluginId() === 'page_title_block') {
+      $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
+    }
   }
 }
 
@@ -212,6 +216,23 @@ function _alshaya_aura_react_page_title_pre_render(array $build) {
   ];
 
   $build['content']['#suffix'] = \Drupal::service('renderer')->render($edit_account);
+
+  return $build;
+}
+
+/**
+ * Pre render callback for alshaya_user_recent_orders block.
+ *
+ * @param array $build
+ *   The block build array.
+ *
+ * @return array
+ *   The altered block build array.
+ */
+function _alshaya_aura_react_user_recent_orders_pre_render(array $build) {
+  // Remove edit account link because we are adding it with
+  // page title when aura enabled.
+  unset($build['content']['edit_account']);
 
   return $build;
 }

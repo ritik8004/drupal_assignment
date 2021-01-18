@@ -159,16 +159,14 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
     try {
 
-      if (!$this->moduleHandler->moduleExists('alshaya_aura_react')) {
-        $build['edit_account'] = [
-          '#type' => 'link',
-          '#title' => $this->t('edit account details'),
-          '#url' => Url::fromRoute('entity.user.edit_form', ['user' => $uid]),
-          '#attributes' => [
-            'class' => ['button', 'button-wide', 'edit-account'],
-          ],
-        ];
-      }
+      $build['edit_account'] = [
+        '#type' => 'link',
+        '#title' => $this->t('edit account details'),
+        '#url' => Url::fromRoute('entity.user.edit_form', ['user' => $uid]),
+        '#attributes' => [
+          'class' => ['button', 'button-wide', 'edit-account'],
+        ],
+      ];
 
       // Get the orders of the user.
       $customer_id = (int) $account->get('acq_customer_id')->getString();
