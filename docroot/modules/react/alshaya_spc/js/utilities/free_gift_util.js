@@ -46,7 +46,7 @@ export const addFreeGift = (freeGiftLink) => {
       }
       const option = {
         option_id: optionId,
-        option_value: parseInt(form.querySelector(`[data-configurable-code="${key}"]`).value,10),
+        option_value: parseInt(form.querySelector(`[data-configurable-code="${key}"]`).value, 10),
       };
       configurableValues.push(option);
     });
@@ -67,7 +67,7 @@ export const addFreeGift = (freeGiftLink) => {
     },
     data: JSON.stringify(postData),
   }).then((cartresponse) => {
-    if (cartresponse.data.length !== 0) {
+    if (Object.keys(cartresponse.data).length !== 0) {
       // Refreshing mini-cart.
       const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartresponse.data } });
       document.dispatchEvent(miniCartEvent);
