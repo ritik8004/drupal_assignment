@@ -1,5 +1,6 @@
 import React from 'react';
 import TotalLineItem from '../../../../../utilities/total-line-item';
+import VatText from '../../../../../utilities/vat-text';
 
 const AuraCheckoutOrderSummary = (props) => {
   const { totals } = props;
@@ -14,6 +15,10 @@ const AuraCheckoutOrderSummary = (props) => {
     return null;
   }
 
+  if (paidWithAura <= 0 || balancePayable <= 0) {
+    return null;
+  }
+
   return (
     <div className="aura-order-summary">
       <TotalLineItem
@@ -21,11 +26,14 @@ const AuraCheckoutOrderSummary = (props) => {
         title={Drupal.t('Paid With Aura')}
         value={paidWithAura}
       />
-      <TotalLineItem
-        name="balance-payable"
-        title={Drupal.t('Balance Payable')}
-        value={balancePayable}
-      />
+      <div className="hero-total aura-hero-total">
+        <TotalLineItem
+          name="balance-payable"
+          title={Drupal.t('Balance Payable')}
+          value={balancePayable}
+        />
+        <VatText />
+      </div>
     </div>
   );
 };

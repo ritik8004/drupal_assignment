@@ -16,6 +16,10 @@
 
       > span {
         padding-#{$right}: 0.25rem;
+
+        div.price {
+          display: inline;
+        }
       }
     }
   }
@@ -65,5 +69,10 @@
         width: 100%;
       }
     }
+  }
+
+  .spc-aura-link-api-response-message.error {
+    font-size: 0.875rem;
+    font-family: $aura-regular;
   }
 }

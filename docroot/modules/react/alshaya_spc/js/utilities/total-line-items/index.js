@@ -67,6 +67,14 @@ class TotalLineItems extends React.Component {
     const { cartPromo, freeShipping } = this.state;
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
+    // Check for aura totals.
+    let showVatInAuraTotals = false;
+    const { paidWithAura } = totals;
+
+    if (paidWithAura > 0) {
+      showVatInAuraTotals = true;
+    }
+
     // Using a separate variable(shippingAmount) to update the value
     // not using the variable in props(totals) as it will
     // update the global value.
@@ -86,44 +94,50 @@ class TotalLineItems extends React.Component {
 
     return (
       <div className="totals">
-        <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
-        <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
+        <div className="sub-totals">
+          <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
+          <TotalLineItem tooltip tooltipContent={discountTooltip} name="discount-total" title={Drupal.t('Discount')} value={totals.discount_amount} />
 
-        <ConditionalView condition={shippingAmount !== null}>
-          <TotalLineItem
-            name="delivery-total"
-            title={Drupal.t('Delivery')}
-            value={shippingAmount > 0 ? shippingAmount : Drupal.t('FREE')}
-          />
-        </ConditionalView>
+          <ConditionalView condition={shippingAmount !== null}>
+            <TotalLineItem
+              name="delivery-total"
+              title={Drupal.t('Delivery')}
+              value={shippingAmount > 0 ? shippingAmount : Drupal.t('FREE')}
+            />
+          </ConditionalView>
 
-        {/* Show surcharge on checkout page only if available. */}
-        <ConditionalView condition={totals.surcharge > 0 && isCartPage === false}>
-          <TotalLineItem
-            tooltip
-            name="surcharge-total"
-            tooltipContent={replaceCodTokens(
-              getAmountWithCurrency(totals.surcharge),
-              getStringMessage('cod_surcharge_tooltip'),
-            )}
-            title={getStringMessage('cod_surcharge_label')}
-            value={totals.surcharge}
-          />
-        </ConditionalView>
-
-        <div className="hero-total">
-          <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
-          <div className="delivery-vat">
-            <ConditionalView condition={shippingAmount === null}>
-              <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
-            </ConditionalView>
-
-            <VatText />
-          </div>
+          {/* Show surcharge on checkout page only if available. */}
+          <ConditionalView condition={totals.surcharge > 0 && isCartPage === false}>
+            <TotalLineItem
+              tooltip
+              name="surcharge-total"
+              tooltipContent={replaceCodTokens(
+                getAmountWithCurrency(totals.surcharge),
+                getStringMessage('cod_surcharge_tooltip'),
+              )}
+              title={getStringMessage('cod_surcharge_label')}
+              value={totals.surcharge}
+            />
+          </ConditionalView>
         </div>
-        {isAuraEnabled()
-          ? <AuraCheckoutOrderSummary totals={totals} />
-          : null}
+
+        <div className="hero-totals-wrapper">
+          <div className="hero-total">
+            <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
+            <div className="delivery-vat">
+              <ConditionalView condition={shippingAmount === null}>
+                <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
+              </ConditionalView>
+              {/* If Aura Totals are present VAT text is shown as part of balance payable */}
+              {showVatInAuraTotals === true
+                ? null
+                : <VatText />}
+            </div>
+          </div>
+          {isAuraEnabled()
+            ? <AuraCheckoutOrderSummary totals={totals} />
+            : null}
+        </div>
       </div>
     );
   }
