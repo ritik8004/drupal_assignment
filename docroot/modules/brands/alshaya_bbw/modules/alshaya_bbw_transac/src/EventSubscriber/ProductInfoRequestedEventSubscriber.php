@@ -106,14 +106,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    */
   public function processTitle(ProductInfoRequestedEvent $event) {
     $sku_entity = $event->getSku();
-    $form = $sku_entity->get('attr_form')->getString();
-
-    if ($form) {
-      $form = '<span class="content--form">' . $form . '</span>';
-    }
-
-    $title = _alshaya_bbw_transac_get_product_title($sku_entity) . $form;
-
+    $title = _alshaya_bbw_transac_get_product_title($sku_entity);
     $event->setValue($title);
   }
 
