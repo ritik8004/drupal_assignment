@@ -38,6 +38,13 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
   protected $fileStorage;
 
   /**
+   * Entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Alshaya404MaintenanceSettings constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -57,6 +64,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
     $this->fileUsage = $file_usage;
     $this->languageManager = $language_manager;
     $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -202,7 +210,7 @@ class Alshaya404MaintenanceSettings extends ConfigFormBase {
    *   Image uri name.
    */
   protected function createImageStyle($image_style, $uri) {
-    $style = $this->entityTypeManager()->getStorage('image_style')->load($image_style);
+    $style = $this->entityTypeManager->getStorage('image_style')->load($image_style);
     $destination = $style->buildUri($uri);
     $style->createDerivative($uri, $destination);
   }
