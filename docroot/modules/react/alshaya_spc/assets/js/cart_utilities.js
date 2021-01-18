@@ -62,7 +62,7 @@
         callback(data, extraData);
       }
       catch(e) {
-        console.log(e);
+        // Do nothing.
       }
       return true;
     }
