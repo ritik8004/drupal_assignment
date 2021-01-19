@@ -292,11 +292,9 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
     $context = $entity->get('field_acq_promotion_context')->getValue();
     // Throw exception only if the web is not set in the context.
     // Do nothing if context is not set at all.
-    if (!empty($context)) {
-      $context = array_column($context, 'value');
-      if (!in_array('web', $context)) {
-        throw new NotFoundHttpException();
-      }
+    if (!empty($context)
+      && !in_array('web', array_column($context, 'value'))) {
+      throw new NotFoundHttpException();
     }
   }
 
