@@ -124,8 +124,7 @@ class AlshayaPlpSortOptionsBase {
     $this->routeMatch = $route_match;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->requestStack = $request_stack;
-    $this->languageManager = $language_manager;
-    $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
+    $this->currentLanguage = $language_manager->getCurrentLanguage()->getId();
     $this->entityRepository = $entity_repository;
   }
 
