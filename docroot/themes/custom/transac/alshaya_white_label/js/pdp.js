@@ -61,7 +61,7 @@
           }
         });
 
-        moveContextualLink('.c-accordion');
+        moveContextualLink('.acq-content-product .c-accordion');
 
         /**
          * Function to create accordion.

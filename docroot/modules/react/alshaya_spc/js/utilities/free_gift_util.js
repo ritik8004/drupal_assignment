@@ -35,20 +35,20 @@ export const addFreeGift = (freeGiftLink) => {
     Object.keys(
       drupalSettings.configurableCombinations[freeGiftMainSku].configurables,
     ).forEach((key) => {
-      const option = {
-        option_id:
-          drupalSettings.configurableCombinations[freeGiftMainSku]
-            .configurables[key].attribute_id,
-        option_value: form.querySelector(`[data-configurable-code="${key}"]`).value,
-      };
-
+      const optionId = drupalSettings.configurableCombinations[freeGiftMainSku]
+        .configurables[key].attribute_id;
       // Skipping the psudo attributes.
       if (
         drupalSettings.psudo_attribute === undefined
-        || drupalSettings.psudo_attribute !== option.option_id
+        || drupalSettings.psudo_attribute === optionId
       ) {
-        configurableValues.push(option);
+        return;
       }
+      const option = {
+        option_id: optionId,
+        option_value: parseInt(form.querySelector(`[data-configurable-code="${key}"]`).value, 10),
+      };
+      configurableValues.push(option);
     });
 
     postData = {
@@ -67,7 +67,7 @@ export const addFreeGift = (freeGiftLink) => {
     },
     data: JSON.stringify(postData),
   }).then((cartresponse) => {
-    if (cartresponse.data.length !== 0) {
+    if (Object.keys(cartresponse.data).length !== 0) {
       // Refreshing mini-cart.
       const miniCartEvent = new CustomEvent('refreshMiniCart', { bubbles: true, detail: { data: () => cartresponse.data } });
       document.dispatchEvent(miniCartEvent);

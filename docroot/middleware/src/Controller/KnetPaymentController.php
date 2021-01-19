@@ -9,6 +9,7 @@ use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Service\Orders;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -85,6 +86,8 @@ class KnetPaymentController extends PaymentController {
    *   Session Storage service.
    * @param \App\Service\Config\SystemSettings $settings
    *   System Settings service.
+   * @param \App\Service\Orders $order
+   *   Order service.
    */
   public function __construct(
     RequestStack $request,
@@ -93,9 +96,10 @@ class KnetPaymentController extends PaymentController {
     PaymentData $payment_data,
     LoggerInterface $logger,
     SessionStorage $session,
-    SystemSettings $settings
+    SystemSettings $settings,
+    Orders $order
   ) {
-    parent::__construct($logger, $settings, $cart);
+    parent::__construct($logger, $settings, $cart, $order);
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->knetHelper = $knet_helper;

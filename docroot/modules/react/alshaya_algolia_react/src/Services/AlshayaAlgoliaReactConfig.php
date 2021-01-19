@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_algolia_react\Services;
 
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
@@ -62,6 +63,13 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected $entityTypeManager;
 
   /**
+   * Alshaya Promotions Context Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   */
+  protected $promoContextManager;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -78,6 +86,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   Service to get sort options for PLP.
    * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService $plp_sort_options
    *   Service to get sort option labels for PLP.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -86,7 +96,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     SkuImagesManager $sku_images_manager,
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaPlpSortLabelsService $plp_sort_labels,
-    AlshayaPlpSortOptionsService $plp_sort_options
+    AlshayaPlpSortOptionsService $plp_sort_options,
+    AlshayaPromoContextManager $alshayaPromoContextManager
   ) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -95,6 +106,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $this->entityTypeManager = $entity_type_manager;
     $this->plpSortLabels = $plp_sort_labels;
     $this->plpSortOptions = $plp_sort_options;
+    $this->promoContextManager = $alshayaPromoContextManager;
   }
 
   /**
@@ -328,6 +340,10 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $identifier = 'field_category';
             $widget['type'] = 'hierarchy';
           }
+          elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
+            $context = $this->promoContextManager->getPromotionContext();
+            $identifier = "field_acq_promotion_label.$context";
+          }
           else {
             $identifier = $facet->getFieldIdentifier();
           }
@@ -340,7 +356,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'checkbox';
           }
 
-          $filter_facets[$identifier] = [
+          $filter_facets[explode('.', $identifier)[0]] = [
             'identifier' => $identifier,
             'label' => $block->label(),
             'name' => $facet->getName(),

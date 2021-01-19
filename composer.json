@@ -357,6 +357,9 @@
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
+            "drupal/metatag": {
+                "metatag_get_default_tags() does not revert config override language": "https://www.drupal.org/files/issues/2020-01-31/metatag-default-config-3108052-6.patch"
+            },
             "drupal/pathauto": {
                 "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
             },
