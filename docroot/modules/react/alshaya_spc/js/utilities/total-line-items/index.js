@@ -1,11 +1,11 @@
 import React from 'react';
 import TotalLineItem from '../total-line-item';
-import VatText from '../vat-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 import AuraCheckoutOrderSummary from '../../aura-loyalty/components/aura-checkout-rewards/components/aura-checkout-order-summary';
 import isAuraEnabled from '../../../../js/utilities/helper';
+import DeliveryVATSuffix from '../delivery-vat';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -124,18 +124,18 @@ class TotalLineItems extends React.Component {
         <div className="hero-totals-wrapper">
           <div className="hero-total">
             <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
-            <div className="delivery-vat">
-              <ConditionalView condition={shippingAmount === null}>
-                <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
-              </ConditionalView>
-              {/* If Aura Totals are present VAT text is shown as part of balance payable */}
-              {showVatInAuraTotals === true
-                ? null
-                : <VatText />}
-            </div>
+            <DeliveryVATSuffix
+              shippingAmount={shippingAmount}
+              showVatInAuraTotals={showVatInAuraTotals}
+            />
           </div>
           {isAuraEnabled()
-            ? <AuraCheckoutOrderSummary totals={totals} />
+            ? (
+              <AuraCheckoutOrderSummary
+                showVatInAuraTotals={showVatInAuraTotals}
+                shippingAmount={shippingAmount}
+              />
+            )
             : null}
         </div>
       </div>

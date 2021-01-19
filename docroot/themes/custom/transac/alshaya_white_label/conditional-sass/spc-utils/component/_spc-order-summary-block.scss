@@ -91,20 +91,20 @@
       font-family: $alshaya-bold;
       margin-bottom: 0;
     }
+  }
 
-    .delivery-vat {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+  .delivery-vat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-      html[lang=ar] & {
-        line-height: 1.5;
-      }
+    html[lang=ar] & {
+      line-height: 1.5;
+    }
 
-      span {
-        font-size: 0.875rem;
-        color: $spc-order-total-suffix-text;
-      }
+    span {
+      font-size: 0.875rem;
+      color: $spc-order-total-suffix-text;
     }
   }
 

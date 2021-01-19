@@ -1,23 +1,15 @@
 import React from 'react';
 import TotalLineItem from '../../../../../utilities/total-line-item';
-import VatText from '../../../../../utilities/vat-text';
+import DeliveryVATSuffix from '../../../../../utilities/delivery-vat';
 
 const AuraCheckoutOrderSummary = (props) => {
-  const { totals } = props;
+  const { totals, shippingAmount, showVatInAuraTotals } = props;
 
   if (totals === undefined || totals === null) {
     return null;
   }
 
   const { paidWithAura, balancePayable } = totals;
-
-  if (paidWithAura === undefined || balancePayable === undefined) {
-    return null;
-  }
-
-  if (paidWithAura <= 0 || balancePayable <= 0) {
-    return null;
-  }
 
   return (
     <div className="aura-order-summary">
@@ -32,7 +24,10 @@ const AuraCheckoutOrderSummary = (props) => {
           title={Drupal.t('Balance Payable')}
           value={balancePayable}
         />
-        <VatText />
+        <DeliveryVATSuffix
+          shippingAmount={shippingAmount}
+          showVatInAuraTotals={showVatInAuraTotals}
+        />
       </div>
     </div>
   );
