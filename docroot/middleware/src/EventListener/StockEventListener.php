@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class StockEventListener {
 
   /**
-   * One dimensional array of OOS sku values.
+   * A flag which indicates if we are handling OOS scenario.
    *
    * @var bool
    */
