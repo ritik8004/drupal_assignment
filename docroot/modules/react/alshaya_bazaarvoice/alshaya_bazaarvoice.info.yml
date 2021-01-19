@@ -1,0 +1,7 @@
+name: Alshaya BazaarVoice
+type: module
+description: 'Provides integration with BazaarVoice.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_react:alshaya_react
