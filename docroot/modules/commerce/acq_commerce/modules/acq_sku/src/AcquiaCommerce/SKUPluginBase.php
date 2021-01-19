@@ -180,18 +180,17 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $node = Node::load($nid);
     $langcode = $sku->language()->getId();
 
-    if (isset($node_not_found[$nid])) {
-      return $node;
-    }
-    elseif (!($node instanceof NodeInterface)) {
+    if (!($node instanceof NodeInterface)) {
       // This function can get called multiple times in a request and we only
       // want to do the logging once.
-      $node_not_found[$nid] = 1;
-      \Drupal::logger('acq_sku')->warning('Display node @nid could not be loaded for @sku for @langcode', [
-        '@nid' => $nid,
-        '@sku' => $sku->getSku(),
-        '@langcode' => $langcode,
-      ]);
+      if (!isset($node_not_found[$nid])) {
+        $node_not_found[$nid] = 1;
+        \Drupal::logger('acq_sku')->warning('Display node @nid could not be loaded for SKU @sku for language @langcode.', [
+          '@nid' => $nid,
+          '@sku' => $sku->getSku(),
+          '@langcode' => $langcode,
+        ]);
+      }
 
       return $node;
     }
