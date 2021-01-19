@@ -588,7 +588,7 @@ class Cart {
               return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             elseif ($exception_type === 'OOS') {
-              $this->refreshStock([$sku, $variant_sku]);
+              $this->refreshStock([$sku, $variant_sku], TRUE);
             }
             elseif ($exception_type === 'not_enough') {
               StockEventListener::matchStockQuantity($sku, $quantity);
@@ -1303,7 +1303,7 @@ class Cart {
           $skus = array_merge($skus, array_column($cart['cart']['items'], 'sku'));
         }
 
-        $this->refreshStock($skus);
+        $this->refreshStock($skus, TRUE);
       }
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
@@ -2282,10 +2282,13 @@ class Cart {
    *
    * @param array $skus
    *   SKUs for which we need to refresh stock.
+   * @param bool $oos
+   *   (optional) Indicates if we have encountered OOS scenario.
    */
-  protected function refreshStock(array $skus) {
+  protected function refreshStock(array $skus, bool $oos = FALSE) {
     $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
       'skus' => $skus,
+      'oos' => $oos,
     ]);
 
     if ($response['status'] == TRUE) {
