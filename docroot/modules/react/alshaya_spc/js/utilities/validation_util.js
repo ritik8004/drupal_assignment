@@ -50,12 +50,14 @@ const validateCartResponse = (response) => {
       return false;
     }
 
-    dispatchCustomEvent('spcCheckoutMessageUpdate', {
-      type: 'error',
-      message: drupalSettings.global_error_message,
-    });
+    if (window.location.pathname.search(/checkout/i) >= 0) {
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: drupalSettings.global_error_message,
+      });
 
-    return false;
+      return false;
+    }
   }
 
   return true;

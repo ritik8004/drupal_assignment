@@ -113,12 +113,12 @@ class AlshayaCloudPurger extends AcquiaCloudPurger {
 
     // Now create requests for all groups of tags.
     $site = $this->hostingInfo->getSiteIdentifier();
-    $ipv4_addresses = $this->configFactory->get('alshaya_purge.settings')->get('ipv4_addresses');
-    $requests = function () use ($groups, $ipv4_addresses, $site) {
+    $hostnames = $this->configFactory->get('alshaya_purge.settings')->get('hostnames');
+    $requests = function () use ($groups, $hostnames, $site) {
       foreach ($groups as $group_id => $group) {
         $tags = implode(' ', Hash::cacheTags($group['tags']));
-        foreach ($ipv4_addresses as $ipv4) {
-          yield $group_id => function ($poolopt) use ($site, $tags, $ipv4) {
+        foreach ($hostnames as $hostname) {
+          yield $group_id => function ($poolopt) use ($site, $tags, $hostname) {
             $opt = [
               'headers' => [
                 'X-Acquia-Purge' => $site,
@@ -130,7 +130,7 @@ class AlshayaCloudPurger extends AcquiaCloudPurger {
             if (is_array($poolopt) && count($poolopt)) {
               $opt = array_merge($poolopt, $opt);
             }
-            return $this->client->requestAsync('BAN', 'http://' . str_replace('-', '.', $ipv4) . '/tags', $opt);
+            return $this->client->requestAsync('BAN', 'http://' . $hostname . '/tags', $opt);
           };
         }
       }

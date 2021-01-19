@@ -58,11 +58,12 @@
 
   Drupal.behaviors.subCategoryScroll = {
     attach: function () {
-      $('.sub-category').once('category-scroll').on('click', function () {
+      $('.sub-category').once('category-scroll').on('click', function (e) {
+        e.preventDefault();
         var tid = $(this).attr('data-tid');
         setTimeout(function () {
           scrollToCategoryHeader(tid);
-        }, 300);
+        }, 150);
       });
 
       if ($('#block-subcategoryblock').length > 0) {
