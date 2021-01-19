@@ -334,7 +334,7 @@ body[class^="super-category"] {
               > h3.c-accordion__title {
                 position: fixed !important;
                 width: 50%;
-                border-right: 0.0625rem solid $category_facet_border;
+                border-#{$right}: 0.0625rem solid $category_facet_border;
 
                 + .category-facet-wrapper {
                   padding-top: 2.9375rem;
@@ -353,6 +353,10 @@ body[class^="super-category"] {
               border-bottom: 0.0625rem solid $category_facet_border_mobile;
               height: 3rem;
               line-height: 3rem;
+
+              @include breakpoint($only-mobile) {
+                border-bottom-color: $plp_mobile_separator;
+              }
             }
           }
 
