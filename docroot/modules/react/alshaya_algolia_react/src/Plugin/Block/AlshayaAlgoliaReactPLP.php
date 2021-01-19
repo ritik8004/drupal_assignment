@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_algolia_react\Plugin\Block;
 
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\alshaya_algolia_react\AlshayaAlgoliaReactBlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
 
@@ -42,6 +44,20 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
   protected $alshayaAlgoliaReactConfig;
 
   /**
+   * Product category tree.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTree
+   */
+  protected $productCategoryTree;
+
+  /**
+   * Entity Repository service.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
@@ -54,17 +70,25 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
    *   Product category page service.
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
    *   Alshaya Algolia React Config.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
+   *   Product category tree.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity Repository service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     ProductCategoryPage $product_category_page,
-    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
+    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config,
+    ProductCategoryTree $product_category_tree,
+    EntityRepositoryInterface $entityRepository
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryPage = $product_category_page;
     $this->alshayaAlgoliaReactConfig = $alshaya_algolia_react_config;
+    $this->productCategoryTree = $product_category_tree;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -81,7 +105,9 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_acm_product_category.page'),
-      $container->get('alshaya_algoila_react.alshaya_algolia_react_config')
+      $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
+      $container->get('alshaya_acm_product_category.product_category_tree'),
+      $container->get('entity.repository')
     );
   }
 
@@ -109,6 +135,16 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
     $algoliaSearch['pageSubType'] = 'plp';
+
+    // Get current category.
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+    $term = $this->entityRepository->getTranslationFromContext($term);
+
+    // We need to show Category facet only for the Categories which are
+    // visible in menu. Condition here is same as what we use to populate
+    // lhn_category field in Algolia Index.
+    // @see AlshayaAlgoliaIndexHelper::getCategoryHierarchy()
+    $algoliaSearch['categoryFacetEnabled'] = (int) $term->get('field_category_include_menu')->getString();
 
     return [
       '#type' => 'markup',
