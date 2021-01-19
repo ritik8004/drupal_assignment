@@ -80,13 +80,6 @@ class AlshayaPlpSortOptionsBase {
   protected $requestStack;
 
   /**
-   * The language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
    * The entity repository.
    *
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
