@@ -33,7 +33,7 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
           <div className="subtitle-2">{ getMembersToEarnMessage(price) }</div>
         </div>
         <div className="spc-aura-link-card-form">
-          <div className="label">{ Drupal.t('Already an Aura member?') }</div>
+          <div className="label">{ Drupal.t('Already an AURA member?') }</div>
           <div className="item-wrapper">
             <AuraFormLinkCard
               enableShowLinkCardMessage={this.enableShowLinkCardMessage}
