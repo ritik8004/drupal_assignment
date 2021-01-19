@@ -19,6 +19,7 @@ import CurrentRefinements from '../components/algolia/current-refinements';
 import withPlpUrlAliasSync from '../components/url-sync/withPlpUrlAliasSync';
 import PLPHierarchicalMenu from '../components/algolia/widgets/PLPHierarchicalMenu';
 import PLPNoResults from '../components/algolia/PLPNoResults';
+import ConditionalView from '../components/conditional-view';
 
 if (window.NodeList && !NodeList.prototype.forEach) {
   NodeList.prototype.forEach = Array.prototype.forEach;
@@ -55,6 +56,7 @@ const PlpApp = ({
     max_category_tree_depth: categoryDepth,
     promotionNodeId,
     ruleContext,
+    categoryFacetEnabled,
   } = drupalSettings.algoliaSearch;
 
   const filters = [];
@@ -84,7 +86,10 @@ const PlpApp = ({
   const optionalFilter = getSuperCategoryOptionalFilter();
 
   const categoryFieldAttributes = [];
-  if ((isMobile() && pageSubType === 'plp' && nestedLevel < parseInt(categoryDepth, 10) + 1)) {
+  if ((isMobile()
+    && pageSubType === 'plp'
+    && categoryFacetEnabled
+    && nestedLevel < parseInt(categoryDepth, 10) + 1)) {
     for (let i = 0; i <= nestedLevel; i++) {
       categoryFieldAttributes.push(`lhn_category.lvl${i}`);
     }
@@ -116,7 +121,7 @@ const PlpApp = ({
               callback={(callerProps) => callback(callerProps)}
             />
 
-            {(isMobile() && pageSubType === 'plp' && nestedLevel < parseInt(categoryDepth, 10) + 1) ? (
+            <ConditionalView condition={categoryFieldAttributes.length > 0}>
               <div className="c-facet c-accordion block-facet-blockcategory-facet-plp algolia-plp-category-facet">
                 <h3 className="c-facet__title c-accordion__title c-collapse__title plp-category-facet-title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                 <PLPHierarchicalMenu
@@ -127,7 +132,8 @@ const PlpApp = ({
                   showParentLevel={false}
                 />
               </div>
-            ) : null}
+            </ConditionalView>
+
             <div className="show-all-filters-algolia show-all-filters hide-for-desktop" ref={allFiltersRef}>
               <span className="desktop">{Drupal.t('all filters')}</span>
               <span className="upto-desktop">{Drupal.t('filter & sort')}</span>
