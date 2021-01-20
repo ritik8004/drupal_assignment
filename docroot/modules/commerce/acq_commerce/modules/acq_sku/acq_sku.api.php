@@ -154,17 +154,5 @@ function hook_acq_sku_indexes_alter(array &$indexes) {
 }
 
 /**
- * This hook is executed once categories are created/updated during sync.
- *
- * @param array $updated_term_data
- *   The array of updated term data retreived by $term->toArray().
- * @param array $old_term_data
- *   The array of old_term_data term data retreived by $term->toArray().
- */
-function hook_acq_sku_commerce_category_post_update(array $updated_term_data = [], array $old_term_data = []) {
-
-}
-
-/**
  * @} End of "addtogroup hooks".
  */
