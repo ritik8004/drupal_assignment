@@ -11,6 +11,10 @@ const AuraCheckoutOrderSummary = (props) => {
 
   const { paidWithAura, balancePayable } = totals;
 
+  if (paidWithAura === undefined || balancePayable === undefined) {
+    return null;
+  }
+
   return (
     <div className="aura-order-summary">
       <TotalLineItem
