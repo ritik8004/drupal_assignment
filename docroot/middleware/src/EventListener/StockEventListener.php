@@ -15,13 +15,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class StockEventListener {
 
   /**
-   * A flag which indicates if we are handling OOS scenario.
-   *
-   * @var bool
-   */
-  public static $oos = FALSE;
-
-  /**
    * Contains SKU and stock data.
    *
    * @var array
@@ -96,13 +89,10 @@ class StockEventListener {
       $request = $event->getRequest();
       $this->requestStack->push($request);
       $this->drupal->triggerCheckoutEvent('refresh stock', [
-        'data' => [
-          'skus_data' => self::$stockMismatchSkusData,
-          'oos' => self::$oos,
-        ],
+        'skus_quantity' => self::$stockMismatchSkusData,
       ]);
       $this->requestStack->pop($request);
-      $this->logger->notice('Stock refresh has been done for the following skus with quantity: @skus.', [
+      $this->logger->notice('Stock refresh process is completed for the following skus with requested quantity: @skus.', [
         '@skus' => json_encode(self::$stockMismatchSkusData),
       ]);
     }

@@ -557,7 +557,6 @@ class CartController {
           foreach ($skus as $sku) {
             StockEventListener::matchStockQuantity($sku);
           }
-          StockEventListener::$oos = TRUE;
 
           $error_message = 'Cart contains some items which are not in stock.';
           $error_code = CartErrorCodes::CART_HAS_OOS_ITEM;

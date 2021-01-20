@@ -47,25 +47,31 @@ class AlshayaSpcStockHelper {
     }
 
     $skus = array_column($cart['items'], 'sku');
-    return $this->refreshStockForSkus($skus);
+
+    $skus_quantity = [];
+    foreach ($skus as $sku) {
+      // This will trigger force refresh of stock.
+      $skus_quantity[$sku] = 0;
+    }
+    return $this->refreshStockForSkus($skus_quantity);
   }
 
   /**
    * Refreshes stock for a set of skus.
    *
-   * @param array $skus
-   *   The array of sku values.
+   * @param array $skus_quantity
+   *   The associative array of sku => quantity values.
    *
    * @return array
    *   The stock status of all skus or empty array if nothing is updated.
    */
-  public function refreshStockForSkus(array $skus) {
-    foreach ($skus as $sku) {
+  public function refreshStockForSkus(array $skus_quantity) {
+    foreach ($skus_quantity as $sku => $requested_quantity) {
       if ($sku_entity = SKU::loadFromSku($sku)) {
         $plugin = $sku_entity->getPluginInstance();
         $stock = $plugin->getStock($sku);
 
-        if ($stock === 0) {
+        if (($stock === 0) || (($requested_quantity > 0) && ($requested_quantity > $stock))) {
           $response['stock'][$sku] = FALSE;
           $this->logger->info('Refresh Stock skipped for SKU: @sku.', [
             '@sku' => $sku,
@@ -122,34 +128,6 @@ class AlshayaSpcStockHelper {
     }
 
     return $stock_status;
-  }
-
-  /**
-   * Refreshes stock for skus whose quantity is less in Drupal.
-   *
-   * @param array $stock_mismatch_skus_data
-   *   Array of sku data, keyed by sku with the quantity in the value.
-   *
-   * @return array
-   *   The stock status of all skus or empty array if nothing is updated.
-   */
-  public function refreshStockForSkusOnDeficiency(array $stock_mismatch_skus_data) {
-    $skus_to_refresh_stock = [];
-    foreach ($stock_mismatch_skus_data as $sku => $user_requested_quantity) {
-      $sku_entity = SKU::loadFromSku($sku);
-      if (empty($sku_entity)) {
-        continue;
-      }
-
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-      $plugin = $sku_entity->getPluginInstance();
-      $stock = $plugin->getStock($sku_entity);
-      if (!empty($stock) && ($stock['quantity'] < $user_requested_quantity)) {
-        $skus_to_refresh_stock[] = $sku;
-      }
-    }
-
-    return $this->refreshStockForSkus($skus_to_refresh_stock);
   }
 
 }
