@@ -5,3 +5,14 @@
     }
   }
 }
+
+.free-gift-detail-modal.ui-dialog-content {
+  article {
+    > a {
+      @include icon(chevrondown, after) {
+        font-size: 0.875rem;
+        line-height: inherit;
+      }
+    }
+  }
+}
