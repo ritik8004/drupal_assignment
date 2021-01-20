@@ -250,8 +250,8 @@ class CategoryProductsHelper {
    */
   public function getSkusForCategory(array $category_ids) {
     $query = $this->database->select('node__field_skus', 'nfs');
-    $query->innerJoin('node__field_category_original', 'nfc', 'nfc.entity_id=nfs.entity_id');
-    $query->condition('nfc.field_category_original_target_id', $category_ids, 'IN');
+    $query->innerJoin('node__field_category', 'nfc', 'nfc.entity_id=nfs.entity_id');
+    $query->condition('nfc.field_category_target_id', $category_ids, 'IN');
     $query->addField('nfs', 'field_skus_value', 'skus');
     $query->distinct();
 
