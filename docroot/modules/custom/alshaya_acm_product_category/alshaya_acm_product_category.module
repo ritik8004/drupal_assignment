@@ -25,6 +25,7 @@ use Drupal\views\ViewExecutable;
 use Drupal\views\ResultRow;
 use Drupal\file\FileInterface;
 use Drupal\search_api\IndexInterface;
+use Differ\ArrayDiff;
 
 /**
  * Implements hook_module_implements_alter().
@@ -151,6 +152,53 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
   // when creating a new taxonomy term.
   if ($term->isNew()) {
     $term->get('field_show_in_lhn')->setValue($term->get('field_category_include_menu')->getString());
+  }
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_post_update().
+ */
+function alshaya_acm_product_category_acq_sku_commerce_category_post_update_alter(array $updated_term_data = [], array $old_term_data = []) {
+  if (empty($updated_term_data) || empty($old_term_data)) {
+    return;
+  }
+
+  $is_term_changed = FALSE;
+  $differ = new ArrayDiff();
+  $diff = $differ->diff($old_term_data, $updated_term_data);
+  if (!empty($diff['added']) || !empty($diff['removed']) || !empty($diff['changed'])) {
+    $is_term_changed = TRUE;
+  }
+
+  if (!$is_term_changed) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $skus_for_category */
+  $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
+    ->getSkusForCategory([$old_term_data['tid'][0]['value']]);
+
+  // Queue the skus for reindexation.
+  if (!empty($skus_for_category)) {
+    \Drupal::service("alshaya_acm_product.product_queue_utility")->queueAvailableProductsForSkus($skus_for_category);
+  }
+}
+
+/**
+ * Implements hook_acq_sku_sync_categories_delete_alter().
+ */
+function alshaya_acm_product_category_acq_sku_sync_categories_delete_alter(array &$result) {
+  if (!empty($result)) {
+    $tids = array_column($result, 'tid');
+
+    /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $skus_for_category */
+    $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
+      ->getSkusForCategory($tids);
+
+    // Queue the skus for reindexation.
+    if (!empty($skus_for_category)) {
+      \Drupal::service("alshaya_acm_product.product_queue_utility")->queueAvailableProductsForSkus($skus_for_category);
+    }
   }
 }
 
