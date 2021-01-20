@@ -803,6 +803,12 @@
           }
         }
       }
+
+      #drupal-modal.free-gift-detail-modal {
+        @include breakpoint($only-tablet) {
+          height: 100% !important;
+        }
+      }
     }
   }
 }
