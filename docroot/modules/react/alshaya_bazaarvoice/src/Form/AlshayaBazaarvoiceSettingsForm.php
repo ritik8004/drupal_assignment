@@ -28,17 +28,24 @@ class AlshayaBazaarvoiceSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['alshaya_bazaarvoice']['local_storage_expire'] = [
+    $form['alshaya_bazaarvoice']['conversations_apikey'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Local storage expire'),
-      '#description' => $this->t('Provide expiry period for cache.'),
-      '#default_value' => $this->config('alshaya_bazaarvoice.settings')->get('local_storage_expire'),
+      '#title' => $this->t('Conversations API Key'),
+      '#description' => $this->t('A passkey provided by BazaarVoice to get and submit brand specific reviews.'),
+      '#default_value' => $this->config('alshaya_bazaarvoice.settings')->get('conversations_apikey'),
     ];
 
     $form['alshaya_bazaarvoice']['api_version'] = [
       '#type' => 'textfield',
       '#title' => $this->t('API Version'),
       '#default_value' => $this->config('alshaya_bazaarvoice.settings')->get('api_version'),
+    ];
+
+    $form['alshaya_bazaarvoice']['locale'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Locale'),
+      '#default_value' => $this->config('alshaya_bazaarvoice.settings')->get('locale'),
+      '#description' => $this->t('Locale is required to get regional reviews data. It can be set as comma saparated, e.g. en_KW,ar_KW,en_AE,ar_AE'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -49,10 +56,13 @@ class AlshayaBazaarvoiceSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_bazaarvoice.settings')
-      ->set('local_storage_expire', $form_state->getValue('local_storage_expire'))
+      ->set('conversations_apikey', $form_state->getValue('conversations_apikey'))
       ->save();
     $this->config('alshaya_bazaarvoice.settings')
       ->set('api_version', $form_state->getValue('api_version'))
+      ->save();
+    $this->config('alshaya_bazaarvoice.settings')
+      ->set('locale', $form_state->getValue('locale'))
       ->save();
 
     parent::submitForm($form, $form_state);
