@@ -272,8 +272,7 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     // Queue products for reindexation if there has been update in term.
     $langcode = $term->language()->getId();
 
-    $old_term = $term->original;
-    $old_term_data = $old_term->toArray();
+    $old_term_data = $term->original->getTranslation($langcode)->toArray();
 
     $term_data = $term->toArray();
 
@@ -281,15 +280,23 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     $differ = new ArrayDiff();
     $diff = $differ->diff($old_term_data, $term_data);
 
-    // We use the same logger as
     \Drupal::logger('alshaya_acm_product_category')->info('Updated category @magento_id for @langcode: @diff.', [
       '@magento_id' => $term->get('field_commerce_id')->getString(),
       '@langcode' => $langcode,
       '@diff' => json_encode($diff),
     ]);
 
+    $changed = FALSE;
+    $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name'];
+    foreach ($fields_to_check as $field) {
+      if ($old_term_data[$field][0]['value'] != $term_data[$field][0]['value']) {
+        $changed = TRUE;
+        break;
+      }
+    }
+
     // We shall only queue products if something has changed in the term.
-    if (empty($diff['added']) && empty($diff['removed']) && empty($diff['changed'])) {
+    if (empty($diff['added']) && empty($diff['removed']) && !$changed) {
       return;
     }
 
@@ -299,7 +306,7 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
 
     // Queue the skus for reindexation.
     if (!empty($skus_for_category)) {
-      \Drupal::service("alshaya_acm_product.product_queue_utility")->queueAvailableProductsForSkus($skus_for_category);
+      \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAvailableProductsForSkus($skus_for_category);
     }
   }
 }
