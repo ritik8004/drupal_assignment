@@ -156,53 +156,6 @@ function alshaya_acm_product_category_acq_sku_commerce_category_alter(TermInterf
 }
 
 /**
- * Implements hook_acq_sku_commerce_category_post_update().
- */
-function alshaya_acm_product_category_acq_sku_commerce_category_post_update_alter(array $updated_term_data = [], array $old_term_data = []) {
-  if (empty($updated_term_data) || empty($old_term_data)) {
-    return;
-  }
-
-  $is_term_changed = FALSE;
-  $differ = new ArrayDiff();
-  $diff = $differ->diff($old_term_data, $updated_term_data);
-  if (!empty($diff['added']) || !empty($diff['removed']) || !empty($diff['changed'])) {
-    $is_term_changed = TRUE;
-  }
-
-  if (!$is_term_changed) {
-    return;
-  }
-
-  /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $skus_for_category */
-  $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
-    ->getSkusForCategory([$old_term_data['tid'][0]['value']]);
-
-  // Queue the skus for reindexation.
-  if (!empty($skus_for_category)) {
-    \Drupal::service("alshaya_acm_product.product_queue_utility")->queueAvailableProductsForSkus($skus_for_category);
-  }
-}
-
-/**
- * Implements hook_acq_sku_sync_categories_delete_alter().
- */
-function alshaya_acm_product_category_acq_sku_sync_categories_delete_alter(array &$result) {
-  if (!empty($result)) {
-    $tids = array_column($result, 'tid');
-
-    /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $skus_for_category */
-    $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
-      ->getSkusForCategory($tids);
-
-    // Queue the skus for reindexation.
-    if (!empty($skus_for_category)) {
-      \Drupal::service("alshaya_acm_product.product_queue_utility")->queueAvailableProductsForSkus($skus_for_category);
-    }
-  }
-}
-
-/**
  * Get all the children of given terms.
  *
  * @param int $tid
@@ -301,15 +254,53 @@ function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $
 function alshaya_acm_product_category_taxonomy_term_insert(TermInterface $term) {
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
+
+    \Drupal::logger('alshaya_acm_product_category')->info('New category @magento_id for @langcode saved.', [
+      '@magento_id' => $term->get('field_commerce_id')->getString(),
+      '@langcode' => $term->language()->getId(),
+    ]);
   }
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert() for taxonomy_term entities.
+ * Implements hook_ENTITY_TYPE_update().
  */
 function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) {
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
+
+    // Queue products for reindexation if there has been update in term.
+    $langcode = $term->language()->getId();
+
+    $old_term = $term->original;
+    $old_term_data = $old_term->toArray();
+
+    $term_data = $term->toArray();
+
+    // Find the difference of old term and updated term.
+    $differ = new ArrayDiff();
+    $diff = $differ->diff($old_term_data, $term_data);
+
+    // We use the same logger as
+    \Drupal::logger('alshaya_acm_product_category')->info('Updated category @magento_id for @langcode: @diff.', [
+      '@magento_id' => $term->get('field_commerce_id')->getString(),
+      '@langcode' => $langcode,
+      '@diff' => json_encode($diff),
+    ]);
+
+    // We shall only queue products if something has changed in the term.
+    if (empty($diff['added']) && empty($diff['removed']) && empty($diff['changed'])) {
+      return;
+    }
+
+    /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $skus_for_category */
+    $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
+      ->getSkusForCategory($term->id());
+
+    // Queue the skus for reindexation.
+    if (!empty($skus_for_category)) {
+      \Drupal::service("alshaya_acm_product.product_queue_utility")->queueAvailableProductsForSkus($skus_for_category);
+    }
   }
 }
 
@@ -319,6 +310,15 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
 function alshaya_acm_product_category_taxonomy_term_delete(TermInterface $term) {
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
+
+    /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $skus_for_category */
+    $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
+      ->getSkusForCategory($term->id());
+
+    // Queue the skus for reindexation.
+    if (!empty($skus_for_category)) {
+      \Drupal::service("alshaya_acm_product.product_queue_utility")->queueAvailableProductsForSkus($skus_for_category);
+    }
   }
 }
 

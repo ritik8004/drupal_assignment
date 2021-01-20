@@ -240,18 +240,18 @@ class CategoryProductsHelper {
   }
 
   /**
-   * Gets all the SKUs for products assigned to specified categories.
+   * Gets all the SKUs for products assigned to specified category.
    *
-   * @param array $category_ids
-   *   The taxonomy term ids.
+   * @param int $category_id
+   *   The taxonomy term id.
    *
    * @return array
    *   The array of sku values.
    */
-  public function getSkusForCategory(array $category_ids) {
+  public function getSkusForCategory(int $category_id) {
     $query = $this->database->select('node__field_skus', 'nfs');
     $query->innerJoin('node__field_category', 'nfc', 'nfc.entity_id=nfs.entity_id');
-    $query->condition('nfc.field_category_target_id', $category_ids, 'IN');
+    $query->condition('nfc.field_category_target_id', $category_id);
     $query->addField('nfs', 'field_skus_value', 'skus');
     $query->distinct();
 

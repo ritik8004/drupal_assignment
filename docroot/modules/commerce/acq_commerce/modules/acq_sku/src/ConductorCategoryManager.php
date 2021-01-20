@@ -2,7 +2,6 @@
 
 namespace Drupal\acq_sku;
 
-use Differ\ArrayDiff;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Entity\Query\QueryFactory;
@@ -343,14 +342,11 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $category['category_id']]);
       }
 
-      $existingTermData = [];
-
       // Always use the first term and continue.
       if (count($tids) > 0) {
         // Load and update the term entity.
         /** @var \Drupal\taxonomy\Entity\Term $term */
         $term = $this->getTranslatedTerm(array_shift($tids), $langcode);
-        $existingTermData = $term->toArray();
 
         $term->get('field_commerce_id')->setValue($category['category_id']);
         $term->setName($category['name']);
@@ -409,27 +405,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       try {
         $term->save();
-
-        // $existingTermData will have value when it is updating.
-        if ($existingTermData) {
-          $updatedTerm = $this->getTranslatedTerm($term->id(), $langcode);
-          $updatedTermData = $updatedTerm->toArray();
-
-          $differ = new ArrayDiff();
-          $diff = $differ->diff($existingTermData, $updatedTermData);
-
-          $this->logger->info('Updated category @magento_id for @langcode: @diff.', [
-            '@langcode' => $langcode,
-            '@magento_id' => $category['category_id'],
-            '@diff' => json_encode($diff),
-          ]);
-        }
-        else {
-          $this->logger->info('New category @magento_id for @langcode saved.', [
-            '@langcode' => $langcode,
-            '@magento_id' => $category['category_id'],
-          ]);
-        }
       }
       catch (\Exception $e) {
         $this->logger->warning('Failed saving category term @name [@magento_id] for @langcode', [
@@ -446,8 +421,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       // Release the lock.
       $lock->release($lock_key);
-
-      \Drupal::moduleHandler()->alter('acq_sku_commerce_category_post_update', $updatedTermData, $existingTermData);
 
       // Recurse to children categories.
       $childCats = (isset($category['children'])) ? $category['children'] : [];
