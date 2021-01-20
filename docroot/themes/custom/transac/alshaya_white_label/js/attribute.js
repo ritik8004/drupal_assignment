@@ -116,8 +116,7 @@
     that.trigger('refresh');
 
     // Using group class to link anchor to its group.
-    var group_class = 'group-' + alternate.label.toLowerCase();
-
+    var group_class = 'group-' + alternate.label.replace(/ /g, '-').toLowerCase();
     // Adding each group inside its own wrapper to let box JS work as is.
     var group = $('<div class="group ' + group_class + '" />');
     group.append(select);
@@ -129,7 +128,7 @@
     anchor.on('click', function (event) {
       event.preventDefault();
 
-      var group_class = 'group-' + $(this).html().toLowerCase();
+      var group_class = 'group-' + $(this).html().replace(/ /g, '-').toLowerCase();
       group_selected[$(this).parents('.form-type-configurable-select-group').find('.form-item-configurable-select-group').attr('name')] = group_class;
 
       // Remove active class from both anchor and group.
