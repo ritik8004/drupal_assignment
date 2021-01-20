@@ -447,6 +447,8 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       // Release the lock.
       $lock->release($lock_key);
 
+      \Drupal::moduleHandler()->alter('acq_sku_commerce_category_post_update', $updatedTermData, $existingTermData);
+
       // Recurse to children categories.
       $childCats = (isset($category['children'])) ? $category['children'] : [];
       $this->syncCategory($childCats, $term);
