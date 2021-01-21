@@ -10,49 +10,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Update node path aliases.
- */
-function alshaya_color_split_update_8005() {
-  // Now run batch process to update the node aliases.
-  // @see Drupal\pathauto\Commands\PathautoCommands::generateAliases().
-  $batch = [
-    'title' => t('Bulk updating URL aliases'),
-    'operations' => [
-      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
-      ['Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
-        [
-          'canonical_entities:node',
-          'all',
-        ],
-      ],
-    ],
-    'finished' => '_alshaya_color_split_node_alias_update_batch_finished',
-    'progressive' => FALSE,
-  ];
-
-  batch_set($batch);
- }
-
-/**
- * Batch finished callback for generating node aliases.
- *
- * @see alshaya_color_split_update_8005()
- */
-function _alshaya_color_split_node_alias_update_batch_finished($success, $results, $operations) {
-  if ($success) {
-    // If no node alias was actually updated, final output should show 0.
-    \Drupal::logger('alshaya_color_split')->notice('Generated @count URL aliases.', [
-      '@count' => $results['updates'] ?? 0,
-    ]);
-  }
-  else {
-    \Drupal::logger('alshaya_color_split')->notice('An error occurred while updating node aliases');
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add index for attr_style_code in acq_sku_field_data table.
  */
 function alshaya_color_split_update_8004() {
