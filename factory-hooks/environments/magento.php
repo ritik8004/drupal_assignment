@@ -985,6 +985,12 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 8, 'ar' => 7],
     ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
   ],
   'bp_uat' => [
     'url' => 'https://boots-uat.store.alshaya.com',
@@ -1005,6 +1011,12 @@ $magentos = [
     ],
     'eg' => [
       'store_id' => ['en' => 22, 'ar' => 19],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 28, 'ar' => 25],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 34, 'ar' => 31],
     ],
   ],
   'bp_prod' => [

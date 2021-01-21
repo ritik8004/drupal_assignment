@@ -28,7 +28,15 @@ const WidgetManager = React.memo((props) => {
 
     case 'swatch_list':
       className = 'block-facet--swatch-list';
-      currentWidget = <ColorFilter name={name} attribute={`${filter.identifier}.label`} searchable={false} itemCount={itemCount} />;
+      currentWidget = (
+        <ColorFilter
+          name={name}
+          facetValues={filter.facet_values}
+          attribute={`${filter.identifier}.value`}
+          searchable={false}
+          itemCount={itemCount}
+        />
+      );
       break;
 
     case 'range_checkbox':
