@@ -263,33 +263,35 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
 
-    // Queue products for reindexation if there has been update in term.
     $langcode = $term->language()->getId();
-
-    $old_term_data = $term->original->getTranslation($langcode);
-
-    $term_data = $term->toArray();
-
+    $old_term = $term->original->getTranslation($langcode);
+    $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name', 'field_show_in_lhn'];
     $changed = FALSE;
-    $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name'];
+
     foreach ($fields_to_check as $field) {
-      if ($old_term_data[$field][0]['value'] != $term_data[$field][0]['value']) {
+      if ($term->get($field)->getString() != $old_term->get($field)->getString()) {
         $changed = TRUE;
         break;
       }
     }
 
     // We shall only queue products if something has changed in the term.
-    if (empty($diff['added']) && empty($diff['removed']) && !$changed) {
+    if (!$changed) {
       return;
     }
 
-    /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $skus_for_category */
     $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
       ->getSkusForCategory($term->id());
 
     // Queue the skus for reindexation.
     if (!empty($skus_for_category)) {
+      \Drupal::logger('alshaya_acm_product_category')
+        ->info('Queueing products for updated category with Drupal ID: @tid, Commerce ID: @commerce_id, Langcode: @langcode, Products: @skus.', [
+          '@tid' => $term->id(),
+          '@commerce_id' => $term->get('field_commerce_status')->getString(),
+          '@langcode' => $langcode,
+          '@skus' => implode(',', $skus_for_category),
+        ]);
       \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAvailableProductsForSkus($skus_for_category);
     }
   }
@@ -302,13 +304,18 @@ function alshaya_acm_product_category_taxonomy_term_delete(TermInterface $term) 
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
 
-    /** @var \Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper $skus_for_category */
     $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
       ->getSkusForCategory($term->id());
 
     // Queue the skus for reindexation.
     if (!empty($skus_for_category)) {
-      \Drupal::service("alshaya_acm_product.product_queue_utility")->queueAvailableProductsForSkus($skus_for_category);
+      \Drupal::logger('alshaya_acm_product_category')
+        ->info('Queueing products for deleted category with Drupal ID: @tid, Commerce ID: @commerce_id, Products: @skus.', [
+          '@tid' => $term->id(),
+          '@commerce_id' => $term->get('field_commerce_status')->getString(),
+          '@skus' => implode(',', $skus_for_category),
+        ]);
+      \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAvailableProductsForSkus($skus_for_category);
     }
   }
 }
