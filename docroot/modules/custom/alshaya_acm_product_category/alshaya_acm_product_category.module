@@ -297,7 +297,7 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
       \Drupal::logger('alshaya_acm_product_category')
         ->info('Queueing products for updated category with Drupal ID: @tid, Commerce ID: @commerce_id, Langcode: @langcode, Products: @skus.', [
           '@tid' => $term->id(),
-          '@commerce_id' => $term->get('field_commerce_status')->getString(),
+          '@commerce_id' => $term->get('field_commerce_id')->getString(),
           '@langcode' => $langcode,
           '@skus' => implode(',', $skus_for_category),
         ]);
@@ -321,7 +321,7 @@ function alshaya_acm_product_category_taxonomy_term_delete(TermInterface $term) 
       \Drupal::logger('alshaya_acm_product_category')
         ->info('Queueing products for deleted category with Drupal ID: @tid, Commerce ID: @commerce_id, Langcode: @langcode, Products: @skus.', [
           '@tid' => $term->id(),
-          '@commerce_id' => $term->get('field_commerce_status')->getString(),
+          '@commerce_id' => $term->get('field_commerce_id')->getString(),
           '@langcode' => $term->language()->getId(),
           '@skus' => implode(',', $skus_for_category),
         ]);
