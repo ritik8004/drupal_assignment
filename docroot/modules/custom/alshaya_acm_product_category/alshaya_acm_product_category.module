@@ -264,14 +264,23 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
 
     $langcode = $term->language()->getId();
-    $old_term = $term->original->getTranslation($langcode);
-    $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name', 'field_show_in_lhn'];
     $changed = FALSE;
 
-    foreach ($fields_to_check as $field) {
-      if ($term->get($field)->getString() != $old_term->get($field)->getString()) {
-        $changed = TRUE;
-        break;
+    // We want to queue related SKUs even if translation is not available.
+    if (!$term->original->hasTranslation($langcode)) {
+      $changed = TRUE;
+    }
+
+    // If translation is available, we check the fields.
+    if (!$changed) {
+      $old_term = $term->original->getTranslation($langcode);
+      $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name', 'field_show_in_lhn'];
+
+      foreach ($fields_to_check as $field) {
+        if ($term->get($field)->getString() != $old_term->get($field)->getString()) {
+          $changed = TRUE;
+          break;
+        }
       }
     }
 
