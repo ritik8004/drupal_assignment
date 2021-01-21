@@ -310,9 +310,10 @@ function alshaya_acm_product_category_taxonomy_term_delete(TermInterface $term) 
     // Queue the skus for reindexation.
     if (!empty($skus_for_category)) {
       \Drupal::logger('alshaya_acm_product_category')
-        ->info('Queueing products for deleted category with Drupal ID: @tid, Commerce ID: @commerce_id, Products: @skus.', [
+        ->info('Queueing products for deleted category with Drupal ID: @tid, Commerce ID: @commerce_id, Langcode: @langcode, Products: @skus.', [
           '@tid' => $term->id(),
           '@commerce_id' => $term->get('field_commerce_status')->getString(),
+          '@langcode' => $term->language()->getId(),
           '@skus' => implode(',', $skus_for_category),
         ]);
       \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAvailableProductsForSkus($skus_for_category);
