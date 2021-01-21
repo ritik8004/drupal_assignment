@@ -335,7 +335,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
     return;
   }
 
-  $promotion_label = $promoLabelManager->getPromotionLabelForProductDetail($sku_entity, $view_mode);
+  $promotion_label = $promoLabelManager->getPromotionLabelForProductDetail($sku_entity, $view_mode, 'web');
 
   if (!empty($promotion_label['promotions'])) {
     $build['promotions'] = $promotion_label['promotions'];
