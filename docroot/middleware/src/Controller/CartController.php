@@ -555,7 +555,7 @@ class CartController {
 
           $skus = array_column($cart['cart']['items'], 'sku');
           foreach ($skus as $sku) {
-            StockEventListener::$oosSkus[] = $sku;
+            StockEventListener::matchStockQuantity($sku);
           }
 
           $error_message = 'Cart contains some items which are not in stock.';
