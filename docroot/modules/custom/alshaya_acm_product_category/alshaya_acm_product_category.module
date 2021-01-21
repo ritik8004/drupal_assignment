@@ -25,7 +25,6 @@ use Drupal\views\ViewExecutable;
 use Drupal\views\ResultRow;
 use Drupal\file\FileInterface;
 use Drupal\search_api\IndexInterface;
-use Differ\ArrayDiff;
 
 /**
  * Implements hook_module_implements_alter().
@@ -254,11 +253,6 @@ function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $
 function alshaya_acm_product_category_taxonomy_term_insert(TermInterface $term) {
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
-
-    \Drupal::logger('alshaya_acm_product_category')->info('New category @magento_id for @langcode saved.', [
-      '@magento_id' => $term->get('field_commerce_id')->getString(),
-      '@langcode' => $term->language()->getId(),
-    ]);
   }
 }
 
@@ -272,19 +266,9 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     // Queue products for reindexation if there has been update in term.
     $langcode = $term->language()->getId();
 
-    $old_term_data = $term->original->getTranslation($langcode)->toArray();
+    $old_term_data = $term->original->getTranslation($langcode);
 
     $term_data = $term->toArray();
-
-    // Find the difference of old term and updated term.
-    $differ = new ArrayDiff();
-    $diff = $differ->diff($old_term_data, $term_data);
-
-    \Drupal::logger('alshaya_acm_product_category')->info('Updated category @magento_id for @langcode: @diff.', [
-      '@magento_id' => $term->get('field_commerce_id')->getString(),
-      '@langcode' => $langcode,
-      '@diff' => json_encode($diff),
-    ]);
 
     $changed = FALSE;
     $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name'];
