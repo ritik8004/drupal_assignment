@@ -632,6 +632,8 @@ class AlshayaAlgoliaIndexHelper {
 
     $list = $aliases = [];
     foreach ($categories as $category) {
+      $category = $this->entityRepository->getTranslationFromContext($category, $langcode);
+
       // Skip the term which is disabled.
       if ($category->get('field_commerce_status')->getString() !== '1') {
         continue;
