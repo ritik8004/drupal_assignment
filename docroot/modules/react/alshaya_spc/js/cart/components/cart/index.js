@@ -135,14 +135,17 @@ export default class Cart extends React.Component {
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
 
     // Display message from cookies.
-    const qtyMismatchError = Cookies.get('middleware_cart_checkout_qty_mismatch');
+    const qtyMismatchError = Cookies.get('middleware_payment_error');
     if (qtyMismatchError !== undefined
       && qtyMismatchError !== null
       && qtyMismatchError.length > 0) {
-      Cookies.remove('middleware_cart_checkout_qty_mismatch');
+      Cookies.remove('middleware_payment_error');
 
       const qtyMismatchErrorInfo = JSON.parse(qtyMismatchError);
-      this.updateCartMessage('error', qtyMismatchErrorInfo.message);
+
+      if (qtyMismatchErrorInfo.code === 9010) {
+        this.updateCartMessage('error', qtyMismatchErrorInfo.message);
+      }
     }
   }
 

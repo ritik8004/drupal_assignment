@@ -227,13 +227,6 @@ class CheckoutComPaymentController extends PaymentController {
       );
       $this->cart->cancelCartReservation($e->getMessage());
 
-      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
-        $response = new RedirectResponse('/' . $data['data']['langcode'] . '/cart', 302);
-        $response->headers->setCookie(CookieHelper::create('middleware_cart_checkout_qty_mismatch', json_encode(['message' => $e->getMessage()]), strtotime('+1 year')));
-
-        return $response;
-      }
-
       $payment_data = [
         'status' => $this->getPaymentFailedStatus($e->getCode()),
         'payment_method' => 'checkoutcom',
@@ -241,6 +234,16 @@ class CheckoutComPaymentController extends PaymentController {
           'order_id' => $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '',
         ],
       ];
+
+      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+        $response = new RedirectResponse('/' . $data['data']['langcode'] . '/cart', 302);
+        $payment_data['code'] = $e->getCode();
+        $payment_data['message'] = $e->getMessage();
+        $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
+
+        return $response;
+      }
+
       $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
       $response->setTargetUrl('/' . $data['data']['langcode'] . '/checkout');
     }
