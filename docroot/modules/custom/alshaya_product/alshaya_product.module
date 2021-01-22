@@ -168,7 +168,11 @@ function alshaya_product_acq_sku_base_fields_updated(array $fields, $op = 'add')
 
   switch ($op) {
     case 'add':
-      alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+      /** @var \Drupal\search_api\Entity\Index $index */
+      $index = Index::load('product');
+      if ($index && $index->status()) {
+        alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+      }
 
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
