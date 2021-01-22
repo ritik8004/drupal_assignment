@@ -266,13 +266,21 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     $langcode = $term->language()->getId();
     $changed = FALSE;
 
+    // This will hold the term ids whose skus will be added to the queue.
+    // for processing.
+    $static = &drupal_static('category_sync_process_term_ids', []);
+
     // We want to queue related SKUs even if translation is not available.
     if (!$term->original->hasTranslation($langcode)) {
       $changed = TRUE;
     }
-
+    // Check if parent is marked as changed. If yes, the we also queue the
+    // child.
+    else if (($parent = $term->parent->getString()) && isset($static[$parent][$langcode])) {
+      $changed = TRUE;
+    }
     // If translation is available, we check the fields.
-    if (!$changed) {
+    else {
       $old_term = $term->original->getTranslation($langcode);
       $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name', 'field_show_in_lhn'];
 
@@ -288,6 +296,10 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     if (!$changed) {
       return;
     }
+
+    // Mark this term as changed in the static variable so that this information
+    // can be used when checked for changed status for its child terms.
+    $static[$term->id()][$langcode] = TRUE;
 
     $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
       ->getSkusForCategory($term->id());
