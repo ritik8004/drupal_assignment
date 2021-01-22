@@ -226,7 +226,6 @@ class CheckoutComPaymentController extends PaymentController {
         ['@cart_id' => $cart['cart']['id'], '@message' => $e->getMessage()]
       );
       $this->cart->cancelCartReservation($e->getMessage());
-
       $payment_data = [
         'status' => $this->getPaymentFailedStatus($e->getCode()),
         'payment_method' => 'checkoutcom',
