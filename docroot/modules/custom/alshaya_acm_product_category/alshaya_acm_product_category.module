@@ -264,6 +264,7 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
 
     $tid = $term->id();
+    $parent_tid = $term->parent->getString();
     $langcode = $term->language()->getId();
     $changed = FALSE;
 
@@ -277,11 +278,11 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     }
     // Check if parent is marked as changed. If yes, the we also queue the
     // child.
-    elseif (($parent = $term->parent->getString()) && isset($static[$parent])) {
+    elseif (isset($static[$parent_tid])) {
       $changed = TRUE;
     }
     // Check if parent has changed.
-    elseif ($parent != $term->original->parent->getString()) {
+    elseif ($parent_tid != $term->original->parent->getString()) {
       $changed = TRUE;
     }
     // If translation is available, we check the fields.
@@ -310,12 +311,7 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
       ->loadTree(ProductCategoryTree::VOCABULARY_ID, $tid);
 
-    $child_tids = [];
-    if (!empty($children)) {
-      foreach ($children as $child) {
-        $child_tids[] = $child->tid;
-      }
-    }
+    $child_tids = array_column($children, 'tid');
 
     $tids = array_merge([$tid], $child_tids);
 
