@@ -356,35 +356,41 @@ class AlshayaSearchApiQueryExecute {
       // Setting the default sort value.
       $this->defaultSort = $query_string_parameters[self::SORT_KEY];
       $sort_option = explode(self::SORT_SEPARATOR, $query_string_parameters[self::SORT_KEY]);
+
       // If both key and value available for sorting.
       if (!empty($sort_option[0]) && !empty($sort_option[1])) {
         if (!in_array(strtoupper($sort_option[1]), ['ASC', 'DESC'])) {
           // If not a valid sort order.
           $this->mobileAppUtility->throwException();
         }
-        else {
-          // Get available sort options.
-          $available_sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
-          $valid_key = FALSE;
-          foreach ($available_sort_data as $sort_data) {
-            // If found a match for sort key.
-            if (strtoupper($sort_data['key']) == strtoupper($query_string_parameters[self::SORT_KEY])) {
-              $valid_key = TRUE;
-              break;
-            }
-          }
 
-          // If not a valid sort key.
-          if (!$valid_key) {
-            $this->mobileAppUtility->throwException();
-          }
-        }
+        // Get available sort options.
+        $available_sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
+        $valid_key = FALSE;
 
+        $sort_key = strtolower($query_string_parameters[self::SORT_KEY]);
         if ($query->getIndex()->getServerInstance()->id() === 'algolia') {
-          $sort_option[0] = self::ALGOLIA_SORT_KEY_MAPPING[$sort_option[0]] ?? $sort_option[0];
+          $sort_key = self::ALGOLIA_SORT_KEY_MAPPING[$sort_key] ?? $sort_key;
+
+          if ($sort_key === 'search_api_relevance') {
+            $sort_option[1] = 'DESC';
+          }
         }
 
-        $query->sort($sort_option[0], $sort_option[1]);
+        foreach ($available_sort_data as $sort_data) {
+          // If found a match for sort key.
+          if (strtolower($sort_data['key']) === $sort_key) {
+            $valid_key = TRUE;
+            break;
+          }
+        }
+
+        // If not a valid sort key.
+        if (!$valid_key) {
+          $this->mobileAppUtility->throwException();
+        }
+
+        $query->sort($sort_key, $sort_option[1]);
       }
       else {
         // If either sort key or sort value not available.
