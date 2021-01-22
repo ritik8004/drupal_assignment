@@ -276,7 +276,7 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     }
     // Check if parent is marked as changed. If yes, the we also queue the
     // child.
-    else if (($parent = $term->parent->getString()) && isset($static[$parent][$langcode])) {
+    else if (($parent = $term->parent->getString()) && isset($static[$parent])) {
       $changed = TRUE;
     }
     // If translation is available, we check the fields.
@@ -299,7 +299,7 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
 
     // Mark this term as changed in the static variable so that this information
     // can be used when checked for changed status for its child terms.
-    $static[$term->id()][$langcode] = TRUE;
+    $static[$term->id()] = TRUE;
 
     $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
       ->getSkusForCategory($term->id());
