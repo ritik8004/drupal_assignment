@@ -279,6 +279,10 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
     else if (($parent = $term->parent->getString()) && isset($static[$parent])) {
       $changed = TRUE;
     }
+    // Check if parent has changed.
+    else if ($parent != $term->original->parent->getString()) {
+      $changed = TRUE;
+    }
     // If translation is available, we check the fields.
     else {
       $old_term = $term->original->getTranslation($langcode);
