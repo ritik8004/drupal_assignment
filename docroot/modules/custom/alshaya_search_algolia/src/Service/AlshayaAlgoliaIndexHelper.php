@@ -649,10 +649,6 @@ class AlshayaAlgoliaIndexHelper {
         continue;
       }
 
-      if ($only_visible_items && $category->get('field_category_include_menu')->getString() !== '1') {
-        continue;
-      }
-
       $parents = array_reverse($this->termStorage->loadAllParents($category->id()));
       $temp_list = [];
       $i = 0;
@@ -665,7 +661,7 @@ class AlshayaAlgoliaIndexHelper {
 
         $term = $this->entityRepository->getTranslationFromContext($term, $langcode);
 
-        // Skip disabled term or marked as not to visible in menu.
+        // Skip the terms marked as not to visible in menu.
         if ($only_visible_items && $term->get('field_category_include_menu')->getString() !== '1') {
           continue;
         }
