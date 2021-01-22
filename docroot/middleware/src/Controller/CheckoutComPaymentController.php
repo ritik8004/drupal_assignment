@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Service\Config\SystemSettings;
+use App\Service\CartErrorCodes;
 
 /**
  * Controller for handling Checkout.com responses.
@@ -225,6 +226,14 @@ class CheckoutComPaymentController extends PaymentController {
         ['@cart_id' => $cart['cart']['id'], '@message' => $e->getMessage()]
       );
       $this->cart->cancelCartReservation($e->getMessage());
+
+      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+        $response = new RedirectResponse('/' . $data['data']['langcode'] . '/cart', 302);
+        $response->headers->setCookie(CookieHelper::create('middleware_cart_checkout_qty_mismatch', json_encode(['message' => $e->getMessage()]), strtotime('+1 year')));
+
+        return $response;
+      }
+
       $payment_data = [
         'status' => $this->getPaymentFailedStatus($e->getCode()),
         'payment_method' => 'checkoutcom',
