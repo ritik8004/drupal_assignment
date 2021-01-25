@@ -341,7 +341,7 @@ function alshaya_acm_product_category_taxonomy_term_delete(TermInterface $term) 
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
 
     $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
-      ->getSkusForCategory($term->id());
+      ->getSkusForCategory([$term->id()]);
 
     // Queue the skus for reindexation.
     if (!empty($skus_for_category)) {
