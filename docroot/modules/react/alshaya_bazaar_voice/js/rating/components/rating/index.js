@@ -19,7 +19,7 @@ export default class Rating extends React.Component {
   componentDidMount() {
     showFullScreenLoader();
     const apiUri = '/data/reviews.json';
-    const params = `&filter=productid:${drupalSettings.alshaya_bazaar_voice.productid}&Include=${drupalSettings.alshaya_bazaar_voice.Include}&stats=${drupalSettings.alshaya_bazaar_voice.stats}`;
+    const params = `&filter=productid:${drupalSettings.bazaar_voice.productid}&Include=${drupalSettings.bazaar_voice.Include}&stats=${drupalSettings.bazaar_voice.stats}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
