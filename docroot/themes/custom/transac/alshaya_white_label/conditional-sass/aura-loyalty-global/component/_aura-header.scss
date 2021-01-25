@@ -117,6 +117,7 @@ body.aura-enabled {
     .title {
       font-size: 1.4375rem;
       text-align: #{$left};
+      line-height: 2.25rem;
 
       @include breakpoint($desktop) {
         font-size: 1.875rem;
@@ -141,7 +142,7 @@ body.aura-enabled {
 
       @include breakpoint($desktop) {
         font-size: 1.4375rem;
-        margin: 0.625rem 0;
+        margin: 0.75rem 0;
       }
     }
   }
@@ -186,7 +187,7 @@ body.aura-enabled {
       padding: 0.3125rem 1.75rem;
       height: 2.875rem;
       color: $join-aura-link;
-      margin-bottom: 1.5625rem;
+      margin-bottom: 1.25rem;
       letter-spacing: 0.0443rem;
       font-family: $aura-bold;
       border-radius: 1.75rem;
