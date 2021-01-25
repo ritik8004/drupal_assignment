@@ -136,13 +136,17 @@ export default class Cart extends React.Component {
 
     // Display message from cookies.
     const qtyMismatchError = Cookies.get('middleware_payment_error');
+
+    // If 'middleware_payment_error' cookie exists.
     if (qtyMismatchError !== undefined
       && qtyMismatchError !== null
       && qtyMismatchError.length > 0) {
+      // Remove 'middleware_payment_error' cookie.
       Cookies.remove('middleware_payment_error');
 
       const qtyMismatchErrorInfo = JSON.parse(qtyMismatchError);
 
+      // Handle CART_CHECKOUT_QUANTITY_MISMATCH exception.
       if (qtyMismatchErrorInfo.code === 9010) {
         this.updateCartMessage('error', qtyMismatchErrorInfo.message);
       }
