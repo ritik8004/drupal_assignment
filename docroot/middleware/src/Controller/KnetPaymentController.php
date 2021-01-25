@@ -260,17 +260,16 @@ class KnetPaymentController extends PaymentController {
         ],
       ];
 
+      $redirectUrl = '/checkout';
+
       if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
-        $response = new RedirectResponse('/' . $data['data']['langcode'] . '/cart', 302);
         $payment_data['code'] = $e->getCode();
         $payment_data['message'] = $e->getMessage();
-        $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
-
-        return $response;
+        $redirectUrl = '/cart';
       }
 
       $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
-      $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout');
+      $redirect->setTargetUrl('/' . $state['data']['langcode'] . $redirectUrl);
     }
 
     return $redirect;
