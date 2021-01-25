@@ -1,0 +1,7 @@
+bazaar_voice.settings_form:
+  path: '/admin/config/system/bazaar_voice'
+  defaults:
+    _form: '\Drupal\bazaar_voice\Form\BazaarVoiceSettingsForm'
+    _title: 'BazaarVoice'
+  requirements:
+    _permission: 'administer site configuration'

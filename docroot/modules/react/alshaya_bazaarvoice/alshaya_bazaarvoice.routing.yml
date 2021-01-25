@@ -1,7 +1,0 @@
-alshaya_bazaarvoice.bazaarvoice_config:
-  path: '/admin/config/alshaya/bazaarvoice'
-  defaults:
-    _form: '\Drupal\alshaya_bazaarvoice\Form\AlshayaBazaarvoiceSettingsForm'
-    _title: 'BazaarVoice Configuration'
-  requirements:
-    _permission: 'administer site configuration'

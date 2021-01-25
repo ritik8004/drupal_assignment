@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $sku = $skuManager->getSkuForNode($entity);
+  $sku_entity = SKU::loadFromSku($sku);
+
+  if ($sku_entity instanceof SKU && $view_mode == 'full') {
+    $config = \Drupal::config('bazaar_voice.settings');
+
+    $settings = [
+      'alshaya_bazaar_voice' => [
+        'endpoint' => $config->get('api_base_url'),
+        'api_version' => $config->get('api_version'),
+        'passkey' => $config->get('conversations_apikey'),
+        'locale' => $config->get('locale'),
+        'productid' => $sku_entity->getSku(),
+        'stats' => 'Reviews',
+        'Include' => 'Products'
+      ]
+    ];
+
+    $build['start_ratings']['#markup'] = '<div id="star-ratings"></div>';
+    $build['#attached']['library'] = 'alshaya_bazaar_voice/rating';
+    $build['#attached']['drupalSettings'] = $settings;
+  }
+}
