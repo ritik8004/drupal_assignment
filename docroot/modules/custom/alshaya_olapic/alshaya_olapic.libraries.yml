@@ -1,0 +1,8 @@
+alshaya_olapic_widget:
+  js:
+    https://photorankstatics-a.akamaihd.net/743d2e78a76dedeb07e0745158547931/static/frontend/latest/build.min.js: { attributes: { data-olapic: olapic_specific_widget , data-instance: "" , data-apikey: "" , async: async } }
+    js/alshaya_olapic_widget.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once

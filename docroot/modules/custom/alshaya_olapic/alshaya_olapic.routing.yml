@@ -1,0 +1,8 @@
+  # Algolia React common config form
+alshaya_olapic.olapic_config_setting:
+  path: '/admin/config/alshaya/olapic_config_setting'
+  defaults:
+    _form: '\Drupal\alshaya_olapic\Form\OlapicConfigForm'
+    _title: 'Olapic Configuration'
+  requirements:
+    _permission: 'administer site configuration'

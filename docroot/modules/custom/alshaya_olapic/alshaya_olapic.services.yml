@@ -1,0 +1,8 @@
+services:
+ utility.signup_redirect:
+  class: Drupal\alshaya_olapic\EventSubscriber\OlapicRedirectEventsubscriber
+  arguments:
+   - '@config.factory'
+   - '@path.current'
+  tags:
+    - { name: event_subscriber }

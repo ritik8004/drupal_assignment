@@ -1,0 +1,5 @@
+name: 'Alshaya Olapic'
+type: module
+description: 'Custom work for Olapic widget'
+package: Alshaya
+core: 8.x
