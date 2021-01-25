@@ -571,8 +571,20 @@ class Cart {
 
             if ($e->getCode() == 404) {
               $this->removeCartFromSession();
-              $this->createCart($this->getDrupalInfo('customer_id'));
-              return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+
+              if ($action === CartActions::CART_ADD_ITEM) {
+                $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
+
+                if (!empty($new_cart['error'])) {
+                  return $new_cart;
+                }
+
+                // Get fresh cart.
+                $this->getCart(TRUE);
+                return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
+              }
+
+              return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             elseif ($exception_type === 'OOS') {
               $this->refreshStock([$sku, $variant_sku]);
@@ -1815,6 +1827,10 @@ class Cart {
    *
    * @return array
    *   Final status array.
+   *
+   * @todo Remove the usage of cart object and pass full order object as arg.
+   * Rather using cart object, pass full order object instead just order id
+   * and use all the required info from there.
    */
   public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
@@ -1996,6 +2012,7 @@ class Cart {
     $this->session->updateDataInSession(self::SESSION_STORAGE_KEY, NULL);
     $this->cache->delete('cached_cart');
     $this->resetCartCache();
+    static::$cart = NULL;
   }
 
   /**

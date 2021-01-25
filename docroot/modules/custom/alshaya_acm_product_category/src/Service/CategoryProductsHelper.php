@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product_category\Service;
 
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
@@ -48,6 +49,13 @@ class CategoryProductsHelper {
   protected $languageManager;
 
   /**
+   * The database service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * CategoryProductsHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -58,15 +66,19 @@ class CategoryProductsHelper {
    *   Category listing page helper.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database service.
    */
   public function __construct(SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ProductCategoryPage $product_category_page,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              Connection $database) {
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->productCategoryPage = $product_category_page;
     $this->languageManager = $language_manager;
+    $this->database = $database;
   }
 
   /**
@@ -225,6 +237,25 @@ class CategoryProductsHelper {
     $unique_nodes = array_slice($unique_nodes, 0, $limit);
 
     return $unique_nodes;
+  }
+
+  /**
+   * Gets all the SKUs for products assigned to specified category.
+   *
+   * @param array $category_ids
+   *   The taxonomy term ids.
+   *
+   * @return array
+   *   The array of sku values.
+   */
+  public function getSkusForCategory(array $category_ids) {
+    $query = $this->database->select('node__field_skus', 'nfs');
+    $query->innerJoin('node__field_category', 'nfc', 'nfc.entity_id=nfs.entity_id');
+    $query->condition('nfc.field_category_target_id', $category_ids, 'IN');
+    $query->addField('nfs', 'field_skus_value', 'skus');
+    $query->distinct();
+
+    return $query->execute()->fetchCol();
   }
 
 }

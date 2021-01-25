@@ -164,6 +164,9 @@ $conductors = [
     'hmac_secret' => 'NmFiYjBlYmMtYjg5YS00',
     'site_id' => 334,
   ],
+  'mcbh_prod' => [
+    'site_id' => 363,
+  ],
   // Mothercare QA
   'mcqa_qa' => [
     'hmac_id' => 'c2fa8f89aa554f778aeeec073ab89810',
@@ -174,6 +177,9 @@ $conductors = [
     'hmac_id' => 'bfae4a74e1d449ed8e8f0ecbd637b1d4',
     'hmac_secret' => 'YTNlNjZhOGMtYTBmOS00',
     'site_id' => 335,
+  ],
+  'mcqa_prod' => [
+    'site_id' => 364,
   ],
   // H&M KW.
   'hmkw_dev' => [

@@ -91,3 +91,4 @@ services:
       - '@entity_type.manager'
       - '@alshaya_acm_product_category.page'
       - '@language_manager'
+      - '@database'

@@ -7,6 +7,7 @@ use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\alshaya_algolia_react\AlshayaAlgoliaReactBlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
 
@@ -163,9 +164,15 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), [
-      'alshaya_acm_product_position.settings',
-    ]);
+    $tags = ['alshaya_acm_product_position.settings'];
+    $tags = Cache::mergeTags(parent::getCacheTags(), $tags);
+
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface) {
+      $tags = Cache::mergeTags($term->getCacheTags(), $tags);
+    }
+
+    return $tags;
   }
 
 }
