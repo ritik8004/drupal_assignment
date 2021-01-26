@@ -1,0 +1,5 @@
+rating:
+  js:
+    dist/rating.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
