@@ -88,7 +88,7 @@ class AuraPDP extends React.Component {
     return null;
   };
 
-  getToolTipContent = () => Drupal.t('Everytime you shop you will earn Aura points which can then be redeemed for future purchases. Not eligible for accrual when purchased through Aura points.');
+  getToolTipContent = () => Drupal.t('Earn AURA points every time you shop! You can redeem your points to use on future purchases. Not applicable on purchases made using AURA points.');
 
   getPointsText = () => {
     const { productPoints } = this.state;
@@ -97,7 +97,7 @@ class AuraPDP extends React.Component {
       return [
         <span>{`${Drupal.t('Earn')} `}</span>,
         <b>{productPoints}</b>,
-        <span>{` ${Drupal.t('Aura points')}`}</span>,
+        <span>{` ${Drupal.t('AURA points')}`}</span>,
       ];
     }
 

@@ -21,7 +21,7 @@ const AuraMyAccountOldCardFound = (props) => {
       </div>
       <div className="aura-myaccount-no-linked-card-description old-card-found">
         <div className="header">
-          { Drupal.t('An Aura loyalty card is associated with your email address. It just takes one click to link.') }
+          { Drupal.t('An AURA card is already associated with your email address. Link your card in just one click.') }
           <span className="bold">{Drupal.t('Do you want to link now?')}</span>
         </div>
         <div className="card-number-wrapper">

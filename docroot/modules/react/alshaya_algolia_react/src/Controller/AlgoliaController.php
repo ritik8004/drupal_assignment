@@ -7,6 +7,7 @@ use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfig;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Customer controller to add front page.
@@ -66,6 +67,7 @@ class AlgoliaController extends ControllerBase {
    *   Settings as JSON.
    */
   public function getSettings() {
+    AlshayaPromoContextManager::updateDefaultContext('app');
     $config = $this->configHelper->getAlgoliaReactCommonConfig(AlshayaAlgoliaReactAutocomplete::PAGE_TYPE);
 
     $settings = [];

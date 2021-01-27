@@ -28,7 +28,7 @@ class AuraFormNewAuraUserModal extends React.Component {
   }
 
   getNewUserFormDescription = () => [
-    <span key="part1">{Drupal.t('By pressing submit, you agree to have read and accepted our')}</span>,
+    <span key="part1">{Drupal.t('By clicking submit, you agree to have read and accepted our')}</span>,
     <a key="part2" className="t-c-link">{Drupal.t('Terms & Conditions')}</a>,
   ];
 
@@ -148,7 +148,7 @@ class AuraFormNewAuraUserModal extends React.Component {
     return (
       <div className="aura-new-user-form">
         <div className="aura-modal-header">
-          <SectionTitle>{Drupal.t('Say hello to Aura')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Say hello to AURA')}</SectionTitle>
           <button type="button" className="close" onClick={() => closeNewUserModal()} />
         </div>
         <div className="aura-modal-form">

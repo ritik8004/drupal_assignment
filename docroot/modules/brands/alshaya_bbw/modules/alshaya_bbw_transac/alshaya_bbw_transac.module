@@ -14,13 +14,7 @@ use Drupal\acq_commerce\SKUInterface;
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_bbw_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
-  $form = $sku->get('attr_form')->getString();
-
-  if ($form) {
-    $form = '<span class="content--form">' . $form . '</span>';
-  }
-
-  $title = _alshaya_bbw_transac_get_product_title($sku) . $form;
+  $title = _alshaya_bbw_transac_get_product_title($sku);
 
   if ($context == 'search') {
     $build['#product_label'] = [
@@ -143,10 +137,16 @@ function _alshaya_bbw_transac_get_product_description($sku_entity) {
  */
 function _alshaya_bbw_transac_get_product_title(SKU $sku) {
   $title = '';
+  $form = $sku->get('attr_form')->getString();
+
+  if ($form) {
+    $form = '<span class="content--form">' . $form . '</span>';
+  }
+
   if (($fragrance_name = $sku->get('attr_fragrance_name')->getString()) || ($descriptive_name = $sku->get('attr_descriptive_name')->getString())) {
     $title = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
   }
-  return $title;
+  return $title . $form;
 }
 
 /**

@@ -10,6 +10,7 @@ use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Link;
+use Drupal\node\NodeInterface;
 
 /**
  * Defines a base SKU Plugin. Can be used as a template for a new SKU type.
@@ -169,6 +170,8 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    * {@inheritdoc}
    */
   public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE) {
+    static $node_not_found = [];
+
     $nid = $this->getDisplayNodeId($sku, $check_parent);
     if (empty($nid)) {
       return NULL;
@@ -176,6 +179,21 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
     $node = Node::load($nid);
     $langcode = $sku->language()->getId();
+
+    if (!($node instanceof NodeInterface)) {
+      // This function can get called multiple times in a request and we only
+      // want to do the logging once.
+      if (!isset($node_not_found[$nid])) {
+        $node_not_found[$nid] = 1;
+        \Drupal::logger('acq_sku')->warning('Display node @nid could not be loaded for SKU @sku for language @langcode.', [
+          '@nid' => $nid,
+          '@sku' => $sku->getSku(),
+          '@langcode' => $langcode,
+        ]);
+      }
+
+      return $node;
+    }
 
     // Check language checks if site is in multilingual mode.
     if (\Drupal::languageManager()->isMultilingual()) {

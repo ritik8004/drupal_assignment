@@ -2,9 +2,11 @@
 
 namespace Drupal\alshaya_algolia_react\Services;
 
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
+use Drupal\alshaya_options_list\AlshayaOptionsListHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
@@ -62,6 +64,20 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected $entityTypeManager;
 
   /**
+   * Alshaya Promotions Context Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   */
+  protected $promoContextManager;
+
+  /**
+   * Alshaya Options List Service.
+   *
+   * @var \Drupal\alshaya_options_list\AlshayaOptionsListHelper
+   */
+  protected $alshayaOptionsService;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -78,6 +94,10 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   Service to get sort options for PLP.
    * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService $plp_sort_options
    *   Service to get sort option labels for PLP.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
+   * @param \Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
+   *   Alshaya Options List service.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -86,7 +106,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     SkuImagesManager $sku_images_manager,
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaPlpSortLabelsService $plp_sort_labels,
-    AlshayaPlpSortOptionsService $plp_sort_options
+    AlshayaPlpSortOptionsService $plp_sort_options,
+    AlshayaPromoContextManager $alshayaPromoContextManager,
+    AlshayaOptionsListHelper $alshaya_options_service
   ) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -95,6 +117,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $this->entityTypeManager = $entity_type_manager;
     $this->plpSortLabels = $plp_sort_labels;
     $this->plpSortOptions = $plp_sort_options;
+    $this->promoContextManager = $alshayaPromoContextManager;
+    $this->alshayaOptionsService = $alshaya_options_service;
   }
 
   /**
@@ -321,15 +345,23 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         }
 
         if (!in_array($facet->getFieldIdentifier(), ['attr_selling_price'])) {
+          $identifier = $facet->getFieldIdentifier();
           $widget = $facet->getWidget();
+
           if ($facet->getFieldIdentifier() === 'field_category') {
             // For category we have index hierarchy in field_category
             // so, updating field_name and type for react.
             $identifier = 'field_category';
             $widget['type'] = 'hierarchy';
           }
-          else {
-            $identifier = $facet->getFieldIdentifier();
+          elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
+            $context = $this->promoContextManager->getPromotionContext();
+            $identifier = "field_acq_promotion_label.$context";
+          }
+
+          $facet_values = [];
+          if ($widget['type'] === 'swatch_list') {
+            $facet_values = $this->loadFacetValues($identifier);
           }
 
           // For HNM we are using "size_group_list" widget type
@@ -340,7 +372,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'checkbox';
           }
 
-          $filter_facets[$identifier] = [
+          $filter_facets[explode('.', $identifier)[0]] = [
             'identifier' => $identifier,
             'label' => $block->label(),
             'name' => $facet->getName(),
@@ -348,6 +380,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             'id' => $block_id,
             'weight' => $block->getWeight(),
             'alias' => $facet->getUrlAlias(),
+            'facet_values' => $facet_values,
           ];
         }
       }
@@ -374,6 +407,33 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     });
 
     return $filter_facets;
+  }
+
+  /**
+   * Wrapper function to load facet values for an attribute.
+   *
+   * @param string $attribute
+   *   Attribute to load the facet values for.
+   *
+   * @return array
+   *   Facet values.
+   */
+  protected function loadFacetValues(string $attribute) {
+    static $facet_values;
+
+    if (empty($facet_values[$attribute])) {
+      $result = $this->alshayaOptionsService->loadFacetsData([
+        str_replace('attr_', '', $attribute),
+      ]);
+
+      if (!empty($result) && is_array($result)) {
+        foreach (array_values($result)[0] as $value) {
+          $facet_values[$attribute][explode(',', $value)[0]] = $value;
+        }
+      }
+    }
+
+    return $facet_values[$attribute] ?? [];
   }
 
 }

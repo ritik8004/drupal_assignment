@@ -3,7 +3,7 @@ import AppStoreSVG from '../../../../svg-component/app-store-svg';
 import { getAuraConfig } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 
 const PendingEnrollmentMessage = () => {
-  const message = Drupal.t('To spend your points online, please provide us with a few more details. Download Aura app and complete your profile.');
+  const message = Drupal.t('To use your points online, please download the AURA app and provide us with a few more details.');
 
   const {
     appStoreLink: appleAppStoreLink,

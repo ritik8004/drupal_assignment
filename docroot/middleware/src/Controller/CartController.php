@@ -555,7 +555,7 @@ class CartController {
 
           $skus = array_column($cart['cart']['items'], 'sku');
           foreach ($skus as $sku) {
-            StockEventListener::$oosSkus[] = $sku;
+            StockEventListener::matchStockQuantity($sku);
           }
 
           $error_message = 'Cart contains some items which are not in stock.';
@@ -665,6 +665,11 @@ class CartController {
           // Cancel reservation when process failed for not enough data,
           // or bad data. i.e. checkout.com cvv missing.
           $this->cart->cancelCartReservation($e->getMessage());
+
+          // Return error message and code on OOS.
+          if ($e->getCode() == CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+            return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH));
+          }
 
           return new JsonResponse([
             'error' => TRUE,

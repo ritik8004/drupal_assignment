@@ -54,13 +54,6 @@ class MobileAppUtility {
   protected $termUrls = [];
 
   /**
-   * Array of term tags.
-   *
-   * @var array
-   */
-  protected $termTags = [];
-
-  /**
    * Cache Backend service for alshaya.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -623,7 +616,6 @@ class MobileAppUtility {
     foreach ($terms as $term) {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
-      $this->termTags[] = "term:{$term->tid}";
 
       $path = $term_url->getGeneratedUrl();
       $deeplink = $this->getDeepLink($term);
@@ -698,16 +690,6 @@ class MobileAppUtility {
       $data[] = $record;
     }
     return $data;
-  }
-
-  /**
-   * Return term tags to cache.
-   *
-   * @return array
-   *   Return Term urls array.
-   */
-  public function cacheableTermTags() {
-    return $this->termTags;
   }
 
   /**

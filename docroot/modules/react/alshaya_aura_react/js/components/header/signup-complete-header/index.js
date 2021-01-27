@@ -26,7 +26,7 @@ const SignUpCompleteHeader = (props) => {
               <AuraLogo stacked="horizontal" />
             </ConditionalView>
             <div className="title">
-              {Drupal.t('Your Aura card number')}
+              {Drupal.t('Your AURA card number')}
             </div>
             <Cleave
               name="aura-my-account-link-card"
@@ -51,7 +51,7 @@ const SignUpCompleteHeader = (props) => {
               && (
                 <>
                   <div className="aura-popup-body">
-                    <p>{Drupal.t('To spend your points you will have to sign in or create an account.')}</p>
+                    <p>{Drupal.t('Sign in or create an account to use your points.')}</p>
                   </div>
                   <div className="aura-popup-footer">
                     <a

@@ -16,6 +16,7 @@ use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\Component\Utility\Html;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Implements hook_views_data_alter().
@@ -286,6 +287,17 @@ function alshaya_acm_promotion_alshaya_acm_get_remove_from_basket_link_alter(&$r
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+
+  if ($entity->bundle() == 'acq_promotion') {
+    $context = $entity->get('field_acq_promotion_context')->getValue();
+    // Throw exception only if the web is not set in the context.
+    // Do nothing if context is not set at all.
+    if (!empty($context)
+      && !in_array('web', array_column($context, 'value'))) {
+      throw new NotFoundHttpException();
+    }
+  }
+
   // Need processing only for products.
   if ($entity->bundle() != 'acq_product') {
     return;
@@ -323,7 +335,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
     return;
   }
 
-  $promotion_label = $promoLabelManager->getPromotionLabelForProductDetail($sku_entity, $view_mode);
+  $promotion_label = $promoLabelManager->getPromotionLabelForProductDetail($sku_entity, $view_mode, 'web');
 
   if (!empty($promotion_label['promotions'])) {
     $build['promotions'] = $promotion_label['promotions'];

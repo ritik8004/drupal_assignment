@@ -58,10 +58,10 @@ class SignUpHeader extends React.Component {
               </div>
             </div>
             <div className="aura-popup-sub-header">
-              <h3>{Drupal.t('Say hello to Aura')}</h3>
+              <h3>{Drupal.t('Say hello to AURA')}</h3>
             </div>
             <div className="aura-popup-body">
-              <p>{Drupal.t('Good things come to those with taste. Say hello to Aura, a lifestyle program that inclulges your taste for refined brands and experiences')}</p>
+              <p>{Drupal.t('Good things come to those with taste. Say hello to AURA, a lifestyle program catered to your taste for refined brands and experiences.')}</p>
             </div>
             <div className="aura-popup-footer">
               <div
@@ -71,7 +71,7 @@ class SignUpHeader extends React.Component {
                 {Drupal.t('Sign up now')}
               </div>
               <a href={headerLearnMoreLink} className="learn-more">
-                {Drupal.t('Learn More')}
+                {Drupal.t('Learn more')}
               </a>
             </div>
           </div>

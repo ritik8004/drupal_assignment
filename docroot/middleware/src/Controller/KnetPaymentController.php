@@ -9,10 +9,12 @@ use App\Service\PaymentData;
 use App\Service\SessionStorage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Service\Orders;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Service\Config\SystemSettings;
+use App\Service\CartErrorCodes;
 
 /**
  * Contains callback methods for Knet Payment.
@@ -85,6 +87,8 @@ class KnetPaymentController extends PaymentController {
    *   Session Storage service.
    * @param \App\Service\Config\SystemSettings $settings
    *   System Settings service.
+   * @param \App\Service\Orders $order
+   *   Order service.
    */
   public function __construct(
     RequestStack $request,
@@ -93,9 +97,10 @@ class KnetPaymentController extends PaymentController {
     PaymentData $payment_data,
     LoggerInterface $logger,
     SessionStorage $session,
-    SystemSettings $settings
+    SystemSettings $settings,
+    Orders $order
   ) {
-    parent::__construct($logger, $settings, $cart);
+    parent::__construct($logger, $settings, $cart, $order);
     $this->request = $request->getCurrentRequest();
     $this->cart = $cart;
     $this->knetHelper = $knet_helper;
@@ -254,8 +259,17 @@ class KnetPaymentController extends PaymentController {
           'order_id' => $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '',
         ],
       ];
+
+      $redirectUrl = '/checkout';
+
+      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+        $payment_data['code'] = $e->getCode();
+        $payment_data['message'] = $e->getMessage();
+        $redirectUrl = '/cart';
+      }
+
       $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
-      $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout');
+      $redirect->setTargetUrl('/' . $state['data']['langcode'] . $redirectUrl);
     }
 
     return $redirect;

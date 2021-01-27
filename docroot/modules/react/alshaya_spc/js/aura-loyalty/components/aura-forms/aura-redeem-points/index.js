@@ -106,7 +106,7 @@ class AuraFormRedeemPoints extends React.Component {
       return;
     }
 
-    if (points > pointsInAccount) {
+    if (parseInt(points, 10) > parseInt(pointsInAccount, 10)) {
       showError('spc-aura-link-api-response-message', `${Drupal.t('You can redeem maximum')} ${pointsInAccount} ${Drupal.t('points')}`);
       return;
     }
@@ -145,6 +145,9 @@ class AuraFormRedeemPoints extends React.Component {
       points: null,
       money: null,
     });
+    // We clear input values from the form elements.
+    const input = document.querySelector('.spc-aura-redeem-points-form-wrapper .form-items input.spc-aura-redeem-field-points');
+    input.value = '';
   }
 
   getPointsRedeemedMessage = () => {

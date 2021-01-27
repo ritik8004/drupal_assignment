@@ -68,7 +68,7 @@ class AuraFormLinkCardOptions extends React.Component {
             className="aura-radio-sim"
             htmlFor="mobile"
           >
-            {Drupal.t('Mobile number')}
+            {Drupal.t('Mobile Number')}
           </label>
         </div>
       </div>

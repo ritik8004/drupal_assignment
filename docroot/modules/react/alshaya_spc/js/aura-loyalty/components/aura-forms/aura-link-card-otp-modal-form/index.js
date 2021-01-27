@@ -201,7 +201,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
       linkCardOption,
     } = this.state;
 
-    const submitButtonText = otpRequested === true ? Drupal.t('Link Now') : Drupal.t('Send One Time Pin');
+    const submitButtonText = otpRequested === true ? Drupal.t('Link Now') : Drupal.t('Send one time PIN');
 
     return (
       <div className="aura-guest-user-link-card-otp-form">

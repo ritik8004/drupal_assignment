@@ -16,6 +16,7 @@ use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
 use Drupal\search_api\Query\ConditionGroup;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Class Promotion Product List Resource.
@@ -178,6 +179,9 @@ class PromotionProductListResource extends ResourceBase {
         $response_data = $this->addExtraPromoData($node);
         // Make response data similar to web site.
         $this->alshayaSearchApiQueryExecute->setFacetsToIgnore(['category_facet_promo']);
+
+        AlshayaPromoContextManager::updateDefaultContext('app');
+
         // Prepare response from result set.
         $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
         $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');

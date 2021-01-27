@@ -8,7 +8,7 @@ const AuraFormUnlinkedCard = (props) => {
   return (
     <div className="spc-aura-unlink-card-wrapper">
       <div className="description">
-        {Drupal.t('An Aura loyalty card is associated with your email address. It just takes one click to link.')}
+        {Drupal.t('An AURA card is already associated with your email address. Link your card in just one click.')}
         <b>{Drupal.t('Do you want to link now?')}</b>
       </div>
       <div className="spc-aura-unlink-card-form-content">
