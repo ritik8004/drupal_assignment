@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 
 import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
@@ -132,6 +133,24 @@ export default class Cart extends React.Component {
 
     // Event to trigger after free gift listing modal open.
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
+
+    // Display message from cookies.
+    const qtyMismatchError = Cookies.get('middleware_payment_error');
+
+    // If 'middleware_payment_error' cookie exists.
+    if (qtyMismatchError !== undefined
+      && qtyMismatchError !== null
+      && qtyMismatchError.length > 0) {
+      // Remove 'middleware_payment_error' cookie.
+      Cookies.remove('middleware_payment_error');
+
+      const qtyMismatchErrorInfo = JSON.parse(qtyMismatchError);
+
+      // Handle CART_CHECKOUT_QUANTITY_MISMATCH exception.
+      if (qtyMismatchErrorInfo.code === 9010) {
+        this.updateCartMessage('error', qtyMismatchErrorInfo.message);
+      }
+    }
   }
 
   componentWillUnmount() {
