@@ -5,7 +5,7 @@ import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 import AuraCheckoutOrderSummary from '../../aura-loyalty/components/aura-checkout-rewards/components/aura-checkout-order-summary';
 import isAuraEnabled from '../../../../js/utilities/helper';
-import DeliveryVATSuffix from '../delivery-vat';
+import DeliveryVATSuffix from '../delivery-vat-suffix';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -68,11 +68,11 @@ class TotalLineItems extends React.Component {
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
     // Check for aura totals.
-    let showVatInAuraTotals = false;
+    let showVatText = false;
     const { paidWithAura } = totals;
 
     if (paidWithAura > 0) {
-      showVatInAuraTotals = true;
+      showVatText = true;
     }
 
     // Using a separate variable(shippingAmount) to update the value
@@ -126,13 +126,13 @@ class TotalLineItems extends React.Component {
             <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
             <DeliveryVATSuffix
               shippingAmount={shippingAmount}
-              showVatInAuraTotals={showVatInAuraTotals}
+              showVatText={showVatText}
             />
           </div>
           {isAuraEnabled()
             ? (
               <AuraCheckoutOrderSummary
-                showVatInAuraTotals={showVatInAuraTotals}
+                showVatText={showVatText}
                 shippingAmount={shippingAmount}
               />
             )

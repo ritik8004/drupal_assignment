@@ -1,9 +1,9 @@
 import React from 'react';
 import TotalLineItem from '../../../../../utilities/total-line-item';
-import DeliveryVATSuffix from '../../../../../utilities/delivery-vat';
+import DeliveryVATSuffix from '../../../../../utilities/delivery-vat-suffix';
 
 const AuraCheckoutOrderSummary = (props) => {
-  const { totals, shippingAmount, showVatInAuraTotals } = props;
+  const { totals, shippingAmount, showVatText } = props;
 
   if (totals === undefined || totals === null) {
     return null;
@@ -30,7 +30,7 @@ const AuraCheckoutOrderSummary = (props) => {
         />
         <DeliveryVATSuffix
           shippingAmount={shippingAmount}
-          showVatInAuraTotals={showVatInAuraTotals}
+          showVatText={showVatText}
         />
       </div>
     </div>

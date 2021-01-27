@@ -5,7 +5,7 @@ import VatText from '../vat-text';
 const DeliveryVATSuffix = (props) => {
   const {
     shippingAmount,
-    showVatInAuraTotals,
+    showVatText,
   } = props;
   return (
     <div className="delivery-vat">
@@ -13,7 +13,7 @@ const DeliveryVATSuffix = (props) => {
         <span className="delivery-prefix">{Drupal.t('Excluding delivery')}</span>
       </ConditionalView>
       {/* If Aura Totals are present VAT text is shown as part of balance payable */}
-      {showVatInAuraTotals === true
+      {showVatText === true
         ? null
         : <VatText />}
     </div>
