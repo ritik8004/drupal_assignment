@@ -65,6 +65,7 @@ body.aura-enabled {
           #{$right}: 1.5rem;
           transition: transform 0.3s ease-in-out;
           cursor: pointer;
+          top: 1.625rem;
         }
 
         &.open {
