@@ -2065,6 +2065,10 @@ class Cart {
 
       foreach ($stores as &$store) {
         $store_info = $this->drupal->getStoreInfo($store['code']);
+        if (empty($store_info) || !is_array($store_info)) {
+          $this->logger->error('Variable: store_info is not an array');
+          continue;
+        }
         $store += $store_info;
         $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
         $store['delivery_time'] = $store['sts_delivery_time_label'];
