@@ -359,24 +359,27 @@ class AlshayaSearchApiQueryExecute {
 
       // If both key and value available for sorting.
       if (!empty($sort_option[0]) && !empty($sort_option[1])) {
+        // Use lower case only for field.
+        $sort_option[0] = strtolower($sort_option[0]);
+
         if (!in_array(strtoupper($sort_option[1]), ['ASC', 'DESC'])) {
           // If not a valid sort order.
           $this->mobileAppUtility->throwException();
+        }
+
+        if ($query->getIndex()->getServerInstance()->id() === 'algolia') {
+          $sort_option[0] = self::ALGOLIA_SORT_KEY_MAPPING[$sort_option[0]] ?? $sort_option[0];
+
+          if ($sort_option[0] === 'search_api_relevance') {
+            $sort_option[1] = 'DESC';
+          }
         }
 
         // Get available sort options.
         $available_sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
         $valid_key = FALSE;
 
-        $sort_key = strtolower($query_string_parameters[self::SORT_KEY]);
-        if ($query->getIndex()->getServerInstance()->id() === 'algolia') {
-          $sort_key = self::ALGOLIA_SORT_KEY_MAPPING[$sort_key] ?? $sort_key;
-
-          if ($sort_key === 'search_api_relevance') {
-            $sort_option[1] = 'DESC';
-          }
-        }
-
+        $sort_key = strtolower(implode(' ', $sort_option));
         foreach ($available_sort_data as $sort_data) {
           // If found a match for sort key.
           if (strtolower($sort_data['key']) === $sort_key) {
@@ -390,7 +393,7 @@ class AlshayaSearchApiQueryExecute {
           $this->mobileAppUtility->throwException();
         }
 
-        $query->sort($sort_key, $sort_option[1]);
+        $query->sort($sort_option[0], $sort_option[1]);
       }
       else {
         // If either sort key or sort value not available.
