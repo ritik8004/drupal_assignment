@@ -115,3 +115,4 @@ fields:
     label: 'Barcode'
     type: 'string'
     description: 'Sku Barcode.'
+    translatable: 0
