@@ -1,0 +1,5 @@
+api_base_url: 'https://stg.api.bazaarvoice.com'
+conversations_apikey: ''
+shared_secret_key: ''
+api_version: 5.4
+locale: 'en_US'

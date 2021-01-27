@@ -1,3 +1,0 @@
-local_storage_expire: 3600000 #Milliseconds
-api_version: 5.4
-langcode: en

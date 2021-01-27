@@ -356,32 +356,41 @@ class AlshayaSearchApiQueryExecute {
       // Setting the default sort value.
       $this->defaultSort = $query_string_parameters[self::SORT_KEY];
       $sort_option = explode(self::SORT_SEPARATOR, $query_string_parameters[self::SORT_KEY]);
+
       // If both key and value available for sorting.
       if (!empty($sort_option[0]) && !empty($sort_option[1])) {
+        // Use lower case only for field.
+        $sort_option[0] = strtolower($sort_option[0]);
+
         if (!in_array(strtoupper($sort_option[1]), ['ASC', 'DESC'])) {
           // If not a valid sort order.
           $this->mobileAppUtility->throwException();
         }
-        else {
-          // Get available sort options.
-          $available_sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
-          $valid_key = FALSE;
-          foreach ($available_sort_data as $sort_data) {
-            // If found a match for sort key.
-            if (strtoupper($sort_data['key']) == strtoupper($query_string_parameters[self::SORT_KEY])) {
-              $valid_key = TRUE;
-              break;
-            }
-          }
-
-          // If not a valid sort key.
-          if (!$valid_key) {
-            $this->mobileAppUtility->throwException();
-          }
-        }
 
         if ($query->getIndex()->getServerInstance()->id() === 'algolia') {
           $sort_option[0] = self::ALGOLIA_SORT_KEY_MAPPING[$sort_option[0]] ?? $sort_option[0];
+
+          if ($sort_option[0] === 'search_api_relevance') {
+            $sort_option[1] = 'DESC';
+          }
+        }
+
+        // Get available sort options.
+        $available_sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
+        $valid_key = FALSE;
+
+        $sort_key = strtolower(implode(' ', $sort_option));
+        foreach ($available_sort_data as $sort_data) {
+          // If found a match for sort key.
+          if (strtolower($sort_data['key']) === $sort_key) {
+            $valid_key = TRUE;
+            break;
+          }
+        }
+
+        // If not a valid sort key.
+        if (!$valid_key) {
+          $this->mobileAppUtility->throwException();
         }
 
         $query->sort($sort_option[0], $sort_option[1]);
@@ -430,6 +439,12 @@ class AlshayaSearchApiQueryExecute {
 
       // Adding filter/condition to the query.
       foreach ($filter_data as $filter_key => $filter_val) {
+        if ($query->getIndex()->id() === 'alshaya_algolia_index') {
+          if ($filter_key == 'field_acq_promotion_label') {
+            $filter_key = 'field_acq_promotion_label.app';
+          }
+        }
+
         // In case of price facet, we need special/different handling.
         if ($filter_key == 'final_price') {
           $filter = $query->createConditionGroup('OR', ['facet:' . $filter_key]);
@@ -525,6 +540,10 @@ class AlshayaSearchApiQueryExecute {
       // For Algolia results come with field identifier.
       elseif (isset($search_api_facets[$facet->getFieldIdentifier()])) {
         $facet_result = $search_api_facets[$facet->getFieldIdentifier()];
+      }
+      elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label'
+        && isset($search_api_facets['field_acq_promotion_label.app'])) {
+        $facet_result = $search_api_facets['field_acq_promotion_label.app'];
       }
 
       $data = [];

@@ -642,12 +642,10 @@ class AlshayaAlgoliaIndexHelper {
 
     $list = $aliases = [];
     foreach ($categories as $category) {
+      $category = $this->entityRepository->getTranslationFromContext($category, $langcode);
+
       // Skip the term which is disabled.
       if ($category->get('field_commerce_status')->getString() !== '1') {
-        continue;
-      }
-
-      if ($only_visible_items && $category->get('field_category_include_menu')->getString() !== '1') {
         continue;
       }
 
@@ -663,7 +661,7 @@ class AlshayaAlgoliaIndexHelper {
 
         $term = $this->entityRepository->getTranslationFromContext($term, $langcode);
 
-        // Skip disabled term or marked as not to visible in menu.
+        // Skip the terms marked as not to visible in menu.
         if ($only_visible_items && $term->get('field_category_include_menu')->getString() !== '1') {
           continue;
         }

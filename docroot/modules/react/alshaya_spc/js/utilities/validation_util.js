@@ -12,7 +12,7 @@ const validateCartResponse = (response) => {
   if ((typeof response.response_message !== 'undefined'
     && response.response_message !== null
     && response.response_message.status === 'json_error'
-    && response.response_message.msg === 'OOS')
+    && ((response.response_message.msg === 'OOS') || response.response_message.msg === 'not_enough'))
   ) {
     redirectToCart();
     return false;

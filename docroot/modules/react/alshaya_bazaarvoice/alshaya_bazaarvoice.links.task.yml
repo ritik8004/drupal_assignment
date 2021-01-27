@@ -1,4 +1,0 @@
-alshaya_bazaarvoice.bazaarvoice_config:
-  route_name: alshaya_bazaarvoice.bazaarvoice_config
-  title: 'Alshaya BazaarVoice settings'
-  base_route: alshaya_bazaarvoice.bazaarvoice_config

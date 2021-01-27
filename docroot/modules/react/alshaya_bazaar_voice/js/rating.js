@@ -4,5 +4,5 @@ import Rating from './rating/components/rating';
 
 ReactDOM.render(
   <Rating />,
-  document.getElementById('review-ratings'),
+  document.getElementById('reviews-rating'),
 );

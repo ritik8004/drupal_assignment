@@ -1,5 +1,5 @@
 var path = require("path");
-var buildPath = '/modules/react/alshaya_bazaarvoice/dist/';
+var buildPath = '/modules/react/alshaya_bazaar_voice/dist/';
 
 var config = {
   entry: {

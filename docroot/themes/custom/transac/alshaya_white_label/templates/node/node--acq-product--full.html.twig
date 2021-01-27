@@ -85,6 +85,9 @@ set classes = [
 
       {% block pdpSidebar %}
         <div class="content__sidebar">
+          {% if content.reviews_rating %}
+            {{content.reviews_rating}}
+          {% endif %}
           {% block sizeVolume %}
           {% endblock %}
 
