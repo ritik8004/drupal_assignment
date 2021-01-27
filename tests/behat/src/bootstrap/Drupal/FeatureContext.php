@@ -881,7 +881,7 @@ class FeatureContext extends CustomMinkContext
   public function iShouldSeeResultsSortedInAscendingOrder()
   {
     $page = $this->getSession()->getPage();
-    $elements = $page->findAll('css', 'h2.field--name-name');
+    $elements = $page->findAll('css', '#hits h2.field--name-name');
     if ($elements == NULL) {
       echo 'No search results found';
     }
@@ -904,7 +904,7 @@ class FeatureContext extends CustomMinkContext
   public function iShouldSeeResultsSortedInDescendingOrder()
   {
     $page = $this->getSession()->getPage();
-    $elements = $page->findAll('css', 'h2.field--name-name');
+    $elements = $page->findAll('css', '#hits h2.field--name-name');
     if ($elements == NULL) {
       echo 'No search results found';
     }
@@ -1171,7 +1171,7 @@ class FeatureContext extends CustomMinkContext
   public function iShouldSeeResultsSortedInDescendingPriceOrder()
   {
     $page = $this->getSession()->getPage();
-    $elements = $page->findAll('css', 'div.price-block');
+    $elements = $page->findAll('css', 'div.product-plp-detail-wrapper');
     if ($elements == NULL) {
       echo 'No search results found';
     }
@@ -1188,7 +1188,7 @@ class FeatureContext extends CustomMinkContext
           }
         }
 
-        if ($value !== NULL) {
+        if (!empty($value)) {
           $actual_values[] = $value;
         }
       }
@@ -1198,13 +1198,50 @@ class FeatureContext extends CustomMinkContext
     }
   }
 
-  /**
+    /**
+     * @When /^I select the filter "([^"]*)"$/
+     */
+    public function iSelectTheFilter($filter)
+    {
+        if(!empty($filter))
+        {
+            $page = $this->getSession()->getPage();
+            $element = $this->getSession()
+                ->getPage()
+                ->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, '$filter')]/h3");
+            if (!empty($element)) {
+                $element->click();
+            } else {
+                throw new \Exception(sprintf('Filter is not found on page.', $filter));
+            }
+            $filterValue_element = $this->getSession()
+                ->getPage()
+                ->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, '$filter')]/ul/li[1]");
+            if(!empty($filterValue_element))
+            {
+                $text = $page->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, $filter)]/ul/li[1]/span")->getText();
+                $filterValue_element->click();
+            } else {
+                throw new \Exception(sprintf('Filter has no value to select.', $filter));
+            }
+//            $text = $page->find('xpath', '//div[@class="container-without-product"]//div[contains(@id, \'price\')]/ul/li/span')->getText();
+            $selectedFilters = $page->findAll('css', '#block-filterbar ul li a span.facet-item__value');
+            foreach ($selectedFilters as $result) {
+                if ($result->getText() == $text) {
+                    echo 'Selected filter is displaying';
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
    * @Then /^I should see results sorted in ascending price order$/
    */
   public function iShouldSeeResultsSortedInAscendingPriceOrder()
   {
     $page = $this->getSession()->getPage();
-    $elements = $page->findAll('css', 'div.price-block');
+    $elements = $page->findAll('css', 'div.product-plp-detail-wrapper');
     if ($elements == NULL) {
       echo 'No search results found';
     }
