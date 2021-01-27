@@ -68,11 +68,11 @@ class TotalLineItems extends React.Component {
     const discountTooltip = this.discountToolTipContent(cartPromo);
 
     // Check for aura totals.
-    let showVatText = false;
+    let showVatTextAsSuffix = false;
     const { paidWithAura } = totals;
 
     if (paidWithAura > 0) {
-      showVatText = true;
+      showVatTextAsSuffix = true;
     }
 
     // Using a separate variable(shippingAmount) to update the value
@@ -126,13 +126,13 @@ class TotalLineItems extends React.Component {
             <TotalLineItem name="grand-total" title={Drupal.t('Order Total')} value={baseGrandTotal} />
             <DeliveryVATSuffix
               shippingAmount={shippingAmount}
-              showVatText={showVatText}
+              showVatTextAsSuffix={showVatTextAsSuffix}
             />
           </div>
           {isAuraEnabled()
             ? (
               <AuraCheckoutOrderSummary
-                showVatText={showVatText}
+                showVatTextAsSuffix={showVatTextAsSuffix}
                 shippingAmount={shippingAmount}
               />
             )
