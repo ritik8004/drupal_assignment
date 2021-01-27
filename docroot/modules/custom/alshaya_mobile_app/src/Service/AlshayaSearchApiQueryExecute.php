@@ -436,6 +436,12 @@ class AlshayaSearchApiQueryExecute {
 
       // Adding filter/condition to the query.
       foreach ($filter_data as $filter_key => $filter_val) {
+        if ($query->getIndex()->id() === 'alshaya_algolia_index') {
+          if ($filter_key == 'field_acq_promotion_label') {
+            $filter_key = 'field_acq_promotion_label.app';
+          }
+        }
+
         // In case of price facet, we need special/different handling.
         if ($filter_key == 'final_price') {
           $filter = $query->createConditionGroup('OR', ['facet:' . $filter_key]);
@@ -531,6 +537,10 @@ class AlshayaSearchApiQueryExecute {
       // For Algolia results come with field identifier.
       elseif (isset($search_api_facets[$facet->getFieldIdentifier()])) {
         $facet_result = $search_api_facets[$facet->getFieldIdentifier()];
+      }
+      elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label'
+        && isset($search_api_facets['field_acq_promotion_label.app'])) {
+        $facet_result = $search_api_facets['field_acq_promotion_label.app'];
       }
 
       $data = [];
