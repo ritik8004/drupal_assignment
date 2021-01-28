@@ -12,17 +12,16 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides a 'Alshaya Olapic Home Widget' Block.
+ * Provides a 'Plp' Block.
  *
  * @Block(
- *   id = "alshaya_olapic_home_widget",
- *   admin_label = @Translation("Alshaya Olapic Home Widget"),
- *   category = @Translation("Alshaya Olapic Home Widget"),
+ *   id = "alshaya_olapic_plp_widget",
+ *   admin_label = @Translation("Alshaya Olapic Plp Widget"),
+ *   category = @Translation("Alshaya Olapic Plp Widget"),
  * )
  */
-class AlshayaOlapicHomeWidget extends BlockBase implements ContainerFactoryPluginInterface {
-  const PAGE_TYPE = 'home';
-
+class AlshayaOlapicPlpWidget extends BlockBase implements ContainerFactoryPluginInterface {
+  const PAGE_TYPE = 'plp';
   /**
    * The language manger service.
    *
@@ -113,7 +112,7 @@ class AlshayaOlapicHomeWidget extends BlockBase implements ContainerFactoryPlugi
     $data_instance_field_name = 'olapic_' . self::PAGE_TYPE . '_' . $lang . '_data_instance';
     $form[$data_instance_field_name] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Olapic Home Data Instance'),
+      '#title' => $this->t('Olapic Plp Data Instance'),
       '#description' => $this->t('Copy the data-instance value from the Olapic Portal'),
       '#default_value' => $this->configuration[$data_instance_field_name] ?? '',
       '#weight' => '1',
@@ -139,8 +138,8 @@ class AlshayaOlapicHomeWidget extends BlockBase implements ContainerFactoryPlugi
     $country_code = strtoupper(_alshaya_custom_get_site_level_country_code());
     $data_apikey_field_name = 'olapic_' . $lang . '_data_apikey';
     $data_instance_field_name = 'olapic_' . self::PAGE_TYPE . '_' . $lang . '_data_instance';
-    $data_apikey = $this->configFactory->get('alshaya_olapic.settings')->get($data_apikey_field_name) ?? '';
-    $data_instance = $this->configuration[$data_instance_field_name] ?? '';
+    $data_apikey = $this->configFactory->get('alshaya_olapic.settings')->get($data_apikey_field_name);
+    $data_instance = $this->configuration[$data_instance_field_name];
     $data_lang = $lang . '_' . $country_code;
     $olapic_keys = [
       'data_apikey' => $data_apikey,

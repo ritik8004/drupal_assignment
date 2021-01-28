@@ -12,6 +12,8 @@
       if (typeof drupalSettings.olapic_keys != "undefined") {
         $('script[data-olapic="olapic_specific_widget"]').attr( 'data-apikey',drupalSettings.olapic_keys.data_apikey);
         $('script[data-olapic="olapic_specific_widget"]').attr( 'data-instance',drupalSettings.olapic_keys.data_instance);
+        $('script[data-olapic="olapic_specific_widget"]').attr( 'data-lang',drupalSettings.olapic_keys.data_lang);
+
       }
     }
   };

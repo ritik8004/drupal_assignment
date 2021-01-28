@@ -12,16 +12,16 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides a 'Alshaya Olapic Home Widget' Block.
+ * Provides a 'Alshaya Olapic Gallery Widget' Block.
  *
  * @Block(
- *   id = "alshaya_olapic_home_widget",
- *   admin_label = @Translation("Alshaya Olapic Home Widget"),
- *   category = @Translation("Alshaya Olapic Home Widget"),
+ *   id = "alshaya_olapic_gallery_widget",
+ *   admin_label = @Translation("Alshaya Olapic Gallery Widget"),
+ *   category = @Translation("Alshaya Olapic Gallery Widget"),
  * )
  */
-class AlshayaOlapicHomeWidget extends BlockBase implements ContainerFactoryPluginInterface {
-  const PAGE_TYPE = 'home';
+class AlshayaOlapicGalleryWidget extends BlockBase implements ContainerFactoryPluginInterface {
+  const PAGE_TYPE = 'gallery';
 
   /**
    * The language manger service.
@@ -113,7 +113,7 @@ class AlshayaOlapicHomeWidget extends BlockBase implements ContainerFactoryPlugi
     $data_instance_field_name = 'olapic_' . self::PAGE_TYPE . '_' . $lang . '_data_instance';
     $form[$data_instance_field_name] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Olapic Home Data Instance'),
+      '#title' => $this->t('Olapic Gallery Data Instance'),
       '#description' => $this->t('Copy the data-instance value from the Olapic Portal'),
       '#default_value' => $this->configuration[$data_instance_field_name] ?? '',
       '#weight' => '1',

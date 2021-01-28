@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+function alshaya_olapic_install() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  // Install react blocks and update weight.
+  $manager->updateConfigs(
+    [
+      'block.block.alshayaolapichomewidget',
+      'block.block.alshayaolapicplpwidget',
+      'block.block.alshayaolapicpdpwidget',
+      'block.block.alshayaolapicgallerywidget',
+    ],
+    'alshaya_olapic',
+    'install'
+  );
+}

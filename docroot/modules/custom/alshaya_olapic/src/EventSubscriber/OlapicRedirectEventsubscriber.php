@@ -9,7 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\CurrentPathStack;
 
 /**
- * Class OlapicRedirec.
+ * Class OlapicRedirect.
  */
 class OlapicRedirectEventsubscriber implements EventSubscriberInterface {
 

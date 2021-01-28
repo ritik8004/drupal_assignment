@@ -50,54 +50,6 @@ class OlapicConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('olapic_ar_data_apikey') ?? '',
       '#required' => TRUE,
     ];
-    $form['olapic_home_en_data_instance'] = [
-      '#title' => $this->t('Olapic Home En Data Instance'),
-      '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_home_en_data_instance') ?? '',
-      '#required' => TRUE,
-    ];
-    $form['olapic_home_ar_data_instance'] = [
-      '#title' => $this->t('Olapic Home Ar Data Instance'),
-      '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_home_ar_data_instance') ?? '',
-      '#required' => TRUE,
-    ];
-    $form['olapic_gallery_en_data_instance'] = [
-      '#title' => $this->t('Olapic Gallery En Data Instance'),
-      '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_gallery_en_data_instance') ?? '',
-      '#required' => TRUE,
-    ];
-    $form['olapic_gallery_ar_data_instance'] = [
-      '#title' => $this->t('Olapic Gallery Ar Data Instance'),
-      '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_gallery_ar_data_instance') ?? '',
-      '#required' => TRUE,
-    ];
-    $form['olapic_plp_en_data_instance'] = [
-      '#title' => $this->t('Olapic PLP En Data Instance'),
-      '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_plp_en_data_instance') ?? '',
-      '#required' => TRUE,
-    ];
-    $form['olapic_plp_ar_data_instance'] = [
-      '#title' => $this->t('Olapic PLP Ar Data Instance'),
-      '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_plp_ar_data_instance') ?? '',
-      '#required' => TRUE,
-    ];
-    $form['olapic_pdp_en_data_instance'] = [
-      '#title' => $this->t('Olapic PDP En Data Instance'),
-      '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_pdp_en_data_instance') ?? '',
-      '#required' => TRUE,
-    ];
-    $form['olapic_pdp_ar_data_instance'] = [
-      '#title' => $this->t('Olapic PDP Ar Data Instance'),
-      '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_pdp_ar_data_instance') ?? '',
-      '#required' => TRUE,
-    ];
     return parent::buildForm($form, $form_state);
   }
 

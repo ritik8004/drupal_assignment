@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_olapic
+  theme:
+    - alshaya_white_label
+id: alshayaolapicgallerywidget
+theme: alshaya_white_label
+region: content
+provider: alshaya_olapic
+plugin: alshaya_olapic_gallery_widget
+settings:
+  id: alshaya_olapic_gallery_widget
+  label: 'Alshaya Olapic Gallery Widget'
+  provider: alshaya_olapic
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: '/gallery'
+    negate: false
+    context_mapping: {  }
