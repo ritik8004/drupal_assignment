@@ -133,12 +133,12 @@ function alshaya_aura_react_alshaya_acm_customer_update_account_alter(User $user
  * Implements hook_alshaya_spc_order_details_settings_alter().
  */
 function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings, $order) {
-  if (isset($order['extension_attributes']['apc_accrued_points'])) {
-    $settings['order_details']['accruedPoints'] = $order['extension_attributes']['apc_accrued_points'] ?? 0;
+  if (isset($order['extension']['apc_accrued_points'])) {
+    $settings['order_details']['accruedPoints'] = $order['extension']['apc_accrued_points'] ?? 0;
   }
 
-  if (isset($order['extension_attributes']['apc_redeemed_points'])) {
-    $settings['order_details']['redeemedPoints'] = $order['extension_attributes']['apc_redeemed_points'] ?? 0;
+  if (isset($order['extension']['apc_redeemed_points'])) {
+    $settings['order_details']['redeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? 0;
   }
 }
 
