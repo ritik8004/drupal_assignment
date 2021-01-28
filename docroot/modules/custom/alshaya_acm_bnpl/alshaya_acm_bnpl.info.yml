@@ -1,0 +1,7 @@
+name: 'Alshaya ACM Buy Now Pay Later'
+type: module
+description: 'Contains Buy Now Pay Later payment method related code.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_acm_checkout:alshaya_acm_checkout
