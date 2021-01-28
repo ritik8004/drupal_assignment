@@ -89,6 +89,13 @@ class LoyaltyClubController {
     $request_content = json_decode($request->getContent(), TRUE);
     $data = $this->auraCustomerHelper->prepareAuraUserStatusUpdateData($request_content);
 
+    if (!empty($data['error'])) {
+      $this->logger->error('Error while trying to update user AURA Status. Data: @data.', [
+        '@data' => json_encode($data),
+      ]);
+      return new JsonResponse($data);
+    }
+
     try {
       // Get user details from session.
       $user = $this->drupal->getSessionCustomerInfo();

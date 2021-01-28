@@ -140,7 +140,6 @@ function handleLinkYourCard(cardNumber) {
  * Helper function to handle manual link your card.
  */
 function handleManualLinkYourCard(cardNumber, mobile, otp) {
-  let stateValues = {};
   const auraStatus = getAllAuraStatus().APC_LINKED_NOT_VERIFIED;
   const data = {
     type: 'withOtp',
@@ -148,7 +147,7 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
     apcIdentifierId: cardNumber,
     apcLinkStatus: auraStatus,
     link: 'Y',
-    mobile,
+    phoneNumber: mobile,
     otp,
   };
 
@@ -159,17 +158,14 @@ function handleManualLinkYourCard(cardNumber, mobile, otp) {
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
-      if (result.data !== undefined && result.data.error === undefined) {
-        // Once we get a success response that OTP is verified, we update state,
-        // to show the quick enrollment fields.
-        if (result.data.status) {
-          stateValues = {
-            loyaltyStatus: auraStatus,
-          };
+      if (result.data !== undefined) {
+        if (result.data.status && result.data.error === undefined) {
+          dispatchCustomEvent('loyaltyStatusUpdated', { stateValues: { loyaltyStatus: auraStatus } });
+          removeFullScreenLoader();
+          return;
         }
-        showError('otp-error', getStringMessage('form_error_invalid_otp'));
       }
-      dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
+      showError('otp-error', getStringMessage('form_error_invalid_otp'));
       removeFullScreenLoader();
     });
   }
