@@ -1,0 +1,69 @@
+diff --git a/src/Plugin/search_api/backend/SearchApiAlgoliaBackend.php b/src/Plugin/search_api/backend/SearchApiAlgoliaBackend.php
+--- a/src/Plugin/search_api/backend/SearchApiAlgoliaBackend.php	(date 1611759580530)
++++ b/src/Plugin/search_api/backend/SearchApiAlgoliaBackend.php	(date 1611759580530)
+@@ -456,10 +456,6 @@
+
+     $this->extractConditions($query->getConditionGroup(), $algolia_options, $facets);
+
+-    // Algolia expects indexed arrays, remove the keys.
+-    if (isset($algolia_options['facetFilters'])) {
+-      $algolia_options['facetFilters'] = array_values($algolia_options['facetFilters']);
+-    }
+     if (isset($algolia_options['disjunctiveFacets'])) {
+       $algolia_options['disjunctiveFacets'] = array_values($algolia_options['disjunctiveFacets']);
+     }
+@@ -469,6 +465,13 @@
+       unset($algolia_options['disjunctiveFacets']);
+     }
+
++    // Algolia expects indexed arrays, remove the keys.
++    if (isset($algolia_options['facetFilters'])) {
++      $algolia_facet_filters = $algolia_options['facetFilters'];
++      $algolia_options['facetFilters'] = array_values($algolia_options['facetFilters']);
++    }
++
++
+     $keys = $query->getOriginalKeys();
+     $search = empty($keys) ? '*' : $keys;
+
+@@ -480,6 +483,40 @@
+     }
+
+     if (isset($data['facets'])) {
++      // Try to mimic the behavior we have via JS / React libraries.
++      if (isset($algolia_facet_filters)) {
++        $processed_facet_filters = [];
++        $algolia_facet_fields = array_keys($algolia_facet_filters);
++
++        // One result is enough, we need facets data only.
++        $algolia_options['length'] = 1;
++        $algolia_options['offset'] = 0;
++
++        // Disable analytics for this request, same as what is observed in
++        // React library.
++        $algolia_options['analytics'] = FALSE;
++
++        // Reset the facets, we go in sequence based on weight and apply
++        // all facets except the current one.
++        // So with color, size, brand and filters applied on all 3, we will
++        // filter by none for color, filter by color for size and filter by
++        // color + size for brand.
++        // This is what we observed when using React library.
++        foreach ($algolia_facet_fields as $facet_filter_field) {
++          $algolia_options['facetFilters'] = [];
++          foreach ($processed_facet_filters as $processed_facet_filter) {
++            $algolia_options['facetFilters'][] = $algolia_facet_filters[$processed_facet_filter];
++          }
++
++          // We need only the current facet data for this request.
++          $algolia_options['facets'] = [$facet_filter_field];
++
++          $facet_data = $index->search($search, $algolia_options);
++          $processed_facet_filters[] = $facet_filter_field;
++          $data['facets'][$facet_filter_field] = $facet_data['facets'][$facet_filter_field];
++        }
++      }
++
+       $results->setExtraData(
+         'search_api_facets',
+         $this->extractFacetsData($facets, $data['facets'])
