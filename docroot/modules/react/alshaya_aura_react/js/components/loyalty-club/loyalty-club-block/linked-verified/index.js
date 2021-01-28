@@ -31,7 +31,7 @@ const AuraMyAccountVerifiedUser = (props) => {
           <div className="aura-user-name">
             { profileInfo.profileName }
             <div className="aura-card-number">
-              <span>{Drupal.t('Card No.')}</span>
+              <span>{Drupal.t('Card number')}</span>
               <span>
                 <Cleave
                   name="aura-my-account-user-card"

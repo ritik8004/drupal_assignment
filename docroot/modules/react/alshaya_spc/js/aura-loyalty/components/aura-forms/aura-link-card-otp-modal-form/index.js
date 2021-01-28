@@ -206,7 +206,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
     return (
       <div className="aura-guest-user-link-card-otp-form">
         <div className="aura-modal-header">
-          <SectionTitle>{Drupal.t('Link Your Card')}</SectionTitle>
+          <SectionTitle>{Drupal.t('Link your card')}</SectionTitle>
           <button type="button" className="close" onClick={() => closeLinkCardOTPModal()} />
         </div>
         <div className="aura-modal-form">

@@ -40,7 +40,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'otp_button_label',
-      'value' => t('Send One Time Pin'),
+      'value' => t('Send One Time PIN'),
     ],
     [
       'key' => 'otp_modal_title',

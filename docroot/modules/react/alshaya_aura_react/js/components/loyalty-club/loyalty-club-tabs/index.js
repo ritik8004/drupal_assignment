@@ -42,10 +42,10 @@ class LoyaltyClubTabs extends React.Component {
         <>
           <div className="loyalty-club-tabs fadeInUp" style={{ animationDelay: '0.5s' }}>
             <div className="loyalty-tab rewards-activity active" data-tab-content="loyalty-club-rewards-wrapper" onClick={(e) => this.switchTab(e)}>
-              {Drupal.t('Rewards Activity')}
+              {Drupal.t('Rewards activity')}
             </div>
             <div className="loyalty-tab loyalty-benefits" data-tab-content="loyalty-club-details-wrapper" onClick={(e) => this.switchTab(e)}>
-              {Drupal.t('Loyalty Benefits')}
+              {Drupal.t('Loyalty benefits')}
             </div>
           </div>
           <div className="loyalty-club-tabs-content">
