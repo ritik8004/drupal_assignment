@@ -36,7 +36,7 @@ class OlapicConfigForm extends ConfigFormBase {
       '#title' => $this->t('Development mode'),
       '#required' => TRUE,
       '#default_value' => $config->get('development_mode') ?? 0,
-      '#options' => [0 => 'No', 1 => 'Yes'],
+      '#options' => [0 => $this->t('No'), 1 => $this->t('Yes')],
     ];
     $form['olapic_en_data_apikey'] = [
       '#title' => $this->t('Olapic En Data Apikey'),
@@ -61,14 +61,6 @@ class OlapicConfigForm extends ConfigFormBase {
       ->set('development_mode', $form_state->getValue('development_mode'))
       ->set('olapic_en_data_apikey', $form_state->getValue('olapic_en_data_apikey'))
       ->set('olapic_ar_data_apikey', $form_state->getValue('olapic_ar_data_apikey'))
-      ->set('olapic_home_en_data_instance', $form_state->getValue('olapic_home_en_data_instance'))
-      ->set('olapic_home_ar_data_instance', $form_state->getValue('olapic_home_ar_data_instance'))
-      ->set('olapic_gallery_en_data_instance', $form_state->getValue('olapic_gallery_en_data_instance'))
-      ->set('olapic_gallery_ar_data_instance', $form_state->getValue('olapic_gallery_ar_data_instance'))
-      ->set('olapic_plp_en_data_instance', $form_state->getValue('olapic_plp_en_data_instance'))
-      ->set('olapic_plp_ar_data_instance', $form_state->getValue('olapic_plp_ar_data_instance'))
-      ->set('olapic_pdp_en_data_instance', $form_state->getValue('olapic_pdp_en_data_instance'))
-      ->set('olapic_pdp_ar_data_instance', $form_state->getValue('olapic_pdp_ar_data_instance'))
       ->save();
     parent::submitForm($form, $form_state);
   }
