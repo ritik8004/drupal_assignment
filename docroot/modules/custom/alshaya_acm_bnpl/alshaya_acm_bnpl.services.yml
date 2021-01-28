@@ -1,0 +1,13 @@
+services:
+  cache.bnpl:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [ bnpl ]
+
+  alshaya_acm_bnpl.api_helper:
+    class: Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmBnplAPIHelper
+    arguments:
+      - '@alshaya_api.api'
+      - '@cache.bnpl'
