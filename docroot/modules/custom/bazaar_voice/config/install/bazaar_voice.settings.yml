@@ -3,3 +3,6 @@ conversations_apikey: ''
 shared_secret_key: ''
 api_version: 5.4
 locale: 'en_US'
+client_name: ''
+site_id: 'main_site'
+environment: 'staging'

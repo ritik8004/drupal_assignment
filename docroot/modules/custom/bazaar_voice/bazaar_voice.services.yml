@@ -1,0 +1,4 @@
+services:
+  bazaar_voice.bazaar_voice:
+    class: Drupal\bazaar_voice\BazaarVoiceService
+    arguments: ['@config.factory']

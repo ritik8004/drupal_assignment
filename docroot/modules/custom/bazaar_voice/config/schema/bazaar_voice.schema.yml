@@ -17,3 +17,12 @@ bazaar_voice.settings:
     locale:
       type: string
       label: 'To get the reviews data at a regional level.'
+    client_name:
+      type: string
+      label: 'The client name provided by Bazaarvoice.'
+    site_id:
+      type: string
+      label: 'The deployment zone set within the Bazaarvoice Workbench.'
+    environment:
+      type: string
+      label: 'The deployment environment where you want to implement BV Pixel.'

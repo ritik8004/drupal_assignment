@@ -81,6 +81,27 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Locale is required to get regional reviews data. It can be set as multiple, e.g. en_AE,ar_AE'),
     ];
 
+    $form['basic_settings']['client_name'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Client Name'),
+      '#default_value' => $config->get('client_name'),
+      '#description' => $this->t('The client name provided by Bazaarvoice.'),
+    ];
+
+    $form['basic_settings']['site_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Site Id'),
+      '#default_value' => $config->get('site_id'),
+      '#description' => $this->t('The deployment zone is set in the Conversations configuration hub within the Bazaarvoice Workbench. The default deployment zone is main_site.'),
+    ];
+
+    $form['basic_settings']['environment'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('environment'),
+      '#default_value' => $config->get('environment'),
+      '#description' => $this->t('The deployment environment where you want to implement BV Pixel.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -96,6 +117,9 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('shared_secret_key', $values['shared_secret_key'])
       ->set('api_version', $values['api_version'])
       ->set('locale', $values['locale'])
+      ->set('client_name', $values['client_name'])
+      ->set('site_id', $values['site_id'])
+      ->set('environment', $values['environment'])
       ->save();
 
     parent::submitForm($form, $form_state);
