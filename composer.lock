@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "23235ce04dbb3ac325edf129fbc88c87",
+    "content-hash": "1e7e1b96848c46e9f504bf295346c055",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -12728,7 +12728,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Allow to override maxValuesPerFacet Algolia setting": "https://www.drupal.org/files/issues/2020-10-20/search-api-algolia-maxvaluesperfacet-3177896.patch"
+                    "Allow to override maxValuesPerFacet Algolia setting": "https://www.drupal.org/files/issues/2020-10-20/search-api-algolia-maxvaluesperfacet-3177896.patch",
+                    "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
