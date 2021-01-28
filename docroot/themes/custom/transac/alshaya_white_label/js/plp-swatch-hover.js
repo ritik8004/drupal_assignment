@@ -31,7 +31,7 @@
   Drupal.behaviors.plpSwatchHover = {
     attach: function (context, settings) {
       // This is for Algolia search that fires when Algolia search results return.
-      $(document).once('searchResponseAddSwatchHover').on('search-results-updated', function () {
+      $(document).once('searchResponseAddSwatchHover').on('search-results-updated plp-results-updated', function () {
         onSwatchHoverUpdateMainImage();
       });
 
