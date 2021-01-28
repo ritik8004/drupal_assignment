@@ -172,15 +172,6 @@ function _alshaya_aura_react_translations() {
     'Please enter OTP.' => [
       'ar' => 'يرجى إدخال رمز الاستخدام لمرة واحدة.',
     ],
-    'Please enter your full name.' => [
-      'ar' => 'يرجى إدخال الاسم بالكامل.',
-    ],
-    'Please enter email.' => [
-      'ar' => 'يرجى إدخال البريد الإلكتروني.',
-    ],
-    'The email address %mail is not valid.' => [
-      'ar' => 'عنوان البريد الإلكتروني غير صحيح.',
-    ],
     'Error in sign up. Please try again.' => [
       'ar' => 'خطأ في تسجيل الاشتراك. يرجى المحاولة مرة أخرى.',
     ],
