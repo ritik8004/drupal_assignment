@@ -373,6 +373,10 @@
   position: relative;
 }
 
+.magazine-layout-node .acq-content-product {
+  overflow: visible;
+}
+
 @include breakpoint($mobile) {
   .description-details {
     div,
