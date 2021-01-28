@@ -45,13 +45,13 @@ class BazaarVoiceService {
     $environment = $this->getEnvironment();
     $locale = $this->getLocale();
     if ($clientName && $siteId && $environment && $locale) {
-      $bv_parameters            = [
+      $bv_parameters = [
         '{{client_name}}',
         '{{site_id}}',
         '{{environment}}',
         '{{locale}}',
       ];
-      $bv_values                = [$clientName, $siteId, $environment, $locale];
+      $bv_values = [$clientName, $siteId, $environment, $locale];
       $bazaar_voice_script_code = str_replace($bv_parameters, $bv_values, self::BAZAAR_VOICE_SCRIPT_CODE);
       return $bazaar_voice_script_code;
     }
