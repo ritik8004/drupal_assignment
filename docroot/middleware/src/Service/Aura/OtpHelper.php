@@ -62,7 +62,7 @@ class OtpHelper {
    */
   public function sendOtp($mobile) {
     try {
-      $endpoint = sprintf('/sendotp/phonenumber/%s', $mobile);
+      $endpoint = sprintf('/sendotp/phonenumber/%s', str_replace('+', '', $mobile));
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $responseData = [
         'status' => $response,

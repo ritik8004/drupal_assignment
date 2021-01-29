@@ -197,7 +197,7 @@ class CustomerHelper {
       }
 
       $processed_data['statusUpdate']['otp'] = $data['otp'];
-      $processed_data['statusUpdate']['phoneNumber'] = $data['mobile'];
+      $processed_data['statusUpdate']['phoneNumber'] = str_replace('+', '', $data['phoneNumber']);
     }
 
     return $processed_data;
