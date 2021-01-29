@@ -11,7 +11,7 @@ function alshaya_olapic_install() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
-  // Install react blocks and update weight.
+  // Install Olapic widget blocks.
   $manager->updateConfigs(
     [
       'block.block.alshayaolapichomewidget',

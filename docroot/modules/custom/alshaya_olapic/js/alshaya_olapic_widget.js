@@ -1,6 +1,6 @@
 /**
  * @file
- * Attaches entity-type selection behaviors to the widget form.
+ * Olapic script to add keys to show widgets.
  */
 
 (function ($, Drupal, drupalSettings) {
