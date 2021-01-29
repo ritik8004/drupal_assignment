@@ -4,11 +4,51 @@ namespace Drupal\alshaya_olapic\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Configure Alshaya Olapic Config settings.
  */
 class OlapicConfigForm extends ConfigFormBase {
+
+  /**
+   * The language manger service.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * Constructor.
+   *
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   */
+  public function __construct(LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory) {
+    $this->languageManager = $language_manager;
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('language_manager'),
+      $container->get('config.factory')
+     );
+  }
 
   /**
    * {@inheritdoc}
@@ -31,24 +71,25 @@ class OlapicConfigForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_olapic.settings');
+    $lang = $this->languageManager->getCurrentLanguage()->getId();
+    $data_api_field_name = 'olapic_' . $lang . '_data_apikey';
     $form['development_mode'] = [
       '#type' => 'radios',
       '#title' => $this->t('Development mode'),
-      '#required' => TRUE,
       '#default_value' => $config->get('development_mode') ?? 0,
       '#options' => [0 => $this->t('No'), 1 => $this->t('Yes')],
     ];
-    $form['olapic_en_data_apikey'] = [
-      '#title' => $this->t('Olapic En Data Apikey'),
+    $form[$data_api_field_name] = [
+      '#title' => $this->t('Olapic Data Apikey'),
       '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_en_data_apikey') ?? '',
-      '#required' => TRUE,
+      '#default_value' => $config->get($data_api_field_name) ?? '',
+      '#size' => 100,
     ];
-    $form['olapic_ar_data_apikey'] = [
-      '#title' => $this->t('Olapic Ar Data Apikey'),
+    $form['olapic_external_script_url'] = [
+      '#title' => $this->t('Olapic External Script Url'),
       '#type' => 'textfield',
-      '#default_value' => $config->get('olapic_ar_data_apikey') ?? '',
-      '#required' => TRUE,
+      '#default_value' => $config->get('olapic_external_script_url') ?? '',
+      '#size' => 100,
     ];
     return parent::buildForm($form, $form_state);
   }
@@ -57,10 +98,12 @@ class OlapicConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $lang = $this->languageManager->getCurrentLanguage()->getId();
+    $data_api_field_name = 'olapic_' . $lang . '_data_apikey';
     $this->configFactory->getEditable('alshaya_olapic.settings')
       ->set('development_mode', $form_state->getValue('development_mode'))
-      ->set('olapic_en_data_apikey', $form_state->getValue('olapic_en_data_apikey'))
-      ->set('olapic_ar_data_apikey', $form_state->getValue('olapic_ar_data_apikey'))
+      ->set($data_api_field_name, $form_state->getValue($data_api_field_name))
+      ->set('olapic_external_script_url', $form_state->getValue('olapic_external_script_url'))
       ->save();
     parent::submitForm($form, $form_state);
   }
