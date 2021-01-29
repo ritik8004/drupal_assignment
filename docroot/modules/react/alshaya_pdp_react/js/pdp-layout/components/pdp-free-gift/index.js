@@ -15,12 +15,15 @@ const PdpFreeGift = ({
         <div className="free-gift-promotions free-gift-promotions-full-view-mode">
           <div className="free-gift-promo-wrapper free-gift-promo-list">
             <div className="free-gift-image">
-              <img
-                src={freeGiftImage['#url']}
-                alt={freeGiftImage['#alt']}
-                title={freeGiftImage['#title']}
-                typeof="foaf:Image"
-              />
+              {freeGiftImage
+                ? (
+                  <img
+                    src={freeGiftImage['#url']}
+                    alt={freeGiftImage['#alt']}
+                    title={freeGiftImage['#title']}
+                    typeof="foaf:Image"
+                  />
+                ) : null}
             </div>
             <div className="free-gift-wrapper">
               <div className="free-gift-title">
