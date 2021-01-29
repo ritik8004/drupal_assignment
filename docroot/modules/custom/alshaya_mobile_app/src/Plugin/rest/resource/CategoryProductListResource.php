@@ -389,7 +389,9 @@ class CategoryProductListResource extends ResourceBase {
       $query->setParseMode($parse_mode);
 
       $conditionGroup = new ConditionGroup();
-      $conditionGroup->addCondition('stock', 0, '>');
+      if ($this->configFactory->get('alshaya_search_api.listing_settings')->get('filter_oos_product')) {
+        $conditionGroup->addCondition('stock', 0, '>');
+      }
       $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
       $query->addConditionGroup($conditionGroup);
       $query->setOption('ruleContexts', $term_details['ruleContext']);
