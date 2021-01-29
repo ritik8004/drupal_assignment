@@ -326,6 +326,8 @@ class CategoryProductListResource extends ResourceBase {
   public function prepareAndExecuteQuery(int $tid) {
     $storage = $this->entityTypeManager->getStorage('search_api_index');
     $response = [];
+
+    // Get term details in current language for meta info (department name).
     $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid);
     if (isset($term_details['hierarchy'])) {
       $response['department_name'] = str_replace('>', '|', $term_details['hierarchy']);
@@ -357,6 +359,12 @@ class CategoryProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      // Get term details in current language for filters.
+      $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
+        $this->languageManager->getCurrentLanguage()->getId(),
+        $tid
+      );
+
       $index = $storage->load('alshaya_algolia_index');
 
       /** @var \Drupal\search_api\Query\QueryInterface $query */
