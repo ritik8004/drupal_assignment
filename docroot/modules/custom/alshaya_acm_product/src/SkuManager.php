@@ -655,6 +655,28 @@ class SkuManager {
   }
 
   /**
+   * Helper function to fetch sku from node ids.
+   *
+   * @param array $nids
+   *   Node ids.
+   *
+   * @return array
+   *   Array of Sku Ids of the item.
+   */
+  public function getSkusByNodeIds(array $nids) {
+    if (empty($nids)) {
+      return [];
+    }
+
+    $query = $this->connection->select('node__field_skus', 'nfs')
+      ->fields('nfs', ['field_skus_value'])
+      ->distinct()
+      ->condition('entity_id', $nids, 'IN');
+
+    return $query->execute()->fetchAllKeyed(0, 0);
+  }
+
+  /**
    * Helper function to fetch entity id from sku rather than loading the SKU.
    *
    * @param array $sku_texts

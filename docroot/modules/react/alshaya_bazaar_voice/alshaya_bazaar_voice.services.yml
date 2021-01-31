@@ -1,0 +1,8 @@
+services:
+  alshaya_bazaar_voice.api_helper:
+    class: Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoiceApiHelper
+    arguments:
+      - '@logger.factory'
+      - '@http_client'
+      - '@config.factory'
+      - '@entity.manager'
