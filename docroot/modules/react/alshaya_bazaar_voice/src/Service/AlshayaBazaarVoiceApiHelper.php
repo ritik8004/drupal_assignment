@@ -80,14 +80,12 @@ class AlshayaBazaarVoiceApiHelper {
    * @throws \Exception
    */
   public function doRequest(string $method, string $url, array $request_options = []) {
-    $that = $this;
-
-    $request_options['on_stats'] = function (TransferStats $stats) use ($that) {
+    $request_options['on_stats'] = function (TransferStats $stats) {
       $code = ($stats->hasResponse())
         ? $stats->getResponse()->getStatusCode()
         : 0;
 
-      $that->logger->info(sprintf(
+      $this->logger->info(sprintf(
         'Finished API request %s in %.4f. Response code: %d. Method: %s.',
         $stats->getEffectiveUri(),
         $stats->getTransferTime(),
@@ -197,8 +195,8 @@ class AlshayaBazaarVoiceApiHelper {
       return NULL;
     }
 
-    usort($rating, function ($item1, $item2) {
-      return $item2['RatingValue'] <=> $item1['RatingValue'];
+    usort($rating, function ($rating_value1, $rating_value2) {
+      return $rating_value2['RatingValue'] <=> $rating_value1['RatingValue'];
     });
 
     $rating_range = [];

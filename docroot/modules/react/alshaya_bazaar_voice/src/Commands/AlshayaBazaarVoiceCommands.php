@@ -7,7 +7,7 @@ use Drupal\alshaya_master\Service\AlshayaEntityHelper;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class Alshaya Bazaar voice Commands.
+ * Class Alshaya BazaarVoice commands.
  *
  * @package Drupal\alshaya_bazaar_voice\Commands
  */
@@ -26,14 +26,12 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
    * @param \Drupal\alshaya_master\Service\AlshayaEntityHelper $alshaya_entity_helper
    *   Alshaya entity helper.
    */
-  public function __construct(
-    AlshayaEntityHelper $alshaya_entity_helper
-  ) {
+  public function __construct(AlshayaEntityHelper $alshaya_entity_helper) {
     $this->alshayaEntityHelper = $alshaya_entity_helper;
   }
 
   /**
-   * Update/index bv attributes values in algolia.
+   * Update/index BazaarVoice attributes values in algolia.
    *
    * @param array $options
    *   (optional) An array of options.
@@ -46,9 +44,9 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
    *   The number of items to check per batch run.
    *
    * @usage drush index-bv-attr-val-algolia
-   *   Fetch and index bv attributes values in algolia.
+   *   Fetch and index BazaarVoice attributes values in algolia.
    * @usage drush index-bv-attr-val-algolia --batch-size=50
-   *   Fetch and index bv attributes values in algolia with batch of 50.
+   *   Fetch and index BazaarVoice attribute values in algolia with batch of 50.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -95,7 +93,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
   }
 
   /**
-   * Batch API callback; update bv attributes in algolia.
+   * Batch API callback; update BazaarVoice attributes in algolia.
    *
    * @param array $nids
    *   A batch size.
@@ -149,7 +147,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
           $bv_objects['results'][] = $object;
         }
 
-        // Save and update objects with bv attributes in algolia.
+        // Save and update objects with bBazaarVoicev attributes in algolia.
         $result = $index->saveObjects($bv_objects['results']);
         $context['results']['items'][] = $result;
       }
