@@ -6,6 +6,7 @@
 
   @include breakpoint($only-mobile) {
     padding: 0.5rem;
+    justify-content: center;
   }
 
   > span {
