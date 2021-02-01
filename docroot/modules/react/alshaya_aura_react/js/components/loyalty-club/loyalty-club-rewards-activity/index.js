@@ -1,4 +1,7 @@
 import React from 'react';
+import { getAPIData } from '../../../utilities/api/fetchApiData';
+import { getUserDetails } from '../../../utilities/helper';
+import { addInlineLoader } from '../../../utilities/aura_utils';
 
 class LoyaltyClubRewardsActivity extends React.Component {
   constructor(props) {
@@ -9,76 +12,51 @@ class LoyaltyClubRewardsActivity extends React.Component {
   }
 
   componentDidMount() {
-    // @todo: API call here to get rewards activity.
-    // Assuming some code for, H - Hold, C - Credited, R - Redeemed, E - Expired.
-    const activityObj = [
-      {
-        order: 'HMEGHDE0006815',
-        date: '23 Apr 2020',
-        amount: 'KWD 123.123',
-        type: 'Online',
-        points: '240',
-        status: 'H',
-      },
-      {
-        order: 'MCEGHDE0006815',
-        date: '21 Apr 2020',
-        amount: 'KWD 70.123',
-        type: 'Online',
-        points: '80',
-        status: 'C',
-      },
-      {
-        order: 'FLEGHDE00068150',
-        date: '20 Apr 2020',
-        amount: 'KWD 8.123',
-        type: 'Online',
-        points: '-2000',
-        status: 'R',
-      },
-      {
-        order: 'HMEGHDE0006765',
-        date: '9 Apr 2020',
-        amount: 'KWD 40.123',
-        type: 'Online',
-        points: '-1600',
-        status: 'E',
-      },
-    ];
+    // @todo: Remove hard coded to and from date when last transaction API is ready.
+    const fromDate = '2020-12-01';
+    const toDate = '2021-12-31';
 
-    this.setState({
-      activity: activityObj,
-    });
+    this.fetchRewardActivity(fromDate, toDate, 0, '');
   }
+
+  fetchRewardActivity = (fromDate, toDate, maxResults, channel) => {
+    // API call to get reward activity for logged in users.
+    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${channel}`;
+    const apiData = getAPIData(apiUrl);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.data !== undefined && result.data.error === undefined) {
+          this.setState({
+            activity: result.data.data || null,
+          });
+        }
+      });
+    }
+  };
 
   generateStatement = () => {
     const { activity } = this.state;
+    if (activity === null || activity === 'undefined') {
+      addInlineLoader('.reward-activity');
+      return null;
+    }
+
     const statement = [];
 
-    if (activity !== null && activity !== 'undefined') {
-      activity.forEach((transaction) => {
-        let statusString = null;
-        if (transaction.status === 'H') {
-          statusString = Drupal.t('On Hold');
-        } else if (transaction.status === 'R') {
-          statusString = Drupal.t('Redeemed');
-        } else if (transaction.status === 'E') {
-          statusString = Drupal.t('Expired');
-        } else {
-          statusString = Drupal.t('Credited');
-        }
-        statement.push(
-          <div className="statement-row">
-            <span className="order-id">{transaction.order}</span>
-            <span className="date">{transaction.date}</span>
-            <span className="amount">{transaction.amount}</span>
-            <span className="type">{transaction.type}</span>
-            <span className={`aura-points style-${transaction.status}`}>{transaction.points}</span>
-            <span className={`status style-${transaction.status}`}>{statusString}</span>
-          </div>,
-        );
-      });
-    }
+    Object.entries(activity).forEach(([, transaction]) => {
+      statement.push(
+        <div className="statement-row">
+          <span className="order-id">{transaction.orderNo}</span>
+          <span className="date">{transaction.date}</span>
+          <span className="amount">{transaction.orderTotal}</span>
+          <span className="type">{transaction.channel}</span>
+          <span className={`aura-points style-${transaction.status}`}>{transaction.auraPoints}</span>
+          <span className={`status style-${transaction.status}`}>{transaction.status}</span>
+        </div>,
+      );
+    });
+
 
     return statement;
   };

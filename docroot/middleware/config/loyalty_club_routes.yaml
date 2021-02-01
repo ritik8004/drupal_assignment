@@ -43,3 +43,7 @@ loyalty_club.send_link_card_otp:
     controller: App\Controller\LoyaltyClub\LoyaltyClubOtpController::sendLinkCardOtp
     methods: POST
 
+loyalty_club.get_reward_activity:
+    path: /get/loyalty-club/get-reward-activity
+    controller: App\Controller\LoyaltyClub\LoyaltyCustomerController::getRewardActivity
+    methods: GET

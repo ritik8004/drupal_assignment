@@ -406,4 +406,73 @@ class LoyaltyCustomerController {
     }
   }
 
+  /**
+   * Reward Activity.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return users reward activities.
+   */
+  public function getRewardActivity(Request $request) {
+    try {
+      $request_content = $request->query->all();
+
+      // Check if required data is present in request.
+      if (empty($request_content['fromDate']) || empty($request_content['toDate'])) {
+        $this->logger->error('Error while trying to get reward activity of the user. From date and to date is required. Request Data: @data', [
+          '@data' => json_encode($request_content),
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('From date and to date is required.', Response::HTTP_NOT_FOUND));
+      }
+
+      // Get user details from session.
+      $user = $this->drupal->getSessionCustomerInfo();
+
+      // Check if uid in the request matches the one in session.
+      if ($user['uid'] !== $request_content['uid']) {
+        $this->logger->error("Error while trying to get reward activity of the user. User id in request doesn't match the one in session. User id from request: @req_uid. User id in session: @session_uid.", [
+          '@req_uid' => $request_content['uid'],
+          '@session_uid' => $user['uid'],
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
+      }
+
+      $endpoint = sprintf('/customers/apcTransactions?customerId=%s&fromDate=%s&toDate=%s&orderField=date&maxResults=%s&channel=%s',
+        $user['customer_id'],
+        $request_content['fromDate'],
+        $request_content['toDate'],
+        $request_content['maxResults'],
+        $request_content['channel']
+      );
+      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $data = [];
+
+      if (!empty($response['apc_transactions'])) {
+        foreach ($response['apc_transactions'] as $transaction) {
+          $data[$transaction['trn_no']] = [
+            'orderNo' => $transaction['trn_no'],
+            'date' => date('d M Y', strtotime($transaction['date'])),
+            'orderTotal' => $transaction['total_value'],
+            'channel' => $transaction['channel'],
+            'auraPoints' => $transaction['points'],
+            'status' => $transaction['points_balances'][0]
+            ? $transaction['points_balances'][0]['status_name']
+            : '',
+          ];
+        }
+      }
+      $responseData = [
+        'status' => TRUE,
+        'data' => $data,
+      ];
+      return new JsonResponse($responseData);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to get reward activity of the user. Request Data: @data. Message: @message', [
+        '@data' => json_encode($request_content),
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
+  }
+
 }
