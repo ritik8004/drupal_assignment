@@ -76,8 +76,8 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
 
     $form['basic_settings']['bvpixel_base_url'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('BV Pixel Base Url'),
-      '#description' => $this->t('Base url for BV pixel script provided by BazaarVoice.'),
+      '#title' => $this->t('BV Pixel Base URL'),
+      '#description' => $this->t('Base URL for BV pixel script provided by BazaarVoice.'),
       '#default_value' => $config->get('bvpixel_base_url'),
     ];
 
@@ -99,14 +99,14 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Site Id'),
       '#default_value' => $config->get('site_id'),
-      '#description' => $this->t('The deployment zone is set in the Conversations configuration hub within the BazaarVoice Workbench. The default deployment zone is main_site.'),
+      '#description' => $this->t('It is the value of deployment zone set in the Conversations configuration hub within the BazaarVoice Workbench. The default value is main_site.'),
     ];
 
     $form['basic_settings']['environment'] = [
       '#type' => 'textfield',
       '#title' => $this->t('environment'),
       '#default_value' => $config->get('environment'),
-      '#description' => $this->t('The deployment environment of BV where we implement BV Pixel.'),
+      '#description' => $this->t('The deployment environment of BazaarVoice where we implement BazaarVoice Pixel.'),
     ];
 
     return parent::buildForm($form, $form_state);

@@ -6,7 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 
 /**
- * Class Bazaar Voice Api Helper.
+ * Class BazaarVoice Api Helper.
  *
  * @package Drupal\bazaar_voice
  */
@@ -61,7 +61,7 @@ class BazaarVoiceApiHelper {
   public function getBvDynamicScriptCode() {
     $bv_config_check = $this->isBvConfigurationsAvailable();
     if ($bv_config_check) {
-      $bazaar_voice_script_code = $bvpixel_base_url . '/' . $clientName . '/' . $siteId . '/' . $environment . '/' . $locale . '/' . 'bv.js';
+      $bazaar_voice_script_code = $this->getBvPixelBaseUrl() . '/' . $this->getClientName() . '/' . $this->getSiteId() . '/' . $this->getEnvironment() . '/' . $this->getLocale() . '/' . 'bv.js';
       return $bazaar_voice_script_code;
     }
     return '';
@@ -166,24 +166,26 @@ class BazaarVoiceApiHelper {
     $routeIdentifier = $this->currentRouteMatch->getRouteName();
     $route_params = $this->currentRouteMatch->getParameters()->all();
 
-    switch ($routeIdentifier) {
-      case 'entity.node.canonical':
-        if (isset($route_params['node'])) {
-          /** @var \Drupal\node\Entity\Node $node */
-          $node = $route_params['node'];
-          $routeIdentifier .= ':' . $node->bundle();
-        }
-        break;
+    if (isset($routeIdentifier)) {
+      switch ($routeIdentifier) {
+        case 'entity.node.canonical':
+          if (!empty($route_params) && isset($route_params['node'])) {
+            /** @var \Drupal\node\Entity\Node $node */
+            $node = $route_params['node'];
+            $routeIdentifier .= ':' . $node->bundle();
+          }
+          break;
 
-      case 'entity.taxonomy_term.canonical':
-        if (isset($route_params['taxonomy_term'])) {
-          /** @var \Drupal\taxonomy\Entity\Term $term */
-          $term = $route_params['taxonomy_term'];
-          $routeIdentifier .= ':' . $term->getVocabularyId();
-        }
-        break;
+        case 'entity.taxonomy_term.canonical':
+          if (!empty($route_params) && isset($route_params['taxonomy_term'])) {
+            /** @var \Drupal\taxonomy\Entity\Term $term */
+            $term = $route_params['taxonomy_term'];
+            $routeIdentifier .= ':' . $term->getVocabularyId();
+          }
+          break;
+      }
     }
-    return $routeIdentifier;
+    return $routeIdentifier ?? '';
   }
 
 }
