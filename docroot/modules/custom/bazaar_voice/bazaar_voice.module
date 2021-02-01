@@ -14,17 +14,18 @@ function bazaar_voice_page_attachments(array &$page) {
   /** @var \Drupal\bazaar_voice\BazaarVoiceService $bazaar_voice */
   $bazaar_voice = \Drupal::service('bazaar_voice.bazaar_voice');
 
-  if ($bazaar_voice->getClientName() && $bazaar_voice->getSiteId() && $bazaar_voice->getEnvironment() && $bazaar_voice->getLocale()) {
-	    // Add BV pixel script to header.
-		$page['#attached']['html_head'][] = [[
-	      '#type' => 'html_tag',
-	      '#tag' => 'script',
-	      '#attributes' => [
-	      	'async' => TRUE,
-	        'src' => $bazaar_voice->getBazaarvoiceDynamicScriptCode(),
-	      ],
-	    ],
-	      'bvpath',
-	    ];
-	}
+  // Check if BV script to be loaded as per current route.
+  if ($bazaar_voice->isCurrentRouteInBvList()) {
+	  // Add BV pixel script to header.
+	  $page['#attached']['html_head'][] = [[
+		'#type' => 'html_tag',
+		'#tag' => 'script',
+		'#attributes' => [
+		  'async' => TRUE,
+		  'src' => $bazaar_voice->getBvDynamicScriptCode(),
+		],
+	  ],
+		'bvpath',
+	];
+  }
 }

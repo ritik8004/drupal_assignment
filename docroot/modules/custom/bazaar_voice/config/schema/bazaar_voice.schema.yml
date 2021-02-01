@@ -1,28 +1,31 @@
 bazaar_voice.settings: 
   type: config_object
-  label: 'Bazaarvoice Settings'
+  label: 'BazaarVoice Settings'
   mapping:
     api_base_url:
       type: string
-      label: 'A base url provided by bazaarvoice.'
+      label: 'A base url provided by BazaarVoice.'
     conversations_apikey:
       type: string
-      label: 'A passkey provided by bazaarvoice.'
+      label: 'A passkey provided by BazaarVoice.'
     shared_secret_key:
       type: string
-      label: 'A shared key provided by bazaarvoice.'
+      label: 'A shared key provided by BazaarVoice.'
     api_version:
       type: decimal
       label: 'API version.'
+    bvpixel_base_url:
+      type: string
+      label: 'Base url for BV pixel script provided by BazaarVoice.'
     locale:
       type: string
       label: 'To get the reviews data at a regional level.'
     client_name:
       type: string
-      label: 'The client name provided by Bazaarvoice.'
+      label: 'The client name provided by BazaarVoice.'
     site_id:
       type: string
-      label: 'The deployment zone set within the Bazaarvoice Workbench.'
+      label: 'The deployment zone set within the BazaarVoice Workbench.'
     environment:
       type: string
-      label: 'The deployment environment where you want to implement BV Pixel.'
+      label: 'The deployment environment of BV where we implement BV Pixel.'

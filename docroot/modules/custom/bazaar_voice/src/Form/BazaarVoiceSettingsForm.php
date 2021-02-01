@@ -74,6 +74,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('api_version'),
     ];
 
+    $form['basic_settings']['bvpixel_base_url'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('BV Pixel Base Url'),
+      '#description' => $this->t('Base url for BV pixel script provided by BazaarVoice.'),
+      '#default_value' => $config->get('bvpixel_base_url'),
+    ];
+
     $form['basic_settings']['locale'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Locale'),
@@ -85,21 +92,21 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Client Name'),
       '#default_value' => $config->get('client_name'),
-      '#description' => $this->t('The client name provided by Bazaarvoice.'),
+      '#description' => $this->t('The client name provided by BazaarVoice.'),
     ];
 
     $form['basic_settings']['site_id'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Site Id'),
       '#default_value' => $config->get('site_id'),
-      '#description' => $this->t('The deployment zone is set in the Conversations configuration hub within the Bazaarvoice Workbench. The default deployment zone is main_site.'),
+      '#description' => $this->t('The deployment zone is set in the Conversations configuration hub within the BazaarVoice Workbench. The default deployment zone is main_site.'),
     ];
 
     $form['basic_settings']['environment'] = [
       '#type' => 'textfield',
       '#title' => $this->t('environment'),
       '#default_value' => $config->get('environment'),
-      '#description' => $this->t('The deployment environment where you want to implement BV Pixel.'),
+      '#description' => $this->t('The deployment environment of BV where we implement BV Pixel.'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -116,6 +123,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('conversations_apikey', $values['conversations_apikey'])
       ->set('shared_secret_key', $values['shared_secret_key'])
       ->set('api_version', $values['api_version'])
+      ->set('bvpixel_base_url', $values['bvpixel_base_url'])
       ->set('locale', $values['locale'])
       ->set('client_name', $values['client_name'])
       ->set('site_id', $values['site_id'])
