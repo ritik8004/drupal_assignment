@@ -377,7 +377,7 @@
           height: 0.125rem;
         }
 
-        &:only-of-type {
+        &:last-of-type {
           margin-#{$right}: 0;
 
           &::after {
