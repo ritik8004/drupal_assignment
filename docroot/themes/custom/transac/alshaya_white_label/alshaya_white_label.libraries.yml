@@ -432,3 +432,8 @@ alshaya-stylefinder:
   css:
     theme:
       css/conditional-sass/alshaya-stylefinder/alshaya-stylefinder.ltr.css: {}
+
+bazaar-voice:
+  css:
+    theme:
+      css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: {}
