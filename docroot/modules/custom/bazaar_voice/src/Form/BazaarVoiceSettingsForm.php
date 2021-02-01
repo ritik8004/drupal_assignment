@@ -99,7 +99,10 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Site Id'),
       '#default_value' => $config->get('site_id'),
-      '#description' => $this->t('It is the value of deployment zone set in the Conversations configuration hub within the BazaarVoice Workbench. The default value is main_site.'),
+      '#description' => $this->t('It is the value of deployment zone set in the Conversations configuration hub within the BazaarVoice Workbench. The default value is main_site. Please read the document for more info @url', [
+        '@url' => Link::fromTextAndUrl($this->t('here'), Url::fromUri('https://developer.bazaarvoice.com/conversations-api/tutorials/bv-pixel/set-up'))
+          ->toString(),
+      ]),
     ];
 
     $form['basic_settings']['environment'] = [
