@@ -17,7 +17,15 @@ matrix:
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_non_transac
-    if: type IN (pull_request, cron)
+    # We are moving non-transac profile check from PR to CRON
+    # as only thing we check here is fresh install and we do
+    # not change frequently for install mode and that too anything
+    # impacting non-transac profile.
+    # If we do this with each PR number of travis builds are double
+    # and it impacts other PRs + projects as there is a limit in
+    # number of concurrent builds in Travis.
+    # if: type IN (pull_request, cron)
+    if: type IN (cron)
   #- php: 7.3
   #  env:
   #  - INSTALL_TYPE=update
