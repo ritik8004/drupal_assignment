@@ -4,7 +4,7 @@ bazaar_voice.settings:
   mapping:
     api_base_url:
       type: string
-      label: 'A base url provided by BazaarVoice.'
+      label: 'A base URL provided by BazaarVoice.'
     conversations_apikey:
       type: string
       label: 'A passkey provided by BazaarVoice.'
@@ -16,7 +16,7 @@ bazaar_voice.settings:
       label: 'API version.'
     bvpixel_base_url:
       type: string
-      label: 'Base url for BV pixel script provided by BazaarVoice.'
+      label: 'Base URL for BV pixel script provided by BazaarVoice.'
     locale:
       type: string
       label: 'To get the reviews data at a regional level.'
@@ -28,4 +28,4 @@ bazaar_voice.settings:
       label: 'The deployment zone set within the BazaarVoice Workbench.'
     environment:
       type: string
-      label: 'The deployment environment of BV where we implement BV Pixel.'
+      label: 'The deployment environment of BazaarVoice where we implement BV Pixel.'
