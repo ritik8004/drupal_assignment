@@ -7,12 +7,12 @@ const AuraRedeemOrderSummaryItem = (props) => {
   } = props;
   const label = Drupal.t('Aura points redeemed');
 
-  if (pointsRedeemed > 0) {
+  if (Math.abs(pointsRedeemed) > 0) {
     return (
       <div className="spc-order-summary-item aura-order-summary-item fadeInUp redeem" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-aura-label">{`${label}:`}</span>
         <span className="spc-aura-value">
-          {`-${pointsRedeemed}`}
+          {pointsRedeemed}
         </span>
       </div>
     );
