@@ -1,4 +1,4 @@
-  # Algolia React common config form
+  # Alshaya Olapic common config form
 alshaya_olapic.olapic_config_setting:
   path: '/admin/config/alshaya/olapic_config_setting'
   defaults:

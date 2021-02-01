@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install file.
+ * Install file for Alshaya Olapic.
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;

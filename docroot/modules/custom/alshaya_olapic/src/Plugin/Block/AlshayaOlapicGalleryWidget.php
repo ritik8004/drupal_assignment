@@ -7,8 +7,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Path\PathValidatorInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -38,20 +36,6 @@ class AlshayaOlapicGalleryWidget extends BlockBase implements ContainerFactoryPl
   protected $configFactory;
 
   /**
-   * The Path Validator service.
-   *
-   * @var \Drupal\Core\Path\PathValidatorInterface
-   */
-  protected $pathValidator;
-
-  /**
-   * The request stack service.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
    * Constructor.
    *
    * @param array $configuration
@@ -64,25 +48,17 @@ class AlshayaOlapicGalleryWidget extends BlockBase implements ContainerFactoryPl
    *   The language manager service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\Core\Path\PathValidatorInterface $pathValidator
-   *   The path validator service.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The request stack service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     LanguageManagerInterface $language_manager,
-    ConfigFactoryInterface $config_factory,
-    PathValidatorInterface $pathValidator,
-    RequestStack $requestStack
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
-    $this->pathValidator = $pathValidator;
-    $this->requestStack = $requestStack;
   }
 
   /**
@@ -100,8 +76,6 @@ class AlshayaOlapicGalleryWidget extends BlockBase implements ContainerFactoryPl
       $plugin_definition,
       $container->get('language_manager'),
       $container->get('config.factory'),
-      $container->get('path.validator'),
-      $container->get('request_stack'),
     );
   }
 
