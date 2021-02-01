@@ -6,8 +6,8 @@ services:
     factory: cache_factory:get
     arguments: [ bnpl ]
 
-  alshaya_acm_bnpl.api_helper:
-    class: Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmBnplAPIHelper
+  alshaya_bnpl.api_helper:
+    class: Drupal\alshaya_bnpl\Helper\AlshayaBnplAPIHelper
     arguments:
       - '@alshaya_api.api'
       - '@cache.bnpl'

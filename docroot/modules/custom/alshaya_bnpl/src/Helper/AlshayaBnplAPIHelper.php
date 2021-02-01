@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_bnpl\Helper;
+namespace Drupal\alshaya_bnpl\Helper;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -11,9 +11,9 @@ use Drupal\Core\Site\Settings;
 /**
  * Api helper for Postpay.
  *
- * @package Drupal\alshaya_acm_bnpl\Helper
+ * @package Drupal\alshaya_bnpl\Helper
  */
-class AlshayaAcmBnplAPIHelper {
+class AlshayaBnplAPIHelper {
 
   use LoggerChannelTrait;
 
@@ -39,7 +39,7 @@ class AlshayaAcmBnplAPIHelper {
   protected $cache;
 
   /**
-   * AlshayaAcmBnplAPIHelper constructor.
+   * AlshayaBnplAPIHelper constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
@@ -53,7 +53,7 @@ class AlshayaAcmBnplAPIHelper {
     $this->apiWrapper = $api_wrapper;
     $this->cache = $cache;
 
-    $this->logger = $this->getLogger('AlshayaAcmBnplAPIHelper');
+    $this->logger = $this->getLogger('AlshayaBnplAPIHelper');
   }
 
   /**
@@ -72,7 +72,7 @@ class AlshayaAcmBnplAPIHelper {
       return $configs;
     }
 
-    $cache_key = 'alshaya_acm_bnpl:api_configs';
+    $cache_key = 'alshaya_bnpl:api_configs';
 
     // Cache time in minutes, set 0 to disable caching.
     $cache_time = (int) Settings::get('postpay_cache_time', 60);
@@ -97,6 +97,9 @@ class AlshayaAcmBnplAPIHelper {
         $this->logger->error('Invalid response from Postpay api, @response', [
           '@response' => Json::encode($configs),
         ]);
+        $configs['merchantId'] = 'id_402c4dceb06d4dff8acd0356335de0f6';
+        $configs['environment'] = 'sandbox';
+        $configs['theme'] = 'light';
       }
       elseif (!empty($configs) && $cache_time > 0) {
         // Cache only if enabled (cache_time set).
