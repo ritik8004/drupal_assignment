@@ -97,13 +97,15 @@ class AlshayaBnplAPIHelper {
         $this->logger->error('Invalid response from Postpay api, @response', [
           '@response' => Json::encode($configs),
         ]);
-        $configs['merchantId'] = 'id_402c4dceb06d4dff8acd0356335de0f6';
-        $configs['environment'] = 'sandbox';
-        $configs['theme'] = 'light';
       }
       elseif (!empty($configs) && $cache_time > 0) {
         // Cache only if enabled (cache_time set).
         $this->cache->set($cache_key, $configs, strtotime("+${cache_time} minutes"));
+      }
+
+      if (isset($configs['merchant_id']) && empty($configs['merchant_id'])) {
+        $configs['merchant_id'] = 'id_402c4dceb06d4dff8acd0356335de0f6';
+        $configs['theme'] = 'light';
       }
     }
 
