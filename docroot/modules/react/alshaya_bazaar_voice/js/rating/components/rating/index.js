@@ -1,5 +1,6 @@
 import React from 'react';
 import fetchAPIData from '../../../utilities/api/apiData';
+import InlineRating from '../widgets/InlineRating';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
@@ -42,12 +43,7 @@ export default class Rating extends React.Component {
 
     return (
       <div className="rating-wrapper">
-        { Object.keys(ReviewsData).map((item) => (
-          <div>
-            <span className="input-label">{parseFloat(ReviewsData[item].ReviewStatistics.AverageOverallRating).toFixed(1)}</span>
-            <span className="input-label">{ReviewsData[item].ReviewStatistics.TotalReviewCount}</span>
-          </div>
-        ))}
+        <InlineRating ReviewsData={ReviewsData} />
       </div>
     );
   }

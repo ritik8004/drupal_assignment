@@ -67,6 +67,8 @@ function alshaya_white_label_preprocess_html(&$variables) {
   if (!empty($sub_brand_logo)) {
     $variables['attributes']['class'][] = 'sub-brand-logo';
   }
+  //Review and rating
+  $variables['#attached']['library'][] = 'alshaya_white_label/bazaar-voice';
 
   // Alias path class.
   $alias_class = preg_replace("/\//", '-', $alias);
