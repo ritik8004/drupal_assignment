@@ -14,7 +14,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class Alshaya Acm Redirect To SpcCart.
+ * Class Alshaya Olapic Redirect With Query String For Non Prod.
  */
 class OlapicRedirectEventsubscriber implements EventSubscriberInterface {
 
