@@ -18,6 +18,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import CheckoutComUpapiContextProvider from '../../../context/CheckoutComUpapi';
 import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi';
+import PaymentMethodCheckoutComUpapiApplePay from '../payment-method-checkout-com-upapi-apple-pay';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -27,6 +28,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodCybersource = React.createRef();
+    this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
   }
 
   validateBeforePlaceOrder = () => {
@@ -42,6 +44,10 @@ export default class PaymentMethod extends React.Component {
 
     if (method.code === 'checkout_com_applepay') {
       return this.paymentMethodApplePay.current.validateBeforePlaceOrder();
+    }
+
+    if (method.code === 'checkout_com_upapi_applepay') {
+      return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
     }
 
     if (method.code === 'cybersource') {
@@ -140,6 +146,12 @@ export default class PaymentMethod extends React.Component {
       }
     }
 
+    if (method.code === 'checkout_com_upapi_applepay') {
+      if (!(ApplePay.isAvailable())) {
+        return (null);
+      }
+    }
+
     return (
       <>
         <div className={`payment-method fadeInUp payment-method-${method.code}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
@@ -218,6 +230,14 @@ export default class PaymentMethod extends React.Component {
           <ConditionalView condition={isSelected && method.code === 'checkout_com_applepay'}>
             <PaymentMethodApplePay
               ref={this.paymentMethodApplePay}
+              cart={cart}
+              finalisePayment={this.finalisePayment}
+            />
+          </ConditionalView>
+
+          <ConditionalView condition={isSelected && method.code === 'checkout_com_upapi_applepay'}>
+            <PaymentMethodCheckoutComUpapiApplePay
+              ref={this.paymentMethodCheckoutComUpapiApplePay}
               cart={cart}
               finalisePayment={this.finalisePayment}
             />

@@ -411,7 +411,7 @@ const PaymentMethodIcon = (props) => {
       </svg>
     );
   }
-  if (methodName === 'checkout_com_applepay') {
+  if (methodName === 'checkout_com_applepay' || methodName === 'checkout_com_upapi_applepay') {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="50" height="32" viewBox="0 0 50 32">
         <defs>
