@@ -12,11 +12,16 @@
       box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.24);
       border: none;
       color: $aura-order-confirmation-points-tooltip-txt;
-      bottom: 1.5rem;
+      bottom: 1.75rem;
+      #{$left}: 50%;
+      transform: translateX(-50%);
 
-      @include breakpoint($only-mobile) {
-        #{$left}: -10rem;
-        transform: none;
+      html[lang=ar] & {
+        transform: translateX(50%);
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$left}: -50%;
       }
 
       &::before,
