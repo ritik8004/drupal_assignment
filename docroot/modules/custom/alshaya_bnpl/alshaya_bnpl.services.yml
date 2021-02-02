@@ -11,3 +11,11 @@ services:
     arguments:
       - '@alshaya_api.api'
       - '@cache.bnpl'
+
+  alshaya_bnpl.widget_helper:
+    class: Drupal\alshaya_bnpl\Helper\AlshayaBnplWidgetHelper
+    arguments:
+      - '@current_route_match'
+      - '@language_manager'
+      - '@config.factory'
+      - '@alshaya_acm_product.skumanager'
