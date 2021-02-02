@@ -23,13 +23,13 @@ const DescriptionContent = (props) => {
           />
         </div>
         <div className="magv2-desc-popup-content-wrapper">
+          <PdpFullDescription
+            pdpDescription={pdpDescription}
+          />
           <div className="magv2-desc-popup-pdp-item-code-attribute">
             <span className="magv2-pdp-section-text dark magv2-desc-popup-pdp-item-code-label">Item Code:</span>
             <span className="magv2-pdp-section-text magv2-desc-popup-pdp-item-code-value">{skuCode}</span>
           </div>
-          <PdpFullDescription
-            pdpDescription={pdpDescription}
-          />
         </div>
       </div>
     </div>

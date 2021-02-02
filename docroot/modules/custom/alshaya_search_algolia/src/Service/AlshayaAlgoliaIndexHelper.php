@@ -369,7 +369,12 @@ class AlshayaAlgoliaIndexHelper {
       $object['promotion_nid'][] = $promotionRecord['id'];
 
       // Used for facets.
-      $object['field_acq_promotion_label'][] = $promotionRecord['text'];
+      if (in_array('web', $promotionRecord['context'])) {
+        $object['field_acq_promotion_label']['web'][] = $promotionRecord['text'];
+      }
+      if (in_array('app', $promotionRecord['context'])) {
+        $object['field_acq_promotion_label']['app'][] = $promotionRecord['text'];
+      }
     }
 
     // Product Images.
@@ -395,6 +400,11 @@ class AlshayaAlgoliaIndexHelper {
 
     if ($attr_style = $sku->get('attr_style')->getString()) {
       $object['attr_style'] = $attr_style;
+    }
+
+    $attr_barcode = $sku->get('attr_aims_barcode')->getString();
+    if ($attr_barcode) {
+      $object['attr_aims_barcode'] = $attr_barcode;
     }
 
     $object['url'] = $this->skuInfoHelper->getEntityUrl($node, FALSE);
@@ -921,6 +931,79 @@ class AlshayaAlgoliaIndexHelper {
     $this->logger->notice('Added attribute(s) for faceting: @attributes', [
       '@attributes' => implode(',', $attributes),
     ]);
+  }
+
+  /**
+   * Helps to update/remove replicas index in algolia.
+   *
+   * @param array $sorts
+   *   The list of the fields to be used in sort index.
+   * @param int $req_attempts
+   *   No of request attempts to algolia.
+   */
+  public function updateReplicaIndex(array $sorts, int $req_attempts = 0) {
+    try {
+      $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
+      $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
+      $client = new Client($backend_config['application_id'], $backend_config['api_key']);
+      $index_name = $client_config['algolia_index_name'];
+
+      foreach ($this->languageManager->getLanguages() as $language) {
+        $index = $client->initIndex($index_name . '_' . $language->getId());
+        $name = $index_name . '_' . $language->getId();
+        $settings = $index->getSettings();
+        unset($settings['replicas']);
+        $ranking = $settings['ranking'];
+
+        foreach ($sorts as $sort) {
+          $replica = $name . '_' . implode('_', $sort);
+          $settings['replicas'][] = $replica;
+        }
+
+        $index->setSettings($settings, TRUE);
+
+        foreach ($sorts as $sort) {
+          $replica = $name . '_' . implode('_', $sort);
+          $replica_index = $client->initIndex($replica);
+          $replica_settings = $replica_index->getSettings();
+          $replica_settings['ranking'] = [
+            'desc(stock)',
+            $sort['direction'] . '(' . $sort['field'] . ')',
+          ] + $ranking;
+          $replica_index->setSettings($replica_settings);
+        }
+      }
+      sleep(3);
+    }
+    catch (\Exception $e) {
+      $this->logger->warning('Error occurred while creating replica index: %message', [
+        '%message' => $e->getMessage(),
+      ]);
+
+      if ($req_attempts < 3) {
+        return $this->updateReplicaIndex($sorts, $req_attempts++);
+      }
+    }
+  }
+
+  /**
+   * Helps to prepare fields to create replicas.
+   *
+   * @param array $sort_options
+   *   The list of options.
+   */
+  public function prepareFieldsToSort(array $sort_options) {
+    $sorts = [];
+    foreach ($sort_options as $value) {
+      if ($value !== 0) {
+        if ($value != 'created') {
+          $sorts[] = ['field' => $value, 'direction' => 'asc'];
+        }
+        $sorts[] = ['field' => $value, 'direction' => 'desc'];
+      }
+    }
+
+    return $sorts;
   }
 
 }

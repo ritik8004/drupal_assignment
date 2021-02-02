@@ -54,6 +54,8 @@
       margin-top: 2.125rem;
 
       @include breakpoint($desktop) {
+        z-index: 11;
+
         html[lang=ar] & {
           margin-right: 0.5rem;
           font-size: 1rem;

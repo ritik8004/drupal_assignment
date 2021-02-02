@@ -1,0 +1,7 @@
+name: Cache tags cleanup
+type: module
+description: Remove cache tags for all deleted entities.
+package: Others
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9

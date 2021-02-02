@@ -15,6 +15,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Class Alshaya Promo Label Manager.
@@ -93,6 +94,13 @@ class AlshayaPromoLabelManager {
   protected $languageManager;
 
   /**
+   * Alshaya Promotions Context Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   */
+  protected $promoContextManager;
+
+  /**
    * AlshayaPromoLabelManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -111,6 +119,8 @@ class AlshayaPromoLabelManager {
    *   Renderer.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
    */
   public function __construct(SkuManager $sku_manager,
                               SkuImagesManager $images_manager,
@@ -119,7 +129,8 @@ class AlshayaPromoLabelManager {
                               ConfigFactoryInterface $configFactory,
                               AlshayaPromotionsManager $promotions_manager,
                               RendererInterface $renderer,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              AlshayaPromoContextManager $alshayaPromoContextManager) {
     $this->skuManager = $sku_manager;
     $this->imagesManager = $images_manager;
     $this->entityTypeManager = $entity_type_manager;
@@ -128,6 +139,7 @@ class AlshayaPromoLabelManager {
     $this->promoManager = $promotions_manager;
     $this->renderer = $renderer;
     $this->languageManager = $language_manager;
+    $this->promoContextManager = $alshayaPromoContextManager;
   }
 
   /**
@@ -249,8 +261,9 @@ class AlshayaPromoLabelManager {
    */
   public function getCurrentSkuPromos(SKU $sku, $view_mode) {
     $promos = [];
+    $context = $this->promoContextManager->getPromotionContext();
 
-    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
+    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart'], $context);
 
     foreach ($promotion_nodes as $promotion_node) {
       if (is_numeric($promotion_node)) {
@@ -555,9 +568,9 @@ class AlshayaPromoLabelManager {
    */
   public function getPromotionLabelForProductDetail(SKU $sku, string $view_mode, $context = '') {
     // Get promotions for the product.
-    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart']);
+    $promotion_nodes = $this->skuManager->getSkuPromotions($sku, ['cart'], $context);
     $displayMode = $view_mode === 'api' ? 'api' : 'links';
-    $promotions = $this->skuManager->preparePromotionsDisplay($sku, $promotion_nodes, $displayMode, ['cart'], 'full');
+    $promotions = $this->skuManager->preparePromotionsDisplay($sku, $promotion_nodes, $displayMode, ['cart'], 'full', TRUE, $context);
 
     // Return early if no promotions found for product in context.
     if (empty($promotions)) {
@@ -611,7 +624,7 @@ class AlshayaPromoLabelManager {
         return [];
       }
 
-      if ($context == 'mapp') {
+      if ($context == 'app') {
         return $free_promotion;
       }
 
@@ -694,7 +707,7 @@ class AlshayaPromoLabelManager {
    * @param \Drupal\acq_sku\Entity\SKU[] $free_skus
    *   Array of Free SKUs.
    * @param string $context
-   *   Context - mapp/web.
+   *   Context - app/web.
    *
    * @return array
    *   Render array.
@@ -837,7 +850,7 @@ class AlshayaPromoLabelManager {
       }
 
       // Context to expose free gift data in mobile api.
-      if ($context == 'mapp') {
+      if ($context == 'app') {
 
         $return = [
           'free_sku_code' => $free_sku_entity->getSku(),
@@ -877,7 +890,7 @@ class AlshayaPromoLabelManager {
    * @param array $free_gift_promotions
    *   Free Gift promotions.
    * @param string $context
-   *   Context - mapp/web.
+   *   Context - app/web.
    *
    * @return array
    *   Promotion data for first available free gift promotion.

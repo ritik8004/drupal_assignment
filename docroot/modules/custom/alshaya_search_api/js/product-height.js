@@ -111,11 +111,13 @@
         var nextIndex = parseInt(index) + 1;
         if (typeof sections[nextIndex] == 'undefined') {
           currentTiles = $(sections[index]).nextAll();
+        } else {
+          if ($(sections[index]).find('.c-products__item').length === 0) {
+            currentTiles = $(sections[index]).nextUntil(sections[nextIndex]);
+          } else {
+            currentTiles = $(sections[index]).find('.c-products__item');
+          }
         }
-        else {
-          currentTiles = $(sections[index]).nextUntil(sections[nextIndex]);
-        }
-
         var totalCount = currentTiles.length;
         var loopCount = Math.ceil(totalCount / gridCount);
         var indexStart, indexEnd = 0;

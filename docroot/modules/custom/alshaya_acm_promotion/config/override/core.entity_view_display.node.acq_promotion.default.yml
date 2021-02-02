@@ -2,6 +2,8 @@ dependencies:
   config:
     - field.field.node.acq_promotion.field_alshaya_promotion_subtype
     - field.field.node.acq_promotion.field_acq_promotion_full_catalog
+    - field.field.node.acq_promotion.field_acq_promotion_context
 hidden:
   field_alshaya_promotion_subtype: true
   field_acq_promotion_full_catalog: true
+  field_acq_promotion_context: true

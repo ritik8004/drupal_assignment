@@ -842,13 +842,8 @@ header {
     > .menu-two__link-wrapper {
       margin-#{$left}: 0 !important;
       margin-#{$right}: 0 !important;
+      padding-#{$left}: 1rem;
     }
-  }
-
-  .menu--three__list-item,
-  .menu--four__list-item {
-    margin-#{$left}: 0.625rem;
-    margin-#{$right}: 0.625rem;
   }
 
   .menu__in {

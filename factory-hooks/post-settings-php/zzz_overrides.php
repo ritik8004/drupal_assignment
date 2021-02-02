@@ -34,8 +34,9 @@ $country_code = $site_country_code['country_code'];
 $settings_path = $home . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings';
 
 $stack_file = $settings_path . '.php';
-if (file_exists($stack_file)) {
-  include_once $stack_file;
+if (empty($settings['alshaya_override_stack_file_included']) && file_exists($stack_file)) {
+  include $stack_file;
+  $settings['alshaya_override_stack_file_included'] = TRUE;
 }
 
 $brand_country_file = $settings_path . '-' . $acsf_site_code . $country_code . '.php';

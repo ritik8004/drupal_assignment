@@ -660,6 +660,11 @@ class CartController {
           // or bad data. i.e. checkout.com cvv missing.
           $this->cart->cancelCartReservation($e->getMessage());
 
+          // Return error message and code on OOS.
+          if ($e->getCode() == CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+            return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH));
+          }
+
           return new JsonResponse([
             'error' => TRUE,
             'message' => $e->getMessage(),

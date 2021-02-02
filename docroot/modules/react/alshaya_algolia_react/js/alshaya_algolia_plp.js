@@ -159,10 +159,11 @@
   Drupal.algoliaReactPLP.stickyfacetfilter = function () {
     var algoliaReactFilterPosition = 0;
     var superCategoryMenuHeight = 0;
-    var position = 0;
     var nav = $('.branding__menu');
     var fixedNavHeight = 0;
     var context = $('#alshaya-algolia-plp');
+    var subCategoryBlock = $('.block-alshaya-sub-category-block');
+    var filter = $('#alshaya-algolia-plp');
 
     if ($('.show-all-filters-algolia', context).length > 0) {
       if ($(window).width() > 1023) {
@@ -186,12 +187,81 @@
         if ($(this).scrollTop() > algoliaReactFilterPosition) {
           context.addClass('filter-fixed-top');
           $('body').addClass('header-sticky-filter');
+          if ($(this).width() > 767 && subCategoryBlock.length > 0) {
+            if (!subCategoryBlock.hasClass('anti-ghosting') && !subCategoryBlock.hasClass('anti-ghosting-done')) {
+              subCategoryBlock.addClass('anti-ghosting');
+            }
+          }
         } else {
           context.removeClass('filter-fixed-top');
           $('body').removeClass('header-sticky-filter');
+          if (subCategoryBlock.length > 0) {
+            // Desktop & Tablet.
+            subCategoryBlock.removeClass('anti-ghosting-done');
+          }
+        }
+      }
+
+      if (subCategoryBlock.length > 0) {
+        if ($(window).width() < 1024) {
+          if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter')) {
+            if (this.oldScroll > this.pageYOffset) {
+              // Action to perform when we scrolling up.
+              if (!subCategoryBlock.hasClass('mobile-sticky-sub-category') && subCategoryBlock.length > 0) {
+                // Tablet.
+                if ($(window).width() > 767) {
+                  subCategoryBlock.removeClass('anti-ghosting');
+                  subCategoryBlock.addClass('anti-ghosting-done');
+                }
+                // This small delay to ensure the entry animations works.
+                setTimeout(() => {
+                  subCategoryBlock.addClass('mobile-sticky-sub-category');
+                }, 5);
+              }
+            } else {
+              // Action to perform when we are scrolling down.
+              if (subCategoryBlock.hasClass('mobile-sticky-sub-category')) {
+                subCategoryBlock.removeClass('mobile-sticky-sub-category');
+              }
+            }
+          } else {
+            if (subCategoryBlock.hasClass('mobile-sticky-sub-category')) {
+              subCategoryBlock.removeClass('mobile-sticky-sub-category');
+            }
+          }
+          this.oldScroll = this.pageYOffset;
+        } else {
+          if (filter.hasClass('filter-fixed-top') && $('body').hasClass('header-sticky-filter') && subCategoryBlock.length > 0) {
+            if (this.oldScroll > this.pageYOffset) {
+              // Action to perform when we scrolling up.
+              if (!$('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                if ($(this).width() > 1024 && subCategoryBlock.length > 0) {
+                  subCategoryBlock.removeClass('anti-ghosting');
+                  subCategoryBlock.addClass('anti-ghosting-done');
+                  // This small delay to ensure the entry animations works.
+                  setTimeout(() => {
+                    $('.sticky-filter-wrapper').addClass('show-sub-category');
+                  }, 5);
+                } else {
+                  $('.sticky-filter-wrapper').addClass('show-sub-category');
+                }
+              }
+            } else {
+              if (this.oldScroll < this.pageYOffset || this.oldScroll !== this.pageYOffset) {
+                // Action to perform when we are scrolling down.
+                if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+                  $('.sticky-filter-wrapper').removeClass('show-sub-category');
+                }
+              }
+            }
+          } else {
+            if ($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+              $('.sticky-filter-wrapper').removeClass('show-sub-category');
+            }
+          }
+          this.oldScroll = this.pageYOffset;
         }
       }
     });
   };
-
 })(jQuery, Drupal);

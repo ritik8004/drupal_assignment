@@ -16,7 +16,7 @@ const PromotionsDynamicLabelsUtil = {
 
     let apiUrl = Drupal.url('promotions/dynamic-label-cart');
     // We set cacheable=1 so it is always treated as anonymous user request.
-    apiUrl = `${apiUrl}?cacheable=1&${Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData)}`;
+    apiUrl = `${apiUrl}?cacheable=1&context=web&${Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData)}`;
 
     Axios.get(apiUrl).then((response) => {
       if (response.data.cart_labels !== undefined || response.data.products_labels !== undefined) {

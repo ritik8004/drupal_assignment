@@ -110,3 +110,9 @@ fields:
     label: 'Is same day delivery'
     type: 'string'
     description: 'Sku applicable for same day delivery or not.'
+
+  aims_barcode:
+    label: 'Barcode'
+    type: 'string'
+    description: 'Sku Barcode.'
+    translatable: 0

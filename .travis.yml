@@ -72,6 +72,7 @@ notifications:
 
 before_install:
   # Disable xdebug.
+  - ${BUILD_DIR}/blt/scripts/deploy_branch_validate.sh
   - phpenv config-rm xdebug.ini
   - composer self-update --1
   - git config --global github.accesstoken "${GITHUB_OAUTH_TOKEN}"
@@ -109,7 +110,7 @@ script:
 
 deploy:
   - provider: script
-    script: ${BUILD_DIR}/blt/scripts/deploy_branch.sh
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
     skip_cleanup: true
     on:
       all_branches: true

@@ -6,6 +6,7 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_category_include_menu
   - field.field.taxonomy_term.acq_product_category.field_commerce_id
   - field.field.taxonomy_term.acq_product_category.field_commerce_status
+  - field.field.taxonomy_term.acq_product_category.field_cta
   - field.field.taxonomy_term.acq_product_category.field_image_text_bg_color
   - field.field.taxonomy_term.acq_product_category.field_image_text_font_color
   - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
@@ -20,8 +21,10 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_show_in_app_navigation
   - taxonomy.vocabulary.acq_product_category
   - field.field.taxonomy_term.acq_product_category.field_show_in_lhn
+  - field.field.taxonomy_term.acq_product_category.field_show_on_department_page
   - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
   - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
+  - field.field.taxonomy_term.acq_product_category.field_display_view_all
   - field.field.taxonomy_term.acq_product_category.field_dy_banner
   - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
   - field.field.taxonomy_term.acq_product_category.field_plp_menu
@@ -71,7 +74,9 @@ hidden:
   field_category_quicklink_plp_mob: true
   field_commerce_id: true
   field_commerce_status: true
+  field_cta: true
   field_display_as_clickable_link: true
+  field_display_view_all: true
   field_icon: true
   field_image_text_bg_color: true
   field_image_text_font_color: true
@@ -87,6 +92,7 @@ hidden:
   field_promotion_banner_mobile: true
   field_show_in_app_navigation: true
   field_show_in_lhn: true
+  field_show_on_department_page: true
   field_size_guide_anchor: true
   field_target_link: true
   field_term_background_color: true

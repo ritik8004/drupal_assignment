@@ -38,28 +38,37 @@ echo -e "\n"
 
 ## In case install/config file have been updated, we reset the sites.
 if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
-  echo "Change in install file detected, restoring databases before executing updb."
+  # @TODO: Test this and enable it back after we manage to stage sites more frequently.
+  # echo "Change in install file detected, restoring databases before executing updb."
+  # ./../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
 
-  ./../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
+  echo "Change in install file detected, executing updb."
+
+  if [ $slack == 1 ]; then
+    curl -X POST --data-urlencode "payload={\"username\": \"${AH_SITE_NAME}\", \"text\": \"Executing drupal updates on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+  fi
+  drush acsf-tools-ml updb
 elif echo $(cat ../git-diff.txt) | grep "\.scss\|\.js\|\.twig\|\.theme"; then
   echo "Change in FE detected, clearing cache."
 
   if [ $slack == 1 ]; then
-    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Clearing drupal cache to reflect FE changes on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+    curl -X POST --data-urlencode "payload={\"username\": \"${AH_SITE_NAME}\", \"text\": \"Clearing drupal cache to reflect FE changes on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
   fi
   drush acsf-tools-ml crf
 else
   if [ $slack == 1 ]; then
-    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+    curl -X POST --data-urlencode "payload={\"username\": \"${AH_SITE_NAME}\", \"text\": \"No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
   fi
 fi
 
 echo -e "\n"
 
+# Commenting this as we do not do it on production.
+# @TODO: Remove after we validate no negative impact on testing for at-least a month.
 ## Clear varnish caches for all domains of this environment.
-./../scripts/utilities/clear-varnish.sh $subscription $target_env
+# ./../scripts/utilities/clear-varnish.sh $subscription $target_env
 
 if [ $slack == 1 ]; then
-  curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Varnish cache cleared on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
-  curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Post code update on $target_env finished.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+  # curl -X POST --data-urlencode "payload={\"username\": \"${AH_SITE_NAME}\", \"text\": \"Varnish cache cleared on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+  curl -X POST --data-urlencode "payload={\"username\": \"${AH_SITE_NAME}\", \"text\": \"Post code update on $target_env finished.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
 fi

@@ -250,6 +250,13 @@ class SkuManager {
   protected $productProcessedManager;
 
   /**
+   * Alshaya Promotions Context Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   */
+  protected $promoContextManager;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -296,6 +303,8 @@ class SkuManager {
    *   Alshaya array utility service.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -318,7 +327,8 @@ class SkuManager {
                               ProductInfoHelper $product_info_helper,
                               ProductCacheManager $product_cache_manager,
                               AlshayaArrayUtils $alshayaArrayUtils,
-                              ProductProcessedManager $product_processed_manager) {
+                              ProductProcessedManager $product_processed_manager,
+                              AlshayaPromoContextManager $alshayaPromoContextManager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -344,6 +354,7 @@ class SkuManager {
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
     $this->productProcessedManager = $product_processed_manager;
+    $this->promoContextManager = $alshayaPromoContextManager;
   }
 
   /**
@@ -806,6 +817,8 @@ class SkuManager {
    *   Product SKU.
    * @param array $types
    *   Promotion Types.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array
    *   List of Promotion Nids.
@@ -813,9 +826,9 @@ class SkuManager {
   public function getSkuPromotions(SKU $sku, array $types = [
     'cart',
     'category',
-  ]) {
+  ], $context = '') {
     // Get promotions for the product.
-    $cache_key = 'promotion_ids_' . implode('-', $types);
+    $cache_key = 'promotion_ids_' . implode('-', $types) . '_' . $context;
     $promotion_nids = $this->productCacheManager->get($sku, $cache_key);
 
     if (is_array($promotion_nids)) {
@@ -844,6 +857,9 @@ class SkuManager {
       $query->condition('nid', $promotion_nids, 'IN');
       $query->condition('field_acq_promotion_type', $types, 'IN');
       $query->condition('status', NodeInterface::PUBLISHED);
+      if (!empty($context)) {
+        $query->condition('field_acq_promotion_context', $context);
+      }
       $query->exists('field_acq_promotion_label');
       $promotion_nids = $query->execute();
     }
@@ -913,6 +929,8 @@ class SkuManager {
    *   Product view mode for which promotion is being rendered.
    * @param bool $check_parent
    *   Flag to specify if we should check parent sku or not.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
@@ -922,7 +940,8 @@ class SkuManager {
                                            $view_mode,
                                            array $types = ['cart', 'category'],
                                            $product_view_mode = NULL,
-                                           $check_parent = TRUE) {
+                                           $check_parent = TRUE,
+                                           $context = '') {
     $promos = [];
     $view_mode_original = $view_mode;
 
@@ -1008,6 +1027,11 @@ class SkuManager {
           }
           $data = unserialize($promotion_node->get('field_acq_promotion_data')->getString());
           $promos[$promotion_node->id()]['promo_type'] = $data['extension']['promo_type'] ?? self::FREE_GIFT_SUB_TYPE_ALL_SKUS;
+          $promotion_context = $promotion_node->get('field_acq_promotion_context')->getValue();
+          $promos[$promotion_node->id()]['context'] = ['web', 'app'];
+          if (!empty($promotion_context)) {
+            $promos[$promotion_node->id()]['context'] = array_column($promotion_context, 'value');
+          }
           break;
       }
     }
@@ -1023,7 +1047,7 @@ class SkuManager {
     if (empty($promos) && $check_parent) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
         if ($parentSku->getSku() != $sku->getSku()) {
-          return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode, FALSE);
+          return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode, FALSE, $context);
         }
       }
     }
@@ -1044,6 +1068,8 @@ class SkuManager {
    *   Product view mode for which promotion is being rendered.
    * @param bool $check_parent
    *   Flag to specify if we should check parent sku or not.
+   * @param string $context
+   *   Promotion context.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
@@ -1052,9 +1078,13 @@ class SkuManager {
                                          $view_mode,
                                          array $types = ['cart', 'category'],
                                          $product_view_mode = NULL,
-                                         $check_parent = TRUE) {
+                                         $check_parent = TRUE,
+                                         $context = '') {
     $promos = [];
-    $promotion_nodes = $this->getSkuPromotions($sku, $types);
+    if (empty($context)) {
+      $context = $this->promoContextManager->getPromotionContext();
+    }
+    $promotion_nodes = $this->getSkuPromotions($sku, $types, $context);
     if (!empty($promotion_nodes)) {
       $promos = $this->preparePromotionsDisplay($sku, $promotion_nodes, $view_mode, $types, $product_view_mode, $check_parent);
     }
@@ -2536,8 +2566,9 @@ class SkuManager {
     }
 
     // For all web requests we don't want to show the products
-    // that are not processed yet.
+    // that are not processed yet except for free gifts.
     if (PHP_SAPI != 'cli'
+      && !($this->isSkuFreeGift($sku))
       && !($this->productProcessedManager->isProductProcessed($sku->getSku()))) {
       return FALSE;
     }

@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -155,4 +156,24 @@ function alshaya_search_algolia_alshaya_seo_google_sitelink_searchbox_url_alter(
 function alshaya_search_algolia_alshaya_search_filter_link_alter(&$link, array &$data) {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $link = '/' . $langcode . '/search#refinementList[attr_' . $data['attribute_code'] . '][0]=';
+}
+
+
+/**
+ * Implements hook_srp_sort_settings_form_alter().
+ */
+function alshaya_search_algolia_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#submit'][] = '_alshaya_search_algolia_sort_settings_submit';
+}
+
+/**
+ * A submit handler to manage replicas in aloglia/drupal.
+ */
+function _alshaya_search_algolia_sort_settings_submit(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+  if (!empty($values['sort_options'])) {
+    $algolia_search_helper = \Drupal::service('alshaya_search_algolia.index_helper');
+    $sort_fields = $algolia_search_helper->prepareFieldsToSort($values['sort_options']);
+    $algolia_search_helper->updateReplicaIndex($sort_fields);
+  }
 }

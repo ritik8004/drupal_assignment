@@ -84,6 +84,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   private $connection;
 
   /**
+   * Api helper object.
+   *
+   * @var \Drupal\acq_sku\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -102,8 +109,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Module handler service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
+   * @param \Drupal\acq_sku\ApiHelper $api_helper
+   *   The api helper object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler, Connection $connection) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler, Connection $connection, ApiHelper $api_helper) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
@@ -113,6 +122,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->i18nHelper = $i18n_helper;
     $this->modulehandler = $moduleHandler;
     $this->connection = $connection;
+    $this->apiHelper = $api_helper;
   }
 
   /**
@@ -129,7 +139,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       if ($store_id) {
         // Load Conductor Category data.
-        $categories = [$this->loadCategoryData($store_id)];
+        $categories = [$this->loadCategoryData($langcode)];
 
         if ($debug && !empty($debug_dir)) {
           // Export category data into file.
@@ -219,19 +229,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   }
 
   /**
-   * LoadCategoryData.
-   *
-   * Load the commerce backend category data from Conductor.
-   *
-   * @param int $store_id
-   *   Store id for which we should get categories.
-   *
-   * @return array
-   *   Array of categories.
+   * {@inheritDoc}
    */
-  public function loadCategoryData($store_id) {
-    $this->apiWrapper->updateStoreContext($store_id);
-    return $this->apiWrapper->getCategories();
+  public function loadCategoryData(string $langcode) {
+    return $this->apiHelper->getCategories($langcode);
   }
 
   /**
@@ -306,6 +307,11 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       // If lancode is not available, means no mapping of store and language.
       if (!$langcode) {
+        $this->logger->warning('Language code not found for store id: @store_id, language: @language.', [
+          '@store_id' => $category['store_id'],
+          '@language' => $langcode,
+        ]);
+
         continue;
       }
 

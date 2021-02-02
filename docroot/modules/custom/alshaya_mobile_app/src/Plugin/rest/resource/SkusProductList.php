@@ -190,10 +190,12 @@ class SkusProductList extends ResourceBase {
     $skus = explode(',', $sku_list);
     $data = [];
     $sku_cache_tags = [];
+    $with_parent_details = (bool) $this->requestStack->query->get('with_parent_details');
+
     foreach ($skus as $value) {
       $skuEntity = SKU::loadFromSku($value);
       if (($skuEntity instanceof SKUInterface)) {
-        $data[] = $this->getSkuData($skuEntity);
+        $data[] = $this->getSkuData($skuEntity, '', $with_parent_details);
         $sku_cache_tags[] = $skuEntity->getCacheTags();
       }
       else {
@@ -226,11 +228,13 @@ class SkusProductList extends ResourceBase {
    *   SKU Entity.
    * @param string $link
    *   Product link if main product.
+   * @param bool $with_parent_details
+   *   Flag to identify whether to get parent details or not.
    *
    * @return array
    *   Product Data.
    */
-  private function getSkuData(SKUInterface $sku, string $link = ''): array {
+  private function getSkuData(SKUInterface $sku, string $link = '', bool $with_parent_details = FALSE): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
 
@@ -254,6 +258,12 @@ class SkusProductList extends ResourceBase {
     $data['stock'] = $stockInfo['stock'];
     $data['in_stock'] = $stockInfo['in_stock'];
     $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
+
+    if ($with_parent_details === TRUE) {
+      $plugin = $sku->getPluginInstance();
+      $data['parent_max_sale_qty'] = $parent_sku ? (int) $plugin->getMaxSaleQty($parent_sku) : NULL;
+    }
+
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],
@@ -288,7 +298,7 @@ class SkusProductList extends ResourceBase {
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($sku);
     $data['labels'] = $this->skuManager->getSkuLabels($sku, 'plp');
-    $this->moduleHandler->alter('alshaya_mobile_app_skus_product_list_data', $data, $sku);
+    $this->moduleHandler->alter('alshaya_mobile_app_skus_product_list_data', $data, $sku, $with_parent_details);
     return $data;
   }
 
@@ -324,7 +334,7 @@ class SkusProductList extends ResourceBase {
    */
   private function getPromotions(SKUInterface $sku): array {
     $promotions = [];
-    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full');
+    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', TRUE, 'app');
     foreach ($promotions_data as $nid => $promotion) {
       if (is_numeric($nid)) {
         $this->cache['tags'][] = 'node:' . $nid;

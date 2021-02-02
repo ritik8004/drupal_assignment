@@ -5,7 +5,7 @@ export const sliderSettings = {
   dots: true,
   infinite: false,
   arrows: false,
-  appendDots: (dots) => <MagicSliderDots dots={dots} numDotsToShow={5} dotWidth={30} />,
+  appendDots: (dots) => <MagicSliderDots dots={dots} numDotsToShow={5} dotWidth={25} />,
 };
 
 export const fullScreenSliderSettings = {

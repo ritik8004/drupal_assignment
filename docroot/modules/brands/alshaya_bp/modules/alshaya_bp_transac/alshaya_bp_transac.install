@@ -12,6 +12,42 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * Provide sorting option A-Z / Z-A by brand in srp/plp.
+ */
+function alshaya_bp_transac_update_8012() {
+  // Update srp sorting configurations.
+  $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
+  $labels = $config->get('sort_options_labels');
+  $new_labels = [
+    [
+      'value' => 'attr_brand ASC',
+      'label' => 'Brand A to Z'
+    ],
+    [
+      'value' => 'attr_brand DESC',
+      'label' => 'Brand Z to A'
+    ],
+  ];
+  $labels = array_merge($labels, $new_labels);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+
+  // Update plp sorting configurations.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
+  // Update available option.
+  $available_sort_options = $config->get('available_sort_options');
+  $available_sort_options['attr_brand'] = 'Brand';
+  $config->set('available_sort_options', $available_sort_options);
+  // Update sorting options labels
+  $labels = $config->get('sort_options_labels');
+  $labels = array_merge($labels, $new_labels);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set hide_max_qty_limit_message => true to hide max qty limit on pdp/cart.
  */
 function alshaya_bp_transac_update_8011() {

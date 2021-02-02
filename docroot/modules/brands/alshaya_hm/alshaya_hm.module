@@ -415,15 +415,15 @@ function alshaya_hm_alshaya_acm_product_light_product_data_alter(SKU $sku, array
 /**
  * Implements hook_alshaya_mobile_app_product_exclude_linked_data_alter().
  */
-function alshaya_hm_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku) {
-  $data['collection_labels'] = _alshaya_hm_process_collection_labels_for_mobile_app($sku, 'pdp');
+function alshaya_hm_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku, bool $with_parent_details) {
+  $data['collection_labels'] = _alshaya_hm_process_collection_labels_for_mobile_app($sku, 'pdp', $with_parent_details);
 }
 
 /**
  * Implements hook_mobile_app_skus_product_list_data_alter().
  */
-function alshaya_hm_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
-  $data['collection_labels'] = _alshaya_hm_process_collection_labels_for_mobile_app($sku, 'pdp');
+function alshaya_hm_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku, bool $with_parent_details) {
+  $data['collection_labels'] = _alshaya_hm_process_collection_labels_for_mobile_app($sku, 'pdp', $with_parent_details);
 }
 
 /**
@@ -433,13 +433,21 @@ function alshaya_hm_alshaya_mobile_app_skus_product_list_data_alter(array &$data
  *   The sku object.
  * @param string $context
  *   The context, if pdp or plp.
+ * @param bool $with_parent_details
+ *   Flag to identify whether to get parent details or not.
  *
  * @return mixed
  *   An associative array of collection labels or an empty stdclass object, so
  *   that the output is always a Json object.
  */
-function _alshaya_hm_process_collection_labels_for_mobile_app(SKUInterface $sku, string $context) {
+function _alshaya_hm_process_collection_labels_for_mobile_app(SKUInterface $sku, string $context, bool $with_parent_details = FALSE) {
   $product_info_helper = \Drupal::service('acq_sku.product_info_helper');
+
+  if ($with_parent_details === TRUE) {
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getParentSkuBySku($sku) ?? $sku;
+  }
+
   $collection_labels = $product_info_helper->getValue($sku, 'collection_labels', $context);
   return (!empty($collection_labels)) ? $collection_labels : (object) $collection_labels;
 }

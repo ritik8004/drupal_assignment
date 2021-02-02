@@ -2,15 +2,14 @@ import React from 'react';
 import Slider from 'react-slick';
 import { updateAfter } from '../../../utils';
 import ImageElement from '../imageHelper/ImageElement';
+import ConditionalView from '../../../../common/components/conditional-view';
 
 const SliderElement = ({
   src, title, mouseenter, mouseout,
 }) => (
   <ImageElement
-    src={drupalSettings.reactTeaserView.gallery.lazy_load_placeholder}
-    data-src={src}
+    src={src}
     title={title}
-    className="b-lazy"
     onMouseOver={mouseenter}
     onMouseOut={mouseout}
   />
@@ -50,24 +49,27 @@ class SearchGallery extends React.PureComponent {
   };
 
   render() {
-    const { media, title } = this.props;
-
+    const { media, title, initiateSlider } = this.props;
     const origObj = this;
-    const thumbnails = [];
-    media.forEach((element) => {
-      thumbnails.push((
-        <SliderElement
-          key={element.url}
-          title={title}
-          src={element.url}
-          mouseenter={origObj.changeImg}
-          mouseout={origObj.resetImg}
-        />
-      ));
-    });
-
-    const sliderStatus = thumbnails.length > sliderSettings.slidesToShow ? 'true' : 'false';
     const mainImageUrl = typeof this.mainImage.url !== 'undefined' ? this.mainImage.url : '';
+    const thumbnails = [];
+    let sliderStatus = false;
+
+    if (initiateSlider) {
+      media.forEach((element) => {
+        thumbnails.push((
+          <SliderElement
+            key={element.url}
+            title={title}
+            src={element.url}
+            mouseenter={origObj.changeImg}
+            mouseout={origObj.resetImg}
+          />
+        ));
+      });
+
+      sliderStatus = thumbnails.length > sliderSettings.slidesToShow ? 'true' : 'false';
+    }
 
     return (
       <div className="alshaya_search_gallery">
@@ -79,11 +81,13 @@ class SearchGallery extends React.PureComponent {
             className="b-lazy"
           />
         </div>
-        <div className="alshaya_search_slider" data-slider-status={sliderStatus}>
-          <Slider {...sliderSettings} className="search-lightSlider">
-            {thumbnails}
-          </Slider>
-        </div>
+        <ConditionalView condition={initiateSlider}>
+          <div className="alshaya_search_slider" data-slider-status={sliderStatus}>
+            <Slider {...sliderSettings} className="search-lightSlider">
+              {thumbnails}
+            </Slider>
+          </div>
+        </ConditionalView>
       </div>
     );
   }

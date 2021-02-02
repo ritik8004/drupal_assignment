@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Url;
 use Drupal\rest\ModifiedResourceResponse;
@@ -16,6 +17,7 @@ use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
 use Drupal\search_api\Query\ConditionGroup;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Class Promotion Product List Resource.
@@ -93,6 +95,13 @@ class PromotionProductListResource extends ResourceBase {
   protected $entityRepository;
 
   /**
+   * The config factory object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * CategoryProductListResource constructor.
    *
    * @param array $configuration
@@ -117,8 +126,21 @@ class PromotionProductListResource extends ResourceBase {
    *   Language manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity repository.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              array $serializer_formats,
+                              LoggerInterface $logger,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ParseModePluginManager $parse_mode_manager,
+                              AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute,
+                              MobileAppUtility $mobile_app_utility,
+                              LanguageManagerInterface $language_manager,
+                              EntityRepositoryInterface $entity_repository,
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
     $this->parseModeManager = $parse_mode_manager;
@@ -126,6 +148,7 @@ class PromotionProductListResource extends ResourceBase {
     $this->mobileAppUtility = $mobile_app_utility;
     $this->languageManager = $language_manager;
     $this->entityRepository = $entity_repository;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -143,7 +166,8 @@ class PromotionProductListResource extends ResourceBase {
       $container->get('alshaya_mobile_app.alshaya_search_api_query_execute'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('language_manager'),
-      $container->get('entity.repository')
+      $container->get('entity.repository'),
+      $container->get('config.factory')
     );
   }
 
@@ -178,6 +202,9 @@ class PromotionProductListResource extends ResourceBase {
         $response_data = $this->addExtraPromoData($node);
         // Make response data similar to web site.
         $this->alshayaSearchApiQueryExecute->setFacetsToIgnore(['category_facet_promo']);
+
+        AlshayaPromoContextManager::updateDefaultContext('app');
+
         // Prepare response from result set.
         $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
         $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_2');
@@ -259,7 +286,9 @@ class PromotionProductListResource extends ResourceBase {
       $query->setParseMode($parse_mode);
 
       $conditionGroup = new ConditionGroup();
-      $conditionGroup->addCondition('stock', 0, '>');
+      if ($this->configFactory->get('alshaya_search_api.listing_settings')->get('filter_oos_product')) {
+        $conditionGroup->addCondition('stock', 0, '>');
+      }
       $conditionGroup->addCondition('promotion_nid', $nid);
       $query->addConditionGroup($conditionGroup);
 

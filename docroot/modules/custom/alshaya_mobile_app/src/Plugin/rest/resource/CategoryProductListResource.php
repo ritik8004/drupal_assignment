@@ -20,6 +20,7 @@ use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\views\Views;
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 
 /**
  * Class Category Product List Resource.
@@ -238,6 +239,8 @@ class CategoryProductListResource extends ResourceBase {
       $result_set = $result_set['plp_data'];
     }
 
+    AlshayaPromoContextManager::updateDefaultContext('app');
+
     $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
     $response_data['sort'] = $this->alshayaSearchApiQueryExecute->prepareSortData('alshaya_product_list', 'block_1');
 
@@ -323,6 +326,8 @@ class CategoryProductListResource extends ResourceBase {
   public function prepareAndExecuteQuery(int $tid) {
     $storage = $this->entityTypeManager->getStorage('search_api_index');
     $response = [];
+
+    // Get term details in current language for meta info (department name).
     $term_details = $this->productCategoryPage->getCurrentSelectedCategory('en', $tid);
     if (isset($term_details['hierarchy'])) {
       $response['department_name'] = str_replace('>', '|', $term_details['hierarchy']);
@@ -354,6 +359,12 @@ class CategoryProductListResource extends ResourceBase {
     }
 
     if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+      // Get term details in current language for filters.
+      $term_details = $this->productCategoryPage->getCurrentSelectedCategory(
+        $this->languageManager->getCurrentLanguage()->getId(),
+        $tid
+      );
+
       $index = $storage->load('alshaya_algolia_index');
 
       /** @var \Drupal\search_api\Query\QueryInterface $query */
@@ -378,7 +389,9 @@ class CategoryProductListResource extends ResourceBase {
       $query->setParseMode($parse_mode);
 
       $conditionGroup = new ConditionGroup();
-      $conditionGroup->addCondition('stock', 0, '>');
+      if ($this->configFactory->get('alshaya_search_api.listing_settings')->get('filter_oos_product')) {
+        $conditionGroup->addCondition('stock', 0, '>');
+      }
       $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
       $query->addConditionGroup($conditionGroup);
       $query->setOption('ruleContexts', $term_details['ruleContext']);

@@ -1,0 +1,10 @@
+services:
+  cache_tags_cleanup.commands:
+    class: \Drupal\cache_tags_cleanup\Commands\CacheTagsCleanupDrushCommand
+    tags:
+      - { name: drush.command }
+    arguments:
+      - '@database'
+      - '@logger.factory'
+      - '@entity.manager'
+      - '@entity.query'

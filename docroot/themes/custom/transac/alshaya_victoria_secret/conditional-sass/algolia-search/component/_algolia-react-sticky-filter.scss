@@ -21,3 +21,18 @@
     }
   }
 }
+
+body:not(.hide-header) {
+  .block-alshaya-algolia-react-plp,
+  .block-alshaya-algolia-react-promotion {
+    .filter-fixed-top {
+      .show-all-filters-algolia,
+      .block-facet-blockcategory-facet-search,
+      .block-facet-blockcategory-facet-plp {
+        @include breakpoint($only-mobile) {
+          top: 2.75rem;
+        }
+      }
+    }
+  }
+}

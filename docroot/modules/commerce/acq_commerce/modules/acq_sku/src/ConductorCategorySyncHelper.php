@@ -8,7 +8,7 @@ use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\Core\Logger\LoggerChannelFactory;
 
 /**
- * Class ConductorCategorySyncHelper.
+ * Class ConductorCategorySyncHelper to sync categories.
  *
  * @package Drupal\acq_sku
  */
@@ -144,7 +144,7 @@ class ConductorCategorySyncHelper {
         $this->catsToSync = [];
         if ($store_id) {
           // Load category data.
-          $categories = [$this->conductorCategoryManager->loadCategoryData($store_id)];
+          $categories = [$this->conductorCategoryManager->loadCategoryData($langcode)];
           $this->iterateRecursive($categories);
 
           // If no data to sync.

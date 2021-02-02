@@ -19,8 +19,10 @@ use Drupal\acq_commerce\SKUInterface;
  *   Product data array to alter.
  * @param \Drupal\acq_commerce\SKUInterface $sku
  *   SKU entity.
+ * @param bool $with_parent_details
+ *   Flag to identify whether to get parent details or not.
  */
-function hook_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku) {
+function hook_alshaya_mobile_app_product_exclude_linked_data_alter(array &$data, SKUInterface $sku, bool $with_parent_details) {
 
 }
 

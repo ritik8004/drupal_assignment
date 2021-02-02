@@ -45,6 +45,12 @@ class I18nHelper {
    *   Mapping array.
    */
   public function getStoreLanguageMapping() {
+    static $mapping = NULL;
+
+    if (is_array($mapping) && !empty($mapping)) {
+      return $mapping;
+    }
+
     $mapping = [];
 
     $languages = $this->languageManager->getLanguages();

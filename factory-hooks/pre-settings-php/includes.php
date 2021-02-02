@@ -120,21 +120,17 @@ if (!empty($social_config[$env_name])) {
 // Shield.
 // TODO: Security.
 $settings['alshaya_custom_shield_default_user'] = 'alshaya_shield';
-$settings['alshaya_custom_shield_default_pass'] = 'AS_S';
 
 // ACM user.
 // TODO: Security.
 $settings['alshaya_acm_user_username'] = 'alshaya_acm';
 $settings['alshaya_acm_user_email'] = 'noreply-acm@alshaya.com';
-$settings['alshaya_acm_user_password'] = 'AlShAyA_AcM';
 
 $settings['alshaya_magento_user_username'] = 'alshaya_magento';
 $settings['alshaya_magento_user_email'] = 'noreply-magento@alshaya.com';
-$settings['alshaya_magento_user_password'] = 'AlShAyA_MaGeNtO';
 
 $settings['alshaya_mobile_app_user_username'] = 'alshaya_mobile_app';
 $settings['alshaya_mobile_app_user_email'] = 'noreply-mobile-app@alshaya.com';
-$settings['alshaya_mobile_app_user_password'] = 'AlShAyA_MoBiLe';
 
 // Simple Oauth.
 // TODO: Security.
@@ -151,16 +147,23 @@ else {
   $soauth_key_dir = $settings['server_home_dir'] . '/simple-oauth/' . $env . '/';
 }
 
+if ($env == 'local' || $env == 'travis') {
+  // set default value for local and travis enviornment.
+  // secret settings file. See `post-settings/zzz_overrides`.
+  $settings['alshaya_custom_shield_default_pass'] = 'travis';
+  $settings['alshaya_acm_user_password'] = 'travis';
+  $settings['alshaya_magento_user_password'] = 'travis';
+  $settings['alshaya_mobile_app_user_password'] = 'travis';
+  $settings['alshaya_acm_soauth_client_secret'] = 'travis';
+  $settings['alshaya_acm_soauth_client_uuid'] = '8df19835-6c9d-4f36-b61e-1eb99cbee8de';
+  $settings['alshaya_magento_soauth_client_uuid'] = 'b5e69c99-60a0-4ad4-a991-04d036f0d72f';
+  $settings['alshaya_magento_soauth_client_secret'] = 'travis';
+  $settings['alshaya_mobile_app_soauth_client_uuid'] = 'f2fc9587-9308-4801-87d9-e67767d4ae50';
+  $settings['alshaya_mobile_app_soauth_client_secret'] = 'travis';
+}
+
 $settings['alshaya_acm_soauth_public_key'] = $soauth_key_dir . $soauth_key_name . '.pub';
 $settings['alshaya_acm_soauth_private_key'] = $soauth_key_dir . $soauth_key_name;
-$settings['alshaya_acm_soauth_client_secret'] = 'AlShAyA';
-$settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
-
-$settings['alshaya_magento_soauth_client_uuid'] = '4cacd535-3b24-434e-9d32-d6e843f7b91a';
-$settings['alshaya_magento_soauth_client_secret'] = 'AlShAyA';
-
-$settings['alshaya_mobile_app_soauth_client_uuid'] = 'ac73dcc7-6918-4e14-8b48-86b5cd17f4d2';
-$settings['alshaya_mobile_app_soauth_client_secret'] = 'AlShAyA';
 
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;

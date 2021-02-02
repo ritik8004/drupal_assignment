@@ -10,6 +10,15 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_mobile_app module.
+ */
+function alshaya_aeo_transac_update_8004() {
+  \Drupal::service('module_installer')->install(['alshaya_mobile_app']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update sort orders for size facet to match order in Magento.
  */
 function alshaya_aeo_transac_update_8003() {

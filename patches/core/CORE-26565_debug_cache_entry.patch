@@ -1,0 +1,59 @@
+diff --git a/core/lib/Drupal/Core/Cache/DatabaseBackend.php b/core/lib/Drupal/Core/Cache/DatabaseBackend.php
+--- a/core/lib/Drupal/Core/Cache/DatabaseBackend.php	(date 1609218155311)
++++ b/core/lib/Drupal/Core/Cache/DatabaseBackend.php	(date 1609218155311)
+@@ -4,8 +4,10 @@
+
+ use Drupal\Component\Assertion\Inspector;
+ use Drupal\Component\Utility\Crypt;
++use Drupal\Component\Utility\DiffArray;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Database\DatabaseException;
++use Drupal\Core\Site\Settings;
+
+ /**
+  * Defines a default cache implementation.
+@@ -268,6 +270,44 @@
+       // the insert fields. This is a performance optimization to avoid
+       // unnecessary loops within the method.
+       $query->values(array_values($fields));
++
++      if (in_array($this->bin, Settings::get('alshaya_debug_cache_bin_entry', []))) {
++        $debug_data = ['NOT DEBUGGING DATA'];
++
++        if (Settings::get('alshaya_debug_cache_bin_entry_diff', FALSE)) {
++          $debug_data = ['OLD CACHE NOT AVAILABLE'];
++
++          $cache = $this->get($fields['cid']);
++          if ($cache && $cache->data) {
++            $new_data = $fields['serialized']
++              ? unserialize($fields['data'])
++              : $fields['data'];
++
++            // If we do not manage to get old and new in same type, we will
++            // simply say it's complicated and skip.
++            $debug_data = ['DIFF COMPLICATED'];
++
++            if (is_array($new_data) && is_array($cache->data)) {
++              $debug_data = [
++                'new' => DiffArray::diffAssocRecursive($new_data, $cache->data),
++                'removed' => DiffArray::diffAssocRecursive($cache->data, $new_data),
++              ];
++            }
++            elseif (is_string($new_data) && is_string($cache->data)) {
++              $debug_data = [
++                'old' => $cache->data,
++                'new' => $new_data
++              ];
++            }
++          }
++        }
++
++        \Drupal::logger('alshaya_debug')->notice('Doing upsert for cache bin: @bin, cid: @cid, data: @data.', [
++          '@bin' => $this->bin,
++          '@cid' => $fields['cid'],
++          '@data' => json_encode($debug_data),
++        ]);
++      }
+     }
+
+     $query->execute();

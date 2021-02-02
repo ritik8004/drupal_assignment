@@ -448,10 +448,10 @@ class AcqSkuPositionCommands extends DrushCommands {
     $cat_data = [];
     // Get all terms data from drupal.
     $drupal_cat_data = $this->getCategoriesFromDrupal();
-    foreach ($this->i18nHelper->getStoreLanguageMapping() as $store_id) {
+    foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       if ($store_id) {
         // Load Conductor Category data.
-        $categories = [$this->categoryManager->loadCategoryData($store_id)];
+        $categories = [$this->categoryManager->loadCategoryData($langcode)];
         // Filter/Remove top level root category.
         $filter_root_category = $this->configFactory->get('acq_commerce.conductor')->get('filter_root_category');
         if ($filter_root_category && !empty($categories)) {

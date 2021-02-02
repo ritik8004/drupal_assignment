@@ -280,7 +280,8 @@
                 "Multiple webheads can cause twig cache to grow indefinitely": "https://www.drupal.org/files/issues/2020-07-01/multiple_webheads_twig_cache-3032078-16.patch",
                 "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch",
                 "CORE-24231 - Adding log trace for 500 error on user login page" : "patches/core/traces-for-form-error.patch",
-                "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2"
+                "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
+                "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -354,6 +355,9 @@
             },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
+            },
+            "drupal/metatag": {
+                "metatag_get_default_tags() does not revert config override language": "https://www.drupal.org/files/issues/2020-01-31/metatag-default-config-3108052-6.patch"
             },
             "drupal/pathauto": {
                 "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"

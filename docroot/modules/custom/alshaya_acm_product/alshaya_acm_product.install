@@ -13,6 +13,21 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add new fields and index them.
+ */
+function alshaya_acm_product_update_8065() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.9.0] Re-install alshaya_brand module for sites which have the module
  * enabled but do not have the alshaya_brand.settings configuration installed.
  * This should have occurred because of some error during installation so we

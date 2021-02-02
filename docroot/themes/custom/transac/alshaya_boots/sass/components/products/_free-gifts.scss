@@ -10,17 +10,6 @@
   }
 }
 
-.nodetype--acq_product,
-.path--cart {
-  &.free-gift-detail-modal {
-    .ui-dialog {
-      @include breakpoint($desktop) {
-        padding: calc((100vh - 34.75rem) / 2) calc((100vw - 60.13rem) / 2) !important;
-      }
-    }
-  }
-}
-
 .free-gift-promo-list-overlay,
 .free-gifts-modal-overlay {
   .slick-prev,

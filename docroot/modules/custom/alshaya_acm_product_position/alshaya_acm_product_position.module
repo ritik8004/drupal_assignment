@@ -121,18 +121,22 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
       $db_query->addExpression('IFNULL(acq_sku_position.position, 99999999)', 'no_position');
 
       // First order by stock (always).
-      $db_query->orderBy('stock', QueryInterface::SORT_DESC);
+      $db_query->addField('t', 'stock');
+      $db_query->orderBy('t.stock', QueryInterface::SORT_DESC);
 
       // Order by position.
       $db_query->orderBy('no_position', QueryInterface::SORT_ASC);
 
       // Order by name if two products have same position (to avoid duplicity).
+      $db_query->addField('t', 'name_1');
       $db_query->orderBy('t.name_1', QueryInterface::SORT_ASC);
 
       // Order by original nid desc (last in first) and then by nid (which will
       // have different values for split listing) for products with same name to
       // avoid random results.
+      $db_query->addField('t', 'original_nid');
       $db_query->orderBy('t.original_nid', QueryInterface::SORT_DESC);
+      $db_query->addField('t', 'nid');
       $db_query->orderBy('t.nid', QueryInterface::SORT_ASC);
     }
   }

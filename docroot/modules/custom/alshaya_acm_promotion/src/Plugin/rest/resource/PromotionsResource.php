@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_promotion\Plugin\rest\resource;
 
+use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -72,6 +73,13 @@ class PromotionsResource extends ResourceBase {
   protected $moduleHandler;
 
   /**
+   * Alshaya Promotions Context Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   */
+  protected $promoContextManager;
+
+  /**
    * PromotionsResource constructor.
    *
    * @param array $configuration
@@ -94,6 +102,8 @@ class PromotionsResource extends ResourceBase {
    *   The database connection.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   *   Alshaya Promo Context Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -104,13 +114,15 @@ class PromotionsResource extends ResourceBase {
                               EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
                               Connection $connection,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              AlshayaPromoContextManager $alshayaPromoContextManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->entityRepository = $entity_repository;
     $this->connection = $connection;
     $this->moduleHandler = $module_handler;
+    $this->promoContextManager = $alshayaPromoContextManager;
   }
 
   /**
@@ -127,7 +139,8 @@ class PromotionsResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('entity.repository'),
       $container->get('database'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_acm_product.context_manager')
     );
   }
 
@@ -136,17 +149,23 @@ class PromotionsResource extends ResourceBase {
    *
    * @param string $langcode
    *   The language code.
+   * @param string $context
+   *   The context of the promotion, either web or app.
    *
    * @return array
    *   List of nids.
    */
-  private function getAllPromotions($langcode) {
+  private function getAllPromotions($langcode, $context = '') {
     $query = $this->connection->select('node', 'n');
     $query->fields('nd', ['nid']);
     $query->leftJoin('node_field_data', 'nd', 'nd.nid = n.nid');
     $query->condition('nd.langcode', $langcode);
     $query->condition('nd.type', 'acq_promotion');
     $query->condition('nd.status', NodeInterface::PUBLISHED);
+    if (!empty($context)) {
+      $query->leftJoin('node__field_acq_promotion_context', 'npc', 'npc.entity_id = n.nid');
+      $query->condition('npc.field_acq_promotion_context_value', $context);
+    }
     return $query->execute()->fetchCol();
   }
 
@@ -158,10 +177,13 @@ class PromotionsResource extends ResourceBase {
    */
   public function get() {
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $nids = $this->getAllPromotions($langcode);
+    $context = $this->promoContextManager->getPromotionContext();
+    $nids = $this->getAllPromotions($langcode, $context);
     $response_data = [];
 
     $cacheability = new CacheableMetadata();
+    $cacheability->addCacheContexts(['url.query_args:context']);
+    $cacheability->addCacheTags(['node_type:acq_promotion']);
 
     if (!empty($nids)) {
       $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
@@ -186,7 +208,6 @@ class PromotionsResource extends ResourceBase {
 
         $response_data[] = $data;
         $this->content[] = $node;
-        $cacheability->addCacheableDependency($node);
       }
 
       $response = new ResourceResponse($response_data);

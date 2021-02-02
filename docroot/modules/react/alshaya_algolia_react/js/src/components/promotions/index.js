@@ -9,7 +9,14 @@ const Promotion = ({ promotion }) => (
 );
 
 const Promotions = ({ promotions }) => {
-  const promotionList = (promotions) ? promotions.map((promotion) => <Promotion key={promotion.text} promotion={promotion} />) : '';
+  const promotionList = (promotions)
+    ? promotions.map((promotion) => {
+      if (typeof promotion.context === 'undefined' || promotion.context.includes('web') || !promotion.context.length) {
+        return <Promotion key={promotion.text} promotion={promotion} />;
+      }
+      return '';
+    })
+    : '';
   if (promotionList !== '' && promotionList !== 'null') {
     return <div className="promotions">{promotionList}</div>;
   }

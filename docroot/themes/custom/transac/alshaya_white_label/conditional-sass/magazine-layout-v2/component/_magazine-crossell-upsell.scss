@@ -202,6 +202,22 @@
           margin-top: -2.5rem;
         }
       }
+
+      .magv2-detail-wrapper {
+        .magv2-pdp-title {
+          html[lang=ar] & {
+            text-align: right;
+          }
+        }
+
+        .magv2-pdp-price-container {
+          .magv2-meta-data-wrapper {
+            html[lang=ar] & {
+              flex-direction: row-reverse;
+            }
+          }
+        }
+      }
     }
 
     &-heading {

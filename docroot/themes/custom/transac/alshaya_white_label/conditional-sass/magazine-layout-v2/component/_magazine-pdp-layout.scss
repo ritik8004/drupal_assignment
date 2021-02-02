@@ -31,7 +31,7 @@
         }
       }
 
-      @include breakpoint($desktop-xl) {
+      @include breakpoint($desktop-HiDPI) {
         &.sticky-element {
           #{$left}: calc((100% - 86.25rem) / 2);
           max-width: calc(86.25rem * 0.72);
@@ -135,7 +135,7 @@
         }
       }
 
-      @include breakpoint($desktop-xl) {
+      @include breakpoint($desktop-HiDPI) {
         &.sticky-element {
           #{$right}: calc((100% - 86.25rem) / 2);
           max-width: calc(86.25rem * 0.28);

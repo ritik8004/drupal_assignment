@@ -14,6 +14,7 @@ services:
       - '@acq_commerce.i18n_helper'
       - '@module_handler'
       - '@database'
+      - '@acq_sku.agent_api'
 
   acq_sku.product_options_manager:
     class: Drupal\acq_sku\ProductOptionsManager
@@ -119,3 +120,8 @@ services:
       - '@logger.factory'
     tags:
       - { name: 'event_subscriber' }
+
+  acq_sku.agent_api:
+    class: Drupal\acq_sku\ApiHelper
+    arguments:
+      - '@alshaya_api.api'

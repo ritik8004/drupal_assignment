@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_algolia_react\Plugin\Block;
 
-use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\alshaya_algolia_react\AlshayaAlgoliaReactBlockBase;
 use Drupal\Core\Cache\Cache;
@@ -10,6 +9,10 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\file\FileInterface;
+use Drupal\alshaya_custom\Utility;
 
 /**
  * Provides a block to display 'plp' results.
@@ -52,6 +55,13 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
   protected $productCategoryTree;
 
   /**
+   * Term storage object.
+   *
+   * @var \Drupal\taxonomy\TermStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * Entity Repository service.
    *
    * @var \Drupal\Core\Entity\EntityRepositoryInterface
@@ -73,6 +83,8 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
    *   Alshaya Algolia React Config.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree
    *   Product category tree.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository service.
    */
@@ -83,12 +95,15 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     ProductCategoryPage $product_category_page,
     AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config,
     ProductCategoryTree $product_category_tree,
+    EntityTypeManagerInterface $entity_type_manager,
     EntityRepositoryInterface $entityRepository
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryPage = $product_category_page;
     $this->alshayaAlgoliaReactConfig = $alshaya_algolia_react_config;
     $this->productCategoryTree = $product_category_tree;
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->entityRepository = $entityRepository;
   }
 
@@ -108,6 +123,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
       $container->get('alshaya_acm_product_category.page'),
       $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
       $container->get('alshaya_acm_product_category.product_category_tree'),
+      $container->get('entity_type.manager'),
       $container->get('entity.repository')
     );
   }
@@ -130,22 +146,59 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     ];
 
     $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory($lang));
-
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
     $algoliaSearch['pageSubType'] = 'plp';
 
-    // Get current category.
+    // Get sub categories information.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
-    $term = $this->entityRepository->getTranslationFromContext($term);
+    if ($term instanceof TermInterface) {
+      $term = $this->entityRepository->getTranslationFromContext($term);
 
-    // We need to show Category facet only for the Categories which are
-    // visible in menu. Condition here is same as what we use to populate
-    // lhn_category field in Algolia Index.
-    // @see AlshayaAlgoliaIndexHelper::getCategoryHierarchy()
-    $algoliaSearch['categoryFacetEnabled'] = (int) $term->get('field_category_include_menu')->getString();
+      // We need to show Category facet only for the Categories which are
+      // visible in menu. Condition here is same as what we use to populate
+      // lhn_category field in Algolia Index.
+      // @see AlshayaAlgoliaIndexHelper::getCategoryHierarchy()
+      $algoliaSearch['categoryFacetEnabled'] = (int) $term->get('field_category_include_menu')->getString();
+
+      $group_sub_category_enabled = $term->get('field_group_by_sub_categories')->getValue();
+      if ($group_sub_category_enabled) {
+        $sub_categories = $term->get('field_select_sub_categories_plp')->getValue();
+        $subcategories = [];
+        foreach ($sub_categories as $term_id) {
+          $subcategory = $this->termStorage->load($term_id['value']);
+          $subcategory = $this->entityRepository->getTranslationFromContext($subcategory);
+
+          $data = [];
+          $data['tid'] = $subcategory->id();
+
+          $data['title'] = $subcategory->get('field_plp_group_category_title')->getString();
+          if (empty($data['title'])) {
+            $data['title'] = $subcategory->label();
+          }
+
+          $data['weight'] = $subcategory->getWeight();
+          $data['description'] = $subcategory->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '';
+
+          $value = $subcategory->get('field_plp_group_category_img')->getValue()[0] ?? [];
+          $image = (!empty($value)) ? $this->fileStorage->load($value['target_id']) : NULL;
+          if ($image instanceof FileInterface) {
+            $data['image']['url'] = file_url_transform_relative(file_create_url($image->getFileUri()));
+            $data['image']['alt'] = $value['alt'];
+          }
+
+          // Get category level informartion.
+          $data['category'] = $this->productCategoryPage->getCurrentSelectedCategory($lang, $subcategory->id());
+
+          $subcategories[$subcategory->id()] = $data;
+        }
+        uasort($subcategories, [Utility::class, 'weightArraySort']);
+
+        $algoliaSearch['subCategories'] = $subcategories;
+      }
+    }
 
     return [
       '#type' => 'markup',

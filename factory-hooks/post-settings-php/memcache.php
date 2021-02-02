@@ -76,9 +76,10 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // there. To avoid overriding we have added this check.
     // @see factory-hooks/post-settings-php/includes.php.
     if (!isset($settings['cache']['bins'])) {
-      $settings['cache']['bins']['bootstrap'] = 'cache.backend.memcache';
-      $settings['cache']['bins']['discovery'] = 'cache.backend.memcache';
       $settings['cache']['bins']['config'] = 'cache.backend.memcache';
+      // Use database for these bins.
+      $settings['cache']['bins']['bootstrap'] = 'cache.backend.database';
+      $settings['cache']['bins']['discovery'] = 'cache.backend.database';
     }
 
     // Use memcache as the default bin.

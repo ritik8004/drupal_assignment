@@ -317,6 +317,9 @@ class AcqPromotionsManager {
     // Set promotion rule_id.
     $promotion_node->get('field_acq_promotion_rule_id')->setValue($promotion['rule_id']);
 
+    // Set promotion context.
+    $promotion_node->get('field_acq_promotion_context')->setValue($promotion['extension']['channel']);
+
     // Set the status.
     $promotion_node->setPublished((bool) $promotion['status']);
 
