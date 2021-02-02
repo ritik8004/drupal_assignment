@@ -4,7 +4,6 @@ namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
 use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -48,8 +47,7 @@ class CheckoutComUpapiApplePay extends AlshayaSpcPaymentMethodPluginBase impleme
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('acq_checkoutcom.agent_api'),
-      $container->get('config.factory')
+      $container->get('acq_checkoutcom.agent_api')
     );
   }
 
@@ -64,17 +62,13 @@ class CheckoutComUpapiApplePay extends AlshayaSpcPaymentMethodPluginBase impleme
    *   The plugin implementation definition.
    * @param \Drupal\acq_checkoutcom\ApiHelper $checkout_com_api_helper
    *   Checkout.com API Helper.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              ApiHelper $checkout_com_api_helper,
-                              ConfigFactoryInterface $config_factory) {
+                              ApiHelper $checkout_com_api_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->checkoutComApiHelper = $checkout_com_api_helper;
-    $this->configFactory = $config_factory;
   }
 
   /**
