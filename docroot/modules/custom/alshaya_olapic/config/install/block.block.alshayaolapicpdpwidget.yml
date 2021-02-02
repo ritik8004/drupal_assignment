@@ -8,7 +8,7 @@ dependencies:
 id: alshayaolapicpdpwidget
 theme: alshaya_white_label
 region: content
-weight: -50
+weight: 50
 provider: alshaya_olapic
 plugin: alshaya_olapic_pdp_widget
 settings:

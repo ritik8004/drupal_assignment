@@ -7,8 +7,8 @@ dependencies:
     - alshaya_white_label
 id: alshayaolapichomewidget
 theme: alshaya_white_label
-region: content
-weight: -50
+region: post_content
+weight: -90
 provider: alshaya_olapic
 plugin: alshaya_olapic_home_widget
 settings:
