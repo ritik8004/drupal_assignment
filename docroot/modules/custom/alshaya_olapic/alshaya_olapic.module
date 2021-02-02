@@ -14,24 +14,24 @@
     $config = \Drupal::config('alshaya_olapic.settings');
     $olapic_external_script_url = $config->get('olapic_external_script_url');
     $libraries = [];
-    if(!empty($olapic_external_script_url)) {
-    $libraries['alshaya_olapic_widget'] = [
-      'version' => '1.x',
-      'footer' => true,
-      'js' => [
-        $olapic_external_script_url => [
-          'type' => 'external',
-          'minified' => true,
-          'attributes' => [
-            'data-olapic' => "olapic_specific_widget",
-            'data-instance' => "",
-            'data-apikey' => "",
-            'data-lang' => "",
-            'async' => "async",
+    if (!empty($olapic_external_script_url)) {
+      $libraries['alshaya_olapic_widget'] = [
+        'version' => '1.x',
+        'footer' => true,
+        'js' => [
+          $olapic_external_script_url => [
+            'type' => 'external',
+            'minified' => true,
+            'attributes' => [
+              'data-olapic' => "olapic_specific_widget",
+              'data-instance' => "",
+              'data-apikey' => "",
+              'data-lang' => "",
+              'async' => "async",
+            ],
           ],
         ],
-      ],
-    ];
-  }
+      ];
+   }
    return $libraries;
  }

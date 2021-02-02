@@ -90,7 +90,7 @@ class OlapicRedirectEventsubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Redirects user to basket page with message from acm checkout pages.
+   * Redirects with query string to run olpaic in non prod.
    *
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    *   Request event object.
