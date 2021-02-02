@@ -45,14 +45,14 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
    *
    * @usage drush index-bv-attr-val-algolia
    *   Fetch and index BazaarVoice attributes values in algolia.
-   * @usage drush index-bv-attr-val-algolia --batch-size=50
-   *   Fetch and index BazaarVoice attribute values in algolia with batch of 50.
+   * @usage drush index-bv-attr-val-algolia --batch-size=100
+   *   Fetch and index BazaarVoice attribute value in algolia with batch of 100.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function indexBvAttrValuesInAlgolia(array $options = ['batch-size' => NULL]) {
-    $batch_size = $options['batch-size'] ?? 10;
+    $batch_size = $options['batch-size'] ?? 50;
     $batch = [
       'finished' => [__CLASS__, 'batchFinish'],
       'title' => dt('Indexing BV att value in algolia'),
@@ -107,9 +107,9 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
   public static function batchProcess(array $nids, &$context) {
     $context['results']['count'] += count($nids);
 
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $skus = $skuManager->getSkusByNodeIds($nids);
-    $data = \Drupal::service('alshaya_bazaar_voice.api_helper')->getDataFromBvReviewFeeds($skus);
+    $bazaar_voice_api_helper = \Drupal::service('alshaya_bazaar_voice.api_helper');
+    $skus = $bazaar_voice_api_helper->getSkusByNodeIds($nids);
+    $data = $bazaar_voice_api_helper->getDataFromBvReviewFeeds($skus);
 
     if (empty($data)) {
       return;

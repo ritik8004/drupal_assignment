@@ -6,3 +6,4 @@ services:
       - '@http_client'
       - '@config.factory'
       - '@entity.manager'
+      - '@database'
