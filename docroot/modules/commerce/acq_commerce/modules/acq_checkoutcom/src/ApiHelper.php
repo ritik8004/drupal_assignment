@@ -238,6 +238,52 @@ class ApiHelper {
   }
 
   /**
+   * Get the configurations for apple-pay checkout.com.
+   *
+   * @param bool $reset
+   *   Reset cached data and fetch again.
+   *
+   * @return array|mixed
+   *   Return array of keys.
+   */
+  public function getCheckoutcomUpapiApplePayConfig($reset = FALSE) {
+    $cache_key = 'acq_checkoutcom_upapi_apple_pay:api_configs';
+
+    $cache = $reset ? NULL : $this->cache->get($cache_key);
+
+    if (empty($cache) || empty($cache->data)) {
+      $response = $this->apiWrapper->invokeApi(
+        'checkoutcomupapi/config',
+        [],
+        'GET'
+      );
+      $configs = Json::decode($response);
+
+      if (!empty($configs)) {
+        $this->cache->set($cache_key, $configs);
+      }
+    }
+    else {
+      $configs = $cache->data;
+    }
+
+    if (empty($configs)) {
+      if ($reset) {
+        $this->logger->error('Invalid response from api, @response', [
+          '@response' => Json::encode($configs),
+        ]);
+
+        return NULL;
+      }
+
+      // Try resetting once.
+      return $this->getCheckoutcomUpapiApplePayConfig(TRUE);
+    }
+
+    return $configs;
+  }
+
+  /**
    * Get customer stored card.
    *
    * @param \Drupal\user\UserInterface|\Drupal\Core\Session\AccountProxy|string $user

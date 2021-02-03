@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
 use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -47,7 +48,8 @@ class CheckoutComUpapiApplePay extends AlshayaSpcPaymentMethodPluginBase impleme
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('acq_checkoutcom.agent_api')
+      $container->get('acq_checkoutcom.agent_api'),
+      $container->get('config.factory')
     );
   }
 
@@ -62,20 +64,53 @@ class CheckoutComUpapiApplePay extends AlshayaSpcPaymentMethodPluginBase impleme
    *   The plugin implementation definition.
    * @param \Drupal\acq_checkoutcom\ApiHelper $checkout_com_api_helper
    *   Checkout.com API Helper.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
-                              ApiHelper $checkout_com_api_helper) {
+                              ApiHelper $checkout_com_api_helper,
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->checkoutComApiHelper = $checkout_com_api_helper;
+    $this->configFactory = $config_factory;
   }
 
   /**
    * {@inheritdoc}
    */
   public function processBuild(array &$build) {
+    $settings = $this->getApplePayConfig();
+    $build['#attached']['drupalSettings']['checkoutComUpapiApplePay'] = $settings;
+  }
 
+  /**
+   * Get checkout.com upapi apple pay configuration.
+   *
+   * @return array
+   *   Apple pay config.
+   */
+  protected function getApplePayConfig() {
+    static $settings = NULL;
+
+    if (isset($settings)) {
+      return $settings;
+    }
+
+    // Data from API.
+    $settings = $this->checkoutComApiHelper->getCheckoutcomUpapiApplePayConfig();
+
+    // Add site info from config.
+    $settings += [
+      'storeName' => $this->configFactory->get('system.site')->get('name'),
+      'countryId' => $this->configFactory->get('system.date')->get('country.default'),
+      'currencyCode' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
+    ];
+
+    $settings['allowedIn'] = $this->checkoutComApiHelper->getApplePayAllowedIn();
+
+    return $settings;
   }
 
 }

@@ -1,14 +1,14 @@
 import React from 'react';
-import ApplePay from '../../../utilities/apple_pay';
+import CheckoutComUpapiApplePay from '../../../utilities/checkout_com_upapi_apple_pay';
 
 class PaymentMethodCheckoutComUpapiApplePay extends React.Component {
   componentDidMount = () => {
-    ApplePay.isPossible();
+    CheckoutComUpapiApplePay.isPossible();
   };
 
   validateBeforePlaceOrder = () => {
     const { cart } = this.props;
-    ApplePay.startPayment(cart.cart.totals.base_grand_total);
+    CheckoutComUpapiApplePay.startPayment(cart.cart.totals.base_grand_total);
     return false;
   };
 
