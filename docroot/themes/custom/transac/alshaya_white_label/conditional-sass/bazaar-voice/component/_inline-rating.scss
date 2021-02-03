@@ -12,12 +12,15 @@
   > span {
     font-size: 0.75rem;
     height: 1.25rem;
-    line-height: 2;
+    line-height: 2.4;
   }
 
   .no-of-stars {
+    font-size: 1.125rem;
     margin-#{$left}: 0.875rem;
     margin-#{$right}: 0.875rem;
+    font-family: $alshaya-bold;
+    line-height: 1.5;
   }
 
   .write-review {
@@ -27,11 +30,7 @@
 
   .empty-stars {
     background: url('#{$base_theme_img_directory_path}/icons/star-rating-sprite.svg') repeat-x;
-    font-size: 0;
     height: 1.1875rem; /* [(height of one sprite / 2) ex: 48/2 = 19] */
-    line-height: 0;
-    overflow: hidden;
-    text-indent: -999rem;
     width: 7.5rem; /* [(width of one sprite x 5) ex: 24*5 = 120] */
   }
 
