@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Helper\CookieHelper;
 use App\Service\Cart;
+use App\Service\CheckoutCom\APIWrapper;
 use Psr\Log\LoggerInterface;
 use App\Service\Config\SystemSettings;
 use App\Service\Orders;
@@ -145,6 +146,13 @@ class PaymentController {
     }
 
     $payment_method = $order['payment']['method'];
+
+    // If payment is done by saved cards.
+    if ($payment_method === 'checkout_com_upapi'
+      && !empty($order['payment']['extension_attributes'])
+      && !empty($order['payment']['extension_attributes']['vault_payment_token'])) {
+      $payment_method = APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD;
+    }
 
     // If Payment-method is not selected by user.
     if (!$payment_method) {

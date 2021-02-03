@@ -4,7 +4,9 @@ namespace Drupal\alshaya_acm_product_position;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
@@ -78,6 +80,13 @@ class AlshayaPlpSortOptionsBase {
   protected $requestStack;
 
   /**
+   * The entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * AlshayaPlpSortOptionsBase constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -88,6 +97,10 @@ class AlshayaPlpSortOptionsBase {
    *   Entity type manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -96,12 +109,16 @@ class AlshayaPlpSortOptionsBase {
     ConfigFactoryInterface $config_factory,
     RouteMatchInterface $route_match,
     EntityTypeManagerInterface $entity_type_manager,
-    RequestStack $request_stack
+    RequestStack $request_stack,
+    LanguageManagerInterface $language_manager,
+    EntityRepositoryInterface $entity_repository
   ) {
     $this->configSortOptions = $config_factory->get(self::CONFIG_SORT_OPTIONS);
     $this->routeMatch = $route_match;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->requestStack = $request_stack;
+    $this->currentLanguage = $language_manager->getCurrentLanguage()->getId();
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -169,6 +186,9 @@ class AlshayaPlpSortOptionsBase {
       $parent_terms = $this->termStorage->loadParents($taxonomy_term->id());
       $term = reset($parent_terms);
       if ($term instanceof Term) {
+        if ($term->language()->getId() != $this->currentLanguage && $term->hasTranslation($this->currentLanguage)) {
+          $term = $this->entityRepository->getTranslationFromContext($term, $this->currentLanguage);
+        }
         return $this->getPlpSortConfigForTerm($term, $type);
       }
       return NULL;

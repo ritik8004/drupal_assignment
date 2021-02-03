@@ -12,7 +12,7 @@ const validateCartResponse = (response) => {
   if ((typeof response.response_message !== 'undefined'
     && response.response_message !== null
     && response.response_message.status === 'json_error'
-    && response.response_message.msg === 'OOS')
+    && ((response.response_message.msg === 'OOS') || response.response_message.msg === 'not_enough'))
   ) {
     redirectToCart();
     return false;
@@ -43,13 +43,21 @@ const validateCartResponse = (response) => {
   }
 
   // If back-end system is down or having errors.
-  if ((errorCode >= 500) && (window.location.pathname.search(/checkout/i) >= 0)) {
-    dispatchCustomEvent('spcCheckoutMessageUpdate', {
-      type: 'error',
-      message: drupalSettings.global_error_message,
-    });
+  if (errorCode >= 500) {
+    // For OOS error, we redirect to cart page.
+    if (errorCode === 506) {
+      redirectToCart();
+      return false;
+    }
 
-    return false;
+    if (window.location.pathname.search(/checkout/i) >= 0) {
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: drupalSettings.global_error_message,
+      });
+
+      return false;
+    }
   }
 
   return true;

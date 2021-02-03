@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\EventListener\StockEventListener;
 use App\Helper\CustomerHelper;
 use App\Service\CartErrorCodes;
 use App\Service\CheckoutCom\APIWrapper;
@@ -551,6 +552,11 @@ class CartController {
           $this->logger->error('Error while finalizing payment. Cart has an OOS item. Cart: @cart.', [
             '@cart' => json_encode($cart),
           ]);
+
+          $skus = array_column($cart['cart']['items'], 'sku');
+          foreach ($skus as $sku) {
+            StockEventListener::matchStockQuantity($sku);
+          }
 
           $error_message = 'Cart contains some items which are not in stock.';
           $error_code = CartErrorCodes::CART_HAS_OOS_ITEM;

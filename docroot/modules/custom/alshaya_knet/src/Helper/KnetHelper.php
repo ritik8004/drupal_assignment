@@ -149,7 +149,7 @@ class KnetHelper {
       $pipe->setTranportalId($knet_creds['tranportal_id']);
       $pipe->setTranportalPassword($knet_creds['tranportal_password']);
       $pipe->setTerminalResourceKey($knet_creds['terminal_resource_key']);
-      $pipe->setKnetUrl($knet_creds['knet_url']);
+      $pipe->setKnetUrl(Settings::get('alshaya_knet.settings')['knet_url']);
 
       // @todo When removing support for old toolkit use only AR.
       if ($knetSettings->get('knet_language_code') == 'ARA') {
@@ -480,7 +480,7 @@ class KnetHelper {
     // Get the K-Net keys etc from settings. These settings are stored in
     // secret settings file. See `post-settings/zzz_overrides`.
     $knet_settings = Settings::get('knet');
-    $knet_url = $this->configFactory->get('alshaya_knet.settings')->get('knet_url');
+    $knet_url = Settings::get('alshaya_knet.settings')['knet_url'];
 
     if (empty($knet_settings) || empty($knet_url)) {
       return [];

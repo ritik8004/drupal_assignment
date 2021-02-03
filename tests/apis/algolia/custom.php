@@ -254,7 +254,6 @@ function algolia_save_rules($index, $rules) {
 function algolia_update_index($client, $index, $settingsSource, $settingsSourceReplica, $rules) {
   $settings = $index->getSettings();
   $settingsSource['replicas'] = $settings['replicas'];
-  $settingsSource['attributesForFaceting'] = $settings['attributesForFaceting'];
 
   $index->setSettings($settingsSource);
   sleep(1);
@@ -270,9 +269,6 @@ function algolia_update_index($client, $index, $settingsSource, $settingsSourceR
     print $replica . PHP_EOL;
 
     $replicaIndex = $client->initIndex($replica);
-    $replicaSettings = $replicaIndex->getSettings();
-
-    $settingsSourceReplica[$replica_key]['attributesForFaceting'] = $replicaSettings['attributesForFaceting'];
 
     $replicaIndex->setSettings($settingsSourceReplica[$replica_key]);
     sleep(1);

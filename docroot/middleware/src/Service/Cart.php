@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\EventListener\StockEventListener;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Drupal\Drupal;
@@ -587,7 +588,13 @@ class Cart {
               return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             elseif ($exception_type === 'OOS') {
-              $this->refreshStock([$sku, $variant_sku]);
+              $this->refreshStock([
+                $sku => 0,
+                $variant_sku => 0,
+              ]);
+            }
+            elseif ($exception_type === 'not_enough') {
+              StockEventListener::matchStockQuantity($sku, $quantity);
             }
 
             return $this->returnExistingCartWithError($e);
@@ -1299,7 +1306,11 @@ class Cart {
           $skus = array_merge($skus, array_column($cart['cart']['items'], 'sku'));
         }
 
-        $this->refreshStock($skus);
+        $skus_data = [];
+        foreach ($skus as $sku) {
+          $skus_data[$sku] = 0;
+        }
+        $this->refreshStock($skus_data);
       }
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
@@ -1565,6 +1576,11 @@ class Cart {
       $this->logger->error('Error while placing order. Cart has an OOS item. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
+
+      $skus = array_column($cart['cart']['items'], 'sku');
+      foreach ($skus as $sku) {
+        StockEventListener::matchStockQuantity($sku);
+      }
 
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
     }
@@ -2274,12 +2290,13 @@ class Cart {
   /**
    * Wrapper function to trigger refresh stock event of Drupal.
    *
-   * @param array $skus
-   *   SKUs for which we need to refresh stock.
+   * @param array $skus_quantity
+   *   Array of SKU => Quantity for which we need to refresh stock.
+   *   Eg. ['sku_1' => 0, 'sku_2' => 0].
    */
-  protected function refreshStock(array $skus) {
+  protected function refreshStock(array $skus_quantity) {
     $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
-      'skus' => $skus,
+      'skus_quantity' => $skus_quantity,
     ]);
 
     if ($response['status'] == TRUE) {
