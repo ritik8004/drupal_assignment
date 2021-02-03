@@ -37,7 +37,11 @@ matrix:
   #  - PROFILE=alshaya_non_transac
   #  if: type = pull_request
   - php: 7.3
-    if: type = push
+    # Skip all the builds from back merge.addons:
+    # Code changes from back merges wont be deployed but that should be fine
+    # considering we dont need for in-active branches and for active ones
+    # there will be fresh PR merges which will take care of pushing.
+    if: type = push AND (branch IN (master, uat, qa, develop) OR sender != "alshaya-github-bot")
 
 env:
   global:
