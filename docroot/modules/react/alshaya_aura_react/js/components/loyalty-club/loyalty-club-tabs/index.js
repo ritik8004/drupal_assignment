@@ -35,7 +35,6 @@ class LoyaltyClubTabs extends React.Component {
     const allAuraStatus = getAllAuraStatus();
 
     // We show tabs only for registered & verified AURA user.
-    // @TODO: Update condition when we have rewards activity.
     if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
       return (
         <>

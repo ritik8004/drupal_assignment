@@ -54,7 +54,7 @@ class AlshayaAuraCommands extends DrushCommands {
     $this->apiHelper->getAuraApiConfig($configs, $options['reset']);
 
     $this->logger->notice('Aura API config synced. Configs: @configs.', [
-      '@configs' => $options['configs'],
+      '@configs' => json_encode($options['configs']),
     ]);
   }
 

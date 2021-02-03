@@ -416,48 +416,43 @@ class LoyaltyCustomerController {
     try {
       $request_content = $request->query->all();
 
-      // Check if required data is present in request.
-      if (empty($request_content['fromDate']) || empty($request_content['toDate'])) {
-        $this->logger->error('Error while trying to get reward activity of the user. From date and to date is required. Request Data: @data', [
-          '@data' => json_encode($request_content),
-        ]);
-        return new JsonResponse($this->utility->getErrorResponse('From date and to date is required.', Response::HTTP_NOT_FOUND));
-      }
-
       // Get user details from session.
       $user = $this->drupal->getSessionCustomerInfo();
 
-      // Check if uid in the request matches the one in session.
-      if ($user['uid'] !== $request_content['uid']) {
-        $this->logger->error("Error while trying to get reward activity of the user. User id in request doesn't match the one in session. User id from request: @req_uid. User id in session: @session_uid.", [
+      // Check if uid is for anonymous or uid in the request
+      // matches the one in session.
+      if ($request_content['uid'] == 0 || $user['uid'] !== $request_content['uid']) {
+        $this->logger->error('Error while trying to get reward activity of the user. User id in request doesn`t match the one in session. User id from request: @req_uid. User id in session: @session_uid.', [
           '@req_uid' => $request_content['uid'],
           '@session_uid' => $user['uid'],
         ]);
-        return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
+        return new JsonResponse($this->utility->getErrorResponse('User id in request doesn`t match the one in session.', Response::HTTP_NOT_FOUND));
       }
 
-      $endpoint = sprintf('/customers/apcTransactions?customerId=%s&fromDate=%s&toDate=%s&orderField=date&maxResults=%s&channel=%s',
+      // We are always passing `orderField=date:DESC` and `maxResults=0`.
+      $endpoint = sprintf('/customers/apcTransactions?customerId=%s&fromDate=%s&toDate=%s&orderField=date:DESC&maxResults=0&channel=%s',
         $user['customer_id'],
-        $request_content['fromDate'],
-        $request_content['toDate'],
-        $request_content['maxResults'],
-        $request_content['channel']
+        $request_content['fromDate'] ?? '',
+        $request_content['toDate'] ?? '',
+        $request_content['channel'] ?? ''
       );
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $data = [];
 
       if (!empty($response['apc_transactions'])) {
-        foreach ($response['apc_transactions'] as $transaction) {
-          $data[$transaction['trn_no']] = [
+        foreach ($response['apc_transactions'] as $key => $transaction) {
+          $data[$key] = [
             'orderNo' => $transaction['trn_no'],
-            'date' => date('d M Y', strtotime($transaction['date'])),
+            'date' => $transaction['date'],
             'orderTotal' => $transaction['total_value'],
             'channel' => $transaction['channel'],
             'auraPoints' => $transaction['points'],
-            'status' => $transaction['points_balances'][0]
-            ? $transaction['points_balances'][0]['status_name']
-            : '',
           ];
+
+          if (!empty($transaction['points_balances'][0])) {
+            $data[$key]['status'] = $transaction['points_balances'][0]['status'];
+            $data[$key]['statusName'] = $transaction['points_balances'][0]['status_name'];
+          }
         }
       }
       $responseData = [
