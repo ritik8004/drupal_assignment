@@ -30,7 +30,7 @@ function bazaar_voice_page_attachments(array &$page) {
   }
 
   // Adding transactional analytics to BazaarVoice pixel.
-  if (_bazaar_voice_process_bvpixel_transactions()) {
+  if (_bazaar_voice_process_bvpixel_transactions() && $bazaar_voice->isBvConfigurationsAvailable()) {
     if (\Drupal::moduleHandler()->moduleExists('alshaya_spc')) {
       $route_match = \Drupal::routeMatch();
       // Attach bvpixel library to order confirmation page.
