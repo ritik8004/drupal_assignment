@@ -108,7 +108,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       ? selectedOption.value
       : '';
 
-    this.fetchRewardActivity(fromDate, toDate, 0, channel);
+    this.fetchRewardActivity(fromDate, toDate, channel);
     this.setState({
       type: channel,
     });
@@ -120,7 +120,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0));
     const { type } = this.state;
 
-    this.fetchRewardActivity(fromDate, toDate, 0, type);
+    this.fetchRewardActivity(fromDate, toDate, type);
     this.setState({
       fromDate,
       toDate,
