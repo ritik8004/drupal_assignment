@@ -18,4 +18,3 @@ services:
       - '@current_route_match'
       - '@language_manager'
       - '@config.factory'
-      - '@alshaya_acm_product.skumanager'

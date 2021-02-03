@@ -30,13 +30,9 @@ function alshaya_bnpl_node_view(array &$build, EntityInterface $entity, EntityVi
   $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
   $build['postpay'] = $bnplWidgetHelper->getBnplWidgetMarkup();
 
-  $build['#attached'] = [
-    'library' => [
-      'alshaya_bnpl/postpay_sdk',
-      'alshaya_bnpl/postpay_pdp',
-    ],
-    'drupalSettings' => [
-      'postpay' => $bnplApiconfig,
-    ],
-  ];
+  $build['#attached']['library'][] = 'alshaya_bnpl/postpay_pdp';
+  $build['#attached']['drupalSettings']['postpay'] = $bnplApiconfig;
+
+  $currency_config = \Drupal::configFactory()->get('acq_commerce.currency');
+  $build['#attached']['drupalSettings']['postpay']['currency_multiplier'] = pow(10, (int) $currency_config->get('decimal_points'));
 }

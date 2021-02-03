@@ -95,7 +95,7 @@ class AlshayaBnplAPIHelper {
       if (!isset($configs['theme']) || empty($configs['theme'])) {
         $configs['theme'] = 'light';
       }
-      $configs['sandbox'] = $configs['environment'] == 'sandbox' ? TRUE : FALSE;
+      $configs['sandbox'] = isset($configs['environment']) && $configs['environment'] == 'sandbox' ? TRUE : FALSE;
 
       if (empty($configs)) {
         $this->logger->error('Invalid response from Postpay api, @response', [
