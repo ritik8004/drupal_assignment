@@ -1,0 +1,7 @@
+services:
+  alshaya_bazaar_voice.commands:
+    class: Drupal\alshaya_bazaar_voice\Commands\AlshayaBazaarVoiceCommands
+    arguments:
+      - '@alshaya_master.entity_helper'
+    tags:
+      - { name: drush.command }
