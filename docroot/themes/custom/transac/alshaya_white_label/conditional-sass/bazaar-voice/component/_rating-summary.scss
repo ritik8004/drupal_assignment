@@ -1,0 +1,65 @@
+%histogram-summary-display {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.aggregate-rating {
+  .empty-stars {
+    position: relative;
+    cursor: pointer;
+
+    .histogram-data {
+      @include tooltip(19.735rem);
+    }
+
+    &:hover {
+      .histogram-data {
+        @include tooltip-display();
+      }
+    }
+  }
+}
+
+.histogram-data {
+  font-family: $alshaya-bold;
+
+  .histogram-title {
+    padding-bottom: 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .histogram-row {
+    color: $rr-histogram-text;
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+
+    .star-label {
+      @extend %histogram-summary-display;
+
+      width: 20%;
+      margin-#{$right}: 1%;
+    }
+
+    .histogram-full-bar {
+      @extend %histogram-summary-display;
+
+      background-color: $rr-histogram-full-bar-bg;
+      width: 62%;
+      margin-#{$right}: 2%;
+
+      .histogram-dynamic-bar {
+        background-color: $rr-histogram-dynamic-bar-bg;
+        height: 1rem;
+        float: $left;
+      }
+    }
+
+    .histogram-star-count {
+      @extend %histogram-summary-display;
+
+      font-size: 0.75rem;
+      width: 15%;
+      text-align: center;
+    }
+  }
+}

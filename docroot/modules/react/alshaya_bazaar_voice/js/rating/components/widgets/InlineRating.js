@@ -1,4 +1,5 @@
 import React from 'react';
+import RatingSummary from './RatingSummary';
 
 const InlineRating = ({
   ReviewsData,
@@ -10,13 +11,24 @@ const InlineRating = ({
           <div className="aggregate-rating" key={item} itemProp="aggregateRating" itemScope="" itemType="">
             <div className="empty-stars">
               <span style={{ width: `${((parseFloat(ReviewsData[item].ReviewStatistics.AverageOverallRating).toFixed(1)) * 100) / 5}%` }} className="aggregate-star-rating" />
+              <div className="histogram-data">
+                <div className="histogram-title">
+                  {ReviewsData[item].ReviewStatistics.TotalReviewCount}
+                  {' '}
+                  {Drupal.t('reviews')}
+                </div>
+                <RatingSummary
+                  HistogramData={ReviewsData[item].ReviewStatistics.RatingDistribution}
+                  TotalReviewCount={ReviewsData[item].ReviewStatistics.TotalReviewCount}
+                />
+              </div>
             </div>
             <span className="no-of-stars" itemProp={`${ReviewsData[item].ReviewStatistics.AverageOverallRating}`}>
               {parseFloat(ReviewsData[item].ReviewStatistics.AverageOverallRating).toFixed(1)}
               {' '}
               {Drupal.t('stars')}
             </span>
-            <span classNameitemProp={`${ReviewsData[item].ReviewStatistics.TotalReviewCount}`}>
+            <span>
               (
               {ReviewsData[item].ReviewStatistics.TotalReviewCount}
               {' '}
@@ -36,5 +48,4 @@ const InlineRating = ({
     </div>
   );
 };
-
 export default InlineRating;
