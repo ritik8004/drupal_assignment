@@ -2,7 +2,7 @@
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  margin: 0.75rem 0;
+  margin-top: 0.75rem;
 
   @include breakpoint($only-mobile) {
     padding: 0.5rem;
@@ -10,35 +10,41 @@
   }
 
   > span {
-    font-size: 0.75rem;
-    height: 1.25rem;
-    line-height: 2.4;
-  }
+    font-size: 0.875rem;
+    line-height: 2;
+    margin-#{$left}: 0.625rem;
 
-  .no-of-stars {
-    font-size: 1.125rem;
-    margin-#{$left}: 0.875rem;
-    margin-#{$right}: 0.875rem;
-    font-family: $alshaya-bold;
-    line-height: 1.5;
+    a {
+      text-decoration: underline;
+    }
   }
 
   .write-review {
     text-decoration: underline;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
   }
 
   .empty-stars {
-    background: url('#{$base_theme_img_directory_path}/icons/star-rating-sprite.svg') repeat-x;
-    height: 1.1875rem; /* [(height of one sprite / 2) ex: 48/2 = 19] */
-    width: 7.5rem; /* [(width of one sprite x 5) ex: 24*5 = 120] */
-  }
+    .star-ratings {
+      .star-ratings-front {
+        position: absolute;
+        overflow: hidden;
+      }
 
-  .aggregate-star-rating {
-    background: url('#{$base_theme_img_directory_path}/icons/star-rating-sprite.svg') repeat-x;
-    background-position: $left 0 bottom 0;
-    float: $left;
-    height: 1.1875rem; /* [(height of one sprite / 2) ex: 48/2 = 19] */
-    display: block;
+      .star-ratings-front,
+      .star-ratings-back {
+        span {
+          padding: 0 0.125rem;
+        }
+      }
+
+      .icon-ic_ratingfull {
+        @include icon(ratingfull);
+      }
+
+      .icon-ic_rating {
+        @include icon(rating);
+      }
+    }
   }
 }

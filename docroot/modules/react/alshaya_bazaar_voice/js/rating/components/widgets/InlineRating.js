@@ -1,5 +1,6 @@
 import React from 'react';
 import RatingSummary from './RatingSummary';
+import DisplayStar from '../stars/DisplayStar';
 
 const InlineRating = ({
   ReviewsData,
@@ -10,7 +11,9 @@ const InlineRating = ({
         { Object.keys(ReviewsData).map((item) => (
           <div className="aggregate-rating" key={item} itemProp="aggregateRating" itemScope="" itemType="">
             <div className="empty-stars">
-              <span style={{ width: `${((parseFloat(ReviewsData[item].ReviewStatistics.AverageOverallRating).toFixed(1)) * 100) / 5}%` }} className="aggregate-star-rating" />
+              <DisplayStar
+                StarPercentage={ReviewsData[item].ReviewStatistics.AverageOverallRating}
+              />
               <div className="histogram-data">
                 <div className="histogram-title">
                   {ReviewsData[item].ReviewStatistics.TotalReviewCount}
@@ -23,16 +26,9 @@ const InlineRating = ({
                 />
               </div>
             </div>
-            <span className="no-of-stars" itemProp={`${ReviewsData[item].ReviewStatistics.AverageOverallRating}`}>
-              {parseFloat(ReviewsData[item].ReviewStatistics.AverageOverallRating).toFixed(1)}
-              {' '}
-              {Drupal.t('stars')}
-            </span>
             <span>
               (
-              {ReviewsData[item].ReviewStatistics.TotalReviewCount}
-              {' '}
-              {Drupal.t('reviews')}
+              <a href="#">{ReviewsData[item].ReviewStatistics.TotalReviewCount}</a>
               )
             </span>
           </div>
