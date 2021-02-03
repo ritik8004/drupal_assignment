@@ -1,7 +1,10 @@
 (function ($, Drupal) {
   Drupal.behaviors.postpayPDP = {
     attach: function (context, settings) {
-      setPostpayWidgetAmount($('.sku-base-form'));
+      $('.sku-base-form').each(function () {
+        setPostpayWidgetAmount(this);
+      });
+
       $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
         setPostpayWidgetAmount(this, variant, event);
       });
