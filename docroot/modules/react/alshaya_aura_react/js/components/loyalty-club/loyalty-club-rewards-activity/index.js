@@ -62,7 +62,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     if (Array.isArray(activity) && activity.length === 0) {
       statement.push(
-        <div className="no-reward-activity">You have no reward activity to display.</div>,
+        <div className="no-reward-activity">{Drupal.t('You have no reward activity to display.')}</div>,
       );
     }
 

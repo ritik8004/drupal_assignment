@@ -1,3 +1,5 @@
+import { getAuraConfig } from './helper';
+
 /**
  * Utility function to get transaction type options.
  */
@@ -19,8 +21,9 @@ function getTransactionDateOptions(activity) {
 
   const date = new Date(Object.entries(activity)[0][1].date);
   const dates = [];
+  const { rewardActivityTimeLimit } = getAuraConfig();
 
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < parseInt(rewardActivityTimeLimit, 10); i++) {
     const monthYear = date.toLocaleString('default', { month: 'short', year: 'numeric' });
     dates[i] = {
       value: monthYear,
