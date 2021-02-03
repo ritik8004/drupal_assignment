@@ -374,6 +374,10 @@ body {
 
   @include breakpoint($only-mobile) {
     #{$left}: -23%;
+
+    html[lang='ar'] & {
+      right: -6%;
+    }
   }
 }
 
