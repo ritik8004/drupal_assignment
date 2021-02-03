@@ -24,6 +24,30 @@
     .sub-total {
       margin-bottom: 0;
     }
+
+    .sub-totals {
+      padding-bottom: 0.625rem;
+    }
+
+    .hero-totals-wrapper {
+      padding: 1.25rem 0;
+      border-top: 1px solid $spc-order-summary-hero-total-border;
+
+      .hero-total:only-child {
+        padding-bottom: 0;
+      }
+
+      .aura-order-summary {
+        .hero-total.aura-hero-total {
+          padding-bottom: 0;
+
+          .vat-text {
+            font-size: 0.875rem;
+            color: $spc-order-total-suffix-text;
+          }
+        }
+      }
+    }
   }
 
   .total-line-item {
@@ -61,27 +85,26 @@
   }
 
   .hero-total {
-    border-top: 1px solid $spc-order-summary-hero-total-border;
-    padding: 1.25rem 0;
+    padding-bottom: 0.625rem;
 
     .total-line-item {
       font-family: $alshaya-bold;
       margin-bottom: 0;
     }
+  }
 
-    .delivery-vat {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+  .delivery-vat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-      html[lang=ar] & {
-        line-height: 1.5;
-      }
+    html[lang=ar] & {
+      line-height: 1.5;
+    }
 
-      span {
-        font-size: 0.875rem;
-        color: $spc-order-total-suffix-text;
-      }
+    span {
+      font-size: 0.875rem;
+      color: $spc-order-total-suffix-text;
     }
   }
 

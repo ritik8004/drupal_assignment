@@ -1,8 +1,9 @@
 import React from 'react';
 import TotalLineItem from '../../../../../utilities/total-line-item';
+import DeliveryVATSuffix from '../../../../../utilities/delivery-vat-suffix';
 
 const AuraCheckoutOrderSummary = (props) => {
-  const { totals } = props;
+  const { totals, shippingAmount, dontShowVatText } = props;
 
   if (totals === undefined || totals === null) {
     return null;
@@ -21,11 +22,17 @@ const AuraCheckoutOrderSummary = (props) => {
         title={Drupal.t('Paid With Aura')}
         value={paidWithAura}
       />
-      <TotalLineItem
-        name="balance-payable"
-        title={Drupal.t('Balance Payable')}
-        value={balancePayable}
-      />
+      <div className="hero-total aura-hero-total">
+        <TotalLineItem
+          name="balance-payable"
+          title={Drupal.t('Balance Payable')}
+          value={balancePayable}
+        />
+        <DeliveryVATSuffix
+          shippingAmount={shippingAmount}
+          dontShowVatText={dontShowVatText}
+        />
+      </div>
     </div>
   );
 };
