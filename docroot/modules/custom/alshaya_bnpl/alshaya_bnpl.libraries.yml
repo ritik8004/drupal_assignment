@@ -1,0 +1,19 @@
+postpay_sdk:
+  remote: https://cdn.postpay.io
+  version: VERSION
+  license:
+    name: UNKNOWN
+    url: UNKNOWN
+    gpl-compatible: FALSE
+  js:
+    js/postpay.js: { }
+    https://cdn.postpay.io/v1/js/postpay.js: { type: external }
+  dependencies:
+    - core/drupalSettings
+
+postpay_pdp:
+  version: 1.x
+  js:
+    js/postpay_pdp.js: { }
+  dependencies:
+    - alshaya_bnpl/postpay_sdk
