@@ -17,22 +17,20 @@ function alshaya_bnpl_node_view(array &$build, EntityInterface $entity, EntityVi
     return;
   }
 
-  // Add Postpay library and its settings.
-  /** @var \Drupal\alshaya_bnpl\AlshayaBnplAPIHelper $bnplApiconfig */
-  $bnplApiconfig = \Drupal::service('alshaya_bnpl.api_helper')->getBnplApiConfig();
-  // No need to integrate the widget if the API does not have merchant id.
-  if (!isset($bnplApiconfig['merchant_id']) || empty($bnplApiconfig['merchant_id'])) {
-    return;
-  }
-  $bnplApiconfig['locale'] = 'en';
-
   /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
   $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
   $build['postpay'] = $bnplWidgetHelper->getBnplWidgetMarkup();
+  $bnplWidgetHelper->getBnplBuild($build, 'pdp');
+}
 
-  $build['#attached']['library'][] = 'alshaya_bnpl/postpay_pdp';
-  $build['#attached']['drupalSettings']['postpay'] = $bnplApiconfig;
-
-  $currency_config = \Drupal::configFactory()->get('acq_commerce.currency');
-  $build['#attached']['drupalSettings']['postpay']['currency_multiplier'] = pow(10, (int) $currency_config->get('decimal_points'));
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ *
+ * @param array $build
+ */
+function alshaya_bnpl_alshaya_spc_cart_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
+  $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
+  $build['#attached']['drupalSettings']['postpay_widget_info'] = $bnplWidgetHelper->getBnplWidgetInfo('cart');
+  $bnplWidgetHelper->getBnplBuild($build, 'cart');
 }
