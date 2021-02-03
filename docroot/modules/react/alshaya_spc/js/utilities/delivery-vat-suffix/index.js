@@ -5,7 +5,7 @@ import VatText from '../vat-text';
 const DeliveryVATSuffix = (props) => {
   const {
     shippingAmount,
-    showVatTextAsSuffix,
+    dontShowVatText,
   } = props;
   return (
     <div className="delivery-vat">
@@ -14,7 +14,7 @@ const DeliveryVATSuffix = (props) => {
       </ConditionalView>
       {/* If any other Hero total are present VAT text is shown as part of the
        last hero total and not the usual order total */}
-      {showVatTextAsSuffix === true
+      {dontShowVatText === true
         ? null
         : <VatText />}
     </div>
