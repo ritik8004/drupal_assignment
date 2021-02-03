@@ -2,10 +2,11 @@
  * Utility function to get transaction type options.
  */
 function getTransactionTypeOptions() {
+  console.log(Drupal.t('Online'));
   return [
-    { value: 'all', label: 'All Transactions' },
-    { value: 'online', label: 'Online' },
-    { value: 'offline', label: 'Offline' },
+    { value: 'all', label: Drupal.t('All Transactions') },
+    { value: 'online', label: Drupal.t('Online') },
+    { value: 'offline', label: Drupal.t('Offline') },
   ];
 }
 
