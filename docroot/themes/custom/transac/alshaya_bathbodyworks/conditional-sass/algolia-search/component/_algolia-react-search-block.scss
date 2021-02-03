@@ -204,6 +204,14 @@
           padding: 0.625rem !important;
         }
       }
+
+      #top-results {
+        .alshaya_search_mainimage {
+          @include breakpoint($only-mobile) {
+            height: 15.5rem;
+          }
+        }
+      }
     }
 
     .react-autosuggest__suggestions-container {
