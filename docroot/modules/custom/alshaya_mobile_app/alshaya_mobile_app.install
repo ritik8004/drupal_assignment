@@ -17,14 +17,12 @@ use Drupal\user\Entity\User;
  * Enable options-list config.
  */
 function alshaya_mobile_app_update_8077() {
-
   // Install options-list config.
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs(
-      ['rest.resource.options_list'],
-      'alshaya_mobile_app',
-      'install',
-    );
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['rest.resource.options_list'],
+    'alshaya_mobile_app',
+    'install',
+  );
 }
 
 /**
