@@ -17,3 +17,10 @@ postpay_pdp:
     js/postpay_pdp.js: { }
   dependencies:
     - alshaya_bnpl/postpay_sdk
+
+postpay_cart:
+  version: 1.x
+  js:
+    js/postpay_cart.js: { }
+  dependencies:
+    - alshaya_bnpl/postpay_sdk

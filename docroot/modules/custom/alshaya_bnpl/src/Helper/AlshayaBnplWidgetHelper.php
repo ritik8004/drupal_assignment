@@ -129,7 +129,7 @@ class AlshayaBnplWidgetHelper {
     $bnplApiconfig['locale'] = 'en';
     switch ($page_type) {
       case 'cart':
-        $build['#attached']['library'][] = 'alshaya_bnpl/postpay_sdk';
+        $build['#attached']['library'][] = 'alshaya_bnpl/postpay_cart';
         break;
 
       default:
