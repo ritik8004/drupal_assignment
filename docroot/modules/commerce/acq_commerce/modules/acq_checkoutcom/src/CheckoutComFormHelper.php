@@ -208,13 +208,13 @@ class CheckoutComFormHelper {
   /**
    * Get all apple pay configuration.
    *
-   * @param string $type
+   * @param mixed $type
    *   Apple-pay or upapi.
    *
    * @return array
    *   Apple pay config.
    */
-  public function getApplePayConfig(string $type = '') {
+  public function getApplePayConfig($type = NULL) {
     // Data from API.
     if ($type == 'upapi') {
       $settings = $this->apiHelper->getCheckoutcomUpapiApplePayConfig();

@@ -1,7 +1,8 @@
 import Axios from 'axios';
-import removeFullScreenLoader from './checkout_util';
+import { placeOrder, removeFullScreenLoader } from './checkout_util';
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
+import i18nMiddleWareUrl from './i18n_url';
 
 let applePaySessionObject;
 
@@ -12,7 +13,7 @@ const CheckoutComUpapiApplePay = {
     }
 
     const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
-    return drupalSettings.checkoutComApplePay.allowedIn === 'all' || isMobile;
+    return drupalSettings.checkoutComUpapiApplePay.allowedIn === 'all' || isMobile;
   },
 
   isPossible: () => {
@@ -68,6 +69,32 @@ const CheckoutComUpapiApplePay = {
     });
   },
 
+  onPaymentAuthorized: (event) => {
+    const url = i18nMiddleWareUrl('payment/checkout-com-apple-pay/save');
+    Axios.post(url, event.payment.token).then((response) => {
+      if (response.data.success !== undefined && response.data.success === true) {
+        // Update apple pay popup.
+        applePaySessionObject.completePayment(window.ApplePaySession.STATUS_SUCCESS);
+
+        // Place order now.
+        placeOrder('checkout_com_upapi_apple_pay');
+        return;
+      }
+
+      // Something wrong, throw error.
+      throw (new Error(response.data.error_message));
+    }).catch((error) => {
+      // Update apple pay popup.
+      applePaySessionObject.completePayment(window.ApplePaySession.STATUS_FAILURE);
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: getStringMessage('payment_error'),
+      });
+      removeFullScreenLoader();
+      Drupal.logJavascriptError('apple-pay-merchant-authorise', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
+    });
+  },
+
   onCancel: () => {
     removeFullScreenLoader();
     Drupal.logJavascriptError('apple-pay', 'user cancelled or error occurred', GTM_CONSTANTS.PAYMENT_ERRORS);
@@ -99,6 +126,7 @@ const CheckoutComUpapiApplePay = {
     try {
       applePaySessionObject = new window.ApplePaySession(1, paymentRequest);
       applePaySessionObject.onvalidatemerchant = CheckoutComUpapiApplePay.onValidateMerchant;
+      applePaySessionObject.onpaymentauthorized = CheckoutComUpapiApplePay.onPaymentAuthorized;
       applePaySessionObject.oncancel = CheckoutComUpapiApplePay.onCancel;
       applePaySessionObject.begin();
     } catch (e) {
