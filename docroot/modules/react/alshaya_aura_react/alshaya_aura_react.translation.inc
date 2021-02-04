@@ -58,7 +58,7 @@ function _alshaya_aura_react_translations() {
     'Rewards activity' => [
       'ar' => 'تفاصيل المكافآت',
     ],
-    'Loyalty Benefits' => [
+    'Loyalty benefits' => [
       'ar' => 'مكافآت الولاء',
     ],
     'Your points will instantly be credited to your account. You’ll be able to redeem them after 14 days as per the returns & refunds policies.' => [

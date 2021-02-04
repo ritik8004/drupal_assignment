@@ -406,4 +406,68 @@ class LoyaltyCustomerController {
     }
   }
 
+  /**
+   * Reward Activity.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Return users reward activities.
+   */
+  public function getRewardActivity(Request $request) {
+    try {
+      $request_content = $request->query->all();
+
+      // Get user details from session.
+      $user = $this->drupal->getSessionCustomerInfo();
+
+      // Check if uid is for anonymous or uid in the request
+      // matches the one in session.
+      if ($request_content['uid'] == 0 || $user['uid'] !== $request_content['uid']) {
+        $this->logger->error('Error while trying to get reward activity of the user. User id in request doesn`t match the one in session. User id from request: @req_uid. User id in session: @session_uid.', [
+          '@req_uid' => $request_content['uid'],
+          '@session_uid' => $user['uid'],
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('User id in request doesn`t match the one in session.', Response::HTTP_NOT_FOUND));
+      }
+
+      // We are always passing `orderField=date:DESC` and `maxResults=0`.
+      $endpoint = sprintf('/customers/apcTransactions?customerId=%s&fromDate=%s&toDate=%s&orderField=date:DESC&maxResults=0&channel=%s',
+        $user['customer_id'],
+        $request_content['fromDate'] ?? '',
+        $request_content['toDate'] ?? '',
+        $request_content['channel'] ?? ''
+      );
+      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $data = [];
+
+      if (!empty($response['apc_transactions'])) {
+        foreach ($response['apc_transactions'] as $key => $transaction) {
+          $data[$key] = [
+            'orderNo' => $transaction['trn_no'],
+            'date' => $transaction['date'],
+            'orderTotal' => $transaction['total_value'],
+            'channel' => $transaction['channel'],
+            'auraPoints' => $transaction['points'],
+          ];
+
+          if (!empty($transaction['points_balances'][0])) {
+            $data[$key]['status'] = $transaction['points_balances'][0]['status'];
+            $data[$key]['statusName'] = $transaction['points_balances'][0]['status_name'];
+          }
+        }
+      }
+      $responseData = [
+        'status' => TRUE,
+        'data' => $data,
+      ];
+      return new JsonResponse($responseData);
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to get reward activity of the user. Request Data: @data. Message: @message', [
+        '@data' => json_encode($request_content),
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
+    }
+  }
+
 }

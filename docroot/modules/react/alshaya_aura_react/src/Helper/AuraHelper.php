@@ -128,6 +128,7 @@ class AuraHelper {
       'mobile_maxlength' => $this->configFactory->get('alshaya_master.mobile_number_settings')->get('maxlength'),
       'headerLearnMoreLink' => $alshaya_aura_config->get('aura_rewards_header_learn_more_link'),
       'phonePrefixList' => $dictionary_api_mobile_country_code_list[AuraDictionaryApiConstants::EXT_PHONE_PREFIX] ?? ['+' . $country_mobile_code],
+      'rewardActivityTimeLimit' => $alshaya_aura_config->get('aura_reward_activity_time_limit_in_months'),
     ];
 
     return $config;
