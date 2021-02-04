@@ -162,7 +162,7 @@ function alshaya_bbw_transac_acq_sku_base_field_additions_alter(array &$fields =
  */
 function alshaya_bbw_transac_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
   $form = $sku->get('attr_form')->getString();
-  $title_raw = explode($form,$sku->label());
+  $raw_title = explode($form,$sku->label());
   $data['form'] = $form;
-  $data['item_title'] = trim($title_raw[0]);
+  $data['raw_title'] = trim($raw_title[0]);
 }

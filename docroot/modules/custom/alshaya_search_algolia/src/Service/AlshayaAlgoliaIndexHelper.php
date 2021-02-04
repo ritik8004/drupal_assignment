@@ -445,8 +445,8 @@ class AlshayaAlgoliaIndexHelper {
 
     // Index the raw title of the product.
     $form = $sku->get('attr_form')->getString();
-    $title_raw = explode($form, $sku->label());
-    $object['item_title'] = trim($title_raw[0]);
+    $raw_title = explode($form, $sku->label());
+    $object['raw_title'] = trim($raw_title[0]);
 
     $object['is_new'] = $sku->get('attr_is_new')->getString();
     $this->updatePrettyPathAlias($object);
