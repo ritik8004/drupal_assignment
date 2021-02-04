@@ -28,6 +28,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
   }
 
   componentDidMount() {
+    // Get user's last reward activity details.
     this.fetchRewardActivity('', '', 1, '');
   }
 
