@@ -88,3 +88,7 @@ variables:
   billing_postal_code: ''
   billing_mobile: '556677888'
   billing_text: 'Billing address:'
+  spc_search_keyword: 'shoe'
+  filter_1: 'final_price'
+  filter_2: 'attr_size_rest'
+  filter_3: 'attr_gender'
