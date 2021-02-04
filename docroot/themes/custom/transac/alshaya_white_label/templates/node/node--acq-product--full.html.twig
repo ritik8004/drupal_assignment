@@ -66,8 +66,6 @@ set classes = [
             </div>
           {% endif %}
 
-          <div class="postpay">{{ content.postpay }}</div>
-
           <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
           {% if content.same_day_delivery_text %}
@@ -84,6 +82,11 @@ set classes = [
           {% endif %}
         </div>
       {% endblock %}
+
+      {% if content.postpay %}
+        {{ attach_library('alshaya_white_label/postpay-pdp') }}
+        <div class="postpay"> {{ content.postpay }} </div>
+      {% endif %}
 
       {% block pdpSidebar %}
         <div class="content__sidebar">

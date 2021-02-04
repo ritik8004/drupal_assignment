@@ -57,7 +57,10 @@
           </div>
         {% endif %}
 
-        <div class="postpay">{% if content.postpay %}{{ content.postpay }}{% endif %}</div>
+        {% if content.postpay %}
+          {{ attach_library('alshaya_white_label/postpay-pdp') }}
+          <div class="postpay"> {{ content.postpay }} </div>
+        {% endif %}
 
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
