@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Service\Cart;
 use App\Service\Drupal\Drupal;
 use App\Service\Aura\RedemptionHelper;
+use App\Service\Orders;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -60,6 +61,13 @@ class LoyaltyClubRedeemController {
   protected $redemptionHelper;
 
   /**
+   * Orders service.
+   *
+   * @var \App\Service\Orders
+   */
+  protected $orders;
+
+  /**
    * LoyaltyClubRedeemController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -74,6 +82,8 @@ class LoyaltyClubRedeemController {
    *   Drupal service.
    * @param \App\Service\Aura\RedemptionHelper $redemption_helper
    *   Drupal service.
+   * @param \App\Service\Orders $orders
+   *   Orders service.
    */
   public function __construct(
       MagentoApiWrapper $magento_api_wrapper,
@@ -81,7 +91,8 @@ class LoyaltyClubRedeemController {
       Utility $utility,
       Cart $cart,
       Drupal $drupal,
-      RedemptionHelper $redemption_helper
+      RedemptionHelper $redemption_helper,
+      Orders $orders
     ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
@@ -89,6 +100,7 @@ class LoyaltyClubRedeemController {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->redemptionHelper = $redemption_helper;
+    $this->orders = $orders;
   }
 
   /**
@@ -150,6 +162,33 @@ class LoyaltyClubRedeemController {
 
       // API call to redeem points.
       $responseData = $this->redemptionHelper->redeemPoints($request_content['cardNumber'], $redeemPointsRequestData);
+
+      $payment_method = '';
+
+      // Check if request is to `set points` and full payment
+      // is done by aura points.
+      if ($redeemPointsRequestData['redeemPoints']['action'] === 'set points'
+        && (int) $responseData['data']['balancePayable'] <= 0) {
+        $payment_method = 'aura_payment';
+      }
+
+      // Check if request is to `remove points` and payment method
+      // is set to `aura_payment`.
+      if ($redeemPointsRequestData['redeemPoints']['action'] === 'remove points'
+        && $this->cart->getPaymentMethodSetOnCart() === 'aura_payment') {
+        $payment_method = $this->orders->getLastOrder($user['customer_id'])['payment']['method'];
+      }
+
+      // Update payment method.
+      if (!empty($payment_method)) {
+        $payment_updated = $this->cart->updatePayment(['method' => $payment_method], ['attempted_payment' => 1]);
+        if (empty($payment_updated) || !empty($payment_updated['error'])) {
+          $this->logger->error('Error while trying to set payment method. Error: @error.', [
+            '@error' => json_encode($payment_updated),
+          ]);
+          return new JsonResponse($this->utility->getErrorResponse($payment_updated['error_message'], $payment_updated['error_code']));
+        }
+      }
 
       return new JsonResponse($responseData);
     }
