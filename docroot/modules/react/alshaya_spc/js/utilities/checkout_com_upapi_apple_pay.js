@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { placeOrder, removeFullScreenLoader } from './checkout_util';
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
-import i18nMiddleWareUrl from './i18n_url';
+import { addPaymentMethodInCart } from './update_cart';
 
 let applePaySessionObject;
 
@@ -70,14 +70,62 @@ const CheckoutComUpapiApplePay = {
   },
 
   onPaymentAuthorized: (event) => {
-    const url = i18nMiddleWareUrl('payment/checkout-com-apple-pay/save');
-    Axios.post(url, event.payment.token).then((response) => {
-      if (response.data.success !== undefined && response.data.success === true) {
-        // Update apple pay popup.
-        applePaySessionObject.completePayment(window.ApplePaySession.STATUS_SUCCESS);
+    const url = drupalSettings.checkoutComUpapiApplePay.api_url;
+    const { token } = event.payment;
+    const params = {
+      type: 'applepay',
+      token_data: {
+        version: token.paymentData.version,
+        data: token.paymentData.data,
+        signature: token.paymentData.signature,
+        header: {
+          ephemeralPublicKey: token.paymentData.header.ephemeralPublicKey,
+          publicKeyHash: token.paymentData.header.publicKeyHash,
+          transactionId: token.transactionIdentifier,
+        },
+      },
+    };
+    Axios.post(url, params, {
+      headers: {
+        Authorization: drupalSettings.checkoutComUpapiApplePay.public_key,
+      },
+    }).then((response) => {
+      if (response.data.type !== undefined && response.data.type === 'applepay') {
+        const paymentData = {
+          payment: {
+            method: 'checkout_com_upapi_applepay',
+            additional_data: {
+              token: response.data.token,
+              scheme: 'Visa',
+              bin: response.data.bin,
+            },
+          },
+        };
 
-        // Place order now.
-        placeOrder('checkout_com_upapi_apple_pay');
+        // Update payment method with token data.
+        addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
+          if (!result) {
+            // Something wrong, throw error.
+            throw (new Error(response.data.error_message));
+          }
+
+          if (result.error === undefined) {
+            // Update apple pay payment sheet.
+            applePaySessionObject.completePayment(window.ApplePaySession.STATUS_SUCCESS);
+
+            // Place order.
+            placeOrder('checkout_com_upapi_apple_pay');
+          }
+        }).catch((error) => {
+          // Update apple pay popup.
+          applePaySessionObject.completePayment(window.ApplePaySession.STATUS_FAILURE);
+          dispatchCustomEvent('spcCheckoutMessageUpdate', {
+            type: 'error',
+            message: getStringMessage('payment_error'),
+          });
+          Drupal.logJavascriptError('add payment method in cart', error, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
+        });
+
         return;
       }
 

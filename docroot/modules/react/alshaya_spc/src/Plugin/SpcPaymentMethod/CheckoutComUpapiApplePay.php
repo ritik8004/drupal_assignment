@@ -82,6 +82,16 @@ class CheckoutComUpapiApplePay extends AlshayaSpcPaymentMethodPluginBase impleme
    */
   public function processBuild(array &$build) {
     $settings = $this->getApplePayConfig();
+
+    // API URL for checkout.com token.
+    $api_url = $settings['api_url'] ?? 'https://api.sandbox.checkout.com';
+    $api_url = trim($api_url, '/');
+    $settings['api_url'] = $api_url . '/tokens';
+
+    // Adding supports3DS to merchant capabilities
+    // else merchant validation fails on apple-pay payment sheet.
+    $settings['apple_pay_merchant_capabilities'] = 'supports3DS,' . $settings['apple_pay_merchant_capabilities'];
+
     $build['#attached']['drupalSettings']['checkoutComUpapiApplePay'] = $settings;
   }
 
