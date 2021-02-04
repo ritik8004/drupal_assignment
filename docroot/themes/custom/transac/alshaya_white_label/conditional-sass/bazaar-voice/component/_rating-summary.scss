@@ -10,6 +10,10 @@
 
     .histogram-data {
       @include tooltip(19.735rem);
+
+      @include breakpoint($only-tablet) {
+        @include tooltip(16rem);
+      }
     }
 
     &:hover {

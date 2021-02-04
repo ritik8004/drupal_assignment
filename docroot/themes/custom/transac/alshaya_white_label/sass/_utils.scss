@@ -373,11 +373,7 @@ body {
   background: $rr-tooltip-bg;
 
   @include breakpoint($only-mobile) {
-    #{$left}: -23%;
-
-    html[lang='ar'] & {
-      right: -6%;
-    }
+    #{$left}: -95%;
   }
 }
 
