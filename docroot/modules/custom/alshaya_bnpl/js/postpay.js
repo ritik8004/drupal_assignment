@@ -8,5 +8,4 @@
       locale: drupalSettings.postpay.locale
     });
   };
-
 })(drupalSettings);
