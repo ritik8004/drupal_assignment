@@ -37,10 +37,7 @@ export default class Rating extends React.Component {
   }
 
   render() {
-    const {
-      ReviewsData,
-    } = this.state;
-
+    const { ReviewsData } = this.state;
     return (
       <div className="rating-wrapper">
         <InlineRating ReviewsData={ReviewsData} />
