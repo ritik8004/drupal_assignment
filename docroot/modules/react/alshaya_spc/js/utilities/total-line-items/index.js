@@ -132,6 +132,7 @@ class TotalLineItems extends React.Component {
           {isAuraEnabled()
             ? (
               <AuraCheckoutOrderSummary
+                totals={totals}
                 dontShowVatText={dontShowVatText}
                 shippingAmount={shippingAmount}
               />

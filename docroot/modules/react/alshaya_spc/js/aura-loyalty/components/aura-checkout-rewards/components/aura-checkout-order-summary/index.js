@@ -11,7 +11,7 @@ const AuraCheckoutOrderSummary = (props) => {
 
   const { paidWithAura, balancePayable } = totals;
 
-  if (paidWithAura === undefined || balancePayable === undefined) {
+  if (paidWithAura === undefined || balancePayable === undefined || paidWithAura === 0) {
     return null;
   }
 
