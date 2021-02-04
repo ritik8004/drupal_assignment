@@ -3,13 +3,12 @@ import AuraRedeemPointsTextField from '../aura-redeem-textfield';
 import ConditionalView from '../../../../common/components/conditional-view';
 import {
   getPointToPrice,
-  getPriceToPoint,
   showError,
   removeError,
 } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
 import { redeemAuraPoints } from '../../utilities/checkout_helper';
-import { getUserDetails } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import { getUserDetails, getPointToPriceRatio } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import PriceElement from '../../../../utilities/special-price/PriceElement';
 
@@ -35,7 +34,7 @@ class AuraFormRedeemPoints extends React.Component {
 
     this.setState({
       money: totals.paidWithAura,
-      points: getPriceToPoint(totals.paidWithAura),
+      points: totals.paidWithAura * getPointToPriceRatio(),
       auraTransaction: true,
     });
     // Add a class for FE purposes.
