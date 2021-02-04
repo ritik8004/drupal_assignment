@@ -93,3 +93,8 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   language_vat: 'تتضمن ضريبة القيمة المضافة'
   governorate: ''
+  spc_search_keyword: 'cloth'
+  filter_1: 'final_price'
+  filter_2: 'attr_color'
+  filter_3: 'attr_product_brand'
+
