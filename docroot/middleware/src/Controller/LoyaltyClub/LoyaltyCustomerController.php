@@ -429,32 +429,42 @@ class LoyaltyCustomerController {
         return new JsonResponse($this->utility->getErrorResponse('User id in request doesn`t match the one in session.', Response::HTTP_NOT_FOUND));
       }
 
-      // We are always passing `orderField=date:DESC` and `maxResults=0`.
-      $endpoint = sprintf('/customers/apcTransactions?customerId=%s&fromDate=%s&toDate=%s&orderField=date:DESC&maxResults=0&channel=%s',
+      // API call to get reward activity.
+      $data = $this->auraCustomerHelper->getRewardActivity(
         $user['customer_id'],
         $request_content['fromDate'] ?? '',
         $request_content['toDate'] ?? '',
+        $request_content['maxResults'] ?? 0,
         $request_content['channel'] ?? ''
       );
-      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
-      $data = [];
 
-      if (!empty($response['apc_transactions'])) {
-        foreach ($response['apc_transactions'] as $key => $transaction) {
-          $data[$key] = [
-            'orderNo' => $transaction['trn_no'],
-            'date' => $transaction['date'],
-            'orderTotal' => $transaction['total_value'],
-            'channel' => $transaction['channel'],
-            'auraPoints' => $transaction['points'],
+      // Check if request is to get last transaction and response is not empty.
+      if ($request_content['fromDate'] === ''
+        && $request_content['toDate'] === ''
+        && (int) $request_content['maxResults'] === 1
+        && !empty($data)) {
+        // If last transaction is before given duration, return empty.
+        $lastTransactionData = reset($data);
+        if (strtotime($lastTransactionData['date']) < strtotime('-' . $request_content['duration'] . 'months')) {
+          return [
+            'status' => TRUE,
+            'data' => [],
           ];
-
-          if (!empty($transaction['points_balances'][0])) {
-            $data[$key]['status'] = $transaction['points_balances'][0]['status'];
-            $data[$key]['statusName'] = $transaction['points_balances'][0]['status_name'];
-          }
         }
+        // API call to get reward activity data.
+        $fromDate = substr($lastTransactionData['date'], 0, strpos($lastTransactionData['date'], 'T'));
+        $dateObject = new \DateTime($lastTransactionData['date']);
+        $toDate = $dateObject->format('Y-m-t');
+
+        $data = $this->auraCustomerHelper->getRewardActivity(
+          $user['customer_id'],
+          $fromDate,
+          $toDate,
+          0,
+          $request_content['channel'] ?? ''
+        );
       }
+
       $responseData = [
         'status' => TRUE,
         'data' => $data,

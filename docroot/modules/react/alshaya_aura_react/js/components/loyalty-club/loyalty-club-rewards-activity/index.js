@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import { getAPIData } from '../../../utilities/api/fetchApiData';
-import { getUserDetails } from '../../../utilities/helper';
+import { getUserDetails, getAuraConfig } from '../../../utilities/helper';
 import {
   addInlineLoader,
   removeInlineLoader,
@@ -10,6 +10,7 @@ import {
   getTransactionTypeOptions,
   getTransactionDateOptions,
   formatDate,
+  getTransactionDateOptionsDefaultValue,
 } from '../../../utilities/reward_activity_helper';
 
 class LoyaltyClubRewardsActivity extends React.Component {
@@ -19,7 +20,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     this.dateSelectRef = React.createRef();
     this.state = {
       activity: null,
-      dateFilterOptions: [],
+      dateFilterOptions: getTransactionDateOptions(),
       fromDate: '',
       toDate: '',
       type: '',
@@ -27,24 +28,21 @@ class LoyaltyClubRewardsActivity extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchRewardActivity();
+    this.fetchRewardActivity('', '', 1, '');
   }
 
-  fetchRewardActivity = (fromDate = '', toDate = '', channel = '') => {
+  fetchRewardActivity = (fromDate = '', toDate = '', maxResults = 0, channel = '') => {
     addInlineLoader('.reward-activity');
     // API call to get reward activity for logged in users.
-    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&channel=${channel}`;
+    const { rewardActivityTimeLimit } = getAuraConfig();
+    const apiUrl = `get/loyalty-club/get-reward-activity?uid=${getUserDetails().id}&fromDate=${fromDate}&toDate=${toDate}&maxResults=${maxResults}&channel=${channel}&duration=${rewardActivityTimeLimit}`;
     const apiData = getAPIData(apiUrl);
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.data !== undefined && result.data.error === undefined) {
-          const { dateFilterOptions } = this.state;
           this.setState({
             activity: result.data.data || null,
-            dateFilterOptions: dateFilterOptions.length === 0
-              ? getTransactionDateOptions(result.data.data)
-              : dateFilterOptions,
           });
         }
         removeInlineLoader('.reward-activity');
@@ -104,13 +102,13 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
   handleTypeChange = (selectedOption) => {
     const { fromDate, toDate } = this.state;
-    const channel = selectedOption.value !== 'all'
+    const type = selectedOption.value !== 'all'
       ? selectedOption.value
       : '';
 
-    this.fetchRewardActivity(fromDate, toDate, channel);
+    this.fetchRewardActivity(fromDate, toDate, 0, type);
     this.setState({
-      type: channel,
+      type,
     });
   };
 
@@ -120,7 +118,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0));
     const { type } = this.state;
 
-    this.fetchRewardActivity(fromDate, toDate, type);
+    this.fetchRewardActivity(fromDate, toDate, 0, type);
     this.setState({
       fromDate,
       toDate,
@@ -128,7 +126,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
   };
 
   render() {
-    const { dateFilterOptions } = this.state;
+    const { activity, dateFilterOptions } = this.state;
     const transactionTypeOptions = getTransactionTypeOptions();
 
     return (
@@ -142,7 +140,8 @@ class LoyaltyClubRewardsActivity extends React.Component {
             onMenuOpen={() => this.onMenuOpen(this.dateSelectRef)}
             onMenuClose={() => this.onMenuClose(this.dateSelectRef)}
             options={dateFilterOptions}
-            defaultValue={dateFilterOptions.length !== 0 ? dateFilterOptions[0] : ''}
+            defaultValue={dateFilterOptions[0]}
+            value={getTransactionDateOptionsDefaultValue(activity)}
             onChange={this.handleDateChange}
           />
           <Select
