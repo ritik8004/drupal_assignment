@@ -42,7 +42,7 @@ function bazaar_voice_page_attachments(array &$page) {
       if(!empty($order)) {
         $page['#attached']['drupalSettings']['bvpixel_order_details'] = array (
           'order_id' => $order['order_id'],
-          'total' => $order['grand_total'],
+          'total' => $order['subtotal_incl_tax'],
           'currency' => $order['base_currency_code'],
           'tax' => $order['base_tax_amount'],
           'shipping' => $order['shipping_incl_tax'],
@@ -55,13 +55,15 @@ function bazaar_voice_page_attachments(array &$page) {
           'locale' => \Drupal::config('bazaar_voice.settings')->get('locale'),
           'shipping_description' => $order['shipping_description'],
         );
-        foreach ($order['items'] as $key => $item) {
-          $products[$key]['sku'] = $item['sku'];
-          $products[$key]['quantity'] = $item['qty_ordered'];
-          $products[$key]['name'] = $item['name'];
-          $products[$key]['price'] = $item['price'];
-          $products[$key]['product_type'] = $item['type'];
-        }
+        if(!empty($order['items'])) {
+	      foreach ($order['items'] as $key => $item) {
+	        $products[$key]['productId'] = $item['sku'];
+          	$products[$key]['quantity'] = $item['qty_ordered'];
+          	$products[$key]['name'] = $item['name'];
+          	$products[$key]['price'] = $item['price'];
+          	$products[$key]['product_type'] = $item['type'];
+	      }
+	    }
         $page['#attached']['drupalSettings']['bvpixel_order_details']['items'] = $products;
       }
     }

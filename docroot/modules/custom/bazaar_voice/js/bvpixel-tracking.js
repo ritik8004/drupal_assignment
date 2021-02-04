@@ -6,6 +6,11 @@
   'use strict';
   Drupal.behaviors.bvpixel_tracking = {
     attach: function (context, settings) {
+      var itemsArray = [];
+      for (var key in drupalSettings.bvpixel_order_details.items) {
+        var obj = drupalSettings.bvpixel_order_details.items[key];
+        itemsArray.push(obj);
+      }
       var TransactionData = {
         orderId: drupalSettings.bvpixel_order_details.order_id,
         city: drupalSettings.bvpixel_order_details.city,
@@ -18,7 +23,7 @@
         shipping: drupalSettings.bvpixel_order_details.shipping,
         total: drupalSettings.bvpixel_order_details.total,
         currency: drupalSettings.bvpixel_order_details.currency,
-        items: drupalSettings.bvpixel_order_details.items
+        items: itemsArray,
       };
       window.bvCallback = function (BV) {
         BV.pixel.trackTransaction(TransactionData);
