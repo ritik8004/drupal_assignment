@@ -576,23 +576,19 @@ class Cart {
 
               if ($action === CartActions::CART_ADD_ITEM) {
                 // If max attempts are set for native mdc api.
-                if ($alshaya_checkout_settings['max_native_update_attempts'] > 0) {
-                  if ($nativeItemUpdateAttempts >= $alshaya_checkout_settings['max_native_update_attempts']) {
-                    return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
-                  }
+                if ($alshaya_checkout_settings['max_native_update_attempts'] > $nativeItemUpdateAttempts) {
                   // Increment the counter.
                   $nativeItemUpdateAttempts++;
+                  $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
+
+                  if (!empty($new_cart['error'])) {
+                    return $new_cart;
+                  }
+
+                  // Get fresh cart.
+                  $this->getCart(TRUE);
+                  return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
                 }
-
-                $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
-
-                if (!empty($new_cart['error'])) {
-                  return $new_cart;
-                }
-
-                // Get fresh cart.
-                $this->getCart(TRUE);
-                return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
               }
 
               return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
