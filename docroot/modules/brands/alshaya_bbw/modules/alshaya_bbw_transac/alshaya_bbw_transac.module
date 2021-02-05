@@ -162,12 +162,17 @@ function alshaya_bbw_transac_acq_sku_base_field_additions_alter(array &$fields =
  * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
 function alshaya_bbw_transac_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
-  $form = $sku->get('attr_form')->getString();
-  $data['form'] = $form;
-  if (($fragrance_name = $sku->get('attr_fragrance_name')->getString()) || ($descriptive_name = $sku->get('attr_descriptive_name')->getString())) {
-    $raw_title = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
+  $data['form'] = $sku->get('attr_form')->getString();
+  $fragrance_name = $sku->get('attr_fragrance_name')->getString();
+  $descriptive_name = $sku->get('attr_descriptive_name')->getString();
+  if ($fragrance_name || $descriptive_name) {
+    $data['raw_title'] = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
   }
-  $data['raw_title'] = $raw_title;
+  if (empty($fragrance_name) && empty($descriptive_name)) {
+    $logger = \Drupal::logger('alshaya_bbw_transac_alshaya_acm_product_light_product_data_alter');
+    $logger->warning('fragrance_name and descriptive_name both are not defined');
+    $data['raw_title'] = null;
+  }
 }
 
 /**
@@ -191,9 +196,14 @@ function alshaya_bbw_transac_search_api_algolia_objects_alter(array &$objects, I
     if ($sku->language()->getId() != $node->language()->getId()) {
       continue;
     }
-    if (($fragrance_name = $sku->get('attr_fragrance_name')->getString()) || ($descriptive_name = $sku->get('attr_descriptive_name')->getString())) {
-      $raw_title = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
+    $fragrance_name = $sku->get('attr_fragrance_name')->getString();
+    $descriptive_name = $sku->get('attr_descriptive_name')->getString();
+    if ($fragrance_name || $descriptive_name) {
+      $object['raw_title'] = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
     }
-    $object['raw_title'] = $raw_title;
+    if (empty($fragrance_name) && empty($descriptive_name)) {
+      $logger = \Drupal::logger('alshaya_bbw_transac_search_api_algolia_objects_alter');
+      $logger->warning('fragrance_name and descriptive_name both are not defined');
+    }
   }
 }
