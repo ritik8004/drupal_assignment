@@ -229,4 +229,51 @@ class CustomerHelper {
     }
   }
 
+  /**
+   * Get Reward Activity.
+   *
+   * @return array
+   *   Return customer's reward activity.
+   */
+  public function getRewardActivity($customerId, $fromDate, $toDate, $maxResults, $channel) {
+    try {
+      // We are always passing `orderField=date:DESC`.
+      $endpoint = sprintf('/customers/apcTransactions?customerId=%s&fromDate=%s&toDate=%s&orderField=date:DESC&maxResults=%s&channel=%s',
+        $customerId,
+        $fromDate,
+        $toDate,
+        $maxResults,
+        $channel
+      );
+      $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
+      $response_data = [];
+
+      if (!empty($response['apc_transactions'])) {
+        foreach ($response['apc_transactions'] as $key => $transaction) {
+          $response_data[$key] = [
+            'orderNo' => $transaction['trn_no'],
+            'date' => $transaction['date'],
+            'orderTotal' => $transaction['total_value'],
+            'channel' => $transaction['channel'],
+            'auraPoints' => $transaction['points'],
+          ];
+
+          if (!empty($transaction['points_balances'][0])) {
+            $response_data[$key]['status'] = $transaction['points_balances'][0]['status'];
+            $response_data[$key]['statusName'] = $transaction['points_balances'][0]['status_name'];
+          }
+        }
+      }
+
+      return $response_data;
+    }
+    catch (\Exception $e) {
+      $this->logger->notice('Error while trying to get reward activity of the user. Endpoint: @endpoint. Message: @message.', [
+        '@endpoint' => $endpoint,
+        '@message' => $e->getMessage(),
+      ]);
+      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+    }
+  }
+
 }
