@@ -216,12 +216,20 @@ class Drupal {
    */
   public function getSessionCustomerInfo() {
     $url = '/spc/customer';
-    $response = $this->invokeApiWithSession('GET', $url);
-    $result = $response->getBody()->getContents();
-    $customer = json_decode($result, TRUE);
+    $customer = [];
+    try {
+      $response = $this->invokeApiWithSession('GET', $url);
+      $result = $response->getBody()->getContents();
+      $customer = json_decode($result, TRUE);
 
-    // Clean customer data.
-    $customer['customer_id'] = (int) $customer['customer_id'];
+      // Clean customer data.
+      $customer['customer_id'] = (int) $customer['customer_id'];
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while fetching customer information from drupal. Error: @error', [
+        '@error' => $e->getMessage(),
+      ]);
+    }
 
     return $customer;
   }

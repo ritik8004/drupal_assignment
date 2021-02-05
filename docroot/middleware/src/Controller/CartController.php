@@ -239,9 +239,9 @@ class CartController {
    */
   public function restoreCart() {
     if (empty($this->cart->getCartId())) {
-      $info = $this->drupal->getSessionCustomerInfo();
-      if (!empty($info['customer_id'])) {
-        $cart_id = $this->cart->searchCart($info['customer_id']);
+      $customer_id = $this->cart->getDrupalInfo('customer_id');
+      if (!empty($customer_id)) {
+        $cart_id = $this->cart->searchCart($customer_id);
         if ($cart_id > 0) {
           $this->cart->setCartId($cart_id);
         }
@@ -861,19 +861,19 @@ class CartController {
         return new JsonResponse($this->utility->getErrorResponse('No cart in session', 404));
       }
 
-      $customer = $this->drupal->getSessionCustomerInfo();
+      $customer_id = $this->cart->getDrupalInfo('customer_id');
 
-      if (empty($customer)) {
+      if (empty($customer_id)) {
         $this->logger->error('Error while associating cart to customer. No customer available in session');
         return new JsonResponse($this->utility->getErrorResponse('No user in session', 404));
       }
 
       // Check if association is not required.
-      if ($customer['customer_id'] === $this->cart->getCartCustomerId()) {
+      if ($customer_id === $this->cart->getCartCustomerId()) {
         return $this->getCart();
       }
 
-      $this->cart->associateCartToCustomer($customer['customer_id'], TRUE);
+      $this->cart->associateCartToCustomer($customer_id, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while associating cart to customer. Error message: @message', [
