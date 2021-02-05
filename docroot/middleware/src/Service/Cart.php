@@ -923,7 +923,7 @@ class Cart {
         '@customer_id' => $customer_id,
       ]);
 
-      return FALSE;
+      return $this->utility->getErrorResponse('Could not associate cart since cart is not available.', 500);
     }
 
     if ($reset_cart) {
