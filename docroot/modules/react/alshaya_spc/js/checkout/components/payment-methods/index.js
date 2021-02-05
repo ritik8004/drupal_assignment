@@ -101,10 +101,10 @@ export default class PaymentMethods extends React.Component {
     }
 
     // We disable the other payment methods when full payment is done by aura points.
-    if (isAuraEnabled()
-      && (cart.cart.totals === undefined || cart.cart.totals.length === 0)
-      && cart.cart.totals.paidWithAura !== 0
-      && cart.cart.totals.balancePayable === 0) {
+    if (!isAuraEnabled()
+      || cart.cart.totals === undefined
+      || cart.cart.totals.length === 0
+      || (cart.cart.totals.paidWithAura !== 0 && cart.cart.totals.balancePayable <= 0)) {
       return false;
     }
 
