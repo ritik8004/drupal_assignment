@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_checkoutcom;
 
+use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -45,6 +46,13 @@ class CheckoutComFormHelper {
   protected $apiHelper;
 
   /**
+   * The api helper object.
+   *
+   * @var \Drupal\acq_checkoutcom\ApiHelper
+   */
+  protected $checkoutComApiHelper;
+
+  /**
    * CheckoutComAPIWrapper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -53,15 +61,19 @@ class CheckoutComFormHelper {
    *   The current user object.
    * @param \Drupal\acq_checkoutcom\ApiHelper $api_helper
    *   ApiHelper object.
+   * @param \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper
+   *   Checkout com api Helper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     AccountProxyInterface $account_proxy,
-    ApiHelper $api_helper
+    ApiHelper $api_helper,
+    AlshayaAcmCheckoutComAPIHelper $checkout_com_api_helper
   ) {
     $this->configFactory = $config_factory;
     $this->currentUser = $account_proxy;
     $this->apiHelper = $api_helper;
+    $this->checkoutComApiHelper = $checkout_com_api_helper;
   }
 
   /**
@@ -217,7 +229,10 @@ class CheckoutComFormHelper {
   public function getApplePayConfig($type = NULL) {
     // Data from API.
     if ($type == 'upapi') {
-      $settings = $this->apiHelper->getCheckoutcomUpapiApplePayConfig();
+      $upapiConfig = $this->checkoutComApiHelper->getCheckoutcomUpApiConfig();
+      $settings = [
+        'merchantIdentifier' => $upapiConfig['apple_pay_merchant_id'],
+      ];
     }
     else {
       $settings = [

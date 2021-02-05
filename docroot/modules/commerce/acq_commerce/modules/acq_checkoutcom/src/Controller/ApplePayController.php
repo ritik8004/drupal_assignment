@@ -99,7 +99,7 @@ class ApplePayController implements ContainerInjectionInterface {
     $ch = curl_init();
 
     $data = [
-      'merchantIdentifier' => ($type == 'upapi') ? $settings['apple_pay_merchant_id'] : $settings['merchantIdentifier'],
+      'merchantIdentifier' => $settings['merchantIdentifier'],
       'domainName' => $_SERVER['HTTP_HOST'],
       'displayName' => $settings['storeName'],
     ];
