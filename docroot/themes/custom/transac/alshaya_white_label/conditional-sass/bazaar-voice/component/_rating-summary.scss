@@ -6,7 +6,6 @@
 .aggregate-rating {
   .empty-stars {
     position: relative;
-    cursor: pointer;
 
     .histogram-data {
       @include tooltip(19.735rem);
