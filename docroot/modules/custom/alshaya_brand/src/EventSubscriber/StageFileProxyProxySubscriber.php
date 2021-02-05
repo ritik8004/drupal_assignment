@@ -121,7 +121,7 @@ class StageFileProxyProxySubscriber implements EventSubscriberInterface {
 
     $request_path = mb_substr($request_path, 1);
 
-    if (strpos($request_path, '' . $file_dir) !== 0) {
+    if (strpos($request_path, '' . $file_dir . '/') !== 0) {
       return;
     }
 
