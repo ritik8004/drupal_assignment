@@ -14,12 +14,8 @@ function getTransactionTypeOptions() {
 /**
  * Utility function to get transaction date options.
  */
-function getTransactionDateOptions(activity) {
-  if (activity === null || Object.entries(activity).length === 0) {
-    return [];
-  }
-
-  const date = new Date(Object.entries(activity)[0][1].date);
+function getTransactionDateOptions() {
+  const date = new Date();
   const dates = [];
   const { rewardActivityTimeLimit } = getAuraConfig();
 
@@ -36,6 +32,21 @@ function getTransactionDateOptions(activity) {
 }
 
 /**
+ * Utility function to get date options default.
+ */
+function getTransactionDateOptionsDefaultValue(activity) {
+  if (activity === null || Object.entries(activity).length === 0) {
+    return { value: '', label: '' };
+  }
+
+  const defaultDate = new Date(Object.entries(activity)[0][1].date).toLocaleString(
+    'default',
+    { month: 'short', year: 'numeric' },
+  );
+  return { value: defaultDate, label: defaultDate };
+}
+
+/**
  * Utility function to format date.
  */
 function formatDate(date) {
@@ -46,4 +57,5 @@ export {
   getTransactionTypeOptions,
   getTransactionDateOptions,
   formatDate,
+  getTransactionDateOptionsDefaultValue,
 };
