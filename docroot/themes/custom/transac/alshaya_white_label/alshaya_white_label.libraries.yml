@@ -437,3 +437,8 @@ postpay-pdp:
   css:
     theme:
       css/conditional-sass/postpay-pdp/postpay-pdp.ltr.css: {}
+
+postpay-cart:
+  css:
+    theme:
+      css/conditional-sass/postpay-cart/postpay-cart.ltr.css: {}

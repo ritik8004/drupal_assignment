@@ -119,16 +119,14 @@ class TotalLineItems extends React.Component {
             <VatText />
           </div>
           <ConditionalView condition={typeof drupalSettings.postpay_widget_info !== 'undefined'}>
-            <span>
-              <div
-                className={drupalSettings.postpay_widget_info.class}
-                data-type={drupalSettings.postpay_widget_info['data-type']}
-                data-amount={baseGrandTotal * drupalSettings.postpay.currency_multiplier}
-                data-currency={drupalSettings.postpay_widget_info['data-currency']}
-                data-num-instalments={drupalSettings.postpay_widget_info['data-num-instalments']}
-                data-locale={drupalSettings.postpay_widget_info['data-locale']}
-              />
-            </span>
+            <div
+              className={`spc-postpay ${drupalSettings.postpay_widget_info.class}`}
+              data-type={drupalSettings.postpay_widget_info['data-type']}
+              data-amount={baseGrandTotal * drupalSettings.postpay.currency_multiplier}
+              data-currency={drupalSettings.postpay_widget_info['data-currency']}
+              data-num-instalments={drupalSettings.postpay_widget_info['data-num-instalments']}
+              data-locale={drupalSettings.postpay_widget_info['data-locale']}
+            />
           </ConditionalView>
         </div>
       </div>
