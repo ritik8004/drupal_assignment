@@ -177,6 +177,8 @@ class AuraFormRedeemPoints extends React.Component {
 
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
 
+    const { totals } = this.props;
+
     return (
       <div className="spc-aura-redeem-points-form-wrapper">
         <span className="label">{ Drupal.t('Use your points') }</span>
@@ -222,6 +224,8 @@ class AuraFormRedeemPoints extends React.Component {
           </ConditionalView>
         </div>
         <div id="spc-aura-link-api-response-message" className="spc-aura-link-api-response-message" />
+        {totals.balancePayable <= 0
+          && <span id="payment-method-aura_payment" />}
       </div>
     );
   }

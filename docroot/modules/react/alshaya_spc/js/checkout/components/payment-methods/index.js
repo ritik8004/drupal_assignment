@@ -101,10 +101,10 @@ export default class PaymentMethods extends React.Component {
     }
 
     // We disable the other payment methods when full payment is done by aura points.
-    if (!isAuraEnabled()
-      || cart.cart.totals === undefined
-      || cart.cart.totals.length === 0
-      || (cart.cart.totals.paidWithAura !== 0 && cart.cart.totals.balancePayable <= 0)) {
+    if (isAuraEnabled()
+      && (cart.cart.totals === undefined
+      || Object.keys(cart.cart.totals).length === 0
+      || (cart.cart.totals.paidWithAura !== 0 && cart.cart.totals.balancePayable <= 0))) {
       return false;
     }
 
@@ -112,6 +112,17 @@ export default class PaymentMethods extends React.Component {
   };
 
   selectDefault = () => {
+    const { cart } = this.props;
+
+    if (isAuraEnabled()) {
+      if (cart.cart.totals !== undefined
+        && Object.keys(cart.cart.totals).length !== 0
+        && cart.cart.totals.balancePayable <= 0) {
+        this.changePaymentMethod('aura_payment');
+        return;
+      }
+    }
+
     if (!(this.isActive())) {
       return;
     }
@@ -121,8 +132,6 @@ export default class PaymentMethods extends React.Component {
     if (Object.keys(paymentMethods).length === 0) {
       return;
     }
-
-    const { cart } = this.props;
 
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
     if (cart.cart.payment.method === undefined
@@ -210,7 +219,7 @@ export default class PaymentMethods extends React.Component {
   changePaymentMethod = (method) => {
     const { cart, refreshCart } = this.props;
 
-    if (!this.isActive()) {
+    if (!this.isActive() && !isAuraEnabled()) {
       return;
     }
 

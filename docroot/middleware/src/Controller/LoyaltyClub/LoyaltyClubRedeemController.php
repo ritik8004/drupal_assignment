@@ -163,33 +163,6 @@ class LoyaltyClubRedeemController {
       // API call to redeem points.
       $responseData = $this->redemptionHelper->redeemPoints($request_content['cardNumber'], $redeemPointsRequestData);
 
-      $payment_method = '';
-
-      // Check if request is to `set points` and full payment
-      // is done by aura points.
-      if ($redeemPointsRequestData['redeemPoints']['action'] === 'set points'
-        && (int) $responseData['data']['balancePayable'] <= 0) {
-        $payment_method = 'aura_payment';
-      }
-
-      // Check if request is to `remove points` and payment method
-      // is set to `aura_payment`.
-      if ($redeemPointsRequestData['redeemPoints']['action'] === 'remove points'
-        && $this->cart->getPaymentMethodSetOnCart() === 'aura_payment') {
-        $payment_method = $this->orders->getLastOrder($user['customer_id'])['payment']['method'];
-      }
-
-      // Update payment method.
-      if (!empty($payment_method)) {
-        $payment_updated = $this->cart->updatePayment(['method' => $payment_method], ['attempted_payment' => 1]);
-        if (empty($payment_updated) || !empty($payment_updated['error'])) {
-          $this->logger->error('Error while trying to set payment method. Error: @error.', [
-            '@error' => json_encode($payment_updated),
-          ]);
-          return new JsonResponse($this->utility->getErrorResponse($payment_updated['error_message'], $payment_updated['error_code']));
-        }
-      }
-
       return new JsonResponse($responseData);
     }
     catch (\Exception $e) {

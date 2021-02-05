@@ -198,7 +198,7 @@ export default class Checkout extends React.Component {
   // Event listener callback to add aura details in cart data.
   handleRedeemPointsEvent = (data) => {
     const { cart } = this.state;
-    const { stateValues } = data.detail;
+    const { stateValues, action } = data.detail;
 
     if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
       return;
@@ -206,9 +206,21 @@ export default class Checkout extends React.Component {
 
     const auraUpdatedCartData = cart;
 
-    auraUpdatedCartData.cart.totals = { ...auraUpdatedCartData.cart.totals, ...stateValues };
+    // If action is to remove points then remove all
+    // aura related keys from totals if present.
+    if (action === 'remove points') {
+      Object.entries(stateValues).forEach(([key]) => {
+        delete auraUpdatedCartData.cart.totals[key];
+      });
+    }
+
+    // If action to set points then add aura details in totals.
+    if (action === 'set points') {
+      auraUpdatedCartData.cart.totals = { ...auraUpdatedCartData.cart.totals, ...stateValues };
+    }
+
     this.setState({
-      cart: { ...auraUpdatedCartData },
+      cart: { ...auraUpdatedCartData, auraRedemptionAction: action },
     });
   };
 
