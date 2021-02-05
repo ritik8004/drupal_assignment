@@ -198,7 +198,10 @@ class CartController {
     // if current cart is associated with logged in user or not.
     $sessionCustomerId = $this->cart->getDrupalInfo('customer_id');
     if ($sessionCustomerId && (empty($data['customer']['id']) || $data['customer']['id'] != $sessionCustomerId)) {
-      $this->cart->associateCartToCustomer($sessionCustomerId, TRUE);
+      $association_status = $this->cart->associateCartToCustomer($sessionCustomerId, TRUE);
+      if (isset($association_status['error'])) {
+        return new JsonResponse($association_status);
+      }
       $data = $this->cart->getCart();
     }
 
