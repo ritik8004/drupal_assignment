@@ -28,7 +28,9 @@ class LoyaltyClubRewardsActivity extends React.Component {
   }
 
   componentDidMount() {
-    // Get user's last reward activity details.
+    // Getting user's last reward transaction details.
+    // Api doen't require from/to date if we need last transaction details
+    // and thus passing empty params for dates.
     this.fetchRewardActivity('', '', 1, '');
   }
 
