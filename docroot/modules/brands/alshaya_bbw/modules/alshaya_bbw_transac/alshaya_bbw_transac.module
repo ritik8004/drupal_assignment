@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\search_api\IndexInterface;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -155,4 +156,41 @@ function _alshaya_bbw_transac_get_product_title(SKU $sku) {
 function alshaya_bbw_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
   $alshaya_bbw_transac_fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
   $fields = array_merge($fields, $alshaya_bbw_transac_fields);
+}
+
+/**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_bbw_transac_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  $data['form'] = $sku->get('attr_form')->getString();
+  $fragrance_name = $sku->get('attr_fragrance_name')->getString();
+  $descriptive_name = $sku->get('attr_descriptive_name')->getString();
+  $data['raw_title'] = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
+}
+
+/**
+ * Implements hook_search_api_algolia_objects_alter().
+ */
+function alshaya_bbw_transac_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
+  if ($index->id() !== 'alshaya_algolia_index') {
+    return;
+  }
+
+  foreach ($objects as $id => &$object) {
+    if (empty($object['sku'])) {
+      continue;
+    }
+
+    $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
+    if (!($sku instanceof SKUInterface)) {
+      continue;
+    }
+    $node = $items[$id]->getOriginalObject()->getValue();
+    if ($sku->language()->getId() != $node->language()->getId()) {
+      continue;
+    }
+    $fragrance_name = $sku->get('attr_fragrance_name')->getString();
+    $descriptive_name = $sku->get('attr_descriptive_name')->getString();
+    $object['raw_title'] = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
+  }
 }
