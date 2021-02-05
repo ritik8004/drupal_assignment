@@ -443,11 +443,6 @@ class AlshayaAlgoliaIndexHelper {
       $object[AlshayaSuperCategoryManager::SEARCH_FACET_NAME] = $super_category_list;
     }
 
-    // Index the raw title of the product.
-    $form = $sku->get('attr_form')->getString();
-    $raw_title = explode($form, $sku->label());
-    $object['raw_title'] = trim($raw_title[0]);
-
     $object['is_new'] = $sku->get('attr_is_new')->getString();
     $this->updatePrettyPathAlias($object);
     unset($object['field_category_aliases']);
