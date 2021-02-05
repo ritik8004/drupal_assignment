@@ -439,8 +439,8 @@ class LoyaltyCustomerController {
       );
 
       // Check if request is to get last transaction and response is not empty.
-      if ($request_content['fromDate'] === ''
-        && $request_content['toDate'] === ''
+      if (empty($request_content['fromDate'])
+        && empty($request_content['toDate'])
         && (int) $request_content['maxResults'] === 1
         && !empty($data)) {
         // If last transaction is before given duration, return empty.
