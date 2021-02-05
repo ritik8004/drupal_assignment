@@ -1,7 +1,7 @@
 import React from 'react';
 import RatingSummary from './RatingSummary';
 import DisplayStar from '../stars/DisplayStar';
-import { smoothScrollTo } from '../../../utilities/smoothScroll';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 const InlineRating = ({
   ReviewsData,

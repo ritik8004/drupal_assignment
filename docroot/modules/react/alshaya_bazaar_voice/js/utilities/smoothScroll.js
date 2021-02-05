@@ -8,9 +8,9 @@ smoothscroll.polyfill();
  * Smooth Scroll to element in Reviews and Rating.
  * @param selector
  */
-export const smoothScrollTo = (e, selector) => {
+export default function smoothScrollTo(e, selector) {
   e.preventDefault();
   document.querySelector(selector).scrollIntoView({
     behavior: 'smooth',
   });
-};
+}
