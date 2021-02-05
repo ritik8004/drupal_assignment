@@ -22,4 +22,4 @@ $settings['alshaya_checkout_settings']['totals_revalidation_ttl'] = 300;
 // Flag to specify if we should use Native Magento API or ACM API.
 $settings['alshaya_checkout_settings']['cart_operations_mode'] = 'native';
 // Maximum attempts for the native mdc api. Set value 0 if not need this.
-$settings['alshaya_checkout_settings']['max_native_update_attempts'] = 3;
+$settings['alshaya_checkout_settings']['max_native_update_attempts'] = 1;

@@ -31,13 +31,6 @@ class Cart {
   protected static $cart = [];
 
   /**
-   * Attempts done by the native mdc api for item update.
-   *
-   * @var int
-   */
-  protected static $nativeItemUpdateAttempts = 0;
-
-  /**
    * Stock info that we get from the refresh stock response.
    *
    * @var array
@@ -541,6 +534,8 @@ class Cart {
     }
 
     if ($alshaya_checkout_settings['cart_operations_mode'] === 'native') {
+      // Attempts done by the native mdc api for item update.
+      static $nativeItemUpdateAttempts = 0;
       switch ($action) {
         case CartActions::CART_REMOVE_ITEM:
           try {
@@ -582,11 +577,11 @@ class Cart {
               if ($action === CartActions::CART_ADD_ITEM) {
                 // If max attempts are set for native mdc api.
                 if ($alshaya_checkout_settings['max_native_update_attempts'] > 0) {
-                  if (self::$nativeItemUpdateAttempts >= $alshaya_checkout_settings['max_native_update_attempts']) {
+                  if ($nativeItemUpdateAttempts >= $alshaya_checkout_settings['max_native_update_attempts']) {
                     return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
                   }
                   // Increment the counter.
-                  self::$nativeItemUpdateAttempts++;
+                  $nativeItemUpdateAttempts++;
                 }
 
                 $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
