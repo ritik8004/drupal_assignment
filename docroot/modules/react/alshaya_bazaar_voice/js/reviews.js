@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Review from './reviews/components/reviews';
+import ReviewSummary from './reviews/components/review-summary';
 
 ReactDOM.render(
-  <Review />,
+  <ReviewSummary />,
   document.getElementById('reviews-section'),
 );
