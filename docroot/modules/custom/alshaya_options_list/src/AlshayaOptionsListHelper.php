@@ -291,8 +291,16 @@ class AlshayaOptionsListHelper {
     $facet_to_load = [];
     foreach ($facets ?? [] as $facet) {
       if (in_array($facet->id(), $attribute_codes)) {
+        $identifier = $facet->getFieldIdentifier();
+
+        // For swatches we have data in .label field.
+        $widget = $facet->getWidget();
+        if ($widget['type'] === 'swatch_list') {
+          $identifier .= '.label';
+        }
+
         $facet_to_load[$facet->id()] = [
-          'field' => $facet->getFieldIdentifier(),
+          'field' => $identifier,
           'operator' => $facet->getQueryOperator(),
           'limit' => 0,
           'min_count' => $facet->getMinCount(),

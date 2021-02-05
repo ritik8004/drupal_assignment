@@ -758,37 +758,56 @@ const productRecommendationsSuffix = 'pr-';
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
       mediaCount = parseInt(product.attr('gtm-dimension4'));
     }
-    // Remove comma from price before passing through parseFloat.
-    var amount = product.attr('gtm-price').replace(/\,/g,'');
+
+    // Prepare default product data object.
     var productData = {
-      name: product.attr('gtm-name'),
+      name: '',
       id: product.attr('gtm-main-sku'),
-      price: parseFloat(amount),
-      category: product.attr('gtm-category'),
-      variant: product.attr('gtm-product-sku'),
-      dimension2: product.attr('gtm-sku-type'),
-      dimension3: product.attr('gtm-dimension3'),
-      dimension4: mediaCount
+      price: 0,
+      category: '',
+      variant: '',
+      dimension2: '',
+      dimension3: '',
+      dimension4: mediaCount,
     };
 
-    if (product.attr('gtm-brand')) {
-      productData.brand = product.attr('gtm-brand');
-    }
+    try {
+      // Remove comma from price before passing through parseFloat.
+      var amount = product.attr('gtm-price').replace(/\,/g,'');
+      productData = {
+        name: product.attr('gtm-name'),
+        id: product.attr('gtm-main-sku'),
+        price: parseFloat(amount),
+        category: product.attr('gtm-category'),
+        variant: product.attr('gtm-product-sku'),
+        dimension2: product.attr('gtm-sku-type'),
+        dimension3: product.attr('gtm-dimension3'),
+        dimension4: mediaCount
+      };
 
-    if (product.attr('gtm-dimension1')) {
-      productData.dimension1 = product.attr('gtm-dimension1');
-    }
-
-    if (product.attr('gtm-dimension5')) {
-      productData.dimension5 = product.attr('gtm-dimension5');
-    }
-
-    // If list variable is set in cookie, retrieve it.
-    if ($.cookie('product-list') !== undefined) {
-      var listValues = JSON.parse($.cookie('product-list'));
-      if (listValues[productData.id]) {
-        productData.list = listValues[productData.id]
+      if (product.attr('gtm-brand')) {
+        productData.brand = product.attr('gtm-brand');
       }
+
+      if (product.attr('gtm-dimension1')) {
+        productData.dimension1 = product.attr('gtm-dimension1');
+      }
+
+      if (product.attr('gtm-dimension5')) {
+        productData.dimension5 = product.attr('gtm-dimension5');
+      }
+
+      // If list variable is set in cookie, retrieve it.
+      if ($.cookie('product-list') !== undefined) {
+        var listValues = JSON.parse($.cookie('product-list'));
+        if (listValues[productData.id]) {
+          productData.list = listValues[productData.id]
+        }
+      }
+    }
+    catch (error) {
+      // In case of error.
+      Drupal.logJavascriptError('Uncaught errors', error);
     }
 
     return productData;

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\EventListener\StockEventListener;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Drupal\Drupal;
@@ -509,7 +510,7 @@ class Cart {
    */
   public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = [], string $variant_sku = NULL) {
     $cart_id = (int) $this->getCartId();
-    $mode = $this->settings->getSettings('alshaya_checkout_settings')['cart_operations_mode'];
+    $alshaya_checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
     $option_data = [];
 
@@ -533,7 +534,9 @@ class Cart {
       ];
     }
 
-    if ($mode === 'native') {
+    if ($alshaya_checkout_settings['cart_operations_mode'] === 'native') {
+      // Attempts done by the native mdc api for item update.
+      static $nativeItemUpdateAttempts = 0;
       switch ($action) {
         case CartActions::CART_REMOVE_ITEM:
           try {
@@ -573,21 +576,32 @@ class Cart {
               $this->removeCartFromSession();
 
               if ($action === CartActions::CART_ADD_ITEM) {
-                $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
+                // If max attempts are set for native mdc api.
+                if ($alshaya_checkout_settings['max_native_update_attempts'] > $nativeItemUpdateAttempts) {
+                  // Increment the counter.
+                  $nativeItemUpdateAttempts++;
+                  $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
 
-                if (!empty($new_cart['error'])) {
-                  return $new_cart;
+                  if (!empty($new_cart['error'])) {
+                    return $new_cart;
+                  }
+
+                  // Get fresh cart.
+                  $this->getCart(TRUE);
+                  return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
                 }
-
-                // Get fresh cart.
-                $this->getCart(TRUE);
-                return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
               }
 
               return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             elseif ($exception_type === 'OOS') {
-              $this->refreshStock([$sku, $variant_sku]);
+              $this->refreshStock([
+                $sku => 0,
+                $variant_sku => 0,
+              ]);
+            }
+            elseif ($exception_type === 'not_enough') {
+              StockEventListener::matchStockQuantity($sku, $quantity);
             }
 
             return $this->returnExistingCartWithError($e);
@@ -1299,7 +1313,11 @@ class Cart {
           $skus = array_merge($skus, array_column($cart['cart']['items'], 'sku'));
         }
 
-        $this->refreshStock($skus);
+        $skus_data = [];
+        foreach ($skus as $sku) {
+          $skus_data[$sku] = 0;
+        }
+        $this->refreshStock($skus_data);
       }
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
@@ -1565,6 +1583,11 @@ class Cart {
       $this->logger->error('Error while placing order. Cart has an OOS item. Cart: @cart.', [
         '@cart' => json_encode($cart),
       ]);
+
+      $skus = array_column($cart['cart']['items'], 'sku');
+      foreach ($skus as $sku) {
+        StockEventListener::matchStockQuantity($sku);
+      }
 
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
     }
@@ -2274,12 +2297,13 @@ class Cart {
   /**
    * Wrapper function to trigger refresh stock event of Drupal.
    *
-   * @param array $skus
-   *   SKUs for which we need to refresh stock.
+   * @param array $skus_quantity
+   *   Array of SKU => Quantity for which we need to refresh stock.
+   *   Eg. ['sku_1' => 0, 'sku_2' => 0].
    */
-  protected function refreshStock(array $skus) {
+  protected function refreshStock(array $skus_quantity) {
     $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
-      'skus' => $skus,
+      'skus_quantity' => $skus_quantity,
     ]);
 
     if ($response['status'] == TRUE) {

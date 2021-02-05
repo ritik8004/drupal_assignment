@@ -229,3 +229,22 @@ function alshaya_bp_transac_form_alshaya_srp_sort_settings_form_alter(&$form, Fo
   $form['sort_options']['#options']['attr_brand'] = t('Brand');
 }
 
+/**
+ * Implements hook_acq_sku_clean_synced_data_alter().
+ */
+function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context) {
+  foreach ($context['sandbox']['results'] as $key => $data) {
+    if ($data['type'] == 'taxonomy_term') {
+      // Query for categories mapped in I&A pages.
+      $value = \Drupal::database()->select('taxonomy_term__field_remove_shop_prefix', 'frsp')
+      ->fields('frsp', ['field_remove_shop_prefix_value'])
+      ->condition('entity_id', $data['entity_id'])
+      ->condition('bundle', 'acq_product_category')
+      ->execute()
+      ->fetchCol();
+      if (reset($value)) {
+        unset($context['sandbox']['results'][$key]);
+      }
+    }
+  }
+}
