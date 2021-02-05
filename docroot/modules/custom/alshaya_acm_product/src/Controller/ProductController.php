@@ -23,6 +23,7 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\image\ImageStyleInterface;
 use Drupal\Core\Extension\ModuleHandler;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -123,7 +124,7 @@ class ProductController extends ControllerBase {
       $node = $this->getProductNode($code);
     }
     catch (HttpException $e) {
-      return new JsonResponse(["message" => $e->getMessage()], $e->getStatusCode());
+      return new Response($e->getMessage(), $e->getStatusCode());
     }
 
     return $node->label();
@@ -146,7 +147,7 @@ class ProductController extends ControllerBase {
       $node = $this->getProductNode($code);
     }
     catch (HttpException $e) {
-      return new JsonResponse(["message" => $e->getMessage()], $e->getStatusCode());
+      return new Response($e->getMessage(), $e->getStatusCode());
     }
 
     if ($js === 'ajax') {
