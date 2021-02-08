@@ -29,7 +29,7 @@ const InlineRating = ({
             </div>
             <span>
               (
-              <a onClick={(e) => smoothScrollTo(e, '.review-section')} href="#">{ReviewsData[item].ReviewStatistics.TotalReviewCount}</a>
+              <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} href="#">{ReviewsData[item].ReviewStatistics.TotalReviewCount}</a>
               )
             </span>
           </div>
@@ -40,7 +40,7 @@ const InlineRating = ({
   return (
     <div className="inline-rating">
       <div className="aggregate-rating">
-        <a onClick={(e) => smoothScrollTo(e, '.review-section')} className="write-review" href="#">{Drupal.t('Write a Review')}</a>
+        <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} className="write-review" href="#">{Drupal.t('Write a Review')}</a>
       </div>
     </div>
   );
