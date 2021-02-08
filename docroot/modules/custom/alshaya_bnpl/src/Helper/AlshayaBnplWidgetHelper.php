@@ -74,6 +74,7 @@ class AlshayaBnplWidgetHelper {
    */
   public function getBnplWidgetInfo($page_type = 'pdp') {
     $currency_config = $this->configFactory->get('acq_commerce.currency');
+    $country_code = $this->configFactory->get('system.date')->get('country.default');
     $info['class'] = 'postpay-widget';
     switch ($page_type) {
       case 'cart':
@@ -82,6 +83,8 @@ class AlshayaBnplWidgetHelper {
 
       case 'checkout':
         $info['data-type'] = 'payment-summary';
+        $info['data-country'] = $country_code;
+        // $info['data-hide-if-invalid'] = 'class-name';
         break;
 
       default:
@@ -127,17 +130,25 @@ class AlshayaBnplWidgetHelper {
       return;
     }
     $bnplApiconfig['locale'] = 'en';
+    $build['#attached']['drupalSettings']['postpay'] = $bnplApiconfig;
+
     switch ($page_type) {
       case 'cart':
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_cart';
         $build['#attached']['library'][] = 'alshaya_white_label/postpay-cart';
+        $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo('cart');
+        break;
+
+      case 'checkout':
+        $build['#attached']['library'][] = 'alshaya_bnpl/postpay_sdk';
+        $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo('checkout');
         break;
 
       default:
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_pdp';
+        $build['postpay'] = $this->getBnplWidgetMarkup();
         break;
     }
-    $build['#attached']['drupalSettings']['postpay'] = $bnplApiconfig;
 
     $currency_config = $this->configFactory->get('acq_commerce.currency');
     $build['#attached']['drupalSettings']['postpay']['currency_multiplier'] = pow(10, (int) $currency_config->get('decimal_points'));
