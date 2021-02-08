@@ -7,6 +7,7 @@ import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   placeOrder,
   removeFullScreenLoader,
+  setUpapiApplePayCofig,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
@@ -29,6 +30,10 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodCybersource = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
+  }
+
+  componentDidMount() {
+    setUpapiApplePayCofig();
   }
 
   validateBeforePlaceOrder = () => {

@@ -1,5 +1,9 @@
 import Axios from 'axios';
-import { placeOrder, removeFullScreenLoader } from './checkout_util';
+import {
+  getUpapiApplePayConfig,
+  placeOrder,
+  removeFullScreenLoader,
+} from './checkout_util';
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
 import { addPaymentMethodInCart } from './update_cart';
@@ -70,7 +74,8 @@ const CheckoutComUpapiApplePay = {
   },
 
   onPaymentAuthorized: (event) => {
-    const url = drupalSettings.checkoutComUpapiApplePay.api_url;
+    const upApiApplePayConfig = getUpapiApplePayConfig();
+    const url = upApiApplePayConfig.api_url;
     const { token } = event.payment;
     const params = {
       type: 'applepay',
