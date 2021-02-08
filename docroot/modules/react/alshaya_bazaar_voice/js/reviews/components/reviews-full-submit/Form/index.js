@@ -36,6 +36,7 @@ export default class Form extends React.Component {
                   field={formData[fieldData]}
                   fieldChanged={this.fieldChanged}
                   value={formData[fieldData]['#value']}
+                  key={formData[fieldData]['#id']}
                 />
               );
             case 'textarea':
@@ -44,6 +45,7 @@ export default class Form extends React.Component {
                   field={formData[fieldData]}
                   fieldChanged={this.fieldChanged}
                   value={formData[fieldData]['#value']}
+                  key={formData[fieldData]['#id']}
                 />
               );
             case 'select':
@@ -52,6 +54,7 @@ export default class Form extends React.Component {
                   field={formData[fieldData]}
                   fieldChanged={this.fieldChanged}
                   value={formData[fieldData]['#value']}
+                  key={formData[fieldData]['#id']}
                 />
               );
             case 'checkbox':
@@ -60,6 +63,7 @@ export default class Form extends React.Component {
                   field={formData[fieldData]}
                   fieldChanged={this.fieldChanged}
                   value={formData[fieldData]['#value']}
+                  key={formData[fieldData]['#id']}
                 />
               );
             default:

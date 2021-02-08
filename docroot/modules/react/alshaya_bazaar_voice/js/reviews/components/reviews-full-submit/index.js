@@ -1,7 +1,6 @@
 import React from 'react';
 import WriteReviewLink from './WriteReviewLink';
 import Modal from './Model';
-import './index.css';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../alshaya_spc/js/utilities/checkout_util';
 import formData from '../../../utilities/api/formData';
 

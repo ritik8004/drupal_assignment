@@ -9,7 +9,7 @@ const TextField = ({
       type="text"
       id={field['#id']}
       name={field['#id']}
-      value={(value === '' || value === 'undefined') ? '' : value}
+      value={value === null ? '' : value}
       required={field['#required']}
       minLength={field['#minlength']}
       maxLength={field['#maxlength']}
@@ -30,7 +30,7 @@ const TextArea = ({
     <textarea
       id={field['#id']}
       name={field['#id']}
-      value={(value === '' || value === 'undefined') ? '' : value}
+      value={value === null ? '' : value}
       required={field['#required']}
       minLength={field['#minlength']}
       maxLength={field['#maxlength']}
@@ -53,7 +53,7 @@ const Select = ({
       <select
         id={field['#id']}
         name={field['#id']}
-        value={(value === '' || value === 'undefined') ? '' : value}
+        value={value === null ? '' : value}
         required={field['#required']}
         default_value={field['#default_value']}
         hidden={field['#hidden']}
@@ -61,8 +61,8 @@ const Select = ({
           fieldChanged(field['#id'], e.target.value);
         }}
       >
-        {Object.keys(Options).map((option, index) => (
-          <option key={Options[index]} value={option === '' ? 0 : option}>
+        {Object.keys(Options).map((option) => (
+          <option key={Options[option]} value={option === '' ? 0 : option}>
             {Options[option] === '' ? Drupal.t('Select') : Options[option]}
           </option>
         ))}
@@ -80,15 +80,14 @@ const Checkbox = ({
       type="checkbox"
       id={field['#id']}
       label={field['#title']}
-      onChange={(e) => {
-        fieldChanged(field['#id'], e.target.value);
-      }}
-      key={field['#id']}
       name={field['#id']}
-      value={(value === '' || value === 'undefined') ? '' : value}
+      value={value === null ? '' : value}
       required={field['#required']}
       default_value={field['#default_value']}
       hidden={field['#hidden']}
+      onChange={(e) => {
+        fieldChanged(field['#id'], e.target.value);
+      }}
     />
   </div>
 );
