@@ -452,8 +452,8 @@ class LoyaltyCustomerController {
           ];
         }
         // API call to get reward activity data.
-        $fromDate = substr($lastTransactionData['date'], 0, strpos($lastTransactionData['date'], 'T'));
         $dateObject = new \DateTime($lastTransactionData['date']);
+        $fromDate = $dateObject->format('Y-m-01');
         $toDate = $dateObject->format('Y-m-t');
 
         $data = $this->auraCustomerHelper->getRewardActivity(

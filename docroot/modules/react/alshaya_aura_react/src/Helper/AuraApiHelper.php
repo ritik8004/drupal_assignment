@@ -78,13 +78,20 @@ class AuraApiHelper {
   public function getAuraApiConfig($configs = [], $reset = FALSE) {
     static $auraConfigs;
 
-    if (!empty($auraConfigs)) {
-      return $auraConfigs;
-    }
-
     $auraApiConfig = !empty($configs)
       ? $configs
       : AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS;
+
+    $notFound = FALSE;
+    foreach ($auraApiConfig as $config) {
+      if (empty($auraConfigs[$config])) {
+        $notFound = TRUE;
+      }
+    }
+
+    if ($notFound === FALSE) {
+      return $auraConfigs;
+    }
 
     foreach ($auraApiConfig as $value) {
       $cache_key = 'alshaya_aura_react:aura_api_configs:' . $value;
@@ -98,14 +105,18 @@ class AuraApiHelper {
       $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
       $response = is_string($response) ? Json::decode($response) : $response;
 
-      if (empty($response)) {
+      if (empty($response) || empty($response['items'])) {
         $this->logger->error('No data found for api: @api.', [
           '@api' => $endpoint,
         ]);
         continue;
       }
 
-      $data = !empty($response['items']) ? array_column($response['items'], 'value') : [];
+      // Getting `code` and `value` keys for tier types api
+      // and just value for others.
+      $data = ($value === AuraDictionaryApiConstants::APC_TIER_TYPES)
+        ? array_column($response['items'], 'value', 'code')
+        : array_column($response['items'], 'value');
 
       $auraConfigs[$value] = $data;
       $this->cache->set($cache_key, $auraConfigs[$value], Cache::PERMANENT);

@@ -1,4 +1,5 @@
 import React from 'react';
+import AuraProgressStringAmount from './progress-string-amount';
 
 const AuraProgressString = (props) => {
   const {
@@ -10,36 +11,54 @@ const AuraProgressString = (props) => {
   } = props;
   const difference = nextTierThreshold - userPoints;
 
-  // @TODO: Get conversion for these ponts.
-  const differenceAmount = `KWD ${difference * 0.05}`;
-
   if (progressRatio === 0) {
     return (
-      <div className="aura-progress-string">
-        <span className="aura-progress-string--string">
-          {Drupal.t('Start spending to earn points')}
-        </span>
-      </div>
+      <>
+        <div className="aura-progress-string">
+          <span className="aura-progress-string--string">
+            {Drupal.t('Start spending to earn points')}
+          </span>
+        </div>
+        <AuraProgressStringAmount
+          userPoints={userPoints}
+          nextTierThreshold={nextTierThreshold}
+          nextTierLabel={nextTierLabel}
+        />
+      </>
     );
   }
 
   if (showDotClass === 'pointer') {
     return (
-      <div className="aura-progress-string">
-        <span className="aura-progress-string--label">{Drupal.t('You are here')}</span>
-        <span className="aura-progress-string--string">
-          {`${Drupal.t('Spend')} ${differenceAmount} ${Drupal.t('more to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
-        </span>
-      </div>
+      <>
+        <div className="aura-progress-string">
+          <span className="aura-progress-string--label">{Drupal.t('You are here')}</span>
+          <span className="aura-progress-string--string">
+            {`${Drupal.t('Earn more')} ${difference} ${Drupal.t('points to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
+          </span>
+        </div>
+        <AuraProgressStringAmount
+          userPoints={userPoints}
+          nextTierThreshold={nextTierThreshold}
+          nextTierLabel={nextTierLabel}
+        />
+      </>
     );
   }
 
   return (
-    <div className="aura-progress-string">
-      <span className="aura-progress-string--string">
-        {`${Drupal.t('Spend')} ${differenceAmount} ${Drupal.t('more to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
-      </span>
-    </div>
+    <>
+      <div className="aura-progress-string">
+        <span className="aura-progress-string--string">
+          {`${Drupal.t('Earn more')} ${difference} ${Drupal.t('points to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
+        </span>
+      </div>
+      <AuraProgressStringAmount
+        userPoints={userPoints}
+        nextTierThreshold={nextTierThreshold}
+        nextTierLabel={nextTierLabel}
+      />
+    </>
   );
 };
 

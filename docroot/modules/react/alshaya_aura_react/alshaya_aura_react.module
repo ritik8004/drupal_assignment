@@ -12,6 +12,7 @@ use Drupal\user\Entity\User;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Url;
+use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -32,7 +33,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     ];
   }
 
-  $settings['allAuraTier'] = AuraTier::ALL_AURA_TIERS;
+  $settings['allAuraTier'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig([AuraDictionaryApiConstants::APC_TIER_TYPES])[AuraDictionaryApiConstants::APC_TIER_TYPES];
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
 
   $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
@@ -48,12 +49,12 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route->getRouteName() === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_pdp';
-    $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
   }
   elseif ($current_route->getRouteName() === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
   }
   $settings['config'] = $aura_helper->getAuraConfig();
+  $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
 
   $page['#attached']['drupalSettings']['aura'] = $settings;
 }
