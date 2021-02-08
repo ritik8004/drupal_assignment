@@ -1,14 +1,15 @@
 import React from 'react';
-import WriteReviewLink from './WriteReviewLink';
-import Modal from './Model';
+import Popup from 'reactjs-popup';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../alshaya_spc/js/utilities/checkout_util';
 import formData from '../../../utilities/api/formData';
+import Loading from '../../../utilities/loading';
+import WithModal from './with-modal';
+import WriteReviewForm from './WriteReviewForm';
 
 export default class WriteReview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShown: false,
       formFieldConfigs: '',
     };
   }
@@ -34,60 +35,52 @@ export default class WriteReview extends React.Component {
     }
   }
 
-  showModal = () => {
-    this.setState({ isShown: true }, () => {
-      this.closeButton.focus();
-    });
-    this.toggleScrollLock();
+  openModal = (callback) => {
+    callback();
+    // console.log('OpenModel');
+  }
+
+  closeModal = (callback) => {
+    callback();
+    // console.log('CloseModel');
   };
 
-  closeModal = () => {
-    this.setState({ isShown: false });
-    this.WriteReviewLink.focus();
-    this.toggleScrollLock();
-  };
-
-  onKeyDown = (event) => {
-    if (event.keyCode === 27) {
-      this.closeModal();
-    }
-  };
-
-  onClickOutside = (event) => {
-    if (this.modal && this.modal.contains(event.target)) return;
-    this.closeModal();
-  };
-
-  toggleScrollLock = () => {
-    document.querySelector('html').classList.toggle('scroll-lock');
-  };
+  // eventListener = (e) => {
+  //   this.eventClosePopup();
+  //   console.log('eventListener');
+  // };
+  //
+  // eventClosePopup = () => {
+  //   console.log('eventClosePopup');
+  // };
 
   render() {
     const {
-      writeReivewText,
-    } = this.props;
-    const {
-      isShown,
       formFieldConfigs,
     } = this.state;
     return (
-      <>
-        <WriteReviewLink
-          showModal={this.showModal}
-          buttonRef={(n) => { this.WriteReviewLink = n; }}
-          writeReivewText={writeReivewText}
-        />
-        {isShown ? (
-          <Modal
-            modalRef={(n) => { this.modal = n; }}
-            buttonRef={(n) => { this.closeButton = n; }}
-            closeModal={this.closeModal}
-            onKeyDown={this.onKeyDown}
-            onClickOutside={this.onClickOutside}
-            formData={formFieldConfigs}
-          />
-        ) : null}
-      </>
+      <WithModal>
+        {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
+          <div className="pdp-write-review">
+            <div onClick={() => this.openModal(triggerOpenModal)} className="pdp-write-review-text">
+              {Drupal.t('Write a review')}
+            </div>
+            <Popup
+              open={isModalOpen}
+              className="write_review"
+              closeOnEscape={false}
+              closeOnDocumentClick={false}
+            >
+              <React.Suspense fallback={<Loading />}>
+                <WriteReviewForm
+                  closeModal={() => this.closeModal(triggerCloseModal)}
+                  formData={formFieldConfigs}
+                />
+              </React.Suspense>
+            </Popup>
+          </div>
+        )}
+      </WithModal>
     );
   }
 }

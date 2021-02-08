@@ -6,8 +6,5 @@
     "build:dev": "../node_modules/.bin/webpack --mode=development",
     "build": "../node_modules/.bin/webpack",
     "watch": "../node_modules/.bin/webpack --watch"
-  },
-  "dependencies": {
-    "focus-trap-react": "^8.4.1"
   }
 }
