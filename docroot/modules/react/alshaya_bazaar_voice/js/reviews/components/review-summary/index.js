@@ -6,6 +6,7 @@ import {
   showFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
 import ConditionalView from '../../../common/components/conditional-view';
+import ReviewAttributes from '../review-attributes';
 
 export default class ReviewSummary extends React.Component {
   constructor(props) {
@@ -114,19 +115,8 @@ export default class ReviewSummary extends React.Component {
                   <div className="horizontal-border" />
                 </ConditionalView>
 
-                <div className="review-attributes">
-                  <div className="review-attributes-wrapper">
-                    {/* Replace the attribute details once available, hardcoded as of now. */}
-                    <div className="review-attributes-details">
-                      <span className="attribute-name">{Drupal.t('Height:')}</span>
-                      <span className="attribute-value"> 55</span>
-                    </div>
-                    <div className="review-attributes-details">
-                      <span className="attribute-name">{Drupal.t('Weight:')}</span>
-                      <span className="attribute-value"> 120 lbs</span>
-                    </div>
-                  </div>
-                </div>
+                <ReviewAttributes />
+
               </div>
               <div className="review-detail-right">
                 <div className="review-details">
