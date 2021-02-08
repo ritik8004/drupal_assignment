@@ -5,6 +5,7 @@ namespace Drupal\alshaya_bazaar_voice\Commands;
 use AlgoliaSearch\Client;
 use Drupal\alshaya_master\Service\AlshayaEntityHelper;
 use Drush\Commands\DrushCommands;
+use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
 
 /**
  * Class Alshaya BazaarVoice commands.
@@ -21,13 +22,25 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
   protected $alshayaEntityHelper;
 
   /**
+   * Alshaya BazaarVoice.
+   *
+   * @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice
+   */
+  protected $alshayaBazaarVoice;
+
+  /**
    * AlshayaBazaarVoiceCommands constructor.
    *
    * @param \Drupal\alshaya_master\Service\AlshayaEntityHelper $alshaya_entity_helper
    *   Alshaya entity helper.
+   * @param \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshaya_bazaar_voice
+   *   Alshaya BazaarVoice.
    */
-  public function __construct(AlshayaEntityHelper $alshaya_entity_helper) {
+  public function __construct(
+                              AlshayaEntityHelper $alshaya_entity_helper,
+                              AlshayaBazaarVoice $alshaya_bazaar_voice) {
     $this->alshayaEntityHelper = $alshaya_entity_helper;
+    $this->alshayaBazaarVoice = $alshaya_bazaar_voice;
   }
 
   /**
@@ -107,9 +120,9 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
   public static function batchProcess(array $nids, &$context) {
     $context['results']['count'] += count($nids);
 
-    $bazaar_voice_api_helper = \Drupal::service('alshaya_bazaar_voice.api_helper');
-    $skus = $bazaar_voice_api_helper->getSkusByNodeIds($nids);
-    $data = $bazaar_voice_api_helper->getDataFromBvReviewFeeds($skus);
+    $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
+    $skus = $alshaya_bazaar_voice->getSkusByNodeIds($nids);
+    $data = $alshaya_bazaar_voice->getDataFromBvReviewFeeds($skus);
 
     if (empty($data)) {
       return;
@@ -209,6 +222,32 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
         '@operation' => $error_operation[0],
         '@args' => print_r($error_operation[0], TRUE),
       ]);
+    }
+  }
+
+  /**
+   * Sync fields in webform getting from bazaarvoice config hub.
+   *
+   * @param string $product_id
+   *   Product id is required to get fields from BazaarVoice.
+   *
+   * @command alshaya_bazaar_voice:alshaya-sync-bv-fields
+   *
+   * @option $product_id
+   *   Product id required by BazaarVoice submission form api.
+   *
+   * @aliases asbvf,alshaya-sync-bv-fields
+   *
+   * @usage drush alshaya-sync-bv-fields Y5BOY5PMDM05
+   *   Sync fields in webform getting from bazaarvoice config hub.
+   */
+  public function syncFieldsFromBvPortal($product_id = '') {
+    // Force reset all the fields configs.
+    if (!$this->alshayaBazaarVoice->syncFieldsFromBvSubmissionForm($product_id)) {
+      $this->io()->error(dt('Sync fields is not done.'));
+    }
+    else {
+      $this->io()->success(dt('Sync fields done successfully.'));
     }
   }
 

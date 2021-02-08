@@ -1,0 +1,11 @@
+title: 'أكتب مراجعة'
+elements: |
+  review_title:
+    '#title': 'مراجعة العنوان'
+  review:
+    '#title': 'مراجعة'
+    '#field_suffix': '220'
+  email:
+    '#title': 'عنوان البريد الإلكتروني'
+  nickname:
+    '#title': 'كنية'

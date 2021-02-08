@@ -1,0 +1,6 @@
+alshaya_bazaar_voice.bv_form_config:
+  path: '/bv-form-config'
+  defaults:
+    _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::getBazaarVoiceFormConfig'
+  requirements:
+    _access: 'TRUE'
