@@ -29,7 +29,6 @@ services:
       - '@config.factory'
       - '@current_user'
       - '@acq_checkoutcom.agent_api'
-      - '@alshaya_acm_checkoutcom.api_helper'
 
   acq_checkoutcom.order_placed_event:
     class: Drupal\acq_checkoutcom\EventSubscriber\OrderPlacedEventSubscriber
