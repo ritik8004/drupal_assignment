@@ -26,26 +26,6 @@
   }
 }
 
-.nodetype--advanced_page {
-  .c-department {
-    .c-content__slider {
-      margin-top: -1rem;
-
-      @include breakpoint($tablet) {
-        margin-top: -1.75rem;
-      }
-    }
-
-    &.advanced-page-only {
-      .c-content__slider {
-        @include breakpoint($only-mobile) {
-          margin-top: 0;
-        }
-      }
-    }
-  }
-}
-
 @include breakpoint($only-mobile) {
   .paragraph--type--product-carousel-category {
     .c-accordion__title {

@@ -79,3 +79,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/frontpage-content-slider:
+    css:
+      theme:
+        css/conditional-sass/frontpage-content-slider/frontpage-content-slider.ltr.css: css/conditional-sass/frontpage-content-slider/frontpage-content-slider.ltr.css
