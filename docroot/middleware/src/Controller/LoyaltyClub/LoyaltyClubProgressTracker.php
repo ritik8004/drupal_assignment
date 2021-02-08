@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Service\Cart;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -44,6 +45,13 @@ class LoyaltyClubProgressTracker {
   protected $utility;
 
   /**
+   * Service for cart interaction.
+   *
+   * @var \App\Service\Cart
+   */
+  protected $cart;
+
+  /**
    * LoyaltyClubProgressTracker constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -54,17 +62,21 @@ class LoyaltyClubProgressTracker {
    *   Drupal service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
+   * @param \App\Service\Cart $cart
+   *   Cart service.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
     Drupal $drupal,
-    Utility $utility
+    Utility $utility,
+    Cart $cart
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->drupal = $drupal;
     $this->utility = $utility;
+    $this->cart = $cart;
   }
 
   /**
@@ -77,19 +89,28 @@ class LoyaltyClubProgressTracker {
     try {
       $request_uid = $request->query->get('uid');
       // Get user details from session.
-      $user = $this->drupal->getSessionCustomerInfo();
+      $customer_id = $this->cart->getDrupalInfo('customer_id');
+      $uid = $this->cart->getDrupalInfo('uid');
+
+      // Check if we have user in session.
+      if (empty($customer_id) || empty($uid)) {
+        $this->logger->error('Error while trying to get progress tracker of the user. User id from request: @uid.', [
+          '@uid' => $request_uid,
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('No user available in session', Response::HTTP_NOT_FOUND));
+      }
 
       // Check if uid is for anonymous or uid in the request
       // matches the one in session.
-      if ($request_uid == 0 || $user['uid'] !== $request_uid) {
+      if ($request_uid == 0 || $uid !== $request_uid) {
         $this->logger->error('Error while trying to get progress tracker of the user. User id in request doesn`t match the one in session. User id from request: @req_uid. User id in session: @session_uid.', [
           '@req_uid' => $request_uid,
-          '@session_uid' => $user['uid'],
+          '@session_uid' => $uid,
         ]);
         return new JsonResponse($this->utility->getErrorResponse('User id in request doesn`t match the one in session.', Response::HTTP_NOT_FOUND));
       }
 
-      $endpoint = sprintf('/customers/apcTierProgressData/customerId/%s', $user['customer_id']);
+      $endpoint = sprintf('/customers/apcTierProgressData/customerId/%s', $customer_id);
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $data = [];
 
@@ -111,7 +132,7 @@ class LoyaltyClubProgressTracker {
     }
     catch (\Exception $e) {
       $this->logger->notice('Error while trying to get progress tracker of the user. User Id: @uid. Message: @message', [
-        '@uid' => $user['uid'],
+        '@uid' => $uid,
         '@message' => $e->getMessage(),
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));

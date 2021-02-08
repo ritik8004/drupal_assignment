@@ -134,4 +134,14 @@ class AuraHelper {
     return $config;
   }
 
+  /**
+   * Helper to check if aura is enabled.
+   *
+   * @return bool
+   *   TRUE/FALSE
+   */
+  public function isAuraEnabled() {
+    return TRUE;
+  }
+
 }

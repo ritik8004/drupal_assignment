@@ -4,7 +4,6 @@ import LoyaltyClubTabs from './loyalty-club-tabs';
 import { getAllAuraStatus } from '../../utilities/helper';
 import dispatchCustomEvent from '../../../../js/utilities/events';
 import { getAuraDetailsDefaultState } from '../../utilities/aura_utils';
-import AuraProgress from '../aura-progress';
 
 class LoyaltyClub extends React.Component {
   constructor(props) {
@@ -92,7 +91,6 @@ class LoyaltyClub extends React.Component {
           linkCardFailed={linkCardFailed}
           updateLoyaltyStatus={this.updateLoyaltyStatus}
         />
-        <AuraProgress />
         <LoyaltyClubTabs loyaltyStatus={loyaltyStatus} />
       </>
     );

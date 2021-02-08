@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUserAuraTier, getUserDetails } from '../../utilities/helper';
+import { getUserAuraTier, getUserDetails, getAllAuraTier } from '../../utilities/helper';
 import AuraProgressString from './progress-string';
 import ConditionalView
   from '../../../../alshaya_spc/js/common/components/conditional-view';
@@ -25,7 +25,8 @@ class AuraProgress extends React.Component {
       apiData.then((result) => {
         if (result.data !== undefined
           && result.data.error === undefined
-          && result.data.data !== undefined) {
+          && result.data.data !== undefined
+          && result.data.data.length !== 0) {
           this.setState({
             ...result.data.data,
             wait: false,
@@ -91,10 +92,10 @@ class AuraProgress extends React.Component {
     return (
       <div className="aura-progressbar-wrapper">
         <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
-          <span className="under">{drupalSettings.aura.allAuraTier[currentTierLevel]}</span>
+          <span className="under">{getAllAuraTier()[currentTierLevel]}</span>
           <div className="start">
             <div className="fill" style={{ width: progress }}>
-              <span className="over">{drupalSettings.aura.allAuraTier[currentTierLevel]}</span>
+              <span className="over">{getAllAuraTier()[currentTierLevel]}</span>
             </div>
             <ConditionalView condition={showDotClass === 'pointer'}>
               <span
@@ -103,13 +104,13 @@ class AuraProgress extends React.Component {
               />
             </ConditionalView>
           </div>
-          <div className={`end next-tier-${nextTierLevel}`}><span>{drupalSettings.aura.allAuraTier[nextTierLevel]}</span></div>
+          <div className={`end next-tier-${nextTierLevel}`}><span>{getAllAuraTier()[nextTierLevel]}</span></div>
         </div>
         <AuraProgressString
           userPoints={userPoints}
           nextTierThreshold={nextTierThreshold}
           showDotClass={showDotClass}
-          nextTierLabel={drupalSettings.aura.allAuraTier[nextTierLevel]}
+          nextTierLabel={getAllAuraTier()[nextTierLevel]}
           progressRatio={progressRatio}
         />
       </div>

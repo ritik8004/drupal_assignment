@@ -129,11 +129,11 @@ class LoyaltyCustomerController {
     $tier = $request->get('tier') ?? '';
     $status = $request->get('status') ?? '';
 
-    $sessionCustomerInfo = $this->drupal->getSessionCustomerInfo();
-    $customer_id = $sessionCustomerInfo['customer_id'];
+    $customer_id = $this->cart->getDrupalInfo('customer_id');
+    $uid = $this->cart->getDrupalInfo('uid');
     $response_data = [];
 
-    if (empty($customer_id)) {
+    if (empty($customer_id) || empty($uid)) {
       $this->logger->error('Error while trying to fetch loyalty points for customer. No customer available in session.');
       return new JsonResponse($this->utility->getErrorResponse('No user in session', Response::HTTP_NOT_FOUND));
     }
@@ -182,7 +182,7 @@ class LoyaltyCustomerController {
       }
 
       if (!empty($updatedData)) {
-        $updatedData['uid'] = $sessionCustomerInfo['uid'];
+        $updatedData['uid'] = $uid;
         $this->drupal->updateUserAuraInfo($updatedData);
       }
     }
@@ -242,11 +242,12 @@ class LoyaltyCustomerController {
 
     try {
       // Get user details from session.
-      $user = $this->drupal->getSessionCustomerInfo();
+      $customer_id = $this->cart->getDrupalInfo('customer_id');
+      $uid = $this->cart->getDrupalInfo('uid');
       $data['customer'] = array_merge($request_content, ['isVerified' => 'Y']);
 
-      if (!empty($user['customer_id'])) {
-        $data['customer']['customerId'] = $user['customer_id'];
+      if (!empty($customer_id)) {
+        $data['customer']['customerId'] = $customer_id;
       }
 
       $url = 'customers/quick-enrollment';
@@ -257,9 +258,9 @@ class LoyaltyCustomerController {
       ];
 
       // On API success, update user AURA Status in Drupal for logged in user.
-      if (!empty($user['uid']) && is_array($response) && !empty($response['apc_link'])) {
+      if (!empty($uid) && is_array($response) && !empty($response['apc_link'])) {
         $auraData = [
-          'uid' => $user['uid'],
+          'uid' => $uid,
           'apcLinkStatus' => $response['apc_link'],
         ];
         $updated = $this->drupal->updateUserAuraInfo($auraData);
@@ -268,8 +269,8 @@ class LoyaltyCustomerController {
         if (!$updated) {
           $message = 'Error while trying to update user AURA Status field in Drupal after loyalty club sign up.';
           $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
-            '@uid' => $user['uid'],
-            '@customer_id' => $user['customer_id'],
+            '@uid' => $uid,
+            '@customer_id' => $customer_id,
             '@aura_status' => $response['apc_link'],
           ]);
           return new JsonResponse($this->utility->getErrorResponse($message, 500));
@@ -417,21 +418,30 @@ class LoyaltyCustomerController {
       $request_content = $request->query->all();
 
       // Get user details from session.
-      $user = $this->drupal->getSessionCustomerInfo();
+      $customer_id = $this->cart->getDrupalInfo('customer_id');
+      $uid = $this->cart->getDrupalInfo('uid');
+
+      // Check if we have user in session.
+      if (empty($customer_id) || empty($uid)) {
+        $this->logger->error('Error while trying to get reward activity of the user. User id from request: @uid.', [
+          '@uid' => $request_uid,
+        ]);
+        return new JsonResponse($this->utility->getErrorResponse('No user available in session', Response::HTTP_NOT_FOUND));
+      }
 
       // Check if uid is for anonymous or uid in the request
       // matches the one in session.
-      if ($request_content['uid'] == 0 || $user['uid'] !== $request_content['uid']) {
+      if ($request_content['uid'] == 0 || $uid !== $request_content['uid']) {
         $this->logger->error('Error while trying to get reward activity of the user. User id in request doesn`t match the one in session. User id from request: @req_uid. User id in session: @session_uid.', [
           '@req_uid' => $request_content['uid'],
-          '@session_uid' => $user['uid'],
+          '@session_uid' => $uid,
         ]);
         return new JsonResponse($this->utility->getErrorResponse('User id in request doesn`t match the one in session.', Response::HTTP_NOT_FOUND));
       }
 
       // API call to get reward activity.
       $data = $this->auraCustomerHelper->getRewardActivity(
-        $user['customer_id'],
+        $uid,
         $request_content['fromDate'] ?? '',
         $request_content['toDate'] ?? '',
         $request_content['maxResults'] ?? 0,
@@ -457,7 +467,7 @@ class LoyaltyCustomerController {
         $toDate = $dateObject->format('Y-m-t');
 
         $data = $this->auraCustomerHelper->getRewardActivity(
-          $user['customer_id'],
+          $customer_id,
           $fromDate,
           $toDate,
           0,
