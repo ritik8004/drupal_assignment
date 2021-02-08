@@ -419,3 +419,8 @@ alshaya-stylefinder:
   css:
     theme:
       css/conditional-sass/alshaya-stylefinder/alshaya-stylefinder.ltr.css: {}
+
+store_finder:
+  css:
+    theme:
+      css/conditional-sass/store-finder/store-finder.ltr.css: {}
