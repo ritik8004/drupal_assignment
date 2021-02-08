@@ -76,7 +76,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
         <div className="statement-row">
           <span className="order-id">{transaction.orderNo}</span>
           <span className="date">{date}</span>
-          <span className="amount">{transaction.orderTotal}</span>
+          <span className="amount">{`${transaction.currencyCode} ${transaction.orderTotal}`}</span>
           <span className="type">{transaction.channel}</span>
           <span className={`aura-points style-${transaction.status}`}>{transaction.auraPoints}</span>
           <span className={`status style-${transaction.status}`}>{transaction.statusName}</span>
