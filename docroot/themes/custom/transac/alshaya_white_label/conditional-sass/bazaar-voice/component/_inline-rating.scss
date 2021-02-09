@@ -23,28 +23,33 @@
     text-decoration: underline;
     font-size: 0.875rem;
   }
+}
 
-  .empty-stars {
-    .star-ratings {
-      .star-ratings-front {
-        position: absolute;
-        overflow: hidden;
-      }
+.star-ratings-wrapper {
+  display: flex;
 
-      .star-ratings-front,
-      .star-ratings-back {
-        span {
-          padding: 0 0.125rem;
-        }
-      }
+  .inline-star {
+    position: relative;
+    cursor: pointer;
 
-      .icon-ic_ratingfull {
-        @include icon(ratingfull);
-      }
+    .star-ratings-front {
+      position: absolute;
+      overflow: hidden;
+    }
 
-      .icon-ic_rating {
-        @include icon(rating);
+    .star-ratings-front,
+    .star-ratings-back {
+      span {
+        padding: 0 0.125rem;
       }
+    }
+
+    .icon-ic_ratingfull {
+      @include icon(ratingfull);
+    }
+
+    .icon-ic_rating {
+      @include icon(rating);
     }
   }
 }
