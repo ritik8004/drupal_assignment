@@ -130,6 +130,7 @@ class AlshayaBnplWidgetHelper {
     switch ($page_type) {
       case 'cart':
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_cart';
+        $build['#attached']['library'][] = 'alshaya_white_label/postpay-cart';
         break;
 
       default:
