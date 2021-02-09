@@ -9,3 +9,15 @@ services:
     arguments: ['@stream_wrapper_manager']
     tags:
       - { name: path_processor_inbound, priority: 301 }
+
+  alshaya_brand.stage_file_proxy_subscriber:
+    class: Drupal\alshaya_brand\EventSubscriber\StageFileProxyProxySubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments:
+      - '@config.factory'
+      - '@request_stack'
+      - '@file_system'
+      - '@http_client'
+    calls:
+      - [ setStageFileProxy, [ '@?stage_file_proxy.fetch_manager' ] ]

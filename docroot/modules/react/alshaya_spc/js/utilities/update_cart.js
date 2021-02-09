@@ -120,6 +120,9 @@ export const addPaymentMethodInCart = (action, data) => {
     payment_info: data,
   }).then((response) => {
     if (!validateCartResponse(response.data)) {
+      if (typeof response.data.message !== 'undefined') {
+        Drupal.logJavascriptError(action, response.message, GTM_CONSTANTS.CHECKOUT_ERRORS);
+      }
       return null;
     }
     return response.data;

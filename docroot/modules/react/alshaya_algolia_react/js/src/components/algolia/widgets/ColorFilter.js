@@ -22,11 +22,17 @@ const ColorFilter = ({
     itemCount(props.attribute, items.length);
   }
 
+  const { facetValues } = props;
+
   return (
     <ul>
       {searchForm}
       {items.map((item) => {
-        const [label, swatchInfo] = item.label.split(',');
+        if (typeof facetValues[item.label] === 'undefined') {
+          facetValues[item.label] = item.label;
+        }
+
+        const [label, swatchInfo] = facetValues[item.label].split(',');
         return (
           <li
             key={item.label}

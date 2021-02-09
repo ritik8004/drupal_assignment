@@ -91,6 +91,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response }
 
+    App\EventListener\StockEventListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate }
+
     App\EventListener\SanitizingListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request }

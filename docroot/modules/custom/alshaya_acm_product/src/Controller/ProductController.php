@@ -23,6 +23,8 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\image\ImageStyleInterface;
 use Drupal\Core\Extension\ModuleHandler;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class Product Controller.
@@ -118,7 +120,13 @@ class ProductController extends ControllerBase {
    *   The label of the node.
    */
   public function modalTitle(string $code) {
-    $node = $this->getProductNode($code);
+    try {
+      $node = $this->getProductNode($code);
+    }
+    catch (HttpException $e) {
+      return new Response($e->getMessage(), $e->getStatusCode());
+    }
+
     return $node->label();
   }
 
@@ -135,7 +143,13 @@ class ProductController extends ControllerBase {
    *   users to node page.
    */
   public function modalView(string $code, $js) {
-    $node = $this->getProductNode($code);
+    try {
+      $node = $this->getProductNode($code);
+    }
+    catch (HttpException $e) {
+      return new Response($e->getMessage(), $e->getStatusCode());
+    }
+
     if ($js === 'ajax') {
       $view_builder = $this->entityTypeManager()->getViewBuilder($node->getEntityTypeId());
       $build = $view_builder->view($node, 'modal');

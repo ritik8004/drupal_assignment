@@ -89,7 +89,25 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'short_description':
         $this->processShortDescription($event);
         break;
+      case 'title':
+        // Only for algolia.
+        if ($event->getContext() == 'plp') {
+          $this->processTitle($event);
+        }
+        break;
     }
+  }
+
+  /**
+   * Process title for SKU.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processTitle(ProductInfoRequestedEvent $event) {
+    $sku_entity = $event->getSku();
+    $title = _alshaya_bbw_transac_get_product_title($sku_entity);
+    $event->setValue($title);
   }
 
   /**
