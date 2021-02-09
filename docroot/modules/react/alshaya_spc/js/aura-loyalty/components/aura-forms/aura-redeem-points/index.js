@@ -29,6 +29,13 @@ class AuraFormRedeemPoints extends React.Component {
     const { totals } = this.props;
 
     if (totals.paidWithAura === undefined || totals.paidWithAura === null) {
+      const pointsToPrefill = this.redemptionLimit();
+
+      this.setState({
+        money: getPointToPrice(pointsToPrefill),
+        points: pointsToPrefill,
+        enableSubmit: true,
+      });
       return;
     }
 
@@ -39,6 +46,20 @@ class AuraFormRedeemPoints extends React.Component {
     });
     // Add a class for FE purposes.
     document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
+  }
+
+  // Minimum of total points in user account and order total value
+  // in points is the redemption limit.
+  redemptionLimit = () => {
+    const { totals, pointsInAccount } = this.props;
+    const { base_grand_total: grandTotal } = totals;
+    const grandTotalPoints = grandTotal * getPointToPriceRatio();
+
+    const pointsAllowedToRedeem = (pointsInAccount < grandTotalPoints)
+      ? pointsInAccount
+      : grandTotalPoints;
+
+    return pointsAllowedToRedeem;
   }
 
   handleRedeemPointsEvent = (data) => {
@@ -98,15 +119,17 @@ class AuraFormRedeemPoints extends React.Component {
     removeError('spc-aura-link-api-response-message');
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     const { points, money } = this.state;
-    const { pointsInAccount, cardNumber } = this.props;
+    const { cardNumber } = this.props;
 
     if (points === null) {
       showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_points'));
       return;
     }
 
-    if (parseInt(points, 10) > parseInt(pointsInAccount, 10)) {
-      showError('spc-aura-link-api-response-message', `${getStringMessage('you_can_redeem_maximum')} ${pointsInAccount} ${getStringMessage('points')}`);
+    const maxPointsToRedeem = this.redemptionLimit();
+
+    if (parseInt(points, 10) > parseInt(maxPointsToRedeem, 10)) {
+      showError('spc-aura-link-api-response-message', `${getStringMessage('you_can_redeem_maximum')} ${maxPointsToRedeem} ${getStringMessage('points')}`);
       return;
     }
 
@@ -172,6 +195,7 @@ class AuraFormRedeemPoints extends React.Component {
     const {
       enableSubmit,
       money,
+      points,
       auraTransaction,
     } = this.state;
 
@@ -187,6 +211,7 @@ class AuraFormRedeemPoints extends React.Component {
                 name="spc-aura-redeem-field-points"
                 placeholder="0"
                 onChangeCallback={this.convertPointsToMoney}
+                value={points}
               />
               <span className="spc-aura-redeem-points-separator">=</span>
               <AuraRedeemPointsTextField

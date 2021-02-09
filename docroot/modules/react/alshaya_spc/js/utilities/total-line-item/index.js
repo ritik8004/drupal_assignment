@@ -22,7 +22,7 @@ const TotalLineItem = (props) => {
     );
   }
 
-  if (value === 0) {
+  if (value === 0 && name !== 'balance-payable') {
     return (null);
   }
   return (

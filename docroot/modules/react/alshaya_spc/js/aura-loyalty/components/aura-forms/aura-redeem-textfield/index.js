@@ -8,6 +8,7 @@ const AuraRedeemPointsTextField = (props) => {
     money,
     currencyCode,
     type,
+    value,
   } = props;
 
   if (type === 'money') {
@@ -29,6 +30,7 @@ const AuraRedeemPointsTextField = (props) => {
           className={name}
           defaultValue={formattedMoneyValue ? `${currencyCode} ${formattedMoneyValue}` : ''}
           type="text"
+          disabled
         />
       </div>
     );
@@ -42,6 +44,7 @@ const AuraRedeemPointsTextField = (props) => {
         className={name}
         type="text"
         onChange={(e) => onChangeCallback(e)}
+        defaultValue={value}
       />
     </div>
   );
