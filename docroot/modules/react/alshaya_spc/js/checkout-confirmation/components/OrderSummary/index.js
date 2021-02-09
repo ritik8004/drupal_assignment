@@ -7,7 +7,7 @@ import AuraRedeemOrderSummaryItem
   from '../../../aura-loyalty/components/aura-redeem-order-summary-item';
 import isAuraEnabled from '../../../../../js/utilities/helper';
 
-const OrderSummary = () => {
+const OrderSummary = (props) => {
   const customEmail = drupalSettings.order_details.customer_email;
   const orderNumber = drupalSettings.order_details.order_number;
   const mobileNumber = drupalSettings.order_details.mobile_number;
@@ -106,6 +106,8 @@ const OrderSummary = () => {
     accruedPoints, redeemedPoints,
   } = drupalSettings.order_details;
 
+  const { context } = props;
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
@@ -167,8 +169,15 @@ const OrderSummary = () => {
       </div>
       {/* TODO: Aura SPC - Improve these conditions once BE for AURA is integrated. */}
       <ConditionalView condition={isAuraEnabled()}>
-        <AuraEarnOrderSummaryItem pointsEarned={accruedPoints} animationDelay="0.8s" />
-        <AuraRedeemOrderSummaryItem pointsRedeemed={redeemedPoints} animationDelay="1s" />
+        <AuraEarnOrderSummaryItem
+          pointsEarned={accruedPoints}
+          animationDelay="0.8s"
+          context={context}
+        />
+        <AuraRedeemOrderSummaryItem
+          pointsRedeemed={redeemedPoints}
+          animationDelay="1s"
+        />
       </ConditionalView>
     </div>
   );
