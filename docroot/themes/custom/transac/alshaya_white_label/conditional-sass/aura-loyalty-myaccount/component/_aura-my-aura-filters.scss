@@ -1,0 +1,70 @@
+.filters {
+  text-align: center;
+  margin-bottom: 3.125rem;
+
+  .reward-activity-filter {
+    width: 14.5625rem;
+    display: inline-block;
+    margin: 0 0.625rem;
+
+    @include breakpoint($only-mobile) {
+      &:first-child {
+        margin-bottom: 1.25rem;
+      }
+    }
+
+    &.open {
+      .spcAuraSelect__indicators {
+        transform: rotate(180deg);
+      }
+    }
+
+    .spcAuraSelect__control {
+      border-radius: 1.75rem;
+      border-color: $aura-my-account-filters;
+      height: 2.5rem;
+      font-size: 1rem;
+      font-family: $aura-regular;
+      color: $aura-my-account-filters;
+      box-shadow: none;
+
+      .spcAuraSelect__value-container {
+        padding-#{$left}: 1.5625rem;
+      }
+
+      .spcAuraSelect__indicators {
+        flex-grow: 0.15;
+        transition: transform 0.3s ease-in-out;
+        background: url('#{$base_theme_img_directory_path}/aura/aura-chevron-dark.svg') center center no-repeat;
+
+        .spcAuraSelect__indicator-separator,
+        svg {
+          visibility: hidden;
+        }
+      }
+    }
+
+    .spcAuraSelect__menu {
+      font-size: 1rem;
+      font-family: $aura-regular;
+      color: $aura-my-account-filters;
+      border-radius: 0.625rem;
+
+      .spcAuraSelect__menu-list {
+        border-radius: 0.625rem;
+        padding: 0;
+
+        .spcAuraSelect__option {
+          padding-#{$left}: 1.5625rem;
+          text-align: left;
+
+          &.spcAuraSelect__option--is-selected {
+            background-image: $aura-loyalty-tab-active;
+            font-family: $aura-bold;
+            color: $aura-loyalty-tab-bg;
+          }
+        }
+      }
+    }
+  }
+}

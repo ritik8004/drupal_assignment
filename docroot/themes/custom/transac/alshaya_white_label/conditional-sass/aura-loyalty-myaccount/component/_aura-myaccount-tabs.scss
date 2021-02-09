@@ -1,7 +1,7 @@
 .loyalty-club-tabs {
   text-align: center;
   overflow-y: auto;
-  margin: 3.75rem 0;
+  margin: 3.75rem 0 3.125rem;
 
   @include breakpoint($only-mobile) {
     white-space: nowrap;
