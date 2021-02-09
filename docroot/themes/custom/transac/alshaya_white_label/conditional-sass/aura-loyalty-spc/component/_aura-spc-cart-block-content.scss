@@ -81,6 +81,7 @@
 
       html[lang=ar] & {
         background-image: $aura-join-link-ar;
+        text-align: center;
       }
     }
   }
@@ -155,6 +156,7 @@
           padding-#{$left}: 0.9375rem;
           padding-#{$right}: 0.9375rem;
           flex-grow: 1;
+          background: $aura-spc-textbox-link-card-textbox;
 
           &::placeholder {
             color: $aura-spc-textbox-placeholder;
