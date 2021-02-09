@@ -12,6 +12,7 @@ import {
   formatDate,
   getTransactionDateOptionsDefaultValue,
 } from '../../../utilities/reward_activity_helper';
+import Loading from '../../../../../alshaya_spc/js/utilities/loading';
 
 class LoyaltyClubRewardsActivity extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       fromDate: '',
       toDate: '',
       type: '',
+      wait: true,
     };
   }
 
@@ -46,6 +48,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
         if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
             activity: result.data.data || null,
+            wait: false,
           });
         }
         removeInlineLoader('.reward-activity');
@@ -89,18 +92,23 @@ class LoyaltyClubRewardsActivity extends React.Component {
     return statement;
   };
 
-  onMenuOpen = (selectRef) => {
-    if (selectRef.current === null) {
-      return;
+  onMenuOpen = (filterName) => {
+    if (filterName === 'date') {
+      this.dateSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.add('open');
     }
-    selectRef.current.select.inputRef.closest(`.${selectRef.current.select.props.className}`).classList.add('open');
+
+    if (filterName === 'type') {
+      this.typeSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.add('open');
+    }
   };
 
-  onMenuClose = (selectRef) => {
-    if (selectRef.current === null) {
-      return;
+  onMenuClose = (filterName) => {
+    if (filterName === 'date') {
+      this.dateSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.remove('open');
     }
-    selectRef.current.select.inputRef.closest(`.${selectRef.current.select.props.className}`).classList.remove('open');
+    if (filterName === 'type') {
+      this.typeSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.remove('open');
+    }
   };
 
   handleTypeChange = (selectedOption) => {
@@ -129,8 +137,16 @@ class LoyaltyClubRewardsActivity extends React.Component {
   };
 
   render() {
-    const { activity, dateFilterOptions } = this.state;
+    const { activity, dateFilterOptions, wait } = this.state;
     const transactionTypeOptions = getTransactionTypeOptions();
+
+    if (wait) {
+      return (
+        <div className="loyalty-club-rewards-wrapper loyalty-tab-content fadeInUp" style={{ animationDelay: '0.6s' }}>
+          <Loading />
+        </div>
+      );
+    }
 
     return (
       <div className="loyalty-club-rewards-wrapper loyalty-tab-content fadeInUp" style={{ animationDelay: '0.6s' }}>
@@ -138,25 +154,29 @@ class LoyaltyClubRewardsActivity extends React.Component {
           <Select
             ref={this.dateSelectRef}
             classNamePrefix="spcAuraSelect"
-            className="transaction-date-filter"
+            className="reward-activity-filter transaction-date-filter"
             name="transactionDateFilter"
-            onMenuOpen={() => this.onMenuOpen(this.dateSelectRef)}
-            onMenuClose={() => this.onMenuClose(this.dateSelectRef)}
+            onMenuOpen={() => this.onMenuOpen('date')}
+            onMenuClose={() => this.onMenuClose('date')}
             options={dateFilterOptions}
             defaultValue={dateFilterOptions[0]}
             value={getTransactionDateOptionsDefaultValue(activity)}
             onChange={this.handleDateChange}
+            isSearchable={false}
+            key="date-filter"
           />
           <Select
             ref={this.typeSelectRef}
             classNamePrefix="spcAuraSelect"
-            className="transaction-type-filter"
+            className="reward-activity-filter transaction-type-filter"
             name="transactionTypeFilter"
-            onMenuOpen={() => this.onMenuOpen(this.typeSelectRef)}
-            onMenuClose={() => this.onMenuClose(this.typeSelectRef)}
+            onMenuOpen={() => this.onMenuOpen('type')}
+            onMenuClose={() => this.onMenuClose('type')}
             options={transactionTypeOptions}
             defaultValue={transactionTypeOptions[0]}
             onChange={this.handleTypeChange}
+            isSearchable={false}
+            key="transaction-filter"
           />
         </div>
         <div className="header-row">
