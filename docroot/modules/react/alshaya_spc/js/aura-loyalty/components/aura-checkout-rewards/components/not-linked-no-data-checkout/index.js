@@ -3,6 +3,7 @@ import AuraFormLinkCard from '../../../aura-forms/aura-link-card-textbox';
 import LinkYourCardMessage from '../link-you-card-message';
 import ConditionalView from '../../../../../common/components/conditional-view';
 import { getMembersToEarnMessage } from '../../../utilities/checkout_helper';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 class AuraNotLinkedNoDataCheckout extends React.Component {
   constructor(props) {
@@ -29,11 +30,11 @@ class AuraNotLinkedNoDataCheckout extends React.Component {
     return (
       <div className="block-content guest-user">
         <div className="title">
-          <div className="subtitle-1">{ Drupal.t('Earn and redeem as you shop ') }</div>
+          <div className="subtitle-1">{ getStringMessage('checkout_earn_and_redeem') }</div>
           <div className="subtitle-2">{ getMembersToEarnMessage(price) }</div>
         </div>
         <div className="spc-aura-link-card-form">
-          <div className="label">{ Drupal.t('Already an AURA member?') }</div>
+          <div className="label">{ getStringMessage('checkout_already_member_question') }</div>
           <div className="item-wrapper">
             <AuraFormLinkCard
               enableShowLinkCardMessage={this.enableShowLinkCardMessage}
