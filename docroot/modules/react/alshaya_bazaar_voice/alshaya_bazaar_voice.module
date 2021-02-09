@@ -37,8 +37,7 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
 
       $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
       $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
-      $build['#attached']['library'][] = 'alshaya_bazaar_voice/rating';
-      $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
+      $build['#attached']['library'] = ['alshaya_bazaar_voice/rating', 'alshaya_bazaar_voice/reviews'];
       $build['#attached']['drupalSettings'] = $settings;
     }
   }

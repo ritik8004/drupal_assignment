@@ -233,7 +233,7 @@
     margin-top: 1.25rem;
   }
 
-  .star-ratings {
+  .star-ratings-wrapper {
     margin-bottom: 0.625rem;
 
     @include breakpoint($tablet) {

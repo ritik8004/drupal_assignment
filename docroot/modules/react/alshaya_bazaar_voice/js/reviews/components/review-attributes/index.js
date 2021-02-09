@@ -1,19 +1,23 @@
 import React from 'react';
 
-const ReviewAttributes = () => (
-  <div className="review-attributes">
-    <div className="review-attributes-wrapper">
-      {/* Replace the attribute details once available, hardcoded as of now. */}
-      <div className="review-attributes-details">
-        <span className="attribute-name">{Drupal.t('Height:')}</span>
-        <span className="attribute-value"> 55</span>
+const ReviewAttributes = ({
+  ReviewAttributesData,
+}) => {
+  if (ReviewAttributesData !== undefined) {
+    return (
+      <div className="review-attributes">
+        <div className="review-attributes-wrapper">
+          {Object.keys(ReviewAttributesData).map((item) => (
+            <div className="review-attributes-details" key={ReviewAttributesData[item].Id}>
+              <span className="attribute-name">{`${ReviewAttributesData[item].DimensionLabel}: `}</span>
+              <span className="attribute-value">{ReviewAttributesData[item].Value}</span>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="review-attributes-details">
-        <span className="attribute-name">{Drupal.t('Weight:')}</span>
-        <span className="attribute-value"> 120 lbs</span>
-      </div>
-    </div>
-  </div>
-);
+    );
+  }
+  return (null);
+};
 
 export default ReviewAttributes;
