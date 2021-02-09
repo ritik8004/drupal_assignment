@@ -735,9 +735,19 @@ class CartController {
           return new JsonResponse($this->utility->getErrorResponse('Invalid cart', '500'));
         }
 
-        $postData = $request_content['postData'];
+        $settings = $this->settings->getSettings('alshaya_checkout_settings');
+        $postData = [
+          'extension' => [
+            'action' => 'refresh',
+          ],
+        ];
+
+        if ($settings['cart_refresh_mode'] === 'full') {
+          $postData = $request_content['postData'];
+        }
 
         $cart = $this->cart->updateCart($postData);
+
         break;
     }
 
