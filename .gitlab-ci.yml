@@ -1,6 +1,6 @@
 services:
   - mysql
-  -
+
 variables:
   APP_NAME: ALSHAYA_WEB_FACTORY
   DOCKER_DRIVER: overlay2
@@ -15,9 +15,9 @@ variables:
   GITLAB_SCRIPT: $CI_PROJECT_DIR/ci/scripts/gitlab
 
 stages:
-  - Validate
-  - Test
-  - Deploy
+  - build
+  - test
+  - deploy
 
 before_script:
   # Update and install packages.
@@ -30,53 +30,22 @@ before_script:
   - composer validate --no-check-all --ansi
   - composer install --ansi
 
-Validate & Build:
-  stage: Validate
-  cache:
-    key: validate
-    paths:
-      - vendor/
-      - docroot/core/
-      - docroot/modules/contrib
-      - docroot/themes/contrib
-      - docroot/libraries
-    policy: pull
+Build:
+  stage: build
   script:
-    # Run BLT Validate tasks
-    - $COMPOSER_BIN/blt validate --ansi
-    # Run BLT build tasks
-    - $COMPOSER_BIN/blt source:build --ansi
+    echo "Building"
   tags:
     - large
 
 Test:
-  stage: Test
-  artifacts:
-    when: always
-    paths:
-      - tests/behat/report
-  cache:
-    key: test
-    paths:
-      - vendor/
-      - docroot/core/
-      - docroot/modules/contrib
-      - docroot/themes/contrib
-      - docroot/libraries
-    policy: pull
+  stage: test
   script:
-    # Download Chrome Driver
-    - source $GITLAB_SCRIPT/install
-    # Run Tests
-    - source $GITLAB_SCRIPT/run_tests
+    echo "Testing"
+  tags:
+    - large
 
 Develop:
-  stage: Deploy
-  script:
-    # Setup the Environment
-    - source $GITLAB_SCRIPT/setup_environment
-    # deploy code
-    - source $GITLAB_SCRIPT/deploy_tag
+  stage: deploy
   tags:
     - large
   environment:
