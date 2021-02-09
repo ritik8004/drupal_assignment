@@ -90,3 +90,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css: css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css
+
+  alshaya_white_label/bazaar-voice:
+    css:
+      theme:
+        css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css

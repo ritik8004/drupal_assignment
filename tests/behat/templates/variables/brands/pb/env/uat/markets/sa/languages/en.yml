@@ -27,3 +27,8 @@ variables:
   language_vat: ''
   language_store_area: 'دبي'
   store_area: 'Dubai'
+  spc_search_keyword: 'rug'
+  filter_1: 'final_price'
+  filter_2: ''
+  filter_3: ''
+
