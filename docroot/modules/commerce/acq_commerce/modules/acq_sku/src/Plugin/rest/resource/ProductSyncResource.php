@@ -334,10 +334,6 @@ class ProductSyncResource extends ResourceBase {
               if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
                 // Delete the node if it is linked to this SKU only.
                 $node->delete();
-                $this->logger->info('Deleted node for SKU @sku for @langcode.', [
-                  '@sku' => $sku->getSku(),
-                  '@langcode' => $langcode,
-                ]);
               }
               else {
                 $this->logger->info('Node for SKU @sku for @langcode not found for deletion.', [
@@ -541,11 +537,6 @@ class ProductSyncResource extends ResourceBase {
             // Delete if node available.
             if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
               $node->delete();
-              $this->logger->info('Node @nid deleted for SKU @sku for @langcode.', [
-                '@nid' => $node->id(),
-                '@sku' => $sku->getSku(),
-                '@langcode' => $langcode,
-              ]);
             }
           }
           catch (\Exception $e) {
