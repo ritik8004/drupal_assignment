@@ -80,3 +80,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/super-menu/super-menu.ltr.css: css/conditional-sass/super-menu/super-menu.ltr.css
+
+  alshaya_white_label/store_finder:
+    css:
+      theme:
+        css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
