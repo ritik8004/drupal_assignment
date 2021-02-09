@@ -127,9 +127,6 @@ function _alshaya_aura_react_translations() {
     'Good things come to those with taste. Say hello to AURA, a lifestyle program catered to your taste for refined brands and experiences.' => [
       'ar' => 'لأن أصحاب الذوق الرفيع يستحقون كل ما هو أفضل. مرحباً بكم في أورا، برنامج المكافآت الذي يقدم لكم ماركاتكم المفضلة من خلال تجربة تسوق تُحسن أسلوب حياتكم.',
     ],
-    'Sign up now' => [
-      'ar' => 'تسجيل الاشتراك الآن',
-    ],
     'Learn more' => [
       'ar' => 'تعرف على المزيد',
     ],
@@ -258,9 +255,6 @@ function _alshaya_aura_react_translations() {
     ],
     'Members will earn' => [
       'ar' => 'سوف يربح الأعضاء',
-    ],
-    'with this purchase' => [
-      'ar' => 'مع عملية الشراء هذه',
     ],
     'will expire by' => [
       'ar' => 'ستنتهي بحلول',

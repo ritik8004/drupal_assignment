@@ -5,6 +5,7 @@ import PointsString from '../../../utilities/points-string';
 import ToolTip from '../../../../../utilities/tooltip';
 import { getTooltipPointsOnHoldMsg } from '../../../utilities/helper';
 import { getPriceToPoint } from '../../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const AuraLinkedVerifiedCheckout = (props) => {
   const {
@@ -22,15 +23,15 @@ const AuraLinkedVerifiedCheckout = (props) => {
       <div className="block-content registered-user-linked">
         <div className="title">
           <div className="subtitle-1">
-            { Drupal.t('You Have') }
+            { getStringMessage('checkout_you_have') }
             :
             <PointsString points={pointsInAccount} />
           </div>
           <div className="subtitle-2">
-            { Drupal.t('You will earn') }
+            { getStringMessage('checkout_you_will_earn') }
             :
             <PointsString points={pointsToEarn} />
-            { Drupal.t('with this purchase') }
+            { getStringMessage('checkout_with_this_purchase') }
             <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
           </div>
         </div>

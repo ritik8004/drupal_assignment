@@ -11,6 +11,7 @@ import {
 import PointsString from './points-string';
 import { getElementValueByType } from './link_card_sign_up_modal_helper';
 import { validateElementValueByType } from './validation_helper';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 /**
  * Utility function to get user input value.
@@ -101,8 +102,8 @@ function processCheckoutCart(data) {
  * Utility function points to earn message.
  */
 function getMembersToEarnMessage(price) {
-  const toEarnMessageP1 = `${Drupal.t('Members will earn')} `;
-  const toEarnMessageP2 = ` ${Drupal.t('with this purchase')}`;
+  const toEarnMessageP1 = `${getStringMessage('checkout_members_will_earn')} `;
+  const toEarnMessageP2 = ` ${getStringMessage('checkout_with_this_purchase')}`;
   const points = getPriceToPoint(price);
 
   return (

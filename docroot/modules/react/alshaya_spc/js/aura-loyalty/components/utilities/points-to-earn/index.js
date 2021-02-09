@@ -11,9 +11,9 @@ const PointsToEarnMessage = (props) => {
   // Guest User & No card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
     || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
-    const toEarnMessageP1 = `${Drupal.t('Earn')} `;
-    const pointsHighlight = `${points} ${Drupal.t('Aura')}`;
-    const toEarnMessageP2 = ` ${Drupal.t('reward points with this purchase')}`;
+    const toEarnMessageP1 = `${getStringMessage('earn')} `;
+    const pointsHighlight = `${points} ${getStringMessage('aura')}`;
+    const toEarnMessageP2 = ` ${getStringMessage('reward_points_with_purchase')}`;
 
     return (
       <span className="spc-aura-points-to-earn">
@@ -28,7 +28,7 @@ const PointsToEarnMessage = (props) => {
   if (loyaltyStatus === allAuraStatus.APC_LINKED_NOT_VERIFIED
     || loyaltyStatus === allAuraStatus.APC_LINKED_VERIFIED) {
     const toEarnMessage = `${getStringMessage('cart_page_aura_accrual_label')} `;
-    const pointsHighlight = `${points} ${Drupal.t('pts')}`;
+    const pointsHighlight = `${points} ${getStringMessage('pts')}`;
     return (
       <span className="spc-aura-points-to-earn">
         <span>{ toEarnMessage }</span>
@@ -39,9 +39,9 @@ const PointsToEarnMessage = (props) => {
 
   // Registered User & UnLinked card.
   if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_DATA) {
-    const toEarnMessageP1 = `${Drupal.t('Our members will earn')} `;
-    const pointsHighlight = `${points} ${Drupal.t('points')}`;
-    const toEarnMessageP2 = ` ${Drupal.t('with this purchase')}`;
+    const toEarnMessageP1 = `${getStringMessage('our_members_will_earn')} `;
+    const pointsHighlight = `${points} ${getStringMessage('points')}`;
+    const toEarnMessageP2 = ` ${getStringMessage('checkout_with_this_purchase')}`;
 
     return (
       <span className="spc-aura-points-to-earn">

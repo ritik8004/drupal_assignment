@@ -64,7 +64,7 @@ class AuraCartRewards extends React.Component {
       || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
       return [
         getStringMessage('cart_page_aura_header'),
-        <span key="aura-cart-title">{` ${Drupal.t('(Optional)')}`}</span>,
+        <span key="aura-cart-title">{` ${getStringMessage('checkout_optional')}`}</span>,
       ];
     }
     return getStringMessage('cart_page_aura_header');
