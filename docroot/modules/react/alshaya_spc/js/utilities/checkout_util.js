@@ -112,6 +112,15 @@ export const placeOrder = (paymentMethod) => {
     .then(
       (response) => {
         if (response.data.error === undefined) {
+          if (response.data.token !== undefined && paymentMethod === 'postpay') {
+            const options = {
+              locale: 'en',
+            };
+            // eslint-disable-next-line no-undef
+            postpay.checkout(response.data.token, options);
+            return;
+          }
+
           // If url is absolute, then redirect to the external payment page.
           if (response.data.isAbsoluteUrl !== undefined && response.data.isAbsoluteUrl) {
             window.location.href = response.data.redirectUrl;
