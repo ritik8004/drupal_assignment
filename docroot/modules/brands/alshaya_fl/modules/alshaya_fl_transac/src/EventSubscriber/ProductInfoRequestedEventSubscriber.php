@@ -134,7 +134,8 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     $return['description'] = [];
     if ($node) {
-      if ($body = $node->get('body')->getValue()) {
+      $body = $node->get('body')->getValue();
+      if ($body) {
         $description['value'] = [
           '#markup' => $body[0]['value'],
         ];
