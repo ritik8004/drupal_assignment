@@ -2,7 +2,6 @@
 
 namespace App\Controller\LoyaltyClub;
 
-use App\Service\Drupal\Drupal;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Utility;
 use Psr\Log\LoggerInterface;
@@ -31,13 +30,6 @@ class LoyaltyClubProgressTracker {
   protected $logger;
 
   /**
-   * Drupal service.
-   *
-   * @var \App\Service\Drupal\Drupal
-   */
-  protected $drupal;
-
-  /**
    * Utility service.
    *
    * @var \App\Service\Utility
@@ -58,8 +50,6 @@ class LoyaltyClubProgressTracker {
    *   Magento API wrapper service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
-   * @param \App\Service\Drupal\Drupal $drupal
-   *   Drupal service.
    * @param \App\Service\Utility $utility
    *   Utility Service.
    * @param \App\Service\Cart $cart
@@ -68,13 +58,11 @@ class LoyaltyClubProgressTracker {
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
-    Drupal $drupal,
     Utility $utility,
     Cart $cart
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
-    $this->drupal = $drupal;
     $this->utility = $utility;
     $this->cart = $cart;
   }
