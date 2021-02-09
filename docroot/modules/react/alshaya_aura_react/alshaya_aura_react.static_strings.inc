@@ -102,5 +102,13 @@ function _alshaya_aura_static_strings() {
       'key' => 'form_error_mobile_not_found',
       'value' => t('No mobile number found. Please try again.'),
     ],
+    [
+      'key' => 'cart_page_aura_header',
+      'value' => t('Aura rewards'),
+    ],
+    [
+      'key' => 'cart_page_aura_accrual_label',
+      'value' => t('On completion of this purchase you will earn:'),
+    ],
   ];
 }
