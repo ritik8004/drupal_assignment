@@ -1,0 +1,79 @@
+# Select a base image to start working with...
+image: gitlab.com:4567/alshaya01/alshaya-pso:php7.3
+# Bring in any services we need http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
+# See http://docs.gitlab.com/ce/ci/services/README.html for examples.
+
+# New gitlab hosted mysql image setup
+services:
+  - name: gitlab.com:4567/alshaya01/alshaya-pso:mysql5.6
+    alias: mysql
+
+stages:
+  - Validate
+  - Test
+  - Deploy
+  - open-platform-deploy
+
+variables:
+  APP_NAME: ALSHAYA_WEB_FACTORY
+  DOCKER_DRIVER: overlay2
+  # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
+  MYSQL_ROOT_PASSWORD: mysql_strong_password
+  MYSQL_USER: drupal
+  MYSQL_PASSWORD: drupal
+  MYSQL_DATABASE: drupal
+  COMPOSER_BIN: $CI_PROJECT_DIR/vendor/bin
+  BLT_DIR: $CI_PROJECT_DIR/vendor/acquia/blt
+  BUILD_DIR: $CI_PROJECT_DIR
+  GITLAB_SCRIPT: $CI_PROJECT_DIR/ci/scripts/gitlab
+
+before_script:
+  # Update and install packages.
+  - apt-get update && apt-get install
+  - apt-get install rsync -y
+  # PHP extensions: Soap:
+  - docker-php-ext-install soap zip
+  # Install all dependencies via composer
+  - composer self-update --2
+  - composer validate --no-check-all --ansi
+  - composer install --ansi
+
+Validate & Build:
+  stage: Validate
+  cache:
+    key: validate
+    paths:
+      - vendor/
+      - docroot/core/
+      - docroot/modules/contrib
+      - docroot/themes/contrib
+      - docroot/libraries
+    policy: pull
+  script:
+    # Run BLT Validate tasks
+    - $COMPOSER_BIN/blt validate --ansi
+    # Run BLT build tasks
+    - $COMPOSER_BIN/blt source:build --ansi
+  tags:
+    - large
+
+Test:
+  stage: Test
+  artifacts:
+    when: always
+    paths:
+      - tests/behat/report
+  cache:
+    key: test
+    paths:
+      - vendor/
+      - docroot/core/
+      - docroot/modules/contrib
+      - docroot/themes/contrib
+      - docroot/libraries
+    policy: pull
+  script:
+    # Download Chrome Driver
+    - source $GITLAB_SCRIPT/install
+    # Run Tests
+    - source $GITLAB_SCRIPT/run_tests
