@@ -58,22 +58,35 @@ $algolia_options['numericFilters'] = 'changed<' . $time;
 
 $actual_indexes = [];
 foreach (['en', 'ar'] as $lang) {
-  $actual_indexes[] = $client->initIndex($index_name . '_' . $lang);
+  $actual_index_name = implode('_', [
+    $index_name,
+    $lang,
+  ]);
+
+  $replica_index_name = implode('_', [
+    $actual_index_name,
+    'changed_asc',
+  ]);
+
+  $indexes[$actual_index_name] = $replica_index_name;
 }
 
-foreach ($actual_indexes as $index) {
+foreach ($indexes as $actual_index_name => $replica_index_name) {
+  $replica = $client->initIndex($replica_index_name);
+  $actual = $client->initIndex($actual_index_name);
+
   $logger->notice('Finding entries with changed older then @days in index @index', [
-    '@index' => $index->indexName,
+    '@index' => $replica->indexName,
     '@days' => $days,
   ]);
 
   $page = 0;
-  $results = $index->search('', $algolia_options);
+  $results = $replica->search('', $algolia_options);
 
   $nids = array_column($results['hits'], 'nid');
   if (empty($nids)) {
     $logger->notice('No items found in the index @index with changed before @days days.', [
-      '@index' => $index->indexName,
+      '@index' => $replica->indexName,
       '@days' => $days,
     ]);
 
@@ -89,14 +102,14 @@ foreach ($actual_indexes as $index) {
   $nids_to_remove = array_diff($nids, $nids_available_in_system);
   if (empty($nids_to_remove)) {
     $logger->notice('All data is legitimate in the index @index with changed before @days days.', [
-      '@index' => $index->indexName,
+      '@index' => $replica->indexName,
       '@days' => $days,
     ]);
     continue;
   }
 
   $logger->notice('NIDs that are in Algolia index @index but not in database: count @count, nids: @nids', [
-    '@index' => $index->indexName,
+    '@index' => $replica->indexName,
     '@count' => count($nids_to_remove),
     '@nids' => implode(',', $nids_to_remove),
   ]);
@@ -106,10 +119,10 @@ foreach ($actual_indexes as $index) {
     $object_id = $results['hits'][$pos]['objectID'];
 
     if ($operation === 'delete') {
-      $index->deleteObject($object_id);
+      $actual->deleteObject($object_id);
 
       $logger->warning('Removed entry with objectId @object_id from index @index', [
-        '@index' => $index->indexName,
+        '@index' => $actual->indexName,
         '@object_id' => $object_id,
       ]);
     }
