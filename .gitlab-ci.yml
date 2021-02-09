@@ -43,14 +43,3 @@ Test:
     - echo "Testing"
   tags:
     - large
-
-Develop:
-  stage: deploy
-  tags:
-    - large
-  environment:
-    name: Develop
-    url: https://www.qa2-alshaya.acsitefactory.com/
-  only:
-    - develop@alshaya01/alshaya-pso
-    - merge-requests
