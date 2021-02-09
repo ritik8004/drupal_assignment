@@ -9,6 +9,7 @@ const AuraEarnOrderSummaryItem = (props) => {
   const {
     pointsEarned,
     animationDelay: animationDelayValue,
+    context,
   } = props;
 
   const label = Drupal.t('Aura points earned');
@@ -22,7 +23,12 @@ const AuraEarnOrderSummaryItem = (props) => {
           <span className="spc-aura-label">{`${label}:`}</span>
           <span className="spc-aura-value">
             {`+${pointsEarned}`}
-            <ToolTip enable question>{ getTooltipPointsOnHoldMsg() }</ToolTip>
+            {context !== 'print'
+            && (
+            <ToolTip enable question>
+              {getTooltipPointsOnHoldMsg()}
+            </ToolTip>
+            )}
           </span>
         </div>
         <ConditionalView condition={userFullyEnrolled}>

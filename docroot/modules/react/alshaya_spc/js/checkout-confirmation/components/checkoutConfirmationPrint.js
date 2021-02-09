@@ -37,7 +37,7 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
       </div>
       <div className="spc-main">
         <div className="spc-content">
-          <OrderSummary />
+          <OrderSummary context="print" />
         </div>
         <div className="spc-sidebar">
           <OrderSummaryBlock
