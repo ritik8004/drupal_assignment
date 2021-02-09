@@ -33,14 +33,14 @@ before_script:
 Build:
   stage: build
   script:
-    echo "Building"
+    - echo "Building"
   tags:
     - large
 
 Test:
   stage: test
   script:
-    echo "Testing"
+    - echo "Testing"
   tags:
     - large
 
