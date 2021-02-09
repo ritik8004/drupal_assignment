@@ -2,8 +2,8 @@
 
 /**
  * @file
- *
  * Add logging information for drush requests in drupal-requests.log on Acquia.
+ *
  * By default these requests show up with no REQUEST_METHOD or URI, which can
  * make splitting them up in sumologic very hard.
  */
@@ -26,6 +26,13 @@ if (isset($_ENV['AH_SITE_ENVIRONMENT']) && PHP_SAPI === 'cli') {
 
     // Prepare the uri.
     $uri = implode(' ', $cli_args);
+
+    // Get users ip.
+    $output = shell_exec('who -m');
+    if (preg_match('#\((.*?)\)#', $output, $match)) {
+      // Set users ip in msg.
+      $uri .= ' src_ip=' . $match[1];
+    }
 
     // Set the `request uri`.
     putenv('REQUEST_URI=' . $uri);
