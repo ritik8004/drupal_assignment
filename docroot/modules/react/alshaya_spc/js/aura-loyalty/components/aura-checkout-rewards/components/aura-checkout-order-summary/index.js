@@ -27,6 +27,7 @@ const AuraCheckoutOrderSummary = (props) => {
           name="balance-payable"
           title={Drupal.t('Balance Payable')}
           value={balancePayable}
+          displayZero
         />
         <DeliveryVATSuffix
           shippingAmount={shippingAmount}

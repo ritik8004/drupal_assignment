@@ -9,6 +9,7 @@ const TotalLineItem = (props) => {
     tooltip,
     tooltipContent,
     title,
+    displayZero,
   } = props;
   if (typeof value === 'string' || value instanceof String) {
     return (
@@ -22,7 +23,8 @@ const TotalLineItem = (props) => {
     );
   }
 
-  if (value === 0 && name !== 'balance-payable') {
+  if ((displayZero === undefined || displayZero === false)
+    && value === 0) {
     return (null);
   }
   return (
