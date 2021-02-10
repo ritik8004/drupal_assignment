@@ -68,17 +68,23 @@ To prepare your local env:
 * Install Yarn `npm i -g yarn`.
 * Install Ansible: `brew install ansible`
 * Run:
-  * `composer clear-cache`
-  * `composer install`
-  * `composer blt-alias`
-  * `vagrant up`
-  * `vagrant ssh` to ssh into your vm
-  * `blt blt:init:git-hooks`
-  * `blt blt:init:settings`
-  * `blt frontend:setup`
-  * `blt frontend:build`
-  * `blt refresh:local` (from inside of your vm)
-  * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
+  * From outside VM:
+    * `composer clear-cache`
+    * `composer install`
+    * `composer blt-alias`
+    * `vagrant up`
+    * `vagrant ssh` to ssh into your vm
+    Note: Before running any below commands in your VM. Please check your composer version that's need to be
+    same as of your local machine. (Run `composer -v` both inside and outside).
+    If any case composer version of your local machine and VM is not matching then downgrade or upgrade the version as per your requirement. Then run : `composer self-update version-number` (i.e 1.10.10)
+
+  * From inside VM:
+    * `blt blt:init:git-hooks`
+    * `blt blt:init:settings`
+    * `blt frontend:setup`
+    * `blt frontend:build`
+    * `blt refresh:local` (from inside of your vm)
+    * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
   * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
   * Login using the default credentials:﻿no-reply@acquia.com / admin
   * Perform drush commands from inside of your vm, like `drush status -l local.alshaya-mckw.com`
@@ -88,7 +94,7 @@ To prepare your local env:
   * Access the site on port 81
   * To do any change in VCL do it in `conf/varnish-4.vcl`, do `vagrant ssh` and run `sh box/scripts/configure-varnish.sh`
 
-Check for known issues during setup check here: https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/589004885/Developer+Handbook#DeveloperHandbook-LocalWorkarounds
+* <a href="https://alshayagroup.atlassian.net/browse/CORE-25284?jql=labels%20%3D%20LOCAL_WORKAROUND%20order%20by%20created%20DESC">Issues during setup.</a>
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
