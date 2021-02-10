@@ -8,5 +8,6 @@ services:
       - '@event_dispatcher'
       - '@database'
       - '@entity_type.manager'
+      - '@module_handler'
     tags:
       - { name: drush.command }

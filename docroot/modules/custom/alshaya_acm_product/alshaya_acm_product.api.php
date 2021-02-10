@@ -133,5 +133,17 @@ function hook_alshaya_acm_product_modal_build_alter(array &$build) {
 }
 
 /**
+ * Allow other modules to alter removeDisabledProducts.
+ *
+ * @param array $disable_product_data
+ *   Disabled Product Data.
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU Entity.
+ */
+function hook_alshaya_acm_product_remove_disabled_products_alter(array &$disable_product_data, SKUInterface $sku) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

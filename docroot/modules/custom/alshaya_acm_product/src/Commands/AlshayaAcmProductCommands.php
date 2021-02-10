@@ -17,6 +17,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class Alshaya Address Product Commands.
@@ -73,6 +74,13 @@ class AlshayaAcmProductCommands extends DrushCommands {
   private $drupalLogger;
 
   /**
+   * The Module Handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
    * AlshayaAcmProductCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
@@ -87,19 +95,23 @@ class AlshayaAcmProductCommands extends DrushCommands {
    *   Database Connection.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The Module Handler service.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_channel_factory,
                               ConfigFactoryInterface $config_factory,
                               SkuManager $sku_manager,
                               EventDispatcherInterface $event_dispatcher,
                               Connection $connection,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ModuleHandlerInterface $module_handler) {
     $this->drupalLogger = $logger_channel_factory->get('alshaya_acm_product');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
     $this->eventDispatcher = $event_dispatcher;
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -930,12 +942,22 @@ class AlshayaAcmProductCommands extends DrushCommands {
     foreach ($skus as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
-        $this->drupalLogger->notice(dt('Deleting SKU @sku not modified since @changed', [
-          '@sku' => $sku,
-          '@changed' => $sku_entity->getChangedTime(),
-        ]));
-
-        $sku_entity->delete();
+        $disable_product_data = [
+          'skipSkuDelete' => FALSE,
+        ];
+        $this->moduleHandler->alter('alshaya_acm_product_remove_disabled_products', $disable_product_data, $sku_entity);
+        if (!$disable_product_data['skipSkuDelete']) {
+          $this->drupalLogger->notice(dt('Deleting SKU @sku not modified since @changed', [
+            '@sku' => $sku,
+            '@changed' => $sku_entity->getChangedTime(),
+          ]));
+          $sku_entity->delete();
+        }
+        else {
+          $this->drupalLogger->notice(dt('Skipping deletion of SKU @sku', [
+            '@sku' => $sku,
+          ]));
+        }
       }
     }
   }
