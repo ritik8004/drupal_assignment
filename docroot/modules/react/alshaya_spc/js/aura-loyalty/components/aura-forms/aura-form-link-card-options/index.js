@@ -23,20 +23,20 @@ class AuraFormLinkCardOptions extends React.Component {
 
     return (
       <div ref={this.optionsRef} className="aura-form-items-link-card-options">
-        <div key="email" className="linking-option" onClick={(e) => this.selectOption(e)}>
+        <div key="mobile" className="linking-option" onClick={(e) => this.selectOption(e)}>
           <input
             type="radio"
-            id="email"
+            id="mobile"
             name="linking-options"
-            value="email"
+            value="mobile"
             className="linking-option-radio"
-            defaultChecked={selectedOption === 'email'}
+            defaultChecked={selectedOption === 'mobile'}
           />
           <label
             className="aura-radio-sim"
-            htmlFor="email"
+            htmlFor="mobile"
           >
-            {Drupal.t('Email address')}
+            {Drupal.t('Mobile Number')}
           </label>
         </div>
         <div key="card" className="linking-option" onClick={(e) => this.selectOption(e)}>
@@ -55,20 +55,20 @@ class AuraFormLinkCardOptions extends React.Component {
             {Drupal.t('Card number')}
           </label>
         </div>
-        <div key="mobile" className="linking-option" onClick={(e) => this.selectOption(e)}>
+        <div key="email" className="linking-option" onClick={(e) => this.selectOption(e)}>
           <input
             type="radio"
-            id="mobile"
+            id="email"
             name="linking-options"
-            value="mobile"
+            value="email"
             className="linking-option-radio"
-            defaultChecked={selectedOption === 'mobile'}
+            defaultChecked={selectedOption === 'email'}
           />
           <label
             className="aura-radio-sim"
-            htmlFor="mobile"
+            htmlFor="email"
           >
-            {Drupal.t('Mobile Number')}
+            {Drupal.t('Email address')}
           </label>
         </div>
       </div>
