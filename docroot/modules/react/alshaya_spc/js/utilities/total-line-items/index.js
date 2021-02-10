@@ -128,7 +128,7 @@ class TotalLineItems extends React.Component {
               data-currency={drupalSettings.postpay_widget_info['data-currency']}
               data-num-instalments={drupalSettings.postpay_widget_info['data-num-instalments']}
               data-locale={drupalSettings.postpay_widget_info['data-locale']}
-            /> 
+            />
           </ConditionalView>
         </div>
       </div>
