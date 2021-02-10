@@ -17,7 +17,7 @@
       height: 100%;
     }
 
-    &.fill-AuraHello {
+    &.fill-Tier1 {
       .start .fill {
         background-image: $aura-progress-hello;
 
@@ -27,7 +27,7 @@
       }
     }
 
-    &.fill-AuraStar {
+    &.fill-Tier2 {
       .start .fill {
         background-image: $aura-progress-star;
 
@@ -67,7 +67,7 @@
       color: $aura-progress-tier-text;
       font-size: 1rem;
 
-      &.next-tier-AuraStar {
+      &.next-tier-Tier2 {
         background-image: $aura-progress-star-end;
 
         html[lang=ar] & {
@@ -75,8 +75,8 @@
         }
       }
 
-      &.next-tier-AuraVIP,
-      &.next-tier-AuraVip {
+      &.next-tier-Tier3,
+      &.next-tier-Tier3 {
         background-image: $aura-progress-vip-end;
 
         html[lang=ar] & {
