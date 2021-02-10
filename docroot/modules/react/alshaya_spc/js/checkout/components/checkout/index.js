@@ -1,4 +1,6 @@
 import React from 'react';
+
+import '../../../utilities/interceptor/interceptor';
 import ClicknCollectContextProvider from '../../../context/ClicknCollect';
 import { fetchCartDataForCheckout } from '../../../utilities/api/requests';
 import Loading from '../../../utilities/loading';

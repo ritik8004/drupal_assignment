@@ -441,7 +441,7 @@ class LoyaltyCustomerController {
 
       // API call to get reward activity.
       $data = $this->auraCustomerHelper->getRewardActivity(
-        $uid,
+        $customer_id,
         $request_content['fromDate'] ?? '',
         $request_content['toDate'] ?? '',
         $request_content['maxResults'] ?? 0,
