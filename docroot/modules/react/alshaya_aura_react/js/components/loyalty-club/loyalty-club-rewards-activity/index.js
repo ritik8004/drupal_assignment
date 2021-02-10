@@ -168,7 +168,6 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
   render() {
     const {
-      activity,
       dateFilterOptions,
       wait,
       noStatement,
