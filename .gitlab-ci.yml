@@ -34,12 +34,8 @@ Build:
   stage: build
   script:
     - echo "Building"
-  tags:
-    - large
 
 Test:
   stage: test
   script:
     - echo "Testing"
-  tags:
-    - large
