@@ -171,6 +171,15 @@ function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings,
   if (isset($order['extension']['apc_redeemed_points'])) {
     $settings['order_details']['redeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? 0;
   }
+
+  // Add `paidWithAura` and `balancePayable` in totals to show
+  // with order summary on order confirmation page.
+  if (isset($order['base_total_paid'])) {
+    $settings['order_details']['totals']['paidWithAura'] = $order['base_total_paid'] ?? 0;
+  }
+  if (isset($order['base_total_due'])) {
+    $settings['order_details']['totals']['balancePayable'] = $order['base_total_due'] ?? 0;
+  }
 }
 
 /**
