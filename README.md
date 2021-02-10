@@ -95,9 +95,7 @@ To prepare your local env:
   * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
-  * Make changes in `conf/varnish-4.vcl`
-  * Run `vagrant ssh`
-  * run `sh box/scripts/configure-varnish.sh`
+  * To do any changes in VCL do it in `conf/varnish-4.vcl`, Run `vagrant ssh` and  then run `sh box/scripts/configure-varnish.sh`.
   
 Check for known issues during setup check here: https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/589004885/Developer+Handbook#DeveloperHandbook-LocalWorkarounds
 
