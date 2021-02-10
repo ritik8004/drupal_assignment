@@ -4,10 +4,11 @@ var buildPath = '/modules/react/alshaya_bazaar_voice/dist/';
 var config = {
   entry: {
     rating: './js/rating',
+    reviews: './js/reviews',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    filename: '[name].js',
     publicPath: buildPath,
     chunkFilename: "[id].chunk.[chunkhash].js",
   },

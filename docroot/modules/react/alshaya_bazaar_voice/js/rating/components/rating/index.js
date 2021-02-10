@@ -26,6 +26,9 @@ export default class Rating extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           removeFullScreenLoader();
+          /* TODO: BE to use from utiltity rather then directly from localstorage. */
+          localStorage.setItem('ReviewsSummary', JSON.stringify(result.data.Results));
+          localStorage.setItem('ReviewsProduct', JSON.stringify(result.data.Includes.Products));
           this.setState({
             ReviewsData: result.data.Includes.Products,
           });
@@ -37,10 +40,7 @@ export default class Rating extends React.Component {
   }
 
   render() {
-    const {
-      ReviewsData,
-    } = this.state;
-
+    const { ReviewsData } = this.state;
     return (
       <div className="rating-wrapper">
         <InlineRating ReviewsData={ReviewsData} />
