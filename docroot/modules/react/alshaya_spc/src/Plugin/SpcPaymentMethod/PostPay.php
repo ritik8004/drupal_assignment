@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
+use Drupal\alshaya_bnpl\Helper\AlshayaBnplAPIHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
@@ -38,6 +39,13 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
   protected $moduleHandler;
 
   /**
+   * The current route matcher service.
+   *
+   * @var \Drupal\alshaya_bnpl\Helper\AlshayaBnplAPIHelper
+   */
+  protected $alshayaBnplAPIHelper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container,
@@ -50,6 +58,7 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
       $plugin_definition,
       $container->get('alshaya_bnpl.widget_helper'),
       $container->get('module_handler'),
+      $container->get('alshaya_bnpl.api_helper'),
     );
   }
 
@@ -66,23 +75,30 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
    *   Postpay Widget Helper.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\alshaya_bnpl\Helper\AlshayaBnplAPIHelper $alshayaBnplAPIHelper
+   *   Alshaya BNPL Helper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               AlshayaBnplWidgetHelper $bnplWidgetHelper,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              AlshayaBnplAPIHelper $alshayaBnplAPIHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->alshayaBnplWidgetHelper = $bnplWidgetHelper;
     $this->moduleHandler = $module_handler;
+    $this->alshayaBnplAPIHelper = $alshayaBnplAPIHelper;
   }
 
   /**
    * {@inheritdoc}
    */
   public function isAvailable() {
-    if ($this->moduleHandler->moduleExists('alshaya_bnpl')) {
-      return TRUE;
+    if ($this->moduleHandler->moduleExists('alshaya_bnpl')
+    && $config = $this->alshayaBnplAPIHelper->getBnplApiConfig()) {
+      if (isset($config['merchant_id']) && !empty($config['merchant_id'])) {
+        return TRUE;
+      }
     }
     return FALSE;
   }

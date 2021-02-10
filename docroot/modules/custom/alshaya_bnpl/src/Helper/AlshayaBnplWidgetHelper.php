@@ -84,7 +84,6 @@ class AlshayaBnplWidgetHelper {
       case 'checkout':
         $info['data-type'] = 'payment-summary';
         $info['data-country'] = $country_code;
-        // $info['data-hide-if-invalid'] = 'class-name';
         break;
 
       default:

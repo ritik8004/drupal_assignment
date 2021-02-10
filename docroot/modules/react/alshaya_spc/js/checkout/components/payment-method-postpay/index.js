@@ -2,8 +2,7 @@ import React from 'react';
 
 class PaymentMethodPostpay extends React.Component {
   componentDidMount = () => {
-    // eslint-disable-next-line no-undef
-    postpay.ui.refresh();
+    window.postpay.ui.refresh();
   };
 
   render() {
