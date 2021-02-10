@@ -57,3 +57,10 @@ services:
         name: access_check
         needs_incoming_request: TRUE
         applies_to: _middleware_request_check
+
+  alshaya_spc.stock_event_subscriber:
+    class: Drupal\alshaya_spc\EventSubscriber\StockEventSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments:
+      - '@logger.factory'

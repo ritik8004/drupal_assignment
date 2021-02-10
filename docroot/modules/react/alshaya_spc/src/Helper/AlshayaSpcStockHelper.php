@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Helper;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_spc\EventSubscriber\StockEventSubscriber;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
@@ -84,6 +85,9 @@ class AlshayaSpcStockHelper {
           foreach ($statuses as $sku => $status) {
             $response['stock'][$sku] = $status;
           }
+
+          // Invalidate cache tags for the SKU.
+          StockEventSubscriber::setSkusWithRefreshedStock($sku);
         }
         catch (\Exception $e) {
           // Do nothing.
