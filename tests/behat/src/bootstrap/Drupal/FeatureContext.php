@@ -2315,4 +2315,17 @@ class FeatureContext extends CustomMinkContext
     $field = $this->getSession()->getPage()->findField($selector);
     $field->setValue($value);
   }
+
+  /**
+   * @Then /^I check the address-book form$/
+   */
+  public function iCheckTheAddressBookForm()
+  {
+    $page = $this->getSession()->getPage();
+    $address_form = $page->find('css', 'form#profile-address-book-add-form');
+    if ($address_form == NULL) {
+      $page->find('css','#block-content > a')->click();
+      $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+  }
 }
