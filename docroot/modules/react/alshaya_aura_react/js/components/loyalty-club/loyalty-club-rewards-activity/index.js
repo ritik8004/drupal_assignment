@@ -53,6 +53,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
             activity: result.data.data || null,
             wait: false,
           });
+          this.setFromAndToDate(result.data.data);
 
           statement = result.data.data;
         }
@@ -65,6 +66,18 @@ class LoyaltyClubRewardsActivity extends React.Component {
         removeInlineLoader('.reward-activity');
       });
     }
+  };
+
+  setFromAndToDate = (activity) => {
+    if (activity === null || Object.entries(activity).length === 0) {
+      return;
+    }
+    const date = new Date(Object.entries(activity)[0][1].date);
+
+    this.setState({
+      fromDate: formatDate(new Date(date.getFullYear(), date.getMonth()), 'YYYY-MM-DD'),
+      toDate: formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD'),
+    });
   };
 
   generateStatement = () => {
@@ -142,8 +155,8 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
   handleDateChange = (selectedOption) => {
     const date = new Date(selectedOption.value);
-    const fromDate = formatDate(date);
-    const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0));
+    const fromDate = formatDate(date, 'YYYY-MM-DD');
+    const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD');
     const { type } = this.state;
 
     this.fetchRewardActivity(fromDate, toDate, 0, type);
@@ -159,6 +172,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
       dateFilterOptions,
       wait,
       noStatement,
+      fromDate,
     } = this.state;
     const transactionTypeOptions = getTransactionTypeOptions();
 
@@ -187,7 +201,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
             onMenuClose={() => this.onMenuClose('date')}
             options={dateFilterOptions}
             defaultValue={dateFilterOptions[0]}
-            value={getTransactionDateOptionsDefaultValue(activity)}
+            value={getTransactionDateOptionsDefaultValue(fromDate)}
             onChange={this.handleDateChange}
             isSearchable={false}
             key="date-filter"
