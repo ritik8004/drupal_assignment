@@ -5,7 +5,7 @@ import ReviewInformation from '../review-info';
 import ReviewDescription from '../review-desc';
 
 const ReviewSummary = () => {
-  {/* TODO: BE to use a helper rather then directly using localstorage. */}
+  /* TODO: BE to use a helper rather then directly using localstorage. */
   const ReviewsSummary = JSON.parse(localStorage.getItem('ReviewsSummary'));
   const ReviewsProduct = JSON.parse(localStorage.getItem('ReviewsProduct'));
   if (ReviewsSummary !== undefined) {
