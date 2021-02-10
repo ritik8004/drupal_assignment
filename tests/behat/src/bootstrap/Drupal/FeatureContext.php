@@ -2328,4 +2328,20 @@ class FeatureContext extends CustomMinkContext
       $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
     }
   }
+
+  /**
+   * @Given /^I double click on "([^"]*)" element$/
+   */
+  public function iDoubleClickOnElement($selector)
+  {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('css', $selector);
+    if (!empty($element)) {
+      $element->click();
+      $element->click();
+    }
+    else {
+      throw new \Exception('Element %s not found', $selector);
+    }
+  }
 }

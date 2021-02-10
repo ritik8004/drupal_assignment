@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test basket page
 
   Background:
@@ -23,21 +23,18 @@ Feature: Test basket page
     And I wait 5 seconds
     Then the price for product should be doubled
 
-  @desktop
+  @desktop @test
   Scenario: As a Guest, I should be able to see the header and the footer
     When I scroll to top
     Then I should see the link "{create_account}"
-#    Then I should see the link "{sign_in}"
+    Then I should see "{sign_in}"
     Then I should see the link "{find_store}"
     Then I should see the link "{language_link}"
     Then I should see "{sort_filter}"
     Then I should see "{price_filter}"
     Then I should see "{color_filter}"
-    Then I should see "{size_filter}"
-    Then I should see "{filters}"
     Then I should see "{brand_filter}"
-    Then I should see "{collection_filter}"
-    Then I should see "{promotional_filter}"
+    Then I should see "{filters}"
 
   @mobile
   Scenario: As a Guest, I should be able to see the header and the footer (mobile)
@@ -169,24 +166,19 @@ Feature: Test basket page
     And I wait 5 seconds
     Then the price for product should be doubled
 
-  @desktop @language
+  @desktop @language @test12
   Scenario: As a Guest, I should be able to see the header and the footer in second language
-    When I follow "{language_link}"
+    And I double click on "#block-languageswitcher li a.language-link:not(.is-active)" element
     And I wait for the page to load
-    And I wait for AJAX to finish
-    When I scroll to top
     Then I should see the link "{language_create_account}"
-#    Then I should see the link "{language_sign_in}"
+    Then I should see "{language_sign_in}"
     Then I should see the link "{language_find_store}"
-    Then I should see the link "{second_language_link}"
+    Then I should see the link "{language_link}"
     Then I should see "{language_sort_filter}"
     Then I should see "{language_price_filter}"
     Then I should see "{language_color_filter}"
-    Then I should see "{language_size_filter}"
-    Then I should see "{language_filters}"
     Then I should see "{language_brand_filter}"
-    Then I should see "{language_collection_filter}"
-    Then I should see "{language_promotional_filter}"
+    Then I should see "{language_filters}"
 
   @mobile @language
   Scenario: As a Guest, I should be able to see the header and the footer in second language (mobile)
