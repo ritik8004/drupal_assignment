@@ -140,6 +140,11 @@ $conductors = [
     'site_id' => 322,
   ],
   // Mothercare EG
+  'mceg_oms_dev2' => [
+    'hmac_id' => '16608f2f16a04296bef2687d60400a86',
+    'hmac_secret' => 'OTM3YmNmMTgtYmMwMy00',
+    'site_id' => 373,
+  ],
   'mceg_qa' => [
     'hmac_id' => '8e3ed7928ee9496b85ffa3a751c09b1d',
     'hmac_secret' => 'MWJiYTk5ZmItYzIwMC00',
@@ -154,6 +159,11 @@ $conductors = [
     'site_id' => 332,
   ],
   // Mothercare BH
+  'mcbh_oms_dev2' => [
+    'hmac_id' => 'c2c5c02b010a471e9209e6070b9f3055',
+    'hmac_secret' => 'ZDU0Mzk4ZjgtYmE2ZC00',
+    'site_id' => 374,
+  ],
   'mcbh_qa' => [
     'hmac_id' => '474c019c19324a5dbcd873bcb1ea049f',
     'hmac_secret' => 'YzY5YTBkYTgtODc5OC00',
@@ -168,6 +178,11 @@ $conductors = [
     'site_id' => 363,
   ],
   // Mothercare QA
+  'mcqa_oms_dev2' => [
+    'hmac_id' => '3072ed6cda674ceebb7c63fd12eb9a1d',
+    'hmac_secret' => 'YTFhODYxYzQtMjIyZS00',
+    'site_id' => 375,
+  ],
   'mcqa_qa' => [
     'hmac_id' => 'c2fa8f89aa554f778aeeec073ab89810',
     'hmac_secret' => 'ODllNzYwNjAtNzk2My00',
@@ -885,6 +900,11 @@ $conductors = [
     'hmac_secret' => 'ZjFkYjU2ZTMtMjRiNi00',
     'site_id' => 351,
   ],
+  'aeobh_dev2' => [
+    'hmac_id' => 'dc1c3020114540378b51112f70780d19',
+    'hmac_secret' => 'YjY5NDcwOTctZjU3Ny00',
+    'site_id' => 369,
+  ],
   'aeobh_qa' => [
     'hmac_id' => 'f14b7223639249f085dc42ca7944ad46',
     'hmac_secret' => 'NjllNDg4NmItMzUyNi00',
@@ -894,6 +914,11 @@ $conductors = [
     'hmac_id' => '1fb0a82ce141405bb695be86542dcc68',
     'hmac_secret' => 'N2I3OGU4NTctNGI3My00',
     'site_id' => 352,
+  ],
+  'aeoqa_dev2' => [
+    'hmac_id' => '05fc397d271048bfa482c12a54d20d98',
+    'hmac_secret' => 'MDFlYTlhYzUtNGVmMy00',
+    'site_id' => 370,
   ],
   'aeoqa_qa' => [
     'hmac_id' => '7203b241292f4d2db96141d4fbd16adc',
