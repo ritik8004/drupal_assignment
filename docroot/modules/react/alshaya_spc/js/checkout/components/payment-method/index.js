@@ -14,6 +14,7 @@ import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
+import PaymentMethodPostpay from '../payment-method-postpay';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import CheckoutComUpapiContextProvider from '../../../context/CheckoutComUpapi';
@@ -26,6 +27,7 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodCheckoutCom = React.createRef();
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
+    this.paymentMethodPostpay = React.createRef();
     this.paymentMethodCybersource = React.createRef();
   }
 
@@ -202,6 +204,18 @@ export default class PaymentMethod extends React.Component {
                   finalisePayment={this.finalisePayment}
                 />
               </CheckoutComUpapiContextProvider>
+            </div>
+          </ConditionalView>
+
+          <ConditionalView condition={(isSelected && method.code === 'postpay')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodPostpay
+                ref={this.PaymentMethodPostpay}
+                postpay={drupalSettings.postpay}
+                postpayWidgetInfo={drupalSettings.postpay_widget_info}
+                cart={cart}
+                finalisePayment={this.finalisePayment}
+              />
             </div>
           </ConditionalView>
 

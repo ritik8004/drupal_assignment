@@ -118,7 +118,9 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
-          <ConditionalView condition={typeof drupalSettings.postpay_widget_info !== 'undefined'}>
+          <ConditionalView condition={typeof drupalSettings.postpay_widget_info !== 'undefined'
+          && isCartPage !== false}
+          >
             <div
               className={`spc-postpay ${drupalSettings.postpay_widget_info.class}`}
               data-type={drupalSettings.postpay_widget_info['data-type']}

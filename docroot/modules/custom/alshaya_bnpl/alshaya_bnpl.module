@@ -19,7 +19,6 @@ function alshaya_bnpl_node_view(array &$build, EntityInterface $entity, EntityVi
 
   /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
   $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
-  $build['postpay'] = $bnplWidgetHelper->getBnplWidgetMarkup();
   $bnplWidgetHelper->getBnplBuild($build, 'pdp');
 }
 
@@ -31,6 +30,5 @@ function alshaya_bnpl_node_view(array &$build, EntityInterface $entity, EntityVi
 function alshaya_bnpl_alshaya_spc_cart_build_alter(array &$build) {
   /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
   $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
-  $build['#attached']['drupalSettings']['postpay_widget_info'] = $bnplWidgetHelper->getBnplWidgetInfo('cart');
   $bnplWidgetHelper->getBnplBuild($build, 'cart');
 }
