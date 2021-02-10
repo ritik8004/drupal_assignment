@@ -424,7 +424,7 @@ class LoyaltyCustomerController {
       // Check if we have user in session.
       if (empty($customer_id) || empty($uid)) {
         $this->logger->error('Error while trying to get reward activity of the user. User id from request: @uid.', [
-          '@uid' => $request_uid,
+          '@uid' => $request_content['uid'],
         ]);
         return new JsonResponse($this->utility->getErrorResponse('No user available in session', Response::HTTP_NOT_FOUND));
       }
@@ -456,10 +456,10 @@ class LoyaltyCustomerController {
         // If last transaction is before given duration, return empty.
         $lastTransactionData = reset($data);
         if (strtotime($lastTransactionData['date']) < strtotime('-' . $request_content['duration'] . 'months')) {
-          return [
+          return new JsonResponse([
             'status' => TRUE,
             'data' => [],
-          ];
+          ]);
         }
         // API call to get reward activity data.
         $dateObject = new \DateTime($lastTransactionData['date']);
