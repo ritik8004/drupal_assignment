@@ -180,6 +180,8 @@ $_aura_dark_purple: #a3217f;
 $_pinkdoll: #e21c79;
 $blueth-truth: #2d68c4;
 $raining-clouds: #858585;
+$_aura-light-blue: #fffbfe;
+$_aura-very-light-pink: rgba(179, 32, 125, 0.1);
 
 // Aura Gradients.
 $aura-gradient-1: linear-gradient(111deg, rgba(252, 190, 123, 0.1) -79%, rgba(251, 170, 105, 0.1) -22%, rgba(240, 54, 137, 0.1) 44%, rgba(152, 34, 163, 0.1) 106%);
@@ -1743,6 +1745,9 @@ $aura-my-account-aura-nav-link: $aura-purpleTwo;
 $aura-my-account-nav-mobile-link-bg: $aura-gradient-19;
 $aura-my-account-nav-mobile-link-bg-ar: $aura-gradient-19-ar;
 $aura-my-account-filters: $_aura_account_txt;
+$aura-my-account-reward-activity: $aura-purpleTwo;
+$aura-my-account-reward-activity-bg: $_aura-light-blue;
+$aura-my-account-filters-active-bg: $_aura-very-light-pink;
 
 // Aura Header.
 $aura-hb-menu-aura-tooltip: $aura-gradient-17;

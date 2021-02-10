@@ -13,6 +13,7 @@ import {
   getTransactionDateOptionsDefaultValue,
 } from '../../../utilities/reward_activity_helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
+import EmptyRewardActivity from './empty-reward-activity';
 
 class LoyaltyClubRewardsActivity extends React.Component {
   constructor(props) {
@@ -26,12 +27,13 @@ class LoyaltyClubRewardsActivity extends React.Component {
       toDate: '',
       type: '',
       wait: true,
+      noStatement: false,
     };
   }
 
   componentDidMount() {
     // Getting user's last reward transaction details.
-    // Api doen't require from/to date if we need last transaction details
+    // Api doesn't require from/to date if we need last transaction details
     // and thus passing empty params for dates.
     this.fetchRewardActivity('', '', 1, '');
   }
@@ -45,12 +47,21 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
+        let statement = null;
         if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
             activity: result.data.data || null,
             wait: false,
           });
           this.setFromAndToDate(result.data.data);
+
+          statement = result.data.data;
+        }
+
+        if (Array.isArray(statement) && statement.length === 0) {
+          this.setState({
+            noStatement: true,
+          });
         }
         removeInlineLoader('.reward-activity');
       });
@@ -77,10 +88,16 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     const statement = [];
 
+    // Check for empty reward activity.
     if (Array.isArray(activity) && activity.length === 0) {
       statement.push(
-        <div className="no-reward-activity">{Drupal.t('You have no reward activity to display.')}</div>,
+        <div className="no-reward-activity">
+          <EmptyRewardActivity />
+        </div>,
       );
+
+      removeInlineLoader('.reward-activity');
+      return statement;
     }
 
     Object.entries(activity).forEach(([, transaction]) => {
@@ -150,8 +167,18 @@ class LoyaltyClubRewardsActivity extends React.Component {
   };
 
   render() {
-    const { dateFilterOptions, wait, fromDate } = this.state;
+    const {
+      dateFilterOptions,
+      wait,
+      noStatement,
+      fromDate,
+    } = this.state;
     const transactionTypeOptions = getTransactionTypeOptions();
+
+    let rewardStatementClass = 'reward-activity';
+    if (noStatement === true) {
+      rewardStatementClass = 'empty-reward-activity';
+    }
 
     if (wait) {
       return (
@@ -192,15 +219,19 @@ class LoyaltyClubRewardsActivity extends React.Component {
             key="transaction-filter"
           />
         </div>
-        <div className="header-row">
-          <span className="order-id">{Drupal.t('Order No.')}</span>
-          <span className="date">{Drupal.t('Date')}</span>
-          <span className="amount">{Drupal.t('Order Total')}</span>
-          <span className="type">{Drupal.t('Online / Offline')}</span>
-          <span className="aura-points">{Drupal.t('AURA points')}</span>
-          <span className="status">{Drupal.t('Status')}</span>
-        </div>
-        <div className="reward-activity">
+        {noStatement === false
+        && (
+          <div className="header-row">
+            <span className="order-id">{Drupal.t('Order No.')}</span>
+            <span className="date">{Drupal.t('Date')}</span>
+            <span className="amount">{Drupal.t('Order Total')}</span>
+            <span className="type">{Drupal.t('Online / Offline')}</span>
+            <span className="aura-points">{Drupal.t('AURA points')}</span>
+            <span className="status">{Drupal.t('Status')}</span>
+          </div>
+        )}
+
+        <div className={rewardStatementClass}>
           {this.generateStatement()}
         </div>
       </div>

@@ -17,6 +17,12 @@
       .spcAuraSelect__indicators {
         transform: rotate(180deg);
       }
+
+      .spcAuraSelect__control {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: none;
+      }
     }
 
     .spcAuraSelect__control {
@@ -48,10 +54,16 @@
       font-size: 1rem;
       font-family: $aura-regular;
       color: $aura-my-account-filters;
-      border-radius: 0.625rem;
+      margin: 0;
+      border-bottom-left-radius: 1.75rem;
+      border-bottom-right-radius: 1.75rem;
+      box-shadow: none;
 
       .spcAuraSelect__menu-list {
-        border-radius: 0.625rem;
+        border-bottom-left-radius: 1.75rem;
+        border-bottom-right-radius: 1.75rem;
+        border: 1px solid $aura-my-account-filters;
+        border-top: none;
         padding: 0;
 
         .spcAuraSelect__option {
@@ -59,9 +71,8 @@
           text-align: left;
 
           &.spcAuraSelect__option--is-selected {
-            background-image: $aura-loyalty-tab-active;
-            font-family: $aura-bold;
-            color: $aura-loyalty-tab-bg;
+            background-color: $aura-my-account-filters-active-bg;
+            color: $aura-my-account-filters;
           }
         }
       }
