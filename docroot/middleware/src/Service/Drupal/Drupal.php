@@ -199,19 +199,6 @@ class Drupal {
   }
 
   /**
-   * Get all promo data from drupal.
-   *
-   * @return mixed
-   *   All promo data.
-   */
-  public function getAllPromoData() {
-    $url = '/rest/v1/promotion/all';
-    $response = $this->invokeApi('GET', $url);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
-  }
-
-  /**
    * Get Drupal uid and customer id for the user in session.
    */
   public function getSessionCustomerInfo() {
