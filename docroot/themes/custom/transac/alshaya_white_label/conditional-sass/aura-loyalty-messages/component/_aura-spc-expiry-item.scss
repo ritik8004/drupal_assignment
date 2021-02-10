@@ -8,6 +8,7 @@
 
   @include breakpoint($only-mobile) {
     padding: 0.875rem;
+    padding-#{$left}: 3rem;
   }
 
   b {
@@ -23,5 +24,9 @@
     #{$left}: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
+
+    @include breakpoint($only-mobile) {
+      #{$left}: 0.8125rem;
+    }
   }
 }

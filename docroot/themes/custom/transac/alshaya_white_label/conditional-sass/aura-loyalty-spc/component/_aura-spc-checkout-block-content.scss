@@ -192,7 +192,10 @@
 
             input.spc-aura-link-card-input {
               border: 1px solid $aura-spc-textbox-border;
-              border-radius: 0.25rem 0 0 0.25rem;
+              border-top-#{$left}-radius: 0.25rem;
+              border-top-#{$right}-radius: 0;
+              border-bottom-#{$right}-radius: 0;
+              border-bottom-#{$left}-radius: 0.25rem;
               border-#{$right}: 0;
               padding-#{$left}: 0.75rem;
               width: calc(100% - 6.1875rem);
