@@ -595,6 +595,33 @@ $conductors = [
     'hmac_secret' => 'OGRkMjY3MGYtNDExZS00',
     'site_id' => 84,
   ],
+  // VictoriaSecret EG.
+  'vseg_uat' => [
+    'hmac_id' => 'd4b6f2f3070848bba00656a582f9bb48',
+    'hmac_secret' => 'ODE2MjliMWEtY2YzOS00',
+    'site_id' => 376,
+  ],
+  'vseg_prod' => [
+    'site_id' => 379,
+  ],
+  // VictoriaSecret BH.
+  'vsbh_uat' => [
+    'hmac_id' => '495335ce724c4e1b940e003d77234bd6',
+    'hmac_secret' => 'NWJkMGZiOTEtYTlkNy00',
+    'site_id' => 377,
+  ],
+  'vsbh_prod' => [
+    'site_id' => 380,
+  ],
+  // VictoriaSecret QA.
+  'vsqa_uat' => [
+    'hmac_id' => '3f2195e623f244c1b0c090f17b0ac7b5',
+    'hmac_secret' => 'ZTFmZWVjOTUtMmEyNS00',
+    'site_id' => 378,
+  ],
+  'vsqa_prod' => [
+    'site_id' => 381,
+  ],
   // FootLocker KW.
   'flkw_qa' => [
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
