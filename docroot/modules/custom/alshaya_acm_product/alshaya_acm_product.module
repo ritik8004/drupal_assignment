@@ -1954,3 +1954,14 @@ function alshaya_acm_product_preprocess_block(&$variables) {
     $variables['#attached']['drupalSettings']['cart_items'] = alshaya_acm_get_cart_items_by_sku();
   }
 }
+
+/**
+ * Implements hook_alshaya_acm_product_remove_disabled_products_alter().
+ */
+function alshaya_acm_product_alshaya_acm_product_remove_disabled_products_alter(array &$data, SKUInterface $sku) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  if ($skuManager->isSkuFreeGift($sku)) {
+    $data['skipSkuDelete'] = TRUE;
+  }
+}
