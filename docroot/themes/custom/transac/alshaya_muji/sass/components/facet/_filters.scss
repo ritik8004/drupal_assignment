@@ -44,10 +44,6 @@
     .facet-item {
       span {
         color: $plp_facet_item_label;
-
-        html[lang=ar] & {
-          direction: ltr;
-        }
       }
     }
   }
