@@ -1,6 +1,7 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 
+import '../../../utilities/interceptor/interceptor';
 import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';

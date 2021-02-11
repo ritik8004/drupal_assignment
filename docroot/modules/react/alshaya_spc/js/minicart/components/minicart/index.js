@@ -7,6 +7,7 @@ import EmptyMiniCartContent from '../empty-mini-cart-content';
 import MiniCartContent from '../mini-cart-content';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
 import dispatchCustomEvent from '../../../utilities/events';
+import '../../../utilities/interceptor/interceptor';
 
 export default class MiniCart extends React.Component {
   constructor(props) {
