@@ -114,10 +114,9 @@ export const placeOrder = (paymentMethod) => {
         if (response.data.error === undefined) {
           if (response.data.token !== undefined && paymentMethod === 'postpay') {
             const options = {
-              locale: 'en',
+              locale: drupalSettings.postpay.locale,
             };
-            // eslint-disable-next-line no-undef
-            postpay.checkout(response.data.token, options);
+            window.postpay.checkout(response.data.token, options);
             return;
           }
 
