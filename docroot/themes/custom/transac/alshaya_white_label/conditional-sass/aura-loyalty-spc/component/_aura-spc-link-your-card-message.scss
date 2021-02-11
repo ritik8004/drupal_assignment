@@ -1,6 +1,7 @@
 .spc-aura-link-your-card-message {
   margin-top: 0.3125rem;
-  padding: 1rem 1rem 1rem 3.625rem !important;
+  padding: 1rem !important;
+  padding-#{$left}: 3.625rem !important;
   position: relative;
 
   > span {
