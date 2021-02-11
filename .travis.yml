@@ -37,7 +37,11 @@ matrix:
   #  - PROFILE=alshaya_non_transac
   #  if: type = pull_request
   - php: 7.3
-    if: type = push
+    # Skip all the builds from back merge.addons:
+    # Code changes from back merges wont be deployed but that should be fine
+    # considering we dont need for in-active branches and for active ones
+    # there will be fresh PR merges which will take care of pushing.
+    if: type = push AND (branch IN (master, uat, qa, develop) OR commit_message !~ /(git\+ssh)/)
 
 env:
   global:
@@ -81,7 +85,7 @@ notifications:
     on_failure: always
   email:
     recipients:
-      - alshayateam@acquia.com
+      - nikunj.kotecha@acquia.com
     on_success: never
     on_failure: always
 
@@ -125,7 +129,7 @@ script:
 
 deploy:
   - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    script: ${BUILD_DIR}/blt/scripts/deploy_branch.sh
     skip_cleanup: true
     on:
       all_branches: true

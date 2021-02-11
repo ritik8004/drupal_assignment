@@ -140,40 +140,51 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function getCart() {
-    $cart_id = $this->cart->getCartId();
-    if (empty($cart_id)) {
-      // In JS we will consider this as empty cart.
-      return new JsonResponse(['error' => TRUE]);
-    }
+    try {
+      $cart_id = $this->cart->getCartId();
+      if (empty($cart_id)) {
+        // In JS we will consider this as empty cart.
+        return new JsonResponse(['error' => TRUE]);
+      }
 
-    $data = $this->cart->getRestoredCart();
+      $data = $this->cart->getRestoredCart();
 
-    // Check customer email And check drupal session customer id to validate,
-    // if current cart is associated with logged in user or not.
-    if (empty($data['customer']['email']) && $customer_id = $this->cart->getDrupalInfo('customer_id')) {
-      $this->cart->associateCartToCustomer($customer_id);
-      $data = $this->cart->getCart();
-    }
+      // Check customer email And check drupal session customer id to validate,
+      // if current cart is associated with logged in user or not.
+      if (empty($data['customer']['email']) && $customer_id = $this->cart->getDrupalInfo('customer_id')) {
+        $this->cart->associateCartToCustomer($customer_id);
+        $data = $this->cart->getCart();
+      }
 
-    if (empty($data)) {
-      $this->logger->error('Cart is no longer available.');
-      return new JsonResponse(['error' => TRUE]);
-    }
+      if (empty($data)) {
+        $this->logger->error('Cart is no longer available.');
+        return new JsonResponse(['error' => TRUE]);
+      }
 
-    // If there is any exception/error, return as is with exception message
-    // without processing further.
-    if (!empty($data['error'])) {
-      $this->logger->error('Error while getting cart:@cart_id Error:@error', [
-        '@cart_id' => $cart_id,
-        '@error' => json_encode($data),
-      ]);
+      // If there is any exception/error, return as is with exception message
+      // without processing further.
+      if (!empty($data['error'])) {
+        $this->logger->error('Error while getting cart:@cart_id Error:@error', [
+          '@cart_id' => $cart_id,
+          '@error' => json_encode($data),
+        ]);
 
+        return new JsonResponse($data);
+      }
+
+      // Here we will do the processing of cart to make it in required format.
+      $data = $this->cart->getProcessedCartData($data);
       return new JsonResponse($data);
     }
+    catch (\Exception $e) {
+      $this->logger->error('Error while getCart controller. Error: @error Code:@code', [
+        '@error' => $e->getMessage(),
+        '@code' => $e->getCode(),
+      ]);
 
-    // Here we will do the processing of cart to make it in required format.
-    $data = $this->cart->getProcessedCartData($data);
-    return new JsonResponse($data);
+      // Return error message.
+      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), $e->getCode()));
+    }
   }
 
   /**
@@ -191,39 +202,53 @@ class CartController {
       return new JsonResponse(['error' => TRUE]);
     }
 
-    // Always get fresh cart for checkout page.
-    $data = $this->cart->getCart(TRUE);
+    try {
+      // Always get fresh cart for checkout page.
+      $data = $this->cart->getCart(TRUE);
 
-    // Check customer email And check drupal session customer id to validate,
-    // if current cart is associated with logged in user or not.
-    $sessionCustomerId = $this->cart->getDrupalInfo('customer_id');
-    if ($sessionCustomerId && (empty($data['customer']['id']) || $data['customer']['id'] != $sessionCustomerId)) {
-      $this->cart->associateCartToCustomer($sessionCustomerId, TRUE);
-      $data = $this->cart->getCart();
+      // Check customer email And check drupal session customer id to validate,
+      // if current cart is associated with logged in user or not.
+      $sessionCustomerId = $this->cart->getDrupalInfo('customer_id');
+      if ($sessionCustomerId && (empty($data['customer']['id']) || $data['customer']['id'] != $sessionCustomerId)) {
+        $association_status = $this->cart->associateCartToCustomer($sessionCustomerId, TRUE);
+        if (isset($association_status['error'])) {
+          return new JsonResponse($association_status);
+        }
+        $data = $this->cart->getCart();
+      }
+
+      // If there is any exception/error, return as is with exception message
+      // without processing further.
+      if (empty($data) || !empty($data['error'])) {
+        $this->logger->error('Error while getting cart:@cart_id Error:@error', [
+          '@cart_id' => $cart_id,
+          '@error' => json_encode($data),
+        ]);
+
+        return new JsonResponse($data);
+      }
+
+      if (empty($data['cart']['items'])) {
+        $this->logger->error('Checkout accessed without items in cart for id @cart_id', [
+          '@cart_id' => $cart_id,
+        ]);
+
+        return new JsonResponse($this->utility->getErrorResponse('Checkout accessed without items in cart', 500));
+      }
+
+      $response = $this->getProcessedCheckoutData($data);
+
+      return new JsonResponse($response);
     }
-
-    // If there is any exception/error, return as is with exception message
-    // without processing further.
-    if (empty($data) || !empty($data['error'])) {
-      $this->logger->error('Error while getting cart:@cart_id Error:@error', [
-        '@cart_id' => $cart_id,
-        '@error' => json_encode($data),
+    catch (\Exception $e) {
+      $this->logger->error('Error while getCartForCheckout controller. Error: @error Code:@code', [
+        '@error' => $e->getMessage(),
+        '@code' => $e->getCode(),
       ]);
 
-      return new JsonResponse($data);
+      // Return error message.
+      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), $e->getCode()));
     }
-
-    if (empty($data['cart']['items'])) {
-      $this->logger->error('Checkout accessed without items in cart for id @cart_id', [
-        '@cart_id' => $cart_id,
-      ]);
-
-      return new JsonResponse($this->utility->getErrorResponse('Checkout accessed without items in cart', 500));
-    }
-
-    $response = $this->getProcessedCheckoutData($data);
-
-    return new JsonResponse($response);
   }
 
   /**
@@ -235,28 +260,39 @@ class CartController {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function restoreCart() {
-    if (empty($this->cart->getCartId())) {
-      $info = $this->drupal->getSessionCustomerInfo();
-      if (!empty($info['customer_id'])) {
-        $cart_id = $this->cart->searchCart($info['customer_id']);
-        if ($cart_id > 0) {
-          $this->cart->setCartId($cart_id);
+    try {
+      if (empty($this->cart->getCartId())) {
+        $customer_id = $this->cart->getDrupalInfo('customer_id');
+        if (!empty($customer_id)) {
+          $cart_id = $this->cart->searchCart($customer_id);
+          if ($cart_id > 0) {
+            $this->cart->setCartId($cart_id);
+          }
+        }
+        else {
+          // @todo Remove this "else" part and getAcmCartId() when we
+          // uninstall alshaya_acm module.
+          $info = $this->drupal->getAcmCartId();
+          // Set the cart_id in current session, if Drupal api returns the
+          // cart_id. If the cart_id is not valid, or contains any error
+          // getCart() will set the session key to NULL.
+          if ($info['cart_id']) {
+            $this->cart->setCartId($info['cart_id']);
+          }
         }
       }
-      else {
-        // @todo Remove this "else" part and getAcmCartId() when we
-        // uninstall alshaya_acm module.
-        $info = $this->drupal->getAcmCartId();
-        // Set the cart_id in current session, if Drupal api returns the
-        // cart_id. If the cart_id is not valid, or contains any error getCart()
-        // will set the session key to NULL.
-        if ($info['cart_id']) {
-          $this->cart->setCartId($info['cart_id']);
-        }
-      }
-    }
 
-    return $this->getCart();
+      return $this->getCart();
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while restoreCart controller. Error: @error Code:@code', [
+        '@error' => $e->getMessage(),
+        '@code' => $e->getCode(),
+      ]);
+
+      // Return error message.
+      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), $e->getCode()));
+    }
   }
 
   /**
@@ -378,9 +414,20 @@ class CartController {
       return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), '500'));
     }
 
-    $validation_response = $this->validateRequestData($request_content);
-    if ($validation_response !== 200) {
-      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), $validation_response));
+    try {
+      $validation_response = $this->validateRequestData($request_content);
+      if ($validation_response !== 200) {
+        return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), $validation_response));
+      }
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while updateCart controller. Error: @error Code:@code', [
+        '@error' => $e->getMessage(),
+        '@code' => $e->getCode(),
+      ]);
+
+      // Return error message.
+      return new JsonResponse($this->utility->getErrorResponse($this->utility->getDefaultErrorMessage(), $e->getCode()));
     }
 
     $action = $request_content['action'];
@@ -732,9 +779,19 @@ class CartController {
           return new JsonResponse($this->utility->getErrorResponse('Invalid cart', '500'));
         }
 
-        $postData = $request_content['postData'];
+        $settings = $this->settings->getSettings('alshaya_checkout_settings');
+        $postData = [
+          'extension' => [
+            'action' => 'refresh',
+          ],
+        ];
+
+        if ($settings['cart_refresh_mode'] === 'full') {
+          $postData = $request_content['postData'];
+        }
 
         $cart = $this->cart->updateCart($postData);
+
         break;
     }
 
@@ -804,6 +861,9 @@ class CartController {
       return 400;
     }
 
+    $uid = (int) $this->cart->getDrupalInfo('uid');
+    $session_customer_id = $this->cart->getDrupalInfo('customer_id');
+
     // For new cart request, we don't need any further validations.
     // Or if request has cart id but cart not exist in session,
     // create new cart for the user.
@@ -821,8 +881,6 @@ class CartController {
     }
 
     // Backend validation.
-    $uid = (int) $this->cart->getDrupalInfo('uid');
-    $session_customer_id = $this->cart->getDrupalInfo('customer_id');
     $cart_customer_id = $this->cart->getCartCustomerId();
     if ($uid > 0) {
       if (empty($cart_customer_id)) {
@@ -858,19 +916,19 @@ class CartController {
         return new JsonResponse($this->utility->getErrorResponse('No cart in session', 404));
       }
 
-      $customer = $this->drupal->getSessionCustomerInfo();
+      $customer_id = $this->cart->getDrupalInfo('customer_id');
 
-      if (empty($customer)) {
+      if (empty($customer_id)) {
         $this->logger->error('Error while associating cart to customer. No customer available in session');
         return new JsonResponse($this->utility->getErrorResponse('No user in session', 404));
       }
 
       // Check if association is not required.
-      if ($customer['customer_id'] === $this->cart->getCartCustomerId()) {
+      if ($customer_id === $this->cart->getCartCustomerId()) {
         return $this->getCart();
       }
 
-      $this->cart->associateCartToCustomer($customer['customer_id'], TRUE);
+      $this->cart->associateCartToCustomer($customer_id, TRUE);
     }
     catch (\Exception $e) {
       $this->logger->error('Error while associating cart to customer. Error message: @message', [

@@ -117,10 +117,11 @@
        */
       function modalCloseBtnEvent() {
         $('.ui-dialog-titlebar-close').once().on('click', function () {
-          // Remove the classes added for overlay having suffix '-overlay'.
+          // Remove the classes added for overlay having suffix '-overlay' except 'tray-overlay'.
+          // 'tray-overlay' get added on body when we open size guide on mobile for HM (Magazine layout).
           var bodyClasses = $('body').attr('class').split(' ');
           for (var i = bodyClasses.length - 1; i >= 0; i--) {
-            if (bodyClasses[i].indexOf('-overlay') > -1) {
+            if (bodyClasses[i].indexOf('-overlay') > -1 && bodyClasses[i].indexOf('tray-overlay') < 0) {
               $('body').removeClass(bodyClasses[i]);
             }
           }
