@@ -23,7 +23,7 @@ Feature: Test basket page
     And I wait 5 seconds
     Then the price for product should be doubled
 
-  @desktop @test
+  @desktop
   Scenario: As a Guest, I should be able to see the header and the footer
     When I scroll to top
     Then I should see the link "{create_account}"
@@ -166,7 +166,7 @@ Feature: Test basket page
     And I wait 5 seconds
     Then the price for product should be doubled
 
-  @desktop @language @test12
+  @desktop @language
   Scenario: As a Guest, I should be able to see the header and the footer in second language
     And I double click on "#block-languageswitcher li a.language-link:not(.is-active)" element
     And I wait for the page to load
