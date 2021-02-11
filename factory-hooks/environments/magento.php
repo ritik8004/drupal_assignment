@@ -445,6 +445,15 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 31, 'ar' => 28],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 37, 'ar' => 34],
+    ],
   ],
   'vs_prod' => [
     'url' => 'https://vs.store.alshaya.com',
@@ -457,6 +466,15 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 12, 'ar' => 15],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 25, 'ar' => 22],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 29, 'ar' => 26],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 35, 'ar' => 32],
     ],
   ],
   // BathBodyWorks.
