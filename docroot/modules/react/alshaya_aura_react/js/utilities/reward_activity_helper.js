@@ -45,6 +45,11 @@ function formatDate(date, type) {
     return new Date(date).toLocaleString('default', { month: 'short', year: 'numeric' });
   }
 
+  // eg. 02 Feb 2021
+  if (type === 'DD-Mon-YYYY') {
+    return new Date(date).toLocaleString('default', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
   return date;
 }
 
