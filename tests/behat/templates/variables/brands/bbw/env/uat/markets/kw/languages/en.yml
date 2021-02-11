@@ -1,7 +1,7 @@
 variables:
   url_base_uri: 'http://bbwkw-uat.factory.alshaya.com/en'
   collection_filter: 'Collection'
-  sort_filter: 'sort by'
+  sort_filter: 'Sort'
   price_filter: ''
   brand_filter: 'Product Type'
   color_filter: 'Fragrance Category'
