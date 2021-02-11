@@ -4,6 +4,7 @@ import VatText from '../vat-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
+import PostpayCart from '../../cart/components/cart-postpay';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -118,18 +119,11 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
-          <ConditionalView condition={typeof drupalSettings.postpay_widget_info !== 'undefined'
-          && isCartPage !== false}
-          >
-            <div
-              className={`spc-postpay ${drupalSettings.postpay_widget_info.class}`}
-              data-type={drupalSettings.postpay_widget_info['data-type']}
-              data-amount={baseGrandTotal * drupalSettings.postpay.currency_multiplier}
-              data-currency={drupalSettings.postpay_widget_info['data-currency']}
-              data-num-instalments={drupalSettings.postpay_widget_info['data-num-instalments']}
-              data-locale={drupalSettings.postpay_widget_info['data-locale']}
-            />
-          </ConditionalView>
+          <PostpayCart
+            ref={this.PostpayCart}
+            amount={totals.base_grand_total}
+            isCartPage={isCartPage}
+          />
         </div>
       </div>
     );

@@ -20,7 +20,7 @@ import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-l
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
-import ConditionalView from '../../../common/components/conditional-view';
+import PostpayCart from '../cart-postpay';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -261,6 +261,11 @@ export default class Cart extends React.Component {
             <SectionTitle animationDelayValue="0.4s">
               <span>{`${Drupal.t('my shopping bag')} `}</span>
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
+              <PostpayCart
+                ref={this.PostpayCart}
+                amount={totals.base_grand_total}
+                isCartPage
+              />
             </SectionTitle>
             <DeliveryInOnlyCity />
             <CartItems

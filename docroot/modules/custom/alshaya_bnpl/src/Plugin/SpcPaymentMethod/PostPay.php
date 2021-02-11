@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
+namespace Drupal\alshaya_bnpl\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_bnpl\Helper\AlshayaBnplAPIHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;

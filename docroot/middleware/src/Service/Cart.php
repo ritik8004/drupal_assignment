@@ -1000,7 +1000,7 @@ class Cart {
     }
 
     // If upapi payment method (payment method via checkout.com).
-    if ($this->isUpapiPaymentMethod($data['method'])) {
+    if ($this->isUpapiPaymentMethod($data['method']) || $data['method'] == 'postpay') {
       // Add success and fail redirect url to additional data.
       $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
       $langcode = $this->request->query->get('lang');
