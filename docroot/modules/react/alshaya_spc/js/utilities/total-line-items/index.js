@@ -123,6 +123,8 @@ class TotalLineItems extends React.Component {
             ref={this.PostpayCart}
             amount={totals.base_grand_total}
             isCartPage={isCartPage}
+            classNames="spc-postpay"
+            mobileOnly={false}
           />
         </div>
       </div>
