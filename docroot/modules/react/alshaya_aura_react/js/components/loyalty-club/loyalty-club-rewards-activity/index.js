@@ -101,14 +101,10 @@ class LoyaltyClubRewardsActivity extends React.Component {
     }
 
     Object.entries(activity).forEach(([, transaction]) => {
-      const date = new Date(transaction.date).toLocaleString(
-        'default',
-        { day: 'numeric', month: 'short', year: 'numeric' },
-      );
       statement.push(
         <div className="statement-row">
           <span className="order-id">{transaction.orderNo}</span>
-          <span className="date">{date}</span>
+          <span className="date">{formatDate(transaction.date, 'DD-Mon-YYYY')}</span>
           <span className="amount">{`${transaction.currencyCode} ${transaction.orderTotal}`}</span>
           <span className="type">{transaction.channel}</span>
           <span className={`aura-points style-${transaction.status}`}>{transaction.auraPoints}</span>
