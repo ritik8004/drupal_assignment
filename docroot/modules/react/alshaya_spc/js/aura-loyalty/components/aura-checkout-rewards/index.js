@@ -12,6 +12,7 @@ import {
   getCustomerDetails,
 } from '../../../../../alshaya_aura_react/js/utilities/header_helper';
 import { getStorageInfo } from '../../../utilities/storage';
+import { isDeliveryTypeSameAsInCart } from '../../../utilities/checkout_util';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -86,13 +87,21 @@ class AuraCheckoutRewards extends React.Component {
     return Drupal.t('Aura rewards');
   };
 
+  isActive = () => {
+    const { cart } = this.props;
+
+    if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
+      return false;
+    }
+
+    return isDeliveryTypeSameAsInCart(cart);
+  };
+
   render() {
     const allAuraStatus = getAllAuraStatus();
 
     const {
-      cartId,
-      price,
-      totals,
+      cart,
       animationDelay: animationDelayValue,
     } = this.props;
 
@@ -105,9 +114,13 @@ class AuraCheckoutRewards extends React.Component {
       cardNumber,
     } = this.state;
 
+    const active = this.isActive();
+    const activeClass = active ? 'active' : 'in-active';
+    const price = cart.cart.cart_total || 0;
+
     if (wait) {
       return (
-        <div className="spc-aura-checkout-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
+        <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
           <SectionTitle>{ this.getSectionTitle(allAuraStatus, loyaltyStatus) }</SectionTitle>
           <Loading />
         </div>
@@ -115,14 +128,14 @@ class AuraCheckoutRewards extends React.Component {
     }
 
     return (
-      <div className="spc-aura-checkout-rewards-block fadeInUp" style={{ animationDelay: animationDelayValue }}>
+      <div className={`spc-aura-checkout-rewards-block fadeInUp ${activeClass}`} style={{ animationDelay: animationDelayValue }}>
         <SectionTitle>{ this.getSectionTitle(allAuraStatus, loyaltyStatus) }</SectionTitle>
 
         {/* Guest */}
         <ConditionalView condition={loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
         || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U}
         >
-          <AuraNotLinkedNoDataCheckout price={price} cartId={cartId} />
+          <AuraNotLinkedNoDataCheckout price={price} cartId={cart.cart.cart_id || ''} />
         </ConditionalView>
 
         {/* Registered User - Linked Card */}
@@ -133,7 +146,7 @@ class AuraCheckoutRewards extends React.Component {
             expiringPoints={expiringPoints}
             expiryDate={expiryDate}
             cardNumber={cardNumber}
-            totals={totals}
+            totals={cart.cart.totals}
           />
         </ConditionalView>
 

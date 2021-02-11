@@ -265,9 +265,7 @@ export default class Checkout extends React.Component {
             {isAuraEnabled()
               ? (
                 <AuraCheckoutContainer
-                  cartId={cart.cart.cart_id || ''}
-                  price={cart.cart.cart_total || 0}
-                  totals={cart.cart.totals}
+                  cart={cart}
                 />
               )
               : null}
