@@ -91,7 +91,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
     // Check for empty reward activity.
     if (Array.isArray(activity) && activity.length === 0) {
       statement.push(
-        <div className="no-reward-activity">
+        <div className="empty-row">
           <EmptyRewardActivity />
         </div>,
       );
@@ -171,11 +171,6 @@ class LoyaltyClubRewardsActivity extends React.Component {
     } = this.state;
     const transactionTypeOptions = getTransactionTypeOptions();
 
-    let rewardStatementClass = 'reward-activity';
-    if (noStatement === true) {
-      rewardStatementClass = 'empty-reward-activity';
-    }
-
     if (wait) {
       return (
         <div className="loyalty-club-rewards-wrapper loyalty-tab-content fadeInUp" style={{ animationDelay: '0.6s' }}>
@@ -227,7 +222,7 @@ class LoyaltyClubRewardsActivity extends React.Component {
           </div>
         )}
 
-        <div className={rewardStatementClass}>
+        <div className="reward-activity">
           {this.generateStatement()}
         </div>
       </div>
