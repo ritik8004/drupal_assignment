@@ -79,12 +79,12 @@
     }
 
     &[id^=edit-submit-stores-finder] {
-      background-image: url('../imgs/icons/store-search.svg');
+      background-image: url('../../../imgs/icons/store-search.svg');
       width: 1.25rem;
       height: 1.5625rem;
 
       @include breakpoint($only-mobile) {
-        background-image: url('../imgs/assets/ic-search.svg');
+        background-image: url('../../../imgs/assets/ic-search.svg');
       }
     }
   }
@@ -106,14 +106,14 @@
   .current-location,
   .cc-near-me {
     &::before {
-      background: url('../imgs/icons/ic-mylocation.svg') no-repeat;
+      background: url('../../../imgs/icons/ic-mylocation.svg') no-repeat;
       width: 1.625rem;
       height: 1.625rem;
     }
   }
 
   .label--location::before {
-    background: url('../imgs/assets/ic-search.svg') no-repeat;
+    background: url('../../../imgs/assets/ic-search.svg') no-repeat;
     width: 1.625rem;
     height: 1.625rem;
 

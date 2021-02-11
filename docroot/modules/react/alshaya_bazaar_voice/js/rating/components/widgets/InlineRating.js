@@ -1,6 +1,7 @@
 import React from 'react';
 import RatingSummary from './RatingSummary';
 import DisplayStar from '../stars/DisplayStar';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 const InlineRating = ({
   ReviewsData,
@@ -28,7 +29,7 @@ const InlineRating = ({
             </div>
             <span>
               (
-              <a href="#">{ReviewsData[item].ReviewStatistics.TotalReviewCount}</a>
+              <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} href="#">{ReviewsData[item].ReviewStatistics.TotalReviewCount}</a>
               )
             </span>
           </div>
@@ -39,7 +40,7 @@ const InlineRating = ({
   return (
     <div className="inline-rating">
       <div className="aggregate-rating">
-        <a className="write-review" href="#">{Drupal.t('Write a Review')}</a>
+        <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} className="write-review" href="#">{Drupal.t('Write a Review')}</a>
       </div>
     </div>
   );

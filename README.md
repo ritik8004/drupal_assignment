@@ -16,10 +16,10 @@ See the [BLT documentation](http://blt.readthedocs.io/en/latest/) for informatio
 
 ## Resources
 
-* <a href="http://jira.alshaya.com:8080/secure/RapidBoard.jspa?rapidView=284">JIRA</a> - VPN Connection required.
-* <a href="https://github.com/acquia-pso/alshaya">GitHub</a>
-* <a href="https://cloud.acquia.com/app/develop/applications/5ce588f5-ce9b-4a46-9b5b-a0c74e47feb2">Acquia Cloud subscription</a>
-* <a href="https://travis-ci.com/acquia-pso/alshaya">TravisCI</a>
+* [JIRA](https://alshayagroup.atlassian.net/secure/RapidBoard.jspa?rapidView=353)
+* [GitHub](https://github.com/acquia-pso/alshaya)
+* [Acquia Cloud subscription](https://cloud.acquia.com/app/develop/applications/5ce588f5-ce9b-4a46-9b5b-a0c74e47feb2)
+* [TravisCI](https://travis-ci.com/acquia-pso/alshaya)
 
 ## Onboarding
 
@@ -68,26 +68,35 @@ To prepare your local env:
 * Install Yarn `npm i -g yarn`.
 * Install Ansible: `brew install ansible`
 * Run:
-  * `composer clear-cache`
-  * `composer install`
-  * `composer blt-alias`
-  * `vagrant up`
-  * `vagrant ssh` to ssh into your vm
-  * `blt blt:init:git-hooks`
-  * `blt blt:init:settings`
-  * `blt frontend:setup`
-  * `blt frontend:build`
-  * `blt refresh:local` (from inside of your vm)
-  * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
-  * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
-  * Login using the default credentials:﻿no-reply@acquia.com / admin
-  * Perform drush commands from inside of your vm, like `drush status -l local.alshaya-mckw.com`
-  * Login quickly using `drush uli -l local.alshaya-mckw.com`  (note: currently doesn't work properly)
+  * From outside VM:
+    * `composer clear-cache`
+    * `composer install`
+    * `composer blt-alias`
+    * `vagrant up`
+    * `vagrant ssh` to ssh into your vm
+    Note: Before running any below commands in your VM. Please check your composer version that's need to be
+    same as of your local machine. (Run `composer -v` both inside and outside).
+    If any case composer version of your local machine and VM is not matching then downgrade or upgrade the version as per your requirement. Then run : `composer self-update --1` (i.e 1.10.10)
+
+  * From inside VM:
+    * `blt blt:init:git-hooks`
+    * `blt blt:init:settings`
+    * `blt frontend:setup`
+    * `blt frontend:build`
+    * `blt refresh:local` (from inside of your vm)
+    * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
+    * Perform drush commands from inside of your vm, like `drush status -l local.alshaya-mckw.com`
+    * Login quickly using `drush uli -l local.alshaya-mckw.com`  (note: currently doesn't work properly)
+
+* Access the site in your web browser, e.g. http://local.alshaya-mckw.com/en/user
+* Login using the default credentials: no-reply@acquia.com / admin
+
+# For Varnish:
   * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
-  * To do any change in VCL do it in `conf/varnish-4.vcl`, do `vagrant ssh` and run `sh box/scripts/configure-varnish.sh`
-
+  * To do any changes in VCL do it in `conf/varnish-4.vcl`, Run `vagrant ssh` and  then run `sh box/scripts/configure-varnish.sh`.
+  
 Check for known issues during setup check here: https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/589004885/Developer+Handbook#DeveloperHandbook-LocalWorkarounds
 
 Next builds can be done using: `blt refresh:local:drupal`
@@ -228,7 +237,7 @@ In order to perform the private key forwarding, do following:
 
 As mentioned above, you should typically run all the blt and drush commands (except the initial one `blt vm` that initializes your virtual machine) from inside of your vm. This should cover all the typical cases and you can skip this part if you are fully comfortable with that approach. However, for the better convenience, it is sometimes quicker to run some drush commands from host PC. For example, running drush uli from host logs quickly user 1 into the site without need of copy/pasting of login link. PC To make this working follow these steps:
 
-* Install <a href="https://github.com/drush-ops/drush-launcher">Drush launcher</a> on your host PC (archive old drush8 command somewhere if you want to run it for another projects)
+* Install [Drush launcher](https://github.com/drush-ops/drush-launcher) on your host PC (archive old drush8 command somewhere if you want to run it for another projects)
 * To connect to vagrant instances from host pc, use @<site>.vm aliases, e.g. `drush @hmkw.vm status`. These aliases cannot be used to sync databases to local (see Technical details on aliases structure for more information)
 * To connect to remote sites, use standard `drush @<site>.01<env>` form, e.g. `drush @hmkw.01dev3 status`. Note this will only work if the remote site has already deployed blt9 and drush9 (see next topic)
 
@@ -329,9 +338,9 @@ Follow instructions [here](https://support.acquia.com/hc/en-us/articles/36000623
 
 ### XHPROF in local
 #### Setup
-Download and add https://www.drupal.org/project/xhprof in docroot/modules/development
+Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modules/development
 
 #### Usage
 * Enable the module (if not enabled already)
 * Add profile=1 in query string to any URL which you want to profile
-* Check factory-hooks/post-settings-php/xhprof.php for more details on default configuration
+* Check [factory-hooks/post-settings-php/xhprof.php](factory-hooks/post-settings-php/xhprof.php) for more details on default configuration

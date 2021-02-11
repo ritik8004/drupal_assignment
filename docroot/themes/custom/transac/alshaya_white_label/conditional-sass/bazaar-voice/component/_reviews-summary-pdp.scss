@@ -1,0 +1,243 @@
+#reviews-section {
+  .review {
+    &-summary {
+      padding: 1.75rem 0.5rem 2.25rem;
+      border-bottom: 0.0625rem solid $rr-reviews-summary-border;
+
+      @include breakpoint($tablet) {
+        display: flex;
+        padding: 2.8125rem 0 2.5rem;
+      }
+    }
+
+    &-detail-left {
+      flex-basis: 31%;
+    }
+
+    &-detail-right {
+      flex-grow: 1;
+    }
+
+    &-tooltip {
+      cursor: pointer;
+      position: relative;
+
+      @include breakpoint($tablet) {
+        display: inline-block;
+      }
+    }
+
+    &-attributes-details {
+      font-size: 0.875rem;
+      margin-#{$right}: 1rem;
+      padding-bottom: 0.5rem;
+
+      .attribute-name {
+        text-transform: uppercase;
+        font-family: $alshaya-bold;
+      }
+
+      .attribute-value {
+        color: $rr-review-summary-grey-text;
+      }
+    }
+
+    &-count {
+      border-bottom: 0.0625rem solid $rr-reviews-summary-border;
+    }
+
+    &-count,
+    &-vote {
+      padding: 0.625rem 1rem;
+      text-align: center;
+    }
+
+    &-title {
+      font-size: 1.125rem;
+      font-family: $alshaya-bold;
+      line-height: 1.2;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1.25rem;
+      }
+    }
+
+    &-date {
+      font-size: 0.875rem;
+      margin-bottom: 0.9375rem;
+    }
+
+    &-text {
+      font-size: 0.875rem;
+      color: $rr-review-summary-grey-text;
+      margin-bottom: 0.9375rem;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    &-feedback {
+      font-size: 0.875rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      a {
+        margin-#{$right}: 0.9375rem;
+        text-transform: uppercase;
+      }
+
+      &-comment {
+        button {
+          width: 10.9375rem;
+          height: 2.5rem;
+          background: $rr-review-summary-btn-color;
+          color: $rr-review-summary-btn-text;
+          border: 0.0625rem solid $rr-review-summary-btn-color;
+          padding: 0.75rem;
+          font-size: 0.875rem;
+          border-radius: 0.1875rem;
+          line-height: 1;
+
+          @include breakpoint($only-mobile) {
+            width: 8.75rem;
+            height: 2rem;
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    &-detail-mobile {
+      margin-bottom: 1.25rem;
+
+      .review-date {
+        margin-#{$right}: 0.5rem;
+      }
+
+      .user-detail-location {
+        padding-#{$left}: 0.5rem;
+        margin-#{$right}: 0.1875rem;
+        border-#{$left}: 0.0625rem solid $rr-reviews-summary-border;
+        padding-bottom: 0;
+      }
+    }
+
+    &-attributes {
+      margin-bottom: 0.9375rem;
+
+      @include breakpoint($tablet) {
+        margin-bottom: 1.125rem;
+      }
+    }
+  }
+
+  .user {
+    &-review-wrapper {
+      display: flex;
+    }
+
+    &-reviews-details {
+      flex-basis: 35%;
+      text-transform: uppercase;
+    }
+
+    &-personal-details {
+      flex-basis: 65%;
+      padding: 0.625rem 0.9375rem;
+      border-#{$left}: 0.0625rem solid $rr-reviews-summary-border;
+    }
+
+    &-name {
+      font-family: $alshaya-bold;
+    }
+
+    &-review-info {
+      @include tooltip(16.75rem);
+
+      @include breakpoint($only-mobile) {
+        #{$left}: 0;
+        top: 1.25rem;
+      }
+    }
+
+    &-detail-nickname {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      font-family: $alshaya-bold;
+      text-decoration: underline;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: 0.1875rem;
+        display: inline-block;
+      }
+    }
+
+    &-detail-location {
+      font-size: 0.875rem;
+      margin-#{$right}: 1rem;
+      padding-bottom: 0.1875rem;
+    }
+
+    &-info {
+      padding: 0.9375rem 0.875rem;
+      border-bottom: 0.0625rem solid $rr-reviews-summary-border;
+      font-family: $alshaya-bold;
+    }
+
+    &-attribute-value {
+      padding-#{$left}: 0.3125rem;
+    }
+  }
+
+  .review-tooltip {
+    &:hover {
+      .user-review-info {
+        @include tooltip-display();
+
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-width: 16.75rem;
+        word-break: break-word;
+      }
+    }
+  }
+
+  .feedback-label {
+    padding-#{$right}: 0.1875rem;
+    margin-#{$right}: 0.625rem;
+    line-height: 1.65;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.1875rem;
+      display: block;
+    }
+  }
+
+  .feedback-option-label {
+    font-family: $alshaya-bold;
+    text-decoration: underline;
+    padding-#{$right}: 0.3125rem;
+  }
+
+  .feedback-count {
+    color: $rr-review-summary-grey-text;
+  }
+
+  .horizontal-border {
+    border-top: 0.03125rem solid $rr-reviews-summary-border;
+    width: 4.0625rem;
+    padding-bottom: 1.5625rem;
+    margin-top: 1.25rem;
+  }
+
+  .star-ratings-wrapper {
+    margin-bottom: 0.625rem;
+
+    @include breakpoint($tablet) {
+      margin-bottom: 0.9375rem;
+    }
+  }
+}
