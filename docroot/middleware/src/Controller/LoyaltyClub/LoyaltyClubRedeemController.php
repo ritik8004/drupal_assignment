@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Cart;
 use App\Service\Aura\RedemptionHelper;
-use App\Service\Orders;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -53,13 +52,6 @@ class LoyaltyClubRedeemController {
   protected $redemptionHelper;
 
   /**
-   * Orders service.
-   *
-   * @var \App\Service\Orders
-   */
-  protected $orders;
-
-  /**
    * LoyaltyClubRedeemController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -72,23 +64,19 @@ class LoyaltyClubRedeemController {
    *   Cart service.
    * @param \App\Service\Aura\RedemptionHelper $redemption_helper
    *   RedemptionHelper service.
-   * @param \App\Service\Orders $orders
-   *   Orders service.
    */
   public function __construct(
       MagentoApiWrapper $magento_api_wrapper,
       LoggerInterface $logger,
       Utility $utility,
       Cart $cart,
-      RedemptionHelper $redemption_helper,
-      Orders $orders
+      RedemptionHelper $redemption_helper
     ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->utility = $utility;
     $this->cart = $cart;
     $this->redemptionHelper = $redemption_helper;
-    $this->orders = $orders;
   }
 
   /**
