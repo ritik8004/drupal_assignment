@@ -1958,10 +1958,10 @@ function alshaya_acm_product_preprocess_block(&$variables) {
 /**
  * Implements hook_alshaya_acm_product_remove_disabled_products_alter().
  */
-function alshaya_acm_product_alshaya_acm_product_remove_disabled_products_alter(array &$disable_product_data, SKUInterface $sku) {
+function alshaya_acm_product_alshaya_acm_product_remove_disabled_products_alter(array &$data, SKUInterface $sku) {
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   if ($skuManager->isSkuFreeGift($sku)) {
-    $disable_product_data['skipSkuDelete'] = TRUE;
+    $data['skipSkuDelete'] = TRUE;
   }
 }

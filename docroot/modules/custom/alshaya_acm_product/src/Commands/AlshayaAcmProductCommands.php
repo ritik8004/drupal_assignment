@@ -942,11 +942,11 @@ class AlshayaAcmProductCommands extends DrushCommands {
     foreach ($skus as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
-        $disable_product_data = [
+        $data = [
           'skipSkuDelete' => FALSE,
         ];
-        $this->moduleHandler->alter('alshaya_acm_product_remove_disabled_products', $disable_product_data, $sku_entity);
-        if (!$disable_product_data['skipSkuDelete']) {
+        $this->moduleHandler->alter('alshaya_acm_product_remove_disabled_products', $data, $sku_entity);
+        if (!$data['skipSkuDelete']) {
           $this->drupalLogger->notice(dt('Deleting SKU @sku not modified since @changed', [
             '@sku' => $sku,
             '@changed' => $sku_entity->getChangedTime(),
