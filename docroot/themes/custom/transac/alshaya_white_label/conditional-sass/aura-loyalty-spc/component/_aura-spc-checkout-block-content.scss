@@ -208,7 +208,9 @@
 
             button.spc-aura-button {
               width: 6.1875rem;
-              border-radius: 0 0.25rem 0.25rem 0;
+              border-radius: 0;
+              border-top-#{$right}-radius: 0.25rem;
+              border-bottom-#{$right}-radius: 0.25rem;
             }
           }
 
