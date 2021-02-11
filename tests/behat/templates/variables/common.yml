@@ -1,0 +1,21 @@
+variables:
+  url_login: '/user/login'
+  url_register: '/user/register'
+  spc_cybersource_card: "4111111111111111"
+  spc_cybersource_expiry: "09/21"
+  spc_cybersource_cvv: "123"
+  spc_checkout_card: "4242424242424242"
+  spc_checkout_expiry: "03/22"
+  spc_checkout_cvv: "100"
+  spc_Knet_card: "0000000001"
+  spc_Knet_month: "9"
+  spc_Knet_year: "2021"
+  spc_Knet_pin: "1234"
+  spc_mada_master_card: '5352151570003404'
+  spc_mada_master_card_expiry: '09/21'
+  spc_mada_master_card_cvv: '100'
+  spc_mada_visa_card: '4484070000035519'
+  spc_mada_visa_card_expiry: '09/21'
+  spc_mada_visa_card_cvv: '257'
+  spc_mada_password: 'Checkout1!'
+
