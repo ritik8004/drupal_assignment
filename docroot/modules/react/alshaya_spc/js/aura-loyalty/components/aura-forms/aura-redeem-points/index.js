@@ -25,10 +25,12 @@ class AuraFormRedeemPoints extends React.Component {
 
   componentDidMount() {
     document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
+    document.addEventListener('refreshCompletePurchaseSection', this.updatePointsAndMoney, false);
 
     const { totals } = this.props;
 
     if (totals.paidWithAura === undefined || totals.paidWithAura === null) {
+      this.updatePointsAndMoney();
       return;
     }
 
@@ -39,6 +41,39 @@ class AuraFormRedeemPoints extends React.Component {
     });
     // Add a class for FE purposes.
     document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
+  }
+
+  // Set points and money in state to prefill redemption input elements.
+  updatePointsAndMoney = () => {
+    const { totals } = this.props;
+
+    if (totals.paidWithAura === undefined || totals.paidWithAura === null) {
+      const pointsToPrefill = this.redemptionLimit();
+
+      if (pointsToPrefill === 0) {
+        return;
+      }
+
+      this.setState({
+        money: getPointToPrice(pointsToPrefill),
+        points: pointsToPrefill,
+        enableSubmit: true,
+      });
+    }
+  }
+
+  // Minimum of total points in user account and order total value
+  // in points is the redemption limit.
+  redemptionLimit = () => {
+    const { totals, pointsInAccount } = this.props;
+    const { base_grand_total: grandTotal } = totals;
+    const grandTotalPoints = grandTotal * getPointToPriceRatio();
+
+    const pointsAllowedToRedeem = (pointsInAccount < grandTotalPoints)
+      ? pointsInAccount
+      : grandTotalPoints;
+
+    return pointsAllowedToRedeem;
   }
 
   handleRedeemPointsEvent = (data) => {
@@ -98,15 +133,17 @@ class AuraFormRedeemPoints extends React.Component {
     removeError('spc-aura-link-api-response-message');
     const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
     const { points, money } = this.state;
-    const { pointsInAccount, cardNumber } = this.props;
+    const { cardNumber } = this.props;
 
     if (points === null) {
       showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_points'));
       return;
     }
 
-    if (parseInt(points, 10) > parseInt(pointsInAccount, 10)) {
-      showError('spc-aura-link-api-response-message', `${Drupal.t('You can redeem maximum')} ${pointsInAccount} ${Drupal.t('points')}`);
+    const maxPointsToRedeem = this.redemptionLimit();
+
+    if (parseInt(points, 10) > parseInt(maxPointsToRedeem, 10)) {
+      showError('spc-aura-link-api-response-message', `${getStringMessage('you_can_redeem_maximum')} ${maxPointsToRedeem} ${getStringMessage('points')}`);
       return;
     }
 
@@ -161,10 +198,10 @@ class AuraFormRedeemPoints extends React.Component {
     }
 
     return [
-      <span key="points" className="spc-aura-highlight">{`${points} ${Drupal.t('points')}`}</span>,
-      <span key="worth" className="spc-aura-redeem-text">{`${Drupal.t('worth')}`}</span>,
+      <span key="points" className="spc-aura-highlight">{`${points} ${getStringMessage('points')}`}</span>,
+      <span key="worth" className="spc-aura-redeem-text">{`${getStringMessage('worth')}`}</span>,
       <span key="money" className="spc-aura-highlight"><PriceElement amount={money} /></span>,
-      <span key="redeemed" className="spc-aura-redeem-text">{`${Drupal.t('have been successfully redeemed')}`}</span>,
+      <span key="redeemed" className="spc-aura-redeem-text">{`${getStringMessage('have_been_redeemed')}`}</span>,
     ];
   }
 
@@ -172,6 +209,7 @@ class AuraFormRedeemPoints extends React.Component {
     const {
       enableSubmit,
       money,
+      points,
       auraTransaction,
     } = this.state;
 
@@ -181,7 +219,7 @@ class AuraFormRedeemPoints extends React.Component {
 
     return (
       <div className="spc-aura-redeem-points-form-wrapper">
-        <span className="label">{ Drupal.t('Use your points') }</span>
+        <span className="label">{ getStringMessage('checkout_use_your_points') }</span>
         <div className="form-items">
           <div className="inputs">
             <ConditionalView condition={auraTransaction === false}>
@@ -189,6 +227,7 @@ class AuraFormRedeemPoints extends React.Component {
                 name="spc-aura-redeem-field-points"
                 placeholder="0"
                 onChangeCallback={this.convertPointsToMoney}
+                value={points}
               />
               <span className="spc-aura-redeem-points-separator">=</span>
               <AuraRedeemPointsTextField
@@ -210,7 +249,7 @@ class AuraFormRedeemPoints extends React.Component {
               onClick={() => this.redeemPoints()}
               disabled={!enableSubmit}
             >
-              { Drupal.t('Use points') }
+              { getStringMessage('checkout_use_points') }
             </button>
           </ConditionalView>
           <ConditionalView condition={auraTransaction === true}>
@@ -219,7 +258,7 @@ class AuraFormRedeemPoints extends React.Component {
               className="spc-aura-redeem-form-submit spc-aura-button"
               onClick={() => this.undoRedeemPoints()}
             >
-              { Drupal.t('Remove') }
+              { getStringMessage('remove') }
             </button>
           </ConditionalView>
         </div>

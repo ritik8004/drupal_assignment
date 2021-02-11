@@ -32,25 +32,36 @@ function getTransactionDateOptions() {
 }
 
 /**
- * Utility function to get date options default.
+ * Utility function to format date.
  */
-function getTransactionDateOptionsDefaultValue(activity) {
-  if (activity === null || Object.entries(activity).length === 0) {
-    return { value: '', label: '' };
+function formatDate(date, type) {
+  // eg. 2020-12-01
+  if (type === 'YYYY-MM-DD') {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
   }
 
-  const defaultDate = new Date(Object.entries(activity)[0][1].date).toLocaleString(
-    'default',
-    { month: 'short', year: 'numeric' },
-  );
-  return { value: defaultDate, label: defaultDate };
+  // eg. Feb 2021
+  if (type === 'Mon-YYYY') {
+    return new Date(date).toLocaleString('default', { month: 'short', year: 'numeric' });
+  }
+
+  // eg. 02 Feb 2021
+  if (type === 'DD-Mon-YYYY') {
+    return new Date(date).toLocaleString('default', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  return date;
 }
 
 /**
- * Utility function to format date.
+ * Utility function to get date options default.
  */
-function formatDate(date) {
-  return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+function getTransactionDateOptionsDefaultValue(fromDate) {
+  if (fromDate.length === 0) {
+    return getTransactionDateOptions()[0];
+  }
+  const formatedDate = formatDate(fromDate, 'Mon-YYYY');
+  return { value: formatedDate, label: formatedDate };
 }
 
 export {

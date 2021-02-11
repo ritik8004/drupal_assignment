@@ -11,13 +11,15 @@ const PendingEnrollmentMessage = () => {
   } = getAuraConfig();
 
   return (
-    <div className="spc-aura-pending-enrollment-message">
-      <div className="message">
-        {message}
-      </div>
-      <div className="app-links">
-        <a href={appleAppStoreLink}><AppStoreSVG store="appstore" /></a>
-        <a href={googlePlayStoreLink}><AppStoreSVG store="playstore" /></a>
+    <div className="spc-aura-pending-enrollment-message-wrapper">
+      <div className="spc-aura-pending-enrollment-message">
+        <div className="message">
+          {message}
+        </div>
+        <div className="app-links">
+          <a href={appleAppStoreLink}><AppStoreSVG store="appstore" /></a>
+          <a href={googlePlayStoreLink}><AppStoreSVG store="playstore" /></a>
+        </div>
       </div>
     </div>
   );

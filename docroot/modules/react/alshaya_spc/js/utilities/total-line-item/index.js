@@ -9,6 +9,7 @@ const TotalLineItem = (props) => {
     tooltip,
     tooltipContent,
     title,
+    showZeroValue,
   } = props;
   if (typeof value === 'string' || value instanceof String) {
     return (
@@ -22,7 +23,10 @@ const TotalLineItem = (props) => {
     );
   }
 
-  if (value === 0) {
+  // If `showZeroValue` is true then we want to display 0 value
+  // so skipping this condition which returns null for 0 value.
+  if ((showZeroValue === undefined || showZeroValue === false)
+    && value === 0) {
     return (null);
   }
   return (

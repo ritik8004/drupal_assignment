@@ -41,7 +41,7 @@ matrix:
     # Code changes from back merges wont be deployed but that should be fine
     # considering we dont need for in-active branches and for active ones
     # there will be fresh PR merges which will take care of pushing.
-    if: type = push AND (branch IN (master, uat, qa, develop) OR sender != "alshaya-github-bot")
+    if: type = push AND (branch IN (master, uat, qa, develop) OR commit_message !~ /(git\+ssh)/)
 
 env:
   global:

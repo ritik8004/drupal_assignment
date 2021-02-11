@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Cart;
-use App\Service\Drupal\Drupal;
 use App\Service\Aura\RedemptionHelper;
 use App\Service\Orders;
 
@@ -47,13 +46,6 @@ class LoyaltyClubRedeemController {
   protected $cart;
 
   /**
-   * Drupal service.
-   *
-   * @var \App\Service\Drupal\Drupal
-   */
-  protected $drupal;
-
-  /**
    * RedemptionHelper service.
    *
    * @var \App\Service\Aura\RedemptionHelper
@@ -78,10 +70,8 @@ class LoyaltyClubRedeemController {
    *   Utility Service.
    * @param \App\Service\Cart $cart
    *   Cart service.
-   * @param \App\Service\Drupal\Drupal $drupal
-   *   Drupal service.
    * @param \App\Service\Aura\RedemptionHelper $redemption_helper
-   *   Drupal service.
+   *   RedemptionHelper service.
    * @param \App\Service\Orders $orders
    *   Orders service.
    */
@@ -90,7 +80,6 @@ class LoyaltyClubRedeemController {
       LoggerInterface $logger,
       Utility $utility,
       Cart $cart,
-      Drupal $drupal,
       RedemptionHelper $redemption_helper,
       Orders $orders
     ) {
@@ -98,7 +87,6 @@ class LoyaltyClubRedeemController {
     $this->logger = $logger;
     $this->utility = $utility;
     $this->cart = $cart;
-    $this->drupal = $drupal;
     $this->redemptionHelper = $redemption_helper;
     $this->orders = $orders;
   }
@@ -132,10 +120,10 @@ class LoyaltyClubRedeemController {
 
     try {
       // Get user details from session.
-      $user = $this->drupal->getSessionCustomerInfo();
+      $uid = $this->cart->getDrupalInfo('uid');
 
       // Check if we have user in session.
-      if (empty($user)) {
+      if (empty($uid)) {
         $this->logger->error('Error while trying to redeem aura points. No user available in session. User id from request: @uid.', [
           '@uid' => $request_content['userId'],
         ]);
@@ -143,10 +131,10 @@ class LoyaltyClubRedeemController {
       }
 
       // Check if uid in the request matches the one in session.
-      if ($user['uid'] !== $request_content['userId']) {
+      if ($uid !== $request_content['userId']) {
         $this->logger->error("Error while trying to redeem aura points. User id in request doesn't match the one in session. User id from request: @req_uid. User id in session: @session_uid.", [
           '@req_uid' => $request_content['userId'],
-          '@session_uid' => $user['uid'],
+          '@session_uid' => $uid,
         ]);
         return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
       }

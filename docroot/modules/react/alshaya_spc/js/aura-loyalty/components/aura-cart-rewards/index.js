@@ -9,6 +9,7 @@ import { getAllAuraStatus, getUserDetails } from '../../../../../alshaya_aura_re
 import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import Loading from '../../../utilities/loading';
 import { getStorageInfo } from '../../../utilities/storage';
+import getStringMessage from '../../../../../js/utilities/strings';
 
 class AuraCartRewards extends React.Component {
   constructor(props) {
@@ -62,11 +63,11 @@ class AuraCartRewards extends React.Component {
     if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
       || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
       return [
-        Drupal.t('Aura rewards'),
-        <span key="aura-cart-title">{` ${Drupal.t('(Optional)')}`}</span>,
+        getStringMessage('cart_page_aura_header'),
+        <span key="aura-cart-title">{` ${getStringMessage('checkout_optional')}`}</span>,
       ];
     }
-    return Drupal.t('Aura rewards');
+    return getStringMessage('cart_page_aura_header');
   };
 
   render() {

@@ -7,20 +7,26 @@
 
 use Drupal\alshaya_user\Plugin\Block\MyAccountLinks;
 use Drupal\alshaya_aura_react\Constants\AuraStatus;
-use Drupal\alshaya_aura_react\Constants\AuraTier;
 use Drupal\user\Entity\User;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Url;
+use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
 
 /**
  * Implements hook_page_attachments_alter().
  */
 function alshaya_aura_react_page_attachments_alter(array &$page) {
-  $settings['enabled'] = 1;
+  $aura_helper = \Drupal::service('alshaya_aura_react.aura_helper');
+  $settings['enabled'] = $aura_helper->isAuraEnabled();
+
+  // Do not proceed if AURA is not enabled.
+  if ($settings['enabled'] !== TRUE) {
+    return;
+  }
+
   $uid = \Drupal::currentUser()->id();
   $user = \Drupal::entityTypeManager()->getStorage('user')->load($uid);
-  $aura_helper = \Drupal::service('alshaya_aura_react.aura_helper');
 
   if (!empty($user)) {
     $settings['userDetails'] = [
@@ -32,7 +38,7 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
     ];
   }
 
-  $settings['allAuraTier'] = AuraTier::ALL_AURA_TIERS;
+  $settings['allAuraTier'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->getAuraApiConfig([AuraDictionaryApiConstants::APC_TIER_TYPES])[AuraDictionaryApiConstants::APC_TIER_TYPES];
   $settings['allAuraStatus'] = AuraStatus::ALL_AURA_STATUS;
 
   $page['#attached']['library'][] = 'alshaya_aura_react/aura_header_library';
@@ -48,12 +54,12 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
   }
   elseif ($current_route->getRouteName() === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_pdp';
-    $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
   }
   elseif ($current_route->getRouteName() === 'entity.user.canonical') {
     $page['#attached']['library'][] = 'alshaya_aura_react/alshaya_aura_my_accounts';
   }
   $settings['config'] = $aura_helper->getAuraConfig();
+  $settings = array_merge($settings, \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData());
 
   $page['#attached']['drupalSettings']['aura'] = $settings;
 }
@@ -62,6 +68,11 @@ function alshaya_aura_react_page_attachments_alter(array &$page) {
  * Implements hook_alshaya_my_account_links_alter().
  */
 function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   // Add My Aura link.
   $links['alshaya_loyalty_club'] = [
     'text' => t('My AURA'),
@@ -74,6 +85,11 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
  * Implements hook_theme().
  */
 function alshaya_aura_react_theme() {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   $theme = [
     'my_loyalty_club' => [
       'variables' => [
@@ -101,6 +117,11 @@ function alshaya_aura_react_theme() {
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_aura_react_preprocess_html(&$variables) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   if ($variables['logged_in']) {
     $my_account_links_routes = array_column(MyAccountLinks::getMyAccountLinks(), 'route');
     if (in_array(\Drupal::routeMatch()->getRouteName(), $my_account_links_routes)) {
@@ -116,6 +137,11 @@ function alshaya_aura_react_preprocess_html(&$variables) {
  * Implements hook_alshaya_acm_customer_update_account_alter().
  */
 function alshaya_aura_react_alshaya_acm_customer_update_account_alter(User $user, array $customer) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   if (isset($customer['extension'])) {
     // Update user aura status and tier in drupal if changed.
     if (!empty($customer['extension']['apc_link'])
@@ -133,6 +159,11 @@ function alshaya_aura_react_alshaya_acm_customer_update_account_alter(User $user
  * Implements hook_alshaya_spc_order_details_settings_alter().
  */
 function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings, $order) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   if (isset($order['extension']['apc_accrued_points'])) {
     $settings['order_details']['accruedPoints'] = $order['extension']['apc_accrued_points'] ?? 0;
   }
@@ -140,12 +171,26 @@ function alshaya_aura_react_alshaya_spc_order_details_settings_alter(&$settings,
   if (isset($order['extension']['apc_redeemed_points'])) {
     $settings['order_details']['redeemedPoints'] = $order['extension']['apc_redeemed_points'] ?? 0;
   }
+
+  // Add `paidWithAura` and `balancePayable` in totals to show
+  // with order summary on order confirmation page.
+  if (isset($order['base_total_paid'])) {
+    $settings['order_details']['totals']['paidWithAura'] = $order['base_total_paid'] ?? 0;
+  }
+  if (isset($order['base_total_due'])) {
+    $settings['order_details']['totals']['balancePayable'] = $order['base_total_due'] ?? 0;
+  }
 }
 
 /**
  * Implements hook_block_view_alter().
  */
 function alshaya_aura_react_block_view_alter(&$build, $block) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   if ($block->getPluginId() === 'alshaya_my_account_links') {
     $build['#pre_render'][] = '_alshaya_aura_react_my_account_block_pre_render';
   }
@@ -164,6 +209,11 @@ function alshaya_aura_react_block_view_alter(&$build, $block) {
  *   The altered block build array.
  */
 function _alshaya_aura_react_my_account_block_pre_render(array $build) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return $build;
+  }
+
   $build['content']['my_account_my_aura_block_root'] = [
     '#markup' => '<div id="my-accounts-aura-mobile"></div>',
     '#weight' => -1,
@@ -184,14 +234,24 @@ function _alshaya_aura_react_my_account_block_pre_render(array $build) {
  *   The altered block build array.
  */
 function _alshaya_aura_react_system_menu_block_account_pre_render(array $build) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return $build;
+  }
+
   $build['content']['#prefix'] = '<div id="aura-mobile-header-signin-register"></div>';
   return $build;
 }
 
 /**
- * Implements hook_block_view_BASE_BLOCK_ID_alter.
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
  */
 function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   // Add edit account link beside page title block.
   if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
     $build['#pre_render'][] = '_alshaya_aura_react_page_title_pre_render';
@@ -208,6 +268,11 @@ function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
  *   The altered block build array.
  */
 function _alshaya_aura_react_page_title_pre_render(array $build) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return $build;
+  }
+
   $edit_account = [
     '#type' => 'link',
     '#title' => t('edit account details'),
@@ -223,9 +288,14 @@ function _alshaya_aura_react_page_title_pre_render(array $build) {
 }
 
 /**
- * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter.
+ * Implements hook_alshaya_acm_customer_alshaya_user_recent_orders_build_alter().
  */
 function alshaya_aura_react_alshaya_acm_customer_alshaya_user_recent_orders_build_alter(array &$build) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   if (\Drupal::routeMatch()->getRouteName() === 'entity.user.canonical') {
     // On my account page, remove edit account link because we are adding
     // it with page title when aura enabled.
@@ -239,6 +309,11 @@ function alshaya_aura_react_alshaya_acm_customer_alshaya_user_recent_orders_buil
  * Implements hook_preprocess_alshaya_main_menu_level1() for menu template.
  */
 function alshaya_aura_react_preprocess_alshaya_main_menu_level1(array &$variables) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   $variables['aura_enabled'] = 1;
 }
 
@@ -246,6 +321,11 @@ function alshaya_aura_react_preprocess_alshaya_main_menu_level1(array &$variable
  * Implements hook_preprocess_node().
  */
 function alshaya_aura_react_preprocess_node(&$variables) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   if ($variables['node']->bundle() === 'acq_product') {
     $variables['aura_enabled'] = 1;
   }
@@ -255,6 +335,11 @@ function alshaya_aura_react_preprocess_node(&$variables) {
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_aura_react_alshaya_spc_checkout_build_alter(array &$build) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   \Drupal::moduleHandler()->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
   $build['#strings'] = array_merge($build['#strings'], _alshaya_aura_static_strings());
 
@@ -266,6 +351,11 @@ function alshaya_aura_react_alshaya_spc_checkout_build_alter(array &$build) {
  * Implements hook_alshaya_spc_cart_build_alter().
  */
 function alshaya_aura_react_alshaya_spc_cart_build_alter(array &$build) {
+  // Do not proceed if AURA is not enabled.
+  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
+    return;
+  }
+
   // Add aura dictionary api data in drupalSettings.
   $build['#attached']['drupalSettings']['aura'] = \Drupal::service('alshaya_aura_react.aura_api_helper')->prepareAuraDictionaryApiData();
 }

@@ -13,6 +13,7 @@ import {
 } from '../../../../../alshaya_aura_react/js/utilities/header_helper';
 import { getStorageInfo } from '../../../utilities/storage';
 import { isDeliveryTypeSameAsInCart } from '../../../utilities/checkout_util';
+import getStringMessage from '../../../utilities/strings';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class AuraCheckoutRewards extends React.Component {
   };
 
   getPointsString = (points) => {
-    const pointsString = `${points} ${Drupal.t('points')}`;
+    const pointsString = `${points} ${getStringMessage('points')}`;
 
     return (
       <span className="spc-aura-highlight">{ pointsString }</span>
@@ -80,14 +81,21 @@ class AuraCheckoutRewards extends React.Component {
     if (loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NO_DATA
       || loyaltyStatus === allAuraStatus.APC_NOT_LINKED_NOT_U) {
       return [
-        Drupal.t('Aura rewards'),
-        <span key="aura-checkout-title">{` ${Drupal.t('(Optional)')}`}</span>,
+        getStringMessage('checkout_aura_block_title'),
+        <span key="aura-checkout-title">{` ${getStringMessage('checkout_optional')}`}</span>,
       ];
     }
-    return Drupal.t('Aura rewards');
+    return getStringMessage('checkout_aura_block_title');
   };
 
   isActive = () => {
+    const allAuraStatus = getAllAuraStatus();
+    const { loyaltyStatus } = this.state;
+
+    if (loyaltyStatus !== allAuraStatus.APC_LINKED_VERIFIED) {
+      return true;
+    }
+
     const { cart } = this.props;
 
     if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {

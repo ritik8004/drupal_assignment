@@ -25,7 +25,10 @@
       display: flex;
       align-items: center;
       border: 1px solid $aura-spc-textbox-border;
-      border-radius: 0.25rem 0 0 0.25rem;
+      border-top-#{$left}-radius: 0.25rem;
+      border-top-#{$right}-radius: 0;
+      border-bottom-#{$right}-radius: 0;
+      border-bottom-#{$left}-radius: 0.25rem;
       border-#{$right}: 0;
 
       .field-wrapper {
@@ -75,7 +78,10 @@
 
   input.spc-aura-link-card-input {
     border: 1px solid $aura-spc-textbox-border;
-    border-radius: 0.25rem 0 0 0.25rem;
+    border-top-#{$left}-radius: 0.25rem;
+    border-top-#{$right}-radius: 0;
+    border-bottom-#{$right}-radius: 0;
+    border-bottom-#{$left}-radius: 0.25rem;
     border-#{$right}: 0;
     padding-#{$left}: 0.75rem;
     width: calc(100% - 6.1875rem);
@@ -87,7 +93,9 @@
 
   button.spc-aura-button {
     width: 6.1875rem;
-    border-radius: 0 0.25rem 0.25rem 0;
+    border-radius: 0;
+    border-top-#{$right}-radius: 0.25rem;
+    border-bottom-#{$right}-radius: 0.25rem;
   }
 }
 
@@ -95,6 +103,7 @@
   color: $aura-spc-response-message;
   padding-top: 0.4375rem;
   padding-#{$left}: 0.8125rem;
+  font-size: 0.75rem;
 
   &.error {
     color: $primary_input_inline_error;

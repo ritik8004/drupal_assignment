@@ -12,6 +12,8 @@ import {
   formatDate,
   getTransactionDateOptionsDefaultValue,
 } from '../../../utilities/reward_activity_helper';
+import Loading from '../../../../../alshaya_spc/js/utilities/loading';
+import EmptyRewardActivity from './empty-reward-activity';
 
 class LoyaltyClubRewardsActivity extends React.Component {
   constructor(props) {
@@ -24,12 +26,14 @@ class LoyaltyClubRewardsActivity extends React.Component {
       fromDate: '',
       toDate: '',
       type: '',
+      wait: true,
+      noStatement: false,
     };
   }
 
   componentDidMount() {
     // Getting user's last reward transaction details.
-    // Api doen't require from/to date if we need last transaction details
+    // Api doesn't require from/to date if we need last transaction details
     // and thus passing empty params for dates.
     this.fetchRewardActivity('', '', 1, '');
   }
@@ -43,14 +47,37 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     if (apiData instanceof Promise) {
       apiData.then((result) => {
+        let statement = null;
         if (result.data !== undefined && result.data.error === undefined) {
           this.setState({
             activity: result.data.data || null,
+            wait: false,
+          });
+          this.setFromAndToDate(result.data.data);
+
+          statement = result.data.data;
+        }
+
+        if (Array.isArray(statement) && statement.length === 0) {
+          this.setState({
+            noStatement: true,
           });
         }
         removeInlineLoader('.reward-activity');
       });
     }
+  };
+
+  setFromAndToDate = (activity) => {
+    if (activity === null || Object.entries(activity).length === 0) {
+      return;
+    }
+    const date = new Date(Object.entries(activity)[0][1].date);
+
+    this.setState({
+      fromDate: formatDate(new Date(date.getFullYear(), date.getMonth()), 'YYYY-MM-DD'),
+      toDate: formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD'),
+    });
   };
 
   generateStatement = () => {
@@ -61,22 +88,24 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
     const statement = [];
 
+    // Check for empty reward activity.
     if (Array.isArray(activity) && activity.length === 0) {
       statement.push(
-        <div className="no-reward-activity">{Drupal.t('You have no reward activity to display.')}</div>,
+        <div className="empty-row">
+          <EmptyRewardActivity />
+        </div>,
       );
+
+      removeInlineLoader('.reward-activity');
+      return statement;
     }
 
     Object.entries(activity).forEach(([, transaction]) => {
-      const date = new Date(transaction.date).toLocaleString(
-        'default',
-        { day: 'numeric', month: 'short', year: 'numeric' },
-      );
       statement.push(
         <div className="statement-row">
           <span className="order-id">{transaction.orderNo}</span>
-          <span className="date">{date}</span>
-          <span className="amount">{transaction.orderTotal}</span>
+          <span className="date">{formatDate(transaction.date, 'DD-Mon-YYYY')}</span>
+          <span className="amount">{`${transaction.currencyCode} ${transaction.orderTotal}`}</span>
           <span className="type">{transaction.channel}</span>
           <span className={`aura-points style-${transaction.status}`}>{transaction.auraPoints}</span>
           <span className={`status style-${transaction.status}`}>{transaction.statusName}</span>
@@ -89,18 +118,23 @@ class LoyaltyClubRewardsActivity extends React.Component {
     return statement;
   };
 
-  onMenuOpen = (selectRef) => {
-    if (selectRef.current === null) {
-      return;
+  onMenuOpen = (filterName) => {
+    if (filterName === 'date') {
+      this.dateSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.add('open');
     }
-    selectRef.current.select.inputRef.closest(`.${selectRef.current.select.props.className}`).classList.add('open');
+
+    if (filterName === 'type') {
+      this.typeSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.add('open');
+    }
   };
 
-  onMenuClose = (selectRef) => {
-    if (selectRef.current === null) {
-      return;
+  onMenuClose = (filterName) => {
+    if (filterName === 'date') {
+      this.dateSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.remove('open');
     }
-    selectRef.current.select.inputRef.closest(`.${selectRef.current.select.props.className}`).classList.remove('open');
+    if (filterName === 'type') {
+      this.typeSelectRef.current.select.inputRef.closest('.reward-activity-filter').classList.remove('open');
+    }
   };
 
   handleTypeChange = (selectedOption) => {
@@ -117,8 +151,8 @@ class LoyaltyClubRewardsActivity extends React.Component {
 
   handleDateChange = (selectedOption) => {
     const date = new Date(selectedOption.value);
-    const fromDate = formatDate(date);
-    const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0));
+    const fromDate = formatDate(date, 'YYYY-MM-DD');
+    const toDate = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0), 'YYYY-MM-DD');
     const { type } = this.state;
 
     this.fetchRewardActivity(fromDate, toDate, 0, type);
@@ -129,8 +163,21 @@ class LoyaltyClubRewardsActivity extends React.Component {
   };
 
   render() {
-    const { activity, dateFilterOptions } = this.state;
+    const {
+      dateFilterOptions,
+      wait,
+      noStatement,
+      fromDate,
+    } = this.state;
     const transactionTypeOptions = getTransactionTypeOptions();
+
+    if (wait) {
+      return (
+        <div className="loyalty-club-rewards-wrapper loyalty-tab-content fadeInUp" style={{ animationDelay: '0.6s' }}>
+          <Loading />
+        </div>
+      );
+    }
 
     return (
       <div className="loyalty-club-rewards-wrapper loyalty-tab-content fadeInUp" style={{ animationDelay: '0.6s' }}>
@@ -138,35 +185,43 @@ class LoyaltyClubRewardsActivity extends React.Component {
           <Select
             ref={this.dateSelectRef}
             classNamePrefix="spcAuraSelect"
-            className="transaction-date-filter"
+            className="reward-activity-filter transaction-date-filter"
             name="transactionDateFilter"
-            onMenuOpen={() => this.onMenuOpen(this.dateSelectRef)}
-            onMenuClose={() => this.onMenuClose(this.dateSelectRef)}
+            onMenuOpen={() => this.onMenuOpen('date')}
+            onMenuClose={() => this.onMenuClose('date')}
             options={dateFilterOptions}
             defaultValue={dateFilterOptions[0]}
-            value={getTransactionDateOptionsDefaultValue(activity)}
+            value={getTransactionDateOptionsDefaultValue(fromDate)}
             onChange={this.handleDateChange}
+            isSearchable={false}
+            key="date-filter"
           />
           <Select
             ref={this.typeSelectRef}
             classNamePrefix="spcAuraSelect"
-            className="transaction-type-filter"
+            className="reward-activity-filter transaction-type-filter"
             name="transactionTypeFilter"
-            onMenuOpen={() => this.onMenuOpen(this.typeSelectRef)}
-            onMenuClose={() => this.onMenuClose(this.typeSelectRef)}
+            onMenuOpen={() => this.onMenuOpen('type')}
+            onMenuClose={() => this.onMenuClose('type')}
             options={transactionTypeOptions}
             defaultValue={transactionTypeOptions[0]}
             onChange={this.handleTypeChange}
+            isSearchable={false}
+            key="transaction-filter"
           />
         </div>
-        <div className="header-row">
-          <span className="order-id">{Drupal.t('Order No.')}</span>
-          <span className="date">{Drupal.t('Date')}</span>
-          <span className="amount">{Drupal.t('Order Total')}</span>
-          <span className="type">{Drupal.t('Online / Offline')}</span>
-          <span className="aura-points">{Drupal.t('AURA points')}</span>
-          <span className="status">{Drupal.t('Status')}</span>
-        </div>
+        {noStatement === false
+        && (
+          <div className="header-row">
+            <span className="order-id">{Drupal.t('Order No.')}</span>
+            <span className="date">{Drupal.t('Date')}</span>
+            <span className="amount">{Drupal.t('Order Total')}</span>
+            <span className="type">{Drupal.t('Online / Offline')}</span>
+            <span className="aura-points">{Drupal.t('AURA points')}</span>
+            <span className="status">{Drupal.t('Status')}</span>
+          </div>
+        )}
+
         <div className="reward-activity">
           {this.generateStatement()}
         </div>

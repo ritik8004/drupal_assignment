@@ -5,6 +5,7 @@ import AuraMyAccountNoLinkedCard from './card-not-linked-no-data';
 import AuraMyAccountVerifiedUser from './linked-verified';
 import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
+import AuraProgress from '../../aura-progress';
 
 const LoyaltyClubBlock = (props) => {
   const allAuraStatus = getAllAuraStatus();
@@ -55,17 +56,20 @@ const LoyaltyClubBlock = (props) => {
     // When user has a verified card.
     if (loyaltyStatusInt === allAuraStatus.APC_LINKED_VERIFIED) {
       return (
-        <AuraMyAccountVerifiedUser
-          tierName={tierName}
-          points={points}
-          expiringPoints={expiringPoints}
-          expiryDate={expiryDate}
-          pointsOnHold={pointsOnHold}
-          upgradeMsg={upgradeMsg}
-          cardNumber={cardNumber}
-          firstName={firstName}
-          lastName={lastName}
-        />
+        <>
+          <AuraMyAccountVerifiedUser
+            tierName={tierName}
+            points={points}
+            expiringPoints={expiringPoints}
+            expiryDate={expiryDate}
+            pointsOnHold={pointsOnHold}
+            upgradeMsg={upgradeMsg}
+            cardNumber={cardNumber}
+            firstName={firstName}
+            lastName={lastName}
+          />
+          <AuraProgress />
+        </>
       );
     }
     // When user has a card but enrollment is pending.

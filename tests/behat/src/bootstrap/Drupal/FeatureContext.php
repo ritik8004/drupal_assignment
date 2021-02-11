@@ -1198,44 +1198,42 @@ class FeatureContext extends CustomMinkContext
     }
   }
 
-    /**
-     * @When /^I select the filter "([^"]*)"$/
-     */
-    public function iSelectTheFilter($filter)
-    {
-        if(!empty($filter))
-        {
-            $page = $this->getSession()->getPage();
-            $element = $this->getSession()
-                ->getPage()
-                ->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, '$filter')]/h3");
-            if (!empty($element)) {
-                $element->click();
-            } else {
-                throw new \Exception(sprintf('Filter is not found on page.', $filter));
-            }
-            $filterValue_element = $this->getSession()
-                ->getPage()
-                ->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, '$filter')]/ul/li[1]");
-            if(!empty($filterValue_element))
-            {
-                $text = $page->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, $filter)]/ul/li[1]/span")->getText();
-                $filterValue_element->click();
-            } else {
-                throw new \Exception(sprintf('Filter has no value to select.', $filter));
-            }
+  /**
+   * @When /^I select the filter "([^"]*)"$/
+   */
+  public function iSelectTheFilter($filter)
+  {
+    if (!empty($filter)) {
+      $page = $this->getSession()->getPage();
+      $element = $this->getSession()
+        ->getPage()
+        ->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, '$filter')]/h3");
+      if (!empty($element)) {
+        $element->click();
+      } else {
+        throw new \Exception(sprintf('Filter is not found on page.', $filter));
+      }
+      $filterValue_element = $this->getSession()
+        ->getPage()
+        ->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, '$filter')]/ul/li[1]");
+      if (!empty($filterValue_element)) {
+        $text = $page->find('xpath', "//div[@id=\"alshaya-algolia-search\"]//div[@class=\"container-without-product\"]//div[contains(@id, $filter)]/ul/li[1]/span")->getText();
+        $filterValue_element->click();
+      } else {
+        throw new \Exception(sprintf('Filter has no value to select.', $filter));
+      }
 //            $text = $page->find('xpath', '//div[@class="container-without-product"]//div[contains(@id, \'price\')]/ul/li/span')->getText();
-            $selectedFilters = $page->findAll('css', '#block-filterbar ul li a span.facet-item__value');
-            foreach ($selectedFilters as $result) {
-                if ($result->getText() == $text) {
-                    echo 'Selected filter is displaying';
-                    break;
-                }
-            }
+      $selectedFilters = $page->findAll('css', '#block-filterbar ul li a span.facet-item__value');
+      foreach ($selectedFilters as $result) {
+        if ($result->getText() == $text) {
+          echo 'Selected filter is displaying';
+          break;
         }
+      }
     }
+  }
 
-    /**
+  /**
    * @Then /^I should see results sorted in ascending price order$/
    */
   public function iShouldSeeResultsSortedInAscendingPriceOrder()
@@ -1412,7 +1410,7 @@ class FeatureContext extends CustomMinkContext
     $page = $this->getSession()->getPage();
     $element = $page->find('css', $class);
     if ($element !== null) {
-      $element->selectOption($value);
+      $element-selectOption($value);
     } else {
       echo 'Element not found';
     }
@@ -1713,8 +1711,8 @@ class FeatureContext extends CustomMinkContext
     if ($all_colors !== NULL) {
       $all_colors = $all_colors->findAll('css', 'div.form-item-configurables-article-castor-id > div.select2Option > ul li');
       foreach ($all_colors as $color) {
-        $check_empty_li = $color->find('css','li')->getHtml();
-        if($check_empty_li == null) {
+        $check_empty_li = $color->find('css', 'li')->getHtml();
+        if ($check_empty_li == null) {
           $color++;
           continue;
         }
@@ -1737,8 +1735,7 @@ class FeatureContext extends CustomMinkContext
     $element = $this->getSession()->getPage()->find('css', $locator);
     if (!empty($element)) {
       $this->getSession()->executeScript("jQuery('$locator').trigger('click');");
-    }
-    else {
+    } else {
       throw new \Exception(sprintf('Element %s is not found on page.', $element));
     }
   }
@@ -1755,7 +1752,7 @@ class FeatureContext extends CustomMinkContext
     if (empty($element)) {
       throw new \Exception(sprintf('Element %s is not found on page.', $locator));
     }
-    $this->getSession()->executeScript('document.getElementById("'. $locator .'").click();');
+    $this->getSession()->executeScript('document.getElementById("' . $locator . '").click();');
   }
 
   /**
@@ -1767,7 +1764,7 @@ class FeatureContext extends CustomMinkContext
     $element = $page->find('css', "$filter .fieldset-legend");
     if (!empty($element)) {
       $element->click();
-      $this->getSession()->executeScript('var id = jQuery("label:contains(\''. $option . '\')").attr(\'for\'); document.getElementById(id).click();');
+      $this->getSession()->executeScript('var id = jQuery("label:contains(\'' . $option . '\')").attr(\'for\'); document.getElementById(id).click();');
       return;
     }
     throw new \Exception(sprintf('Element %s is not found on page.', $filter));
@@ -1806,9 +1803,8 @@ class FeatureContext extends CustomMinkContext
       $element = $attribute_wrapper->find('css', "select[name='configurables[$attribute]']")->getParent();
       if ($element) {
         $links = $element->findAll('css', '.select2Option li');
-        if($links)
-        {
-          foreach($links as $link){
+        if ($links) {
+          foreach ($links as $link) {
             if ($link->isVisible()) {
               $link->find('css', 'a')->click();
               break;
@@ -1829,8 +1825,7 @@ class FeatureContext extends CustomMinkContext
     if ($page->find('css', '#block-content #spc-cart .spc-cart-item .spc-product-price .has--special--price')) {
       $product_price = $page->find('css', '#block-content #spc-cart .spc-cart-item .spc-product-price .special--price .price .price-amount')->getHtml();
       $double_price = floatval($product_price) * 2;
-    }
-    else {
+    } else {
       $original_price = $page->find('css', '#spc-cart .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-container .spc-product-price .price-amount')
         ->getHtml();
       $original_price = floatval($original_price);
@@ -1854,7 +1849,8 @@ class FeatureContext extends CustomMinkContext
   /**
    * @Then I should see a :element element on page
    */
-  public function iShouldSeeAElementOnPage($element) {
+  public function iShouldSeeAElementOnPage($element)
+  {
     $this->assertSession()->elementExists('css', $element);
   }
 
@@ -1868,8 +1864,7 @@ class FeatureContext extends CustomMinkContext
       $product_price = $page->find('css', '#block-content .acq-content-product div.content__title_wrapper .price-block .special--price .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
       $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-currency')->getHtml();
-    }
-    else {
+    } else {
       $product_price = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
       $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-currency')->getHtml();
@@ -1882,8 +1877,7 @@ class FeatureContext extends CustomMinkContext
       if (!empty($message)) {
         throw new \Exception(sprintf($message, $product_price));
       }
-    }
-    else {
+    } else {
       if ($product_price !== $cart_price) {
         throw new \Exception(sprintf('Correct price did not added get in minicart, expected cart price %d', $product_price));
       }
@@ -1901,7 +1895,8 @@ class FeatureContext extends CustomMinkContext
    *
    * @Then the element :selector should exist
    */
-  public function theElementShouldExist($selector) {
+  public function theElementShouldExist($selector)
+  {
     $this->assertSession()->elementExists('css', $selector);
   }
 
@@ -1916,10 +1911,10 @@ class FeatureContext extends CustomMinkContext
   public function assertPageLocate($path)
   {
     $parts = parse_url($path);
-    $fragment = empty($parts['fragment']) ? '' : '#'.$parts['fragment'];
+    $fragment = empty($parts['fragment']) ? '' : '#' . $parts['fragment'];
     $path = empty($parts['path']) ? '/' : $parts['path'];
 
-    $expected = preg_replace('/^\/[^\.\/]+\.php\//', '/', $path).$fragment;
+    $expected = preg_replace('/^\/[^\.\/]+\.php\//', '/', $path) . $fragment;
     $actual = $this->getSession()->getCurrentUrl();
 
     if (strpos($actual, $expected) === FALSE) {
@@ -1936,7 +1931,7 @@ class FeatureContext extends CustomMinkContext
     $element = $page->find('css', "$filter");
     if (!empty($element)) {
       $element->click();
-      $this->getSession()->executeScript('var id = jQuery("label:contains(\''. $option . '\')").attr(\'for\'); document.getElementById(id).click();');
+      $this->getSession()->executeScript('var id = jQuery("label:contains(\'' . $option . '\')").attr(\'for\'); document.getElementById(id).click();');
       return;
     }
     throw new \Exception(sprintf('Element %s is not found on page.', $filter));
@@ -1945,7 +1940,8 @@ class FeatureContext extends CustomMinkContext
   /**
    * @Then I click jQuery :element element on page
    */
-  public function iClickJqueryElementOnPage($element) {
+  public function iClickJqueryElementOnPage($element)
+  {
     $this->getSession()->executeScript("jQuery('$element').trigger('click');");
   }
 
@@ -1967,8 +1963,7 @@ class FeatureContext extends CustomMinkContext
           $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
           // Adding a wait time for elements to load properly
           $this->iWaitSeconds(5);
-        }
-        else {
+        } else {
           $this->getSession()->getPage()->fillField($field, $value);
         }
       }
@@ -1985,10 +1980,10 @@ class FeatureContext extends CustomMinkContext
       $driver = $this->getSession()->getDriver();
       $page = $this->getSession()->getPage();
 
-      $highlightedClass    = '.select2-results__option--highlighted';
+      $highlightedClass = '.select2-results__option--highlighted';
       $highlightedSelector = '.select2-results__options ' . $highlightedClass;
-      $selectableSelector  = '.select2-results__options .select2-results__option';
-      $searchSelector      = '.select2-container.select2-container--open .select2-search__field';
+      $selectableSelector = '.select2-results__options .select2-results__option';
+      $searchSelector = '.select2-container.select2-container--open .select2-search__field';
       $page->find('css', '.select2-selection__arrow')->click();
 
       $element = $page->find('css', $searchSelector);
@@ -2077,7 +2072,7 @@ class FeatureContext extends CustomMinkContext
     if (!empty($text)) {
       $actual = $this->getSession()->getPage()->getText();
       $actual = preg_replace('/\s+/u', ' ', $actual);
-      $regex = '/'.preg_quote($text, '/').'/ui';
+      $regex = '/' . preg_quote($text, '/') . '/ui';
       $message = sprintf('The text "%s" appears in the text of this page, but it should not.', $text);
 
       if (!preg_match($regex, $actual)) {
@@ -2096,7 +2091,8 @@ class FeatureContext extends CustomMinkContext
    *
    * @Then the element :selector should not exist
    */
-  public function theElementShouldNotExist($selector) {
+  public function theElementShouldNotExist($selector)
+  {
     $this->assertSession()->elementNotExists('css', $selector);
   }
 
@@ -2120,14 +2116,14 @@ class FeatureContext extends CustomMinkContext
    * @param string $selector
    *   The CSS ID to search for.
    */
-  public function theElementSimilar($id) {
+  public function theElementSimilar($id)
+  {
     $element = $this->getSession()
       ->getPage()
       ->find('xpath', "//*[contains(@id,'" . $id . "')]");
     if ($element) {
       return $element->getAttribute('id');
-    }
-    else {
+    } else {
       throw new ElementNotFoundException(sprintf('Could not evaluate CSS selector: "%s"', $id));
     }
   }
@@ -2164,12 +2160,11 @@ class FeatureContext extends CustomMinkContext
       $element->click();
       $this->iWaitSeconds(10);
       $this->iWaitForThePageToLoad();
-      if ($this->getSession()->getPage()->find('css', 'div.spc-address-list-member-overlay div.address-list-content div.spc-checkout-address-list')){
+      if ($this->getSession()->getPage()->find('css', 'div.spc-address-list-member-overlay div.address-list-content div.spc-checkout-address-list')) {
         $address = $this->getSession()->getPage()->find('css', 'div.spc-address-list-member-overlay div.address-list-content div.spc-checkout-address-list div.spc-address-tile .spc-address-tile-actions .spc-address-select-address');
         $address->press();
         $this->iWaitSeconds(20);
-      }
-      else {
+      } else {
         foreach ($fields->getRowsHash() as $field => $value) {
           if ($value) {
             if ($field == "spc-area-select-selected-city" || $field == "spc-area-select-selected") {
@@ -2177,16 +2172,14 @@ class FeatureContext extends CustomMinkContext
               $this->iWaitSeconds(5);
               $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
               $this->iWaitSeconds(5);
-            }
-            else {
+            } else {
               $this->getSession()->getPage()->fillField($field, $value);
             }
           }
         }
         $this->iClickJqueryElementOnPage("#address-form-action #save-address");
       }
-    }
-    else {
+    } else {
       $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .delivery-information-preview");
       if (!$element) {
         throw new Exception("Element " . "#spc-checkout .spc-main .spc-content .delivery-information-preview" . " not found on " . $this->getSession()->getCurrentUrl());
@@ -2222,8 +2215,7 @@ class FeatureContext extends CustomMinkContext
             $this->iWaitForThePageToLoad();
             $this->iClickJqueryElementOnPage(".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button");
             $this->iWaitSeconds(10);
-          }
-          else {
+          } else {
             $this->getSession()->getPage()->fillField($field, $value);
           }
         }
@@ -2260,18 +2252,16 @@ class FeatureContext extends CustomMinkContext
             $this->iWaitSeconds(5);
             $this->iClickJqueryElementOnPage(".spc-address-add .filter-list .spc-filter-area-panel-list-wrapper ul li span:contains($value)");
             $this->iWaitSeconds(5);
-          }
-          else {
+          } else {
             $this->getSession()->getPage()->fillField($field, $value);
           }
         }
       }
       $this->iClickJqueryElementOnPage("#address-form-action #save-address");
-    }
-    else {
+    } else {
       $element = $this->getSession()->getPage()->find("css", "#spc-checkout .spc-main .spc-content .spc-billing-bottom-panel .spc-billing-information");
       if (!$element) {
-        throw new Exception("Existing Billing address not attached on the page "  . $this->getSession()->getCurrentUrl());
+        throw new Exception("Existing Billing address not attached on the page " . $this->getSession()->getCurrentUrl());
       }
     }
   }
@@ -2287,8 +2277,7 @@ class FeatureContext extends CustomMinkContext
     $element = $this->getSession()->getPage()->find('css', $locator);
     if (!empty($element)) {
       $this->getSession()->executeScript("jQuery('$locator:contains('$text')').trigger('click');");
-    }
-    else {
+    } else {
       throw new \Exception(sprintf('Element %s is not found on page.', $element));
     }
   }
@@ -2300,8 +2289,8 @@ class FeatureContext extends CustomMinkContext
   {
     $element = $this->getSession()->getPage()->find('css', $selector);
     $Selectelement = $element->getAttribute($attribute);
-    if (strpos($Selectelement,$contains) === False) {
-      throw new \Exception(sprintf('Element %s does not contain attribute %s with %s.', $selector, $attribute , $contains));
+    if (strpos($Selectelement, $contains) === False) {
+      throw new \Exception(sprintf('Element %s does not contain attribute %s with %s.', $selector, $attribute, $contains));
     }
   }
 
@@ -2314,5 +2303,33 @@ class FeatureContext extends CustomMinkContext
   {
     $field = $this->getSession()->getPage()->findField($selector);
     $field->setValue($value);
+  }
+
+  /**
+   * @Then /^I check the address-book form$/
+   */
+  public function iCheckTheAddressBookForm()
+  {
+    $page = $this->getSession()->getPage();
+    $address_form = $page->find('css', 'form#profile-address-book-add-form');
+    if ($address_form == NULL) {
+      $page->find('css', '#block-content > a')->click();
+      $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+  }
+
+  /**
+   * @Given /^I double click on "([^"]*)" element$/
+   */
+  public function iDoubleClickOnElement($selector)
+  {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('css', $selector);
+    if (!empty($element)) {
+      $element->click();
+      $element->click();
+    } else {
+      throw new \Exception ('Element %s not found');
+    }
   }
 }

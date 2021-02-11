@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\Aura\CustomerHelper;
+use App\Service\Cart;
 
 /**
  * Provides route callbacks for different Loyalty Club requirements.
@@ -52,6 +53,13 @@ class LoyaltyClubController {
   protected $auraCustomerHelper;
 
   /**
+   * Service for cart interaction.
+   *
+   * @var \App\Service\Cart
+   */
+  protected $cart;
+
+  /**
    * LoyaltyClubController constructor.
    *
    * @param \App\Service\Magento\MagentoApiWrapper $magento_api_wrapper
@@ -64,19 +72,23 @@ class LoyaltyClubController {
    *   Utility Service.
    * @param \App\Service\Aura\CustomerHelper $aura_customer_helper
    *   Aura customer helper service.
+   * @param \App\Service\Cart $cart
+   *   Cart service.
    */
   public function __construct(
     MagentoApiWrapper $magento_api_wrapper,
     LoggerInterface $logger,
     Drupal $drupal,
     Utility $utility,
-    CustomerHelper $aura_customer_helper
+    CustomerHelper $aura_customer_helper,
+    Cart $cart
   ) {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->logger = $logger;
     $this->drupal = $drupal;
     $this->utility = $utility;
     $this->auraCustomerHelper = $aura_customer_helper;
+    $this->cart = $cart;
   }
 
   /**
@@ -98,10 +110,11 @@ class LoyaltyClubController {
 
     try {
       // Get user details from session.
-      $user = $this->drupal->getSessionCustomerInfo();
+      $customer_id = $this->cart->getDrupalInfo('customer_id');
+      $uid = $this->cart->getDrupalInfo('uid');
 
       // Check if we have user in session.
-      if (empty($user)) {
+      if (empty($customer_id) || empty($uid)) {
         $this->logger->error('Error while trying to update user AURA Status. No user available in session. User id from request: @uid.', [
           '@uid' => $request_content['uid'],
         ]);
@@ -109,15 +122,15 @@ class LoyaltyClubController {
       }
 
       // Check if uid in the request matches the one in session.
-      if ($user['uid'] !== $request_content['uid']) {
+      if ($uid !== $request_content['uid']) {
         $this->logger->error("Error while trying to update user AURA Status. User id in request doesn't match the one in session. User id from request: @req_uid. User id in session: @session_uid.", [
           '@req_uid' => $request_content['uid'],
-          '@session_uid' => $user['uid'],
+          '@session_uid' => $uid,
         ]);
         return new JsonResponse($this->utility->getErrorResponse("User id in request doesn't match the one in session.", Response::HTTP_NOT_FOUND));
       }
 
-      $data['statusUpdate']['customerId'] = $user['customer_id'];
+      $data['statusUpdate']['customerId'] = $customer_id;
       $url = 'customers/apc-status-update';
       $response = $this->magentoApiWrapper->doRequest('POST', $url, ['json' => $data]);
 
@@ -135,7 +148,7 @@ class LoyaltyClubController {
           $this->logger->error($message . ' User Id: @uid, Customer Id: @customer_id, Aura Status: @aura_status.', [
             '@uid' => $request_content['uid'],
             '@aura_status' => $request_content['apcLinkStatus'],
-            '@customer_id' => $user['customer_id'],
+            '@customer_id' => $customer_id,
           ]);
           return new JsonResponse($this->utility->getErrorResponse($message, 500));
         }
@@ -149,7 +162,7 @@ class LoyaltyClubController {
     }
     catch (\Exception $e) {
       $this->logger->notice('Error while trying to update AURA Status for user with customer id @customer_id. Request Data: @request_data. Message: @message', [
-        '@customer_id' => $user['customer_id'],
+        '@customer_id' => $customer_id,
         '@request_data' => json_encode($data),
         '@message' => $e->getMessage(),
       ]);

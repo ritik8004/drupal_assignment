@@ -1,11 +1,41 @@
 import React from 'react';
-import { getUserAuraTier } from '../../utilities/helper';
+import { getUserAuraTier, getUserDetails, getAllAuraTier } from '../../utilities/helper';
 import AuraProgressString from './progress-string';
 import ConditionalView
   from '../../../../alshaya_spc/js/common/components/conditional-view';
 import isRTL from '../../../../alshaya_spc/js/utilities/rtl';
+import { getAPIData } from '../../utilities/api/fetchApiData';
 
 class AuraProgress extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      wait: true,
+      nextTierLevel: '',
+      userPoints: '',
+      nextTierThreshold: '',
+    };
+  }
+
+  componentDidMount() {
+    const apiUrl = `get/loyalty-club/get-progress-tracker?uid=${getUserDetails().id}`;
+    const apiData = getAPIData(apiUrl);
+
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.data !== undefined
+          && result.data.error === undefined
+          && result.data.data !== undefined
+          && result.data.data.length !== 0) {
+          this.setState({
+            ...result.data.data,
+            wait: false,
+          });
+        }
+      });
+    }
+  }
+
   // Adds the required left/right positioning for the dot based on
   // language direction.
   getDotPosition = (progress) => {
@@ -40,18 +70,17 @@ class AuraProgress extends React.Component {
   };
 
   render() {
-    // Current User tier class so we can change gradient for progress bar.
-    const tierLevel = getUserAuraTier();
-    // @todo: Need a helper for this, so that we always have machine name
-    // Tier labels which are non translated, we are using this as class.
-    const nextTierLevel = 'AuraStar';
-    const tierClass = tierLevel || 'no-tier';
+    const {
+      wait, nextTierLevel, userPoints, nextTierThreshold,
+    } = this.state;
 
-    // @TODO: Expecting below from state/API or props.
-    const currentTierLabel = Drupal.t('Hello');
-    const nextTierLabel = Drupal.t('Star');
-    const userPoints = 120000;
-    const nextTierThreshold = 300000;
+    if (wait === true) {
+      return null;
+    }
+
+    // Current User tier class so we can change gradient for progress bar.
+    const currentTierLevel = getUserAuraTier();
+    const tierClass = currentTierLevel || 'no-tier';
 
     // Progress Percentage;
     const progressRatio = (userPoints / nextTierThreshold) * 100;
@@ -63,10 +92,10 @@ class AuraProgress extends React.Component {
     return (
       <div className="aura-progressbar-wrapper">
         <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
-          <span className="under">{currentTierLabel}</span>
+          <span className="under">{getAllAuraTier()[currentTierLevel]}</span>
           <div className="start">
             <div className="fill" style={{ width: progress }}>
-              <span className="over">{currentTierLabel}</span>
+              <span className="over">{getAllAuraTier()[currentTierLevel]}</span>
             </div>
             <ConditionalView condition={showDotClass === 'pointer'}>
               <span
@@ -75,13 +104,13 @@ class AuraProgress extends React.Component {
               />
             </ConditionalView>
           </div>
-          <div className={`end next-tier-${nextTierLevel}`}><span>{nextTierLabel}</span></div>
+          <div className={`end next-tier-${nextTierLevel}`}><span>{getAllAuraTier()[nextTierLevel]}</span></div>
         </div>
         <AuraProgressString
           userPoints={userPoints}
           nextTierThreshold={nextTierThreshold}
           showDotClass={showDotClass}
-          nextTierLabel={nextTierLabel}
+          nextTierLabel={getAllAuraTier()[nextTierLevel]}
           progressRatio={progressRatio}
         />
       </div>

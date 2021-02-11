@@ -1,9 +1,8 @@
 .loyalty-club-rewards-wrapper {
   color: $aura-loyalty-activity-txt;
-  overflow-x: auto;
 
   .header-row,
-  .reward-activity > div {
+  .reward-activity > div.statement-row {
     min-height: 3.125rem;
     padding: 0.625rem 0;
     align-items: center;
@@ -36,7 +35,7 @@
     border-bottom: 1px solid $aura-loyalty-club-border;
   }
 
-  .reward-activity > div {
+  .reward-activity > div.statement-row {
     &:nth-child(odd) {
       background: $aura-loyalty-club-odd-row;
     }
@@ -89,6 +88,43 @@
 
     &-E::before {
       background: url(#{$base_theme_img_directory_path}/aura/aura-warning.svg) no-repeat center center;
+    }
+  }
+}
+
+div.empty-row {
+  background: $aura-my-account-reward-activity-bg;
+  padding: 3.625rem;
+  text-align: center;
+
+  @include breakpoint($only-mobile) {
+    padding: 1.25rem;
+  }
+
+  > div {
+    font-size: 1.5rem;
+    letter-spacing: 1.07px;
+    color: $aura-my-account-reward-activity;
+    font-family: $aura-regular;
+    margin-bottom: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1.375rem;
+      line-height: 31px;
+      letter-spacing: 0.98px;
+    }
+
+    .highlight {
+      font-family: $aura-bold;
+    }
+
+    a {
+      color: $aura-my-account-reward-activity;
+      text-decoration: underline;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 }

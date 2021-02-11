@@ -184,6 +184,12 @@
       }
     }
 
+    .spc-order-summary-order-detail .spc-order-summary-item,
+    .spc-order-summary-order-preview .spc-order-summary-item {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
     .spc-print-header--logo {
       display: flex;
       align-items: center;

@@ -37,3 +37,19 @@
     }
   }
 }
+
+.spc-aura-checkout-rewards-block {
+  .block-content .tooltip-anchor .tooltip-box {
+    @include breakpoint($only-mobile) {
+      #{$left}: -54%;
+    }
+  }
+}
+
+#spc-checkout-confirmation {
+  .spc-order-summary-item.aura-order-summary-item .tooltip-box {
+    @include breakpoint($only-mobile) {
+      #{$left}: -4rem;
+    }
+  }
+}

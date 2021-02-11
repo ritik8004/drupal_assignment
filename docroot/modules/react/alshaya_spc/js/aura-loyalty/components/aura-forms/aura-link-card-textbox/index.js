@@ -72,11 +72,11 @@ class AuraFormLinkCard extends React.Component {
 
       let message = '';
       if (stateValues.error_code === 'NO_CARD_FOUND') {
-        message = Drupal.t('No card found. Please try again.');
+        message = getStringMessage('checkout_no_card_found_try_again');
       } else if (stateValues.error_code === 'MISSING_DATA') {
         message = getStringMessage(stateValues.error_message) || '';
       } else {
-        message = Drupal.t('Something went wrong. Please try again.');
+        message = getStringMessage('something_went_wrong');
       }
 
       this.showResponse({
@@ -88,7 +88,7 @@ class AuraFormLinkCard extends React.Component {
 
     this.showResponse({
       type: 'success',
-      message: Drupal.t('Your loyalty points will be credited to this account.'),
+      message: getStringMessage('checkout_points_to_be_credited_message'),
     });
 
     if (searchData) {
@@ -244,7 +244,7 @@ class AuraFormLinkCard extends React.Component {
                 className="spc-aura-link-card-submit spc-aura-button"
                 onClick={() => this.addCard()}
               >
-                { Drupal.t('Apply') }
+                { getStringMessage('checkout_apply') }
               </button>
             </div>
             <ConditionalView condition={window.innerWidth < 768}>
@@ -255,16 +255,16 @@ class AuraFormLinkCard extends React.Component {
             { loyaltyCardLinkedToCart === true
               ? (
                 <a onClick={() => this.removeCard()}>
-                  {Drupal.t('Not you?')}
+                  {getStringMessage('not_you_question')}
                 </a>
               )
               : (
                 <>
-                  <span>{ Drupal.t('Not a member yet?') }</span>
+                  <span>{ getStringMessage('checkout_not_member_question') }</span>
                   <a
                     onClick={() => this.openOTPModal()}
                   >
-                    {Drupal.t('Sign up now')}
+                    {getStringMessage('sign_up_now')}
                   </a>
                 </>
               )}

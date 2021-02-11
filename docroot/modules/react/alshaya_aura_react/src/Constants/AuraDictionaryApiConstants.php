@@ -22,12 +22,18 @@ final class AuraDictionaryApiConstants {
   const EXT_PHONE_PREFIX = 'EXT_PHONE_PREFIX';
 
   /**
+   * Aura tier types constant.
+   */
+  const APC_TIER_TYPES = 'APC_TIER_TYPES';
+
+  /**
    * Contains all the dictionary api keys constants in the class.
    */
   const ALL_DICTIONARY_API_CONSTANTS = [
     'CASHBACK_ACCRUAL_RATIO' => self::CASHBACK_ACCRUAL_RATIO,
     'CASHBACK_REDEMPTION_RATIO' => self::CASHBACK_REDEMPTION_RATIO,
     'EXT_PHONE_PREFIX' => self::EXT_PHONE_PREFIX,
+    'APC_TIER_TYPES' => self::APC_TIER_TYPES,
   ];
 
 }

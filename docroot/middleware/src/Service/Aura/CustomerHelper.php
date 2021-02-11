@@ -254,6 +254,7 @@ class CustomerHelper {
             'orderNo' => $transaction['trn_no'],
             'date' => $transaction['date'],
             'orderTotal' => $transaction['total_value'],
+            'currencyCode' => $transaction['currency_code'],
             'channel' => $transaction['channel'],
             'auraPoints' => $transaction['points'],
           ];
