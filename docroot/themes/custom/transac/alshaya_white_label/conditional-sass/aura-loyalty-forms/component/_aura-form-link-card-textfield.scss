@@ -101,6 +101,7 @@
   color: $aura-spc-response-message;
   padding-top: 0.4375rem;
   padding-#{$left}: 0.8125rem;
+  font-size: 0.75rem;
 
   &.error {
     color: $primary_input_inline_error;
