@@ -243,25 +243,23 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
+          <ConditionalView condition={typeof drupalSettings.postpay_widget_info !== 'undefined' && window.innerWidth < 768}>
+            <div
+              className={`spc-postpay-mobile-preview ${drupalSettings.postpay_widget_info.class}`}
+              data-type={drupalSettings.postpay_widget_info['data-type']}
+              data-amount={totals.base_grand_total
+              * drupalSettings.postpay.currency_multiplier}
+              data-currency={drupalSettings.postpay_widget_info['data-currency']}
+              data-num-instalments={drupalSettings.postpay_widget_info['data-num-instalments']}
+              data-locale={drupalSettings.postpay_widget_info['data-locale']}
+            />
+          </ConditionalView>
         </div>
         <div className="spc-main">
           <div className="spc-content">
             <SectionTitle animationDelayValue="0.4s">
               <span>{`${Drupal.t('my shopping bag')} `}</span>
               <span>{Drupal.t('(@qty items)', { '@qty': totalItems })}</span>
-              <ConditionalView condition={typeof drupalSettings.postpay_widget_info !== 'undefined'}>
-                <span>
-                  <div
-                    className={drupalSettings.postpay_widget_info.class}
-                    data-type={drupalSettings.postpay_widget_info['data-type']}
-                    data-amount={totals.base_grand_total
-                    * drupalSettings.postpay.currency_multiplier}
-                    data-currency={drupalSettings.postpay_widget_info['data-currency']}
-                    data-num-instalments={drupalSettings.postpay_widget_info['data-num-instalments']}
-                    data-locale={drupalSettings.postpay_widget_info['data-locale']}
-                  />
-                </span>
-              </ConditionalView>
             </SectionTitle>
             <DeliveryInOnlyCity />
             <CartItems

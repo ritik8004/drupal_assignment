@@ -1,3 +1,20 @@
 .postpay {
-  margin-bottom: 12px;
+  margin: 0.75rem 0;
+
+  @include breakpoint($only-mobile) {
+    padding: 0 0.5rem;
+  }
+
+  @include breakpoint($tablet) {
+    width: 35%;
+    float: $right;
+    margin-#{$left}: 1rem;
+    margin-#{$right}: 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    width: 30%;
+    margin-#{$left}: 0;
+    margin-#{$right}: 0;
+  }
 }
