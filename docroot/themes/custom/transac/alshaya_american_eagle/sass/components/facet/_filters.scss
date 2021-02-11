@@ -41,19 +41,6 @@
   font-size: 0.875rem;
 }
 
-.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search),
-.c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
-  ul {
-    .facet-item {
-      span {
-        html[lang=ar] & {
-          direction: ltr;
-        }
-      }
-    }
-  }
-}
-
 body {
   .branding__menu {
     @include breakpoint($only-mobile) {
