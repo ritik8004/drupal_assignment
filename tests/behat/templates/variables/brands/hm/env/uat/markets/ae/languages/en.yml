@@ -1,9 +1,9 @@
 variables:
-  url_base_uri: 'https://hmae2-uat.factory.alshaya.com/en'
+  url_base_uri: 'https://hmae5-uat.factory.alshaya.com/en'
   collection_filter: ''
   sort_filter: 'sort by'
   price_filter: 'Concept'
-  brand_filter: 'Accessories Style'
+  brand_filter: ''
   color_filter: ''
   size_filter: 'Age Group'
   filters: 'all filters'

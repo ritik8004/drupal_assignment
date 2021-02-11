@@ -6,7 +6,7 @@ variables:
   brand_filter: ''
   color_filter: 'Color'
   size_filter: 'Size'
-  filters: ''
+  filters: 'all filters'
   promotional_filter: ''
   language_collection_filter: 'المجموعة'
   language_sort_filter: 'رتبي حسب'
