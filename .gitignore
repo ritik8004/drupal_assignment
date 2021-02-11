@@ -172,6 +172,3 @@ docroot/modules/.gitignore
 docroot/profiles/.gitignore
 /.editorconfig
 /.gitattributes
-
-# Ignore common.yml.
-tests/behat/templates/variables/common.yml
