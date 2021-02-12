@@ -1,64 +1,69 @@
-import React, {useState } from "react";
+import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
-import {postAPIData} from '../../../utilities/api/apiData';
+import { postAPIData } from '../../../utilities/api/apiData';
 
-const ReviewInappropriate = ({
-  ReviewId,
-  IsSyndicatedReview,
-}) => {
-  // Set the initial count state to zero, 0
-  const [reportedStatus, setReportedStatus] = useState("Report");
-  const [isReported, setReported] = useState(false);
+class ReviewInappropriate extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      disabled: false,
+      reportButtonText: Drupal.t('Report'),
+    };
+  }
 
-  const reportReview=()=>{
+  reportReview = (reviewId, newText) => (event) => {
+    event.preventDefault();
+    var { disabled: buttonState } = this.state;
+    if (buttonState) {
+      return;
+    }
+    this.setState({ disabled: true });
+    this.setState({ reportButtonText: newText });
     const apiUri = '/data/submitfeedback.json';
-    const params = `&FeedbackType=inappropriate&ContentType=review&ContentId=${ReviewId}`;
+    const params = `&FeedbackType=inappropriate&ContentType=review&ContentId=${reviewId}`;
     const apiData = postAPIData(apiUri, params);
-    setReported(!isReported);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined
-          && result.data !== undefined
-          && result.data.error === undefined) {
-            var reportedVoteObj = {
-              "reviewId": ReviewId,
-              "reported": "Yes",
-            }
-            setReportedStatus("Reported");
-            localStorage.setItem("reportedVote-"+ReviewId, JSON.stringify(reportedVoteObj));
-            console.log(JSON.parse(localStorage.getItem("reportedVote-"+ReviewId)));
-        } else {
-          // To Do
+      && result.data !== undefined
+      && result.data.error === undefined) {
+          const reportedVoteObj = {
+            reviewId,
+            reported: 'Yes',
+          };
+          localStorage.setItem(`reportedVote-${reviewId}`, JSON.stringify(reportedVoteObj));
         }
       });
     }
   }
 
-  if (IsSyndicatedReview == false) {
-    const reportedReviewVote = JSON.parse(localStorage.getItem("reportedVote-"+ReviewId));
-    return (
-        <div className="report-review-status">
-        {reportedReviewVote !== null ? (
-            <ConditionalView condition={window.innerWidth > 767}>
-            <span className="feedback-report review-feedback-vote-active">
-                <button disabled onClick={() => reportReview()}>  
-                <span className="feedback-option-label">{Drupal.t('Reported')}</span>
-                </button>
+  render() {
+    const { ReviewId: reviewId } = this.props;
+    if (reviewId !== null) {
+      const reportedReviewVote = JSON.parse(localStorage.getItem(`reportedVote-${reviewId}`));
+      var { disabled: buttonState } = this.state;
+      var { reportButtonText: text } = this.state;
+      var newText = Drupal.t('Reported');
+      return (
+        <ConditionalView condition={window.innerWidth > 767}>
+          {reportedReviewVote === null ? (
+            <span className={`feedback-report ${buttonState ? 'feedback-report-disabled' : 'feedback-report-active'}`}>
+              <button type="button" onClick={this.reportReview(reviewId, newText)} disabled={buttonState}>
+                <span className="feedback-option-label">{text}</span>
+              </button>
             </span>
-            </ConditionalView>
-        ) : (
-            <ConditionalView condition={window.innerWidth > 767}>
-            <span className="feedback-report review-feedback-vote-active">
-                <button disabled = {isReported} onClick={() => reportReview()}>  
-                <span className="feedback-option-label">{reportedStatus}</span>
-                </button>
+          ) : (
+            <span className="feedback-report feedback-report-disabled">
+              <button type="button" disabled>
+                <span className="feedback-option-label">{newText}</span>
+              </button>
             </span>
-            </ConditionalView>
-        )}
-        </div>
-    );
+          )}
+        </ConditionalView>
+      );
+    }
+    return (null);
   }
-  return (null);
-};
+}
 
 export default ReviewInappropriate;

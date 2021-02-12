@@ -24,14 +24,14 @@ export function fetchAPIData(apiUri, params) {
 }
 
 export function postAPIData(apiUri, params) {
-  var data = {};
+  const data = {};
   const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${params}`;
   return Axios.post(url, data)
-  .then((response) => response)
-  .catch((error) => error);
+    .then((response) => response)
+    .catch((error) => error);
 }
 
 export default {
   fetchAPIData,
   postAPIData,
-}
+};

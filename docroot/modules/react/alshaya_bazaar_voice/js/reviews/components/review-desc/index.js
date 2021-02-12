@@ -23,11 +23,11 @@ const ReviewDescription = ({
           <div className="review-text">{ReviewDescriptionData.ReviewText}</div>
           <div className="review-photo">{ReviewDescriptionData.Photo}</div>
           <div className="review-feedback">
-            <ReviewFeedback 
-              NegativeFeedbackCount = {ReviewDescriptionData.TotalNegativeFeedbackCount}
-              PositiveFeedbackCount = {ReviewDescriptionData.TotalPositiveFeedbackCount}
-              IsSyndicatedReview = {ReviewDescriptionData.IsSyndicated}
-              ReviewId = {ReviewDescriptionData.Id}
+            <ReviewFeedback
+              NegativeFeedbackCount={ReviewDescriptionData.TotalNegativeFeedbackCount}
+              PositiveFeedbackCount={ReviewDescriptionData.TotalPositiveFeedbackCount}
+              IsSyndicatedReview={ReviewDescriptionData.IsSyndicated}
+              ReviewId={ReviewDescriptionData.Id}
             />
             <div className="review-feedback-comment">
               <button type="button">{Drupal.t('comment')}</button>
