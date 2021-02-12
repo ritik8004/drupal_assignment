@@ -56,9 +56,9 @@ before_script:
   - apt-get update && apt-get install
   - apt-get install rsync -y
   # Install all dependencies via composer.
-  - composer self-update --1
   - composer validate --no-check-all --ansi
-  - composer install --ansi
+  - composer install
+  - npm install npm@latest -g
 
 build:
   stage: build
@@ -69,7 +69,6 @@ build:
     - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
     # Build appointment middleware.
     - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/appointment
-    - npm install npm@latest -g
 
 validate:
   stage: validate
