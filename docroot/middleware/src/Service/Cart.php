@@ -2063,10 +2063,14 @@ class Cart {
         return $stores;
       }
 
-      foreach ($stores as &$store) {
+      foreach ($stores as $key => &$store) {
         $store_info = $this->drupal->getStoreInfo($store['code']);
         if (empty($store_info) || !is_array($store_info)) {
-          $this->logger->error('Variable: store_info is not an array');
+          // Removing the corrupt store from the list.
+          unset($stores[$key]);
+          $this->logger->error('No store info retrieved for @store_code', [
+            '@store_code' => $store['code'],
+          ]);
           continue;
         }
         $store += $store_info;
