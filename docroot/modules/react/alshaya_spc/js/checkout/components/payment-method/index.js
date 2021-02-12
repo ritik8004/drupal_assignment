@@ -214,7 +214,6 @@ export default class PaymentMethod extends React.Component {
                 postpay={drupalSettings.postpay}
                 postpayWidgetInfo={drupalSettings.postpay_widget_info}
                 cart={cart}
-                finalisePayment={this.finalisePayment}
               />
             </div>
           </ConditionalView>

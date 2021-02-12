@@ -1,10 +1,9 @@
 <?php
 
-namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
+namespace Drupal\alshaya_bnpl\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_bnpl\Helper\AlshayaBnplAPIHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -32,13 +31,6 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
   protected $alshayaBnplWidgetHelper;
 
   /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * The current route matcher service.
    *
    * @var \Drupal\alshaya_bnpl\Helper\AlshayaBnplAPIHelper
@@ -57,7 +49,6 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
       $plugin_id,
       $plugin_definition,
       $container->get('alshaya_bnpl.widget_helper'),
-      $container->get('module_handler'),
       $container->get('alshaya_bnpl.api_helper'),
     );
   }
@@ -73,8 +64,6 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
    *   The plugin implementation definition.
    * @param \Drupal\alshaya_bnpl\Helper\AlshayaBnplWidgetHelper $bnplWidgetHelper
    *   Postpay Widget Helper.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
    * @param \Drupal\alshaya_bnpl\Helper\AlshayaBnplAPIHelper $alshayaBnplAPIHelper
    *   Alshaya BNPL Helper.
    */
@@ -82,11 +71,9 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
                               $plugin_id,
                               $plugin_definition,
                               AlshayaBnplWidgetHelper $bnplWidgetHelper,
-                              ModuleHandlerInterface $module_handler,
                               AlshayaBnplAPIHelper $alshayaBnplAPIHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->alshayaBnplWidgetHelper = $bnplWidgetHelper;
-    $this->moduleHandler = $module_handler;
     $this->alshayaBnplAPIHelper = $alshayaBnplAPIHelper;
   }
 
@@ -94,11 +81,9 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function isAvailable() {
-    if ($this->moduleHandler->moduleExists('alshaya_bnpl')) {
-      $config = $this->alshayaBnplAPIHelper->getBnplApiConfig();
-      if (isset($config['merchant_id']) && !empty($config['merchant_id'])) {
-        return TRUE;
-      }
+    $config = $this->alshayaBnplAPIHelper->getBnplApiConfig();
+    if (!empty($config['merchant_id'])) {
+      return TRUE;
     }
     return FALSE;
   }

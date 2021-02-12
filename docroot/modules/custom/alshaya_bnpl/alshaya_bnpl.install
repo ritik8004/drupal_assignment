@@ -1,0 +1,25 @@
+<?php
+
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_bnpl module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_bnpl_install() {
+  /** @var \Drupal\taxonomy\TermStorage $termStorage */
+  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $term = $termStorage->create([
+    'vid' => 'payment_method',
+    'name' => 'Installments with Postpay',
+    'field_payment_code' => 'postpay'
+  ]);
+  $term->save();
+
+  $term_ar = $term->addTranslation('ar', []);
+  $term_ar->setName('تقسيط بوست باي');
+  $term_ar->save();
+}
