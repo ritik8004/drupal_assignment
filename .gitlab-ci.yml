@@ -18,13 +18,20 @@ cache: &global_cache
   key: ${CI_COMMIT_REF_SLUG}
   policy: pull-push
   paths:
+    - $HOME/.composer/cache
+    - $HOME/.drush/cache
     - $HOME/.npm
     - $HOME/.nvm
+    - $CI_PROJECT_DIR/docroot/middleware/vendor
+    - $CI_PROJECT_DIR/docroot/appointment/vendor
     - $CI_PROJECT_DIR/docroot/core
     - $CI_PROJECT_DIR/docroot/libraries
     - $CI_PROJECT_DIR/docroot/modules/contrib
     - $CI_PROJECT_DIR/docroot/themes/contrib
     - $CI_PROJECT_DIR/docroot/profiles/contrib
+    - $CI_PROJECT_DIR/docroot/themes/custom/amp/node_modules
+    - $CI_PROJECT_DIR/docroot/themes/custom/non_transac/node_modules
+    - $CI_PROJECT_DIR/docroot/themes/custom/transac/node_modules
     - $CI_PROJECT_DIR/vendor
 
 .global_cache:
@@ -44,15 +51,24 @@ cache: &global_cache
       - $MYSQL_DATABASE
       - $MYSQL_ROOT_PASSWORD
 
-before_script: []
+before_script:
+  # Update and install packages.
+  - apt-get update && apt-get install
+  - apt-get install rsync -y
+  # Install all dependencies via composer.
+  - composer self-update --1
+  - composer validate --no-check-all --ansi
+  - composer install --ansi
 
 build:
   stage: build
   extends: .global_cache
   allow_failure: false
   script:
-    - composer validate --no-check-all --ansi
-    - composer install
+    # Build middleware.
+    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
+    # Build appointment middleware.
+    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/appointment
     - npm install npm@latest -g
 
 validate:
