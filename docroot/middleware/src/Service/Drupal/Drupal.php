@@ -103,6 +103,17 @@ class Drupal {
     $request_options['headers']['Host'] = $this->drupalInfo->getDrupalBaseUrl();
     $request_options['timeout'] = $request_options['timeout'] ?? $this->drupalInfo->getPhpTimeout('default');
 
+    // Bypass CloudFlare for all requests from middleware to Drupal.
+    // Rules are added in CF to disable caching for urls having the following
+    // query string.
+    // The query string is added since same APIs are used by MAPP also.
+    if (strpos($url, '?') !== FALSE) {
+      $url .= '&_cf_cache_bypass=1';
+    }
+    else {
+      $url .= '/?_cf_cache_bypass=1';
+    }
+
     return $client->request($method, $url, $request_options);
   }
 
