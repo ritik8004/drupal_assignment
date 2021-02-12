@@ -15,6 +15,10 @@
   .sub-text {
     color: $aura-spc-checkout-text-content;
 
+    html[lang=ar] & {
+      line-height: normal;
+    }
+
     b {
       font-family: $aura-bold;
     }
