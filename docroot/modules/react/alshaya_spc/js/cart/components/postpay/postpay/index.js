@@ -1,7 +1,9 @@
 import React from 'react';
 
 const PostpayCart = (props) => {
-  const { amount, isCartPage, classNames, mobileOnly } = props;
+  const {
+    amount, isCartPage, classNames, mobileOnly,
+  } = props;
   if (isCartPage === true
     && !(mobileOnly && window.innerWidth >= 768)) {
     return (
