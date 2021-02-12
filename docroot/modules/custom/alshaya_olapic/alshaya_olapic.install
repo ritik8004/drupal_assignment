@@ -14,10 +14,10 @@ function alshaya_olapic_install() {
   // Install Olapic widget blocks.
   $manager->updateConfigs(
     [
-      'block.block.alshayaolapichomewidget',
-      'block.block.alshayaolapicplpwidget',
-      'block.block.alshayaolapicpdpwidget',
-      'block.block.alshayaolapicgallerywidget',
+      'block.block.alshayaolapicwidget',
+      'block.block.alshayaolapicwidget_2',
+      'block.block.alshayaolapicwidget_3',
+      'block.block.alshayaolapicwidget_4',
     ],
     'alshaya_olapic',
     'install'

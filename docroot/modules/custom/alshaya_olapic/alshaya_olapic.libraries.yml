@@ -5,3 +5,12 @@ alshaya_olapic_widget:
     - core/drupal
     - core/jquery
     - core/jquery.once
+
+olapic_checkout_pixel:
+  version: 1.x
+  footer: true
+  js:
+    js/olapic_checkout_pixel.js: { }
+  dependencies:
+    - core/drupal
+    - core/jquery

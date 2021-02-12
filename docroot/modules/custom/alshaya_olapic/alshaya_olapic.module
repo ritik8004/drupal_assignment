@@ -21,12 +21,7 @@
         'js' => [
           $olapic_external_script_url => [
             'type' => 'external',
-            'minified' => true,
             'attributes' => [
-              'data-olapic' => "olapic_specific_widget",
-              'data-instance' => "",
-              'data-apikey' => "",
-              'data-lang' => "",
               'async' => "async",
             ],
           ],
@@ -34,4 +29,20 @@
       ];
    }
    return $libraries;
+ }
+
+ /**
+  * Implements hook_theme().
+  */
+ function alshaya_olapic_theme($existing, $type, $theme, $path) {
+   return [
+     'olapic_widget' => [
+       'variables' => [
+         'instance_id' => '',
+         'div_id' => '',
+         'dynamic_product_id' => '',
+       ],
+       'template' => 'olapic_widget',
+     ],
+   ];
  }
