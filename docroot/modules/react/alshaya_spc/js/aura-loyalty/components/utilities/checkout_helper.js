@@ -143,9 +143,39 @@ function redeemAuraPoints(data) {
   }
 }
 
+/**
+ * Utility function to check if `aura_payment` is set in cart.
+ */
+function isPaymentMethodSetAsAura(cart) {
+  if (cart.cart.totals !== undefined
+    && Object.entries(cart.cart.totals).length !== 0
+    && cart.cart.totals.paidWithAura !== 0
+    && cart.cart.totals.balancePayable <= 0
+    && cart.cart.payment.method === 'aura_payment') {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Utility function to check if full payment is being done by AURA.
+ */
+function isFullPaymentDoneByAura(cart) {
+  if (cart.cart.totals !== undefined
+    && Object.keys(cart.cart.totals).length !== 0
+    && cart.cart.totals.balancePayable <= 0) {
+    return true;
+  }
+
+  return false;
+}
+
 export {
   getUserInput,
   processCheckoutCart,
   getMembersToEarnMessage,
   redeemAuraPoints,
+  isPaymentMethodSetAsAura,
+  isFullPaymentDoneByAura,
 };

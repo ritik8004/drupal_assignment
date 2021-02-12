@@ -15,6 +15,10 @@ import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import isAuraEnabled from '../../../../../js/utilities/helper';
+import {
+  isFullPaymentDoneByAura,
+  isPaymentMethodSetAsAura,
+} from '../../../aura-loyalty/components/utilities/checkout_helper';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -100,13 +104,9 @@ export default class PaymentMethods extends React.Component {
       return false;
     }
 
-    // We disable the other payment methods when full payment is done by aura points.
-    if (isAuraEnabled()
-      && cart.cart.totals !== undefined
-      && Object.entries(cart.cart.totals).length !== 0
-      && cart.cart.totals.paidWithAura !== 0
-      && cart.cart.totals.balancePayable <= 0
-      && cart.cart.payment.method === 'aura_payment') {
+    // We disable the other payment methods when full payment is done by aura points
+    // and payment method is set as `aura_payment`.
+    if (isAuraEnabled() && isPaymentMethodSetAsAura(cart)) {
       return false;
     }
 
@@ -116,13 +116,10 @@ export default class PaymentMethods extends React.Component {
   selectDefault = () => {
     const { cart } = this.props;
 
-    if (isAuraEnabled()) {
-      if (cart.cart.totals !== undefined
-        && Object.keys(cart.cart.totals).length !== 0
-        && cart.cart.totals.balancePayable <= 0) {
-        this.changePaymentMethod('aura_payment');
-        return;
-      }
+    // If full payment is being done by aura then we change payment method to `aura_payment`.
+    if (isAuraEnabled() && isFullPaymentDoneByAura(cart)) {
+      this.changePaymentMethod('aura_payment');
+      return;
     }
 
     if (!(this.isActive())) {

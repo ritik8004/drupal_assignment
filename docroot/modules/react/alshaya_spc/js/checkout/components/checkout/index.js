@@ -102,7 +102,7 @@ export default class Checkout extends React.Component {
             PromotionsDynamicLabelsUtil.apply(result);
           }
 
-          // Event listerner to update any update in totals in cart object.
+          // Event listerner to update any change in totals in cart object.
           document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
         });
       } else {
