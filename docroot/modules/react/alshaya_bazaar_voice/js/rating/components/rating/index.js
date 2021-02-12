@@ -1,5 +1,5 @@
 import React from 'react';
-import fetchAPIData from '../../../utilities/api/apiData';
+import {fetchAPIData} from '../../../utilities/api/apiData';
 import InlineRating from '../widgets/InlineRating';
 import {
   removeFullScreenLoader,
