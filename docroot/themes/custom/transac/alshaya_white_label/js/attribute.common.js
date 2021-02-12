@@ -11,6 +11,8 @@
    *
    * @param {object} element
    *   The HTML element inside which we want to convert select list into unformatted list.
+   * @param {boolean} isGroupData
+   *   If attribute is grouped.
    */
   Drupal.convertSelectListtoUnformattedList = function (element, isGroupData) {
     element.once('convert-select-list-to-unformatted-list').each(function () {
