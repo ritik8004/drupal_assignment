@@ -23,11 +23,50 @@
   }
 
   &.top {
+    &-left {
+      position: absolute;
+      top: 0.625rem;
+      #{$left}: 0.625rem;
+      #{$right}: inherit;
+    }
+
     &-right {
       position: absolute;
       top: 0.625rem;
       #{$right}: 0.625rem;
       #{$left}: inherit;
+    }
+  }
+
+  &.bottom {
+    &-left {
+      position: absolute;
+      bottom: 6rem;
+      #{$left}: 0.625rem;
+      #{$right}: inherit;
+
+      @include breakpoint($tablet) {
+        bottom: 7.2rem;
+      }
+
+      @include breakpoint($desktop) {
+        bottom: 12.5rem;
+      }
+    }
+
+    &-right {
+      position: absolute;
+      bottom: 6rem;
+      #{$right}: 0.625rem;
+      #{$left}: inherit;
+
+      @include breakpoint($tablet) {
+        bottom: 7.2rem;
+      }
+
+      @include breakpoint($desktop) {
+        bottom: 12.5rem;
+      }
     }
   }
 }
