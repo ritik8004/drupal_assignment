@@ -1,4 +1,8 @@
 services:
+  logger.channel.alshaya_spc:
+    parent: logger.channel_base
+    arguments: ['alshaya_spc']
+
   alshaya_spc.route_subscriber:
     class: Drupal\alshaya_spc\Routing\RouteSubscriber
     tags:
@@ -63,4 +67,8 @@ services:
     tags:
       - { name: event_subscriber }
     arguments:
-      - '@logger.factory'
+      - '@logger.channel.alshaya_spc'
+      - '@purge.purgers'
+      - '@purge.processors'
+      - '@purge.invalidation.factory'
+
