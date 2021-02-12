@@ -15,10 +15,8 @@ function alshaya_bnpl_install() {
   $term = $termStorage->create([
     'vid' => 'payment_method',
     'name' => 'Installments with Postpay',
+    'field_payment_code' => 'postpay'
   ]);
-
-  $term->get('field_payment_code')->setValue('postpay');
-
   $term->save();
 
   $term_ar = $term->addTranslation('ar', []);

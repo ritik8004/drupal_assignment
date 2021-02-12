@@ -82,7 +82,7 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
    */
   public function isAvailable() {
     $config = $this->alshayaBnplAPIHelper->getBnplApiConfig();
-    if (isset($config['merchant_id']) && !empty($config['merchant_id'])) {
+    if (!empty($config['merchant_id'])) {
       return TRUE;
     }
     return FALSE;

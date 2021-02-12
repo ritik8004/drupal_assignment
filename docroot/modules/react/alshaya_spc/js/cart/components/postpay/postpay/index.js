@@ -1,10 +1,8 @@
 import React from 'react';
 
-const PostpayCart = ({
-  amount, isCartPage, classNames, mobileOnly,
-}) => {
-  if (typeof drupalSettings.postpay_widget_info !== 'undefined'
-    && isCartPage !== false
+const PostpayCart = (props) => {
+  const { amount, isCartPage, classNames, mobileOnly } = props;
+  if (isCartPage === true
     && !(mobileOnly && window.innerWidth >= 768)) {
     return (
       <div

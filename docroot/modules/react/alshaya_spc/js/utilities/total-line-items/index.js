@@ -4,7 +4,8 @@ import VatText from '../vat-text';
 import ConditionalView from '../../common/components/conditional-view';
 import getStringMessage from '../strings';
 import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
-import PostpayCart from '../../cart/components/cart-postpay';
+import PostpayCart from '../../cart/components/postpay/postpay';
+import isPostpayEnabled from '../helper';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -119,13 +120,16 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
-          <PostpayCart
-            ref={this.PostpayCart}
-            amount={totals.base_grand_total}
-            isCartPage={isCartPage}
-            classNames="spc-postpay"
-            mobileOnly={false}
-          />
+          {isPostpayEnabled()
+            ? (
+              <PostpayCart
+                amount={totals.base_grand_total}
+                isCartPage={isCartPage}
+                classNames="spc-postpay"
+                mobileOnly={false}
+              />
+            )
+            : null}
         </div>
       </div>
     );
