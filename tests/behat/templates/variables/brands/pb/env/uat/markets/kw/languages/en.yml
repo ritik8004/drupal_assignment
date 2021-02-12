@@ -29,3 +29,6 @@ variables:
   filter_1: 'final_price'
   filter_2: ''
   filter_3: ''
+  create_account: 'Create An Account'
+  sign_in: 'Sign In'
+  find_store: 'Find A Store'
