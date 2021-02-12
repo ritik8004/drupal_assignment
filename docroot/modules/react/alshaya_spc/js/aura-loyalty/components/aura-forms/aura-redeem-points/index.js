@@ -11,6 +11,7 @@ import { redeemAuraPoints } from '../../utilities/checkout_helper';
 import { getUserDetails, getPointToPriceRatio } from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import PriceElement from '../../../../utilities/special-price/PriceElement';
+import dispatchCustomEvent from '../../../../utilities/events';
 
 class AuraFormRedeemPoints extends React.Component {
   constructor(props) {
@@ -25,10 +26,14 @@ class AuraFormRedeemPoints extends React.Component {
 
   componentDidMount() {
     document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
+    // Event listener for any change in payment methods section.
+    // On payment method update, we recalculate and prefill redemption section.
     document.addEventListener('refreshCompletePurchaseSection', this.updatePointsAndMoney, false);
 
     const { totals } = this.props;
 
+    // If amount paid with aura is undefined or null, we calculate and
+    // refill redemption input elements and return.
     if (totals.paidWithAura === undefined || totals.paidWithAura === null) {
       this.updatePointsAndMoney();
       return;
@@ -47,6 +52,8 @@ class AuraFormRedeemPoints extends React.Component {
   updatePointsAndMoney = () => {
     const { totals } = this.props;
 
+    // If amount paid with aura is not present in cart totals, we calculate
+    // points and money to refill redemption input elements.
     if (totals.paidWithAura === undefined || totals.paidWithAura === null) {
       const pointsToPrefill = this.redemptionLimit();
 
@@ -86,13 +93,25 @@ class AuraFormRedeemPoints extends React.Component {
       return;
     }
 
+    const { totals } = this.props;
+    let cartTotals = totals;
+
     if (action === 'set points') {
+      // Add aura details in totals.
+      cartTotals = { ...cartTotals, ...stateValues };
+
       stateValues.auraTransaction = true;
       // Add a class for FE purposes.
       document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.add('redeemed');
     } else if (action === 'remove points') {
       // Reset redemption input fields to initial value.
       this.resetInputs();
+
+      // Remove all aura related keys from totals if present.
+      Object.entries(stateValues).forEach(([key]) => {
+        delete cartTotals[key];
+      });
+
       // Remove class.
       document.querySelector('.spc-aura-redeem-points-form-wrapper').classList.remove('redeemed');
     }
@@ -100,6 +119,9 @@ class AuraFormRedeemPoints extends React.Component {
     this.setState({
       ...stateValues,
     });
+
+    // Dispatch an event to update totals in cart object.
+    dispatchCustomEvent('updateTotalsInCart', { totals: cartTotals });
   };
 
   convertPointsToMoney = (e) => {

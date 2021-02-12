@@ -91,13 +91,16 @@ class AuraCheckoutRewards extends React.Component {
   isActive = () => {
     const allAuraStatus = getAllAuraStatus();
     const { loyaltyStatus } = this.state;
+    const { cart } = this.props;
 
+    // We have redemption available only for linked and verified users so we proceed
+    // further to show/hide aura section only for linked and verified user.
     if (loyaltyStatus !== allAuraStatus.APC_LINKED_VERIFIED) {
       return true;
     }
 
-    const { cart } = this.props;
-
+    // If payment methods is not defined or empty, return false
+    // to set aura section as in-active.
     if (cart.cart.payment.methods === undefined || cart.cart.payment.methods.length === 0) {
       return false;
     }

@@ -126,6 +126,7 @@ function redeemAuraPoints(data) {
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
+      removeFullScreenLoader();
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status) {
           stateValues = {
@@ -138,7 +139,6 @@ function redeemAuraPoints(data) {
         stateValues = result.data || { error: true };
       }
       dispatchCustomEvent('auraRedeemPointsApiInvoked', { stateValues, action: data.action });
-      removeFullScreenLoader();
     });
   }
 }

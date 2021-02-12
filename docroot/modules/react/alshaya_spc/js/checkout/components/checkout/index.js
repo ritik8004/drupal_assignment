@@ -102,10 +102,8 @@ export default class Checkout extends React.Component {
             PromotionsDynamicLabelsUtil.apply(result);
           }
 
-          // If aura is enabled, we add a listner to track aura points being redeemed.
-          if (isAuraEnabled()) {
-            document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
-          }
+          // Event listerner to update any update in totals in cart object.
+          document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
         });
       } else {
         redirectToCart();
@@ -198,33 +196,14 @@ export default class Checkout extends React.Component {
     );
   };
 
-  // Event listener callback to add aura details in cart data.
-  handleRedeemPointsEvent = (data) => {
+  // Event listener to update totals in cart.
+  handleTotalsUpdateEvent = (event) => {
     const { cart } = this.state;
-    const { stateValues, action } = data.detail;
+    const { totals } = event.detail;
+    const cartData = cart;
+    cartData.cart.totals = { ...cartData.cart.totals, ...totals };
 
-    if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
-      return;
-    }
-
-    const auraUpdatedCartData = cart;
-
-    // If action is to remove points then remove all
-    // aura related keys from totals if present.
-    if (action === 'remove points') {
-      Object.entries(stateValues).forEach(([key]) => {
-        delete auraUpdatedCartData.cart.totals[key];
-      });
-    }
-
-    // If action to set points then add aura details in totals.
-    if (action === 'set points') {
-      auraUpdatedCartData.cart.totals = { ...auraUpdatedCartData.cart.totals, ...stateValues };
-    }
-
-    this.setState({
-      cart: { ...auraUpdatedCartData, auraRedemptionAction: action },
-    });
+    this.setState({ cart: cartData });
   };
 
   render() {

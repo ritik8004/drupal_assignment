@@ -105,7 +105,7 @@ export default class PaymentMethods extends React.Component {
       && cart.cart.totals !== undefined
       && Object.entries(cart.cart.totals).length !== 0
       && cart.cart.totals.paidWithAura !== 0
-      && cart.cart.totals.balancePayable === 0
+      && cart.cart.totals.balancePayable <= 0
       && cart.cart.payment.method === 'aura_payment') {
       return false;
     }
@@ -221,7 +221,7 @@ export default class PaymentMethods extends React.Component {
   changePaymentMethod = (method) => {
     const { cart, refreshCart } = this.props;
 
-    if (!this.isActive() && !isAuraEnabled()) {
+    if (!this.isActive()) {
       return;
     }
 
