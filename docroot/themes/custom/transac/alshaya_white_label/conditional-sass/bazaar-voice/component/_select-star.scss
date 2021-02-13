@@ -1,0 +1,36 @@
+// select star
+.select-star__wrap {
+  display: inline-block;
+  font-size: 1rem;
+}
+
+.select-star__wrap::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.select-star-rating__ico {
+  padding-#{$left}: 0.125rem;
+  cursor: pointer;
+
+  &.ratingfull {
+    @include icon(ratingfull) {
+      font-size: 2rem;
+    }
+  }
+
+  &.rating {
+    @include icon(rating) {
+      font-size: 2rem;
+    }
+  }
+}
+
+.select-star-rating__ico:last-child {
+  padding-#{$left}: 0;
+}
+
+.select-star-rating__input {
+  display: none;
+}
