@@ -1,0 +1,65 @@
+@mixin bv-placeholder-label() {
+  font-size: 0.875rem;
+  position: absolute;
+  #{$left}: 0;
+  top: 0;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+@mixin bv-placeholder-active() {
+  top: -1rem;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+
+.bv-type-textfield,
+.bv-type-textarea {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+// Type = Text.
+.bv-type-textfield {
+  input[type=text],
+  input[type=email] {
+    height: 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  label {
+    @include bv-placeholder-label;
+  }
+
+  input:focus ~ label,
+  input.focus ~ label {
+    @include bv-placeholder-active;
+  }
+}
+
+// Type = TextArea.
+.bv-type-textarea {
+  height: 1.5rem;
+  font-size: 0.875rem;
+
+  label {
+    @include bv-placeholder-label;
+  }
+
+  textarea:focus ~ label,
+  textarea.focus ~ label {
+    @include bv-placeholder-active;
+  }
+}
+
+// Type = Select.
+.bv-type-select {
+  margin-bottom: 2rem;
+
+  label {
+    font-size: 0.75rem;
+    color: #333;
+  }
+}
