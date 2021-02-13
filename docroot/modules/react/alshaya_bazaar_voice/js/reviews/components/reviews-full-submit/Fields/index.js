@@ -1,15 +1,13 @@
 import React from 'react';
 
 const TextField = ({
-  field, fieldChanged, value,
+  field, fieldChanged,
 }) => (
-  <div key={field['#id']}>
-    <label htmlFor={field['#id']}>{field['#title']}</label>
+  <div className="bv-type-textfield" key={field['#id']}>
     <input
       type="text"
       id={field['#id']}
       name={field['#id']}
-      value={value === null ? '' : value}
       required={field['#required']}
       minLength={field['#minlength']}
       maxLength={field['#maxlength']}
@@ -19,60 +17,36 @@ const TextField = ({
         fieldChanged(field['#id'], e.target.value);
       }}
     />
+    <div className="c-input__bar" />
+    <label htmlFor={field['#id']}>{field['#title']}</label>
+    <div id="bv-error" className="error" />
   </div>
 );
 
 const TextArea = ({
-  field, fieldChanged, value,
+  field, fieldChanged,
 }) => (
-  <div key={field['#id']}>
-    <label htmlFor={field['#id']}>{field['#title']}</label>
+  <div className="bv-type-textarea" key={field['#id']}>
     <textarea
       id={field['#id']}
       name={field['#id']}
-      value={value === null ? '' : value}
       required={field['#required']}
       minLength={field['#minlength']}
       maxLength={field['#maxlength']}
       default_value={field['#default_value']}
       hidden={field['#hidden']}
       onChange={(e) => {
-        fieldChanged(field['#id'], e.target.value);
+        fieldChanged(field['#id'], e.value);
       }}
     />
+    <div className="c-input__bar" />
+    <label htmlFor={field['#id']}>{field['#title']}</label>
+    <div id="bv-error" className="error" />
   </div>
 );
 
-const Select = ({
-  field, fieldChanged, value,
-}) => {
-  const Options = field['#options'];
-  return (
-    <div key={field['#id']}>
-      <label htmlFor={field['#id']}>{field['#title']}</label>
-      <select
-        id={field['#id']}
-        name={field['#id']}
-        value={value === null ? '' : value}
-        required={field['#required']}
-        default_value={field['#default_value']}
-        hidden={field['#hidden']}
-        onChange={(e) => {
-          fieldChanged(field['#id'], e.target.value);
-        }}
-      >
-        {Object.keys(Options).map((option) => (
-          <option key={Options[option]} value={option === '' ? 0 : option}>
-            {Options[option] === '' ? Drupal.t('Select') : Options[option]}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
-
 const Checkbox = ({
-  field, fieldChanged, value,
+  field, fieldChanged,
 }) => (
   <div key={field['#id']}>
     <label htmlFor={field['#id']}>{field['#title']}</label>
@@ -81,12 +55,11 @@ const Checkbox = ({
       id={field['#id']}
       label={field['#title']}
       name={field['#id']}
-      value={value === null ? '' : value}
       required={field['#required']}
       default_value={field['#default_value']}
       hidden={field['#hidden']}
       onChange={(e) => {
-        fieldChanged(field['#id'], e.target.value);
+        fieldChanged(field['#id'], e.value);
       }}
     />
   </div>
@@ -95,6 +68,5 @@ const Checkbox = ({
 export {
   TextField,
   TextArea,
-  Select,
   Checkbox,
 };
