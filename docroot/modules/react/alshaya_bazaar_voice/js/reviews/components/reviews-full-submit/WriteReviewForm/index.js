@@ -1,36 +1,37 @@
 import React from 'react';
-import {
-  TextField, TextArea, Checkbox,
-} from '../Fields';
-import SelectField from '../Fields/SelectField';
 import SectionTitle from '../../../../utilities/section-title';
-import SelectStar from '../Fields/SelectStar';
-import RangeSlider from '../Fields/RangeSlider';
+import DynamicFormField from '../DynamicFormField';
 
 export default class WriteReviewForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
+  handleSubmit = () => {
+    // e.preventDefault();
+    // if (validateForm(this.state.errors)) {
+    //   console.info('Valid Form');
+    // } else {
+    //   console.error('Invalid Form');
+    // }
   }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    // console.log(fieldId);
-    // console.log(value);
-  }
-
-  fieldChanged = (e) => {
-    e.preventDefault();
-    // console.log(fieldId);
-    // console.log(value);
-  };
 
   render() {
+    const dynamicFields = [];
     const {
       closeModal,
       formData,
     } = this.props;
+
+    Object.entries(formData).forEach(
+      ([key, field]) => {
+        // console.log(key);
+        // console.log(field);
+        dynamicFields.push(
+          <DynamicFormField
+            key={key}
+            field_key={key}
+            field={field}
+          />,
+        );
+      },
+    );
     return (
       <div className="write-review-form">
         <div className="title-block">
@@ -47,60 +48,28 @@ export default class WriteReviewForm extends React.Component {
         </div>
         <div className="write-review-form-sidebar">
           <div className="write-review-form-wrapper">
-            <form onSubmit={this.handleSubmit} noValidate>
-              {Object.keys(formData).map((fieldData) => {
-                switch (formData[fieldData]['#type']) {
-                  case 'textfield':
-                    if ((formData[fieldData]['#id']) === 'rating') {
-                      return (<SelectStar />);
-                    }
-                    return (
-                      <TextField
-                        field={formData[fieldData]}
-                        fieldChanged={this.fieldChanged}
-                        key={formData[fieldData]['#id']}
-                      />
-                    );
-
-                  case 'textarea':
-                    return (
-                      <TextArea
-                        field={formData[fieldData]}
-                        fieldChanged={this.fieldChanged}
-                        key={formData[fieldData]['#id']}
-                      />
-                    );
-                  case 'select':
-                    if ((formData[fieldData]['#id']) === 'rating_Fit_22') {
-                      return (<RangeSlider field={formData[fieldData]} />);
-                    }
-                    return (
-                      <SelectField
-                        field={formData[fieldData]}
-                        fieldChanged={this.fieldChanged}
-                        key={formData[fieldData]['#id']}
-                      />
-                    );
-
-                  case 'checkbox':
-                    return (
-                      <Checkbox
-                        field={formData[fieldData]}
-                        fieldChanged={this.fieldChanged}
-                        key={formData[fieldData]['#id']}
-                      />
-                    );
-                  default:
-                    return (
-                      <div>{Drupal.t('No field type is found.')}</div>
-                    );
-                }
-              })}
-              <div className="cancel">
-                <button type="button">{Drupal.t('Cancel')}</button>
+            <form
+              className="write-review-form-add"
+              onSubmit={(e) => this.handleSubmit(e)}
+            >
+              <div className="write-review-fields">
+                {dynamicFields}
               </div>
-              <div className="preview">
-                <button type="submit">{Drupal.t('Preview')}</button>
+              <div className="write-review-form-actions" id="review-form-action">
+                <button
+                  id="cancel-write-review"
+                  className="write-review-form-cancel"
+                  type="button"
+                >
+                  {Drupal.t('Cancel')}
+                </button>
+                <button
+                  id="preview-write-review"
+                  className="write-review-form-preview"
+                  type="submit"
+                >
+                  {Drupal.t('Preview')}
+                </button>
               </div>
             </form>
           </div>

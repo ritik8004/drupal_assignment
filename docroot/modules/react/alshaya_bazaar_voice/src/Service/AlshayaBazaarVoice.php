@@ -177,40 +177,36 @@ class AlshayaBazaarVoice {
    *   Updated form fields in webform.
    */
   public function updateAlshayaBvWriteReviewWebForm($fields) {
+    $is_new = 0;
+
     if ($fields) {
-      $bv_form_fields = [];
+      // Load webform fields by form id.
+      $webforms = $this->entityTypeManager->getStorage('webform')
+        ->loadByProperties(['id' => self::ALSHAYA_BAZAARVOICE_FORM_ID]);
+      $webform = reset($webforms);
+
+      $write_review_form_fields = [];
+
       foreach ($fields as $key => $value) {
         $key = preg_replace("/[^A-Za-z0-9-]/", '_', $key);
         $key = strtolower($key);
         $id = preg_replace("/[^A-Za-z0-9-]/", '_', $value['Id']);
         switch ($value['Type']) {
-          case 'TextInput':
-          case 'IntegerInput':
-            $bv_form_fields[$key] = [
-              '#type' => 'textfield',
-              '#required' => $value['Required'],
-              '#title' => $value['Label'],
-              '#value' => $value['Value'],
-              '#minlength' => $value['MinLength'],
-              '#id' => $id,
-              '#maxlength' => $value['MaxLength'],
-              '#default_value' => $value['Default'],
-            ];
-            break;
-
           case 'BooleanInput':
-            $bv_form_fields[$key] = [
+            $write_review_form_fields[$key] = [
               '#type' => 'checkbox',
               '#required' => $value['Required'],
               '#title' => $value['Label'],
               '#value' => $value['Value'],
               '#id' => $id,
               '#default_value' => $value['Default'],
+              '#group_type' => 'boolean',
+              '#visible' => FALSE,
             ];
             break;
 
           case 'TextAreaInput':
-            $bv_form_fields[$key] = [
+            $write_review_form_fields[$key] = [
               '#type' => 'textarea',
               '#required' => $value['Required'],
               '#title' => $value['Label'],
@@ -219,35 +215,52 @@ class AlshayaBazaarVoice {
               '#id' => $id,
               '#maxlength' => $value['MaxLength'],
               '#default_value' => $value['Default'],
+              '#group_type' => 'textarea',
+              '#visible' => FALSE,
             ];
             break;
 
           case 'SelectInput':
             $options = $this->processOptionsField($value['Options']);
-            $bv_form_fields[$key] = [
+            $write_review_form_fields[$key] = [
               '#type' => 'select',
               '#title' => $value['Label'],
               '#required' => $value['Required'],
               '#default_value' => $options['default'],
               '#options' => $options['options'],
               '#id' => $id,
+              '#group_type' => 'select',
+              '#visible' => FALSE,
             ];
             break;
 
           default:
-            break;
+            $write_review_form_fields[$key] = [
+              '#type' => 'textfield',
+              '#required' => $value['Required'],
+              '#title' => $value['Label'],
+              '#value' => $value['Value'],
+              '#minlength' => $value['MinLength'],
+              '#id' => $id,
+              '#maxlength' => $value['MaxLength'],
+              '#default_value' => $value['Default'],
+              '#group_type' => 'textfield',
+              '#visible' => FALSE,
+            ];
+        }
+        // Ignore the fields exist already.
+        if (!in_array($key, array_keys($webform->getElementsDecoded()))) {
+          // Add BazaarVoice fields in webform.
+          $new_element = array_merge($webform->getElementsDecoded(), $write_review_form_fields);
+          $updated = $webform->setElements($new_element)->save();
+          if ($updated) {
+            $is_new = 1;
+          }
         }
       }
-
-      // Update/Add BazaarVoice webform fields.
-      $webforms = $this->entityTypeManager->getStorage('webform')
-        ->loadByProperties(['id' => self::ALSHAYA_BAZAARVOICE_FORM_ID]);
-
-      $webform = reset($webforms);
-      $new_element = array_merge($webform->getElementsDecoded(), $bv_form_fields);
-
-      return $webform->setElements($new_element)->save();
     }
+
+    return $is_new;
   }
 
   /**
@@ -281,6 +294,17 @@ class AlshayaBazaarVoice {
     $webform = reset($webforms);
 
     return $webform->getElementsDecoded();
+  }
+
+  /**
+   * BazaarVoice web form fields configs.
+   *
+   * @return array
+   *   BazaarVoice web form fields configs.
+   */
+  public function getFileContents($url) {
+    $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url);
+    return $result;
   }
 
 }

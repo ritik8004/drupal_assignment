@@ -4,3 +4,9 @@ alshaya_bazaar_voice.bv_form_config:
     _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::getBazaarVoiceFormConfig'
   requirements:
     _access: 'TRUE'
+alshaya_bazaar_voice.upload:
+  path: '/uploadfile'
+  defaults:
+    _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::uploadFile'
+  requirements:
+    _access: 'TRUE'

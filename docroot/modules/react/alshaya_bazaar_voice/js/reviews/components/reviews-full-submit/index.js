@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../alshaya_spc/js/utilities/checkout_util';
-import formData from '../../../utilities/api/formData';
+import { getFormConfig } from '../../../utilities/api/formData';
 import Loading from '../../../utilities/loading';
 import WithModal from './with-modal';
 import WriteReviewForm from './WriteReviewForm';
@@ -20,7 +20,7 @@ export default class WriteReview extends React.Component {
   componentDidMount() {
     showFullScreenLoader();
     const apiUri = '/bv-form-config';
-    const apiData = formData(apiUri);
+    const apiData = getFormConfig(apiUri);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.status === 200 && result.statusText === 'OK') {

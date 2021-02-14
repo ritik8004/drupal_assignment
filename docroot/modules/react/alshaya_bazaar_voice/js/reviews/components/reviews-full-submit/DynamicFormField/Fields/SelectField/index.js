@@ -22,13 +22,18 @@ export default class SelectField extends React.Component {
 
   render() {
     const {
-      field, fieldChanged,
+      required,
+      id,
+      label,
+      defaultValue,
+      options,
+      visible,
     } = this.props;
-    const Options = field['#options'];
-    const result = Object.keys(Options).map((key) => ({ value: key, label: Options[key] }));
+    const result = Object.keys(options).map((key) => ({ value: key, label: options[key] }));
+
     return (
-      <div key={field['#id']}>
-        <label htmlFor={field['#id']}>{field['#title']}</label>
+      <div key={id}>
+        <label htmlFor={label}>{label}</label>
         <Select
           ref={this.selectRef}
           classNamePrefix="bvSelect"
@@ -36,16 +41,13 @@ export default class SelectField extends React.Component {
           onMenuOpen={this.onMenuOpen}
           onMenuClose={this.onMenuClose}
           options={result}
-          id={field['#id']}
-          name={field['#id']}
-          required={field['#required']}
-          default_value={field['#default_value']}
+          id={id}
+          name={id}
+          required={required}
+          default_value={defaultValue}
           isSearchable={false}
           isDisabled={false}
-          hidden={field['#hidden']}
-          onChange={(e) => {
-            fieldChanged(field['#id'], e.value);
-          }}
+          hidden={visible}
         />
       </div>
     );

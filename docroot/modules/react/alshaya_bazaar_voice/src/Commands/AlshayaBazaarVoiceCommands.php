@@ -242,9 +242,12 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
    *   Sync fields in webform getting from bazaarvoice config hub.
    */
   public function syncFieldsFromBvPortal($product_id = '') {
-    // Force reset all the fields configs.
-    if (!$this->alshayaBazaarVoice->syncFieldsFromBvSubmissionForm($product_id)) {
+    $sync_field = $this->alshayaBazaarVoice->syncFieldsFromBvSubmissionForm($product_id);
+    if ($sync_field === NULL) {
       $this->io()->error(dt('Sync fields is not done.'));
+    }
+    elseif ($sync_field === 0) {
+      $this->io()->warning(dt('No new field found for sync.'));
     }
     else {
       $this->io()->success(dt('Sync fields done successfully.'));
