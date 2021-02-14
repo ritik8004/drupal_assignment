@@ -1,7 +1,7 @@
 variables:
   url_base_uri: 'https://vssa3-uat.factory.alshaya.com/en'
   collection_filter: 'Collection'
-  sort_filter: 'sort by'
+  sort_filter: 'Sort by'
   price_filter: 'Price'
   brand_filter: ''
   color_filter: 'Color'
