@@ -23,7 +23,9 @@ const ReviewHistogram = ({
                 starPercentage={overallSummary[item].ReviewStatistics.AverageOverallRating}
               />
               <div className="average-rating">
-                {(parseFloat(overallSummary[item].ReviewStatistics.AverageOverallRating).toFixed(1))}
+                {(
+                  parseFloat(overallSummary[item].ReviewStatistics.AverageOverallRating).toFixed(1)
+                )}
               </div>
               <div className="histogram-data">
                 <div className="histogram-title">

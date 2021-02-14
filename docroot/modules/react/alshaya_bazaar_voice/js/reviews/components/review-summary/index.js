@@ -12,11 +12,9 @@ const ReviewSummary = () => {
   if (ReviewsSummary !== undefined) {
     return (
       <div className="reviews-wrapper">
-        <div class="histogram-data-section">
+        <div className="histogram-data-section">
           <div className="rating-wrapper">
-            <ReviewHistogram
-               overallSummary={ReviewsProduct}
-            />
+            <ReviewHistogram overallSummary={ReviewsProduct} />
           </div>
         </div>
         { Object.keys(ReviewsSummary).map((item) => (
