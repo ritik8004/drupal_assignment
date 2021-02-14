@@ -1,13 +1,13 @@
 import React from 'react';
 
 const DisplayStar = ({
-  StarPercentage,
+  starPercentage,
 }) => (
   <div className="star-ratings-wrapper">
     <div className="inline-star">
       <div
         className="star-ratings-front"
-        style={{ width: `${((parseFloat(StarPercentage).toFixed(1) * 100) / 5)}%` }}
+        style={{ width: `${((parseFloat(starPercentage).toFixed(1) * 100) / 5)}%` }}
       >
         <span className="icon-ic_ratingfull" />
         <span className="icon-ic_ratingfull" />
