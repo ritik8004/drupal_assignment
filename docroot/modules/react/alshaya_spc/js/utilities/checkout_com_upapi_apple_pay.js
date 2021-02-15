@@ -59,8 +59,8 @@ const CheckoutComUpapiApplePay = {
   },
 
   onValidateMerchant: (event) => {
-    const controllerUrl = Drupal.url('checkoutcom/applepay/validate');
-    const validationUrl = `${controllerUrl}?u=${event.validationURL}&type=upapi`;
+    const controllerUrl = Drupal.url('checkoutcom/upapi/applepay/validate');
+    const validationUrl = `${controllerUrl}?u=${event.validationURL}`;
     Axios.get(validationUrl).then((merchantSession) => {
       applePaySessionObject.completeMerchantValidation(merchantSession.data);
     }).catch((error) => {
@@ -92,7 +92,7 @@ const CheckoutComUpapiApplePay = {
     };
     Axios.post(url, params, {
       headers: {
-        Authorization: drupalSettings.checkoutComUpapiApplePay.public_key,
+        Authorization: upApiApplePayConfig.public_key,
       },
     }).then((response) => {
       if (response.data.type !== undefined && response.data.type === 'applepay') {
@@ -153,25 +153,26 @@ const CheckoutComUpapiApplePay = {
   },
 
   startPayment: (total) => {
+    const upApiApplePayConfig = getUpapiApplePayConfig();
     // Some features are not supported in some versions, this is browser
     // specific so done in JS.
     // Mada is supported only from version 5 onwards.
-    let networks = drupalSettings.checkoutComUpapiApplePay.apple_pay_supported_networks.split(',');
+    let networks = upApiApplePayConfig.apple_pay_supported_networks.split(',');
     if (CheckoutComUpapiApplePay.getApplePaySupportedVersion() < 5) {
       networks = networks.filter((element) => element !== 'mada');
     }
 
     // Prepare the parameters.
     const paymentRequest = {
-      merchantIdentifier: drupalSettings.checkoutComUpapiApplePay.apple_pay_merchant_id,
-      currencyCode: drupalSettings.checkoutComUpapiApplePay.currencyCode,
-      countryCode: drupalSettings.checkoutComUpapiApplePay.countryId,
+      merchantIdentifier: upApiApplePayConfig.apple_pay_merchant_id,
+      currencyCode: upApiApplePayConfig.currencyCode,
+      countryCode: upApiApplePayConfig.countryId,
       total: {
-        label: drupalSettings.checkoutComUpapiApplePay.storeName,
+        label: upApiApplePayConfig.storeName,
         amount: total,
       },
       supportedNetworks: networks,
-      merchantCapabilities: drupalSettings.checkoutComUpapiApplePay.apple_pay_merchant_capabilities.split(','),
+      merchantCapabilities: upApiApplePayConfig.apple_pay_merchant_capabilities.split(','),
     };
 
     // Start the payment session.

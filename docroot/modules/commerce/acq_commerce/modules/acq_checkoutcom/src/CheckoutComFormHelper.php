@@ -208,30 +208,19 @@ class CheckoutComFormHelper {
   /**
    * Get all apple pay configuration.
    *
-   * @param mixed $type
-   *   Apple-pay or upapi.
-   *
    * @return array
    *   Apple pay config.
    */
-  public function getApplePayConfig($type = NULL) {
+  public function getApplePayConfig() {
     // Data from API.
-    if ($type == 'upapi') {
-      $upapiConfig = $this->apiHelper->getCheckoutcomUpapiApplePayConfig();
-      $settings = [
-        'merchantIdentifier' => $upapiConfig['apple_pay_merchant_id'],
-      ];
-    }
-    else {
-      $settings = [
-        'merchantIdentifier' => $this->apiHelper->getCheckoutcomConfig('applepay_merchant_id'),
-        'supportedNetworks' => $this->apiHelper->getCheckoutcomConfig('applepay_supported_networks'),
-        // Adding supports3DS hardcoded here same as code in Magento plugin from
-        // where we have copied the logic.
-        'merchantCapabilities' => 'supports3DS,' . $this->apiHelper->getCheckoutcomConfig('applepay_merchant_capabilities'),
-        'supportedCountries' => $this->apiHelper->getCheckoutcomConfig('applepay_supported_countries'),
-      ];
-    }
+    $settings = [
+      'merchantIdentifier' => $this->apiHelper->getCheckoutcomConfig('applepay_merchant_id'),
+      'supportedNetworks' => $this->apiHelper->getCheckoutcomConfig('applepay_supported_networks'),
+      // Adding supports3DS hardcoded here same as code in Magento plugin from
+      // where we have copied the logic.
+      'merchantCapabilities' => 'supports3DS,' . $this->apiHelper->getCheckoutcomConfig('applepay_merchant_capabilities'),
+      'supportedCountries' => $this->apiHelper->getCheckoutcomConfig('applepay_supported_countries'),
+    ];
 
     // Add site info from config.
     $settings += [

@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\acq_checkoutcom\Controller;
+namespace Drupal\alshaya_acm_checkoutcom\Controller;
 
-use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_checkoutcom\CheckoutComFormHelper;
+use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Psr\Log\LoggerInterface;
@@ -19,11 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
 class ApplePayController implements ContainerInjectionInterface {
 
   /**
-   * The cart storage.
+   * Api Helper.
    *
-   * @var \Drupal\acq_cart\CartStorageInterface
+   * @var \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper
    */
-  protected $cartStorage;
+  protected $apiHelper;
 
   /**
    * Checkout.com form Helper.
@@ -44,7 +44,7 @@ class ApplePayController implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('acq_cart.cart_storage'),
+      $container->get('alshaya_acm_checkoutcom.api_helper'),
       $container->get('acq_checkoutcom.form_helper'),
       $container->get('logger.factory')->get('ApplePayController')
     );
@@ -53,17 +53,17 @@ class ApplePayController implements ContainerInjectionInterface {
   /**
    * ApplePayController constructor.
    *
-   * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
-   *   The cart storage.
+   * @param \Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper $acm_checkoutcom_api_helper
+   *   Api helper.
    * @param \Drupal\acq_checkoutcom\CheckoutComFormHelper $form_helper
    *   Checkout.com form Helper.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger.
    */
-  public function __construct(CartStorageInterface $cart_storage,
+  public function __construct(AlshayaAcmCheckoutComAPIHelper $acm_checkoutcom_api_helper,
                               CheckoutComFormHelper $form_helper,
                               LoggerInterface $logger) {
-    $this->cartStorage = $cart_storage;
+    $this->apiHelper = $acm_checkoutcom_api_helper;
     $this->formHelper = $form_helper;
     $this->logger = $logger;
   }
@@ -89,14 +89,14 @@ class ApplePayController implements ContainerInjectionInterface {
     }
 
     // Get apple pay configuration.
-    $settings = $this->formHelper->getApplePayConfig();
+    $settings = $this->apiHelper->getCheckoutcomUpApiConfig();
 
     $settings += $this->formHelper->getApplePaySecretInfo();
 
     $ch = curl_init();
 
     $data = [
-      'merchantIdentifier' => $settings['merchantIdentifier'],
+      'merchantIdentifier' => $settings['apple_pay_merchant_id'],
       'domainName' => $_SERVER['HTTP_HOST'],
       'displayName' => $settings['storeName'],
     ];
@@ -125,47 +125,6 @@ class ApplePayController implements ContainerInjectionInterface {
     curl_close($ch);
 
     return new JsonResponse($return);
-  }
-
-  /**
-   * Save payment info to cart.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   HTTP Request.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   JSON Response.
-   */
-  public function savePayment(Request $request) {
-    $params = $request->request->all();
-
-    if (empty($params) || empty($params['paymentData'])) {
-      return new JsonResponse(['status' => FALSE]);
-    }
-
-    $cart = $this->cartStorage->getCart(FALSE);
-
-    if (empty($cart)) {
-      return new JsonResponse(['status' => FALSE]);
-    }
-
-    // Format data in 1D array.
-    $data = [
-      'data' => $params['paymentData']['data'],
-      'ephemeralPublicKey' => $params['paymentData']['header']['ephemeralPublicKey'],
-      'publicKeyHash' => $params['paymentData']['header']['publicKeyHash'],
-      'transactionId' => $params['paymentData']['header']['transactionId'],
-      'signature' => $params['paymentData']['signature'],
-      'version' => $params['paymentData']['version'],
-      'paymentMethodDisplayName' => $params['paymentMethod']['displayName'],
-      'paymentMethodNetwork' => $params['paymentMethod']['network'],
-      'paymentMethodType' => $params['paymentMethod']['type'],
-      'transactionIdentifier' => $params['transactionIdentifier'],
-    ];
-
-    $cart->setPaymentMethod('checkout_com_applepay', $data);
-
-    return new JsonResponse(['status' => TRUE]);
   }
 
 }
