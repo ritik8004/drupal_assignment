@@ -1,119 +1,123 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { postAPIData } from '../../../utilities/api/apiData';
 import ReviewInappropriate from '../review-inappropriate';
 
-const ReviewFeedback = ({
-  NegativeFeedbackCount,
-  PositiveFeedbackCount,
-  IsSyndicatedReview,
-  ReviewId,
-}) => {
-  const reviewVote = JSON.parse(localStorage.getItem(`helpfulnessVote-${ReviewId}`));
-  let positiveCountIndex;
-  let negativeCountIndex;
-  if (reviewVote !== null) {
-    if (reviewVote.positiveVoteCount !== null) {
-      positiveCountIndex = reviewVote.positiveVoteCount;
-    }
-  }
-  else {
-    positiveCountIndex = PositiveFeedbackCount;
-  }
-  if (reviewVote !== null) {
-    if (reviewVote.negativeVoteCount !== null) {
-      negativeCountIndex = reviewVote.negativeVoteCount;
-  }
-  } else {
-    negativeCountIndex = NegativeFeedbackCount;
+class ReviewFeedback extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      disabled: false,
+      positiveCount: props.PositiveFeedbackCount,
+      negativeCount: props.NegativeFeedbackCount,
+    };
   }
 
-  // Set the initial count state to zero, 0
-  const [positiveCount, setPositiveCount] = useState(positiveCountIndex);
-  const [negativeCount, setNegativeCount] = useState(negativeCountIndex);
-  const [isActive, setActive] = useState(false);
-  const ConsoleFunction = (label) => {
+  handleFeedbackCount = (reviewId, voteText) => (event) => {
+    event.preventDefault();
+    const { disabled: buttonState } = this.state;
+    if (buttonState) {
+      return;
+    }
+    this.setState({ disabled: true });
     const apiUri = '/data/submitfeedback.json';
-    const params = `&FeedbackType=helpfulness&ContentType=review&ContentId=${ReviewId}&Vote=${label}`;
+    const params = `&FeedbackType=helpfulness&ContentType=review&ContentId=${reviewId}&Vote=${voteText}`;
     const apiData = postAPIData(apiUri, params);
-    setActive(!isActive);
+    const { positiveCount: positiveVoteCount } = this.state;
+    const { negativeCount: negativeVoteCount } = this.state;
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined
           && result.data !== undefined
           && result.data.error === undefined) {
           const helpfulnessVoteObj = {
-            reviewId: ReviewId,
-            positiveVoteCount: positiveCount,
-            negativeVoteCount: negativeCount,
+            reviewId,
+            positiveVoteCount,
+            negativeVoteCount,
           };
-          if (label === 'Positive') {
-            setPositiveCount((prevCount) => prevCount + 1);
-            helpfulnessVoteObj.positiveVoteCount = positiveCount + 1;
-            localStorage.setItem(`helpfulnessVote-${ReviewId}`, JSON.stringify(helpfulnessVoteObj));
-          } else if (label === 'Negative') {
-            setNegativeCount((prevCount) => prevCount + 1);
-            helpfulnessVoteObj.negativeVoteCount = negativeCount + 1;
-            localStorage.setItem(`helpfulnessVote-${ReviewId}`, JSON.stringify(helpfulnessVoteObj));
+          if (voteText === 'Positive') {
+            this.setState({ positiveCount: positiveVoteCount + 1 });
+            helpfulnessVoteObj.positiveVoteCount += 1;
+            localStorage.setItem(`helpfulnessVote-${reviewId}`, JSON.stringify(helpfulnessVoteObj));
           }
-        } else {
-          // To Do
+          if (voteText === 'Negative') {
+            this.setState({ negativeCount: negativeVoteCount + 1 });
+            helpfulnessVoteObj.negativeVoteCount += 1;
+            localStorage.setItem(`helpfulnessVote-${reviewId}`, JSON.stringify(helpfulnessVoteObj));
+          }
         }
       });
     }
   };
 
-  if (PositiveFeedbackCount !== undefined && IsSyndicatedReview === false) {
-    const retrievedReviewVote = JSON.parse(localStorage.getItem(`helpfulnessVote-${ReviewId}`));
-    return (
-      <div className={`review-feedback-vote ${isActive ? 'review-feedback-vote-active' : 'review-feedback-vote-given'}`}>
-        <span className="feedback-label">{Drupal.t('Was this review helpful?')}</span>
-        {retrievedReviewVote !== null ? (
-          <div>
-            <span className="feedback-positive">
-              <button type="button" disabled onClick={() => ConsoleFunction('Positive')}>
-                <span className="feedback-option-label">{Drupal.t('yes')}</span>
-                <span className="feedback-count">
-                ( {positiveCount} )
-                </span>
-              </button>
-            </span>
-            <span className="feedback-negative">
-              <button type="button" disabled onClick={() => ConsoleFunction('Negative')}>
-                <span className="feedback-option-label">{Drupal.t('no')}</span>
-                <span className="feedback-count">
-                ( {negativeCount} )
-                </span>
-              </button>
-            </span>
-          </div>
-        ) : (
-          <div>
-            <span className="feedback-positive">
-              <button type="button" disabled={isActive} onClick={() => ConsoleFunction('Positive')}>
-                <span className="feedback-option-label">{Drupal.t('yes')}</span>
-                <span className="feedback-count">
-                ( {positiveCount} )
-                </span>
-              </button>
-            </span>
-            <span className="feedback-negative">
-              <button type="button" disabled={isActive} onClick={() => ConsoleFunction('Negative')}>
-                <span className="feedback-option-label">{Drupal.t('no')}</span>
-                <span className="feedback-count">
-                ( {negativeCount} )
-                </span>
-              </button>
-            </span>
-          </div>
-        )}
-        <ReviewInappropriate
-          ReviewId={ReviewId}
-        />
-
-      </div>
-    );
+  render() {
+    const { ReviewId: reviewId } = this.props;
+    const { IsSyndicatedReview: isSyndicatedReview } = this.props;
+    const { disabled: buttonState } = this.state;
+    const { positiveCount: positiveVoteCount } = this.state;
+    const { negativeCount: negativeVoteCount } = this.state;
+    const positiveText = 'Positive';
+    const negativeText = 'Negative';
+    if (reviewId !== undefined && positiveVoteCount !== undefined && negativeVoteCount
+      !== undefined && isSyndicatedReview === false) {
+      const retrievedReviewVote = JSON.parse(localStorage.getItem(`helpfulnessVote-${reviewId}`));
+      return (
+        <div className="review-feedback-vote">
+          <span className="feedback-label">{Drupal.t('Was this review helpful?')}</span>
+          {retrievedReviewVote === null ? (
+            <div className={`${buttonState ? 'review-feedback-vote-disabled' : 'review-feedback-vote-active'}`}>
+              <span className="feedback-positive">
+                <button value={positiveText} type="button" onClick={this.handleFeedbackCount(reviewId, positiveText)} disabled={buttonState}>
+                  <span className="feedback-option-label">{Drupal.t('yes')}</span>
+                  <span className="feedback-count">
+                    (
+                    {positiveVoteCount}
+                    )
+                  </span>
+                </button>
+              </span>
+              <span className="feedback-negative">
+                <button value={negativeText} type="button" onClick={this.handleFeedbackCount(reviewId, negativeText)} disabled={buttonState}>
+                  <span className="feedback-option-label">{Drupal.t('no')}</span>
+                  <span className="feedback-count">
+                    (
+                    {negativeVoteCount}
+                    )
+                  </span>
+                </button>
+              </span>
+            </div>
+          ) : (
+            <div className="review-feedback-vote-disabled">
+              <span className="feedback-positive">
+                <button value={positiveText} type="button" onClick={this.handleFeedbackCount(reviewId, positiveText)} disabled>
+                  <span className="feedback-option-label">{Drupal.t('yes')}</span>
+                  <span className="feedback-count">
+                    (
+                    {retrievedReviewVote.positiveVoteCount}
+                    )
+                  </span>
+                </button>
+              </span>
+              <span className="feedback-negative">
+                <button value={negativeText} type="button" onClick={this.handleFeedbackCount(reviewId, negativeText)} disabled>
+                  <span className="feedback-option-label">{Drupal.t('no')}</span>
+                  <span className="feedback-count">
+                    (
+                    {retrievedReviewVote.negativeVoteCount}
+                    )
+                  </span>
+                </button>
+              </span>
+            </div>
+          )}
+          <ReviewInappropriate
+            ReviewId={reviewId}
+          />
+        </div>
+      );
+    }
+    return (null);
   }
-  return (null);
-};
+}
 
 export default ReviewFeedback;

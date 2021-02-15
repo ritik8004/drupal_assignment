@@ -13,7 +13,7 @@ class ReviewInappropriate extends React.Component {
 
   reportReview = (reviewId, newText) => (event) => {
     event.preventDefault();
-    var { disabled: buttonState } = this.state;
+    const { disabled: buttonState } = this.state;
     if (buttonState) {
       return;
     }
@@ -39,11 +39,11 @@ class ReviewInappropriate extends React.Component {
 
   render() {
     const { ReviewId: reviewId } = this.props;
-    if (reviewId !== null) {
+    if (reviewId !== undefined) {
       const reportedReviewVote = JSON.parse(localStorage.getItem(`reportedVote-${reviewId}`));
-      var { disabled: buttonState } = this.state;
-      var { reportButtonText: text } = this.state;
-      var newText = Drupal.t('Reported');
+      const { disabled: buttonState } = this.state;
+      const { reportButtonText: text } = this.state;
+      const newText = Drupal.t('Reported');
       return (
         <ConditionalView condition={window.innerWidth > 767}>
           {reportedReviewVote === null ? (
