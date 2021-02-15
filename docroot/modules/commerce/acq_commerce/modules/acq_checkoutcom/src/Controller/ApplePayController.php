@@ -88,9 +88,7 @@ class ApplePayController implements ContainerInjectionInterface {
       throw new \InvalidArgumentException();
     }
 
-    // Get apple pay configuration.
     $settings = $this->formHelper->getApplePayConfig();
-
     $settings += $this->formHelper->getApplePaySecretInfo();
 
     $ch = curl_init();
