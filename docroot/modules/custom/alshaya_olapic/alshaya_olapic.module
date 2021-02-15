@@ -45,3 +45,30 @@
      ],
    ];
  }
+
+ /**
+  * Updated build array for olapic checkout pixel.
+  *
+  * @param array $build
+  *   Reference to the build array of spc confirmation.
+  * @param string $data_apikeys
+  *   Olapic data api key.
+  */
+ function alshaya_olapic_checkout_pixel_build_alter(array &$build, $data_apikey) {
+  if (!empty($build['#attached']['drupalSettings'])){
+      $config = \Drupal::config('alshaya_olapic.settings');
+      $olapic_checkout_pixel_external_script_url = $config->get('olapic_checkout_pixel_external_script_url') ?? '';
+      $drupalSettings = $build['#attached']['drupalSettings'];
+      $country_code = strtoupper(_alshaya_custom_get_site_level_country_code());
+      $build['#attached']['library'][] = 'alshaya_olapic/olapic_checkout_pixel';
+      $cartObject = [
+        'products' => array_values($drupalSettings['order_details']['items']) ?? '',
+        'transaction_id' => $drupalSettings['order_details']['order_number'] ?? '',
+        'currency' => $drupalSettings['alshaya_spc']['currency_config']['currency_code'] ?? '',
+        'country' => $country_code ?? '',
+        'data_apikey' => $data_apikey ?? '',
+        'olapic_checkout_pixel_external_script_url' => $olapic_checkout_pixel_external_script_url ?? '',
+      ];
+    $build['#attached']['drupalSettings']['cartObject'] = $cartObject;
+  }
+ }

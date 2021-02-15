@@ -1,6 +1,6 @@
 /**
  * @file
- * Checkout olapic script for tracking the purchase.
+ * Checkout olapic script for tracking the order.
  */
 (function ($, Drupal, drupalSettings) {
 
@@ -38,7 +38,7 @@
                 })(document.head || document.getElementsByTagName('head')[0]);
 
                 // ==== Checkout Code:
-                olapicRequireCheckoutScript('//photorankstatics-a.akamaihd.net/static/frontend/checkout/olapic.checkout.helper.js', function () {
+                olapicRequireCheckoutScript(drupalSettings.cartObject.olapic_checkout_pixel_external_script_url, function () {
                     // Initialization
                     olapicCheckout.init(drupalSettings.cartObject.data_apikey);
 
