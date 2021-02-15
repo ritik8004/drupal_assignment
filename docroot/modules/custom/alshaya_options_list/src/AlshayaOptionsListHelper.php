@@ -325,7 +325,7 @@ class AlshayaOptionsListHelper {
     $query->setOption('search_api_facets', $facet_to_load);
 
     // Override Algolia settings maxValuesPerFacet.
-    $query->setOption('maxValuesPerFacet', 1000);
+    $query->setOption('algolia_options', ['maxValuesPerFacet' => 1000]);
 
     // Limit to only one result, we want only facets data.
     $query->range(0, 1);
