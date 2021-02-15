@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import AuraFormLinkCardOTPModal from '../../../aura-forms/aura-link-card-otp-modal-form';
+import getStringMessage from '../../../../../utilities/strings';
 
 class LinkYourCardMessage extends React.Component {
   constructor(props) {
@@ -38,11 +39,11 @@ class LinkYourCardMessage extends React.Component {
     return (
       <>
         <div className="spc-aura-link-your-card-message">
-          {Drupal.t('To enable auto accrual and rewards redemption')}
+          {getStringMessage('auto_accrual_message')}
           <span
             onClick={() => this.openLinkCardModal()}
           >
-            {Drupal.t('link your card now')}
+            {getStringMessage('link_your_card_now')}
           </span>
         </div>
         <Popup

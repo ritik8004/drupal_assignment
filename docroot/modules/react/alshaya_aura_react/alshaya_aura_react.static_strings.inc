@@ -218,5 +218,17 @@ function _alshaya_aura_static_strings() {
       'key' => 'sign_up_now',
       'value' => t('Sign up now'),
     ],
+    [
+      'key' => 'loyalty_card_placeholder',
+      'value' => t('Card number'),
+    ],
+    [
+      'key' => 'auto_accrual_message',
+      'value' => t('To enable auto accrual and rewards redemption'),
+    ],
+    [
+      'key' => 'link_your_card_now',
+      'value' => t('link your card now'),
+    ],
   ];
 }
