@@ -14,7 +14,7 @@ const ReviewDescription = ({
 
           <ConditionalView condition={window.innerWidth > 767}>
             <DisplayStar
-              StarPercentage={reviewDescriptionData.Rating}
+              starPercentage={reviewDescriptionData.Rating}
             />
             <div className="review-title">{reviewDescriptionData.Title}</div>
             <div className="review-date">{`${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}, ${date.getFullYear()}`}</div>
