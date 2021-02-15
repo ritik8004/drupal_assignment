@@ -47,6 +47,13 @@ function getAuraLocalStorageKey() {
 }
 
 /**
+ * Utility function to get aura localStorage key for checkout.
+ */
+function getAuraCheckoutLocalStorageKey() {
+  return 'aura_checkout_data';
+}
+
+/**
  * Utility function to get aura details default state.
  */
 function getAuraDetailsDefaultState() {
@@ -184,4 +191,5 @@ export {
   showInlineError,
   removeInlineError,
   getNotYouLabel,
+  getAuraCheckoutLocalStorageKey,
 };

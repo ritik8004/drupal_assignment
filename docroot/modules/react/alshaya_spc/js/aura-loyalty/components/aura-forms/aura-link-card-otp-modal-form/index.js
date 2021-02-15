@@ -52,13 +52,13 @@ class AuraFormLinkCardOTPModal extends React.Component {
     this.resetModalMessages();
     removeError(getInlineErrorSelector('otp').otp);
     const { linkCardOption } = this.state;
-    const isValid = validateElementValueByType(linkCardOption);
+    const isValid = validateElementValueByType(linkCardOption, '.aura-modal-form');
 
     if (isValid === false) {
       return;
     }
 
-    const selectedElementValue = getElementValueByType(linkCardOption);
+    const selectedElementValue = getElementValueByType(linkCardOption, '.aura-modal-form');
     const { chosenCountryCode } = this.props;
 
     if (linkCardOption !== 'mobile') {
@@ -159,7 +159,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
 
   selectOption = (option) => {
     // Reset input elements.
-    resetInputElement();
+    resetInputElement('all', '.aura-modal-form');
 
     this.setState({
       linkCardOption: option,

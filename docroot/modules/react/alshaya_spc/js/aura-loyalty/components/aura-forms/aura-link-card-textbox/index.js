@@ -6,7 +6,7 @@ import LinkCardOptionCard from './components/link-card-option-card';
 import LinkCardOptionMobile from './components/link-card-option-mobile';
 import { handleSignUp } from '../../../../../../alshaya_aura_react/js/utilities/cta_helper';
 import SignUpOtpModal from '../../../../../../alshaya_aura_react/js/components/header/sign-up-otp-modal';
-import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
+import { getAuraDetailsDefaultState, getAuraCheckoutLocalStorageKey } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import { getUserInput, processCheckoutCart } from '../../utilities/checkout_helper';
 import {
   showFullScreenLoader,
@@ -36,7 +36,7 @@ class AuraFormLinkCard extends React.Component {
     document.addEventListener('orderPlaced', this.handlePlaceOrderEvent, false);
 
     // Get data from localStorage.
-    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+    const localStorageValues = getStorageInfo(getAuraCheckoutLocalStorageKey());
 
     if (localStorageValues === null) {
       return;
@@ -100,7 +100,7 @@ class AuraFormLinkCard extends React.Component {
         dataForStorage.value = searchData.value.substring(3);
       }
 
-      setStorageInfo(dataForStorage, getAuraLocalStorageKey());
+      setStorageInfo(dataForStorage, getAuraCheckoutLocalStorageKey());
     }
 
     this.setState({
@@ -123,7 +123,7 @@ class AuraFormLinkCard extends React.Component {
   };
 
   handlePlaceOrderEvent = () => {
-    removeStorageInfo(getAuraLocalStorageKey());
+    removeStorageInfo(getAuraCheckoutLocalStorageKey());
   };
 
   showResponse = (data) => {
@@ -168,7 +168,7 @@ class AuraFormLinkCard extends React.Component {
       type: 'failure',
       message: '',
     });
-    removeStorageInfo(getAuraLocalStorageKey());
+    removeStorageInfo(getAuraCheckoutLocalStorageKey());
   };
 
   addCard = () => {

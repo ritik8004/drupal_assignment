@@ -61,10 +61,12 @@ function getElementSelector(type = 'all') {
 /**
  * Utility function to get element value by type.
  */
-function getElementValueByType(type) {
+function getElementValueByType(type, context = '') {
   let elementValue = '';
 
-  const element = document.querySelector(getElementSelector(type)[type]);
+  const selector = getElementSelector(type)[type];
+  const selectorWithContext = context ? `${context} ${selector}` : selector;
+  const element = document.querySelector(selectorWithContext);
   elementValue = element ? element.value : '';
 
   if ((type === 'cardNumber' || type === 'cardNumberCheckout') && elementValue.length > 0) {
@@ -130,12 +132,13 @@ function getInlineErrorSelector(type = 'all') {
 /**
  * Utility function to reset input field.
  */
-function resetInputElement(type = 'all') {
+function resetInputElement(type = 'all', context = '') {
   const selectors = Object.values(getElementSelector(type));
 
   if (selectors.length > 0) {
     selectors.forEach((selector) => {
-      const element = document.querySelector(selector);
+      const elementSelector = context ? `${context} ${selector}` : selector;
+      const element = document.querySelector(elementSelector);
       if (element) {
         element.value = '';
       }

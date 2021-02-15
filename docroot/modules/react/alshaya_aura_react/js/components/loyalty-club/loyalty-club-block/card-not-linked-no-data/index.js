@@ -142,7 +142,6 @@ class AuraMyAccountNoLinkedCard extends React.Component {
               <AuraFormLinkCardOTPModal
                 closeLinkCardOTPModal={() => this.closeLinkCardModal()}
                 setChosenCountryCode={this.setChosenCountryCode}
-                setChosenUserMobile={this.setChosenUserMobile}
                 chosenCountryCode={chosenCountryCode}
               />
             </Popup>
