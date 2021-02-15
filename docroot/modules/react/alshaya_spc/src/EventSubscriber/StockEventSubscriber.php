@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\EventSubscriber;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\Plugin\rest\resource\StockResource;
 use Drupal\Core\Cache\Cache;
 use Drupal\purge\Plugin\Purge\Invalidation\InvalidationsServiceInterface;
 use Drupal\purge\Plugin\Purge\Processor\ProcessorsServiceInterface;
@@ -130,9 +131,16 @@ class StockEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    Cache::invalidateTags($cache_tags);
+    // We want the SKU cache tags to get cleared only when the SKU is processed
+    // in the alshaya_process_product queue. And that will happen when Magento
+    // pushes the SKU with stock update to Drupal.
+    // Hence we invalidate only the Cache tags for the Stock API here to mark
+    // real time stock update has happened.
+    Cache::invalidateTags([StockResource::CACHE_TAG]);
 
     // Now prepare data to purge the varnish cache.
+    // Purging the SKU cache tags should also purge the Varnish cache for the
+    // Stock API.
     foreach ($cache_tags as $cache_tag) {
       $purge_tags[] = $this->purgeInvalidationsFactory->get('tag', $cache_tag);
     }
