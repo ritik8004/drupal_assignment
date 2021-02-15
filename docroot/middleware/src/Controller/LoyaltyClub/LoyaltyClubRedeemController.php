@@ -63,7 +63,7 @@ class LoyaltyClubRedeemController {
    * @param \App\Service\Cart $cart
    *   Cart service.
    * @param \App\Service\Aura\RedemptionHelper $redemption_helper
-   *   Drupal service.
+   *   RedemptionHelper service.
    */
   public function __construct(
       MagentoApiWrapper $magento_api_wrapper,

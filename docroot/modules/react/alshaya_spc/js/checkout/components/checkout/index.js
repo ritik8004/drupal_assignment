@@ -102,10 +102,8 @@ export default class Checkout extends React.Component {
             PromotionsDynamicLabelsUtil.apply(result);
           }
 
-          // If aura is enabled, we add a listner to track aura points being redeemed.
-          if (isAuraEnabled()) {
-            document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
-          }
+          // Event listerner to update any change in totals in cart object.
+          document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
         });
       } else {
         redirectToCart();
@@ -198,21 +196,14 @@ export default class Checkout extends React.Component {
     );
   };
 
-  // Event listener callback to add aura details in cart data.
-  handleRedeemPointsEvent = (data) => {
+  // Event listener to update totals in cart.
+  handleTotalsUpdateEvent = (event) => {
     const { cart } = this.state;
-    const { stateValues } = data.detail;
+    const { totals } = event.detail;
+    const cartData = cart;
+    cartData.cart.totals = { ...cartData.cart.totals, ...totals };
 
-    if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
-      return;
-    }
-
-    const auraUpdatedCartData = cart;
-
-    auraUpdatedCartData.cart.totals = { ...auraUpdatedCartData.cart.totals, ...stateValues };
-    this.setState({
-      cart: { ...auraUpdatedCartData },
-    });
+    this.setState({ cart: cartData });
   };
 
   render() {
@@ -256,9 +247,7 @@ export default class Checkout extends React.Component {
             {isAuraEnabled()
               ? (
                 <AuraCheckoutContainer
-                  cartId={cart.cart.cart_id || ''}
-                  price={cart.cart.cart_total || 0}
-                  totals={cart.cart.totals}
+                  cart={cart}
                 />
               )
               : null}

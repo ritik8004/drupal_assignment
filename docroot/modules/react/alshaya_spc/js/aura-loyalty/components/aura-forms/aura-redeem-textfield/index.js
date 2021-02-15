@@ -44,7 +44,7 @@ const AuraRedeemPointsTextField = (props) => {
         className={name}
         type="text"
         onChange={(e) => onChangeCallback(e)}
-        defaultValue={value}
+        value={value || ''}
       />
     </div>
   );

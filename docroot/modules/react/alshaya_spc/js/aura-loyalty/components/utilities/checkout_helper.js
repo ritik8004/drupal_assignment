@@ -126,6 +126,7 @@ function redeemAuraPoints(data) {
 
   if (apiData instanceof Promise) {
     apiData.then((result) => {
+      removeFullScreenLoader();
       if (result.data !== undefined && result.data.error === undefined) {
         if (result.data.status) {
           stateValues = {
@@ -138,9 +139,36 @@ function redeemAuraPoints(data) {
         stateValues = result.data || { error: true };
       }
       dispatchCustomEvent('auraRedeemPointsApiInvoked', { stateValues, action: data.action });
-      removeFullScreenLoader();
     });
   }
+}
+
+/**
+ * Utility function to check if `aura_payment` is set in cart.
+ */
+function isPaymentMethodSetAsAura(cart) {
+  if (cart.cart.totals !== undefined
+    && Object.entries(cart.cart.totals).length !== 0
+    && cart.cart.totals.paidWithAura !== 0
+    && cart.cart.totals.balancePayable <= 0
+    && cart.cart.payment.method === 'aura_payment') {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Utility function to check if full payment is being done by AURA.
+ */
+function isFullPaymentDoneByAura(cart) {
+  if (cart.cart.totals !== undefined
+    && Object.keys(cart.cart.totals).length !== 0
+    && cart.cart.totals.balancePayable <= 0) {
+    return true;
+  }
+
+  return false;
 }
 
 export {
@@ -148,4 +176,6 @@ export {
   processCheckoutCart,
   getMembersToEarnMessage,
   redeemAuraPoints,
+  isPaymentMethodSetAsAura,
+  isFullPaymentDoneByAura,
 };
