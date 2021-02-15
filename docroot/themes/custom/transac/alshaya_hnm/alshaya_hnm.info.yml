@@ -109,3 +109,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/bazaar-voice:
+    css:
+      theme:
+        css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css

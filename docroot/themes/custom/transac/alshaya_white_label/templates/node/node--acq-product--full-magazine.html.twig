@@ -59,6 +59,10 @@
 
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
+        {% if content.reviews_rating %}
+          {{content.reviews_rating}}
+        {% endif %}
+
         <div class="basic-details-wrapper">
           {{ content.field_skus }}
           <div class="modal-share-this">
@@ -78,6 +82,7 @@
 
     {% block pdpSidebar %}
       <div class="content__sidebar">
+
         {% block sizeVolume %}
         {% endblock %}
 
@@ -120,4 +125,10 @@
 
 {% block desktopCS %}
   {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
+{% endblock %}
+
+{% block reviewsSection %}
+  {% if content.reviews_section %}
+    {{content.reviews_section}}
+  {% endif %}
 {% endblock %}
