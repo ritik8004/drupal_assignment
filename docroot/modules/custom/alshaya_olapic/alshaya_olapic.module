@@ -16,7 +16,6 @@
     $libraries = [];
     if (!empty($olapic_external_script_url)) {
       $libraries['alshaya_olapic_widget'] = [
-        'version' => '1.x',
         'footer' => true,
         'js' => [
           $olapic_external_script_url => [

@@ -86,9 +86,15 @@ class OlapicConfigForm extends ConfigFormBase {
       '#size' => 100,
     ];
     $form['olapic_external_script_url'] = [
-      '#title' => $this->t('Olapic External Script Url'),
+      '#title' => $this->t('Olapic Widget External Script Url'),
       '#type' => 'textfield',
       '#default_value' => $config->get('olapic_external_script_url') ?? '',
+      '#size' => 100,
+    ];
+    $form['olapic_checkout_pixel_external_script_url'] = [
+      '#title' => $this->t('Olapic Checkout Pixel External Script Url'),
+      '#type' => 'textfield',
+      '#default_value' => $config->get('olapic_checkout_pixel_external_script_url') ?? '',
       '#size' => 100,
     ];
     return parent::buildForm($form, $form_state);
@@ -104,6 +110,7 @@ class OlapicConfigForm extends ConfigFormBase {
       ->set('development_mode', $form_state->getValue('development_mode'))
       ->set($data_api_field_name, $form_state->getValue($data_api_field_name))
       ->set('olapic_external_script_url', $form_state->getValue('olapic_external_script_url'))
+      ->set('olapic_checkout_pixel_external_script_url', $form_state->getValue('olapic_checkout_pixel_external_script_url'))
       ->save();
     parent::submitForm($form, $form_state);
   }

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * @file
  * Checkout olapic script for tracking the purchase.

@@ -7,7 +7,6 @@ alshaya_olapic_widget:
     - core/jquery.once
 
 olapic_checkout_pixel:
-  version: 1.x
   footer: true
   js:
     js/olapic_checkout_pixel.js: { }
