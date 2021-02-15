@@ -107,12 +107,7 @@ class Drupal {
     // Rules are added in CF to disable caching for urls having the following
     // query string.
     // The query string is added since same APIs are used by MAPP also.
-    if (strpos($url, '?') !== FALSE) {
-      $url .= '&_cf_cache_bypass=1';
-    }
-    else {
-      $url .= '/?_cf_cache_bypass=1';
-    }
+    $url .= (strpos($url, '?') !== FALSE) ? '&_cf_cache_bypass=1' : '?_cf_cache_bypass=1';
 
     return $client->request($method, $url, $request_options);
   }
