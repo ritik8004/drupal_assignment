@@ -18,17 +18,19 @@ const PdpCrossellUpsellImageContent = ({
         title={title}
         loading="lazy"
       />
-      {productLabels ? (
+      {productLabels.length ? (
         <div className="product-labels">
-          {Object.keys(productLabels).map((key) => (
-            <div className={`labels ${productLabels[key].position}`} key={productLabels[key].position}>
-              <img
-                src={productLabels[key].image.url}
-                alt={productLabels[key].image.alt}
-                title={productLabels[key].image.title}
-              />
-            </div>
-          ))}
+          <div className={`labels-wrapper ${productLabels[0].position}`}>
+            {Object.keys(productLabels).map((key) => (
+              <div className="labels" key={productLabels[key].position}>
+                <img
+                  src={productLabels[key].image.url}
+                  alt={productLabels[key].image.alt}
+                  title={productLabels[key].image.title}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       ) : null}
     </div>
