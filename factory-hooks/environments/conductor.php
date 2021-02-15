@@ -418,6 +418,11 @@ $conductors = [
     'hmac_secret' => 'NDE1ODgwYTItYWUxOS00',
     'site_id' => 286,
   ],
+  'bbwae_dev3' => [
+    'hmac_id' => '31a760b8c9064e10b4ee793f40b77495',
+    'hmac_secret' => 'MmU3MjJjZjktMjZlMy00',
+    'site_id' => 382,
+  ],
   'bbwkw_qa' => [
     'hmac_id' => '0b92904888cd422f8acd2938e199916e',
     'hmac_secret' => 'YWFiMzI4M2QtMzY5ZC00',
