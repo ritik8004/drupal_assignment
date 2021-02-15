@@ -90,6 +90,7 @@
 
       > div.btn {
         cursor: pointer;
+        outline: none;
         margin-top: 0.875rem;
 
         @include linkBtnDimensions();
@@ -172,6 +173,10 @@
         font-size: 1rem;
         text-align: center;
         letter-spacing: 0.71px;
+
+        &:disabled {
+          opacity: 1;
+        }
       }
     }
 

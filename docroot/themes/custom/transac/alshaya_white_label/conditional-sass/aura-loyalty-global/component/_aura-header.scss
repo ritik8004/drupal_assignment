@@ -46,12 +46,7 @@
   }
 
   .aura-header-popup-wrapper {
-    background: $aura-block-bg-mobile;
     padding: 1.25rem;
-
-    html[lang=ar] & {
-      background-image: $aura-block-bg-mobile-ar;
-    }
 
     @include breakpoint($upto-desktop) {
       display: block;
