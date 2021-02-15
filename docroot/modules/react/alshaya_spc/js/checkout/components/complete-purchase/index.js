@@ -20,18 +20,35 @@ export default class CompletePurchase extends React.Component {
       return;
     }
 
-    dispatchCustomEvent('orderPaymentMethod', {
-      payment_method: Object
-        .values(drupalSettings.payment_methods)
-        .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
-        .shift().gtm_name,
-    });
+    // Flag to track pseudo payment method.
+    let isPseudoPaymentMedthod = false;
+
+    // Check if payment method in cart is a pseudo method
+    // or not and accordingly dispatch event.
+    if (drupalSettings.payment_methods[cart.cart.payment.method]) {
+      dispatchCustomEvent('orderPaymentMethod', {
+        payment_method: Object
+          .values(drupalSettings.payment_methods)
+          .filter((paymentMethod) => (paymentMethod.code === cart.cart.payment.method))
+          .shift().gtm_name,
+      });
+    } else {
+      // If cart payment method is not in drupalSettings,
+      // then it's a pseudo payment method.
+      isPseudoPaymentMedthod = true;
+      dispatchCustomEvent('orderPaymentMethod', {
+        payment_method: cart.cart.payment.method,
+      });
+    }
 
     const checkoutButton = e.target.parentNode;
     checkoutButton.classList.add('in-active');
 
     try {
-      const validated = validateBeforePlaceOrder();
+      const validated = (isPseudoPaymentMedthod === false)
+        ? validateBeforePlaceOrder()
+        : true;
+
       if (validated === false) {
         if (this.completePurchaseButtonActive()) {
           checkoutButton.classList.remove('in-active');
