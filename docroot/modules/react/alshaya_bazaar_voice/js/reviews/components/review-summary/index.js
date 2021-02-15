@@ -6,30 +6,30 @@ import ReviewDescription from '../review-desc';
 
 const ReviewSummary = () => {
   /* TODO: BE to use a helper rather then directly using localstorage. */
-  const ReviewsSummary = JSON.parse(localStorage.getItem('ReviewsSummary'));
-  const ReviewsProduct = JSON.parse(localStorage.getItem('ReviewsProduct'));
-  if (ReviewsSummary !== undefined) {
+  const reviewsSummary = JSON.parse(localStorage.getItem('ReviewsSummary'));
+  const reviewsProduct = JSON.parse(localStorage.getItem('ReviewsProduct'));
+  if (reviewsSummary !== undefined) {
     return (
       <div className="reviews-wrapper">
-        { Object.keys(ReviewsSummary).map((item) => (
-          <div className="review-summary" key={ReviewsSummary[item].Id}>
+        { Object.keys(reviewsSummary).map((item) => (
+          <div className="review-summary" key={reviewsSummary[item].Id}>
 
             <ConditionalView condition={window.innerWidth < 768}>
               <DisplayStar
-                StarPercentage={ReviewsSummary[item].Rating}
+                StarPercentage={reviewsSummary[item].Rating}
               />
-              <div className="review-title">{ReviewsSummary[item].Title}</div>
+              <div className="review-title">{reviewsSummary[item].Title}</div>
             </ConditionalView>
 
             <ReviewInformation
-              ReviewInformationData={ReviewsSummary[item]}
-              ReviewTooltipInfo={
-                ReviewsProduct[ReviewsSummary[item].ProductId].ReviewStatistics
+              reviewInformationData={reviewsSummary[item]}
+              reviewTooltipInfo={
+                reviewsProduct[reviewsSummary[item].ProductId].ReviewStatistics
               }
             />
 
             <ReviewDescription
-              ReviewDescriptionData={ReviewsSummary[item]}
+              reviewDescriptionData={reviewsSummary[item]}
             />
           </div>
         ))}
