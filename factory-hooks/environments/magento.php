@@ -528,7 +528,7 @@ $magentos = [
     ],
   ],
   'bbw_apc' => [
-    'url' => ' https://apc-7vc7xgy-bbk3lvknero4c.eu-3.magentosite.cloud',
+    'url' => 'https://apc-7vc7xgy-bbk3lvknero4c.eu-3.magentosite.cloud',
     'magento_secrets' => [
       'consumer_key' => 'evay531jglmeinqwsfg6sis05smhrucy',
       'consumer_secret' => '09p2et416nf7dj44iudswsf7vf4tl682',
