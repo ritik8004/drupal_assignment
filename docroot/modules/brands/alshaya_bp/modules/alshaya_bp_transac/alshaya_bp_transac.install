@@ -6,8 +6,25 @@
  */
 
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\block\Entity\Block;
 use Drupal\facets\Entity\Facet;
+
+/**
+ * Implements hook_update_N().
+ *
+ * [5.16.0] Add missing acquia_search_index field configs.
+ */
+function alshaya_bp_transac_update_8013() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+  $alshayaConfigManager->updateConfigs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
 
 /**
  * Implements hook_update_N().
