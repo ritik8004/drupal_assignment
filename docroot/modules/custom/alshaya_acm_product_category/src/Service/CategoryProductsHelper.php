@@ -194,7 +194,7 @@ class CategoryProductsHelper {
         $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
         $query->addConditionGroup($conditionGroup);
         $query->setOption('attributesToRetrieve', ['nid']);
-        $query->setOption('algolia_options', ['ruleContexts' => $term_details['ruleContext']]);
+        $query->setOption('ruleContexts', $term_details['ruleContext']);
         $results = $query->execute()->getResultItems();
 
         $nids = array_map(function ($result) {
