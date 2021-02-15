@@ -4,7 +4,7 @@
  * @file
  * Bazaarvoice.module for hook implementations.
  */
-
+use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_page_attachments().
@@ -35,7 +35,7 @@ function bazaar_voice_page_attachments(array &$page) {
       $route_match = \Drupal::routeMatch();
       // Attach bvpixel library to order confirmation page.
       if ($route_match->getRouteName() == 'alshaya_spc.checkout.confirmation') {
-        $page['#attached']['library'][] = 'bazaar_voice/bvpixel_tracking';
+		$page['#attached']['library'][] = 'bazaar_voice/bvpixel_tracking';
         // Get last order from session.
       	$order = \Drupal::service('alshaya_spc.order_helper')->getLastOrder();
       	if(!empty($order)) {
@@ -62,7 +62,7 @@ function bazaar_voice_page_attachments(array &$page) {
 	          $products[$key]['price'] = $item['price'];
 	          $products[$key]['product_type'] = $item['type'];
 		    }
-		    $page['#attached']['drupalSettings']['bvpixel_order_details']['items'] = $products;
+		    $page['#attached']['drupalSettings']['bvpixel_order_details']['products'] = $products;
 		  }
       	}
       }

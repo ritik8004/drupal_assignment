@@ -6,10 +6,21 @@
   'use strict';
   Drupal.behaviors.bvpixel_tracking = {
     attach: function (context, settings) {
-      var itemsArray = [];
-      for (var key in drupalSettings.bvpixel_order_details.items) {
-        var obj = drupalSettings.bvpixel_order_details.items[key];
-        itemsArray.push(obj);
+      var order_from_storage = localStorage.getItem('bvpixel_order_id');
+      // Return if same order.
+      // Else remove order from local storage if new order.
+      if (order_from_storage != null) {
+        if (order_from_storage == drupalSettings.bvpixel_order_details.order_id) {
+          return;
+        }
+        else {
+          localStorage.removeItem('bvpixel_order_id');
+        }
+      }
+      var productsArray = [];
+      for (var key in drupalSettings.bvpixel_order_details.products) {
+        var obj = drupalSettings.bvpixel_order_details.products[key];
+        productsArray.push(obj);
       }
       var TransactionData = {
         orderId: drupalSettings.bvpixel_order_details.order_id,
@@ -23,10 +34,13 @@
         shipping: drupalSettings.bvpixel_order_details.shipping,
         total: drupalSettings.bvpixel_order_details.total,
         currency: drupalSettings.bvpixel_order_details.currency,
-        items: itemsArray,
+        items: productsArray,
       };
       window.bvCallback = function (BV) {
         BV.pixel.trackTransaction(TransactionData);
+
+        // Store transaction info in local storage.
+        localStorage.setItem('bvpixel_order_id', TransactionData.orderId);
       };
     }
   };
