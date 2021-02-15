@@ -67,7 +67,7 @@ class ReviewFeedback extends React.Component {
             <div className={`${buttonState ? 'review-feedback-vote-disabled' : 'review-feedback-vote-active'}`}>
               <span className="feedback-positive">
                 <button value={positiveText} type="button" onClick={this.handleFeedbackCount(reviewId, positiveText)} disabled={buttonState}>
-                  <span className="feedback-option-label">{Drupal.t('Yes')}</span>
+                  <span className="feedback-option-label">{Drupal.t('yes')}</span>
                   <span className="feedback-count">
                     (
                     {positiveVoteCount}
@@ -77,7 +77,7 @@ class ReviewFeedback extends React.Component {
               </span>
               <span className="feedback-negative">
                 <button value={negativeText} type="button" onClick={this.handleFeedbackCount(reviewId, negativeText)} disabled={buttonState}>
-                  <span className="feedback-option-label">{Drupal.t('No')}</span>
+                  <span className="feedback-option-label">{Drupal.t('no')}</span>
                   <span className="feedback-count">
                     (
                     {negativeVoteCount}
@@ -90,7 +90,7 @@ class ReviewFeedback extends React.Component {
             <div className="review-feedback-vote-disabled">
               <span className="feedback-positive">
                 <button value={positiveText} type="button" onClick={this.handleFeedbackCount(reviewId, positiveText)} disabled>
-                  <span className="feedback-option-label">{Drupal.t('Yes')}</span>
+                  <span className="feedback-option-label">{Drupal.t('yes')}</span>
                   <span className="feedback-count">
                     (
                     {retrievedReviewVote.positiveVoteCount}
@@ -100,7 +100,7 @@ class ReviewFeedback extends React.Component {
               </span>
               <span className="feedback-negative">
                 <button value={negativeText} type="button" onClick={this.handleFeedbackCount(reviewId, negativeText)} disabled>
-                  <span className="feedback-option-label">{Drupal.t('No')}</span>
+                  <span className="feedback-option-label">{Drupal.t('no')}</span>
                   <span className="feedback-count">
                     (
                     {retrievedReviewVote.negativeVoteCount}
