@@ -1184,6 +1184,10 @@ class Cart {
         $additional_data['failUrl'] = $this->checkoutComApi->getFailUrl();
 
         break;
+
+      case 'checkout_com_upapi_applepay':
+        $additional_data['token'] = $additional_info['token'];
+        $additional_data['bin'] = $additional_info['bin'];
     }
 
     return $additional_data;

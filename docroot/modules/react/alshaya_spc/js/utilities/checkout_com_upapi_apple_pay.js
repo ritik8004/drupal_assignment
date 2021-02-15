@@ -101,7 +101,6 @@ const CheckoutComUpapiApplePay = {
             method: 'checkout_com_upapi_applepay',
             additional_data: {
               token: response.data.token,
-              scheme: 'Visa',
               bin: response.data.bin,
             },
           },
