@@ -1264,8 +1264,8 @@ class Cart {
 
         // Create new cart only if user is trying to add an item to cart.
         if ($is_add_to_cart) {
-          $info = $this->drupal->getSessionCustomerInfo();
-          $newCart = $this->createCart($info['customer_id'] ?? 0);
+          $customer_id = $this->getDrupalInfo('customer_id');
+          $newCart = $this->createCart($customer_id ?? 0);
           if (empty($newCart['error'])) {
             return $this->updateCart($data);
           }
@@ -2063,8 +2063,16 @@ class Cart {
         return $stores;
       }
 
-      foreach ($stores as &$store) {
+      foreach ($stores as $key => &$store) {
         $store_info = $this->drupal->getStoreInfo($store['code']);
+        if (empty($store_info) || !is_array($store_info)) {
+          // Removing the corrupt store from the list.
+          unset($stores[$key]);
+          $this->logger->error('No store info retrieved for @store_code', [
+            '@store_code' => $store['code'],
+          ]);
+          continue;
+        }
         $store += $store_info;
         $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
         $store['delivery_time'] = $store['sts_delivery_time_label'];

@@ -2,4 +2,10 @@
   .no-of-stars {
     font-family: $alshaya-bold;
   }
+
+  > span {
+    a {
+      font-family: $bp-light;
+    }
+  }
 }

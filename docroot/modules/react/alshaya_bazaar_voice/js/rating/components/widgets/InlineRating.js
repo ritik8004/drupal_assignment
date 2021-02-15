@@ -13,7 +13,7 @@ const InlineRating = ({
           <div className="aggregate-rating" key={item} itemProp="aggregateRating" itemScope="" itemType="">
             <div className="empty-stars">
               <DisplayStar
-                StarPercentage={ReviewsData[item].ReviewStatistics.AverageOverallRating}
+                starPercentage={ReviewsData[item].ReviewStatistics.AverageOverallRating}
               />
               <div className="histogram-data">
                 <div className="histogram-title">
