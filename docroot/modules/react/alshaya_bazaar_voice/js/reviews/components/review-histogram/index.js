@@ -9,53 +9,53 @@ import ConditionalView from '../../../common/components/conditional-view';
 const ReviewHistogram = ({
   overallSummary,
 }) => {
-  if (overallSummary !== undefined) {
-    return (
-      <>
-        <div className="overall-summary-title">{Drupal.t('Ratings + Reviews')}</div>
-        <div className="overall-summary">
-          { Object.keys(overallSummary).map((item) => (
-            <div className="histogram-wrapper" key={item}>
-              <ConditionalView condition={window.innerWidth < 768}>
-                <ReviewButton ButtonText={Drupal.t('write a review')} />
-              </ConditionalView>
-              <DisplayStar
-                starPercentage={overallSummary[item].ReviewStatistics.AverageOverallRating}
-              />
-              <div className="average-rating">
-                {(
-                  parseFloat(overallSummary[item].ReviewStatistics.AverageOverallRating).toFixed(1)
-                )}
-              </div>
-              <div className="histogram-data">
-                <div className="histogram-title">
-                  {((
-                    overallSummary[item].ReviewStatistics.RecommendedCount
-                    / overallSummary[item].ReviewStatistics.TotalReviewCount) * 100
-                  )}
-                  {'% '}
-                  {Drupal.t('of Customers Recommended the Product')}
-                </div>
-                <RatingSummary
-                  HistogramData={overallSummary[item].ReviewStatistics.RatingDistribution}
-                  TotalReviewCount={overallSummary[item].ReviewStatistics.TotalReviewCount}
-                />
-                <ConditionalView condition={window.innerWidth < 768}>
-                  <SecondaryReview SecondaryAttribute={Drupal.t('Attributes')} />
-                </ConditionalView>
-              </div>
-            </div>
-          ))}
-          <div className="secondary-summary">
-            <ConditionalView condition={window.innerWidth > 767}>
-              <ReviewButton ButtonText={Drupal.t('write a review')} />
-              <SecondaryReview SecondaryAttribute={Drupal.t('Attributes')} />
-            </ConditionalView>
-          </div>
-        </div>
-      </>
-    );
+  if (overallSummary === undefined) {
+    return null;
   }
-  return (null);
+  return (
+    <>
+      <div className="overall-summary-title">{Drupal.t('Ratings + Reviews')}</div>
+      <div className="overall-summary">
+        { Object.keys(overallSummary).map((item) => (
+          <div className="histogram-wrapper" key={item}>
+            <ConditionalView condition={window.innerWidth < 768}>
+              <ReviewButton ButtonText={Drupal.t('write a review')} />
+            </ConditionalView>
+            <DisplayStar
+              starPercentage={overallSummary[item].ReviewStatistics.AverageOverallRating}
+            />
+            <div className="average-rating">
+              {(
+                parseFloat(overallSummary[item].ReviewStatistics.AverageOverallRating).toFixed(1)
+              )}
+            </div>
+            <div className="histogram-data">
+              <div className="histogram-title">
+                {((
+                  overallSummary[item].ReviewStatistics.RecommendedCount
+                  / overallSummary[item].ReviewStatistics.TotalReviewCount) * 100
+                )}
+                {'% '}
+                {Drupal.t('of Customers Recommended the Product')}
+              </div>
+              <RatingSummary
+                HistogramData={overallSummary[item].ReviewStatistics.RatingDistribution}
+                TotalReviewCount={overallSummary[item].ReviewStatistics.TotalReviewCount}
+              />
+              <ConditionalView condition={window.innerWidth < 768}>
+                <SecondaryReview SecondaryAttribute={Drupal.t('Attributes')} />
+              </ConditionalView>
+            </div>
+          </div>
+        ))}
+        <div className="secondary-summary">
+          <ConditionalView condition={window.innerWidth > 767}>
+            <ReviewButton ButtonText={Drupal.t('write a review')} />
+            <SecondaryReview SecondaryAttribute={Drupal.t('Attributes')} />
+          </ConditionalView>
+        </div>
+      </div>
+    </>
+  );
 };
 export default ReviewHistogram;
