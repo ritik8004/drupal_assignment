@@ -87,7 +87,7 @@ class AlshayaSpcStockHelper {
           }
 
           // Invalidate cache tags for the SKU.
-          StockEventSubscriber::setSkusWithRefreshedStock($sku);
+          StockEventSubscriber::setSkusForCacheInvalidation($sku);
         }
         catch (\Exception $e) {
           // Do nothing.

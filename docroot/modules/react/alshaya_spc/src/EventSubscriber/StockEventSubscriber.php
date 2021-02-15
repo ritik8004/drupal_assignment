@@ -23,11 +23,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class StockEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * Contains the SKU code of skus for which stock has been refreshed.
+   * Contains the SKU code of the skus for which cache has to be invalidated.
    *
    * @var array
    */
-  protected static $skusWithRefreshedStock = [];
+  protected static $skusForCacheInvalidation = [];
 
   /**
    * The logger service.
@@ -87,8 +87,8 @@ class StockEventSubscriber implements EventSubscriberInterface {
    * @param string $sku
    *   The SKU code.
    */
-  public static function setSkusWithRefreshedStock($sku) {
-    self::$skusWithRefreshedStock[] = $sku;
+  public static function setSkusForCacheInvalidation($sku) {
+    self::$skusForCacheInvalidation[] = $sku;
   }
 
   /**
@@ -112,14 +112,14 @@ class StockEventSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function onKernelTerminate(PostResponseEvent $event) {
-    if (empty(self::$skusWithRefreshedStock)) {
+    if (empty(self::$skusForCacheInvalidation)) {
       return;
     }
 
     $cache_tags = [];
     $purge_tags = [];
 
-    foreach (self::$skusWithRefreshedStock as $sku) {
+    foreach (self::$skusForCacheInvalidation as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
         $cache_tags = Cache::mergeTags($cache_tags, $sku_entity->getCacheTags());
@@ -140,13 +140,13 @@ class StockEventSubscriber implements EventSubscriberInterface {
     try {
       $this->purgers->invalidate($this->purgeProcessor, $purge_tags);
       $this->logger->info('Invalidated cache tags on stock refresh for the following skus: @skus', [
-        '@skus' => implode(',', self::$skusWithRefreshedStock),
+        '@skus' => implode(',', self::$skusForCacheInvalidation),
       ]);
     }
     catch (\Exception $e) {
       $this->logger->notice('Exception occurred while invalidating cache tags on stock refresh: @exception, for skus @skus', [
         '@exception' => $e->getMessage(),
-        '@skus' => implode(',', self::$skusWithRefreshedStock),
+        '@skus' => implode(',', self::$skusForCacheInvalidation),
       ]);
     }
   }
