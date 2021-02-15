@@ -1,0 +1,411 @@
+field_settings:
+  attr_color_family:
+    label: 'Color'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_brand:
+    label: 'Brand'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_brand
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_ingredients_lhn:
+    label: 'Ingredients'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_ingredients_lhn
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_active_ingredients_lhn:
+    label: 'Active Ingredients'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_active_ingredients_lhn
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_suitable_for_lhn:
+    label: 'Suitable For'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_suitable_for_lhn
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_body_area_lhn:
+    label: 'Body Area'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_body_area_lhn
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_condition:
+    label: 'Condition'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_condition
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_free_from:
+    label: 'Free From'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_free_from
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_format:
+    label: 'Format'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_format
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_hair_colour:
+    label: 'Hair Colour'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_hair_colour
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_product_type:
+    label: 'Product Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_product_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_gender:
+    label: 'Gender'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_gender
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_hair_type:
+    label: 'Hair Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_hair_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_key_features:
+    label: 'Key Features'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_key_features
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_skin_type:
+    label: 'Skin Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_skin_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_suitable_from:
+    label: 'Suitable From'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_suitable_from
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_character:
+    label: 'Character'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_character
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_flavour:
+    label: 'Flavour'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_flavour
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_fragrance_scent:
+    label: 'Fragrance Scent'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fragrance_scent
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_fragrance_type:
+    label: 'Fragrance Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_fragrance_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_spf:
+    label: 'SPF'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_spf
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_finish:
+    label: 'Finish'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_finish
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_bottle_type:
+    label: 'Bottle Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_bottle_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_nappy_type:
+    label: 'Nappy Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_nappy_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_age_range:
+    label: 'Age Range'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_age_range
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_car_seat_category:
+    label: 'Car Seat Category'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_car_seat_category
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_denier:
+    label: 'Denier'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_denier
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_pack_size:
+    label: 'Pack Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_pack_size
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_teat_flow:
+    label: 'Teat Flow'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_teat_flow
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_shop_by_collection:
+    label: 'Shop By Collection'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_shop_by_collection
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_number_of_wheels:
+    label: 'Number Of Wheels'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_number_of_wheels
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_protection:
+    label: 'Protection'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_protection
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_meal_type:
+    label: 'Meal Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_meal_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_specialist_milk:
+    label: 'Specialist Milk'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_specialist_milk
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_power:
+    label: 'Power'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_power
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_power_source:
+    label: 'Power Source'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_power_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_barrel_size:
+    label: 'Barrel Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_barrel_size
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_battery_size:
+    label: 'Battery Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_battery_size
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_battery_type:
+    label: 'Battery Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_battery_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_compatibility:
+    label: 'Compatibility'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_compatibility
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_lhn_group:
+    label: 'LHN Group'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_lhn_group
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
