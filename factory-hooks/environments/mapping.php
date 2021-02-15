@@ -143,8 +143,8 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     ],
     'bbwkw' => [
       'dev3' => [
-        'magento' => 'bbw_qa',
-        'conductor' => 'bbwsa_dev3',
+        'magento' => 'bbw_apc',
+        'conductor' => 'bbwkw_dev3',
       ],
     ],
     'bbwae' => [
@@ -159,6 +159,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev2' => [
         'magento' => 'bbw_uat',
         'conductor' => 'bbwae_dev2',
+      ],
+      'dev3' => [
+        'magento' => 'bbw_apc',
+        'conductor' => 'bbwae_dev3',
       ],
     ],
     'bbwsa' => [
