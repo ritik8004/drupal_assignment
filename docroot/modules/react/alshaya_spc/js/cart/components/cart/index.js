@@ -228,7 +228,17 @@ export default class Cart extends React.Component {
         </>
       );
     }
-
+    let postpay;
+    if (isPostpayEnabled()) {
+      postpay = (
+        <PostpayCart
+          amount={totals.base_grand_total}
+          isCartPage
+          classNames="spc-postpay-mobile-preview"
+          mobileOnly
+        />
+      );
+    }
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -245,16 +255,7 @@ export default class Cart extends React.Component {
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
-          {isPostpayEnabled()
-            ? (
-              <PostpayCart
-                amount={totals.base_grand_total}
-                isCartPage
-                classNames="spc-postpay-mobile-preview"
-                mobileOnly
-              />
-            )
-            : null}
+          {postpay}
         </div>
         <div className="spc-main">
           <div className="spc-content">

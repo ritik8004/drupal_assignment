@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * @file
  * Contains install, update, uninstall hooks for alshaya_bnpl module.
