@@ -268,5 +268,8 @@ function _alshaya_aura_react_translations() {
     'On completion of this purchase you will earn:' => [
       'ar' => 'عند إتمام عملية الشراء هذه، سوف تربح:',
     ],
+    'Sign in' => [
+      'ar' => 'تسجيل الدخول',
+    ],
   ];
 }

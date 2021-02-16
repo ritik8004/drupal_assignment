@@ -6,6 +6,7 @@ import {
 import dispatchCustomEvent from '../../../js/utilities/events';
 import {
   setStorageInfo,
+  removeStorageInfo,
 } from '../../../js/utilities/storage';
 import {
   getAuraLocalStorageKey,
@@ -70,16 +71,19 @@ function handleNotYou(cardNumber) {
   let stateValues = {};
   const auraStatus = getAllAuraStatus().APC_NOT_LINKED_NOT_U;
 
+  // Guest users.
   if (!getUserDetails().id) {
     stateValues = {
       ...getAuraDetailsDefaultState(),
       loyaltyStatus: auraStatus,
       signUpComplete: false,
     };
+    removeStorageInfo(getAuraLocalStorageKey());
     dispatchCustomEvent('loyaltyStatusUpdated', { stateValues });
     return;
   }
 
+  // Logged in users.
   removeInlineError('.error-placeholder');
   addInlineLoader('.not-you-wrapper');
   const apiData = updateUsersLoyaltyStatus(cardNumber, auraStatus, 'N');
