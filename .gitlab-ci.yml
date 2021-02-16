@@ -1,8 +1,8 @@
 image: acquia/ads-local:lando-php-7.3-nodejs-10
 
 stages:
-#  - build
-#  - validate
+  - build
+  - validate
   - setup_and_test
   - test
   - deploy
@@ -66,9 +66,9 @@ build:
   allow_failure: false
   script:
     # Build middleware.
-    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
+#    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
     # Build appointment middleware.
-    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/appointment
+#    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/appointment
 
 validate:
   stage: validate
@@ -77,7 +77,7 @@ validate:
     - build
   allow_failure: false
   script:
-    - $SCRIPT_DIR/validate.sh
+#    - $SCRIPT_DIR/validate.sh
 
 setup_and_test:
   stage: setup_and_test
