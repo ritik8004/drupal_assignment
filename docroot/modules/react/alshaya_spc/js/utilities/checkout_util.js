@@ -584,3 +584,13 @@ export const applyCode = (e) => {
     document.getElementById('promo-action-button').click();
   }
 };
+
+let checkoutComUpapiApplePayConfig = {};
+export const setUpapiApplePayCofig = () => {
+  if (({}).hasOwnProperty.call(drupalSettings, 'checkoutComUpapiApplePay')) {
+    checkoutComUpapiApplePayConfig = drupalSettings.checkoutComUpapiApplePay;
+    Object.freeze(checkoutComUpapiApplePayConfig);
+  }
+};
+
+export const getUpapiApplePayConfig = () => checkoutComUpapiApplePayConfig;

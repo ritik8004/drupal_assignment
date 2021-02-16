@@ -1198,6 +1198,11 @@ class Cart {
         $additional_data['failUrl'] = $this->checkoutComApi->getFailUrl();
 
         break;
+
+      case 'checkout_com_upapi_applepay':
+        $additional_data = $additional_info;
+
+        break;
     }
 
     return $additional_data;

@@ -7,6 +7,7 @@ import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   placeOrder,
   removeFullScreenLoader,
+  setUpapiApplePayCofig,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
@@ -19,6 +20,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import CheckoutComUpapiContextProvider from '../../../context/CheckoutComUpapi';
 import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi';
+import PaymentMethodCheckoutComUpapiApplePay from '../payment-method-checkout-com-upapi-apple-pay';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -29,6 +31,11 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodPostpay = React.createRef();
     this.paymentMethodCybersource = React.createRef();
+    this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
+  }
+
+  componentDidMount() {
+    setUpapiApplePayCofig();
   }
 
   validateBeforePlaceOrder = () => {
@@ -44,6 +51,10 @@ export default class PaymentMethod extends React.Component {
 
     if (method.code === 'checkout_com_applepay') {
       return this.paymentMethodApplePay.current.validateBeforePlaceOrder();
+    }
+
+    if (method.code === 'checkout_com_upapi_applepay') {
+      return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
     }
 
     if (method.code === 'cybersource') {
@@ -136,7 +147,7 @@ export default class PaymentMethod extends React.Component {
     } = this.props;
     const animationDelayValue = `${0.4 + animationOffset}s`;
 
-    if (method.code === 'checkout_com_applepay') {
+    if (method.code === 'checkout_com_applepay' || method.code === 'checkout_com_upapi_applepay') {
       if (!(ApplePay.isAvailable())) {
         return (null);
       }
@@ -231,6 +242,14 @@ export default class PaymentMethod extends React.Component {
           <ConditionalView condition={isSelected && method.code === 'checkout_com_applepay'}>
             <PaymentMethodApplePay
               ref={this.paymentMethodApplePay}
+              cart={cart}
+              finalisePayment={this.finalisePayment}
+            />
+          </ConditionalView>
+
+          <ConditionalView condition={isSelected && method.code === 'checkout_com_upapi_applepay'}>
+            <PaymentMethodCheckoutComUpapiApplePay
+              ref={this.paymentMethodCheckoutComUpapiApplePay}
               cart={cart}
               finalisePayment={this.finalisePayment}
             />
