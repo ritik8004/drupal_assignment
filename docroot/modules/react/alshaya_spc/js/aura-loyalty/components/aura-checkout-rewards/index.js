@@ -13,7 +13,11 @@ import {
 } from '../../../../../alshaya_aura_react/js/utilities/header_helper';
 import { getStorageInfo } from '../../../utilities/storage';
 import { isDeliveryTypeSameAsInCart } from '../../../utilities/checkout_util';
-import getStringMessage from '../../../utilities/strings';
+import getStringMessage from '../../../../../js/utilities/strings';
+import { processCheckoutCart } from '../utilities/checkout_helper';
+import {
+  showFullScreenLoader,
+} from '../../../../../js/utilities/showRemoveFullScreenLoader';
 
 class AuraCheckoutRewards extends React.Component {
   constructor(props) {
@@ -63,10 +67,40 @@ class AuraCheckoutRewards extends React.Component {
   // Event listener callback to update states.
   updateStates = (data) => {
     const states = { ...data.detail.stateValues };
+
+    // Attach aura card to cart.
+    this.attachCardInCart();
+
     states.wait = false;
     this.setState({
       ...states,
     });
+  };
+
+  attachCardInCart = () => {
+    const { cart } = this.props;
+
+    // We don't need to attach card for logged in users or if card is already attached.
+    if (getUserDetails().id || cart.cart.loyaltyCard) {
+      return;
+    }
+
+    const localStorageValues = getStorageInfo(getAuraLocalStorageKey());
+
+    if (localStorageValues === null
+      || localStorageValues.cardNumber === undefined
+      || localStorageValues.cardNumber.length === 0) {
+      return;
+    }
+
+    const data = {
+      action: 'add',
+      type: 'apcNumber',
+      value: localStorageValues.cardNumber,
+    };
+
+    showFullScreenLoader();
+    processCheckoutCart(data);
   };
 
   getPointsString = (points) => {

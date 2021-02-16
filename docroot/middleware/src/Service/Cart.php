@@ -2395,6 +2395,11 @@ class Cart {
       }
     }
 
+    // Add aura card if present in cart.
+    if (!empty($cart_data['cart']['extension_attributes']['loyalty_card'])) {
+      $data['loyaltyCard'] = $cart_data['cart']['extension_attributes']['loyalty_card'];
+    }
+
     if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
       // We use null to show "Excluding Delivery".
       $data['totals']['shipping_incl_tax'] = NULL;
