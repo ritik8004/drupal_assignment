@@ -1,8 +1,12 @@
 .labels-container {
   .label {
-    max-width: 2.375rem;
+    max-width: 3.125rem;
     margin-bottom: 0.625rem;
     z-index: 0;
+
+    @include breakpoint($only-mobile) {
+      max-width: 2.375rem;
+    }
 
     &:last-child {
       margin-bottom: 0;
@@ -65,6 +69,45 @@
 
       @include breakpoint($desktop) {
         bottom: 12.5rem;
+      }
+    }
+  }
+}
+
+.magazine-layout,
+.nodetype--acq_product {
+  .labels-container {
+    &.bottom {
+      &-left,
+      &-right {
+        bottom: 0;
+      }
+    }
+  }
+
+  .horizontal-upell,
+  .horizontal-related {
+    .labels-container {
+      &.top {
+        &-left,
+        &-right {
+          top: 0.625rem;
+        }
+      }
+
+      &.bottom {
+        &-left,
+        &-right {
+          bottom: 4.375rem;
+
+          @include breakpoint($only-mobile) {
+            bottom: 0;
+          }
+        }
+      }
+
+      .label {
+        max-width: 2.375rem;
       }
     }
   }
