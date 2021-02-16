@@ -7,7 +7,7 @@ Feature: Test basket page
     And I wait for the page to load
 
   Scenario: As a Guest, I should be able to add more quantity
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -55,7 +55,7 @@ Feature: Test basket page
 
   @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -84,7 +84,7 @@ Feature: Test basket page
 
   @mobile
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -103,7 +103,7 @@ Feature: Test basket page
     And I should see "{vat}"
 
   Scenario: As a Guest, I should be able to remove products from the basket
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -129,7 +129,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -150,7 +150,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -166,14 +166,14 @@ Feature: Test basket page
     And I wait 5 seconds
     Then the price for product should be doubled
 
-  @desktop @language
+  @desktop @language @test12
   Scenario: As a Guest, I should be able to see the header and the footer in second language
     When I follow "{language_link}"
     And I wait for the page to load
     Then I should see the link "{language_create_account}"
     Then I should see "{language_sign_in}"
     Then I should see the link "{language_find_store}"
-    Then I should see "{language_link}"
+    Then I should see the link "{second_language_link}"
     Then I should see "{language_sort_filter}"
     Then I should see "{language_price_filter}"
     Then I should see "{language_color_filter}"
@@ -206,7 +206,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -227,7 +227,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -250,7 +250,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -276,7 +276,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
