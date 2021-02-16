@@ -68,7 +68,8 @@ services:
       - { name: event_subscriber }
     arguments:
       - '@logger.channel.alshaya_spc'
-      - '@purge.purgers'
-      - '@purge.processors'
-      - '@purge.invalidation.factory'
+    calls:
+      - ['setPurger', ['@?purge.purgers']]
+      - ['setPurgeProcessor', ['@?purge.processors']]
+      - ['setPurgeInvalidationFactory', ['@?purge.invalidation.factory']]
 

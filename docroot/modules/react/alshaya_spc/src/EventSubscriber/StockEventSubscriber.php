@@ -63,22 +63,40 @@ class StockEventSubscriber implements EventSubscriberInterface {
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger factory service.
+   */
+  public function __construct(
+    LoggerInterface $logger
+  ) {
+    $this->logger = $logger;
+  }
+
+  /**
+   * Set the optional purger service.
+   *
    * @param \Drupal\purge\Plugin\Purge\Purger\PurgersServiceInterface $purgers
    *   The purgers service.
+   */
+  public function setPurger(PurgersServiceInterface $purgers) {
+    $this->purgers = $purgers;
+  }
+
+  /**
+   * Set the optional purge processor service.
+   *
    * @param \Drupal\purge\Plugin\Purge\Processor\ProcessorsServiceInterface $processors
    *   The purge processors service.
+   */
+  public function setPurgeProcessor(ProcessorsServiceInterface $processors) {
+    $this->purgeProcessor = $processors->get('lateruntime');
+  }
+
+  /**
+   * Set the optional purge invalidation factory service.
+   *
    * @param \Drupal\purge\Plugin\Purge\Invalidation\InvalidationsServiceInterface $purge_invalidations_factory
    *   The purge invalidations factory service.
    */
-  public function __construct(
-    LoggerInterface $logger,
-    PurgersServiceInterface $purgers,
-    ProcessorsServiceInterface $processors,
-    InvalidationsServiceInterface $purge_invalidations_factory
-  ) {
-    $this->logger = $logger;
-    $this->purgers = $purgers;
-    $this->purgeProcessor = $processors->get('lateruntime');
+  public function setPurgeInvalidationFactory(InvalidationsServiceInterface $purge_invalidations_factory) {
     $this->purgeInvalidationsFactory = $purge_invalidations_factory;
   }
 
@@ -113,7 +131,7 @@ class StockEventSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function onKernelTerminate(PostResponseEvent $event) {
-    if (empty(self::$skusForCacheInvalidation)) {
+    if (isset($this->purgers) && !empty($this->purgers) && empty(self::$skusForCacheInvalidation)) {
       return;
     }
 
