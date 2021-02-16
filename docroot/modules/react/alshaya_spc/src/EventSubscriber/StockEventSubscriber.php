@@ -135,7 +135,8 @@ class StockEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $cache_tags = [];
+    // We purge the cache tags for the stock resource in any case.
+    $cache_tags = [StockResource::CACHE_TAG];
     $purge_tags = [];
 
     foreach (self::$skusForCacheInvalidation as $sku) {
@@ -143,10 +144,6 @@ class StockEventSubscriber implements EventSubscriberInterface {
       if ($sku_entity instanceof SKUInterface) {
         $cache_tags = Cache::mergeTags($cache_tags, $sku_entity->getCacheTags());
       }
-    }
-
-    if (empty($cache_tags)) {
-      return;
     }
 
     // We want the SKU cache tags to get cleared only when the SKU is processed
@@ -157,13 +154,12 @@ class StockEventSubscriber implements EventSubscriberInterface {
     Cache::invalidateTags([StockResource::CACHE_TAG]);
 
     // Now prepare data to purge the varnish cache.
-    // Purging the SKU cache tags should also purge the Varnish cache for the
-    // Stock API.
     foreach ($cache_tags as $cache_tag) {
       $purge_tags[] = $this->purgeInvalidationsFactory->get('tag', $cache_tag);
     }
 
     try {
+      // This will immediately invalidate the cache tags.
       $this->purgers->invalidate($this->purgeProcessor, $purge_tags);
       $this->logger->info('Invalidated cache tags on stock refresh for the following skus: @skus', [
         '@skus' => implode(',', self::$skusForCacheInvalidation),
