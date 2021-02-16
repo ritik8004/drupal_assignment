@@ -100,13 +100,13 @@ class AuraFormNewAuraUserModal extends React.Component {
           }
 
           if (result.data.error_code === 'mobile_already_registered') {
-            showError(getInlineErrorSelector('signUpMobile').signUpMobile, getStringMessage('form_error_mobile_already_registered'));
+            showError(getInlineErrorSelector('signUpMobile').signUpMobile, getStringMessage(result.data.error_message));
             removeFullScreenLoader();
             return;
           }
 
           if (result.data.error_code === 'email_already_registered') {
-            showError(getInlineErrorSelector('signUpEmail').signUpEmail, getStringMessage('form_error_email_already_registered'));
+            showError(getInlineErrorSelector('signUpEmail').signUpEmail, getStringMessage(result.data.error_message));
             removeFullScreenLoader();
             return;
           }

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Aura\OtpHelper;
 use App\Service\Aura\SearchHelper;
+use App\Service\Aura\AuraErrorCodes;
 
 /**
  * Provides route callbacks for Loyalty Club OTP APIs.
@@ -102,7 +103,7 @@ class LoyaltyClubOtpController {
       $this->logger->error('Error while trying to send otp. Mobile number @mobile is already registered.', [
         '@mobile' => $mobile,
       ]);
-      return new JsonResponse($this->utility->getErrorResponse('form_error_mobile_already_registered', 'already_registered'));
+      return new JsonResponse($this->utility->getErrorResponse(AuraErrorCodes::MOBILE_ALREADY_REGISTERED_MSG, AuraErrorCodes::MOBILE_ALREADY_REGISTERED_CODE));
     }
 
     $response_data = $this->auraOtpHelper->sendOtp($mobile);
@@ -168,7 +169,7 @@ class LoyaltyClubOtpController {
         $this->logger->error('Error while trying to send link card OTP. Mobile number not found. Request Data: @data', [
           '@data' => json_encode($request_content),
         ]);
-        return new JsonResponse($this->utility->getErrorResponse('form_error_mobile_not_found', Response::HTTP_NOT_FOUND));
+        return new JsonResponse($this->utility->getErrorResponse(AuraErrorCodes::NO_MOBILE_FOUND_MSG, Response::HTTP_NOT_FOUND));
       }
 
       $response_data = $this->auraOtpHelper->sendOtp($search_response['data']['mobile']);

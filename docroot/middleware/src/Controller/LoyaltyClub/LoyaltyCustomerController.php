@@ -226,7 +226,7 @@ class LoyaltyCustomerController {
       $this->logger->error('Error while trying to do loyalty club sign up. Mobile number @mobile is already registered.', [
         '@mobile' => $request_content['mobile'],
       ]);
-      return new JsonResponse($this->utility->getErrorResponse('form_error_mobile_already_registered', 'mobile_already_registered'));
+      return new JsonResponse($this->utility->getErrorResponse(AuraErrorCodes::MOBILE_ALREADY_REGISTERED_MSG, AuraErrorCodes::MOBILE_ALREADY_REGISTERED_CODE));
     }
 
     // Call search API to check if given email
@@ -237,7 +237,7 @@ class LoyaltyCustomerController {
       $this->logger->error('Error while trying to do loyalty club sign up. Email address @email is already registered.', [
         '@email' => $request_content['email'],
       ]);
-      return new JsonResponse($this->utility->getErrorResponse('form_error_email_already_registered', 'email_already_registered'));
+      return new JsonResponse($this->utility->getErrorResponse(AuraErrorCodes::EMAIL_ALREADY_REGISTERED_MSG, AuraErrorCodes::EMAIL_ALREADY_REGISTERED_CODE));
     }
 
     try {

@@ -29,4 +29,44 @@ final class AuraErrorCodes {
    */
   const NO_CARD_FOUND = 'NO_CARD_FOUND';
 
+  /**
+   * Error code when mobile is already registered.
+   */
+  const MOBILE_ALREADY_REGISTERED_CODE = 'mobile_already_registered';
+
+  /**
+   * Error message when mobile is already registered.
+   */
+  const MOBILE_ALREADY_REGISTERED_MSG = 'form_error_mobile_already_registered';
+
+  /**
+   * Error code when email is already registered.
+   */
+  const EMAIL_ALREADY_REGISTERED_CODE = 'email_already_registered';
+
+  /**
+   * Error message when email is already registered.
+   */
+  const EMAIL_ALREADY_REGISTERED_MSG = 'form_error_email_already_registered';
+
+  /**
+   * Error message when no mobile number is found for given user details.
+   */
+  const NO_MOBILE_FOUND_MSG = 'form_error_mobile_not_found';
+
+  /**
+   * Error code for invalid mobile.
+   */
+  const INVALID_MOBILE = 'INVALID_MOBILE';
+
+  /**
+   * Error code for invalid card.
+   */
+  const INVALID_CARDNUMBER = 'INVALID_CARDNUMBER';
+
+  /**
+   * Error code for invalid email.
+   */
+  const INVALID_EMAIL = 'INVALID_EMAIL';
+
 }

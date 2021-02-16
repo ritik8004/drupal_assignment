@@ -88,6 +88,6 @@ loyalty_club_routes:
   resource: './loyalty_club_routes.yaml'
 
 freegift.select_free_gift:
-  path: /select-free-gift
-  controller: App\Controller\FreeGiftController::selectFreeGift
-  methods: POST
+    path: /select-free-gift
+    controller: App\Controller\FreeGiftController::selectFreeGift
+    methods: POST
