@@ -69,6 +69,7 @@ build:
 #    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
     # Build appointment middleware.
 #    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/appointment
+    - export
 
 validate:
   stage: validate
@@ -78,6 +79,7 @@ validate:
   allow_failure: false
   script:
 #    - $SCRIPT_DIR/validate.sh
+    - export
 
 setup_and_test:
   stage: setup_and_test
@@ -88,7 +90,6 @@ setup_and_test:
     - mysql:5.7
   allow_failure: false
   script:
-    - export
     - $SCRIPT_DIR/setup_env.sh
     - $SCRIPT_DIR/setup_app.sh
     - $SCRIPT_DIR/test.sh
