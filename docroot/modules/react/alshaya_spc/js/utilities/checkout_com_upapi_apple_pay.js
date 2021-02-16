@@ -102,6 +102,11 @@ const CheckoutComUpapiApplePay = {
             additional_data: {
               token: response.data.token,
               bin: response.data.bin,
+              type: response.data.type,
+              expires_on: response.data.expires_on,
+              expiry_month: response.data.expiry_month,
+              expiry_year: response.data.expiry_year,
+              last4: response.data.last4,
             },
           },
         };
