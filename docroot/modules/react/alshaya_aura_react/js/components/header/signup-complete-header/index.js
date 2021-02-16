@@ -46,28 +46,26 @@ const SignUpCompleteHeader = (props) => {
               </div>
             </div>
           </div>
+          <div className="aura-popup-body">
+            <p>{Drupal.t('Sign in or create an account to use your points.')}</p>
+          </div>
           {
             !noRegisterLinks
               && (
-                <>
-                  <div className="aura-popup-body">
-                    <p>{Drupal.t('Sign in or create an account to use your points.')}</p>
-                  </div>
-                  <div className="aura-popup-footer">
-                    <a
-                      className="create-an-account"
-                      href={`${baseUrl}${pathPrefix}user/register`}
-                    >
-                      {Drupal.t('Create an account')}
-                    </a>
-                    <a
-                      href={`${baseUrl}${pathPrefix}user/login`}
-                      className="sign-in"
-                    >
-                      {Drupal.t('Sign in')}
-                    </a>
-                  </div>
-                </>
+                <div className="aura-popup-footer">
+                  <a
+                    className="create-an-account"
+                    href={`${baseUrl}${pathPrefix}user/register`}
+                  >
+                    {Drupal.t('Create an account')}
+                  </a>
+                  <a
+                    href={`${baseUrl}${pathPrefix}user/login`}
+                    className="sign-in"
+                  >
+                    {Drupal.t('Sign in')}
+                  </a>
+                </div>
               )
           }
         </div>
