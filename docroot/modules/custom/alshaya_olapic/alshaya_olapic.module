@@ -9,7 +9,6 @@
  /**
   * Implements hook_library_info_build().
   */
-
  function alshaya_olapic_library_info_build() {
     $config = \Drupal::config('alshaya_olapic.settings');
     $olapic_external_script_url = $config->get('olapic_external_script_url');
