@@ -427,6 +427,15 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 4, 'ar' => 5],
     ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
   ],
   'vs_uat' => [
     'url' => 'https://vs-uat2.store.alshaya.com',
