@@ -17,7 +17,7 @@ variables:
   filters: 'جميع اختياراتك'
   promotional_filter: ''
   add_to_cart_link: 'أضف إلى سلة التسوق'
-  language_add_to_cart_link: 'add to basket'
+  language_add_to_cart_link: 'add-to-cart-main'
   language_link: 'العربية'
   checkout_link: 'continue to checkout'
   create_account: 'تسجيل مستخدم جديد'
