@@ -143,7 +143,7 @@ const CheckoutComUpapiApplePay = {
         message: getStringMessage('payment_error'),
       });
       removeFullScreenLoader();
-      Drupal.logJavascriptError('apple-pay-merchant-authorise', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
+      Drupal.logJavascriptError('apple-pay-checkoutcom-get-token', error.message, GTM_CONSTANTS.PAYMENT_ERRORS);
     });
   },
 
