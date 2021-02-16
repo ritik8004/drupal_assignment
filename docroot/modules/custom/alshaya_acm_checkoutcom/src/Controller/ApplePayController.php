@@ -89,7 +89,7 @@ class ApplePayController implements ContainerInjectionInterface {
     }
 
     // Get apple pay configuration.
-    $settings = $this->apiHelper->getCheckoutcomUpApiConfig();
+    $settings = $this->apiHelper->getApplePayConfig();
 
     $settings += $this->formHelper->getApplePaySecretInfo();
 

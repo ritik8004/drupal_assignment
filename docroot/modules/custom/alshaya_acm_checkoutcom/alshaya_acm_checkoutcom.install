@@ -10,7 +10,7 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_n().
  *
- * Update translations of checkout.com upapi payment method.
+ * Update translations of apple-pay checkout.com upapi payment method.
  */
 function alshaya_acm_checkoutcom_update_8004() {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
@@ -20,7 +20,7 @@ function alshaya_acm_checkoutcom_update_8004() {
   $checkout_com = $checkout_com->hasTranslation('ar')
     ? $checkout_com->getTranslation('ar')
     : $checkout_com->addTranslation('ar', []);
-  $checkout_com->setName('الدفع عن طريق أبل باي (checkout.com)');
+  $checkout_com->setName('الدفع عن طريق أبل باي');
   $checkout_com->save();
 }
 
