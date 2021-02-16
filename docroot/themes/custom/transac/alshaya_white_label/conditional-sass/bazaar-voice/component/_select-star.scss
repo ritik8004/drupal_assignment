@@ -1,36 +1,60 @@
 // select star
-.select-star__wrap {
-  display: inline-block;
-  font-size: 1rem;
-}
+.select-star {
+  &__wrap {
+    display: inline-block;
+    font-size: 1rem;
 
-.select-star__wrap::after {
-  content: "";
-  display: table;
-  clear: both;
-}
+    &.rating_Quality,
+    &.rating_Value {
+      display: flex;
+    }
 
-.select-star-rating__ico {
-  padding-#{$left}: 0.125rem;
-  cursor: pointer;
+    &.rating {
+      .star-rating-label {
+        font-family: $alshaya-bold;
+      }
 
-  &.ratingfull {
-    @include icon(ratingfull) {
-      font-size: 2rem;
+      .star-counter {
+        margin-bottom: 1.25rem;
+        margin-top: 0.25rem;
+
+        label {
+          &:first-of-type {
+            span {
+              margin-#{$left}: -0.1875rem;
+            }
+          }
+        }
+      }
+    }
+
+    &::after {
+      content: "";
+      display: table;
+      clear: both;
     }
   }
 
-  &.rating {
-    @include icon(rating) {
-      font-size: 2rem;
+  &-rating {
+    &__ico {
+      padding-#{$left}: 0.125rem;
+      cursor: pointer;
+
+      &.ratingfull {
+        @include icon(ratingfull) {
+          font-size: 2rem;
+        }
+      }
+
+      &.rating {
+        @include icon(rating) {
+          font-size: 2rem;
+        }
+      }
+    }
+
+    &__input {
+      display: none;
     }
   }
-}
-
-.select-star-rating__ico:last-child {
-  padding-#{$left}: 0;
-}
-
-.select-star-rating__input {
-  display: none;
 }
