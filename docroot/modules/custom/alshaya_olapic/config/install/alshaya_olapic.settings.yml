@@ -1,0 +1,5 @@
+development_mode: '0'
+olapic_en_data_apikey: e3d150ff4676c3d50169bbfbd0c120b8bca62c2df21935f896bf1076fd081a3a
+olapic_ar_data_apikey: f7bc836a9e39e9d30f256342747e42512835a80ebfec252fbc67da90bcc88fdb
+olapic_external_script_url: //photorankstatics-a.akamaihd.net/81b03e40475846d5883661ff57b34ece/static/frontend/latest/build.min.js
+olapic_checkout_pixel_external_script_url: //photorankstatics-a.akamaihd.net/static/frontend/checkout/olapic.checkout.helper.js
