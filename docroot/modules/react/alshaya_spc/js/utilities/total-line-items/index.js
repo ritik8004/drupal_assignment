@@ -84,6 +84,17 @@ class TotalLineItems extends React.Component {
       ? totals.base_grand_total
       : totals.base_grand_total_without_surcharge;
 
+    let postpay;
+    if (isPostpayEnabled()) {
+      postpay = (
+        <PostpayCart
+          amount={totals.base_grand_total}
+          isCartPage={isCartPage}
+          classNames="spc-postpay"
+          mobileOnly={false}
+        />
+      );
+    }
     return (
       <div className="totals">
         <TotalLineItem name="sub-total" title={Drupal.t('subtotal')} value={totals.subtotal_incl_tax} />
@@ -120,16 +131,7 @@ class TotalLineItems extends React.Component {
 
             <VatText />
           </div>
-          {isPostpayEnabled()
-            ? (
-              <PostpayCart
-                amount={totals.base_grand_total}
-                isCartPage={isCartPage}
-                classNames="spc-postpay"
-                mobileOnly={false}
-              />
-            )
-            : null}
+          {postpay}
         </div>
       </div>
     );

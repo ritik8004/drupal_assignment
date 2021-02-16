@@ -72,7 +72,7 @@ class AlshayaBnplWidgetHelper {
    * @return array|mixed
    *   Return array of keys.
    */
-  public function getBnplWidgetInfo($page_type = 'pdp') {
+  private function getBnplWidgetInfo($page_type = 'pdp') {
     $currency_config = $this->configFactory->get('acq_commerce.currency');
     $country_code = $this->configFactory->get('system.date')->get('country.default');
     $info['class'] = 'postpay-widget';
