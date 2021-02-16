@@ -1,8 +1,8 @@
 image: acquia/ads-local:lando-php-7.3-nodejs-10
 
 stages:
-  - build
-  - validate
+#  - build
+#  - validate
   - setup_and_test
   - test
   - deploy
