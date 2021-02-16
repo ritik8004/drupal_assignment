@@ -88,6 +88,7 @@ setup_and_test:
     - mysql:5.7
   allow_failure: false
   script:
+    - export
     - $SCRIPT_DIR/setup_env.sh
     - $SCRIPT_DIR/setup_app.sh
     - $SCRIPT_DIR/test.sh
