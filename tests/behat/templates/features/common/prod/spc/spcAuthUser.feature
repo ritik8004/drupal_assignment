@@ -23,6 +23,7 @@ Feature: Test the My Account functionality
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
+    Then I check the address-book form
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
     Then I select "{city_option}" from "field_address[0][address][area_parent]" address
