@@ -120,7 +120,7 @@
     }
 
     &.guest-user {
-      .aura-form-items-link-card-options {
+      .item-wrapper > .aura-form-items-link-card-options {
         margin-#{$left}: -0.625rem;
         margin-bottom: 0.5rem;
 
