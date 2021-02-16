@@ -37,8 +37,8 @@ function validateMobile(type, data) {
 /**
  * Utility function to validate input by element type.
  */
-function validateElementValueByType(type) {
-  const inputValue = getElementValueByType(type);
+function validateElementValueByType(type, context) {
+  const inputValue = getElementValueByType(type, context);
 
   if (type === 'mobile' || type === 'signUpOtpMobile' || type === 'signUpMobile' || type === 'mobileCheckout') {
     if (inputValue.length === 0 || inputValue.match(/^[0-9]+$/) === null) {

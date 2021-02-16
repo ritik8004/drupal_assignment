@@ -1,5 +1,6 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
+import getStringMessage from '../../../../../../utilities/strings';
 
 const labelEffect = (e) => {
   if (e.currentTarget.value.length > 0) {
@@ -33,7 +34,7 @@ const LinkCardOptionCard = (props) => {
 
   return (
     <Cleave
-      placeholder={Drupal.t('Loyalty card number')}
+      placeholder={getStringMessage('loyalty_card_placeholder')}
       id="spc-aura-link-card-input-card"
       name="spc-aura-link-card-input-card"
       className="spc-aura-link-card-input-card spc-aura-link-card-input"

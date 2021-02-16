@@ -1,6 +1,6 @@
 import React from 'react';
 import AuraFormLinkCard from '../../../aura-forms/aura-link-card-textbox';
-import LinkYourCardMessage from '../link-you-card-message';
+import LinkYourCardMessage from '../link-your-card-message';
 import ConditionalView from '../../../../../common/components/conditional-view';
 import { getMembersToEarnMessage } from '../../../utilities/checkout_helper';
 import getStringMessage from '../../../../../../../js/utilities/strings';
