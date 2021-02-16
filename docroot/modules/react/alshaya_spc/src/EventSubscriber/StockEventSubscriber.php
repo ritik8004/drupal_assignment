@@ -106,7 +106,7 @@ class StockEventSubscriber implements EventSubscriberInterface {
    * @param string $sku
    *   The SKU code.
    */
-  public static function setSkusForCacheInvalidation($sku) {
+  public static function setSkusForCacheInvalidation(string $sku) {
     self::$skusForCacheInvalidation[] = $sku;
   }
 
