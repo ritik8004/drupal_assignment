@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class Apple-Pay checkout.com UPAPI Controller.
  *
- * @package Drupal\acq_checkoutcom\Controller
+ * @package Drupal\alshaya_acm_checkoutcom\Controller
  */
 class ApplePayController implements ContainerInjectionInterface {
 
