@@ -8,7 +8,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
 
   @cc @hd @checkout_com @visa @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (VISA Card)
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -106,7 +106,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -207,7 +207,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -270,7 +270,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -365,7 +365,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -467,7 +467,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
