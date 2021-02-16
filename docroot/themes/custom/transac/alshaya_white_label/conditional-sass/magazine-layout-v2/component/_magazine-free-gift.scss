@@ -5,6 +5,10 @@
       .coupon-code {
         color: $magv2-free-gift;
       }
+
+      span.coupon-code {
+        display: inline-block;
+      }
     }
   }
 

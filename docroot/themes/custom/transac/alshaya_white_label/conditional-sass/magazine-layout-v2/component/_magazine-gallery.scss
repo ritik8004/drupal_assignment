@@ -26,6 +26,7 @@
   .magv2-pdp-image {
     img {
       margin: 0 auto;
+      align-self: center;
     }
   }
 
@@ -76,6 +77,7 @@
     .magv2-pdp-image {
       position: relative;
       display: inline-flex;
+      align-items: center;
       cursor: pointer;
       background: $magv2-gallery-bg;
 

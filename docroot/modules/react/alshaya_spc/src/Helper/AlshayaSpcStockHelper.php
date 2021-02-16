@@ -47,25 +47,31 @@ class AlshayaSpcStockHelper {
     }
 
     $skus = array_column($cart['items'], 'sku');
-    return $this->refreshStockForSkus($skus);
+
+    $skus_quantity = [];
+    foreach ($skus as $sku) {
+      // This will trigger force refresh of stock.
+      $skus_quantity[$sku] = 0;
+    }
+    return $this->refreshStockForSkus($skus_quantity);
   }
 
   /**
    * Refreshes stock for a set of skus.
    *
-   * @param array $skus
-   *   The array of sku values.
+   * @param array $skus_quantity
+   *   The associative array of sku => quantity values.
    *
    * @return array
    *   The stock status of all skus or empty array if nothing is updated.
    */
-  public function refreshStockForSkus(array $skus) {
-    foreach ($skus as $sku) {
+  public function refreshStockForSkus(array $skus_quantity) {
+    foreach ($skus_quantity as $sku => $requested_quantity) {
       if ($sku_entity = SKU::loadFromSku($sku)) {
         $plugin = $sku_entity->getPluginInstance();
         $stock = $plugin->getStock($sku);
 
-        if ($stock === 0) {
+        if (($stock === 0) || (($requested_quantity > 0) && ($requested_quantity > $stock))) {
           $response['stock'][$sku] = FALSE;
           $this->logger->info('Refresh Stock skipped for SKU: @sku.', [
             '@sku' => $sku,
