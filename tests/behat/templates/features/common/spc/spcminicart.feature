@@ -14,7 +14,7 @@ Feature: Test MiniCart page
 
   @desktop
   Scenario: As a Guest, I should be able add content in minicart
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -48,7 +48,7 @@ Feature: Test MiniCart page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -82,7 +82,7 @@ Feature: Test MiniCart page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -103,7 +103,7 @@ Feature: Test MiniCart page
 
   @mobile
   Scenario: As a Guest, I should be able add content in minicart
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on "#plp-hits .view-content .c-products__item.views-row"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
