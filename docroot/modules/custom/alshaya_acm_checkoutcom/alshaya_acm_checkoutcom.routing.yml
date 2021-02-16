@@ -1,0 +1,9 @@
+alshaya_acm_checkoutcom.apple_pay_validate:
+  path: '/checkoutcom/upapi/applepay/validate'
+  defaults:
+    _title: ''
+    _controller: '\Drupal\alshaya_acm_checkoutcom\Controller\ApplePayController::validate'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
