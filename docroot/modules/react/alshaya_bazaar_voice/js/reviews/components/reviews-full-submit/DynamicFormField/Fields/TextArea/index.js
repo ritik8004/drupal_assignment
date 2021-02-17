@@ -51,7 +51,7 @@ class TextArea extends React.Component {
           {defaultValue}
         </textarea>
         <div className="c-input__bar" />
-        <div id={`${label}-error`} className="error" />
+        <div id={`${label}-error`} className="error">{errors[id]}</div>
       </div>
     );
   }
