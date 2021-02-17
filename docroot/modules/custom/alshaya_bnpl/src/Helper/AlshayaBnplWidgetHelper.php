@@ -139,7 +139,7 @@ class AlshayaBnplWidgetHelper {
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_cart';
         $build['#attached']['library'][] = 'alshaya_white_label/postpay-cart';
         $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo('cart');
-        $build['#attached']['drupalSettings']['alshaya_spc']['postpay_eligibility_message'] = $this->t('<p>Your order total does not qualify for payment via Postpay. <a href="#">Find out more</a> about our interest-free installments and options with Postpay</p>');
+        $build['#attached']['drupalSettings']['alshaya_spc']['postpay_eligibility_message'] = $this->t('<p>Your order total does not qualify for payment via <span class="brand-postpay">Postpay</span>. <a href="#">Find out more</a> about our interest-free installments and options with <span class="brand-postpay">Postpay</span></p>');
         break;
 
       case 'checkout':

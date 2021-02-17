@@ -1,6 +1,6 @@
 (function ($, Drupal) {
 
-  document.addEventListener('alshayaPostpayInit', (e) => {
+  document.addEventListener('alshayaPostpayInit', () => {
     alshayaPostpayCheckAmount();
   });
 
@@ -14,20 +14,21 @@
   });
 
   function alshayaPostpayCheckAmount() {
-    var amount = $(".postpay-widget").attr('data-amount');
+    var amount = $('.postpay-widget').attr('data-amount');
+    var currency = $('.postpay-widget').attr('data-currency');
     window.postpay.check_amount({
       amount: amount,
-      currency: 'AED',
+      currency: currency,
       callback: function (payment_options) {
         if (payment_options !== null) {
           // Hide Postpay eligibility message if the payment_options is
           // not available.
-          $("#postpay-eligibility-message").hide();
+          $('#postpay-eligibility-message').hide();
         }
         else {
           // Display Postpay eligibility message if the payment_options is
           // not available.
-          $("#postpay-eligibility-message").show();
+          $('#postpay-eligibility-message').show();
         }
       },
     });
