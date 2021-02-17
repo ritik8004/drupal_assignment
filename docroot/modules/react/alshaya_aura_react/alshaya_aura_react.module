@@ -85,11 +85,6 @@ function alshaya_aura_react_alshaya_my_account_links_alter(array &$links) {
  * Implements hook_theme().
  */
 function alshaya_aura_react_theme() {
-  // Do not proceed if AURA is not enabled.
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
-    return;
-  }
-
   $theme = [
     'my_loyalty_club' => [
       'variables' => [
@@ -209,11 +204,6 @@ function alshaya_aura_react_block_view_alter(&$build, $block) {
  *   The altered block build array.
  */
 function _alshaya_aura_react_my_account_block_pre_render(array $build) {
-  // Do not proceed if AURA is not enabled.
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
-    return $build;
-  }
-
   $build['content']['my_account_my_aura_block_root'] = [
     '#markup' => '<div id="my-accounts-aura-mobile"></div>',
     '#weight' => -1,
@@ -234,11 +224,6 @@ function _alshaya_aura_react_my_account_block_pre_render(array $build) {
  *   The altered block build array.
  */
 function _alshaya_aura_react_system_menu_block_account_pre_render(array $build) {
-  // Do not proceed if AURA is not enabled.
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
-    return $build;
-  }
-
   $build['content']['#prefix'] = '<div id="aura-mobile-header-signin-register"></div>';
   return $build;
 }
@@ -268,11 +253,6 @@ function alshaya_aura_react_block_view_page_title_block_alter(&$build, $block) {
  *   The altered block build array.
  */
 function _alshaya_aura_react_page_title_pre_render(array $build) {
-  // Do not proceed if AURA is not enabled.
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
-    return $build;
-  }
-
   $edit_account = [
     '#type' => 'link',
     '#title' => t('edit account details'),
@@ -309,25 +289,15 @@ function alshaya_aura_react_alshaya_acm_customer_alshaya_user_recent_orders_buil
  * Implements hook_preprocess_alshaya_main_menu_level1() for menu template.
  */
 function alshaya_aura_react_preprocess_alshaya_main_menu_level1(array &$variables) {
-  // Do not proceed if AURA is not enabled.
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
-    return;
-  }
-
-  $variables['aura_enabled'] = 1;
+  $variables['aura_enabled'] = \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled();
 }
 
 /**
  * Implements hook_preprocess_node().
  */
 function alshaya_aura_react_preprocess_node(&$variables) {
-  // Do not proceed if AURA is not enabled.
-  if (\Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled() !== TRUE) {
-    return;
-  }
-
   if ($variables['node']->bundle() === 'acq_product') {
-    $variables['aura_enabled'] = 1;
+    $variables['aura_enabled'] = \Drupal::service('alshaya_aura_react.aura_helper')->isAuraEnabled();
   }
 }
 

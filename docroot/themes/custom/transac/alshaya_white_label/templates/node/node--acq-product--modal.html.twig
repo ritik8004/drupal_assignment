@@ -53,7 +53,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
           {{ content.item_code }}
         </div>
 
-        {% if aura_enabled is defined and aura_enabled == 1 %}
+        {% if aura_enabled is defined and aura_enabled == true %}
           {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
           <div id="aura-pdp-modal"></div>
         {% endif %}

@@ -9,6 +9,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_aura_react\Helper\AuraHelper;
 
 /**
  * Provides My Accounts AURA block.
@@ -35,6 +36,13 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
   protected $moduleHandler;
 
   /**
+   * Aura Helper service object.
+   *
+   * @var Drupal\alshaya_aura_react\Helper\AuraHelper
+   */
+  protected $auraHelper;
+
+  /**
    * AuraRewardsHeader constructor.
    *
    * @param array $configuration
@@ -47,15 +55,19 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
    *   The current route match.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param Drupal\alshaya_aura_react\Helper\AuraHelper $aura_helper
+   *   The aura helper service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               RouteMatchInterface $route_match,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              AuraHelper $aura_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->routeMatch = $route_match;
     $this->moduleHandler = $module_handler;
+    $this->auraHelper = $aura_helper;
   }
 
   /**
@@ -69,7 +81,8 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
       $plugin_id,
       $plugin_definition,
       $container->get('current_route_match'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_aura_react.aura_helper')
     );
   }
 
@@ -95,8 +108,10 @@ class MyAccountsAuraBlock extends BlockBase implements ContainerFactoryPluginInt
   protected function blockAccess(AccountInterface $account) {
     $route_name = $this->routeMatch->getRouteName();
 
-    // Show block only on my accounts page.
-    return AccessResult::allowedIf($route_name === 'entity.user.canonical');
+    // Show block only on my accounts page if aura is enabled.
+    return AccessResult::allowedIf(
+      $this->auraHelper->isAuraEnabled() && $route_name === 'entity.user.canonical'
+    );
   }
 
 }

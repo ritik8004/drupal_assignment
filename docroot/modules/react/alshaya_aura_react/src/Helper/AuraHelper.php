@@ -142,7 +142,7 @@ class AuraHelper {
    *   TRUE/FALSE
    */
   public function isAuraEnabled() {
-    return TRUE;
+    return $this->configFactory->get('alshaya_aura_react.settings')->get('aura_enabled');
   }
 
 }

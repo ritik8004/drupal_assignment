@@ -8,6 +8,7 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_aura_react\Helper\AuraHelper;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * AlshayaLoyaltyController for loyalty club page.
@@ -110,6 +111,16 @@ class AlshayaLoyaltyController extends ControllerBase {
    */
   public function getLoyaltyClubTitle() {
     return $this->t('My AURA');
+  }
+
+  /**
+   * Helper method to check access.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   Return access result object.
+   */
+  public function checkAccess() {
+    return AccessResult::allowedIf($this->auraHelper->isAuraEnabled());
   }
 
 }

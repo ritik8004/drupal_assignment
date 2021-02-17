@@ -310,7 +310,7 @@
 
   Drupal.dispatchModalOpenCloseEvent = function (eventName) {
     // Dispatch a custom event when modal is opened/closed to listen in AURA react app.
-    if (drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled === 1) {
+    if (drupalSettings.aura !== 'undefined' && drupalSettings.aura.enabled === true) {
       var event = new CustomEvent(eventName, {
         bubbles: true,
         detail: true
