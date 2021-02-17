@@ -38,6 +38,7 @@ class TextArea extends React.Component {
 
     return (
       <div className="write-review-type-textarea">
+        <label>{label}</label>
         <textarea
           required={required}
           id={id}
@@ -50,8 +51,7 @@ class TextArea extends React.Component {
           {defaultValue}
         </textarea>
         <div className="c-input__bar" />
-        <label>{label}</label>
-        <div id={`${label}-error`} className="error">{errors[id]}</div>
+        <div id={`${label}-error`} className="error" />
       </div>
     );
   }

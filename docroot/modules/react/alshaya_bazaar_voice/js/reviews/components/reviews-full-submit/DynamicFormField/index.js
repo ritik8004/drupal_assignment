@@ -3,9 +3,10 @@ import TextField from './Fields/TextField';
 import TextArea from './Fields/TextArea';
 import SelectField from './Fields/SelectField';
 import Slider from './Fields/Slider';
-import Checkbox from './Fields/Checkbox';
+// import Checkbox from './Fields/Checkbox';
 import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
+import RadioButton from './Fields/RadioButton';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
@@ -21,17 +22,17 @@ const DynamicFormField = (props) => {
     );
   }
 
-  if (fieldProperty.group_type === 'boolean'
-    && fieldProperty.visible === true) {
-    return (
-      <Checkbox
-        required={fieldProperty.required}
-        id={fieldProperty.id}
-        label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
-      />
-    );
-  }
+  // if (fieldProperty.group_type === 'boolean'
+  //   && fieldProperty.visible === true) {
+  //   return (
+  //     <Checkbox
+  //       required={fieldProperty.required}
+  //       id={fieldProperty.id}
+  //       label={fieldProperty.title}
+  //       defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+  //     />
+  //   );
+  // }
 
   if (fieldProperty.group_type === 'slider'
     && fieldProperty.visible === true) {
@@ -86,6 +87,17 @@ const DynamicFormField = (props) => {
     return (
       <PhotoUpload
         fieldProperty={fieldProperty}
+      />
+    );
+  }
+
+  if (fieldProperty.group_type === 'boolean'
+    && fieldProperty.visible === true) {
+    return (
+      <RadioButton
+        required={fieldProperty.required}
+        id={fieldProperty.id}
+        label={fieldProperty.title}
       />
     );
   }
