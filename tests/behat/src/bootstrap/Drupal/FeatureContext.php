@@ -233,32 +233,6 @@ class FeatureContext extends CustomMinkContext
   }
 
   /**
-   * @Given /^I select a product in stock on "([^"]*)"$/
-   */
-  public function iSelectAProductInStockOn($css)
-  {
-    $page = $this->getSession()->getPage();
-    $all_products = $page->find('css', $css);
-    if ($all_products !== NULL) {
-      $all_products = $all_products->findAll('css', '.c-products__item');
-      $total_products = count($all_products);
-    } else {
-      throw new \Exception('Search passed, but search results were empty');
-    }
-    foreach ($all_products as $item) {
-      if ($item->find('css', 'div.out-of-stock span')) {
-        $total_products--;
-        if (!$total_products) {
-          throw new \Exception('All products are out of stock');
-        }
-        continue;
-      }
-      $this->getSession()->executeScript("jQuery('h2.field--name-name a').get(0).click();");
-      break;
-    }
-  }
-
-  /**
    * @When /^I select address$/
    */
   public function iSelectAddress()
@@ -2330,6 +2304,38 @@ class FeatureContext extends CustomMinkContext
       $element->click();
     } else {
       throw new \Exception ('Element %s not found');
+    }
+  }
+
+  /**
+   * @When /^I select a product in stock on "([^"]*)"$/
+   */
+  public function iSelectAProductInStockOn($css)
+  {
+    $page = $this->getSession()->getPage();
+    $algoliaenabled = $page->find('css', '#alshaya-algolia-plp');
+    if (!empty($algoliaenabled)) {
+      $all_products = $page->find('css', '#plp-hits');
+    }
+    else {
+      $all_products = $page->find('css', $css);
+    }
+    if (!empty($all_products)) {
+      $all_products = $all_products->findAll('css', '.c-products__item');
+      $total_products = count($all_products);
+    } else {
+      throw new \Exception('Search passed, but search results were empty');
+    }
+    foreach ($all_products as $item) {
+      if ($item->find('css', 'div.out-of-stock span')) {
+        $total_products--;
+        if (!$total_products) {
+          throw new \Exception('All products are out of stock');
+        }
+        continue;
+      }
+      $this->getSession()->executeScript("jQuery('h2.field--name-name a').get(0).click();");
+      break;
     }
   }
 }

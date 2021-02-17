@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_customer\Plugin\Block;
 
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -75,6 +76,13 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
   protected $configFactory;
 
   /**
+   * Orders Manager service.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * UserRecentOrders constructor.
    *
    * @param array $configuration
@@ -97,6 +105,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
    *   The logger instance.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   Orders Manager service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -107,7 +117,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                               DateFormatterInterface $date_formatter,
                               Request $current_request,
                               LoggerChannelInterface $logger,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              OrdersManager $orders_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $current_account;
     $this->routeMatch = $route_match;
@@ -116,6 +127,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
     $this->currentRequest = $current_request;
     $this->logger = $logger;
     $this->configFactory = $config_factory;
+    $this->ordersManager = $orders_manager;
   }
 
   /**
@@ -132,7 +144,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       $container->get('date.formatter'),
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('logger.factory')->get('alshaya_acm_customer'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_acm_customer.orders_manager')
     );
   }
 
@@ -251,9 +264,22 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                   '#price' => $order['items'][$key]['price'],
                 ];
               }
+
+              if ($order['items'][$key]['is_item_cancelled']) {
+                $cancelled_item = $order['items'][$key];
+                $cancelled_item['price'] = [
+                  '#theme' => 'acq_commerce_price',
+                  '#price' => $order['items'][$key]['refund_amount'],
+                ];
+                $cancelled_item['ordered'] = $order['items'][$key]['cancelled_quantity'];
+
+                $order['cancelled_items'][] = $cancelled_item;
+              }
             }
 
             $order['status'] = alshaya_acm_customer_get_order_status($order);
+            $order['refund_text'] = $this->ordersManager->getRefundText($order['payment']['method']);
+            $order['total_quantity'] = alshaya_acm_customer_get_order_total_quantity($order);
           }
 
           $build['recent_order'][] = [
@@ -295,7 +321,9 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
     if (empty($account)) {
       $account = $this->currentUser;
     }
-    return Cache::mergeTags(parent::getCacheTags(), ['user:' . $account->id()]);
+    // Refund text depends on alshaya_acm_checkout.settings.
+    $cache_tags = Cache::mergeTags(parent::getCacheTags(), ['config:alshaya_acm_checkout.settings']);
+    return Cache::mergeTags($cache_tags, ['user:' . $account->id()]);
   }
 
 }

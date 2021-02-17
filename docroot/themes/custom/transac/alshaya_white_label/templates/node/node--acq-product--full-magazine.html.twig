@@ -62,6 +62,11 @@
           <div id="aura-pdp"></div>
         {% endif %}
 
+        {% if content.postpay %}
+          {{ attach_library('alshaya_white_label/postpay-pdp') }}
+          <div class="postpay"> {{ content.postpay }} </div>
+        {% endif %}
+
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
         {% if aura_enabled is defined and aura_enabled == 1 %}

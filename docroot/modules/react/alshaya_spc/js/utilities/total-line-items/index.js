@@ -6,6 +6,8 @@ import { getAmountWithCurrency, replaceCodTokens } from '../checkout_util';
 import AuraCheckoutOrderSummary from '../../aura-loyalty/components/aura-checkout-rewards/components/aura-checkout-order-summary';
 import isAuraEnabled from '../../../../js/utilities/helper';
 import DeliveryVATSuffix from '../delivery-vat-suffix';
+import PostpayCart from '../../cart/components/postpay/postpay';
+import isPostpayEnabled from '../helper';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -92,6 +94,17 @@ class TotalLineItems extends React.Component {
       ? totals.base_grand_total
       : totals.base_grand_total_without_surcharge;
 
+    let postpay;
+    if (isPostpayEnabled()) {
+      postpay = (
+        <PostpayCart
+          amount={totals.base_grand_total}
+          isCartPage={isCartPage}
+          classNames="spc-postpay"
+          mobileOnly={false}
+        />
+      );
+    }
     return (
       <div className="totals">
         <div className="sub-totals">
@@ -138,6 +151,7 @@ class TotalLineItems extends React.Component {
               />
             )
             : null}
+          {postpay}
         </div>
       </div>
     );

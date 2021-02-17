@@ -124,6 +124,11 @@ libraries-override:
       theme:
         css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css: css/conditional-sass/aura-loyalty-pdp/aura-loyalty-pdp.ltr.css
 
+  alshaya_white_label/postpay-pdp:
+    css:
+      theme:
+        css/conditional-sass/postpay-pdp/postpay-pdp.ltr.css: css/conditional-sass/postpay-pdp/postpay-pdp.ltr.css
+
   alshaya_white_label/store_finder:
     css:
       theme:
