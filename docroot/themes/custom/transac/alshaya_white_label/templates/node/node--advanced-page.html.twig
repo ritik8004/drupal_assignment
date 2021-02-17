@@ -28,7 +28,10 @@
             {% if content.field_delivery_banner %}
               {{ content.field_delivery_banner }}
             {% endif %}
-            {{ content.field_promo_blocks }}
+            {% if content.field_promo_blocks %}
+              {{ attach_library('alshaya_white_label/promo-blocks') }}
+              {{ content.field_promo_blocks }}
+            {% endif %}
           </div>
         </div>
 
