@@ -349,9 +349,14 @@ matchback_cart_notification:
       css/conditional-sass/matchback-cart-notification/matchback-cart-notification.ltr.css: {}
 
 tooltip:
+  js:
+      js/order-detail.js: {}
   css:
     theme:
       css/conditional-sass/tooltip/tooltip.ltr.css: {}
+  dependencies:
+  - core/jquery
+  - core/drupal
 
 alshaya-react-animate:
   css:

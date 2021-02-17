@@ -44,6 +44,11 @@
               {% plural count %}
                 Total: {{ count }} items
               {% endtrans %}
+              {% if order.cancelled_items_count > 0 %}
+                <div class="cancel-item">
+                  <a href="#cancelled-items" class="cancel-link">{{ '@count Cancelled'|t({'@count': order.cancelled_items_count})}}</a>
+                </div>
+              {% endif %}
             </div>
           </div>
         </td>
@@ -60,6 +65,11 @@
             {% plural count %}
               Total: {{ count }} items
             {% endtrans %}
+            {% if order.cancelled_items_count > 0 %}
+              <div class="cancel-item">
+                <a href="#cancelled-items" class="cancel-link">{{ '@count Cancelled'|t({'@count': order.cancelled_items_count})}}</a>
+              </div>
+            {% endif %}
           </div>
 
           <div class="tablet-only">
@@ -221,66 +231,18 @@
       </tr>
 
       {% for product in products %}
-        <tr class="order-item-row">
-          <td class="order__product--image">
-            {% if product.image %}
-              {{ product.image }}
-            {% endif %}
-          </td>
-          <td>
-            <div class="dark">{{ product.name }}</div>
-            {% if product.attributes is not empty %}
-              {% for attribute in product.attributes %}
-                <div class="light">
-                  {% trans %}
-                    {{ attribute.label }}: {{ attribute.value }}
-                  {% endtrans %}
-                </div>
-              {% endfor %}
-            {% endif %}
-            <div class="light">
-              {% trans %}
-                Item code: {{ product.sku }}
-              {% endtrans %}
-            </div>
-
-            <div class="light">
-              {% trans %}
-                Quantity: {{ product.ordered }}
-              {% endtrans %}
-            </div>
-
-            {% if product.free_gift_label %}
-              <div class="free-gift-label">{{ product.free_gift_label }}</div>
-            {% endif %}
-
-            <div class="tablet-only">
-              <div class="light">{{ "Unit price"|t }}</div>
-              <div class="dark">{{ product.price }}</div>
-            </div>
-            <div class="mobile-only">
-              {% if product.total %}
-                <div class="light">{{ "Total"|t }}</div>
-                <div class="dark">{{ product.total }}</div>
-              {% endif %}
-            </div>
-          </td>
-
-          <td class="desktop-only">
-            <div class="light">{{ "Unit price"|t }}</div>
-            <div class="dark">{{ product.price }}</div>
-          </td>
-
-          <td class="above-mobile blend">
-            {% if product.total %}
-              <div class="light">{{ "Total"|t }}</div>
-              <div class="dark">{{ product.total }}</div>
-            {% endif %}
-          </td>
-
-          <td class="above-mobile empty--cell">&nbsp;</td>
-        </tr>
+        {{ _self.order_item(product, false) }}
       {% endfor %}
+      {% if order.cancelled_items_count > 0 %}
+        <tr id="cancelled-items" class="order-item-row">
+          <td colspan="4">
+            <div>{{ "Cancelled Items"|t }}</div>
+          </td>
+        </tr>
+        {% for product in cancelled_products %}
+          {{ _self.order_item(product, true) }}
+        {% endfor %}
+      {% endif %}
 
       <tr class="sub-total-row">
         <td class="desktop-only">&nbsp;</td>
@@ -355,5 +317,93 @@
       {% endif %}
     </tbody>
   </table>
+  {% if order.refund_text is not empty %}
+    <tr class="order-item-row">
+      <td colspan="4">
+        <div class="tooltip-anchor cancelled-item-tooltip-refund-text info">
+          <span>{{ order.refund_text }}</span>
+        </div>
+      </td>
+    </tr>
+  {% endif %}
 
 </div>
+
+{% macro order_item(product, cancelled) %}
+  <tr class="order-item-row">
+    {% if product.image and cancelled %}
+      <td class="order__product--image">
+        <div class="image-wrapper">
+          {{ product.image }}
+          <span>{{ 'Cancelled' | t }}</span>
+        </div>
+      </td>
+    {% else %}
+      <td class="order__product--image">
+        {% if product.image %}
+          {{ product.image }}
+        {% endif %}
+      </td>
+    {% endif %}
+    <td>
+      <div class="dark">{{ product.name }}</div>
+      {% if product.attributes is not empty %}
+        {% for attribute in product.attributes %}
+          <div class="light">
+            {% trans %}
+              {{ attribute.label }}: {{ attribute.value }}
+            {% endtrans %}
+          </div>
+        {% endfor %}
+      {% endif %}
+      <div class="light">
+        {% trans %}
+          Item code: {{ product.sku }}
+        {% endtrans %}
+      </div>
+
+      <div class="light">
+        {% trans %}
+          Quantity: {{ product.ordered }}
+        {% endtrans %}
+      </div>
+
+      {% if product.free_gift_label %}
+        <div class="free-gift-label">{{ product.free_gift_label }}</div>
+      {% endif %}
+
+      <div class="tablet-only">
+        <div class="light">{{ "Unit price"|t }}</div>
+        <div class="dark">{{ product.price }}</div>
+      </div>
+      <div class="mobile-only">
+        {% if product.total %}
+          <div class="light">{{ "Total"|t }}</div>
+          {% if cancelled %}
+            <div class="dark cancelled-total-price">{{ product.total }}</div>
+          {% else %}
+            <div class="dark">{{ product.total }}</div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </td>
+
+    <td class="desktop-only">
+      <div class="light">{{ "Unit price"|t }}</div>
+      <div class="dark">{{ product.price }}</div>
+    </td>
+
+    <td class="above-mobile blend">
+      {% if product.total %}
+        <div class="light">{{ "Total"|t }}</div>
+        {% if cancelled %}
+          <div class="dark cancelled-total-price">{{ product.total }}</div>
+        {% else %}
+          <div class="dark">{{ product.total }}</div>
+        {% endif %}
+      {% endif %}
+    </td>
+
+    <td class="above-mobile empty--cell">&nbsp;</td>
+  </tr>
+{% endmacro %}
