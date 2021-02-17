@@ -30,7 +30,7 @@
 
     span {
       margin-top: 0.1875rem;
-      margin-#{$left}: 1.25rem;
+      margin-#{$left}: 0.5rem;
       color: $cancel-item-refund-text;
     }
   }
@@ -58,6 +58,7 @@
         background-color: $cancel-item-image-label-bg;
         color: $cancel-item-image-label-text;
         font-size: 0.8125rem;
+        line-height: 0.9;
       }
     }
   }
