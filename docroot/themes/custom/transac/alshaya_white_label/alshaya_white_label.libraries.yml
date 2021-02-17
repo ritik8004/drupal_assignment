@@ -434,3 +434,8 @@ store_finder:
   css:
     theme:
       css/conditional-sass/store-finder/store-finder.ltr.css: {}
+
+promo-blocks:
+  css:
+    theme:
+      css/conditional-sass/promo-blocks/promo-blocks.ltr.css: {}
