@@ -1,0 +1,15 @@
+.spc-postpay {
+  @include breakpoint($only-mobile) {
+    padding-top: 0.75rem;
+    margin-top: 1.25rem;
+    border-top: 1px solid $spc-order-summary-hero-total-border;
+  }
+
+  @include breakpoint($tablet) {
+    margin-top: 0.875rem;
+  }
+}
+
+.spc-postpay-mobile-preview {
+  padding: 0 1.25rem 1.25rem;
+}

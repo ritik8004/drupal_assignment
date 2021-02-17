@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce3491cb98377487f3e8338f41aa17ed",
+    "content-hash": "238910bf7ccbf98481bc6aed51877bb7",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -12729,7 +12729,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Allow to override maxValuesPerFacet Algolia setting": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/1.patch",
+                    "Allow to override maxValuesPerFacet Algolia setting": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/1.patch?v=2",
                     "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
                 }
             },

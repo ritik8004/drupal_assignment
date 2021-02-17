@@ -344,3 +344,9 @@ Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modu
 * Enable the module (if not enabled already)
 * Add profile=1 in query string to any URL which you want to profile
 * Check [factory-hooks/post-settings-php/xhprof.php](factory-hooks/post-settings-php/xhprof.php) for more details on default configuration
+
+### Enable Apple-Pay on local.
+* Setup Apple pay wallet (https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/577208482/Apple+Pay+-+Setup)
+* Download / Copy SSL (merchant_id.key and merchant_id.pem files) from Cloud dev/test environment of any brand and place them in local environment folder as per paths (usually /var/www/apple-pay-resources) defined in factory-hooks/pre-settings-php/apple_pay.php
+* The Apple-Pay payment method appears on desktop view if "apple_pay_allowed_in" key from configuration acq_checkoutcom.settings is set to 'all'
+  Drush command to set config to all: drush -l <site-url> cset acq_checkoutcom.settings apple_pay_allowed_in 'all' --input-format=yaml

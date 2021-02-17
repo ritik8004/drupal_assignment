@@ -111,6 +111,13 @@ export const placeOrder = (paymentMethod) => {
     .then(
       (response) => {
         if (response.data.error === undefined) {
+          if (response.data.token !== undefined && paymentMethod === 'postpay') {
+            window.postpay.checkout(response.data.token, {
+              locale: drupalSettings.postpay.locale,
+            });
+            return;
+          }
+
           // If url is absolute, then redirect to the external payment page.
           if (response.data.isAbsoluteUrl !== undefined && response.data.isAbsoluteUrl) {
             window.location.href = response.data.redirectUrl;
@@ -578,3 +585,13 @@ export const applyCode = (e) => {
     document.getElementById('promo-action-button').click();
   }
 };
+
+let checkoutComUpapiApplePayConfig = {};
+export const setUpapiApplePayCofig = () => {
+  if (({}).hasOwnProperty.call(drupalSettings, 'checkoutComUpapiApplePay')) {
+    checkoutComUpapiApplePayConfig = drupalSettings.checkoutComUpapiApplePay;
+    Object.freeze(checkoutComUpapiApplePayConfig);
+  }
+};
+
+export const getUpapiApplePayConfig = () => checkoutComUpapiApplePayConfig;

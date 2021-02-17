@@ -195,6 +195,18 @@
       display: table-cell;
     }
   }
+
+  // Order details.
+  #cancelled-items {
+    font-family: $hnm-demibold;
+  }
+
+  // My account - Recent Order list.
+  #cancel-order-item {
+    td {
+      background: $order_summary_row;
+    }
+  }
 }
 
 .path--user #block-userrecentorders {

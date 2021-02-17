@@ -1,0 +1,5 @@
+alshaya_olapic.olapic_config_setting:
+  route_name: alshaya_olapic.olapic_config_setting
+  title: 'Configure Olapic'
+  description: 'Configure the settings for Olapic.'
+  parent: alshaya_master.alshaya_admin

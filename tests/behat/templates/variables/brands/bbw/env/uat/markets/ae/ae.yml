@@ -1,4 +1,4 @@
 variables:
   spc_product_listing_page: '/shop-body-care/'
-  spc_basket_page: '/shop-bodycare/'
+  spc_basket_page: 'shop-body-care/bath-shower/all-bath-shower/'
   product_listing_page_url: '/shop-body-care/'
