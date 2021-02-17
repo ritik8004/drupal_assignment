@@ -263,6 +263,12 @@ body.path--confirmation.alias--confirmation-print {
         font-family: $alshaya-arabic-bold;
       }
     }
+
+    .cancelled-total-price {
+      .price-amount {
+        text-decoration: line-through;
+      }
+    }
   }
 
   .price {

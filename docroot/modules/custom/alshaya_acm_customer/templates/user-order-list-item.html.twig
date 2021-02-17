@@ -11,13 +11,15 @@
  */
 #}
 {% set count = order.quantity %}
-<a href="{{ order_detail_link }}">
+<div class="order-list-wrapper-container">
   <div class="first-second wrapper">
-    <div class="first">
-      <div class="light order-label">{{ "Order ID"|t }}</div>
-      <div class="dark order-id">{{ order.orderId }}</div>
-      <div class="light date">{{ order.orderDate }}</div>
-    </div>
+    <a href="{{ order_detail_link }}" class="link-wrapper">
+      <div class="first">
+        <div class="light order-label">{{ "Order ID"|t }}</div>
+        <div class="dark order-id">{{ order.orderId }}</div>
+        <div class="light date">{{ order.orderDate }}</div>
+      </div>
+    </a>
     <div class="second">
       <div class="dark order-name">
         {% trans %}
@@ -25,15 +27,26 @@
         {% endtrans %}
       </div>
       <div class="light order-quantity">
-        {% trans %}
-          Total: {{ count }} item
-        {% plural count %}
-          Total: {{ count }} items
-        {% endtrans %}
+        <div class="item-count">
+          {% trans %}
+            Total: {{ count }} item
+          {% plural count %}
+            Total: {{ count }} items
+          {% endtrans %}
+        </div>
       </div>
+      {% if order.cancelled_items_count > 0 %}
+        <div class="cancel-item">
+          <a href="{{ order_detail_link }}#cancelled-items" class="cancel-link"> {{ '@count Cancelled'|t({ '@count': order.cancelled_items_count } ) }}</a>
+        </div>
+      {% endif %}
     </div>
   </div>
-  <div class="second-third wrapper">
+  {% if order.cancelled_items_count > 0 %}
+    <div class="second-third wrapper cancelled-item-wrapper">
+  {% else %}
+    <div class="second-third wrapper">
+  {% endif %}
     <div class="second">
       <div class="dark order-name">
         {% trans %}
@@ -41,22 +54,34 @@
         {% endtrans %}
       </div>
       <div class="light order-quantity">
-        {% trans %}
-          Total: {{ count }} item
-        {% plural count %}
-          Total: {{ count }} items
-        {% endtrans %}
+        <div class="item-count">
+          {% trans %}
+            Total: {{ count }} item
+          {% plural count %}
+            Total: {{ count }} items
+          {% endtrans %}
+        </div>
+        {% if order.cancelled_items_count > 0 %}
+          <div class="cancel-item">
+            <a href="{{ order_detail_link }}#cancelled-items" class="cancel-link"> {{ '@count Cancelled'|t({ '@count': order.cancelled_items_count } ) }}</a>
+          </div>
+        {% endif %}
       </div>
     </div>
 
     <div class="third">
-      <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
+      <a href="{{ order_detail_link }}" class="link-wrapper">
+        <div class="button {{ order.status.class }}">{{ order.status.text }}</div>
+      </a>
     </div>
   </div>
   <div class="fourth">
-    <div class="light totale-label">{{ "Order Total"|t }}</div>
-    <div class="dark order-total">
-      {{ order.total }}
-    </div>
+    <a href="{{ order_detail_link }}" class="link-wrapper">
+      <div class="light totale-label">{{ "Order Total"|t }}</div>
+      <div class="dark order-total">
+        {{ order.total }}
+      </div>
+    </a>
   </div>
-</a>
+  <a href="{{ order_detail_link }}" class="order-detail-page"></a>
+</div>
