@@ -606,6 +606,14 @@
   }
 }
 
+.cancelled-item-tooltip-refund-text {
+  span {
+    margin-top: 0.1875rem;
+    margin-left: 0.5rem;
+    color: $cancel-item-refund-text;
+  }
+}
+
 #block-userrecentorders {
   @include breakpoint($only-tablet) {
     margin-top: -1.5em;
