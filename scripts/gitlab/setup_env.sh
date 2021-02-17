@@ -20,7 +20,7 @@ echo "FLUSH PRIVILEGES;" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" -
 
 
 apt install memcached -y
-apt install netstat -y
+apt install net-tools -y
 netstat -taunpe | grep LISTEN
 
 set +v
