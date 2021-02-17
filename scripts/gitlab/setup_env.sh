@@ -19,5 +19,6 @@ echo "GRANT ALL ON drupal.* TO 'drupal'@'%';" | mysql --user=root --password="$M
 echo "FLUSH PRIVILEGES;" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql
 
 apt install memcached -y
+systemctl status memcached
 
 set +v
