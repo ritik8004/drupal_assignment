@@ -28,4 +28,12 @@ function alshaya_bnpl_install() {
   $data['postpay'] = 'postpay';
   $config->set('exclude_payment_methods', $data);
   $config->save();
+
+  $strings = [
+    '<p>Your order total does not qualify for payment via Postpay. <a href="#">Find out more</a> about our interest-free installments and options with Postpay</p>' => [
+      'ar' => '',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

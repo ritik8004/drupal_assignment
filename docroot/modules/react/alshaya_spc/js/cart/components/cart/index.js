@@ -229,6 +229,7 @@ export default class Cart extends React.Component {
       );
     }
     let postpay;
+    let postpayEligibilityMessage;
     if (isPostpayEnabled()) {
       postpay = (
         <PostpayCart
@@ -238,6 +239,7 @@ export default class Cart extends React.Component {
           mobileOnly
         />
       );
+      postpayEligibilityMessage = <div id="postpay-eligibility-message" style={{ display: 'none' }}>{drupalSettings.alshaya_spc.postpay_eligibility_message}</div>;
     }
     return (
       <>
@@ -254,6 +256,7 @@ export default class Cart extends React.Component {
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
+          {postpayEligibilityMessage}
           <MobileCartPreview total_items={totalItems} totals={totals} />
           {postpay}
         </div>
