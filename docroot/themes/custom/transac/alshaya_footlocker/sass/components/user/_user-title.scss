@@ -16,7 +16,8 @@
 .c-user-edit,
 .c-order-list,
 .c-user--node,
-.c-address-book {
+.c-address-book,
+.c-loyalty-club-page {
   .block-page-title-block {
     .back-link {
       @include breakpoint($only-mobile) {
