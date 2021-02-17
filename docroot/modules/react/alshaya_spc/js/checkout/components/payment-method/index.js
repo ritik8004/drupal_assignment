@@ -21,6 +21,8 @@ import getStringMessage from '../../../utilities/strings';
 import CheckoutComUpapiContextProvider from '../../../context/CheckoutComUpapi';
 import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi';
 import PaymentMethodCheckoutComUpapiApplePay from '../payment-method-checkout-com-upapi-apple-pay';
+import CheckoutComUpapiApplePay
+  from '../../../utilities/checkout_com_upapi_apple_pay';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -149,6 +151,12 @@ export default class PaymentMethod extends React.Component {
 
     if (method.code === 'checkout_com_applepay' || method.code === 'checkout_com_upapi_applepay') {
       if (!(ApplePay.isAvailable())) {
+        return (null);
+      }
+    }
+
+    if (method.code === 'checkout_com_upapi_applepay') {
+      if (!(CheckoutComUpapiApplePay.isAvailable())) {
         return (null);
       }
     }
