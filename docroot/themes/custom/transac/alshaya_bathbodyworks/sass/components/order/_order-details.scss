@@ -41,4 +41,24 @@
       }
     }
   }
+
+  // My account - Recent Order list.
+  #cancel-order-item {
+    td {
+      font-size: 1.125rem;
+      background: none;
+      font-family: $bbw-thin;
+    }
+
+    + tr {
+      > td {
+        border-top-color: $checkout_section_titles;
+      }
+    }
+  }
+
+  #cancelled-items {
+    border-bottom-color: $checkout_section_titles;
+    font-size: 1.125rem;
+  }
 }
