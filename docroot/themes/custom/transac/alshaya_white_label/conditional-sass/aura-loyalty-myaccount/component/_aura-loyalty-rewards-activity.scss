@@ -118,6 +118,15 @@ div.empty-row {
       font-family: $aura-bold;
     }
 
+    .app-links {
+      margin-top: 1.25rem;
+
+      svg path,
+      svg g {
+        color: $aura-my-account-reward-activity;
+      }
+    }
+
     a {
       color: $aura-my-account-reward-activity;
       text-decoration: underline;

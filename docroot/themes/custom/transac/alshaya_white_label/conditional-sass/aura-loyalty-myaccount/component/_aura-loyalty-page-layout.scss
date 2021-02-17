@@ -1,5 +1,9 @@
 #my-loyalty-club {
   margin-top: 2.5rem;
+
+  @include breakpoint($only-mobile) {
+    margin-top: 1.25rem;
+  }
 }
 
 .aura-my-account {
