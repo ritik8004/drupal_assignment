@@ -31,7 +31,7 @@ function alshaya_bnpl_install() {
 
   $strings = [
     '<p>Your order total does not qualify for payment via <span class="brand-postpay">Postpay</span>. <a href="#">Find out more</a> about our interest-free installments and options with <span class="brand-postpay">Postpay</span></p>' => [
-      'ar' => '.مجموع طلبيتك غير مؤهل لاستخدام خدمة الدفع بوست باي.<a href="#"> تعرف على المزيد <a/> من الأقساط بدون فوائد',
+      'ar' => '.مجموع طلبيتك غير مؤهل لاستخدام خدمة الدفع بوست باي.(<a href="#"> تعرف على المزيد <a/>) من الأقساط بدون فوائد',
     ],
   ];
 
