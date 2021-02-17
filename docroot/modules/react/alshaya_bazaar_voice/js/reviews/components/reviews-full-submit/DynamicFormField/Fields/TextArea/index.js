@@ -1,14 +1,23 @@
 import React from 'react';
 
 class TextArea extends React.Component {
-  handleEvent = (e, handler) => {
-    if (handler === 'blur') {
-      if (e.currentTarget.value.length > 0) {
-        e.currentTarget.classList.add('focus');
-      } else {
-        e.currentTarget.classList.remove('focus');
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+      errors: [],
+    };
+  }
+
+  handleChange = (e, minLength) => {
+    const { errors } = this.state;
+    const { name, value } = e.currentTarget;
+
+    if (value.length > 0) {
+      errors[name] = value.length < minLength
+        ? Drupal.t('Minimum characters limit for this field is ') + minLength
+        : null;
     }
+    this.setState({ errors, [name]: value });
   };
 
   render() {
@@ -20,6 +29,7 @@ class TextArea extends React.Component {
       maxLength,
       minLength,
     } = this.props;
+    const { errors } = this.state;
 
     let focusClass = '';
     if (defaultValue !== undefined && defaultValue !== '') {
@@ -33,7 +43,7 @@ class TextArea extends React.Component {
           id={id}
           name={id}
           className={focusClass}
-          onBlur={(e) => this.handleEvent(e, 'blur')}
+          onChange={(e) => this.handleChange(e, minLength)}
           minLength={minLength}
           maxLength={maxLength}
         >
@@ -41,7 +51,7 @@ class TextArea extends React.Component {
         </textarea>
         <div className="c-input__bar" />
         <label>{label}</label>
-        <div id={`${label}-error`} className="error" />
+        <div id={`${label}-error`} className="error">{errors[id]}</div>
       </div>
     );
   }

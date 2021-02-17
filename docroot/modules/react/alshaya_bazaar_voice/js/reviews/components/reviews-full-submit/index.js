@@ -10,7 +10,7 @@ export default class WriteReview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formFieldConfigs: '',
+      formFieldMeta: '',
     };
   }
 
@@ -26,7 +26,7 @@ export default class WriteReview extends React.Component {
         if (result.status === 200 && result.statusText === 'OK') {
           removeFullScreenLoader();
           this.setState({
-            formFieldConfigs: result.data,
+            formFieldMeta: result.data,
           });
         } else {
           // Todo
@@ -37,26 +37,15 @@ export default class WriteReview extends React.Component {
 
   openModal = (callback) => {
     callback();
-    // console.log('OpenModel');
   }
 
   closeModal = (callback) => {
     callback();
-    // console.log('CloseModel');
   };
-
-  // eventListener = (e) => {
-  //   this.eventClosePopup();
-  //   console.log('eventListener');
-  // };
-  //
-  // eventClosePopup = () => {
-  //   console.log('eventClosePopup');
-  // };
 
   render() {
     const {
-      formFieldConfigs,
+      formFieldMeta,
     } = this.state;
     return (
       <WithModal>
@@ -74,7 +63,7 @@ export default class WriteReview extends React.Component {
               <React.Suspense fallback={<Loading />}>
                 <WriteReviewForm
                   closeModal={() => this.closeModal(triggerCloseModal)}
-                  formData={formFieldConfigs}
+                  formFieldMeta={formFieldMeta}
                 />
               </React.Suspense>
             </Popup>

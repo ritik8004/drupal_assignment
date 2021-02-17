@@ -1,14 +1,29 @@
 import React from 'react';
+import { validEmailRegex } from '../../../../../../utilities/write_review_util';
 
 class TextField extends React.Component {
-  handleEvent = (e, handler) => {
-    if (handler === 'blur') {
-      if (e.currentTarget.value.length > 0) {
-        e.currentTarget.classList.add('focus');
-      } else {
-        e.currentTarget.classList.remove('focus');
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+      errors: [],
+    };
+  }
+
+  handleChange = (e, minLength) => {
+    const { errors } = this.state;
+    const { name, value } = e.currentTarget;
+
+    if (value.length > 0) {
+      errors[name] = value.length < minLength
+        ? Drupal.t('Minimum characters limit for this field is ') + minLength
+        : null;
     }
+    if (name === 'useremail') {
+      errors[name] = validEmailRegex.test(value)
+        ? null
+        : Drupal.t('Email address is not valid.');
+    }
+    this.setState({ errors, [name]: value });
   };
 
   render() {
@@ -21,10 +36,7 @@ class TextField extends React.Component {
       minLength,
       visible,
     } = this.props;
-    let focusClass = '';
-    if (defaultValue !== undefined && defaultValue !== '') {
-      focusClass = 'focus';
-    }
+    const { errors } = this.state;
 
     if (visible === true) {
       return (
@@ -34,15 +46,14 @@ class TextField extends React.Component {
             id={id}
             name={id}
             defaultValue={defaultValue}
-            onBlur={(e) => this.handleEvent(e, 'blur')}
-            className={focusClass}
+            onChange={(e) => this.handleChange(e, minLength)}
             maxLength={maxLength}
             minLength={minLength}
             required={required}
           />
           <div className="c-input__bar" />
           <label>{label}</label>
-          <div id={`${label}-error`} className="error" />
+          <div id={`${label}-error`} className="error">{errors[id]}</div>
         </div>
       );
     }
@@ -51,7 +62,6 @@ class TextField extends React.Component {
         type="text"
         id={id}
         name={id}
-        required={required}
         hidden
       />
     );

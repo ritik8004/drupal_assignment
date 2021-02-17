@@ -75,8 +75,8 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
-        maxLength={fieldProperty.maxLength}
-        minLength={fieldProperty.minLength}
+        maxLength={fieldProperty.maxlength}
+        minLength={fieldProperty.minlength}
       />
     );
   }
@@ -96,8 +96,8 @@ const DynamicFormField = (props) => {
       id={fieldProperty.id}
       label={fieldProperty.title}
       defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
-      maxLength={fieldProperty.maxLength}
-      minLength={fieldProperty.minLength}
+      maxLength={fieldProperty.maxlength}
+      minLength={fieldProperty.minlength}
       visible={fieldProperty.visible}
     />
   );

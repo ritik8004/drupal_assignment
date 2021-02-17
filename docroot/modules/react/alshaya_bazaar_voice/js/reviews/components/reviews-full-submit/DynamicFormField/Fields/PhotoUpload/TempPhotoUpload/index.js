@@ -1,6 +1,6 @@
 import React from 'react';
 import { postFile } from '../../../../../../../utilities/api/formData';
-import { postAPICall } from '../../../../../../../utilities/api/apiData';
+import { postAPIData } from '../../../../../../../utilities/api/apiData';
 
 class TempPhotoUpload extends React.Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class TempPhotoUpload extends React.Component {
               const photoUrl = 'https://kw.hm.com/sites/g/files/hm/styles/product_zoom_large_800x800/brand/assets-shared/HNM/12312769/102460c245c9c0326ba3b0bbe18222b22a98bc12/1/102460c245c9c0326ba3b0bbe18222b22a98bc12.jpg';
               const params = `&contenttype=Review&photourl=${photoUrl}`;
               const apiUri = '/data/uploadphoto.json';
-              const apiData = postAPICall(apiUri, params);
+              const apiData = postAPIData(apiUri, params);
               if (apiData instanceof Promise) {
                 apiData.then((response) => {
                   if (response.error === undefined && response.data !== undefined) {
@@ -57,6 +57,7 @@ class TempPhotoUpload extends React.Component {
   }
 
   render() {
+    // Todo in CORE-27727
     // const { bvResponse } = this.state;
     // console.log(bvResponse);
 
