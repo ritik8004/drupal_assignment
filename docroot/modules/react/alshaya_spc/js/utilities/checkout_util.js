@@ -7,7 +7,6 @@ import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-import { redirectToCart } from './get_cart';
 
 /**
  * Change the interactiveness of CTAs to avoid multiple user clicks.
@@ -122,24 +121,25 @@ export const placeOrder = (paymentMethod) => {
           return;
         }
 
-        // If cart has some OOS item.
-        if (response.data.error !== undefined
-          && parseInt(response.data.error_code, 10) === 506) {
-          Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.CHECKOUT_ERRORS);
-          redirectToCart();
-          return;
-        }
-
         if (response.data.error && response.data.redirectUrl !== undefined) {
           Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           window.location = response.data.redirectUrl;
           return;
         }
         let message = response.data.error_message;
-        if (response.data.error_code !== undefined
-          && parseInt(response.data.error_code, 10) === 505) {
+        const errorCode = (typeof response.data.error_code !== 'undefined')
+          ? parseInt(response.data.error_code, 10)
+          : null;
+
+        if (errorCode === 505) {
           message = getStringMessage('shipping_method_error');
+        } else if (errorCode === 506) {
+          // If cart has some OOS item.
+          Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.CHECKOUT_ERRORS);
         }
+
+        validateCartResponse(response.data);
+
         dispatchCustomEvent('spcCheckoutMessageUpdate', {
           type: 'error',
           message,

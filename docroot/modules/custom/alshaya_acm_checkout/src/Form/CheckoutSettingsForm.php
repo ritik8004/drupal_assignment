@@ -78,6 +78,7 @@ class CheckoutSettingsForm extends ConfigFormBase {
     $config->set('exclude_payment_methods', $form_state->getValue('exclude_payment_methods'));
     $config->set('cancel_reservation_enabled', $form_state->getValue('cancel_reservation_enabled'));
     $config->set('same_day_shipping_method_code', $form_state->getValue('same_day_shipping_method_code'));
+    $config->set('refund_exclude_payment_methods', $form_state->getValue('refund_exclude_payment_methods'));
 
     $config->save();
 
@@ -211,6 +212,20 @@ class CheckoutSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Exclude payment methods'),
       '#description' => $this->t('Select the payment methods which needs to be exclude on payment screen.'),
       '#default_value' => $config->get('exclude_payment_methods'),
+    ];
+
+    $form['partial_fullfillment'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Partial fullfillment'),
+      '#tree' => FALSE,
+    ];
+
+    $form['partial_fullfillment']['refund_exclude_payment_methods'] = [
+      '#type' => 'checkboxes',
+      '#options' => $options,
+      '#title' => $this->t('Exclude refund text for selected payment methods'),
+      '#description' => $this->t('Select the payment methods where refund text needs to be excluded.'),
+      '#default_value' => $config->get('refund_exclude_payment_methods'),
     ];
 
     $form['cancel_reservation_enabled'] = [

@@ -11,6 +11,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -306,7 +307,8 @@ class CustomerController extends ControllerBase {
 
     $cache_time_limit = $this->config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
     $build['#cache'] = ['max-age' => $cache_time_limit];
-    $build['#cache']['tags'] = $user->getCacheTags();
+    // Refund text depends on alshaya_acm_checkout.settings.
+    $build['#cache']['tags'] = Cache::mergeTags($user->getCacheTags(), ['config:alshaya_acm_checkout.settings']);
     $build['#cache']['contexts'] = $user->getCacheContexts();
 
     return $build;
