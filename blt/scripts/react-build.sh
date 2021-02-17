@@ -5,19 +5,19 @@ set -e
 
 docrootDir="$1"
 
-isTravis=0
-isTravisPr=0
-isTravisMerge=0
+isGitlab=0
+isGitlabPr=0
+isGitlabMerge=0
 diff=""
 
 ignoredDirs=( "node_modules" )
 
-# Determine if we are on Travis.
-if [[ $TRAVIS && $TRAVIS == "true" ]]; then
-  isTravis=1
+# Determine if we are on Gitlab.
+if [[ $CI && $CI == "true" ]]; then
+  isGitlab=1
 
-  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false" ]]; then
-    isTravisMerge=1
+  if [[ $CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_ID == "false" ]]; then
+    isGitlabMerge=1
     log=$(git log -n 1)
 
     # Extract commit IDs from git log.
@@ -27,24 +27,24 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
       # Get a list of updated files in this PR.
       diff=$(git diff ${BASH_REMATCH[1]} ${BASH_REMATCH[2]} --name-only)
     else
-      isTravis=0
+      isGitlab=0
       echo "Not able to identify commit IDs to do the diff. Building all the modules."
     fi
 
     # If the PR title or merge contains "FORCE" we will build all modules.
     if ([[ $(echo "$log" | grep "FORCE") ]])
     then
-      isTravis=0
+      isGitlab=0
     fi
   else
-    isTravisPr=1
-    diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
+    isGitlabPr=1
+    diff=$(git diff --name-only $CI_MERGE_REQUEST_TARGET_BRANCH_NAME-frontend-check)
   fi
 fi
 
-# We always build react unless we are testing a simple push on Travis and there
+# We always build react unless we are testing a simple push on Gitlab and there
 # is no change in react.
-if ([ $isTravis == 0 ]) || ([ $isTravisMerge == 1 ]) || ([[ $(echo "$diff" | grep /react/) ]])
+if ([ $isGitlab == 0 ]) || ([ $isGitlabMerge == 1 ]) || ([[ $(echo "$diff" | grep /react/) ]])
 then
 
   for subdir in $(find $docrootDir/modules/react -mindepth 1 -maxdepth 1 -type d)
@@ -72,20 +72,20 @@ then
       continue
     fi
 
-    echo -e "travis_fold:start:REACT-$module_dir-Build\r"
+    echo -e "gitlab_fold:start:REACT-$module_dir-Build\r"
 
     # We build the module if:
-    # - We are outside Travis context.
+    # - We are outside Gitlab context.
     # - The module has changed.
     # - We are merging but the module (dist) does not exist on deploy directory.
     build=0
     if ([[ $(echo "$diff" | grep modules/react/$module_dir) ]]); then
       echo -e "Building $module_dir because there is some change in this folder."
       build=1
-    elif [ $isTravis == 0 ]; then
-      echo -e "Building $module_dir because we are outside Travis (or force build is requested)."
+    elif [ $isGitlab == 0 ]; then
+      echo -e "Building $module_dir because we are outside Gitlab (or force build is requested)."
       build=1
-    elif [ $isTravisMerge == 1 ]; then
+    elif [ $isGitlabMerge == 1 ]; then
       if ([ ! -d "$docrootDir/../deploy/docroot/modules/react/$module_dir/dist" ])
       then
         echo -e "Building $module_dir because there is no dist folder in $docrootDir/../deploy/docroot/modules/react/$module_dir"
@@ -100,7 +100,7 @@ then
     else
       # If the module has not changed and we are on a merge, we copy the dist
       # folder from deploy (it contains the source from acquia git).
-      if ([ $isTravisMerge == 1 ])
+      if ([ $isGitlabMerge == 1 ])
       then
         cp -r $docrootDir/../deploy/docroot/modules/react/$module_dir/dist $docrootDir/modules/react/$module_dir/
         echo -e "No need to build for $module_dir. There is no change in $module_dir module. We copied dist folder from deploy directory."
@@ -109,7 +109,7 @@ then
       fi
     fi
 
-    echo -e "travis_fold:end:REACT-$module_dir-Build\r"
+    echo -e "gitlab_fold:end:REACT-$module_dir-Build\r"
   done
 
 else

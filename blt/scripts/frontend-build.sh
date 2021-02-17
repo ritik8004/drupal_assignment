@@ -5,19 +5,19 @@ set -e
 
 docrootDir="$1"
 
-isTravis=0
-isTravisPr=0
-isTravisMerge=0
+isGitlab=0
+isGitlabPr=0
+isGitlabMerge=0
 diff=""
 
 ignoredDirs=( "alshaya_example_subtheme" "node_modules" )
 
-# Determine if we are on Travis.
-if [[ $TRAVIS && $TRAVIS == "true" ]]; then
-  isTravis=1
+# Determine if we are on Gitlab.
+if [[ $CI && $GITLAB_CI ]]; then
+  isGitlab=1
 
-  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false" ]]; then
-    isTravisMerge=1
+  if [[ $CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_ID == "false" ]]; then
+    isGitlabMerge=1
     log=$(git log -n 1)
 
     # Extract commit IDs from git log.
@@ -27,23 +27,23 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
       # Get a list of updated files in this PR.
       diff=$(git diff ${BASH_REMATCH[1]} ${BASH_REMATCH[2]} --name-only)
     else
-      isTravis=0
+      isGitlab=0
       echo "Not able to identify commit IDs to do the diff. Building all the themes."
     fi
 
     # If the PR title or merge contains "FORCE" we will build all themes.
     if ([[ $(echo "$log" | grep "FORCE") ]])
     then
-      isTravis=0
+      isGitlab=0
     fi
   else
-    isTravisPr=1
-    diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
+    isGitlabMerge=1
+    diff=$(git diff --name-only $CI_MERGE_REQUEST_TARGET_BRANCH_NAME-frontend-check)
   fi
 fi
 
 # We always build themes unless we are testing a simple push on Travis and there is no change in themes.
-if ([ $isTravis == 0 ]) || ([ $isTravisMerge == 1 ]) || ([[ $(echo "$diff" | grep /themes/) ]])
+if ([ $isGitlab == 0 ]) || ([ $isGitlabMerge == 1 ]) || ([[ $(echo "$diff" | grep /themes/) ]])
 then
   for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
   do
@@ -53,7 +53,7 @@ then
     do
       theme_dir=${subdir##*/}
 
-      echo -en "travis_fold:start:FE-$theme_dir-Build\r"
+      echo -en "gitlab_fold:start:FE-$theme_dir-Build\r"
 
       # Ignore some directories which are not themes (node_modules) or which
       # don't need to be build (alshaya_example_subtheme or mothercare themes).
@@ -94,10 +94,10 @@ then
       elif ([[ $theme_type_dir == "amp" && $(echo "$diff" | grep themes/custom/$theme_type_dir/alshaya_amp_white_label) ]]); then
         echo -en "Building $theme_dir because the parent theme (alshaya_amp_white_label) has changed."
         build=1
-      elif [ $isTravis == 0 ]; then
+      elif [ $isGitlab == 0 ]; then
         echo -en "Building $theme_dir because we are outside Travis (or force build is requested)."
         build=1
-      elif [ $isTravisMerge == 1 ]; then
+      elif [ $isGitlabMerge == 1 ]; then
         if ([ $theme_type_dir == "non_transac" ])
         then
           if [[ $theme_dir == "whitelabel" && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist" ]]
@@ -123,7 +123,7 @@ then
       else
         # If the theme has not changed are we are on a merge, we copy the css
         # or dist folder from deploy (it contains the source from acquia git).
-        if ([ $isTravisMerge == 1 ])
+        if ([ $isGitlabMerge == 1 ])
         then
           if ([ $theme_type_dir == "non_transac" ])
           then
@@ -144,7 +144,7 @@ then
         fi
       fi
 
-      echo -en "travis_fold:end:FE-$theme_dir-Build\r"
+      echo -en "gitlab_fold:end:FE-$theme_dir-Build\r"
     done
 
   done
