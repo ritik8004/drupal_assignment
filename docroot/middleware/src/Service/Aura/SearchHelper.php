@@ -108,7 +108,7 @@ class SearchHelper {
       $search_response = $this->search('email', $input['value']);
 
       if (!empty($search_response['error'])) {
-        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_EMAIL');
+        return $this->utility->getErrorResponse(AuraErrorCodes::NO_MOBILE_FOUND_MSG, AuraErrorCodes::INVALID_EMAIL);
       }
 
       return $search_response;
@@ -119,7 +119,7 @@ class SearchHelper {
       $search_response = $this->search('apcNumber', $input['value']);
 
       if (!empty($search_response['error'])) {
-        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_CARDNUMBER');
+        return $this->utility->getErrorResponse(AuraErrorCodes::NO_MOBILE_FOUND_MSG, AuraErrorCodes::INVALID_CARDNUMBER);
       }
 
       return $search_response;
@@ -130,7 +130,7 @@ class SearchHelper {
       $search_response = $this->search('phone', $input['value']);
 
       if (!empty($search_response['error'])) {
-        return $this->utility->getErrorResponse('form_error_mobile_not_found', 'INVALID_MOBILE_ERROR');
+        return $this->utility->getErrorResponse(AuraErrorCodes::NO_MOBILE_FOUND_MSG, AuraErrorCodes::INVALID_MOBILE);
       }
 
       return $search_response;

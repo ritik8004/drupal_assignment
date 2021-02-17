@@ -81,8 +81,8 @@ class AuraFormSignUpOTPModal extends React.Component {
                       otpRequested: true,
                     });
                   }
-                } else if (result.data.error_code === 'already_registered') {
-                  showError(getInlineErrorSelector('signUpOtpMobile').signUpOtpMobile, getStringMessage('form_error_mobile_already_registered'));
+                } else if (result.data.error_code === 'mobile_already_registered') {
+                  showError(getInlineErrorSelector('signUpOtpMobile').signUpOtpMobile, getStringMessage(result.data.error_message));
                 } else {
                   this.setState({
                     messageType: 'error',

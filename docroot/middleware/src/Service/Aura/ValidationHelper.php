@@ -54,7 +54,7 @@ class ValidationHelper {
         $this->logger->error('Email is missing/invalid. Data: @data', [
           '@data' => $value,
         ]);
-        return $this->utility->getErrorResponse('form_error_email', 'INVALID_EMAIL');
+        return $this->utility->getErrorResponse(AuraErrorCodes::EMPTY_EMAIL, AuraErrorCodes::INVALID_EMAIL);
       }
       return [];
     }
@@ -64,7 +64,7 @@ class ValidationHelper {
         $this->logger->error('Card number is missing/invalid. Data: @data', [
           '@data' => $value,
         ]);
-        return $this->utility->getErrorResponse('form_error_empty_card', 'INVALID_CARDNUMBER');
+        return $this->utility->getErrorResponse(AuraErrorCodes::EMPTY_CARD, AuraErrorCodes::INVALID_CARDNUMBER);
       }
       return [];
     }
@@ -74,7 +74,7 @@ class ValidationHelper {
         $this->logger->error('Mobile number is missing/invalid. Data: @data', [
           '@data' => $value,
         ]);
-        return $this->utility->getErrorResponse('form_error_mobile_number', 'INVALID_MOBILE_ERROR');
+        return $this->utility->getErrorResponse(AuraErrorCodes::EMPTY_MOBILE, AuraErrorCodes::INVALID_MOBILE);
       }
       return [];
     }
