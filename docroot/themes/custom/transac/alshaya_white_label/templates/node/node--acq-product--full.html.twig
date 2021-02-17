@@ -83,6 +83,11 @@ set classes = [
         </div>
       {% endblock %}
 
+      {% if content.postpay %}
+        {{ attach_library('alshaya_white_label/postpay-pdp') }}
+        <div class="postpay"> {{ content.postpay }} </div>
+      {% endif %}
+
       {% block pdpSidebar %}
         <div class="content__sidebar">
           {% if content.reviews_rating %}
