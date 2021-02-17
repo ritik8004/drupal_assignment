@@ -2,15 +2,21 @@ alshaya_aura_react.settings:
   type: config_object
   label: 'AURA Loyalty Settings'
   mapping:
-    aura_rewards_header_learn_more_link:
-      type: text
-      label: 'AURA Rewards Header Learn More Link'
+    aura_enabled:
+      type: boolean
+      label: 'Config to enable/disable AURA'
     aura_app_store_link:
       type: text
       label: 'AURA Apple App Store Link'
     aura_google_play_link:
       type: text
       label: 'AURA Google Play Store Link'
+    aura_rewards_header_learn_more_link:
+      type: text
+      label: 'AURA Rewards Header Learn More Link'
+    aura_reward_activity_time_limit_in_months:
+      type: integer
+      label: 'Reward activity transaction history limit in months'
 
 alshaya_aura_react.loyalty_benefits:
   type: config_object

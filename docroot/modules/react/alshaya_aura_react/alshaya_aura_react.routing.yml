@@ -4,6 +4,7 @@ alshaya_aura_react.my_loyalty_club:
     _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::loyaltyClub'
     _title_callback: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::getLoyaltyClubTitle'
   requirements:
+    _custom_access: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::checkAccess'
     _entity_access: 'user.update'
   options:
     parameters:

@@ -57,7 +57,7 @@
           </div>
         {% endif %}
 
-        {% if aura_enabled is defined and aura_enabled == 1 %}
+        {% if aura_enabled is defined and aura_enabled == true %}
           {{ attach_library('alshaya_white_label/aura-loyalty-pdp') }}
           <div id="aura-pdp"></div>
         {% endif %}
@@ -69,7 +69,7 @@
 
         <div class="free-gift-promotions free-gift-promotions-full-view-mode">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
 
-        {% if aura_enabled is defined and aura_enabled == 1 %}
+        {% if aura_enabled is defined and aura_enabled == true %}
           <div id="aura-pdp"></div>
         {% endif %}
 

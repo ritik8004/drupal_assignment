@@ -7,6 +7,9 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_aura_react\Helper\AuraHelper;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Provides 'AURA Rewards Header' block.
@@ -33,6 +36,13 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
   protected $moduleHandler;
 
   /**
+   * Aura Helper service object.
+   *
+   * @var Drupal\alshaya_aura_react\Helper\AuraHelper
+   */
+  protected $auraHelper;
+
+  /**
    * AuraRewardsHeader constructor.
    *
    * @param array $configuration
@@ -45,15 +55,19 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
    *   Config Factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param Drupal\alshaya_aura_react\Helper\AuraHelper $aura_helper
+   *   The aura helper service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               ConfigFactoryInterface $config_factory,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              AuraHelper $aura_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
+    $this->auraHelper = $aura_helper;
   }
 
   /**
@@ -67,7 +81,8 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_aura_react.aura_helper')
     );
   }
 
@@ -94,6 +109,14 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
         ],
       ],
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function blockAccess(AccountInterface $account) {
+    // Show block only if aura is enabled.
+    return AccessResult::allowedIf($this->auraHelper->isAuraEnabled());
   }
 
 }

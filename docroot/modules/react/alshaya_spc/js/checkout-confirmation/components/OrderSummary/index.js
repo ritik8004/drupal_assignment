@@ -167,7 +167,6 @@ const OrderSummary = (props) => {
           <OrderSummaryItem label={Drupal.t('number of items')} value={itemsCount} />
         </div>
       </div>
-      {/* TODO: Aura SPC - Improve these conditions once BE for AURA is integrated. */}
       <ConditionalView condition={isAuraEnabled()}>
         <AuraEarnOrderSummaryItem
           pointsEarned={accruedPoints}

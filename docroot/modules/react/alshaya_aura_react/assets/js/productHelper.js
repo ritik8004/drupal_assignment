@@ -1,6 +1,7 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
+  // Helper to prepare total price of the selected variant considering the quantity.
   Drupal.getSelectedVariantDetails = function (element) {
     var data = []
     var form = element.parents('form');
@@ -20,8 +21,6 @@
       var variantInfo = drupalSettings[productKey][sku]['variants'][currentSelectedVariant];
       var price = variantInfo ? variantInfo.priceRaw : 0;
       data = {
-        code: currentSelectedVariant,
-        quantity: quantity,
         amount: price * quantity,
       };
     }
@@ -29,6 +28,7 @@
     return { data, context };
   };
 
+  // Event dispatcher on variant/quantity change to update aura accrual points. 
   Drupal.dispatchProductUpdateEvent = function (element) {
     var data = Drupal.getSelectedVariantDetails(element);
     const event = new CustomEvent('auraProductUpdate', {

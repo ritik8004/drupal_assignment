@@ -11,6 +11,8 @@ class QuantityDropdown extends React.Component {
   }
 
   componentDidMount() {
+    // On page load we dispatch 'auraProductUpdate' event with
+    // quantity value 1 to show aura points on PDP.
     this.dispatchUpdateEvent(1);
   }
 
@@ -38,6 +40,8 @@ class QuantityDropdown extends React.Component {
     this.dispatchUpdateEvent(qty + 1);
   };
 
+  // Prepare total product price of the variant considering
+  // quantity and dispatch event to show AURA points.
   dispatchUpdateEvent = (qty) => {
     if (!isAuraEnabled()) {
       return;
@@ -50,8 +54,6 @@ class QuantityDropdown extends React.Component {
       ? productInfo[skuCode].variants[variantSelected][priceKey]
       : productInfo[skuCode][priceKey];
     const data = {
-      code: variantSelected,
-      quantity: qty,
       amount: price * qty,
     };
     dispatchCustomEvent('auraProductUpdate', { data, context });

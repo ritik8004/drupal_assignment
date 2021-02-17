@@ -2,13 +2,13 @@
   <div class="toggle--sign no--desktop">
     <div class="shop one active">{{ 'shop' | t }}</div>
     {% if logged_in %}
-      {% if aura_enabled is defined and aura_enabled == 1 %}
+      {% if aura_enabled is defined and aura_enabled == true %}
         <div class="account--logged_in one" id="username-points-wrapper-mobile-menu"></div>
       {% else %}
         <div class="account--logged_in one">{{ 'my account' | t }}</div>
       {% endif %}
     {% else %}
-      {% if aura_enabled is defined and aura_enabled == 1 %}
+      {% if aura_enabled is defined and aura_enabled == true %}
         <div class="account one">
           {{ "sign in" | t }} / {{ "register" | t }}
           <span id="points-wrapper-mobile-menu"></span>
@@ -23,7 +23,7 @@
   </div>
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
-    {% if aura_enabled is defined and aura_enabled == 1 %}
+    {% if aura_enabled is defined and aura_enabled == true %}
       <div class="no--desktop">
         <div id="aura-mobile-header-shop"></div>
       </div>
