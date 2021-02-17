@@ -17,7 +17,6 @@ alshaya_aura_react.aura_loyalty_config:
     _form: '\Drupal\alshaya_aura_react\Form\AlshayaAuraSettingsForm'
     _title: 'Alshaya AURA Configurations'
   requirements:
-    _custom_access: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::checkAccess'
     _permission: 'administer site configuration'
 
 alshaya_aura_react.update_user_aura_info:
@@ -26,7 +25,6 @@ alshaya_aura_react.update_user_aura_info:
     _controller: '\Drupal\alshaya_aura_react\Controller\AlshayaAuraController::updateUserAuraInfo'
   methods: [POST]
   requirements:
-    _custom_access: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::checkAccess'
     _middleware_request_check: 'TRUE'
 
 alshaya_aura_react.aura_loyalty_benefits_config:
@@ -35,5 +33,4 @@ alshaya_aura_react.aura_loyalty_benefits_config:
     _form: '\Drupal\alshaya_aura_react\Form\AlshayaAuraLoyaltyBenefitsForm'
     _title: 'AURA Loyalty Benefits Configuration'
   requirements:
-    _custom_access: '\Drupal\alshaya_aura_react\Controller\AlshayaLoyaltyController::checkAccess'
     _permission: 'administer site configuration'
