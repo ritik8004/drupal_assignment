@@ -74,7 +74,7 @@
       {% endfor %}
       {% if order.refund_text is not empty %}
         <tr class="order-item-row">
-          <td colspan="4">
+          <td class="cancelled-item-refund-text" colspan="4">
             <div class="tooltip-anchor info">
               <span>{{ order.refund_text }}</span>
             </div>
