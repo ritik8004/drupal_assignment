@@ -13,9 +13,12 @@
     font-size: 0.875rem;
     line-height: 2;
     margin-#{$left}: 0.625rem;
+    color: $rr-review-count;
 
     a {
       text-decoration: underline;
+      color: $rr-review-count;
+      font-family: $alshaya-thin;
     }
   }
 

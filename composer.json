@@ -397,7 +397,7 @@
                 "Fix warning for config entity values": "https://www.drupal.org/files/issues/2020-10-05/fix-large-number-of-entries-warning-3174826-2.patch"
             },
             "drupal/search_api_algolia": {
-                "Allow to override maxValuesPerFacet Algolia setting": "https://www.drupal.org/files/issues/2020-10-20/search-api-algolia-maxvaluesperfacet-3177896.patch",
+                "Allow to override maxValuesPerFacet Algolia setting": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/1.patch?v=2",
                 "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
             }
         },

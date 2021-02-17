@@ -16,23 +16,21 @@ function getLocale() {
   return `&locale=${drupalSettings.bazaar_voice.locale}`;
 }
 
-function fetchAPIData(apiUri, params) {
+export function fetchAPIData(apiUri, params) {
   const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${params}`;
-
   return Axios.get(url)
     .then((response) => response)
     .catch((error) => error);
 }
 
-function postAPICall(apiUri, params) {
+export function postAPIData(apiUri, params) {
   const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${params}`;
-
   return Axios.post(url)
     .then((response) => response)
     .catch((error) => error);
 }
 
-export {
+export default {
   fetchAPIData,
-  postAPICall,
+  postAPIData,
 };

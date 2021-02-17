@@ -838,7 +838,11 @@ class CartController {
         'redirectUrl' => $result['redirect_url'] ?? 'checkout/confirmation?id=' . $result['secure_order_id'],
         'isAbsoluteUrl' => isset($result['redirect_url']),
       ];
-
+      // This is postpay specific. In future if any other payment gateway sends
+      // token, we will have to add a condition here.
+      if (isset($result['token'])) {
+        $response['token'] = $result['token'];
+      }
       return new JsonResponse($response);
     }
 

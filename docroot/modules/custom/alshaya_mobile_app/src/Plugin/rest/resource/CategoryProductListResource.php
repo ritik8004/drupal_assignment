@@ -394,7 +394,7 @@ class CategoryProductListResource extends ResourceBase {
       }
       $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
       $query->addConditionGroup($conditionGroup);
-      $query->setOption('ruleContexts', $term_details['ruleContext']);
+      $query->setOption('algolia_options', ['ruleContexts' => $term_details['ruleContext']]);
 
       // Prepare and execute query and pass result set.
       $response['plp_data'] = $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query, 'plp');

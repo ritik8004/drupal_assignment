@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_olapic
+    - system
+  theme:
+    - alshaya_white_label
+id: alshayaolapicwidget
+theme: alshaya_white_label
+region: post_content
+weight: -77
+provider: null
+plugin: olapicblock
+settings:
+  id: olapicblock
+  label: 'Alshaya Olapic Widget'
+  provider: alshaya_olapic
+  label_display: '0'
+  olapic_settings:
+  instance_id_en: 41b8e044f86137f5c8e5e0d96a85fa72
+  instance_id_ar: da1d71228b4271b63a635608d311a38c
+  div_id: '1'
+  dynamic_product_id: ''
+visibility:
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: false
+    context_mapping: {  }

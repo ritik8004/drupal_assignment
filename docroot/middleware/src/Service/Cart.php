@@ -1000,7 +1000,8 @@ class Cart {
     }
 
     // If upapi payment method (payment method via checkout.com).
-    if ($this->isUpapiPaymentMethod($data['method'])) {
+    if ($this->isUpapiPaymentMethod($data['method'])
+      || $this->isPostpayPaymentMethod($data['method'])) {
       // Add success and fail redirect url to additional data.
       $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
       $langcode = $this->request->query->get('lang');
@@ -1035,6 +1036,19 @@ class Cart {
    */
   public function isUpapiPaymentMethod(string $payment_method) {
     return strpos($payment_method, 'checkout_com_upapi') !== FALSE;
+  }
+
+  /**
+   * Checks if postpay payment method.
+   *
+   * @param string $payment_method
+   *   Payment method code.
+   *
+   * @return bool
+   *   TRUE if payment methods from postpay
+   */
+  public function isPostpayPaymentMethod(string $payment_method) {
+    return strpos($payment_method, 'postpay') !== FALSE;
   }
 
   /**
@@ -1182,6 +1196,11 @@ class Cart {
         // to use it when authorising.
         $additional_data['successUrl'] = $this->checkoutComApi->getSuccessUrl();
         $additional_data['failUrl'] = $this->checkoutComApi->getFailUrl();
+
+        break;
+
+      case 'checkout_com_upapi_applepay':
+        $additional_data = $additional_info;
 
         break;
     }
@@ -2063,8 +2082,16 @@ class Cart {
         return $stores;
       }
 
-      foreach ($stores as &$store) {
+      foreach ($stores as $key => &$store) {
         $store_info = $this->drupal->getStoreInfo($store['code']);
+        if (empty($store_info) || !is_array($store_info)) {
+          // Removing the corrupt store from the list.
+          unset($stores[$key]);
+          $this->logger->error('No store info retrieved for @store_code', [
+            '@store_code' => $store['code'],
+          ]);
+          continue;
+        }
         $store += $store_info;
         $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
         $store['delivery_time'] = $store['sts_delivery_time_label'];

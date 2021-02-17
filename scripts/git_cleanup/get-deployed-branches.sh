@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Load the Deployed branches using Heroku proxy if available.
+if [ ! "$acsf_deployed_branches_proxy" = "" ]
+then
+  deployed_branches=$(curl -sk "$acsf_deployed_branches_proxy" --header 'ALSHAYAREQUEST: 1' --max-time 30)
+  echo "$deployed_branches"
+  exit 0
+fi
+
 # Load the ACSF API credentials.
 FILE=$HOME/acsf_api_settings
 if [ -f $FILE ]; then
