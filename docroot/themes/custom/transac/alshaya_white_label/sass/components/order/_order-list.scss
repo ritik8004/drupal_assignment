@@ -221,9 +221,13 @@
     border-top: 1px solid $primary_border;
   }
 
-  &:nth-of-type(1) {
-    td {
-      border-top: none;
+  &:first-child {
+    .order-summary-row {
+      &:nth-of-type(1) {
+        td {
+          border-top: none;
+        }
+      }
     }
   }
 
