@@ -66,6 +66,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'print_link' => NULL,
       'download_link' => NULL,
       'vat_text' => NULL,
+      'cancelled_products' => NULL,
     ],
   ];
 
@@ -97,6 +98,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'delivery_detail_notice' => NULL,
       'account' => NULL,
       'vat_text' => NULL,
+      'cancelled_products' => NULL,
     ],
   ];
 

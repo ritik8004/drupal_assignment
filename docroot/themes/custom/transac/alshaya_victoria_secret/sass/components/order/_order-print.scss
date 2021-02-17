@@ -6,12 +6,6 @@
     .dark {
       font-size: 0.875rem;
     }
-
-    td:last-child {
-      @include breakpoint($tablet) {
-        display: table-cell !important;
-      }
-    }
   }
 
   .order-details-row {
