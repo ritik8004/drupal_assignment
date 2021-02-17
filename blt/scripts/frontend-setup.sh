@@ -11,6 +11,8 @@ isGitlabPr=0
 isGitlabMerge=0
 diff=""
 
+echo "CI: $CI"
+echo "GITLAB CI: $GITLAB_CI"
 echo "CI_TARGET_BRANCH: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
 echo "CI_COMMIT_TAG: $CI_COMMIT_TAG"
 echo "CI_COMMIT_MESSAGE: $CI_COMMIT_MESSAGE"
@@ -18,7 +20,7 @@ echo "CI_MERGE_REQUEST: $CI_MERGE_REQUEST_ID"
 echo ""
 
 # Determine if we are on Gitlab.
-if [[ $GITLAB && $GITLAB == "true" ]]; then
+if [[ $CI && $GITLAB == "true" ]]; then
   isGitlab=1
 
   if [[ $CI_MERGE_REQUEST && $CI_MERGE_REQUEST == "false" ]]; then
