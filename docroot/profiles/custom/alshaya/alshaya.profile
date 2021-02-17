@@ -85,9 +85,6 @@ function alshaya_final_common_install_task($profile) {
 
   // Delete basic page content type, we don't need this in Alshaya.
   $node_type = NodeType::load('page');
-$tempstore = \Drupal::service('tempstore.shared')->get('views');
-error_log(print_r($tempstore,1));
-$tempstore->delete('content_needs_review');
 
   if ($node_type) {
     $node_type->delete();

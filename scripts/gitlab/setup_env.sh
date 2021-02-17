@@ -18,7 +18,7 @@ echo "CREATE USER 'drupal'@'%' IDENTIFIED BY 'drupal';" | mysql --user=root --pa
 echo "GRANT ALL ON drupal.* TO 'drupal'@'%';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql
 echo "FLUSH PRIVILEGES;" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql
 
-apt install memcached
+apt install memcached -y
 netstat -taunpe | grep LISTEN
 
 set +v
