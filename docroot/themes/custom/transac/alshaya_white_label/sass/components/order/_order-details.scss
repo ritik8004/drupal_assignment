@@ -768,6 +768,31 @@
       margin-top: 0.5rem;
     }
   }
+
+  #cancelled-items {
+    color: $order_detail_td_dark_content;
+
+    td {
+      padding-bottom: 0.8125rem;
+      padding-top: 0.8125rem;
+    }
+
+    td > div {
+      margin: 0;
+    }
+  }
+
+  // My account - Recent Order list.
+  #cancel-order-item {
+    td > div {
+      margin: 0;
+    }
+
+    td {
+      background: $order_accordion_open_bg;
+      font-size: 1rem;
+    }
+  }
 }
 
 #block-content .order-items li {

@@ -10,6 +10,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class Orders Manager.
@@ -22,6 +23,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 class OrdersManager {
 
   use Orders;
+  use StringTranslationTrait;
 
   /**
    * API Wrapper object.
@@ -66,6 +68,13 @@ class OrdersManager {
   protected $countCache;
 
   /**
+   * Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $configFactory;
+
+  /**
    * OrdersManager constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
@@ -93,6 +102,7 @@ class OrdersManager {
     $this->languageManager = $language_manager;
     $this->logger = $logger_factory->get('alshaya_acm_customer');
     $this->countCache = $count_cache;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -345,6 +355,27 @@ class OrdersManager {
 
     $order = reset($result['items']);
     return $this->cleanupOrder($order);
+  }
+
+  /**
+   * Gets the refund text for the payment method.
+   *
+   * @param string $payment_method_code
+   *   The payment method code, eg. cashondelivery.
+   *
+   * @return string|null
+   *   The refund text. If payment method is excluded, null is returned.
+   */
+  public function getRefundText(string $payment_method_code) {
+    $checkout_settings = $this->configFactory->get('alshaya_acm_checkout.settings');
+    $excluded_payment_methods = $checkout_settings->get('refund_exclude_payment_methods');
+    $excluded_payment_methods = array_filter($excluded_payment_methods);
+
+    if (in_array($payment_method_code, $excluded_payment_methods)) {
+      return NULL;
+    }
+
+    return $this->t('The refund for cancelled items will be made to your account within 14 working days if you have paid for your order.');
   }
 
 }
