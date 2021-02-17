@@ -10,6 +10,7 @@ stages:
 variables:
   APP_NAME: Alshaya
   BLT: ./vendor/bin/blt
+  BLT_SCRIPT_DIR: ./blt/scripts
   SCRIPT_DIR: ./scripts/gitlab
   MYSQL_DATABASE: drupal
   MYSQL_ROOT_PASSWORD: drupal
@@ -91,6 +92,7 @@ setup_and_test:
     - $SCRIPT_DIR/setup_env.sh
     - $SCRIPT_DIR/setup_app.sh
     - $SCRIPT_DIR/test.sh
+    - $BLT_SCRIPT_DIR/run_tests
 
 deploy:
   stage: deploy
