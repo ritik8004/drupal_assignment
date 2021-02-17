@@ -1000,7 +1000,8 @@ class Cart {
     }
 
     // If upapi payment method (payment method via checkout.com).
-    if ($this->isUpapiPaymentMethod($data['method'])) {
+    if ($this->isUpapiPaymentMethod($data['method'])
+      || $this->isPostpayPaymentMethod($data['method'])) {
       // Add success and fail redirect url to additional data.
       $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
       $langcode = $this->request->query->get('lang');
@@ -1035,6 +1036,19 @@ class Cart {
    */
   public function isUpapiPaymentMethod(string $payment_method) {
     return strpos($payment_method, 'checkout_com_upapi') !== FALSE;
+  }
+
+  /**
+   * Checks if postpay payment method.
+   *
+   * @param string $payment_method
+   *   Payment method code.
+   *
+   * @return bool
+   *   TRUE if payment methods from postpay
+   */
+  public function isPostpayPaymentMethod(string $payment_method) {
+    return strpos($payment_method, 'postpay') !== FALSE;
   }
 
   /**
