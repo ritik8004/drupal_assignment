@@ -131,7 +131,7 @@ class StockEventSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function onKernelTerminate(PostResponseEvent $event) {
-    if (empty(self::$skusForCacheInvalidation) || (isset($this->purgers) && empty($this->purgers))) {
+    if (!isset($this->purgers) || (isset($this->purgers) && empty(self::$skusForCacheInvalidation))) {
       return;
     }
 
