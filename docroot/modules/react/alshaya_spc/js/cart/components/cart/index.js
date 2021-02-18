@@ -156,11 +156,20 @@ export default class Cart extends React.Component {
         this.updateCartMessage('error', qtyMismatchErrorInfo.message);
       }
     }
+
+    // Event listerner to update any change in cart totals.
+    document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('spcCartMessageUpdate', this.handleCartMessageUpdateEvent, false);
   }
+
+  // Event listener to update cart totals.
+  handleTotalsUpdateEvent = (event) => {
+    const { totals } = event.detail;
+    this.setState({ totals });
+  };
 
   saveDynamicPromotions = (event) => {
     const {
@@ -282,7 +291,7 @@ export default class Cart extends React.Component {
               items={items}
             />
             {isAuraEnabled()
-              ? <AuraCartContainer price={amount} />
+              ? <AuraCartContainer price={amount} totals={totals} />
               : null}
             <OrderSummaryBlock
               totals={totals}
