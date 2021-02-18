@@ -449,3 +449,8 @@ advance-content-slider:
   css:
     theme:
       css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: {}
+      
+postpay-checkout:
+  css:
+    theme:
+      css/conditional-sass/postpay-checkout/postpay-checkout.ltr.css: {}
