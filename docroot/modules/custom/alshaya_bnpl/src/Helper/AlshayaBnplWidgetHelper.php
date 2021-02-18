@@ -144,6 +144,7 @@ class AlshayaBnplWidgetHelper {
 
       case 'checkout':
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_sdk';
+        $build['#attached']['library'][] = 'alshaya_white_label/postpay-checkout';
         $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo('checkout');
         break;
 
