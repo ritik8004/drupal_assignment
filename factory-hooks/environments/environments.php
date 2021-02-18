@@ -19,6 +19,7 @@ function alshaya_get_site_environment() {
   elseif (getenv('TRAVIS') || getenv('CI_BUILD_ID')) {
     $env = 'travis';
   }
+
   return $env;
 }
 

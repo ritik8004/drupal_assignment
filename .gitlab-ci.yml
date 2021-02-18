@@ -69,7 +69,6 @@ build:
     - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
     # Build appointment middleware.
     - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/appointment
-    - export
 
 validate:
   stage: validate
@@ -79,7 +78,6 @@ validate:
   allow_failure: false
   script:
     - $SCRIPT_DIR/validate.sh
-    - export
 
 setup_and_test:
   stage: setup_and_test

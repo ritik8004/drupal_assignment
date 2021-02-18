@@ -85,7 +85,6 @@ function alshaya_final_common_install_task($profile) {
 
   // Delete basic page content type, we don't need this in Alshaya.
   $node_type = NodeType::load('page');
-
   if ($node_type) {
     $node_type->delete();
   }
