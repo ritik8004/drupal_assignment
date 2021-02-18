@@ -1,4 +1,4 @@
-@javascript @guest @codPayment @homeDelivery @hmaeuat @bbwkwuat
+@javascript @guest @codPayment @homeDelivery @hmaeuat @bbwkwuat @mckwuat @vsaeuat
 Feature: SPC Checkout Home Delivery COD
 
   Background:
@@ -8,7 +8,7 @@ Feature: SPC Checkout Home Delivery COD
 
   @cod @hd
   Scenario: As a Guest, I should be able to checkout using COD
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -87,12 +87,12 @@ Feature: SPC Checkout Home Delivery COD
     And I should see "{vat}"
     And I should see "{continue_shopping_text}"
 
-  @cod @hd @language @desktop
+  @cod @hd @language @desktop @test12
   Scenario: As a Guest, I should be able to checkout using COD in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -104,6 +104,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
+    And print current URL
     Then I should be on "/{language_short}/cart/login" page
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
@@ -181,7 +182,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"

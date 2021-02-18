@@ -14,6 +14,8 @@ import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import CheckoutComUpapiApplePay
+  from '../../../utilities/checkout_com_upapi_apple_pay';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -151,6 +153,10 @@ export default class PaymentMethods extends React.Component {
         // available payment methods in drupal, ignore it.
         if (method.code in drupalSettings.payment_methods) {
           if (method.code === 'checkout_com_applepay' && !(ApplePay.isAvailable())) {
+            return;
+          }
+
+          if (method.code === 'checkout_com_upapi_applepay' && !(CheckoutComUpapiApplePay.isAvailable())) {
             return;
           }
 

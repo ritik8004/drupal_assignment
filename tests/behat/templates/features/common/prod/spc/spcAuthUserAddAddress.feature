@@ -17,6 +17,7 @@ Feature: Test the adding address to existing user account
     Then I click on "#block-content a" element
     And I wait 10 seconds
     And I wait for the page to load
+    Then I check the address-book form
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
     Then I scroll to the "#address-book-form-open" element

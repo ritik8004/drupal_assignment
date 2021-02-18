@@ -1,0 +1,5 @@
+name: 'Alshaya Olapic'
+type: module
+description: 'Provides integration with Olapic'
+package: Alshaya
+core: 8.x

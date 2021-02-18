@@ -1,0 +1,224 @@
+.path--store-finder,
+.nodetype--store {
+  .by--alphabet {
+    .rows a {
+      color: $store_finder_glossary_title !important;
+    }
+  }
+
+  .label--location {
+    .block-store-finder-form__form__label__wrapper {
+      color: $store_finder_label_location !important;
+    }
+  }
+
+  .list-view-locator {
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+
+    .row-title {
+      color: $store_finder_search_results_label;
+      font-weight: normal;
+      font-family: $vs-bold;
+      padding-bottom: 1rem;
+    }
+
+    .store-row--counter {
+      top: 0.75rem;
+      #{$left}: 1.25rem;
+      width: 1.5rem;
+      height: 1.5rem;
+
+      @include breakpoint($tablet) {
+        padding-top: 0.4rem;
+      }
+    }
+
+    .views-field-field-store-address {
+      letter-spacing: 0.3px;
+      line-height: 1.33;
+    }
+
+    .views-field-field-store-address {
+      padding-bottom: 0;
+      border-bottom: 0;
+
+      .views-field-field-brand {
+        padding: 0;
+      }
+    }
+
+    .views-field-field-brand {
+      padding: 0 3.25rem;
+
+      @include breakpoint($only-mobile) {
+        padding: 0 3.5rem;
+      }
+
+      html[lang=ar] & {
+        padding-top: 0.375rem;
+      }
+    }
+
+    .views-field-field-store-open-hours .hours--wrapper {
+      border-bottom: 1px solid $store_finder_search_results_border;
+
+      .open--hours,
+      .hours--label {
+        border-bottom: 0;
+      }
+
+      .open--hours {
+        padding-top: 0.4rem;
+      }
+    }
+
+    .hours--label {
+      @include icon(chevrondown, after);
+    }
+
+    &.selected {
+      .row-title {
+        font-family: $vs-bold;
+      }
+    }
+  }
+
+  .view-on--map {
+    @include breakpoint($only-mobile) {
+      &::after {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        background: url(../../../imgs/icons/ic-directions.svg);
+        #{$right}: 0.6875rem;
+        width: 1.875rem;
+        height: 1.875rem;
+        background-size: contain;
+        background-position: center;
+        top: 0.5rem;
+      }
+    }
+  }
+
+  .get--directions a::after {
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 1.375rem;
+    width: 1.375rem;
+  }
+
+  .store-row--counter {
+    @include breakpoint($tablet) {
+      padding-top: 0.3125rem;
+      font-size: 0.625rem;
+    }
+  }
+
+  .back-link,
+  .mobile-only-back-to-glossary {
+    a::after {
+      font-size: 2.5rem;
+      top: -0.25rem;
+    }
+  }
+
+  .hours--wrapper .hours--label.open::after {
+    transform: rotate(180deg);
+  }
+}
+
+.geolocation-common-map-container {
+  .hours--wrapper .hours--label,
+  .view-on--map a,
+  .get--directions a {
+    border-top: 1px solid $store_finder_map_border;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .location-content {
+    .views-field-title {
+      font-family: $vs-bold;
+      margin-bottom: 0.875rem;
+    }
+  }
+
+  .hours--label::after {
+    margin-top: 0.375rem;
+  }
+
+  .views-field-field-store-address {
+    margin-bottom: 0;
+  }
+}
+
+.field--name-field-brand {
+  .field__label,
+  .field__item {
+    display: inline;
+  }
+
+  .field__label::after {
+    content: '\003A';
+  }
+}
+
+.view-stores-finder {
+  .views-field-field-store-open-hours {
+    margin-top: 1rem;
+    border-top: 1px solid $store_finder_search_results_border;
+  }
+
+  .views-field-field-brand {
+    .views-label-field-brand,
+    .field-content {
+      display: inline;
+    }
+  }
+
+  .hours--label {
+    & .open {
+      border-bottom: 0;
+    }
+  }
+
+  .geolocation-common-map-container {
+    .views-field-field-store-open-hours {
+      border-top: 0;
+    }
+  }
+}
+
+.individual--store {
+  .row-title {
+    margin-bottom: 0.5rem;
+
+    span {
+      font-family: $vs-bold;
+      font-weight: normal;
+    }
+  }
+
+  .list-view-locator {
+    .views-field-field-store-address {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  .views-field-field-store-open-hours {
+    margin-top: 0.5rem;
+  }
+}
+
+html[lang=ar] {
+  .path--store-finder,
+  .nodetype--store {
+    .list-view-locator {
+      .views-field-field-store-address {
+        line-height: 1.3;
+      }
+    }
+  }
+}

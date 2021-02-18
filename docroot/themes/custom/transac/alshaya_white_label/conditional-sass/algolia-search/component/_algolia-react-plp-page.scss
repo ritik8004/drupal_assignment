@@ -16,4 +16,17 @@
       height: 0;
     }
   }
+
+  .labels-container {
+    .label {
+      &.bottom {
+        &-right,
+        &-left {
+          @include breakpoint($only-mobile) {
+            bottom: 6.75rem;
+          }
+        }
+      }
+    }
+  }
 }

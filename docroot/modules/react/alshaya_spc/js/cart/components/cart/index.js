@@ -1,6 +1,7 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 
+import '../../../utilities/interceptor/interceptor';
 import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';
@@ -19,6 +20,8 @@ import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-l
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
+import PostpayCart from '../postpay/postpay';
+import isPostpayEnabled from '../../../utilities/helper';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -225,7 +228,19 @@ export default class Cart extends React.Component {
         </>
       );
     }
-
+    let postpay;
+    let postpayEligibilityMessage;
+    if (isPostpayEnabled()) {
+      postpay = (
+        <PostpayCart
+          amount={totals.base_grand_total}
+          isCartPage
+          classNames="spc-postpay-mobile-preview"
+          mobileOnly
+        />
+      );
+      postpayEligibilityMessage = <div id="postpay-eligibility-message" style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: drupalSettings.alshaya_spc.postpay_eligibility_message }} />;
+    }
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -241,7 +256,9 @@ export default class Cart extends React.Component {
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
+          {postpayEligibilityMessage}
           <MobileCartPreview total_items={totalItems} totals={totals} />
+          {postpay}
         </div>
         <div className="spc-main">
           <div className="spc-content">
