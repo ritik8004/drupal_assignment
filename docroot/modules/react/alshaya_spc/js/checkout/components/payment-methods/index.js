@@ -31,7 +31,7 @@ export default class PaymentMethods extends React.Component {
     const { isPostpayInitialised, cart } = this.props;
 
     if (isPostpayEnabled()) {
-      setTimeout(() => {
+      const postpayTimer = setInterval(() => {
         if (isPostpayInitialised) {
           window.postpay.check_amount({
             amount: cart.cart.cart_total * drupalSettings.postpay.currency_multiplier,
@@ -47,8 +47,9 @@ export default class PaymentMethods extends React.Component {
             }.bind(this),
           });
           this.selectDefault();
+          clearInterval(postpayTimer);
         }
-      }, 500);
+      }, 100);
     } else {
       this.selectDefault();
     }
