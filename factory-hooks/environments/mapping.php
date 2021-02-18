@@ -92,9 +92,21 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   // Fill this variable to override the default mapping.
   $mapping = [
     'hmkw' => [
-      'dev2' => [
-        'magento' => 'hm_lpn',
-        'conductor' => 'hmkw_dev2',
+      'dev' => [
+        'magento' => 'hm_qa',
+        'conductor' => 'hmkw_dev',
+      ],
+    ],
+    'hmsa' => [
+      'dev' => [
+        'magento' => 'hm_qa',
+        'conductor' => 'hmsa_dev',
+      ],
+    ],
+    'hmae' => [
+      'dev' => [
+        'magento' => 'hm_qa',
+        'conductor' => 'hmae_dev',
       ],
     ],
     'hmsa' => [
@@ -109,14 +121,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'hmae_dev2',
       ],
     ],
-    'hmeg' => [
-      'local' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmeg_dev2',
-      ],
-      'dev2' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmeg_dev2',
+    'flkw' => [
+      'dev' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flkw_dev',
       ],
     ],
     'flsa' => [
@@ -124,13 +132,11 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'fl_qa',
         'conductor' => 'flsa_dev',
       ],
-      'local' => [
-        'magento' => 'fl_uat',
-        'conductor' => 'flsa_dev2',
-      ],
-      'dev2' => [
-        'magento' => 'fl_uat',
-        'conductor' => 'flsa_dev2',
+    ],
+    'flae' => [
+      'dev' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flae_dev',
       ],
     ],
     'bbwkw' => [
@@ -143,10 +149,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev' => [
         'magento' => 'bbw_qa',
         'conductor' => 'bbwae_dev',
-      ],
-      'local' => [
-        'magento' => 'bbw_uat',
-        'conductor' => 'bbwae_dev2',
       ],
       'dev2' => [
         'magento' => 'bbw_uat',
@@ -186,10 +188,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'mc_uat',
         'conductor' => 'mcae_dev2',
       ],
-      'local' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mcae_dev2',
-      ],
     ],
     'mcsa' => [
       'dev' => [
@@ -198,10 +196,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       ],
     ],
     'pbkw' => [
-      'local' => [
-        'magento' => 'pb_uat',
-        'conductor' => 'pbkw_dev2',
-      ],
       'dev2' => [
         'magento' => 'pb_uat',
         'conductor' => 'pbkw_dev2',
@@ -221,10 +215,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev' => [
         'magento' => 'vs_qa',
         'conductor' => 'vsae_dev',
-      ],
-      'local'=> [
-        'magento' => 'vs_uat',
-        'conductor' => 'vsae_dev2',
       ],
       'dev2' => [
         'magento' => 'vs_uat',
@@ -265,10 +255,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       'dev2' => [
         'magento' => 'aeo_pprod',
         'conductor' => 'aeosa_dev2',
-      ],
-      'local' => [
-        'magento' => 'aeo_uat',
-        'conductor' => 'aeosa_uat',
       ],
     ],
     'aeoae' => [
@@ -323,56 +309,10 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'bpeg_dev',
       ],
     ],
-    'mukw' => [
-      'local' => [
-        'magento' => 'mu_uat',
-        'conductor' => 'mukw_uat',
-      ],
-    ],
     'muae' => [
       'dev' => [
         'magento' => 'mu_qa',
         'conductor' => 'muae_dev',
-      ],
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'muae_qa',
-      ],
-    ],
-    'musa' => [
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'musa_qa',
-      ],
-    ],
-    'mueg' => [
-      'local' => [
-        'magento' => 'mu_qa',
-        'conductor' => 'mueg_qa',
-      ],
-    ],
-    'pbkkw' => [
-      'local' => [
-        'magento' => 'pbk_uat',
-        'conductor' => 'pbkkw_uat',
-      ],
-    ],
-    'pbkae' => [
-      'local' => [
-        'magento' => 'pbk_qa',
-        'conductor' => 'pbkae_qa',
-      ],
-    ],
-    'pbksa' => [
-      'local' => [
-        'magento' => 'pbk_qa',
-        'conductor' => 'pbksa_qa',
-      ],
-    ],
-    'pbkeg' => [
-      'local' => [
-        'magento' => 'pbk_qa',
-        'conductor' => 'pbkeg_qa',
       ],
     ],
   ];
