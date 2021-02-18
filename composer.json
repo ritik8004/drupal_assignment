@@ -398,7 +398,8 @@
             },
             "drupal/search_api_algolia": {
                 "Allow to override maxValuesPerFacet Algolia setting": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/1.patch?v=2",
-                "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
+                "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch",
+                "Allow debugging data pushed to Algolia": "patches/search_api_algolia/search_api_algolia_debug.patch"
             }
         },
         "installer-paths": {
