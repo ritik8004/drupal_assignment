@@ -780,24 +780,15 @@
     color: $order_detail_td_dark_content;
 
     td {
-      padding-bottom: 0.8125rem;
-      padding-top: 0.8125rem;
+      padding-bottom: 0.25rem;
+      padding-top: 1.125rem;
+      padding-#{$left}: 0;
     }
 
     td > div {
-      margin: 0;
-    }
-  }
-
-  // My account - Recent Order list.
-  #cancel-order-item {
-    td > div {
-      margin: 0;
-    }
-
-    td {
-      background: $order_accordion_open_bg;
-      font-size: 1rem;
+      font-size: 1.125rem;
+      line-height: 1.22;
+      color: $cancel-item-list-header;
     }
   }
 }
