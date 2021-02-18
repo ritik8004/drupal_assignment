@@ -135,27 +135,25 @@ class StockEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $cache_tags = [];
-    $purge_tags = [];
-    $stock_resource_cache_tags = [];
-
-    foreach (self::$skusForCacheInvalidation as $sku) {
-      $sku_entity = SKU::loadFromSku($sku);
-      if ($sku_entity instanceof SKUInterface) {
-        $stock_resource_cache_tags[] = StockResource::CACHE_PREFIX . $sku_entity->id();
-        $cache_tags = Cache::mergeTags($cache_tags, $sku_entity->getCacheTags());
-      }
-    }
-
     // We want the SKU cache tags to get cleared only when the SKU is processed
     // in the alshaya_process_product queue. And that will happen when Magento
     // pushes the SKU with stock update to Drupal.
     // Hence we invalidate only the Cache tags for the Stock API here to mark
     // real time stock update has happened.
-    Cache::invalidateTags($stock_resource_cache_tags);
+    $purge_tags = [];
+    $cache_tags_to_invalidate = [];
+
+    foreach (self::$skusForCacheInvalidation as $sku) {
+      $sku_entity = SKU::loadFromSku($sku);
+      if ($sku_entity instanceof SKUInterface) {
+        $cache_tags_to_invalidate = Cache::mergeTags($cache_tags_to_invalidate, [StockResource::CACHE_PREFIX . $sku_entity->id()]);
+      }
+    }
+
+    Cache::invalidateTags($cache_tags_to_invalidate);
 
     // Now prepare data to purge the varnish cache.
-    foreach ($cache_tags as $cache_tag) {
+    foreach ($cache_tags_to_invalidate as $cache_tag) {
       $purge_tags[] = $this->purgeInvalidationsFactory->get('tag', $cache_tag);
     }
 
