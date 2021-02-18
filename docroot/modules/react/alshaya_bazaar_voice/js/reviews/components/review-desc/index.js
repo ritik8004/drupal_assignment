@@ -2,6 +2,7 @@ import React from 'react';
 import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import ReviewFeedback from '../review-feedback';
 import ConditionalView from '../../../common/components/conditional-view';
+import ReviewCommentForm from '../review-comment-form';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -29,9 +30,11 @@ const ReviewDescription = ({
               IsSyndicatedReview={reviewDescriptionData.IsSyndicated}
               ReviewId={reviewDescriptionData.Id}
             />
-            <div className="review-feedback-comment">
-              <button type="button">{Drupal.t('comment')}</button>
-            </div>
+          </div>
+          <div className="review-comment">
+            <ReviewCommentForm
+              ReviewId={reviewDescriptionData.Id}
+            />
           </div>
         </div>
       </div>
