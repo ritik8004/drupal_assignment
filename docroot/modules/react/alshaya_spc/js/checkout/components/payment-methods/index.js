@@ -16,15 +16,42 @@ import ApplePay from '../../../utilities/apple_pay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
+import isPostpayEnabled from '../../../utilities/helper';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
     super(props);
     this.paymentMethodRefs = [];
+    this.state = {
+      postpayAvailable: false,
+    };
   }
 
   componentDidMount = () => {
-    this.selectDefault();
+    const { isPostpayInitialised, cart } = this.props;
+
+    if (isPostpayEnabled()) {
+      setTimeout(() => {
+        if (isPostpayInitialised) {
+          window.postpay.check_amount({
+            amount: cart.cart.cart_total * drupalSettings.postpay.currency_multiplier,
+            currency: drupalSettings.postpay_widget_info['data-currency'],
+            callback: function (paymentOptions) {
+              if (paymentOptions === null) {
+                // Hide Postpay payment method if the payment_options is
+                // not available.
+                document.getElementById('.payment-method-postpay').style.display = 'none';
+              } else {
+                this.setState({ postpayAvailable: true });
+              }
+            }.bind(this),
+          });
+          this.selectDefault();
+        }
+      }, 500);
+    } else {
+      this.selectDefault();
+    }
 
     // We want this to be executed once all other JS execution is finished.
     // For this we use setTimeout with 1 ms.
@@ -118,6 +145,7 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    const { postpayAvailable } = this.state;
     const { cart } = this.props;
 
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
@@ -129,20 +157,28 @@ export default class PaymentMethods extends React.Component {
       if (cart.cart.payment.method !== undefined
         && cart.cart.payment.method !== null
         && paymentMethods[cart.cart.payment.method] !== undefined) {
-        this.changePaymentMethod(cart.cart.payment.method);
-        return;
+        if (postpayAvailable || cart.cart.payment.method !== 'postpay') {
+          this.changePaymentMethod(cart.cart.payment.method);
+          return;
+        }
       }
 
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         && cart.cart.payment.default !== null
         && paymentMethods[cart.cart.payment.default] !== undefined) {
-        this.changePaymentMethod(cart.cart.payment.default);
-        return;
+        if (postpayAvailable || cart.cart.payment.default !== 'postpay') {
+          this.changePaymentMethod(cart.cart.payment.default);
+          return;
+        }
       }
 
       // Select first payment method by default.
-      this.changePaymentMethod(Object.keys(paymentMethods)[0]);
+      if (postpayAvailable || Object.keys(paymentMethods)[0] !== 'postpay') {
+        this.changePaymentMethod(Object.keys(paymentMethods)[0]);
+      } else {
+        this.changePaymentMethod(Object.keys(paymentMethods)[1]);
+      }
     }
   };
 
