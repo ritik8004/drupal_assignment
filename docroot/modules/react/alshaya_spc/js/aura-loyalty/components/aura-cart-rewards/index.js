@@ -28,10 +28,14 @@ class AuraCartRewards extends React.Component {
 
     if (getUserDetails().id) {
       document.addEventListener('customerDetailsFetched', this.updateStates, false);
+
       // Listener to refreshCart event to track any cart update action like quantity update.
       document.addEventListener('refreshCart', this.removeRedeemedPoints, false);
       // Listener to promoCodeSuccess event to track when promo code is applied on cart.
       document.addEventListener('promoCodeSuccess', this.removeRedeemedPoints, false);
+      // Listener to track when user clicks on continue to checkout from cart page.
+      document.addEventListener('continueToCheckoutFromCart', this.removeRedeemedPoints, false);
+
       // Listener to redeem points API event to update cart total based on response.
       document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
 

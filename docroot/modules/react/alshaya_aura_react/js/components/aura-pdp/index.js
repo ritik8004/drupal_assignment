@@ -25,6 +25,8 @@ class AuraPDP extends React.Component {
     // Listener to track any update in customer's aura details.
     document.addEventListener('customerDetailsFetched', this.setCustomerDetails, false);
     document.addEventListener('loyaltyStatusUpdated', this.setCustomerDetails, false);
+    // Listener to track refresh cart event - Add to cart on PDP.
+    document.addEventListener('refreshCart', this.removeRedeemedPoints, false);
   }
 
   componentWillUnmount() {
