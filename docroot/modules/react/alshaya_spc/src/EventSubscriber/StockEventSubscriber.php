@@ -135,13 +135,14 @@ class StockEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // We purge the cache tags for the stock resource in any case.
-    $cache_tags = [StockResource::CACHE_TAG];
+    $cache_tags = [];
     $purge_tags = [];
+    $stock_resource_cache_tags = [];
 
     foreach (self::$skusForCacheInvalidation as $sku) {
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
+        $stock_resource_cache_tags[] = StockResource::CACHE_PREFIX . $sku_entity->id();
         $cache_tags = Cache::mergeTags($cache_tags, $sku_entity->getCacheTags());
       }
     }
@@ -151,7 +152,7 @@ class StockEventSubscriber implements EventSubscriberInterface {
     // pushes the SKU with stock update to Drupal.
     // Hence we invalidate only the Cache tags for the Stock API here to mark
     // real time stock update has happened.
-    Cache::invalidateTags([StockResource::CACHE_TAG]);
+    Cache::invalidateTags($stock_resource_cache_tags);
 
     // Now prepare data to purge the varnish cache.
     foreach ($cache_tags as $cache_tag) {
