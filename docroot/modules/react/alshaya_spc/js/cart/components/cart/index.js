@@ -254,9 +254,9 @@ export default class Cart extends React.Component {
           </CheckoutMessage>
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
+          {postpayEligibilityMessage}
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
-          {postpayEligibilityMessage}
           <MobileCartPreview total_items={totalItems} totals={totals} />
           {postpay}
         </div>
