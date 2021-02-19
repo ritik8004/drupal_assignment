@@ -34,21 +34,9 @@ export default class PaymentMethods extends React.Component {
       const postpayTimer = setInterval(() => {
         const { isPostpayInitialised } = this.props;
         if (isPostpayInitialised) {
-          window.postpay.check_amount({
-            amount: cart.cart.cart_total * drupalSettings.postpay.currency_multiplier,
-            currency: drupalSettings.postpay_widget_info['data-currency'],
-            callback: function (paymentOptions) {
-              if (paymentOptions === null) {
-                // Hide Postpay payment method if the payment_options is
-                // not available.
-                document.getElementById('.payment-method-postpay').style.display = 'none';
-              } else {
-                this.setState({ postpayAvailable: true });
-              }
-            }.bind(this),
-          });
-          this.selectDefault();
           clearInterval(postpayTimer);
+          this.alshayaPostpayCheckCheckCheckoutAmount(cart.cart.cart_total);
+          this.selectDefault();
         }
       }, 100);
     } else {
@@ -119,6 +107,9 @@ export default class PaymentMethods extends React.Component {
         message,
       });
     }
+    document.addEventListener('deliveryMethodChange', (e) => {
+      this.alshayaPostpayCheckCheckCheckoutAmount(e.detail.cart.cart.cart_total);
+    });
   };
 
   componentDidUpdate() {
@@ -304,6 +295,25 @@ export default class PaymentMethods extends React.Component {
     // Trigger validate of selected component.
     return this.paymentMethodRefs[cart.cart.payment.method].current.validateBeforePlaceOrder();
   };
+
+  alshayaPostpayCheckCheckCheckoutAmount = (cartTotal) => {
+    window.postpay.check_amount({
+      amount: cartTotal * drupalSettings.postpay.currency_multiplier,
+      currency: drupalSettings.postpay_widget_info['data-currency'],
+      callback: function (paymentOptions) {
+        if (paymentOptions === null) {
+          // Hide Postpay payment method if the payment_options is
+          // not available.
+          const postpayElement = document.getElementsByClassName('payment-method-postpay');
+          if (postpayElement[0]) {
+            postpayElement[0].style.display = 'none';
+          }
+        } else {
+          this.setState({ postpayAvailable: true });
+        }
+      }.bind(this),
+    });
+  }
 
   render = () => {
     const methods = [];
