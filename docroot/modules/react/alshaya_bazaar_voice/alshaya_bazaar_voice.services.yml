@@ -5,5 +5,7 @@ services:
       - '@logger.factory'
       - '@http_client'
       - '@config.factory'
-      - '@entity.manager'
-      - '@database'
+  alshaya_bazaar_voice.service:
+    class: Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice
+    arguments:
+      - '@config.factory'

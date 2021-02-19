@@ -1,0 +1,25 @@
+sort_options:
+  SubmissionTime: 'SubmissionTime'
+  Helpfulness: 'Helpfulness'
+  Rating: 'Rating'
+  HasPhotos: 'HasPhotos'
+sort_options_labels:
+  -
+    value: 'none'
+    label: 'Sort by'
+  -
+    value: 'SubmissionTime Desc'
+    label: 'Most Recent'
+  -
+    value: 'Most Helpful Desc'
+    label: 'Helpfulness'
+  -
+    value: 'Rating DESC'
+    label: 'Highest to Lowest Ranking'
+  -
+    value: 'Rating ASC'
+    label: 'Lowest to Highest Ranking'
+  -
+    value: 'HasPhotos DESC'
+    label: 'Photo Reviews First'
+langcode: en
