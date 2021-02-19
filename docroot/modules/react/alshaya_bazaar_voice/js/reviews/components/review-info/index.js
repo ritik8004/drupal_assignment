@@ -10,7 +10,6 @@ const ReviewInformation = ({
   reviewTooltipInfo,
 }) => {
   if (reviewInformationData !== undefined) {
-    // console.log(reviewInformationData);
     const date = new Date(reviewInformationData.SubmissionTime);
     return (
       <div className="review-detail-left">

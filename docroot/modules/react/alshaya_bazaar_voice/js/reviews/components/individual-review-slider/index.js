@@ -5,7 +5,6 @@ const IndividualReviewSlider = ({
   sliderData,
 }) => {
   const direction = isRTL() === true ? 'rtl' : 'ltr';
-
   if (sliderData === null) {
     return null;
   }
