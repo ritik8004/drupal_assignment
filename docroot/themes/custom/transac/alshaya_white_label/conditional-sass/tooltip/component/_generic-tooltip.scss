@@ -45,7 +45,7 @@
   position: relative;
 
   @include icon(infomation, before) {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     color: $spc_tooltip_icon;
   }
 
