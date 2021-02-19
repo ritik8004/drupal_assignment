@@ -45,8 +45,8 @@ class ReviewCommentDisplay extends React.Component {
     const timeAgo = new TimeAgo('en-US');
     const { ReviewComments } = this.state;
     const { ReviewId: reviewId } = this.props;
-    const data = Array.from(ReviewComments);
-    const abc = data.map((comment) => {
+    const reviewCommentsData = Array.from(ReviewComments);
+    const reviewCommentsDisplay = reviewCommentsData.map((comment) => {
       if (reviewId !== null && comment.ModerationStatus === 'APPROVED') {
         return ([
           <div className="comment-submission-details" key={comment.Id}>
@@ -62,7 +62,7 @@ class ReviewCommentDisplay extends React.Component {
       }
       return '';
     }, {});
-    return abc;
+    return reviewCommentsDisplay;
   }
 }
 
