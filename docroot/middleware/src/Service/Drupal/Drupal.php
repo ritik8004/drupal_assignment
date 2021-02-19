@@ -103,12 +103,6 @@ class Drupal {
     $request_options['headers']['Host'] = $this->drupalInfo->getDrupalBaseUrl();
     $request_options['timeout'] = $request_options['timeout'] ?? $this->drupalInfo->getPhpTimeout('default');
 
-    // Bypass CloudFlare for all requests from middleware to Drupal.
-    // Rules are added in CF to disable caching for urls having the following
-    // query string.
-    // The query string is added since same APIs are used by MAPP also.
-    $url .= (strpos($url, '?') !== FALSE) ? '&_cf_cache_bypass=1' : '?_cf_cache_bypass=1';
-
     return $client->request($method, $url, $request_options);
   }
 
@@ -149,7 +143,11 @@ class Drupal {
    */
   public function getCartItemDrupalStock($sku) {
     $url = sprintf('/rest/v1/stock/%s', $sku);
-    $response = $this->invokeApi('GET', $url);
+    // Bypass CloudFlare to get fresh stock data.
+    // Rules are added in CF to disable caching for urls having the following
+    // query string.
+    // The query string is added since same APIs are used by MAPP also.
+    $response = $this->invokeApi('GET', $url, ['query' => ['_cf_cache_bypass' => '1']]);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
   }
