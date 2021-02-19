@@ -2,6 +2,8 @@ import React from 'react';
 import ReviewAttributes from '../review-attributes';
 import ReviewTooltip from '../review-tooltip';
 import ConditionalView from '../../../common/components/conditional-view';
+import IndividualReviewSlider from '../individual-review-slider';
+import IndividualReviewStar from '../individual-review-star';
 
 const ReviewInformation = ({
   reviewInformationData,
@@ -46,6 +48,15 @@ const ReviewInformation = ({
         <ReviewAttributes
           reviewAttributesData={reviewInformationData.ContextDataValues}
         />
+
+        <IndividualReviewSlider
+          sliderData={reviewInformationData.SecondaryRatings}
+        />
+
+        <IndividualReviewStar
+          customerValue={reviewInformationData.SecondaryRatings}
+        />
+
       </div>
     );
   }

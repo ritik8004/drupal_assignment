@@ -16,6 +16,10 @@
 
     &-detail-right {
       flex-grow: 1;
+
+      @include breakpoint($only-mobile) {
+        padding-top: 1.5rem;
+      }
     }
 
     &-tooltip {
@@ -33,7 +37,6 @@
       padding-bottom: 0.5rem;
 
       .attribute-name {
-        text-transform: uppercase;
         font-family: $alshaya-bold;
         color: $rr-review-summary-txt;
       }
@@ -92,7 +95,6 @@
 
       a {
         margin-#{$right}: 0.9375rem;
-        text-transform: uppercase;
       }
 
       &-comment {
@@ -148,7 +150,6 @@
 
     &-reviews-details {
       flex-basis: 35%;
-      text-transform: uppercase;
     }
 
     &-personal-details {
@@ -174,7 +175,6 @@
 
     &-detail-nickname {
       font-size: 0.875rem;
-      text-transform: uppercase;
       font-family: $alshaya-bold;
       text-decoration: underline;
       color: $rr-review-summary-txt;
@@ -241,6 +241,7 @@
   .feedback-count {
     color: $rr-review-summary-grey-text;
     font-family: $alshaya-thin;
+    font-size: 0.75rem;
   }
 
   .horizontal-border {
