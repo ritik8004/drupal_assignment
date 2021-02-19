@@ -460,9 +460,19 @@ const PaymentMethodIcon = (props) => {
             <g fill="#000">
               <g>
                 <g>
-                  <text transform="translate(-849 -968) translate(100 734) translate(0 212)">
-                    <tspan x="755" y="41">postpay </tspan>
-                  </text>
+                  {
+                    drupalSettings.path.currentLanguage === 'en'
+                      ? (
+                        <text transform="translate(-849 -968) translate(100 734) translate(0 212)">
+                          <tspan x="755" y="41">postpay </tspan>
+                        </text>
+                      )
+                      : (
+                        <text transform="translate(-810.5 -968) translate(100 734) translate(0 212)">
+                          <tspan x="755" y="41">postpay </tspan>
+                        </text>
+                      )
+}
                 </g>
               </g>
             </g>
