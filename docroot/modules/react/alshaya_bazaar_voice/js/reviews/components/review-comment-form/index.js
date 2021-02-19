@@ -27,13 +27,13 @@ class ReviewCommentForm extends React.Component {
             {Drupal.t('Post a Comment')}
             <div className="comment-form-fields">
               <label className="comment-form-commentbox-label">{Drupal.t('Comment')}</label>
-              <input type="text" id="commentbox" value={commentbox} onChange={this.handleCommentboxChange} name="commentbox" />
+              <input type="text" id="commentbox" value={commentbox || ''} onChange={this.handleCommentboxChange} name="commentbox" />
 
               <label className="comment-form-nickname">{Drupal.t('Screen name')}</label>
-              <input type="text" id="nickname" value={nickname} onChange={this.handleNicknameChange} name="nickname" />
+              <input type="text" id="nickname" value={nickname || ''} onChange={this.handleNicknameChange} name="nickname" />
 
               <label className="comment-form-email">{Drupal.t('Email Address')}</label>
-              <input type="email" id="email" placeholder="Email" value={email} onChange={this.handleEmailChange} name="email" />
+              <input type="email" id="email" placeholder="Email" value={email || ''} onChange={this.handleEmailChange} name="email" />
 
               <input type="hidden" name="blackBox" id="ioBlackBox" />
               <div className="customtext">

@@ -3,6 +3,7 @@ import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import ReviewFeedback from '../review-feedback';
 import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
+import ReviewCommentDisplay from '../review-comment-display';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -33,6 +34,11 @@ const ReviewDescription = ({
           </div>
           <div className="review-comment">
             <ReviewCommentForm
+              ReviewId={reviewDescriptionData.Id}
+            />
+          </div>
+          <div className="review-comment-display">
+            <ReviewCommentDisplay
               ReviewId={reviewDescriptionData.Id}
             />
           </div>
