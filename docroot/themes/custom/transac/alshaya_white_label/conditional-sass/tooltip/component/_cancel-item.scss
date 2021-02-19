@@ -30,9 +30,15 @@
     align-items: center;
 
     span {
-      margin-top: 0.1875rem;
+      font-size: 0.875rem;
+      line-height: 1.125rem;
       margin-#{$left}: 0.5rem;
+      margin-top: 0.1875rem;
       color: $cancel-item-refund-text;
+
+      @include breakpoint($desktop) {
+        line-height: 1.25rem;
+      }
     }
   }
 
@@ -70,6 +76,7 @@
 
     &::before {
       padding-#{$right}: 0.5rem;
+      font-size: 1.25rem;
     }
   }
 }
