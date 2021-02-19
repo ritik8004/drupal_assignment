@@ -27,10 +27,22 @@ class AuraFormNewAuraUserModal extends React.Component {
     };
   }
 
-  getNewUserFormDescription = () => [
-    <span key="part1">{Drupal.t('By clicking submit, you agree to have read and accepted our')}</span>,
-    <a key="part2" className="t-c-link">{Drupal.t('Terms & Conditions')}</a>,
-  ];
+  getNewUserFormDescription = () => {
+    const { signUpTermsAndConditionsLink } = getAuraConfig();
+
+    return [
+      <span key="part1">{Drupal.t('By clicking submit, you agree to have read and accepted our')}</span>,
+      <a
+        key="part2"
+        href={signUpTermsAndConditionsLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="t-c-link"
+      >
+        {Drupal.t('Terms & Conditions')}
+      </a>,
+    ];
+  }
 
   getCountryMobileCode = () => {
     const {

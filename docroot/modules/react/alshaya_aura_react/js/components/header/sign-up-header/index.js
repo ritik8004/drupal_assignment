@@ -70,7 +70,12 @@ class SignUpHeader extends React.Component {
               >
                 {Drupal.t('Sign up now')}
               </div>
-              <a href={headerLearnMoreLink} className="learn-more">
+              <a
+                href={headerLearnMoreLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="learn-more"
+              >
                 {Drupal.t('Learn more')}
               </a>
             </div>
