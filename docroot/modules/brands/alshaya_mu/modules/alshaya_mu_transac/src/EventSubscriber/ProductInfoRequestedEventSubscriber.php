@@ -41,7 +41,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
    *   Event object.
    */
-  public function processDescription(ProductInfoRequestedEvent $event) {
+  private function processDescription(ProductInfoRequestedEvent $event) {
     $sku_entity = $event->getSku();
     $description = _alshaya_mu_transac_get_product_description($sku_entity);
     $event->setValue($description['description']);
