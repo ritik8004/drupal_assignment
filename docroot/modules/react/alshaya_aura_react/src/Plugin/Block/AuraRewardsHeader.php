@@ -93,7 +93,6 @@ class AuraRewardsHeader extends BlockBase implements ContainerFactoryPluginInter
     $this->moduleHandler->loadInclude('alshaya_aura_react', 'inc', 'alshaya_aura_react.static_strings');
     return [
       '#theme' => 'aura_rewards_header',
-      '#learn_more_link' => $this->configFactory->get('alshaya_aura_react.settings')->get('aura_rewards_header_learn_more_link'),
       '#strings' => _alshaya_aura_static_strings(),
       '#attached' => [
         'library' => [

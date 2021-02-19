@@ -17,6 +17,9 @@ alshaya_aura_react.settings:
     aura_reward_activity_time_limit_in_months:
       type: integer
       label: 'Reward activity transaction history limit in months'
+    aura_signup_terms_and_conditions_link:
+      type: text
+      label: 'AURA Sign up terms and conditions Link'
 
 alshaya_aura_react.loyalty_benefits:
   type: config_object

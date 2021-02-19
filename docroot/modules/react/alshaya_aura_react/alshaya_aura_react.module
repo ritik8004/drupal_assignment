@@ -98,7 +98,6 @@ function alshaya_aura_react_theme() {
     ],
     'aura_rewards_header' => [
       'variables' => [
-        'learn_more_link' => '',
         'strings' => [],
       ],
       'template' => 'aura-rewards-header',
