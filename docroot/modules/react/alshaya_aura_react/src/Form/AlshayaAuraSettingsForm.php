@@ -32,7 +32,7 @@ class AlshayaAuraSettingsForm extends ConfigFormBase {
       'aura_rewards_header_learn_more_link' => [
         '#type' => 'textfield',
         '#title' => $this->t('AURA Rewards Header Learn More Link'),
-        '#description' => $this->t('Learn More link to be added in AURA Rewards popup in header.'),
+        '#description' => $this->t('Learn More link to be added in AURA Rewards popup in header. This should be an internal link. For eg. `aura/learn-more`'),
         '#default_value' => $this->config('alshaya_aura_react.settings')->get('aura_rewards_header_learn_more_link'),
       ],
       'aura_app_store_link' => [
@@ -50,7 +50,7 @@ class AlshayaAuraSettingsForm extends ConfigFormBase {
       'aura_signup_terms_and_conditions_link' => [
         '#type' => 'textfield',
         '#title' => $this->t('AURA Sign up terms and conditions Link'),
-        '#description' => $this->t('Terms and Conditions link to be added in AURA Sign up popup.'),
+        '#description' => $this->t('Terms and Conditions link to be added in AURA Sign up popup. This should be an internal link. For eg. `aura/terms-and-conditions`'),
         '#default_value' => $this->config('alshaya_aura_react.settings')->get('aura_signup_terms_and_conditions_link'),
       ],
     ];
