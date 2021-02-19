@@ -41,7 +41,6 @@ export default class DeliveryMethods extends React.Component {
       bubbles: true,
       detail: {
         data: method,
-        cart,
       },
     });
     document.dispatchEvent(event);

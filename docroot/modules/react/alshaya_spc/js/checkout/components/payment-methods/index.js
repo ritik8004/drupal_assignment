@@ -28,15 +28,12 @@ export default class PaymentMethods extends React.Component {
   }
 
   componentDidMount = () => {
-    const { cart } = this.props;
-
     if (isPostpayEnabled()) {
       const postpayTimer = setInterval(() => {
         const { isPostpayInitialised } = this.props;
         if (isPostpayInitialised) {
           clearInterval(postpayTimer);
-          this.alshayaPostpayCheckCheckCheckoutAmount(cart.cart.cart_total);
-          this.selectDefault();
+          this.alshayaPostpayCheckCheckCheckoutAmount();
         }
       }, 100);
     } else {
@@ -107,8 +104,8 @@ export default class PaymentMethods extends React.Component {
         message,
       });
     }
-    document.addEventListener('deliveryMethodChange', (e) => {
-      this.alshayaPostpayCheckCheckCheckoutAmount(e.detail.cart.cart.cart_total);
+    document.addEventListener('deliveryMethodChange', () => {
+      this.alshayaPostpayCheckCheckCheckoutAmount();
     });
   };
 
@@ -296,9 +293,10 @@ export default class PaymentMethods extends React.Component {
     return this.paymentMethodRefs[cart.cart.payment.method].current.validateBeforePlaceOrder();
   };
 
-  alshayaPostpayCheckCheckCheckoutAmount = (cartTotal) => {
+  alshayaPostpayCheckCheckCheckoutAmount = () => {
+    const { cart } = this.props;
     window.postpay.check_amount({
-      amount: cartTotal * drupalSettings.postpay.currency_multiplier,
+      amount: cart.cart.cart_total * drupalSettings.postpay.currency_multiplier,
       currency: drupalSettings.postpay_widget_info['data-currency'],
       callback: function (paymentOptions) {
         if (paymentOptions === null) {
@@ -306,11 +304,12 @@ export default class PaymentMethods extends React.Component {
           // not available.
           const postpayElement = document.getElementsByClassName('payment-method-postpay');
           if (postpayElement[0]) {
-            postpayElement[0].style.display = 'none';
+            postpayElement[0].remove();
           }
         } else {
           this.setState({ postpayAvailable: true });
         }
+        this.selectDefault();
       }.bind(this),
     });
   }
