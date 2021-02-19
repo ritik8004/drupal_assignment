@@ -10,6 +10,9 @@ import { getAuraDetailsDefaultState, getAuraLocalStorageKey } from '../../../../
 import Loading from '../../../utilities/loading';
 import { getStorageInfo } from '../../../utilities/storage';
 import getStringMessage from '../../../../../js/utilities/strings';
+import { showFullScreenLoader } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import { redeemAuraPoints } from '../utilities/checkout_helper';
+import dispatchCustomEvent from '../../../utilities/events';
 
 class AuraCartRewards extends React.Component {
   constructor(props) {
@@ -21,11 +24,21 @@ class AuraCartRewards extends React.Component {
   }
 
   componentDidMount() {
-    // @TODO: Get product points and update in state.
     document.addEventListener('loyaltyStatusUpdated', this.updateStates, false);
 
     if (getUserDetails().id) {
       document.addEventListener('customerDetailsFetched', this.updateStates, false);
+
+      // Listener to refreshCart event to track any cart update action like quantity update.
+      document.addEventListener('refreshCart', this.removeRedeemedPoints, false);
+      // Listener to promoCodeSuccess event to track when promo code is applied on cart.
+      document.addEventListener('promoCodeSuccess', this.removeRedeemedPoints, false);
+      // Listener to track when user clicks on continue to checkout from cart page.
+      document.addEventListener('continueToCheckoutFromCart', this.removeRedeemedPoints, false);
+
+      // Listener to redeem points API event to update cart total based on response.
+      document.addEventListener('auraRedeemPointsApiInvoked', this.handleRedeemPointsEvent, false);
+
       const { loyaltyStatus } = this.state;
 
       if (loyaltyStatus === getAllAuraStatus().APC_NOT_LINKED_NOT_U) {
@@ -50,6 +63,51 @@ class AuraCartRewards extends React.Component {
       this.updateStates(data);
     }
   }
+
+  // Event listener callback for redeem points API event to
+  // trigger an event to update totals in cart.
+  handleRedeemPointsEvent = (data) => {
+    const { stateValues, action } = data.detail;
+
+    if (Object.keys(stateValues).length === 0 || stateValues.error === true) {
+      return;
+    }
+
+    const { totals } = this.props;
+    const cartTotals = totals;
+
+    if (action === 'remove points') {
+      // Remove all aura related keys from totals if present.
+      Object.entries(stateValues).forEach(([key]) => {
+        delete cartTotals[key];
+      });
+    }
+    // Dispatch an event to update totals in cart object.
+    dispatchCustomEvent('updateTotalsInCart', { totals: cartTotals });
+  };
+
+  // Event listener callback to remove redeemed points for
+  // logged in users on any refreshCart event.
+  removeRedeemedPoints = () => {
+    const { totals } = this.props;
+
+    // Return if paidWithAura and balancePayable is not present
+    // in cart totals that means user has not redeemed any points.
+    if (totals.paidWithAura === undefined && totals.balancePayable === undefined) {
+      return;
+    }
+
+    const { cardNumber } = this.state;
+
+    // Call API to remove redeemed aura points.
+    const requestData = {
+      action: 'remove points',
+      userId: getUserDetails().id,
+      cardNumber,
+    };
+    showFullScreenLoader();
+    redeemAuraPoints(requestData);
+  };
 
   updateStates = (data) => {
     const states = { ...data.detail.stateValues };

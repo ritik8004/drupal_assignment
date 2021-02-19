@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ToolTip from '../../../../alshaya_spc/js/utilities/tooltip';
 import { getPriceToPoint } from '../../utilities/aura_utils';
+import { cartAvailableInStorage } from '../../../../alshaya_spc/js/utilities/get_cart';
+import { showFullScreenLoader } from '../../../../js/utilities/showRemoveFullScreenLoader';
+import { redeemAuraPoints } from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/checkout_helper';
+import { getUserDetails } from '../../utilities/helper';
 
 class AuraPDP extends React.Component {
   constructor(props) {
@@ -18,11 +22,23 @@ class AuraPDP extends React.Component {
     document.addEventListener('auraProductUpdate', this.processVariant, false);
     document.addEventListener('auraProductModalOpened', this.loadModalAuraPoints, false);
     document.addEventListener('auraProductModalClosed', this.removeModalAuraPoints, false);
+    // Listener to track any update in customer's aura details.
+    document.addEventListener('customerDetailsFetched', this.setCustomerDetails, false);
+    document.addEventListener('loyaltyStatusUpdated', this.setCustomerDetails, false);
+    // Listener to track refresh cart event - Add to cart on PDP.
+    document.addEventListener('refreshCart', this.removeRedeemedPoints, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('auraProductUpdate', this.processVariant, false);
   }
+
+  setCustomerDetails = (data) => {
+    const { stateValues } = data.detail;
+    this.setState({
+      ...stateValues,
+    });
+  };
 
   getInitialProductPoints = (mode) => {
     let productPoints = 0;
@@ -83,9 +99,39 @@ class AuraPDP extends React.Component {
         productPoints: data.amount ? getPriceToPoint(data.amount) : 0,
         context,
       });
+
+      // On change in variant or quantity order total amount might change
+      // so we remove redeemed aura points.
+      this.removeRedeemedPoints();
     }
 
     return null;
+  };
+
+  // Helper to remove redeemed aura points if any.
+  removeRedeemedPoints = () => {
+    const cart = cartAvailableInStorage();
+    const { cardNumber } = this.state;
+
+    // Return if cart not available or paidWithAura and balancePayable is not present
+    // in cart totals that means user has not redeemed any points.
+    if (cart === false
+      || cart === null
+      || cart === 'empty'
+      || cart.totals.paidWithAura === undefined
+      || cart.totals.balancePayable === undefined
+      || cardNumber === undefined) {
+      return;
+    }
+
+    // Call API to remove redeemed aura points.
+    const requestData = {
+      action: 'remove points',
+      userId: getUserDetails().id,
+      cardNumber,
+    };
+    showFullScreenLoader();
+    redeemAuraPoints(requestData);
   };
 
   getToolTipContent = () => Drupal.t('Earn AURA points every time you shop! You can redeem your points to use on future purchases. Not applicable on purchases made using AURA points.');

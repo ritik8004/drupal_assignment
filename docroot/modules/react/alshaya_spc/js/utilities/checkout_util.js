@@ -406,6 +406,10 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
         ? 'cart/login'
         : 'checkout';
 
+      // Dispatch an event when user is moving to checkout page by
+      // clicking on `continue to checkout` link.
+      dispatchCustomEvent('continueToCheckoutFromCart', { cartResult });
+
       // Redirect to next page.
       window.location.href = Drupal.url(continueCheckoutLink);
       return;

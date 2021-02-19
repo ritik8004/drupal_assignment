@@ -29,6 +29,10 @@ class AuraFormRedeemPoints extends React.Component {
     // Event listener for any change in payment methods section.
     // On payment method update, we recalculate and prefill redemption section.
     document.addEventListener('refreshCompletePurchaseSection', this.updatePointsAndMoney, false);
+    // Event listener on delivery information update to remove redeemed points.
+    document.addEventListener('refreshCartOnAddress', this.undoRedeemPoints, false);
+    // Event listener on CnC store selection.
+    document.addEventListener('storeSelected', this.undoRedeemPoints, false);
 
     const { totals } = this.props;
 
