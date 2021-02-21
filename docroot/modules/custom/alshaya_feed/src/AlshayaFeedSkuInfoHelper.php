@@ -252,6 +252,7 @@ class AlshayaFeedSkuInfoHelper {
 
       if ($sku->bundle() == 'simple') {
         $parentProduct['sku'] = $parentProduct['group_id'];
+        $parentProduct['sanitized_sku'] = $this->getSanitizedSku($parentProduct['sku']);
         unset($parentProduct['group_id']);
         $stockInfo = $this->skuInfoHelper->stockInfo($sku);
         $parentProduct['stock'] = [
@@ -277,6 +278,7 @@ class AlshayaFeedSkuInfoHelper {
 
           $variant = [
             'sku' => $child->getSku(),
+            'sanitized_sku' => $this->getSanitizedSku($child->getSku()),
             'product_type' => $child->bundle(),
             'configurable_attributes' => $this->getConfigurableValues($child, $combination),
             'swatch_image' => $this->getSwatchImages($child, $combination, $swatches),
@@ -461,6 +463,25 @@ class AlshayaFeedSkuInfoHelper {
 
     $static[$cid] = $configurations;
     return $configurations;
+  }
+
+  /**
+   * Get sanized version of sku.
+   *
+   * @return array
+   *   Return sanitized version sku
+   */
+  public function getSanitizedSku($skuId) {
+    if (empty($skuId)) {
+      return NULL;
+    }
+
+    return preg_replace(
+        ['#[\\s-]+#', '#[^A-Za-z0-9. -]+#'],
+        ['-', ''],
+
+        urldecode($skuId)
+      );
   }
 
 }
