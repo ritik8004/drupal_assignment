@@ -474,11 +474,11 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $product['attributes'] = array_merge($product['attributes'], $item['attributes']);
       }
 
-      $product['image'] = '';
-
       // Load the first image.
       $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'cart');
-      $product['image']['#skip_lazy_loading'] = TRUE;
+      if ($product['image']) {
+        $product['image']['#skip_lazy_loading'] = TRUE;
+      }
 
       // If 'applied_rule_ids' is set and price is 0, set the free gift label.
       if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_bnpl\Helper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Widget helper for Postpay.
@@ -12,6 +13,8 @@ use Drupal\Core\Routing\CurrentRouteMatch;
  * @package Drupal\alshaya_bnpl\Helper
  */
 class AlshayaBnplWidgetHelper {
+
+  use StringTranslationTrait;
 
   /**
    * Language Manager service.
@@ -136,10 +139,12 @@ class AlshayaBnplWidgetHelper {
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_cart';
         $build['#attached']['library'][] = 'alshaya_white_label/postpay-cart';
         $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo('cart');
+        $build['#attached']['drupalSettings']['alshaya_spc']['postpay_eligibility_message'] = $this->t('<p>Your order total does not qualify for payment via <span class="brand-postpay light">Postpay</span>. <a href="#">Find out more</a> about our interest-free installments and options with <span class="brand-postpay dark">Postpay</span></p>');
         break;
 
       case 'checkout':
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_sdk';
+        $build['#attached']['library'][] = 'alshaya_white_label/postpay-checkout';
         $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo('checkout');
         break;
 
