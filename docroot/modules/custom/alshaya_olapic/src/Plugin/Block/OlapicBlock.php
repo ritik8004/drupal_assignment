@@ -145,6 +145,13 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function build() {
+    $env = alshaya_get_site_environment();
+    $development_mode = $this->configFactory->get('alshaya_olapic.settings')->get('development_mode') ?? '';
+    // Not allowing olapic block
+    // For non prod environment + development mode disabled.
+    if ($env != 'prod' && $development_mode == 0) {
+      return [];
+    }
     $routename = $this->routeMatch->getRouteName();
     $node = $this->routeMatch->getParameter('node');
     if ($routename == 'entity.node.canonical' && $node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 0) {
@@ -156,7 +163,6 @@ class OlapicBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $data_instance_field_name = 'instance_id_' . $lang;
     $data_apikey = $this->configFactory->get('alshaya_olapic.settings')->get($data_apikey_field_name) ?? '';
     $data_instance = $this->configuration[$data_instance_field_name] ?? '';
-    $development_mode = $this->configFactory->get('alshaya_olapic.settings')->get('development_mode') ?? '';
     $data_lang = $lang . '_' . $country_code;
     $olapic_keys = [
       'data_apikey' => $data_apikey,
