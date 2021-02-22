@@ -45,10 +45,10 @@ function algolia_get_query_suggestions($app_id, $app_secret_admin, $index) {
 function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) {
   $ch = curl_init();
 
-  curl_setopt($ch, CURLOPT_URL, ALGOLIA_QUERY_SUGGESTTIONS_URL . '/' . $name);
+  curl_setopt($ch, CURLOPT_URL, ALGOLIA_QUERY_SUGGESTTIONS_URL);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-  curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+  curl_setopt($ch, CURLOPT_POST, 1);
   curl_setopt($ch, CURLOPT_TIMEOUT, 3000);
 
   curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate');
@@ -56,7 +56,7 @@ function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) 
   $headers = [];
   $headers[] = 'X-Algolia-Api-Key: ' . $app_secret_admin;
   $headers[] = 'X-Algolia-Application-Id: ' . $app_id;
-  $headers[] = 'Content-Type: application/x-www-form-urlencoded';
+  $headers[] = 'Content-Type: application/json';
   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
   $result = curl_exec($ch);
@@ -94,6 +94,7 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   global $source_app_id, $source_app_secret_admin, $source_index;
   global $sorts, $facets, $query_facets, $query_generate;
   global $searchable_attributes, $ranking;
+  global $migrate_index;
 
   $clientSource = new Client($source_app_id, $source_app_secret_admin);
   $client = new Client($app_id, $app_secret_admin);
@@ -110,8 +111,14 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   $client->copyIndex('dummy', $name);
   $index = $client->initIndex($name);
 
+  if ($migrate_index) {
+    $settings['attributesForFaceting'] = $settingsSource['attributesForFaceting'];
+  }
+  else {
+    $settings['attributesForFaceting'] = $facets;
+  }
+
   $settings = $settingsSource;
-  $settings['attributesForFaceting'] = $facets;
   $settings['searchableAttributes'] = $searchable_attributes;
   $settings['ranking'] = $ranking;
   unset($settings['replicas']);
