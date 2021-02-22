@@ -13,6 +13,7 @@ use Symfony\Component\Yaml\Yaml;
  * Clearing the decimal points from the language config of acq_commerce.currency.
  */
 function acq_commerce_update_8004() {
+  $languageManager = \Drupal::languageManager();
   foreach ($languageManager->getLanguages() as $language) {
     if ($language->isDefault()) {
       continue;
