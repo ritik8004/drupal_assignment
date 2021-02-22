@@ -21,7 +21,7 @@ export default class ReviewSummary extends React.Component {
       reviewsProduct: '',
       currentSortOption: '',
       currentFilterOptions: [],
-      emptyMessage: '',
+      noResultsmessage: null,
       totalReviews: '',
       currentTotal: '',
     };
@@ -56,20 +56,23 @@ export default class ReviewSummary extends React.Component {
       apiData.then((result) => {
         removeFullScreenLoader();
         if (result.error === undefined && result.data !== undefined) {
-          if (result.data.Results !== null && result.data.Results !== '') {
+          if (result.data.Results.length > 0) {
             if (type === undefined) {
               this.setState({
                 totalReviews: result.data.TotalResults,
+                reviewsProduct: result.data.Includes.Products,
               });
             }
+
             this.setState({
               currentTotal: result.data.TotalResults,
               reviewsSummary: result.data.Results,
-              reviewsProduct: result.data.Includes.Products,
+              noResultsmessage: null,
             });
           } else {
             this.setState({
-              emptyMessage: Drupal.t('No review found.'),
+              currentTotal: result.data.TotalResults,
+              noResultsmessage: Drupal.t('No review found.'),
             });
           }
         } else {
@@ -139,68 +142,71 @@ export default class ReviewSummary extends React.Component {
       reviewsProduct,
       currentSortOption,
       currentFilterOptions,
-      emptyMessage,
+      noResultsmessage,
       totalReviews,
       currentTotal,
     } = this.state;
 
-    if (emptyMessage === '') {
-      return (
-        <div className="reviews-wrapper">
-          {emptyMessage}
-          <div className="histogram-data-section">
-            <div className="rating-wrapper">
-              <ReviewHistogram overallSummary={reviewsProduct} />
-              <div className="sorting-filter-wrapper">
-                <div className="sorting-filter-title-block">{Drupal.t('Filter + Sort')}</div>
-                <ReviewSorting
-                  currentOption={currentSortOption}
-                  sortOptions={drupalSettings.bazaar_voice.sorting_options}
-                  processingCallback={this.processSortOption}
-                />
-                <ReviewRatingsFilter
-                  currentOptions={currentFilterOptions}
-                  filterOptions={reviewsProduct}
-                  processingCallback={this.addFilters}
-                />
-                <ReviewFilters
-                  currentOptions={currentFilterOptions}
-                  filterOptions={reviewsProduct}
-                  processingCallback={this.addFilters}
-                />
-              </div>
-              <ReviewFiltersDisplay
-                currentOptions={currentFilterOptions}
-                processingCallback={this.removeFilters}
-                totalReviews={totalReviews}
-                currentTotal={currentTotal}
-              />
-            </div>
-          </div>
-          { Object.keys(reviewsSummary).map((item) => (
-            <div className="review-summary" key={reviewsSummary[item].Id}>
-              <ConditionalView condition={window.innerWidth < 768}>
-                <DisplayStar
-                  starPercentage={reviewsSummary[item].Rating}
-                />
-                <div className="review-title">{reviewsSummary[item].Title}</div>
-              </ConditionalView>
-              <ReviewInformation
-                reviewInformationData={reviewsSummary[item]}
-                reviewTooltipInfo={
-                  reviewsProduct[reviewsSummary[item].ProductId].ReviewStatistics
-                }
-              />
-              <ReviewDescription
-                reviewDescriptionData={reviewsSummary[item]}
-              />
-            </div>
-          ))}
-        </div>
-      );
-    }
     return (
-      <EmptyMessage />
+      <div className="reviews-wrapper">
+        <div className="histogram-data-section">
+          <div className="rating-wrapper">
+            <ReviewHistogram overallSummary={reviewsProduct} />
+            <div className="sorting-filter-wrapper">
+              <div className="sorting-filter-title-block">{Drupal.t('Filter + Sort')}</div>
+              <ReviewSorting
+                currentOption={currentSortOption}
+                sortOptions={drupalSettings.bazaar_voice.sorting_options}
+                processingCallback={this.processSortOption}
+              />
+              <ReviewRatingsFilter
+                currentOptions={currentFilterOptions}
+                filterOptions={reviewsProduct}
+                processingCallback={this.addFilters}
+              />
+              <ReviewFilters
+                currentOptions={currentFilterOptions}
+                filterOptions={reviewsProduct}
+                processingCallback={this.addFilters}
+              />
+            </div>
+            <ReviewFiltersDisplay
+              currentOptions={currentFilterOptions}
+              processingCallback={this.removeFilters}
+              totalReviews={totalReviews}
+              currentTotal={currentTotal}
+            />
+          </div>
+        </div>
+        {noResultsmessage === null
+          && (
+            <>
+              {Object.keys(reviewsSummary).map((item) => (
+                <div className="review-summary" key={reviewsSummary[item].Id}>
+                  <ConditionalView condition={window.innerWidth < 768}>
+                    <DisplayStar
+                      starPercentage={reviewsSummary[item].Rating}
+                    />
+                    <div className="review-title">{reviewsSummary[item].Title}</div>
+                  </ConditionalView>
+                  <ReviewInformation
+                    reviewInformationData={reviewsSummary[item]}
+                    reviewTooltipInfo={
+                    reviewsProduct[reviewsSummary[item].ProductId].ReviewStatistics
+                  }
+                  />
+                  <ReviewDescription
+                    reviewDescriptionData={reviewsSummary[item]}
+                  />
+                </div>
+              ))}
+            </>
+          )}
+        {noResultsmessage !== null
+          && (
+          <EmptyMessage emptyMessage={noResultsmessage} />
+          )}
+      </div>
     );
   }
 }
