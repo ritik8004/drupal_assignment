@@ -1,0 +1,3 @@
+bvpixel_tracking:
+  js:
+    js/bvpixel-tracking.js: {}

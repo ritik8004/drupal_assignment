@@ -1,0 +1,16 @@
+#reviews-section {
+  .review {
+    &-feedback {
+      &-comment {
+        button {
+          text-transform: uppercase;
+          font-family: $hnm-bold;
+        }
+      }
+    }
+
+    &-title {
+      font-family: $hnm-regular;
+    }
+  }
+}

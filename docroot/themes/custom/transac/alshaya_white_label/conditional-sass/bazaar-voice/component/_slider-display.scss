@@ -1,0 +1,44 @@
+.display-slider {
+  display: flex;
+  align-items: center;
+  margin-top: 0.625rem;
+
+  .slider-label {
+    width: 20%;
+    font-size: 0.75rem;
+    color: $rr-slider-label-txt;
+
+    @include breakpoint($only-mobile) {
+      width: 30%;
+    }
+  }
+
+  .slide-dot-container {
+    width: 72%;
+    background: $rr-slider-bg;
+    height: 0.1875rem;
+    border-#{$left}: 0.125rem solid $rr-slider-seperator-border;
+    display: flex;
+    position: relative;
+    margin-#{$right}: 1rem;
+
+    @include breakpoint($only-mobile) {
+      width: 60%;
+    }
+
+    .slide-dot {
+      width: 25%;
+      border-#{$right}: 0.125rem solid $rr-slider-seperator-border;
+      height: 0.1875rem;
+    }
+
+    .dynamic-dot {
+      width: 0.625rem;
+      height: 0.625rem;
+      background: $rr-slider-dot-bg;
+      border-radius: 50%;
+      position: absolute;
+      top: -0.25rem;
+    }
+  }
+}

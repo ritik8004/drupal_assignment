@@ -1,0 +1,42 @@
+#reviews-section {
+  .review {
+    &-feedback {
+      &-comment {
+        button {
+          font-family: $bp-thin;
+        }
+      }
+    }
+
+    &-title {
+      font-family: $bp-bold;
+    }
+
+    &-date,
+    &-text,
+    &-count,
+    &-vote {
+      font-family: $bp-light;
+    }
+
+    &-attributes-details {
+      .attribute-value {
+        font-family: $bp-light;
+      }
+    }
+  }
+
+  .user {
+    &-attribute-value {
+      font-family: $bp-light;
+    }
+  }
+
+  .feedback-label {
+    font-family: $bp-light;
+  }
+
+  .feedback-count {
+    font-family: $bp-light;
+  }
+}
