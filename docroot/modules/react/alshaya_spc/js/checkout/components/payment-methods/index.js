@@ -28,17 +28,7 @@ export default class PaymentMethods extends React.Component {
   }
 
   componentDidMount = () => {
-    if (isPostpayEnabled()) {
-      const postpayTimer = setInterval(() => {
-        const { isPostpayInitialised } = this.props;
-        if (isPostpayInitialised) {
-          clearInterval(postpayTimer);
-          this.alshayaPostpayCheckCheckCheckoutAmount();
-        }
-      }, 100);
-    } else {
-      this.selectDefault();
-    }
+    this.selectDefault();
 
     // We want this to be executed once all other JS execution is finished.
     // For this we use setTimeout with 1 ms.
@@ -104,9 +94,6 @@ export default class PaymentMethods extends React.Component {
         message,
       });
     }
-    document.addEventListener('deliveryMethodChange', () => {
-      this.alshayaPostpayCheckCheckCheckoutAmount();
-    });
   };
 
   componentDidUpdate() {
@@ -174,6 +161,7 @@ export default class PaymentMethods extends React.Component {
 
   getPaymentMethods = (active) => {
     const { cart } = this.props;
+
     let paymentMethods = [];
 
     if (active) {
@@ -189,6 +177,9 @@ export default class PaymentMethods extends React.Component {
             return;
           }
 
+          if (method.code === 'postpay' && !(this.isAvailable())) {
+            return;
+          }
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
       });
@@ -204,6 +195,27 @@ export default class PaymentMethods extends React.Component {
 
     return paymentMethods;
   };
+
+  isAvailable = () => {
+    if (isPostpayEnabled()) {
+      const { cart, isPostpayInitialised } = this.props;
+      if (isPostpayInitialised) {
+        window.postpay.check_amount({
+          amount: cart.cart.cart_total * drupalSettings.postpay.currency_multiplier,
+          currency: drupalSettings.postpay_widget_info['data-currency'],
+          callback(paymentOptions) {
+            if (paymentOptions === null) {
+              // Hide Postpay payment method if the payment_options is
+              // not available.
+              return false;
+            }
+            return true;
+          },
+        });
+      }
+    }
+    return false;
+  }
 
   processPostPaymentSelection = (method) => {
     const paymentDiv = document.getElementById(`payment-method-${method}`);
@@ -292,27 +304,6 @@ export default class PaymentMethods extends React.Component {
     // Trigger validate of selected component.
     return this.paymentMethodRefs[cart.cart.payment.method].current.validateBeforePlaceOrder();
   };
-
-  alshayaPostpayCheckCheckCheckoutAmount = () => {
-    const { cart } = this.props;
-    window.postpay.check_amount({
-      amount: cart.cart.cart_total * drupalSettings.postpay.currency_multiplier,
-      currency: drupalSettings.postpay_widget_info['data-currency'],
-      callback: function (paymentOptions) {
-        if (paymentOptions === null) {
-          // Hide Postpay payment method if the payment_options is
-          // not available.
-          const postpayElement = document.getElementsByClassName('payment-method-postpay');
-          if (postpayElement[0]) {
-            postpayElement[0].remove();
-          }
-        } else {
-          this.setState({ postpayAvailable: true });
-        }
-        this.selectDefault();
-      }.bind(this),
-    });
-  }
 
   render = () => {
     const methods = [];
