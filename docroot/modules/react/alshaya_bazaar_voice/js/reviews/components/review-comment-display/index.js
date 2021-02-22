@@ -1,17 +1,12 @@
 import React from 'react';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
 import { fetchAPIData } from '../../../utilities/api/apiData';
-import {
-  removeFullScreenLoader,
-  showFullScreenLoader,
-} from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import ReviewCommentRender from '../review-comment-render';
 
 class ReviewCommentDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ReviewComments: '',
+      reviewComments: '',
     };
   }
 
@@ -19,18 +14,15 @@ class ReviewCommentDisplay extends React.Component {
    * Get Average Overall ratings and total reviews count.
    */
   componentDidMount() {
-    showFullScreenLoader();
-    const apiUri = '/data/reviewcomments.json';
     const { ReviewId: reviewId } = this.props;
     const params = `&filter=reviewid:${reviewId}`;
-    const apiData = fetchAPIData(apiUri, params);
+    const apiData = fetchAPIData('/data/reviewcomments.json', params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
-          removeFullScreenLoader();
           if (result.data.hasErrors !== false) {
             this.setState({
-              ReviewComments: result.data.Results,
+              reviewComments: result.data.Results,
             });
           }
         } else {
@@ -41,28 +33,28 @@ class ReviewCommentDisplay extends React.Component {
   }
 
   render() {
-    TimeAgo.addLocale(en);
-    const timeAgo = new TimeAgo('en-US');
-    const { ReviewComments } = this.state;
-    const { ReviewId: reviewId } = this.props;
-    const reviewCommentsData = Array.from(ReviewComments);
+    const { reviewComments } = this.state;
+    const { ReviewId } = this.props;
+    const reviewCommentsData = Array.from(reviewComments);
     const reviewCommentsDisplay = reviewCommentsData.map((comment) => {
-      if (reviewId !== null && comment.ModerationStatus === 'APPROVED') {
+      if (ReviewId !== null && comment.ModerationStatus === 'APPROVED') {
         return ([
           <div className="comment-submission-details" key={comment.Id}>
-            <div className="comment-user-details">
-              <span className="comment-user-nickname">{comment.UserNickname}</span>
-              <span className="comment-user-date">{timeAgo.format(new Date(comment.SubmissionTime))}</span>
-            </div>
-            <div className="comment-description">
-              <span className="comment-description-text">{comment.CommentText}</span>
-            </div>
+            <ReviewCommentRender
+              UserNickname={comment.UserNickname}
+              SubmissionTime={comment.SubmissionTime}
+              CommentText={comment.CommentText}
+            />
           </div>,
         ]);
       }
       return '';
     }, {});
-    return reviewCommentsDisplay;
+    if (reviewCommentsDisplay && reviewCommentsDisplay.length > 0) {
+      return reviewCommentsDisplay;
+    }
+
+    return (null);
   }
 }
 

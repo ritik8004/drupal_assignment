@@ -20,18 +20,12 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
-    // Get current user details.
-    $user = \Drupal::currentUser();
-    if (!($user->isAnonymous())){
-      $user_email = $user->getEmail();
-    }
-
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       $config = \Drupal::config('bazaar_voice.settings');
       \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
       $settings = [
         'user' => [
-          'user_email' => $user_email
+          'user_email' => \Drupal::currentUser()->getEmail(),
         ],
         'bazaar_voice' => [
           'endpoint' => $config->get('api_base_url'),

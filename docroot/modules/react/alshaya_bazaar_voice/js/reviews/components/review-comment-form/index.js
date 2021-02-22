@@ -37,8 +37,9 @@ class ReviewCommentForm extends React.Component {
               <input type="email" id="email" placeholder="Email" value={email || ''} onChange={this.handleEmailChange} name="email" />
 
               <input type="hidden" name="blackBox" id="ioBlackBox" />
-              <div className="customtext">
-                You may receive emails regarding this submission. Any emails will include the ability to opt-out of future communications. Boots UK Limited (“Boots”) will collect and use your personal data that you share with us, such as your name and contact details, for the purposes of processing your product review. Boots may share your information across all Boots services such as Boots Opticians and Boots Pharmacy. We may also use your data to improve our services. These are in our interests but we believe they benefit our customers this includes things like creating customer profiles to tell you about certain products and offers which we think will interest you, based on how you use Boots services. We will store your personal data for as long as necessary, unless a longer retention period is needed or allowed by law. We may also share your data with companies who provide services on our behalf such as Bazaarvoice (our reviews platform), but Boots will never sell your personal data, and keeping it safe is our top priority. For more information about who we may share your data with, how Boots process your data and how to amend or remove your data please see our privacy policy (http://www.boots.com/privacypolicy) or contact Boots.CustomerCare_Team@boots.co.uk.
+              <div className="terms-conditions">
+                <input type="checkbox" name="terms" id="terms" />
+                {Drupal.t('I agree with terms and conditions.')}
               </div>
               <button onClick={() => this.setState({ showCommentForm: false })} type="button">{Drupal.t('CANCEL')}</button>
               <button type="submit" id="review-comments-submit">{Drupal.t('POST COMMENT')}</button>
@@ -77,9 +78,8 @@ class ReviewCommentForm extends React.Component {
     const { email } = this.state;
     const { nickname } = this.state;
     e.preventDefault();
-    const apiUri = '/data/submitreviewcomment.json';
     const params = `&Action=submit&CommentText=${commentbox}&UserEmail=${email}&UserNickname=${nickname}&ReviewId=${reviewId}`;
-    const apiData = postAPIData(apiUri, params);
+    const apiData = postAPIData('/data/submitreviewcomment.json', params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined
@@ -109,10 +109,10 @@ class ReviewCommentForm extends React.Component {
   }
 
   render() {
-    const { ReviewId: reviewId } = this.props;
+    const { ReviewId } = this.props;
     const { showCommentForm } = this.state;
     const { showCommentSubmission } = this.state;
-    if (reviewId !== undefined) {
+    if (ReviewId !== undefined) {
       return (
         <div className="review-feedback-comment">
           <span className={`feedback-comment ${showCommentForm ? 'feedback-comment-disabled' : 'feedback-comment-active'}`}>
