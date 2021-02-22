@@ -11,6 +11,7 @@ import ReviewSorting from '../review-sorting';
 import ReviewFilters from '../review-filters';
 import ReviewFiltersDisplay from '../review-filters-display';
 import EmptyMessage from '../../../utilities/empty-message';
+import ReviewRatingsFilter from '../review-ratings-filter';
 
 export default class ReviewSummary extends React.Component {
   constructor(props) {
@@ -157,6 +158,11 @@ export default class ReviewSummary extends React.Component {
               currentOption={currentSortOption}
               sortOptions={drupalSettings.bazaar_voice.sorting_options}
               processingCallback={this.processSortOption}
+            />
+            <ReviewRatingsFilter
+              currentOptions={currentFilterOptions}
+              filterOptions={reviewsProduct}
+              processingCallback={this.addFilters}
             />
             <ReviewFilters
               currentOptions={currentFilterOptions}

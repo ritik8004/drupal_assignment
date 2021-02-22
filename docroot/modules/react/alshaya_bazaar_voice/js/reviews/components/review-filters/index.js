@@ -46,23 +46,23 @@ export default class ReviewFilters extends React.Component {
   }
 
   render() {
-    const filterList = (this.processFilters() !== null
-      && this.processFilters() !== undefined)
-      ? this.processFilters()
-      : '';
+    const filterList = this.processFilters();
 
-    return (
-      <div className="review-sorting-wrapper">
-        { Object.keys(filterList).map((item) => (
-          <div key={item}>
-            <Select
-              onChange={this.handleSelect}
-              options={filterList[item]}
-              defaultValue={{ value: 'none', label: item }}
-            />
-          </div>
-        ))}
-      </div>
-    );
+    if (filterList !== null) {
+      return (
+        <div className="review-filter-wrapper">
+          { Object.keys(filterList).map((item) => (
+            <div key={item}>
+              <Select
+                onChange={this.handleSelect}
+                options={filterList[item]}
+                defaultValue={{ value: 'none', label: item }}
+              />
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
   }
 }
