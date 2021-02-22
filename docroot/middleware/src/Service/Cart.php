@@ -18,6 +18,9 @@ use Drupal\alshaya_master\Helper\SortUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Lock\Factory;
 use Symfony\Component\Lock\Store\PdoStore;
+use App\Event\CartDataEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\EventSubscriber\Aura\CartDataSubscriber;
 
 /**
  * Class Cart methods.
@@ -163,6 +166,13 @@ class Cart {
   protected $nativeOperations;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $dispatcher;
+
+  /**
    * Cart constructor.
    *
    * @param \App\Service\Magento\MagentoInfo $magento_info
@@ -199,6 +209,8 @@ class Cart {
    *   Language Manager.
    * @param \App\Service\CartOperationsNative $native_operations
    *   Cart Native Operations wrapper.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    */
   public function __construct(
     MagentoInfo $magento_info,
@@ -217,7 +229,8 @@ class Cart {
     Connection $connection,
     RequestStack $requestStack,
     LanguageManager $language_manager,
-    CartOperationsNative $native_operations
+    CartOperationsNative $native_operations,
+    EventDispatcherInterface $dispatcher
   ) {
     $this->magentoInfo = $magento_info;
     $this->magentoApiWrapper = $magento_api_wrapper;
@@ -236,6 +249,7 @@ class Cart {
     $this->request = $requestStack->getCurrentRequest();
     $this->languageManager = $language_manager;
     $this->nativeOperations = $native_operations;
+    $this->dispatcher = $dispatcher;
   }
 
   /**
@@ -2396,29 +2410,6 @@ class Cart {
       'surcharge' => 0,
     ];
 
-    // Add aura payment details if present to cart.
-    if (!empty($cart_data['totals']['total_segments'])) {
-      $aura_payment_key = array_search('aura_payment', array_column($cart_data['totals']['total_segments'], 'code'));
-
-      if ($aura_payment_key) {
-        $data['totals']['paidWithAura'] = $aura_payment_key
-          ? $cart_data['totals']['total_segments'][$aura_payment_key]['value']
-          : 0;
-      }
-
-      $balance_payable_key = array_search('balance_payable', array_column($cart_data['totals']['total_segments'], 'code'));
-      if ($balance_payable_key) {
-        $data['totals']['balancePayable'] = $aura_payment_key
-          ? $cart_data['totals']['total_segments'][$balance_payable_key]['value']
-          : 0;
-      }
-    }
-
-    // Add aura card if present in cart.
-    if (!empty($cart_data['cart']['extension_attributes']['loyalty_card'])) {
-      $data['loyaltyCard'] = $cart_data['cart']['extension_attributes']['loyalty_card'];
-    }
-
     if (empty($cart_data['shipping']) || empty($cart_data['shipping']['method'])) {
       // We use null to show "Excluding Delivery".
       $data['totals']['shipping_incl_tax'] = NULL;
@@ -2513,6 +2504,13 @@ class Cart {
 
     // Whether cart is stale or not.
     $data['stale_cart'] = $cart_data['stale_cart'] ?? FALSE;
+
+    // Dispatch an event for other modules/features to add/update cart data.
+    $event = new CartDataEvent($data, $cart_data);
+    // Add subscriber for aura related cart data.
+    $this->dispatcher->addSubscriber(new CartDataSubscriber());
+    $this->dispatcher->dispatch($event, CartDataEvent::EVENT_NAME);
+    $data = $event->getProcessedCartData();
 
     return $data;
   }
