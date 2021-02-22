@@ -7,6 +7,7 @@
 
         @include breakpoint($upto-desktop) {
           flex-flow: row wrap;
+          width: 100%;
         }
 
         .feedback-positive,
@@ -46,6 +47,13 @@
           button {
             background: $rr-feedback-button-disable-bg;
           }
+        }
+      }
+
+      .review-feedback-comment {
+        @include breakpoint($upto-desktop) {
+          width: 100%;
+          margin-top: 0.5rem;
         }
       }
     }
