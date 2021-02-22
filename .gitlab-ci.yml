@@ -66,6 +66,8 @@ build:
   extends: .global_cache
   allow_failure: false
   script:
+    # Debug.
+    - export
     # Build middleware.
     - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
     # Build appointment middleware.

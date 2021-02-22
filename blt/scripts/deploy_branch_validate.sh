@@ -2,12 +2,6 @@
 
 set -ev
 
-echo "CI_TARGET_BRANCH: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
-echo "CI_COMMIT_TAG: $CI_COMMIT_TAG"
-echo "CI_COMMIT_MESSAGE: $CI_COMMIT_MESSAGE"
-echo "CI_MERGE_REQUEST: $CI_MERGE_REQUEST_ID"
-echo ""
-
 # Run this script only for merge.
 if [ ! "CI_MERGE_REQUEST" = "false" ]
 then
@@ -42,7 +36,7 @@ if [[ ! $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ ^revert-.* ]]; then
   echo $deployed_branches
   echo
 
-  branch="$CI_MERGE_REQUEST_TARGET_BRANCH_NAME-build"
+  branch="$CI_COMMIT_BRANCH-build"
   for deployed_branch in $deployed_branches ; do
     if [ "$branch" = "$deployed_branch" ] ; then
       exit 0

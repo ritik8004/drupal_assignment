@@ -16,7 +16,7 @@ ignoredDirs=( "node_modules" )
 if [[ $CI && $CI == "true" ]]; then
   isGitlab=1
 
-  if [[ $CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_ID == "false" ]]; then
+  if [[ $CI_PROJECT_NAME && $CI_PROJECT_NAME == "alshaya-pso" ]]; then
     isGitlabMerge=1
     log=$(git log -n 1)
 

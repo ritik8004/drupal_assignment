@@ -15,12 +15,12 @@ diff=""
 if [[ $CI && $CI == "true" ]]; then
   isGitlab=1
 
-  if [[ $CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_ID == "false" ]]; then
+  if [[ $CI_PROJECT_NAME && $CI_PROJECT_NAME == "alshaya-pso" ]]; then
     isGitlabMerge=1
   else
     isGitlabPr=1
-    git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME:$CI_MERGE_REQUEST_TARGET_BRANCH_NAME-frontend-check
-    diff=$(git diff --name-only $CI_MERGE_REQUEST_TARGET_BRANCH_NAME-frontend-check)
+    git fetch origin $CI_COMMIT_BRANCH:$CI_COMMIT_BRANCH-frontend-check
+    diff=$(git diff --name-only $CI_COMMIT_BRANCH-frontend-check)
   fi
 fi
 
