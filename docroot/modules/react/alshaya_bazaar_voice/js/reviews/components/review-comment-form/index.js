@@ -2,6 +2,7 @@ import React from 'react';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import { postAPIData } from '../../../utilities/api/apiData';
+import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -119,6 +120,7 @@ class ReviewCommentForm extends React.Component {
             {showCommentForm ? this.showCommentForm() : null}
             {showCommentSubmission ? this.showCommentSubmission() : null}
           </span>
+          <BazaarVoiceMessages />
         </div>
       );
     }
