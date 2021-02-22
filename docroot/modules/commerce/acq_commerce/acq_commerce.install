@@ -10,6 +10,17 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Clearing the decimal points from the language config of acq_commerce.currency.
+ */
+function acq_commerce_update_8004() {
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
+  $config->clear('decimal_points');
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new string translations.
  */
 function acq_commerce_update_8003() {
