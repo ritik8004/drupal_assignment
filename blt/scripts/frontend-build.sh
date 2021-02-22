@@ -13,10 +13,10 @@ diff=""
 ignoredDirs=( "alshaya_example_subtheme" "node_modules" )
 
 # Determine if we are on Gitlab.
-if [[ $CI && $GITLAB_CI ]]; then
+if [[ $CI && $CI ]]; then
   isGitlab=1
 
-  if [[ $CI_MERGE_REQUEST_ID && $CI_MERGE_REQUEST_ID == "false" ]]; then
+  if [[ $CI_PROJECT_NAME && $CI_PROJECT_NAME == "alshaya-pso" ]]; then
     isGitlabMerge=1
     log=$(git log -n 1)
 

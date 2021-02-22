@@ -2,7 +2,7 @@
 
 set -e
 
-if ([ $CI_MERGE_REQUEST_ID == "false" ]) && ([ $CI_MERGE_REQUEST_EVENT_TYPE != "cron" ])
+if ([ $CI_PROJECT_NAME != "alshaya-pso" ]) && ([ $CI_MERGE_REQUEST_EVENT_TYPE != "cron" ])
 then
   echo "No need to run validations."
 else
