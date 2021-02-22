@@ -10,23 +10,23 @@ use Drupal\Core\Site\Settings;
  * Implements hook_page_attachments().
  */
 function bazaar_voice_page_attachments(array &$page) {
-
   /** @var \Drupal\bazaar_voice\BazaarVoiceService $bazaar_voice */
   $bazaar_voice = \Drupal::service('bazaar_voice.bazaar_voice');
 
   // Check if BV script to be loaded as per current route.
   if ($bazaar_voice->isCurrentRouteInBvList()) {
 	  // Add BV pixel script to header.
-	  $page['#attached']['html_head'][] = [[
-		'#type' => 'html_tag',
-		'#tag' => 'script',
-		'#attributes' => [
-		  'async' => TRUE,
-		  'src' => $bazaar_voice->getBvDynamicScriptCode(),
-		],
-	  ],
-		'bvpath',
-	];
+	  $page['#attached']['html_head'][] = [
+			[
+				'#type' => 'html_tag',
+				'#tag' => 'script',
+				'#attributes' => [
+					'async' => TRUE,
+					'src' => $bazaar_voice->getBvDynamicScriptCode(),
+				],
+			],
+			'bvpath',
+		];
   }
 
   // Adding transactional analytics to BazaarVoice pixel.
@@ -35,35 +35,35 @@ function bazaar_voice_page_attachments(array &$page) {
       $route_match = \Drupal::routeMatch();
       // Attach bvpixel library to order confirmation page.
       if ($route_match->getRouteName() == 'alshaya_spc.checkout.confirmation') {
-		$page['#attached']['library'][] = 'bazaar_voice/bvpixel_tracking';
+		    $page['#attached']['library'][] = 'bazaar_voice/bvpixel_tracking';
         // Get last order from session.
       	$order = \Drupal::service('alshaya_spc.order_helper')->getLastOrder();
       	if(!empty($order)) {
-	      $page['#attached']['drupalSettings']['bvpixel_order_details'] = array (
-	        'order_id' => $order['order_id'],
-	        'total' => $order['subtotal_incl_tax'],
-	        'currency' => $order['base_currency_code'],
-	        'tax' => $order['base_tax_amount'],
-	        'shipping' => $order['shipping_incl_tax'],
-	        'city' => $order['shipping']['address']['city'],
-	        'country' => $order['shipping']['address']['country_id'],
-	        'email' => $order['customer_email'],
-	        'nickname' => $order['customer_firstname'],
-	        'customer_id' => $order['customer_id'],
-	        'customer_is_guest' => $order['customer_is_guest'],
-	        'locale' => \Drupal::config('bazaar_voice.settings')->get('locale'),
-	        'shipping_description' => $order['shipping_description'],
-	      );
-	      if(!empty($order['items'])) {
-		    foreach ($order['items'] as $key => $item) {
-		      $products[$key]['productId'] = $item['sku'];
-	          $products[$key]['quantity'] = $item['qty_ordered'];
-	          $products[$key]['name'] = $item['name'];
-	          $products[$key]['price'] = $item['price'];
-	          $products[$key]['product_type'] = $item['type'];
-		    }
-		    $page['#attached']['drupalSettings']['bvpixel_order_details']['products'] = $products;
-		  }
+          $page['#attached']['drupalSettings']['bvpixel_order_details'] = array (
+            'order_id' => $order['order_id'],
+            'total' => $order['subtotal_incl_tax'],
+            'currency' => $order['base_currency_code'],
+            'tax' => $order['base_tax_amount'],
+            'shipping' => $order['shipping_incl_tax'],
+            'city' => $order['shipping']['address']['city'],
+            'country' => $order['shipping']['address']['country_id'],
+            'email' => $order['customer_email'],
+            'nickname' => $order['customer_firstname'],
+            'customer_id' => $order['customer_id'],
+            'customer_is_guest' => $order['customer_is_guest'],
+            'locale' => \Drupal::config('bazaar_voice.settings')->get('locale'),
+            'shipping_description' => $order['shipping_description'],
+          );
+          if(!empty($order['items'])) {
+            foreach ($order['items'] as $key => $item) {
+              $products[$key]['productId'] = $item['sku'];
+              $products[$key]['quantity'] = $item['qty_ordered'];
+              $products[$key]['name'] = $item['name'];
+              $products[$key]['price'] = $item['price'];
+              $products[$key]['product_type'] = $item['type'];
+            }
+            $page['#attached']['drupalSettings']['bvpixel_order_details']['products'] = $products;
+          }
       	}
       }
     }
@@ -71,7 +71,8 @@ function bazaar_voice_page_attachments(array &$page) {
 }
 
 /**
- * Function to check if we should process BazaarVoice transaction data for current page.
+ * Function to check if we should process BazaarVoice
+ * transaction data for current page.
  *
  * @return bool
  *   Whether to process or not.
