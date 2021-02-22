@@ -23,3 +23,15 @@ function alshaya_olapic_install() {
     'install'
   );
 }
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Delete block config. We need to ensure all the block configuration added in the module
+ */
+function alshaya_olapic_uninstall() {
+  Drupal::configFactory()->getEditable('block.block.alshayaolapicwidget')->delete();
+  Drupal::configFactory()->getEditable('block.block.alshayaolapicwidget_2')->delete();
+  Drupal::configFactory()->getEditable('block.block.alshayaolapicwidget_3')->delete();
+  Drupal::configFactory()->getEditable('block.block.alshayaolapicwidget_4')->delete();
+}
