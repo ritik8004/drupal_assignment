@@ -51,6 +51,8 @@ export default class ReviewRatingsFilter extends React.Component {
       return (
         <div className="review-rating-filter-wrapper">
           <Select
+            classNamePrefix="bvSelect"
+            className="bv-select"
             onChange={this.handleSelect}
             options={ratingList}
             defaultValue={{ value: 'none', label: Drupal.t('Rating') }}

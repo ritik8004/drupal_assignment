@@ -151,30 +151,31 @@ export default class ReviewSummary extends React.Component {
           <div className="histogram-data-section">
             <div className="rating-wrapper">
               <ReviewHistogram overallSummary={reviewsProduct} />
+              <div className="sorting-filter-wrapper">
+                <div className="sorting-filter-title-block">{Drupal.t('Filter + Sort')}</div>
+                <ReviewSorting
+                  currentOption={currentSortOption}
+                  sortOptions={drupalSettings.bazaar_voice.sorting_options}
+                  processingCallback={this.processSortOption}
+                />
+                <ReviewRatingsFilter
+                  currentOptions={currentFilterOptions}
+                  filterOptions={reviewsProduct}
+                  processingCallback={this.addFilters}
+                />
+                <ReviewFilters
+                  currentOptions={currentFilterOptions}
+                  filterOptions={reviewsProduct}
+                  processingCallback={this.addFilters}
+                />
+              </div>
+              <ReviewFiltersDisplay
+                currentOptions={currentFilterOptions}
+                processingCallback={this.removeFilters}
+                totalReviews={totalReviews}
+                currentTotal={currentTotal}
+              />
             </div>
-          </div>
-          <div className="sorting-filter-wrapper">
-            <ReviewSorting
-              currentOption={currentSortOption}
-              sortOptions={drupalSettings.bazaar_voice.sorting_options}
-              processingCallback={this.processSortOption}
-            />
-            <ReviewRatingsFilter
-              currentOptions={currentFilterOptions}
-              filterOptions={reviewsProduct}
-              processingCallback={this.addFilters}
-            />
-            <ReviewFilters
-              currentOptions={currentFilterOptions}
-              filterOptions={reviewsProduct}
-              processingCallback={this.addFilters}
-            />
-            <ReviewFiltersDisplay
-              currentOptions={currentFilterOptions}
-              processingCallback={this.removeFilters}
-              totalReviews={totalReviews}
-              currentTotal={currentTotal}
-            />
           </div>
           { Object.keys(reviewsSummary).map((item) => (
             <div className="review-summary" key={reviewsSummary[item].Id}>
