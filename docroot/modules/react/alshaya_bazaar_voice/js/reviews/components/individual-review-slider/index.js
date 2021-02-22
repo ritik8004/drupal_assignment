@@ -19,7 +19,7 @@ const IndividualReviewSlider = ({
                 :
                 {' '}
               </span>
-              <span>
+              <span className="slider-header-label">
                 {
                   !(sliderData[item].ValueLabel) === true
                     ? 'True to size'

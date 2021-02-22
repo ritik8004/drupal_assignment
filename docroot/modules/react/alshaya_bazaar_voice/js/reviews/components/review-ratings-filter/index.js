@@ -49,7 +49,7 @@ export default class ReviewRatingsFilter extends React.Component {
 
     if (ratingList !== null) {
       return (
-        <div className="review-rating-filter-wrapper">
+        <div className="filter-items">
           <Select
             classNamePrefix="bvSelect"
             className="bv-select"
