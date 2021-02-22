@@ -27,7 +27,7 @@ export default class ReviewFiltersDisplay extends React.Component {
             {Drupal.t('of')}
             {totalReviews}
           </div>
-          <ul>
+          <ul className="filter-result">
             {currentOptions.map((item) => (
               <li key={item.value}>
                 <button
@@ -36,12 +36,13 @@ export default class ReviewFiltersDisplay extends React.Component {
                   className="bv-active-filter-button"
                 >
                   {item.label}
-                  <span className="bv-close-icon"> ✘ </span>
                 </button>
               </li>
             ))}
           </ul>
-          <button type="button" onClick={() => this.handleClick('clearall')}>{Drupal.t('Clear all')}</button>
+          <div className="clear-all-button">
+            <button type="button" onClick={() => this.handleClick('clearall')}>{Drupal.t('Clear all')}</button>
+          </div>
         </div>
       );
     }

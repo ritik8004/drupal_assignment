@@ -52,17 +52,19 @@ export default class ReviewFilters extends React.Component {
       : '';
 
     return (
-      <div className="review-sorting-wrapper">
+      <>
         { Object.keys(filterList).map((item) => (
-          <div key={item}>
+          <div className="filter-items" key={item}>
             <Select
+              classNamePrefix="bvSelect"
+              className="bv-select"
               onChange={this.handleSelect}
               options={filterList[item]}
               defaultValue={{ value: 'none', label: item }}
             />
           </div>
         ))}
-      </div>
+      </>
     );
   }
 }

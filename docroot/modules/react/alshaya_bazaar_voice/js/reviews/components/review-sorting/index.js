@@ -21,13 +21,15 @@ export default class ReviewSorting extends React.Component {
     } = this.props;
 
     return (
-      <div className="review-sorting-wrapper">
+      <>
         <Select
+          classNamePrefix="bvSelect"
+          className="bv-select sort-item"
           onChange={this.handleSelect}
           options={sortOptions}
           defaultValue={sortOptions[0]}
         />
-      </div>
+      </>
     );
   }
 }
