@@ -60,9 +60,11 @@ body {
 .order--print {
   border-top: none;
 
-  tr {
-    page-break-inside: avoid;
-    page-break-after: auto;
+  @media print {
+    tr {
+      page-break-inside: avoid;
+      page-break-after: auto;
+    }
   }
 
   .order-details-row {
