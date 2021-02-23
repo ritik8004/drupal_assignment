@@ -94,8 +94,9 @@
   }
 }
 
-// Style center-left positioned live text on 1 row 2 col dept promo blocks
+// Style center-left positioned live text on slider promo and 1 row 2 col dept promo blocks
 // [Live text position: center left, Promo theme: black normal]
+.c-content__slider,
 .paragraph--type--_-row-2-col-dept {
   .promo-block__position {
     max-width: 50%;
