@@ -47,7 +47,7 @@
 
           @include breakpoint($only-mobile) {
             width: 100%;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
           }
 
           .histogram-data {
@@ -71,7 +71,7 @@
 
             .histogram-row {
               .star-label {
-                width: 10%;
+                width: 9%;
                 text-decoration: underline;
                 cursor: pointer;
 
@@ -81,7 +81,7 @@
               }
 
               .histogram-full-bar {
-                width: 66%;
+                width: 68%;
               }
 
               .histogram-star-count {
