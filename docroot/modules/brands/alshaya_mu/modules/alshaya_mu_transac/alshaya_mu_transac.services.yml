@@ -1,0 +1,5 @@
+services:
+  alshaya_mu_transac.product_info_requested_event:
+    class: Drupal\alshaya_mu_transac\EventSubscriber\ProductInfoRequestedEventSubscriber
+    tags:
+      - { name: 'event_subscriber' }

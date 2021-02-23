@@ -606,6 +606,19 @@
   }
 }
 
+.cancelled-item-tooltip-refund-text {
+  span {
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    margin-top: 0.1875rem;
+    color: $cancel-item-refund-text;
+
+    @include breakpoint($desktop) {
+      line-height: 1.25rem;
+    }
+  }
+}
+
 #block-userrecentorders {
   @include breakpoint($only-tablet) {
     margin-top: -1.5em;
@@ -626,7 +639,6 @@
 
     .path--user & {
       padding-bottom: 0.5625rem;
-      border-bottom: 1px solid $primary_border;
     }
   }
 
@@ -773,24 +785,15 @@
     color: $order_detail_td_dark_content;
 
     td {
-      padding-bottom: 0.8125rem;
-      padding-top: 0.8125rem;
+      padding-bottom: 0.25rem;
+      padding-top: 1.125rem;
+      padding-#{$left}: 0;
     }
 
     td > div {
-      margin: 0;
-    }
-  }
-
-  // My account - Recent Order list.
-  #cancel-order-item {
-    td > div {
-      margin: 0;
-    }
-
-    td {
-      background: $order_accordion_open_bg;
-      font-size: 1rem;
+      font-size: 1.125rem;
+      line-height: 1.22;
+      color: $cancel-item-list-header;
     }
   }
 }

@@ -19,6 +19,8 @@ import {
   isFullPaymentDoneByAura,
   isPaymentMethodSetAsAura,
 } from '../../../aura-loyalty/components/utilities/checkout_helper';
+import CheckoutComUpapiApplePay
+  from '../../../utilities/checkout_com_upapi_apple_pay';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -168,6 +170,10 @@ export default class PaymentMethods extends React.Component {
         // available payment methods in drupal, ignore it.
         if (method.code in drupalSettings.payment_methods) {
           if (method.code === 'checkout_com_applepay' && !(ApplePay.isAvailable())) {
+            return;
+          }
+
+          if (method.code === 'checkout_com_upapi_applepay' && !(CheckoutComUpapiApplePay.isAvailable())) {
             return;
           }
 

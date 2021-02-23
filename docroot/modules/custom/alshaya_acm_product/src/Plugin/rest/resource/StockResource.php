@@ -32,6 +32,13 @@ class StockResource extends ResourceBase {
   protected $skuInfoHelper;
 
   /**
+   * The custom cache tag for this API.
+   *
+   * @var string
+   */
+  public const CACHE_PREFIX = 'acq_sku_stock:';
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -98,7 +105,7 @@ class StockResource extends ResourceBase {
     // Add sku cache tags to response.
     $cacheableMetadata = $response->getCacheableMetadata();
     $cacheableMetadata->addCacheContexts($skuEntity->getCacheContexts());
-    $cacheableMetadata->addCacheTags($skuEntity->getCacheTags());
+    $cacheableMetadata->addCacheTags(array_merge($skuEntity->getCacheTags(), [self::CACHE_PREFIX . $skuEntity->id()]));
     $response->addCacheableDependency($cacheableMetadata);
 
     return $response;
