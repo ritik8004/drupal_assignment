@@ -58,7 +58,8 @@ class CartDataSubscriber implements EventSubscriberInterface {
       $updated = TRUE;
     }
 
-    if ($updated === TRUE) {
+    // If there is any modification/change in processed cart data.
+    if ($updated) {
       $event->setProcessedCartData($processedCartData);
     }
   }
