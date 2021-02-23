@@ -1,0 +1,589 @@
+.store-finder-exposed-form {
+  margin-top: 0.5rem;
+}
+
+.path--store-finder,
+.nodetype--store {
+  .back-to-glossary {
+    margin: 0;
+    width: 23%;
+    border: 1px solid $warm-grey-two;
+    height: 2.5rem;
+    padding: 0.312rem 0;
+    text-transform: uppercase;
+    color: $store_finder_text;
+
+    html[lang=ar] & {
+      padding: 0.125rem 0 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 36%;
+
+      html[lang=ar] & {
+        width: 35%;
+      }
+    }
+
+    @include icon(list, before) {
+      font-size: 2rem;
+      vertical-align: middle;
+      position: relative;
+      top: -0.125rem;
+
+      html[lang=ar] & {
+        top: 0;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 0.5rem;
+      }
+    }
+  }
+
+  .get--directions a::after {
+    background: url('../imgs/icons/ic-directions.svg') no-repeat;
+    width: 1.875rem;
+    height: 1.875rem;
+    position: static;
+    background-size: contain;
+    float: $right;
+  }
+
+  .input--wrapper {
+    [id^=edit-actions] {
+      top: 0;
+      height: 2.5rem;
+      padding-top: 0.5rem;
+
+      @include icon(search, before) {
+        color: $store_finder_icon;
+        font-size: 2rem;
+        line-height: 0.8;
+
+        @include breakpoint($upto-desktop) {
+          line-height: 1;
+        }
+      }
+
+      @include breakpoint($tablet) {
+        top: 0;
+      }
+
+      @include breakpoint($only-tablet) {
+        padding: 0.175rem;
+        #{$right}: 0.537rem;
+        line-height: 4;
+      }
+
+      @include breakpoint($desktop) {
+        top: 0;
+        z-index: -1;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-#{$right}: 0;
+        padding-top: 0.225rem;
+      }
+    }
+  }
+
+  .c-content__region,
+  .view-stores-finder {
+    .region__content {
+      @include breakpoint($only-mobile) {
+        html[lang=ar] & {
+          margin-top: 2rem;
+        }
+      }
+    }
+  }
+
+  .label--location {
+    color: $store_finder_search_label !important;
+    display: block;
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+
+  button {
+    &[id^=edit-submit-stores-finder] {
+      background: none;
+      width: auto;
+
+      @include breakpoint($desktop) {
+        margin-top: -0.1875rem;
+      }
+    }
+  }
+
+  .current-location,
+  .back-to-glossary {
+    &:hover,
+    &.active {
+      border: 1px solid $store_finder_border_hover;
+      color: $store_finder_text_hover;
+    }
+  }
+
+  .current-location {
+    &::before {
+      margin-#{$right}: 0;
+    }
+  }
+
+  .current-location {
+    @include breakpoint($only-tablet) {
+      &::before {
+        #{$left}: 0.5rem;
+        bottom: 0.6875rem;
+      }
+    }
+  }
+
+  .current-location {
+    line-height: 2.5;
+
+    @include breakpoint($only-mobile) {
+      line-height: 2;
+    }
+  }
+
+  .list-view-link {
+    @include icon(list, before) {
+      margin-top: -0.56rem;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 0.5rem;
+
+        html[lang=ar] & {
+          margin-top: -0.4375rem;
+        }
+      }
+    }
+  }
+
+  .label--location {
+    padding-#{$left}: 2rem;
+
+    &::before {
+      html[lang=ar] & {
+        top: 0 !important;
+      }
+
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      html[lang=en] & {
+        padding-#{$right}: 0;
+        padding-#{$left}: 0.5rem;
+        text-indent: 0;
+      }
+
+      html[lang=ar] & {
+        margin-#{$left}: 0.625rem;
+        padding-#{$right}: 0;
+        width: 30%;
+      }
+    }
+
+    width: 7.75rem;
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 1.5rem;
+      width: 15% !important;
+
+      &::before {
+        display: none;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      padding-#{$left}: 0;
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    text-transform: uppercase;
+  }
+
+  .list-view-link,
+  .map-view-link {
+    padding: 0.6875rem;
+
+    html[lang=ar] & {
+      padding: 0.619rem 0 0;
+    }
+  }
+
+  .map-view-link {
+    margin-left: 0.75rem;
+
+    &::before {
+      margin-#{$left}: -0.5rem;
+      margin-#{$right}: 0.125rem;
+      margin-top: -0.1875rem;
+
+      html[lang=ar] & {
+        margin-top: 0.125rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 0.5rem 0 0;
+
+      html[lang=ar] & {
+        padding: 0.3rem 0 0;
+      }
+    }
+  }
+
+  #edit-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
+    [id^=edit-geolocation-geocoder-google-places-api] {
+      font-size: 0.875rem;
+      height: 2.5rem;
+      padding: 0.875rem 0.6rem 0.5rem;
+
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0.5rem;
+      }
+
+      @include breakpoint($tablet) {
+        max-width: 100%;
+        border: 1px solid $store_finder_search_results_border !important;
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: 85%;
+      }
+    }
+  }
+
+  .list-view-locator {
+    font-family: $alshaya-thin;
+  }
+
+  .view-display-id-page_1,
+  .view-display-id-page_2 {
+    @include breakpoint($tablet) {
+      margin-top: 0.87rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .current-location {
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    .store-finder--wrapper {
+      width: 45%;
+
+      html[lang=ar] & {
+        width: 46%;
+      }
+
+      .block-store-finder-form__input__wrapper {
+        .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+        .form-item-geolocation-geocoder-google-places-api {
+          width: 60% !important;
+
+          html[lang=ar] & {
+            width: 62% !important;
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($tablet) {
+    .c-page-title {
+      margin-bottom: 0.5rem;
+    }
+
+    .c-content__region .views-exposed-form {
+      border-bottom: none;
+    }
+
+    .label--location {
+      padding-top: 0.875rem;
+
+      html[lang=ar] & {
+        padding-top: 0.5rem;
+        text-indent: 0;
+        padding-right: 0;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 37%;
+      }
+
+      @include breakpoint($desktop) {
+        html[lang=ar] & {
+          width: 26.6% !important;
+          padding-top: 0.875rem;
+          border-right: none;
+        }
+      }
+    }
+
+    .current-location {
+      padding: 0.25rem 0.75rem;
+
+      @include breakpoint($only-tablet) {
+        padding: 0.75rem;
+      }
+
+      text-transform: uppercase;
+    }
+
+    .current-location,
+    .map-view-link,
+    .list-view-link {
+      border: 1px solid $warm-grey-two;
+    }
+
+    .current-location,
+    .list-view-link,
+    .map-view-link {
+      @include breakpoint($desktop) {
+        width: 11%;
+      }
+
+      height: 2.5rem;
+    }
+  }
+
+  .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+  .form-item-geolocation-geocoder-google-places-api {
+    @include breakpoint($tablet) {
+      margin: 0;
+    }
+
+    @include breakpoint($desktop) {
+      margin: 0;
+    }
+  }
+
+  .list-view-link {
+    @include breakpoint($tablet) {
+      margin-right: 0.625rem;
+
+      html[lang=ar] & {
+        margin-right: 0;
+        margin-left: 0.625rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        margin-right: -0.5rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      &::before {
+        margin-#{$right}: 0;
+        margin-#{$left}: 0;
+      }
+
+      html[lang=ar] & {
+        margin-right: 0;
+        margin-left: 0.625rem;
+      }
+    }
+  }
+
+  .current-location,
+  .label--location,
+  .map-view-link {
+    @include breakpoint($tablet) {
+      margin: 0;
+
+      html[lang=ar] & {
+        margin-top: 0;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin: 0;
+
+      html[lang=ar] & {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .current-location {
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        padding-top: 0.25rem;
+      }
+    }
+  }
+
+  .current-location,
+  .store-finder--wrapper,
+  .list-view-link,
+  .map-view-link {
+    font-size: 0.875rem;
+  }
+
+  @include breakpoint($desktop) {
+    .store-finder--wrapper {
+      width: 66%;
+      max-width: 100%;
+    }
+  }
+
+  .store-finder--wrapper {
+    .block-store-finder-form__input__wrapper {
+      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+      .form-item-geolocation-geocoder-google-places-api {
+        @include breakpoint($desktop) {
+          width: 95% !important;
+          padding-#{$right}: 0;
+          padding-#{$left}: 0;
+
+          html[lang=ar] & {
+            width: 72% !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.path--store-finder .store-finder--wrapper .input--wrapper [id^=edit-actions] {
+  @include breakpoint($desktop) {
+    #{$right}: 0;
+  }
+}
+
+.path--store-finder .view-header {
+  margin-top: 0.5rem;
+}
+
+.individual--store .view-content {
+  @include breakpoint($desktop) {
+    html[lang=ar] & {
+      padding-#{$right}: 1%;
+      padding-#{$left}: 0;
+    }
+  }
+}
+
+.geolocation-common-map-container {
+  text-transform: capitalize;
+
+  .views-field-title span {
+    color: $store_finder_search_results_title;
+  }
+
+  .views-field-field-store-address {
+    color: $store_finder_search_results_store_address;
+    border-bottom: 1px solid $warm-grey-two;
+    padding-bottom: 0.312rem;
+  }
+
+  .hours--label::after {
+    color: $store_finder_search_results_down_arrow;
+  }
+}
+
+.views-field-field-store-open-hours {
+  .hours--wrapper .hours--label,
+  .hours--wrapper .open--hours {
+    border-bottom: 1px solid $warm-grey-two !important;
+  }
+}
+
+.path--store-finder .input--wrapper,
+.nodetype--store .input--wrapper {
+  position: absolute;
+  #{$left}: 19%;
+  overflow: hidden !important;
+
+  @include breakpoint($desktop) {
+    width: 57% !important;
+  }
+
+  html[lang=ar] & {
+    right: 12%;
+
+    @include breakpoint($desktop) {
+      width: 64% !important;
+    }
+
+    @include breakpoint($only-tablet) {
+      right: 14%;
+      width: 49% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      right: 0;
+      width: 100%;
+      position: relative;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    #{$left}: 0;
+    width: 100%;
+    position: relative;
+  }
+
+  @include breakpoint($only-tablet) {
+    #{$left}: 16%;
+    width: 47% !important;
+  }
+}
+
+.path--store-finder,
+.nodetype--store {
+  .form--inline {
+    .current-location,
+    .cc-near-me {
+      @include breakpoint($only-tablet) {
+        line-height: 1.5;
+      }
+    }
+
+    .current-location,
+    .cc-near-me {
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: 2.5rem !important;
+      }
+
+      &::before {
+        background-image: url(../imgs/icons/my-location.svg);
+        background-size: 100%;
+        height: 1.875rem;
+        width: 1.875rem;
+      }
+    }
+  }
+
+  .label--location {
+    .block-store-finder-form__form__label__wrapper {
+      float: $right;
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    line-height: 1.5;
+  }
+}
