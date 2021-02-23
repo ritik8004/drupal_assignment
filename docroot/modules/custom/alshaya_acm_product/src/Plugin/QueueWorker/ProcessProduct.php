@@ -120,7 +120,12 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $this->getLogger('ProcessProduct')->notice('Skipping process of product with sku: @sku as Node not available', [
         '@sku' => $entity->getSku(),
       ]);
-
+      if ($this->skuManager->isSkuFreeGift($entity)) {
+        $entity->getMedia();
+        $this->getLogger('ProcessProduct')->notice('Processed free gift product with sku: @sku', [
+          '@sku' => $entity->getSku(),
+        ]);
+      }
       return;
     }
 
