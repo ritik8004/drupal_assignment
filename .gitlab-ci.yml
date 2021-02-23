@@ -10,6 +10,7 @@ stages:
 variables:
   APP_NAME: Alshaya
   BLT: ./vendor/bin/blt
+  BLT_DIR: ./vendor/acquia/blt
   BLT_SCRIPT_DIR: ./blt/scripts
   SCRIPT_DIR: ./scripts/gitlab
   MYSQL_DATABASE: drupal
