@@ -94,6 +94,11 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
    */
   public function processBuild(array &$build) {
     $this->alshayaBnplWidgetHelper->getBnplBuild($build, 'checkout');
+
+    $build['#strings']['postpay_error'] = [
+      'key' => 'postpay_error',
+      'value' => $this->t('Your postpay order has been cancelled'),
+    ];
   }
 
 }
