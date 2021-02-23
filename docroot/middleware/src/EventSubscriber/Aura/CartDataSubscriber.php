@@ -30,6 +30,7 @@ class CartDataSubscriber implements EventSubscriberInterface {
   public function processCartData(CartDataEvent $event) {
     $cart = $event->getCart();
     $processedCartData = $event->getProcessedCartData();
+    $updated = FALSE;
 
     // Add aura payment details if present to cart.
     if (!empty($cart['totals']['total_segments'])) {
@@ -39,6 +40,7 @@ class CartDataSubscriber implements EventSubscriberInterface {
         $processedCartData['totals']['paidWithAura'] = $aura_payment_key
           ? $cart['totals']['total_segments'][$aura_payment_key]['value']
           : 0;
+        $updated = TRUE;
       }
 
       $balance_payable_key = array_search('balance_payable', array_column($cart['totals']['total_segments'], 'code'));
@@ -46,15 +48,19 @@ class CartDataSubscriber implements EventSubscriberInterface {
         $processedCartData['totals']['balancePayable'] = $aura_payment_key
           ? $cart['totals']['total_segments'][$balance_payable_key]['value']
           : 0;
+        $updated = TRUE;
       }
     }
 
     // Add aura card if present in cart.
     if (!empty($cart['cart']['extension_attributes']['loyalty_card'])) {
       $processedCartData['loyaltyCard'] = $cart['cart']['extension_attributes']['loyalty_card'];
+      $updated = TRUE;
     }
 
-    $event->setProcessedCartData($processedCartData);
+    if ($updated === TRUE) {
+      $event->setProcessedCartData($processedCartData);
+    }
   }
 
 }
