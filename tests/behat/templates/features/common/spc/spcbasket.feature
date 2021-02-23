@@ -14,7 +14,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -62,7 +62,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     Then the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile" should exist
@@ -91,8 +91,8 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     Then I should see "{promo_code}"
     And I wait 5 seconds
@@ -110,7 +110,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
