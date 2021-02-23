@@ -8,18 +8,18 @@ sort_options_labels:
     value: 'none'
     label: 'Sort by'
   -
-    value: 'SubmissionTime Desc'
+    value: 'SubmissionTime:Desc'
     label: 'Most Recent'
   -
-    value: 'Most Helpful Desc'
+    value: 'Helpfulness:Desc'
     label: 'Helpfulness'
   -
-    value: 'Rating DESC'
+    value: 'Rating:Desc'
     label: 'Highest to Lowest Ranking'
   -
-    value: 'Rating ASC'
+    value: 'Rating:Asc'
     label: 'Lowest to Highest Ranking'
   -
-    value: 'HasPhotos DESC'
+    value: 'HasPhotos:Desc'
     label: 'Photo Reviews First'
 langcode: en
