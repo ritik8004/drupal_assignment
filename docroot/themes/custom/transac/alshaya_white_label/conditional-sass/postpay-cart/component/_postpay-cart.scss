@@ -1,4 +1,7 @@
 .spc-postpay {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
   @include breakpoint($only-mobile) {
     padding-top: 0.75rem;
     margin-top: 1.25rem;
@@ -12,6 +15,8 @@
 
 .spc-postpay-mobile-preview:not(:empty) {
   padding: 0 1.25rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 #postpay-eligibility-message {
