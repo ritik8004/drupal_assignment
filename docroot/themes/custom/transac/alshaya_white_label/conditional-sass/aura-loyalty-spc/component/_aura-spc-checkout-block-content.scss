@@ -9,6 +9,30 @@
 }
 
 .spc-aura-checkout-rewards-block {
+  &.in-active {
+    .spc-checkout-section-title {
+      opacity: 0.2;
+    }
+
+    .registered-user-linked,
+    .spc-aura-redeem-points-form-wrapper,
+    .spc-aura-checkout-messages {
+      position: relative;
+      opacity: 0.2;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: $_transparent_overlay;
+        z-index: 3;
+      }
+    }
+  }
+
   .spc-checkout-aura-points-to-earn,
   .description,
   label,
