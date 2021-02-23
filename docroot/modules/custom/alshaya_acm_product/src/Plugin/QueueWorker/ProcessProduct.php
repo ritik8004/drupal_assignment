@@ -121,10 +121,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         '@sku' => $entity->getSku(),
       ]);
       if ($this->skuManager->isSkuFreeGift($entity)) {
-        $entity->getMedia();
-        $this->getLogger('ProcessProduct')->notice('Processed free gift product with sku: @sku', [
-          '@sku' => $entity->getSku(),
-        ]);
+        $this->getFreeGiftSkuMedia($entity);
       }
       return;
     }
@@ -239,6 +236,34 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $container->get('cache_tags.invalidator'),
       $container->get('alshaya_acm_product.product_processed_manager')
     );
+  }
+
+  /**
+   * Function to get media for Free Gift SKU.
+   */
+  private function getFreeGiftSkuMedia(SKU $entity) {
+    // Disable re-queueing while processing.
+    self::$processingItem = TRUE;
+
+    // Invalid cache tags for node and sku.
+    $this->cacheTagsInvalidator->invalidateTags($entity->getCacheTagsToInvalidate());
+
+    // Invalidate our custom cache tags.
+    $sku_tags = ProductCacheManager::getAlshayaProductTags($entity);
+    $this->cacheTagsInvalidator->invalidateTags($sku_tags);
+
+    foreach ($entity->getTranslationLanguages() as $language) {
+      $translation = SKU::loadFromSku($entity->getSku(), $language->getId());
+
+      // Download product images for product and warm up caches.
+      $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
+      $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
+
+    }
+
+    $this->getLogger('ProcessProduct')->notice('Processed free gift product with sku: @sku', [
+      '@sku' => $entity->getSku(),
+    ]);
   }
 
 }
