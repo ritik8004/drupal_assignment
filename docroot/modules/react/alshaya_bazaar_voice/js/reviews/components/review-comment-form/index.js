@@ -1,8 +1,7 @@
 import React from 'react';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
+import ReviewCommentSubmission from '../review-comment-submission';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -10,17 +9,26 @@ class ReviewCommentForm extends React.Component {
     this.state = {
       showCommentForm: false,
       showCommentSubmission: false,
-      email: drupalSettings.user.user_email,
+      email: '',
       commentbox: '',
       nickname: '',
       submissionTime: '',
     };
+    this.getUserEmail = this.getUserEmail.bind(this);
+  }
+
+  componentDidMount() {
+    this.getUserEmail();
+  }
+
+  getUserEmail() {
+    const emailValue = drupalSettings.user.user_email;
+    this.setState({ email: emailValue });
+    return emailValue;
   }
 
   showCommentForm = () => {
-    const { commentbox } = this.state;
-    const { nickname } = this.state;
-    const { email } = this.state;
+    const { commentbox, nickname, email } = this.state;
     return (
       <div>
         <form id="comment-form" onSubmit={this.handleSubmit}>
@@ -35,8 +43,6 @@ class ReviewCommentForm extends React.Component {
 
               <label className="comment-form-email">{Drupal.t('Email Address')}</label>
               <input type="email" id="email" placeholder="Email" value={email || ''} onChange={this.handleEmailChange} name="email" />
-
-              <input type="hidden" name="blackBox" id="ioBlackBox" />
               <div className="terms-conditions">
                 <input type="checkbox" name="terms" id="terms" />
                 {Drupal.t('I agree with terms and conditions.')}
@@ -51,34 +57,21 @@ class ReviewCommentForm extends React.Component {
   }
 
   showCommentSubmission = () => {
-    TimeAgo.addLocale(en);
-    const timeAgo = new TimeAgo('en-US');
-    const { submissionTime } = this.state;
-    const { nickname } = this.state;
-    const { commentbox } = this.state;
+    const { commentbox, nickname, submissionTime } = this.state;
     return (
-      <div className="comment-submission-details">
-        <div className="comment-user-details">
-          <span className="comment-user-nickname">{nickname}</span>
-          <span className="comment-user-date">{timeAgo.format(new Date(submissionTime))}</span>
-        </div>
-        <div className="comment-description">
-          <span className="comment-description-text">{commentbox}</span>
-        </div>
-        <div className="comment-moderation-block">
-          <span className="comment-moderation-text">{Drupal.t('Thank you for submitting a comment! Your comment is being moderated and may take up to a few days to appear.')}</span>
-        </div>
-      </div>
+      <ReviewCommentSubmission
+        UserNickname={nickname}
+        SubmissionTime={submissionTime}
+        CommentText={commentbox}
+      />
     );
   }
 
   handleSubmit = (e) => {
-    const { ReviewId: reviewId } = this.props;
-    const { commentbox } = this.state;
-    const { email } = this.state;
-    const { nickname } = this.state;
     e.preventDefault();
-    const params = `&Action=submit&CommentText=${commentbox}&UserEmail=${email}&UserNickname=${nickname}&ReviewId=${reviewId}`;
+    const { ReviewId } = this.props;
+    const { commentbox, nickname, email } = this.state;
+    const params = `&Action=submit&CommentText=${commentbox}&UserEmail=${email}&UserNickname=${nickname}&ReviewId=${ReviewId}`;
     const apiData = postAPIData('/data/submitreviewcomment.json', params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -87,9 +80,11 @@ class ReviewCommentForm extends React.Component {
       && result.data.error === undefined) {
           const response = result.data;
           if (response.SubmissionId !== null) {
-            this.setState({ submissionTime: response.Comment.SubmissionTime });
-            this.setState({ showCommentSubmission: true });
-            this.setState({ showCommentForm: false });
+            this.setState({
+              submissionTime: response.Comment.SubmissionTime,
+              showCommentSubmission: true,
+              showCommentForm: false,
+            });
           }
         }
       });
@@ -110,8 +105,7 @@ class ReviewCommentForm extends React.Component {
 
   render() {
     const { ReviewId } = this.props;
-    const { showCommentForm } = this.state;
-    const { showCommentSubmission } = this.state;
+    const { showCommentForm, showCommentSubmission } = this.state;
     if (ReviewId !== undefined) {
       return (
         <div className="review-feedback-comment">
