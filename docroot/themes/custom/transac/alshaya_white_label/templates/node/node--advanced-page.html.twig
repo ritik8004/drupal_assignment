@@ -16,7 +16,6 @@
       {% endif %}
 
       {% if content.field_slider %}
-        {{ attach_library('alshaya_white_label/advance-content-slider') }}
         <div class="c-content__slider">
           {{ content.field_slider }}
         </div>
@@ -29,10 +28,7 @@
             {% if content.field_delivery_banner %}
               {{ content.field_delivery_banner }}
             {% endif %}
-            {% if content.field_promo_blocks %}
-              {{ attach_library('alshaya_white_label/promo-blocks') }}
-              {{ content.field_promo_blocks }}
-            {% endif %}
+            {{ content.field_promo_blocks }}
           </div>
         </div>
 

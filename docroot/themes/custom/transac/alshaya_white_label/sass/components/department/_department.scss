@@ -77,6 +77,11 @@
       padding-#{$right}: 0;
     }
 
+    .c-content__slider {
+      margin-bottom: 0.75rem;
+      min-height: auto;
+    }
+
     .term-description-mobile-only {
       padding-#{$left}: 0.5rem;
       padding-#{$right}: 0.5rem;
