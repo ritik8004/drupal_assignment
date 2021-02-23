@@ -37,6 +37,16 @@
       }
     }
 
+    &.fill-Tier3 {
+      .start .fill {
+        background-image: $aura-progress-vip-end;
+
+        html[lang=ar] & {
+          background-image: $aura-progress-vip-end-ar;
+        }
+      }
+    }
+
     .start {
       padding-#{$left}: 1.875rem;
       display: flex;
