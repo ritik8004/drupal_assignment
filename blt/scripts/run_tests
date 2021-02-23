@@ -11,14 +11,14 @@ else
   yaml set blt/blt.yml project.profile.name ${PROFILE}
 
   echo -en "gitlab_fold:start:Validate\r"
-  blt validate:all
+  vendor/bin/blt validate:all
   echo -en "gitlab_fold:end:Validate\r"
 
   if ([ ${INSTALL_TYPE} == 'install' ])
   then
     echo -en "gitlab_fold:start:Setup\r"
 
-    blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --yes -v
+    vendor/bin/blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --yes -v
 
     cd ${BUILD_DIR}/docroot
     drush @self --uri=default alshaya-post-drupal-install --brand_module="alshaya_vs" --country_code="ae"
@@ -28,7 +28,7 @@ else
 
     if [[ $CI_MERGE_REQUEST_EVENT_TYPE == "cron" ]]
     then
-      blt tests --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
+      vendor/bin/blt tests --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
     else
       echo "Local behat tests are being run only on cron run."
     fi
