@@ -458,11 +458,6 @@ promo-blocks:
     theme:
       css/conditional-sass/promo-blocks/promo-blocks.ltr.css: {}
 
-advance-content-slider:
-  css:
-    theme:
-      css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: {}
-      
 postpay-checkout:
   css:
     theme:

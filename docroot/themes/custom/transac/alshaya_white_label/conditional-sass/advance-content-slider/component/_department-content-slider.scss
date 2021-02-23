@@ -1,8 +1,0 @@
-.c-department {
-  @include breakpoint($only-mobile) {
-    .c-content__slider {
-      margin-bottom: 0.75rem;
-      min-height: auto;
-    }
-  }
-}
