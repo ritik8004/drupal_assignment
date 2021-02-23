@@ -167,8 +167,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Array of media files.
    */
   public function getMedia($download_media = TRUE, $reset = FALSE, $default_label = '') {
-    if (!$reset && !empty($this->mediaData)) {
-      return $this->mediaData;
+    // Get sku langcode.
+    $langcode = $this->language()->getId();
+    if (!$reset && !empty($this->mediaData) && !empty($this->mediaData[$langcode])) {
+      return $this->mediaData[$langcode];
     }
 
     if ($media_data = $this->get('media')->getString()) {
@@ -186,7 +188,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
-        $this->mediaData[] = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
+        $this->mediaData[$langcode][] = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
       }
 
       if ($update_sku) {
@@ -212,7 +214,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
     }
 
-    return array_filter($this->mediaData, function ($row) {
+    return array_filter($this->mediaData[$langcode], function ($row) {
       return !empty($row['fid']);
     });
   }
@@ -381,7 +383,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if ($lock_key) {
         $lock->release($lock_key);
       }
-      // @TODO: SAVE blacklist info in a way so it does not have dependency on SKU.
+      // @todo SAVE blacklist info in a way so it does not have dependency on SKU.
       // Blacklist this image URL to prevent subsequent downloads for 1 day.
       $data['blacklist_expiry'] = strtotime('+1 day');
       // Empty file detected log.
