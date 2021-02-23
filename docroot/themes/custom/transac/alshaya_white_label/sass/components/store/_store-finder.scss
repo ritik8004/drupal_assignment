@@ -217,7 +217,7 @@
     }
 
     &[id^=edit-submit-stores-finder] {
-      background: url('../../../imgs/icons/store-search.svg');
+      background: url('../imgs/icons/store-search.svg');
       border: none;
       background-repeat: no-repeat;
       text-indent: -9999px;
@@ -269,14 +269,14 @@
   .current-location,
   .cc-near-me {
     &::before {
-      background: url('../../../imgs/icons/current.svg') no-repeat;
+      background: url('../imgs/icons/current.svg') no-repeat;
       width: 26px;
       height: 26px;
     }
   }
 
   .label--location::before {
-    background: url('../../../imgs/icons/ic-search-store.svg') no-repeat;
+    background: url('../imgs/icons/ic-search-store.svg') no-repeat;
     width: 25px;
     height: 25px;
     margin-#{$right}: 0.4rem;
@@ -1033,7 +1033,7 @@
       &::after {
         position: absolute;
         content: '';
-        background: url('../../../imgs/icons/store--down.svg');
+        background: url('../imgs/icons/store--down.svg');
         display: inline-block;
         width: 17px;
         height: 7px;
@@ -1239,7 +1239,7 @@
     content: '';
     display: inline-block;
     position: absolute;
-    background: url('../../../imgs/icons/ic-directions.svg');
+    background: url('../imgs/icons/ic-directions.svg');
     #{$right}: 1rem;
     width: 18px;
     height: 18px;

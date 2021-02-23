@@ -448,11 +448,6 @@ postpay-cart:
     theme:
       css/conditional-sass/postpay-cart/postpay-cart.ltr.css: {}
 
-store_finder:
-  css:
-    theme:
-      css/conditional-sass/store-finder/store-finder.ltr.css: {}
-
 postpay-checkout:
   css:
     theme:
