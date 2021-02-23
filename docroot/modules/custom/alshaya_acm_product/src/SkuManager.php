@@ -3757,4 +3757,27 @@ class SkuManager {
     return array_values($values);
   }
 
+  /**
+   * Get sanized version of sku.
+   *
+   * @return array
+   *   Return sanitized version sku
+   */
+  public function getSanitizedSku($skuId) {
+    if (empty($skuId)) {
+      return NULL;
+    }
+
+    // Remove any spcial characters,
+    // Replace space with hyphen
+    // e.g. Replace >M-GC58 7d780 shs%#/ /#$#@/564\46 /5653<
+    // into M-GC58-7d780-shs-56446-5653.
+    return preg_replace(
+        ['#[\\s-]+#', '#[^A-Za-z0-9. -]+#'],
+        ['-', ''],
+
+        urldecode($skuId)
+      );
+  }
+
 }

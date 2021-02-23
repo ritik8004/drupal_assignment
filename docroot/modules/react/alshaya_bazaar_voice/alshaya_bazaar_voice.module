@@ -27,7 +27,12 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
       // Get avalable sorting options from config.
       $sorting_options = $alshayaBazaarVoice->getSortingOptions();
 
+      \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+
       $settings = [
+        'user' => [
+          'user_email' => \Drupal::currentUser()->getEmail(),
+        ],
         'bazaar_voice' => [
           'endpoint' => $config->get('api_base_url'),
           'api_version' => $config->get('api_version'),
@@ -39,11 +44,28 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
           'sorting_options' => $sorting_options,
         ]
       ];
-
+      // Adding template to render string values.
+      $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
+      $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
       $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
       $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
       $build['#attached']['library'] = ['alshaya_bazaar_voice/rating', 'alshaya_bazaar_voice/reviews'];
       $build['#attached']['drupalSettings'] = $settings;
+
     }
   }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_bazaar_voice_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_bazaar_voice_reviews' => [
+      'variables' => [
+        'strings' => [],
+      ],
+      'template' => 'alshaya-bazaar-voice-reviews',
+    ],
+  ];
 }
