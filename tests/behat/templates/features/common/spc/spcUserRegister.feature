@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @hmsauat
 Feature: Test the User Registeration functionality
 
   Background:
