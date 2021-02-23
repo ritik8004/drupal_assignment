@@ -1,0 +1,293 @@
+// wiswig editor styles
+.text-align-left {
+  text-align: $left;
+}
+
+.text-align-right {
+  text-align: $right;
+}
+
+// Section didvider to be used as Block heading
+.paragraph--type--section-divider {
+  &::before {
+    border-top: none;
+  }
+
+  .field--name-field-section-divider-text {
+    @include style-font($alshaya-bold, 2.1875rem, 1.1875rem, 2.5rem);
+  }
+}
+
+// Apply border to 1 row 3 col and 1 row 2 col dept promo blocks
+.c-promo-1-3__item,
+.paragraph--type--_-row-2-col-dept .c-promo-1-1--eq__item {
+  border: $border-default;
+  text-align: center;
+
+  .field--name-field-title {
+    margin-top: 0;
+
+    @include style-font($alshaya-bold, 1.25rem, 1rem, 0.9375rem, 0.9375rem);
+  }
+
+  .field--name-field-sub-title {
+    @include style-font($alshaya-thin, 1.0625rem, 0.875rem, 0, 0.9375rem);
+  }
+
+  .field--name-field-banner {
+    border-bottom: $border-default;
+  }
+}
+
+.c-promo-1-3__item {
+  .field--name-field-title {
+    text-transform: none;
+  }
+
+  .field--name-field-button-link {
+    padding-bottom: 0.9375rem;
+  }
+}
+
+// Slide the 1 row 3 col promo blocks only on mobile
+.c-promo-1-3__items {
+  @include breakpoint($only-mobile) {
+    display: flex;
+    overflow-x: auto;
+
+    .c-promo-1-3__item {
+      &.field--name-field-1-row-promo-block {
+        margin-#{$right}: 1rem;
+        width: 75%;
+        height: 75%;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+// Style center-left positioned live text on 1 row 1 col promo block
+// [Live text position: center left, Promo theme: black normal]
+.paragraph--type--_-row-1-col {
+  .promo-block__position {
+    @include breakpoint($upto-desktop) {
+      position: relative !important;
+    }
+
+    &.position-center-left {
+      @include stack-live-text-mobile(4rem);
+    }
+
+    .field--name-field-promo-text-1 {
+      @include style-font(false, 2.625rem, 2.25rem);
+    }
+
+    .field--name-field-promo-text-2 {
+      margin-bottom: 0;
+
+      @include style-font(false, 1rem, false, 0.625rem, 0.625rem);
+    }
+
+    .field--name-field-button-link a {
+      @include promo-default-button();
+    }
+  }
+}
+
+// Style center-left positioned live text on slider promo and 1 row 2 col dept promo blocks
+// [Live text position: center left, Promo theme: black normal]
+.c-content__slider,
+.paragraph--type--_-row-2-col-dept {
+  .promo-block__position {
+    max-width: 50%;
+
+    @include breakpoint($upto-desktop) {
+      position: relative !important;
+      max-width: none;
+    }
+
+    &.position-center-left {
+      #{$left}: 1rem;
+
+      @include stack-live-text-mobile(1.5rem);
+
+      @include breakpoint($tablet) {
+        #{$left}: 3rem;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($upto-desktop) {
+          left: 0;
+        }
+      }
+    }
+
+    .field--name-field-promo-text-1,
+    h4 {
+      margin: 0;
+
+      @include style-font(false, 1.5rem, 1.0625rem);
+    }
+
+    .field--name-field-promo-text-2 {
+      margin: 0;
+
+      @include style-font(false, 1rem, false, 0.625rem, 0.625rem);
+    }
+
+    // Custom class to be used on markup of brand logo image added via wiswig
+    // markup refrence <p class="live_text_logo"><img></p>
+    .live_text_logo {
+      padding: 0;
+      margin: 0;
+
+      > img {
+        width: 13.4375rem;
+
+        @include breakpoint($upto-desktop) {
+          display: none;
+        }
+      }
+    }
+
+    .field--name-field-button-link {
+      #{$left}: auto;
+      transform: none;
+
+      html[lang=ar] & {
+        left: auto;
+      }
+
+      @include breakpoint($only-mobile) {
+        position: unset;
+        margin-bottom: 3rem;
+      }
+
+      a {
+        @include promo-default-button();
+      }
+    }
+  }
+}
+
+// Right aligned CTA buttons below content blocks [use h5 heading style on wiswig]
+h5 {
+  > a {
+    @include promo-default-button();
+  }
+}
+
+// Use section divider on wiswig
+hr {
+  border: 0;
+  height: 0;
+  border-top: $border-default;
+}
+
+// Style 1 row 2 col 1-2 dept and 1 row 2 col 2-1 dept promo block fields
+.paragraph--type--_-row-2-col-1-2-dept,
+.paragraph--type--_-row-2-col-2-1-dept {
+  .field--name-field-title {
+    @include style-font($alshaya-bold, 2rem, 1rem, 0.9375rem, 0.9375rem);
+  }
+
+  .field--name-field-sub-title {
+    @include style-font($alshaya-thin, 1.0625rem, 0.875rem, 0, 0.9375rem);
+  }
+
+  .field--name-field-button-link {
+    @include promo-default-button();
+  }
+}
+
+// Style 1 row 2 col promo block, 1 row 3 col flex and 1 row 4 col promo block fields
+.paragraph--type--_-row-2-col,
+.paragraph--type--_-row-3-col-flex,
+.field--name-field-1-row-4-col {
+  .field--name-field-title,
+  h4 {
+    @include style-font($alshaya-bold, 1.25rem, 1rem, 0.3125rem, 0.3125rem);
+
+    border: $border-default;
+    text-align: center;
+  }
+
+  .field--name-field-html-heading p {
+    @include style-font($alshaya-bold, 1.25rem, 1rem, 0.3125rem, 0.3125rem);
+  }
+
+  .field--name-field-video {
+    max-height: 14.875rem;
+    overflow: hidden;
+    border-bottom: none;
+
+    @include breakpoint($upto-desktop) {
+      max-height: 10.5rem;
+    }
+  }
+
+  .field--name-field-banner {
+    min-height: 14.875rem;
+    border: $border-default;
+    border-bottom: none;
+
+    @include breakpoint($upto-desktop) {
+      min-height: auto;
+    }
+  }
+
+  .field--name-field-sub-title {
+    @include style-font($alshaya-thin, 1.0625rem, 0.875rem, 0, 0.3125rem);
+    @include apply-border();
+  }
+
+  .field--name-field-button-link {
+    @include style-font($alshaya-thin, 0.875rem, false, 0, 0.625rem);
+    @include apply-border();
+
+    text-decoration: underline;
+  }
+}
+
+// On 1 row 3 col flex layout show video with more view area
+.paragraph--type--_-row-3-col-flex {
+  .video-embed-field-responsive-video {
+    padding-top: calc(100% - 8rem);
+
+    @include breakpoint($upto-desktop) {
+      padding-top: calc(100% - 5.75rem);
+    }
+  }
+}
+
+// Style 1 row 3 col promo block h4 on wiswig, use as promo title when corrsponding promo block title break to two lines
+.paragraph--type--_-row-3-col-flex {
+  h4 {
+    margin: 0;
+  }
+}
+
+// Style 1 row 4 col promo link text blocks
+.field--name-field-1-row-4-col {
+  .paragraph--type--promo-block-text {
+    .field--name-field-link {
+      @include style-font($alshaya-bold, 1.125rem, 1rem, 0.9375rem, 0.9375rem, $promo_black_btn_text);
+
+      border: 0.125rem solid $promo_black_btn_text;
+    }
+  }
+}
+
+// advance page textarea anchor link.
+.nodetype--advanced_page {
+  .paragraph--type--title-textarea {
+    a {
+      color: $content_link_color;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
