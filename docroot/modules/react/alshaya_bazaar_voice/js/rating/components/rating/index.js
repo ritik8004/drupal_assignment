@@ -3,6 +3,7 @@ import { fetchAPIData } from '../../../utilities/api/apiData';
 import InlineRating from '../widgets/InlineRating';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -36,10 +37,18 @@ export default class Rating extends React.Component {
 
   render() {
     const { ReviewsData } = this.state;
-
+    if (ReviewsData !== undefined && ReviewsData !== '') {
+      return (
+        <div className="rating-wrapper">
+          <InlineRating ReviewsData={ReviewsData} />
+        </div>
+      );
+    }
     return (
-      <div className="rating-wrapper">
-        <InlineRating ReviewsData={ReviewsData} />
+      <div className="inline-rating">
+        <div className="aggregate-rating">
+          <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} className="write-review" href="#">{Drupal.t('Write a Review')}</a>
+        </div>
       </div>
     );
   }

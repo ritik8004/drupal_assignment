@@ -1,11 +1,11 @@
 rating:
   js:
-    dist/rating.js: {}
+    dist/rating.bundle.js: {}
   dependencies:
     - alshaya_react/react
 
 reviews:
   js:
-    dist/reviews.js: {}
+    dist/reviews.bundle.js: {}
   dependencies:
     - alshaya_react/react
