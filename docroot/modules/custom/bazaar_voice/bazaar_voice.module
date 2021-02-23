@@ -10,8 +10,8 @@ use Drupal\Core\Site\Settings;
  * Implements hook_page_attachments().
  */
 function bazaar_voice_page_attachments(array &$page) {
-  /** @var \Drupal\bazaar_voice\BazaarVoiceService $bazaar_voice */
-  $bazaar_voice = \Drupal::service('bazaar_voice.bazaar_voice');
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
+  $bazaar_voice = \Drupal::service('bazaar_voice.api_helper');
 
   // Check if BV script to be loaded as per current route.
   if ($bazaar_voice->isCurrentRouteInBvList()) {
