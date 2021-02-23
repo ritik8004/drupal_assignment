@@ -12,7 +12,7 @@ acq_commerce.currency:
       type: label
       label: 'Currency Code Position'
     decimal_points:
-      type: label
+      type: integer
       label: 'Decimal Points'
     langcode:
       type: string

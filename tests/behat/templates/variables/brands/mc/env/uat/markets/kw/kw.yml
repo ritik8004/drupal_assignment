@@ -1,4 +1,4 @@
 variables:
   spc_product_listing_page: '/shop-bathing-care/shop-by-brand/cool-cool/'
-  spc_basket_page: '/shop-bathing-care/shop-by-brand/cool-cool'
+  spc_basket_page: '/shop-feeding/'
   product_listing_page_url: "/shop-baby-clothing/baby-newborn-18-months/"
