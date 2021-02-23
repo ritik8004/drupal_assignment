@@ -31,8 +31,10 @@ export default class BazaarVoiceMessages extends React.Component {
         this.setState({
           message: getStringMessage('default_error'),
         });
+        return;
       }
-    } else if (response.data.HasErrors && response.data.FormErrors !== null) {
+    }
+    if (response.data.HasErrors && response.data.FormErrors !== null) {
       if (response.data.FormErrors.FieldErrors !== null) {
         const fieldErrors = response.data.FormErrors.FieldErrors;
         Object.values(fieldErrors).forEach((item) => {
@@ -42,13 +44,13 @@ export default class BazaarVoiceMessages extends React.Component {
           this.setState({
             errorList: errorMessages,
           });
+          return;
         }
       }
-    } else {
-      this.setState({
-        message: '',
-      });
     }
+    this.setState({
+      message: '',
+    });
   };
 
   render() {

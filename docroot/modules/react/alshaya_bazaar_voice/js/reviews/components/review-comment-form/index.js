@@ -2,6 +2,7 @@ import React from 'react';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
+import { getCurrentUserEmail } from '../../../utilities/utility';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class ReviewCommentForm extends React.Component {
   }
 
   getUserEmail() {
-    const emailValue = drupalSettings.user.user_email;
+    const emailValue = getCurrentUserEmail();
     this.setState({ email: emailValue });
     return emailValue;
   }
