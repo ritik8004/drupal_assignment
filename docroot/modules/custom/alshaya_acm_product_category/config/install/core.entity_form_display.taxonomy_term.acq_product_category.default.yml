@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - entity_browser.browser.image_browser
+    - field.field.taxonomy_term.acq_product_category.field_bazaarvoice_rating_review
     - field.field.taxonomy_term.acq_product_category.field_category_google
     - field.field.taxonomy_term.acq_product_category.field_category_image
     - field.field.taxonomy_term.acq_product_category.field_category_include_menu
@@ -135,6 +136,7 @@ third_party_settings:
         - field_show_on_department_page
         - field_display_view_all
         - field_cta
+        - field_bazaarvoice_rating_review
       parent_name: group_taxonomy_fields
       weight: 0
       format_type: tab
@@ -332,6 +334,13 @@ content:
       placeholder: ''
       rows: 5
     third_party_settings: {  }
+    region: content
+  field_bazaarvoice_rating_review:
+    weight: 19
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
     region: content
   field_category_google:
     weight: 4
