@@ -50,7 +50,7 @@ variables:
   language_order_total: 'Order Total'
   language_order_summary: 'order summary'
   language_promo_code: 'have a promo code?'
-  language_excluding_delivery: 'excluding delivery'
+  language_excluding_delivery: 'Excluding delivery'
   street: 'Street A'
   building: 'Building B'
   locality: ''

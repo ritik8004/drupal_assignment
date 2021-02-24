@@ -1,4 +1,4 @@
-@javascript @guest @cybersourcePayment @homeDelivery @pbsauat @hmaeuat @vssauat @mckwuat @hmkwuat @hmsauat
+@javascript @guest @cybersourcePayment @homeDelivery @pbsauat @hmaeuat @vssauat @mckwuat @hmkwuat @hmsauat @flkwuat
 Feature: SPC Checkout Home Delivery using CyberSource Payment Method
 
   Background:
