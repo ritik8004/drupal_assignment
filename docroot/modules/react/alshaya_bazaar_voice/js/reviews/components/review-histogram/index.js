@@ -41,8 +41,8 @@ const ReviewHistogram = ({
                   {Drupal.t('of Customers Recommended the Product')}
                 </div>
                 <RatingSummary
-                  HistogramData={overallSummary[item].ReviewStatistics.RatingDistribution}
-                  TotalReviewCount={overallSummary[item].ReviewStatistics.TotalReviewCount}
+                  histogramData={overallSummary[item].ReviewStatistics.RatingDistribution}
+                  totalReviewCount={overallSummary[item].ReviewStatistics.TotalReviewCount}
                 />
                 <ConditionalView condition={window.innerWidth < 768}>
                   <div className="secondary-summary">
