@@ -12,7 +12,6 @@ use Drupal\field\Entity\FieldStorageConfig;
  * Implements hook_install().
  *
  * Create new field (Disable BazaarVoice Rating and Reviews)
- * for acq_product_category taxonomy.
  */
 function alshaya_bazaar_voice_install() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -34,14 +33,12 @@ function alshaya_bazaar_voice_install() {
  * Implements hook_uninstall().
  *
  * Delete field (Disable BazaarVoice Rating and Reviews)
- * for acq_product_category taxonomy.
  */
 function alshaya_bazaar_voice_uninstall() {
-$field = FieldStorageConfig::loadByName('taxonomy_term', 'field_bazaarvoice_rating_review');
-if ($field) {
-  // Delete this field.
-  $field->delete();
-}
-
+  $field = FieldStorageConfig::loadByName('taxonomy_term', 'field_bazaarvoice_rating_review');
+  if ($field) {
+    // Delete this field.
+    $field->delete();
+  }
 }
 
