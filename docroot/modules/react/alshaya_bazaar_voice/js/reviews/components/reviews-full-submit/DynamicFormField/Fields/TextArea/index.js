@@ -28,6 +28,7 @@ class TextArea extends React.Component {
       defaultValue,
       maxLength,
       minLength,
+      text,
     } = this.props;
     const { errors } = this.state;
 
@@ -37,22 +38,28 @@ class TextArea extends React.Component {
     }
 
     return (
-      <div className="write-review-type-textarea">
-        <label>{label}</label>
-        <textarea
-          required={required}
-          id={id}
-          name={id}
-          className={focusClass}
-          onChange={(e) => this.handleChange(e, minLength)}
-          minLength={minLength}
-          maxLength={maxLength}
-        >
-          {defaultValue}
-        </textarea>
-        <div className="c-input__bar" />
-        <div id={`${label}-error`} className="error">{errors[id]}</div>
-      </div>
+      <>
+        {text !== undefined
+          && (
+          <div className="head-row">{text}</div>
+          )}
+        <div className="write-review-type-textarea">
+          <label>{label}</label>
+          <textarea
+            required={required}
+            id={id}
+            name={id}
+            className={focusClass}
+            onChange={(e) => this.handleChange(e, minLength)}
+            minLength={minLength}
+            maxLength={maxLength}
+          >
+            {defaultValue}
+          </textarea>
+          <div className="c-input__bar" />
+          <div id={`${label}-error`} className="error">{errors[id]}</div>
+        </div>
+      </>
     );
   }
 }

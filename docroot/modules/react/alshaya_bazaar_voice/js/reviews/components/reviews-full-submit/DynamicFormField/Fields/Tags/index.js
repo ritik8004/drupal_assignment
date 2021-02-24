@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Checkbox extends React.Component {
+class Tags extends React.Component {
   handleEvent = (e, handler) => {
     if (handler === 'blur') {
       if (e.currentTarget.value.length > 0) {
@@ -25,7 +25,7 @@ class Checkbox extends React.Component {
           && (
           <div className="head-row">{text}</div>
           )}
-        <div className="write-review-type-checkbox">
+        <div className="write-review-type-tags">
           <input
             type="checkbox"
             id={id}
@@ -40,4 +40,4 @@ class Checkbox extends React.Component {
   }
 }
 
-export default Checkbox;
+export default Tags;

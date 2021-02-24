@@ -14,13 +14,13 @@ export const validEmailRegex = RegExp(
 export const prepareRequest = (elements, formFieldMeta) => {
   let params = '';
 
-  Object.entries(formFieldMeta).forEach(([field]) => {
-    const id = field['#id'];
+  Object.entries(formFieldMeta).forEach(([key, field]) => {
+    const id = formFieldMeta[key]['#id'];
 
-    // Handle text input data.
+    // Add text input data in request.
     if (field['#type'] === 'textfield'
       || field['#type'] === 'textarea') {
-      const value = (typeof elements[id].value === 'undefined')
+      const value = (elements[id].value === undefined)
         ? ''
         : elements[id].value;
 
@@ -33,9 +33,9 @@ export const prepareRequest = (elements, formFieldMeta) => {
       }
     }
 
-    // Handle select input data.
+    // Add select input data in request.
     if (field['#type'] === 'select') {
-      const value = (typeof elements[id].value === 'undefined')
+      const value = (elements[id].value === undefined)
         ? ''
         : elements[id].value;
 

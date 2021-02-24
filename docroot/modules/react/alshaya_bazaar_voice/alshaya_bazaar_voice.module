@@ -25,6 +25,7 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
 
       $settings = [
         'bazaar_voice' => [
+          'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
           'endpoint' => $config->get('api_base_url'),
           'api_version' => $config->get('api_version'),
           'passkey' => $config->get('conversations_apikey'),

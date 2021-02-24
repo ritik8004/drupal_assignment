@@ -3,10 +3,12 @@ import TextField from './Fields/TextField';
 import TextArea from './Fields/TextArea';
 import SelectField from './Fields/SelectField';
 import Slider from './Fields/Slider';
-// import Checkbox from './Fields/Checkbox';
+import Checkbox from './Fields/Checkbox';
+import Tags from './Fields/Tags';
 import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
+import NetPromoter from './Fields/NetPromoter';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
@@ -22,17 +24,31 @@ const DynamicFormField = (props) => {
     );
   }
 
-  // if (fieldProperty.group_type === 'boolean'
-  //   && fieldProperty.visible === true) {
-  //   return (
-  //     <Checkbox
-  //       required={fieldProperty.required}
-  //       id={fieldProperty.id}
-  //       label={fieldProperty.title}
-  //       defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
-  //     />
-  //   );
-  // }
+  if (fieldProperty.group_type === 'checkbox'
+    && fieldProperty.visible === true) {
+    return (
+      <Checkbox
+        required={fieldProperty.required}
+        id={fieldProperty.id}
+        label={fieldProperty.title}
+        defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+        text={fieldProperty.text}
+      />
+    );
+  }
+
+  if (fieldProperty.group_type === 'tags'
+    && fieldProperty.visible === true) {
+    return (
+      <Tags
+        required={fieldProperty.required}
+        id={fieldProperty.id}
+        label={fieldProperty.title}
+        defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+        text={fieldProperty.text}
+      />
+    );
+  }
 
   if (fieldProperty.group_type === 'slider'
     && fieldProperty.visible === true) {
@@ -42,9 +58,11 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         options={fieldProperty.options}
+        text={fieldProperty.text}
       />
     );
   }
+
   if (fieldProperty.group_type === 'ratings') {
     return (
       <StarRating
@@ -52,9 +70,11 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+        text={fieldProperty.text}
       />
     );
   }
+
   if (fieldProperty.group_type === 'select'
     && fieldProperty.visible === true) {
     return (
@@ -65,9 +85,11 @@ const DynamicFormField = (props) => {
         defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
         options={fieldProperty.options}
         visible={fieldProperty.visible}
+        text={fieldProperty.text}
       />
     );
   }
+
   if (fieldProperty.group_type === 'textarea'
     && fieldProperty.visible === true) {
     return (
@@ -78,6 +100,7 @@ const DynamicFormField = (props) => {
         defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
         maxLength={fieldProperty.maxlength}
         minLength={fieldProperty.minlength}
+        text={fieldProperty.text}
       />
     );
   }
@@ -98,6 +121,20 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
+        text={fieldProperty.text}
+      />
+    );
+  }
+
+  if (fieldProperty.group_type === 'netpromoter'
+    && fieldProperty.visible === true) {
+    return (
+      <NetPromoter
+        required={fieldProperty.required}
+        id={fieldProperty.id}
+        label={fieldProperty.title}
+        maxLength={fieldProperty.maxlength}
+        text={fieldProperty.text}
       />
     );
   }
@@ -111,6 +148,7 @@ const DynamicFormField = (props) => {
       maxLength={fieldProperty.maxlength}
       minLength={fieldProperty.minlength}
       visible={fieldProperty.visible}
+      text={fieldProperty.text}
     />
   );
 };

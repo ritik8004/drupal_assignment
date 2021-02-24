@@ -43,12 +43,14 @@ export default class WriteReviewForm extends React.Component {
             const evt = new CustomEvent('reviewPosted', { detail: result.data });
             document.dispatchEvent(evt);
           } else {
-            // Todo - error handle
+            removeFullScreenLoader();
+            Drupal.logJavascriptError('write-review', result.error);
           }
         });
       }
     } else {
-      // console.log('handle error for invalid form');
+      removeFullScreenLoader();
+      Drupal.logJavascriptError('write-review', 'invalid form');
     }
   }
 

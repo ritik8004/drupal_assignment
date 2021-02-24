@@ -35,26 +35,33 @@ class TextField extends React.Component {
       maxLength,
       minLength,
       visible,
+      text,
     } = this.props;
     const { errors } = this.state;
 
     if (visible === true) {
       return (
-        <div className="write-review-type-textfield">
-          <input
-            type="text"
-            id={id}
-            name={id}
-            defaultValue={defaultValue}
-            onChange={(e) => this.handleChange(e, minLength)}
-            maxLength={maxLength}
-            minLength={minLength}
-            required={required}
-          />
-          <div className="c-input__bar" />
-          <label>{label}</label>
-          <div id={`${label}-error`} className="error">{errors[id]}</div>
-        </div>
+        <>
+          {text !== undefined
+            && (
+            <div className="head-row">{text}</div>
+            )}
+          <div className="write-review-type-textfield">
+            <input
+              type="text"
+              id={id}
+              name={id}
+              defaultValue={defaultValue}
+              onChange={(e) => this.handleChange(e, minLength)}
+              maxLength={maxLength}
+              minLength={minLength}
+              required={required}
+            />
+            <div className="c-input__bar" />
+            <label>{label}</label>
+            <div id={`${label}-error`} className="error">{errors[id]}</div>
+          </div>
+        </>
       );
     }
     return (
