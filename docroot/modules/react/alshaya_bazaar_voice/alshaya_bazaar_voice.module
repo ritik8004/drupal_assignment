@@ -21,13 +21,10 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
       $term_obj = Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term['target_id']);
       $field_bazaarvoice_rating_review = $term_obj->get('field_bazaarvoice_rating_review')->value;
       // Disable BazaarVoice Review and Ratings if checked
-      //    echo '<pre>';print_r($field_bazaarvoice_rating_review);exit;
-
       if (isset($field_bazaarvoice_rating_review) && !empty($field_bazaarvoice_rating_review)) {
         $flag = FALSE;
       }
     }
-  //  echo '<pre>';print_r($flag);exit;
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 

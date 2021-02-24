@@ -2,12 +2,11 @@
 
 /**
  * @file
- * Contains install, update, uninstall hooks for alshaya_acm_product_category.
+ * Contains install, update, uninstall hooks for alshaya_bazaar_voice.
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldStorageConfig;
-
 
 /**
  * Implements hook_install().
@@ -38,7 +37,6 @@ function alshaya_bazaar_voice_install() {
  * for acq_product_category taxonomy.
  */
 function alshaya_bazaar_voice_uninstall() {
-
 $field = FieldStorageConfig::loadByName('taxonomy_term', 'field_bazaarvoice_rating_review');
 if ($field) {
   // Delete this field.

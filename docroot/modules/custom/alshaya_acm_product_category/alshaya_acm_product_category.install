@@ -13,7 +13,6 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\block\Entity\Block;
 use Drupal\block\BlockInterface;
 
-
 /**
  * Implements hook_update_N().
  *
