@@ -10,7 +10,7 @@ variables:
   promotional_filter: ''
   language_collection_filter: ''
   language_sort_filter: 'رتب حسب'
-  language_price_filter: 'المجموعة'
+  language_price_filter: ''
   language_brand_filter: 'ارتفاع الخصر'
   language_color_filter: ''
   language_size_filter: 'السعر'
