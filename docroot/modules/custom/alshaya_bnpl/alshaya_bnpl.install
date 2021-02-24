@@ -33,6 +33,12 @@ function alshaya_bnpl_install() {
     '<p>Your order total does not qualify for payment via <span class="brand-postpay light">postpay</span>. <a href="#">Find out more</a> about our interest-free installments and options with <span class="brand-postpay dark">postpay</span></p>' => [
       'ar' => '<p>مجموع طلبيتك غير مؤهل لاستخدام خدمة الدفع <span class="brand-postpay light">بوست باي</span>. <a href="#">تعرف على المزيد</a> على الأقساط بدون فوائد، وخيارات الدفع من خلال <span class="brand-postpay dark">بوست باي</span></p>',
     ],
+    'Continue with postpay' => [
+      'ar' => 'استمر مع بوست باي',
+    ],
+    'Your postpay order has been cancelled' => [
+      'ar' => 'طلبيتك من بوست باي تم إلغاءها',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
