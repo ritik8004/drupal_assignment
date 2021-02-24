@@ -123,7 +123,6 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         ]);
         return;
       }
-      return;
     }
 
     // Disable re-queueing while processing.
