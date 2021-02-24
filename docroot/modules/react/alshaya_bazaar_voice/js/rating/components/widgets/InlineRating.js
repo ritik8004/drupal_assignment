@@ -20,8 +20,8 @@ const InlineRating = ({
               {Drupal.t('reviews')}
             </div>
             <RatingSummary
-              HistogramData={reviewsData[item].ReviewStatistics.RatingDistribution}
-              TotalReviewCount={reviewsData[item].ReviewStatistics.TotalReviewCount}
+              histogramData={reviewsData[item].ReviewStatistics.RatingDistribution}
+              totalReviewCount={reviewsData[item].ReviewStatistics.TotalReviewCount}
             />
           </div>
         </div>
