@@ -42,3 +42,38 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
     }
   }
 }
+
+/**
+  * Implements hook_alshaya_checkout_bvpixel_order_build_alter().
+  * Updating build array for bv pixel integration.
+  *
+  * @param array $build
+  *   Reference to the build array of spc confirmation.
+  * @param string $order
+  *   Order details array.
+  */
+  function alshaya_bazaar_voice_checkout_bvpixel_order_build_alter(array &$build, $order) {
+    /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
+    $bazaar_voice_api_helper = \Drupal::service('bazaar_voice.api_helper');
+    if (!empty($build['#attached']['drupalSettings'])){
+      if ($bazaar_voice_api_helper->isBvConfigurationsAvailable()) {
+        $bazaarvoice_config = \Drupal::config('bazaar_voice.settings');
+        $locale = $bazaarvoice_config->get('locale');
+        // Attach bvpixel library to order confirmation page. 
+        $build['#attached']['library'][] = 'alshaya_bazaar_voice/bvpixel_tracking';
+        if(!empty($build['#attached']['drupalSettings']['order_details'])) {
+          $build['#attached']['drupalSettings']['order_details']['bv_extra_params'] = [
+            'currency' => $order['base_currency_code'] ?? '',
+            'tax' => $order['base_tax_amount'] ?? '',
+            'shipping' => $order['shipping_incl_tax'] ?? '',
+            'city' => $order['shipping']['address']['city'] ?? '',
+            'country' => $order['shipping']['address']['country_id'] ?? '',
+            'nickname' => $order['customer_firstname'] ?? '',
+            'customer_is_guest' => $order['customer_is_guest'] ?? '',
+            'customer_id' => $order['customer_id'] ?? '',
+            'locale' => $locale ?? '',
+          ];
+        }
+      }
+    }
+  }

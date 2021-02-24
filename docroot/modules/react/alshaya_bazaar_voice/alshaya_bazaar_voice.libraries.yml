@@ -9,3 +9,7 @@ reviews:
     dist/reviews.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+bvpixel_tracking:
+  js:
+    js/assets/bvpixel-tracking.js: {}
