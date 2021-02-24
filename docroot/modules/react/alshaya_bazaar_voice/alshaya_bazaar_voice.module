@@ -14,24 +14,27 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-
+        
+    $flag = TRUE;
     $category = $entity->get('field_category')->getValue();
-    $reviews = '';
     foreach ($category as $term) {
       $term_obj = Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term['target_id']);
       $field_bazaarvoice_rating_review = $term_obj->get('field_bazaarvoice_rating_review')->value;
       // Disable BazaarVoice Review and Ratings if checked
+      //    echo '<pre>';print_r($field_bazaarvoice_rating_review);exit;
+
       if (isset($field_bazaarvoice_rating_review) && !empty($field_bazaarvoice_rating_review)) {
-        $reviews = 'disable';
+        $flag = FALSE;
       }
     }
+  //  echo '<pre>';print_r($flag);exit;
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
-    if ($sku_entity instanceof SKU && $view_mode == 'full' && $reviews != 'disable') {
+    if ($sku_entity instanceof SKU && $view_mode == 'full' && $flag) {
       $config = \Drupal::config('bazaar_voice.settings');
 
       $settings = [

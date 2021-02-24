@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_product_category.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\block\Entity\Block;
+use Drupal\block\BlockInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+
+
+/**
+ * Implements hook_install().
+ *
+ * Create new field (Disable BazaarVoice Rating and Reviews)
+ * for acq_product_category taxonomy.
+ */
+function alshaya_bazaar_voice_install() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $fields = [
+    'field.storage.taxonomy_term.field_bazaarvoice_rating_review',
+    'field.field.taxonomy_term.acq_product_category.field_bazaarvoice_rating_review',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $fields,
+    'alshaya_acm_product_category',
+    'install',
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Delete field (Disable BazaarVoice Rating and Reviews)
+ * for acq_product_category taxonomy.
+ */
+function alshaya_bazaar_voice_uninstall() {
+
+$field = FieldStorageConfig::loadByName('taxonomy_term', 'field_bazaarvoice_rating_review');
+if ($field) {
+  // Delete this field.
+  $field->delete();
+}
+
+}
+
