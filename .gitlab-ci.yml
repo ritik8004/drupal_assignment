@@ -4,7 +4,6 @@ stages:
   - build
   - validate
   - setup_and_test
-  - test
   - deploy
 
 variables:
