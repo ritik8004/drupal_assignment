@@ -196,7 +196,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   /**
    * Function to get media for Free Gift SKU.
    */
-  private function getProessProductMedia(SKU $entity, $node = []) {
+  private function getProessProductMedia(SKU $entity, NodeInterface $node = NULL) {
     // Disable re-queueing while processing.
     self::$processingItem = TRUE;
 
@@ -234,7 +234,6 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         // Download product images for product and warm up caches.
         $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
         $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
-
         // Mark the product as processed now.
         $this->productProcessedManager->markProductProcessed($translation->getSku());
 
@@ -244,7 +243,6 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         $this->dispatcher->dispatch(ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT, $event);
       }
     }
-
     else {
       foreach ($entity->getTranslationLanguages() as $language) {
         $translation = SKU::loadFromSku($entity->getSku(), $language->getId());
