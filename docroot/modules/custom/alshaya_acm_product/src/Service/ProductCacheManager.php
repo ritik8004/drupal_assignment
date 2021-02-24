@@ -48,10 +48,7 @@ class ProductCacheManager {
 
     if (!isset($static[$cid])) {
       $cache = $this->cache->get($cid);
-      $static[$cid] = !empty($cache->data) ? $cache->data : NULL;
-    }
-    elseif (empty($static[$cid])) {
-      $static[$cid] = NULL;
+      $static[$cid] = $cache->data ?? NULL;
     }
 
     return $static[$cid];
