@@ -12,4 +12,4 @@ reviews:
 
 bvpixel_tracking:
   js:
-    js/bvpixel-tracking.js: {}
+    js/assets/bvpixel-tracking.js: {}
