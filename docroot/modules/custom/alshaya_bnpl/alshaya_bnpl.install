@@ -6,21 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Add translations for Postpay eligibility message on cart page.
- */
-function alshaya_bnpl_update_8001() {
-  $strings = [
-    '<p>Your order total does not qualify for payment via <span class="brand-postpay light">Postpay</span>. <a href="#">Find out more</a> about our interest-free installments and options with <span class="brand-postpay dark">Postpay</span></p>' => [
-      'ar' => '<p>مجموع طلبيتك غير مؤهل لاستخدام خدمة الدفع <span class="brand-postpay light">بوست باي</span>. <a href="#">تعرف على المزيد</a> على الأقساط بدون فوائد، وخيارات الدفع من خلال <span class="brand-postpay dark">بوست باي</span></p>',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_bnpl_install() {
@@ -28,7 +13,7 @@ function alshaya_bnpl_install() {
   $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $term = $termStorage->create([
     'vid' => 'payment_method',
-    'name' => 'Installments with Postpay',
+    'name' => 'Installments with postpay',
     'field_payment_code' => 'postpay'
   ]);
   $term->save();
@@ -45,8 +30,14 @@ function alshaya_bnpl_install() {
   $config->save();
 
   $strings = [
-    '<p>Your order total does not qualify for payment via <span class="brand-postpay light">Postpay</span>. <a href="#">Find out more</a> about our interest-free installments and options with <span class="brand-postpay dark">Postpay</span></p>' => [
+    '<p>Your order total does not qualify for payment via <span class="brand-postpay light">postpay</span>. <a href="#">Find out more</a> about our interest-free installments and options with <span class="brand-postpay dark">postpay</span></p>' => [
       'ar' => '<p>مجموع طلبيتك غير مؤهل لاستخدام خدمة الدفع <span class="brand-postpay light">بوست باي</span>. <a href="#">تعرف على المزيد</a> على الأقساط بدون فوائد، وخيارات الدفع من خلال <span class="brand-postpay dark">بوست باي</span></p>',
+    ],
+    'Continue with postpay' => [
+      'ar' => 'استمر مع بوست باي',
+    ],
+    'Your postpay order has been cancelled' => [
+      'ar' => 'طلبيتك من بوست باي تم إلغاءها',
     ],
   ];
 
