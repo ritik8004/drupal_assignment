@@ -21,7 +21,7 @@ import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 import PostpayCart from '../postpay/postpay';
-import isPostpayEnabled from '../../../utilities/helper';
+import Postpay from '../../../utilities/postpay';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -230,7 +230,7 @@ export default class Cart extends React.Component {
     }
     let postpay;
     let postpayEligibilityMessage;
-    if (isPostpayEnabled()) {
+    if (Postpay.isPostpayEnabled()) {
       postpay = (
         <PostpayCart
           amount={totals.base_grand_total}
