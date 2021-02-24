@@ -44,7 +44,8 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
 }
 
 /**
-  * Updated build array for bv pixel integration.
+  * Implements hook_alshaya_checkout_bvpixel_order_build_alter().
+  * Updating build array for bv pixel integration.
   *
   * @param array $build
   *   Reference to the build array of spc confirmation.
