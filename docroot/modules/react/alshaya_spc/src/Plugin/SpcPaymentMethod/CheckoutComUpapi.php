@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_acm_checkoutcom\Helper\AlshayaAcmCheckoutComAPIHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
@@ -97,7 +98,7 @@ class CheckoutComUpapi extends AlshayaSpcPaymentMethodPluginBase implements Cont
     $config = $this->apiWrapper->getCheckoutcomUpApiConfig();
 
     $build['#cache']['contexts'] = ['user'];
-    $build['#cache']['tags'] = ['user:' . $this->currentUser->id()];
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ['user:' . $this->currentUser->id()]);
 
     $api_url = $config['api_url'] ?? 'https://api.sandbox.checkout.com';
     $api_url = trim($api_url, '/');
