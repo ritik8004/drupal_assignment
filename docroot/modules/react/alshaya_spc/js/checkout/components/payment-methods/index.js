@@ -140,6 +140,9 @@ export default class PaymentMethods extends React.Component {
       if (cart.cart.payment.method !== undefined
         && cart.cart.payment.method !== null
         && paymentMethods[cart.cart.payment.method] !== undefined) {
+        // If the payment method is postpay and it is available for the cart then
+        // only we can display the postpay payment method. No restrictions for
+        // rest of the payment methods.
         if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay') {
           this.changePaymentMethod(cart.cart.payment.method);
           return;
@@ -150,6 +153,9 @@ export default class PaymentMethods extends React.Component {
       if (cart.cart.payment.default !== undefined
         && cart.cart.payment.default !== null
         && paymentMethods[cart.cart.payment.default] !== undefined) {
+        // If the payment method is postpay and it is available for the cart then
+        // only we can display the postpay payment method. No restrictions for
+        // rest of the payment methods.
         if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay') {
           this.changePaymentMethod(cart.cart.payment.default);
           return;
