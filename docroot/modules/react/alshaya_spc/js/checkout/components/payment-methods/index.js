@@ -17,7 +17,6 @@ import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
-import isPostpayEnabled from '../../../utilities/helper';
 
 export default class PaymentMethods extends React.Component {
   constructor(props) {
@@ -31,22 +30,6 @@ export default class PaymentMethods extends React.Component {
   componentDidMount = () => {
     this.selectDefault();
 
-    if (isPostpayEnabled()) {
-      const postpayTimer = setInterval(() => {
-        const { isPostpayInitialised } = this.props;
-        if (isPostpayInitialised) {
-          clearInterval(postpayTimer);
-          const { postpayAvailable } = this.state;
-          const { cart: { cart } } = this.props;
-          Postpay.alshayaPostpayCheckCheckoutAmount(
-            postpayAvailable,
-            cart,
-            this.setState.bind(this),
-          );
-        }
-      }, 100);
-    }
-    this.selectDefault();
     // We want this to be executed once all other JS execution is finished.
     // For this we use setTimeout with 1 ms.
     setTimeout(() => {
@@ -126,13 +109,7 @@ export default class PaymentMethods extends React.Component {
     }
 
     if (isDeliveryTypeSameAsInCart(cart)) {
-      const { postpayAvailable } = this.state;
-      if (isPostpayEnabled()
-        && Postpay.isAvailable(
-          postpayAvailable,
-          cart.cart,
-          this.setState.bind(this),
-        ) == null) {
+      if (Postpay.isPostpayEnabled() && Postpay.isAvailable(this) == null) {
         return false;
       }
       return true;
@@ -152,39 +129,35 @@ export default class PaymentMethods extends React.Component {
     }
 
     const { postpayAvailable } = this.state;
-    const { cart: { cart } } = this.props;
+    const { cart } = this.props;
 
-    const paymentDiv = document.getElementById(`payment-method-${cart.payment.method}`);
-    if (cart.payment.method === undefined
-      || paymentMethods[cart.payment.method] === undefined
+    const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
+    if (cart.cart.payment.method === undefined
+      || paymentMethods[cart.cart.payment.method] === undefined
       || paymentDiv === null
       || paymentDiv.checked !== true) {
       // Select previously selected method if available.
-      if (cart.payment.method !== undefined
-        && cart.payment.method !== null
-        && paymentMethods[cart.payment.method] !== undefined) {
-        if (postpayAvailable[cart.cart_total] || cart.payment.method !== 'postpay') {
-          this.changePaymentMethod(cart.payment.method);
+      if (cart.cart.payment.method !== undefined
+        && cart.cart.payment.method !== null
+        && paymentMethods[cart.cart.payment.method] !== undefined) {
+        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay') {
+          this.changePaymentMethod(cart.cart.payment.method);
           return;
         }
       }
 
       // Select default from previous order if available.
-      if (cart.payment.default !== undefined
-        && cart.payment.default !== null
-        && paymentMethods[cart.payment.default] !== undefined) {
-        if (postpayAvailable[cart.cart_total] || cart.payment.default !== 'postpay') {
-          this.changePaymentMethod(cart.payment.default);
+      if (cart.cart.payment.default !== undefined
+        && cart.cart.payment.default !== null
+        && paymentMethods[cart.cart.payment.default] !== undefined) {
+        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay') {
+          this.changePaymentMethod(cart.cart.payment.default);
           return;
         }
       }
 
       // Select first payment method by default.
-      if (postpayAvailable[cart.cart_total] || Object.keys(paymentMethods)[0] !== 'postpay') {
-        this.changePaymentMethod(Object.keys(paymentMethods)[0]);
-      } else {
-        this.changePaymentMethod(Object.keys(paymentMethods)[1]);
-      }
+      this.changePaymentMethod(Object.keys(paymentMethods)[0]);
     }
   };
 
@@ -206,16 +179,8 @@ export default class PaymentMethods extends React.Component {
             return;
           }
 
-          if (method.code === 'postpay') {
-            const { postpayAvailable } = this.state;
-            if (!Postpay.isAvailable(
-              postpayAvailable,
-              cart.cart,
-              this.setState.bind(this),
-            )
-            ) {
-              return;
-            }
+          if (method.code === 'postpay' && !Postpay.isAvailable(this)) {
+            return;
           }
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
