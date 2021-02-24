@@ -47,16 +47,18 @@
 }
 
 .style {
-  &-H {
+  &-N,
+  &-W {
     color: $_aura_status_hold;
   }
 
-  &-C {
+  &-B {
     color: $_aura_status_credit;
   }
 
   &-E,
-  &-R {
+  &-C,
+  &-S {
     color: $_aura_status_debit;
   }
 }
@@ -74,19 +76,21 @@
   }
 
   &.style {
-    &-H::before {
+    &-N::before,
+    &-W::before {
       background: url(#{$base_theme_img_directory_path}/aura/aura-pending.svg) no-repeat center center;
     }
 
-    &-R::before {
+    &-S::before {
       background: url(#{$base_theme_img_directory_path}/aura/aura-circle.svg) no-repeat center center;
     }
 
-    &-C::before {
+    &-B::before {
       background: url(#{$base_theme_img_directory_path}/aura/aura-check.svg) no-repeat center center;
     }
 
-    &-E::before {
+    &-E::before,
+    &-C::before {
       background: url(#{$base_theme_img_directory_path}/aura/aura-warning.svg) no-repeat center center;
     }
   }
