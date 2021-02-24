@@ -24,18 +24,18 @@
 }
 
 .histogram-data {
-  font-family: $alshaya-bold;
-
   .histogram-title {
-    padding-bottom: 1.25rem;
+    padding-bottom: 1.5rem;
     font-size: 0.875rem;
     color: $rr-histogram-text;
+    font-family: $alshaya-bold;
   }
 
   .histogram-row {
     color: $rr-histogram-text;
     font-size: 0.75rem;
     margin-bottom: 1rem;
+    font-family: $alshaya-bold;
 
     .star-label {
       @extend %histogram-summary-display;
