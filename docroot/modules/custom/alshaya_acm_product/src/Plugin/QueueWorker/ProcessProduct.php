@@ -117,16 +117,64 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     // So either configurable SKU or simple one visible in frontend.
     $node = $entity->getPluginInstance()->getDisplayNode($entity, FALSE);
     if (!($node instanceof NodeInterface)) {
-      if ($this->skuManager->isSkuFreeGift($entity)) {
-        $this->proessProduct($entity);
+      if (!($this->skuManager->isSkuFreeGift($entity))) {
+        $this->getLogger('ProcessProduct')->notice('Skipping process of product with sku: @sku as Node not available', [
+          '@sku' => $entity->getSku(),
+        ]);
         return;
       }
-      $this->getLogger('ProcessProduct')->notice('Skipping process of product with sku: @sku as Node not available', [
-        '@sku' => $entity->getSku(),
-      ]);
       return;
     }
-    $this->proessProduct($entity, $node);
+
+    // Disable re-queueing while processing.
+    self::$processingItem = TRUE;
+
+    // Invalid cache tags for node.
+    if ($node) {
+      $this->cacheTagsInvalidator->invalidateTags($node->getCacheTagsToInvalidate());
+    }
+    // Invalid cache tags for sku.
+    $this->cacheTagsInvalidator->invalidateTags($entity->getCacheTagsToInvalidate());
+
+    // Invalidate our custom cache tags.
+    $sku_tags = ProductCacheManager::getAlshayaProductTags($entity);
+    $this->cacheTagsInvalidator->invalidateTags($sku_tags);
+
+    $variants = $entity->bundle() === 'configurable'
+      ? Configurable::getChildSkus($entity)
+      : [];
+
+    foreach ($node ? $node->getTranslationLanguages() : $entity->getTranslationLanguages() as $language) {
+      $translation = SKU::loadFromSku($entity->getSku(), $language->getId());
+
+      foreach ($variants as $variant) {
+        $variant_sku = SKU::loadFromSku($variant, $language->getId(), FALSE);
+        if ($variant_sku instanceof SKU) {
+          // Download product images for all the variants of the product.
+          $this->imagesManager->getProductMedia($variant_sku, 'pdp', TRUE);
+          $this->imagesManager->getProductMedia($variant_sku, 'pdp', FALSE);
+          if ($node) {
+            // Mark the variant as processed now.
+            $this->productProcessedManager->markProductProcessed($variant_sku->getSku());
+          }
+        }
+      }
+
+      // Download product images for product and warm up caches.
+      $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
+      $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
+      if ($node) {
+        // Mark the product as processed now.
+        $this->productProcessedManager->markProductProcessed($translation->getSku());
+        // Trigger event for other modules to take action.
+        // For instance alshaya_search_api to index items.
+        $event = new ProductUpdatedEvent($translation, ProductUpdatedEvent::PRODUCT_PROCESSED);
+        $this->dispatcher->dispatch(ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT, $event);
+      }
+    }
+    $this->getLogger('ProcessProduct')->notice('Processed product with sku: @sku', [
+      '@sku' => $entity->getSku(),
+    ]);
   }
 
   /**
@@ -191,60 +239,6 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $container->get('cache_tags.invalidator'),
       $container->get('alshaya_acm_product.product_processed_manager')
     );
-  }
-
-  /**
-   * Function to Process product.
-   */
-  private function proessProduct(SKU $entity, NodeInterface $node = NULL) {
-    // Disable re-queueing while processing.
-    self::$processingItem = TRUE;
-
-    // Invalid cache tags for node.
-    if ($node) {
-      $this->cacheTagsInvalidator->invalidateTags($node->getCacheTagsToInvalidate());
-    }
-    // Invalid cache tags for sku.
-    $this->cacheTagsInvalidator->invalidateTags($entity->getCacheTagsToInvalidate());
-
-    // Invalidate our custom cache tags.
-    $sku_tags = ProductCacheManager::getAlshayaProductTags($entity);
-    $this->cacheTagsInvalidator->invalidateTags($sku_tags);
-
-    $variants = $entity->bundle() === 'configurable'
-      ? Configurable::getChildSkus($entity)
-      : [];
-
-    foreach ($node ? $node->getTranslationLanguages() : $entity->getTranslationLanguages() as $language) {
-      $translation = SKU::loadFromSku($entity->getSku(), $language->getId());
-
-      foreach ($variants as $variant) {
-        $variant_sku = SKU::loadFromSku($variant, $language->getId(), FALSE);
-        if ($variant_sku instanceof SKU) {
-          // Download product images for all the variants of the product.
-          $this->imagesManager->getProductMedia($variant_sku, 'pdp', TRUE);
-          $this->imagesManager->getProductMedia($variant_sku, 'pdp', FALSE);
-
-          // Mark the variant as processed now.
-          $this->productProcessedManager->markProductProcessed($variant_sku->getSku());
-        }
-      }
-
-      // Download product images for product and warm up caches.
-      $this->imagesManager->getProductMedia($translation, 'pdp', TRUE);
-      $this->imagesManager->getProductMedia($translation, 'pdp', FALSE);
-      if ($node) {
-        // Mark the product as processed now.
-        $this->productProcessedManager->markProductProcessed($translation->getSku());
-        // Trigger event for other modules to take action.
-        // For instance alshaya_search_api to index items.
-        $event = new ProductUpdatedEvent($translation, ProductUpdatedEvent::PRODUCT_PROCESSED);
-        $this->dispatcher->dispatch(ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT, $event);
-      }
-    }
-    $this->getLogger('ProcessProduct')->notice('Processed product with sku: @sku', [
-      '@sku' => $entity->getSku(),
-    ]);
   }
 
 }
