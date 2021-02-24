@@ -68,8 +68,9 @@ function alshaya_white_label_preprocess_html(&$variables) {
     $variables['attributes']['class'][] = 'sub-brand-logo';
   }
   //Review and rating
-  $variables['#attached']['library'][] = 'alshaya_white_label/bazaar-voice';
-
+  if (\Drupal::service('module_handler')->moduleExists('alshaya_bazaar_voice')) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/bazaar-voice';
+  }
   // Alias path class.
   $alias_class = preg_replace("/\//", '-', $alias);
   if (!empty($alias_class) && strpos($alias_class, 'node') !== 0) {
