@@ -5,6 +5,10 @@ class PaymentMethodPostpay extends React.Component {
     window.postpay.ui.refresh();
   };
 
+  componentDidUpdate = () => {
+    window.postpay.ui.refresh();
+  };
+
   render() {
     const { postpay, postpayWidgetInfo, cart } = this.props;
     return (
