@@ -23,6 +23,7 @@ Feature: Test basket page
     And I wait 15 seconds
     Then I should see "2"
     And I wait 5 seconds
+    And I wait for AJAX to finish
     Then the price for product should be doubled
 
   @desktop

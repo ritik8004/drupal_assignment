@@ -1,4 +1,4 @@
-@javascript @guest @cybersourcePayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat
+@javascript @guest @cybersourcePayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat
 Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest User
 
   Background:
