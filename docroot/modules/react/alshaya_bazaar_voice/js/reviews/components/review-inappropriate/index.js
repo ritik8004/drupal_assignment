@@ -1,5 +1,4 @@
 import React from 'react';
-import ConditionalView from '../../../common/components/conditional-view';
 import { postAPIData } from '../../../utilities/api/apiData';
 
 class ReviewInappropriate extends React.Component {
@@ -45,7 +44,7 @@ class ReviewInappropriate extends React.Component {
       const { reportButtonText: text } = this.state;
       const newText = Drupal.t('Reported');
       return (
-        <ConditionalView condition={window.innerWidth > 767}>
+        <>
           {reportedReviewVote === null ? (
             <span className={`feedback-report ${buttonState ? 'feedback-report-disabled' : 'feedback-report-active'}`}>
               <button type="button" onClick={this.reportReview(reviewId, newText)} disabled={buttonState}>
@@ -59,7 +58,7 @@ class ReviewInappropriate extends React.Component {
               </button>
             </span>
           )}
-        </ConditionalView>
+        </>
       );
     }
     return (null);

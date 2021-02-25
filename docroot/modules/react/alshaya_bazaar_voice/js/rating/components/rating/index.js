@@ -28,6 +28,7 @@ export default class Rating extends React.Component {
             ReviewsData: result.data.Results,
           });
         } else {
+          removeFullScreenLoader();
           Drupal.logJavascriptError('review-statistics', result.error);
         }
       });

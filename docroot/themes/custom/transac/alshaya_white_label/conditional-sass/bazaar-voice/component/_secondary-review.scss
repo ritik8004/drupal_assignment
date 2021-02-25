@@ -87,6 +87,12 @@
 
       .slider-header {
         font-size: 0.875rem;
+        font-family: $alshaya-bold;
+
+        .slider-header-label {
+          color: $rr-review-summary-grey-text;
+          font-family: $alshaya-thin;
+        }
       }
     }
 
@@ -103,6 +109,7 @@
       .overall-label {
         font-size: 0.875rem;
         padding-right: 0.625rem;
+        font-family: $alshaya-bold;
 
         @include breakpoint($only-tablet) {
           width: 34%;

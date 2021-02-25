@@ -1,0 +1,24 @@
+bazaar_voice.basic_settings_tab:
+  route_name: bazaar_voice.settings_form
+  title: 'Basic settings'
+  base_route: bazaar_voice.settings_form
+
+bazaar_voice.review_settings_form:
+  route_name: bazaar_voice.review_settings_form
+  title: 'Review settings'
+  base_route: bazaar_voice.settings_form
+
+bazaar_voice.review_settings_form.form:
+  route_name: bazaar_voice.review_settings_form
+  title: 'Review sort settings'
+  parent_id: bazaar_voice.review_settings_form
+
+bazaar_voice.review_sort_option_settings_form:
+  route_name: bazaar_voice.review_sort_option_settings_form
+  title: 'Review sort options'
+  parent_id: bazaar_voice.review_settings_form
+
+bazaar_voice.review_sort_label_settings_form:
+  route_name: bazaar_voice.review_sort_label_settings_form
+  title: 'Review sort labels'
+  parent_id: bazaar_voice.review_settings_form

@@ -32,7 +32,13 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
 
     if ($sku_entity instanceof SKU && $view_mode == 'full' && $showRatingReviews) {
       $config = \Drupal::config('bazaar_voice.settings');
+
+      $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+      // Get avalable sorting options from config.
+      $sorting_options = $alshayaBazaarVoice->getSortingOptions();
+
       \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+
       $settings = [
         'user' => [
           'user_email' => \Drupal::currentUser()->getEmail(),
@@ -44,7 +50,8 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
           'locale' => $config->get('locale'),
           'productid' => $sku_entity->getSku(),
           'stats' => 'Reviews',
-          'Include' => 'Products'
+          'Include' => 'Products',
+          'sorting_options' => $sorting_options,
         ]
       ];
       // Adding template to render string values.
