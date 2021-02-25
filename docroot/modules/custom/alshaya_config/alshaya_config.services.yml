@@ -19,6 +19,7 @@ services:
       - '@theme.manager'
       - '@module_handler'
       - '@logger.factory'
+      - '@file_system'
 
   alshaya.alshaya_array_utils:
     class: Drupal\alshaya_config\AlshayaArrayUtils

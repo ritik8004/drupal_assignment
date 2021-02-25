@@ -1,7 +1,7 @@
 variables:
   url_base_uri: 'https://vssa3-uat.factory.alshaya.com/en'
   collection_filter: 'Collection'
-  sort_filter: 'sort by'
+  sort_filter: 'Sort by'
   price_filter: 'Price'
   brand_filter: ''
   color_filter: 'Color'
@@ -102,3 +102,7 @@ variables:
   continue_shopping_text: 'continue shopping'
   governorate: ''
   address_area_field: 'Abqaiq'
+  spc_search_keyword: 'sport'
+  filter_1: 'attr_actual_color_label_code'
+  filter_2: 'attr_size'
+  filter_3: 'final_price'

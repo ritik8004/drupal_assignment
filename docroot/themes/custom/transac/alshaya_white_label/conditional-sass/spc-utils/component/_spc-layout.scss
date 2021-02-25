@@ -4,6 +4,7 @@
   .spc-pre-content-sticky {
     @include breakpoint($only-mobile) {
       margin-bottom: 1.25rem;
+      background-color: $spc-order-summary-totals-bg;
     }
   }
 

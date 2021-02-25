@@ -143,7 +143,11 @@ class Drupal {
    */
   public function getCartItemDrupalStock($sku) {
     $url = sprintf('/rest/v1/stock/%s', $sku);
-    $response = $this->invokeApi('GET', $url);
+    // Bypass CloudFlare to get fresh stock data.
+    // Rules are added in CF to disable caching for urls having the following
+    // query string.
+    // The query string is added since same APIs are used by MAPP also.
+    $response = $this->invokeApi('GET', $url, ['query' => ['_cf_cache_bypass' => '1']]);
     $result = $response->getBody()->getContents();
     return json_decode($result, TRUE);
   }
@@ -196,19 +200,6 @@ class Drupal {
     }
 
     return ['status' => FALSE];
-  }
-
-  /**
-   * Get all promo data from drupal.
-   *
-   * @return mixed
-   *   All promo data.
-   */
-  public function getAllPromoData() {
-    $url = '/rest/v1/promotion/all';
-    $response = $this->invokeApi('GET', $url);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
   }
 
   /**

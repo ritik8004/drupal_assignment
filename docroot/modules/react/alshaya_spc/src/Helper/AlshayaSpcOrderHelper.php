@@ -301,6 +301,8 @@ class AlshayaSpcOrderHelper {
     $data['image'] = NULL;
     $data['url'] = '';
     $data['isNonRefundable'] = NULL;
+    // Added quantity of product for checkout olapic pixel.
+    $data['qtyOrdered'] = $item['qty_ordered'];
 
     $data['options'] = [];
     $node = $this->skuManager->getDisplayNode($item['sku']);

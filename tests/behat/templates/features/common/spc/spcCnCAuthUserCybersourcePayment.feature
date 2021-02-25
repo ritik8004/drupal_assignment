@@ -1,4 +1,4 @@
-@javascript @cybersourcePayment @auth @clickCollect @hmaeuat
+@javascript @cybersourcePayment @auth @clickCollect @hmaeuat @mckwuat
 Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authenticated User
 
   Background:
@@ -8,7 +8,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
 
   @cc @cnc @cybersource
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -94,7 +94,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     When I follow "{language_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -180,7 +180,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"

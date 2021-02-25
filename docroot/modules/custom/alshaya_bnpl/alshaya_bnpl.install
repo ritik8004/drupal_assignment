@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_bnpl module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_bnpl_install() {
+  /** @var \Drupal\taxonomy\TermStorage $termStorage */
+  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $term = $termStorage->create([
+    'vid' => 'payment_method',
+    'name' => 'Installments with postpay',
+    'field_payment_code' => 'postpay'
+  ]);
+  $term->save();
+
+  $term_ar = $term->addTranslation('ar', []);
+  $term_ar->setName('تقسيط بوست باي');
+  $term_ar->save();
+
+  // Disable new postpay payment method by default
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $data = $config->get('exclude_payment_methods');
+  $data['postpay'] = 'postpay';
+  $config->set('exclude_payment_methods', $data);
+  $config->save();
+
+  $strings = [
+    '<p>Your order total does not qualify for payment via <span class="brand-postpay light">postpay</span>. <a href="#">Find out more</a> about our interest-free installments and options with <span class="brand-postpay dark">postpay</span></p>' => [
+      'ar' => '<p>مجموع طلبيتك غير مؤهل لاستخدام خدمة الدفع <span class="brand-postpay light">بوست باي</span>. <a href="#">تعرف على المزيد</a> على الأقساط بدون فوائد، وخيارات الدفع من خلال <span class="brand-postpay dark">بوست باي</span></p>',
+    ],
+    'Continue with postpay' => [
+      'ar' => 'استمر مع بوست باي',
+    ],
+    'Your postpay order has been cancelled' => [
+      'ar' => 'طلبيتك من بوست باي تم إلغاءها',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

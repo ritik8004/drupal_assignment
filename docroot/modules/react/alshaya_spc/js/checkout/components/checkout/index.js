@@ -1,4 +1,6 @@
 import React from 'react';
+
+import '../../../utilities/interceptor/interceptor';
 import ClicknCollectContextProvider from '../../../context/ClicknCollect';
 import { fetchCartDataForCheckout } from '../../../utilities/api/requests';
 import Loading from '../../../utilities/loading';
@@ -38,6 +40,7 @@ export default class Checkout extends React.Component {
       cart: null,
       messageType: null,
       errorSuccessMessage: null,
+      isPostpayInitialised: false,
     };
   }
 
@@ -110,6 +113,9 @@ export default class Checkout extends React.Component {
     stickySidebar();
 
     document.addEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
+    document.addEventListener('alshayaPostpayInit', () => {
+      this.setState({ isPostpayInitialised: true });
+    });
   }
 
   componentWillUnmount() {
@@ -195,6 +201,7 @@ export default class Checkout extends React.Component {
       cart,
       errorSuccessMessage,
       messageType,
+      isPostpayInitialised,
     } = this.state;
     // While page loads and all info available.
 
@@ -227,7 +234,12 @@ export default class Checkout extends React.Component {
               <DeliveryInformation refreshCart={this.refreshCart} cart={cart} />
             </ClicknCollectContextProvider>
 
-            <PaymentMethods ref={this.paymentMethods} refreshCart={this.refreshCart} cart={cart} />
+            <PaymentMethods
+              ref={this.paymentMethods}
+              refreshCart={this.refreshCart}
+              cart={cart}
+              isPostpayInitialised={isPostpayInitialised}
+            />
 
             {billingComponent}
 
