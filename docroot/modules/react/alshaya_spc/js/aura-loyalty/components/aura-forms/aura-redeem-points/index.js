@@ -8,7 +8,11 @@ import {
 } from '../../../../../../alshaya_aura_react/js/utilities/aura_utils';
 import getStringMessage from '../../../../utilities/strings';
 import { redeemAuraPoints } from '../../utilities/checkout_helper';
-import { getUserDetails, getPointToPriceRatio } from '../../../../../../alshaya_aura_react/js/utilities/helper';
+import {
+  getUserDetails,
+  getPointToPriceRatio,
+  getAuraConfig,
+} from '../../../../../../alshaya_aura_react/js/utilities/helper';
 import { showFullScreenLoader } from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import PriceElement from '../../../../utilities/special-price/PriceElement';
 import dispatchCustomEvent from '../../../../utilities/events';
@@ -157,7 +161,7 @@ class AuraFormRedeemPoints extends React.Component {
 
   redeemPoints = () => {
     removeError('spc-aura-link-api-response-message');
-    const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
+    const { isoCurrencyCode } = getAuraConfig();
     const { points, money } = this.state;
     const { cardNumber } = this.props;
 
@@ -179,7 +183,7 @@ class AuraFormRedeemPoints extends React.Component {
       userId: getUserDetails().id || 0,
       redeemPoints: points,
       moneyValue: money,
-      currencyCode,
+      currencyCode: isoCurrencyCode,
       cardNumber,
     };
     showFullScreenLoader();
