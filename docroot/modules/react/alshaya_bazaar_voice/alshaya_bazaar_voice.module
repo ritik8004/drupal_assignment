@@ -44,7 +44,7 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
 }
 
 /**
-  * Implements hook_alshaya_checkout_bvpixel_order_build_alter().
+  * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
   * Updating build array for bv pixel integration.
   *
   * @param array $build
@@ -52,7 +52,7 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
   * @param string $order
   *   Order details array.
   */
-  function alshaya_bazaar_voice_checkout_bvpixel_order_build_alter(array &$build, $order) {
+  function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
     /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
     $bazaar_voice_api_helper = \Drupal::service('bazaar_voice.api_helper');
     if (!empty($build['#attached']['drupalSettings'])){
