@@ -490,22 +490,27 @@ class SkuManager {
       return $cache;
     }
 
-    $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
-    $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
-
-    if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
-      $price = $final_price;
-    }
-    elseif (empty($final_price)) {
-      $final_price = $price;
-    }
-
     $prices = [
-      'price' => $price,
-      'final_price' => $final_price,
+      'price' => 0,
+      'final_price' => 0,
     ];
 
-    if ($sku_entity->bundle() != 'configurable') {
+    if ($sku_entity->bundle() == 'simple') {
+      $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
+      $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
+
+      if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
+        $price = $final_price;
+      }
+      elseif (empty($final_price)) {
+        $final_price = $price;
+      }
+
+      $prices = [
+        'price' => $price,
+        'final_price' => $final_price,
+      ];
+
       $this->productCacheManager->set($sku_entity, $cache_key, $prices);
       return $prices;
     }
