@@ -16,7 +16,7 @@ class PaymentMethodPostpay extends React.Component {
         <div
           className={postpayWidgetInfo.class}
           data-type={postpayWidgetInfo['data-type']}
-          data-amount={cart.cart.totals.base_grand_total * postpay.currency_multiplier}
+          data-amount={(cart.cart.totals.base_grand_total * postpay.currency_multiplier).toFixed(0)}
           data-currency={postpayWidgetInfo['data-currency']}
           data-num-instalments={postpayWidgetInfo['data-num-instalments']}
           data-locale={postpayWidgetInfo['data-locale']}
