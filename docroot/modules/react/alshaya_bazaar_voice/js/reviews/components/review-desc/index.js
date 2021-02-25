@@ -24,8 +24,8 @@ const ReviewDescription = ({
           <div className="review-photo">{reviewDescriptionData.Photo}</div>
           <div className="review-feedback">
             <ReviewFeedback
-              negativeFeedbackCount={reviewDescriptionData.TotalNegativeFeedbackCount}
-              positiveFeedbackCount={reviewDescriptionData.TotalPositiveFeedbackCount}
+              negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
+              positiveCount={reviewDescriptionData.TotalPositiveFeedbackCount}
               isSyndicatedReview={reviewDescriptionData.IsSyndicated}
               reviewId={reviewDescriptionData.Id}
             />
