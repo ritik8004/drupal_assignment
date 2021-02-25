@@ -8,6 +8,11 @@
     width: 100%;
     background: $spc-checkout-order-detail-bg;
 
+    .always-ltr {
+      direction: ltr;
+      display: inline-block;
+    }
+
     .spc-aura-label {
       color: $aura-order-confirmation-label;
     }

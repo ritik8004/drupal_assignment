@@ -11,7 +11,7 @@ const AuraRedeemOrderSummaryItem = (props) => {
     return (
       <div className="spc-order-summary-item aura-order-summary-item fadeInUp redeem" style={{ animationDelay: animationDelayValue }}>
         <span className="spc-aura-label">{`${label}:`}</span>
-        <span className="spc-aura-value">
+        <span className="spc-aura-value always-ltr">
           {pointsRedeemed}
         </span>
       </div>
