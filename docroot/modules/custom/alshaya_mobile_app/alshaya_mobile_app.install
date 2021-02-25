@@ -17,8 +17,8 @@ use Drupal\user\Entity\User;
  * [5.18.0] Re-indexing items for updating swatch URLs from relative to absolute.
  */
 function alshaya_mobile_app_update_8078() {
-  // Re-index only on brands where `color_family` facet is present and enabled.
-  if (\Drupal::config('alshaya_acm_product.sku_base_fields')->get('fields.color_family.facet')) {
+  // Re-index only on brands where we have swatches for plp.
+  if (!empty(\Drupal::config('alshaya_acm_product.display_settings')->get('swatches.plp'))) {
     \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
   }
 }
