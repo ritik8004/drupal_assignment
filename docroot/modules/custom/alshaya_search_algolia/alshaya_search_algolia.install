@@ -10,6 +10,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * [5.18.0] Re-indexing items for updating swatch URLs from relative to absolute.
+ */
+function alshaya_search_algolia_update_8007() {
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.13.0] Re-indexing items for updating promo label URLs.
  */
 function alshaya_search_algolia_update_8006() {
