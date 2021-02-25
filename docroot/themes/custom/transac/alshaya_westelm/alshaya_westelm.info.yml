@@ -75,3 +75,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/super-menu/super-menu.ltr.css: css/conditional-sass/super-menu/super-menu.ltr.css
+
+  alshaya_white_label/postpay-cart:
+    css:
+      theme:
+        css/conditional-sass/postpay-cart/postpay-cart.ltr.css: css/conditional-sass/postpay-cart/postpay-cart.ltr.css
