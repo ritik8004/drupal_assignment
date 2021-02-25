@@ -13,6 +13,27 @@ use Drupal\Core\Utility\UpdateException;
 /**
  * Implements hook_update_N().
  *
+ * [5.18.0] Remove KNET payment method.
+ */
+function alshaya_spc_update_8009() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+
+  // Remove from excluded payment methods.
+  $data = $config->get('exclude_payment_methods');
+  unset($data['knet']);
+  $config->set('exclude_payment_methods', $data);
+
+  // Remove from partial fullfilment excluded payment methods.
+  $data = $config->get('refund_exclude_payment_methods');
+  unset($data['knet']);
+  $config->set('refund_exclude_payment_methods', $data);
+
+  $config->save(TRUE);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Disable new checkout_com_upapi_applepay payment method by default.
  */
 function alshaya_spc_update_8008() {
