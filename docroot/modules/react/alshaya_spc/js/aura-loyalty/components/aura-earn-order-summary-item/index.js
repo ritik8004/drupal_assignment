@@ -22,7 +22,7 @@ const AuraEarnOrderSummaryItem = (props) => {
         <div className="spc-order-summary-item aura-order-summary-item fadeInUp earn" style={{ animationDelay: animationDelayValue }}>
           <span className="spc-aura-label">{`${label}:`}</span>
           <span className="spc-aura-value">
-            {`+${pointsEarned}`}
+            <span className="always-ltr">{`+${pointsEarned}`}</span>
             {context !== 'print'
             && (
             <ToolTip enable question>
