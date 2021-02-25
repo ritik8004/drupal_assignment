@@ -1,7 +1,7 @@
 import React from 'react';
 
 class PaymentMethodPostpay extends React.Component {
-  componentDidMount = () => {
+  componentDidUpdate = () => {
     window.postpay.ui.refresh();
   };
 
