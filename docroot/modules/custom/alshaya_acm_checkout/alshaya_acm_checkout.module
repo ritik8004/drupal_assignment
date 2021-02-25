@@ -226,18 +226,6 @@ function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, arr
     $cybersource_ar->save();
 
     $country_code = Settings::get('country_code');
-    // K-Net.
-    $knet = $checkout_options_manager->loadPaymentMethod('knet');
-    $knet->get('description')->setValue('Please proceed to K-Net payment gateway by clicking the "Place Order" button below.');
-    if ($country_code == 'KW') {
-      // Set K-Net to default during install.
-      $knet->get('field_payment_default')->setValue(1);
-    }
-    $knet->save();
-    $knet_ar = $knet->addTranslation('ar', []);
-    $knet_ar->setName('كي-نت');
-    $knet_ar->get('description')->setValue('يرجى المتابعة إلى صفحة الدفع عن طريق K-Net  بواسطة الضغط على رابط "سجل الطلبية" أدناه');
-    $knet_ar->save();
 
     // Checkout.com.
     $checkout_com = $checkout_options_manager->loadPaymentMethod('checkout_com');
