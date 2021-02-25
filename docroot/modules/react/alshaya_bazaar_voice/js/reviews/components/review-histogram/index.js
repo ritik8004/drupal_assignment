@@ -2,8 +2,7 @@ import React from 'react';
 import RatingSummary from '../../../rating/components/widgets/RatingSummary';
 import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import ReviewButton from '../review-button';
-import IndividualReviewSlider from '../individual-review-slider';
-import IndividualReviewStar from '../individual-review-star';
+import CombineDisplay from '../review-combine-display';
 import ConditionalView from '../../../common/components/conditional-view';
 
 
@@ -46,17 +45,11 @@ const ReviewHistogram = ({
                 />
                 <ConditionalView condition={window.innerWidth < 768}>
                   <div className="secondary-summary">
-                    <div className="overall-product-rating">
-                      <IndividualReviewSlider
-                        sliderData={overallSummary[item].ReviewStatistics.SecondaryRatingsAverages}
-                      />
-
-                      <IndividualReviewStar
-                        customerValue={
-                          overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
-                        }
-                      />
-                    </div>
+                    <CombineDisplay
+                      starSliderCombine={
+                        overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
+                      }
+                    />
                   </div>
                 </ConditionalView>
               </div>
@@ -64,15 +57,11 @@ const ReviewHistogram = ({
             <div className="secondary-summary">
               <ConditionalView condition={window.innerWidth > 767}>
                 <ReviewButton buttonText={Drupal.t('write a review')} />
-                <div className="overall-product-rating">
-                  <IndividualReviewSlider
-                    sliderData={overallSummary[item].ReviewStatistics.SecondaryRatingsAverages}
-                  />
-
-                  <IndividualReviewStar
-                    customerValue={overallSummary[item].ReviewStatistics.SecondaryRatingsAverages}
-                  />
-                </div>
+                <CombineDisplay
+                  starSliderCombine={
+                    overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
+                  }
+                />
               </ConditionalView>
             </div>
           </React.Fragment>
