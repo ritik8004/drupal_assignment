@@ -13,10 +13,10 @@ class ReviewFeedback extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('handleApiResponse', this.handleApiResponse);
+    document.addEventListener('handleFeedbackSubmit', this.handleApiResponse);
   }
 
-  handleApiResponse = (event) => {
+  handleFeedbackSubmit = (event) => {
     event.preventDefault();
     const { reviewId } = event.detail;
     const { voteText } = event.detail;

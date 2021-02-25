@@ -13,7 +13,7 @@ class ReviewFeedbackNegative extends React.Component {
     e.preventDefault();
     const { positiveCount, negativeCount } = this.state;
     const helpfulnessVoteObj = { reviewId, positiveCount, negativeCount };
-    const event = new CustomEvent('handleApiResponse', {
+    const event = new CustomEvent('handleFeedbackSubmit', {
       bubbles: true,
       detail: {
         reviewId,
