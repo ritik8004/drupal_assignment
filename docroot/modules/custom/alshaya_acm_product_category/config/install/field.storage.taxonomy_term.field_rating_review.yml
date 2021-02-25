@@ -3,8 +3,8 @@ status: true
 dependencies:
   module:
     - taxonomy
-id: taxonomy_term.field_bazaarvoice_rating_review
-field_name: field_bazaarvoice_rating_review
+id: taxonomy_term.field_rating_review
+field_name: field_rating_review
 entity_type: taxonomy_term
 type: boolean
 settings: {  }

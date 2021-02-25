@@ -2,10 +2,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_bazaarvoice_rating_review
+    - field.storage.taxonomy_term.field_rating_review
     - taxonomy.vocabulary.acq_product_category
-id: taxonomy_term.acq_product_category.field_bazaarvoice_rating_review
-field_name: field_bazaarvoice_rating_review
+id: taxonomy_term.acq_product_category.field_rating_review
+field_name: field_rating_review
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Disable BazaarVoice Rating and Reviews'

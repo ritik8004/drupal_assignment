@@ -18,8 +18,8 @@ function alshaya_bazaar_voice_install() {
   $manager = \Drupal::service('alshaya_config.manager');
 
   $fields = [
-    'field.storage.taxonomy_term.field_bazaarvoice_rating_review',
-    'field.field.taxonomy_term.acq_product_category.field_bazaarvoice_rating_review',
+    'field.storage.taxonomy_term.field_rating_review',
+    'field.field.taxonomy_term.acq_product_category.field_rating_review',
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
   ];
   $manager->updateConfigs(
@@ -35,7 +35,7 @@ function alshaya_bazaar_voice_install() {
  * Delete field (Disable BazaarVoice Rating and Reviews)
  */
 function alshaya_bazaar_voice_uninstall() {
-  $field = FieldStorageConfig::loadByName('taxonomy_term', 'field_bazaarvoice_rating_review');
+  $field = FieldStorageConfig::loadByName('taxonomy_term', 'field_rating_review');
   if ($field) {
     // Delete this field.
     $field->delete();
