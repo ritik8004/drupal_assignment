@@ -31,7 +31,7 @@ const Postpay = {
     const { postpayAvailable } = that.state;
     const { cart: { cart } } = that.props;
     window.postpay.check_amount({
-      amount: cart.cart_total * drupalSettings.postpay.currency_multiplier,
+      amount: (cart.cart_total * drupalSettings.postpay.currency_multiplier).toFixed(0),
       currency: drupalSettings.postpay_widget_info['data-currency'],
       callback(paymentOptions) {
         postpayAvailable[cart.cart_total] = !(paymentOptions === null);
