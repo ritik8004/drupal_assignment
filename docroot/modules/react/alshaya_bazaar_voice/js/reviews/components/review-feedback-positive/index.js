@@ -4,20 +4,15 @@ class ReviewFeedbackPositive extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false,
       positiveCount: props.positiveCount,
-      // negativeCount: props.negativeFeedbackCount,
+      negativeCount: props.negativeCount,
     };
   }
 
-  handlePositiveFeedbackCount = (reviewId, voteText) => (e) => {
+  handlePositiveCount = (reviewId, voteText) => (e) => {
     e.preventDefault();
-    const { disabled, positiveCount } = this.state;
-    if (disabled) {
-      return;
-    }
-    this.setState({ disabled: true });
-    const helpfulnessVoteObj = { reviewId, positiveCount };
+    const { positiveCount, negativeCount } = this.state;
+    const helpfulnessVoteObj = { reviewId, positiveCount, negativeCount };
     const event = new CustomEvent('handleApiResponse', {
       bubbles: true,
       detail: {
@@ -32,21 +27,18 @@ class ReviewFeedbackPositive extends React.Component {
   }
 
   render() {
-    const { disabled, positiveCount } = this.state;
+    const { positiveCount } = this.state;
     const { reviewId } = this.props;
-    const positiveText = 'Negative';
+    const positiveText = 'Positive';
     const retrievedReviewVote = JSON.parse(localStorage.getItem(`helpfulnessVote-${reviewId}`));
-    if (retrievedReviewVote != null && !disabled) {
-      this.setState({ disabled: true });
-    }
     if (reviewId !== undefined && positiveText !== undefined) {
       return (
         <span className="feedback-positive">
-          <button value={positiveText} type="button" onClick={this.handlePositiveFeedbackCount(reviewId, positiveText)} disabled={disabled}>
+          <button value={positiveText} type="button" onClick={this.handlePositiveCount(reviewId, positiveText)} disabled={retrievedReviewVote !== null}>
             <span className="feedback-option-label">{Drupal.t('yes')}</span>
             <span className="feedback-count">
               (
-              {positiveCount}
+              {retrievedReviewVote !== null ? retrievedReviewVote.positiveCount : positiveCount}
               )
             </span>
           </button>

@@ -52,9 +52,11 @@ class ReviewFeedback extends React.Component {
             <ReviewFeedbackPositive
               reviewId={reviewId}
               positiveCount={positiveCount}
+              negativeCount={negativeCount}
             />
             <ReviewFeedbackNegative
               reviewId={reviewId}
+              positiveCount={positiveCount}
               negativeCount={negativeCount}
             />
           </div>

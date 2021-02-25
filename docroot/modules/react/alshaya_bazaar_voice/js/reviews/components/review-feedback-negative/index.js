@@ -4,19 +4,15 @@ class ReviewFeedbackNegative extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false,
+      positiveCount: props.positiveCount,
       negativeCount: props.negativeCount,
     };
   }
 
-  handleNegativeFeedbackCount = (reviewId, voteText) => (e) => {
+  handleNegativeCount = (reviewId, voteText) => (e) => {
     e.preventDefault();
-    const { disabled, negativeCount } = this.state;
-    if (disabled) {
-      return;
-    }
-    this.setState({ disabled: true });
-    const helpfulnessVoteObj = { reviewId, negativeCount };
+    const { positiveCount, negativeCount } = this.state;
+    const helpfulnessVoteObj = { reviewId, positiveCount, negativeCount };
     const event = new CustomEvent('handleApiResponse', {
       bubbles: true,
       detail: {
@@ -31,21 +27,18 @@ class ReviewFeedbackNegative extends React.Component {
   }
 
   render() {
-    const { disabled, negativeCount } = this.state;
+    const { negativeCount } = this.state;
     const { reviewId } = this.props;
     const negativeText = 'Negative';
     const retrievedReviewVote = JSON.parse(localStorage.getItem(`helpfulnessVote-${reviewId}`));
-    if (retrievedReviewVote != null && !disabled) {
-      this.setState({ disabled: true });
-    }
     if (reviewId !== undefined && negativeText !== undefined) {
       return (
         <span className="feedback-negative">
-          <button value={negativeText} type="button" onClick={this.handleNegativeFeedbackCount(reviewId, negativeText)} disabled={disabled}>
+          <button value={negativeText} type="button" onClick={this.handleNegativeCount(reviewId, negativeText)} disabled={retrievedReviewVote !== null}>
             <span className="feedback-option-label">{Drupal.t('no')}</span>
             <span className="feedback-count">
               (
-              {negativeCount}
+              {retrievedReviewVote !== null ? retrievedReviewVote.negativeCount : negativeCount}
               )
             </span>
           </button>
