@@ -4,18 +4,16 @@ import IndividualReviewStar from '../individual-review-star';
 
 const CombineDisplay = ({
   starSliderCombine,
-}) => {
-  return (
-    <div className="overall-product-rating">
-      <IndividualReviewSlider
-        sliderData={starSliderCombine}
-      />
+}) => (
+  <div className="overall-product-rating">
+    <IndividualReviewSlider
+      sliderData={starSliderCombine}
+    />
 
-      <IndividualReviewStar
-        customerValue={starSliderCombine}
-      />
-    </div>
-  );
-}
+    <IndividualReviewStar
+      customerValue={starSliderCombine}
+    />
+  </div>
+);
 
 export default CombineDisplay;
