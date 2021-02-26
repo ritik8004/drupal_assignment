@@ -4,7 +4,6 @@
  * @file
  * Bazaarvoice.module for hook implementations.
  */
-use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_page_attachments().

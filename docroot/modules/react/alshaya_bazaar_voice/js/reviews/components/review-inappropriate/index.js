@@ -1,6 +1,10 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 import { postAPIData } from '../../../utilities/api/apiData';
+import {
+  setStorageInfo,
+  getStorageInfo,
+} from '../../../utilities/storage';
 
 class ReviewInappropriate extends React.Component {
   constructor(props) {
@@ -13,43 +17,43 @@ class ReviewInappropriate extends React.Component {
 
   reportReview = (reviewId, newText) => (event) => {
     event.preventDefault();
-    const { disabled: buttonState } = this.state;
-    if (buttonState) {
+    const { disabled } = this.state;
+    if (disabled) {
       return;
     }
-    this.setState({ disabled: true });
-    this.setState({ reportButtonText: newText });
-    const apiUri = '/data/submitfeedback.json';
+    this.setState({
+      disabled: true,
+      reportButtonText: newText,
+    });
     const params = `&FeedbackType=inappropriate&ContentType=review&ContentId=${reviewId}`;
-    const apiData = postAPIData(apiUri, params);
+    const apiData = postAPIData('/data/submitfeedback.json', params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined
-      && result.data !== undefined
-      && result.data.error === undefined) {
+          && result.data !== undefined
+          && result.data.error === undefined) {
           const reportedVoteObj = {
             reviewId,
             reported: 'Yes',
           };
-          localStorage.setItem(`reportedVote-${reviewId}`, JSON.stringify(reportedVoteObj));
+          setStorageInfo(reportedVoteObj, `reportedVote-${reviewId}`);
         }
       });
     }
   }
 
   render() {
-    const { ReviewId: reviewId } = this.props;
+    const { reviewId } = this.props;
     if (reviewId !== undefined) {
-      const reportedReviewVote = JSON.parse(localStorage.getItem(`reportedVote-${reviewId}`));
-      const { disabled: buttonState } = this.state;
-      const { reportButtonText: text } = this.state;
+      const reportedReviewVote = getStorageInfo(`reportedVote-${reviewId}`);
+      const { disabled, reportButtonText } = this.state;
       const newText = Drupal.t('Reported');
       return (
         <ConditionalView condition={window.innerWidth > 767}>
           {reportedReviewVote === null ? (
-            <span className={`feedback-report ${buttonState ? 'feedback-report-disabled' : 'feedback-report-active'}`}>
-              <button type="button" onClick={this.reportReview(reviewId, newText)} disabled={buttonState}>
-                <span className="feedback-option-label">{text}</span>
+            <span className={`feedback-report ${disabled ? 'feedback-report-disabled' : 'feedback-report-active'}`}>
+              <button type="button" onClick={this.reportReview(reviewId, newText)} disabled={disabled}>
+                <span className="feedback-option-label">{reportButtonText}</span>
               </button>
             </span>
           ) : (

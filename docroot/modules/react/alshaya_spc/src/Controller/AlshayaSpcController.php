@@ -680,7 +680,7 @@ class AlshayaSpcController extends ControllerBase {
     }
     // Adding condition bazaarvoice pixel integration.
     if ($this->moduleHandler->moduleExists('alshaya_bazaar_voice')) {
-      $this->moduleHandler->alter('checkout_bvpixel_order_build', $build, $order);
+      $this->moduleHandler->alter('alshaya_spc_checkout_confirmation_order_build', $build, $order);
     }
     return $build;
   }
