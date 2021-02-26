@@ -1839,9 +1839,9 @@ class FeatureContext extends CustomMinkContext
       $product_price = floatval($product_price);
       $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-currency')->getHtml();
     } else {
-      $product_price = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-amount')->getHtml();
+      $product_price = $page->find('css', '.acq-mini-cart .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
-      $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-currency')->getHtml();
+      $product_currency = $page->find('css', '.acq-mini-cart .price .price-currency')->getHtml();
     }
     $cart_price = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount')->getHtml();
     $cart_price = floatval($cart_price);
