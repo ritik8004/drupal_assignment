@@ -13,7 +13,7 @@ class ReviewFeedback extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('handleFeedbackSubmit', this.handleApiResponse);
+    document.addEventListener('handleFeedbackSubmit', this.handleFeedbackSubmit);
   }
 
   handleFeedbackSubmit = (event) => {
@@ -23,13 +23,12 @@ class ReviewFeedback extends React.Component {
     if (reviewId !== undefined && voteText !== undefined) {
       const params = `&FeedbackType=helpfulness&ContentType=review&ContentId=${reviewId}&Vote=${voteText}`;
       const apiData = postAPIData('/data/submitfeedback.json', params);
-      this.setState({ disabled: true });
       if (apiData instanceof Promise) {
         apiData.then((result) => {
           if (result.error === undefined
             && result.data !== undefined
             && result.data.error === undefined) {
-            // To Do - handle api response
+            this.setState({ disabled: true });
           } else {
             // To Do - handle error response
           }

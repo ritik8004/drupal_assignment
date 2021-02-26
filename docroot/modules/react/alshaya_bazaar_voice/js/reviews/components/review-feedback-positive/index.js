@@ -1,4 +1,8 @@
 import React from 'react';
+import {
+  setStorageInfo,
+  getStorageInfo,
+} from '../../../utilities/storage';
 
 class ReviewFeedbackPositive extends React.Component {
   constructor(props) {
@@ -23,14 +27,15 @@ class ReviewFeedbackPositive extends React.Component {
     document.dispatchEvent(event);
     this.setState({ positiveCount: positiveCount + 1 });
     helpfulnessVoteObj.positiveCount += 1;
-    localStorage.setItem(`helpfulnessVote-${reviewId}`, JSON.stringify(helpfulnessVoteObj));
+    setStorageInfo(helpfulnessVoteObj, `helpfulnessVote-${reviewId}`);
   }
 
   render() {
     const { positiveCount } = this.state;
     const { reviewId } = this.props;
     const positiveText = 'Positive';
-    const retrievedReviewVote = JSON.parse(localStorage.getItem(`helpfulnessVote-${reviewId}`));
+
+    const retrievedReviewVote = getStorageInfo(`helpfulnessVote-${reviewId}`);
     if (reviewId !== undefined && positiveText !== undefined) {
       return (
         <span className="feedback-positive">

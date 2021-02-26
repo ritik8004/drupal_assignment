@@ -1,4 +1,8 @@
 import React from 'react';
+import {
+  setStorageInfo,
+  getStorageInfo,
+} from '../../../utilities/storage';
 
 class ReviewFeedbackNegative extends React.Component {
   constructor(props) {
@@ -23,14 +27,14 @@ class ReviewFeedbackNegative extends React.Component {
     document.dispatchEvent(event);
     this.setState({ negativeCount: negativeCount + 1 });
     helpfulnessVoteObj.negativeCount += 1;
-    localStorage.setItem(`helpfulnessVote-${reviewId}`, JSON.stringify(helpfulnessVoteObj));
+    setStorageInfo(helpfulnessVoteObj, `helpfulnessVote-${reviewId}`);
   }
 
   render() {
     const { negativeCount } = this.state;
     const { reviewId } = this.props;
     const negativeText = 'Negative';
-    const retrievedReviewVote = JSON.parse(localStorage.getItem(`helpfulnessVote-${reviewId}`));
+    const retrievedReviewVote = getStorageInfo(`helpfulnessVote-${reviewId}`);
     if (reviewId !== undefined && negativeText !== undefined) {
       return (
         <span className="feedback-negative">

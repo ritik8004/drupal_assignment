@@ -1,6 +1,10 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 import { postAPIData } from '../../../utilities/api/apiData';
+import {
+  setStorageInfo,
+  getStorageInfo,
+} from '../../../utilities/storage';
 
 class ReviewInappropriate extends React.Component {
   constructor(props) {
@@ -32,7 +36,7 @@ class ReviewInappropriate extends React.Component {
             reviewId,
             reported: 'Yes',
           };
-          localStorage.setItem(`reportedVote-${reviewId}`, JSON.stringify(reportedVoteObj));
+          setStorageInfo(reportedVoteObj, `reportedVote-${reviewId}`);
         }
       });
     }
@@ -41,7 +45,7 @@ class ReviewInappropriate extends React.Component {
   render() {
     const { reviewId } = this.props;
     if (reviewId !== undefined) {
-      const reportedReviewVote = JSON.parse(localStorage.getItem(`reportedVote-${reviewId}`));
+      const reportedReviewVote = getStorageInfo(`reportedVote-${reviewId}`);
       const { disabled, reportButtonText } = this.state;
       const newText = Drupal.t('Reported');
       return (
