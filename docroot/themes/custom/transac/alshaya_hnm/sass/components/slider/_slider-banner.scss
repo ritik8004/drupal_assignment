@@ -1,0 +1,10 @@
+.slick-prev,
+.slick-next {
+  &::before {
+    line-height: 1.15 !important;
+  }
+}
+
+.slick-dots li {
+  color: $sell_owl_dots;
+}
