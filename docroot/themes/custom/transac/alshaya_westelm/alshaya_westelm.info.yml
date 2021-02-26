@@ -90,3 +90,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/postpay-cart/postpay-cart.ltr.css: css/conditional-sass/postpay-cart/postpay-cart.ltr.css
+
+  alshaya_white_label/advance-page:
+    css:
+      theme:
+        css/conditional-sass/advance-page/advance-page.ltr.css: css/conditional-sass/advance-page/advance-page.ltr.css

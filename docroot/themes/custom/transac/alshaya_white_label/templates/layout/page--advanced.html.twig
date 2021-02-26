@@ -1,5 +1,9 @@
 {% extends 'page.html.twig' %}
 
+{% block attach_library %}
+  {{ attach_library('alshaya_white_label/advance-page') }}
+{% endblock %}
+
 {% if node.field_use_as_department_page.value == 1 %}
   {% set sidebar_visibility = node.field_show_left_menu.value == 0 ? 'l-one--w' : 'l-two--sf' %}
 {% else %}

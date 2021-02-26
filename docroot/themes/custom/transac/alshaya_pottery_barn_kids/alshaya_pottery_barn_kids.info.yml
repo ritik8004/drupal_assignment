@@ -64,4 +64,9 @@ libraries-override:
   alshaya_white_label/promo-blocks:
     css:
       theme:
-        css/conditional-sass/promo-blocks/promo-blocks.ltr.css: css/conditional-sass/promo-blocks/promo-blocks.ltr.css
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/promo-blocks/promo-blocks.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/promo-blocks/promo-blocks.ltr.css
+
+  alshaya_white_label/advance-page:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/advance-page/advance-page.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/advance-page/advance-page.ltr.css
