@@ -14,7 +14,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-        
+
     $showRatingReviews = TRUE;
     $category = $entity->get('field_category')->getValue();
     foreach ($category as $term) {
@@ -30,8 +30,12 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
+    $config = \Drupal::config('bazaar_voice.settings');
+    // Disable BazaarVoice Rating and Review in PDP if checkbox is unchecked in bazaarVoice Settings Form
+    if (empty($config->get('enable_rating_reviews'))) {
+      $showRatingReviews = FALSE;
+    }
     if ($sku_entity instanceof SKU && $view_mode == 'full' && $showRatingReviews) {
-      $config = \Drupal::config('bazaar_voice.settings');
 
       $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
       // Get avalable sorting options from config.

@@ -1,4 +1,4 @@
-bazaar_voice.settings: 
+bazaar_voice.settings:
   type: config_object
   label: 'BazaarVoice Settings'
   mapping:
@@ -29,3 +29,6 @@ bazaar_voice.settings:
     environment:
       type: string
       label: 'The deployment environment of BazaarVoice where we implement BV Pixel.'
+    enable_rating_reviews:
+      type: string
+      label: 'Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'

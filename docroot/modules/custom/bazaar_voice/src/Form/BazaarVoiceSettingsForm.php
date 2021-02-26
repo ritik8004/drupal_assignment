@@ -112,6 +112,14 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('The deployment environment of BazaarVoice where we implement BazaarVoice Pixel.'),
     ];
 
+    $form['basic_settings']['enable_rating_reviews'] = [
+      '#type' => 'checkboxes',
+      '#options' => ['enable' => $this->t('Enable/Disable')],
+      '#title' => $this->t('Ratings and Review'),
+      '#default_value' => [$config->get('enable_rating_reviews')],
+      '#description' => $this->t('Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -131,6 +139,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('client_name', $values['client_name'])
       ->set('site_id', $values['site_id'])
       ->set('environment', $values['environment'])
+      ->set('enable_rating_reviews', $values['enable_rating_reviews']['enable'])
       ->save();
 
     parent::submitForm($form, $form_state);
