@@ -14,7 +14,7 @@ class ReviewCommentRender extends React.Component {
     TimeAgo.addLocale(en);
     const timeAgo = new TimeAgo('en-US');
     return (
-      <div className="comment-submission">
+      <div className="comment-submission-wrapper">
         <div className="comment-user-details">
           <span className="comment-user-nickname">{UserNickname}</span>
           <span className="comment-user-date">{timeAgo.format(new Date(SubmissionTime))}</span>

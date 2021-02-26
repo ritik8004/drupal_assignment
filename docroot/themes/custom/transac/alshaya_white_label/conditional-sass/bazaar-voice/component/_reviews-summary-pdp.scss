@@ -15,7 +15,7 @@
     }
 
     &-detail-right {
-      flex-grow: 1;
+      flex-basis: 69%;
 
       @include breakpoint($only-mobile) {
         padding-top: 1.5rem;
@@ -99,24 +99,26 @@
       }
 
       &-comment {
-        button {
-          width: 10.9375rem;
-          height: 2.5rem;
-          background: $rr-review-summary-btn-color;
-          color: $rr-review-summary-btn-text;
-          border: 0.0625rem solid $rr-review-summary-btn-color;
-          padding: 0.75rem;
-          font-size: 0.875rem;
-          border-radius: 0.1875rem;
-          line-height: 1;
-          font-family: $alshaya-thin;
+        position: relative;
 
-          @include breakpoint($only-mobile) {
-            width: 100%;
-            height: 2.8125rem;
-            padding: 0;
+        &-btn {
+          @include breakpoint($tablet-landscape) {
+            position: absolute;
+            right: 0;
+            top: -1.938rem;
           }
         }
+
+        .feedback-comment-disabled {
+          .review-feedback-comment-btn {
+            background: $rr-feedback-button-active-bg;
+            border: 0.0625rem solid $rr-feedback-button-active-bg;
+          }
+        }
+      }
+
+      &-vote {
+        display: flex;
       }
     }
 
