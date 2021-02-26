@@ -116,7 +116,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Ratings and Review'),
       '#default_value' => $config->get('enable_rating_reviews'),
-      '#description' => $this->t('Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'),
+      '#description' => $this->t('Enable Site wide BazaarVoice Ratings and Review Feature.'),
     ];
 
     return parent::buildForm($form, $form_state);
