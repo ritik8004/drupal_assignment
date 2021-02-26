@@ -547,6 +547,7 @@ export const checkoutAddressProcess = (e) => {
         }
 
         const cartData = { cart: cartResult };
+        localStorage.setItem('shippingAddress', JSON.stringify(formData));
 
         // Trigger event.
         dispatchCustomEvent('refreshCartOnAddress', cartData);
