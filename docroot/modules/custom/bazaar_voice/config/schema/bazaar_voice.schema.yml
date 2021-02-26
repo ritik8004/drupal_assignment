@@ -30,5 +30,5 @@ bazaar_voice.settings:
       type: string
       label: 'The deployment environment of BazaarVoice where we implement BV Pixel.'
     enable_rating_reviews:
-      type: string
+      type: boolean
       label: 'Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'
