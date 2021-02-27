@@ -149,6 +149,7 @@ const DynamicFormField = (props) => {
       minLength={fieldProperty.minlength}
       visible={fieldProperty.visible}
       text={fieldProperty.text}
+      classLable={fieldProperty.class_name}
     />
   );
 };

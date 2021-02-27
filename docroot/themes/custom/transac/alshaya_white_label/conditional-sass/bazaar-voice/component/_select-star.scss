@@ -4,9 +4,22 @@
     display: inline-block;
     font-size: 1rem;
 
-    &.rating_Quality,
-    &.rating_Value {
+    &[class^="rating_"],
+    &[class*=" rating_"] {
       display: flex;
+      align-items: center;
+      margin-bottom: 1.25rem;
+
+      .star-rating-label {
+        width: 50%;
+        font-size: 0.9375rem;
+        font-family: $alshaya-thin;
+      }
+
+      .star-counter {
+        width: 50%;
+        text-align: $right;
+      }
     }
 
     &.rating {

@@ -36,6 +36,7 @@ class TextField extends React.Component {
       minLength,
       visible,
       text,
+      classLable,
     } = this.props;
     const { errors } = this.state;
 
@@ -46,7 +47,7 @@ class TextField extends React.Component {
             && (
             <div className="head-row">{text}</div>
             )}
-          <div className="write-review-type-textfield">
+          <div className={`write-review-type-textfield ${(classLable !== undefined) ? classLable : ''}`}>
             <input
               type="text"
               id={id}
