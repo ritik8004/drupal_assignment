@@ -36,16 +36,27 @@ class NetPromoter extends React.Component {
             <label htmlFor={label}>{label}</label>
           </div>
           <div className="netpromoter-option">
-            <div className="">
-              {[...Array(maxLength)].map((i) => (
-                <input
-                  key={i}
-                  type="radio"
-                  value={i}
-                  name="netpromoter"
-                  onClick={(e) => this.handleClick(e)}
-                />
-              ))}
+            <div className="survey-block">
+              {[...Array(maxLength)].map((radio, i) => {
+                const radioIndex = i + 1;
+                return (
+                  <div key={radioIndex} className="form-type-radio">
+                    <input
+                      type="radio"
+                      id={i}
+                      value={i}
+                      name="netpromoter"
+                      data-drupal-selector={i}
+                      onClick={(e) => this.handleClick(e)}
+                    />
+                    <label htmlFor={i}><p>{i}</p></label>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="survey-experience">
+              <div>{Drupal.t('Not at all likely')}</div>
+              <div>{Drupal.t('Extremely likely')}</div>
             </div>
           </div>
           <input type="hidden" id={id} name={id} required={required} value={promoterVal || ''} />

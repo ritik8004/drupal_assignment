@@ -33,7 +33,7 @@ class Tags extends React.Component {
             required={required}
             onBlur={(e) => this.handleEvent(e, 'blur')}
           />
-          <label>{label}</label>
+          <label htmlFor={id}>{label}</label>
         </div>
       </>
     );

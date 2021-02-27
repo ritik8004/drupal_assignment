@@ -41,6 +41,17 @@
     input.focus ~ label {
       @include bv-placeholder-active;
     }
+
+    &.nikename,
+    &.useremail {
+      float: $left;
+      width: 47%;
+      margin-bottom: 3.5rem;
+    }
+
+    &.nikename {
+      margin-#{$right}: 3rem;
+    }
   }
 
   // Type = TextArea.
@@ -64,6 +75,123 @@
 
     label {
       font-size: 0.75rem;
+    }
+  }
+
+  .dropdown-conatiner {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.875rem;
+
+    .dropdown-label {
+      width: 50%;
+      font-size: 0.9375rem;
+      font-family: $alshaya-thin;
+    }
+
+    .bv-select {
+      width: 50%;
+    }
+  }
+
+  .netpromoter-option {
+    .survey-block {
+      display: flex;
+      margin: 2rem;
+      margin-bottom: 1rem;
+
+      .form-type-radio {
+        margin-#{$right}: 3rem;
+
+        input[type=radio] {
+          & ~ label {
+            &::before {
+              width: 1.5rem;
+              height: 1.5rem;
+              margin-#{$right}: 0;
+            }
+
+            p {
+              margin: 0;
+              margin-top: 0.25rem;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+
+    .survey-experience {
+      display: flex;
+
+      > div {
+        width: 50%;
+        color: $rr-survey-txt;
+
+        &:last-of-type {
+          text-align: $right;
+        }
+      }
+    }
+  }
+
+  .write-review-type-tags {
+    display: inline-flex;
+    margin-right: 0.625rem;
+    margin-bottom: 1rem;
+
+    input[type=checkbox] {
+      & ~ label {
+        border: 1px solid $rr-tag-label-border;
+        padding: 0.5rem;
+
+        @include icon(plus) {
+          background: $rr-tag-label-icon-bg;
+          color: $rr-tag-label-icon-txt;
+          margin-#{$right}: 0.5rem;
+          font-size: 1rem;
+          font-weight: bold;
+          position: relative;
+          top: 1px;
+        }
+      }
+
+      &:checked {
+        & ~ label {
+          background: $rr-tag-label-active-bg;
+          color: $rr-tag-label-active-txt;
+          border: 1px solid $rr-tag-label-active-border;
+
+          @include icon(check) {
+            color: $rr-tag-label-active-icon-txt;
+            background: $rr-tag-label-active-icon-bg;
+          }
+        }
+      }
+    }
+  }
+
+  .write-review-form-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      min-width: 15rem;
+      height: 2.5rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-color;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      border-radius: 0.1875rem;
+      line-height: 1;
+      font-family: $alshaya-thin;
+    }
+
+    .write-review-form-cancel {
+      margin-#{$right}: 2rem;
+      background: $rr-write-review-cancel-btn-bg;
+      color: $rr-write-review-cancel-btn-txt;
     }
   }
 }
