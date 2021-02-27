@@ -14,15 +14,31 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
+        
+    $showRatingReviews = TRUE;
+    $category = $entity->get('field_category')->getValue();
+    foreach ($category as $term) {
+      $term_obj = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term['target_id']);
+      // Disable BazaarVoice Review and Ratings if checked
+      if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
+        $showRatingReviews = FALSE;
+      }
+    }
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
-    if ($sku_entity instanceof SKU && $view_mode == 'full') {
+    if ($sku_entity instanceof SKU && $view_mode == 'full' && $showRatingReviews) {
       $config = \Drupal::config('bazaar_voice.settings');
+
+      $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+      // Get avalable sorting options from config.
+      $sorting_options = $alshayaBazaarVoice->getSortingOptions();
+
       \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+
       $settings = [
         'user' => [
           'user_email' => \Drupal::currentUser()->getEmail(),
@@ -35,7 +51,8 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
           'locale' => $config->get('locale'),
           'productid' => $sku_entity->getSku(),
           'stats' => 'Reviews',
-          'Include' => 'Products'
+          'Include' => 'Products',
+          'sorting_options' => $sorting_options,
         ]
       ];
       // Adding template to render string values.

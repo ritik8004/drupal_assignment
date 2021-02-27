@@ -1,6 +1,7 @@
 import React from 'react';
 import RatingSummary from './RatingSummary';
 import DisplayStar from '../stars/DisplayStar';
+import ConditionalView from '../../../common/components/conditional-view';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 
 const InlineRating = ({
@@ -11,21 +12,23 @@ const InlineRating = ({
       <div className="inline-rating">
         { Object.keys(ReviewsData).map((item) => (
           <div className="aggregate-rating" key={item} itemProp="aggregateRating" itemScope="" itemType="">
-            <div className="empty-stars">
+            <div className="empty-stars" onClick={(e) => smoothScrollTo(e, '#reviews-section')}>
               <DisplayStar
                 starPercentage={ReviewsData[item].ReviewStatistics.AverageOverallRating}
               />
-              <div className="histogram-data">
-                <div className="histogram-title">
-                  {ReviewsData[item].ReviewStatistics.TotalReviewCount}
-                  {' '}
-                  {Drupal.t('reviews')}
+              <ConditionalView condition={window.innerWidth >= 1024}>
+                <div className="histogram-data">
+                  <div className="histogram-title">
+                    {ReviewsData[item].ReviewStatistics.TotalReviewCount}
+                    {' '}
+                    {Drupal.t('reviews')}
+                  </div>
+                  <RatingSummary
+                    HistogramData={ReviewsData[item].ReviewStatistics.RatingDistribution}
+                    TotalReviewCount={ReviewsData[item].ReviewStatistics.TotalReviewCount}
+                  />
                 </div>
-                <RatingSummary
-                  HistogramData={ReviewsData[item].ReviewStatistics.RatingDistribution}
-                  TotalReviewCount={ReviewsData[item].ReviewStatistics.TotalReviewCount}
-                />
-              </div>
+              </ConditionalView>
             </div>
             <span>
               (

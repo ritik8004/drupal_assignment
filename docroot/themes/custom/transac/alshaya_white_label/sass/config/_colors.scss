@@ -144,6 +144,8 @@ $_stylefinder-pink-bg: #f7afca;
 $_stylefinder-pink-active-bg: #ef5f96;
 $_stylefinder-active-lining-text: #d91560;
 $_stylefinder-default-card-gray: #d3d3d3;
+$_gray_98: #fafafa;
+$_corn_silk: #fffade;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1623,3 +1625,21 @@ $rr-tag-label-active-txt: $white-five;
 $rr-survey-txt: $grey-light;
 $rr-write-review-cancel-btn-bg: $white-five;
 $rr-write-review-cancel-btn-txt: $mothercare-black;
+$rr-select-text: $grey-light;
+$rr-select-arrow-bg: $white-five;
+$rr-select-border: $warm-grey-two;
+$rr-select-area-bg: $white-smoke-light;
+$rr-select-bg: $white-five;
+$rr-select-bg-hover: $white-four;
+$rr-select-option-bg: $white-five;
+$rr-select-hover-border: $warm-grey-two;
+$rr-select-arrow-icon: $grey-ash;
+$rr-filter-selected-item-bg: $cerulean-two;
+$rr-filter-selected-item-txt: $white-five;
+$rr-review-summary-grey-border: $brownish-grey;
+$rr-review-comment-cancel-btn-bg: $white-five;
+$rr-review-comment-cancel-btn: $black-two;
+$rr-review-comment-bg: $_gray_98;
+$rr-review-comment-error: $scarlet-two;
+$rr-review-comment-confirmation-bg: $_corn_silk;
+$rr-review-comment-label: $greyish;

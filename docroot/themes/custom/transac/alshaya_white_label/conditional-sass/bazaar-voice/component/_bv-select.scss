@@ -29,8 +29,8 @@
       }
 
       .bvSelect__indicator {
-        color: $rr-select-text;
-        background: $rr-select-arrow-bg;
+      color: $rr-select-text;
+      background: $rr-select-arrow-bg;
         height: 100%;
 
         svg {
@@ -58,7 +58,11 @@
         cursor: pointer;
         padding: 0.75rem;
 
-        @include arabic-letter-spacing;
+      @include breakpoint($only-mobile) {
+        white-space: wrap;
+      }
+  
+      @include arabic-letter-spacing;
 
         &:hover,
         &.bvSelect__option--is-selected {
@@ -75,8 +79,8 @@
       justify-content: center;
 
       @include icon('chevrondown') {
-        font-size: 1.75rem;
-        position: absolute;
+      font-size: 1.75rem;
+      position: absolute;
         top: 50%;
         transform: translateY(-50%);
         transition: transform 0.125s ease-in-out;
