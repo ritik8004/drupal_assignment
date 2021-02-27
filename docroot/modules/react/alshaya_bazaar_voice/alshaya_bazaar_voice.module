@@ -17,27 +17,44 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
+    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
+      /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+      $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+      $media = $skuImagesManager->getFirstImage($sku_entity, 'pdp');
+      $image_url = file_create_url($media['drupal_uri']);
+
       $config = \Drupal::config('bazaar_voice.settings');
+
       \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+
       $settings = [
         'user' => [
           'user_email' => \Drupal::currentUser()->getEmail(),
         ],
+        'product' => [
+          'url' => $entity->toUrl()->setAbsolute()->toString(),
+          'title' => $entity->label(),
+          'image_url' => $image_url,
+        ],
         'bazaar_voice' => [
-          'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
           'endpoint' => $config->get('api_base_url'),
           'api_version' => $config->get('api_version'),
           'passkey' => $config->get('conversations_apikey'),
           'locale' => $config->get('locale'),
           'productid' => $sku_entity->getSku(),
+          'max_age' => $config->get('max_age'),
           'stats' => 'Reviews',
           'Include' => 'Products'
-        ]
+        ],
+        'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
+        'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
       ];
+
       // Adding template to render string values.
       $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
       $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();

@@ -7,13 +7,17 @@ import ReviewHistogram from '../review-histogram';
 import { fetchAPIData } from '../../../utilities/api/apiData';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import PostReviewMessage from '../reviews-full-submit/post-review-message';
 
 export default class ReviewSummary extends React.Component {
+  isComponentMounted = true;
+
   constructor(props) {
     super(props);
     this.state = {
       reviewsSummary: '',
       reviewsProduct: '',
+      postReviewData: '',
     };
   }
 
@@ -21,6 +25,10 @@ export default class ReviewSummary extends React.Component {
    * Get Review results and product statistical data.
    */
   componentDidMount() {
+    this.isComponentMounted = true;
+    // Listen to the review post event.
+    document.addEventListener('reviewPosted', this.eventListener, false);
+
     showFullScreenLoader();
     const apiUri = '/data/reviews.json';
     const params = `&filter=productid:${drupalSettings.bazaar_voice.productid}&Include=${drupalSettings.bazaar_voice.Include}&stats=${drupalSettings.bazaar_voice.stats}`;
@@ -40,8 +48,30 @@ export default class ReviewSummary extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('reviewPosted', this.eventListener, false);
+  }
+
+  eventListener = (e) => {
+    if (!this.isComponentMounted) {
+      return;
+    }
+
+    if (e.detail.SubmissionId !== null) {
+      this.setState({
+        postReviewData: e.detail,
+      });
+    }
+  }
+
   render() {
-    const { reviewsSummary, reviewsProduct } = this.state;
+    const {
+      reviewsSummary,
+      reviewsProduct,
+      postReviewData,
+    } = this.state;
+
     return (
       <div className="reviews-wrapper">
         <div className="histogram-data-section">
@@ -49,7 +79,10 @@ export default class ReviewSummary extends React.Component {
             <ReviewHistogram overallSummary={reviewsProduct} />
           </div>
         </div>
-        { Object.keys(reviewsSummary).map((item) => (
+        {postReviewData !== ''
+          && (
+            <PostReviewMessage postReviewData={postReviewData} />)}
+        {Object.keys(reviewsSummary).map((item) => (
           <div className="review-summary" key={reviewsSummary[item].Id}>
             <ConditionalView condition={window.innerWidth < 768}>
               <DisplayStar

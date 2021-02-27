@@ -5,6 +5,7 @@ namespace Drupal\alshaya_bazaar_voice\Service;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\Core\Session\AccountProxy;
 
 /**
  * Provides integration with BazaarVoice.
@@ -42,6 +43,13 @@ class AlshayaBazaarVoice {
   protected $alshayaBazaarVoiceApiHelper;
 
   /**
+   * The current user service object.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
+   */
+  public $currentUser;
+
+  /**
    * BazaarVoiceApiWrapper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -52,15 +60,19 @@ class AlshayaBazaarVoice {
    *   Database service.
    * @param \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoiceApiHelper $alshaya_bazaar_voice_api_helper
    *   Alshaya BazaarVoice API helper.
+   * @param \Drupal\Core\Session\AccountProxy $current_user
+   *   The current account object.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               Connection $connection,
-                              AlshayaBazaarVoiceApiHelper $alshaya_bazaar_voice_api_helper) {
+                              AlshayaBazaarVoiceApiHelper $alshaya_bazaar_voice_api_helper,
+                              AccountProxy $current_user) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->connection = $connection;
     $this->alshayaBazaarVoiceApiHelper = $alshaya_bazaar_voice_api_helper;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -305,6 +317,29 @@ class AlshayaBazaarVoice {
   public function getFileContents($url) {
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url);
     return $result;
+  }
+
+  /**
+   * Generate UAS token to use in write a review form for authenticated user.
+   *
+   * @return string
+   *   Encoded UAS token.
+   */
+  public function generateEncodedUasToken() {
+    $config = $this->configFactory->get('bazaar_voice.settings');
+    $sharedKey = $config->get('shared_secret_key');
+    $maxAge = $config->get('max_age');
+    $userId = $this->currentUser->id();
+
+    // URL-encoded query string.
+    $userStr = "date=" . urlencode(date('d-m-Y')) . "&userid=" . urlencode($userId) . "&maxage=" . urlencode($maxAge);
+
+    // Encode the signature using HMAC SHA-256.
+    $signature = hash_hmac('sha256', $userStr, $sharedKey);
+    // Concatenate the signature and hex-encoded string of parameters.
+    $uas = $signature . bin2hex($userStr);
+
+    return $uas;
   }
 
 }
