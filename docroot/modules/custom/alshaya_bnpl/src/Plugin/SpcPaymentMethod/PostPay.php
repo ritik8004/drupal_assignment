@@ -15,7 +15,7 @@ use Drupal\alshaya_bnpl\Helper\AlshayaBnplWidgetHelper;
  *
  * @AlshayaSpcPaymentMethod(
  *   id = "postpay",
- *   label = @Translation("Installments with Postpay"),
+ *   label = @Translation("Instalments with Postpay"),
  * )
  */
 class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
