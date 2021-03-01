@@ -21,6 +21,10 @@
   padding: 0 1.875rem;
   padding-bottom: 2.5rem;
 
+  @include breakpoint($only-mobile) {
+    width: 100%;
+  }
+
   .range-slider {
     border-bottom: 0.3125rem solid $rr-range-slider-border;
     position: relative;
@@ -160,10 +164,19 @@
     display: flex;
     align-items: center;
 
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
     .selectedValue {
       width: 35%;
       font-size: 0.9375rem;
       font-family: $alshaya-thin;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
 
       .selectedLabel {
         color: #777;

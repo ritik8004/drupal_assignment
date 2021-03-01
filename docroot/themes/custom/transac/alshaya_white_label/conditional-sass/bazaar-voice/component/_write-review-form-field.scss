@@ -18,6 +18,10 @@
 .write-review-form-add {
   padding: 2.5rem;
 
+  @include breakpoint($only-mobile) {
+    padding: 2.5rem 0;
+  }
+
   .write-review-type {
     &-textfield {
       position: relative;
@@ -47,10 +51,18 @@
       float: $left;
       width: 47%;
       margin-bottom: 3.5rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
     }
 
     &.nikename {
       margin-#{$right}: 3rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0;
+      }
     }
   }
 
@@ -83,14 +95,27 @@
     align-items: center;
     margin-bottom: 1.875rem;
 
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
     .dropdown-label {
       width: 50%;
       font-size: 0.9375rem;
       font-family: $alshaya-thin;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
     }
 
     .bv-select {
       width: 50%;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
     }
   }
 
@@ -100,8 +125,17 @@
       margin: 2rem;
       margin-bottom: 1rem;
 
+      @include breakpoint($only-mobile) {
+        margin: 2rem 0;
+        margin-bottom: 0.5rem;
+      }
+
       .form-type-radio {
         margin-#{$right}: 3rem;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 0.375rem;
+        }
 
         input[type=radio] {
           & ~ label {
@@ -127,6 +161,7 @@
       > div {
         width: 50%;
         color: $rr-survey-txt;
+        font-size: 0.875rem;
 
         &:last-of-type {
           text-align: $right;
@@ -144,6 +179,7 @@
       & ~ label {
         border: 1px solid $rr-tag-label-border;
         padding: 0.5rem;
+        cursor: pointer;
 
         @include icon(plus) {
           background: $rr-tag-label-icon-bg;
@@ -175,6 +211,10 @@
     display: flex;
     justify-content: flex-end;
 
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
     button {
       min-width: 15rem;
       height: 2.5rem;
@@ -186,12 +226,23 @@
       border-radius: 0.1875rem;
       line-height: 1;
       font-family: $alshaya-thin;
+
+      @include breakpoint($only-mobile) {
+        min-width: 100%;
+        margin-bottom: 1rem;
+        order: 1;
+      }
     }
 
     .write-review-form-cancel {
       margin-#{$right}: 2rem;
       background: $rr-write-review-cancel-btn-bg;
       color: $rr-write-review-cancel-btn-txt;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0;
+        order: 2;
+      }
     }
   }
 }
