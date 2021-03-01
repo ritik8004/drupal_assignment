@@ -24,7 +24,9 @@ export default class ReviewFiltersDisplay extends React.Component {
         <div className="review-filter-display-wrapper">
           <div className="review-count">
             {currentTotal}
+            {' '}
             {Drupal.t('of')}
+            {' '}
             {totalReviews}
           </div>
           <ul className="filter-result">

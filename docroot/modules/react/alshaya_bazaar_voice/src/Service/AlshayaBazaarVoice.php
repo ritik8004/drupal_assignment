@@ -6,6 +6,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Session\AccountProxy;
+use Symfony\Component\Yaml\Yaml;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Provides integration with BazaarVoice.
@@ -50,6 +52,13 @@ class AlshayaBazaarVoice {
   public $currentUser;
 
   /**
+   * Entity Repository service.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * BazaarVoiceApiWrapper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -62,17 +71,21 @@ class AlshayaBazaarVoice {
    *   Alshaya BazaarVoice API helper.
    * @param \Drupal\Core\Session\AccountProxy $current_user
    *   The current account object.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity Repository service.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               Connection $connection,
                               AlshayaBazaarVoiceApiHelper $alshaya_bazaar_voice_api_helper,
-                              AccountProxy $current_user) {
+                              AccountProxy $current_user,
+                              EntityRepositoryInterface $entityRepository) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->connection = $connection;
     $this->alshayaBazaarVoiceApiHelper = $alshaya_bazaar_voice_api_helper;
     $this->currentUser = $current_user;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -319,17 +332,29 @@ class AlshayaBazaarVoice {
   }
 
   /**
-   * BazaarVoice web form fields configs.
+   * Write a review fields configs created in webform.
    *
    * @return array
-   *   BazaarVoice web form fields configs.
+   *   Write a review fields configs.
    */
-  public function getBazaarVoiceFormConfig() {
+  public function getWriteReviewFieldsConfig() {
     $webforms = $this->entityTypeManager->getStorage('webform')
       ->loadByProperties(['id' => self::ALSHAYA_BAZAARVOICE_FORM_ID]);
     $webform = reset($webforms);
+    // Get fields info with label translations.
+    $field_configs = $this->entityRepository->getTranslationFromContext($webform);
+    $elements = $field_configs->get('elements');
+    $elements = Yaml::parse($elements);
 
-    return $webform->getElementsDecoded();
+    $translated_field_configs = [];
+    foreach ($webform->getElementsDecoded() as $key => $value) {
+      $translated_field_configs[$key] = $value;
+      if (isset($elements[$key])) {
+        $translated_field_configs[$key] = array_merge($value, $elements[$key]);
+      }
+    }
+
+    return $translated_field_configs;
   }
 
   /**

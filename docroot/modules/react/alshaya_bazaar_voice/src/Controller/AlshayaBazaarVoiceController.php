@@ -59,7 +59,7 @@ class AlshayaBazaarVoiceController extends ControllerBase {
    *   Build array.
    */
   public function getWriteReviewFieldsConfig() {
-    $configData = $this->alshayaBazaarVoice->getBazaarVoiceFormConfig();
+    $configData = $this->alshayaBazaarVoice->getWriteReviewFieldsConfig();
 
     $response = new JsonResponse();
     $response->setData(array_values($configData));

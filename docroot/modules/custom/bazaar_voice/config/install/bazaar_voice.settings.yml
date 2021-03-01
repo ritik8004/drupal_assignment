@@ -3,8 +3,9 @@ conversations_apikey: ''
 shared_secret_key: ''
 max_age: 1
 api_version: 5.4
-bvpixel_base_url: 'https://apps.bazaarvoice.com/deployments'
 locale: 'en_US'
+content_locale: 'en_US,en_AE'
+bvpixel_base_url: 'https://apps.bazaarvoice.com/deployments'
 client_name: ''
 site_id: 'main_site'
 environment: 'staging'

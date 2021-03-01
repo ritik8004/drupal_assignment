@@ -11,5 +11,3 @@ elements: |
     '#title': 'عنوان البريد الإلكتروني'
   usernickname:
     '#title': 'كنية'
-  userlocation:
-    '#title': 'موقعك'

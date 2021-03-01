@@ -21,7 +21,10 @@ bazaar_voice.settings:
       type: string
       label: 'Base URL for BV pixel script provided by BazaarVoice.'
     locale:
-      type: string
+      type: label
+      label: 'To get api response based on locale.'
+    content_locale:
+      type: label
       label: 'To get the reviews data at a regional level.'
     client_name:
       type: string

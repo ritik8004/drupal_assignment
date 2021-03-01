@@ -15,6 +15,7 @@ elements: |
   rating:
     '#type': textfield
     '#required': true
+    '#title': 'Overall Rating'
     '#value': null
     '#minlength': 0
     '#id': title
@@ -63,17 +64,6 @@ elements: |
     '#minlength': 4
     '#id': usernickname
     '#maxlength': 25
-    '#default_value': null
-    '#group_type': textfield
-    '#visible': true
-  userlocation:
-    '#type': textfield
-    '#required': false
-    '#title': Location
-    '#value': null
-    '#minlength': 0
-    '#id': userlocation
-    '#maxlength': 50
     '#default_value': null
     '#group_type': textfield
     '#visible': true

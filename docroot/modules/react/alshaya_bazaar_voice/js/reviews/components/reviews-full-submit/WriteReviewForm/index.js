@@ -6,7 +6,7 @@ import { postAPIData } from '../../../../utilities/api/apiData';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
-import { doRequest } from '../../../../utilities/api/request';
+import { getLanguageCode, doRequest } from '../../../../utilities/api/request';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -26,7 +26,7 @@ export default class WriteReviewForm extends React.Component {
     document.addEventListener('reviewPosted', this.eventListener, false);
     // Load and display write a review form.
     showFullScreenLoader();
-    const apiUri = '/get-write-review-fields-configs';
+    const apiUri = `/${getLanguageCode()}/get-write-review-fields-configs`;
     const apiData = doRequest(apiUri);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -79,7 +79,7 @@ export default class WriteReviewForm extends React.Component {
       return;
     }
 
-    if (e.detail.hasErrors === null) {
+    if (!e.detail.HasErrors) {
       closeModal();
     }
   };

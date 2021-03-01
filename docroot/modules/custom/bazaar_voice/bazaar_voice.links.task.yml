@@ -1,4 +1,4 @@
-bazaar_voice.basic_settings_tab:
+bazaar_voice.settings_form:
   route_name: bazaar_voice.settings_form
   title: 'Basic settings'
   base_route: bazaar_voice.settings_form

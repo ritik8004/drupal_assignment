@@ -88,8 +88,6 @@ export const prepareRequest = (elements, fieldsConfig) => {
     params += `&user=${getSessionCookie()}`;
   }
 
-  params += '&agreedtotermsandconditions=1';
-
   return params;
 };
 

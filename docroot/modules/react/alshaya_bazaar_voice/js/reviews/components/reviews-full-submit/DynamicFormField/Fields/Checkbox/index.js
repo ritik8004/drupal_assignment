@@ -1,14 +1,17 @@
 import React from 'react';
 
 class Checkbox extends React.Component {
-  handleEvent = (e, handler) => {
-    if (handler === 'blur') {
-      if (e.currentTarget.value.length > 0) {
-        e.currentTarget.classList.add('focus');
-      } else {
-        e.currentTarget.classList.remove('focus');
-      }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      checkVal: '',
+    };
+  }
+
+  handleClick = (e) => {
+    this.setState({
+      checkVal: e.target.checked,
+    });
   };
 
   render() {
@@ -16,8 +19,10 @@ class Checkbox extends React.Component {
       required,
       id,
       label,
+      defaultValue,
       text,
     } = this.props;
+    const { checkVal } = this.state;
 
     return (
       <>
@@ -31,7 +36,8 @@ class Checkbox extends React.Component {
             id={id}
             name={id}
             required={required}
-            onBlur={(e) => this.handleEvent(e, 'blur')}
+            defaultValue={(checkVal !== '') ? checkVal : defaultValue}
+            onClick={(e) => this.handleClick(e)}
           />
           <label>
             {label}

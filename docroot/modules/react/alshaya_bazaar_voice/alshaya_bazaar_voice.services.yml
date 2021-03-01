@@ -13,3 +13,4 @@ services:
       - '@database'
       - '@alshaya_bazaar_voice.api_helper'
       - '@current_user'
+      - '@entity.repository'

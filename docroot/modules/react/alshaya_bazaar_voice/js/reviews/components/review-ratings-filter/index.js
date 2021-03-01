@@ -34,7 +34,7 @@ export default class ReviewRatingsFilter extends React.Component {
 
         const options = Object.keys(contextData).map((item) => ({
           value: `rating:${contextData[item].RatingValue}`,
-          label: `${contextData[item].RatingValue} ${(contextData[item].RatingValue > 1) ? 'stars' : 'star'} (${contextData[item].Count})`,
+          label: `${contextData[item].RatingValue} ${(contextData[item].RatingValue > 1) ? Drupal.t('stars') : Drupal.t('star')} (${contextData[item].Count})`,
         }));
         availableOptions = options.reverse();
       });

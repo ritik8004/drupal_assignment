@@ -16,8 +16,13 @@ function getLocale() {
   return `&locale=${drupalSettings.bazaar_voice.locale}`;
 }
 
+function getContentLocale() {
+  return `&contentlocale=${drupalSettings.bazaar_voice.content_locale}`;
+}
+
 export function fetchAPIData(apiUri, params) {
-  const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${params}`;
+  const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${getContentLocale()}${params}`;
+
   return Axios.get(url)
     .then((response) => response)
     .catch((error) => error);
