@@ -173,6 +173,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
       return $this->mediaData[$langcode];
     }
 
+    // Initialise with empty array to avoid null.
+    $this->mediaData[$langcode] = $this->mediaData[$langcode] ?? [];
+
     if ($media_data = $this->get('media')->getString()) {
       $update_sku = FALSE;
 
