@@ -119,6 +119,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This option should be checked to disable the ratings and reviews in PDP.'),
     ];
 
+    $form['basic_settings']['write_review_submission'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Closed submission for unauthorized user.'),
+      '#default_value' => $config->get('write_review_submission'),
+      '#description' => $this->t('This option should be checked to enable closed submission for unauthorized user on the site.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -139,6 +146,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('site_id', $values['site_id'])
       ->set('environment', $values['environment'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
+      ->set('write_review_submission', $values['write_review_submission'])
       ->save();
 
     parent::submitForm($form, $form_state);
