@@ -1,12 +1,14 @@
 import React from 'react';
 import { getUserAuraTier, getUserDetails, getAllAuraTier } from '../../utilities/helper';
 import AuraProgressString from './progress-string';
-import ConditionalView
-  from '../../../../alshaya_spc/js/common/components/conditional-view';
 import isRTL from '../../../../alshaya_spc/js/utilities/rtl';
 import { getAPIData } from '../../utilities/api/fetchApiData';
+import PointsExpiryMessage
+  from '../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
+import AuraProgressBar from './progress-bar';
+import Loading from '../../../../alshaya_spc/js/utilities/loading';
 
-class AuraProgress extends React.Component {
+class AuraProgressWrapper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,8 +76,17 @@ class AuraProgress extends React.Component {
       wait, nextTierLevel, userPoints, nextTierThreshold,
     } = this.state;
 
+    const {
+      expiringPoints,
+      expiryDate,
+    } = this.props;
+
     if (wait === true) {
-      return null;
+      return (
+        <div className="aura-progressbar-wrapper-loading">
+          <Loading />
+        </div>
+      );
     }
 
     // Current User tier class so we can change gradient for progress bar.
@@ -91,21 +102,15 @@ class AuraProgress extends React.Component {
 
     return (
       <div className="aura-progressbar-wrapper">
-        <div className={`aura-progress ${showDotClass} fill-${tierClass.replace(/ /g, '')}`}>
-          <span className="under">{getAllAuraTier()[currentTierLevel]}</span>
-          <div className="start">
-            <div className="fill" style={{ width: progress }}>
-              <span className="over">{getAllAuraTier()[currentTierLevel]}</span>
-            </div>
-            <ConditionalView condition={showDotClass === 'pointer'}>
-              <span
-                className="dot"
-                style={this.getDotPosition(progress)}
-              />
-            </ConditionalView>
-          </div>
-          <div className={`end next-tier-${nextTierLevel}`}><span>{getAllAuraTier()[nextTierLevel]}</span></div>
-        </div>
+        <AuraProgressBar
+          showDotClass={showDotClass}
+          tierClass={tierClass}
+          currentTierLevel={currentTierLevel}
+          nextTierLevel={nextTierLevel}
+          progress={progress}
+          progressRatio={progressRatio}
+          getDotPosition={this.getDotPosition}
+        />
         <AuraProgressString
           userPoints={userPoints}
           nextTierThreshold={nextTierThreshold}
@@ -113,9 +118,13 @@ class AuraProgress extends React.Component {
           nextTierLabel={getAllAuraTier()[nextTierLevel]}
           progressRatio={progressRatio}
         />
+        <PointsExpiryMessage
+          points={expiringPoints}
+          date={expiryDate}
+        />
       </div>
     );
   }
 }
 
-export default AuraProgress;
+export default AuraProgressWrapper;

@@ -1,10 +1,6 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
 import { getUserProfileInfo } from '../../../../utilities/helper';
-import PointsExpiryMessage
-  from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-expiry-message';
-import PointsUpgradeMessage
-  from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/points-upgrade-message';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/helper';
 
@@ -14,9 +10,6 @@ const AuraMyAccountVerifiedUser = (props) => {
     points,
     cardNumber,
     pointsOnHold,
-    upgradeMsg,
-    expiringPoints,
-    expiryDate,
     firstName,
     lastName,
   } = props;
@@ -62,8 +55,6 @@ const AuraMyAccountVerifiedUser = (props) => {
           </div>
         </div>
       </div>
-      <PointsUpgradeMessage msg={upgradeMsg} />
-      <PointsExpiryMessage points={expiringPoints} date={expiryDate} />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { getPriceToPointRatio } from '../../utilities/helper';
 
-const AuraProgressStringAmount = (props) => {
+const AuraProgressNextTierMessage = (props) => {
   const {
     userPoints,
     nextTierThreshold,
@@ -17,10 +17,10 @@ const AuraProgressStringAmount = (props) => {
   }
 
   return (
-    <div className="aura-progress-string-amount">
+    <div className="spc-aura-points-upgrade-item">
       {`${Drupal.t('Spend')} ${currencyCode} ${differenceAmount} ${Drupal.t('to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
     </div>
   );
 };
 
-export default AuraProgressStringAmount;
+export default AuraProgressNextTierMessage;
