@@ -9,7 +9,7 @@ export default class Rating extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ReviewsData: '',
+      reviewsData: '',
     };
   }
 
@@ -26,7 +26,7 @@ export default class Rating extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           removeFullScreenLoader();
           this.setState({
-            ReviewsData: result.data.Results,
+            reviewsData: result.data.Results,
           });
         } else {
           Drupal.logJavascriptError('review-statistics', result.error);
@@ -36,11 +36,11 @@ export default class Rating extends React.Component {
   }
 
   render() {
-    const { ReviewsData } = this.state;
-    if (ReviewsData !== undefined && ReviewsData !== '') {
+    const { reviewsData } = this.state;
+    if (reviewsData !== undefined && reviewsData !== '') {
       return (
         <div className="rating-wrapper">
-          <InlineRating ReviewsData={ReviewsData} />
+          <InlineRating reviewsData={reviewsData} />
         </div>
       );
     }

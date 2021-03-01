@@ -3761,10 +3761,13 @@ class SkuManager {
   /**
    * Get sanized version of sku.
    *
+   * @param string $skuId
+   *   Product sku id.
+   *
    * @return array
    *   Return sanitized version sku
    */
-  public function getSanitizedSku($skuId) {
+  public function getSanitizedSku(string $skuId) {
     if (empty($skuId)) {
       return NULL;
     }

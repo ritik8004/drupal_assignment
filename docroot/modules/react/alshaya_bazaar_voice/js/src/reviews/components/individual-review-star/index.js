@@ -20,14 +20,14 @@ const IndividualReviewStar = ({
               starPercentage={
                 (customerValue[item].Value > 0)
                   ? customerValue[item].Value
-                  : customerValue[item].AverageRating
+                  : (customerValue[item].AverageRating).toFixed(1)
               }
             />
             <div className="overall-rating">
               {
                 (customerValue[item].Value > 0)
                   ? customerValue[item].Value
-                  : customerValue[item].AverageRating
+                  : (customerValue[item].AverageRating).toFixed(1)
               }
             </div>
           </div>

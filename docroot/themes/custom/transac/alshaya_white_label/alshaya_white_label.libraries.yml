@@ -439,7 +439,23 @@ postpay-checkout:
   css:
     theme:
       css/conditional-sass/postpay-checkout/postpay-checkout.ltr.css: {}
+
 bazaar-voice:
   css:
     theme:
       css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: {}
+
+store_finder:
+  css:
+    theme:
+      css/conditional-sass/store-finder/store-finder.ltr.css: {}
+
+promo-blocks:
+  css:
+    theme:
+      css/conditional-sass/promo-blocks/promo-blocks.ltr.css: {}
+
+advance-content-slider:
+  css:
+    theme:
+      css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: {}
