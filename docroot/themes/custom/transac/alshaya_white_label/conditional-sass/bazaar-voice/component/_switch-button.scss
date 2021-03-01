@@ -5,11 +5,24 @@
     display: inline-block;
 
     &.query {
-      padding-#{$right}: 4rem;
+      @include breakpoint($tablet) {
+        padding-#{$right}: 4rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1rem;
+      }
 
       label {
         font-size: 0.9375rem;
         font-family: $alshaya-thin;
+      }
+    }
+
+    &.answer {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        text-align: $right;
       }
     }
   }

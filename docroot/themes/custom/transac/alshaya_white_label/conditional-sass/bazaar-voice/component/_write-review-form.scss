@@ -15,6 +15,10 @@
   flex-flow: row wrap;
   padding: 2.875rem 1.5625rem 6.25rem;
 
+  @include breakpoint($only-mobile) {
+    padding: 2.875rem 1rem 3.25rem;
+  }
+
   .title-block {
     width: 100%;
     margin-bottom: 1.5rem;
@@ -49,6 +53,11 @@
     width: 25%;
     padding-#{$right}: 4rem;
 
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      padding-#{$right}: 0;
+    }
+
     .product-title {
       text-align: center;
       font-size: 1.125rem;
@@ -60,6 +69,10 @@
   .write-review-form-sidebar {
     width: 75%;
 
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+
     .write-review-fields {
       .head-row,
       .help-text {
@@ -67,6 +80,7 @@
         border-bottom: 0.1875rem solid $rr-form-head-row-border;
         font-family: $alshaya-bold;
         padding-bottom: 0.25rem;
+        clear: both;
       }
     }
   }
