@@ -16,9 +16,9 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
   if ($entity->bundle() == 'acq_product') {
 
     $config = \Drupal::config('bazaar_voice.settings');
-    // Disable BazaarVoice Rating and Review in PDP if checkbox is unchecked in bazaarVoice Settings Form
-    $isBVEnabled = $config->get('enable_rating_reviews');
-    if (empty($isBVEnabled)) {
+    // Disable BazaarVoice Rating and Review in PDP if checkbox is checked in bazaarVoice Settings Form
+    $isBVDisabled = $config->get('pdp_rating_reviews');
+    if ($isBVDisabled) {
       return;
     }
     $showRatingReviews = TRUE;
