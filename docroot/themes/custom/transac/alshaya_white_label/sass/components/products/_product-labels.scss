@@ -181,18 +181,3 @@
     }
   }
 }
-
-.c-plp .c-products__item article:hover {
-  .labels-container {
-    .label {
-      &.bottom {
-        &-left,
-        &-right {
-          @include breakpoint($desktop) {
-            bottom: 16.25rem;
-          }
-        }
-      }
-    }
-  }
-}
