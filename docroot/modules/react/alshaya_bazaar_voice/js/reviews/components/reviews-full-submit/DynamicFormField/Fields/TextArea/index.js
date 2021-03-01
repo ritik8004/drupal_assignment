@@ -44,7 +44,11 @@ class TextArea extends React.Component {
           <div className="head-row">{text}</div>
           )}
         <div className="write-review-type-textarea">
-          <label>{label}</label>
+          <label>
+            {label}
+            {' '}
+            {(required) ? '*' : '' }
+          </label>
           <textarea
             required={required}
             id={id}

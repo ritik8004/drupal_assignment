@@ -37,7 +37,11 @@ class RadioButton extends React.Component {
           )}
         <div className="switch-button">
           <div className="switch-text query">
-            <label htmlFor={label}>{label}</label>
+            <label htmlFor={label}>
+              {label}
+              {' '}
+              {(required) ? '*' : '' }
+            </label>
           </div>
           <div className="switch-text">
             {Object.values(recommend).reverse().map((radioLabel, i) => {

@@ -58,7 +58,7 @@ class AlshayaBazaarVoiceController extends ControllerBase {
    * @return array
    *   Build array.
    */
-  public function getBazaarVoiceFormConfig() {
+  public function getWriteReviewFieldsConfig() {
     $configData = $this->alshayaBazaarVoice->getBazaarVoiceFormConfig();
 
     $response = new JsonResponse();
@@ -88,6 +88,21 @@ class AlshayaBazaarVoiceController extends ControllerBase {
 
     $response = new JsonResponse();
     $response->setData($url);
+
+    return $response;
+  }
+
+  /**
+   * Returns UAS token to be used for site authenticated user.
+   *
+   * @return string
+   *   UAS Token.
+   */
+  public function getUasToken() {
+    $uasToken = $this->alshayaBazaarVoice->generateEncodedUasToken();
+
+    $response = new JsonResponse();
+    $response->setData($uasToken);
 
     return $response;
   }

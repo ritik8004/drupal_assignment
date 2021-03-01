@@ -1,14 +1,17 @@
 import React from 'react';
 
 class Tags extends React.Component {
-  handleEvent = (e, handler) => {
-    if (handler === 'blur') {
-      if (e.currentTarget.value.length > 0) {
-        e.currentTarget.classList.add('focus');
-      } else {
-        e.currentTarget.classList.remove('focus');
-      }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      tagVal: '',
+    };
+  }
+
+  handleClick = (e) => {
+    this.setState({
+      tagVal: e.target.checked,
+    });
   };
 
   render() {
@@ -16,8 +19,10 @@ class Tags extends React.Component {
       required,
       id,
       label,
+      defaultValue,
       text,
     } = this.props;
+    const { tagVal } = this.state;
 
     return (
       <>
@@ -28,12 +33,17 @@ class Tags extends React.Component {
         <div className="write-review-type-tags">
           <input
             type="checkbox"
+            defaultValue={(tagVal !== '') ? tagVal : defaultValue}
             id={id}
             name={id}
             required={required}
-            onBlur={(e) => this.handleEvent(e, 'blur')}
+            onClick={(e) => this.handleClick(e)}
           />
-          <label>{label}</label>
+          <label htmlFor={id}>
+            {label}
+            {' '}
+            {(required) ? '*' : '' }
+          </label>
         </div>
       </>
     );

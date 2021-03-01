@@ -1,6 +1,7 @@
 api_base_url: 'https://stg.api.bazaarvoice.com'
 conversations_apikey: ''
 shared_secret_key: ''
+max_age: 1
 api_version: 5.4
 bvpixel_base_url: 'https://apps.bazaarvoice.com/deployments'
 locale: 'en_US'

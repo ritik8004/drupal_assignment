@@ -2,6 +2,8 @@ import React from 'react';
 import getStringMessage from '../../../../../js/utilities/strings';
 
 export default class BazaarVoiceMessages extends React.Component {
+  isComponentMounted = true;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -11,12 +13,24 @@ export default class BazaarVoiceMessages extends React.Component {
   }
 
   componentDidMount() {
+    this.isComponentMounted = true;
+    // Listen to the show Message event.
     document.addEventListener('showMessage', this.showMessage);
   }
 
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('showMessage', this.showMessage);
+  }
+
   showMessage = (event) => {
+    if (!this.isComponentMounted) {
+      return;
+    }
+
     const response = event.detail.data;
     const errorMessages = [];
+
     if (response === undefined) {
       this.setState({
         message: '',
@@ -50,6 +64,7 @@ export default class BazaarVoiceMessages extends React.Component {
     }
     this.setState({
       message: '',
+      errorList: [],
     });
   };
 
@@ -73,7 +88,6 @@ export default class BazaarVoiceMessages extends React.Component {
           </div>
         </div>
         )}
-
       </>
     );
   }

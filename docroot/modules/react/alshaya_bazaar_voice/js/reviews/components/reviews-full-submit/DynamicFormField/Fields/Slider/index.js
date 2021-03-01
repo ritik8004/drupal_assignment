@@ -39,33 +39,37 @@ class Slider extends React.Component {
             <div className="selectedValue">
               <span>
                 {label}
+                {' '}
+                {(required) ? '*' : '' }
                 {':'}
               </span>
-              <span>{activeId}</span>
+              <span className="selectedLabel">{activeId}</span>
             </div>
-            <div className="range-slider">
-              {Object.values(options).map((sliderLabel, i) => {
-                const sliderValue = i + 1;
-                return (
-                  <div key={sliderValue}>
-                    <input
-                      id={`slider-${sliderValue}`}
-                      type="radio"
-                      name={`slider-${id}`}
-                      value={sliderValue}
-                      required={required}
-                    />
+            <div className="range-slider-block">
+              <div className="range-slider">
+                {Object.values(options).map((sliderLabel, i) => {
+                  const sliderValue = i + 1;
+                  return (
+                    <React.Fragment key={sliderValue}>
+                      <input
+                        id={`slider-${sliderValue}`}
+                        type="radio"
+                        name={`slider-${id}`}
+                        value={sliderValue}
+                        required={required}
+                      />
 
-                    <label
-                      className={activeId === sliderLabel ? 'active' : 'inactive'}
-                      onClick={(e) => this.setActiveId(e, sliderLabel, sliderValue)}
-                      htmlFor={sliderLabel}
-                    >
-                      <span>{sliderLabel}</span>
-                    </label>
-                  </div>
-                );
-              })}
+                      <label
+                        className={activeId === sliderLabel ? 'active' : 'inactive'}
+                        onClick={(e) => this.setActiveId(e, sliderLabel, sliderValue)}
+                        htmlFor={sliderLabel}
+                      >
+                        <span>{sliderLabel}</span>
+                      </label>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
             </div>
             <input type="hidden" id={id} name={id} required={required} value={sliderVal || ''} />
           </div>

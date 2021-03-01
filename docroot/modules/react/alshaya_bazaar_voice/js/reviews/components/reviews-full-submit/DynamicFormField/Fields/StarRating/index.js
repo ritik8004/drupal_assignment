@@ -46,7 +46,11 @@ class StarRating extends React.Component {
           )}
         <div className="write-review-type-star-rating">
           <div className={`select-star__wrap ${id}`}>
-            <label className="star-rating-label" htmlFor={label}>{label}</label>
+            <label className="star-rating-label" htmlFor={label}>
+              {label}
+              {' '}
+              {(required) ? '*' : '' }
+            </label>
             <div className="star-counter">
               {[...Array(5)].map((star, i) => {
                 const ratingValue = i + 1;

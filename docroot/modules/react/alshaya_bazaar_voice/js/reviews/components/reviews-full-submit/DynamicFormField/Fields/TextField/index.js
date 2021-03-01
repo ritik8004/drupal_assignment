@@ -1,5 +1,6 @@
 import React from 'react';
 import { validEmailRegex } from '../../../../../../utilities/write_review_util';
+import { getCurrentUserEmail } from '../../../../../../utilities/user_util';
 
 class TextField extends React.Component {
   constructor(props) {
@@ -36,29 +37,39 @@ class TextField extends React.Component {
       minLength,
       visible,
       text,
+      classLable,
     } = this.props;
     const { errors } = this.state;
 
     if (visible === true) {
+      let email = '';
+      if (getCurrentUserEmail() !== undefined && id === 'useremail') {
+        email = getCurrentUserEmail();
+      }
       return (
         <>
           {text !== undefined
             && (
             <div className="head-row">{text}</div>
             )}
-          <div className="write-review-type-textfield">
+          <div className={`write-review-type-textfield ${(classLable !== undefined) ? classLable : ''}`}>
             <input
               type="text"
               id={id}
               name={id}
-              defaultValue={defaultValue}
+              defaultValue={(email !== '') ? email : defaultValue}
               onChange={(e) => this.handleChange(e, minLength)}
               maxLength={maxLength}
               minLength={minLength}
               required={required}
+              readOnly={(email !== '') ? 1 : 0}
             />
             <div className="c-input__bar" />
-            <label>{label}</label>
+            <label>
+              {label}
+              {' '}
+              {(required) ? '*' : '' }
+            </label>
             <div id={`${label}-error`} className="error">{errors[id]}</div>
           </div>
         </>

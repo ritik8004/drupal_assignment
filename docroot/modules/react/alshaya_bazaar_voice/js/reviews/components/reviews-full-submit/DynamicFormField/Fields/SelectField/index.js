@@ -38,8 +38,12 @@ export default class SelectField extends React.Component {
           && (
           <div className="head-row">{text}</div>
           )}
-        <div key={id}>
-          <label htmlFor={label}>{label}</label>
+        <div className="dropdown-conatiner" key={id}>
+          <label className="dropdown-label" htmlFor={label}>
+            {label}
+            {' '}
+            {(required) ? '*' : '' }
+          </label>
           <Select
             ref={this.selectRef}
             classNamePrefix="bvSelect"

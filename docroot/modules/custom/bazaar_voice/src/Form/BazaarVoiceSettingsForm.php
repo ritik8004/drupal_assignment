@@ -67,6 +67,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('shared_secret_key'),
     ];
 
+    $form['basic_settings']['max_age'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Max age'),
+      '#description' => $this->t('Max age to expire UAS token.'),
+      '#default_value' => $config->get('max_age'),
+    ];
+
     $form['basic_settings']['api_version'] = [
       '#type' => 'textfield',
       '#title' => $this->t('API Version'),
@@ -125,6 +132,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('api_base_url', $values['api_base_url'])
       ->set('conversations_apikey', $values['conversations_apikey'])
       ->set('shared_secret_key', $values['shared_secret_key'])
+      ->set('max_age', $values['max_age'])
       ->set('api_version', $values['api_version'])
       ->set('bvpixel_base_url', $values['bvpixel_base_url'])
       ->set('locale', $values['locale'])

@@ -1,6 +1,6 @@
 import React from 'react';
 import ImageUploading from 'react-images-uploading';
-import TempPhotoUpload from './TempPhotoUpload';
+import PhotoUrls from './PhotoUrls';
 
 const PhotoUpload = (props) => {
   const { fieldProperty: photoField } = props;
@@ -24,12 +24,10 @@ const PhotoUpload = (props) => {
           imageList,
           onImageUpload,
           onImageRemoveAll,
-          onImageUpdate,
           onImageRemove,
           isDragging,
           dragProps,
         }) => (
-          // write your building UI
           <div className="upload__image-wrapper">
             <div className="help-text">{photoField.text}</div>
             <button
@@ -43,18 +41,19 @@ const PhotoUpload = (props) => {
             &nbsp;
             <button type="button" onClick={onImageRemoveAll}>Remove all images</button>
             {imageList.map((image, index) => (
-              <div key={image[index]} className="image-item">
-                <img src={image.data_url} alt="" width="100" />
+              <div key={image} className="image-item">
+                <img src={image.data_url} alt="" width="100" imageindex={index} />
+                <PhotoUrls
+                  imageDataUrl={image.data_url}
+                  imageName={image.file.name}
+                  imageType={image.file.type}
+                  index={index}
+                />
                 <div className="image-item__btn-wrapper">
-                  <button type="button" onClick={() => onImageUpdate(index)}>Update</button>
                   <button type="button" onClick={() => onImageRemove(index)}>Remove</button>
                 </div>
               </div>
             ))}
-            {imageList !== undefined && imageList.length > 0
-              && (
-                <TempPhotoUpload imageList={imageList} />
-              )}
           </div>
         )}
       </ImageUploading>

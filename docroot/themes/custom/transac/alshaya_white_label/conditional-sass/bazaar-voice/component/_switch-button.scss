@@ -6,6 +6,11 @@
 
     &.query {
       padding-#{$right}: 4rem;
+
+      label {
+        font-size: 0.9375rem;
+        font-family: $alshaya-thin;
+      }
     }
   }
 

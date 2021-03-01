@@ -158,6 +158,11 @@
           font-size: 0.875rem;
           border-radius: 0.1875rem;
           line-height: 1;
+
+          @include breakpoint($only-mobile) {
+            min-width: 100%;
+            height: 2.8125rem;
+          }
         }
       }
     }

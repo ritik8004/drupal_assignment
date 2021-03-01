@@ -58,6 +58,10 @@
         cursor: pointer;
         padding: 0.75rem;
 
+        @include breakpoint($only-mobile) {
+          white-space: wrap;
+        }
+
         @include arabic-letter-spacing;
 
         &:hover,

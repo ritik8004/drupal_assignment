@@ -59,5 +59,15 @@
 
   .write-review-form-sidebar {
     width: 75%;
+
+    .write-review-fields {
+      .head-row,
+      .help-text {
+        margin: 55px 0 33px;
+        border-bottom: 0.1875rem solid $rr-form-head-row-border;
+        font-family: $alshaya-bold;
+        padding-bottom: 0.25rem;
+      }
+    }
   }
 }

@@ -1,40 +1,9 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { removeFullScreenLoader, showFullScreenLoader } from '../../../../../alshaya_spc/js/utilities/checkout_util';
-import { getFormConfig } from '../../../utilities/api/formData';
-import Loading from '../../../utilities/loading';
 import WithModal from './with-modal';
 import WriteReviewForm from './WriteReviewForm';
 
-export default class WriteReview extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      formFieldMeta: '',
-    };
-  }
-
-  /**
-   * Get form fields from bazaarVoice.
-   */
-  componentDidMount() {
-    showFullScreenLoader();
-    const apiUri = '/bv-form-config';
-    const apiData = getFormConfig(apiUri);
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.status === 200 && result.statusText === 'OK') {
-          removeFullScreenLoader();
-          this.setState({
-            formFieldMeta: result.data,
-          });
-        } else {
-          // Todo
-        }
-      });
-    }
-  }
-
+export default class WriteReviewButton extends React.Component {
   openModal = (callback) => {
     callback();
   }
@@ -44,9 +13,6 @@ export default class WriteReview extends React.Component {
   };
 
   render() {
-    const {
-      formFieldMeta,
-    } = this.state;
     return (
       <WithModal>
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
@@ -60,12 +26,9 @@ export default class WriteReview extends React.Component {
               closeOnEscape={false}
               closeOnDocumentClick={false}
             >
-              <React.Suspense fallback={<Loading />}>
-                <WriteReviewForm
-                  closeModal={() => this.closeModal(triggerCloseModal)}
-                  formFieldMeta={formFieldMeta}
-                />
-              </React.Suspense>
+              <WriteReviewForm
+                closeModal={() => this.closeModal(triggerCloseModal)}
+              />
             </Popup>
           </div>
         )}

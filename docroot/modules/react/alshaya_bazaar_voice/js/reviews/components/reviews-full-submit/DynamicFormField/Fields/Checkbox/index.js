@@ -33,7 +33,11 @@ class Checkbox extends React.Component {
             required={required}
             onBlur={(e) => this.handleEvent(e, 'blur')}
           />
-          <label>{label}</label>
+          <label>
+            {label}
+            {' '}
+            {(required) ? '*' : '' }
+          </label>
         </div>
       </>
     );

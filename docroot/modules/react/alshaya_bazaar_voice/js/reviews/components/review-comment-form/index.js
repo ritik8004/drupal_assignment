@@ -2,7 +2,7 @@ import React from 'react';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import { getCurrentUserEmail } from '../../../utilities/utility';
+import { getCurrentUserEmail } from '../../../utilities/user_util';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -35,21 +35,33 @@ class ReviewCommentForm extends React.Component {
         <form id="comment-form" onSubmit={this.handleSubmit}>
           <div className="comment-form-title">
             {Drupal.t('Post a Comment')}
-            <div className="comment-form-fields">
-              <label className="comment-form-commentbox-label">{Drupal.t('Comment')}</label>
-              <input type="text" id="commentbox" value={commentbox || ''} onChange={this.handleCommentboxChange} name="commentbox" />
+          </div>
+          <div className="comment-form-fields">
+            <div className="form-item">
+              <input type="text" id="commentbox" required="required" className="form-input" value={commentbox || ''} onChange={this.handleCommentboxChange} name="commentbox" />
+              <label className="comment-form-commentbox-label form-label">{Drupal.t('Comment')}</label>
+            </div>
 
-              <label className="comment-form-nickname">{Drupal.t('Screen name')}</label>
-              <input type="text" id="nickname" value={nickname || ''} onChange={this.handleNicknameChange} name="nickname" />
-
-              <label className="comment-form-email">{Drupal.t('Email Address')}</label>
-              <input type="email" id="email" placeholder="Email" value={email || ''} onChange={this.handleEmailChange} name="email" />
-              <div className="terms-conditions">
-                <input type="checkbox" name="terms" id="terms" />
-                {Drupal.t('I agree with terms and conditions.')}
+            <div className="form-item-two-column">
+              <div className="form-item">
+                <input type="text" className="form-input" required="required" id="nickname" value={nickname || ''} onChange={this.handleNicknameChange} name="nickname" />
+                <label className="comment-form-nickname form-label">{Drupal.t('Screen name')}</label>
               </div>
-              <button onClick={() => this.setState({ showCommentForm: false })} type="button">{Drupal.t('CANCEL')}</button>
-              <button type="submit" id="review-comments-submit">{Drupal.t('POST COMMENT')}</button>
+
+              <div className="form-item">
+                <input type="email" className="form-input" required="required" id="email" value={email || ''} onChange={this.handleEmailChange} name="email" />
+                <label className="comment-form-email form-label">{Drupal.t('Email Address')}</label>
+              </div>
+            </div>
+
+            <div className="terms-conditions">
+              <input type="checkbox" className="form-input" id="terms" name="terms" />
+              <label htmlFor="terms" className="form-label">{Drupal.t('I agree with terms and conditions.')}</label>
+            </div>
+
+            <div className="form-button-wrapper">
+              <button className="form-cancel-btn" onClick={() => this.setState({ showCommentForm: false })} type="button">{Drupal.t('cancel')}</button>
+              <button type="submit" className="form-submit-btn" id="review-comments-submit">{Drupal.t('post comment')}</button>
             </div>
           </div>
         </form>
@@ -111,11 +123,12 @@ class ReviewCommentForm extends React.Component {
       return (
         <div className="review-feedback-comment">
           <span className={`feedback-comment ${showCommentForm ? 'feedback-comment-disabled' : 'feedback-comment-active'}`}>
-            <button onClick={() => this.setState({ showCommentForm: true })} type="button" disabled={showCommentForm}>{Drupal.t('comment')}</button>
+            <button className="review-feedback-comment-btn" onClick={() => this.setState({ showCommentForm: true })} type="button" disabled={showCommentForm}>{Drupal.t('comment')}</button>
             {showCommentForm ? this.showCommentForm() : null}
             {showCommentSubmission ? this.showCommentSubmission() : null}
           </span>
-          <BazaarVoiceMessages />
+          {showCommentForm
+           && (<BazaarVoiceMessages />)}
         </div>
       );
     }
