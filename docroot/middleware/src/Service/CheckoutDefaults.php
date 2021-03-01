@@ -184,7 +184,7 @@ class CheckoutDefaults {
     $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
 
     foreach ($methods as $method) {
-      if (strpos($order['shipping']['method'], $method['carrier_code']) === 0
+      if (strpos($order['shipping']['method'], strval($method['carrier_code'])) === 0
         && strpos($order['shipping']['method'], $method['method_code']) !== FALSE) {
         $this->logger->notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', [
           '@cart_id' => $this->cart->getCartId(),
