@@ -7,3 +7,5 @@ locale: 'en_US'
 client_name: ''
 site_id: 'main_site'
 environment: 'staging'
+pdp_rating_reviews: false
+write_review_submission: false
