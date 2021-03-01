@@ -48,6 +48,8 @@
 }
 
 .price {
+  text-align: $left;
+
   html[lang=ar] & {
     direction: ltr;
 
