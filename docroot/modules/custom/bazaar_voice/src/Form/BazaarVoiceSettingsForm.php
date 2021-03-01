@@ -112,6 +112,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('The deployment environment of BazaarVoice where we implement BazaarVoice Pixel.'),
     ];
 
+    $form['basic_settings']['pdp_rating_reviews'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable ratings and reviews in PDP.'),
+      '#default_value' => $config->get('pdp_rating_reviews'),
+      '#description' => $this->t('This option should be checked to disable the ratings and reviews in PDP.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -131,6 +138,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('client_name', $values['client_name'])
       ->set('site_id', $values['site_id'])
       ->set('environment', $values['environment'])
+      ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
       ->save();
 
     parent::submitForm($form, $form_state);
