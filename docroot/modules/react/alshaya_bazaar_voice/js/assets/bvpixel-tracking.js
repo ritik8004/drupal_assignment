@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * @file
  * Javascript to load the BazaarVoice pixel map api.

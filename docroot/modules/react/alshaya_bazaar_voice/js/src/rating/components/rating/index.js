@@ -2,7 +2,7 @@ import React from 'react';
 import { fetchAPIData } from '../../../utilities/api/apiData';
 import InlineRating from '../widgets/InlineRating';
 import { removeFullScreenLoader, showFullScreenLoader }
-  from '../../../../../js/utilities/showRemoveFullScreenLoader';
+  from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class Rating extends React.Component {
