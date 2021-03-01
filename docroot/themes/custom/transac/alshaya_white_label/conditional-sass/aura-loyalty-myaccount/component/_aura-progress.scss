@@ -1,6 +1,33 @@
 .aura-progressbar-wrapper {
   margin-top: 0.625rem;
 
+  .spc-aura-points-upgrade-item,
+  .spc-aura-points-expiry-item {
+    margin-top: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include breakpoint($only-mobile) {
+      justify-content: flex-start;
+    }
+
+    b {
+      padding: 0 0.3125rem;
+    }
+
+    &::before {
+      position: relative;
+      transform: none;
+      #{$left}: 0;
+      margin-#{$right}: 0.625rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0.3125rem;
+      }
+    }
+  }
+
   .aura-progress {
     height: 3.125rem;
     border-radius: 0.625rem;
@@ -141,6 +168,7 @@
     text-align: center;
     color: $aura-progress-string;
     margin-top: 0.625rem;
+    padding-bottom: 0.625rem;
 
     @include breakpoint($only-mobile) {
       max-width: 70%;

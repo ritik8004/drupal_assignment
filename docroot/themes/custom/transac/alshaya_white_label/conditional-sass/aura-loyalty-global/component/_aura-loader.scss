@@ -5,7 +5,8 @@
 #aura-pdp,
 #my-accounts-aura-mobile,
 #my-loyalty-club,
-.aura-myaccount-waiting-wrapper {
+.aura-myaccount-waiting-wrapper,
+.aura-progressbar-wrapper-loading {
   .spc-loading-container {
     display: flex;
     align-items: center;
@@ -26,7 +27,8 @@
   }
 }
 
-.aura-myaccount-waiting-wrapper {
+.aura-myaccount-waiting-wrapper,
+.aura-progressbar-wrapper-loading {
   .spc-loading-container {
     min-height: 3rem;
   }

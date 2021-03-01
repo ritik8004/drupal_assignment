@@ -5,7 +5,7 @@ import AuraMyAccountNoLinkedCard from './card-not-linked-no-data';
 import AuraMyAccountVerifiedUser from './linked-verified';
 import { getAllAuraStatus } from '../../../utilities/helper';
 import Loading from '../../../../../alshaya_spc/js/utilities/loading';
-import AuraProgress from '../../aura-progress';
+import AuraProgressWrapper from '../../aura-progress';
 
 const LoyaltyClubBlock = (props) => {
   const allAuraStatus = getAllAuraStatus();
@@ -60,15 +60,16 @@ const LoyaltyClubBlock = (props) => {
           <AuraMyAccountVerifiedUser
             tierName={tierName}
             points={points}
-            expiringPoints={expiringPoints}
-            expiryDate={expiryDate}
             pointsOnHold={pointsOnHold}
-            upgradeMsg={upgradeMsg}
             cardNumber={cardNumber}
             firstName={firstName}
             lastName={lastName}
           />
-          <AuraProgress />
+          <AuraProgressWrapper
+            upgradeMsg={upgradeMsg}
+            expiringPoints={expiringPoints}
+            expiryDate={expiryDate}
+          />
         </>
       );
     }
