@@ -114,7 +114,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
 
     $form['basic_settings']['pdp_rating_reviews'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Ratings and Review'),
+      '#title' => $this->t('Disable ratings and reviews in PDP.'),
       '#default_value' => $config->get('pdp_rating_reviews'),
       '#description' => $this->t('This option should be checked to disable the ratings and reviews in PDP.'),
     ];
