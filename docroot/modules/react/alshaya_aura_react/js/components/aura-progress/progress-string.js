@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPriceToPointRatio } from '../../utilities/helper';
+import AuraProgressNextTierMessage from './progress-upgrade-message';
 
 const AuraProgressString = (props) => {
   const {
@@ -11,8 +11,6 @@ const AuraProgressString = (props) => {
   } = props;
 
   const difference = nextTierThreshold - userPoints;
-  const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
-  const differenceAmount = difference / getPriceToPointRatio();
 
   if (progressRatio === 0) {
     return (
@@ -22,6 +20,11 @@ const AuraProgressString = (props) => {
             {Drupal.t('Start spending to earn points')}
           </span>
         </div>
+        <AuraProgressNextTierMessage
+          userPoints={userPoints}
+          nextTierThreshold={nextTierThreshold}
+          nextTierLabel={nextTierLabel}
+        />
       </>
     );
   }
@@ -32,9 +35,14 @@ const AuraProgressString = (props) => {
         <div className="aura-progress-string">
           <span className="aura-progress-string--label">{Drupal.t('You are here')}</span>
           <span className="aura-progress-string--string">
-            {`${Drupal.t('Spend')} ${currencyCode} ${differenceAmount} ${Drupal.t('more to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
+            {`${Drupal.t('Earn more')} ${difference} ${Drupal.t('points to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
           </span>
         </div>
+        <AuraProgressNextTierMessage
+          userPoints={userPoints}
+          nextTierThreshold={nextTierThreshold}
+          nextTierLabel={nextTierLabel}
+        />
       </>
     );
   }
@@ -43,9 +51,14 @@ const AuraProgressString = (props) => {
     <>
       <div className="aura-progress-string">
         <span className="aura-progress-string--string">
-          {`${Drupal.t('Spend')} ${currencyCode} ${differenceAmount} ${Drupal.t('more to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
+          {`${Drupal.t('Earn more')} ${difference} ${Drupal.t('points to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
         </span>
       </div>
+      <AuraProgressNextTierMessage
+        userPoints={userPoints}
+        nextTierThreshold={nextTierThreshold}
+        nextTierLabel={nextTierLabel}
+      />
     </>
   );
 };

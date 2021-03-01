@@ -69,33 +69,6 @@
     }
   }
 
-  .spc-aura-points-upgrade-item,
-  .spc-aura-points-expiry-item {
-    margin-top: 0.625rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    @include breakpoint($only-mobile) {
-      justify-content: flex-start;
-    }
-
-    b {
-      padding: 0 0.3125rem;
-    }
-
-    &::before {
-      position: relative;
-      transform: none;
-      #{$left}: 0;
-      margin-#{$right}: 0.625rem;
-
-      @include breakpoint($only-mobile) {
-        margin-#{$right}: 0.3125rem;
-      }
-    }
-  }
-
   .aura-card-linked-verified-description {
     display: flex;
     flex-wrap: wrap;
