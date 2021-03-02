@@ -12,12 +12,14 @@ const PostReviewMessage = ({
       <div className="review-title">{postReviewData.Review.Title}</div>
       <div className="review-text">{postReviewData.Review.ReviewText}</div>
       {(postReviewData.Review.IsRecommended !== null)
-        ? <div className="review-recommendation">
+        ? (
+          <div className="review-recommendation">
             <span className="review-recommendation-icon" />
             <span className="review-recommendation-text">
-            {Drupal.t('Yes, I would like to recomend this product.')}
+              {Drupal.t('Yes, I would like to recomend this product.')}
             </span>
           </div>
+        )
         : ''}
     </div>
     <div className="comment-moderation-block"><span className="comment-moderation-text">{Drupal.t('Thanks for submitting a review. Your review is being moderated and may take few days to appear.')}</span></div>
