@@ -4,7 +4,6 @@ namespace Drupal\acq_promotion\Plugin\AcqPromotion;
 
 use Drupal\acq_promotion\AcqPromotionBase;
 use Drupal\Core\Link;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -40,13 +39,6 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
   protected $alshayaPromotionsManager;
 
   /**
-   * Logger Factory.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $logger;
-
-  /**
    * Free Gift constructor.
    *
    * @param array $configuration
@@ -61,20 +53,16 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
    *   SKU Manager.
    * @param \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $alshayaPromotionsManager
    *   Alshaya Promotions Manager.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger_factory
-   *   Logger factory.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               NodeInterface $promotionNode,
                               SkuManager $sku_manager,
-                              AlshayaPromotionsManager $alshayaPromotionsManager,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              AlshayaPromotionsManager $alshayaPromotionsManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $promotionNode);
     $this->skuManager = $sku_manager;
     $this->alshayaPromotionsManager = $alshayaPromotionsManager;
-    $this->logger = $logger_factory->get('acq_promotion');
   }
 
   /**
@@ -87,8 +75,7 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
       $plugin_definition,
       $promotionNode,
       $container->get('alshaya_acm_product.skumanager'),
-      $container->get('alshaya_acm_promotion.manager'),
-      $container->get('logger.factory')
+      $container->get('alshaya_acm_promotion.manager')
     );
   }
 
@@ -141,7 +128,6 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
    */
   public function getFreeGiftLink($free_sku_entity) {
     if (empty($free_sku_entity)) {
-      $this->logger->warning('Free gift sku not configured properly');
       return NULL;
     }
 
