@@ -261,4 +261,16 @@
       margin-bottom: 0.9375rem;
     }
   }
+
+  .post-review-moderation {
+    margin-top: 2rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
+    }
+
+    .review-title {
+      margin-bottom: 0.5rem;
+    }
+  }
 }

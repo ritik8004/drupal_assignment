@@ -46,16 +46,18 @@ const PhotoUpload = (props) => {
             </div>
             <div className="photo-upload-block">
               <div className="user-pic-label">{Drupal.t('Show us how it looks! Upload up to 5 pics ')}</div>
-              {imageList.length < maxNumber
-                && (
-                  <button
-                    type="button"
-                    onClick={onImageUpload}
-                    {...dragProps}
-                  >
-                    {Drupal.t('Upload a Photo')}
-                  </button>
-                )}
+              <div className="upload-btn-container">
+                {imageList.length < maxNumber
+                  && (
+                    <button
+                      type="button"
+                      onClick={onImageUpload}
+                      {...dragProps}
+                    >
+                      {Drupal.t('Upload a Photo')}
+                    </button>
+                  )}
+              </div>
             </div>
           </div>
         )}

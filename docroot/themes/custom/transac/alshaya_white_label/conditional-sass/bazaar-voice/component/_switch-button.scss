@@ -16,6 +16,11 @@
       label {
         font-size: 0.9375rem;
         font-family: $alshaya-thin;
+
+        @include breakpoint($only-tablet) {
+          margin-bottom: 0.875rem;
+          display: inline-block;
+        }
       }
     }
 

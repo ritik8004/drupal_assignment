@@ -39,7 +39,7 @@ class Checkbox extends React.Component {
             defaultValue={(checkVal !== '') ? checkVal : defaultValue}
             onClick={(e) => this.handleClick(e)}
           />
-          <label>
+          <label htmlFor={id}>
             {label}
             {' '}
             {(required) ? '*' : '' }
