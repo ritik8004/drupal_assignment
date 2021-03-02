@@ -31,7 +31,7 @@ class ReviewCommentForm extends React.Component {
   showCommentForm = () => {
     const { commentbox, nickname, email } = this.state;
     return (
-      <div>
+      <div className="review-comment-form">
         <form id="comment-form" onSubmit={this.handleSubmit}>
           <div className="comment-form-title">
             {Drupal.t('Post a Comment')}
@@ -121,15 +121,17 @@ class ReviewCommentForm extends React.Component {
     const { showCommentForm, showCommentSubmission } = this.state;
     if (ReviewId !== undefined) {
       return (
-        <div className="review-feedback-comment">
-          <span className={`feedback-comment ${showCommentForm ? 'feedback-comment-disabled' : 'feedback-comment-active'}`}>
-            <button className="review-feedback-comment-btn" onClick={() => this.setState({ showCommentForm: true })} type="button" disabled={showCommentForm}>{Drupal.t('comment')}</button>
-            {showCommentForm ? this.showCommentForm() : null}
-            {showCommentSubmission ? this.showCommentSubmission() : null}
-          </span>
+        <>
+          <div className="review-feedback-comment">
+            <span className={`feedback-comment ${showCommentForm ? 'feedback-comment-disabled' : 'feedback-comment-active'}`}>
+              <button className="review-feedback-comment-btn" onClick={() => this.setState({ showCommentForm: true })} type="button" disabled={showCommentForm}>{Drupal.t('comment')}</button>
+            </span>
+          </div>
+          {showCommentForm ? this.showCommentForm() : null}
+          {showCommentSubmission ? this.showCommentSubmission() : null}
           {showCommentForm
            && (<BazaarVoiceMessages />)}
-        </div>
+        </>
       );
     }
     return (null);
