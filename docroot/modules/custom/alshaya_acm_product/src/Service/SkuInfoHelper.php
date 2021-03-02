@@ -583,6 +583,21 @@ class SkuInfoHelper {
     $variant['configurableOptions'] = $this->skuManager->getConfigurableValues($child);
     $variant['configurableOptions'] = array_values($variant['configurableOptions']);
 
+    if (($parent instanceof SKUInterface)) {
+      $variant['parent_sku'] = $parent->getSku();
+    }
+
+    // Add language for all urls for language switcher block.
+    $node = $this->skuManager->getDisplayNode($parent, FALSE);
+    if ($node) {
+      foreach ($this->languageManager->getLanguages() as $language) {
+        $variant['url'][$language->getId()] = $node->toUrl('canonical', [
+          'absolute' => FALSE,
+          'language' => $language,
+        ])->toString();
+      }
+    }
+
     $this->moduleHandler->alter('sku_variant_info', $variant, $child, $parent);
 
     return $variant;
