@@ -584,10 +584,7 @@ class SkuInfoHelper {
     $variant['configurableOptions'] = array_values($variant['configurableOptions']);
 
     if (($parent instanceof SKUInterface)) {
-      $parent_sku = $this->skuManager->getParentSkuBySku($child);
-      if ($parent_sku != NULL) {
-        $variant['parent_sku'] = $parent_sku->getSku();
-      }
+      $variant['parent_sku'] = $parent->getSku();
     }
 
     // Add language for all urls for language switcher block.
