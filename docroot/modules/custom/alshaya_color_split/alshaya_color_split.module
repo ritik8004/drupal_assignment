@@ -348,6 +348,14 @@ function alshaya_color_split_sku_variant_info_alter(array &$variant, SKUInterfac
 
   // Add language for all urls for language switcher block.
   $node = $skuManager->getDisplayNode($parent_sku, FALSE);
+  if ($node) {
+    foreach (\Drupal::languageManager()->getLanguages() as $language) {
+      $variant['url'][$language->getId()] = $node->toUrl('canonical', [
+        'absolute' => FALSE,
+        'language' => $language,
+      ])->toString();
+    }
+  }
 
   /** @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager $promoContextManager */
   $promoContextManager = \Drupal::service('alshaya_acm_product.context_manager');
