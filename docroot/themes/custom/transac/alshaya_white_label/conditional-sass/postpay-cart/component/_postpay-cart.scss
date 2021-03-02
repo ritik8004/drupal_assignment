@@ -48,14 +48,11 @@
   }
 
   .brand-postpay {
-    font-family: $alshaya-bold;
+    font-family: $postpay-font;
+    color: $postpay_eligibility-text;
 
-    &.light {
-      color: $postpay_light;
-    }
-
-    &.dark {
-      color: $postpay_dark;
+    html[lang=ar] & {
+      font-family: $postpay-arabic-font;
     }
   }
 }

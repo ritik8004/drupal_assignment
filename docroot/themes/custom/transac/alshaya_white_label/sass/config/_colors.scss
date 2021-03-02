@@ -147,8 +147,7 @@ $_stylefinder-active-lining-text: #d91560;
 $_stylefinder-default-card-gray: #d3d3d3;
 $_cancelled: #f77;
 $_gray_222: #222;
-$_postpay_light: #8bafbd;
-$_postpay_dark: #8bafbe;
+$_postpay_blue: #8abbd5;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1586,5 +1585,4 @@ $cancel-item-image-label-bg: $_cancelled;
 $cancel-item-image-label-text: $_gray_222;
 
 // Postpay
-$postpay_light: $_postpay_light;
-$postpay_dark: $_postpay_dark;
+$postpay_eligibility-text: $_postpay_blue;

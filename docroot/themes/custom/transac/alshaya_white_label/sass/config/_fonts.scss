@@ -85,6 +85,10 @@ $body_font: $arial;
 $campaign-plp-style-1-font: $alshaya-bold;
 $campaign-plp-style-1-arabic-font: $alshaya-arabic-bold;
 
+// Postpay font family
+$postpay-font: 'GreycliffCF-Bold','MothercareThin', 'Arial';
+$postpay-arabic-font: $alshaya-arabic-bold;
+
 // Icon Fonts
 $icons: (
   bell: "\e006",
