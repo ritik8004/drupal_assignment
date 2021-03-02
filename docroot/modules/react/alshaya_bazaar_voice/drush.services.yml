@@ -3,5 +3,6 @@ services:
     class: Drupal\alshaya_bazaar_voice\Commands\AlshayaBazaarVoiceCommands
     arguments:
       - '@alshaya_master.entity_helper'
+      - '@alshaya_bazaar_voice.service'
     tags:
       - { name: drush.command }

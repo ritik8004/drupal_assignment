@@ -35,7 +35,9 @@ export default class ReviewFilters extends React.Component {
             value: `contextdatavalue_${item}:${option.Values[key].Value}`,
             label: `${option.Values[key].Value} (${option.Values[key].Count})`,
           }));
+
           availableFilters[item] = options;
+          availableFilters[item].label = option.Label;
         });
       });
     }
@@ -57,7 +59,7 @@ export default class ReviewFilters extends React.Component {
                 className="bv-select"
                 onChange={this.handleSelect}
                 options={filterList[item]}
-                defaultValue={{ value: 'none', label: item }}
+                defaultValue={{ value: 'none', label: filterList[item].label }}
               />
             </div>
           ))}

@@ -1,0 +1,111 @@
+.write-review-type-photo-upload {
+  .help-text {
+    border-bottom: 0.125rem solid $rr-form-section-title-border;
+  }
+
+  .image-wrapper {
+    display: flex;
+
+    @include breakpoint($only-mobile) {
+      display: -webkit-box;
+      white-space: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      align-items: flex-start;
+      padding-top: 0.625rem;
+      width: 100vw;
+      #{$left}: 13%;
+      margin-#{$left}: -17vw;
+      position: relative;
+      padding-#{$left}: 1.5rem;
+    }
+
+    .image-item {
+      position: relative;
+      height: 9.125rem;
+      width: 9.125rem;
+      cursor: pointer;
+      zoom: 1;
+      margin-#{$right}: 0.75rem;
+      padding-bottom: 1.25rem;
+
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+        zoom: 1;
+      }
+
+      .exception-error {
+        font-size: 0.75rem;
+        color: $primary_input_inline_error;
+      }
+
+      .image-item__btn-wrapper {
+        position: absolute;
+        top: -0.5rem;
+        #{$right}: -0.3125rem;
+
+        button {
+          background: transparent;
+          border-radius: 50%;
+          border: 0;
+          width: 1.25rem;
+          height: 1.25rem;
+          position: relative;
+          top: -0.4375rem;
+          #{$left}: 0.3125rem;
+
+          @include icon(close, after) {
+            font-size: 1.125rem;
+            #{$left}: -0.0625rem;
+            top: 0;
+            border: 0.0625rem solid;
+            width: 1.25rem;
+            height: 1.25rem;
+            position: absolute;
+            background: $modal_close_bg;
+            color: $modal_close_icon;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+
+  .photo-upload-block {
+    display: flex;
+    align-items: center;
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
+    .user-pic-label {
+      width: 62%;
+
+      @include breakpoint($only-mobile) {
+        min-width: 100%;
+        margin: 1.25rem 0;
+      }
+    }
+
+    button {
+      min-width: 20rem;
+      height: 2.5rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-color;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      border-radius: 0.1875rem;
+      line-height: 1;
+      font-family: $alshaya-thin;
+
+      @include breakpoint($only-mobile) {
+        min-width: 100%;
+      }
+    }
+  }
+}

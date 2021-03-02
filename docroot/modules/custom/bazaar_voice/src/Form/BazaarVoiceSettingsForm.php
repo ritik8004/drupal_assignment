@@ -44,7 +44,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
     $form['basic_settings']['api_base_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('API Base Url'),
-      '#description' => $this->t('BazaarVoice api base url for [stg] and prod enviroments.'),
+      '#description' => $this->t('BazaarVoice api base url for [stg] and [prod] enviroments.'),
       '#default_value' => $config->get('api_base_url'),
     ];
 
@@ -63,8 +63,18 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
     $form['basic_settings']['shared_secret_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Shared Secret Key'),
-      '#description' => $this->t('BazaarVoice shared encoding key to create a UAS token.'),
+      '#description' => $this->t('BazaarVoice shared encoding key to create a user authentication string.'),
       '#default_value' => $config->get('shared_secret_key'),
+    ];
+
+    $form['basic_settings']['max_age'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Max age'),
+      '#description' => $this->t('Max age to expire user authentication string. Please read the document for more info @url', [
+        '@url' => Link::fromTextAndUrl($this->t('here'), Url::fromUri('https://developer.bazaarvoice.com/conversations-api/tutorials/submission/authentication/client-mastered'))
+          ->toString(),
+      ]),
+      '#default_value' => $config->get('max_age'),
     ];
 
     $form['basic_settings']['api_version'] = [
@@ -74,18 +84,25 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('api_version'),
     ];
 
+    $form['basic_settings']['locale'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Locale'),
+      '#default_value' => $config->get('locale'),
+      '#description' => $this->t('Locale to display Labels, Configuration, Product Attributes and Category Attributes in. The default value is the locale defined in the display associated with the API key.'),
+    ];
+
+    $form['basic_settings']['content_locale'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Content Locale'),
+      '#default_value' => $config->get('content_locale'),
+      '#description' => $this->t('Locale of the content to display. If this filter is not defined, all content regardless of its locale is returned. To return specific content by locale, define the value in the filter. A wildcard character “*” can be used to define the value, e.g., “en*” returns all content in English (en_US, en_AE, en_KW, etc.) or you can use a single ContentLocale code (e.g., "en_KW"). ContentLocale codes are case-sensitive'),
+    ];
+
     $form['basic_settings']['bvpixel_base_url'] = [
       '#type' => 'textfield',
       '#title' => $this->t('BV Pixel Base URL'),
       '#description' => $this->t('Base URL for BV pixel script provided by BazaarVoice.'),
       '#default_value' => $config->get('bvpixel_base_url'),
-    ];
-
-    $form['basic_settings']['locale'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Locale'),
-      '#default_value' => $config->get('locale'),
-      '#description' => $this->t('Locale is required to get regional reviews data. It can be set as multiple, e.g. en_AE,ar_AE'),
     ];
 
     $form['basic_settings']['client_name'] = [
@@ -139,9 +156,11 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('api_base_url', $values['api_base_url'])
       ->set('conversations_apikey', $values['conversations_apikey'])
       ->set('shared_secret_key', $values['shared_secret_key'])
+      ->set('max_age', $values['max_age'])
       ->set('api_version', $values['api_version'])
-      ->set('bvpixel_base_url', $values['bvpixel_base_url'])
       ->set('locale', $values['locale'])
+      ->set('content_locale', $values['content_locale'])
+      ->set('bvpixel_base_url', $values['bvpixel_base_url'])
       ->set('client_name', $values['client_name'])
       ->set('site_id', $values['site_id'])
       ->set('environment', $values['environment'])

@@ -2,7 +2,7 @@ import React from 'react';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import { getCurrentUserEmail } from '../../../utilities/utility';
+import { getCurrentUserEmail } from '../../../utilities/user_util';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -127,7 +127,8 @@ class ReviewCommentForm extends React.Component {
             {showCommentForm ? this.showCommentForm() : null}
             {showCommentSubmission ? this.showCommentSubmission() : null}
           </span>
-          <BazaarVoiceMessages />
+          {showCommentForm
+           && (<BazaarVoiceMessages />)}
         </div>
       );
     }

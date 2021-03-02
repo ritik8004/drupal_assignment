@@ -12,8 +12,11 @@ import ReviewFilters from '../review-filters';
 import ReviewFiltersDisplay from '../review-filters-display';
 import EmptyMessage from '../../../utilities/empty-message';
 import ReviewRatingsFilter from '../review-ratings-filter';
+import PostReviewMessage from '../reviews-full-submit/post-review-message';
 
 export default class ReviewSummary extends React.Component {
+  isComponentMounted = true;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -21,9 +24,10 @@ export default class ReviewSummary extends React.Component {
       reviewsProduct: '',
       currentSortOption: '',
       currentFilterOptions: [],
-      noResultsmessage: null,
+      noResultmessage: null,
       totalReviews: '',
       currentTotal: '',
+      postReviewData: '',
     };
   }
 
@@ -31,7 +35,28 @@ export default class ReviewSummary extends React.Component {
    * Get Review results and product statistical data.
    */
   componentDidMount() {
+    this.isComponentMounted = true;
+    // Listen to the review post event.
+    document.addEventListener('reviewPosted', this.eventListener, false);
+
     this.getReviews();
+  }
+
+  componentWillUnmount() {
+    this.isComponentMounted = false;
+    document.removeEventListener('reviewPosted', this.eventListener, false);
+  }
+
+  eventListener = (e) => {
+    if (!this.isComponentMounted) {
+      return;
+    }
+
+    if (e.detail.SubmissionId !== null) {
+      this.setState({
+        postReviewData: e.detail,
+      });
+    }
   }
 
   getReviews = (options, type) => {
@@ -67,12 +92,12 @@ export default class ReviewSummary extends React.Component {
             this.setState({
               currentTotal: result.data.TotalResults,
               reviewsSummary: result.data.Results,
-              noResultsmessage: null,
+              noResultmessage: null,
             });
           } else {
             this.setState({
               currentTotal: result.data.TotalResults,
-              noResultsmessage: Drupal.t('No review found.'),
+              noResultmessage: Drupal.t('No review found.'),
             });
           }
         } else {
@@ -142,9 +167,10 @@ export default class ReviewSummary extends React.Component {
       reviewsProduct,
       currentSortOption,
       currentFilterOptions,
-      noResultsmessage,
+      noResultmessage,
       totalReviews,
       currentTotal,
+      postReviewData,
     } = this.state;
 
     return (
@@ -178,9 +204,12 @@ export default class ReviewSummary extends React.Component {
             />
           </div>
         </div>
-        {noResultsmessage === null
+        {noResultmessage === null
           && (
             <>
+              {postReviewData !== ''
+                && (
+                  <PostReviewMessage postReviewData={postReviewData} />)}
               {Object.keys(reviewsSummary).map((item) => (
                 <div className="review-summary" key={reviewsSummary[item].Id}>
                   <ConditionalView condition={window.innerWidth < 768}>
@@ -202,9 +231,9 @@ export default class ReviewSummary extends React.Component {
               ))}
             </>
           )}
-        {noResultsmessage !== null
+        {noResultmessage !== null
           && (
-          <EmptyMessage emptyMessage={noResultsmessage} />
+            <EmptyMessage emptyMessage={noResultmessage} />
           )}
       </div>
     );

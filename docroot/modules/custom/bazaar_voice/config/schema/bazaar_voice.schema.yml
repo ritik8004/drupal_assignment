@@ -11,6 +11,9 @@ bazaar_voice.settings:
     shared_secret_key:
       type: string
       label: 'A shared key provided by BazaarVoice.'
+    max_age:
+      type: integer
+      label: 'Max age to expire user authentication string.'
     api_version:
       type: decimal
       label: 'API version.'
@@ -18,7 +21,10 @@ bazaar_voice.settings:
       type: string
       label: 'Base URL for BV pixel script provided by BazaarVoice.'
     locale:
-      type: string
+      type: label
+      label: 'To get api response based on locale.'
+    content_locale:
+      type: label
       label: 'To get the reviews data at a regional level.'
     client_name:
       type: string

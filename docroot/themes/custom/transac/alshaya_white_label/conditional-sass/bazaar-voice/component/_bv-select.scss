@@ -14,7 +14,7 @@
   .bvSelect__control {
     border: 1px solid $rr-select-border;
     border-radius: 0;
-    height: 3.125rem;
+    height: 2.5rem;
     font-size: 0.875rem;
     box-shadow: none;
     cursor: pointer;
@@ -29,7 +29,7 @@
       }
 
       .bvSelect__indicator {
-        color: $rr-select-arrow-icon;
+        color: $rr-select-text;
         background: $rr-select-arrow-bg;
         height: 100%;
 
@@ -79,7 +79,7 @@
       justify-content: center;
 
       @include icon('chevrondown') {
-        font-size: 2.25rem;
+        font-size: 1.75rem;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);

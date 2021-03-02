@@ -1,0 +1,87 @@
+.write_review {
+  &-overlay {
+    overflow-y: auto;
+  }
+
+  &-content {
+    width: 100% !important;
+    min-height: 100vh;
+    max-width: 80.25rem;
+  }
+}
+
+.write-review-form {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 2.875rem 1.5625rem 6.25rem;
+
+  @include breakpoint($only-mobile) {
+    padding: 2.875rem 1rem 3.25rem;
+  }
+
+  .title-block {
+    width: 100%;
+    margin-bottom: 1.5rem;
+
+    .close-modal {
+      cursor: pointer;
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+      background: $modal_close_bg;
+
+      @include icon('close') {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: $modal_close_icon;
+      }
+
+      @include breakpoint($only-mobile) {
+        z-index: 3;
+        position: fixed;
+      }
+    }
+
+    .pdp-write-review-title {
+      font-size: 1.5rem;
+      font-family: $alshaya-bold;
+    }
+  }
+
+  .product-block {
+    width: 25%;
+    padding-#{$right}: 4rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      padding-#{$right}: 0;
+    }
+
+    .product-title {
+      text-align: center;
+      font-size: 1.125rem;
+      font-family: $alshaya-bold;
+      margin-top: 0.75rem;
+    }
+  }
+
+  .write-review-form-sidebar {
+    width: 75%;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+
+    .write-review-fields {
+      .head-row,
+      .help-text {
+        margin: 55px 0 33px;
+        border-bottom: 0.1875rem solid $rr-form-head-row-border;
+        font-family: $alshaya-bold;
+        padding-bottom: 0.25rem;
+        clear: both;
+      }
+    }
+  }
+}

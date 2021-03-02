@@ -1,0 +1,248 @@
+@mixin bv-placeholder-label() {
+  font-size: 0.875rem;
+  position: absolute;
+  #{$left}: 0;
+  top: 0;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+@mixin bv-placeholder-active() {
+  top: -1rem;
+  bottom: 0;
+  #{$left}: 0;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+
+.write-review-form-add {
+  padding: 2.5rem;
+
+  @include breakpoint($only-mobile) {
+    padding: 2.5rem 0;
+  }
+
+  .write-review-type {
+    &-textfield {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  // Type = Text.
+  .write-review-type-textfield {
+    input[type=text],
+    input[type=email] {
+      height: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    label {
+      @include bv-placeholder-label;
+    }
+
+    input:focus ~ label,
+    input.focus ~ label {
+      @include bv-placeholder-active;
+    }
+
+    &.nikename,
+    &.useremail {
+      float: $left;
+      width: 47%;
+      margin-bottom: 3.5rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+
+    &.nikename {
+      margin-#{$right}: 3rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0;
+      }
+    }
+  }
+
+  // Type = TextArea.
+  .write-review-type-textarea {
+    label {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    textarea {
+      resize: none;
+      font-size: 0.875rem;
+      height: 10rem;
+      border: 1px solid $primary_input_border !important;
+    }
+  }
+
+  // Type = Select.
+  .write-review-type-select {
+    margin-bottom: 2rem;
+
+    label {
+      font-size: 0.75rem;
+    }
+  }
+
+  .dropdown-conatiner {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.875rem;
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
+    .dropdown-label {
+      width: 50%;
+      font-size: 0.9375rem;
+      font-family: $alshaya-thin;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .bv-select {
+      width: 50%;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+  }
+
+  .netpromoter-option {
+    .survey-block {
+      display: flex;
+      margin: 2rem;
+      margin-bottom: 1rem;
+
+      @include breakpoint($only-mobile) {
+        margin: 2rem 0;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-type-radio {
+        margin-#{$right}: 3rem;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 0.375rem;
+        }
+
+        input[type=radio] {
+          & ~ label {
+            &::before {
+              width: 1.5rem;
+              height: 1.5rem;
+              margin-#{$right}: 0;
+            }
+
+            p {
+              margin: 0;
+              margin-top: 0.25rem;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+
+    .survey-experience {
+      display: flex;
+
+      > div {
+        width: 50%;
+        color: $rr-survey-txt;
+        font-size: 0.875rem;
+
+        &:last-of-type {
+          text-align: $right;
+        }
+      }
+    }
+  }
+
+  .write-review-type-tags {
+    display: inline-flex;
+    margin-right: 0.625rem;
+    margin-bottom: 1rem;
+
+    input[type=checkbox] {
+      & ~ label {
+        border: 1px solid $rr-tag-label-border;
+        padding: 0.5rem;
+        cursor: pointer;
+
+        @include icon(plus) {
+          background: $rr-tag-label-icon-bg;
+          color: $rr-tag-label-icon-txt;
+          margin-#{$right}: 0.5rem;
+          font-size: 1rem;
+          font-weight: bold;
+          position: relative;
+          top: 1px;
+        }
+      }
+
+      &:checked {
+        & ~ label {
+          background: $rr-tag-label-active-bg;
+          color: $rr-tag-label-active-txt;
+          border: 1px solid $rr-tag-label-active-border;
+
+          @include icon(check) {
+            color: $rr-tag-label-active-icon-txt;
+            background: $rr-tag-label-active-icon-bg;
+          }
+        }
+      }
+    }
+  }
+
+  .write-review-form-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
+    button {
+      min-width: 15rem;
+      height: 2.5rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-color;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      border-radius: 0.1875rem;
+      line-height: 1;
+      font-family: $alshaya-thin;
+
+      @include breakpoint($only-mobile) {
+        min-width: 100%;
+        margin-bottom: 1rem;
+        order: 1;
+      }
+    }
+
+    .write-review-form-cancel {
+      margin-#{$right}: 2rem;
+      background: $rr-write-review-cancel-btn-bg;
+      color: $rr-write-review-cancel-btn-txt;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0;
+        order: 2;
+      }
+    }
+  }
+}
