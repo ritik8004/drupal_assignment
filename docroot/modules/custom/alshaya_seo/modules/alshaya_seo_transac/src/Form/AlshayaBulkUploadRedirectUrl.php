@@ -9,6 +9,7 @@ use Drupal\path_alias\AliasManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Render\Markup;
 
 /**
  * Class Alshaya Bulk Upload Redirect url.
@@ -83,20 +84,11 @@ class AlshayaBulkUploadRedirectUrl extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $help_text = "<span>Supported comma separator csv file format:</span>
-                  <ul>
-                    <li>Total 2 columns => From,To</li>
-                    <li>
-                      <p> Sample CSV with 1 row: </p>
-                      <strong><p> From,To</p>
-                      <p> http://example.com/test,http://example.com/test/test-l2</p></strong>
-                    </li>
-                  </ul>";
     $form['file'] = [
       '#type' => 'managed_file',
       '#title' => $this->t('Upload file'),
+      '#description' => Markup::create($this->helpText()),
       '#required' => TRUE,
-      '#description' => $help_text,
       '#upload_validators'  => [
         'file_validate_extensions' => ['csv CSV'],
       ],
@@ -110,6 +102,7 @@ class AlshayaBulkUploadRedirectUrl extends FormBase {
     $form['language'] = [
       '#type' => 'select',
       '#title' => $this->t('Language'),
+      '#description' => $this->t('Choose your language for redirection.'),
       '#default_value' => 'en',
       '#options' => $languages,
       '#required' => TRUE,
@@ -194,6 +187,10 @@ class AlshayaBulkUploadRedirectUrl extends FormBase {
         $redirect_exists = $redirect_repository->findMatchingRedirect($redirect[0], [], $langcode);
         // If redirect already exists.
         if ($redirect_exists) {
+          \Drupal::messenger()->addMessage(t('Please check, redirect from @source is already existing.', [
+            '@source' => $redirect[0],
+          ]), 'warning');
+
           continue;
         }
 
@@ -244,12 +241,12 @@ class AlshayaBulkUploadRedirectUrl extends FormBase {
    * @param string $csv_uri
    *   Csv uri.
    */
-  public function csvDataChecks($form_state, $csv_uri) {
+  private function csvDataChecks($form_state, $csv_uri) {
     // Re-initialising variables as causing duplicate entries.
     $this->redirects = [];
     $handle = fopen($csv_uri, 'r');
     if (empty($handle)) {
-      $form_state->setErrorByName('file', $this->t('There was some error in opening the file. Please try again.'));
+      return $form_state->setErrorByName('file', $this->t('There was some error in opening the file. Please try again.'));
     }
     // Read csv file handler.
     $i = 0;
@@ -261,16 +258,16 @@ class AlshayaBulkUploadRedirectUrl extends FormBase {
         // Process only for exact two columns count.
         if (count($row) < 2) {
           // If there is some discrepancy in column count.
-          $form_state->setErrorByName('file', $this->t('There is some discrepancy in column at row @row. Please check.', ['@row' => $i]));
+          return $form_state->setErrorByName('file', $this->t('There is some discrepancy in column at row @row. Please check.', ['@row' => $i]));
         }
         if (empty($row[0]) && empty($row[1])) {
           // Missing data.
-          $form_state->setErrorByName('file', $this->t('Data is not available at row @row. Please check.', ['@row' => $i]));
+          return $form_state->setErrorByName('file', $this->t('Data is not available at row @row. Please check.', ['@row' => $i]));
         }
         if ((strpos($row[0], ' ') === TRUE) ||
         (strpos($row[1], ' ') === TRUE)) {
           // Corrupted urls.
-          $form_state->setErrorByName('file', $this->t('Url is containing space at row @row. Please check.', ['@row' => $i]));
+          return $form_state->setErrorByName('file', $this->t('Url is containing space at row @row. Please check.', ['@row' => $i]));
         }
         if ($i > 1) {
           $redirection_data = $this->prepareRedirectionData($row);
@@ -284,7 +281,7 @@ class AlshayaBulkUploadRedirectUrl extends FormBase {
 
     // If no data after processing csv or just contains only header.
     if (empty($this->redirects) || count($this->redirects) < 2) {
-      $form_state->setErrorByName('file', $this->t('CSV file has no data.'));
+      return $form_state->setErrorByName('file', $this->t('CSV file has no data.'));
     }
 
   }
@@ -298,13 +295,19 @@ class AlshayaBulkUploadRedirectUrl extends FormBase {
    * @return array
    *   Redirection paths.
    */
-  public function prepareRedirectionData(array $row) {
+  private function prepareRedirectionData(array $row) {
     $data = [];
     // Get path from both rows and
     // exclude langcode & backslash trailing.
+    // Store only url path.
     $from = parse_url($row[0], PHP_URL_PATH);
+    // Remove langcode and both end backslash.
+    // Example: "/en/test/level1/" convert into "test/level1".
     $redirect_source = trim(substr($from, strpos($from, '/', 1)), '/');
+
     $to = parse_url($row[1], PHP_URL_PATH);
+    // Remove langcode and back end backslash.
+    // Example: "/en/test/another-path/" convert into "/test/another-path".
     $redirect_to = rtrim(substr($to, strpos($to, '/', 1)), '/');
 
     // From and to urls are different.
@@ -320,6 +323,26 @@ class AlshayaBulkUploadRedirectUrl extends FormBase {
     }
 
     return $data;
+  }
+
+  /**
+   * Function to have help text.
+   *
+   * @return string
+   *   Help text.
+   */
+  private function helpText() {
+    $help_text = '<span>Supported comma separator csv file format:</span>
+                  <ul>
+                    <li>Total 2 columns => From,To</li>
+                    <li>
+                      <p> Sample CSV with 1 row: </p>
+                      <strong><p> From,To</p>
+                      <p> http://example.com/test,http://example.com/test/test-l2</p></strong>
+                    </li>
+                  </ul>';
+
+    return $help_text;
   }
 
 }
