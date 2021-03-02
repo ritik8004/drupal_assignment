@@ -91,7 +91,7 @@ libraries-override:
       theme:
         css/conditional-sass/promo-blocks/promo-blocks.ltr.css: css/conditional-sass/promo-blocks/promo-blocks.ltr.css
 
-  alshaya_white_label/advance-page:
+  alshaya_white_label/advanced-page:
     css:
       theme:
-        css/conditional-sass/advance-page/advance-page.ltr.css: css/conditional-sass/advance-page/advance-page.ltr.css
+        css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css

@@ -455,7 +455,7 @@ advance-content-slider:
     theme:
       css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: {}
 
-advance-page:
+advanced-page:
   css:
     theme:
-      css/conditional-sass/advance-page/advance-page.ltr.css: {}
+      css/conditional-sass/advanced-page/advanced-page.ltr.css: {}
