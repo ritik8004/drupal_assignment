@@ -1,5 +1,5 @@
 import React from 'react';
-import getStringMessage from '../../../../../js/utilities/strings';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 export default class BazaarVoiceMessages extends React.Component {
   isComponentMounted = true;

@@ -6,7 +6,7 @@ import ReviewDescription from '../review-desc';
 import ReviewHistogram from '../review-histogram';
 import { fetchAPIData } from '../../../utilities/api/apiData';
 import { removeFullScreenLoader, showFullScreenLoader }
-  from '../../../../../js/utilities/showRemoveFullScreenLoader';
+  from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import ReviewSorting from '../review-sorting';
 import ReviewFilters from '../review-filters';
 import ReviewFiltersDisplay from '../review-filters-display';
