@@ -189,6 +189,11 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
               "short_name" => "FL",
             ],
           ],
+          'algolia_sandbox.settings' => [
+            'app_id' => 'VSW25YM48U',
+            'write_api_key' => '1033c9bef964ede8cfd5ea308660d710',
+            'search_api_key' => 'ad97d63e6036c6d66a4032f90780234f',
+          ],
         ],
       ],
     ],

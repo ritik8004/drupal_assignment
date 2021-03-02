@@ -11,6 +11,7 @@
  * @ingroup themeable
  */
 #}
+{{ attach_library('alshaya_white_label/tooltip') }}
 <div class="site--brand">
   {{ site_logo }}
 </div>
@@ -182,47 +183,19 @@
     </tr>
 
     {% for product in products %}
-      <tr class="order-item-row">
-        <td>
-          {% if product.image %}
-            {{ product.image }}
-          {% endif %}
-        </td>
-        <td>
-          <div class="dark">{{ product.name }}</div>
-
-          {% for attribute in product.attributes %}
-            <div>
-              {% trans %}
-              {{ attribute.label }}: {{ attribute.value }}
-              {% endtrans %}
-            </div>
-          {% endfor %}
-
-          <div>
-            {% trans %}
-            Item code: {{ product.sku }}
-            {% endtrans %}
-          </div>
-
-          <div>
-            {% trans %}
-            Quantity: {{ product.ordered }}
-            {% endtrans %}
-          </div>
-        </td>
-        <td>
-          <div class="light">{{ "Unit price"|t }}</div>
-          {{ product.price }}
-        </td>
-        <td class="blend">
-          <div class="light">{{ "Total"|t }}</div>
-          {{ product.total }}
-        </td>
-
-        <td>&nbsp;</td>
-      </tr>
+      {{ _self.order_item(product, false) }}
     {% endfor %}
+    {% if order.cancelled_items_count > 0 %}
+      <tr id="cancelled-items" class="order-item-row">
+        <td colspan="5">
+          <div>{{ "Cancelled Items"|t }}</div>
+        </td>
+      </tr>
+      {% for product in cancelled_products %}
+        {{ _self.order_item(product, true) }}
+      {% endfor %}
+    {% endif %}
+
     <tr class="sub-total-row">
       <td>&nbsp;</td>
       <td>&nbsp;</td>
@@ -294,5 +267,70 @@
         <td class="empty--cell">&nbsp;</td>
       </tr>
     {% endif %}
+    {% if order.refund_text is not empty %}
+      <tr>
+        <td colspan="4">
+          <div class="tooltip-anchor cancelled-item-tooltip-refund-text info">
+            <span>{{ order.refund_text }}</span>
+          </div>
+        </td>
+      </tr>
+    {% endif %}
   </tbody>
 </table>
+
+{% macro order_item(product, cancelled) %}
+  <tr class="order-item-row">
+    {% if product.image and cancelled %}
+      <td class="order__product--image">
+        <div class="image-wrapper">
+          {{ product.image }}
+          <span>{{ 'Cancelled' | t }}</span>
+        </div>
+      </td>
+    {% else %}
+      <td class="order__product--image">
+        {% if product.image %}
+          {{ product.image }}
+        {% endif %}
+      </td>
+    {% endif %}
+    <td>
+      <div class="dark">{{ product.name }}</div>
+
+      {% for attribute in product.attributes %}
+        <div>
+          {% trans %}
+          {{ attribute.label }}: {{ attribute.value }}
+          {% endtrans %}
+        </div>
+      {% endfor %}
+
+      <div>
+        {% trans %}
+        Item code: {{ product.sku }}
+        {% endtrans %}
+      </div>
+
+      <div>
+        {% trans %}
+        Quantity: {{ product.ordered }}
+        {% endtrans %}
+      </div>
+    </td>
+    <td>
+      <div class="light">{{ "Unit price"|t }}</div>
+      {{ product.price }}
+    </td>
+    <td class="blend">
+      <div class="light">{{ "Total"|t }}</div>
+      {% if cancelled %}
+        <div class="cancelled-total-price">{{ product.total }}</div>
+      {% else %}
+        {{ product.total }}
+      {% endif %}
+    </td>
+
+    <td>&nbsp;</td>
+  </tr>
+{% endmacro %}

@@ -192,7 +192,7 @@
                 "version": "1.0.0",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/HubSpot/pace/archive/master.zip",
+                    "url": "https://github.com/hubspot/pace/archive/master.zip",
                     "type": "zip"
                 }
             }
@@ -397,8 +397,10 @@
                 "Fix warning for config entity values": "https://www.drupal.org/files/issues/2020-10-05/fix-large-number-of-entries-warning-3174826-2.patch"
             },
             "drupal/search_api_algolia": {
-                "Allow to override maxValuesPerFacet Algolia setting": "https://www.drupal.org/files/issues/2020-10-20/search-api-algolia-maxvaluesperfacet-3177896.patch",
-                "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
+                "Allow to override maxValuesPerFacet Algolia setting": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/1.patch?v=2",
+                "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch",
+                "Allow debugging data pushed to Algolia": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/2.patch?v=2",
+                "Log response of delete requests": "patches/search_api_algolia/CORE-25535-log-delete-requests.patch"
             }
         },
         "installer-paths": {

@@ -5,6 +5,19 @@
       float: $right;
     }
   }
+
+  .labels-container {
+    .label {
+      &.bottom {
+        &-right,
+        &-left {
+          @include breakpoint($only-mobile) {
+            bottom: 9rem;
+          }
+        }
+      }
+    }
+  }
 }
 
 #alshaya-algolia-search,
@@ -447,6 +460,23 @@ body[class^="super-category"] {
               .c-accordion {
                 margin: 0;
               }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.hide-header {
+  #alshaya-algolia-search {
+    .labels-container {
+      .label {
+        &.bottom {
+          &-right,
+          &-left {
+            @include breakpoint($only-mobile) {
+              bottom: 8rem;
             }
           }
         }

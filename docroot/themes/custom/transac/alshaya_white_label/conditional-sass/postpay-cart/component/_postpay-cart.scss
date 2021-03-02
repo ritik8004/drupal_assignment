@@ -1,0 +1,58 @@
+.spc-postpay {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  @include breakpoint($only-mobile) {
+    padding-top: 0.75rem;
+    margin-top: 1.25rem;
+    border-top: 1px solid $spc-order-summary-hero-total-border;
+  }
+
+  @include breakpoint($tablet) {
+    margin-top: 0.875rem;
+  }
+}
+
+.spc-postpay-mobile-preview:not(:empty) {
+  padding: 0 1.25rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+#postpay-eligibility-message {
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+
+  @include breakpoint($only-mobile) {
+    padding: 1.875rem 1.25rem;
+    background-color: $spc-order-summary-totals-bg;
+    margin-bottom: 0.1875rem;
+  }
+
+  p {
+    margin: 0;
+    padding: 0.75rem 0;
+    padding-#{$left}: 1.25rem;
+    padding-#{$right}: 3.75rem;
+    border-radius: 0.125rem;
+    border: solid 1px rgba(139, 175, 189, 0.33);
+    background-color: rgba(139, 175, 189, 0.07);
+
+    @include breakpoint($only-mobile) {
+      padding-#{$right}: 1.25rem;
+    }
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  .brand-postpay {
+    font-family: $postpay-font;
+    color: $postpay_eligibility-text;
+
+    html[lang=ar] & {
+      font-family: $postpay-arabic-font;
+    }
+  }
+}

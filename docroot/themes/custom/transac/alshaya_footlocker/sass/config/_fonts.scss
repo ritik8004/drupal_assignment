@@ -104,6 +104,10 @@ $fl-arabic-bold-nodir: 'DroidArabicKufi_Bold', 'Roboto-Bold', 'Arial';
 $fl-arabic-thin: 'DroidKufi_Regular', 'Roboto-Regular', 'Arial';
 $fl-arabic-thin-nodir: 'DroidKufi_Regular', 'Roboto-Regular', 'Arial';
 
+// Postpay font family
+$postpay-font: 'GreycliffCF-Bold', 'Roboto-Regular', 'DroidKufi_Regular', 'Arial';
+$postpay-arabic-font: 'Cairo-Bold', 'DroidArabicKufi_Bold', 'Roboto-Bold', 'Arial';
+
 $arial: $fl-thin;
 $arial-nodir: $fl-thin-nodir;
 $alshaya-bold: $fl-bold;
