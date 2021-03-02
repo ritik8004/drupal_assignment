@@ -48,12 +48,6 @@
       .blend {
         background-color: $order_print_order_details_row_bg_td_blend;
       }
-
-      td {
-        &:last-child {
-          display: block !important;
-        }
-      }
     }
   }
 }

@@ -21,7 +21,7 @@ import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
 import PostpayCart from '../postpay/postpay';
-import isPostpayEnabled from '../../../utilities/helper';
+import Postpay from '../../../utilities/postpay';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -229,7 +229,8 @@ export default class Cart extends React.Component {
       );
     }
     let postpay;
-    if (isPostpayEnabled()) {
+    let postpayEligibilityMessage;
+    if (Postpay.isPostpayEnabled()) {
       postpay = (
         <PostpayCart
           amount={totals.base_grand_total}
@@ -238,6 +239,8 @@ export default class Cart extends React.Component {
           mobileOnly
         />
       );
+      postpayEligibilityMessage = <div id="postpay-eligibility-message" style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: drupalSettings.alshaya_spc.postpay_eligibility_message }} />;
+      preContentActive = 'visible';
     }
     return (
       <>
@@ -252,6 +255,7 @@ export default class Cart extends React.Component {
           </CheckoutMessage>
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
+          {postpayEligibilityMessage}
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />

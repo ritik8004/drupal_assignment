@@ -180,6 +180,11 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
     $orderRow['loyaltyCard'] = isset($order['extension']['loyalty_card']) ? alshaya_loyalty_format_card_number($order['extension']['loyalty_card'], TRUE) : '';
   }
 
+  $orderRow['cancelled_items_count'] = $order['cancelled_items_count'];
+  $orderRow['refund_text'] = ($order['cancelled_items_count'] > 0)
+                               ? \Drupal::service('alshaya_acm_customer.orders_manager')->getRefundText($order['payment']['method'])
+                               : NULL;
+
   return $orderRow;
 }
 
@@ -436,6 +441,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
   $products = [];
+  $cancelled_products = [];
+
   foreach ($order['items'] as $item) {
     $item['price'] = acq_commerce_get_clean_price($item['price']);
     $product = $item;
@@ -467,11 +474,11 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $product['attributes'] = array_merge($product['attributes'], $item['attributes']);
       }
 
-      $product['image'] = '';
-
       // Load the first image.
       $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'cart');
-      $product['image']['#skip_lazy_loading'] = TRUE;
+      if ($product['image']) {
+        $product['image']['#skip_lazy_loading'] = TRUE;
+      }
 
       // If 'applied_rule_ids' is set and price is 0, set the free gift label.
       if (isset($item['applied_rule_ids']) && (int) $item['price'] == 0) {
@@ -482,6 +489,14 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
       $products[] = $product;
     }
+
+    if ($item['is_item_cancelled']) {
+      $cancelled_item = $product;
+      $cancelled_item['total'] = alshaya_acm_price_format($product['refund_amount']);
+      $cancelled_item['ordered'] = $product['cancelled_quantity'];
+
+      $cancelled_products[] = $cancelled_item;
+    }
   }
 
   $build = [];
@@ -489,6 +504,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $build['#order'] = alshaya_acm_customer_get_processed_order_summary($order);
   $build['#order_details'] = alshaya_acm_customer_get_processed_order_details($order);
   $build['#products'] = $products;
+  $build['#cancelled_products'] = $cancelled_products;
   $build['#products_count'] = count($build['#products']);
 
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkoutOptionsManager */

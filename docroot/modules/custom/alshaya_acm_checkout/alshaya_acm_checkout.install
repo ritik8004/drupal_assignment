@@ -13,6 +13,39 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Update checkout config to include refund details and added translations.
+ */
+function alshaya_acm_checkout_update_8009() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_checkout.settings'],
+    'alshaya_acm_checkout',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING,
+  );
+
+  $strings = [
+    'The refund for cancelled items will be made to your account within 14 working days if you have paid for your order.' => [
+      'ar' => 'سوف يتم استرجاع المبلغ المدفوع على المنتجات الملغية في حسابك خلال 14 يوم عمل إذا كنت قد دفعت قيمة الطلبية.',
+    ],
+    '@count Cancelled' => [
+      'ar' => 'إلغاء 1',
+    ],
+    'Cancelled' => [
+      'ar' => 'تم الإلغاء',
+    ],
+    'Cancelled Items' => [
+      'ar' => 'المنتجات الملغاه',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Increase size of shipping method description fields.
  *
  * This is a temporary solution. We will stop using this taxonomy once we move
@@ -205,4 +238,22 @@ function alshaya_acm_checkout_install() {
   $configFactory = \Drupal::configFactory()->getEditable('acq_checkout.settings');
   $configFactory->set('checkout_flow_plugin', 'multistep_checkout');
   $configFactory->save();
+
+  // Adding translations.
+  $strings = [
+    'The refund for cancelled items will be made to your account within 14 working days if you have paid for your order.' => [
+      'ar' => 'سوف يتم استرجاع المبلغ المدفوع على المنتجات الملغية في حسابك خلال 14 يوم عمل إذا كنت قد دفعت قيمة الطلبية.',
+    ],
+    '@count Cancelled' => [
+      'ar' => 'إلغاء 1',
+    ],
+    'Cancelled' => [
+      'ar' => 'تم الإلغاء',
+    ],
+    'Cancelled Items' => [
+      'ar' => 'المنتجات الملغاه',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

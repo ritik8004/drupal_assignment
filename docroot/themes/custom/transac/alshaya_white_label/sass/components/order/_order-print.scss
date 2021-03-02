@@ -60,6 +60,13 @@ body {
 .order--print {
   border-top: none;
 
+  @media print {
+    tr {
+      page-break-inside: avoid;
+      page-break-after: auto;
+    }
+  }
+
   .order-details-row {
     background: $order_print_order_details_row_bg;
 
@@ -154,6 +161,33 @@ body {
 
   .order-item-row .blend {
     vertical-align: top;
+  }
+
+  .order__product--image {
+    .image-wrapper {
+      position: relative;
+      display: inline-block;
+
+      img {
+        opacity: 50%;
+        border: 1px solid $cancel-item-image-border;
+      }
+
+      span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 4.6875rem;
+        height: 1.75rem;
+        text-align: center;
+        padding: 0.5rem;
+        background-color: $cancel-item-image-label-bg;
+        color: $cancel-item-image-label-text;
+        font-size: 0.8125rem;
+        line-height: 0.9;
+      }
+    }
   }
 }
 
@@ -261,6 +295,12 @@ body.path--confirmation.alias--confirmation-print {
       html[lang=ar] & {
         font-weight: normal;
         font-family: $alshaya-arabic-bold;
+      }
+    }
+
+    .cancelled-total-price {
+      .price-amount {
+        text-decoration: line-through;
       }
     }
   }

@@ -115,6 +115,16 @@ libraries-override:
       theme:
         css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
 
+  alshaya_white_label/promo-blocks:
+    css:
+      theme:
+        css/conditional-sass/promo-blocks/promo-blocks.ltr.css: css/conditional-sass/promo-blocks/promo-blocks.ltr.css
+
+  alshaya_white_label/advance-content-slider:
+    css:
+      theme:
+        css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css
+
   alshaya_white_label/bazaar-voice:
     css:
       theme:

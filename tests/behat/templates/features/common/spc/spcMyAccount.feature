@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @mckwuat @hmkwuat @hmsauat
 Feature: Test the My Account functionality
 
   Background:
@@ -14,7 +14,6 @@ Feature: Test the My Account functionality
     And the element "#block-page-title .c-page-title" should exist
     And the element "#block-userrecentorders" should exist
     And the element "#block-userrecentorders .subtitle" should exist
-    And the element "#block-userrecentorders table.recent__orders--list" should exist
 
   Scenario: As an authenticated user, I should be able to see all the sections after logging in
     Then I should see the link "my account" in "#block-alshayamyaccountlinks .my-account-nav" section
@@ -39,10 +38,14 @@ Feature: Test the My Account functionality
     When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
     And I wait 10 seconds
     And I wait for the page to load
-    When I click the label for "div.view-id-address_book div.views-field-rendered-entity div.address--edit a"
-    And I wait 10 seconds
+    Then I check the address-book form
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
+    Then I select "{city_option}" from "field_address[0][address][area_parent]" address
+    And I wait 2 seconds
+    Then I select "{governorate}" from "field_address[0][address][area_parent]" address
+    And I wait 2 seconds
+    Then I select "{address_area_field}" from "field_address[0][address][administrative_area]" address
     When I scroll to the ".country-field-wrapper" element
     When fill in billing address with following:
       | field_address[0][address][address_line1]             | {street}      |

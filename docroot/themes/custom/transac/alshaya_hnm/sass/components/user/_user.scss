@@ -200,22 +200,7 @@
 #block-content {
   .order-items {
     li {
-      a {
-        @include icon(arrow-#{$right}, after) {
-          padding: 0.125rem;
-          padding-#{$left}: 0.25rem;
-          top: 2rem;
-          height: 2.1875rem;
-          width: 2.1875rem;
-          font-size: 1.25rem;
-
-          @include breakpoint($only-mobile) {
-            #{$right}: 3.125rem;
-            top: 50%;
-            background-color: transparent;
-          }
-        }
-
+      .order-list-wrapper-container {
         .second-third {
           @include breakpoint($desktop) {
             > div {
@@ -233,6 +218,26 @@
 
           font-family: $hnm-demibold;
           font-weight: normal;
+        }
+      }
+
+      a.order-detail-page {
+        position: absolute;
+        padding: 0.125rem;
+        padding-#{$left}: 0.25rem;
+        top: 2rem;
+        height: 2.1875rem;
+        width: 2.1875rem;
+        font-size: 1.25rem;
+
+        @include breakpoint($only-mobile) {
+          #{$right}: 3.125rem;
+          top: 50%;
+          background-color: transparent;
+        }
+
+        @include icon(arrow-#{$right}, after) {
+          font-size: 1.25rem;
         }
       }
     }

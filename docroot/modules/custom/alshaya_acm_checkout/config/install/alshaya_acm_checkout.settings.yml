@@ -23,4 +23,6 @@ exclude_payment_methods: { }
 cancel_reservation_enabled: 0
 place_order_double_check_after_exception: true
 same_day_shipping_method_code: ''
+refund_exclude_payment_methods:
+  cashondelivery: cashondelivery
 langcode: en
