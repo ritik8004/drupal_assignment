@@ -42,7 +42,7 @@ class TextField extends React.Component {
     const { errors } = this.state;
 
     if (visible === true) {
-      let email = '';
+      let email = null;
       if (getCurrentUserEmail() !== undefined && id === 'useremail') {
         email = getCurrentUserEmail();
       }
@@ -57,12 +57,12 @@ class TextField extends React.Component {
               type="text"
               id={id}
               name={id}
-              defaultValue={(email !== '') ? email : defaultValue}
+              defaultValue={(email !== null) ? email : defaultValue}
               onChange={(e) => this.handleChange(e, minLength)}
               maxLength={maxLength}
               minLength={minLength}
               required={required}
-              readOnly={(email !== '') ? 1 : 0}
+              readOnly={(email !== null) ? 1 : 0}
             />
             <div className="c-input__bar" />
             <label>

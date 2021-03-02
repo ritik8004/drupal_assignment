@@ -210,7 +210,7 @@ class AlshayaBazaarVoice {
         ->loadByProperties(['id' => self::ALSHAYA_BAZAARVOICE_FORM_ID]);
       $webform = reset($webforms);
 
-      $write_review_form_fields = [];
+      $form_fields = [];
 
       foreach ($fields as $key => $value) {
         $key = preg_replace("/[^A-Za-z0-9-]/", '_', $key);
@@ -218,7 +218,7 @@ class AlshayaBazaarVoice {
         $id = preg_replace("/[^A-Za-z0-9-]/", '_', $value['Id']);
         switch ($value['Type']) {
           case 'BooleanInput':
-            $write_review_form_fields[$key] = [
+            $form_fields[$key] = [
               '#type' => 'checkbox',
               '#required' => $value['Required'],
               '#title' => $value['Label'],
@@ -231,7 +231,7 @@ class AlshayaBazaarVoice {
             break;
 
           case 'TextAreaInput':
-            $write_review_form_fields[$key] = [
+            $form_fields[$key] = [
               '#type' => 'textarea',
               '#required' => $value['Required'],
               '#title' => $value['Label'],
@@ -247,7 +247,7 @@ class AlshayaBazaarVoice {
 
           case 'SelectInput':
             $options = $this->processOptionsField($value['Options']);
-            $write_review_form_fields[$key] = [
+            $form_fields[$key] = [
               '#type' => 'select',
               '#title' => $value['Label'],
               '#required' => $value['Required'],
@@ -260,7 +260,7 @@ class AlshayaBazaarVoice {
             break;
 
           default:
-            $write_review_form_fields[$key] = [
+            $form_fields[$key] = [
               '#type' => 'textfield',
               '#required' => $value['Required'],
               '#title' => $value['Label'],
@@ -276,7 +276,7 @@ class AlshayaBazaarVoice {
         // Ignore the fields exist already.
         if (!in_array($key, array_keys($webform->getElementsDecoded()))) {
           // Add BazaarVoice fields in webform.
-          $new_element = array_merge($webform->getElementsDecoded(), $write_review_form_fields);
+          $new_element = array_merge($webform->getElementsDecoded(), $form_fields);
           $updated = $webform->setElements($new_element)->save();
           if ($updated) {
             $is_new = 1;

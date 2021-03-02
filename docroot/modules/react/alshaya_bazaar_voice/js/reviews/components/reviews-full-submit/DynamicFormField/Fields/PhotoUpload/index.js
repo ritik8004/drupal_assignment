@@ -30,7 +30,7 @@ const PhotoUpload = (props) => {
             <div className="help-text">{photoField.text}</div>
             <div className="image-wrapper">
               {imageList.map((image, index) => (
-                <div key={image} className="image-item">
+                <div key={index.toString()} className="image-item">
                   <img src={image.data_url} alt="" imageindex={index} />
                   <PhotoUrls
                     imageDataUrl={image.data_url}
@@ -46,13 +46,16 @@ const PhotoUpload = (props) => {
             </div>
             <div className="photo-upload-block">
               <div className="user-pic-label">{Drupal.t('Show us how it looks! Upload up to 5 pics ')}</div>
-              <button
-                type="button"
-                onClick={onImageUpload}
-                {...dragProps}
-              >
-                {Drupal.t('Upload a Photo')}
-              </button>
+              {imageList.length < maxNumber
+                && (
+                  <button
+                    type="button"
+                    onClick={onImageUpload}
+                    {...dragProps}
+                  >
+                    {Drupal.t('Upload a Photo')}
+                  </button>
+                )}
             </div>
           </div>
         )}

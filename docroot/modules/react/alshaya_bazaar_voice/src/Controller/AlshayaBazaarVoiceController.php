@@ -75,15 +75,15 @@ class AlshayaBazaarVoiceController extends ControllerBase {
    */
   public function uploadFile(Request $request) {
     $request_content = json_decode($request->getContent(), TRUE);
-    $dataUrl = $request_content['dataUrl'];
-    $fileName = $request_content['fileName'];
+    $data_url = $request_content['dataUrl'];
+    $file_name = $request_content['fileName'];
 
     $review_photo_temp_upload = 'public://review_photo_temp_upload';
     // Make sure the directory exists and is writable.
     $this->fileSystem->prepareDirectory($review_photo_temp_upload, FileSystemInterface::CREATE_DIRECTORY);
-    $image_name = $review_photo_temp_upload . '/' . $fileName;
+    $image_name = $review_photo_temp_upload . '/' . $file_name;
 
-    $file_object = $this->fileSystem->saveData(base64_decode($dataUrl), $image_name, FileSystemInterface::EXISTS_REPLACE);
+    $file_object = $this->fileSystem->saveData(base64_decode($data_url), $image_name, FileSystemInterface::EXISTS_REPLACE);
     $url = file_create_url($file_object);
 
     $response = new JsonResponse();

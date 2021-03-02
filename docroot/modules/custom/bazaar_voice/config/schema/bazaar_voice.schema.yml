@@ -13,7 +13,7 @@ bazaar_voice.settings:
       label: 'A shared key provided by BazaarVoice.'
     max_age:
       type: integer
-      label: 'Max age to expire uas token.'
+      label: 'Max age to expire user authentication string.'
     api_version:
       type: decimal
       label: 'API version.'

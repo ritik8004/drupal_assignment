@@ -63,14 +63,17 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
     $form['basic_settings']['shared_secret_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Shared Secret Key'),
-      '#description' => $this->t('BazaarVoice shared encoding key to create a UAS token.'),
+      '#description' => $this->t('BazaarVoice shared encoding key to create a user authentication string.'),
       '#default_value' => $config->get('shared_secret_key'),
     ];
 
     $form['basic_settings']['max_age'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Max age'),
-      '#description' => $this->t('Max age to expire UAS token.'),
+      '#description' => $this->t('Max age to expire user authentication string. Please read the document for more info @url', [
+        '@url' => Link::fromTextAndUrl($this->t('here'), Url::fromUri('https://developer.bazaarvoice.com/conversations-api/tutorials/submission/authentication/client-mastered'))
+          ->toString(),
+      ]),
       '#default_value' => $config->get('max_age'),
     ];
 
