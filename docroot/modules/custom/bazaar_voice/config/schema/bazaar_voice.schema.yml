@@ -35,3 +35,9 @@ bazaar_voice.settings:
     environment:
       type: string
       label: 'The deployment environment of BazaarVoice where we implement BV Pixel.'
+    pdp_rating_reviews:
+      type: boolean
+      label: 'Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'
+    write_review_submission:
+      type: boolean
+      label: 'Enable Closed submission for unauthorized user.'
