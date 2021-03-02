@@ -4,7 +4,7 @@ import DynamicFormField from '../DynamicFormField';
 import { prepareRequest } from '../../../../utilities/write_review_util';
 import { postAPIData } from '../../../../utilities/api/apiData';
 import { removeFullScreenLoader, showFullScreenLoader }
-  from '../../../../../../js/utilities/showRemoveFullScreenLoader';
+  from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import { getLanguageCode, doRequest } from '../../../../utilities/api/request';
 

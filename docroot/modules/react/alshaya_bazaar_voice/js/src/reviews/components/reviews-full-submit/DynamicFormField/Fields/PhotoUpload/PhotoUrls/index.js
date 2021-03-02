@@ -4,7 +4,7 @@ import { postRequest } from '../../../../../../../utilities/api/request';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
-} from '../../../../../../../../../js/utilities/showRemoveFullScreenLoader';
+} from '../../../../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import BazaarVoiceMessages from '../../../../../../../common/components/bazaarvoice-messages';
 
 class PhotoUrls extends React.Component {
