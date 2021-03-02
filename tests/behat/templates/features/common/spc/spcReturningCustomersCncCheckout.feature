@@ -38,13 +38,13 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 20 seconds
     And I wait for AJAX to finish
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "4242424242424242"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "4242424242424242"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "03/22"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "100"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 5 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -118,13 +118,13 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 20 seconds
     And I wait for AJAX to finish
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "4242424242424242"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "100"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "4242424242424242"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "03/22"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "100"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
