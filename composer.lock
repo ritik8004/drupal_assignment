@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cdad30ec406e8fdd6c0769a39d4ffacc",
+    "content-hash": "7f860da9b657dccd456cfac1aa27164a",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -16108,10 +16108,10 @@
         },
         {
             "name": "hubspot/pace",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/hubspot/pace/archive/master.zip"
+                "url": "https://github.com/hubspot/pace/archive/v1.0.2.zip"
             },
             "type": "drupal-library"
         },
@@ -24654,6 +24654,7 @@
                 }
             ],
             "description": "Command line tool to detect usage of deprecated code",
+            "abandoned": true,
             "time": "2017-09-06T12:14:01+00:00"
         },
         {
