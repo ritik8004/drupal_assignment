@@ -437,20 +437,4 @@ class CustomCommand extends BltTasks {
     }
   }
 
-  /**
-   * Build react dist files for use in local.
-   *
-   * @command local:react:build
-   * @aliases react-build
-   */
-  public function reactBuildDist() {
-    $result = $this->taskExec('blt/scripts/react-build.sh ' . $this->getConfigValue('repo.root') . '/docroot')
-      ->dir($this->getConfigValue('repo.root'))
-      ->interactive($this->input()->isInteractive())
-      ->setVerbosityThreshold(VerbosityThresholdInterface::VERBOSITY_VERBOSE)
-      ->run();
-
-    return $result;
-  }
-
 }

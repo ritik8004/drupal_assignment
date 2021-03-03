@@ -10,7 +10,7 @@ variables:
   APP_NAME: Alshaya
   BLT: ./vendor/bin/blt
   BLT_DIR: ./vendor/acquia/blt
-  BLT_SCRIPT_DIR: ./blt/scripts
+  BLT_SCRIPT_DIR: ./blt/scripts/gitlab
   SCRIPT_DIR: ./scripts/gitlab
   MYSQL_DATABASE: drupal
   MYSQL_ROOT_PASSWORD: drupal
