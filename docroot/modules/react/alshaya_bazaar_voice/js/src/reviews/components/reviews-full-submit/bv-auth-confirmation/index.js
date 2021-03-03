@@ -1,6 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { postAPIData } from '../api/apiData';
+import { postAPIData } from '../../../../utilities/api/apiData';
+import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -8,7 +9,6 @@ export default class BvAuthConfirmation extends React.Component {
     this.state = {
       isModelOpen: true,
       isUserVerified: false,
-      errors: '',
     };
   }
 
@@ -23,11 +23,7 @@ export default class BvAuthConfirmation extends React.Component {
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
-          if (result.data.HasErrors === true) {
-            this.setState({
-              errors: result.data.Errors,
-            });
-          } else {
+          if (!result.data.HasErrors) {
             this.setState({
               isUserVerified: true,
             });
@@ -49,7 +45,6 @@ export default class BvAuthConfirmation extends React.Component {
     const {
       isModelOpen,
       isUserVerified,
-      errors,
     } = this.state;
 
     return (
@@ -65,14 +60,7 @@ export default class BvAuthConfirmation extends React.Component {
                 <div>{Drupal.t('We have verified your submission. If the content is approved it will be published within 72 hours.')}</div>
               </div>
             )}
-          {errors !== ''
-            && (
-              <ul>
-                {
-              Object.keys(errors).map((index, item) => <li key={index}>{errors[item].Message}</li>)
-                }
-              </ul>
-            )}
+          <BazaarVoiceMessages />
         </div>
       </Popup>
     );

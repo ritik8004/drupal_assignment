@@ -4,6 +4,7 @@ import InlineRating from '../widgets/InlineRating';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import smoothScrollTo from '../../../utilities/smoothScroll';
+import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -42,6 +43,8 @@ export default class Rating extends React.Component {
       return (
         <div className="rating-wrapper">
           <InlineRating reviewsData={reviewsData} />
+          {drupalSettings.bv_auth_token !== null
+          && (<BvAuthConfirmation bvAuthToken={drupalSettings.bv_auth_token} />)}
         </div>
       );
     }
