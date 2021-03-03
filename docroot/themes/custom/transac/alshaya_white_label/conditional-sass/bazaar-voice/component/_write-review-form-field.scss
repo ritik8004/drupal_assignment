@@ -296,7 +296,7 @@
 
     .static-link {
       &:first-of-type {
-        border-#{$right}: 1px solid #000;
+        border-#{$right}: 1px solid $rr-static-links-border;
         padding-#{$right}: 0.5rem;
       }
 

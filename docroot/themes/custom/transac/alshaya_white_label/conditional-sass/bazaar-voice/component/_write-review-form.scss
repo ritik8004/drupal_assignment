@@ -28,7 +28,7 @@
     .exception-field-error-list {
       border: 1px solid $primary_input_border;
       padding: 1.25rem;
-      padding-left: 1.875rem;
+      padding-#{$left}: 1.875rem;
       font-size: 0.875rem;
       color: $rr-review-comment-error;
 
