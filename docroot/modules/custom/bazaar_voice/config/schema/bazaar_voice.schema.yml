@@ -41,6 +41,9 @@ bazaar_voice.settings:
     write_review_submission:
       type: boolean
       label: 'Enable Closed submission for unauthorized user.'
+    reviews_limit_per_page:
+      type: integer
+      label: 'Number of reviews to be shown per page of PDP.'
     write_review_tnc:
       type: string
       label: 'URL of BazaarVoice Write Review Terms and Conditon.'

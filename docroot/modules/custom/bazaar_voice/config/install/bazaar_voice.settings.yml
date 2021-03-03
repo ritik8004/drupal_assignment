@@ -11,6 +11,7 @@ site_id: 'main_site'
 environment: 'staging'
 pdp_rating_reviews: false
 write_review_submission: false
+reviews_limit_per_page: 5
 write_review_tnc: ''
 write_review_guidlines: ''
 comment_form_tnc: ''

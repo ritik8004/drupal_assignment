@@ -143,6 +143,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This option should be checked to enable closed submission for unauthorized user on the site.'),
     ];
 
+    $form['basic_settings']['reviews_limit_per_page'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Number of reviews per page.'),
+      '#default_value' => $config->get('reviews_limit_per_page'),
+      '#description' => $this->t('Number of reviews to be shown per page of PDP'),
+    ];
+
     $form['basic_settings']['write_review_tnc'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Write a review T&C url'),
@@ -187,6 +194,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('environment', $values['environment'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
       ->set('write_review_submission', $values['write_review_submission'])
+      ->set('reviews_limit_per_page', $values['reviews_limit_per_page'])
       ->set('write_review_tnc', $values['write_review_tnc'])
       ->set('write_review_guidlines', $values['write_review_guidlines'])
       ->set('comment_form_tnc', $values['comment_form_tnc'])
