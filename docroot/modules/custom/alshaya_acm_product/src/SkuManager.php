@@ -39,6 +39,7 @@ use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product\Plugin\rest\resource\StockResource;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
@@ -2585,7 +2586,7 @@ class SkuManager {
       $in_stock = (count($children) > 0);
     }
 
-    $this->productCacheManager->set($sku, 'in_stock', $in_stock);
+    $this->productCacheManager->set($sku, 'in_stock', $in_stock, [StockResource::CACHE_PREFIX . $sku->id()]);
 
     return $in_stock;
   }
@@ -3760,10 +3761,13 @@ class SkuManager {
   /**
    * Get sanized version of sku.
    *
+   * @param string $skuId
+   *   Product sku id.
+   *
    * @return array
    *   Return sanitized version sku
    */
-  public function getSanitizedSku($skuId) {
+  public function getSanitizedSku(string $skuId) {
     if (empty($skuId)) {
       return NULL;
     }

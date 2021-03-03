@@ -1,0 +1,90 @@
+.user__order--detail {
+  .light {
+    a {
+      &.cancel-link {
+        margin-top: 0.125rem;
+        font-size: 0.75rem;
+        line-height: 1.33;
+        color: $cancel-item-link;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  tr[id^="cancel-order-item"] {
+    td {
+      padding-bottom: 0.25rem;
+      padding-top: 1.125rem;
+      padding-#{$left}: 0;
+    }
+
+    div {
+      font-size: 1.125rem;
+      line-height: 1.22;
+      color: $cancel-item-list-header;
+    }
+  }
+
+  .tooltip-anchor {
+    display: flex;
+    align-items: center;
+
+    span {
+      font-size: 0.875rem;
+      line-height: 1.125rem;
+      margin-top: 0.1875rem;
+      color: $cancel-item-refund-text;
+
+      @include breakpoint($desktop) {
+        line-height: 1.25rem;
+      }
+    }
+  }
+
+  .order-item-image,
+  .order__product--image {
+    .image-wrapper {
+      position: relative;
+      display: inline-block;
+
+      img {
+        opacity: 50%;
+        border: 1px solid $cancel-item-image-border;
+      }
+
+      span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 4.6875rem;
+        height: 1.75rem;
+        text-align: center;
+        padding: 0.5rem;
+        background-color: $cancel-item-image-label-bg;
+        color: $cancel-item-image-label-text;
+        font-size: 0.8125rem;
+        line-height: 0.9;
+      }
+    }
+  }
+
+  + .cancelled-item-tooltip-refund-text {
+    display: flex;
+    align-items: center;
+
+    &::before {
+      padding-#{$right}: 0.5rem;
+      font-size: 1.25rem;
+    }
+  }
+
+  .cancelled-item-refund-text {
+    .tooltip-anchor {
+      &::before {
+        padding-#{$right}: 0.5rem;
+        font-size: 1.25rem;
+      }
+    }
+  }
+}

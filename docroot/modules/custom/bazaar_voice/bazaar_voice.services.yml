@@ -1,5 +1,5 @@
 services:
-  bazaar_voice.bazaar_voice:
+  bazaar_voice.api_helper:
     class: Drupal\bazaar_voice\BazaarVoiceApiHelper
     arguments: 
       - '@config.factory'
