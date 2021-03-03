@@ -13,6 +13,24 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add new Product resource v2.
+ */
+function alshaya_acm_product_update_8067() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['rest.resource.product_v2'],
+    'alshaya_acm_product',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new Stock resource v2.
  */
 function alshaya_acm_product_update_8066() {
