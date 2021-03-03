@@ -425,7 +425,7 @@ class CustomCommand extends BltTasks {
       if (strpos($paragraph_yml, 'field.field.')) {
         $yaml_parsed = Yaml::parse(file_get_contents($paragraph_yml));
         return ($yaml_parsed['field_type'] == 'entity_reference_revisions'
-        && (empty($yaml_parsed['skip_translation_check']) || !empty($yaml_parsed['translatable'])));
+          && (empty($yaml_parsed['skip_translation_check']) || !empty($yaml_parsed['translatable'])));
       }
     });
 
@@ -435,6 +435,22 @@ class CustomCommand extends BltTasks {
       // Exit with a status of 1.
       return 1;
     }
+  }
+
+  /**
+   * Build react dist files for use in local.
+   *
+   * @command local:react:build
+   * @aliases react-build
+   */
+  public function reactBuildDist() {
+    $result = $this->taskExec('blt/scripts/react-build.sh ' . $this->getConfigValue('repo.root') . '/docroot')
+      ->dir($this->getConfigValue('repo.root'))
+      ->interactive($this->input()->isInteractive())
+      ->setVerbosityThreshold(VerbosityThresholdInterface::VERBOSITY_VERBOSE)
+      ->run();
+
+    return $result;
   }
 
 }
