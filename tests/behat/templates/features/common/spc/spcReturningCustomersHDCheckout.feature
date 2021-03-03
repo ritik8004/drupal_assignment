@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @homeDelivery @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @auth
+@javascript @returnUser @checkoutPayment @homeDelivery @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @auth @vsaeuat @hmkwuat @hmsauat @flkwuat
 Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2D) Card Payment Method
 
   Background:
@@ -8,7 +8,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
 
   @cc @hd @checkout_com
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -45,13 +45,13 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I wait for AJAX to finish
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
@@ -70,10 +70,9 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I should see "{delivery_type_text}"
     Then I should see "{delivery_type}"
     Then I should see "{payment_type_text}"
-    Then I should see "{cc_payment_type}"
+    Then I should see "{payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -95,7 +94,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -107,6 +106,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
+    And print current URL
     Then I should be on "/{language_short}/cart/login" page
     And I wait 10 seconds
     Then I fill in "edit-name" with "{spc_returning_user_email}"
@@ -132,20 +132,22 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I wait for AJAX to finish
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
+    And print current URL
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds
     And I wait for the page to load
-    Then I should be on "/{language_short}/checkout/confirmation" page
+    Then I should be on "/{language_short}/checkout/" page
     And I wait 10 seconds
     And I wait for the page to load
+    And print current URL
     Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_returning_user_email}"
     Then I should see "{language_order_detail}"
@@ -183,12 +185,12 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I should see "{language_continue_shopping_text}"
 
 
-  @cc @hd @language @mobile @checkout_com
+  @cc @hd @language @mobile @checkout_com @test34
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -225,13 +227,13 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for the page to load
     And I wait for AJAX to finish
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 10 seconds

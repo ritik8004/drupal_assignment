@@ -1,0 +1,15 @@
+alshaya_olapic_widget:
+  js:
+    js/alshaya_olapic_widget.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+
+olapic_checkout_pixel:
+  footer: true
+  js:
+    js/olapic_checkout_pixel.js: { }
+  dependencies:
+    - core/drupal
+    - core/jquery

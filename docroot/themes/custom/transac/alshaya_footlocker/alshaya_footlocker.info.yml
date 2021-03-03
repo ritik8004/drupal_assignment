@@ -74,3 +74,18 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css
+
+  alshaya_white_label/store_finder:
+    css:
+      theme:
+        css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/advance-content-slider:
+    css:
+      theme:
+        css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css
+        
+  alshaya_white_label/postpay-cart:
+    css:
+      theme:
+        css/conditional-sass/postpay-cart/postpay-cart.ltr.css: css/conditional-sass/postpay-cart/postpay-cart.ltr.css

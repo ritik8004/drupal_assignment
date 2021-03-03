@@ -370,8 +370,6 @@
 .cloudzoom__herocontainer {
   .product-labels {
     position: unset;
-    top: 0;
-    left: 0;
   }
 }
 
@@ -434,10 +432,6 @@
 
   .cloudzoom__herocontainer {
     width: 100%;
-
-    .product-labels {
-      position: absolute;
-    }
   }
 
   #lightSlider {

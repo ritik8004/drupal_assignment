@@ -4,25 +4,3 @@
     @include container(1235px);
   }
 }
-
-.c-promo__item {
-  .paragraph--type--section-divider {
-    &::before {
-      content: none;
-    }
-
-    display: block;
-
-    .field--name-field-section-divider-text {
-      padding: 0;
-      font-family: $muji-demibold;
-      font-size: 1.875rem;
-      font-weight: 500;
-      text-align: left;
-
-      @include breakpoint($only-mobile) {
-        font-size: 1.5rem;
-      }
-    }
-  }
-}

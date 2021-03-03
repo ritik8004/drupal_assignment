@@ -263,16 +263,30 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
   if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
 
+    $tid = $term->id();
+    $parent_tid = $term->parent->getString();
     $langcode = $term->language()->getId();
     $changed = FALSE;
+
+    // This will hold the term ids whose skus will be added to the queue.
+    // for processing.
+    $static = &drupal_static('category_sync_process_term_ids', []);
 
     // We want to queue related SKUs even if translation is not available.
     if (!$term->original->hasTranslation($langcode)) {
       $changed = TRUE;
     }
-
+    // Check if parent is marked as changed. If yes, the we also queue the
+    // child.
+    elseif (isset($static[$parent_tid])) {
+      $changed = TRUE;
+    }
+    // Check if parent has changed.
+    elseif ($parent_tid != $term->original->parent->getString()) {
+      $changed = TRUE;
+    }
     // If translation is available, we check the fields.
-    if (!$changed) {
+    else {
       $old_term = $term->original->getTranslation($langcode);
       $fields_to_check = ['field_commerce_status', 'field_category_include_menu', 'name', 'field_show_in_lhn'];
 
@@ -289,16 +303,29 @@ function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) 
       return;
     }
 
+    // Mark this term as changed in the static variable so that this information
+    // can be used when checked for changed status for its child terms.
+    $static[$tid] = TRUE;
+
+    // Get the children.
+    $children = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+      ->loadTree(ProductCategoryTree::VOCABULARY_ID, $tid);
+
+    $child_tids = array_column($children, 'tid');
+
+    $tids = array_merge([$tid], $child_tids);
+
     $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
-      ->getSkusForCategory($term->id());
+      ->getSkusForCategory($tids);
 
     // Queue the skus for reindexation.
     if (!empty($skus_for_category)) {
       \Drupal::logger('alshaya_acm_product_category')
-        ->info('Queueing products for updated category with Drupal ID: @tid, Commerce ID: @commerce_id, Langcode: @langcode, Products: @skus.', [
-          '@tid' => $term->id(),
+        ->info('Queueing products for updated category with Drupal ID: @tid, Commerce ID: @commerce_id, Langcode: @langcode, Child tids: @child_tids, Products: @skus.', [
+          '@tid' => $tid,
           '@commerce_id' => $term->get('field_commerce_id')->getString(),
           '@langcode' => $langcode,
+          '@child_tids' => !empty($child_tids) ? implode(',', $child_tids) : '-',
           '@skus' => implode(',', $skus_for_category),
         ]);
       \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAvailableProductsForSkus($skus_for_category);
@@ -314,7 +341,7 @@ function alshaya_acm_product_category_taxonomy_term_delete(TermInterface $term) 
     _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
 
     $skus_for_category = \Drupal::service('alshaya_acm_product_category.category_products_helper')
-      ->getSkusForCategory($term->id());
+      ->getSkusForCategory([$term->id()]);
 
     // Queue the skus for reindexation.
     if (!empty($skus_for_category)) {

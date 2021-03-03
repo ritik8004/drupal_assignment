@@ -641,41 +641,24 @@
         }
       }
 
-      a {
-        @include icon(chevron#{$right}, after) {
-          font-size: 1.875rem;
-          position: absolute;
-          #{$right}: 1rem;
-          border-radius: 100%;
-          color: $user_order_list_text;
-          padding: 2px;
-          padding-#{$left}: 4px;
-          top: 2rem;
-          height: 35px;
-          width: 35px;
-
-          @include breakpoint($only-mobile) {
-            background-color: $user_order_list_hover_link_bg;
-            #{$right}: 3rem;
-            top: 62%;
-          }
-        }
-
+      .order-list-wrapper-container {
         display: block;
         border-bottom: 1px solid $user_order_list_border;
         position: relative;
 
         @include breakpoint($only-tablet) {
           display: table;
+          padding: 0 1.25rem;
           width: 100%;
         }
 
         @include breakpoint($desktop) {
-          width: 921px;
+          width: 57.5625rem;
+          padding: 0 1.5rem;
         }
 
         @include breakpoint($only-mobile) {
-          height: 143px;
+          height: 8.9375rem;
           background-position: percent-value(80%) 60%;
         }
 
@@ -692,11 +675,11 @@
             vertical-align: middle;
 
             > .first {
-              padding-bottom: 8px;
+              padding-bottom: 0.5rem;
             }
 
             > .second {
-              padding-top: 8px;
+              padding: 0.5rem 0;
             }
           }
 
@@ -762,7 +745,16 @@
             }
 
             .second {
-              width: 227px;
+              width: 14.1875rem;
+              line-height: 1rem;
+            }
+          }
+
+          &.cancelled-item-wrapper {
+            .second {
+              @include breakpoint($only-tablet) {
+                margin-bottom: 1.25rem;
+              }
             }
           }
         }
@@ -850,6 +842,28 @@
 
         .date {
           margin-top: 0.3125rem;
+        }
+      }
+
+      a.order-detail-page {
+        position: absolute;
+        #{$right}: 1rem;
+        border-radius: 100%;
+        color: $user_order_list_text;
+        padding: 0.125rem;
+        padding-#{$left}: 0.25rem;
+        top: 2rem;
+        height: 2.1875rem;
+        width: 2.1875rem;
+
+        @include breakpoint($only-mobile) {
+          background-color: $user_order_list_hover_link_bg;
+          #{$right}: 3rem;
+          top: 62%;
+        }
+
+        @include icon(chevron#{$right}, after) {
+          font-size: 1.875rem;
         }
       }
     }

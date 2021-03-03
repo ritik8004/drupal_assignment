@@ -439,3 +439,17 @@ function alshaya_color_split_alshaya_acm_customer_order_details_alter(array &$or
     }
   }
 }
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function alshaya_color_split_pathauto_alias_alter(&$alias, array $context) {
+  if ($context['module'] != 'node' || $context['bundle'] != 'acq_product') {
+    return;
+  }
+
+  // Remove - appering before .html in pdp url.
+  if (strpos($alias, '-.html') !== FALSE) {
+    $alias = str_replace('-.html', '.html', $alias);
+  }
+}

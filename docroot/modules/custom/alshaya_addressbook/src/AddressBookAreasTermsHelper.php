@@ -143,8 +143,11 @@ class AddressBookAreasTermsHelper {
       return [];
     }
 
+    // Variable to store the original parent value.
+    $original_parent = $parent;
+
     $cache_key = $location_key ? 'getAllAreasWithParentKeyedByLocationID' : 'getAllAreasWithParent';
-    $area_withparent = $this->getAddressCachedData($cache_key . ':' . $parent);
+    $area_withparent = $this->getAddressCachedData($cache_key . ':' . $original_parent);
     if (is_array($area_withparent)) {
       return $area_withparent;
     }
@@ -181,7 +184,7 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list, $cache_key . ':' . $parent);
+    $this->setAddressCachedData($term_list, $cache_key . ':' . $original_parent);
 
     return $term_list;
   }

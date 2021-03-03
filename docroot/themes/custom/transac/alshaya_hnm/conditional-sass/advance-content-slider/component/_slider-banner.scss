@@ -1,0 +1,5 @@
+.c-content__slider {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 0.75rem;
+  }
+}

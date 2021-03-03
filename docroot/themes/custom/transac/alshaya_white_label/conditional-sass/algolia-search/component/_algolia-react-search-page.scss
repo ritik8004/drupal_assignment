@@ -5,6 +5,19 @@
       float: $right;
     }
   }
+
+  .labels-container {
+    .label {
+      &.bottom {
+        &-right,
+        &-left {
+          @include breakpoint($only-mobile) {
+            bottom: 9rem;
+          }
+        }
+      }
+    }
+  }
 }
 
 #alshaya-algolia-search,
@@ -290,7 +303,7 @@ body.ie {
   }
 }
 
-body[class^="super-category"] {
+body[class*="super-category"] {
   #alshaya-algolia-search {
     .block-facet-blockcategory-facet-search {
       ul {
@@ -447,6 +460,23 @@ body[class^="super-category"] {
               .c-accordion {
                 margin: 0;
               }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.hide-header {
+  #alshaya-algolia-search {
+    .labels-container {
+      .label {
+        &.bottom {
+          &-right,
+          &-left {
+            @include breakpoint($only-mobile) {
+              bottom: 8rem;
             }
           }
         }

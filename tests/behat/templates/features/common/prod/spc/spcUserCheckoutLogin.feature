@@ -42,5 +42,4 @@ Feature: Test the Checkout Login functionality
     Then I should see "{order_total}"
     Then I should see "{order_summary}"
     Then I should see "{promo_code}"
-    And I should see "{excluding_delivery}"
     And I should see "{vat}"

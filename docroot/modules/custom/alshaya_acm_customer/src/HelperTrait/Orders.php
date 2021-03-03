@@ -59,6 +59,8 @@ trait Orders {
     $order['email'] = $order['customer_email'];
 
     $items = [];
+    $total_cancelled_quantity = 0;
+
     foreach ($order['items'] as $item) {
       if (isset($items[$item['sku']])) {
         continue;
@@ -73,6 +75,17 @@ trait Orders {
         'refunded' => (int) ($item['qty_refunded'] ?? 0),
       ];
 
+      $cancelled_quantity = $this->getCancelledItemsQuantity($item);
+      if ($cancelled_quantity) {
+        $processed_item['is_item_cancelled'] = TRUE;
+        $processed_item['cancelled_quantity'] = $cancelled_quantity;
+        $processed_item['refund_amount'] = $item['extension_attributes']['oms_amount_refunded'] ?? 0.0;
+        $total_cancelled_quantity += $cancelled_quantity;
+      }
+      else {
+        $processed_item['is_item_cancelled'] = FALSE;
+      }
+
       // If attribute value available for grouping attribute.
       if (isset($item['attributes']) && !empty($item['attributes'])) {
         $processed_item['attributes'] = $item['attributes'];
@@ -84,6 +97,8 @@ trait Orders {
     $order['items'] = $items;
 
     $order['coupon'] = $order['coupon_code'] ?? '';
+
+    $order['cancelled_items_count'] = $total_cancelled_quantity;
 
     // Extension.
     $order['extension'] = $order['extension_attributes'];
@@ -120,6 +135,24 @@ trait Orders {
     ];
 
     return $order;
+  }
+
+  /**
+   * Get the cancelled quantity for an item in an order.
+   *
+   * @param array $item
+   *   The item array from the order.
+   *
+   * @return int
+   *   The cancelled quantity.
+   */
+  private function getCancelledItemsQuantity(array $item) {
+    if (isset($item['extension_attributes']['qty_adjustments'])) {
+      $adjustments = json_decode($item['extension_attributes']['qty_adjustments'], TRUE);
+      return isset($adjustments['qty_stock_shortage']) ? (int) $adjustments['qty_stock_shortage'] : 0;
+    }
+
+    return 0;
   }
 
 }

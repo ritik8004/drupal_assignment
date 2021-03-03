@@ -1,5 +1,7 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 
+import '../../../utilities/interceptor/interceptor';
 import SectionTitle from '../../../utilities/section-title';
 import CartItems from '../cart-items';
 import CartRecommendedProducts from '../recommended-products';
@@ -18,6 +20,8 @@ import PromotionsDynamicLabelsUtil from '../../../utilities/promotions-dynamic-l
 import DynamicPromotionBanner from '../dynamic-promotion-banner';
 import DeliveryInOnlyCity from '../../../utilities/delivery-in-only-city';
 import { openFreeGiftModal, selectFreeGiftModal } from '../../../utilities/free_gift_util';
+import PostpayCart from '../postpay/postpay';
+import Postpay from '../../../utilities/postpay';
 
 export default class Cart extends React.Component {
   constructor(props) {
@@ -132,6 +136,24 @@ export default class Cart extends React.Component {
 
     // Event to trigger after free gift listing modal open.
     document.addEventListener('selectFreeGiftModalEvent', selectFreeGiftModal, false);
+
+    // Display message from cookies.
+    const qtyMismatchError = Cookies.get('middleware_payment_error');
+
+    // If 'middleware_payment_error' cookie exists.
+    if (qtyMismatchError !== undefined
+      && qtyMismatchError !== null
+      && qtyMismatchError.length > 0) {
+      // Remove 'middleware_payment_error' cookie.
+      Cookies.remove('middleware_payment_error');
+
+      const qtyMismatchErrorInfo = JSON.parse(qtyMismatchError);
+
+      // Handle CART_CHECKOUT_QUANTITY_MISMATCH exception.
+      if (qtyMismatchErrorInfo.code === 9010) {
+        this.updateCartMessage('error', qtyMismatchErrorInfo.message);
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -206,7 +228,20 @@ export default class Cart extends React.Component {
         </>
       );
     }
-
+    let postpay;
+    let postpayEligibilityMessage;
+    if (Postpay.isPostpayEnabled()) {
+      postpay = (
+        <PostpayCart
+          amount={totals.base_grand_total}
+          isCartPage
+          classNames="spc-postpay-mobile-preview"
+          mobileOnly
+        />
+      );
+      postpayEligibilityMessage = <div id="postpay-eligibility-message" style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: drupalSettings.alshaya_spc.postpay_eligibility_message }} />;
+      preContentActive = 'visible';
+    }
     return (
       <>
         <div className={`spc-pre-content ${preContentActive}`} style={{ animationDelay: '0.4s' }}>
@@ -220,9 +255,11 @@ export default class Cart extends React.Component {
           </CheckoutMessage>
           {/* This will be used for Dynamic promotion labels. */}
           <DynamicPromotionBanner dynamicPromoLabelsCart={dynamicPromoLabelsCart} />
+          {postpayEligibilityMessage}
         </div>
         <div className="spc-pre-content-sticky fadeInUp" style={{ animationDelay: '0.4s' }}>
           <MobileCartPreview total_items={totalItems} totals={totals} />
+          {postpay}
         </div>
         <div className="spc-main">
           <div className="spc-content">

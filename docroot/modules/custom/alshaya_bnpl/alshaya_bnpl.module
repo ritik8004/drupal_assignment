@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_bnpl_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  // Need processing only for products with Full view mode.
+  if ($entity->bundle() != 'acq_product') {
+    return;
+  }
+
+  if (in_array($view_mode, ['full', 'modal', 'matchback'])) {
+    /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
+    $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
+    $bnplWidgetHelper->getBnplBuild($build, 'pdp');
+  }
+}
+
+/**
+ * Implements hook_alshaya_spc_cart_build_alter().
+ *
+ * @param array $build
+ */
+function alshaya_bnpl_alshaya_spc_cart_build_alter(array &$build) {
+  /** @var \Drupal\alshaya_bnpl\AlshayaBnplWidgetHelper $bnplWidgetHelper */
+  $bnplWidgetHelper = \Drupal::service('alshaya_bnpl.widget_helper');
+  $bnplWidgetHelper->getBnplBuild($build, 'cart');
+}

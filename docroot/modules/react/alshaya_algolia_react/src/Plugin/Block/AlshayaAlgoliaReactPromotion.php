@@ -4,6 +4,7 @@ namespace Drupal\alshaya_algolia_react\Plugin\Block;
 
 use Drupal\alshaya_algolia_react\AlshayaAlgoliaReactBlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -108,13 +109,8 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    if (($url_object = $this->pathValidator->getUrlIfValid($this->requestStack->getCurrentRequest()->getPathInfo())) &&
-      ($url_object->getRouteName() == 'entity.node.canonical') &&
-      ($node_id = $url_object->getRouteParameters()['node']) &&
-      (($node = $this->entityTypeManager->getStorage('node')->load($node_id)))) {
-      $promotion_nid = $node->id();
-    }
-    else {
+    $promotion = $this->getPromotion();
+    if (!($promotion instanceof NodeInterface)) {
       return [];
     }
 
@@ -126,7 +122,7 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
     $algoliaSearchValues = [
       'local_storage_expire' => $common_config['otherRequiredValues']['local_storage_expire'],
       'filters_alias' => array_column($promotion_filters, 'identifier', 'alias'),
-      'promotionNodeId' => $promotion_nid,
+      'promotionNodeId' => $promotion->id(),
     ];
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
@@ -148,12 +144,47 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
   }
 
   /**
+   * Get Promotion Node object for current page.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   Null if promotion not found.
+   */
+  protected function getPromotion() {
+    static $promotion = NULL;
+
+    if (!isset($promotion)) {
+      $promotion = '';
+
+      $url_object = $this->pathValidator->getUrlIfValid(
+        $this->requestStack->getCurrentRequest()->getPathInfo()
+      );
+
+      if ($url_object && $url_object->getRouteName() == 'entity.node.canonical') {
+        $node_id = $url_object->getRouteParameters()['node'];
+        $promotion = $node_id
+          ? $this->entityTypeManager->getStorage('node')->load($node_id)
+          : '';
+      }
+    }
+
+    return $promotion instanceof NodeInterface
+      ? $promotion
+      : NULL;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), [
-      'alshaya_acm_product_position.settings',
-    ]);
+    $tags = ['alshaya_acm_product_position.settings'];
+    Cache::mergeTags(parent::getCacheTags(), $tags);
+
+    $promotion = $this->getPromotion();
+    if ($promotion instanceof NodeInterface) {
+      $tags = Cache::mergeTags($promotion->getCacheTags(), $tags);
+    }
+
+    return $tags;
   }
 
 }

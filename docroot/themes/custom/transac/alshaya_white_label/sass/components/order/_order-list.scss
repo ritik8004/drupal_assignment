@@ -221,9 +221,13 @@
     border-top: 1px solid $primary_border;
   }
 
-  &:nth-of-type(1) {
-    td {
-      border-top: none;
+  &:first-child {
+    .order-summary-row {
+      &:nth-of-type(1) {
+        td {
+          border-top: none;
+        }
+      }
     }
   }
 
@@ -297,6 +301,12 @@
 
   .order-item-row td {
     padding: 1.313rem 1.5rem 1.8rem;
+
+    &.cancelled-item-refund-text {
+      @include breakpoint($only-tablet) {
+        padding-top: 0.375rem;
+      }
+    }
 
     &:first-child {
       @include breakpoint($only-tablet) {
@@ -606,5 +616,15 @@
     @include breakpoint($only-mobile) {
       margin-bottom: 0.4rem;
     }
+  }
+}
+
+.cancel-item {
+  a {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: $cancel-item-link;
+    text-decoration: underline;
+    display: block;
   }
 }

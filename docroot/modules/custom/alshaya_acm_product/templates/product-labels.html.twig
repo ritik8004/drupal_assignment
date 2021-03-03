@@ -1,6 +1,6 @@
-<div class="labels-container" data-type="{{ type }}" data-sku="{{ sku }}" data-main-sku="{{ mainsku }}">
+<div class="labels-container {{ labels[0].position }}" data-type="{{ type }}" data-sku="{{ sku }}" data-main-sku="{{ mainsku }}">
   {% for label in labels %}
-    <div class="label {{ label.position }}">
+    <div class="label">
       {{ label.image }}
     </div>
   {% endfor %}
