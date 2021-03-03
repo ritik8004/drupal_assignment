@@ -9,8 +9,8 @@
   "devDependencies": {
     "breakpoint-sass": "2.7.0",
     "browser-sync": "2.17.x",
-    "browserslist": "^4.5.5",
-    "caniuse-lite": "^1.0.30000963",
+    "browserslist": "^4.16.3",
+    "caniuse-lite": "^1.0.30001181",
     "del": "2.2.x",
     "gulp": "3.9.x",
     "gulp-autoprefixer": "6.0.0",
@@ -50,6 +50,7 @@
     "uninstall-tools": "rm -r node_modules",
     "build": "../node_modules/gulp/bin/gulp.js",
     "build:dev": "../node_modules/gulp/bin/gulp.js build:dev",
-    "watch": "../node_modules/gulp/bin/gulp.js watch"
+    "watch": "../node_modules/gulp/bin/gulp.js watch",
+    "build:conditional": "../node_modules/gulp/bin/gulp.js build:conditional"
   }
 }

@@ -48,6 +48,7 @@
         var facets_blocks = [];
         $('.block-facets-ajax').each(function (index) {
           var dom_id_start = 'js-facet-dom-id-';
+          // eslint-disable-next-line max-nested-callbacks
           var facet_block_id = $.map($(this).attr('class').split(' '), function (v, i) {
             if (v.indexOf(dom_id_start) > -1) {
               return v.slice(dom_id_start.length, v.length);

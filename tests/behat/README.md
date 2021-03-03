@@ -391,6 +391,12 @@ Note: Make sure your chrome browser is at the latest version
     8. spc_full_name
     9. anon_email
     10. anon_username
+    11. boots_user_email
+    12. boots_user_password
+    13. boots_auth_firstname
+    14. boots_auth_lastname
+    15. boots_auth_email
+
 For example :-  anon_username: 'Sample User Name'
 7. Run the following command:
 `./behat-build.sh --rebuild=TRUE`
@@ -422,3 +428,29 @@ For example :-  anon_username: 'Sample User Name'
         1. `bin/behat --profile=pb-kw-pprod-en-desktop`
         2. `bin/behat --profile=pb-ae-pprod-en-desktop`
         3. `bin/behat --profile=pb-sa-pprod-en-desktop`
+        
+**Please Note**:
+
+For testing the functionalities like New Checkout and New Pdp the following variables need to be set as TRUE or 1 in the yaml files where the functionality is available.
+
+**Variables:**
+
+*For New PDP:*
+```text
+  new_pdp_enabled: TRUE
+```
+*For New Checkout:*
+```text
+new_checkout_enabled: TRUE
+```
+For example: The New PDP functionality is available on HM-SA on QA environment (i.e H&M brand for QA environment under SA Region) then this functionality can be tested via setting the new pdp variable in sa.yml file that can found under H&M brand QA environment SA region, then the yaml file should look like:
+```text
+variables:
+  new_pdp_enabled: TRUE
+```
+OR 
+```text
+variables:
+  new_pdp_enabled: 1
+```
+Similarly, new checkout functionality can be tested via setting the variable.

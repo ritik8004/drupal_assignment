@@ -138,14 +138,20 @@ export default class CompletePurchase extends React.Component {
       ? cart.cart.payment.method
       : '';
 
+    let buttonText = Drupal.t('complete purchase');
+
+    if (paymentMethod === 'postpay') {
+      buttonText = Drupal.t('Continue with postpay');
+    }
+
     return (
       <div className={`checkout-link complete-purchase fadeInUp notInMobile submit active ${paymentMethod}`} style={{ animationDelay: '0.5s' }}>
-        <ConditionalView condition={paymentMethod === 'checkout_com_applepay'}>
+        <ConditionalView condition={paymentMethod === 'checkout_com_applepay' || paymentMethod === 'checkout_com_upapi_applepay'}>
           <ApplePayButton isaActive="active" text={Drupal.t('Buy with')} lang={drupalSettings.path.currentLanguage} placeOrder={(e) => this.placeOrder(e)} />
         </ConditionalView>
-        <ConditionalView condition={paymentMethod !== 'checkout_com_applepay'}>
+        <ConditionalView condition={paymentMethod !== 'checkout_com_applepay' && paymentMethod !== 'checkout_com_upapi_applepay'}>
           <a href={Drupal.url('checkout')} className="checkout-link" onClick={(e) => this.placeOrder(e)}>
-            {Drupal.t('complete purchase')}
+            {buttonText}
           </a>
         </ConditionalView>
       </div>

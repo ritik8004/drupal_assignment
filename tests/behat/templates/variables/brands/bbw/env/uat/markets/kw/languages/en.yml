@@ -1,7 +1,7 @@
 variables:
   url_base_uri: 'http://bbwkw-uat.factory.alshaya.com/en'
   collection_filter: 'Collection'
-  sort_filter: 'sort by'
+  sort_filter: 'Sort'
   price_filter: ''
   brand_filter: 'Product Type'
   color_filter: 'Fragrance Category'
@@ -97,3 +97,8 @@ variables:
   language_add_to_cart_link: 'اضف إلى حقيبة التسوق'
   add_to_cart_link: 'add to bag'
   governorate: 'Kuwait City'
+  spc_search_keyword: 'fragrance'
+  filter_1: 'attr_collection_1'
+  filter_2: 'attr_fragrance_name'
+  filter_3: 'attr_fragrance_category'
+

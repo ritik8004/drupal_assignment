@@ -194,7 +194,7 @@ class CategoryProductsHelper {
         $conditionGroup->addCondition($term_details['category_field'], '"' . $term_details['hierarchy'] . '"');
         $query->addConditionGroup($conditionGroup);
         $query->setOption('attributesToRetrieve', ['nid']);
-        $query->setOption('ruleContexts', $term_details['ruleContext']);
+        $query->setOption('algolia_options', ['ruleContexts' => $term_details['ruleContext']]);
         $results = $query->execute()->getResultItems();
 
         $nids = array_map(function ($result) {
@@ -242,16 +242,16 @@ class CategoryProductsHelper {
   /**
    * Gets all the SKUs for products assigned to specified category.
    *
-   * @param int $category_id
-   *   The taxonomy term id.
+   * @param array $category_ids
+   *   The taxonomy term ids.
    *
    * @return array
    *   The array of sku values.
    */
-  public function getSkusForCategory(int $category_id) {
+  public function getSkusForCategory(array $category_ids) {
     $query = $this->database->select('node__field_skus', 'nfs');
     $query->innerJoin('node__field_category', 'nfc', 'nfc.entity_id=nfs.entity_id');
-    $query->condition('nfc.field_category_target_id', $category_id);
+    $query->condition('nfc.field_category_target_id', $category_ids, 'IN');
     $query->addField('nfs', 'field_skus_value', 'skus');
     $query->distinct();
 

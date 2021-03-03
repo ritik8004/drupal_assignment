@@ -60,3 +60,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/super-menu/super-menu.ltr.css: css/conditional-sass/super-menu/super-menu.ltr.css
+        
+  alshaya_white_label/promo-blocks:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/promo-blocks/promo-blocks.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/promo-blocks/promo-blocks.ltr.css
+
+  alshaya_white_label/advanced-page:
+    css:
+      theme:
+        /themes/custom/transac/alshaya_pottery_barn/css/conditional-sass/advanced-page/advanced-page.ltr.css: /themes/custom/transac/alshaya_pottery_barn_kids/css/conditional-sass/advanced-page/advanced-page.ltr.css

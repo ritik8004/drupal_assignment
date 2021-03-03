@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Service\Config\SystemSettings;
+use App\Service\CartErrorCodes;
 
 /**
  * Contains callback methods for Knet Payment.
@@ -258,8 +259,17 @@ class KnetPaymentController extends PaymentController {
           'order_id' => $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '',
         ],
       ];
+
+      $redirectUrl = '/checkout';
+
+      if ($e->getCode() === CartErrorCodes::CART_CHECKOUT_QUANTITY_MISMATCH) {
+        $payment_data['code'] = $e->getCode();
+        $payment_data['message'] = $e->getMessage();
+        $redirectUrl = '/cart';
+      }
+
       $redirect->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
-      $redirect->setTargetUrl('/' . $state['data']['langcode'] . '/checkout');
+      $redirect->setTargetUrl('/' . $state['data']['langcode'] . $redirectUrl);
     }
 
     return $redirect;

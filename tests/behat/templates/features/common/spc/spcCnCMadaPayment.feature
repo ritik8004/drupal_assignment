@@ -1,4 +1,4 @@
-@javascript @guest @cnc @madaPayment @clickCollect @hmaeuat
+@javascript @guest @cnc @madaPayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat
 Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest Users
 
   Background:
@@ -8,7 +8,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
 
   @cc @hd @checkout_com @visa @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (VISA Card)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -48,13 +48,13 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_mada_visa_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
@@ -117,7 +117,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -154,13 +154,13 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_mada_visa_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-section-billing-address" element
@@ -229,7 +229,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -266,13 +266,13 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_visa_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_mada_visa_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I wait 10 seconds
     And I wait for the page to load
@@ -303,7 +303,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -340,13 +340,13 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_mada_master_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
@@ -409,7 +409,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -448,13 +448,13 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I scroll to the "#spc-payment-methods" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_mada_master_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
@@ -522,7 +522,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -559,13 +559,13 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
+    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_mada_master_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-section-billing-address" element

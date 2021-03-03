@@ -181,6 +181,8 @@ require('./gulp-tasks/lint-css')(gulp, plugins, options);
 require('./gulp-tasks/minify-css')(gulp, plugins, options);
 require('./gulp-tasks/test-css')(gulp, plugins, options);
 require('./gulp-tasks/watch')(gulp, plugins, options);
+// Compile only conditional.
+require('./gulp-tasks/build-conditional')(gulp, plugins, options);
 
 // Credits:
 //

@@ -169,10 +169,6 @@ jquery_mobile_touch_swipe:
   js:
     vendor/js/jquery.touchSwipe.min.js: {}
 
-checkout_scroll:
-  js:
-    js/checkout_scroll.js: {}
-
 pace:
   js:
     /libraries/pace/pace.min.js: {}
@@ -258,15 +254,6 @@ footer_js:
     - core/jquery.once
     - core/drupal
 
-cart_js:
-  js:
-    js/cart-accordion.js: {}
-  dependencies:
-    - core/jquery
-    - core/jquery.once
-    - core/drupal
-    - alshaya_white_label/order-qty-limit
-
 product-category-accordion:
   js:
     js/product-category-accordion.js: {}
@@ -349,9 +336,14 @@ matchback_cart_notification:
       css/conditional-sass/matchback-cart-notification/matchback-cart-notification.ltr.css: {}
 
 tooltip:
+  js:
+      js/order-detail.js: {}
   css:
     theme:
       css/conditional-sass/tooltip/tooltip.ltr.css: {}
+  dependencies:
+  - core/jquery
+  - core/drupal
 
 alshaya-react-animate:
   css:
@@ -432,3 +424,38 @@ alshaya-stylefinder:
   css:
     theme:
       css/conditional-sass/alshaya-stylefinder/alshaya-stylefinder.ltr.css: {}
+
+postpay-pdp:
+  css:
+    theme:
+      css/conditional-sass/postpay-pdp/postpay-pdp.ltr.css: {}
+
+postpay-cart:
+  css:
+    theme:
+      css/conditional-sass/postpay-cart/postpay-cart.ltr.css: {}
+
+postpay-checkout:
+  css:
+    theme:
+      css/conditional-sass/postpay-checkout/postpay-checkout.ltr.css: {}
+      
+store_finder:
+  css:
+    theme:
+      css/conditional-sass/store-finder/store-finder.ltr.css: {}
+
+promo-blocks:
+  css:
+    theme:
+      css/conditional-sass/promo-blocks/promo-blocks.ltr.css: {}
+
+advance-content-slider:
+  css:
+    theme:
+      css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: {}
+
+advanced-page:
+  css:
+    theme:
+      css/conditional-sass/advanced-page/advanced-page.ltr.css: {}

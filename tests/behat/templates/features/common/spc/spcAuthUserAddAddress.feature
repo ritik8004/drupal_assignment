@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
+@javascript @account @smoke @auth @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat  @flkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
 Feature: Test the adding address to existing user account
 
   Background:
@@ -16,7 +16,8 @@ Feature: Test the adding address to existing user account
     And I wait for the page to load
     Then I click on "#block-content a" element
     And I wait 10 seconds
-    And I wait for the page to load
+    And I wait for AJAX to finish
+    Then I check the address-book form
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
     Then I scroll to the "#address-book-form-open" element

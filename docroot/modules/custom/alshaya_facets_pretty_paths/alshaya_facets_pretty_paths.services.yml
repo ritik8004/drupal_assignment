@@ -30,6 +30,7 @@ services:
     arguments:
       - '@database'
       - '@language_manager'
+      - '@logger.factory'
 
   cache.pretty_paths:
     class: Drupal\Core\Cache\CacheBackendInterface

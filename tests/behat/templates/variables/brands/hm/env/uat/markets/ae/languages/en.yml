@@ -1,9 +1,9 @@
 variables:
-  url_base_uri: 'https://hmae2-uat.factory.alshaya.com/en'
+  url_base_uri: 'https://hmae5-uat.factory.alshaya.com/en'
   collection_filter: ''
   sort_filter: 'sort by'
   price_filter: 'Concept'
-  brand_filter: 'Accessories Style'
+  brand_filter: ''
   color_filter: ''
   size_filter: 'Age Group'
   filters: 'all filters'
@@ -92,3 +92,8 @@ variables:
   language_cc_mada_payment_type: 'البطاقة الائتمانية / البطاقة المصرفية'
   language_order_detail: 'تفاصيل الطلبية'
   language_payment_type_text: 'طريقة الدفع:'
+  spc_search_keyword: 'cloth'
+  filter_1: 'attr_size'
+  filter_2: 'final_price'
+  filter_3: 'field_acq_promotion_label.web'
+
