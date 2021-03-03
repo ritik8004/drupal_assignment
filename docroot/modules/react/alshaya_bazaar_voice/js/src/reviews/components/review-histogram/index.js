@@ -3,7 +3,7 @@ import RatingSummary from '../../../rating/components/widgets/RatingSummary';
 import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import CombineDisplay from '../review-combine-display';
 import ConditionalView from '../../../common/components/conditional-view';
-import WriteReview from '../reviews-full-submit';
+import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
 
 
 const ReviewHistogram = ({
@@ -20,7 +20,7 @@ const ReviewHistogram = ({
           <React.Fragment key={item}>
             <div className="histogram-wrapper" key={item}>
               <ConditionalView condition={window.innerWidth < 768}>
-                <WriteReview />
+                <WriteReviewButton />
               </ConditionalView>
               <DisplayStar
                 starPercentage={overallSummary[item].ReviewStatistics.AverageOverallRating}
@@ -56,7 +56,7 @@ const ReviewHistogram = ({
             </div>
             <div className="secondary-summary">
               <ConditionalView condition={window.innerWidth > 767}>
-                <WriteReview />
+                <WriteReviewButton />
                 <CombineDisplay
                   starSliderCombine={
                     overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
