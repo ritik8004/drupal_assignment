@@ -141,7 +141,10 @@
       }
 
       .button-wrapper {
-        text-align: $right;
+        text-align: center;
+        display: flex;
+        justify-content: flex-end;
+        cursor: pointer;
 
         @include breakpoint($only-mobile) {
           text-align: center;

@@ -13,6 +13,7 @@
   display: flex;
   flex-flow: row wrap;
   padding: 2.875rem 1.5625rem 0;
+  text-align: $left;
 
   @include breakpoint($only-mobile) {
     padding: 2.875rem 1rem 0;

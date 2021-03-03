@@ -1,10 +1,10 @@
 import React from 'react';
 import RatingSummary from '../../../rating/components/widgets/RatingSummary';
 import DisplayStar from '../../../rating/components/stars/DisplayStar';
-import ReviewButton from '../review-button';
 import IndividualReviewSlider from '../individual-review-slider';
 import IndividualReviewStar from '../individual-review-star';
 import ConditionalView from '../../../common/components/conditional-view';
+import WriteReview from '../../../reviews/components/reviews-full-submit';
 
 
 const ReviewHistogram = ({
@@ -21,7 +21,7 @@ const ReviewHistogram = ({
           <React.Fragment key={item}>
             <div className="histogram-wrapper" key={item}>
               <ConditionalView condition={window.innerWidth < 768}>
-                <ReviewButton buttonText={Drupal.t('write a review')} />
+                <WriteReview />
               </ConditionalView>
               <DisplayStar
                 starPercentage={overallSummary[item].ReviewStatistics.AverageOverallRating}
@@ -63,7 +63,7 @@ const ReviewHistogram = ({
             </div>
             <div className="secondary-summary">
               <ConditionalView condition={window.innerWidth > 767}>
-                <ReviewButton buttonText={Drupal.t('write a review')} />
+                <WriteReview />
                 <div className="overall-product-rating">
                   <IndividualReviewSlider
                     sliderData={overallSummary[item].ReviewStatistics.SecondaryRatingsAverages}
