@@ -189,10 +189,10 @@
             "type": "package",
             "package": {
                 "name": "hubspot/pace",
-                "version": "1.0.0",
+                "version": "1.0.2",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/hubspot/pace/archive/master.zip",
+                    "url": "https://github.com/hubspot/pace/archive/v1.0.2.zip",
                     "type": "zip"
                 }
             }
