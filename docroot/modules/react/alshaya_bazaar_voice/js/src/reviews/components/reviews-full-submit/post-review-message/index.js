@@ -4,20 +4,25 @@ import DisplayStar from '../../../../rating/components/stars/DisplayStar';
 const PostReviewMessage = ({
   postReviewData,
 }) => (
-  <div>
+  <div className="post-review-moderation">
     <div>
       <DisplayStar
         starPercentage={postReviewData.Review.Rating}
       />
-      <p>{postReviewData.Review.Title}</p>
-      <p>{postReviewData.Review.ReviewText}</p>
-      <p>
-        {(postReviewData.Review.IsRecommended !== null)
-          ? Drupal.t('Yes, I would like to recomend this product.')
-          : ''}
-      </p>
+      <div className="review-title">{postReviewData.Review.Title}</div>
+      <div className="review-text">{postReviewData.Review.ReviewText}</div>
+      {(postReviewData.Review.IsRecommended !== null)
+        ? (
+          <div className="review-recommendation">
+            <span className="review-recommendation-icon" />
+            <span className="review-recommendation-text">
+              {Drupal.t('Yes, I would like to recomend this product.')}
+            </span>
+          </div>
+        )
+        : ''}
     </div>
-    <p>{Drupal.t('Thanks for submitting a review. Your review is being moderated and may take few days to appear.')}</p>
+    <div className="comment-moderation-block"><span className="comment-moderation-text">{Drupal.t('Thanks for submitting a review. Your review is being moderated and may take few days to appear.')}</span></div>
   </div>
 );
 

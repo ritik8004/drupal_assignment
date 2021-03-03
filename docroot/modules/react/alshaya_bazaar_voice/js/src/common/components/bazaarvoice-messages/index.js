@@ -89,11 +89,12 @@ export default class BazaarVoiceMessages extends React.Component {
         { errorList && errorList.length > 0
         && (
         <div className="exception-error">
-          <div className="exception-field-error-list">
+          <div className="error-group-label">{Drupal.t('Hold Up! There is a problem')}</div>
+          <ul className="exception-field-error-list">
             {errorList.map((error) => (
               <li key={`error-${error.Field}`}>{error.Message}</li>
             ))}
-          </div>
+          </ul>
         </div>
         )}
       </>

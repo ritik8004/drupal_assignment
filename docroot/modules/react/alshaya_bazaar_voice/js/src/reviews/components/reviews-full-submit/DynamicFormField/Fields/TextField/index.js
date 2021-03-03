@@ -7,18 +7,22 @@ class TextField extends React.Component {
     super(props);
     this.state = {
       errors: [],
+      labelActiveClass: '',
     };
   }
 
   handleChange = (e, minLength) => {
     const { errors } = this.state;
     const { name, value } = e.currentTarget;
-
+    let activeClass = '';
     if (value.length > 0) {
       errors[name] = value.length < minLength
         ? Drupal.t('Minimum characters limit for this field is ') + minLength
         : null;
+      activeClass = 'active-label';
     }
+    this.setState({ labelActiveClass: activeClass });
+
     if (name === 'useremail') {
       errors[name] = validEmailRegex.test(value)
         ? null
@@ -39,7 +43,7 @@ class TextField extends React.Component {
       text,
       classLable,
     } = this.props;
-    const { errors } = this.state;
+    const { errors, labelActiveClass } = this.state;
 
     if (visible === true) {
       let email = null;
@@ -61,11 +65,10 @@ class TextField extends React.Component {
               onChange={(e) => this.handleChange(e, minLength)}
               maxLength={maxLength}
               minLength={minLength}
-              required={required}
               readOnly={(email !== null) ? 1 : 0}
             />
             <div className="c-input__bar" />
-            <label>
+            <label className={`${labelActiveClass}`}>
               {label}
               {' '}
               {(required) ? '*' : '' }

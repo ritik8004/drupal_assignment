@@ -6,18 +6,40 @@
   &-content {
     width: 100% !important;
     min-height: 100vh;
-    max-width: 80.25rem;
   }
 }
 
 .write-review-form {
   display: flex;
   flex-flow: row wrap;
-  padding: 2.875rem 1.5625rem 6.25rem;
-  text-align: $left;
+  padding: 2.875rem 1.5625rem 0;
 
   @include breakpoint($only-mobile) {
-    padding: 2.875rem 1rem 3.25rem;
+    padding: 2.875rem 1rem 0;
+  }
+
+  .exception-error {
+    width: 100%;
+
+    .error-group-label {
+      color: $rr-review-comment-error;
+    }
+
+    .exception-field-error-list {
+      border: 1px solid $primary_input_border;
+      padding: 1.25rem;
+      padding-#{$left}: 1.875rem;
+      font-size: 0.875rem;
+      color: $rr-review-comment-error;
+
+      li {
+        margin-bottom: 0.25rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 
   .title-block {
@@ -77,11 +99,15 @@
     .write-review-fields {
       .head-row,
       .help-text {
-        margin: 55px 0 33px;
+        margin: 3.4375rem 0 2rem;
         border-bottom: 0.1875rem solid $rr-form-head-row-border;
         font-family: $alshaya-bold;
         padding-bottom: 0.25rem;
         clear: both;
+
+        @include breakpoint($upto-desktop) {
+          margin: 2rem 0;
+        }
       }
     }
   }

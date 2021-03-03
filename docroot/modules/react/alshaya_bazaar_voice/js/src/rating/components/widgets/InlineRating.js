@@ -12,7 +12,7 @@ const InlineRating = ({
       <div className="inline-rating">
         { Object.keys(reviewsData).map((item) => (
           <div className="aggregate-rating" key={item} itemProp="aggregateRating" itemScope="" itemType="">
-            <div className="empty-stars" onClick={(e) => smoothScrollTo(e, '#reviews-section')}>
+            <div className="empty-stars">
               <DisplayStar
                 starPercentage={reviewsData[item].ReviewStatistics.AverageOverallRating}
               />

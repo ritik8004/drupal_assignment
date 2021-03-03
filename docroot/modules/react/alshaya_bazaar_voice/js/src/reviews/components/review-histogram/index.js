@@ -5,7 +5,6 @@ import CombineDisplay from '../review-combine-display';
 import ConditionalView from '../../../common/components/conditional-view';
 import WriteReviewButton from '../reviews-full-submit';
 
-
 const ReviewHistogram = ({
   overallSummary,
 }) => {

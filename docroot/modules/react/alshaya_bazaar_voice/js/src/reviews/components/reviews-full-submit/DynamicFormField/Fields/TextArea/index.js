@@ -50,13 +50,13 @@ class TextArea extends React.Component {
             {(required) ? '*' : '' }
           </label>
           <textarea
-            required={required}
             id={id}
             name={id}
             className={focusClass}
             onChange={(e) => this.handleChange(e, minLength)}
             minLength={minLength}
             maxLength={maxLength}
+            noValidate
           >
             {defaultValue}
           </textarea>
