@@ -3,7 +3,7 @@ import RatingSummary from '../../../rating/components/widgets/RatingSummary';
 import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import CombineDisplay from '../review-combine-display';
 import ConditionalView from '../../../common/components/conditional-view';
-import WriteReviewButton from '../../../reviews/components/reviews-full-submit';
+import WriteReviewButton from '../reviews-full-submit';
 
 
 const ReviewHistogram = ({
