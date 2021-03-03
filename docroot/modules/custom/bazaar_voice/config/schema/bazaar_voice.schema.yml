@@ -44,3 +44,12 @@ bazaar_voice.settings:
     reviews_limit_per_page:
       type: integer
       label: 'Number of reviews to be shown per page of PDP.'
+    write_review_tnc:
+      type: string
+      label: 'URL of BazaarVoice Write Review Terms and Conditon.'
+    write_review_guidlines:
+      type: string
+      label: 'URL of BazaarVoice Write review Guidelines.'
+    comment_form_tnc:
+      type: string
+      label: 'URL of BazaarVoice Comment Form Terms and Condition.'

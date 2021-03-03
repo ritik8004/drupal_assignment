@@ -150,6 +150,27 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Number of reviews to be shown per page of PDP'),
     ];
 
+    $form['basic_settings']['write_review_tnc'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Write a review T&C url'),
+      '#default_value' => $config->get('write_review_tnc'),
+      '#description' => $this->t('URL of Write Review Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
+    ];
+
+    $form['basic_settings']['write_review_guidlines'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Write a review guidelines url'),
+      '#default_value' => $config->get('write_review_guidlines'),
+      '#description' => $this->t('URL of Write Review Guidelines. URL format should be /url-name e.g /review-guidelines'),
+    ];
+
+    $form['basic_settings']['comment_form_tnc'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Comments T&C url'),
+      '#default_value' => $config->get('comment_form_tnc'),
+      '#description' => $this->t('URL of Comment Form Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -174,6 +195,9 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
       ->set('write_review_submission', $values['write_review_submission'])
       ->set('reviews_limit_per_page', $values['reviews_limit_per_page'])
+      ->set('write_review_tnc', $values['write_review_tnc'])
+      ->set('write_review_guidlines', $values['write_review_guidlines'])
+      ->set('comment_form_tnc', $values['comment_form_tnc'])
       ->save();
 
     parent::submitForm($form, $form_state);
