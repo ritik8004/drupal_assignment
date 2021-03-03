@@ -303,7 +303,7 @@ body.ie {
   }
 }
 
-body[class^="super-category"] {
+body[class*="super-category"] {
   #alshaya-algolia-search {
     .block-facet-blockcategory-facet-search {
       ul {
