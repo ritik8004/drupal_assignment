@@ -19,6 +19,8 @@ function alshaya_mc_update_8320() {
     'alshaya_seo_transac'
   );
 
+  $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
+  $category_config->set('tags.title', '[alshaya_seo:page_title]')->save();
   // Add ar translation for config.
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'metatag.metatag_defaults.taxonomy_term__acq_product_category');
   $tags = [
