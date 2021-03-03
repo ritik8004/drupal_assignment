@@ -51,9 +51,9 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the "payment-method-checkout_com_upapi" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
@@ -105,9 +105,9 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the "payment-method-checkout_com_upapi" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
@@ -158,8 +158,8 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the "payment-method-checkout_com_upapi" checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_checkout_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_checkout_cvv}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the "#spc-payment-methods" element
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
