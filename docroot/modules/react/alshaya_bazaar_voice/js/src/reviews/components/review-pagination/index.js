@@ -1,4 +1,5 @@
 import React from 'react';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class Pagination extends React.Component {
   constructor(props) {
@@ -18,7 +19,6 @@ export default class Pagination extends React.Component {
     document.dispatchEvent(event);
   }
 
-
   render() {
     const {
       prevButtonDisabled,
@@ -28,13 +28,13 @@ export default class Pagination extends React.Component {
     } = this.props;
     return (
       <div className="review-pagination">
-        <button type="button" value="prev" onClick={(e) => this.navigatePage(e.target.value)} disabled={prevButtonDisabled}>Previous Page</button>
-        <span>
-          {currentPage}
-          /
-        </span>
-        <span>{numberOfPages}</span>
-        <button type="button" value="next" onClick={(e) => this.navigatePage(e.target.value)} disabled={nextButtonDisabled}>Next Page</button>
+        <div className="prev" onClick={(e) => this.navigatePage(e.target.value)}>
+          <button type="button" value="prev" className="prev-btn" disabled={prevButtonDisabled} onClick={(e) => smoothScrollTo(e, '#review-summary-wrapper')}>{Drupal.t('Previous Page')}</button>
+        </div>
+        <span>{`${currentPage}/${numberOfPages}`}</span>
+        <div className="next" onClick={(e) => this.navigatePage(e.target.value)}>
+          <button type="button" value="next" className="next-btn" disabled={nextButtonDisabled} onClick={(e) => smoothScrollTo(e, '#review-summary-wrapper')}>{Drupal.t('Next Page')}</button>
+        </div>
       </div>
     );
   }
