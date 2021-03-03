@@ -145,21 +145,21 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
 
     $form['basic_settings']['write_review_tnc'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('URL of Write Review Terms and Conditions'),
+      '#title' => $this->t('Write a review T&C url'),
       '#default_value' => $config->get('write_review_tnc'),
       '#description' => $this->t('URL of Write Review Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
     ];
 
     $form['basic_settings']['write_review_guidlines'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('URL of Write Review Guidelines'),
+      '#title' => $this->t('Write a review guidelines url'),
       '#default_value' => $config->get('write_review_guidlines'),
       '#description' => $this->t('URL of Write Review Guidelines. URL format should be /url-name e.g /review-guidelines'),
     ];
 
     $form['basic_settings']['comment_form_tnc'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('URL of Comments form Terms and Guideline'),
+      '#title' => $this->t('Comments T&C url'),
       '#default_value' => $config->get('comment_form_tnc'),
       '#description' => $this->t('URL of Comment Form Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
     ];
