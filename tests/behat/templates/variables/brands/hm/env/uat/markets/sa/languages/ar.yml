@@ -13,6 +13,7 @@ variables:
   language_size_filter: 'Age Group'
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
+  excluding_delivery: 'قبل التوصيل'
   collection_filter: ''
   sort_filter: 'رتب حسب'
   price_filter: 'المجموعة'
@@ -24,6 +25,7 @@ variables:
   language_add_to_cart_link: 'add to basket'
   add_to_cart_link: 'أضف إلى حقيبة التسوق'
   language_continue_shopping: 'go shopping'
+  language_excluding_delivery: 'excluding delivery'
   continue_shopping: "اذهب للتسوق"
   language_create_account: 'تسجيل مستخدم جديد'
   language_sign_in: 'تسجيل الدخول'

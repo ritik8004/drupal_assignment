@@ -202,11 +202,6 @@ $conductors = [
     'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
     'site_id' => 135,
   ],
-  'hmkw_dev2' => [
-    'hmac_id' => 'bb8596447880451fa689e65e53506429',
-    'hmac_secret' => 'NjE4NDYzYmMtNWRmNy00',
-    'site_id' => 109,
-  ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
     'hmac_secret' => 'NWE3ZDg1OGYtNmEwYi00',
@@ -223,6 +218,11 @@ $conductors = [
     'site_id' => 98,
   ],
   // H&M SA.
+  'hmsa_dev' => [
+    'hmac_id' => 'aa9714724c894af59aafdd60a2bfd09a',
+    'hmac_secret' => 'YjQxNWM0MmItODM0Ny00',
+    'site_id' => 136,
+  ],
   'hmsa_qa' => [
     'hmac_id' => 'd6e8ad54d1b74a9d8153028b42da4e38',
     'hmac_secret' => 'NDNkNDYzOGQtZjEyZC00',
@@ -239,6 +239,11 @@ $conductors = [
     'site_id' => 99,
   ],
   // H&M AE.
+  'hmae_dev' => [
+    'hmac_id' => 'c988092f47f54bb7bcc14fa2fd4fd950',
+    'hmac_secret' => 'ZTkwODE2YTEtYTE2Zi00',
+    'site_id' => 137,
+  ],
   'hmae_qa' => [
     'hmac_id' => '48f2b6197df649f6bf5437312319ab5b',
     'hmac_secret' => 'ZDI1OTgyNDEtNzlkMS00',
@@ -633,6 +638,11 @@ $conductors = [
     'site_id' => 381,
   ],
   // FootLocker KW.
+  'flkw_dev' => [
+    'hmac_id' => '582a73e8a0534b77970fa38e525f62a1',
+    'hmac_secret' => 'MTU5MWJiODYtNTEwZS00',
+    'site_id' => 229,
+  ],
   'flkw_qa' => [
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
@@ -675,6 +685,11 @@ $conductors = [
     'site_id' => 128,
   ],
   // FootLocker AE.
+  'flae_dev' => [
+    'hmac_id' => 'ddd6506aa778421fa2b0c95a90c057d2',
+    'hmac_secret' => 'YTQ0MzYwMmMtNDI0ZS00',
+    'site_id' => 386,
+  ],
   'flae_qa' => [
     'hmac_id' => '61f09f6fe1474ce68cc8057f97188d2f',
     'hmac_secret' => 'MjU3YzZiOGEtNmI1Yi00',

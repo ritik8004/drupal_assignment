@@ -49,7 +49,7 @@ const PdpProductLabel = ({
     {
         bifercatedLabels[directionKey].map((labelItem) => (
           // BE to provide and add a unique key here.
-          <div className={`labels ${labelItem.position}`} key={labelItem}>
+          <div className="labels" key={labelItem}>
             <img
               src={(context === 'main') ? labelItem.image.url : labelItem.image}
               alt={labelItem.image.alt || ''}

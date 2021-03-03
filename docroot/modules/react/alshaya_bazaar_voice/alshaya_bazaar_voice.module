@@ -80,7 +80,11 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
       $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
       $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
       $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
-      $build['#attached']['library'] = ['alshaya_bazaar_voice/rating', 'alshaya_bazaar_voice/reviews'];
+      $build['#attached']['library'] = [
+        'alshaya_bazaar_voice/rating',
+        'alshaya_bazaar_voice/reviews',
+        'alshaya_bazaar_voice/iovation'
+      ];
       $build['#attached']['drupalSettings'] = $settings;
     }
   }
@@ -99,3 +103,57 @@ function alshaya_bazaar_voice_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_bazaar_voice_page_attachments(array &$page){
+  // Configurations must be on page before iovation's JavaScript loads.
+  // Add script to generate the device finger printing string.
+  $page['#attached']['html_head'][] = [[
+    '#type' => 'html_tag',
+    '#tag' => 'script',
+    '#attributes' => [
+      'type' => 'text/javascript',
+      ],
+    '#value' => 'window.IGLOO = window.IGLOO || {
+    "bbout_element_id" : "ioBlackBox","enable_rip" : true,"enable_flash" : false,"install_flash" : false,"loader" : {"version" : "general5","fp_static" : false}};',
+    ],
+    'fppath',
+    ];
+}
+
+/**
+  * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+  * Updating build array for bv pixel integration.
+  *
+  * @param array $build
+  *   Reference to the build array of spc confirmation.
+  * @param string $order
+  *   Order details array.
+  */
+  function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
+    /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
+    $bazaar_voice_api_helper = \Drupal::service('bazaar_voice.api_helper');
+    if (!empty($build['#attached']['drupalSettings'])){
+      if ($bazaar_voice_api_helper->isBvConfigurationsAvailable()) {
+        $bazaarvoice_config = \Drupal::config('bazaar_voice.settings');
+        $locale = $bazaarvoice_config->get('locale');
+        // Attach bvpixel library to order confirmation page.
+        $build['#attached']['library'][] = 'alshaya_bazaar_voice/bvpixel_tracking';
+        if(!empty($build['#attached']['drupalSettings']['order_details'])) {
+          $build['#attached']['drupalSettings']['order_details']['bv_extra_params'] = [
+            'currency' => $order['base_currency_code'] ?? '',
+            'tax' => $order['base_tax_amount'] ?? '',
+            'shipping' => $order['shipping_incl_tax'] ?? '',
+            'city' => $order['shipping']['address']['city'] ?? '',
+            'country' => $order['shipping']['address']['country_id'] ?? '',
+            'nickname' => $order['customer_firstname'] ?? '',
+            'customer_is_guest' => $order['customer_is_guest'] ?? '',
+            'customer_id' => $order['customer_id'] ?? '',
+            'locale' => $locale ?? '',
+          ];
+        }
+      }
+    }
+  }

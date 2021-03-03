@@ -1,4 +1,4 @@
-@javascript @madaPayment @auth @clickCollect @hmaeuat @mckwuat
+@javascript @madaPayment @auth @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat
 Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticated User
 
   Background:

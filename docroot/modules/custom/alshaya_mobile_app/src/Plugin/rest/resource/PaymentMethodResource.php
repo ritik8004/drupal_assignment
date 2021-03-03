@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
+use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -61,6 +62,13 @@ class PaymentMethodResource extends ResourceBase {
   protected $configFactory;
 
   /**
+   * The orders manager service.
+   *
+   * @var \Drupal\alshaya_acm_customer\OrdersManager
+   */
+  protected $ordersManager;
+
+  /**
    * PaymentMethodResource constructor.
    *
    * @param array $configuration
@@ -81,6 +89,8 @@ class PaymentMethodResource extends ResourceBase {
    *   Payment plugins.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
+   * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
+   *   The orders manager service.
    */
   public function __construct(
     array $configuration,
@@ -91,13 +101,15 @@ class PaymentMethodResource extends ResourceBase {
     EntityRepositoryInterface $entity_repository,
     CheckoutOptionsManager $checkout_option_manager,
     AlshayaSpcPaymentMethodManager $payment_plugins,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    OrdersManager $orders_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityRepository = $entity_repository;
     $this->checkoutOptionManager = $checkout_option_manager;
     $this->paymentMethodManager = $payment_plugins;
     $this->configFactory = $config_factory;
+    $this->ordersManager = $orders_manager;
   }
 
   /**
@@ -113,7 +125,8 @@ class PaymentMethodResource extends ResourceBase {
       $container->get('entity.repository'),
       $container->get('alshaya_acm_checkout.options_manager'),
       $container->get('plugin.manager.alshaya_spc_payment_method'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('alshaya_acm_customer.orders_manager')
     );
   }
 
@@ -156,12 +169,15 @@ class PaymentMethodResource extends ResourceBase {
           }
         }
 
+        $payment_method_code = $payment_method_term->get('field_payment_code')->getString();
+
         $response_data[] = [
           'name' => $payment_method_term->getName(),
           'description' => $payment_method_term->getDescription(),
-          'code' => $payment_method_term->get('field_payment_code')->getString(),
+          'code' => $payment_method_code,
           'default' => ($payment_method_term->get('field_payment_default')->getString() == '1'),
           'visibility' => $visibility,
+          'refund_text' => $this->ordersManager->getRefundText($payment_method_code),
         ];
 
         // Adding to property for using later to attach cacheable dependency.

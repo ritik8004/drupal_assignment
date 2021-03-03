@@ -27,6 +27,11 @@ $envs = [
 ];
 
 global $languages;
+global $migrate_index;
+
+// To be set to TRUE when we are moving indices from one Algolia app to
+// another.
+$migrate_index = FALSE;
 
 foreach ($envs as $env) {
   foreach ($brands as $brand) {

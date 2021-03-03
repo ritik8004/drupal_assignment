@@ -33,6 +33,7 @@ $marine-blue: #003773;
 $grey-shade: #c1c1c1;
 $grey-light: #777;
 $grey-light-two: #f3f3f3;
+$error-red: #c00;
 // Mothercare
 $warm-grey-two: #dadada;
 $black: #333;
@@ -146,6 +147,10 @@ $_stylefinder-active-lining-text: #d91560;
 $_stylefinder-default-card-gray: #d3d3d3;
 $_gray_98: #fafafa;
 $_corn_silk: #fffade;
+$_cancelled: #f77;
+$_gray_222: #222;
+$_postpay_light: #8bafbd;
+$_postpay_dark: #8bafbe;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1574,6 +1579,17 @@ $stylefinder-slider-arrow: $white-five;
 $stylefinder-slider-text: $mothercare-black;
 $stylefinder-slider-navigation: $_stylefinder-pink-active-bg;
 
+// Partialfulfillment
+$cancel-item-link: $error-red;
+$cancel-item-list-header: $black-two;
+$cancel-item-refund-text: $grey-light;
+$cancel-item-image-border: $warm-grey-two;
+$cancel-item-image-label-bg: $_cancelled;
+$cancel-item-image-label-text: $_gray_222;
+
+// Postpay
+$postpay_light: $_postpay_light;
+$postpay_dark: $_postpay_dark;
 // Review and Rating
 $rr-tooltip-border: $primary_border;
 $rr-tooltip-bg: $white-five;

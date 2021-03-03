@@ -14,14 +14,3 @@
     }
   }
 }
-
-.alias--cart-checkout-delivery,
-.alias--cart-checkout-login,
-.alias--cart-checkout-payment,
-.alias--cart-checkout-confirmation {
-  .block-content--copyright {
-    @include breakpoint($only-mobile) {
-      background: $checkout_footer_copyright_mobile_bg;
-    }
-  }
-}

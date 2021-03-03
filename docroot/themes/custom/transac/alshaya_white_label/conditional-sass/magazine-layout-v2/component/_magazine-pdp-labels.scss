@@ -26,21 +26,11 @@
         overflow: hidden;
       }
 
-      &__inner {
-        width: 48.9%;
-        display: flex;
-        flex-wrap: wrap;
-      }
-
       &__inner--top-left {
-        padding: 0.9375rem 1.25rem 0 0.9375rem;
+        padding: 0.625rem 0.625rem 0;
         position: absolute;
         top: 0;
         #{$left}: 0;
-
-        html[lang=ar] & {
-          padding: 0.9375rem 0.9375rem 0 1.25rem;
-        }
 
         @include breakpoint($only-mobile) {
           padding-top: 0;
@@ -50,14 +40,10 @@
 
       &__inner--top-right {
         flex-direction: row-reverse;
-        padding: 0.9375rem 0.9375rem 0 1.25rem;
+        padding: 0.625rem 0.625rem 0;
         position: absolute;
         top: 0;
         #{$right}: 0;
-
-        html[lang=ar] & {
-          padding: 0.9375rem 1.25rem 0 0.9375rem;
-        }
 
         @include breakpoint($only-mobile) {
           padding-top: 0;
@@ -67,30 +53,27 @@
 
       &__inner--bottom-right {
         flex-direction: row-reverse;
-        padding: 0 0.9375rem 0.9375rem 1.25rem;
+        padding: 0 0.625rem 0.625rem;
         position: absolute;
         bottom: 0;
         #{$right}: 0;
-
-        html[lang=ar] & {
-          padding: 0 1.25rem 0.9375rem 0.9375rem;
-        }
       }
 
       &__inner--bottom-left {
-        padding: 0 1.25rem 0.9375rem 0.9375rem;
+        padding: 0 0.625rem 0.625rem;
         position: absolute;
         bottom: 0;
         #{$left}: 0;
-
-        html[lang=ar] & {
-          padding: 0 0.9375rem 0.9375rem 1.25rem;
-        }
       }
     }
 
     .labels {
-      padding: 0.3125rem;
+      margin-bottom: 0.625rem;
+      max-width: 3.125rem;
+
+      @include breakpoint($only-mobile) {
+        max-width: 2.375rem;
+      }
 
       &.bottom-left,
       &.bottom-right {

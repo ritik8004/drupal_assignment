@@ -52,3 +52,8 @@ alshaya_acm_checkout.settings:
     cancel_reservation_enabled:
       type: integer
       label: 'Invoke Cancel Reservation API?'
+    refund_exclude_payment_methods:
+      label: 'Exclude refund text for selected payment methods'
+      type: sequence
+      sequence:
+        type: string
