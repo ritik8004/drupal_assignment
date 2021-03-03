@@ -4,7 +4,7 @@ import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import IndividualReviewSlider from '../individual-review-slider';
 import IndividualReviewStar from '../individual-review-star';
 import ConditionalView from '../../../common/components/conditional-view';
-import WriteReview from '../../../reviews/components/reviews-full-submit';
+import WriteReview from '../reviews-full-submit';
 
 
 const ReviewHistogram = ({
