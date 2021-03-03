@@ -72,21 +72,24 @@ export const prepareRequest = (elements, fieldsConfig) => {
       });
     }
   });
-
-  // Set product id
-  params += `&productid=${drupalSettings.bazaar_voice.productid}`;
-  // Set action type.
-  params += '&action=submit';
-
   if (getCurrentUserEmail() === undefined) {
     // Set callback url for BV auntheticated user.
-    params += `&HostedAuthentication_CallbackURL=${drupalSettings.product.url}`;
+    params += `&HostedAuthentication_CallbackURL=${drupalSettings.base_url}${drupalSettings.product.url}`;
   }
-
   if (getCurrentUserEmail() !== undefined && getSessionCookie() !== undefined) {
     // Set UAS token in user param.
     params += `&user=${getSessionCookie()}`;
   }
+  // Set product id
+  params += `&productid=${drupalSettings.bazaar_voice.productid}`;
+  // Add device finger printing string in params.
+  if (elements.blackBox.value !== '') {
+    params += `&fp=${elements.blackBox.value}`;
+  }
+  // Terms and conditions must be agreed.
+  params += '&agreedtotermsandconditions=1';
+  // Set action type.
+  params += '&action=submit';
 
   return params;
 };
