@@ -1,4 +1,3 @@
-
 # Alshaya
 
 ACSF D8 commerce project with Magento integration done via Acquia Conductor.
@@ -71,12 +70,8 @@ To prepare your local env:
   * `composer clear-cache`
   * `composer install`
   * `composer blt-alias`
-  * `vagrant up`
+  * `blt vm`
   * `vagrant ssh` to ssh into your vm
-  * `blt blt:init:git-hooks`
-  * `blt blt:init:settings`
-  * `blt frontend:setup`
-  * `blt frontend:build`
   * `blt refresh:local` (from inside of your vm)
   * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
   * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
@@ -88,23 +83,8 @@ To prepare your local env:
   * Access the site on port 81
   * To do any change in VCL do it in `conf/varnish-4.vcl`, do `vagrant ssh` and run `sh box/scripts/configure-varnish.sh`
 
-Check for known issues during setup check here: https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/589004885/Developer+Handbook#DeveloperHandbook-LocalWorkarounds
-
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
-
-### React Modules.
-
-#### Build React files for local.
-if someone wants to just rebuild the files to use in local `blt react-build` can be used.
-For
-
-#### React module development.
-Go through the [README file](./docroot/modules/react/README.md) to start with react module development.
-
-### Alshaya SPC Middleware development.
-We have a sub-application symfony based to handle all the API calls.
-Go through the [README file](./docroot/middleware/README.md) to start with SPC middleware development.
 
 ### Running behat tests with headless Chrome locally on MacOS
 This reproduces the travis behavior closely (travis is running selected tests from alshaya_behat folder on daily basis), so use this way if your tests behave differently from travis.
@@ -200,8 +180,7 @@ done`). One argument - site code will be passed to this script.
 Script usage:
 * `blt local:sync "site" "env" "mode"`
 * `blt local:sync mckw dev reuse`
-* `blt local:sync hmkw2 uat reuse`
-* `blt local:sync vsae3 dev2 download`
+* `blt local:sync mckw dev download`
 * `blt local:download "site" "env"`
 
 Be careful in using the mode download, it will take time as it does sql-dump
@@ -290,8 +269,6 @@ bin/behat --@tagname --profile=mcuat
 
 A recommended IDE for debugging is PhpStorm. However, if you use another IDE, you should be able to apply the guidelines below with some tweaks.
 
-> *NOTE: XDEBUG Port configured in VM is 9002*
-
 #### Browser-based debugging
 
 XDebug debugger is enabled by default. In order to debug your code from browser, do following:
@@ -326,12 +303,3 @@ After finishing CLI debuging it's recommended to disable xdebug back again, to i
 ### Remote debugging from ACSF
 On ACSF dev, dev2 and dev3 environments, xdebug is enabled for remote debugging.
 Follow instructions [here](https://support.acquia.com/hc/en-us/articles/360006231933-How-to-debug-an-Acquia-Cloud-environment-using-PhpStorm-and-Remote-Xdebug) to set up remote debugging on your local PhpStorm to leverage it.
-
-### XHPROF in local
-#### Setup
-Download and add https://www.drupal.org/project/xhprof in docroot/modules/development
-
-#### Usage
-* Enable the module (if not enabled already)
-* Add profile=1 in query string to any URL which you want to profile
-* Check factory-hooks/post-settings-php/xhprof.php for more details on default configuration
