@@ -91,6 +91,10 @@
       height: 10rem;
       border: 1px solid $primary_input_border !important;
       padding: 0.75rem !important;
+
+      &.error {
+        border: 1px solid $primary_input_inline_error !important;
+      }
     }
   }
 
