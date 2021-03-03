@@ -4,6 +4,7 @@ import ReviewFeedback from '../review-feedback';
 import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
+import ReviewAdditionalAttributes from '../review-additional-attributes';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -23,25 +24,46 @@ const ReviewDescription = ({
           </ConditionalView>
 
           <div className="review-text">{reviewDescriptionData.ReviewText}</div>
+
+          <ReviewAdditionalAttributes
+            reviewAdditionalAttributesData={reviewDescriptionData.TagDimensions}
+          />
+
+          <ReviewAdditionalAttributes
+            reviewAdditionalAttributesData={reviewDescriptionData.AdditionalFields}
+            includes="_textarea"
+          />
+
           <div className="review-photo">{reviewDescriptionData.Photo}</div>
-          <div className="review-feedback">
-            <ReviewFeedback
-              negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
-              positiveCount={reviewDescriptionData.TotalPositiveFeedbackCount}
-              isSyndicatedReview={reviewDescriptionData.IsSyndicated}
-              contentId={reviewDescriptionData.Id}
-              contentType="review"
-            />
-          </div>
-          <div className="review-comment">
+          <div className="review-inline-feedback">
+            <div>
+              <ConditionalView condition={reviewDescriptionData.IsRecommended !== false
+                && reviewDescriptionData.IsRecommended !== null}
+              >
+                <div className="review-recommendation">
+                  <span className="review-recommendation-icon">{Drupal.t('recommendation-icon')}</span>
+                  <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
+                  <span className="review-recommendation-text">{Drupal.t('I would recommend this product.')}</span>
+                </div>
+              </ConditionalView>
+              <div className="review-feedback">
+                <ReviewFeedback
+                  negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
+                  positiveCount={reviewDescriptionData.TotalPositiveFeedbackCount}
+                  isSyndicatedReview={reviewDescriptionData.IsSyndicated}
+                  contentId={reviewDescriptionData.Id}
+                  contentType="review"
+                />
+              </div>
+            </div>
             <ReviewCommentForm
               ReviewId={reviewDescriptionData.Id}
             />
-          </div>
-          <div className="review-comment-display">
-            <ReviewCommentDisplay
-              ReviewId={reviewDescriptionData.Id}
-            />
+            <div className="review-comment-display">
+              <ReviewCommentDisplay
+                ReviewId={reviewDescriptionData.Id}
+              />
+            </div>
           </div>
         </div>
       </div>
