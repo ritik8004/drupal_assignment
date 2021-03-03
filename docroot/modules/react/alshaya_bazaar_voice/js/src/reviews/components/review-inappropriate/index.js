@@ -14,7 +14,7 @@ class ReviewInappropriate extends React.Component {
     };
   }
 
-  reportReview = (reviewId, newText) => (event) => {
+  reportContent = (contentId, newText, contentType) => (event) => {
     event.preventDefault();
     const { disabled } = this.state;
     if (disabled) {
@@ -24,7 +24,7 @@ class ReviewInappropriate extends React.Component {
       disabled: true,
       reportButtonText: newText,
     });
-    const params = `&FeedbackType=inappropriate&ContentType=review&ContentId=${reviewId}`;
+    const params = `&FeedbackType=inappropriate&ContentType=${contentType}&ContentId=${contentId}`;
     const apiData = postAPIData('/data/submitfeedback.json', params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -32,26 +32,26 @@ class ReviewInappropriate extends React.Component {
           && result.data !== undefined
           && result.data.error === undefined) {
           const reportedVoteObj = {
-            reviewId,
+            contentId,
             reported: 'Yes',
           };
-          setStorageInfo(reportedVoteObj, `reportedVote-${reviewId}`);
+          setStorageInfo(reportedVoteObj, `${contentType}-reportedVote-${contentId}`);
         }
       });
     }
   }
 
   render() {
-    const { reviewId } = this.props;
-    if (reviewId !== undefined) {
-      const reportedReviewVote = getStorageInfo(`reportedVote-${reviewId}`);
+    const { contentId, contentType } = this.props;
+    if (contentId !== undefined) {
+      const reportedContentVote = getStorageInfo(`${contentType}-reportedVote-${contentId}`);
       const { disabled, reportButtonText } = this.state;
       const newText = Drupal.t('Reported');
       return (
         <>
-          {reportedReviewVote === null ? (
+          {reportedContentVote === null ? (
             <span className={`feedback-report ${disabled ? 'feedback-report-disabled' : 'feedback-report-active'}`}>
-              <button type="button" onClick={this.reportReview(reviewId, newText)} disabled={disabled}>
+              <button type="button" onClick={this.reportContent(contentId, newText, contentType)} disabled={disabled}>
                 <span className="feedback-option-label">{reportButtonText}</span>
               </button>
             </span>

@@ -29,7 +29,8 @@ const ReviewDescription = ({
               negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
               positiveCount={reviewDescriptionData.TotalPositiveFeedbackCount}
               isSyndicatedReview={reviewDescriptionData.IsSyndicated}
-              reviewId={reviewDescriptionData.Id}
+              contentId={reviewDescriptionData.Id}
+              contentType="review"
             />
           </div>
           <div className="review-comment">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { fetchAPIData } from '../../../utilities/api/apiData';
 import ReviewCommentRender from '../review-comment-render';
+import ReviewFeedback from '../review-feedback';
 
 class ReviewCommentDisplay extends React.Component {
   constructor(props) {
@@ -45,6 +46,15 @@ class ReviewCommentDisplay extends React.Component {
               SubmissionTime={comment.SubmissionTime}
               CommentText={comment.CommentText}
             />
+            <div className="review-feedback">
+              <ReviewFeedback
+                negativeCount={comment.TotalNegativeFeedbackCount}
+                positiveCount={comment.TotalPositiveFeedbackCount}
+                isSyndicatedReview={comment.IsSyndicated}
+                contentId={comment.Id}
+                contentType="review_comment"
+              />
+            </div>
           </div>,
         ]);
       }
