@@ -10,6 +10,11 @@
     font-family: $aura-regular;
     grid-template-columns: 11.8125rem 9rem 8.5625rem 10.0625rem 7.1875rem 10.125rem;
 
+    > span.order-id {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     > span.order-id,
     > span.date {
       padding-#{$left}: 1.875rem;
