@@ -13,6 +13,7 @@ import ReviewFiltersDisplay from '../review-filters-display';
 import EmptyMessage from '../../../utilities/empty-message';
 import ReviewRatingsFilter from '../review-ratings-filter';
 import PostReviewMessage from '../reviews-full-submit/post-review-message';
+import Pagination from '../review-pagination';
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
@@ -46,6 +47,7 @@ export default class ReviewSummary extends React.Component {
     this.isComponentMounted = true;
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
+    document.addEventListener('handlePagination', this.handlePagination);
 
     this.getReviews();
   }
@@ -123,6 +125,20 @@ export default class ReviewSummary extends React.Component {
           Drupal.logJavascriptError('review-summary', result.error);
         }
       });
+    }
+  };
+
+  /**
+   * Call next or previous page function.
+   */
+  handlePagination = (event) => {
+    event.preventDefault();
+    const { buttonValue } = event.detail;
+    if (buttonValue === 'prev') {
+      this.previousPage();
+    }
+    if (buttonValue === 'next') {
+      this.nextPage();
     }
   };
 
@@ -325,13 +341,12 @@ export default class ReviewSummary extends React.Component {
                   />
                 </div>
               ))}
-              <button type="button" onClick={this.previousPage} disabled={prevButtonDisabled}>Previous Page</button>
-              <span>
-                {currentPage}
-                /
-              </span>
-              <span>{numberOfPages}</span>
-              <button type="button" onClick={this.nextPage} disabled={nextButtonDisabled}>Next Page</button>
+              <Pagination
+                currentPage={currentPage}
+                numberOfPages={numberOfPages}
+                prevButtonDisabled={prevButtonDisabled}
+                nextButtonDisabled={nextButtonDisabled}
+              />
             </>
           )}
         {noResultmessage !== null
