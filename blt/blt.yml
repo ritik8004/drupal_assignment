@@ -55,10 +55,10 @@ command-hooks:
     command: 'bash frontend-validate.sh ${docroot}'
   frontend-reqs:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-setup.sh ${docroot}'
+    command: 'bash frontend-setup.sh ${docroot}; bash react-setup.sh ${docroot}'
   frontend-assets:
     dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-build.sh ${docroot}'
+    command: 'bash frontend-build.sh ${docroot}; bash react-build.sh ${docroot}'
   pre-config-import:
     dir: '${docroot}'
     command: 'echo ''No pre-config-import configured.'''
