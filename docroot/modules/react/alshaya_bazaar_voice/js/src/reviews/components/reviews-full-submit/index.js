@@ -16,8 +16,8 @@ export default class WriteReviewButton extends React.Component {
     return (
       <WithModal>
         {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
-          <div className="pdp-write-review">
-            <div onClick={() => this.openModal(triggerOpenModal)} className="pdp-write-review-text">
+          <div className="button-wrapper">
+            <div onClick={() => this.openModal(triggerOpenModal)} className="write-review-button">
               {Drupal.t('Write a review')}
             </div>
             <Popup

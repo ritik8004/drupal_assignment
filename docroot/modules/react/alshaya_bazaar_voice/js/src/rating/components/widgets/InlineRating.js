@@ -1,6 +1,7 @@
 import React from 'react';
 import RatingSummary from './RatingSummary';
 import DisplayStar from '../stars/DisplayStar';
+import ConditionalView from '../../../common/components/conditional-view';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 
 const InlineRating = ({
@@ -15,17 +16,19 @@ const InlineRating = ({
               <DisplayStar
                 starPercentage={reviewsData[item].ReviewStatistics.AverageOverallRating}
               />
-              <div className="histogram-data">
-                <div className="histogram-title">
-                  {reviewsData[item].ReviewStatistics.TotalReviewCount}
-                  {' '}
-                  {Drupal.t('reviews')}
+              <ConditionalView condition={window.innerWidth >= 1024}>
+                <div className="histogram-data">
+                  <div className="histogram-title">
+                    {reviewsData[item].ReviewStatistics.TotalReviewCount}
+                    {' '}
+                    {Drupal.t('reviews')}
+                  </div>
+                  <RatingSummary
+                    histogramData={reviewsData[item].ReviewStatistics.RatingDistribution}
+                    totalReviewCount={reviewsData[item].ReviewStatistics.TotalReviewCount}
+                  />
                 </div>
-                <RatingSummary
-                  histogramData={reviewsData[item].ReviewStatistics.RatingDistribution}
-                  totalReviewCount={reviewsData[item].ReviewStatistics.TotalReviewCount}
-                />
-              </div>
+              </ConditionalView>
             </div>
             <span>
               (
