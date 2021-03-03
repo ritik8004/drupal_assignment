@@ -128,6 +128,7 @@ export default class WriteReviewForm extends React.Component {
               <form className="write-review-form-add" onSubmit={this.handleSubmit}>
                 <div className="write-review-fields">
                   {dynamicFields}
+                  <input type="hidden" name="blackBox" id="ioBlackBox" />
                 </div>
                 <br />
                 <div className="write-review-form-actions" id="review-form-action">
