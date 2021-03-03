@@ -3,19 +3,19 @@
 set -ev
 
 # Run this script only for merge.
-if [ ! "CI_MERGE_REQUEST" = "false" ]
+if [[ ! ($TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false") ]]
 then
-  echo "Not a Gitlab Merge Build, no validation required."
+  echo "Not a TRAVIS MERGE Build, no validation required."
   exit 0
 fi
 
-if [ ! "$CI_COMMIT_TAG" = "" ]
+if [ ! "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]
 then
-  echo "Gitlab Build request for tag, no validation required."
+  echo "TRAVIS Build request for tag, no validation required."
   exit 0
 fi
 
-if [[ ! $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ ^revert-.* ]]; then
+if [[ ! $TRAVIS_BRANCH =~ ^revert-.* ]]; then
   # We can force a build using:
   # branch=xxx
   # git fetch upstream
@@ -23,7 +23,7 @@ if [[ ! $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ ^revert-.* ]]; then
   # git reset --hard upstream/$branch
   # git commit --allow-empty -m "BUILD REQUEST" -n
   # git push upstream $branch
-  if [ "$CI_COMMIT_MESSAGE" = "BUILD REQUEST" ]; then
+  if [ "$TRAVIS_COMMIT_MESSAGE" = "BUILD REQUEST" ]; then
     echo "Forced build request"
     exit 0
   fi
@@ -36,7 +36,7 @@ if [[ ! $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ ^revert-.* ]]; then
   echo $deployed_branches
   echo
 
-  branch="$CI_COMMIT_BRANCH-build"
+  branch="$TRAVIS_BRANCH-build"
   for deployed_branch in $deployed_branches ; do
     if [ "$branch" = "$deployed_branch" ] ; then
       exit 0
