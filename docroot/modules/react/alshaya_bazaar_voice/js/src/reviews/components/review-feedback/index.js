@@ -18,10 +18,9 @@ class ReviewFeedback extends React.Component {
 
   handleFeedbackSubmit = (event) => {
     event.preventDefault();
-    const { reviewId } = event.detail;
-    const { voteText } = event.detail;
-    if (reviewId !== undefined && voteText !== undefined) {
-      const params = `&FeedbackType=helpfulness&ContentType=review&ContentId=${reviewId}&Vote=${voteText}`;
+    const { contentId, voteText, contentType } = event.detail;
+    if (contentId !== undefined && voteText !== undefined) {
+      const params = `&FeedbackType=helpfulness&ContentType=${contentType}&ContentId=${contentId}&Vote=${voteText}`;
       const apiData = postAPIData('/data/submitfeedback.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
@@ -39,28 +38,38 @@ class ReviewFeedback extends React.Component {
 
   render() {
     const {
-      reviewId, isSyndicatedReview, positiveCount, negativeCount,
+      contentId, isSyndicatedReview, positiveCount, negativeCount, contentType,
     } = this.props;
     const { disabled } = this.state;
-    if (reviewId !== undefined && positiveCount !== undefined && negativeCount
+    let contentTypeDisplayValue = null;
+    if (contentType === 'review_comment') {
+      contentTypeDisplayValue = 'comment';
+    }
+    if (contentType === 'review') {
+      contentTypeDisplayValue = 'review';
+    }
+    if (contentId !== undefined && positiveCount !== undefined && negativeCount
       !== undefined && isSyndicatedReview === false) {
       return (
         <div className="review-feedback-vote">
-          <span className="feedback-label">{Drupal.t('Was this review helpful?')}</span>
+          <span className="feedback-label">{Drupal.t(`Was this ${contentTypeDisplayValue} helpful?`)}</span>
           <div className={`${disabled ? 'review-feedback-vote-disabled' : 'review-feedback-vote-active'}`}>
             <ReviewFeedbackPositive
-              reviewId={reviewId}
+              contentId={contentId}
+              contentType={contentType}
               positiveCount={positiveCount}
               negativeCount={negativeCount}
             />
             <ReviewFeedbackNegative
-              reviewId={reviewId}
+              contentId={contentId}
+              contentType={contentType}
               positiveCount={positiveCount}
               negativeCount={negativeCount}
             />
           </div>
           <ReviewInappropriate
-            reviewId={reviewId}
+            contentId={contentId}
+            contentType={contentType}
           />
         </div>
       );

@@ -13,37 +13,38 @@ class ReviewFeedbackPositive extends React.Component {
     };
   }
 
-  handlePositiveCount = (reviewId, voteText) => (e) => {
+  handlePositiveCount = (contentId, voteText, contentType) => (e) => {
     e.preventDefault();
     const { positiveCount, negativeCount } = this.state;
-    const helpfulnessVoteObj = { reviewId, positiveCount, negativeCount };
+    const helpfulnessVoteObj = { contentId, positiveCount, negativeCount };
     const event = new CustomEvent('handleFeedbackSubmit', {
       bubbles: true,
       detail: {
-        reviewId,
+        contentId,
         voteText,
+        contentType,
       },
     });
     document.dispatchEvent(event);
     this.setState({ positiveCount: positiveCount + 1 });
     helpfulnessVoteObj.positiveCount += 1;
-    setStorageInfo(helpfulnessVoteObj, `helpfulnessVote-${reviewId}`);
+    setStorageInfo(helpfulnessVoteObj, `${contentType}-helpfulnessVote-${contentId}`);
   }
 
   render() {
     const { positiveCount } = this.state;
-    const { reviewId } = this.props;
+    const { contentId, contentType } = this.props;
     const positiveText = 'Positive';
 
-    const retrievedReviewVote = getStorageInfo(`helpfulnessVote-${reviewId}`);
-    if (reviewId !== undefined && positiveText !== undefined) {
+    const retrievedContentVote = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
+    if (contentId !== undefined && positiveText !== undefined) {
       return (
         <span className="feedback-positive">
-          <button value={positiveText} type="button" onClick={this.handlePositiveCount(reviewId, positiveText)} disabled={retrievedReviewVote !== null}>
+          <button value={positiveText} type="button" onClick={this.handlePositiveCount(contentId, positiveText, contentType)} disabled={retrievedContentVote !== null}>
             <span className="feedback-option-label">{Drupal.t('yes')}</span>
             <span className="feedback-count">
               (
-              {retrievedReviewVote !== null ? retrievedReviewVote.positiveCount : positiveCount}
+              {retrievedContentVote !== null ? retrievedContentVote.positiveCount : positiveCount}
               )
             </span>
           </button>
