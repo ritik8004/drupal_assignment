@@ -36,6 +36,9 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
+    //Get number of reviews per page limit.
+    $reviewsPerPage = $config->get('reviews_limit_per_page');
+
     if ($sku_entity instanceof SKU && $view_mode == 'full' && $showRatingReviews) {
       /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
       $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
@@ -70,6 +73,7 @@ function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, 
           'stats' => 'Reviews',
           'Include' => 'Products',
           'sorting_options' => $sorting_options,
+          'reviews_per_page' => $reviewsPerPage,
         ],
         'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
         'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
