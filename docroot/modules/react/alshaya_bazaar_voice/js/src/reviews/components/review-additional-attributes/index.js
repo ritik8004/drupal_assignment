@@ -1,13 +1,14 @@
 import React from 'react';
 import ConditionalView from '../../../common/components/conditional-view';
 
+function concatTagValues(val) {
+  return val === undefined ? '' : val.join(',');
+}
+
 const ReviewAdditionalAttributes = ({
   reviewAdditionalAttributesData,
   includes,
 }) => {
-  function concatTagValues(val) {
-    return val === undefined ? '' : val.join(',');
-  }
   if (reviewAdditionalAttributesData !== undefined) {
     return (
       <>

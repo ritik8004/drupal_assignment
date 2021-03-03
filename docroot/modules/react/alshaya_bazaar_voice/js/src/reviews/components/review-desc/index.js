@@ -42,7 +42,7 @@ const ReviewDescription = ({
               >
                 <div className="review-recommendation">
                   <span className="review-recommendation-icon">{Drupal.t('recommendation-icon')}</span>
-                  <span>{`${reviewDescriptionData.IsRecommended ? 'yes' : 'no'},`}</span>
+                  <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
                   <span className="review-recommendation-text">{Drupal.t('I would recommend this product.')}</span>
                 </div>
               </ConditionalView>
