@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import ClosedReviewSubmit from './closed-review-submit';
 import WithModal from './with-modal';
 import WriteReviewForm from './WriteReviewForm';
+import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 
 export default class WriteReviewButton extends React.Component {
   openModal = (callback) => {
@@ -14,10 +15,11 @@ export default class WriteReviewButton extends React.Component {
   };
 
   render() {
-    if (drupalSettings.user.user_id === 0
-      && drupalSettings.bazaar_voice.write_review_submission) {
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+    if (bazaarVoiceSettings.reviews.user.user_id === 0
+      && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission) {
       return (
-        <ClosedReviewSubmit destination={drupalSettings.product.url} />
+        <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
       );
     }
     return (

@@ -57,6 +57,7 @@ const PhotoUpload = (props) => {
                       {Drupal.t('Upload a Photo')}
                     </button>
                   )}
+                <input type="hidden" name="photoCount" id="photoCount" defaultValue={imageList.length} />
               </div>
             </div>
           </div>

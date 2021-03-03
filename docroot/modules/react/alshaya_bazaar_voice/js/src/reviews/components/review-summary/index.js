@@ -14,6 +14,7 @@ import EmptyMessage from '../../../utilities/empty-message';
 import ReviewRatingsFilter from '../review-ratings-filter';
 import PostReviewMessage from '../reviews-full-submit/post-review-message';
 import Pagination from '../review-pagination';
+import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
@@ -34,6 +35,7 @@ export default class ReviewSummary extends React.Component {
       currentPage: 1,
       prevButtonDisabled: true,
       nextButtonDisabled: false,
+      bazaarVoiceSettings: getbazaarVoiceSettings(),
     };
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
@@ -71,6 +73,7 @@ export default class ReviewSummary extends React.Component {
 
   getReviews = (options, type, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
+    const { bazaarVoiceSettings } = this.state;
     // Add sorting parameters.
     const sortParams = (type === 'sort') ? `&${type}=${options}` : '';
 
@@ -85,8 +88,8 @@ export default class ReviewSummary extends React.Component {
 
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/reviews.json';
-    const limit = drupalSettings.bazaar_voice.reviews_per_page;
-    const params = `&filter=productid:${drupalSettings.bazaar_voice.productid}&Include=${drupalSettings.bazaar_voice.Include}&stats=${drupalSettings.bazaar_voice.stats}&Limit=${limit}&Offset=${offset}${sortParams}${filterParams}`;
+    const limit = bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page;
+    const params = `&filter=productid:${bazaarVoiceSettings.productid}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${limit}&Offset=${offset}${sortParams}${filterParams}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -283,6 +286,7 @@ export default class ReviewSummary extends React.Component {
       nextButtonDisabled,
       currentPage,
       numberOfPages,
+      bazaarVoiceSettings,
     } = this.state;
 
     return (
@@ -294,7 +298,7 @@ export default class ReviewSummary extends React.Component {
               <div className="sorting-filter-title-block">{Drupal.t('Filter + Sort')}</div>
               <ReviewSorting
                 currentOption={currentSortOption}
-                sortOptions={drupalSettings.bazaar_voice.sorting_options}
+                sortOptions={bazaarVoiceSettings.reviews.bazaar_voice.sorting_options}
                 processingCallback={this.processSortOption}
               />
               <ReviewRatingsFilter

@@ -4,6 +4,16 @@ export function getLanguageCode() {
   return drupalSettings.path.currentLanguage;
 }
 
+export function getbazaarVoiceSettings() {
+  const settings = [];
+  Object.entries(drupalSettings.productInfo).forEach(([key]) => {
+    settings.productid = key;
+    settings.reviews = drupalSettings.productInfo[key].alshaya_bazaar_voice;
+  });
+
+  return settings;
+}
+
 export function doRequest(url) {
   return Axios.get(url)
     .then((response) => response)

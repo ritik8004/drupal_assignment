@@ -5,12 +5,14 @@ import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
+import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 
 export default class Rating extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       reviewsData: '',
+      bazaarVoiceSettings: getbazaarVoiceSettings(),
     };
   }
 
@@ -19,8 +21,10 @@ export default class Rating extends React.Component {
    */
   componentDidMount() {
     showFullScreenLoader();
+    const { bazaarVoiceSettings } = this.state;
+
     const apiUri = '/data/products.json';
-    const params = `&filter=id:${drupalSettings.bazaar_voice.productid}&stats=${drupalSettings.bazaar_voice.stats}`;
+    const params = `&filter=id:${bazaarVoiceSettings.productid}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -38,13 +42,14 @@ export default class Rating extends React.Component {
   }
 
   render() {
-    const { reviewsData } = this.state;
+    const { reviewsData, bazaarVoiceSettings } = this.state;
+
     if (reviewsData !== undefined && reviewsData !== '') {
       return (
         <div className="rating-wrapper">
           <InlineRating reviewsData={reviewsData} />
-          {drupalSettings.bv_auth_token !== null
-          && (<BvAuthConfirmation bvAuthToken={drupalSettings.bv_auth_token} />)}
+          {bazaarVoiceSettings.reviews.bv_auth_token !== null
+          && (<BvAuthConfirmation bvAuthToken={bazaarVoiceSettings.reviews.bv_auth_token} />)}
         </div>
       );
     }

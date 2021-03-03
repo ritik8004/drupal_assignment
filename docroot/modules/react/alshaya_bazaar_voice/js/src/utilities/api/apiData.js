@@ -1,23 +1,26 @@
 import Axios from 'axios';
+import { getbazaarVoiceSettings } from './request';
+
+const bazaarVoiceSettings = getbazaarVoiceSettings();
 
 function getBvUrl() {
-  return drupalSettings.bazaar_voice.endpoint;
+  return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
 }
 
 function getApiVersion() {
-  return `apiversion=${drupalSettings.bazaar_voice.api_version}`;
+  return `apiversion=${bazaarVoiceSettings.reviews.bazaar_voice.api_version}`;
 }
 
 function getPassKey() {
-  return `&passkey=${drupalSettings.bazaar_voice.passkey}`;
+  return `&passkey=${bazaarVoiceSettings.reviews.bazaar_voice.passkey}`;
 }
 
 function getLocale() {
-  return `&locale=${drupalSettings.bazaar_voice.locale}`;
+  return `&locale=${bazaarVoiceSettings.reviews.bazaar_voice.locale}`;
 }
 
 function getContentLocale() {
-  return `&contentlocale=${drupalSettings.bazaar_voice.content_locale}`;
+  return `&contentlocale=${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}`;
 }
 
 export function fetchAPIData(apiUri, params) {

@@ -1,5 +1,7 @@
 import Cookies from 'js-cookie';
-import { doRequest } from './api/request';
+import { doRequest, getbazaarVoiceSettings } from './api/request';
+
+const bazaarVoiceSettings = getbazaarVoiceSettings();
 
 /**
  * Get email address of current user.
@@ -7,7 +9,7 @@ import { doRequest } from './api/request';
  * @returns {email}
  */
 export const getCurrentUserEmail = () => {
-  const email = drupalSettings.user.user_email;
+  const email = bazaarVoiceSettings.reviews.user.user_email;
   return email;
 };
 
@@ -31,7 +33,7 @@ export const getSessionCookie = () => {
     if (request instanceof Promise) {
       request.then((result) => {
         if (result.status === 200 && result.statusText === 'OK') {
-          setSessionCookie(result.data, drupalSettings.bazaar_voice.max_age);
+          setSessionCookie(result.data, bazaarVoiceSettings.reviews.bazaar_voice.max_age);
         } else {
           Drupal.logJavascriptError('user-session', result.error);
         }
