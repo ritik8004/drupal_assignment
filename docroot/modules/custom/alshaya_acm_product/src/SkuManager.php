@@ -594,8 +594,9 @@ class SkuManager {
       // By default X is 5 so examples:
       // Log if parent final price is 101 and calculated final price is 20,
       // Log if parent final price is 19 and calculated final price is 100.
-      if (($final_price_parent > ($prices['final_price'] * $diff_multiplier))
-        || ($final_price_parent < ($prices['final_price'] / $diff_multiplier))) {
+      if ($final_price_parent > self::FREE_GIFT_PRICE
+        && (($final_price_parent > ($prices['final_price'] * $diff_multiplier))
+        || ($final_price_parent < ($prices['final_price'] / $diff_multiplier)))) {
         $this->logger->info('Suspicious price for parent product for sku: @sku, final_price_parent: @final_price_parent, final_price_calculated: @final_price_calculated.', [
           '@sku' => $sku_entity->getSku(),
           '@final_price_parent' => $final_price_parent,
