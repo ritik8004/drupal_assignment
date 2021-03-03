@@ -8,8 +8,7 @@ export default class Pagination extends React.Component {
     this.navigatePage = this.navigatePage.bind(this);
   }
 
-  navigatePage = (buttonValue) => (e) => {
-    e.preventDefault();
+  navigatePage = (buttonValue) => {
     const event = new CustomEvent('handlePagination', {
       bubbles: true,
       detail: {
