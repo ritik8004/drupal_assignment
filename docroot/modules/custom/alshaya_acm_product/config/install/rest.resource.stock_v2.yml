@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_product
+    - serialization
+    - simple_oauth
+id: stock_v2
+plugin_id: stock_v2
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie
