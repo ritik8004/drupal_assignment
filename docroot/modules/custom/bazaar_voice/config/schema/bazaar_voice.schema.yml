@@ -41,3 +41,12 @@ bazaar_voice.settings:
     write_review_submission:
       type: boolean
       label: 'Enable Closed submission for unauthorized user.'
+    write_review_tnc:
+      type: string
+      label: 'URL of BazaarVoice Write Review Terms and Conditon.'
+    write_review_guidlines:
+      type: string
+      label: 'URL of BazaarVoice Write review Guidelines.'
+    comment_form_tnc:
+      type: string
+      label: 'URL of BazaarVoice Comment Form Terms and Condition.'
