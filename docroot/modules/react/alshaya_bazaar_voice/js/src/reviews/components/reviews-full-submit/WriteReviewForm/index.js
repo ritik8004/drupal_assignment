@@ -32,7 +32,7 @@ export default class WriteReviewForm extends React.Component {
     const apiData = doRequest(apiUri);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
-        if (result.status === 200 && result.statusText === 'OK') {
+        if (result.status === 200) {
           removeFullScreenLoader();
           this.setState({
             fieldsConfig: result.data,
