@@ -13,6 +13,8 @@
   display: flex;
   flex-flow: row wrap;
   padding: 2.875rem 1.5625rem 0;
+  text-align: $left;
+  cursor: auto;
 
   @include breakpoint($only-mobile) {
     padding: 2.875rem 1rem 0;
@@ -79,6 +81,10 @@
     @include breakpoint($only-mobile) {
       width: 100%;
       padding-#{$right}: 0;
+    }
+
+    .product-image-block {
+      padding-top: 2rem;
     }
 
     .product-title {
