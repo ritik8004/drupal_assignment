@@ -28,6 +28,7 @@ import VatFooterText from '../../../utilities/vat-footer';
 import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
 import validateCartResponse from '../../../utilities/validation_util';
+import { getStorageInfo } from '../../../utilities/storage';
 
 window.fetchStore = 'idle';
 
@@ -69,47 +70,7 @@ export default class Checkout extends React.Component {
             redirectToCart();
             return;
           }
-
-          let formdata = {};
-          if (result.shipping && result.shipping.address === null) {
-            const shippingAddress = localStorage.getItem('shippingaddress-formdata') ? JSON.parse(localStorage.getItem('shippingaddress-formdata')) : null;
-            if (shippingAddress) {
-              formdata = { static: shippingAddress.static };
-              const cartInfo = addShippingInCart('update shipping', formdata);
-              if (cartInfo instanceof Promise) {
-                showFullScreenLoader();
-                cartInfo.then((cartResult) => {
-                  if (!(cartResult)) {
-                    return;
-                  }
-
-                  // If any error, don't process further.
-                  if (cartResult.error !== undefined) {
-                    dispatchCustomEvent('addressPopUpError', {
-                      type: 'error',
-                      message: cartResult.error_message,
-                      showDismissButton: false,
-                    });
-                    return;
-                  }
-                  if (typeof cartResult.response_message !== 'undefined'
-                      && cartResult.response_message.status !== 'success') {
-                    dispatchCustomEvent('addressPopUpError', {
-                      type: 'error',
-                      message: cartResult.response_message.msg,
-                      showDismissButton: false,
-                    });
-
-                    return;
-                  }
-                  this.processCheckout(cartResult);
-                  // Remove the loader.
-                  removeFullScreenLoader();
-                });
-              }
-            }
-          }
-
+          this.processAddressFromLocalStorage(result);
           this.processCheckout(result);
         });
       } else {
@@ -164,6 +125,28 @@ export default class Checkout extends React.Component {
     // Get promo info.
     if (typeof result.error === 'undefined') {
       PromotionsDynamicLabelsUtil.apply(result);
+    }
+  }
+
+  processAddressFromLocalStorage = (result) => {
+    let formdata = {};
+    if (result.shipping && result.shipping.method === null) {
+      const shippingAddress = getStorageInfo('shippingaddress-formdata');
+      if (shippingAddress) {
+        formdata = { static: shippingAddress.static };
+        showFullScreenLoader();
+        const cartInfo = addShippingInCart('update shipping', formdata);
+        if (cartInfo instanceof Promise) {
+          cartInfo.then((cartResult) => {
+            if (!(cartResult)) {
+              return;
+            }
+            this.processCheckout(cartResult);
+            // Remove the loader.
+            removeFullScreenLoader();
+          });
+        }
+      }
     }
   }
 
