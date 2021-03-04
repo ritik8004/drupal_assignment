@@ -55,7 +55,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $sorting_options = $alshayaBazaarVoice->getSortingOptions();
 
     \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
-    $bv_authtoken = \Drupal::service('cache.render')->invalidateAll();
+
     $settings = [
       'user' => [
         'user_email' => \Drupal::currentUser()->getEmail(),
