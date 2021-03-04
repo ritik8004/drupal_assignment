@@ -3,7 +3,7 @@ import React from 'react';
 const EmptyMessage = ({
   emptyMessage,
 }) => (
-  <div>
+  <div className="no-review">
     {emptyMessage}
   </div>
 );
