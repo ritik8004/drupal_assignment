@@ -6,6 +6,15 @@
     align-items: flex-start;
 
     &.success {
+      cursor: not-allowed;
+
+      > .spc-aura-link-card-input-mobile-aura-mobile-field,
+      > .spc-aura-link-card-input-card,
+      > .spc-aura-link-card-input-email,
+      > .spc-aura-link-card-submit {
+        pointer-events: none;
+      }
+
       @include icon('check') {
         display: inline-flex;
         font-size: 1.8125rem;

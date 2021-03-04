@@ -349,3 +349,8 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+@mixin force-ltr {
+  direction: ltr;
+  display: inline-block;
+}
