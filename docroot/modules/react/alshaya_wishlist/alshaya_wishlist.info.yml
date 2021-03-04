@@ -1,0 +1,7 @@
+name: Alshaya Wishlist
+type: module
+description: 'Provides the feature Alshaya Product WishList.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_react:alshaya_react
