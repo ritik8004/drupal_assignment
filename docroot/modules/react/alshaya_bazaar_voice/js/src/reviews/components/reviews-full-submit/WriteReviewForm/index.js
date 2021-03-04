@@ -82,7 +82,7 @@ export default class WriteReviewForm extends React.Component {
     }
 
     if (!e.detail.HasErrors) {
-      closeModal();
+      closeModal(e);
     }
   };
 
@@ -113,7 +113,7 @@ export default class WriteReviewForm extends React.Component {
       <div className="write-review-form">
         <div className="title-block">
           <SectionTitle>{Drupal.t('Write a Review')}</SectionTitle>
-          <a className="close-modal" onClick={() => closeModal()} />
+          <a className="close-modal" onClick={(e) => closeModal(e)} />
         </div>
         <BazaarVoiceMessages />
         <div className="product-block">
@@ -140,7 +140,7 @@ export default class WriteReviewForm extends React.Component {
                     className="write-review-form-cancel"
                     type="button"
                     name="cancel"
-                    onClick={() => closeModal()}
+                    onClick={(e) => closeModal(e)}
                   >
                     {Drupal.t('Cancel')}
                   </button>
