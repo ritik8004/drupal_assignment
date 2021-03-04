@@ -176,6 +176,39 @@
         font-size: 0;
       }
     }
+
+    &-pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 2.5rem 0;
+      font-size: 0.9375rem;
+
+      .prev-btn,
+      .next-btn {
+        font-size: 0;
+        border: none;
+        background: unset;
+
+        &:disabled {
+          display: none;
+        }
+      }
+
+      button {
+        &::before {
+          font-size: 1.75rem;
+        }
+      }
+
+      .prev-btn {
+        @include icon(chevron#{$left});
+      }
+
+      .next-btn {
+        @include icon(chevron#{$right});
+      }
+    }
   }
 
   .user {

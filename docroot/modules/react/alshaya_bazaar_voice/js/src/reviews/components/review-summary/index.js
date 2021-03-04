@@ -323,28 +323,29 @@ export default class ReviewSummary extends React.Component {
         {noResultmessage === null
           && (
             <>
-              {postReviewData !== ''
-                && (
-                  <PostReviewMessage postReviewData={postReviewData} />)}
-              {Object.keys(reviewsSummary).map((item) => (
-                <div className="review-summary" key={reviewsSummary[item].Id}>
-                  <ConditionalView condition={window.innerWidth < 768}>
-                    <DisplayStar
-                      starPercentage={reviewsSummary[item].Rating}
+              <div id="review-summary-wrapper">
+                {postReviewData !== ''
+                  && (
+                    <PostReviewMessage postReviewData={postReviewData} />)}
+                {Object.keys(reviewsSummary).map((item) => (
+                  <div className="review-summary" key={reviewsSummary[item].Id}>
+                    <ConditionalView condition={window.innerWidth < 768}>
+                      <DisplayStar
+                        starPercentage={reviewsSummary[item].Rating}
+                      />
+                      <div className="review-title">{reviewsSummary[item].Title}</div>
+                    </ConditionalView>
+                    <ReviewInformation
+                      reviewInformationData={reviewsSummary[item]}
+                      reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
+                        .ProductId].ReviewStatistics}
                     />
-                    <div className="review-title">{reviewsSummary[item].Title}</div>
-                  </ConditionalView>
-                  <ReviewInformation
-                    reviewInformationData={reviewsSummary[item]}
-                    reviewTooltipInfo={
-                    reviewsProduct[reviewsSummary[item].ProductId].ReviewStatistics
-                  }
-                  />
-                  <ReviewDescription
-                    reviewDescriptionData={reviewsSummary[item]}
-                  />
-                </div>
-              ))}
+                    <ReviewDescription
+                      reviewDescriptionData={reviewsSummary[item]}
+                    />
+                  </div>
+                ))}
+              </div>
               <Pagination
                 currentPage={currentPage}
                 numberOfPages={numberOfPages}
