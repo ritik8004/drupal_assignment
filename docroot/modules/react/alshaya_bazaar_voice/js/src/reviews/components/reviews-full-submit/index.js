@@ -1,47 +1,57 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import ClosedReviewSubmit from './closed-review-submit';
-import WithModal from './with-modal';
 import WriteReviewForm from './WriteReviewForm';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import smoothScrollTo from '../../../utilities/smoothScroll';
 
 export default class WriteReviewButton extends React.Component {
-  openModal = (callback) => {
-    callback();
+  constructor(props) {
+    super(props);
+    this.state = {
+      isModelOpen: false,
+    };
   }
 
-  closeModal = (callback) => {
-    callback();
+  openModal = (e) => {
+    e.preventDefault();
+
+    this.setState({
+      isModelOpen: true,
+    });
+  };
+
+  closeModal = (e) => {
+    e.preventDefault();
+
+    this.setState({
+      isModelOpen: false,
+    });
+
+    if (e.detail.HasErrors !== undefined) {
+      smoothScrollTo(e, '#post-review-message');
+    }
   };
 
   render() {
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
-    if (bazaarVoiceSettings.reviews.user.user_id === 0
-      && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission) {
-      return (
-        <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
-      );
-    }
+    const {
+      isModelOpen,
+    } = this.state;
+
     return (
-      <WithModal>
-        {({ triggerOpenModal, triggerCloseModal, isModalOpen }) => (
-          <div className="button-wrapper">
-            <div onClick={() => this.openModal(triggerOpenModal)} className="write-review-button">
-              {Drupal.t('Write a review')}
-            </div>
-            <Popup
-              open={isModalOpen}
-              className="write_review"
-              closeOnEscape={false}
-              closeOnDocumentClick={false}
-            >
-              <WriteReviewForm
-                closeModal={() => this.closeModal(triggerCloseModal)}
-              />
-            </Popup>
-          </div>
-        )}
-      </WithModal>
+      <div className="button-wrapper">
+        <div onClick={(e) => this.openModal(e)} className="write-review-button">
+          {Drupal.t('Write a review')}
+        </div>
+        <Popup
+          open={isModelOpen}
+          className="write_review"
+          closeOnDocumentClick={false}
+          closeOnEscape={false}
+        >
+          <WriteReviewForm
+            closeModal={(e) => this.closeModal(e)}
+          />
+        </Popup>
+      </div>
     );
   }
 }

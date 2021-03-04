@@ -4,7 +4,7 @@ import DisplayStar from '../../../../rating/components/stars/DisplayStar';
 const PostReviewMessage = ({
   postReviewData,
 }) => (
-  <div className="post-review-moderation">
+  <div className="post-review-moderation" id="post-review-message">
     <div>
       <DisplayStar
         starPercentage={postReviewData.Review.Rating}
