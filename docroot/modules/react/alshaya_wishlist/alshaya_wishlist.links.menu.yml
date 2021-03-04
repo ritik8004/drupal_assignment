@@ -1,0 +1,5 @@
+alshaya_wishlist.alshaya_wishlist_config:
+  route_name: alshaya_wishlist.alshaya_wishlist_config
+  title: 'Alshaya Wishlist Configuration'
+  description: 'Configure the settings for Alshaya Wishlist.'
+  parent: alshaya_master.alshaya_admin

@@ -1,0 +1,10 @@
+alshaya_wishlist.settings: 
+  type: config_object
+  label: 'Alshaya Wishlist Configurations'
+  mapping:
+    wishlist_enabled:
+      type: boolean
+      label: 'Switch to enable and disable wishlist.'
+    empty_wishlist_message:
+      type: text
+      label: 'Empty Wishlist Message.'
