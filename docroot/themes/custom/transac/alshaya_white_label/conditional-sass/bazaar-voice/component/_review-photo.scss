@@ -1,0 +1,97 @@
+.review-summary {
+  .review-detail-right {
+    .review-details {
+      @include breakpoint($only-mobile) {
+        position: relative;
+      }
+    }
+
+    .thumbnail-img-block {
+      display: flex;
+
+      @include breakpoint($tablet) {
+        position: relative;
+      }
+
+      @include breakpoint($only-mobile) {
+        overflow-y: auto;
+      }
+
+      .thumbnail-img {
+        border: 0;
+        background: #fff;
+        box-sizing: border-box;
+        vertical-align: top;
+        margin: 0 1% 1% 0;
+        height: 140px;
+        width: 140px;
+        overflow: hidden;
+        cursor: pointer;
+        zoom: 1;
+        flex-shrink: 0;
+
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          object-position: center;
+          zoom: 1;
+        }
+      }
+
+      .popup-overlay {
+        background: transparent !important;
+        position: absolute !important;
+        z-index: 2;
+      }
+
+      .popup-content {
+        width: 300px !important;
+        padding: 0 !important;
+        border: 0 !important;
+        z-index: 3 !important;
+        top: 30px !important;
+
+        @include breakpoint($only-mobile) {
+          left: 0 !important;
+          width: 100% !important;
+          top: 100px !important;
+        }
+
+        .popup-arrow {
+          display: none;
+        }
+
+        .large-image {
+          @include breakpoint($tablet) {
+            width: 300px;
+            height: 380px;
+          }
+
+          img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            object-position: center;
+            zoom: 1;
+          }
+        }
+
+        .close {
+          position: absolute;
+          #{$right}: 0;
+          border: 0;
+          padding: 0;
+          background: $modal_close_bg;
+          color: $modal_close_icon;
+
+          @include icon(close, after) {
+            font-size: 1.25rem;
+            vertical-align: middle;
+            position: relative;
+          }
+        }
+      }
+    }
+  }
+}
