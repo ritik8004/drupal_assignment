@@ -104,7 +104,7 @@
     }
 
     $.ajax({
-      url: Drupal.url('rest/v1/product/' + sku) + '?context=cart',
+      url: Drupal.url('rest/v2/product/' + btoa(sku)) + '?context=cart',
       type: 'GET',
       dataType: 'json',
       beforeSend: function(xmlhttprequest, options) {

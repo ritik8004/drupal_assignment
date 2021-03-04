@@ -142,7 +142,7 @@ class Drupal {
    *   Items data with info from drupal.
    */
   public function getCartItemDrupalStock($sku) {
-    $url = sprintf('/rest/v1/stock/%s', $sku);
+    $url = sprintf('/rest/v2/stock/%s', base64_encode($sku));
     // Bypass CloudFlare to get fresh stock data.
     // Rules are added in CF to disable caching for urls having the following
     // query string.
