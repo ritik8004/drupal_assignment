@@ -1,0 +1,20 @@
+bazaar_voice_sort_review.settings:
+  type: config_object
+  label: 'Review sort settings'
+  mapping:
+    sort_options:
+      type: sequence
+      label: 'Sort options keys'
+    sort_options_labels:
+      type: sequence
+      label: 'Sort options values'
+      sequence:
+        type: mapping
+        label: 'Sort options value with label'
+        mapping:
+          value:
+            type: string
+            label: 'Value'
+          label:
+            type: label
+            label: 'Label'

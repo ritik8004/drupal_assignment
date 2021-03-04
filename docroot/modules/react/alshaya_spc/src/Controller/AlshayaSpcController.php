@@ -678,6 +678,8 @@ class AlshayaSpcController extends ControllerBase {
     if (!empty($data_apikey)) {
       $this->moduleHandler->alter('checkout_pixel_build', $build, $data_apikey);
     }
+    // Adding hook alter for bazaarvoice pixel integration.
+    $this->moduleHandler->alter('alshaya_spc_checkout_confirmation_order_build', $build, $order);
     return $build;
   }
 
