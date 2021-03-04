@@ -96,6 +96,10 @@
     padding-#{$left}: 0.75rem;
     width: calc(100% - 6.1875rem);
 
+    @include force-ltr {
+      text-align: right;
+    }
+
     &::placeholder {
       color: $aura-spc-textbox-placeholder;
     }

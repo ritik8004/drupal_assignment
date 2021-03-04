@@ -351,6 +351,10 @@ body {
 }
 
 @mixin force-ltr {
-  direction: ltr;
-  display: inline-block;
+  html[lang=ar] & {
+    direction: ltr;
+    display: inline-block;
+
+    @content;
+  }
 }

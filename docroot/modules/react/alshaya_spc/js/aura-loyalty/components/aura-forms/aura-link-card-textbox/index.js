@@ -24,7 +24,6 @@ class AuraFormLinkCard extends React.Component {
     this.state = {
       linkCardOption: 'cardNumber',
       isOTPModalOpen: false,
-      chosenCountryCode: null,
       loyaltyCardLinkedToCart: false,
       ...getAuraDetailsDefaultState(),
     };
@@ -233,7 +232,7 @@ class AuraFormLinkCard extends React.Component {
               <ConditionalView condition={linkCardOption === 'cardNumber'}>
                 <LinkCardOptionCard cardNumber={cardNumber} />
               </ConditionalView>
-              <ConditionalView condition={linkCardOption === 'mobile'}>
+              <ConditionalView condition={linkCardOption === 'mobile' || linkCardOption === 'mobileCheckout'}>
                 <LinkCardOptionMobile
                   setChosenCountryCode={this.setChosenCountryCode}
                   mobile={mobile}
