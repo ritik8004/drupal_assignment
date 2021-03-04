@@ -1200,12 +1200,14 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
       $gtm_datas[] = $container_value->snippets();
     }
   }
-  foreach ($gtm_datas as $gtm_data) {
-    $variables['#attached']['html_head'][] =  [
-      ['#tag' => 'script',
-      '#attributes' => ['type' => 'text/javascript',],
-      '#value' => $gtm_data['script'],],
-    ];
+  if ($gtm_datas) {
+    foreach ($gtm_datas as $gtm_data) {
+      $variables['#attached']['html_head'][] =  [
+        ['#tag' => 'script',
+        '#attributes' => ['type' => 'text/javascript',],
+        '#value' => $gtm_data['script'],],
+      ];
+    }
   }
 }
 
