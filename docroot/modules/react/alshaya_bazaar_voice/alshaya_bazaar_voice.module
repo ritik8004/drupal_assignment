@@ -5,94 +5,96 @@
  * Module file.
  */
 
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\node\NodeInterface;
 
 /**
- * Implements hook_ENTITY_TYPE_view().
+ * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_bazaar_voice_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  if ($entity->bundle() == 'acq_product') {
+function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  if ($context !== 'pdp') {
+    return;
+  }
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $productNode = $skuManager->getDisplayNode($sku->getSku());
+
+  if ($productNode instanceof NodeInterface) {
     $config = \Drupal::config('bazaar_voice.settings');
-    // Disable BazaarVoice Rating and Review in PDP if checkbox is checked in bazaarVoice Settings Form
+    // Disable BazaarVoice Rating and Review in PDP
+    // if checkbox is checked in bazaarVoice Settings Form.
     $isBVDisabled = $config->get('pdp_rating_reviews');
     if ($isBVDisabled) {
       return;
     }
+    // Disable BazaarVoice Rating and Review in PDP
+    // if checkbox is checked for any categories.
     $showRatingReviews = TRUE;
-    $category = $entity->get('field_category')->getValue();
+    $category = $productNode->get('field_category')->getValue();
     foreach ($category as $term) {
       $term_obj = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term['target_id']);
-      // Disable BazaarVoice Review and Ratings if checked
+      // Disable BazaarVoice Review and Ratings if checked.
       if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
         $showRatingReviews = FALSE;
       }
     }
-
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $sku = $skuManager->getSkuForNode($entity);
-    $sku_entity = SKU::loadFromSku($sku);
-
-    //Get number of reviews per page limit.
-    $reviewsPerPage = $config->get('reviews_limit_per_page');
-
-    if ($sku_entity instanceof SKU && $view_mode == 'full' && $showRatingReviews) {
-      /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-      $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-      $media = $skuImagesManager->getFirstImage($sku_entity, 'pdp');
-      $image_url = file_create_url($media['drupal_uri']);
-
-      $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
-      // Get avalable sorting options from config.
-      $sorting_options = $alshayaBazaarVoice->getSortingOptions();
-
-      \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
-
-      $config = \Drupal::config('bazaar_voice.settings');
-
-      $settings = [
-        'user' => [
-          'user_email' => \Drupal::currentUser()->getEmail(),
-          'user_id' => \Drupal::currentUser()->id(),
-        ],
-        'product' => [
-          'url' => $entity->toUrl()->toString(),
-          'title' => $entity->label(),
-          'image_url' => $image_url,
-        ],
-        'bazaar_voice' => [
-          'endpoint' => $config->get('api_base_url'),
-          'api_version' => $config->get('api_version'),
-          'passkey' => $config->get('conversations_apikey'),
-          'locale' => $config->get('locale'),
-          'content_locale' => $config->get('content_locale'),
-          'productid' => $sku_entity->getSku(),
-          'max_age' => $config->get('max_age'),
-          'stats' => 'Reviews',
-          'Include' => 'Products',
-          'sorting_options' => $sorting_options,
-          'reviews_per_page' => $reviewsPerPage,
-          'write_review_submission' => $config->get('write_review_submission'),
-        ],
-        'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
-        'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
-      ];
-
-      // Adding template to render string values.
-      $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
-      $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
-      $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
-      $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
-      $build['#attached']['library'] = [
-        'alshaya_bazaar_voice/rating',
-        'alshaya_bazaar_voice/reviews',
-        'alshaya_bazaar_voice/iovation'
-      ];
-      $build['#attached']['drupalSettings'] = $settings;
+    if (!$showRatingReviews) {
+      return;
     }
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+    $media = $skuImagesManager->getFirstImage($sku, 'pdp');
+    $image_url = '';
+    if (!empty($media)) {
+      $image_url = file_create_url($media['drupal_uri']);
+    }
+
+    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    // Get avalable sorting options from config.
+    $sorting_options = $alshayaBazaarVoice->getSortingOptions();
+
+    \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+
+    $settings = [
+      'user' => [
+        'user_email' => \Drupal::currentUser()->getEmail(),
+        'user_id' => \Drupal::currentUser()->id(),
+      ],
+      'product' => [
+        'url' => $productNode->toUrl()->toString(),
+        'title' => $productNode->label(),
+        'image_url' => $image_url,
+      ],
+      'bazaar_voice' => [
+        'endpoint' => $config->get('api_base_url'),
+        'api_version' => $config->get('api_version'),
+        'passkey' => $config->get('conversations_apikey'),
+        'locale' => $config->get('locale'),
+        'content_locale' => $config->get('content_locale'),
+        'max_age' => $config->get('max_age'),
+        'stats' => 'Reviews',
+        'Include' => 'Products',
+        'sorting_options' => $sorting_options,
+        'reviews_per_page' => $config->get('reviews_limit_per_page'),
+        'write_review_submission' => $config->get('write_review_submission'),
+      ],
+      'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
+      'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
+    ];
+
+    // Adding template to render string values.
+    $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
+    $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
+    $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
+    $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
+    $build['#attached']['library'] = [
+      'alshaya_bazaar_voice/rating',
+      'alshaya_bazaar_voice/reviews',
+      'alshaya_bazaar_voice/iovation',
+    ];
+
+    $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['alshaya_bazaar_voice'] = $settings;
   }
 }
 

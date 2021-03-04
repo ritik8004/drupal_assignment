@@ -1,4 +1,7 @@
 import { getCurrentUserEmail, getSessionCookie } from './user_util';
+import { getbazaarVoiceSettings } from './api/request';
+
+const bazaarVoiceSettings = getbazaarVoiceSettings();
 
 /**
  * Email address validation.
@@ -19,75 +22,47 @@ export const prepareRequest = (elements, fieldsConfig) => {
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
-    // Add text input data in request.
-    if (field['#type'] === 'textfield'
-      || field['#type'] === 'textarea') {
-      const value = (elements[id].value === undefined)
-        ? ''
-        : elements[id].value;
+    // Add input field data in request.
+    try {
+      if (elements[id].value !== null) {
+        params += `&${id}=${elements[id].value}`;
 
-      if (value !== null && value !== '') {
-        params += `&${id}=${value}`;
-
-        if (id === 'useremail' && getCurrentUserEmail() === undefined) {
-          params += `&HostedAuthentication_AuthenticationEmail=${value}`;
+        if (id === 'useremail' && getCurrentUserEmail() === null) {
+          params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
         }
       }
-    }
-    // Add select input data in request.
-    if (field['#type'] === 'select') {
-      const value = (elements[id].value === undefined)
-        ? ''
-        : elements[id].value;
+    } catch (e) { return null; }
 
-      if (value !== null && value !== '') {
-        params += `&${id}=${value}`;
-      }
-    }
-    // Add tags type data in request
-    if (field['#type'] === 'checkbox') {
-      const value = (elements[id].value === undefined)
-        ? ''
-        : elements[id].value;
-
-      if (value !== null && value !== '') {
-        params += `&${id}=${value}`;
-      }
-    }
-
-    // Add tags type data in request
-    if (field['#group_type'] === 'photo') {
+    // Add photo type data in request
+    if (field['#group_type'] === 'photo'
+      && elements.photoCount.value > 0) {
       [...Array(5)].map((val, i) => {
-        let photoUrl = '';
         try {
           const photoId = `photourl_${(i + 1)}`;
-          photoUrl = `&${photoId}=${elements[photoId].value}`;
-        } catch (e) {
-          Drupal.logJavascriptError('photo-url-exception', e.message);
-        }
-        if (photoUrl !== '') {
-          params += photoUrl;
-        }
-        return photoUrl;
+          params += `&${photoId}=${elements[photoId].value}`;
+        } catch (e) { return null; }
+        return val;
       });
     }
+    return field;
   });
-  if (getCurrentUserEmail() === undefined) {
+
+  if (getCurrentUserEmail() === null) {
     // Set callback url for BV auntheticated user.
-    params += `&HostedAuthentication_CallbackURL=${drupalSettings.base_url}${drupalSettings.product.url}`;
+    params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
-  if (getCurrentUserEmail() !== undefined && getSessionCookie() !== undefined) {
+  if (getCurrentUserEmail() !== null && getSessionCookie() !== undefined) {
     // Set UAS token in user param.
     params += `&user=${getSessionCookie()}`;
   }
   // Set product id
-  params += `&productid=${drupalSettings.bazaar_voice.productid}`;
+  params += `&productid=${bazaarVoiceSettings.productid}`;
   // Add device finger printing string in params.
   if (elements.blackBox.value !== '') {
     params += `&fp=${elements.blackBox.value}`;
   }
   // Terms and conditions must be agreed.
-  params += '&agreedtotermsandconditions=1';
+  params += `&agreedtotermsandconditions=${true}`;
   // Set action type.
   params += '&action=submit';
 

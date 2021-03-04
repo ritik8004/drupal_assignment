@@ -6,8 +6,8 @@ import { postAPIData } from '../../../../utilities/api/apiData';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
-import { getLanguageCode, doRequest } from '../../../../utilities/api/request';
 import FormLinks from '../DynamicFormField/Fields/FormLinks';
+import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../utilities/api/request';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -16,6 +16,7 @@ export default class WriteReviewForm extends React.Component {
     super(props);
     this.state = {
       fieldsConfig: '',
+      bazaarVoiceSettings: getbazaarVoiceSettings(),
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -93,6 +94,7 @@ export default class WriteReviewForm extends React.Component {
 
     const {
       fieldsConfig,
+      bazaarVoiceSettings,
     } = this.state;
 
     Object.entries(fieldsConfig).forEach(
@@ -116,10 +118,10 @@ export default class WriteReviewForm extends React.Component {
         <BazaarVoiceMessages />
         <div className="product-block">
           <div className="product-image-block">
-            <img src={drupalSettings.product.image_url} />
+            <img src={bazaarVoiceSettings.reviews.product.image_url} />
           </div>
           <div className="product-title">
-            <span>{drupalSettings.product.title}</span>
+            <span>{bazaarVoiceSettings.reviews.product.title}</span>
           </div>
         </div>
         <div className="write-review-form-sidebar">

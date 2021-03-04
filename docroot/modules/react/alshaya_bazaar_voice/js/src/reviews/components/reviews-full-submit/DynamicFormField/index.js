@@ -31,7 +31,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         text={fieldProperty.text}
       />
     );
@@ -44,7 +44,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         text={fieldProperty.text}
       />
     );
@@ -58,6 +58,7 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         options={fieldProperty.options}
+        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         text={fieldProperty.text}
       />
     );
@@ -69,7 +70,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         text={fieldProperty.text}
       />
     );
@@ -82,7 +83,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         options={fieldProperty.options}
         visible={fieldProperty.visible}
         text={fieldProperty.text}
@@ -97,7 +98,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         maxLength={fieldProperty.maxlength}
         minLength={fieldProperty.minlength}
         text={fieldProperty.text}
@@ -121,6 +122,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
+        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         text={fieldProperty.text}
       />
     );
@@ -134,6 +136,7 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         maxLength={fieldProperty.maxlength}
+        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         text={fieldProperty.text}
       />
     );
@@ -144,7 +147,7 @@ const DynamicFormField = (props) => {
       required={fieldProperty.required}
       id={fieldProperty.id}
       label={fieldProperty.title}
-      defaultValue={fieldProperty.defaultVal !== '' ? fieldProperty.defaultVal : ''}
+      defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
       maxLength={fieldProperty.maxlength}
       minLength={fieldProperty.minlength}
       visible={fieldProperty.visible}

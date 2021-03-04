@@ -25,15 +25,18 @@ export default class BazaarVoiceMessages extends React.Component {
 
   processErrors = (fieldErrors) => {
     const errorMessages = [];
-    Object.values(fieldErrors).forEach((item) => {
-      errorMessages.push(item);
-    });
-    if (errorMessages.length > 0) {
-      this.setState({
-        errorList: errorMessages,
+    try {
+      Object.values(fieldErrors).forEach((item) => {
+        errorMessages.push(item);
       });
-      return null;
-    }
+      if (errorMessages.length > 0) {
+        this.setState({
+          errorList: errorMessages,
+        });
+        return null;
+      }
+    } catch (e) { return null; }
+
     return null;
   };
 
@@ -68,7 +71,6 @@ export default class BazaarVoiceMessages extends React.Component {
     if (response.data.HasErrors && response.data.FormErrors !== null) {
       if (response.data.Errors.length > 0) {
         this.processErrors(response.data.Errors);
-        return;
       }
       if (response.data.FormErrors.FieldErrors !== null) {
         this.processErrors(response.data.FormErrors.FieldErrors);
