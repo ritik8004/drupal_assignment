@@ -1,4 +1,4 @@
-@javascript @cybersourcePayment @auth @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat
+@javascript @cybersourcePayment @auth @clickCollect
 Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authenticated User
 
   Background:
