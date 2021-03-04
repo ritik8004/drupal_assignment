@@ -28,6 +28,9 @@ function alshaya_acm_product_update_8066() {
 
   \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
   \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+
+  // Rebuild router.
+  \Drupal::service('router.builder')->rebuild();
 }
 
 /**
