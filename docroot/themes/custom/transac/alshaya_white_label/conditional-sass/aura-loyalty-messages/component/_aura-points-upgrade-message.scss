@@ -1,5 +1,8 @@
 .spc-aura-points-upgrade-item {
-  padding: 0.875rem 1.25rem 0.875rem 3.625rem;
+  padding-top: 0.875rem;
+  padding-#{$right}: 1.25rem;
+  padding-bottom: 0.875rem;
+  padding-#{$left}: 3.625rem;
   background: $aura-item-upgrade-bg;
   border-radius: 0.625rem;
   color: $aura-item-upgrade-txt;

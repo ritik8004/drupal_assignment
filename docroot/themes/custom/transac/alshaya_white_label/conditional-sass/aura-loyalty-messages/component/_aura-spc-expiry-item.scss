@@ -1,5 +1,8 @@
 .spc-aura-points-expiry-item {
-  padding: 0.875rem 1.25rem 0.875rem 3.625rem;
+  padding-top: 0.875rem;
+  padding-#{$right}: 1.25rem;
+  padding-bottom: 0.875rem;
+  padding-#{$left}: 3.625rem;
   background: $aura-expiry-item-bg;
   border-radius: 0.625rem;
   color: $aura-expiry-item-txt;
@@ -13,6 +16,8 @@
 
   b {
     font-family: $aura-bold;
+
+    @include force-ltr;
   }
 
   @include icon('warning') {

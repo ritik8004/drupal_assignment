@@ -18,7 +18,11 @@ const AuraProgressNextTierMessage = (props) => {
 
   return (
     <div className="spc-aura-points-upgrade-item">
-      {`${Drupal.t('Spend')} ${currencyCode} ${differenceAmount} ${Drupal.t('to reach')} ${nextTierLabel} ${Drupal.t('status')}`}
+      {`${Drupal.t('Spend')}`}
+      <b>{`${currencyCode} ${differenceAmount}`}</b>
+      {`${Drupal.t('to reach')}`}
+      <b>{`${nextTierLabel}`}</b>
+      {`${Drupal.t('status')}`}
     </div>
   );
 };

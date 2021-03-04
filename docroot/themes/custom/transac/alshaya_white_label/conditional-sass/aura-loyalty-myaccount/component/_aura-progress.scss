@@ -87,7 +87,8 @@
         top: 0;
         #{$left}: 0;
         height: 100%;
-        border-radius: 0.625rem 0 0 0.625rem;
+        border-top-#{$left}-radius: 0.625rem;
+        border-bottom-#{$left}-radius: 0.625rem;
         display: flex;
         align-items: center;
         overflow: hidden;
@@ -96,7 +97,8 @@
     }
 
     .end {
-      border-radius: 0 0.625rem 0.625rem 0;
+      border-top-#{$right}-radius: 0.625rem;
+      border-bottom-#{$right}-radius: 0.625rem;
       grid-area: end;
       display: flex;
       align-items: center;
