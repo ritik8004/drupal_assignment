@@ -36,7 +36,7 @@ class PhotoUrls extends React.Component {
     const fileData = postRequest('/uploadfile', data);
     if (fileData instanceof Promise) {
       fileData.then((result) => {
-        if (result.status === 200 && result.statusText === 'OK') {
+        if (result.status === 200) {
           if (result.data) {
             const photoUrl = result.data;
             const params = `&contenttype=Review&photourl=${photoUrl}`;
