@@ -5,6 +5,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
+import ReviewPhoto from '../review-photo';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -34,7 +35,12 @@ const ReviewDescription = ({
             includes="_textarea"
           />
 
-          <div className="review-photo">{reviewDescriptionData.Photo}</div>
+          {
+            (reviewDescriptionData.Photos && reviewDescriptionData.Photos.length > 0)
+              ? <ReviewPhoto photoCollection={reviewDescriptionData.Photos} />
+              : null
+          }
+
           <div className="review-inline-feedback">
             <div>
               <ConditionalView condition={reviewDescriptionData.IsRecommended !== false
