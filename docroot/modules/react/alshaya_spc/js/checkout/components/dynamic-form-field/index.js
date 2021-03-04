@@ -11,7 +11,6 @@ const DynamicFormField = (props) => {
     && defVal.length !== 'undefined') {
     defaultVal = defVal;
   }
-  const shippingAddress = JSON.parse(localStorage.getItem('shippingAddress'));
 
   const {
     field_key: fieldKey,
@@ -40,13 +39,9 @@ const DynamicFormField = (props) => {
       />
     );
   }
-  let dynamicDefaultValue = '';
-  if (shippingAddress) {
-    dynamicDefaultValue = shippingAddress[field.key];
-  }
 
   return (
-    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : dynamicDefaultValue} maxLength={field.maxLength} />
+    <TextField isAddressField required={field.required} id={fieldKey} type="text" label={field.label} name={fieldKey} defaultValue={defaultVal !== '' ? defaultVal[field.key] : ''} maxLength={field.maxLength} />
   );
 };
 

@@ -517,6 +517,7 @@ export const checkoutAddressProcess = (e) => {
     }
 
     // Get shipping methods based on address info.
+    localStorage.setItem('shippingaddress-formdata', JSON.stringify(formData));
     const cartInfo = addShippingInCart('update shipping', formData);
     if (cartInfo instanceof Promise) {
       cartInfo.then((cartResult) => {
@@ -547,7 +548,6 @@ export const checkoutAddressProcess = (e) => {
         }
 
         const cartData = { cart: cartResult };
-        localStorage.setItem('shippingAddress', JSON.stringify(formData));
 
         // Trigger event.
         dispatchCustomEvent('refreshCartOnAddress', cartData);

@@ -10,15 +10,8 @@ const FixedFields = ({
   defaultVal, showEmail, showFullName = true, subTitle, type,
 }) => {
   let defaultValue = '';
-  let shippingAddress = '';
-  let shippingAddressValue = '';
-  let guestUserFullname = '';
-  shippingAddress = JSON.parse(localStorage.getItem('shippingAddress'));
   if (defaultVal.length !== 0 && defaultVal.length !== 'undefined') {
     defaultValue = defaultVal.static;
-  } else if (shippingAddress) {
-    shippingAddressValue = shippingAddress.static;
-    guestUserFullname = shippingAddressValue.firstname.concat(' ').concat(shippingAddressValue.lastname);
   }
 
   const hasSubTitle = subTitle !== undefined && subTitle.length > 0
@@ -40,8 +33,8 @@ const FixedFields = ({
             type="text"
             required={false}
             name="fullname"
-            defaultValue={defaultValue !== '' ? defaultValue.fullname : guestUserFullname}
-            className={(defaultValue !== '' && defaultValue.fullname !== '') || (shippingAddressValue !== '' && guestUserFullname !== '') ? 'focus' : ''}
+            defaultValue={defaultValue !== '' ? defaultValue.fullname : ''}
+            className={defaultValue !== '' && defaultValue.fullname !== '' ? 'focus' : ''}
             label={getStringMessage('ci_full_name')}
           />
         </ConditionalView>
@@ -49,16 +42,16 @@ const FixedFields = ({
           <TextField
             type="email"
             name="email"
-            defaultValue={defaultValue !== '' ? defaultValue.email : shippingAddressValue.email}
-            className={(defaultValue !== '' && defaultValue.email !== '') || (shippingAddressValue !== '' && shippingAddressValue.email !== '') ? 'focus' : ''}
+            defaultValue={defaultValue !== '' ? defaultValue.email : ''}
+            className={defaultValue !== '' && defaultValue.email !== '' ? 'focus' : ''}
             label={getStringMessage('ci_email')}
           />
         </ConditionalView>
         <TextField
           type="tel"
           name="mobile"
-          defaultValue={defaultValue !== '' ? cleanMobileNumber(defaultValue.telephone) : cleanMobileNumber(shippingAddressValue.telephone)}
-          className={(defaultValue !== '' && defaultValue.telephone !== '') || (shippingAddressValue !== '' && shippingAddressValue.telephone !== '') ? 'focus' : ''}
+          defaultValue={defaultValue !== '' ? cleanMobileNumber(defaultValue.telephone) : ''}
+          className={defaultValue !== '' && defaultValue.telephone !== '' ? 'focus' : ''}
           label={getStringMessage('ci_mobile_number')}
         />
         <input type="hidden" name="address_id" value={defaultValue !== '' && defaultValue.address_id !== null ? defaultValue.address_id : 0} />
