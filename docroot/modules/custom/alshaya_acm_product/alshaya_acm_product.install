@@ -13,7 +13,7 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
- * Add new Prodcut and Stock resource v2.
+ * Add new Product and Stock resource v2.
  */
 function alshaya_acm_product_update_8066() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
