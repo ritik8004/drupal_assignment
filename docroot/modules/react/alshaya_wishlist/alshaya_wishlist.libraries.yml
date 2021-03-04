@@ -1,0 +1,5 @@
+alshaya_wishlist:
+  js:
+    dist/wishlist.bundle.js: {}
+  dependencies:
+    - alshaya_react/react
