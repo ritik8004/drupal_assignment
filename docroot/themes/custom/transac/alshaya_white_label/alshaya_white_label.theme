@@ -18,6 +18,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\file\Entity\File;
+use Drupal\google_tag\Entity\Container;
 
 /**
  * Implements hook_css_alter().
@@ -1192,6 +1193,19 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
     if ($file = file_load($image)) {
       $variables['maintenance_image'] = file_create_url($file->getFileUri());
     }
+  }
+  $container = \Drupal::service('entity_type.manager')->getStorage('google_tag_container')->loadMultiple();
+  if ($container) {
+    foreach($container as &$container_value) {
+      $gtm_datas[] = $container_value->snippets();
+    }
+  }
+  foreach ($gtm_datas as $gtm_data) {
+    $variables['#attached']['html_head'][] =  [
+      ['#tag' => 'script',
+      '#attributes' => ['type' => 'text/javascript',],
+      '#value' => $gtm_data['script'],],
+    ];
   }
 }
 
