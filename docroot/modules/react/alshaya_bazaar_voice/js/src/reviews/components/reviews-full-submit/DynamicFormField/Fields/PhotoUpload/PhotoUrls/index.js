@@ -38,8 +38,7 @@ class PhotoUrls extends React.Component {
       fileData.then((result) => {
         if (result.status === 200 && result.statusText === 'OK') {
           if (result.data) {
-            // const photoUrl = result.data;
-            const photoUrl = 'https://kw.hm.com/sites/g/files/hm/styles/product_zoom_large_800x800/brand/assets-shared/HNM/11902571/83fad35eb48fd3fde86ca5cf12849ff54ac2d11b/2/a43a93661bb4833a8b015fa1c6be2da70f3aa1b1.jpg';
+            const photoUrl = result.data;
             const params = `&contenttype=Review&photourl=${photoUrl}`;
             const apiUri = '/data/uploadphoto.json';
             const apiData = postAPIData(apiUri, params);
