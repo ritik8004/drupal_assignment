@@ -32,7 +32,7 @@ export const getSessionCookie = () => {
 
     if (request instanceof Promise) {
       request.then((result) => {
-        if (result.status === 200 && result.statusText === 'OK') {
+        if (result.status === 200) {
           setSessionCookie(result.data, bazaarVoiceSettings.reviews.bazaar_voice.max_age);
         } else {
           Drupal.logJavascriptError('user-session', result.error);

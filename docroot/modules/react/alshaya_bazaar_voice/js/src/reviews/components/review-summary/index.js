@@ -15,6 +15,7 @@ import ReviewRatingsFilter from '../review-ratings-filter';
 import PostReviewMessage from '../reviews-full-submit/post-review-message';
 import Pagination from '../review-pagination';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import WriteReviewButton from '../reviews-full-submit';
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
@@ -288,6 +289,14 @@ export default class ReviewSummary extends React.Component {
       numberOfPages,
       bazaarVoiceSettings,
     } = this.state;
+
+    if (totalReviews === '') {
+      return (
+        <div className="empty-review-summary">
+          <WriteReviewButton />
+        </div>
+      );
+    }
 
     return (
       <div className="reviews-wrapper">

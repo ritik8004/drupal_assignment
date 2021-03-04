@@ -31,7 +31,7 @@ export default class Rating extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           removeFullScreenLoader();
           this.setState({
-            reviewsData: result.data.Results,
+            reviewsData: result.data.Results[0],
           });
         } else {
           removeFullScreenLoader();
@@ -44,7 +44,9 @@ export default class Rating extends React.Component {
   render() {
     const { reviewsData, bazaarVoiceSettings } = this.state;
 
-    if (reviewsData !== undefined && reviewsData !== '') {
+    if (reviewsData !== undefined
+      && reviewsData !== ''
+      && reviewsData.TotalReviewCount > 0) {
       return (
         <div className="rating-wrapper">
           <InlineRating reviewsData={reviewsData} />
