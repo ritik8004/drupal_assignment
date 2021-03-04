@@ -13,13 +13,15 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
- * Add new Stock resource v2.
+ * Add new Product and Stock resource v2.
  */
 function alshaya_acm_product_update_8066() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['rest.resource.stock_v2'],
+  $manager->updateConfigs([
+      'rest.resource.stock_v2',
+      'rest.resource.product_v2'
+    ],
     'alshaya_acm_product',
     'install'
   );
