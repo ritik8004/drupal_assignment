@@ -146,7 +146,17 @@
 .c-user-login.user-page {
   @include breakpoint($only-mobile) {
     margin-top: 3rem;
-    padding-top: 1.7rem;
+    margin-bottom: 1rem;
+    padding-top: 0;
+  }
+
+  @include breakpoint($upto-tablet) {
+    padding-top: 1.8rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    padding: 2.5rem 0;
+    margin: 4.25em 2rem 0;
   }
 
   @include breakpoint($tablet) {
@@ -157,6 +167,7 @@
   @include breakpoint($desktop) {
     margin: 4.6rem auto 1rem;
     max-width: 64.125rem;
+    padding: 2.5rem 0;
   }
 
   .messages__wrapper {
@@ -181,9 +192,7 @@
       font-size: 1rem;
       letter-spacing: 0.1875rem;
     }
-  }
 
-  .user-login-form {
     .form-item:first-child {
       margin-top: 1.49em;
     }
@@ -287,32 +296,41 @@
       }
     }
   }
+
+  main {
+    @include breakpoint($only-mobile) {
+      .region__content {
+        .block-system-main-block {
+          order: 2;
+          padding-bottom: 2.5rem;
+        }
+
+        .block-page-title-block {
+          h1 {
+            top: -2rem;
+          }
+        }
+
+        .block-alshaya-social-login {
+          order: 1;
+          margin-bottom: 0;
+        }
+
+        .block-alshaya-signup-signin-buttons {
+          order: 3;
+        }
+      }
+
+      #block-content {
+        + #block-alshayasignupsigninbuttonsblock {
+          margin-top: 1.5rem;
+        }
+      }
+    }
+  }
 }
 
 .c-user-register {
-  &.user-page {
-    @include breakpoint($upto-tablet) {
-      padding-top: 1.8rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      margin-bottom: 1rem;
-      margin-top: 3rem;
-      padding-top: 1.7rem;
-    }
-
-    @include breakpoint($only-tablet) {
-      padding: 2.5rem 0;
-      margin: 4.25em 2rem 0;
-    }
-
-    @include breakpoint($desktop) {
-      margin: 4.6rem auto 1rem;
-      max-width: 64.125rem;
-      padding: 2.5rem 0;
-    }
-  }
-
   .messages.drupal-messages {
     display: none;
   }
@@ -468,7 +486,7 @@
 
     #edit-actions {
       margin-top: 0.477rem;
-      margin-bottom: 4rem;
+      margin-bottom: 1.5rem;
 
       @include breakpoint($only-mobile) {
         margin-bottom: 0;
@@ -716,16 +734,6 @@ main .user-register-form {
   }
 }
 
-.c-user-register {
-  .c-content__region {
-    .user-form {
-      #edit-actions {
-        margin-bottom: 1.5rem;
-      }
-    }
-  }
-}
-
 .c-user-login,
 .c-user-register {
   &.user-page {
@@ -779,60 +787,6 @@ main .user-register-form {
 
     .c-sidebar-second {
       display: none;
-    }
-  }
-}
-
-.c-user-login {
-  &.user-page {
-    main {
-      @include breakpoint($only-mobile) {
-        .region__content {
-          .block-system-main-block {
-            order: 1;
-            padding-bottom: 2.5rem;
-          }
-
-          .block-page-title-block {
-            h1 {
-              top: -2rem;
-            }
-          }
-        }
-
-        #block-content {
-          + #block-alshayasignupsigninbuttonsblock {
-            margin-top: 1.5rem;
-          }
-        }
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      padding-top: 0;
-    }
-  }
-}
-
-.c-user-register {
-  &.user-page {
-    main {
-      @include breakpoint($only-mobile) {
-        .region__content {
-          .block-alshaya-social-login {
-            order: 1;
-            margin-bottom: 0;
-          }
-
-          .block-alshaya-signup-signin-buttons {
-            order: 3;
-          }
-
-          .block-system-main-block {
-            order: 2;
-          }
-        }
-      }
     }
   }
 }

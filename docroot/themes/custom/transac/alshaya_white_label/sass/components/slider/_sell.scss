@@ -32,6 +32,11 @@
       }
     }
   }
+
+  @include breakpoint($tablet) {
+    margin-bottom: 3.75rem;
+    clear: both;
+  }
 }
 
 .view-product-slider {
@@ -96,6 +101,19 @@
     .views-row {
       img {
         width: 100%;
+      }
+    }
+
+    // For mobile when we have no size attribute the quantity should span to full.
+    article[gtm-sku-type="simple"] {
+      .mobile--only--sell {
+        .form-item-quantity {
+          width: 100%;
+
+          select {
+            width: 100%;
+          }
+        }
       }
     }
   }
@@ -211,15 +229,6 @@
   }
 }
 
-.horizontal-related,
-.horizontal-crossell,
-.horizontal-upell {
-  @include breakpoint($tablet) {
-    margin-bottom: 3.75rem;
-    clear: both;
-  }
-}
-
 .subtitle.crossell-title {
   font-size: 1rem;
   font-family: $alshaya-bold;
@@ -249,6 +258,7 @@
 
 .mobile--only--sell .sell-sku {
   clear: both;
+  vertical-align: bottom;
 
   .field--name-name,
   .field--name-sku,
@@ -348,6 +358,18 @@
       }
     }
   }
+
+  .field__items {
+    @include breakpoint($only-mobile) {
+      padding: 0.3125rem;
+    }
+  }
+
+  .field--name-field-skus {
+    @include breakpoint($only-mobile) {
+      border-bottom: none;
+    }
+  }
 }
 
 .mobile--only--sell {
@@ -373,39 +395,6 @@
   .promotions {
     a {
       margin-top: 0.25rem;
-    }
-  }
-
-  .sell-sku {
-    vertical-align: bottom;
-
-    .field__items {
-      @include breakpoint($only-mobile) {
-        padding: 0.3125rem;
-      }
-    }
-
-    .field--name-field-skus {
-      @include breakpoint($only-mobile) {
-        border-bottom: none;
-      }
-    }
-  }
-}
-
-// for mobile when we have no size attribute the quantity should span to full.
-.view-product-slider {
-  .owl-carousel {
-    article[gtm-sku-type="simple"] {
-      .mobile--only--sell {
-        .form-item-quantity {
-          width: 100%;
-
-          select {
-            width: 100%;
-          }
-        }
-      }
     }
   }
 }

@@ -33,7 +33,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "DroidArabicKufi_Bold";
-  src: url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.eot");
+  src: url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot");
   src:
     url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.otf") format("opentype"),
@@ -48,7 +48,7 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "DroidKufi_Regular";
-  src: url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.eot");
+  src: url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot");
   src:
     url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.otf") format("opentype"),

@@ -23,9 +23,15 @@ html {
   }
 }
 
+// All filters Height / overflow issues - all brands
+$all-filter-height-mobile: calc(100vh - 3.75rem - 7.375rem);
+$all-filter-height-tablet: calc(100vh - 5.3125rem - 9.375rem);
+$all-filter-height-desktop: calc(100vh - 5.3125rem - 8.25rem);
+
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   // Main all filters div theming.
+  // Filter Head.
   .all-filters,
   .all-filters-algolia {
     max-width: 31.25rem;
@@ -70,11 +76,7 @@ html {
         }
       }
     }
-  }
 
-  // Filter Head
-  .all-filters .filter,
-  .all-filters-algolia .filter {
     &__head {
       border-bottom: 1px solid $plp_all_filter_head_border;
       padding: 1.625rem 1rem;
@@ -544,15 +546,7 @@ html {
       }
     }
   }
-}
 
-// All filters Height / overflow issues - all brands
-$all-filter-height-mobile: calc(100vh - 3.75rem - 7.375rem);
-$all-filter-height-tablet: calc(100vh - 5.3125rem - 9.375rem);
-$all-filter-height-desktop: calc(100vh - 5.3125rem - 8.25rem);
-
-.c-plp .c-content__region .all-filters,
-.c-plp .c-content__region .all-filters-algolia {
   .filter__inner {
     @include breakpoint($only-mobile) {
       height: $all-filter-height-mobile;
