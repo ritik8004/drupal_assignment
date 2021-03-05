@@ -15,6 +15,11 @@ class ReviewFeedback extends React.Component {
 
   componentDidMount() {
     document.addEventListener('handleFeedbackSubmit', this.handleFeedbackSubmit);
+    const { contentId, contentType } = this.props;
+    const checkFeedbackInStorage = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
+    if (checkFeedbackInStorage !== null) {
+      this.setState({ votedContentId: contentId });
+    }
   }
 
   handleFeedbackSubmit = (event) => {
@@ -43,19 +48,22 @@ class ReviewFeedback extends React.Component {
     } = this.props;
     const { votedContentId } = this.state;
     let contentTypeDisplayValue = null;
+    let btnStatus = 'active';
+    if (votedContentId === contentId) {
+      btnStatus = 'disabled';
+    }
     if (contentType === 'review_comment') {
       contentTypeDisplayValue = 'comment';
     }
     if (contentType === 'review') {
       contentTypeDisplayValue = 'review';
     }
-    const checkFeedbackInStorage = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
     if (contentId !== undefined && positiveCount !== undefined && negativeCount
       !== undefined && isSyndicatedReview === false) {
       return (
         <div className="review-feedback-vote">
           <span className="feedback-label">{Drupal.t(`Was this ${contentTypeDisplayValue} helpful?`)}</span>
-          <div className={`${checkFeedbackInStorage !== null || votedContentId === contentId ? 'review-feedback-vote-disabled' : 'review-feedback-vote-active'}`}>
+          <div className={`review-feedback-vote-${btnStatus}`}>
             <ReviewFeedbackPositive
               contentId={contentId}
               contentType={contentType}
