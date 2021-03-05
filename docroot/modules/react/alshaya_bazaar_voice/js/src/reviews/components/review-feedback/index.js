@@ -3,12 +3,13 @@ import { postAPIData } from '../../../utilities/api/apiData';
 import ReviewInappropriate from '../review-inappropriate';
 import ReviewFeedbackPositive from '../review-feedback-positive';
 import ReviewFeedbackNegative from '../review-feedback-negative';
+import { getStorageInfo } from '../../../utilities/storage';
 
 class ReviewFeedback extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false,
+      votedContentId: '',
     };
   }
 
@@ -27,7 +28,7 @@ class ReviewFeedback extends React.Component {
           if (result.error === undefined
             && result.data !== undefined
             && result.data.error === undefined) {
-            this.setState({ disabled: true });
+            this.setState({ votedContentId: contentId });
           } else {
             // To Do - handle error response
           }
@@ -40,7 +41,7 @@ class ReviewFeedback extends React.Component {
     const {
       contentId, isSyndicatedReview, positiveCount, negativeCount, contentType,
     } = this.props;
-    const { disabled } = this.state;
+    const { votedContentId } = this.state;
     let contentTypeDisplayValue = null;
     if (contentType === 'review_comment') {
       contentTypeDisplayValue = 'comment';
@@ -48,12 +49,13 @@ class ReviewFeedback extends React.Component {
     if (contentType === 'review') {
       contentTypeDisplayValue = 'review';
     }
+    const checkFeedbackInStorage = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
     if (contentId !== undefined && positiveCount !== undefined && negativeCount
       !== undefined && isSyndicatedReview === false) {
       return (
         <div className="review-feedback-vote">
           <span className="feedback-label">{Drupal.t(`Was this ${contentTypeDisplayValue} helpful?`)}</span>
-          <div className={`${disabled ? 'review-feedback-vote-disabled' : 'review-feedback-vote-active'}`}>
+          <div className={`${checkFeedbackInStorage !== null || votedContentId === contentId ? 'review-feedback-vote-disabled' : 'review-feedback-vote-active'}`}>
             <ReviewFeedbackPositive
               contentId={contentId}
               contentType={contentType}
