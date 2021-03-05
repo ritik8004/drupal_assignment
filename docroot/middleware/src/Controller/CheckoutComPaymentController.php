@@ -369,7 +369,7 @@ class CheckoutComPaymentController extends PaymentController {
       // We get cases where cookies are not forwarded on redirects in mobile.
       $this->session->updateDataInSession(Cart::SESSION_STORAGE_KEY, (int) $data['cart_id']);
     }
-    elseif ($data['cart_id'] != $cart_id) {
+    elseif (!isset($data['cart_id']) || $data['cart_id'] != $cart_id) {
       $this->logger->error('3D secure payment came into @callback with cart not matching in session. Payment token: @token, Cart ID in session @cart_id, Payment data: @data', [
         '@token' => $payment_token,
         '@callback' => $callback,
