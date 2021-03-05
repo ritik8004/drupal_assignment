@@ -29,14 +29,15 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
       return;
     }
     // Disable BazaarVoice Rating and Review in PDP
-    // if checkbox is checked for any categories.
+    // if checkbox is checked for any categories or its Parent Categories.
     $showRatingReviews = TRUE;
     $category = $productNode->get('field_category')->getValue();
     foreach ($category as $term) {
-      $term_obj = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term['target_id']);
-      // Disable BazaarVoice Review and Ratings if checked.
-      if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
-        $showRatingReviews = FALSE;
+      $term_parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term['target_id']);
+      foreach ($term_parents as $term_obj) {
+        if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
+          $showRatingReviews = FALSE;
+        }
       }
     }
     if (!$showRatingReviews) {
