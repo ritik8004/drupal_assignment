@@ -33,6 +33,9 @@ class CheckoutConfirmation extends React.Component {
         removeStorageInfo('shippingaddress-formdata');
         Cookies.remove('middleware_order_placed');
       }
+      else if (drupalSettings.order_details.order_number) {
+        removeStorageInfo('shippingaddress-formdata');
+      }
     } catch (e) {
       window.location = Drupal.url('cart');
     }
