@@ -2241,8 +2241,8 @@ class Cart {
    */
   private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
     $order_id = '';
-    if (isset($cart['cart'], $cart['cart']['extension_attributes'])) {
-      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    if (isset($cart['cart'], $cart['cart']['extension_attributes'], $cart['cart']['extension_attributes']['real_reserved_order_id'])) {
+      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'];
     }
 
     $message[] = 'exception:' . $exception_message;
