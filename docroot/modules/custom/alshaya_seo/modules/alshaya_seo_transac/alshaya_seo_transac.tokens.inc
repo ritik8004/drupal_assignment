@@ -364,7 +364,7 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
               }
             }
             // Check for category level 3.
-            if ($term_depth == 3) {
+            elseif ($term_depth == 3) {
               $value = (string) t('alshaya_seo_l3_text_before_cod');
               // If token value doesn't return saved data
               // then assign to original value i.e alshaya_seo_text_before_cod.
@@ -372,6 +372,7 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
                 $value = (string) t('alshaya_seo_text_before_cod');
               }
             }
+
             $replacements[$original] = $value == 'alshaya_seo_text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
