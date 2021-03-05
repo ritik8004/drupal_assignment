@@ -59,8 +59,8 @@ class BazaarVoiceApiHelper {
    *   BV pixel script url.
    */
   public function getBvDynamicScriptCode() {
-    $bv_config_check = $this->isBvConfigurationsAvailable();
-    if ($bv_config_check) {
+    $bv_config_available = $this->isBvConfigurationsAvailable();
+    if ($bv_config_available) {
       $bazaar_voice_script_code = $this->getBvPixelBaseUrl() . '/' . $this->getClientName() . '/' . $this->getSiteId() . '/' . $this->getEnvironment() . '/' . $this->getLocale() . '/' . 'bv.js';
       return $bazaar_voice_script_code;
     }
@@ -92,8 +92,7 @@ class BazaarVoiceApiHelper {
    *   BV pixel base url or empty.
    */
   public function getBvPixelBaseUrl() {
-    $bvpixel_base_url = $this->configFactory->get('bazaar_voice.settings')->get('bvpixel_base_url');
-    return $bvpixel_base_url ?? '';
+    return $this->configFactory->get('bazaar_voice.settings')->get('bvpixel_base_url') ?? '';
   }
 
   /**
@@ -103,8 +102,7 @@ class BazaarVoiceApiHelper {
    *   BV Client Name or empty.
    */
   public function getClientName() {
-    $client_name = $this->configFactory->get('bazaar_voice.settings')->get('client_name');
-    return $client_name ?? '';
+    return $this->configFactory->get('bazaar_voice.settings')->get('client_name') ?? '';
   }
 
   /**
@@ -114,8 +112,7 @@ class BazaarVoiceApiHelper {
    *   Site Id or empty.
    */
   public function getSiteId() {
-    $siteId = $this->configFactory->get('bazaar_voice.settings')->get('site_id');
-    return $siteId ?? '';
+    return $this->configFactory->get('bazaar_voice.settings')->get('site_id') ?? '';
   }
 
   /**
@@ -125,8 +122,7 @@ class BazaarVoiceApiHelper {
    *   Environment or empty.
    */
   public function getEnvironment() {
-    $environment = $this->configFactory->get('bazaar_voice.settings')->get('environment');
-    return $environment ?? '';
+    return $this->configFactory->get('bazaar_voice.settings')->get('environment') ?? '';
   }
 
   /**
@@ -136,8 +132,7 @@ class BazaarVoiceApiHelper {
    *   Locale or empty.
    */
   public function getLocale() {
-    $locale = $this->configFactory->get('bazaar_voice.settings')->get('locale');
-    return $locale ?? '';
+    return $this->configFactory->get('bazaar_voice.settings')->get('locale') ?? '';
   }
 
   /**
