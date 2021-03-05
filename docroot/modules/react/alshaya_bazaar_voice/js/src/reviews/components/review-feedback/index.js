@@ -3,17 +3,23 @@ import { postAPIData } from '../../../utilities/api/apiData';
 import ReviewInappropriate from '../review-inappropriate';
 import ReviewFeedbackPositive from '../review-feedback-positive';
 import ReviewFeedbackNegative from '../review-feedback-negative';
+import { getStorageInfo } from '../../../utilities/storage';
 
 class ReviewFeedback extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false,
+      votedContentId: '',
     };
   }
 
   componentDidMount() {
     document.addEventListener('handleFeedbackSubmit', this.handleFeedbackSubmit);
+    const { contentId, contentType } = this.props;
+    const checkFeedbackInStorage = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
+    if (checkFeedbackInStorage !== null) {
+      this.setState({ votedContentId: contentId });
+    }
   }
 
   handleFeedbackSubmit = (event) => {
@@ -27,7 +33,7 @@ class ReviewFeedback extends React.Component {
           if (result.error === undefined
             && result.data !== undefined
             && result.data.error === undefined) {
-            this.setState({ disabled: true });
+            this.setState({ votedContentId: contentId });
           } else {
             // To Do - handle error response
           }
@@ -40,8 +46,12 @@ class ReviewFeedback extends React.Component {
     const {
       contentId, isSyndicatedReview, positiveCount, negativeCount, contentType,
     } = this.props;
-    const { disabled } = this.state;
+    const { votedContentId } = this.state;
     let contentTypeDisplayValue = null;
+    let btnStatus = 'active';
+    if (votedContentId === contentId) {
+      btnStatus = 'disabled';
+    }
     if (contentType === 'review_comment') {
       contentTypeDisplayValue = 'comment';
     }
@@ -53,7 +63,7 @@ class ReviewFeedback extends React.Component {
       return (
         <div className="review-feedback-vote">
           <span className="feedback-label">{Drupal.t(`Was this ${contentTypeDisplayValue} helpful?`)}</span>
-          <div className={`${disabled ? 'review-feedback-vote-disabled' : 'review-feedback-vote-active'}`}>
+          <div className={`review-feedback-vote-${btnStatus}`}>
             <ReviewFeedbackPositive
               contentId={contentId}
               contentType={contentType}
