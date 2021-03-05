@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @pbaeuat @pbkwuat @pbsauat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @pbaeuat @pbkwuat @pbsauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test basket page
 
   Background:
@@ -136,7 +136,7 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -157,7 +157,7 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -166,7 +166,7 @@ Feature: Test basket page
     And I wait 5 seconds
     Then the price for product should be doubled
 
-  @desktop @language @test12
+  @desktop @language
   Scenario: As a Guest, I should be able to see the header and the footer in second language
     When I follow "{language_link}"
     And I wait for the page to load
@@ -213,8 +213,8 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
     Then I should see "{language_order_summary}"
@@ -234,8 +234,8 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     And I wait 5 seconds
     Then I should see "{language_promo_code}"
@@ -257,7 +257,7 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
@@ -283,7 +283,7 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds

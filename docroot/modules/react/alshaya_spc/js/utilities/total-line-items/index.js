@@ -7,7 +7,7 @@ import AuraCheckoutOrderSummary from '../../aura-loyalty/components/aura-checkou
 import isAuraEnabled from '../../../../js/utilities/helper';
 import DeliveryVATSuffix from '../delivery-vat-suffix';
 import PostpayCart from '../../cart/components/postpay/postpay';
-import isPostpayEnabled from '../helper';
+import Postpay from '../postpay';
 
 class TotalLineItems extends React.Component {
   constructor(props) {
@@ -95,7 +95,7 @@ class TotalLineItems extends React.Component {
       : totals.base_grand_total_without_surcharge;
 
     let postpay;
-    if (isPostpayEnabled()) {
+    if (Postpay.isPostpayEnabled()) {
       postpay = (
         <PostpayCart
           amount={totals.base_grand_total}

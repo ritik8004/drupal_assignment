@@ -860,10 +860,9 @@ header .region__header {
         &:hover {
           a {
             &.menu--one__link {
-              border: none;
-              border-top: 2px solid transparent;
-
               @include breakpoint($desktop) {
+                border: none;
+                border-top: 2px solid transparent;
                 color: $header_c_menu_text;
               }
             }

@@ -490,22 +490,27 @@ class SkuManager {
       return $cache;
     }
 
-    $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
-    $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
-
-    if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
-      $price = $final_price;
-    }
-    elseif (empty($final_price)) {
-      $final_price = $price;
-    }
-
     $prices = [
-      'price' => $price,
-      'final_price' => $final_price,
+      'price' => 0,
+      'final_price' => 0,
     ];
 
-    if ($sku_entity->bundle() != 'configurable') {
+    if ($sku_entity->bundle() == 'simple') {
+      $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
+      $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
+
+      if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
+        $price = $final_price;
+      }
+      elseif (empty($final_price)) {
+        $final_price = $price;
+      }
+
+      $prices = [
+        'price' => $price,
+        'final_price' => $final_price,
+      ];
+
       $this->productCacheManager->set($sku_entity, $cache_key, $prices);
       return $prices;
     }
@@ -572,6 +577,31 @@ class SkuManager {
       catch (\Exception $e) {
         // Child SKU might be deleted or translation not available.
         // Log messages are already set in previous functions.
+      }
+    }
+
+    $diff_multiplier = Settings::get('alshaya_debug_parent_price_huge_diff_multiplier', 5);
+    // Log only if product not free gift and multiplier set.
+    if ($diff_multiplier && $prices['final_price'] > self::FREE_GIFT_PRICE) {
+      $final_price_parent = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
+
+      // Log the price diff if it is huge (there may be minor variations as
+      // we might not show all the products available in back-end system
+      // because of it being out of stock or missing images).
+      // We try to capture here the cases where price in parent looks like from
+      // different market (400 instead of 4 for instance).
+      // We log here if it is X times higher or X times lower.
+      // By default X is 5 so examples:
+      // Log if parent final price is 101 and calculated final price is 20,
+      // Log if parent final price is 19 and calculated final price is 100.
+      if ($final_price_parent > self::FREE_GIFT_PRICE
+        && (($final_price_parent > ($prices['final_price'] * $diff_multiplier))
+        || ($final_price_parent < ($prices['final_price'] / $diff_multiplier)))) {
+        $this->logger->info('Suspicious price for parent product for sku: @sku, final_price_parent: @final_price_parent, final_price_calculated: @final_price_calculated.', [
+          '@sku' => $sku_entity->getSku(),
+          '@final_price_parent' => $final_price_parent,
+          '@final_price_calculated' => $prices['final_price'],
+        ]);
       }
     }
 

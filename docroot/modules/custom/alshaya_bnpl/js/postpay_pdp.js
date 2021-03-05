@@ -32,7 +32,7 @@
 
     // No need to add a condition to check if the amount is changed, Postpay
     // takes care of that.
-    $('.postpay-widget').attr('data-amount', variantInfo['gtm_price'] * drupalSettings.postpay.currency_multiplier);
+    $('.postpay-widget').attr('data-amount', (variantInfo['gtm_price'].replace(',', '') * drupalSettings.postpay.currency_multiplier).toFixed(0));
     postpay.ui.refresh();
   }
 })(jQuery, Drupal);

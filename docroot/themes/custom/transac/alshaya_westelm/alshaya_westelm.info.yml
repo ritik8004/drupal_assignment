@@ -85,3 +85,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/promo-blocks/promo-blocks.ltr.css: css/conditional-sass/promo-blocks/promo-blocks.ltr.css
+        
+  alshaya_white_label/postpay-cart:
+    css:
+      theme:
+        css/conditional-sass/postpay-cart/postpay-cart.ltr.css: css/conditional-sass/postpay-cart/postpay-cart.ltr.css
+
+  alshaya_white_label/advanced-page:
+    css:
+      theme:
+        css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css

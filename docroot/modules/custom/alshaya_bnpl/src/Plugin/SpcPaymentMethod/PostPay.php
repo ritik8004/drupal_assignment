@@ -15,7 +15,7 @@ use Drupal\alshaya_bnpl\Helper\AlshayaBnplWidgetHelper;
  *
  * @AlshayaSpcPaymentMethod(
  *   id = "postpay",
- *   label = @Translation("Installments with Postpay"),
+ *   label = @Translation("Instalments with Postpay"),
  * )
  */
 class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
@@ -94,6 +94,11 @@ class PostPay extends AlshayaSpcPaymentMethodPluginBase implements ContainerFact
    */
   public function processBuild(array &$build) {
     $this->alshayaBnplWidgetHelper->getBnplBuild($build, 'checkout');
+
+    $build['#strings']['postpay_error'] = [
+      'key' => 'postpay_error',
+      'value' => $this->t('Your postpay order has been cancelled'),
+    ];
   }
 
 }

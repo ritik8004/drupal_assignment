@@ -13,6 +13,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import ApplePay from '../../../utilities/apple_pay';
+import Postpay from '../../../utilities/postpay';
 import PriceElement from '../../../utilities/special-price/PriceElement';
 import isAuraEnabled from '../../../../../js/utilities/helper';
 import {
@@ -26,6 +27,9 @@ export default class PaymentMethods extends React.Component {
   constructor(props) {
     super(props);
     this.paymentMethodRefs = [];
+    this.state = {
+      postpayAvailable: [],
+    };
   }
 
   componentDidMount = () => {
@@ -44,8 +48,11 @@ export default class PaymentMethods extends React.Component {
       const paymentErrorInfo = JSON.parse(paymentError);
       let message = getStringMessage('payment_error');
 
-      // If K-NET error and have K-Net Error details.
-      if (paymentErrorInfo.status !== undefined && paymentErrorInfo.status === 'place_order_failed') {
+
+      if (paymentErrorInfo.status === 'declined' && paymentErrorInfo.payment_method === 'postpay') {
+        message = parse(getStringMessage('postpay_error'));
+      } else if (paymentErrorInfo.status !== undefined && paymentErrorInfo.status === 'place_order_failed') {
+        // If K-NET error and have K-Net Error details.
         const errorData = {};
         Object.entries(paymentErrorInfo.data).forEach(([key, value]) => {
           errorData[`@${key}`] = value;
@@ -112,7 +119,13 @@ export default class PaymentMethods extends React.Component {
       return false;
     }
 
-    return isDeliveryTypeSameAsInCart(cart);
+    if (isDeliveryTypeSameAsInCart(cart)) {
+      if (Postpay.isPostpayEnabled() && Postpay.isAvailable(this) == null) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   };
 
   selectDefault = () => {
@@ -134,7 +147,9 @@ export default class PaymentMethods extends React.Component {
       return;
     }
 
+    const { postpayAvailable } = this.state;
     const paymentDiv = document.getElementById(`payment-method-${cart.cart.payment.method}`);
+
     if (cart.cart.payment.method === undefined
       || paymentMethods[cart.cart.payment.method] === undefined
       || paymentDiv === null
@@ -143,16 +158,24 @@ export default class PaymentMethods extends React.Component {
       if (cart.cart.payment.method !== undefined
         && cart.cart.payment.method !== null
         && paymentMethods[cart.cart.payment.method] !== undefined) {
-        this.changePaymentMethod(cart.cart.payment.method);
-        return;
+        // For PostPay there is additional check required on frontend, it is
+        // available for order amount within specific limit only.
+        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.method !== 'postpay') {
+          this.changePaymentMethod(cart.cart.payment.method);
+          return;
+        }
       }
 
       // Select default from previous order if available.
       if (cart.cart.payment.default !== undefined
         && cart.cart.payment.default !== null
         && paymentMethods[cart.cart.payment.default] !== undefined) {
-        this.changePaymentMethod(cart.cart.payment.default);
-        return;
+        // For PostPay there is additional check required on frontend, it is
+        // available for order amount within specific limit only.
+        if (postpayAvailable[cart.cart.cart_total] || cart.cart.payment.default !== 'postpay') {
+          this.changePaymentMethod(cart.cart.payment.default);
+          return;
+        }
       }
 
       // Select first payment method by default.
@@ -162,6 +185,7 @@ export default class PaymentMethods extends React.Component {
 
   getPaymentMethods = (active) => {
     const { cart } = this.props;
+
     let paymentMethods = [];
 
     if (active) {
@@ -177,6 +201,9 @@ export default class PaymentMethods extends React.Component {
             return;
           }
 
+          if (method.code === 'postpay' && !Postpay.isAvailable(this)) {
+            return;
+          }
           paymentMethods[method.code] = drupalSettings.payment_methods[method.code];
         }
       });
