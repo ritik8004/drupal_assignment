@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   getStorageInfo,
   getInfoFromStorage,
+  removeStorageInfo,
 } from './storage';
 import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
@@ -111,6 +112,7 @@ export const placeOrder = (paymentMethod) => {
     .then(
       (response) => {
         if (response.data.error === undefined) {
+          removeStorageInfo('shippingaddress-formdata');
           if (response.data.token !== undefined && paymentMethod === 'postpay') {
             window.postpay.checkout(response.data.token, {
               locale: drupalSettings.postpay_widget_info['data-locale'],
@@ -127,7 +129,6 @@ export const placeOrder = (paymentMethod) => {
           window.location = Drupal.url(response.data.redirectUrl);
           return;
         }
-
         if (response.data.error && response.data.redirectUrl !== undefined) {
           Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           window.location = response.data.redirectUrl;
