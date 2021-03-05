@@ -972,12 +972,11 @@ header {
 
     &.with-icon {
       > div > a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: $left;
-        width: 100%;
-
         @include breakpoint($upto-desktop) {
+          display: inline-flex;
+          align-items: center;
+          justify-content: $left;
+          width: 100%;
           padding: 0.5rem 0;
 
           .icon {
@@ -986,10 +985,6 @@ header {
             max-height: 2rem;
             margin-#{$right}: 0.3125rem;
           }
-        }
-
-        @include breakpoint($desktop) {
-          display: block;
         }
       }
     }

@@ -105,3 +105,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css
+
+  alshaya_white_label/advanced-page:
+    css:
+      theme:
+        css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css

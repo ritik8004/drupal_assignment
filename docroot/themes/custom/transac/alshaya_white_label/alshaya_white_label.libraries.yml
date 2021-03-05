@@ -497,6 +497,11 @@ postpay-cart:
     theme:
       css/conditional-sass/postpay-cart/postpay-cart.ltr.css: {}
 
+postpay-checkout:
+  css:
+    theme:
+      css/conditional-sass/postpay-checkout/postpay-checkout.ltr.css: {}
+      
 store_finder:
   css:
     theme:
@@ -511,8 +516,8 @@ advance-content-slider:
   css:
     theme:
       css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: {}
-      
-postpay-checkout:
+
+advanced-page:
   css:
     theme:
-      css/conditional-sass/postpay-checkout/postpay-checkout.ltr.css: {}
+      css/conditional-sass/advanced-page/advanced-page.ltr.css: {}

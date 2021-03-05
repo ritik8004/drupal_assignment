@@ -4,6 +4,7 @@ namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
 use Drupal\acq_checkoutcom\ApiHelper;
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
@@ -82,7 +83,7 @@ class CheckoutCom extends AlshayaSpcPaymentMethodPluginBase implements Container
   public function processBuild(array &$build) {
     $sandbox = ($this->checkoutComApiHelper->getCheckoutcomConfig('environment') === 'sandbox');
     $build['#cache']['contexts'] = ['user'];
-    $build['#cache']['tags'] = ['user:' . $this->currentUser->id()];
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ['user:' . $this->currentUser->id()]);
 
     $acceptedCards = Settings::get('checkout_com_accepted_cards', ['visa']);
 

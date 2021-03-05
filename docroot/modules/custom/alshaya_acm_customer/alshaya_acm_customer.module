@@ -5,6 +5,7 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
@@ -573,6 +574,9 @@ function alshaya_acm_customer_register_validate_final(array &$form, FormStateInt
     $customer = $api_wrapper->updateCustomer($customer_array, [
       'password' => $pass,
     ]);
+    if (empty($customer)) {
+      throw new \Exception(acq_commerce_api_down_global_error_message(), APIWrapper::API_DOWN_ERROR_CODE);
+    }
   }
   catch (\Exception $e) {
     // Do nothing except for downtime exception, we will do other validations
