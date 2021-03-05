@@ -1,0 +1,6 @@
+<div class="wishlist-wrapper">
+  <div id="my-wishlist"></div>
+  {% for string in strings %}
+    <input type="hidden" data-string-id="{{ string.key }}" value="{{ string.value }}" />
+  {% endfor %}
+</div>
