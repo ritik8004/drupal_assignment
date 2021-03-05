@@ -211,7 +211,7 @@ class CheckoutDefaults {
     $orderPaymentMethod = $order['payment']['method'];
 
     $methods = $this->cart->getPaymentMethods();
-    if (isset($methods['error'])) {
+    if (empty($methods) || isset($methods['error'])) {
       return FALSE;
     }
 
