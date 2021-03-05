@@ -41,6 +41,10 @@ export default class Rating extends React.Component {
     }
   }
 
+  scrollToReviewSection = (e) => {
+    smoothScrollTo(e, '#reviews-section');
+  }
+
   render() {
     const { reviewsData, bazaarVoiceSettings } = this.state;
 
@@ -58,7 +62,7 @@ export default class Rating extends React.Component {
     return (
       <div className="inline-rating">
         <div className="aggregate-rating">
-          <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} className="write-review" href="#">{Drupal.t('Write a Review')}</a>
+          <a onClick={(e) => this.scrollToReviewSection(e)} className="write-review" href="#">{Drupal.t('Write a Review')}</a>
         </div>
       </div>
     );

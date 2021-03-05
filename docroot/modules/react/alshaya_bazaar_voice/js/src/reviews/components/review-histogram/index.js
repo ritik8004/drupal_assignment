@@ -31,12 +31,14 @@ const ReviewHistogram = ({
               </div>
               <div className="histogram-data">
                 <div className="histogram-title">
-                  {((
-                    overallSummary[item].ReviewStatistics.RecommendedCount
-                    / overallSummary[item].ReviewStatistics.TotalReviewCount).toFixed(1) * 100
-                  )}
-                  {'% '}
-                  {Drupal.t('of Customers Recommended the Product')}
+                  {
+                    Drupal.t('@customerCount% of Customers Recommended the Product', {
+                      '@customerCount': ((
+                        overallSummary[item].ReviewStatistics.RecommendedCount
+                        / overallSummary[item].ReviewStatistics.TotalReviewCount).toFixed(1) * 100
+                      ),
+                    })
+                  }
                 </div>
                 <RatingSummary
                   histogramData={overallSummary[item].ReviewStatistics.RatingDistribution}

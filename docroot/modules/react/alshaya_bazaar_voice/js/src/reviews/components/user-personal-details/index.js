@@ -9,7 +9,7 @@ const UserPersonalDetails = ({
     return (
       <div className="user-personal-details">
         <div className="user-attributes">
-          <span className="user-name">{`${userNickname}:`}</span>
+          <span className="user-name">{`${userNickname}: `}</span>
           <span className="user-attribute-value">{userAgeValue}</span>
         </div>
         {(userGender !== undefined) ? (

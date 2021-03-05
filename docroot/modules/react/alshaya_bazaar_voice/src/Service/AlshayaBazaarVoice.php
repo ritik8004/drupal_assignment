@@ -94,11 +94,11 @@ class AlshayaBazaarVoice {
    * @param array $skus
    *   batch of Skus.
    *
-   * @return array
+   * @return array|null
    *   BV attributes data to be indexed in algolia.
    */
   public function getDataFromBvReviewFeeds(array $skus) {
-    $skus = implode(",", $skus);
+    $skus = implode(',', $skus);
     $extra_params = [
       'filter' => 'id:' . $skus,
       'stats' => 'reviews',
