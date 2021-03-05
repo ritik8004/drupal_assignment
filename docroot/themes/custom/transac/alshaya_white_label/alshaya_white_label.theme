@@ -1196,6 +1196,25 @@ function alshaya_white_label_preprocess_maintenance_page(&$variables) {
       $variables['maintenance_image'] = file_create_url($file->getFileUri());
     }
   }
+  $container_service = \Drupal::service('entity_type.manager')->getStorage('google_tag_container');
+  $ids = $container_service
+  ->getQuery()
+  ->condition('status', 1)
+  ->execute();
+  if ($ids) {
+    $id = reset($ids);
+  }
+  $container = $container_service->load($id);
+  if ($container) {
+    $gtm_data = $container->snippets();
+    if ($gtm_data) {
+      $variables['#attached']['html_head'][] =  [
+        ['#tag' => 'script',
+        '#attributes' => ['type' => 'text/javascript',],
+        '#value' => $gtm_data['script'],],
+      ];
+    }
+  }
 }
 
 /**
