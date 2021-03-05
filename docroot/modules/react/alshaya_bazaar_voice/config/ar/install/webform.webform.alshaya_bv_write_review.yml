@@ -1,0 +1,13 @@
+title: 'أكتب مراجعة'
+elements: |
+  rating:
+    '#title': 'تقييم'
+  title:
+    '#title': 'مراجعة العنوان'
+  reviewtext:
+    '#title': 'مراجعة'
+    '#field_suffix': '220'
+  useremail:
+    '#title': 'عنوان البريد الإلكتروني'
+  usernickname:
+    '#title': 'كنية'

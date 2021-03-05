@@ -1,0 +1,7 @@
+services:
+  bazaar_voice.api_helper:
+    class: Drupal\bazaar_voice\BazaarVoiceApiHelper
+    arguments: 
+      - '@config.factory'
+      - '@current_route_match'
+

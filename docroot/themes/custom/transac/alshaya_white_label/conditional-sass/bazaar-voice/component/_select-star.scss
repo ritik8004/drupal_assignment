@@ -1,0 +1,88 @@
+// select star
+.select-star {
+  &__wrap {
+    display: inline-block;
+    font-size: 1rem;
+
+    &[class^="rating_"],
+    &[class*=" rating_"] {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        flex-flow: row wrap;
+      }
+
+      .star-rating-label {
+        width: 50%;
+        font-size: 0.9375rem;
+        font-family: $alshaya-thin;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      .star-counter {
+        width: 50%;
+        text-align: $right;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          text-align: $left;
+          margin-#{$left}: -0.3125rem;
+        }
+      }
+    }
+
+    &.rating {
+      .star-rating-label {
+        font-family: $alshaya-bold;
+      }
+
+      .star-counter {
+        margin-bottom: 1.25rem;
+        margin-top: 0.25rem;
+
+        label {
+          &:first-of-type {
+            span {
+              margin-#{$left}: -0.1875rem;
+            }
+          }
+        }
+      }
+    }
+
+    &::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+
+  &-rating {
+    &__ico {
+      padding-#{$left}: 0.125rem;
+      cursor: pointer;
+
+      &.ratingfull {
+        @include icon(ratingfull) {
+          font-size: 2rem;
+        }
+      }
+
+      &.rating {
+        @include icon(rating) {
+          font-size: 2rem;
+        }
+      }
+    }
+
+    &__input {
+      display: none;
+    }
+  }
+}
