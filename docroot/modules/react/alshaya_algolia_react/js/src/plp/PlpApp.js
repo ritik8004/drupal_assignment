@@ -58,6 +58,7 @@ const PlpApp = ({
     promotionNodeId,
     ruleContext,
     subCategories,
+    categoryFacetEnabled,
   } = drupalSettings.algoliaSearch;
 
   const filters = [];
@@ -71,7 +72,7 @@ const PlpApp = ({
   }
 
   if (pageSubType === 'plp') {
-    if (subCategories.length !== 0) {
+    if (typeof subCategories !== 'undefined' && Object.keys(subCategories).length > 0) {
       filterOperator = ' OR ';
       groupEnabled = true;
       // Set all the filters selected in sub category.
@@ -101,7 +102,10 @@ const PlpApp = ({
   const optionalFilter = getSuperCategoryOptionalFilter();
 
   const categoryFieldAttributes = [];
-  if ((isMobile() && pageSubType === 'plp' && nestedLevel < parseInt(categoryDepth, 10) + 1)) {
+  if ((isMobile()
+    && pageSubType === 'plp'
+    && categoryFacetEnabled
+    && nestedLevel < parseInt(categoryDepth, 10) + 1)) {
     for (let i = 0; i <= nestedLevel; i++) {
       categoryFieldAttributes.push(`lhn_category.lvl${i}`);
     }
@@ -129,7 +133,7 @@ const PlpApp = ({
       <PlpStickyFilter>
         {(callback) => (
           <>
-            <ConditionalView condition={(subCategories.length !== 0) && (pageSubType === 'plp')}>
+            <ConditionalView condition={(groupEnabled)}>
               <div id="block-subcategoryblock" className="block-alshaya-sub-category-block">
                 <div className="plp-subcategory-block">
                   {Object.keys(subCategories || {}).map((id) => (
@@ -147,7 +151,7 @@ const PlpApp = ({
               callback={(callerProps) => callback(callerProps)}
             />
 
-            {(isMobile() && pageSubType === 'plp' && nestedLevel < parseInt(categoryDepth, 10) + 1) ? (
+            <ConditionalView condition={categoryFieldAttributes.length > 0}>
               <div className="c-facet c-accordion block-facet-blockcategory-facet-plp algolia-plp-category-facet">
                 <h3 className="c-facet__title c-accordion__title c-collapse__title plp-category-facet-title">{drupalSettings.algoliaSearch.category_facet_label}</h3>
                 <PLPHierarchicalMenu
@@ -158,7 +162,8 @@ const PlpApp = ({
                   showParentLevel={false}
                 />
               </div>
-            ) : null}
+            </ConditionalView>
+
             <div className="show-all-filters-algolia show-all-filters hide-for-desktop" ref={allFiltersRef}>
               <span className="desktop">{Drupal.t('all filters')}</span>
               <span className="upto-desktop">{Drupal.t('filter & sort')}</span>

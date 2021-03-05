@@ -45,6 +45,11 @@ set classes = [
             {{ content.price_block }}
           </div>
 
+          {% if content.postpay %}
+            {{ attach_library('alshaya_white_label/postpay-pdp') }}
+            <div class="postpay"> {{ content.postpay }} </div>
+          {% endif %}
+
           <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
           {% if vat_text %}
@@ -85,6 +90,9 @@ set classes = [
 
       {% block pdpSidebar %}
         <div class="content__sidebar">
+          {% if content.reviews_rating %}
+            {{content.reviews_rating}}
+          {% endif %}
           {% block sizeVolume %}
           {% endblock %}
 
@@ -210,4 +218,10 @@ set classes = [
     {% endif %}
 
   </div>
+
+  {% if content.reviews_section %}
+    {{ content.bazaar_voice_strings }}
+    {{content.reviews_section}}
+  {% endif %}
+
 </article>

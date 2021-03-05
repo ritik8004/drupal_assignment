@@ -671,7 +671,16 @@ class AlshayaSpcController extends ControllerBase {
       ],
     ];
 
-    return $this->addCheckoutConfigSettings($build);
+    $build = $this->addCheckoutConfigSettings($build);
+    // Added Olapic checkout pixel condition.
+    $data_apikey_field_name = 'olapic_' . $langcode . '_data_apikey';
+    $data_apikey = $this->configFactory->get('alshaya_olapic.settings')->get($data_apikey_field_name) ?? '';
+    if (!empty($data_apikey)) {
+      $this->moduleHandler->alter('checkout_pixel_build', $build, $data_apikey);
+    }
+    // Adding hook alter for bazaarvoice pixel integration.
+    $this->moduleHandler->alter('alshaya_spc_checkout_confirmation_order_build', $build, $order);
+    return $build;
   }
 
   /**

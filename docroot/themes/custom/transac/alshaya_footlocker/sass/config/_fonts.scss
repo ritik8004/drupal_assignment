@@ -61,6 +61,36 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
   font-display: swap;
 }
 
+@font-face {
+  font-family: "FootLocker-FLClassic";
+  src: url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FootLocker-FLStandard";
+  src: url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 // Font Family
 $fl-bold: 'Roboto-Bold', 'DroidArabicKufi_Bold', 'Arial';
 $fl-bold-nodir: 'Roboto-Bold', 'DroidArabicKufi_Bold', 'Arial';
@@ -73,6 +103,10 @@ $fl-arabic-bold-nodir: 'DroidArabicKufi_Bold', 'Roboto-Bold', 'Arial';
 
 $fl-arabic-thin: 'DroidKufi_Regular', 'Roboto-Regular', 'Arial';
 $fl-arabic-thin-nodir: 'DroidKufi_Regular', 'Roboto-Regular', 'Arial';
+
+// Postpay font family
+$postpay-font: 'GreycliffCF-Bold', 'Roboto-Regular', 'DroidKufi_Regular', 'Arial';
+$postpay-arabic-font: 'Cairo-Bold', 'DroidArabicKufi_Bold', 'Roboto-Bold', 'Arial';
 
 $arial: $fl-thin;
 $arial-nodir: $fl-thin-nodir;

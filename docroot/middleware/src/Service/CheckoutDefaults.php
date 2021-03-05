@@ -182,14 +182,16 @@ class CheckoutDefaults {
     }
 
     $methods = $this->cart->getHomeDeliveryShippingMethods(['address' => $address]);
-
-    foreach ($methods as $method) {
-      if (strpos($order['shipping']['method'], $method['carrier_code']) === 0
-        && strpos($order['shipping']['method'], $method['method_code']) !== FALSE) {
-        $this->logger->notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', [
-          '@cart_id' => $this->cart->getCartId(),
-        ]);
-        return $this->selectHd($address, reset($methods), $address, $methods);
+    if (count($methods) && !isset($methods['error'])) {
+      foreach ($methods as $method) {
+        if (isset($method['carrier_code'])
+          && strpos($order['shipping']['method'], $method['carrier_code']) === 0
+          && strpos($order['shipping']['method'], $method['method_code']) !== FALSE) {
+          $this->logger->notice('Setting shipping/billing address from user last HD order. Cart: @cart_id', [
+            '@cart_id' => $this->cart->getCartId(),
+          ]);
+          return $this->selectHd($address, reset($methods), $address, $methods);
+        }
       }
     }
 
@@ -209,7 +211,7 @@ class CheckoutDefaults {
     $orderPaymentMethod = $order['payment']['method'];
 
     $methods = $this->cart->getPaymentMethods();
-    if (isset($methods['error'])) {
+    if (empty($methods) || isset($methods['error'])) {
       return FALSE;
     }
 

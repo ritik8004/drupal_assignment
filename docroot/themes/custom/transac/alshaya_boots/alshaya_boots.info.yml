@@ -90,3 +90,28 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css: css/conditional-sass/shop-by-brand/shop-by-brand.ltr.css
+
+  alshaya_white_label/store_finder:
+    css:
+      theme:
+        css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/promo-blocks:
+    css:
+      theme:
+        css/conditional-sass/promo-blocks/promo-blocks.ltr.css: css/conditional-sass/promo-blocks/promo-blocks.ltr.css
+
+  alshaya_white_label/advance-content-slider:
+    css:
+      theme:
+        css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css
+
+  alshaya_white_label/advanced-page:
+    css:
+      theme:
+        css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css
+
+  alshaya_white_label/bazaar-voice:
+    css:
+      theme:
+        css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css

@@ -510,7 +510,7 @@ class Cart {
    */
   public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = [], string $variant_sku = NULL) {
     $cart_id = (int) $this->getCartId();
-    $mode = $this->settings->getSettings('alshaya_checkout_settings')['cart_operations_mode'];
+    $alshaya_checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
     $option_data = [];
 
@@ -534,7 +534,9 @@ class Cart {
       ];
     }
 
-    if ($mode === 'native') {
+    if ($alshaya_checkout_settings['cart_operations_mode'] === 'native') {
+      // Attempts done by the native mdc api for item update.
+      static $nativeItemUpdateAttempts = 0;
       switch ($action) {
         case CartActions::CART_REMOVE_ITEM:
           try {
@@ -574,21 +576,32 @@ class Cart {
               $this->removeCartFromSession();
 
               if ($action === CartActions::CART_ADD_ITEM) {
-                $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
+                // If max attempts are set for native mdc api.
+                if ($alshaya_checkout_settings['max_native_update_attempts'] > $nativeItemUpdateAttempts) {
+                  // Increment the counter.
+                  $nativeItemUpdateAttempts++;
+                  $new_cart = $this->createCart($this->getDrupalInfo('customer_id'));
 
-                if (!empty($new_cart['error'])) {
-                  return $new_cart;
+                  if (!empty($new_cart['error'])) {
+                    return $new_cart;
+                  }
+
+                  // Get fresh cart.
+                  $this->getCart(TRUE);
+                  return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
                 }
-
-                // Get fresh cart.
-                $this->getCart(TRUE);
-                return $this->addUpdateRemoveItem($sku, $quantity, $action, $options, $variant_sku);
               }
 
               return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
             }
             elseif ($exception_type === 'OOS') {
-              $this->refreshStock([$sku, $variant_sku]);
+              $this->refreshStock([
+                $sku => 0,
+                $variant_sku => 0,
+              ]);
+            }
+            elseif ($exception_type === 'not_enough') {
+              StockEventListener::matchStockQuantity($sku, $quantity);
             }
 
             return $this->returnExistingCartWithError($e);
@@ -917,7 +930,7 @@ class Cart {
         '@customer_id' => $customer_id,
       ]);
 
-      return FALSE;
+      return $this->utility->getErrorResponse('Could not associate cart since cart is not available.', 500);
     }
 
     if ($reset_cart) {
@@ -987,7 +1000,8 @@ class Cart {
     }
 
     // If upapi payment method (payment method via checkout.com).
-    if ($this->isUpapiPaymentMethod($data['method'])) {
+    if ($this->isUpapiPaymentMethod($data['method'])
+      || $this->isPostpayPaymentMethod($data['method'])) {
       // Add success and fail redirect url to additional data.
       $host = 'https://' . $this->request->getHttpHost() . '/middleware/public/payment/';
       $langcode = $this->request->query->get('lang');
@@ -1022,6 +1036,19 @@ class Cart {
    */
   public function isUpapiPaymentMethod(string $payment_method) {
     return strpos($payment_method, 'checkout_com_upapi') !== FALSE;
+  }
+
+  /**
+   * Checks if postpay payment method.
+   *
+   * @param string $payment_method
+   *   Payment method code.
+   *
+   * @return bool
+   *   TRUE if payment methods from postpay
+   */
+  public function isPostpayPaymentMethod(string $payment_method) {
+    return strpos($payment_method, 'postpay') !== FALSE;
   }
 
   /**
@@ -1171,6 +1198,11 @@ class Cart {
         $additional_data['failUrl'] = $this->checkoutComApi->getFailUrl();
 
         break;
+
+      case 'checkout_com_upapi_applepay':
+        $additional_data = $additional_info;
+
+        break;
     }
 
     return $additional_data;
@@ -1251,8 +1283,8 @@ class Cart {
 
         // Create new cart only if user is trying to add an item to cart.
         if ($is_add_to_cart) {
-          $info = $this->drupal->getSessionCustomerInfo();
-          $newCart = $this->createCart($info['customer_id'] ?? 0);
+          $customer_id = $this->getDrupalInfo('customer_id');
+          $newCart = $this->createCart($customer_id ?? 0);
           if (empty($newCart['error'])) {
             return $this->updateCart($data);
           }
@@ -1300,7 +1332,11 @@ class Cart {
           $skus = array_merge($skus, array_column($cart['cart']['items'], 'sku'));
         }
 
-        $this->refreshStock($skus);
+        $skus_data = [];
+        foreach ($skus as $sku) {
+          $skus_data[$sku] = 0;
+        }
+        $this->refreshStock($skus_data);
       }
 
       return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
@@ -1569,7 +1605,7 @@ class Cart {
 
       $skus = array_column($cart['cart']['items'], 'sku');
       foreach ($skus as $sku) {
-        StockEventListener::$oosSkus[] = $sku;
+        StockEventListener::matchStockQuantity($sku);
       }
 
       return $this->utility->getErrorResponse('Cart contains some items which are not in stock.', CartErrorCodes::CART_HAS_OOS_ITEM);
@@ -1833,6 +1869,10 @@ class Cart {
    *
    * @return array
    *   Final status array.
+   *
+   * @todo Remove the usage of cart object and pass full order object as arg.
+   * Rather using cart object, pass full order object instead just order id
+   * and use all the required info from there.
    */
   public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
@@ -2042,8 +2082,16 @@ class Cart {
         return $stores;
       }
 
-      foreach ($stores as &$store) {
+      foreach ($stores as $key => &$store) {
         $store_info = $this->drupal->getStoreInfo($store['code']);
+        if (empty($store_info) || !is_array($store_info)) {
+          // Removing the corrupt store from the list.
+          unset($stores[$key]);
+          $this->logger->error('No store info retrieved for @store_code', [
+            '@store_code' => $store['code'],
+          ]);
+          continue;
+        }
         $store += $store_info;
         $store['formatted_distance'] = number_format((float) $store['distance'], 2, '.', '');
         $store['delivery_time'] = $store['sts_delivery_time_label'];
@@ -2193,8 +2241,8 @@ class Cart {
    */
   private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
     $order_id = '';
-    if (isset($cart['cart'], $cart['cart']['extension_attributes'])) {
-      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    if (isset($cart['cart'], $cart['cart']['extension_attributes'], $cart['cart']['extension_attributes']['real_reserved_order_id'])) {
+      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'];
     }
 
     $message[] = 'exception:' . $exception_message;
@@ -2276,12 +2324,13 @@ class Cart {
   /**
    * Wrapper function to trigger refresh stock event of Drupal.
    *
-   * @param array $skus
-   *   SKUs for which we need to refresh stock.
+   * @param array $skus_quantity
+   *   Array of SKU => Quantity for which we need to refresh stock.
+   *   Eg. ['sku_1' => 0, 'sku_2' => 0].
    */
-  protected function refreshStock(array $skus) {
+  protected function refreshStock(array $skus_quantity) {
     $response = $this->drupal->triggerCheckoutEvent('refresh stock', [
-      'skus' => $skus,
+      'skus_quantity' => $skus_quantity,
     ]);
 
     if ($response['status'] == TRUE) {

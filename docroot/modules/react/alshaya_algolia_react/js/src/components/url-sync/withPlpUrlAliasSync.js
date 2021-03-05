@@ -50,6 +50,26 @@ const hierarchicalFilters = () => {
 hierarchicalFilters.cache = {};
 
 /**
+ * Create and return Object containing hierachical filters with
+ * key and value.
+ */
+const swatchFiltersList = () => {
+  if (!swatchFiltersList.cache.results) {
+    const { filters } = drupalSettings.algoliaSearch.listing;
+    const results = [];
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value.widget.type === 'swatch_list') {
+        results[key] = value.alias;
+      }
+    });
+    swatchFiltersList.cache = { results };
+  }
+  return swatchFiltersList.cache.results;
+};
+
+swatchFiltersList.cache = {};
+
+/**
  * Helper function to convert partial url containing filter string
  * into an array.
  *
@@ -219,6 +239,7 @@ const withPlpUrlAliasSync = (
   getRefinementListForFilters = async (filters) => {
     const rangeFilters = multiRangeFilters();
     const hierarchyFilters = hierarchicalFilters();
+    const swatchFilters = swatchFiltersList();
 
     const filterList = {
       multiRange: {},
@@ -246,14 +267,20 @@ const withPlpUrlAliasSync = (
       // Try to get the alias from local storage if exists.
       // const facetValues = getFacetStorage(facetAlias, true);
       if (!filterList.refinementList[element.key] && !hierarchyFilters[element.key]) {
-        filterList.refinementList[element.key] = element.values;
+        let facetKey = element.key;
+
+        if (typeof swatchFilters[element.key] !== 'undefined') {
+          facetKey = `${element.key}.value`;
+        }
+
+        filterList.refinementList[facetKey] = element.values;
         const { replacedValues, makeApiRequest } = convertAliasToFilterValues(element.key, facetAlias, element.values, 'refinementList');
         if (!makeApiRequest && replacedValues.length > 0) {
-          filterList.refinementList[element.key] = replacedValues;
+          filterList.refinementList[facetKey] = replacedValues;
         }
 
         if (makeApiRequest) {
-          apiRequests[facetAlias] = element.key;
+          apiRequests[facetAlias] = facetKey;
         }
         return;
       }

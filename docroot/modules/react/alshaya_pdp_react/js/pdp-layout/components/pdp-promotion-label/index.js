@@ -27,7 +27,7 @@ class PdpPromotionLabel extends React.Component {
     // If product promotion data is already processed.
     const { skuMainCode } = this.props;
     const { promotionsRawData } = this.state;
-    const url = Drupal.url(`rest/v1/product/${skuMainCode}?pdp=magazinev2`);
+    const url = Drupal.url(`rest/v2/product/${btoa(skuMainCode)}?pdp=magazinev2`);
     const promotionStateValue = promotionsRawData ? promotionsRawData[skuMainCode] : null;
     if (promotionStateValue === null || promotionStateValue === undefined) {
       axios.get(url).then((response) => {

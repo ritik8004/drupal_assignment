@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
@@ -12,6 +12,7 @@ const Teaser = ({
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
   const collectionLabel = [];
+  const [initiateSlider, setInitiateSlider] = useState(false);
   if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
@@ -30,6 +31,7 @@ const Teaser = ({
     labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
   }
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
+
   return (
     <div className="c-products__item views-row">
       <article
@@ -44,6 +46,9 @@ const Teaser = ({
         // eslint-disable-next-line no-underscore-dangle
         data-insights-query-id={hit.__queryID}
         gtm-type="gtm-product-link"
+        onMouseEnter={() => {
+          setInitiateSlider(true);
+        }}
         {...overridenGtm}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
@@ -52,7 +57,7 @@ const Teaser = ({
             data--original-url={`${hit.url}`}
             className="list-product-gallery product-selected-url"
           >
-            <Gallery media={hit.media} title={hit.title} />
+            <Gallery media={hit.media} title={hit.title} initiateSlider={initiateSlider} />
           </a>
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
@@ -67,7 +72,7 @@ const Teaser = ({
               <a href={`${hit.url}`} className="product-selected-url">
                 <div className="aa-suggestion">
                   <span className="suggested-text">
-                    {hit.title}
+                    {Parser(hit.title)}
                   </span>
                 </div>
               </a>

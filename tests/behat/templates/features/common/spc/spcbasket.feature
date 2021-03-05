@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @pbaeuat @pbkwuat @pbsauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test basket page
 
   Background:
@@ -7,14 +7,14 @@ Feature: Test basket page
     And I wait for the page to load
 
   Scenario: As a Guest, I should be able to add more quantity
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -27,17 +27,14 @@ Feature: Test basket page
   Scenario: As a Guest, I should be able to see the header and the footer
     When I scroll to top
     Then I should see the link "{create_account}"
-#    Then I should see the link "{sign_in}"
+    Then I should see "{sign_in}"
     Then I should see the link "{find_store}"
     Then I should see the link "{language_link}"
     Then I should see "{sort_filter}"
     Then I should see "{price_filter}"
     Then I should see "{color_filter}"
-    Then I should see "{size_filter}"
-    Then I should see "{filters}"
     Then I should see "{brand_filter}"
-    Then I should see "{collection_filter}"
-    Then I should see "{promotional_filter}"
+    Then I should see "{filters}"
 
   @mobile
   Scenario: As a Guest, I should be able to see the header and the footer (mobile)
@@ -58,14 +55,14 @@ Feature: Test basket page
 
   @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     Then the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile" should exist
@@ -87,15 +84,15 @@ Feature: Test basket page
 
   @mobile
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     Then I should see "{promo_code}"
     And I wait 5 seconds
@@ -106,14 +103,14 @@ Feature: Test basket page
     And I should see "{vat}"
 
   Scenario: As a Guest, I should be able to remove products from the basket
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
@@ -132,14 +129,14 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -153,14 +150,14 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -173,20 +170,15 @@ Feature: Test basket page
   Scenario: As a Guest, I should be able to see the header and the footer in second language
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
-    When I scroll to top
     Then I should see the link "{language_create_account}"
-#    Then I should see the link "{language_sign_in}"
+    Then I should see "{language_sign_in}"
     Then I should see the link "{language_find_store}"
     Then I should see the link "{second_language_link}"
     Then I should see "{language_sort_filter}"
     Then I should see "{language_price_filter}"
     Then I should see "{language_color_filter}"
-    Then I should see "{language_size_filter}"
-    Then I should see "{language_filters}"
     Then I should see "{language_brand_filter}"
-    Then I should see "{language_collection_filter}"
-    Then I should see "{language_promotional_filter}"
+    Then I should see "{language_filters}"
 
   @mobile @language
   Scenario: As a Guest, I should be able to see the header and the footer in second language (mobile)
@@ -214,15 +206,15 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
     Then I should see "{language_order_summary}"
@@ -235,15 +227,15 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     And I wait 5 seconds
     Then I should see "{language_promo_code}"
@@ -258,14 +250,14 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
@@ -284,14 +276,14 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds

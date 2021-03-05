@@ -7,6 +7,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Site\Settings;
@@ -103,6 +104,13 @@ class AlshayaConfigManager {
   private $logger;
 
   /**
+   * The file system service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  private $fileSystem;
+
+  /**
    * Constructs a new AlshayaConfigManager object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -117,19 +125,23 @@ class AlshayaConfigManager {
    *   Module Handler.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger Channel Factory.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file system service.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ThemeManagerInterface $theme_manager,
                               ModuleHandlerInterface $module_handler,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              LoggerChannelFactoryInterface $logger_factory,
+                              FileSystemInterface $file_system) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->themeManager = $theme_manager;
     $this->moduleHandler = $module_handler;
     $this->logger = $logger_factory->get('alshaya_config');
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -480,39 +492,52 @@ class AlshayaConfigManager {
 
     // @codingStandardsIgnoreLine
     global $magentos;
-    $settings['magento_host'] = $magentos[$mdc]['url'];
+
+    $settings = [];
+    $settings['alshaya_api.settings']['magento_host'] = $magentos[$mdc]['url'];
 
     $settings_file = $settings_path . '-' . $acsf_site_code . $country_code . '.yml';
 
     if ($reset) {
       if (file_exists($settings_file)) {
         unlink($settings_file);
-        $this->logger->info('Resetted alshaya_api.settings.magento_host to default value');
+        $this->logger->notice('Magento settings reset to default value');
         return 1;
       }
       else {
-        $this->logger->notice('Failed resetting alshaya_api.settings.magento_host.');
+        $this->logger->notice('Failed resetting magento settings.');
         return 0;
       }
     }
 
     foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
-      $settings[$key] = $value;
+      $settings['alshaya_api.settings'][$key] = $value;
     }
 
     // Reset magento_lang_prefix - EN and AR.
     foreach ($this->languageManager->getLanguages() as $langcode => $language) {
-      $settings['magento_lang_prefix'][$langcode] = $magentos[$mdc][$country_code]['magento_lang_prefix'][$langcode]
+      $settings['alshaya_api.settings']['magento_lang_prefix'][$langcode] = $magentos[$mdc][$country_code]['magento_lang_prefix'][$langcode]
         ?? $magentos['default'][$country_code]['magento_lang_prefix'][$langcode];
-      $this->logger->info('Configuring alshaya_api.settings.magento_lang_prefix @langcode to @value.', [
+
+      $this->logger->notice('Configuring alshaya_api.settings.magento_lang_prefix for @langcode to @value.', [
         '@langcode' => $langcode,
-        '@value' => $settings['magento_lang_prefix'][$langcode],
+        '@value' => $settings['alshaya_api.settings']['magento_lang_prefix'][$langcode],
+      ]);
+
+      $settings['store_id'][$langcode] = $magentos[$mdc][$country_code]['store_id'][$langcode]
+        ?? $magentos['default'][$country_code]['store_id'][$langcode];
+
+      $this->logger->notice('Configuring store_id for @langcode to @value.', [
+        '@langcode' => $langcode,
+        '@value' => $settings['store_id'][$langcode],
       ]);
     }
 
-    $yml_settings = SerializationYaml::encode(['alshaya_api.settings' => $settings]);
+    $yml_settings = SerializationYaml::encode($settings);
+    $settings_dir = dirname($settings_file);
+    $this->fileSystem->prepareDirectory($settings_dir, FileSystemInterface::CREATE_DIRECTORY);
     if (file_put_contents($settings_file, $yml_settings)) {
-      $this->logger->info('Configuring alshaya_api.settings.magento_host to @value.', [
+      $this->logger->notice('Configuring alshaya_api.settings.magento_host to @value.', [
         '@value' => $settings['magento_host'],
       ]);
       return 1;

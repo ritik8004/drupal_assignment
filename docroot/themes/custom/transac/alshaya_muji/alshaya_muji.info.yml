@@ -78,3 +78,18 @@ libraries-override:
   alshaya_white_label/convert_to_select2:
     js:
       js/convert_to_select2.js: js/convert_to_select2.js
+
+  alshaya_white_label/store_finder:
+    css:
+      theme:
+        css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
+
+  alshaya_white_label/promo-blocks:
+    css:
+      theme:
+        css/conditional-sass/promo-blocks/promo-blocks.ltr.css: css/conditional-sass/promo-blocks/promo-blocks.ltr.css
+
+  alshaya_white_label/advanced-page:
+    css:
+      theme:
+        css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css

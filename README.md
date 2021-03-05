@@ -1,3 +1,4 @@
+
 # Alshaya
 
 ACSF D8 commerce project with Magento integration done via Acquia Conductor.
@@ -15,10 +16,10 @@ See the [BLT documentation](http://blt.readthedocs.io/en/latest/) for informatio
 
 ## Resources
 
-* <a href="http://jira.alshaya.com:8080/secure/RapidBoard.jspa?rapidView=284">JIRA</a> - VPN Connection required.
-* <a href="https://github.com/acquia-pso/alshaya">GitHub</a>
-* <a href="https://cloud.acquia.com/app/develop/applications/5ce588f5-ce9b-4a46-9b5b-a0c74e47feb2">Acquia Cloud subscription</a>
-* <a href="https://travis-ci.com/acquia-pso/alshaya">TravisCI</a>
+* [JIRA](https://alshayagroup.atlassian.net/secure/RapidBoard.jspa?rapidView=353)
+* [GitHub](https://github.com/acquia-pso/alshaya)
+* [Acquia Cloud subscription](https://cloud.acquia.com/app/develop/applications/5ce588f5-ce9b-4a46-9b5b-a0c74e47feb2)
+* [TravisCI](https://travis-ci.com/acquia-pso/alshaya)
 
 ## Onboarding
 
@@ -26,9 +27,9 @@ See the [BLT documentation](http://blt.readthedocs.io/en/latest/) for informatio
 
 There are 2 git repositories on the project:
 * Github: used for local development, contains much more than what is needed
-to run the sites.
+  to run the sites.
 * Acquia Cloud: used on Acquia environments only, contains the strict minimum
-to run the sites.
+  to run the sites.
 
 The synchronisation between the 2 repositories is ensured by blt.
 Cf. `blt deploy`.
@@ -40,7 +41,7 @@ creates Pull Requests (PRs) against the main repository when he is ready.
 
 To prepare your local env:
 * Fork the main repository into your own repository, i.e. click on Fork button
-on https://github.com/acquia-pso/alshaya page.
+  on https://github.com/acquia-pso/alshaya page.
 * Clone the fork locally: `git clone git@github.com:<your_username>/alshaya.git`
 * Add a git remote for the main repository (aka upstream):
   * `cd alshaya`
@@ -67,25 +68,36 @@ To prepare your local env:
 * Install Yarn `npm i -g yarn`.
 * Install Ansible: `brew install ansible`
 * Run:
-  * `composer clear-cache`
-  * `composer install`
-  * `composer blt-alias`
-  * `blt vm`
-  * `vagrant ssh` to ssh into your vm
-  * `blt blt:init:git-hooks`
-  * `blt blt:init:settings`
-  * `blt frontend:setup`
-  * `blt frontend:build`
-  * `blt refresh:local` (from inside of your vm)
-  * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
-  * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
-  * Login using the default credentials:﻿no-reply@acquia.com / admin
-  * Perform drush commands from inside of your vm, like `drush status -l local.alshaya-mckw.com`
-  * Login quickly using `drush uli -l local.alshaya-mckw.com`  (note: currently doesn't work properly)
-  * Access site through Varnish in local
-  * Comment out the code forcing SSL redirection in `docroot/.htaccess`
-  * Access the site on port 81
-  * To do any change in VCL do it in `conf/varnish-4.vcl`, do `vagrant ssh` and run `sh box/scripts/configure-varnish.sh`
+  * From outside VM:
+    * `composer clear-cache`
+    * `composer install`
+    * `composer blt-alias`
+    * `vagrant up`
+    * `vagrant ssh` to ssh into your vm
+      Note: Before running any below commands in your VM. Please check your composer version that's need to be
+      same as of your local machine. (Run `composer -v` both inside and outside).
+      If any case composer version of your local machine and VM is not matching then downgrade or upgrade the version as per your requirement. Then run : `composer self-update --1` (i.e 1.10.10)
+
+  * From inside VM:
+    * `blt blt:init:git-hooks`
+    * `blt blt:init:settings`
+    * `blt frontend:setup`
+    * `blt frontend:build`
+    * `blt refresh:local` (from inside of your vm)
+    * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
+    * Perform drush commands from inside of your vm, like `drush status -l local.alshaya-mckw.com`
+    * Login quickly using `drush uli -l local.alshaya-mckw.com`  (note: currently doesn't work properly)
+
+* Access the site in your web browser, e.g. http://local.alshaya-mckw.com/en/user
+* Login using the default credentials: no-reply@acquia.com / admin
+
+# For Varnish:
+* Access site through Varnish in local
+* Comment out the code forcing SSL redirection in `docroot/.htaccess`
+* Access the site on port 81
+* To do any changes in VCL do it in `conf/varnish-4.vcl`, Run `vagrant ssh` and  then run `sh box/scripts/configure-varnish.sh`.
+
+Check for known issues during setup check here: https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/589004885/Developer+Handbook#DeveloperHandbook-LocalWorkarounds
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
@@ -125,8 +137,8 @@ Notes:
 * `blt refresh:local` failed in drupal installation with EntityStorageException (...) entity with ID '...' already exists
   * The reason for this is in the existing configuration values that still exist in memcache. The workaround is that you either restart the vm using ​vagrant reload​ command, or you restart memcache service using sudo service memcached restart in your vm and restart `blt refresh:local` again
 * In case, updates done to default settings.php don't reflect in sites/g/settings/local.settigns.php:
-    * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
-    * `blt local:reset-settings-file` to reset local settings file.
+  * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
+  * `blt local:reset-settings-file` to reset local settings file.
 
 ### Create a new site
 
@@ -136,8 +148,8 @@ commercial features and integration with Conductor/Magento. `non_transac`
 profile is a light/static site without any commercial feature.`
 
 * Create a custom module in `docroot/modules/brands`. This module's goal is to
-enable the appropriate theme, place the blocks in the theme's regions and
-install the specific configuration. See existing brand modules for example.
+  enable the appropriate theme, place the blocks in the theme's regions and
+  install the specific configuration. See existing brand modules for example.
 * Install the new theme for the respective brand inside this brand module.
 * See "Create a new theme for the site." for specific instructions on creating a new theme.
 * Add a new brand support:
@@ -190,9 +202,9 @@ in local as and when required. All required changes are done.
 * Update super admin user
 * Enable dblog and other ui modules
 * Allows hooking into the script, we can create scripts/install-site-dev.sh
-which is already added to .gitignore and add any code we want to execute post
-this script (for instance command to shout loud in mac - `say installation
-done`). One argument - site code will be passed to this script.
+  which is already added to .gitignore and add any code we want to execute post
+  this script (for instance command to shout loud in mac - `say installation
+  done`). One argument - site code will be passed to this script.
 
 Script usage:
 * `blt local:sync "site" "env" "mode"`
@@ -225,7 +237,7 @@ In order to perform the private key forwarding, do following:
 
 As mentioned above, you should typically run all the blt and drush commands (except the initial one `blt vm` that initializes your virtual machine) from inside of your vm. This should cover all the typical cases and you can skip this part if you are fully comfortable with that approach. However, for the better convenience, it is sometimes quicker to run some drush commands from host PC. For example, running drush uli from host logs quickly user 1 into the site without need of copy/pasting of login link. PC To make this working follow these steps:
 
-* Install <a href="https://github.com/drush-ops/drush-launcher">Drush launcher</a> on your host PC (archive old drush8 command somewhere if you want to run it for another projects)
+* Install [Drush launcher](https://github.com/drush-ops/drush-launcher) on your host PC (archive old drush8 command somewhere if you want to run it for another projects)
 * To connect to vagrant instances from host pc, use @<site>.vm aliases, e.g. `drush @hmkw.vm status`. These aliases cannot be used to sync databases to local (see Technical details on aliases structure for more information)
 * To connect to remote sites, use standard `drush @<site>.01<env>` form, e.g. `drush @hmkw.01dev3 status`. Note this will only work if the remote site has already deployed blt9 and drush9 (see next topic)
 
@@ -268,14 +280,14 @@ Execution:
 * bin/behat features/mothercare/common/checkout.feature --profile=mcuat
 * The above command will run the checkout.feature script for MC and the profile used should be according to environment.
 * Another way to run: Use tags e.g
-bin/behat --@tagname --profile=mcuat
+  bin/behat --@tagname --profile=mcuat
 
 
 
 ### How to interpret the Behat reports:
-  * When the execution of the feature file is completed, navigate to site folder directory which is inside your parent directory. e.g (hmkw)
-  * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
-  * In order to share the reports, compress the html directory immediately after every run.
+* When the execution of the feature file is completed, navigate to site folder directory which is inside your parent directory. e.g (hmkw)
+* Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
+* In order to share the reports, compress the html directory immediately after every run.
 
 ### Test Results analysis:
 * If any scenarios fail, try re-running the script once to discard any network issues.
@@ -286,6 +298,8 @@ bin/behat --@tagname --profile=mcuat
 ### Debugging with xdebug
 
 A recommended IDE for debugging is PhpStorm. However, if you use another IDE, you should be able to apply the guidelines below with some tweaks.
+
+> *NOTE: XDEBUG Port configured in VM is 9002*
 
 #### Browser-based debugging
 
@@ -324,9 +338,15 @@ Follow instructions [here](https://support.acquia.com/hc/en-us/articles/36000623
 
 ### XHPROF in local
 #### Setup
-Download and add https://www.drupal.org/project/xhprof in docroot/modules/development
+Download and add [xhprof](https://www.drupal.org/project/xhprof) in docroot/modules/development
 
 #### Usage
 * Enable the module (if not enabled already)
 * Add profile=1 in query string to any URL which you want to profile
-* Check factory-hooks/post-settings-php/xhprof.php for more details on default configuration
+* Check [factory-hooks/post-settings-php/xhprof.php](factory-hooks/post-settings-php/xhprof.php) for more details on default configuration
+
+### Enable Apple-Pay on local.
+* Setup Apple pay wallet (https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/577208482/Apple+Pay+-+Setup)
+* Download / Copy SSL (merchant_id.key and merchant_id.pem files) from Cloud dev/test environment of any brand and place them in local environment folder as per paths (usually /var/www/apple-pay-resources) defined in factory-hooks/pre-settings-php/apple_pay.php
+* The Apple-Pay payment method appears on desktop view if "apple_pay_allowed_in" key from configuration acq_checkoutcom.settings is set to 'all'
+  Drush command to set config to all: drush -l <site-url> cset acq_checkoutcom.settings apple_pay_allowed_in 'all' --input-format=yaml

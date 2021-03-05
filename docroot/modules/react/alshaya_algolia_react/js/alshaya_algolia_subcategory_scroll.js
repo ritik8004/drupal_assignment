@@ -43,9 +43,13 @@
       } else if ($('.region__content').hasClass('filter-fixed-top') && $('.plp-subcategory-block').offset().top < $(element).offset().top) {
         stickyFilterPosition = $('.site-brand-home').outerHeight() + 10;
       } else {
-        // Adding 160px of margin from top so term title
-        // doesn't hide behind sticky subcategory filters.
-        stickyFilterPosition = $('.site-brand-home').outerHeight() + 160;
+        if($('.sticky-filter-wrapper').hasClass('show-sub-category')) {
+          stickyFilterPosition = $('.site-brand-home').outerHeight() + 10;
+        } else {
+          // Adding 170px of margin from top so term title
+          // doesn't hide behind sticky subcategory filters.
+          stickyFilterPosition = $('.site-brand-home').outerHeight() + 170;
+        }
       }
     }
 
@@ -58,11 +62,12 @@
 
   Drupal.behaviors.subCategoryScroll = {
     attach: function () {
-      $('.sub-category').once('category-scroll').on('click', function () {
+      $('.sub-category').once('category-scroll').on('click', function (e) {
+        e.preventDefault();
         var tid = $(this).attr('data-tid');
         setTimeout(function () {
           scrollToCategoryHeader(tid);
-        }, 300);
+        }, 150);
       });
 
       if ($('#block-subcategoryblock').length > 0) {

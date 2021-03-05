@@ -56,7 +56,7 @@
 }
 
 html[lang=ar] {
-  body.ie[class^="super-category"] {
+  body.ie[class*="super-category"] {
     #alshaya-algolia-search {
       .block-facet-blockcategory-facet-search {
         .c-accordion__title.active + ul {

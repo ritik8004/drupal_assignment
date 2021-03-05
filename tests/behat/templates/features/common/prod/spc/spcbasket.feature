@@ -16,13 +16,14 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
     And I wait 15 seconds
     Then I should see "2"
     And I wait 5 seconds
+    And I wait for AJAX to finish
     Then the price for product should be doubled
 
   @desktop
@@ -67,7 +68,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     Then the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile" should exist
@@ -96,8 +97,8 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     Then I should see "{promo_code}"
     And I wait 5 seconds
@@ -115,7 +116,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
@@ -143,7 +144,7 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -164,7 +165,7 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
     And I click on ".spcSelect__menu .spcSelect__menu-list #react-select-2-option-2" element
@@ -227,8 +228,8 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     And I should see "{language_subtotal}"
     Then I should see "{language_order_total}"
     Then I should see "{language_order_summary}"
@@ -248,8 +249,8 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
     And I wait for the page to load
-    And I wait 10 seconds
     Then I scroll to the "#block-content .vat-text-footer" element
     And I wait 5 seconds
     Then I should see "{language_promo_code}"
@@ -273,7 +274,7 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds
@@ -299,7 +300,7 @@ Feature: Test basket page
     And I wait 15 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock a.cart-link" element
-    And I wait 10 seconds
+    And I wait for AJAX to finish
     And I wait for the page to load
     Then I click on "#spc-cart .spc-cart-items .spc-product-tile-actions .spc-remove-btn" element
     And I wait 10 seconds

@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Helper\CookieHelper;
 use App\Service\Cart;
+use App\Service\CheckoutCom\APIWrapper;
 use Psr\Log\LoggerInterface;
 use App\Service\Config\SystemSettings;
+use App\Service\Orders;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -58,6 +60,13 @@ class PaymentController {
   protected $cart;
 
   /**
+   * Order service.
+   *
+   * @var \App\Service\Orders
+   */
+  protected $order;
+
+  /**
    * PaymentController constructor.
    *
    * @param \Psr\Log\LoggerInterface $logger
@@ -66,13 +75,17 @@ class PaymentController {
    *   System Settings service.
    * @param \App\Service\Cart $cart
    *   Cart service.
+   * @param \App\Service\Orders $order
+   *   Order service.
    */
   public function __construct(LoggerInterface $logger,
                               SystemSettings $settings,
-                              Cart $cart) {
+                              Cart $cart,
+                              Orders $order) {
     $this->logger = $logger;
     $this->settings = $settings;
     $this->cart = $cart;
+    $this->order = $order;
   }
 
   /**
@@ -121,7 +134,26 @@ class PaymentController {
     }
 
     $cart = $this->cart->getCart();
-    $payment_method = $this->cart->getPaymentMethodSetOnCart();
+
+    // Check and get order details from MDC.
+    $order = $this->order->getOrderById($order_id);
+    // If order not available in magento.
+    if (!$order) {
+      $this->logger->error('User is trying to access success url directly as order is not available for the orderId: @order_id.', [
+        '@order_id' => $order_id,
+      ]);
+      return $redirect;
+    }
+
+    $payment_method = $order['payment']['method'];
+
+    // If payment is done by saved cards.
+    if ($payment_method === 'checkout_com_upapi'
+      && !empty($order['payment']['extension_attributes'])
+      && !empty($order['payment']['extension_attributes']['vault_payment_token'])) {
+      $payment_method = APIWrapper::CHECKOUT_COM_UPAPI_VAULT_METHOD;
+    }
+
     // If Payment-method is not selected by user.
     if (!$payment_method) {
       $this->logger->error('User trying to access success url directly. Payment method is not set on cart. Order-Id: @order_id Cart: @cart', [
@@ -178,6 +210,15 @@ class PaymentController {
 
     $cart = $this->cart->getCart();
     $payment_method = $this->cart->getPaymentMethodSetOnCart();
+
+    // If payment method is not string but array.
+    if (is_array($payment_method)) {
+      $this->logger->error('Payment method could not found. Detail: @details', [
+        '@details' => json_encode($payment_method),
+      ]);
+      $payment_method = 'NOT_FOUND';
+    }
+
     // If Payment-method is not selected by user.
     if (!$payment_method) {
       $this->logger->error('User trying to access fail url directly. Payment method is not set on cart. Cart: @cart', [

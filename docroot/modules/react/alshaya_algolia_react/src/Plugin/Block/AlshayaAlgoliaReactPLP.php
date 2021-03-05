@@ -5,14 +5,14 @@ namespace Drupal\alshaya_algolia_react\Plugin\Block;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryPage;
 use Drupal\alshaya_algolia_react\AlshayaAlgoliaReactBlockBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
-use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\FileInterface;
 use Drupal\alshaya_custom\Utility;
-use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides a block to display 'plp' results.
@@ -62,11 +62,11 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
   protected $termStorage;
 
   /**
-   * Language Manager.
+   * Entity Repository service.
    *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
    */
-  protected $languageManager;
+  protected $entityRepository;
 
   /**
    * AlshayaAlgoliaReactAutocomplete constructor.
@@ -85,8 +85,8 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
    *   Product category tree.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language Manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity Repository service.
    */
   public function __construct(
     array $configuration,
@@ -96,7 +96,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config,
     ProductCategoryTree $product_category_tree,
     EntityTypeManagerInterface $entity_type_manager,
-    LanguageManagerInterface $language_manager
+    EntityRepositoryInterface $entityRepository
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryPage = $product_category_page;
@@ -104,7 +104,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     $this->productCategoryTree = $product_category_tree;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->fileStorage = $entity_type_manager->getStorage('file');
-    $this->languageManager = $language_manager;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -124,7 +124,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
       $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
       $container->get('alshaya_acm_product_category.product_category_tree'),
       $container->get('entity_type.manager'),
-      $container->get('language_manager')
+      $container->get('entity.repository')
     );
   }
 
@@ -154,19 +154,22 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
 
     // Get sub categories information.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
-    $current_language = $this->languageManager->getCurrentLanguage()->getId();
     if ($term instanceof TermInterface) {
+      $term = $this->entityRepository->getTranslationFromContext($term);
+
+      // We need to show Category facet only for the Categories which are
+      // visible in menu. Condition here is same as what we use to populate
+      // lhn_category field in Algolia Index.
+      // @see AlshayaAlgoliaIndexHelper::getCategoryHierarchy()
+      $algoliaSearch['categoryFacetEnabled'] = (int) $term->get('field_category_include_menu')->getString();
+
       $group_sub_category_enabled = $term->get('field_group_by_sub_categories')->getValue();
       if ($group_sub_category_enabled) {
         $sub_categories = $term->get('field_select_sub_categories_plp')->getValue();
         $subcategories = [];
         foreach ($sub_categories as $term_id) {
           $subcategory = $this->termStorage->load($term_id['value']);
-
-          // Get current language translation if available.
-          if ($subcategory->hasTranslation($current_language)) {
-            $subcategory = $subcategory->getTranslation($current_language);
-          }
+          $subcategory = $this->entityRepository->getTranslationFromContext($subcategory);
 
           $data = [];
           $data['tid'] = $subcategory->id();
@@ -214,9 +217,15 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), [
-      'alshaya_acm_product_position.settings',
-    ]);
+    $tags = ['alshaya_acm_product_position.settings'];
+    $tags = Cache::mergeTags(parent::getCacheTags(), $tags);
+
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface) {
+      $tags = Cache::mergeTags($term->getCacheTags(), $tags);
+    }
+
+    return $tags;
   }
 
 }

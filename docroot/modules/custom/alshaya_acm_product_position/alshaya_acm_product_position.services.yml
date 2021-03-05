@@ -6,6 +6,8 @@ services:
       - '@current_route_match'
       - '@entity_type.manager'
       - '@request_stack'
+      - '@language_manager'
+      - '@entity.repository'
   alshaya_acm_product_position.sort_labels:
     class: Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService
     arguments:
@@ -13,3 +15,5 @@ services:
       - '@current_route_match'
       - '@entity_type.manager'
       - '@request_stack'
+      - '@language_manager'
+      - '@entity.repository'

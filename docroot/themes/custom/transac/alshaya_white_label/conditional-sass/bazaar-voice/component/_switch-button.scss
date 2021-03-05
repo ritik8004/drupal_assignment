@@ -1,0 +1,63 @@
+.switch-button {
+  margin: 1.5rem 0;
+
+  .switch-text {
+    display: inline-block;
+
+    &.query {
+      @include breakpoint($tablet) {
+        padding-#{$right}: 4rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 1rem;
+      }
+
+      label {
+        font-size: 0.9375rem;
+        font-family: $alshaya-thin;
+
+        @include breakpoint($only-tablet) {
+          margin-bottom: 0.875rem;
+          display: inline-block;
+        }
+      }
+    }
+
+    &.answer {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        text-align: $right;
+      }
+    }
+  }
+
+  span {
+    &:first-of-type {
+      border-top-#{$left}-radius: 1.1875rem;
+      border-bottom-#{$left}-radius: 1.1875rem;
+      border-#{$right}: 1px solid $rr-switch-border;
+    }
+
+    &:last-of-type {
+      border-top-#{$right}-radius: 1.1875rem;
+      border-bottom-#{$right}-radius: 1.1875rem;
+    }
+  }
+
+  .switchOff,
+  .switchOn {
+    display: inline-block;
+    background: $rr-switch-bg;
+    min-width: 12%;
+    text-align: center;
+    padding: 0.5625rem 2.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .switchOn {
+    background: $rr-switchOn-active-bg;
+    color: $rr-switchOn-active-txt;
+  }
+}

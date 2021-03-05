@@ -16,6 +16,7 @@ use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\Component\Utility\Html;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Implements hook_views_data_alter().
@@ -115,18 +116,49 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
       $node->get('field_acq_promotion_full_catalog')->setValue(FALSE);
     }
   }
-  elseif ($is_full_catalog_promotion) {
-    // Queue products when promotion label changes for full catalog promotions.
+  else {
+    $queuing_required = 0;
     foreach ($node->getTranslationLanguages() as $langcode => $language) {
       $temp_node = ($node->language()->getId() != $langcode)
         ? $node->getTranslation($langcode)
         : $node;
 
       if ($temp_node->get('field_acq_promotion_label')->getString() !== $promotion['processed_promo_labels'][$language->getId()]) {
+        $queuing_required = 1;
+        break;
+      }
+    }
+
+    if (!$queuing_required) {
+      // Check if context has changed.
+      $promotion_context = $node->get('field_acq_promotion_context')->getValue();
+      if (!empty($promotion_context)) {
+        $promotion_context = array_column($promotion_context, 'value');
+      }
+      $new_promotion_context = $promotion['extension']['channel'];
+      if (count($promotion_context) != count($new_promotion_context) ||
+        array_diff($promotion_context, $new_promotion_context) !== array_diff($new_promotion_context, $promotion_context)) {
+        $queuing_required = 1;
+      }
+    }
+
+    if ($queuing_required) {
+      if ($is_full_catalog_promotion) {
+        // Queue products when promotion label/context changes for full catalog promotions.
         $product_queue_utility->queueAllProducts();
         // Since all products are already queued, we do not need to apply
         // further checks.
-        break;
+      }
+      else {
+        /** @var \Drupal\acq_promotion\AcqPromotionsManager $promotion_manager */
+        $promotion_manager = \Drupal::service('acq_promotion.promotions_manager');
+        // Fetch the Associated SKUs
+        $skus = $promotion_manager->getSkusForPromotion($promotion['rule_id']);
+
+        // Queue associated SKUs when promotion label/context changes.
+        if (!empty($skus)) {
+          $product_queue_utility->queueAvailableProductsForSkus($skus);
+        }
       }
     }
   }
@@ -255,6 +287,17 @@ function alshaya_acm_promotion_alshaya_acm_get_remove_from_basket_link_alter(&$r
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+
+  if ($entity->bundle() == 'acq_promotion') {
+    $context = $entity->get('field_acq_promotion_context')->getValue();
+    // Throw exception only if the web is not set in the context.
+    // Do nothing if context is not set at all.
+    if (!empty($context)
+      && !in_array('web', array_column($context, 'value'))) {
+      throw new NotFoundHttpException();
+    }
+  }
+
   // Need processing only for products.
   if ($entity->bundle() != 'acq_product') {
     return;
@@ -292,7 +335,7 @@ function alshaya_acm_promotion_node_view(array &$build, EntityInterface $entity,
     return;
   }
 
-  $promotion_label = $promoLabelManager->getPromotionLabelForProductDetail($sku_entity, $view_mode);
+  $promotion_label = $promoLabelManager->getPromotionLabelForProductDetail($sku_entity, $view_mode, 'web');
 
   if (!empty($promotion_label['promotions'])) {
     $build['promotions'] = $promotion_label['promotions'];

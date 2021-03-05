@@ -6,7 +6,7 @@ variables:
   brand_filter: ''
   color_filter: 'Color'
   size_filter: 'Size'
-  filters: ''
+  filters: 'all filters'
   promotional_filter: ''
   language_collection_filter: 'المجموعة'
   language_sort_filter: 'رتبي حسب'
@@ -93,4 +93,9 @@ variables:
   billing_mobile: '556677888'
   billing_text: 'Billing address:'
   governorate: ''
+  spc_search_keyword: 'sport'
+  filter_1: 'attr_actual_color_label_code'
+  filter_2: 'attr_size'
+  filter_3: 'final_price'
+
 

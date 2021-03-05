@@ -9,3 +9,5 @@ services:
      - '@entity_type.manager'
      - '@alshaya_acm_product_position.sort_labels'
      - '@alshaya_acm_product_position.sort_options'
+     - '@alshaya_acm_product.context_manager'
+     - '@alshaya_options_list.alshaya_options_service'

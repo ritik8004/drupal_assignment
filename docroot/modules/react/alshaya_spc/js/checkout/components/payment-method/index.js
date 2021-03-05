@@ -7,6 +7,7 @@ import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   placeOrder,
   removeFullScreenLoader,
+  setUpapiApplePayCofig,
   showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
@@ -14,10 +15,14 @@ import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
+import PaymentMethodPostpay from '../payment-method-postpay';
 import dispatchCustomEvent from '../../../utilities/events';
 import getStringMessage from '../../../utilities/strings';
 import CheckoutComUpapiContextProvider from '../../../context/CheckoutComUpapi';
 import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi';
+import PaymentMethodCheckoutComUpapiApplePay from '../payment-method-checkout-com-upapi-apple-pay';
+import CheckoutComUpapiApplePay
+  from '../../../utilities/checkout_com_upapi_apple_pay';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -26,7 +31,13 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodCheckoutCom = React.createRef();
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
+    this.paymentMethodPostpay = React.createRef();
     this.paymentMethodCybersource = React.createRef();
+    this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
+  }
+
+  componentDidMount() {
+    setUpapiApplePayCofig();
   }
 
   validateBeforePlaceOrder = () => {
@@ -42,6 +53,10 @@ export default class PaymentMethod extends React.Component {
 
     if (method.code === 'checkout_com_applepay') {
       return this.paymentMethodApplePay.current.validateBeforePlaceOrder();
+    }
+
+    if (method.code === 'checkout_com_upapi_applepay') {
+      return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
     }
 
     if (method.code === 'cybersource') {
@@ -134,10 +149,12 @@ export default class PaymentMethod extends React.Component {
     } = this.props;
     const animationDelayValue = `${0.4 + animationOffset}s`;
 
-    if (method.code === 'checkout_com_applepay') {
-      if (!(ApplePay.isAvailable())) {
-        return (null);
-      }
+    if (method.code === 'checkout_com_applepay' && !(ApplePay.isAvailable())) {
+      return (null);
+    }
+
+    if (method.code === 'checkout_com_upapi_applepay' && !(CheckoutComUpapiApplePay.isAvailable())) {
+      return (null);
     }
 
     return (
@@ -205,6 +222,17 @@ export default class PaymentMethod extends React.Component {
             </div>
           </ConditionalView>
 
+          <ConditionalView condition={(isSelected && method.code === 'postpay')}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodPostpay
+                ref={this.PaymentMethodPostpay}
+                postpay={drupalSettings.postpay}
+                postpayWidgetInfo={drupalSettings.postpay_widget_info}
+                cart={cart}
+              />
+            </div>
+          </ConditionalView>
+
           <ConditionalView condition={(isSelected && method.code === 'cybersource')}>
             <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
               <PaymentMethodCybersource
@@ -218,6 +246,14 @@ export default class PaymentMethod extends React.Component {
           <ConditionalView condition={isSelected && method.code === 'checkout_com_applepay'}>
             <PaymentMethodApplePay
               ref={this.paymentMethodApplePay}
+              cart={cart}
+              finalisePayment={this.finalisePayment}
+            />
+          </ConditionalView>
+
+          <ConditionalView condition={isSelected && method.code === 'checkout_com_upapi_applepay'}>
+            <PaymentMethodCheckoutComUpapiApplePay
+              ref={this.paymentMethodCheckoutComUpapiApplePay}
               cart={cart}
               finalisePayment={this.finalisePayment}
             />

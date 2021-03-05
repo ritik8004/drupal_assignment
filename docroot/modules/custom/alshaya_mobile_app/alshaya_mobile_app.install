@@ -14,6 +14,32 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * [5.18.0] Re-indexing items for updating swatch URLs from relative to absolute.
+ */
+function alshaya_mobile_app_update_8078() {
+  // Re-index only on brands where we have swatches for plp.
+  if (!empty(\Drupal::config('alshaya_acm_product.display_settings')->get('swatches.plp'))) {
+    \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable options-list config.
+ */
+function alshaya_mobile_app_update_8077() {
+  // Install options-list config.
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['rest.resource.options_list'],
+    'alshaya_mobile_app',
+    'install',
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set the default value for the max_product_limit.
  */
 function alshaya_mobile_app_update_8076() {

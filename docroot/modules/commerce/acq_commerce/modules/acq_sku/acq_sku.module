@@ -8,6 +8,7 @@
  * connector.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Element;
 
 /**
@@ -79,4 +80,19 @@ function acq_sku_theme_suggestions_acq_sku(array $variables) {
   $suggestions[] = 'acq_sku__' . $sku->id();
   $suggestions[] = 'acq_sku__' . $sku->id() . '__' . $sanitized_view_mode;
   return $suggestions;
+}
+
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function acq_sku_node_delete(EntityInterface $entity) {
+  if ($entity->bundle() == 'acq_product') {
+    /** @var \Drupal\alshaya_seo_transac\AlshayaSitemapManager $sitemap */
+    \Drupal::logger('acq_sku')->notice('Deleted node for SKU @sku for @langcode with nid @nid.', [
+      '@sku' => $entity->get('field_skus')->getString(),
+      '@langcode' => $entity->language()->getId(),
+      '@nid' => $entity->id(),
+    ]);
+  }
 }

@@ -423,7 +423,7 @@ class SwatchesHelper {
 
           /** @var \Drupal\file\Entity\File $file */
           $file = $this->fileStorage->load($file_value['target_id']);
-          $data['swatch'] = file_url_transform_relative(file_create_url($file->getFileUri()));
+          $data['swatch'] = file_create_url($file->getFileUri());
         }
         break;
 

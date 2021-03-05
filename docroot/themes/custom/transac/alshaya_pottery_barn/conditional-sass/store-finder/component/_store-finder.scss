@@ -1,0 +1,85 @@
+.path--store-finder,
+.nodetype--store {
+  .form-item-geolocation-geocoder-google-places-api {
+    input[type=text] {
+      &::placeholder {
+        color: $store_finder_location_search_text_placeholder;
+      }
+
+      @include breakpoint($only-mobile) {
+        border-color: $store_finder_location_search_text_input_border_mobile;
+      }
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    text-transform: none;
+  }
+
+  .label--location::before {
+    background: url(../../../imgs/icons/store-search.svg) no-repeat;
+  }
+
+  .list-view-locator {
+    border-left: 0;
+    border-right: 0;
+
+    .row-title {
+      font-weight: 600;
+    }
+
+    .store-row--counter {
+      line-height: 1.1;
+    }
+
+    .views-field-field-store-open-hours {
+      .hours--wrapper {
+        .hours--label {
+          &.open {
+            border-bottom: none;
+          }
+
+          + .open--hours {
+            padding-top: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .get--directions div {
+    color: $store_finder_get_direction_label_color;
+  }
+}
+
+.geolocation-common-map-container {
+  .view-on--map,
+  .get--directions {
+    font-weight: 300;
+  }
+
+  .hours--label {
+    color: $store_finder_search_results_hour_label;
+
+    &.open {
+      font-weight: 300;
+    }
+
+    &::after {
+      color: $store_finder_search_results_hour_icon_open;
+    }
+  }
+
+  .views-field-title {
+    span {
+      font-weight: 600;
+      color: $store_finder_header;
+    }
+  }
+
+  .hours--wrapper .hours--label,
+  .get--directions {
+    font-size: 0.875rem;
+  }
+}

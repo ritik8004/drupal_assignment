@@ -307,6 +307,11 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       // If lancode is not available, means no mapping of store and language.
       if (!$langcode) {
+        $this->logger->warning('Language code not found for store id: @store_id, language: @language.', [
+          '@store_id' => $category['store_id'],
+          '@language' => $langcode,
+        ]);
+
         continue;
       }
 

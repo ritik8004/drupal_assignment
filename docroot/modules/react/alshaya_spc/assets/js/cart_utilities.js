@@ -58,7 +58,12 @@
     var expireTime = drupalSettings.alshaya_spc.productExpirationTime * 60 * 1000;
     var currentTime = new Date().getTime();
     if (data !== null && ((currentTime - data.created) < expireTime)) {
-      callback(data, extraData);
+      try {
+        callback(data, extraData);
+      }
+      catch(e) {
+        Drupal.logJavascriptError('getLocalStorageProductData fail', e, GTM_CONSTANTS.CART_ERRORS);
+      }
       return true;
     }
     return false;
@@ -99,7 +104,7 @@
     }
 
     $.ajax({
-      url: Drupal.url('rest/v1/product/' + sku) + '?context=cart',
+      url: Drupal.url('rest/v2/product/' + btoa(sku)) + '?context=cart',
       type: 'GET',
       dataType: 'json',
       beforeSend: function(xmlhttprequest, options) {

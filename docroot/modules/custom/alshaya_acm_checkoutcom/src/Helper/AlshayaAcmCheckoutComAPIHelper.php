@@ -150,6 +150,24 @@ class AlshayaAcmCheckoutComAPIHelper {
   }
 
   /**
+   * Gets Apple-pay UPAPI config.
+   *
+   * @return array|mixed
+   *   Apple pay config.
+   */
+  public function getApplePayConfig() {
+    $settings = $this->getCheckoutcomUpApiConfig();
+    // Add site info from config.
+    $settings += [
+      'storeName' => $this->configFactory->get('system.site')->get('name'),
+      'countryId' => $this->configFactory->get('system.date')->get('country.default'),
+      'currencyCode' => $this->configFactory->get('acq_commerce.currency')->get('iso_currency_code'),
+    ];
+
+    return $settings;
+  }
+
+  /**
    * Get saved cards for checkout.com upapi method.
    *
    * @return array

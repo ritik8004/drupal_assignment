@@ -1,0 +1,102 @@
+.bv-select {
+  &.open {
+    .bvSelect__indicator {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+
+    .bvSelect__control {
+      border-bottom-color: transparent;
+    }
+  }
+
+  .bvSelect__control {
+    border: 1px solid $rr-select-border;
+    border-radius: 0;
+    height: 2.5rem;
+    font-size: 0.875rem;
+    box-shadow: none;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $rr-select-hover-border;
+    }
+
+    > div:nth-child(2) {
+      .bvSelect__indicator-separator {
+        display: none;
+      }
+
+      .bvSelect__indicator {
+        color: $rr-select-text;
+        background: $rr-select-arrow-bg;
+        height: 100%;
+
+        svg {
+          transition: transform 0.3s ease-in-out;
+        }
+      }
+    }
+  }
+
+  .bvSelect__menu {
+    margin: 0;
+    box-shadow: none;
+
+    .bvSelect__menu-list {
+      padding: 0;
+      border: 1px solid $rr-select-border;
+      border-top-width: 0;
+
+      > div {
+        color: $rr-select-text;
+        border-top: 1px solid $rr-select-border;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        background: $rr-select-option-bg;
+        cursor: pointer;
+        padding: 0.75rem;
+
+        @include breakpoint($only-mobile) {
+          white-space: wrap;
+        }
+
+        @include arabic-letter-spacing;
+
+        &:hover,
+        &.bvSelect__option--is-selected {
+          background: $rr-select-bg-hover;
+        }
+      }
+    }
+  }
+
+  .bvSelect__control {
+    .bvSelect__dropdown-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include icon('chevrondown') {
+        font-size: 1.75rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.125s ease-in-out;
+      }
+
+      svg {
+        visibility: hidden;
+      }
+    }
+
+    &--menu-is-open {
+      .bvSelect__dropdown-indicator {
+        &::before {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+    }
+  }
+}
