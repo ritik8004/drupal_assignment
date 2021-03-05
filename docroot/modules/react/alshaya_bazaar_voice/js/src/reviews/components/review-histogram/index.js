@@ -32,7 +32,7 @@ const ReviewHistogram = ({
               <div className="histogram-data">
                 <div className="histogram-title">
                   {
-                    Drupal.t('@customerCount % of Customers Recommended the Product', {
+                    Drupal.t('@customerCount% of Customers Recommended the Product', {
                       '@customerCount': ((
                         overallSummary[item].ReviewStatistics.RecommendedCount
                         / overallSummary[item].ReviewStatistics.TotalReviewCount).toFixed(1) * 100
