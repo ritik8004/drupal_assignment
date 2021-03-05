@@ -44,9 +44,14 @@ class AuraFormLinkCard extends React.Component {
     const { cartId } = this.props;
 
     if (cartId === localStorageValues.cartId) {
-      const key = localStorageValues.type === 'apcNumber'
-        ? 'cardNumber'
-        : localStorageValues.key;
+      let { key } = localStorageValues;
+
+      if (localStorageValues.type === 'apcNumber') {
+        key = 'cardNumber';
+      } else if (localStorageValues.type === 'phone') {
+        key = 'mobile';
+      }
+
       const data = {
         detail: {
           stateValues: {
@@ -95,7 +100,7 @@ class AuraFormLinkCard extends React.Component {
       const dataForStorage = { cartId, ...searchData };
 
       // Get mobile number without country code to set in storage.
-      if (searchData.key === 'mobile') {
+      if (searchData.key === 'mobile' || searchData.key === 'mobileCheckout') {
         dataForStorage.value = searchData.value.substring(3);
       }
 
@@ -232,7 +237,7 @@ class AuraFormLinkCard extends React.Component {
               <ConditionalView condition={linkCardOption === 'cardNumber'}>
                 <LinkCardOptionCard cardNumber={cardNumber} />
               </ConditionalView>
-              <ConditionalView condition={linkCardOption === 'mobile' || linkCardOption === 'mobileCheckout'}>
+              <ConditionalView condition={linkCardOption === 'mobile'}>
                 <LinkCardOptionMobile
                   setChosenCountryCode={this.setChosenCountryCode}
                   mobile={mobile}
