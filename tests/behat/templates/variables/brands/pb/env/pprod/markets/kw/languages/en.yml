@@ -34,7 +34,7 @@ variables:
   order_total: 'Order Total'
   order_summary: 'order summary'
   promo_code: 'have a promo code?'
-  excluding_delivery: 'excluding delivery'
+  excluding_delivery: 'Excluding delivery'
   checkout_link: 'continue to checkout'
   language_create_account: 'تسجيل مستخدم جديد'
   language_sign_in: 'تسجيل الدخول'

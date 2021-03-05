@@ -109,8 +109,9 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
     $free_skus = $this->alshayaPromotionsManager->getFreeGiftSkuEntitiesByPromotionId($this->promotionNode->id());
     $free_sku_entity = reset($free_skus);
 
+    $link = $this->getFreeGiftLink($free_sku_entity);
     $label = $this->t('Your Free Gift @gift has been added to the cart', [
-      '@gift' => $this->getFreeGiftLink($free_sku_entity),
+      '@gift' => $link,
     ]);
 
     return $label;
@@ -126,6 +127,10 @@ class FreeGiftOrder extends AcqPromotionBase implements ContainerFactoryPluginIn
    *   Link object for free gift.
    */
   public function getFreeGiftLink($free_sku_entity) {
+    if (empty($free_sku_entity)) {
+      return NULL;
+    }
+
     $link = Link::createFromRoute(
       $free_sku_entity->name->getString(),
       'alshaya_acm_promotion.free_gift_modal',

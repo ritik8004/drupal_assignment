@@ -529,6 +529,15 @@
           position: absolute;
         }
 
+        .labels-container {
+          &.bottom {
+            &-left,
+            &-right {
+              bottom: 10.3125rem;
+            }
+          }
+        }
+
         .product-plp-detail-wrapper,
         .stock-placeholder.out-of-stock,
         .alshaya_search_slider {

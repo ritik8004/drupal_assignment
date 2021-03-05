@@ -1798,12 +1798,12 @@ class FeatureContext extends CustomMinkContext
 
     if ($page->find('css', '#block-content #spc-cart .spc-cart-item .spc-product-price .has--special--price')) {
       $product_price = $page->find('css', '#block-content #spc-cart .spc-cart-item .spc-product-price .special--price .price .price-amount')->getHtml();
-      $double_price = floatval($product_price) * 2;
+      $double_price = floatval(str_replace(',', '', $product_price)) * 2;
     } else {
       $original_price = $page->find('css', '#spc-cart .spc-main .spc-content .spc-cart-item .spc-product-tile .spc-product-container .spc-product-price .price-amount')
         ->getHtml();
-      $original_price = floatval($original_price);
-      $double_price = floatval($original_price) * 2;
+      $original_price = floatval(str_replace(',', '', $original_price));
+      $double_price = floatval(str_replace(',', '', $original_price)) * 2;
     }
 
     if ($page->find('css', '.spc-sidebar .spc-order-summary-block .totals .discount-total')) {
@@ -1813,7 +1813,7 @@ class FeatureContext extends CustomMinkContext
     }
 
     $expected_price = $page->find('css', '.spc-sidebar .spc-order-summary-block .hero-total .value .price .price-amount')->getText();
-    $expected_price = floatval($expected_price);
+    $expected_price = floatval(str_replace(',', '', $expected_price));
 
     if ($expected_price !== $double_price) {
       throw new \Exception('Price did not get updated after adding the quantity');
@@ -1839,9 +1839,9 @@ class FeatureContext extends CustomMinkContext
       $product_price = floatval($product_price);
       $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .special--price .price .price-currency')->getHtml();
     } else {
-      $product_price = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-amount')->getHtml();
+      $product_price = $page->find('css', '.acq-mini-cart .price .price-amount')->getHtml();
       $product_price = floatval($product_price);
-      $product_currency = $page->find('css', '#block-content .acq-content-product .content__title_wrapper .price-block .price .price-currency')->getHtml();
+      $product_currency = $page->find('css', '.acq-mini-cart .price .price-currency')->getHtml();
     }
     $cart_price = $page->find('css', '#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount')->getHtml();
     $cart_price = floatval($cart_price);

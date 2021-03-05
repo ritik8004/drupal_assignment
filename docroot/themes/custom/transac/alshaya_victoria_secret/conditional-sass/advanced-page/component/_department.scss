@@ -1,0 +1,49 @@
+@include breakpoint($only-mobile) {
+  .nodetype--advanced_page {
+    .page-standard {
+      margin-top: 1.625rem;
+    }
+
+    .page-standard {
+      .c-page-title {
+        font-size: 1rem;
+        line-height: 1.25;
+        text-align: $left;
+        font-family: $vs-regular;
+        padding-bottom: 0.375rem;
+      }
+    }
+
+    .node--type-advanced-page {
+      margin-top: 0;
+    }
+
+    &.frontpage {
+      .page-standard {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .paragraph--type--product-carousel-category {
+    .c-accordion__title {
+      &::after {
+        #{$right}: 0;
+      }
+    }
+
+    .c-accordion_content {
+      ul {
+        li {
+          a {
+            &::after {
+              #{$right}: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
