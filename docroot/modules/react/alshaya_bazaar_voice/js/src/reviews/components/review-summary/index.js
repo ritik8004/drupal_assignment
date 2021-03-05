@@ -89,7 +89,7 @@ export default class ReviewSummary extends React.Component {
 
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/reviews.json';
-    const limit = bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page;
+    const limit = this.getLimitConfigValue(bazaarVoiceSettings);
     const params = `&filter=productid:${bazaarVoiceSettings.productid}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${limit}&Offset=${offset}${sortParams}${filterParams}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
@@ -113,7 +113,7 @@ export default class ReviewSummary extends React.Component {
               reviewsSummary: result.data.Results,
               reviewsProduct: result.data.Includes.Products,
               noResultmessage: null,
-              numberOfPages: Math.ceil(result.data.TotalResults / 5),
+              numberOfPages: Math.ceil(result.data.TotalResults / limit),
             }, () => {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
@@ -152,6 +152,14 @@ export default class ReviewSummary extends React.Component {
   getOffsetValue() {
     const { offset } = this.state;
     return offset;
+  }
+
+  /**
+   * Get limit configuration value..
+   */
+  getLimitConfigValue() {
+    const { bazaarVoiceSettings } = this.state;
+    return bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page;
   }
 
   /**
@@ -215,10 +223,11 @@ export default class ReviewSummary extends React.Component {
    * Get the next page reviews when user clicks on next button.
    */
   nextPage() {
-    const { currentFilterOptions } = this.state;
-    const { currentSortOption } = this.state;
-    const { offset } = this.state;
-    this.setState({ offset: offset + 5 }, () => {
+    const {
+      currentFilterOptions, currentSortOption, offset, bazaarVoiceSettings,
+    } = this.state;
+    const limit = this.getLimitConfigValue(bazaarVoiceSettings);
+    this.setState({ offset: offset + limit }, () => {
       if (currentFilterOptions && currentFilterOptions.length > 0) {
         this.getReviews(currentFilterOptions, 'filter');
       } else if (currentSortOption) {
@@ -237,10 +246,11 @@ export default class ReviewSummary extends React.Component {
    * Get the previous page reviews when user clicks on previous button.
    */
   previousPage() {
-    const { currentFilterOptions } = this.state;
-    const { currentSortOption } = this.state;
-    const { offset } = this.state;
-    this.setState({ offset: offset - 5 }, () => {
+    const {
+      currentFilterOptions, currentSortOption, offset, bazaarVoiceSettings,
+    } = this.state;
+    const limit = this.getLimitConfigValue(bazaarVoiceSettings);
+    this.setState({ offset: offset - limit }, () => {
       if (currentFilterOptions && currentFilterOptions.length > 0) {
         this.getReviews(currentFilterOptions, 'filter');
       } else if (currentSortOption) {
