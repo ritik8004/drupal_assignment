@@ -25,6 +25,8 @@
 
     .terms-conditions {
       margin: 1.875rem 0 0.938rem;
+      font-size: 0.625rem;
+      text-decoration: underline;
 
       @include breakpoint($tablet) {
         margin: 2.5rem 0 1.563rem;
