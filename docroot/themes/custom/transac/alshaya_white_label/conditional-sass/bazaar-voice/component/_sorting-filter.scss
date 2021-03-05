@@ -1,0 +1,112 @@
+.sorting-filter-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+
+  .sorting-filter-title-block {
+    width: 100%;
+    margin: 2.5rem 0 0.5rem;
+  }
+
+  .sort-item {
+    width: 23.8%;
+    margin-#{$right}: 1.5%;
+    margin-bottom: 1rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      margin-#{$right}: 0;
+    }
+  }
+
+  .filter-items {
+    width: 23.8%;
+    margin-#{$right}: 1.5%;
+    margin-bottom: 1rem;
+
+    &:nth-child(5n),
+    &:last-of-type {
+      margin-#{$right}: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 32%;
+      margin-#{$right}: 1.8%;
+    }
+  }
+}
+
+.review-filter-display-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 1.25rem;
+
+  .review-count {
+    #reviews-section & {
+      order: 3;
+      width: 14%;
+      border-bottom: 0;
+      font-size: 0.75rem;
+      align-self: center;
+
+      @include breakpoint($only-mobile) {
+        padding-top: 0.625rem;
+        border-bottom: 0;
+        align-self: unset;
+      }
+    }
+  }
+
+  .filter-result {
+    width: 75%;
+    order: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+
+    @include breakpoint($only-mobile) {
+      width: 70%;
+    }
+
+    li {
+      margin-#{$right}: 1rem;
+      margin-bottom: 0.75rem;
+
+      .bv-active-filter-button {
+        background: $rr-filter-selected-item-bg;
+        color: $rr-filter-selected-item-txt;
+        border: 0;
+        height: 2rem;
+        padding: 0 1.25rem;
+        font-family: $alshaya-thin;
+        font-size: 0.75rem;
+
+        @include icon(close, after) {
+          font-size: 1.25rem;
+          vertical-align: middle;
+          position: relative;
+          #{$left}: 0.75rem;
+        }
+      }
+    }
+  }
+
+  .clear-all-button {
+    order: 2;
+    width: 10%;
+    align-self: center;
+
+    @include breakpoint($only-mobile) {
+      width: 15%;
+      align-self: unset;
+      padding-top: 0.375rem;
+    }
+
+    button {
+      border: 0;
+      font-size: 0.6875rem;
+      background: transparent;
+    }
+  }
+}

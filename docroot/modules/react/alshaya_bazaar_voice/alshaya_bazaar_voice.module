@@ -1,0 +1,165 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_alshaya_acm_product_build_alter().
+ */
+function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+  if ($context !== 'pdp') {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $productNode = $skuManager->getDisplayNode($sku->getSku());
+
+  if ($productNode instanceof NodeInterface) {
+    $config = \Drupal::config('bazaar_voice.settings');
+    // Disable BazaarVoice Rating and Review in PDP
+    // if checkbox is checked in bazaarVoice Settings Form.
+    $isBVDisabled = $config->get('pdp_rating_reviews');
+    if ($isBVDisabled) {
+      return;
+    }
+    // Disable BazaarVoice Rating and Review in PDP
+    // if checkbox is checked for any categories.
+    $showRatingReviews = TRUE;
+    $category = $productNode->get('field_category')->getValue();
+    foreach ($category as $term) {
+      $term_obj = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term['target_id']);
+      // Disable BazaarVoice Review and Ratings if checked.
+      if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
+        $showRatingReviews = FALSE;
+      }
+    }
+    if (!$showRatingReviews) {
+      return;
+    }
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+    $media = $skuImagesManager->getFirstImage($sku, 'pdp');
+    $image_url = '';
+    if (!empty($media)) {
+      $image_url = file_create_url($media['drupal_uri']);
+    }
+
+    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    // Get avalable sorting options from config.
+    $sorting_options = $alshayaBazaarVoice->getSortingOptions();
+
+    \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+
+    $settings = [
+      'user' => [
+        'user_email' => \Drupal::currentUser()->getEmail(),
+        'user_id' => \Drupal::currentUser()->id(),
+      ],
+      'product' => [
+        'url' => $productNode->toUrl()->toString(),
+        'title' => $productNode->label(),
+        'image_url' => $image_url,
+      ],
+      'bazaar_voice' => [
+        'endpoint' => $config->get('api_base_url'),
+        'api_version' => $config->get('api_version'),
+        'passkey' => $config->get('conversations_apikey'),
+        'locale' => $config->get('locale'),
+        'content_locale' => $config->get('content_locale'),
+        'max_age' => $config->get('max_age'),
+        'stats' => 'Reviews',
+        'Include' => 'Products',
+        'sorting_options' => $sorting_options,
+        'reviews_per_page' => $config->get('reviews_limit_per_page'),
+        'write_review_submission' => $config->get('write_review_submission'),
+      ],
+      'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
+      'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
+    ];
+
+    // Adding template to render string values.
+    $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
+    $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
+    $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
+    $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
+    $build['#attached']['library'][] = 'alshaya_bazaar_voice/rating';
+    $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
+    $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
+
+    $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['alshaya_bazaar_voice'] = $settings;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_bazaar_voice_theme($existing, $type, $theme, $path) {
+  return [
+    'alshaya_bazaar_voice_reviews' => [
+      'variables' => [
+        'strings' => [],
+      ],
+      'template' => 'alshaya-bazaar-voice-reviews',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_bazaar_voice_page_attachments(array &$page){
+  // Configurations must be on page before iovation's JavaScript loads.
+  // Add script to generate the device finger printing string.
+  $page['#attached']['html_head'][] = [[
+    '#type' => 'html_tag',
+    '#tag' => 'script',
+    '#attributes' => [
+      'type' => 'text/javascript',
+      ],
+    '#value' => 'window.IGLOO = window.IGLOO || {
+    "bbout_element_id" : "ioBlackBox","enable_rip" : true,"enable_flash" : false,"install_flash" : false,"loader" : {"version" : "general5","fp_static" : false}};',
+    ],
+    'fppath',
+    ];
+}
+
+/**
+  * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+  * Updating build array for bv pixel integration.
+  *
+  * @param array $build
+  *   Reference to the build array of spc confirmation.
+  * @param string $order
+  *   Order details array.
+  */
+  function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
+    /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
+    $bazaar_voice_api_helper = \Drupal::service('bazaar_voice.api_helper');
+    if (!empty($build['#attached']['drupalSettings'])){
+      if ($bazaar_voice_api_helper->isBvConfigurationsAvailable()) {
+        $bazaarvoice_config = \Drupal::config('bazaar_voice.settings');
+        $locale = $bazaarvoice_config->get('locale');
+        // Attach bvpixel library to order confirmation page.
+        $build['#attached']['library'][] = 'alshaya_bazaar_voice/bvpixel_tracking';
+        if(!empty($build['#attached']['drupalSettings']['order_details'])) {
+          $build['#attached']['drupalSettings']['order_details']['bv_extra_params'] = [
+            'currency' => $order['base_currency_code'] ?? '',
+            'tax' => $order['base_tax_amount'] ?? '',
+            'shipping' => $order['shipping_incl_tax'] ?? '',
+            'city' => $order['shipping']['address']['city'] ?? '',
+            'country' => $order['shipping']['address']['country_id'] ?? '',
+            'nickname' => $order['customer_firstname'] ?? '',
+            'customer_is_guest' => $order['customer_is_guest'] ?? '',
+            'customer_id' => $order['customer_id'] ?? '',
+            'locale' => $locale ?? '',
+          ];
+        }
+      }
+    }
+  }
