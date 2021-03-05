@@ -31,14 +31,14 @@ class AlshayaWishlistConfigForm extends ConfigFormBase {
     $form['alshaya_wishlist']['wishlist_enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Wishlist'),
-      '#description' => $this->t('Switch to enable or disable wishlist feature.'),
+      '#description' => $this->t('Switch to enable or disable Wishlist feature.'),
       '#default_value' => $this->config('alshaya_wishlist.settings')->get('wishlist_enabled'),
     ];
 
     $form['alshaya_wishlist']['empty_wishlist_message'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Empty Wishlist Message'),
-      '#description' => $this->t('Provides a static message that will be shown when the wishlist is empty.'),
+      '#description' => $this->t('Provides a static message that will be shown when the Wishlist is empty.'),
       '#maxlength' => 255,
       '#default_value' => $this->config('alshaya_wishlist.settings')->get('empty_wishlist_message'),
     ];

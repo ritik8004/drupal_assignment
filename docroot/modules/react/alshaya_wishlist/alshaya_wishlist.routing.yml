@@ -2,7 +2,7 @@ alshaya_wishlist.alshaya_wishlist_config:
   path: '/admin/config/alshaya/wishlist'
   defaults:
     _form: '\Drupal\alshaya_wishlist\Form\AlshayaWishlistConfigForm'
-    _title: 'Alshaya Wishlist Configurations'
+    _title: 'Alshaya Wishlist Configuration'
   requirements:
     _permission: 'administer site configuration'
 
