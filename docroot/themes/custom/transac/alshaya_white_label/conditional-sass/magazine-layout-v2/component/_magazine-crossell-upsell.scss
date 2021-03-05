@@ -69,6 +69,12 @@
                 margin-bottom: 0.3125rem;
               }
             }
+
+            .magv2-meta-data-wrapper {
+              html[lang=ar] & {
+                flex-direction: row-reverse;
+              }
+            }
           }
 
           &-title {
@@ -83,6 +89,10 @@
 
             @include breakpoint($only-mobile) {
               max-width: 12.5rem;
+            }
+
+            html[lang=ar] & {
+              text-align: right;
             }
           }
 
@@ -203,17 +213,49 @@
         }
       }
 
-      .magv2-detail-wrapper {
-        .magv2-pdp-title {
-          html[lang=ar] & {
-            text-align: right;
-          }
+      .magv2-pdp-crossell-upsell-image-wrapper {
+        position: relative;
+
+        .magv2-pdp-crossell-upsell-img {
+          position: relative;
         }
 
-        .magv2-pdp-price-container {
-          .magv2-meta-data-wrapper {
-            html[lang=ar] & {
-              flex-direction: row-reverse;
+        .product-labels {
+          position: static;
+        }
+
+        .labels-wrapper {
+          position: absolute;
+
+          &.top {
+            &-left {
+              top: 0.625rem;
+              #{$left}: 0.625rem;
+            }
+
+            &-right {
+              top: 0.625rem;
+              #{$right}: 0.625rem;
+            }
+          }
+
+          &.bottom {
+            &-left {
+              bottom: 0.625rem;
+              #{$left}: 0.625rem;
+            }
+
+            &-right {
+              bottom: 0.625rem;
+              #{$right}: 0.625rem;
+            }
+          }
+
+          .labels {
+            max-width: 2.375rem;
+
+            img {
+              width: auto;
             }
           }
         }
@@ -325,56 +367,6 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-    }
-  }
-}
-
-.magv2-pdp-crossell-upsell-wrapper {
-  .magv2-pdp-crossell-upsell-image-wrapper {
-    position: relative;
-
-    .magv2-pdp-crossell-upsell-img {
-      position: relative;
-    }
-
-    .product-labels {
-      position: static;
-    }
-
-    .labels-wrapper {
-      position: absolute;
-
-      &.top {
-        &-left {
-          top: 0.625rem;
-          #{$left}: 0.625rem;
-        }
-
-        &-right {
-          top: 0.625rem;
-          #{$right}: 0.625rem;
-        }
-      }
-
-      &.bottom {
-        &-left {
-          bottom: 0.625rem;
-          #{$left}: 0.625rem;
-        }
-
-        &-right {
-          bottom: 0.625rem;
-          #{$right}: 0.625rem;
-        }
-      }
-
-      .labels {
-        max-width: 2.375rem;
-
-        img {
-          width: auto;
-        }
-      }
     }
   }
 }
