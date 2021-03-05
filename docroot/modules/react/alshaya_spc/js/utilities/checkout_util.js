@@ -112,6 +112,7 @@ export const placeOrder = (paymentMethod) => {
     .then(
       (response) => {
         if (response.data.error === undefined) {
+          // Remove value from localStorage if place ordered successfully.
           removeStorageInfo('shippingaddress-formdata');
           if (response.data.token !== undefined && paymentMethod === 'postpay') {
             window.postpay.checkout(response.data.token, {
