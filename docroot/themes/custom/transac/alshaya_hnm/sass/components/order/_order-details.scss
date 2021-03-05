@@ -74,11 +74,25 @@
     color: $order_detail_total;
     font-weight: normal;
     font-family: $hnm-demibold;
+
+    &.vat-row {
+      td {
+        &:nth-child(3) {
+          @include breakpoint($only-tablet) {
+            display: none;
+          }
+        }
+      }
+    }
   }
 
   .delivery-details-row {
+    color: $order_detail_total_bg;
+
     td {
       background: $order_summary_blend_bg;
+      font-family: $hnm-bold;
+      font-weight: normal;
 
       .icon-ic_info {
         font-size: 1.9375rem;
@@ -93,15 +107,6 @@
         background: $order_summary_blend_bg;
       }
     }
-  }
-
-  .delivery-details-row td {
-    font-family: $hnm-bold;
-    font-weight: normal;
-  }
-
-  .delivery-details-row {
-    color: $order_detail_total_bg;
   }
 
   .delivery-charge-row,
@@ -283,20 +288,6 @@ html[lang=ar] {
   &.order-detail {
     @include breakpoint($tablet) {
       margin-top: 2.5rem;
-    }
-  }
-}
-
-.user__order--detail {
-  .total-row {
-    &.vat-row {
-      td {
-        &:nth-child(3) {
-          @include breakpoint($only-tablet) {
-            display: none;
-          }
-        }
-      }
     }
   }
 }
