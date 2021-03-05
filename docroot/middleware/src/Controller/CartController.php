@@ -366,7 +366,7 @@ class CartController {
 
     // If payment method is not available in the list, we set the first
     // available payment method.
-    if (!empty($response['payment'])) {
+    if (!empty($response['payment']) && isset($response['payment']['methods'])) {
       $codes = array_column($response['payment']['methods'], 'code');
       if (!empty($response['payment']['method'])
         && !in_array($response['payment']['method'], $codes)) {
