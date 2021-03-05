@@ -9,6 +9,12 @@
       }
     }
 
+    &-comment-form {
+      button {
+        text-transform: uppercase;
+      }
+    }
+
     &-title {
       font-family: $hnm-regular;
     }

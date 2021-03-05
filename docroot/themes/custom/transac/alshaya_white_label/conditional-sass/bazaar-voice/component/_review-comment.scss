@@ -58,7 +58,7 @@
         padding: 0.75rem;
         font-size: 0.875rem;
         line-height: 1;
-        font-family: $alshaya-thin;
+        font-family: $alshaya-bold;
 
         @include breakpoint($only-mobile) {
           margin-top: 2.5rem;
@@ -91,7 +91,6 @@
 
       @include breakpoint($tablet) {
         width: 8.75rem;
-        height: 2rem;
         padding: 0;
       }
     }
