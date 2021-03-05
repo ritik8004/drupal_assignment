@@ -127,6 +127,7 @@ export const placeOrder = (paymentMethod) => {
           window.location = Drupal.url(response.data.redirectUrl);
           return;
         }
+
         if (response.data.error && response.data.redirectUrl !== undefined) {
           Drupal.logJavascriptError('place-order', 'Redirecting user for 3D verification for 2D card.', GTM_CONSTANTS.PAYMENT_ERRORS);
           window.location = response.data.redirectUrl;
