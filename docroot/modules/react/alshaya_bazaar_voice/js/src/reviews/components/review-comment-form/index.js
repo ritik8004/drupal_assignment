@@ -3,6 +3,7 @@ import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
 import { getCurrentUserEmail } from '../../../utilities/user_util';
+import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -30,6 +31,8 @@ class ReviewCommentForm extends React.Component {
 
   showCommentForm = () => {
     const { commentbox, nickname, email } = this.state;
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
         <form id="comment-form" onSubmit={this.handleSubmit}>
@@ -55,8 +58,7 @@ class ReviewCommentForm extends React.Component {
             </div>
 
             <div className="terms-conditions">
-              <input type="checkbox" className="form-input" id="terms" name="terms" />
-              <label htmlFor="terms" className="form-label">{Drupal.t('I agree with terms and conditions.')}</label>
+              <a href={commentTncUri} target="_blank" rel="noopener noreferrer">{Drupal.t('Terms and condition')}</a>
             </div>
 
             <div className="form-button-wrapper">
