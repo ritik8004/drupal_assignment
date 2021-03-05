@@ -49,7 +49,7 @@ class AuraFormRedeemPoints extends React.Component {
 
     this.setState({
       money: totals.paidWithAura,
-      points: totals.paidWithAura * getPointToPriceRatio(),
+      points: Math.round(totals.paidWithAura * getPointToPriceRatio()),
       auraTransaction: true,
     });
     // Add a class for FE purposes.
@@ -82,7 +82,7 @@ class AuraFormRedeemPoints extends React.Component {
   redemptionLimit = () => {
     const { totals, pointsInAccount } = this.props;
     const { base_grand_total: grandTotal } = totals;
-    const grandTotalPoints = grandTotal * getPointToPriceRatio();
+    const grandTotalPoints = Math.round(grandTotal * getPointToPriceRatio());
 
     const pointsAllowedToRedeem = (pointsInAccount < grandTotalPoints)
       ? pointsInAccount
@@ -134,27 +134,23 @@ class AuraFormRedeemPoints extends React.Component {
 
   convertPointsToMoney = (e) => {
     removeError('spc-aura-link-api-response-message');
-    // @todo: Run some proper validations, for now just checking length.
-    if (e.target.value.length >= 1) {
+
+    // Disable submit button if no points in input box.
+    if (e.target.value.length < 1) {
       this.setState({
-        enableSubmit: true,
-      });
-    } else {
-      this.setState({
+        points: null,
+        money: null,
         enableSubmit: false,
       });
+      return;
     }
 
     // Convert to money.
     if (e.target.value > 0) {
       this.setState({
-        points: e.target.value,
+        points: parseInt(e.target.value, 10),
         money: getPointToPrice(e.target.value),
-      });
-    } else {
-      this.setState({
-        points: null,
-        money: null,
+        enableSubmit: true,
       });
     }
   };
