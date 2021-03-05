@@ -1,0 +1,46 @@
+.form-item {
+  position: relative;
+
+  label.form-label {
+    font-size: 0.75rem;
+    color: $rr-review-comment-label;
+    position: absolute;
+    #{$left}: 0;
+    top: 0.25rem;
+    transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+    pointer-events: none;
+  }
+
+  input.form-input:focus ~ label:last-of-type,
+  input.form-input:not(:focus):valid ~ label,
+  input.form-input:not(:active):valid ~ label {
+    top: -1.375rem;
+    bottom: 0;
+    #{$left}: 0;
+    opacity: 1;
+    font-size: 0.75rem;
+  }
+
+  &-two-column {
+    @include breakpoint($tablet) {
+      display: flex;
+
+      .form-item {
+        width: calc(50% - 0.75rem);
+
+        &:first-child {
+          margin-#{$right}: 2.813rem;
+        }
+      }
+    }
+  }
+}
+
+.form {
+  &-button-wrapper {
+    @include breakpoint($tablet) {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
