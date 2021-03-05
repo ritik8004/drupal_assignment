@@ -1082,18 +1082,4 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     return $l1Terms ? $l1Terms : [];
   }
 
-  /**
-   * Get category level.
-   *
-   * @param int $tid
-   *   Term id.
-   *
-   * @return int
-   *   Category level.
-   */
-  public function getCategoryLevel($tid) {
-    $depth = (int) taxonomy_term_depth_get_by_tid($tid);
-    return $depth;
-  }
-
 }
