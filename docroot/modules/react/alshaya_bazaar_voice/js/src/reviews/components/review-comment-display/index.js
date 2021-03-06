@@ -40,7 +40,7 @@ class ReviewCommentDisplay extends React.Component {
     const reviewCommentsDisplay = reviewCommentsData.map((comment) => {
       if (ReviewId !== null && comment.ModerationStatus === 'APPROVED') {
         return ([
-          <div className="comment-submission-details" key={comment.Id}>
+          <div className="comment-submission-details comment-submission-wrapper" key={comment.Id}>
             <ReviewCommentRender
               UserNickname={comment.UserNickname}
               SubmissionTime={comment.SubmissionTime}
