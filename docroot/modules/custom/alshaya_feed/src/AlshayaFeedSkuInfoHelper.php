@@ -269,6 +269,7 @@ class AlshayaFeedSkuInfoHelper {
         $product[$lang][0] = $parentProduct;
         unset($product[$lang][0]['group_id']);
         $product[$lang][0]['sku'] = $parentProduct['group_id'];
+        $product[$lang][0]['sanitized_sku'] = $this->skuManager->getSanitizedSku($parentProduct['group_id']);
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
           $child = SKU::loadFromSku($child_sku, $lang);
           if (!$child instanceof SKUInterface) {
