@@ -4,6 +4,7 @@ import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages
 import ReviewCommentSubmission from '../review-comment-submission';
 import { getCurrentUserEmail } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { processFormDetails } from '../../../utilities/validate';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -41,19 +42,46 @@ class ReviewCommentForm extends React.Component {
           </div>
           <div className="comment-form-fields">
             <div className="form-item">
-              <input type="text" id="commentbox" required="required" className="form-input" value={commentbox || ''} onChange={this.handleCommentboxChange} name="commentbox" />
+              <input
+                type="text"
+                id="commentbox"
+                name="commentbox"
+                onChange={this.handleCommentboxChange}
+                className="form-input focus"
+                value={commentbox || ''}
+              />
+              <div className="c-input__bar" />
               <label className="comment-form-commentbox-label form-label">{Drupal.t('Comment')}</label>
+              <div id="commentbox-error" className="error" />
             </div>
 
             <div className="form-item-two-column">
               <div className="form-item">
-                <input type="text" className="form-input" required="required" id="nickname" value={nickname || ''} onChange={this.handleNicknameChange} name="nickname" />
+                <input
+                  type="text"
+                  id="nickname"
+                  name="nickname"
+                  onChange={this.handleNicknameChange}
+                  className="form-input focus"
+                  value={nickname || ''}
+                />
+                <div className="c-input__bar" />
                 <label className="comment-form-nickname form-label">{Drupal.t('Screen name')}</label>
+                <div id="nickname-error" className="error" />
               </div>
 
               <div className="form-item">
-                <input type="email" className="form-input" required="required" id="email" value={email || ''} onChange={this.handleEmailChange} name="email" />
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  onChange={this.handleEmailChange}
+                  className="form-input focus"
+                  value={email || ''}
+                />
+                <div className="c-input__bar" />
                 <label className="comment-form-email form-label">{Drupal.t('Email Address')}</label>
+                <div id="email-error" className="error" />
               </div>
             </div>
 
@@ -63,7 +91,7 @@ class ReviewCommentForm extends React.Component {
 
             <div className="form-button-wrapper">
               <button className="form-cancel-btn" onClick={() => this.setState({ showCommentForm: false })} type="button">{Drupal.t('cancel')}</button>
-              <button type="submit" className="form-submit-btn" id="review-comments-submit">{Drupal.t('post comment')}</button>
+              <button type="submit" className="form-submit-btn">{Drupal.t('post comment')}</button>
             </div>
           </div>
         </form>
@@ -82,27 +110,38 @@ class ReviewCommentForm extends React.Component {
     );
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
-    const { ReviewId } = this.props;
-    const { commentbox, nickname, email } = this.state;
-    const params = `&Action=submit&CommentText=${commentbox}&UserEmail=${email}&UserNickname=${nickname}&ReviewId=${ReviewId}`;
-    const apiData = postAPIData('/data/submitreviewcomment.json', params);
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.error === undefined
-      && result.data !== undefined
-      && result.data.error === undefined) {
-          const response = result.data;
-          if (response.SubmissionId !== null) {
-            this.setState({
-              submissionTime: response.Comment.SubmissionTime,
-              showCommentSubmission: true,
-              showCommentForm: false,
-            });
+    const isError = await processFormDetails(e);
+    if (!isError) {
+      const { ReviewId } = this.props;
+      const { commentbox, nickname, email } = this.state;
+      const params = `&Action=submit&CommentText=${commentbox}&UserEmail=${email}&UserNickname=${nickname}&ReviewId=${ReviewId}`;
+      const apiData = postAPIData('/data/submitreviewcomment.json', params);
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.error === undefined
+        && result.data !== undefined
+        && result.data.error === undefined) {
+            const response = result.data;
+            if (result.status !== 200
+              || (response.HasErrors
+              && response.FormErrors !== null)) {
+              this.setState({
+                showCommentSubmission: false,
+              });
+              return;
+            }
+            if (response.SubmissionId !== null) {
+              this.setState({
+                submissionTime: response.Comment.SubmissionTime,
+                showCommentSubmission: true,
+                showCommentForm: false,
+              });
+            }
           }
-        }
-      });
+        });
+      }
     }
   }
 
