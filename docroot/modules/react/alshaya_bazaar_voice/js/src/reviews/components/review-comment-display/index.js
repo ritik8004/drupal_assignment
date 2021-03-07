@@ -41,19 +41,21 @@ class ReviewCommentDisplay extends React.Component {
       if (ReviewId !== null && comment.ModerationStatus === 'APPROVED') {
         return ([
           <div className="comment-submission-details" key={comment.Id}>
-            <ReviewCommentRender
-              UserNickname={comment.UserNickname}
-              SubmissionTime={comment.SubmissionTime}
-              CommentText={comment.CommentText}
-            />
-            <div className="review-feedback">
-              <ReviewFeedback
-                negativeCount={comment.TotalNegativeFeedbackCount}
-                positiveCount={comment.TotalPositiveFeedbackCount}
-                isSyndicatedReview={comment.IsSyndicated}
-                contentId={comment.Id}
-                contentType="review_comment"
+            <div className="comment-submission-wrapper">
+              <ReviewCommentRender
+                UserNickname={comment.UserNickname}
+                SubmissionTime={comment.SubmissionTime}
+                CommentText={comment.CommentText}
               />
+              <div className="review-feedback">
+                <ReviewFeedback
+                  negativeCount={comment.TotalNegativeFeedbackCount}
+                  positiveCount={comment.TotalPositiveFeedbackCount}
+                  isSyndicatedReview={comment.IsSyndicated}
+                  contentId={comment.Id}
+                  contentType="review_comment"
+                />
+              </div>
             </div>
           </div>,
         ]);
