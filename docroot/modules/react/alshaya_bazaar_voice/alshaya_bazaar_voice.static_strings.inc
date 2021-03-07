@@ -90,5 +90,9 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'valid_email_error',
       'value' => t('The email address %mail is not valid.'),
     ],
+    [
+      'key' => 'commentbox_length_error',
+      'value' => t('Comment text should be minimum 100 characters.'),
+    ],
   ];
 }
