@@ -29,6 +29,11 @@
         width: 50%;
         text-align: $right;
 
+        html[lang=ar] & {
+          text-align: right;
+          transform: rotate(180deg);
+        }
+
         @include breakpoint($only-mobile) {
           width: 100%;
           text-align: $left;
@@ -45,6 +50,12 @@
       .star-counter {
         margin-bottom: 1.25rem;
         margin-top: 0.25rem;
+
+        html[lang=ar] & {
+          margin-bottom: 1rem;
+          margin-top: 1rem;
+          transform: rotate(180deg);
+        }
 
         label {
           &:first-of-type {
