@@ -58,6 +58,7 @@
       float: $left;
       width: 48%;
       margin-bottom: 3.5rem;
+      min-height: 2.5rem;
 
       @include breakpoint($only-mobile) {
         width: 100%;
