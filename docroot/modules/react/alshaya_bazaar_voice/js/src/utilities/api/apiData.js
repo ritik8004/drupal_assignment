@@ -19,12 +19,8 @@ function getLocale() {
   return `&locale=${bazaarVoiceSettings.reviews.bazaar_voice.locale}`;
 }
 
-function getContentLocale() {
-  return `&contentlocale=${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}`;
-}
-
 export function fetchAPIData(apiUri, params) {
-  const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${getContentLocale()}${params}`;
+  const url = `${getBvUrl() + apiUri}?${getApiVersion()}${getPassKey()}${getLocale()}${params}`;
 
   return Axios.get(url)
     .then((response) => {

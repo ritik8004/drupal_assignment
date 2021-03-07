@@ -12,7 +12,7 @@ export const validEmailRegex = RegExp(
 );
 
 /**
- * Prepare review data from form value.
+ * Prepare request data to be sent in review submit api.
  *
  * @param {*} elements
  * @param {*} fieldsConfig
@@ -22,7 +22,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
-    // Add input field data in request.
+    // Add input data from field types.
     try {
       if (elements[id].value !== null) {
         params += `&${id}=${elements[id].value}`;
@@ -33,35 +33,34 @@ export const prepareRequest = (elements, fieldsConfig) => {
       }
     } catch (e) { return null; }
 
-    // Add photo type data in request
-    if (field['#group_type'] === 'photo'
-      && elements.photoCount.value > 0) {
-      [...Array(5)].map((val, i) => {
-        try {
-          const photoId = `photourl_${(i + 1)}`;
-          params += `&${photoId}=${elements[photoId].value}`;
-        } catch (e) { return null; }
-        return val;
-      });
-    }
     return field;
   });
 
+  // Add photo urls uploaded from photo upload.
+  if (elements.photoCount.value > 0) {
+    const count = Number(elements.photoCount.value);
+    [...Array(count)].map((key, index) => {
+      const photoId = `photourl_${(index + 1)}`;
+      params += `&${photoId}=${elements[photoId].value}`;
+
+      return key;
+    });
+  }
+  // Set callback url for BV auntheticated user.
   if (getCurrentUserEmail() === null) {
-    // Set callback url for BV auntheticated user.
     params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
+  // Set user authenticated string (UAS).
   if (getCurrentUserEmail() !== null && getSessionCookie() !== undefined) {
-    // Set UAS token in user param.
     params += `&user=${getSessionCookie()}`;
   }
   // Set product id
   params += `&productid=${bazaarVoiceSettings.productid}`;
-  // Add device finger printing string in params.
+  // Add device finger printing string.
   if (elements.blackBox.value !== '') {
     params += `&fp=${elements.blackBox.value}`;
   }
-  // Terms and conditions must be agreed.
+  // Add tnc status and it must be true only.
   params += `&agreedtotermsandconditions=${true}`;
   // Set action type.
   params += '&action=submit';
