@@ -49,18 +49,20 @@ export default class BvAuthConfirmation extends React.Component {
 
     return (
       <Popup open={isModelOpen}>
-        <div className="modal">
-          <a className="close" onClick={this.closeModal}>
-            &times;
-          </a>
+        <div className="write-review-form">
+          <div className="title-block">
+            <a className="close-modal" onClick={this.closeModal} />
+            <div className="review-success-msg">
+              <BazaarVoiceMessages />
+            </div>
+          </div>
           {isUserVerified === true
             && (
               <div className="auth-confirmation-message">
                 <h1>{Drupal.t('Thank you for your contribution.')}</h1>
-                <div>{Drupal.t('We have verified your submission. If the content is approved it will be published within 72 hours.')}</div>
+                <div className="submission-msg">{Drupal.t('We have verified your submission. If the content is approved it will be published within 72 hours.')}</div>
               </div>
             )}
-          <BazaarVoiceMessages />
         </div>
       </Popup>
     );
