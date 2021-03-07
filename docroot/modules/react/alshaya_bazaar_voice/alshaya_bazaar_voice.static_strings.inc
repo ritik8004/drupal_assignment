@@ -92,7 +92,7 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'commentbox_length_error',
-      'value' => t('Comment text should be minimum 100 characters.'),
+      'value' => t('Comment text should be minimum %minLength characters.'),
     ],
   ];
 }

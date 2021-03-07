@@ -4,7 +4,7 @@ import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages
 import ReviewCommentSubmission from '../review-comment-submission';
 import { getCurrentUserEmail } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
-import { processCustomerDetails } from '../../../utilities/validate';
+import { processFormDetails } from '../../../utilities/validate';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -112,7 +112,7 @@ class ReviewCommentForm extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    const isError = await processCustomerDetails(e);
+    const isError = await processFormDetails(e);
     if (!isError) {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;

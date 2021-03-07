@@ -1,10 +1,11 @@
 import getStringMessage from '../../../../js/utilities/strings';
 import { validEmailRegex } from './write_review_util';
+import { getbazaarVoiceSettings } from './api/request';
 
 /**
- * Validates the customer details.
+ * Validates the form details.
  */
-export const processCustomerDetails = async (e) => {
+export const processFormDetails = async (e) => {
   // Flag to determine if there is any error.
   let isError = false;
 
@@ -37,10 +38,12 @@ export const processCustomerDetails = async (e) => {
   }
 
   const targetElementCommentbox = e.target.elements.commentbox;
+  const bazaarVoiceSettings = getbazaarVoiceSettings();
+  const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_form_commentbox_length;
   if (targetElementCommentbox !== undefined
-    && targetElementCommentbox.value.toString().length < 100) {
+    && targetElementCommentbox.value.toString().length < commentMinLength) {
     document.getElementById(`${targetElementCommentbox.id}`).classList.add('error');
-    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('commentbox_length_error');
+    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('commentbox_length_error', { '%minLength': commentMinLength });
     document.getElementById(`${targetElementCommentbox.id}-error`).classList.add('error');
     isError = true;
   }
@@ -48,5 +51,5 @@ export const processCustomerDetails = async (e) => {
 };
 
 export default {
-  processCustomerDetails,
+  processFormDetails,
 };
