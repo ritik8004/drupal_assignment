@@ -22,7 +22,6 @@ export const processFormDetails = async (e) => {
     } else {
       document.getElementById(`${element.id}-error`).innerHTML = '';
       document.getElementById(`${element.id}-error`).classList.remove('error');
-      document.getElementById(`${element.id}`).classList.add('error');
     }
   });
 

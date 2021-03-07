@@ -124,6 +124,14 @@ class ReviewCommentForm extends React.Component {
         && result.data !== undefined
         && result.data.error === undefined) {
             const response = result.data;
+            if (result.status !== 200
+              || (response.HasErrors
+              && response.FormErrors !== null)) {
+              this.setState({
+                showCommentSubmission: false,
+              });
+              return;
+            }
             if (response.SubmissionId !== null) {
               this.setState({
                 submissionTime: response.Comment.SubmissionTime,
