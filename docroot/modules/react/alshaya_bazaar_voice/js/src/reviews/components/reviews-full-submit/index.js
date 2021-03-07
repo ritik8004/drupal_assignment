@@ -26,7 +26,7 @@ export default class WriteReviewButton extends React.Component {
       isModelOpen: false,
     });
 
-    if (e.detail.HasErrors !== undefined) {
+    if (!e.detail.HasErrors) {
       smoothScrollTo(e, '#post-review-message');
     }
   };
