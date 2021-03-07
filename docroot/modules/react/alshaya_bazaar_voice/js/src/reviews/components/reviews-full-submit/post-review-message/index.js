@@ -15,8 +15,9 @@ const PostReviewMessage = ({
         ? (
           <div className="review-recommendation">
             <span className="review-recommendation-icon" />
+            <span>{`${Drupal.t('yes')},`}</span>
             <span className="review-recommendation-text">
-              {Drupal.t('Yes, I would like to recommend this product.')}
+              {Drupal.t('I would like to recommend this product.')}
             </span>
           </div>
         )
