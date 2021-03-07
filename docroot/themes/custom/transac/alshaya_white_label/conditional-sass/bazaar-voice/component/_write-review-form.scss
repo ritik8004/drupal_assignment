@@ -17,15 +17,11 @@
   cursor: auto;
 
   @include breakpoint($only-mobile) {
-    padding: 2.875rem 1rem 0;
+    padding: 2rem 0;
   }
 
   .exception-error {
     width: 100%;
-
-    .error-group-label {
-      color: $rr-review-comment-error;
-    }
 
     .exception-field-error-list {
       border: 1px solid $primary_input_border;
@@ -40,6 +36,28 @@
         &:last-child {
           margin-bottom: 0;
         }
+      }
+    }
+  }
+
+  .review-success-msg {
+    @include breakpoint($only-mobile) {
+      height: 100vh;
+      overflow: auto;
+    }
+
+    .exception-field-error-list {
+      border: 0;
+      color: $rr-review-success-msg-txt;
+      list-style: none;
+      font-size: 1.75rem;
+      margin: 0;
+      padding: 0;
+      margin-bottom: 0.75rem;
+
+      @include breakpoint($only-mobile) {
+        height: 100vh;
+        overflow: auto;
       }
     }
   }
@@ -65,6 +83,20 @@
       @include breakpoint($only-mobile) {
         z-index: 3;
         position: fixed;
+      }
+    }
+
+    .auth-confirmation-message {
+      margin-bottom: 0.75rem;
+
+      h1 {
+        margin: 0;
+        margin-bottom: 0.75rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        height: 100vh;
+        overflow: auto;
       }
     }
 
@@ -116,5 +148,15 @@
         }
       }
     }
+  }
+}
+
+.popup-content {
+  @include breakpoint($only-mobile) {
+    width: 100% !important;
+  }
+
+  @include breakpoint($only-tablet) {
+    width: 80% !important;
   }
 }
