@@ -4,6 +4,7 @@ namespace Drupal\alshaya_master\Commands;
 
 use Drupal\Core\Config\CachedStorage;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleExtensionList;
@@ -12,8 +13,11 @@ use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\Locale;
+use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -89,6 +93,13 @@ class AlshayaMasterCommands extends DrushCommands {
   private $moduleExtensionList;
 
   /**
+   * Date Formatter.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatter
+   */
+  private $dateFormatter;
+
+  /**
    * AlshayaMasterCommands constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -109,6 +120,8 @@ class AlshayaMasterCommands extends DrushCommands {
    *   Entity type manager.
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
    *   Module Extension List Manager.
+   * @param \Drupal\Core\Datetime\DateFormatter $date_formatter
+   *   Date Formatter.
    */
   public function __construct(StateInterface $state,
                               ConfigFactoryInterface $configFactory,
@@ -118,7 +131,8 @@ class AlshayaMasterCommands extends DrushCommands {
                               LanguageManagerInterface $languageManager,
                               QueryFactory $queryFactory,
                               EntityTypeManagerInterface $entityTypeManager,
-                              ModuleExtensionList $module_extension_list) {
+                              ModuleExtensionList $module_extension_list,
+                              DateFormatter $date_formatter) {
     $this->state = $state;
     $this->configFactory = $configFactory;
     $this->moduleInstaller = $moduleInstaller;
@@ -128,6 +142,7 @@ class AlshayaMasterCommands extends DrushCommands {
     $this->queryFactory = $queryFactory;
     $this->entityTypeManager = $entityTypeManager;
     $this->moduleExtensionList = $module_extension_list;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -347,6 +362,50 @@ class AlshayaMasterCommands extends DrushCommands {
       $this->state->set('system.maintenance_mode', FALSE);
 
       $this->logger()->warning('Disabled maintenance mode via alshaya-disable-maintenance command');
+    }
+  }
+
+  /**
+   * Create QA accounts.
+   *
+   * @command alshaya_master:create-qa-accounts
+   *
+   * @aliases alshaya-create-qa-accounts
+   */
+  public function createQaAccounts() {
+    if (alshaya_is_env_prod()) {
+      return;
+    }
+
+    $date = $this->dateFormatter->format(
+      time(),
+      'custom',
+      DateTimeItemInterface::DATETIME_STORAGE_FORMAT,
+      DATETIME_STORAGE_TIMEZONE
+    );
+
+    $qa_users = @file_get_contents(Settings::get('server_home_dir') . '/qa_accounts.txt');
+    foreach (explode(PHP_EOL, $qa_users ?? '') as $qa_user) {
+      if (empty($qa_user)) {
+        continue;
+      }
+
+      $admin_user = user_load_by_mail($qa_user);
+      if (!($admin_user instanceof UserInterface)) {
+        // Create default administrator user.
+        $admin_user = User::create();
+        $admin_user->enforceIsNew();
+        $admin_user->setUsername(explode('@', $qa_user)[0]);
+        $admin_user->setEmail($qa_user);
+        $admin_user->addRole('administrator');
+      }
+
+      // Set expiration to not-expired.
+      $admin_user->set('field_last_password_reset', $date);
+      $admin_user->set('field_password_expiration', '0');
+      $admin_user->setPassword(user_password());
+      $admin_user->activate();
+      $admin_user->save();
     }
   }
 
