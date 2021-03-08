@@ -1342,12 +1342,8 @@ function _alshaya_hm_get_metatag_translations() {
       'ar' => ' اختار من أحدث تشكيلة [term:name] لعام [current-date:html_year] التي تشمل أجدد الإصدارات والتصاميم بأسعار مميزة.',
     ],
     'alshaya_seo_desc_free_delivery_n_cod' => [
-      'en' => 'Enjoy ✓ Free Returns and ✓ Cash on Delivery!',
-      'ar' => 'ستمتع بمزايا ✓  الاسترجاع المجاني ✓  الدفع عند الاستلام!',
-    ],
-    'alshaya_seo_l2_desc_free_delivery_n_cod' => [
-      'en' => 'Special ✓ Free Returns and ✓ Cash on Delivery!',
-      'ar' => 'استمتع بمزايا ✓ الاسترجاع المجاني ✓ الدفع عند الاستلام!',
+      'en' => '✓ Amazing Offer ✓ Hassle-free Returns ✓ Fast Shipping!',
+      'ar' => '✓ عرض مذهل ✓ مرتجعات خالية من المتاعب ✓ شحن سريع!',
     ],
     'alshaya_seo_page_title' => [
       'en' => ' Shop [term:name] Fashion Collection Online | [site:name]',

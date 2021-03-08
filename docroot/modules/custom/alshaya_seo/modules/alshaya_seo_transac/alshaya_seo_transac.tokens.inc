@@ -138,10 +138,6 @@ function alshaya_seo_transac_token_info() {
     'name' => t('Level 3 Text before COD.'),
   ];
 
-  $info['tokens']['alshaya_seo']['l2_desc_free_delivery_n_cod'] = [
-    'name' => t('Level 2 Description free delivery and COD.'),
-  ];
-
   $info['tokens']['alshaya_seo']['l2_desc_start'] = [
     'name' => t('Level 2 start text in description.'),
   ];
@@ -441,16 +437,6 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
 
         case 'desc_free_delivery_n_cod':
           $value = (string) t('alshaya_seo_desc_free_delivery_n_cod');
-          // Check for category level 2.
-          if ($term_depth == 2) {
-            $value = (string) t('alshaya_seo_l2_desc_free_delivery_n_cod');
-            // If token value doesn't return saved data then assign
-            // to original value i.e alshaya_seo_l2_desc_free_delivery_n_cod.
-            if ($value == 'alshaya_seo_l2_desc_free_delivery_n_cod') {
-              $value = (string) t('alshaya_seo_desc_free_delivery_n_cod');
-            }
-          }
-
           $replacements[$original] = $value == 'alshaya_seo_desc_free_delivery_n_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
           break;
 
