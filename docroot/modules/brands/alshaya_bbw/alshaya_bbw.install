@@ -8,28 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * [5.18.0] Update the metatag translations.
- */
-function alshaya_bbw_update_8107() {
-  $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
-  $category_config->set('tags.title', '[alshaya_seo:page_title]');
-  $category_config->set('tags.description', '[alshaya_seo:desc_start] [alshaya_seo:text_before_cod] [alshaya_seo:desc_free_delivery_n_cod]');
-  $category_config->save();
-  // Add ar translation for config.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'metatag.metatag_defaults.taxonomy_term__acq_product_category');
-  $tags = [
-    'title' => '[alshaya_seo:page_title]',
-    'description' => '[alshaya_seo:desc_start] [alshaya_seo:text_before_cod] [alshaya_seo:desc_free_delivery_n_cod]',
-  ];
-  $config->set('tags', $tags);
-  $config->save();
-
-  _alshaya_bbw_updated_metatag_translations();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Change the options list page settings data structure for attribute details.
  */
 function alshaya_bbw_update_8106() {
@@ -177,42 +155,4 @@ function alshaya_bbw_update_dependencies() {
       ],
     ],
   ];
-}
-
-/**
- * Get updated translations for bbw metatag.
- */
-function _alshaya_bbw_updated_metatag_translations() {
-  $updated_strings = [
-    'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:name] Body Online, Shop [term:name] Online, Shop [term:name] Products in [alshaya_seo:country], Shop [term:name] Collection, Shop [term:name] Products in [alshaya_seo:city1], Shop [term:name] Products in [alshaya_seo:city2]',
-      'ar' => 'تسوق [term:name] اونلاين، تسوق منتجات [term:name] اونلاين، تسوق منتجات [term:name] في [alshaya_seo:country]، تسوق مجموعة [term:name]، تسوق منتجات [term:name] في [alshaya_seo:city1]، تسوق منتجات [term:name] في [alshaya_seo:city2] ',
-    ],
-    'alshaya_seo_text_before_cod' => [
-      'en' => 'Compare 2021 [term:name] collections at the best prices of [alshaya_seo:sub_categories] and more.',
-      'ar' => 'قارن بين تشكيلات 2021 في [term:name] وأفضل أسعار [alshaya_seo:sub_categories]، وأكثر.',
-    ],
-    'alshaya_seo_l2_text_before_cod' => [
-      'en' => 'Choose from a wide range of [term:name] products of [alshaya_seo:sub_categories] and more.',
-      'ar' => 'اختر من مجموعة كبيرة من منتجات [term:name] في [alshaya_seo:sub_categories] وأكث.',
-    ],
-    'alshaya_seo_l3_text_before_cod' => [
-      'en' => 'Compare 2021 [term:name] collections at the best prices of [alshaya_seo:sub_categories] and more.',
-      'ar' => 'قارن بين تشكيلات 2021 في [term:name] وأفضل أسعار [alshaya_seo:sub_categories]، وأكثر.',
-    ],
-    'alshaya_seo_desc_free_delivery_n_cod' => [
-      'en' => 'Enjoy ✓ Free Returns and ✓ Cash on Delivery!',
-      'ar' => 'ستمتع بمزايا ✓  الاسترجاع المجاني ✓  الدفع عند الاستلام!',
-    ],
-    'alshaya_seo_desc_start' => [
-      'en' => 'Shop exclusive [term:name] products online in [alshaya_seo:cities] and whole [alshaya_seo:country].',
-      'ar' => 'تسوق  حصريا منتجات [term:name] اونلاين في [alshaya_seo:cities]، وجميع أنحاء [alshaya_seo:country].',
-    ],
-    'alshaya_seo_page_title' => [
-      'en' => 'Shop [term:name] Products Online | [site:name]',
-      'ar' => 'تسوق مجموعة أزياء [term:name] اتش آند إم | [site:name]',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($updated_strings);  
 }
