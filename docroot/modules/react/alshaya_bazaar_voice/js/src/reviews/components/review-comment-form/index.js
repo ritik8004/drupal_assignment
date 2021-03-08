@@ -139,6 +139,8 @@ class ReviewCommentForm extends React.Component {
                 showCommentForm: false,
               });
             }
+          } else {
+            Drupal.logJavascriptError('comment-submit', result.error);
           }
         });
       }
