@@ -6,4 +6,13 @@
       }
     }
   }
+
+  .review-inline-feedback {
+    .review-feedback-comment,
+    .review-comment-form {
+      button {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
 }
