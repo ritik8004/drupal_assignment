@@ -1,0 +1,20 @@
+.page-my-wishlist {
+  margin-top: 2rem;
+
+  .block-page-title-block {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid $primary_border;
+    margin-bottom: 1.875rem;
+  }
+
+  .wishlist-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13.25rem, 1fr));
+    grid-gap: 2.625rem;
+
+    @include breakpoint($only-mobile) {
+      grid-template-columns: repeat(auto-fill, minmax(10.125rem, 1fr));
+      grid-gap: 2.1875rem;
+    }
+  }
+}

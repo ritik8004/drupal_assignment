@@ -89,6 +89,10 @@ class AlshayaMyWishlistController extends ControllerBase {
         'drupalSettings' => [
           'wishlist' => $settings,
         ],
+        'library' => [
+          'alshaya_white_label/my-wishlist-page',
+          'alshaya_wishlist/my-wishlist',
+        ],
       ],
       '#cache' => [
         'tags' => $cache_tags,
