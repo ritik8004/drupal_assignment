@@ -72,7 +72,7 @@ export default class ReviewSummary extends React.Component {
     }
   }
 
-  getReviews = (options, type, offset = this.getOffsetValue()) => {
+  getReviews = (options, type, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
     const { bazaarVoiceSettings } = this.state;
     // Add sorting parameters.
@@ -127,6 +127,11 @@ export default class ReviewSummary extends React.Component {
         } else {
           removeFullScreenLoader();
           Drupal.logJavascriptError('review-summary', result.error);
+        }
+
+        if (explicitTrigger) {
+          const handlePaginationCompleteEvent = new CustomEvent('handlePaginationComplete', {});
+          document.dispatchEvent(handlePaginationCompleteEvent);
         }
       });
     }
@@ -229,11 +234,11 @@ export default class ReviewSummary extends React.Component {
     const limit = this.getLimitConfigValue(bazaarVoiceSettings);
     this.setState({ offset: offset + limit }, () => {
       if (currentFilterOptions && currentFilterOptions.length > 0) {
-        this.getReviews(currentFilterOptions, 'filter');
+        this.getReviews(currentFilterOptions, 'filter', true);
       } else if (currentSortOption) {
-        this.getReviews(currentSortOption, 'sort');
+        this.getReviews(currentSortOption, 'sort', true);
       } else {
-        this.getReviews();
+        this.getReviews(undefined, undefined, true);
       }
       this.setState((prevState) => ({ currentPage: prevState.currentPage + 1 }), () => {
         const { currentPage, numberOfPages } = this.state;
@@ -252,11 +257,11 @@ export default class ReviewSummary extends React.Component {
     const limit = this.getLimitConfigValue(bazaarVoiceSettings);
     this.setState({ offset: offset - limit }, () => {
       if (currentFilterOptions && currentFilterOptions.length > 0) {
-        this.getReviews(currentFilterOptions, 'filter');
+        this.getReviews(currentFilterOptions, 'filter', true);
       } else if (currentSortOption) {
-        this.getReviews(currentSortOption, 'sort');
+        this.getReviews(currentSortOption, 'sort', true);
       } else {
-        this.getReviews();
+        this.getReviews(undefined, undefined, true);
       }
       this.setState((prevState) => ({ currentPage: prevState.currentPage - 1 }), () => {
         const { currentPage, numberOfPages } = this.state;
