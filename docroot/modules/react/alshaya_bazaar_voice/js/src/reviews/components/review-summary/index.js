@@ -25,6 +25,7 @@ export default class ReviewSummary extends React.Component {
     this.state = {
       reviewsSummary: '',
       reviewsProduct: '',
+      reviewsComment: '',
       currentSortOption: '',
       currentFilterOptions: [],
       noResultmessage: null,
@@ -101,6 +102,7 @@ export default class ReviewSummary extends React.Component {
               this.setState({
                 totalReviews: result.data.TotalResults,
                 reviewsProduct: result.data.Includes.Products,
+                reviewsComment: result.data.Includes.Comments,
                 numberOfPages: Math.ceil(result.data.TotalResults / limit),
               }, () => {
                 const { currentPage, numberOfPages } = this.state;
@@ -112,6 +114,7 @@ export default class ReviewSummary extends React.Component {
               currentTotal: result.data.TotalResults,
               reviewsSummary: result.data.Results,
               reviewsProduct: result.data.Includes.Products,
+              reviewsComment: result.data.Includes.Comments,
               noResultmessage: null,
               numberOfPages: Math.ceil(result.data.TotalResults / limit),
             }, () => {
@@ -287,6 +290,7 @@ export default class ReviewSummary extends React.Component {
     const {
       reviewsSummary,
       reviewsProduct,
+      reviewsComment,
       currentSortOption,
       currentFilterOptions,
       noResultmessage,
@@ -366,6 +370,7 @@ export default class ReviewSummary extends React.Component {
                     />
                     <ReviewDescription
                       reviewDescriptionData={reviewsSummary[item]}
+                      reviewsComment={reviewsComment}
                     />
                   </div>
                 ))}
