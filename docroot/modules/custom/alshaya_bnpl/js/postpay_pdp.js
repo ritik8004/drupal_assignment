@@ -8,6 +8,10 @@
       $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
         setPostpayWidgetAmount(this, variant, event);
       });
+      // This is to set amount on the modal popup (CS/US/Related products)
+      $(window).once().on('dialog:aftercreate', function () {
+        setPostpayWidgetAmount($('#drupal-modal .sku-base-form'));
+      });
     }
   };
 
@@ -25,7 +29,7 @@
       }
     }
     else {
-      variant = $('.selected-variant-sku').val();
+      variant = $('.selected-variant-sku', element).val();
     }
 
     var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
