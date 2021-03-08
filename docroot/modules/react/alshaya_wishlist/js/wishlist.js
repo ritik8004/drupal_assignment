@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WishlistButton from './components/wishlist-button';
+import WishlistProductList from './components/wishlist-product-list';
 
 ReactDOM.render(
-  <WishlistButton />,
-  document.querySelector('#alshaya-wishlist'),
+  <WishlistProductList />,
+  document.getElementById('my-wishlist'),
 );

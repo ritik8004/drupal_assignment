@@ -464,3 +464,8 @@ advanced-page:
   css:
     theme:
       css/conditional-sass/advanced-page/advanced-page.ltr.css: {}
+
+my-wishlist-page:
+  css:
+    theme:
+      css/conditional-sass/my-wishlist-page/my-wishlist-page.ltr.css: {}
