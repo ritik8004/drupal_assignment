@@ -38,7 +38,7 @@ export const processFormDetails = async (e) => {
 
   const targetElementCommentbox = e.target.elements.commentbox;
   const bazaarVoiceSettings = getbazaarVoiceSettings();
-  const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_form_commentbox_length;
+  const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length;
   if (targetElementCommentbox !== undefined
     && targetElementCommentbox.value.toString().length < commentMinLength) {
     document.getElementById(`${targetElementCommentbox.id}`).classList.add('error');

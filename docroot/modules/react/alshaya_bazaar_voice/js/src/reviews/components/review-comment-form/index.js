@@ -48,7 +48,7 @@ class ReviewCommentForm extends React.Component {
                 name="commentbox"
                 onChange={this.handleCommentboxChange}
                 className="form-input focus"
-                value={commentbox || ''}
+                defaultValue={commentbox}
               />
               <div className="c-input__bar" />
               <label className="comment-form-commentbox-label form-label">{Drupal.t('Comment')}</label>
@@ -63,7 +63,7 @@ class ReviewCommentForm extends React.Component {
                   name="nickname"
                   onChange={this.handleNicknameChange}
                   className="form-input focus"
-                  value={nickname || ''}
+                  defaultValue={nickname}
                 />
                 <div className="c-input__bar" />
                 <label className="comment-form-nickname form-label">{Drupal.t('Screen name')}</label>
@@ -77,7 +77,7 @@ class ReviewCommentForm extends React.Component {
                   name="email"
                   onChange={this.handleEmailChange}
                   className="form-input focus"
-                  value={email || ''}
+                  defaultValue={email}
                 />
                 <div className="c-input__bar" />
                 <label className="comment-form-email form-label">{Drupal.t('Email Address')}</label>
