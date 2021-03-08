@@ -118,6 +118,14 @@
     width: 40%;
     float: $left;
   }
+
+  @include breakpoint($only-mobile) {
+    border-bottom: 1px solid $accordion_border;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0;
+  }
 }
 
 .alshaya-newsletter-subscribe {
@@ -187,16 +195,6 @@
     .ladda-spinner {
       top: 1.25rem;
     }
-  }
-}
-
-.c-footer-menu--help {
-  @include breakpoint($only-mobile) {
-    border-bottom: 1px solid $accordion_border;
-  }
-
-  @include breakpoint($only-tablet) {
-    margin-top: 0;
   }
 }
 

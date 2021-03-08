@@ -24,6 +24,78 @@
         margin-bottom: 0.5rem;
       }
     }
+
+    .bef-exposed-form {
+      position: relative;
+    }
+
+    .block-views-exposed-filter-blockalshaya-product-list-block-1,
+    .block-views-exposed-filter-blockalshaya-product-list-block-2 {
+      @include breakpoint($only-mobile) {
+        padding-top: 0.5rem;
+      }
+    }
+
+    .c-page-title__description {
+      @include breakpoint($tablet) {
+        width: auto;
+        max-width: none;
+      }
+    }
+
+    .view-header {
+      &.search-count {
+        padding-bottom: 1rem;
+
+        @include breakpoint($tablet) {
+          margin-top: 1.5625rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-top: 0.3125rem;
+          padding-top: 0.1875rem;
+          padding-bottom: 0.5rem;
+        }
+      }
+    }
+
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      ul {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      ul li {
+        margin-bottom: 0.75rem;
+        padding-bottom: 0;
+        border: 1px solid $plp_facet_clear_border;
+
+        &:hover {
+          opacity: 0.75;
+        }
+
+        &.clear-all {
+          padding: 0;
+          text-transform: uppercase;
+          font-family: $vs-bold;
+          border: none;
+
+          a {
+            display: block;
+          }
+        }
+
+        a {
+          span {
+            &.facet-item__value {
+              text-transform: none;
+            }
+          }
+        }
+      }
+    }
   }
 
   .c-products__item {
@@ -171,80 +243,6 @@
     }
   }
 
-  .region__content {
-    .bef-exposed-form {
-      position: relative;
-    }
-
-    .block-views-exposed-filter-blockalshaya-product-list-block-1,
-    .block-views-exposed-filter-blockalshaya-product-list-block-2 {
-      @include breakpoint($only-mobile) {
-        padding-top: 0.5rem;
-      }
-    }
-
-    .c-page-title__description {
-      @include breakpoint($tablet) {
-        width: auto;
-        max-width: none;
-      }
-    }
-
-    .view-header {
-      &.search-count {
-        padding-bottom: 1rem;
-
-        @include breakpoint($tablet) {
-          margin-top: 1.5625rem;
-        }
-
-        @include breakpoint($only-mobile) {
-          margin-top: 0.3125rem;
-          padding-top: 0.1875rem;
-          padding-bottom: 0.5rem;
-        }
-      }
-    }
-
-    .block-facets-summary-blockfilter-bar-promotions,
-    .block-facets-summary-blockfilter-bar-plp,
-    .block-facets-summary-blockfilter-bar {
-      ul {
-        border-bottom: none;
-        margin-bottom: 0;
-      }
-
-      ul li {
-        margin-bottom: 0.75rem;
-        padding-bottom: 0;
-        border: 1px solid $plp_facet_clear_border;
-
-        &:hover {
-          opacity: 0.75;
-        }
-
-        &.clear-all {
-          padding: 0;
-          text-transform: uppercase;
-          font-family: $vs-bold;
-          border: none;
-
-          a {
-            display: block;
-          }
-        }
-
-        a {
-          span {
-            &.facet-item__value {
-              text-transform: none;
-            }
-          }
-        }
-      }
-    }
-  }
-
   .term-description-mobile-only {
     display: none;
   }
@@ -255,6 +253,24 @@
       input[type=checkbox] ~ label::before {
         @include breakpoint($only-mobile) {
           top: 0;
+        }
+      }
+    }
+  }
+
+  ul {
+    &.js-pager__items {
+      margin-top: 3rem;
+
+      a {
+        font-size: 0.875rem;
+        line-height: 1.29;
+        text-transform: uppercase;
+        padding: 0.62625rem 3.9375rem;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          width: 100%;
         }
       }
     }
@@ -290,26 +306,6 @@
       @include breakpoint($tablet) {
         font-size: 2rem;
         #{$right}: 0;
-      }
-    }
-  }
-}
-
-.c-plp {
-  ul {
-    &.js-pager__items {
-      margin-top: 3rem;
-
-      a {
-        font-size: 0.875rem;
-        line-height: 1.29;
-        text-transform: uppercase;
-        padding: 0.62625rem 3.9375rem;
-
-        @include breakpoint($only-mobile) {
-          display: block;
-          width: 100%;
-        }
       }
     }
   }

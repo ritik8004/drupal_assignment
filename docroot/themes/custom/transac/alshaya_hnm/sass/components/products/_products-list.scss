@@ -354,27 +354,7 @@
       }
     }
   }
-}
 
-.c-content__highlighted {
-  .promo-banner {
-    img {
-      @include breakpoint($only-mobile) {
-        margin-bottom: 0.75rem;
-      }
-    }
-  }
-}
-
-.region__sidebar-first {
-  > .block-facets-summary-blockfilter-bar-plp {
-    @include breakpoint($only-mobile) {
-      width: 100%;
-    }
-  }
-}
-
-.c-plp {
   .facet-item {
     input[type=checkbox] ~ label {
       &::before {
@@ -394,6 +374,24 @@
       @include breakpoint($only-mobile) {
         display: none;
       }
+    }
+  }
+}
+
+.c-content__highlighted {
+  .promo-banner {
+    img {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.75rem;
+      }
+    }
+  }
+}
+
+.region__sidebar-first {
+  > .block-facets-summary-blockfilter-bar-plp {
+    @include breakpoint($only-mobile) {
+      width: 100%;
     }
   }
 }

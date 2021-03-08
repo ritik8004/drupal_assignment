@@ -208,6 +208,10 @@
           margin-top: 1.45rem;
           margin-bottom: 0;
           padding-bottom: 1.25rem;
+
+          @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
+            #{$right}: 1rem;
+          }
         }
 
         .form-select {
@@ -419,18 +423,6 @@
       select.form-select {
         @include breakpoint($only-mobile) {
           height: 3.1875rem;
-        }
-      }
-    }
-  }
-}
-
-.field--name-field-skus {
-  .sku-base-form {
-    .configurable-select {
-      @include breakpoint($only-mobile) {
-        @include facet-arrow(after, down, 0.3125rem, 0, 0.3125rem, 0.375rem) {
-          #{$right}: 1rem;
         }
       }
     }
