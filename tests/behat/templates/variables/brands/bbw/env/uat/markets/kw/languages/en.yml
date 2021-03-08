@@ -50,7 +50,7 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
-  city_option: ''
+  city_option: 'Ahmadi'
   street: 'Street A'
   building: 'Building B'
   locality: 'Block N'
@@ -96,7 +96,7 @@ variables:
   billing_text: 'Billing address:'
   language_add_to_cart_link: 'اضف إلى حقيبة التسوق'
   add_to_cart_link: 'add to bag'
-  governorate: 'Kuwait City'
+  governorate: 'Ahmadi'
   spc_search_keyword: 'fragrance'
   filter_1: 'attr_collection_1'
   filter_2: 'attr_fragrance_name'
