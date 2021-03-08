@@ -44,7 +44,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -67,7 +67,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
-    Then I should see "{anon_email}"
+    Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
@@ -129,7 +129,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -183,7 +183,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish

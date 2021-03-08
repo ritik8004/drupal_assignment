@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect
+@javascript @KNET @KNetPayment @clickCollect @bbwkwuat
 Feature: SPC Checkout Click and Collect using KNET payment method
 
   Background:
@@ -48,7 +48,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi_knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait for AJAX to finish
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
@@ -121,7 +121,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi_knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait for AJAX to finish
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
@@ -197,7 +197,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait for AJAX to finish
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
@@ -270,7 +270,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi_knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait for AJAX to finish
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element

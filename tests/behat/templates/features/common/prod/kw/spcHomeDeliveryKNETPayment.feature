@@ -1,4 +1,4 @@
-@javascript @KNetPayment @homeDelivery @auth @hmkwprod @mckwprod @bbwkwprod @flkwprod @pbkwprod
+@javascript @KNetPayment @homeDelivery @auth @hmkwprod @mckwprod @bbwkwpprod @flkwprod @pbkwprod
 Feature: SPC Checkout Home Delivery CC
 
   Background:
@@ -50,7 +50,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
@@ -100,7 +100,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
@@ -148,6 +148,6 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
     And I wait 10 seconds
     And the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
