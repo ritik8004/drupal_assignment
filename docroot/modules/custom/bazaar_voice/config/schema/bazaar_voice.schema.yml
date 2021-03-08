@@ -56,3 +56,6 @@ bazaar_voice.settings:
     comment_form_commentbox_length:
       type: integer
       label: 'Minimum character length for comment box text in comment form.'
+    bv_content_types:
+      type: string
+      label: 'List of content types of BV associated with reviews API.'
