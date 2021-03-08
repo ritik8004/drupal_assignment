@@ -8,10 +8,6 @@
       $('.sku-base-form').once('postpay-pdp').on('variant-selected magazinev2-variant-selected', function (event, variant, code) {
         setPostpayWidgetAmount(this, variant, event);
       });
-      // This is to set amount on the modal popup (CS/US/Related products)
-      $(window).once().on('dialog:aftercreate', function () {
-        setPostpayWidgetAmount($('#drupal-modal .sku-base-form'));
-      });
     }
   };
 
@@ -36,7 +32,7 @@
 
     // No need to add a condition to check if the amount is changed, Postpay
     // takes care of that.
-    $('.postpay-widget').attr('data-amount', (variantInfo['gtm_price'].replace(',', '') * drupalSettings.postpay.currency_multiplier).toFixed(0));
+    $('.postpay-widget', product).attr('data-amount', (variantInfo['gtm_price'].replace(',', '') * drupalSettings.postpay.currency_multiplier).toFixed(0));
     postpay.ui.refresh();
   }
 })(jQuery, Drupal);
