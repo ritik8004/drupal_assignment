@@ -13,12 +13,6 @@ use Drupal\Core\Site\Settings;
  * [5.18.0] Update the metatag translations.
  */
 function alshaya_mc_update_8320() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['metatag.metatag_defaults.taxonomy_term__acq_product_category'],
-    'alshaya_seo_transac'
-  );
-
   $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
   $category_config->set('tags.title', '[alshaya_seo:page_title]')->save();
   // Add ar translation for config.
@@ -29,7 +23,7 @@ function alshaya_mc_update_8320() {
   $config->set('tags', $tags);
   $config->save();
 
-  _alshaya_mc_updated_metatag_translations();
+  _alshaya_mc_get_metatag_translations();
 }
 
 /**
@@ -463,20 +457,6 @@ function _alshaya_mc_get_metatag_translations() {
       'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
     ],
     'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:name] Collection Online, Shop Newborn [term:name], Shop [term:name] for [term:parent:name], Shop [term:parent:name] [term:name], Shop [term:name] in [alshaya_seo:country], Buy [alshaya_seo:brand_name] [term:name] online, [alshaya_seo:term_cities]',
-      'ar' => 'تسوق تشكيلة [term:name] اون لاين, تسوق [term:name] [term:parent:name] من [alshaya_seo:brand_name], اشتري [term:name] من [alshaya_seo:brand_name], اشتري [term:name] [term:parent:name] من [alshaya_seo:brand_name], [alshaya_seo:term_cities], تسوق [term:name] اون لاين في [alshaya_seo:country]',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Get updated translations for mc metatag.
- */
-function _alshaya_mc_updated_metatag_translations() {
-  $updated_strings = [
-    'alshaya_seo_keywords' => [
       'en' => 'Shop [term:name] Collection Online, Shop [term:name], Shop best [term:name] products,Shop [term:name] in [alshaya_seo:country], Buy [alshaya_seo:brand_name] [term:name] online, [alshaya_seo:term_cities]',
       'ar' => 'تسوق مجموعة [term:name] أونلاين، تسوق [term:name]، تسوق أفضل منتجات [term:name]، تسوق [term:name] في [alshaya_seo:country]، اشتري [alshaya_seo:brand_name] [term:name] أونلاين، تسوق [alshaya_seo:term_cities]',
     ],
@@ -502,5 +482,5 @@ function _alshaya_mc_updated_metatag_translations() {
     ],
   ];
 
-  alshaya_i18n_save_translations($updated_strings);  
+  alshaya_i18n_save_translations($strings);
 }
