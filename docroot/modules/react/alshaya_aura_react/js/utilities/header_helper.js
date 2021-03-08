@@ -23,7 +23,6 @@ function getCustomerDetails(tier, loyaltyStatus) {
         stateValues = {
           loyaltyStatus: userLoyaltyStatus,
           tier: result.data.tier || tier,
-          tierName: result.data.tierName || tier,
           points: result.data.auraPoints || 0,
           cardNumber: result.data.cardNumber || '',
           expiringPoints: result.data.auraPointsToExpire || 0,

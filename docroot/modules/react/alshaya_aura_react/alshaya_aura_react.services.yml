@@ -14,6 +14,7 @@ services:
       - '@logger.factory'
       - '@cache.aura_api_config'
       - '@mobile_number.util'
+      - '@language_manager'
   cache.aura_api_config:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:

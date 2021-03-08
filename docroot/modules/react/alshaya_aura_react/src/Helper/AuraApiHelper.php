@@ -9,6 +9,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\alshaya_aura_react\Constants\AuraDictionaryApiConstants;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Helper class for Aura APIs.
@@ -46,6 +47,13 @@ class AuraApiHelper {
   protected $mobileUtil;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AuraApiHelper constructor.
    *
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
@@ -56,17 +64,21 @@ class AuraApiHelper {
    *   Cache backend service for aura_api_config.
    * @param \Drupal\mobile_number\MobileNumberUtilInterface $mobile_util
    *   Mobile utility.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(
     AlshayaApiWrapper $api_wrapper,
     LoggerChannelFactoryInterface $logger_factory,
     CacheBackendInterface $cache,
-    MobileNumberUtilInterface $mobile_util
+    MobileNumberUtilInterface $mobile_util,
+    LanguageManagerInterface $language_manager
   ) {
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('alshaya_aura_react');
     $this->cache = $cache;
     $this->mobileUtil = $mobile_util;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -93,8 +105,15 @@ class AuraApiHelper {
       return $auraConfigs;
     }
 
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
     foreach ($auraApiConfig as $value) {
-      $cache_key = 'alshaya_aura_react:aura_api_configs:' . $value;
+      // Adding language code in cache key for tier names only
+      // because for rest of the dictionary APIs, response is not
+      // expected to change based on language.
+      $cache_key = $value === AuraDictionaryApiConstants::APC_TIER_TYPES
+        ? 'alshaya_aura_react:aura_api_configs:' . $langcode . ':' . $value
+        : 'alshaya_aura_react:aura_api_configs:' . $value;
 
       if (!$reset && $cache = $this->cache->get($cache_key)) {
         $auraConfigs[$value] = $cache->data;

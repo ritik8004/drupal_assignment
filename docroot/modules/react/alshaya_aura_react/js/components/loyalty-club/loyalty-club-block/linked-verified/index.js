@@ -1,12 +1,12 @@
 import React from 'react';
 import Cleave from 'cleave.js/react';
-import { getUserProfileInfo } from '../../../../utilities/helper';
+import { getUserProfileInfo, getAllAuraTier } from '../../../../utilities/helper';
 import ToolTip from '../../../../../../alshaya_spc/js/utilities/tooltip';
 import { getTooltipPointsOnHoldMsg } from '../../../../../../alshaya_spc/js/aura-loyalty/components/utilities/helper';
 
 const AuraMyAccountVerifiedUser = (props) => {
   const {
-    tierName,
+    tier,
     points,
     cardNumber,
     pointsOnHold,
@@ -40,7 +40,7 @@ const AuraMyAccountVerifiedUser = (props) => {
         <div className="aura-card-linked-verified-description">
           <div className="aura-tier">
             <label>{Drupal.t('Status')}</label>
-            <span className="aura-blend">{ tierName }</span>
+            <span className="aura-blend">{ getAllAuraTier()[tier] }</span>
           </div>
           <div className="aura-points">
             <label>{Drupal.t('Point balance')}</label>

@@ -59,7 +59,7 @@ class MyAccount extends React.Component {
     const {
       wait,
       loyaltyStatus,
-      tierName,
+      tier,
       points,
       cardNumber,
       expiringPoints,
@@ -76,7 +76,7 @@ class MyAccount extends React.Component {
       <LoyaltyClubBlock
         wait={wait}
         loyaltyStatus={loyaltyStatus}
-        tierName={tierName}
+        tier={tier}
         points={points}
         cardNumber={cardNumber}
         expiringPoints={expiringPoints}
