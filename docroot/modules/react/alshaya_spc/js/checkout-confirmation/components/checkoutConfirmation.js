@@ -28,12 +28,13 @@ class CheckoutConfirmation extends React.Component {
     });
 
     try {
+      // Remove the 'shippingaddress-formdata' from localStorage
+      // when we come to the order confirmation page after the order
+      // has been placed.
+      removeStorageInfo('shippingaddress-formdata');
       if (Cookies.get('middleware_order_placed')) {
         removeCartFromStorage();
-        removeStorageInfo('shippingaddress-formdata');
         Cookies.remove('middleware_order_placed');
-      } else if (drupalSettings.order_details.order_number) {
-        removeStorageInfo('shippingaddress-formdata');
       }
     } catch (e) {
       window.location = Drupal.url('cart');
