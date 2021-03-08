@@ -14,6 +14,7 @@ import {
   smoothScrollToAddressField,
   smoothScrollTo,
 } from './smoothScroll';
+import { setStorageInfo } from './storage';
 
 /**
  * Use this to auto scroll to the right field in address form upon
@@ -547,7 +548,8 @@ export const checkoutAddressProcess = (e) => {
         }
 
         const cartData = { cart: cartResult };
-
+        // Store the address in localStorage.
+        setStorageInfo(formData, 'shippingaddress-formdata');
         // Trigger event.
         dispatchCustomEvent('refreshCartOnAddress', cartData);
       });
