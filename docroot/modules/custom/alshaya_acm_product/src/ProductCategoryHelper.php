@@ -317,11 +317,14 @@ class ProductCategoryHelper {
    *   Category level.
    */
   public function getCategoryLevel($tid) {
-    $depth = (int) taxonomy_term_depth_get_by_tid($tid);
-    // Super category status.
-    $super_category_status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
-    if ($super_category_status == TRUE) {
-      $depth = $depth - 1;
+    $depth = 0;
+    if (!empty($tid)) {
+      $depth = (int) taxonomy_term_depth_get_by_tid($tid);
+      // Super category status.
+      $super_category_status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+      if ($super_category_status == TRUE) {
+        $depth = $depth - 1;
+      }
     }
 
     return $depth;

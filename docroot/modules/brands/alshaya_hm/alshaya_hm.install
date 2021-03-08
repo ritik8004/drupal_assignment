@@ -1330,15 +1330,19 @@ function _alshaya_hm_get_metatag_translations() {
       'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for [term:parents:first], [alshaya_seo:brand_name] [term:name] sale for [term:parents:first]',
     ],
     'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:name] Fashion, Shop [term:name] Clothing, Shop [alshaya_seo:brand_name] [term:name], Shop Collection for [alshaya_seo:gender], Shop [term:name] Fashion Products in [alshaya_seo:country], Shop [term:name] Fashion Products in [alshaya_seo:city1], Shop [term:name] Fashion Products in [alshaya_seo:city2]',
+      'en' => 'Shop [term:name] Fashion, Shop [term:name] Clothing, Shop [alshaya_seo:brand_name] [term:name], Shop Collection for [term:parents:first], Shop [term:name] Fashion Products in [alshaya_seo:country], Shop [term:name] Fashion Products in [alshaya_seo:city1], Shop [term:name] Fashion Products in [alshaya_seo:city2]',
       'ar' => 'تسوق أزياء [term:name] ، تسوق ملابس [term:name] من [alshaya_seo:brand_name]، تسوق تشكيلة [term:name]، تسوق منتجات أزياء [term:name] في [alshaya_seo:country]، تسوق منتجات أزياء [term:name] في [alshaya_seo:city1]، تسوق منتجات أزياء [term:name] في [alshaya_seo:city2]',
     ],
     'alshaya_seo_text_before_cod' => [
-      'en' => 'Compare [current-date:html_year] [term:name]fashion collection at the best prices of [alshaya_seo:sub_categories] and more.',
+      'en' => 'Compare [current-date:html_year] [term:name] fashion collection at the best prices of [alshaya_seo:sub_categories] and more.',
       'ar' => 'قارن بين تشكيلات [term:name] لعام [current-date:html_year] وأفضل أسعار [alshaya_seo:sub_categories] و أكثر.',
     ],
     'alshaya_seo_l2_text_before_cod' => [
-      'en' => 'Pick from the updated collection of the latest fashion trends in [term:name] for [alshaya_seo:gender] at the best prices.',
+      'en' => 'Compare [current-date:html_year] [term:name] fashion collection at the best prices of [alshaya_seo:sub_categories] and more.',
+      'ar' => 'قارن بين تشكيلات [term:name] لعام [current-date:html_year] وأفضل أسعار [alshaya_seo:sub_categories] و أكثر.',
+    ],
+    'alshaya_seo_l3_text_before_cod' => [
+      'en' => 'Pick from the updated collection of the latest fashion trends in [term:name] for [term:parents:first] at the best prices.',
       'ar' => ' اختار من أحدث تشكيلة [term:name] لعام [current-date:html_year] التي تشمل أجدد الإصدارات والتصاميم بأسعار مميزة.',
     ],
     'alshaya_seo_desc_free_delivery_n_cod' => [
@@ -1349,17 +1353,17 @@ function _alshaya_hm_get_metatag_translations() {
       'en' => ' Shop [term:name] Fashion Collection Online | [site:name]',
       'ar' => 'تسوق مجموعة أزياء [term:name] اتش آند إم| [site:name]',
     ],
-    'alshaya_seo_l2_page_title' => [
-      'en' => 'Shop [term:name] Collection for [alshaya_seo:gender] Online | [site:name]',
-      'ar' => 'تسوق مجموعة [term:name] [alshaya_seo:gender] اتش | [site:name]',
+    'alshaya_seo_l3_page_title' => [
+      'en' => 'Shop [term:name] Collection for [term:parents:first] Online | [site:name]',
+      'ar' => 'تسوق مجموعة [term:name] [term:parents:first] اتش | [site:name]',
     ],
     'alshaya_seo_desc_start' => [
       'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] fashion products online in [alshaya_seo:term_cities] and whole [alshaya_seo:country].',
       'ar' => 'تسوق حصريا منتجات أزياء [term:name] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:term_cities]، وكل أنحاء [alshaya_seo:country].',
     ],
-    'alshaya_seo_l2_desc_start' => [
-      'en' => 'A large selection of [alshaya_seo:brand_name] [term:name] for [alshaya_seo:gender] online in [alshaya_seo:term_cities] and whole [alshaya_seo:country].',
-      'ar' => 'مجموعة كبيرة من [term:name] [alshaya_seo:gender] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:term_cities]، وكل أنحاء [alshaya_seo:country].',
+    'alshaya_seo_l3_desc_start' => [
+      'en' => 'A large selection of [alshaya_seo:brand_name] [term:name] for [term:parents:first] online in [alshaya_seo:term_cities] and whole [alshaya_seo:country].',
+      'ar' => 'مجموعة كبيرة من [term:name] [term:parents:first] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:term_cities]، وكل أنحاء [alshaya_seo:country].',
     ],
   ];
 

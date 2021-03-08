@@ -126,8 +126,8 @@ function alshaya_seo_transac_token_info() {
     'name' => t('Page title.'),
   ];
 
-  $info['tokens']['alshaya_seo']['l2_page_title'] = [
-    'name' => t('Level 2 Page title.'),
+  $info['tokens']['alshaya_seo']['l3_page_title'] = [
+    'name' => t('Level 3 Page title.'),
   ];
 
   $info['tokens']['alshaya_seo']['l2_text_before_cod'] = [
@@ -138,8 +138,8 @@ function alshaya_seo_transac_token_info() {
     'name' => t('Level 3 Text before COD.'),
   ];
 
-  $info['tokens']['alshaya_seo']['l2_desc_start'] = [
-    'name' => t('Level 2 start text in description.'),
+  $info['tokens']['alshaya_seo']['l3_desc_start'] = [
+    'name' => t('Level 3 start text in description.'),
   ];
 
   return $info;
@@ -391,12 +391,12 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
           }
           else {
             $value = (string) t('alshaya_seo_desc_start');
-            // Check for category level 2.
-            if ($term_depth == 2) {
-              $value = (string) t('alshaya_seo_l2_desc_start');
+            // Check for category level 3.
+            if ($term_depth == 3) {
+              $value = (string) t('alshaya_seo_l3_desc_start');
               // If token value doesn't return saved data
-              // then assign to original value i.e alshaya_seo_l2_desc_start.
-              if ($value == 'alshaya_seo_l2_desc_start') {
+              // then assign to original value i.e alshaya_seo_l3_desc_start.
+              if ($value == 'alshaya_seo_l3_desc_start') {
                 $value = (string) t('alshaya_seo_desc_start');
               }
             }
@@ -463,12 +463,12 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
 
         case 'page_title':
           $value = (string) t('alshaya_seo_page_title');
-          // Check for category level 2.
-          if ($term_depth == 2) {
-            $value = (string) t('alshaya_seo_l2_page_title');
+          // Check for category level 3.
+          if ($term_depth == 3) {
+            $value = (string) t('alshaya_seo_l3_page_title');
             // If token value doesn't return saved data
-            // then assign to original value i.e alshaya_seo_l2_page_title.
-            if ($value == 'alshaya_seo_l2_page_title') {
+            // then assign to original value i.e alshaya_seo_l3_page_title.
+            if ($value == 'alshaya_seo_l3_page_title') {
               $value = (string) t('alshaya_seo_page_title');
             }
           }
