@@ -1,4 +1,4 @@
-alshaya_wishlist:
+my-wishlist:
   js:
     dist/wishlist.bundle.js: {}
   dependencies:
