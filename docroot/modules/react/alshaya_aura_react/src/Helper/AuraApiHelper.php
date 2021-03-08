@@ -87,25 +87,30 @@ class AuraApiHelper {
    * @return array
    *   Return array of config values.
    */
-  public function getAuraApiConfig($configs = [], $reset = FALSE) {
+  public function getAuraApiConfig($configs = [], $reset = FALSE, $langcode = '') {
     static $auraConfigs;
 
     $auraApiConfig = !empty($configs)
       ? $configs
       : AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS;
 
-    $notFound = FALSE;
-    foreach ($auraApiConfig as $config) {
-      if (empty($auraConfigs[$config])) {
-        $notFound = TRUE;
+    // Do not check static config variable for drush commands - cli requests.
+    if (PHP_SAPI !== 'cli') {
+      $notFound = FALSE;
+      foreach ($auraApiConfig as $config) {
+        if (empty($auraConfigs[$config])) {
+          $notFound = TRUE;
+        }
+      }
+
+      if ($notFound === FALSE) {
+        return $auraConfigs;
       }
     }
 
-    if ($notFound === FALSE) {
-      return $auraConfigs;
-    }
-
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $langcode = !empty($langcode)
+      ? $langcode
+      : $this->languageManager->getCurrentLanguage()->getId();
 
     foreach ($auraApiConfig as $value) {
       // Adding language code in cache key for tier names only
@@ -120,9 +125,23 @@ class AuraApiHelper {
         continue;
       }
 
+      // For tier mapping API, if langcode in the argumnet is different from
+      // the request language then update context langcode for the API call.
+      $resetStoreContext = FALSE;
+      if ($value === AuraDictionaryApiConstants::APC_TIER_TYPES
+        && $langcode !== $this->languageManager->getCurrentLanguage()->getId()) {
+        $this->apiWrapper->updateStoreContext($langcode);
+        $resetStoreContext = TRUE;
+      }
+
       $endpoint = 'customers/apcDicData/' . $value;
       $response = $this->apiWrapper->invokeApi($endpoint, [], 'GET');
       $response = is_string($response) ? Json::decode($response) : $response;
+
+      // Restore the store context langcode.
+      if ($resetStoreContext) {
+        $this->apiWrapper->resetStoreContext();
+      }
 
       if (empty($response) || empty($response['items'])) {
         $this->logger->error('No data found for api: @api.', [
