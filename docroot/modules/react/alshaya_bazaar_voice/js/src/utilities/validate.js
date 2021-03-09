@@ -5,7 +5,7 @@ import { getbazaarVoiceSettings } from './api/request';
 /**
  * Validates the form details.
  */
-export const processFormDetails = async (e) => {
+export const processFormDetails = (e) => {
   // Flag to determine if there is any error.
   let isError = false;
 
