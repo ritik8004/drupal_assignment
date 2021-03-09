@@ -87,12 +87,16 @@ function _alshaya_bazaar_voice_static_strings() {
       'value' => t('Please enter value for this field.'),
     ],
     [
+      'key' => 'empty_select_field_default_error',
+      'value' => t('Please select value for this field.'),
+    ],
+    [
       'key' => 'valid_email_error',
       'value' => t('The email address %mail is not valid.'),
     ],
     [
-      'key' => 'commentbox_length_error',
-      'value' => t('Comment text should be minimum %minLength characters.'),
+      'key' => 'text_min_chars_limit_error',
+      'value' => t('Minimum characters limit for this field is %minLength characters.'),
     ],
   ];
 }

@@ -5,7 +5,6 @@ import {
   removeFullScreenLoader,
   showFullScreenLoader,
 } from '../../../../../../../../../../js/utilities/showRemoveFullScreenLoader';
-import BazaarVoiceMessages from '../../../../../../../common/components/bazaarvoice-messages';
 
 class PhotoUrls extends React.Component {
   constructor(props) {
@@ -83,7 +82,7 @@ class PhotoUrls extends React.Component {
         />
       );
     }
-    return (<BazaarVoiceMessages />);
+    return (null);
   }
 }
 

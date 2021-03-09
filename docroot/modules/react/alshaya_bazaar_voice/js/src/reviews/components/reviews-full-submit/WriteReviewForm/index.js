@@ -1,13 +1,14 @@
 import React from 'react';
 import SectionTitle from '../../../../utilities/section-title';
 import DynamicFormField from '../DynamicFormField';
-import { prepareRequest } from '../../../../utilities/write_review_util';
+import { prepareRequest, validateRequest } from '../../../../utilities/write_review_util';
 import { postAPIData } from '../../../../utilities/api/apiData';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import FormLinks from '../DynamicFormField/Fields/FormLinks';
 import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../utilities/api/request';
+import ConditionalView from '../../../../common/components/conditional-view';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -54,6 +55,10 @@ export default class WriteReviewForm extends React.Component {
     const { fieldsConfig } = this.state;
     e.preventDefault();
 
+    const isError = validateRequest(e.target.elements, fieldsConfig);
+    if (isError) {
+      return;
+    }
     showFullScreenLoader();
     const request = prepareRequest(e.target.elements, fieldsConfig);
     const apiUri = '/data/submitreview.json';
@@ -125,10 +130,9 @@ export default class WriteReviewForm extends React.Component {
           </div>
         </div>
         <div className="write-review-form-sidebar">
-          {dynamicFields.length > 0
-            && (
+          <ConditionalView condition={dynamicFields.length > 0}>
             <div className="write-review-form-wrapper">
-              <form className="write-review-form-add" onSubmit={this.handleSubmit}>
+              <form className="write-review-form-add" onSubmit={this.handleSubmit} noValidate>
                 <div className="write-review-fields">
                   {dynamicFields}
                   <input type="hidden" name="blackBox" id="ioBlackBox" />
@@ -159,7 +163,7 @@ export default class WriteReviewForm extends React.Component {
                 />
               </form>
             </div>
-            )}
+          </ConditionalView>
         </div>
       </div>
     );

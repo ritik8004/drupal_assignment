@@ -1,5 +1,6 @@
 import { getCurrentUserEmail, getSessionCookie } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
+import getStringMessage from '../../../../js/utilities/strings';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -12,7 +13,7 @@ export const validEmailRegex = RegExp(
 );
 
 /**
- * Prepare request data to be sent in review submit api.
+ * Prepare request data to be sent in submit review api.
  *
  * @param {*} elements
  * @param {*} fieldsConfig
@@ -66,6 +67,75 @@ export const prepareRequest = (elements, fieldsConfig) => {
   params += '&action=submit';
 
   return params;
+};
+
+/**
+ * Validate request data to be passed in submit review api.
+ *
+ * @param {*} elements
+ * @param {*} fieldsConfig
+ */
+export const validateRequest = (elements, fieldsConfig) => {
+  let isError = false;
+
+  Object.entries(fieldsConfig).forEach(([key, field]) => {
+    const id = fieldsConfig[key]['#id'];
+    const required = fieldsConfig[key]['#required'];
+    const groupType = fieldsConfig[key]['#group_type'];
+    // Validate input data from field types.
+    try {
+      if (required) {
+        if (elements[id].value === '') {
+          switch (groupType) {
+            case 'textfield':
+            case 'textarea':
+              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_field_default_error');
+              document.getElementById(`${id}-error`).classList.add('error');
+              isError = true;
+              break;
+            case 'select':
+              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_select_field_default_error');
+              document.getElementById(`${id}-error`).classList.add('error');
+              isError = true;
+              break;
+            case 'ratings':
+              document.getElementById(`${id}-error`).classList.add('rating-error');
+              isError = true;
+              break;
+            default:
+              document.getElementById(`${id}-error`).classList.add('radio-error');
+              isError = true;
+          }
+        } else if (id === 'reviewtext'
+          || id === 'usernickname'
+          || id === 'useremail') {
+          if (id === 'reviewtext' || id === 'usernickname') {
+            if (elements[id].value.length < fieldsConfig[key]['#minlength']) {
+              document.getElementById(`${id}-error`).classList.add('error');
+              isError = true;
+            }
+          }
+          if (id === 'useremail' && !validEmailRegex.test(elements[id].value)) {
+            document.getElementById(`${id}-error`).classList.add('error');
+            isError = true;
+          }
+        } else {
+          if (groupType === 'textfield'
+           || groupType === 'textarea'
+           || groupType === 'select') {
+            document.getElementById(`${id}-error`).innerHTML = '';
+          }
+          document.getElementById(`${id}-error`).classList.remove('error');
+          document.getElementById(`${id}-error`).classList.remove('radio-error');
+          document.getElementById(`${id}-error`).classList.remove('rating-error');
+        }
+      }
+    } catch (e) { return null; }
+
+    return field;
+  });
+
+  return isError;
 };
 
 /**

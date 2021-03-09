@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 class Slider extends React.Component {
   constructor(props) {
@@ -30,10 +31,9 @@ class Slider extends React.Component {
 
     return (
       <>
-        {text !== undefined
-          && (
+        <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
-          )}
+        </ConditionalView>
         <div className="write-review-type-slider">
           <div className="select-slider__wrap">
             <div className="selectedValue">
@@ -45,7 +45,7 @@ class Slider extends React.Component {
               </span>
               <span className="selectedLabel">{activeId}</span>
             </div>
-            <div className="range-slider-block">
+            <div className="range-slider-block" id={`${id}-error`}>
               <div className="range-slider">
                 {Object.values(options).map((sliderLabel, i) => {
                   const sliderValue = i + 1;
@@ -73,7 +73,6 @@ class Slider extends React.Component {
             </div>
             <input type="hidden" id={id} name={id} required={required} value={sliderVal || ''} />
           </div>
-          <div id={`${label}-error`} className="error" />
         </div>
       </>
     );
