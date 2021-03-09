@@ -193,7 +193,7 @@ class AlshayaProductListHelper {
     $block_storage = $this->entityTypeManager->getStorage('block');
     $facets = $this->facetManager->getFacetsByFacetSourceId('search_api:views_block__alshaya_product_list__block_3');
 
-    $product_list_block = $block_storage->load('alshaya_algolia_react_product_list');
+    $product_list_block = $block_storage->load('alshayaalgoliareactproductlist');
     if ($product_list_block instanceof BlockInterface && $product_list_block->status()) {
       $this->logger->notice('Algolia on product list is already enabled.');
       return;
@@ -230,6 +230,7 @@ class AlshayaProductListHelper {
       }
     }
 
+    $product_list_block = $block_storage->load('alshayaalgoliareactproductlist');
     // If database product list block status is disabled Enable,
     // the algolia product list block otherwise disable.
     if ($product_list_block instanceof BlockInterface) {
