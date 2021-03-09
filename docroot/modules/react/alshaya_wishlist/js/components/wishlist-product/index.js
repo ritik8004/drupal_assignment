@@ -1,5 +1,6 @@
 import React from 'react';
 import SpecialPrice from '../../../../alshaya_spc/js/utilities/special-price';
+import ShareIcon from '../utils/share-icon';
 
 const WishlistProduct = ({ item, itemKey }) => {
   const itemUrl = `product-quick-view/${item.nid}/nojs`;
@@ -22,7 +23,10 @@ const WishlistProduct = ({ item, itemKey }) => {
       </div>
       <div className="wishlist-actions">
         <span className="remove-wishlist">{Drupal.t('Remove')}</span>
-        <span className="share-product">{Drupal.t('Share')}</span>
+        <span className="share-product">
+          {Drupal.t('Share')}
+          <ShareIcon />
+        </span>
       </div>
     </div>
   );

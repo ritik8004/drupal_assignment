@@ -1,5 +1,6 @@
 import React from 'react';
 import WishlistProduct from '../wishlist-product';
+import LoginMessage from '../login-message';
 
 class WishlistProductList extends React.Component {
   constructor(props) {
@@ -100,9 +101,12 @@ class WishlistProductList extends React.Component {
     const { items } = this.state;
 
     return (
-      <div className="wishlist-list">
-        { this.generateProductGrid(items) }
-      </div>
+      <>
+        <LoginMessage />
+        <div className="wishlist-list">
+          { this.generateProductGrid(items) }
+        </div>
+      </>
     );
   }
 }
