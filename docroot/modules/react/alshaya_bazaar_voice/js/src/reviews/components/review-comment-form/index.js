@@ -5,7 +5,6 @@ import ReviewCommentSubmission from '../review-comment-submission';
 import { getCurrentUserEmail } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
-import TextField from '../reviews-full-submit/DynamicFormField/Fields/TextField';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -14,7 +13,7 @@ class ReviewCommentForm extends React.Component {
       showCommentForm: false,
       showCommentSubmission: false,
       email: '',
-      comment: '',
+      commentbox: '',
       nickname: '',
       submissionTime: '',
     };
@@ -32,9 +31,8 @@ class ReviewCommentForm extends React.Component {
   }
 
   showCommentForm = () => {
-    const { comment, nickname, email } = this.state;
+    const { commentbox, nickname, email } = this.state;
     const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length;
     const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
@@ -44,37 +42,46 @@ class ReviewCommentForm extends React.Component {
           </div>
           <div className="comment-form-fields">
             <div className="form-item">
-              <TextField
-                required
-                id="comment"
-                label="Comment"
-                defaultValue={comment}
-                minLength={commentMinLength}
-                visible
-                classLable="form-input focus"
+              <input
+                type="text"
+                id="commentbox"
+                name="commentbox"
+                onChange={this.handleCommentboxChange}
+                className="form-input focus"
+                defaultValue={commentbox}
               />
+              <div className="c-input__bar" />
+              <label className="comment-form-commentbox-label form-label">{Drupal.t('Comment')}</label>
+              <div id="commentbox-error" className="error" />
             </div>
+
             <div className="form-item-two-column">
               <div className="form-item">
-                <TextField
-                  required
+                <input
+                  type="text"
                   id="nickname"
-                  label="Nickname"
+                  name="nickname"
+                  onChange={this.handleNicknameChange}
+                  className="form-input focus"
                   defaultValue={nickname}
-                  visible
-                  classLable="form-input focus"
                 />
+                <div className="c-input__bar" />
+                <label className="comment-form-nickname form-label">{Drupal.t('Screen name')}</label>
+                <div id="nickname-error" className="error" />
               </div>
 
               <div className="form-item">
-                <TextField
-                  required
+                <input
+                  type="email"
                   id="email"
-                  label="Email"
+                  name="email"
+                  onChange={this.handleEmailChange}
+                  className="form-input focus"
                   defaultValue={email}
-                  visible
-                  classLable="form-input focus"
                 />
+                <div className="c-input__bar" />
+                <label className="comment-form-email form-label">{Drupal.t('Email Address')}</label>
+                <div id="email-error" className="error" />
               </div>
             </div>
 
@@ -93,28 +100,23 @@ class ReviewCommentForm extends React.Component {
   }
 
   showCommentSubmission = () => {
-    const { comment, nickname, submissionTime } = this.state;
+    const { commentbox, nickname, submissionTime } = this.state;
     return (
       <ReviewCommentSubmission
         UserNickname={nickname}
         SubmissionTime={submissionTime}
-        CommentText={comment}
+        CommentText={commentbox}
       />
     );
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({
-      email: e.target.elements.email.value,
-      nickname: e.target.elements.nickname.value,
-      comment: e.target.elements.comment.value,
-    });
-    const isError = processFormDetails(e);
+    const isError = await processFormDetails(e);
     if (!isError) {
       const { ReviewId } = this.props;
-      const { comment, nickname, email } = this.state;
-      const params = `&Action=submit&CommentText=${comment}&UserEmail=${email}&UserNickname=${nickname}&ReviewId=${ReviewId}`;
+      const { commentbox, nickname, email } = this.state;
+      const params = `&Action=submit&CommentText=${commentbox}&UserEmail=${email}&UserNickname=${nickname}&ReviewId=${ReviewId}`;
       const apiData = postAPIData('/data/submitreviewcomment.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
@@ -143,6 +145,18 @@ class ReviewCommentForm extends React.Component {
         });
       }
     }
+  }
+
+  handleEmailChange = (e) => {
+    this.setState({ email: e.target.value });
+  }
+
+  handleNicknameChange = (e) => {
+    this.setState({ nickname: e.target.value });
+  }
+
+  handleCommentboxChange = (e) => {
+    this.setState({ commentbox: e.target.value });
   }
 
   render() {
