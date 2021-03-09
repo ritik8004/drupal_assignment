@@ -77,6 +77,7 @@ class AlshayaMyWishlistController extends ControllerBase {
     $settings = [
       'enabled' => $this->wishListHelper->isWishListEnabled(),
       'config' => $this->wishListHelper->getWishListConfig(),
+      'userDetails' => $this->wishListHelper->getWishListUserDetails(),
     ];
 
     $cache_tags = Cache::mergeTags($cache_tags, $this->configFactory->get('alshaya_wishlist.settings')->getCacheTags());

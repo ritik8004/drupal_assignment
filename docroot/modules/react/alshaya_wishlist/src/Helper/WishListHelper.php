@@ -59,4 +59,18 @@ class WishListHelper {
     return $this->configFactory->get('alshaya_wishlist.settings')->get('wishlist_enabled');
   }
 
+  /**
+   * Get wishlist user details.
+   *
+   * @return array
+   *   WishList user details.
+   */
+  public function getWishListUserDetails() {
+    $user_details = [
+      'id' => $this->currentUser()->id(),
+    ];
+
+    return $user_details;
+  }
+
 }

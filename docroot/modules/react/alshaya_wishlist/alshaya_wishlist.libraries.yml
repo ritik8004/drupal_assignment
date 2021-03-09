@@ -3,3 +3,9 @@ my-wishlist:
     dist/wishlist.bundle.js: {}
   dependencies:
     - alshaya_react/react
+
+wishlist_pdp:
+  js:
+    dist/pdp.bundle.js: {}
+  dependencies:
+    - alshaya_react/react

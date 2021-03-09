@@ -17,3 +17,31 @@ function alshaya_wishlist_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_wishlist_preprocess_node(&$variables) {
+  if ($variables['node']->bundle() === 'acq_product') {
+    $variables['wishlist_enabled'] = \Drupal::service('alshaya_wishlist.wishlist_helper')->isWishListEnabled();;
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_wishlist_page_attachments_alter(array &$page) {
+  $wishlist_helper = \Drupal::service('alshaya_wishlist.wishlist_helper');
+  $settings['enabled'] = $wishlist_helper->isWishListEnabled();
+
+  // Do not proceed if wishlist is not enabled.
+  if ($settings['enabled'] !== TRUE) {
+    return;
+  }
+
+  $current_route = \Drupal::routeMatch();
+
+  if ($current_route->getRouteName() === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
+    $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_pdp';
+  }
+}
