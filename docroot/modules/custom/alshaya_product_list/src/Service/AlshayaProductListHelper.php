@@ -9,6 +9,7 @@ use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\block\BlockInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -67,6 +68,13 @@ class AlshayaProductListHelper {
   protected $logger;
 
   /**
+   * Algolia react helper.
+   *
+   * @var \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper
+   */
+  protected $algoliaReactHelper;
+
+  /**
    * ProductCategoryTermId constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -83,6 +91,8 @@ class AlshayaProductListHelper {
    *   Facet manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
    *   Logger Factory.
+   * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper $algolia_react_helper
+   *   Algolia react helper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_manager,
@@ -91,7 +101,8 @@ class AlshayaProductListHelper {
     EntityRepositoryInterface $entity_repository,
     LanguageManagerInterface $language_manager,
     DefaultFacetManager $facet_manager,
-    LoggerChannelFactoryInterface $loggerChannelFactory
+    LoggerChannelFactoryInterface $loggerChannelFactory,
+    AlshayaAlgoliaReactHelper $algolia_react_helper
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->pathValidator = $pathValidator;
@@ -99,6 +110,7 @@ class AlshayaProductListHelper {
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
     $this->facetManager = $facet_manager;
+    $this->algoliaReactHelper = $algolia_react_helper;
     $this->logger = $loggerChannelFactory->get('alshaya_product_list');
   }
 
@@ -162,15 +174,7 @@ class AlshayaProductListHelper {
       ? $this->entityRepository->getTranslationFromContext($node, 'en')
       : $node;
 
-    $context = strtolower(trim($node_en->label()));
-    // Remove special characters.
-    $context = preg_replace("/[^a-zA-Z0-9\s]/", "", $context);
-    // Ensure duplicate spaces are replaced with single space.
-    // H & M would have become H  M after preg_replace.
-    $context = str_replace('  ', ' ', $context);
-
-    // Replace spaces with underscore.
-    $context = str_replace(' ', '_', $context);
+    $context = $this->algoliaReactHelper->formatCleanRuleContext($node_en->label());
 
     return [
       'option_key' => $node->get('field_attribute_name')->first()->getString(),

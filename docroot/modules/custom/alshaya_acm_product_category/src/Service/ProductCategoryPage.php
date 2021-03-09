@@ -9,6 +9,7 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -67,6 +68,13 @@ class ProductCategoryPage {
   protected $cache;
 
   /**
+   * Algolia react helper.
+   *
+   * @var \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper
+   */
+  protected $algoliaReactHelper;
+
+  /**
    * ProductCategoryTermId constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -83,6 +91,8 @@ class ProductCategoryPage {
    *   The config factory service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend service.
+   * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper $algolia_react_helper
+   *   Algolia react helper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_manager,
@@ -91,7 +101,8 @@ class ProductCategoryPage {
     EntityRepositoryInterface $entity_repository,
     LanguageManagerInterface $language_manager,
     ConfigFactory $config_factory,
-    CacheBackendInterface $cache
+    CacheBackendInterface $cache,
+    AlshayaAlgoliaReactHelper $algolia_react_helper
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->pathValidator = $pathValidator;
@@ -100,6 +111,7 @@ class ProductCategoryPage {
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->cache = $cache;
+    $this->algoliaReactHelper = $algolia_react_helper;
   }
 
   /**
@@ -185,19 +197,7 @@ class ProductCategoryPage {
 
       $hierarchy_list[] = $term->label();
 
-      $context = strtolower(trim($term_en->label()));
-
-      // Remove special characters.
-      $context = preg_replace("/[^a-zA-Z0-9\s]/", "", $context);
-
-      // Ensure duplicate spaces are replaced with single space.
-      // H & M would have become H  M after preg_replace.
-      $context = str_replace('  ', ' ', $context);
-
-      // Replace spaces with underscore.
-      $context = str_replace(' ', '_', $context);
-
-      $context_list[] = $context;
+      $context_list[] = $this->algoliaReactHelper->formatCleanRuleContext($term_en->label());
 
       // Merge term name for to use multiple contexts for category pages.
       $contexts[] = implode('__', $context_list);
