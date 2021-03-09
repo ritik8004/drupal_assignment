@@ -146,6 +146,7 @@ class AlshayaProductListHelper {
       return [
         'option_key' => '',
         'option_val' => 0,
+        'ruleContext' => [],
       ];
     }
 
@@ -155,9 +156,26 @@ class AlshayaProductListHelper {
 
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
 
+    // Get english version of the brand node only to prepare the
+    // ruleContext for the brand list pages.
+    $node_en = ($langcode != 'en')
+      ? $this->entityRepository->getTranslationFromContext($node, 'en')
+      : $node;
+
+    $context = strtolower(trim($node_en->label()));
+    // Remove special characters.
+    $context = preg_replace("/[^a-zA-Z0-9\s]/", "", $context);
+    // Ensure duplicate spaces are replaced with single space.
+    // H & M would have become H  M after preg_replace.
+    $context = str_replace('  ', ' ', $context);
+
+    // Replace spaces with underscore.
+    $context = str_replace(' ', '_', $context);
+
     return [
       'option_key' => $node->get('field_attribute_name')->first()->getString(),
       'option_val' => $node->get('field_attribute_value')->first()->getString(),
+      'ruleContext' => ['brand_list__' . $context],
     ];
   }
 
