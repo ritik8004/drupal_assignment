@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 class StarRating extends React.Component {
   constructor(props) {
@@ -40,10 +41,9 @@ class StarRating extends React.Component {
 
     return (
       <>
-        {text !== undefined
-          && (
+        <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
-          )}
+        </ConditionalView>
         <div className="write-review-type-star-rating">
           <div className={`select-star__wrap ${id}`}>
             <label className="star-rating-label" htmlFor={label}>
@@ -51,7 +51,7 @@ class StarRating extends React.Component {
               {' '}
               {(required) ? '*' : '' }
             </label>
-            <div className="star-counter">
+            <div className="star-counter" id={`${id}-error`}>
               {[...Array(5)].map((star, i) => {
                 const ratingValue = i + 1;
                 return (
@@ -77,7 +77,6 @@ class StarRating extends React.Component {
             </div>
             <input type="hidden" id={id} name={id} required={required} value={rating || ''} />
           </div>
-          <div id={`${label}-error`} className="error" />
         </div>
       </>
     );

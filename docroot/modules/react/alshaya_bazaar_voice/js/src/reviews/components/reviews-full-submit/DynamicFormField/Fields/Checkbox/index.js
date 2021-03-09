@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 class Checkbox extends React.Component {
   constructor(props) {
@@ -26,11 +27,10 @@ class Checkbox extends React.Component {
 
     return (
       <>
-        {text !== undefined
-          && (
+        <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
-          )}
-        <div className="write-review-type-checkbox">
+        </ConditionalView>
+        <div className="write-review-type-checkbox" id={`${id}-error`}>
           <input
             type="checkbox"
             id={id}

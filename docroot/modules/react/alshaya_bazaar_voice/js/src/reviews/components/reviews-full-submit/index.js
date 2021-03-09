@@ -2,6 +2,8 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import WriteReviewForm from './WriteReviewForm';
 import smoothScrollTo from '../../../utilities/smoothScroll';
+import ClosedReviewSubmit from './closed-review-submit';
+import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
@@ -26,7 +28,7 @@ export default class WriteReviewButton extends React.Component {
       isModelOpen: false,
     });
 
-    if (!e.detail.HasErrors) {
+    if (e.detail.HasErrors !== undefined && !e.detail.HasErrors) {
       smoothScrollTo(e, '#post-review-message');
     }
   };
@@ -35,6 +37,14 @@ export default class WriteReviewButton extends React.Component {
     const {
       isModelOpen,
     } = this.state;
+
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+    if (bazaarVoiceSettings.reviews.user.user_id === 0
+      && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission) {
+      return (
+        <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
+      );
+    }
 
     return (
       <div className="button-wrapper">

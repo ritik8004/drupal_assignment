@@ -311,9 +311,9 @@ export default class ReviewSummary extends React.Component {
           <div className="empty-review-summary">
             <WriteReviewButton />
           </div>
-          {postReviewData !== ''
-          && (
-            <PostReviewMessage postReviewData={postReviewData} />)}
+          <ConditionalView condition={postReviewData !== ''}>
+            <PostReviewMessage postReviewData={postReviewData} />
+          </ConditionalView>
         </>
       );
     }
@@ -349,44 +349,40 @@ export default class ReviewSummary extends React.Component {
             />
           </div>
         </div>
-        {noResultmessage === null
-          && (
-            <>
-              <div id="review-summary-wrapper">
-                {postReviewData !== ''
-                  && (
-                    <PostReviewMessage postReviewData={postReviewData} />)}
-                {Object.keys(reviewsSummary).map((item) => (
-                  <div className="review-summary" key={reviewsSummary[item].Id}>
-                    <ConditionalView condition={window.innerWidth < 768}>
-                      <DisplayStar
-                        starPercentage={reviewsSummary[item].Rating}
-                      />
-                      <div className="review-title">{reviewsSummary[item].Title}</div>
-                    </ConditionalView>
-                    <ReviewInformation
-                      reviewInformationData={reviewsSummary[item]}
-                      reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
-                        .ProductId].ReviewStatistics}
-                    />
-                    <ReviewDescription
-                      reviewDescriptionData={reviewsSummary[item]}
-                    />
-                  </div>
-                ))}
+        <ConditionalView condition={noResultmessage === null}>
+          <div id="review-summary-wrapper">
+            <ConditionalView condition={postReviewData !== ''}>
+              <PostReviewMessage postReviewData={postReviewData} />
+            </ConditionalView>
+            {Object.keys(reviewsSummary).map((item) => (
+              <div className="review-summary" key={reviewsSummary[item].Id}>
+                <ConditionalView condition={window.innerWidth < 768}>
+                  <DisplayStar
+                    starPercentage={reviewsSummary[item].Rating}
+                  />
+                  <div className="review-title">{reviewsSummary[item].Title}</div>
+                </ConditionalView>
+                <ReviewInformation
+                  reviewInformationData={reviewsSummary[item]}
+                  reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
+                    .ProductId].ReviewStatistics}
+                />
+                <ReviewDescription
+                  reviewDescriptionData={reviewsSummary[item]}
+                />
               </div>
-              <Pagination
-                currentPage={currentPage}
-                numberOfPages={numberOfPages}
-                prevButtonDisabled={prevButtonDisabled}
-                nextButtonDisabled={nextButtonDisabled}
-              />
-            </>
-          )}
-        {noResultmessage !== null
-          && (
-            <EmptyMessage emptyMessage={noResultmessage} />
-          )}
+            ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            numberOfPages={numberOfPages}
+            prevButtonDisabled={prevButtonDisabled}
+            nextButtonDisabled={nextButtonDisabled}
+          />
+        </ConditionalView>
+        <ConditionalView condition={noResultmessage !== null}>
+          <EmptyMessage emptyMessage={noResultmessage} />
+        </ConditionalView>
       </div>
     );
   }

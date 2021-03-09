@@ -1,34 +1,34 @@
 import React from 'react';
 import { validEmailRegex } from '../../../../../../utilities/write_review_util';
 import { getCurrentUserEmail } from '../../../../../../utilities/user_util';
+import ConditionalView from '../../../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
 class TextField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      errors: [],
       labelActiveClass: '',
     };
   }
 
-  handleChange = (e, minLength) => {
-    const { errors } = this.state;
-    const { name, value } = e.currentTarget;
+  handleChange = (e) => {
+    const { value, minLength, id } = e.currentTarget;
     let activeClass = '';
     if (value.length > 0) {
-      errors[name] = value.length < minLength
-        ? Drupal.t('Minimum characters limit for this field is ') + minLength
-        : null;
+      document.getElementById(`${id}-error`).innerHTML = value.length < minLength
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength })
+        : '';
       activeClass = 'active-label';
     }
+
     this.setState({ labelActiveClass: activeClass });
 
-    if (name === 'useremail') {
-      errors[name] = validEmailRegex.test(value)
-        ? null
-        : Drupal.t('Email address is not valid.');
+    if (id === 'useremail') {
+      document.getElementById(`${id}-error`).innerHTML = validEmailRegex.test(value)
+        ? ''
+        : getStringMessage('valid_email_error', { '%mail': value });
     }
-    this.setState({ errors, [name]: value });
   };
 
   render() {
@@ -43,7 +43,7 @@ class TextField extends React.Component {
       text,
       classLable,
     } = this.props;
-    const { errors, labelActiveClass } = this.state;
+    const { labelActiveClass } = this.state;
 
     if (visible === true) {
       let email = null;
@@ -52,17 +52,16 @@ class TextField extends React.Component {
       }
       return (
         <>
-          {text !== undefined
-            && (
+          <ConditionalView condition={text !== undefined}>
             <div className="head-row">{text}</div>
-            )}
+          </ConditionalView>
           <div className={`write-review-type-textfield ${(classLable !== undefined) ? classLable : ''}`}>
             <input
               type="text"
               id={id}
               name={id}
               defaultValue={(email !== null) ? email : defaultValue}
-              onChange={(e) => this.handleChange(e, minLength)}
+              onChange={(e) => this.handleChange(e)}
               maxLength={maxLength}
               minLength={minLength}
               readOnly={(email !== null) ? 1 : 0}
@@ -73,7 +72,7 @@ class TextField extends React.Component {
               {' '}
               {(required) ? '*' : '' }
             </label>
-            <div id={`${label}-error`} className="error">{errors[id]}</div>
+            <div id={`${id}-error`} className="error" />
           </div>
         </>
       );
