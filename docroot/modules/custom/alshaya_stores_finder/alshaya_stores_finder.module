@@ -45,6 +45,7 @@ function alshaya_stores_finder_page_attachments(array &$attachments) {
       'label_position' => $marker->get('marker.label_position'),
     ];
     $attachments['#attached']['library'][] = 'alshaya_stores_finder/store_finder';
+    $attachments['#attached']['library'][] = 'alshaya_white_label/store_finder';
   }
 }
 

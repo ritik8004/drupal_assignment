@@ -177,10 +177,10 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('URL of Comment Form Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
     ];
 
-    $form['basic_settings']['comment_form_commentbox_length'] = [
+    $form['basic_settings']['comment_form_box_length'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Comment minimum character length'),
-      '#default_value' => $config->get('comment_form_commentbox_length'),
+      '#default_value' => $config->get('comment_form_box_length'),
       '#description' => $this->t('Enter minimum character length for comment box text in comment form.'),
     ];
 
@@ -211,8 +211,8 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('write_review_tnc', $values['write_review_tnc'])
       ->set('write_review_guidlines', $values['write_review_guidlines'])
       ->set('comment_form_tnc', $values['comment_form_tnc'])
-      ->set('comment_form_commentbox_length', $values['comment_form_commentbox_length'])
       ->set('bv_content_types', $values['bv_content_types'])
+      ->set('comment_form_box_length', $values['comment_form_box_length'])
       ->save();
 
     parent::submitForm($form, $form_state);
