@@ -9,6 +9,7 @@ use Drupal\Core\Path\PathValidatorInterface;
 use Drupal\block\BlockInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -67,6 +68,13 @@ class AlshayaProductListHelper {
   protected $logger;
 
   /**
+   * Algolia react helper.
+   *
+   * @var \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper
+   */
+  protected $algoliaReactHelper;
+
+  /**
    * ProductCategoryTermId constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -83,6 +91,8 @@ class AlshayaProductListHelper {
    *   Facet manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
    *   Logger Factory.
+   * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper $algolia_react_helper
+   *   Algolia react helper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_manager,
@@ -91,7 +101,8 @@ class AlshayaProductListHelper {
     EntityRepositoryInterface $entity_repository,
     LanguageManagerInterface $language_manager,
     DefaultFacetManager $facet_manager,
-    LoggerChannelFactoryInterface $loggerChannelFactory
+    LoggerChannelFactoryInterface $loggerChannelFactory,
+    AlshayaAlgoliaReactHelper $algolia_react_helper
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->pathValidator = $pathValidator;
@@ -99,6 +110,7 @@ class AlshayaProductListHelper {
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
     $this->facetManager = $facet_manager;
+    $this->algoliaReactHelper = $algolia_react_helper;
     $this->logger = $loggerChannelFactory->get('alshaya_product_list');
   }
 
@@ -146,6 +158,7 @@ class AlshayaProductListHelper {
       return [
         'option_key' => '',
         'option_val' => 0,
+        'ruleContext' => [],
       ];
     }
 
@@ -155,9 +168,18 @@ class AlshayaProductListHelper {
 
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
 
+    // Get english version of the brand node only to prepare the
+    // ruleContext for the brand list pages.
+    $node_en = ($langcode != 'en')
+      ? $this->entityRepository->getTranslationFromContext($node, 'en')
+      : $node;
+
+    $context = $this->algoliaReactHelper->formatCleanRuleContext($node_en->label());
+
     return [
       'option_key' => $node->get('field_attribute_name')->first()->getString(),
       'option_val' => $node->get('field_attribute_value')->first()->getString(),
+      'ruleContext' => ['brand_list__' . $context],
     ];
   }
 
@@ -171,7 +193,7 @@ class AlshayaProductListHelper {
     $block_storage = $this->entityTypeManager->getStorage('block');
     $facets = $this->facetManager->getFacetsByFacetSourceId('search_api:views_block__alshaya_product_list__block_3');
 
-    $product_list_block = $block_storage->load('alshaya_algolia_react_product_list');
+    $product_list_block = $block_storage->load('alshayaalgoliareactproductlist');
     if ($product_list_block instanceof BlockInterface && $product_list_block->status()) {
       $this->logger->notice('Algolia on product list is already enabled.');
       return;
@@ -208,6 +230,7 @@ class AlshayaProductListHelper {
       }
     }
 
+    $product_list_block = $block_storage->load('alshayaalgoliareactproductlist');
     // If database product list block status is disabled Enable,
     // the algolia product list block otherwise disable.
     if ($product_list_block instanceof BlockInterface) {
