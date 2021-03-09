@@ -70,7 +70,7 @@ class AlshayaAuraCommands extends DrushCommands {
       : array_keys($this->languageManager->getLanguages());
 
     foreach ($langcode_list as $langcode) {
-      $this->apiHelper->getAuraApiConfig($configs, $options['reset'], $langcode);
+      $this->apiHelper->getAuraApiConfig($configs, $options['reset'], $langcode, TRUE);
     }
 
     $this->logger->notice('Aura API config synced. Configs: @configs.', [

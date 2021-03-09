@@ -87,7 +87,7 @@ class AuraApiHelper {
    * @return array
    *   Return array of config values.
    */
-  public function getAuraApiConfig($configs = [], $reset = FALSE, $langcode = '') {
+  public function getAuraApiConfig($configs = [], $reset = FALSE, $langcode = '', $is_cli_request = FALSE) {
     static $auraConfigs;
 
     $auraApiConfig = !empty($configs)
@@ -95,7 +95,7 @@ class AuraApiHelper {
       : AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS;
 
     // Do not check static config variable for drush commands - cli requests.
-    if (PHP_SAPI !== 'cli') {
+    if (!$is_cli_request) {
       $notFound = FALSE;
       foreach ($auraApiConfig as $config) {
         if (empty($auraConfigs[$config])) {
