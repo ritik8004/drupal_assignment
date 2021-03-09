@@ -1200,7 +1200,6 @@ function alshaya_acm_form_google_tag_container_alter(&$form, FormStateInterface 
  * @param \Drupal\Core\Form\FormStateInterface $formState
  *   The current state of the form.
  */
-
 function alshaya_acm_google_tag_container_validate_handler($form, FormStateInterface $form_state) {
   $condition_ids = $form_state->getTemporaryValue('filtered_conditions');
   if (!empty($condition_ids)) {
