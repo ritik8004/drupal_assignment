@@ -9,6 +9,7 @@ import ReviewPhoto from '../review-photo';
 
 const ReviewDescription = ({
   reviewDescriptionData,
+  reviewsComment,
 }) => {
   if (reviewDescriptionData !== undefined) {
     const date = new Date(reviewDescriptionData.SubmissionTime);
@@ -67,7 +68,8 @@ const ReviewDescription = ({
             />
             <div className="review-comment-display">
               <ReviewCommentDisplay
-                ReviewId={reviewDescriptionData.Id}
+                reviewId={reviewDescriptionData.Id}
+                reviewsComment={reviewsComment}
               />
             </div>
           </div>
