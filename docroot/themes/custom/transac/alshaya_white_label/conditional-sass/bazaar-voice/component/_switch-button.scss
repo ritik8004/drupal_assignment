@@ -32,6 +32,21 @@
     }
   }
 
+  .radio-error {
+    span {
+      border-top: 1px solid $rr-form-error-border;
+      border-bottom: 1px solid $rr-form-error-border;
+
+      &:first-of-type {
+        border-#{$left}: 1px solid $rr-form-error-border;
+      }
+
+      &:last-of-type {
+        border-#{$right}: 1px solid $rr-form-error-border;
+      }
+    }
+  }
+
   span {
     &:first-of-type {
       border-top-#{$left}-radius: 1.1875rem;
