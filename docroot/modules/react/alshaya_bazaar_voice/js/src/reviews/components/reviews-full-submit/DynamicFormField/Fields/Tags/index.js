@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 class Tags extends React.Component {
   constructor(props) {
@@ -26,11 +27,10 @@ class Tags extends React.Component {
 
     return (
       <>
-        {text !== undefined
-          && (
+        <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
-          )}
-        <div className="write-review-type-tags">
+        </ConditionalView>
+        <div className="write-review-type-tags" id={`${id}-error`}>
           <input
             type="checkbox"
             defaultValue={(tagVal !== '') ? tagVal : defaultValue}

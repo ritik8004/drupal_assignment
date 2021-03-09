@@ -6,6 +6,7 @@ import { removeFullScreenLoader, showFullScreenLoader }
 import smoothScrollTo from '../../../utilities/smoothScroll';
 import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -54,8 +55,9 @@ export default class Rating extends React.Component {
       return (
         <div className="rating-wrapper">
           <InlineRating reviewsData={reviewsData} />
-          {bazaarVoiceSettings.reviews.bv_auth_token !== null
-          && (<BvAuthConfirmation bvAuthToken={bazaarVoiceSettings.reviews.bv_auth_token} />)}
+          <ConditionalView condition={bazaarVoiceSettings.reviews.bv_auth_token !== null}>
+            <BvAuthConfirmation bvAuthToken={bazaarVoiceSettings.reviews.bv_auth_token} />
+          </ConditionalView>
         </div>
       );
     }
