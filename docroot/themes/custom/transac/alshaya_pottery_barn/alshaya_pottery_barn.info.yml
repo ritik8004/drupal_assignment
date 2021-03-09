@@ -95,3 +95,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css
+
+  alshaya_white_label/my-wishlist-page:
+    css:
+      theme:
+        css/conditional-sass/my-wishlist-page/my-wishlist-page.ltr.css: css/conditional-sass/my-wishlist-page/my-wishlist-page.ltr.css
