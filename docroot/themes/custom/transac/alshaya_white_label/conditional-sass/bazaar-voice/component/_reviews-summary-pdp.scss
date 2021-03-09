@@ -81,6 +81,7 @@
       color: $rr-review-summary-grey-text;
       margin-bottom: 0.9375rem;
       font-family: $alshaya-thin;
+      word-break: break-word;
 
       @include breakpoint($only-mobile) {
         margin-bottom: 1.5rem;
