@@ -96,7 +96,7 @@ class AuraApiHelper {
 
     $currentRequestLangCode = $this->languageManager->getCurrentLanguage()->getId();
     // Check if current request langcode is different from langcode in argument.
-    $isRequestLangDifferentFromArgumentLang = $langcode !== $currentRequestLangCode;
+    $isRequestLangDifferentFromArgumentLang = !empty($langcode) && $langcode !== $currentRequestLangCode;
 
     // Do not check static config variable if request langcode
     // is different from langcode in argument.
