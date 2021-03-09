@@ -29,7 +29,7 @@ export default class BvAuthConfirmation extends React.Component {
             });
           }
         } else {
-          Drupal.logJavascriptError('bv-auth-confirmation', result.error);
+          Drupal.logJavascriptError('review-bv-auth-confirmation', result.error);
         }
       });
     }
