@@ -36,6 +36,8 @@ class ReviewInappropriate extends React.Component {
             reported: 'Yes',
           };
           setStorageInfo(reportedVoteObj, `${contentType}-reportedVote-${contentId}`);
+        } else {
+          Drupal.logJavascriptError(`review-${contentType}-report-feedback`, result.error);
         }
       });
     }
