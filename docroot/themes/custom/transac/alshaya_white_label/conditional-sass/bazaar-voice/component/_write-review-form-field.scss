@@ -211,7 +211,7 @@
 
   .write-review-type-tags {
     display: inline-flex;
-    margin-right: 0.625rem;
+    margin-#{$right}: 0.625rem;
     margin-bottom: 1rem;
 
     input[type=checkbox] {
