@@ -91,8 +91,6 @@ class ProductCategoryPage {
    *   The config factory service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend service.
-   * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper $algolia_react_helper
-   *   Algolia react helper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_manager,
@@ -101,8 +99,7 @@ class ProductCategoryPage {
     EntityRepositoryInterface $entity_repository,
     LanguageManagerInterface $language_manager,
     ConfigFactory $config_factory,
-    CacheBackendInterface $cache,
-    AlshayaAlgoliaReactHelper $algolia_react_helper
+    CacheBackendInterface $cache
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->pathValidator = $pathValidator;
@@ -111,6 +108,14 @@ class ProductCategoryPage {
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
     $this->cache = $cache;
+  }
+
+  /**
+   * Initiate algolia helper service.
+   *
+   * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper $algolia_react_helper
+   */
+  public function setAlgoliaReactHelper(AlshayaAlgoliaReactHelper $algolia_react_helper) {
     $this->algoliaReactHelper = $algolia_react_helper;
   }
 
