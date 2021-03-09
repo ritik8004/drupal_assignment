@@ -29,6 +29,16 @@
         width: 50%;
         text-align: $right;
 
+        &.rating-error {
+          .select-star-rating__ico {
+            &.rating {
+              &::before {
+                color: $rr-star-rating-error;
+              }
+            }
+          }
+        }
+
         html[lang=ar] & {
           text-align: right;
           transform: rotate(180deg);
@@ -61,6 +71,16 @@
           &:first-of-type {
             span {
               margin-#{$left}: -0.1875rem;
+            }
+          }
+        }
+
+        &.rating-error {
+          .select-star-rating__ico {
+            &.rating {
+              &::before {
+                color: $rr-star-rating-error;
+              }
             }
           }
         }

@@ -117,9 +117,17 @@
     display: flex;
     align-items: center;
     margin-bottom: 1.875rem;
+    flex-flow: row wrap;
 
-    @include breakpoint($only-mobile) {
-      flex-flow: row wrap;
+    .error {
+      display: flex;
+      justify-content: flex-start;
+      width: 100%;
+      margin-#{$left}: 50%;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
     }
 
     .dropdown-label {
@@ -156,6 +164,26 @@
 
       @include breakpoint($only-tablet) {
         margin: 1rem 0;
+      }
+
+      &.radio-error {
+        .form-type-radio {
+          input[type=radio] {
+            & ~ label {
+              &::before {
+                border: 1px solid $rr-form-error-border;
+              }
+            }
+
+            &:checked {
+              & ~ label {
+                &::before {
+                  border: 3px solid $primary_radiobtn_filled;
+                }
+              }
+            }
+          }
+        }
       }
 
       .form-type-radio {
@@ -213,6 +241,14 @@
     display: inline-flex;
     margin-#{$right}: 0.625rem;
     margin-bottom: 1rem;
+
+    &.radio-error {
+      input[type=checkbox] {
+        & ~ label {
+          border: 1px solid $rr-form-error-border;
+        }
+      }
+    }
 
     input[type=checkbox] {
       & ~ label {
@@ -281,6 +317,7 @@
       margin-#{$right}: 2rem;
       background: $rr-write-review-cancel-btn-bg;
       color: $rr-write-review-cancel-btn-txt;
+      border: 1px solid $rr-write-review-cancel-btn-border;
 
       @include breakpoint($only-mobile) {
         margin-#{$right}: 0;
@@ -312,6 +349,7 @@
 
       a {
         text-decoration: underline;
+        color: $rr-static-links-txt;
       }
     }
   }
