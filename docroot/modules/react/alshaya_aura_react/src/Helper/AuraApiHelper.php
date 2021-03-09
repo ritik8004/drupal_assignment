@@ -87,15 +87,22 @@ class AuraApiHelper {
    * @return array
    *   Return array of config values.
    */
-  public function getAuraApiConfig($configs = [], $reset = FALSE, $langcode = '', $is_cli_request = FALSE) {
+  public function getAuraApiConfig($configs = [], $reset = FALSE, $langcode = '') {
     static $auraConfigs;
 
     $auraApiConfig = !empty($configs)
       ? $configs
       : AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS;
 
-    // Do not check static config variable for drush commands - cli requests.
-    if (!$is_cli_request) {
+    $currentRequestLangCode = $this->languageManager->getCurrentLanguage()->getId();
+    // Check if current request langcode is different from langcode in argument.
+    $isRequestLangDifferentFromArgumentLang = $langcode !== $currentRequestLangCode;
+
+    // Do not check static config variable if request langcode
+    // is different from langcode in argument.
+    // This scenario occurs when we sync dictionary API data
+    // using drush command for all language.
+    if (!$isRequestLangDifferentFromArgumentLang) {
       $notFound = FALSE;
       foreach ($auraApiConfig as $config) {
         if (empty($auraConfigs[$config])) {
@@ -110,7 +117,7 @@ class AuraApiHelper {
 
     $langcode = !empty($langcode)
       ? $langcode
-      : $this->languageManager->getCurrentLanguage()->getId();
+      : $currentRequestLangCode;
 
     foreach ($auraApiConfig as $value) {
       // Adding language code in cache key for tier names only
@@ -125,11 +132,11 @@ class AuraApiHelper {
         continue;
       }
 
-      // For tier mapping API, if langcode in the argumnet is different from
+      // For tier mapping API, if langcode in the argument is different from
       // the request language then update context langcode for the API call.
       $resetStoreContext = FALSE;
       if ($value === AuraDictionaryApiConstants::APC_TIER_TYPES
-        && $langcode !== $this->languageManager->getCurrentLanguage()->getId()) {
+        && $isRequestLangDifferentFromArgumentLang) {
         $this->apiWrapper->updateStoreContext($langcode);
         $resetStoreContext = TRUE;
       }
