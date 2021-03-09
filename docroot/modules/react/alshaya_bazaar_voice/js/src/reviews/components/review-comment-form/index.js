@@ -34,6 +34,7 @@ class ReviewCommentForm extends React.Component {
   showCommentForm = () => {
     const { comment, nickname, email } = this.state;
     const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length;
     const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
@@ -48,7 +49,7 @@ class ReviewCommentForm extends React.Component {
                 id="comment"
                 label="Comment"
                 defaultValue={comment}
-                minLength={100}
+                minLength={commentMinLength}
                 visible
                 classLable="form-input focus"
               />
