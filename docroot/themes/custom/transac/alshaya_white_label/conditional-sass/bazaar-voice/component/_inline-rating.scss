@@ -47,11 +47,15 @@
     }
 
     .icon-ic_ratingfull {
-      @include icon(ratingfull);
+      @include icon(ratingfull) {
+        color: $rr-stars-color;
+      }
     }
 
     .icon-ic_rating {
-      @include icon(rating);
+      @include icon(rating) {
+        color: $rr-stars-color;
+      }
     }
   }
 }
