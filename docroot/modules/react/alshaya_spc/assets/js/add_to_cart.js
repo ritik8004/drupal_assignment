@@ -103,8 +103,6 @@
               success: function (response) {
                 // If there any error we throw from middleware.
                 if (response.error === true) {
-                  console.log('Enter in if');
-                  console.log(response);
                   if (response.error_code === '400') {
                     Drupal.alshayaSpc.clearCartData();
                     $(that).trigger('click');
