@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Function to check if we should process GTM code for current request.
@@ -451,5 +452,29 @@ function alshaya_seo_metatags_alter(array &$metatags, array $context) {
     $metatags['twitter_cards_title'] = ($metatags['title']) ?? '';
     $metatags['twitter_cards_description'] = ($metatags['description']) ?? '';
     $metatags['twitter_cards_image'] = ($metatags['image_src']) ?? '';
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_seo_form_google_tag_container_alter(&$form, FormStateInterface $form_state) {
+  $form['#validate'][] = 'alshaya_seo_google_tag_container_validate_handler';
+}
+
+/**
+ * Gtm tag container form validation handler.
+ *
+ * @param array $form
+ *   An associative array containing the structure of the form.
+ *
+ * @param \Drupal\Core\Form\FormStateInterface $formState
+ *   The current state of the form.
+ */
+function alshaya_seo_google_tag_container_validate_handler($form, FormStateInterface $form_state) {
+  // Unset conditions to resolve gtm tag visibilty for anonymous users.
+  $condition_ids = $form_state->getTemporaryValue('filtered_conditions');
+  if (!empty($condition_ids)) {
+    $form_state->setTemporaryValue('filtered_conditions', []);
   }
 }
