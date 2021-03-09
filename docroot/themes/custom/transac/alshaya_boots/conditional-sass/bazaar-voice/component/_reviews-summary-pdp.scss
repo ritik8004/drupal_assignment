@@ -40,4 +40,10 @@
   .feedback-count {
     font-family: $bp-light;
   }
+
+  .empty-review-summary {
+    .write-review-button {
+      border-radius: 0.1875rem;
+    }
+  }
 }
