@@ -118,7 +118,8 @@ export default class AreaSelect extends React.Component {
     if (parentArea !== undefined || parentArea.visible === false) {
       const areaParentInput = document.getElementById('area_parent');
       if (areaParentInput) {
-        areaParentInput.value = getAreaParentId(false, val.toString())[0].id;
+        const areaParentInputValue = getAreaParentId(false, val.toString());
+        areaParentInput.value = areaParentInputValue ? areaParentInputValue[0].id : null;
       }
     }
   };
