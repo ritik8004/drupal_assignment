@@ -178,8 +178,9 @@
 
     .selectedValue {
       width: 35%;
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
       font-family: $alshaya-thin;
+      color: $rr-form-label-txt;
 
       @include breakpoint($only-mobile) {
         width: 100%;
@@ -187,9 +188,8 @@
       }
 
       .selectedLabel {
-        color: #777;
+        color: $rr-selected-slider-value;
         font-style: italic;
-        font-family: $alshaya-thin;
       }
     }
   }

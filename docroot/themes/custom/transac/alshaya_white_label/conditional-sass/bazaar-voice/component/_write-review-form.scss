@@ -152,11 +152,7 @@
 }
 
 .popup-content {
-  @include breakpoint($only-mobile) {
+  @include breakpoint($upto-desktop) {
     width: 100% !important;
-  }
-
-  @include breakpoint($only-tablet) {
-    width: 80% !important;
   }
 }
