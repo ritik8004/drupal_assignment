@@ -54,14 +54,14 @@ class PhotoUrls extends React.Component {
                   }
                 } else {
                   removeFullScreenLoader();
-                  Drupal.logJavascriptError('bv-photo-urls', result.error);
+                  Drupal.logJavascriptError('review-bv-photo-urls', result.error);
                 }
               });
             }
           }
         } else {
           removeFullScreenLoader();
-          Drupal.logJavascriptError('photo-urls', result.error);
+          Drupal.logJavascriptError('review-photo-urls', result.error);
         }
       });
     }

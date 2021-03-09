@@ -37,7 +37,7 @@ class ReviewInappropriate extends React.Component {
           };
           setStorageInfo(reportedVoteObj, `${contentType}-reportedVote-${contentId}`);
         } else {
-          Drupal.logJavascriptError(`${contentType}-report-feedback`, result.error);
+          Drupal.logJavascriptError(`review-${contentType}-report-feedback`, result.error);
         }
       });
     }

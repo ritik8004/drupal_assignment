@@ -27,7 +27,7 @@ class ReviewCommentDisplay extends React.Component {
             });
           }
         } else {
-          Drupal.logJavascriptError('comment-render', result.error);
+          Drupal.logJavascriptError('review-comment-render', result.error);
         }
       });
     }

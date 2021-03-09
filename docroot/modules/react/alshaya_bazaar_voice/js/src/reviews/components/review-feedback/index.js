@@ -35,7 +35,7 @@ class ReviewFeedback extends React.Component {
             && result.data.error === undefined) {
             this.setState({ votedContentId: contentId });
           } else {
-            Drupal.logJavascriptError(`${contentType}-feedback-submit`, result.error);
+            Drupal.logJavascriptError(`review-${contentType}-feedback-submit`, result.error);
           }
         });
       }

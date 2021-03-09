@@ -39,7 +39,7 @@ export default class WriteReviewForm extends React.Component {
           });
         } else {
           removeFullScreenLoader();
-          Drupal.logJavascriptError('write-review', result.error);
+          Drupal.logJavascriptError('review-write-review-form', result.error);
         }
       });
     }
@@ -69,7 +69,7 @@ export default class WriteReviewForm extends React.Component {
           document.dispatchEvent(event);
         } else {
           removeFullScreenLoader();
-          Drupal.logJavascriptError('write-review', result.error);
+          Drupal.logJavascriptError('review-write-review-form', result.error);
         }
       });
     }

@@ -140,7 +140,7 @@ class ReviewCommentForm extends React.Component {
               });
             }
           } else {
-            Drupal.logJavascriptError('comment-submit', result.error);
+            Drupal.logJavascriptError('review-comment-submit', result.error);
           }
         });
       }
