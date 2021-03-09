@@ -1,0 +1,15 @@
+.write-review-form {
+  .title-block {
+    .close-modal {
+      height: 2rem;
+      width: 2rem;
+
+      &::before {
+        font-size: 1rem;
+        position: relative;
+        #{$right}: -0.5rem;
+        top: 0.3125rem;
+      }
+    }
+  }
+}

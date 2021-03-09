@@ -16,8 +16,8 @@
 
       .star-rating-label {
         width: 50%;
-        font-size: 0.9375rem;
-        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        color: $rr-form-label-txt;
 
         @include breakpoint($only-mobile) {
           width: 100%;
@@ -82,12 +82,14 @@
       &.ratingfull {
         @include icon(ratingfull) {
           font-size: 2rem;
+          color: $rr-stars-color;
         }
       }
 
       &.rating {
         @include icon(rating) {
           font-size: 2rem;
+          color: $rr-stars-color;
         }
       }
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import 'element-closest-polyfill';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 export default class SelectField extends React.Component {
   constructor(props) {
@@ -34,10 +35,9 @@ export default class SelectField extends React.Component {
 
     return (
       <>
-        {text !== undefined
-          && (
+        <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
-          )}
+        </ConditionalView>
         <div className="dropdown-conatiner" key={id}>
           <label className="dropdown-label" htmlFor={label}>
             {label}
@@ -59,6 +59,7 @@ export default class SelectField extends React.Component {
             isDisabled={false}
             hidden={visible}
           />
+          <div id={`${id}-error`} className="error" />
         </div>
       </>
     );

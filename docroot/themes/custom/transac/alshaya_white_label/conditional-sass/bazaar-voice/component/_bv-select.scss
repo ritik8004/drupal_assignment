@@ -51,7 +51,7 @@
 
       > div {
         color: $rr-select-text;
-        border-top: 1px solid $rr-select-border;
+        border-top: 1px solid $rr-select-border-separator;
         font-size: 0.75rem;
         letter-spacing: 1px;
         background: $rr-select-option-bg;
@@ -84,6 +84,7 @@
         top: 50%;
         transform: translateY(-50%);
         transition: transform 0.125s ease-in-out;
+        color: $rr-select-arrow-icon;
       }
 
       svg {
