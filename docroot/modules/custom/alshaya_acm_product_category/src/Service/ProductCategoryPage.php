@@ -114,6 +114,7 @@ class ProductCategoryPage {
    * Initiate algolia helper service.
    *
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper $algolia_react_helper
+   *   Algolia react helper.
    */
   public function setAlgoliaReactHelper(AlshayaAlgoliaReactHelper $algolia_react_helper) {
     $this->algoliaReactHelper = $algolia_react_helper;
