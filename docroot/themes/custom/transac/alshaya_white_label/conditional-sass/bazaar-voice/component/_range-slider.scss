@@ -21,6 +21,10 @@
   padding: 0 1.875rem;
   padding-bottom: 2.5rem;
 
+  &.radio-error {
+    border: 1px solid $rr-form-error-border;
+  }
+
   @include breakpoint($only-mobile) {
     width: 100%;
   }
