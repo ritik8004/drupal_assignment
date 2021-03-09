@@ -1183,3 +1183,27 @@ function alshaya_acm_node_view_alter(array &$build, EntityInterface $entity, Ent
     }
   }
 }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_acm_form_google_tag_container_alter(&$form, FormStateInterface $form_state) {
+  $form['#validate'][] = 'alshaya_acm_google_tag_container_validate_handler';
+}
+
+/**
+ * Gtm tag container form validation handler.
+ *
+ * @param array $form
+ *   An associative array containing the structure of the form.
+ *
+ * @param \Drupal\Core\Form\FormStateInterface $formState
+ *   The current state of the form.
+ */
+
+function alshaya_acm_google_tag_container_validate_handler($form, FormStateInterface $form_state) {
+  $condition_ids = $form_state->getTemporaryValue('filtered_conditions');
+  if (!empty($condition_ids)) {
+    $form_state->setTemporaryValue('filtered_conditions', []);
+  }
+}
