@@ -87,37 +87,10 @@ class AuraApiHelper {
    * @return array
    *   Return array of config values.
    */
-  public function getAuraApiConfig($configs = [], $reset = FALSE, $langcode = '') {
-    static $auraConfigs;
-
+  public function getAuraApiConfig($configs = [], $langcode = 'en', $reset = FALSE) {
     $auraApiConfig = !empty($configs)
       ? $configs
       : AuraDictionaryApiConstants::ALL_DICTIONARY_API_CONSTANTS;
-
-    $currentRequestLangCode = $this->languageManager->getCurrentLanguage()->getId();
-    // Check if current request langcode is different from langcode in argument.
-    $isRequestLangDifferentFromArgumentLang = !empty($langcode) && $langcode !== $currentRequestLangCode;
-
-    // Do not check static config variable if request langcode
-    // is different from langcode in argument.
-    // This scenario occurs when we sync dictionary API data
-    // using drush command for all language.
-    if (!$isRequestLangDifferentFromArgumentLang) {
-      $notFound = FALSE;
-      foreach ($auraApiConfig as $config) {
-        if (empty($auraConfigs[$config])) {
-          $notFound = TRUE;
-        }
-      }
-
-      if ($notFound === FALSE) {
-        return $auraConfigs;
-      }
-    }
-
-    $langcode = !empty($langcode)
-      ? $langcode
-      : $currentRequestLangCode;
 
     foreach ($auraApiConfig as $value) {
       // Adding language code in cache key for tier names only
@@ -136,7 +109,7 @@ class AuraApiHelper {
       // the request language then update context langcode for the API call.
       $resetStoreContext = FALSE;
       if ($value === AuraDictionaryApiConstants::APC_TIER_TYPES
-        && $isRequestLangDifferentFromArgumentLang) {
+        && $langcode !== $this->languageManager->getCurrentLanguage()->getId()) {
         $this->apiWrapper->updateStoreContext($langcode);
         $resetStoreContext = TRUE;
       }
@@ -177,7 +150,11 @@ class AuraApiHelper {
    *   AURA dictionary api data.
    */
   public function prepareAuraDictionaryApiData() {
-    $aura_dictionary_api_config = $this->getAuraApiConfig();
+    $aura_dictionary_api_config = $this->getAuraApiConfig(
+      [AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO,
+        AuraDictionaryApiConstants::CASHBACK_REDEMPTION_RATIO,
+      ],
+      $this->languageManager->getCurrentLanguage()->getId());
 
     $data = [
       'priceToPointRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO] ?? '',
