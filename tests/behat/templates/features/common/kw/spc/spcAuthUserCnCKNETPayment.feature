@@ -1,13 +1,20 @@
-@javascript @KNET @KNetPayment @clickCollect @bbwkwuat
-Feature: SPC Checkout Click and Collect using KNET payment method
+@javascript @KNET @KNetPayment @clickCollect @bbwkwuat @mckwuat @flkwuat @pbkwuat
+Feature: SPC Checkout Click and Collect using KNET payment method for authenticated user
 
   Background:
-    Given I am on "{spc_basket_page}"
-    And I wait 5 seconds
+    Given I am on "user/login"
+    And I wait 10 seconds
+    Then I fill in "edit-name" with "{spc_auth_user_email}"
+    And I fill in "edit-pass" with "{spc_auth_user_password}"
+    Then I press "edit-submit"
+    And I wait 10 seconds
+    Then I should be on "/user" page
+    When I am on "{spc_basket_page}"
+    And I wait 10 seconds
     And I wait for the page to load
 
   @cc @cnc @desktop @knet
-  Scenario: As a Guest, I should be able to checkout using click and collect with knet
+  Scenario: As an Authenticated user, I should be able to checkout using click and collect with knet
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
@@ -80,7 +87,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     Then I should be on "/checkout/confirmation" page
 
   @cc @cnc @language @desktop @knet
-  Scenario: As a Guest, I should be able to checkout using click and collect with knet
+  Scenario: As an Authenticated user, I should be able to checkout using click and collect with knet
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -156,7 +163,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     Then I should be on "/{language_short}/checkout/confirmation" page
 
   @cc @cnc @mobile @knet
-  Scenario: As a Guest, I should be able to checkout using click and collect with knet
+  Scenario: As an Authenticated user, I should be able to checkout using click and collect with knet
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
