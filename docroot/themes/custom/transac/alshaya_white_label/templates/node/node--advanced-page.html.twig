@@ -6,6 +6,8 @@
   ]
 %}
 
+{{ attach_library('alshaya_white_label/advance-content-slider') }}
+
 <article {{ attributes.addClass(classes) }}>
   <div class="c-content">
     <div class="l-container {{ show_right_sidebar ? 'l-column--two' : 'l-column--one' }}">
@@ -28,7 +30,10 @@
             {% if content.field_delivery_banner %}
               {{ content.field_delivery_banner }}
             {% endif %}
-            {{ content.field_promo_blocks }}
+            {% if content.field_promo_blocks %}
+              {{ attach_library('alshaya_white_label/promo-blocks') }}
+              {{ content.field_promo_blocks }}
+            {% endif %}
           </div>
         </div>
 

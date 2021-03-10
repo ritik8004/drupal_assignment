@@ -333,7 +333,8 @@ class CartController {
     }
 
     if (empty($data['payment']['methods']) && !empty($data['shipping']['method'])) {
-      $data['payment']['methods'] = $this->cart->getPaymentMethods();
+      $methods = $this->cart->getPaymentMethods();
+      $data['payment']['methods'] = $methods ?? [];
       $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
     }
 

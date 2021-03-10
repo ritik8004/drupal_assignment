@@ -338,28 +338,38 @@
     }
 
     .product-labels {
+      position: static;
+    }
+
+    .labels-wrapper {
+      position: absolute;
+
+      &.top {
+        &-left {
+          top: 0.625rem;
+          #{$left}: 0.625rem;
+        }
+
+        &-right {
+          top: 0.625rem;
+          #{$right}: 0.625rem;
+        }
+      }
+
+      &.bottom {
+        &-left {
+          bottom: 0.625rem;
+          #{$left}: 0.625rem;
+        }
+
+        &-right {
+          bottom: 0.625rem;
+          #{$right}: 0.625rem;
+        }
+      }
+
       .labels {
-        position: absolute;
-
-        &.top-left,
-        &.top-right {
-          top: 0.75rem;
-        }
-
-        &.bottom-left,
-        &.bottom-right {
-          bottom: 0;
-        }
-
-        &.top-left,
-        &.bottom-left {
-          #{$left}: 0.9375rem;
-        }
-
-        &.top-right,
-        &.bottom-right {
-          #{$right}: 0.9375rem;
-        }
+        max-width: 2.375rem;
 
         img {
           width: auto;
