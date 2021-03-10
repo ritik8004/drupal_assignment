@@ -17,10 +17,6 @@ export default class SelectField extends React.Component {
     this.selectRef.current.select.inputRef.closest('.bv-select').classList.remove('open');
   };
 
-  afterCartUpdate = () => {
-    this.selectRef.current.select.inputRef.closest('.bv-select').previousSibling.classList.remove('loading');
-  };
-
   render() {
     const {
       required,
