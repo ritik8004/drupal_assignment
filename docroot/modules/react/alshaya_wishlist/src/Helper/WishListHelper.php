@@ -4,6 +4,7 @@ namespace Drupal\alshaya_wishlist\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Session\AccountProxyInterface;
 
 /**
  * Helper class for Wishlist.
@@ -22,15 +23,26 @@ class WishListHelper {
   protected $configFactory;
 
   /**
+   * Current user object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * WishListHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
+   *   The current user object.
    */
   public function __construct(
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    AccountProxyInterface $account_proxy
   ) {
     $this->configFactory = $config_factory;
+    $this->currentUser = $account_proxy;
   }
 
   /**
@@ -67,7 +79,7 @@ class WishListHelper {
    */
   public function getWishListUserDetails() {
     $user_details = [
-      'id' => $this->currentUser()->id(),
+      'id' => $this->currentUser->id(),
     ];
 
     return $user_details;

@@ -39,9 +39,13 @@ function alshaya_wishlist_page_attachments_alter(array &$page) {
     return;
   }
 
+  $settings['userDetails'] = $wishlist_helper->getWishListUserDetails();
+
   $current_route = \Drupal::routeMatch();
 
   if ($current_route->getRouteName() === 'entity.node.canonical' && $current_route->getParameter('node')->bundle() === 'acq_product') {
     $page['#attached']['library'][] = 'alshaya_wishlist/wishlist_pdp';
   }
+
+  $page['#attached']['drupalSettings']['wishlist'] = $settings;
 }
