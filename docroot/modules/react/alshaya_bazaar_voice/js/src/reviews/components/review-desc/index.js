@@ -48,7 +48,7 @@ const ReviewDescription = ({
                 && reviewDescriptionData.IsRecommended !== null}
               >
                 <div className="review-recommendation">
-                  <span className="review-recommendation-icon">{Drupal.t('recommendation-icon')}</span>
+                  <span className="review-recommendation-icon" />
                   <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
                   <span className="review-recommendation-text">{Drupal.t('I would recommend this product.')}</span>
                 </div>
