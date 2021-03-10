@@ -79,7 +79,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   /**
    * Works on a single queue item.
    *
-   * @param mixed $sku
+   * @param mixed $data
    *   The data that was passed to
    *   \Drupal\Core\Queue\QueueInterface::createItem() when the item was queued.
    *
@@ -101,7 +101,18 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    *
    * @see \Drupal\Core\Cron::processQueues()
    */
-  public function processItem($sku) {
+  public function processItem($data) {
+    if (is_string($data)) {
+      $sku = $data;
+      $nid = 0;
+    }
+    elseif (is_array($data)) {
+      $sku = $data['sku'];
+      $nid = (int) $data['nid'];
+    }
+
+    $this->getLogger('ProcessProduct')->notice(serialize($data));
+
     $entity = SKU::loadFromSku($sku);
 
     // Sanity check.
@@ -110,6 +121,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         '@sku' => $sku,
       ]);
 
+      $this->deleteFromIndexes($nid);
       return;
     }
 
@@ -117,6 +129,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     // So either configurable SKU or simple one visible in frontend.
     $node = $entity->getPluginInstance()->getDisplayNode($entity, FALSE);
     if (!($node instanceof NodeInterface)) {
+      $this->deleteFromIndexes($nid);
+
       if (!($this->skuManager->isSkuFreeGift($entity))) {
         $this->getLogger('ProcessProduct')->notice('Skipping process of product with sku: @sku as Node not available', [
           '@sku' => $entity->getSku(),
@@ -174,6 +188,54 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     $this->getLogger('ProcessProduct')->notice('Processed product with sku: @sku', [
       '@sku' => $entity->getSku(),
     ]);
+  }
+
+  /**
+   * Wrapper function to get active indexes.
+   *
+   * @return \Drupal\search_api\Entity\Index[]
+   *   Enabled and writable indexes array.
+   */
+  protected function getIndexes() {
+    static $indexes;
+    if (!empty($indexes)) {
+      return $indexes;
+    }
+
+    $indexes = $this->entityTypeManager->getStorage('search_api_index')->loadMultiple();
+
+    /** @var \Drupal\search_api\Entity\Index $index */
+    foreach ($indexes as $id => $index) {
+      if ($index->isReadOnly() || !($index->status())) {
+        unset($indexes[$id]);
+      }
+    }
+
+    return $indexes;
+  }
+
+  /**
+   * Wrapper function to delete nodes from Indexes.
+   */
+  protected function deleteFromIndexes(int $nid) {
+    if (empty($nid)) {
+      return;
+    }
+
+    $indexes = $this->getIndexes();
+    if (!$indexes) {
+      return;
+    }
+
+    // Remove the search items for all the entity's translations.
+    foreach ($indexes as $index) {
+      $index->trackItemsDeleted('entity:node', [$nid]);
+
+      $this->getLogger('ProcessProduct')->notice('Deleted product from index: @index, nid: @nid.', [
+        'nid' => $nid,
+        'index' => $index->id(),
+      ]);
+    }
   }
 
   /**

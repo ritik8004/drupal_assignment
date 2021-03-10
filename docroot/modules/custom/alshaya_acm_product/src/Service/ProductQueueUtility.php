@@ -44,9 +44,17 @@ class ProductQueueUtility {
    *
    * @param string $sku
    *   Product SKU.
+   * @param string|int|null $nid
+   *   Node ID for the product.
    */
-  public function queueProduct(string $sku) {
-    $this->getQueue()->createItem($sku);
+  public function queueProduct(string $sku, $nid = 0) {
+    // Always convert node id to integer to have it consistent every-time.
+    $nid = (int) $nid;
+
+    $this->getQueue()->createItem([
+      'sku' => $sku,
+      'nid' => $nid,
+    ]);
   }
 
   /**
@@ -60,12 +68,13 @@ class ProductQueueUtility {
     $query->condition('nfd.default_langcode', 1);
     $query->condition('nfd.type', 'acq_product');
     $query->isNotNull('nfs.field_skus_value');
+    $query->addField('nfd', 'nid');
     $query->addField('nfs', 'field_skus_value');
 
-    $products = $query->execute()->fetchAllKeyed(0, 0);
+    $products = $query->execute()->fetchAllKeyed(0, 1);
 
-    foreach ($products as $sku) {
-      $this->queueProduct($sku);
+    foreach ($products as $nid => $sku) {
+      $this->queueProduct($sku, $nid);
     }
   }
 
@@ -96,11 +105,13 @@ class ProductQueueUtility {
     $query->condition('nfd.default_langcode', 1);
     $query->condition('nfd.type', 'acq_product');
     $query->condition('nfs.field_skus_value', $skus, 'IN');
+    $query->addField('nfd', 'nid');
     $query->addField('nfs', 'field_skus_value');
 
-    $products = $query->execute()->fetchCol();
-    foreach ($products as $sku) {
-      $this->queueProduct($sku);
+    $products = $query->execute()->fetchAllKeyed(0, 1);
+
+    foreach ($products as $nid => $sku) {
+      $this->queueProduct($sku, $nid);
     }
   }
 
