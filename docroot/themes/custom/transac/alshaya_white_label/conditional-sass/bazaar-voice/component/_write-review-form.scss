@@ -15,6 +15,7 @@
   padding: 2.875rem 1.5625rem 0;
   text-align: $left;
   cursor: auto;
+  color: $rr-form-body-txt;
 
   @include breakpoint($only-mobile) {
     padding: 2rem 0;
