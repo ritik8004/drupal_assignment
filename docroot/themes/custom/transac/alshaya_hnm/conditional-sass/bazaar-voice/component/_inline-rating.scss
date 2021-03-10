@@ -1,5 +1,9 @@
 .aggregate-rating {
+  margin-top: 0;
+
   > span {
+    margin-top: -0.25rem;
+
     a {
       font-family: $hnm-regular;
     }
@@ -8,12 +12,39 @@
 
 .star-ratings-wrapper {
   .inline-star {
+    top: 0.125rem;
+
     .icon-ic_ratingfull {
-      @include icon(rating-filled);
+      @include icon(rating-filled) {
+        font-size: 1.5rem;
+      }
     }
 
     .icon-ic_rating {
-      @include icon(rating-empty);
+      @include icon(rating-empty) {
+        font-size: 1.5rem;
+      }
+    }
+
+    .star-ratings-front,
+    .star-ratings-back {
+      span {
+        padding: 0;
+      }
+    }
+  }
+}
+
+.review-detail-right {
+  .inline-star {
+    .star-ratings-front,
+    .star-ratings-back {
+      .icon-ic_ratingfull,
+      .icon-ic_rating {
+        &::before {
+          font-size: 2rem;
+        }
+      }
     }
   }
 }
