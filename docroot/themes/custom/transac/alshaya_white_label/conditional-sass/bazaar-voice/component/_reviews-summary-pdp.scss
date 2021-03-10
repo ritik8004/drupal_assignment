@@ -169,11 +169,15 @@
       }
 
       &-icon {
-        background: url(#{$base_theme_img_directory_path}/icons/recommendation-tick.svg) no-repeat;
-        display: inline-block;
-        width: 1.5rem;
-        height: 1.5rem;
-        font-size: 0;
+        @include icon(check) {
+          background: $rr-recommendation-icon-bg;
+          color: $rr-recommendation-icon;
+          border-radius: 50%;
+          font-size: 1.25rem;
+          margin-#{$right}: 0.3125rem;
+          position: relative;
+          top: 0.0625rem;
+        }
       }
     }
 
