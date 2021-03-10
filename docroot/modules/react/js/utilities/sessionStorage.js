@@ -1,21 +1,20 @@
 export const setStorageInfo = (data, storageKey) => {
   const dataToStore = (typeof data === 'object') ? JSON.stringify(data) : data;
-  localStorage.setItem(storageKey, dataToStore);
+  sessionStorage.setItem(storageKey, dataToStore);
 };
 
 export const removeStorageInfo = (storageKey) => {
-  localStorage.removeItem(storageKey);
+  sessionStorage.removeItem(storageKey);
 };
 
 export const getStorageInfo = (storageKey) => {
-  const storageItem = localStorage.getItem(storageKey);
+  const storageItem = sessionStorage.getItem(storageKey);
   if (!storageItem) {
     return null;
   }
 
   try {
     const storageItemArray = JSON.parse(storageItem);
-    // @TODO: Handle storage expiration.
     return storageItemArray;
   } catch (e) {
     return storageItem;

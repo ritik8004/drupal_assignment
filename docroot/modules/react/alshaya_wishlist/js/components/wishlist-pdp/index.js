@@ -1,7 +1,7 @@
 import React from 'react';
-import { getStorageInfo } from '../../../../js/utilities/storage';
+import { getStorageInfo } from '../../../../js/utilities/sessionStorage';
 import {
-  getWishListLocalStorageKey,
+  getWishListStorageKey,
   addProductToWishList,
   removeProductFromWishList,
   prepareProductDetailsForWishList,
@@ -15,12 +15,12 @@ class WishListPDP extends React.Component {
     let addedInWishList = false;
 
     if (!getUserDetails().id) {
-      const localStorageValues = getStorageInfo(getWishListLocalStorageKey());
+      const storageValues = getStorageInfo(getWishListStorageKey());
 
-      if (localStorageValues) {
+      if (storageValues) {
         const parentProductSku = Object.keys(getCurrentProductDetails())[0];
 
-        if (Object.prototype.hasOwnProperty.call(localStorageValues, parentProductSku)) {
+        if (Object.prototype.hasOwnProperty.call(storageValues, parentProductSku)) {
           addedInWishList = true;
         }
       }

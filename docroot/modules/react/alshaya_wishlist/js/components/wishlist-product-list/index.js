@@ -10,7 +10,7 @@ class WishlistProductList extends React.Component {
   }
 
   componentDidMount() {
-    // @todo: Fetch the wishlist product list from API or local Storage.
+    // @todo: Fetch the wishlist product list from API or Storage.
     // Set the data in state.
     this.setState({
       items: [

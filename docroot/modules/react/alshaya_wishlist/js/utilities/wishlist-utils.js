@@ -1,11 +1,11 @@
-import { getStorageInfo, setStorageInfo } from '../../../js/utilities/storage';
+import { getStorageInfo, setStorageInfo } from '../../../js/utilities/sessionStorage';
 import { getUserDetails } from './wishlist-data-helper';
 import dispatchCustomEvent from '../../../js/utilities/events';
 
 /**
- * Utility function to get wishlist localStorage key.
+ * Utility function to get wishlist storage key.
  */
-function getWishListLocalStorageKey() {
+function getWishListStorageKey() {
   return 'wishlist_data';
 }
 
@@ -13,18 +13,18 @@ function getWishListLocalStorageKey() {
  * Utility function to add a product to wishlist for guest users.
  */
 function addProductToWishListForGuestUsers(productData) {
-  const localStorageKey = getWishListLocalStorageKey();
+  const storageKey = getWishListStorageKey();
   // Get the existing data.
-  let existing = getStorageInfo(localStorageKey);
+  let existing = getStorageInfo(storageKey);
 
   // If no existing data, create an array.
   existing = existing || {};
 
-  // Add new data to localStorage.
+  // Add new data to storage.
   existing[productData.sku] = productData;
 
-  // Save back to localStorage.
-  setStorageInfo(existing, getWishListLocalStorageKey());
+  // Save back to storage.
+  setStorageInfo(existing, getWishListStorageKey());
 }
 
 /**
@@ -43,15 +43,15 @@ function addProductToWishList(productData) {
  * Utility function to remove a product from wishlist for guest users.
  */
 function removeProductFromWishListForGuestUsers(productSku) {
-  const localStorageKey = getWishListLocalStorageKey();
+  const storageKey = getWishListStorageKey();
   // Get the existing data.
-  const existing = getStorageInfo(localStorageKey);
+  const existing = getStorageInfo(storageKey);
 
   // Remove the entry for given productSku from existing storage data.
   delete existing[productSku];
 
-  // Save back to localStorage.
-  setStorageInfo(existing, getWishListLocalStorageKey());
+  // Save back to storage.
+  setStorageInfo(existing, getWishListStorageKey());
 }
 
 /**
@@ -85,7 +85,7 @@ function prepareProductDetailsForWishList(productSku) {
 }
 
 export {
-  getWishListLocalStorageKey,
+  getWishListStorageKey,
   addProductToWishList,
   removeProductFromWishList,
   prepareProductDetailsForWishList,
