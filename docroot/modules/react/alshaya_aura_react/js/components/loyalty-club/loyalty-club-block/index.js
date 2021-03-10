@@ -12,7 +12,7 @@ const LoyaltyClubBlock = (props) => {
   const {
     wait,
     loyaltyStatus,
-    tierName,
+    tier,
     points,
     cardNumber,
     expiringPoints,
@@ -58,7 +58,7 @@ const LoyaltyClubBlock = (props) => {
       return (
         <>
           <AuraMyAccountVerifiedUser
-            tierName={tierName}
+            tier={tier}
             points={points}
             pointsOnHold={pointsOnHold}
             cardNumber={cardNumber}

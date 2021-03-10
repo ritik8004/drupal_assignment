@@ -4,6 +4,7 @@ namespace Drupal\alshaya_aura_react\Commands;
 
 use Drupal\alshaya_aura_react\Helper\AuraApiHelper;
 use Drush\Commands\DrushCommands;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Provides commands to sync Aura related config from API.
@@ -20,15 +21,26 @@ class AlshayaAuraCommands extends DrushCommands {
   protected $apiHelper;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * AlshayaAuraCommands constructor.
    *
    * @param Drupal\alshaya_aura_react\Helper\AuraApiHelper $api_helper
    *   Api helper object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(
-    AuraApiHelper $api_helper
+    AuraApiHelper $api_helper,
+    LanguageManagerInterface $language_manager
   ) {
     $this->apiHelper = $api_helper;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -43,15 +55,23 @@ class AlshayaAuraCommands extends DrushCommands {
    * @usage drush sync-aura-api-config
    * @usage drush sync-aura-api-config --configs="APC_CASHBACK_ACCRUAL_RATIO,EXT_PHONE_PREFIX"
    * @usage drush sync-aura-api-config --configs="APC_CASHBACK_REDEMPTION_RATIO" --reset
+   * @usage drush sync-aura-api-config --configs="APC_CASHBACK_REDEMPTION_RATIO" --langcode='en,ar' --reset
    */
   public function syncAuraConfig(array $options = [
     'configs' => '',
     'reset' => FALSE,
+    'langcode' => '',
   ]) {
     $configs = !empty($options['configs'])
       ? explode(',', $options['configs'])
       : [];
-    $this->apiHelper->getAuraApiConfig($configs, $options['reset']);
+    $langcode_list = !empty($options['langcode'])
+      ? explode(',', $options['langcode'])
+      : array_keys($this->languageManager->getLanguages());
+
+    foreach ($langcode_list as $langcode) {
+      $this->apiHelper->getAuraApiConfig($configs, $langcode, $options['reset']);
+    }
 
     $this->logger->notice('Aura API config synced. Configs: @configs.', [
       '@configs' => json_encode($options['configs']),

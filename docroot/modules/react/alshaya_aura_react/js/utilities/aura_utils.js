@@ -60,7 +60,6 @@ function getAuraDetailsDefaultState() {
   const auraDetails = {
     loyaltyStatus: getUserAuraStatus(),
     tier: getUserAuraTier(),
-    tierName: '',
     points: 0,
     cardNumber: '',
     pointsOnHold: 0,
