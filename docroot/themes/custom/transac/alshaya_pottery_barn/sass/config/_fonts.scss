@@ -22,14 +22,9 @@ $cairo: 'Cairo';
 // DY fonts.
 @font-face {
   font-family: "Montserrat-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -37,14 +32,9 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: "Montserrat-Medium";
-  src: url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Medium.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -52,14 +42,9 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: "Montserrat-Regular";
-  src: url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -67,14 +52,9 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: "Montserrat-SemiBold";
-  src: url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Montserrat-SemiBold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -82,14 +62,9 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: "NunitoSans-Regular";
-  src: url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/NunitoSans-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -97,14 +72,9 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: "SweetSansPro-Medium";
-  src: url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/SweetSansPro-Medium.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -112,42 +82,27 @@ $cairo: 'Cairo';
 
 @font-face {
   font-family: 'FranklinGothicLTPro-BkCm';
-  src: url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/FranklinGothicLTPro-BkCm.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "NeutrafaceDisplay-Light";
-  src: url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/NeutrafaceDisplay-Light.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Canela-Thin";
-  src: url("#{$base_theme_fonts_directory_path}/Canela-Thin.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/Canela-Thin.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Canela-Thin.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/Canela-Thin.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Canela-Thin.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Canela-Thin.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
