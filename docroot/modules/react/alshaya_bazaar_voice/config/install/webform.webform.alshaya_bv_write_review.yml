@@ -47,7 +47,7 @@ elements: |
     '#visible': true
   useremail:
     '#type': textfield
-    '#required': false
+    '#required': true
     '#title': Email
     '#value': null
     '#minlength': 0
