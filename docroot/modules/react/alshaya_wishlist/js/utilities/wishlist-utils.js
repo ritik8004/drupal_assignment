@@ -12,7 +12,7 @@ function getWishListStorageKey() {
 /**
  * Utility function to add a product to wishlist for guest users.
  */
-function addProductToWishListForGuestUsers(productData) {
+function addProductToWishListForGuestUsers(productSku) {
   const storageKey = getWishListStorageKey();
   // Get the existing data.
   let existing = getStorageInfo(storageKey);
@@ -21,7 +21,7 @@ function addProductToWishListForGuestUsers(productData) {
   existing = existing || {};
 
   // Add new data to storage.
-  existing[productData.sku] = productData;
+  existing[productSku] = productSku;
 
   // Save back to storage.
   setStorageInfo(existing, getWishListStorageKey());
@@ -30,13 +30,13 @@ function addProductToWishListForGuestUsers(productData) {
 /**
  * Utility function to add a product to wishlist.
  */
-function addProductToWishList(productData) {
+function addProductToWishList(productSku) {
   // For Guest users.
   if (!getUserDetails().id) {
-    addProductToWishListForGuestUsers(productData);
+    addProductToWishListForGuestUsers(productSku);
   }
 
-  dispatchCustomEvent('productAddedToWishlist', { data: productData, addedInWishList: true });
+  dispatchCustomEvent('productAddedToWishlist', { sku: productSku, addedInWishList: true });
 }
 
 /**
@@ -63,7 +63,7 @@ function removeProductFromWishList(productSku) {
     removeProductFromWishListForGuestUsers(productSku);
   }
 
-  dispatchCustomEvent('productRemovedFromWishlist', { data: productSku, addedInWishList: false });
+  dispatchCustomEvent('productRemovedFromWishlist', { sku: productSku, addedInWishList: false });
 }
 
 /**

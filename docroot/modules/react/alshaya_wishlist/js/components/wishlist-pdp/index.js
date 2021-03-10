@@ -4,7 +4,6 @@ import {
   getWishListStorageKey,
   addProductToWishList,
   removeProductFromWishList,
-  prepareProductDetailsForWishList,
 } from '../../utilities/wishlist-utils';
 import { getCurrentProductDetails } from '../../utilities/wishlist-pdp-helper';
 import { getUserDetails } from '../../utilities/wishlist-data-helper';
@@ -57,7 +56,7 @@ class WishListPDP extends React.Component {
     if (addedInWishList) {
       removeProductFromWishList(parentProductSku);
     } else {
-      addProductToWishList(prepareProductDetailsForWishList(parentProductSku));
+      addProductToWishList(parentProductSku);
     }
   }
 
