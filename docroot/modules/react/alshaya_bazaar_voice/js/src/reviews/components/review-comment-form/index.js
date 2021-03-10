@@ -5,6 +5,8 @@ import ReviewCommentSubmission from '../review-comment-submission';
 import { getCurrentUserEmail } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
+import { validEmailRegex } from '../../../utilities/write_review_util';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -46,12 +48,16 @@ class ReviewCommentForm extends React.Component {
                 type="text"
                 id="commentbox"
                 name="commentbox"
+                minLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length}
                 onChange={this.handleCommentboxChange}
-                className="form-input focus"
+                className="form-input"
                 defaultValue={commentbox}
               />
               <div className="c-input__bar" />
-              <label className="comment-form-commentbox-label form-label">{Drupal.t('Comment')}</label>
+              <label className={`form-label ${commentbox ? 'active-label' : ''}`}>
+                {Drupal.t('Comment')}
+                {'*'}
+              </label>
               <div id="commentbox-error" className="error" />
             </div>
 
@@ -62,11 +68,14 @@ class ReviewCommentForm extends React.Component {
                   id="nickname"
                   name="nickname"
                   onChange={this.handleNicknameChange}
-                  className="form-input focus"
+                  className="form-input"
                   defaultValue={nickname}
                 />
                 <div className="c-input__bar" />
-                <label className="comment-form-nickname form-label">{Drupal.t('Screen name')}</label>
+                <label className={`form-label ${nickname ? 'active-label' : ''}`}>
+                  {Drupal.t('Screen name')}
+                  {'*'}
+                </label>
                 <div id="nickname-error" className="error" />
               </div>
 
@@ -76,11 +85,14 @@ class ReviewCommentForm extends React.Component {
                   id="email"
                   name="email"
                   onChange={this.handleEmailChange}
-                  className="form-input focus"
+                  className="form-input"
                   defaultValue={email}
                 />
                 <div className="c-input__bar" />
-                <label className="comment-form-email form-label">{Drupal.t('Email Address')}</label>
+                <label className={`form-label ${email ? 'active-label' : ''}`}>
+                  {Drupal.t('Email Address')}
+                  {'*'}
+                </label>
                 <div id="email-error" className="error" />
               </div>
             </div>
@@ -148,6 +160,12 @@ class ReviewCommentForm extends React.Component {
   }
 
   handleEmailChange = (e) => {
+    if (e.target.value.length > 0) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = validEmailRegex.test(e.target.value)
+        ? '' : getStringMessage('valid_email_error', { '%mail': e.target.value });
+    } else {
+      document.getElementById(`${e.target.id}-error`).innerHTML = '';
+    }
     this.setState({ email: e.target.value });
   }
 
@@ -156,6 +174,13 @@ class ReviewCommentForm extends React.Component {
   }
 
   handleCommentboxChange = (e) => {
+    if (e.target.value.length > 0) {
+      document.getElementById(`${e.target.id}-error`).innerHTML = e.target.value.length < e.target.minLength
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength })
+        : '';
+    } else {
+      document.getElementById(`${e.target.id}-error`).innerHTML = '';
+    }
     this.setState({ commentbox: e.target.value });
   }
 
@@ -167,7 +192,16 @@ class ReviewCommentForm extends React.Component {
         <>
           <div className="review-feedback-comment">
             <span className={`feedback-comment ${showCommentForm ? 'feedback-comment-disabled' : 'feedback-comment-active'}`}>
-              <button className="review-feedback-comment-btn" onClick={() => this.setState({ showCommentForm: true })} type="button" disabled={showCommentForm}>{Drupal.t('comment')}</button>
+              <button
+                className="review-feedback-comment-btn"
+                onClick={() => this.setState({
+                  showCommentForm: true, showCommentSubmission: false, email: '', nickname: '', commentbox: '',
+                })}
+                type="button"
+                disabled={showCommentForm}
+              >
+                {Drupal.t('comment')}
+              </button>
             </span>
           </div>
           {showCommentForm ? this.showCommentForm() : null}
