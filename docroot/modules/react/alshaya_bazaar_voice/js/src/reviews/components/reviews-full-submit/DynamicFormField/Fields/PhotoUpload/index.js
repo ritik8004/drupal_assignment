@@ -1,6 +1,7 @@
 import React from 'react';
 import ImageUploading from 'react-images-uploading';
 import PhotoUrls from './PhotoUrls';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 const PhotoUpload = (props) => {
   const { fieldProperty: photoField } = props;
@@ -47,16 +48,15 @@ const PhotoUpload = (props) => {
             <div className="photo-upload-block">
               <div className="user-pic-label">{Drupal.t('Show us how it looks! Upload up to 5 pics ')}</div>
               <div className="upload-btn-container">
-                {imageList.length < maxNumber
-                  && (
-                    <button
-                      type="button"
-                      onClick={onImageUpload}
-                      {...dragProps}
-                    >
-                      {Drupal.t('Upload a Photo')}
-                    </button>
-                  )}
+                <ConditionalView condition={imageList.length < maxNumber}>
+                  <button
+                    type="button"
+                    onClick={onImageUpload}
+                    {...dragProps}
+                  >
+                    {Drupal.t('Upload a Photo')}
+                  </button>
+                </ConditionalView>
                 <input type="hidden" name="photoCount" id="photoCount" defaultValue={imageList.length} />
               </div>
             </div>

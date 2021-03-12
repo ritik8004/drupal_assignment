@@ -21,6 +21,8 @@
     }
 
     .rating-wrapper {
+      color: $rr-rating-section;
+
       @include breakpoint($tablet) {
         margin: 0 auto;
         max-width: 66.35rem;
@@ -159,8 +161,8 @@
           border: 0.0625rem solid $rr-review-summary-btn-color;
           padding: 0.75rem;
           font-size: 0.875rem;
-          border-radius: 0.1875rem;
           line-height: 1;
+          font-family: $alshaya-bold;
 
           @include breakpoint($only-mobile) {
             min-width: 100%;

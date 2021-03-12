@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 class NetPromoter extends React.Component {
   constructor(props) {
@@ -27,10 +28,9 @@ class NetPromoter extends React.Component {
 
     return (
       <>
-        {text !== undefined
-          && (
+        <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
-          )}
+        </ConditionalView>
         <div className="netpromotr-wrapper">
           <div className="netpromoter-label">
             <label htmlFor={label}>
@@ -40,7 +40,7 @@ class NetPromoter extends React.Component {
             </label>
           </div>
           <div className="netpromoter-option">
-            <div className="survey-block">
+            <div className="survey-block" id={`${id}-error`}>
               {[...Array(maxLength)].map((radio, i) => {
                 const radioIndex = i + 1;
                 return (
@@ -48,12 +48,12 @@ class NetPromoter extends React.Component {
                     <input
                       type="radio"
                       id={i}
-                      value={i}
+                      defaultValue={i}
                       name="netpromoter"
                       data-drupal-selector={i}
                       onClick={(e) => this.handleClick(e)}
                     />
-                    <label htmlFor={i}><p>{i}</p></label>
+                    <label className="netpromoter" htmlFor={i}><p>{i}</p></label>
                   </div>
                 );
               })}
@@ -65,7 +65,6 @@ class NetPromoter extends React.Component {
           </div>
           <input type="hidden" id={id} name={id} required={required} value={promoterVal || ''} />
           <div className="c-input__bar" />
-          <div id="bv-error" className="error" />
         </div>
       </>
     );

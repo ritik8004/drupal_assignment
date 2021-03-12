@@ -42,7 +42,7 @@ export const processFormDetails = async (e) => {
   if (targetElementCommentbox !== undefined
     && targetElementCommentbox.value.toString().length < commentMinLength) {
     document.getElementById(`${targetElementCommentbox.id}`).classList.add('error');
-    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('commentbox_length_error', { '%minLength': commentMinLength });
+    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': commentMinLength });
     document.getElementById(`${targetElementCommentbox.id}-error`).classList.add('error');
     isError = true;
   }

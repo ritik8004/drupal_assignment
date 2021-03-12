@@ -9,6 +9,7 @@ import ReviewPhoto from '../review-photo';
 
 const ReviewDescription = ({
   reviewDescriptionData,
+  reviewsComment,
 }) => {
   if (reviewDescriptionData !== undefined) {
     const date = new Date(reviewDescriptionData.SubmissionTime);
@@ -47,7 +48,7 @@ const ReviewDescription = ({
                 && reviewDescriptionData.IsRecommended !== null}
               >
                 <div className="review-recommendation">
-                  <span className="review-recommendation-icon">{Drupal.t('recommendation-icon')}</span>
+                  <span className="review-recommendation-icon" />
                   <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
                   <span className="review-recommendation-text">{Drupal.t('I would recommend this product.')}</span>
                 </div>
@@ -67,7 +68,8 @@ const ReviewDescription = ({
             />
             <div className="review-comment-display">
               <ReviewCommentDisplay
-                ReviewId={reviewDescriptionData.Id}
+                reviewId={reviewDescriptionData.Id}
+                reviewsComment={reviewsComment}
               />
             </div>
           </div>

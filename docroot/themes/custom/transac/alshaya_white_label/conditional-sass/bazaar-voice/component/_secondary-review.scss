@@ -110,6 +110,7 @@
         font-size: 0.875rem;
         padding-right: 0.625rem;
         font-family: $alshaya-bold;
+        color: $rr-review-summary-txt;
 
         @include breakpoint($only-tablet) {
           width: 34%;

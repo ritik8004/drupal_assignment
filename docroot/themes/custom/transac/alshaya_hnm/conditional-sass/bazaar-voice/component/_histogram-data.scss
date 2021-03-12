@@ -1,0 +1,32 @@
+#reviews-section {
+  .histogram-data-section {
+    .rating-wrapper {
+      @include breakpoint($tablet) {
+        max-width: 80rem;
+        padding: 0 1.5rem;
+      }
+
+      .button-wrapper {
+        .write-review-button {
+          font-size: 0.8125rem;
+          font-family: $hnm-demibold;
+        }
+      }
+
+      .star-ratings-wrapper {
+        .inline-star {
+          .icon-ic_ratingfull,
+          .icon-ic_rating {
+            &::before {
+              font-size: 2.25rem;
+
+              @include breakpoint($only-mobile) {
+                font-size: 3rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

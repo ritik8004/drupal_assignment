@@ -25,4 +25,5 @@ visibility:
     bundles:
       product_list: product_list
     negate: false
-    context_mapping: {  }
+    context_mapping:
+      node: '@node.node_route_context:node'

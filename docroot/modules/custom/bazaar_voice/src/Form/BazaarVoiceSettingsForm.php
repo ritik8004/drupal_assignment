@@ -121,6 +121,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ]),
     ];
 
+    $form['basic_settings']['bv_content_types'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('BV Content Types'),
+      '#default_value' => $config->get('bv_content_types'),
+      '#description' => $this->t('List of content types of BV associated with reviews API.'),
+    ];
+
     $form['basic_settings']['environment'] = [
       '#type' => 'textfield',
       '#title' => $this->t('environment'),
@@ -204,6 +211,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('write_review_tnc', $values['write_review_tnc'])
       ->set('write_review_guidlines', $values['write_review_guidlines'])
       ->set('comment_form_tnc', $values['comment_form_tnc'])
+      ->set('bv_content_types', $values['bv_content_types'])
       ->set('comment_form_box_length', $values['comment_form_box_length'])
       ->save();
 

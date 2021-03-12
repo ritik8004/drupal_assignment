@@ -3,14 +3,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "BBWTradeGothicLTStd_Bold";
-  src: url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd-Bd2.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -18,14 +13,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
 
 @font-face {
   font-family: "BBWTradeGothicLTStd";
-  src: url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BBWTradeGothicLTStd.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -35,12 +25,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
   font-family: "DroidArabicKufi_Bold";
   src: url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -50,12 +36,8 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_bathbodyworks/
   font-family: "DroidKufi_Regular";
   src: url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
