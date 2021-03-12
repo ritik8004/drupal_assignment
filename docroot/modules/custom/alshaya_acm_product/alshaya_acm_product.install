@@ -1354,6 +1354,9 @@ function alshaya_acm_product_install() {
     'Click <span class="coupon-code">@promotion.coupon_code</span> to get a Free Gift' => [
       'ar' => 'اضغط <span class="coupon-code">@promotion.coupon_code</span> للحصول على هدية مجانية',
     ],
+    'The product that you are trying to add is not available.' => [
+      'ar' => 'المنتج الذي تحاول إضافته غير متوفر.',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
