@@ -2482,10 +2482,14 @@ class Cart {
       }
     }
     catch (\Exception $e) {
+      $error_code = $e->getCode();
+      if ($error_code === 404) {
+        $error_code = 604;
+      }
       $this->logger->error('Error while processing cart data. Error message: @message', [
         '@message' => $e->getMessage(),
       ]);
-      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $error_code);
     }
 
     // Whether cart is stale or not.
