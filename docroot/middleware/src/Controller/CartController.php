@@ -869,6 +869,19 @@ class CartController {
     $uid = (int) $this->cart->getDrupalInfo('uid');
     $session_customer_id = $this->cart->getDrupalInfo('customer_id');
 
+    if (in_array($request_content['action'],
+      [
+        CartActions::CART_ADD_ITEM,
+        CartActions::CART_UPDATE_ITEM,
+        CartActions::CART_REMOVE_ITEM,
+      ]
+    )) {
+      if (empty($request_content['sku'])) {
+        $this->logger->error('Cart update operation not containing any sku.');
+        return 400;
+      }
+    }
+
     // For new cart request, we don't need any further validations.
     // Or if request has cart id but cart not exist in session,
     // create new cart for the user.
