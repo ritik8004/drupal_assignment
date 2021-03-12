@@ -883,8 +883,6 @@ class CartController {
       return 400;
     }
 
-    // @todo This code is to analyse the cases when the quantity is null or 0,
-    // Remove it after the analysis.
     if ($cart_item_updated && empty($request_content['quantity'])) {
       $this->logger->error('Cart update operation not containing any quantity. Data: @request_data', [
         '@request_data' => json_encode($request_content),
