@@ -6,7 +6,7 @@
   .image-wrapper {
     display: flex;
 
-    @include breakpoint($only-mobile) {
+    @include breakpoint($upto-desktop) {
       display: -webkit-box;
       white-space: nowrap;
       overflow-x: auto;
@@ -18,6 +18,13 @@
       margin-#{$left}: -17vw;
       position: relative;
       padding-#{$left}: 1.5rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 100%;
+      padding-#{$left}: 0;
+      #{$left}: 0;
+      margin-#{$left}: 0;
     }
 
     .image-item {
@@ -85,6 +92,8 @@
     .user-pic-label,
     .upload-btn-container {
       width: 50%;
+      color: $rr-form-label-txt;
+      font-size: 0.875rem;
 
       @include breakpoint($only-mobile) {
         min-width: 100%;
@@ -104,7 +113,6 @@
       border: 0.0625rem solid $rr-review-summary-btn-color;
       padding: 0.75rem;
       font-size: 0.875rem;
-      border-radius: 0.1875rem;
       line-height: 1;
       font-family: $alshaya-thin;
 

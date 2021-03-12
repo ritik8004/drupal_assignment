@@ -66,12 +66,12 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onProductUpdated(ProductUpdatedEvent $event) {
+    $this->queueProductForProcessing($event->getSku());
+
     if ($event->getOperation() == ProductUpdatedEvent::EVENT_DELETE) {
       $this->productProcessedManager->removeProduct($event->getSku()->getSku());
       return;
     }
-
-    $this->queueProductForProcessing($event->getSku());
   }
 
   /**
@@ -114,25 +114,14 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   SKU entity.
    */
   private function queueProductForProcessing(SKU $entity) {
-    $skus = [$entity->getSku()];
+    $nid = $entity->getPluginInstance()->getDisplayNodeId($entity, FALSE);
+    $this->queueUtility->queueProduct($entity->getSku(), $nid);
 
     if ($entity->bundle() == 'simple') {
       $parents = $entity->getPluginInstance()->getAllParentIds($entity->getSku());
       if (!empty($parents)) {
-        $skus = $parents;
-
-        // If a product is visible at both simple as well as configurable level
-        // we need to process for the node attached to simple product too.
-        // This is content issue but we handle in code.
-        if ($entity->getPluginInstance()->getDisplayNodeId($entity, FALSE)) {
-          $skus[] = $entity->getSku();
-        }
+        $this->queueUtility->queueAvailableProductsForSkus($parents);
       }
-    }
-
-    // Create multiple items if we have multiple parents.
-    foreach ($skus as $sku) {
-      $this->queueUtility->queueProduct($sku);
     }
   }
 

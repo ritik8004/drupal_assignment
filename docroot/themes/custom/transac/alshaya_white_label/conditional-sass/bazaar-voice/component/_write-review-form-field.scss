@@ -5,6 +5,7 @@
   top: 0;
   transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
   pointer-events: none;
+  color: $rr-form-label-txt;
 }
 
 @mixin bv-placeholder-active() {
@@ -31,7 +32,6 @@
       position: relative;
       margin-bottom: 1.5rem;
 
-      // Type = Text.
       input[type=text],
       input[type=email] {
         height: 1.5rem;
@@ -56,6 +56,7 @@
         width: 48%;
         margin-bottom: 3.5rem;
         min-height: 2.5rem;
+        margin-top: 1.5rem;
 
         @include breakpoint($only-mobile) {
           width: 100%;
@@ -81,6 +82,8 @@
     label {
       display: inline-block;
       margin-bottom: 0.5rem;
+      color: $rr-form-label-txt;
+      font-size: 0.875rem;
     }
 
     textarea {
@@ -109,16 +112,24 @@
     display: flex;
     align-items: center;
     margin-bottom: 1.875rem;
+    flex-flow: row wrap;
 
-    @include breakpoint($only-mobile) {
-      flex-flow: row wrap;
+    .error {
+      display: flex;
+      justify-content: flex-start;
+      width: 100%;
+      margin-#{$left}: 50%;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 0;
+      }
     }
 
     .dropdown-label {
       width: 50%;
-      font-size: 0.9375rem;
-      font-family: $alshaya-thin;
+      font-size: 0.875rem;
       padding-#{$right}: 1.25rem;
+      color: $rr-form-label-txt;
 
       @include breakpoint($only-mobile) {
         width: 100%;
@@ -150,11 +161,31 @@
         margin: 1rem 0;
       }
 
+      &.radio-error {
+        .form-type-radio {
+          input[type=radio] {
+            & ~ label {
+              &::before {
+                border: 1px solid $rr-form-error-border;
+              }
+            }
+
+            &:checked {
+              & ~ label {
+                &::before {
+                  border: 3px solid $primary_radiobtn_filled;
+                }
+              }
+            }
+          }
+        }
+      }
+
       .form-type-radio {
         margin-#{$right}: 7.5%;
 
         @include breakpoint($only-mobile) {
-          margin-#{$right}: 2%;
+          margin-#{$right}: 2.5%;
         }
 
         @include breakpoint($only-tablet) {
@@ -194,10 +225,25 @@
     }
   }
 
+  .netpromoter-label {
+    label {
+      font-size: 0.875rem;
+      color: $rr-form-label-txt;
+    }
+  }
+
   .write-review-type-tags {
     display: inline-flex;
-    margin-right: 0.625rem;
+    margin-#{$right}: 0.625rem;
     margin-bottom: 1rem;
+
+    &.radio-error {
+      input[type=checkbox] {
+        & ~ label {
+          border: 1px solid $rr-form-error-border;
+        }
+      }
+    }
 
     input[type=checkbox] {
       & ~ label {
@@ -241,14 +287,13 @@
     }
 
     button {
-      min-width: 19rem;
+      min-width: 19.75rem;
       height: 2.5rem;
       background: $rr-review-summary-btn-color;
       color: $rr-review-summary-btn-text;
       border: 0.0625rem solid $rr-review-summary-btn-color;
       padding: 0.75rem;
       font-size: 0.875rem;
-      border-radius: 0.1875rem;
       line-height: 1;
       font-family: $alshaya-thin;
 
@@ -267,6 +312,7 @@
       margin-#{$right}: 2rem;
       background: $rr-write-review-cancel-btn-bg;
       color: $rr-write-review-cancel-btn-txt;
+      border: 1px solid $rr-write-review-cancel-btn-border;
 
       @include breakpoint($only-mobile) {
         margin-#{$right}: 0;
@@ -277,19 +323,13 @@
 
   .link-block {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     font-size: 0.75rem;
     font-family: $alshaya-thin;
-    width: 62%;
     margin-top: 1.25rem;
 
-    @include breakpoint($only-mobile) {
-      width: 100%;
+    @include breakpoint($upto-desktop) {
       justify-content: flex-start;
-    }
-
-    @include breakpoint($only-tablet) {
-      width: 44%;
     }
 
     .static-link {
@@ -304,6 +344,7 @@
 
       a {
         text-decoration: underline;
+        color: $rr-static-links-txt;
       }
     }
   }

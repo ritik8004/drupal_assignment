@@ -1,4 +1,5 @@
 import React from 'react';
+import ConditionalView from '../../../../../../common/components/conditional-view';
 
 class RadioButton extends React.Component {
   constructor(props) {
@@ -31,10 +32,9 @@ class RadioButton extends React.Component {
 
     return (
       <>
-        {text !== undefined
-          && (
+        <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
-          )}
+        </ConditionalView>
         <div className="switch-button">
           <div className="switch-text query">
             <label htmlFor={label}>
@@ -43,7 +43,7 @@ class RadioButton extends React.Component {
               {(required) ? '*' : '' }
             </label>
           </div>
-          <div className="switch-text answer">
+          <div className="switch-text answer" id={`${id}-error`}>
             {Object.values(recommend).reverse().map((radioLabel, i) => {
               const radioValue = i;
               return (

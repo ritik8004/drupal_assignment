@@ -25,6 +25,7 @@ export default class ReviewSummary extends React.Component {
     this.state = {
       reviewsSummary: '',
       reviewsProduct: '',
+      reviewsComment: '',
       currentSortOption: '',
       currentFilterOptions: [],
       noResultmessage: null,
@@ -101,6 +102,7 @@ export default class ReviewSummary extends React.Component {
               this.setState({
                 totalReviews: result.data.TotalResults,
                 reviewsProduct: result.data.Includes.Products,
+                reviewsComment: result.data.Includes.Comments,
                 numberOfPages: Math.ceil(result.data.TotalResults / limit),
               }, () => {
                 const { currentPage, numberOfPages } = this.state;
@@ -112,6 +114,7 @@ export default class ReviewSummary extends React.Component {
               currentTotal: result.data.TotalResults,
               reviewsSummary: result.data.Results,
               reviewsProduct: result.data.Includes.Products,
+              reviewsComment: result.data.Includes.Comments,
               noResultmessage: null,
               numberOfPages: Math.ceil(result.data.TotalResults / limit),
             }, () => {
@@ -292,6 +295,7 @@ export default class ReviewSummary extends React.Component {
     const {
       reviewsSummary,
       reviewsProduct,
+      reviewsComment,
       currentSortOption,
       currentFilterOptions,
       noResultmessage,
@@ -311,9 +315,9 @@ export default class ReviewSummary extends React.Component {
           <div className="empty-review-summary">
             <WriteReviewButton />
           </div>
-          {postReviewData !== ''
-          && (
-            <PostReviewMessage postReviewData={postReviewData} />)}
+          <ConditionalView condition={postReviewData !== ''}>
+            <PostReviewMessage postReviewData={postReviewData} />
+          </ConditionalView>
         </>
       );
     }
@@ -349,44 +353,41 @@ export default class ReviewSummary extends React.Component {
             />
           </div>
         </div>
-        {noResultmessage === null
-          && (
-            <>
-              <div id="review-summary-wrapper">
-                {postReviewData !== ''
-                  && (
-                    <PostReviewMessage postReviewData={postReviewData} />)}
-                {Object.keys(reviewsSummary).map((item) => (
-                  <div className="review-summary" key={reviewsSummary[item].Id}>
-                    <ConditionalView condition={window.innerWidth < 768}>
-                      <DisplayStar
-                        starPercentage={reviewsSummary[item].Rating}
-                      />
-                      <div className="review-title">{reviewsSummary[item].Title}</div>
-                    </ConditionalView>
-                    <ReviewInformation
-                      reviewInformationData={reviewsSummary[item]}
-                      reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
-                        .ProductId].ReviewStatistics}
-                    />
-                    <ReviewDescription
-                      reviewDescriptionData={reviewsSummary[item]}
-                    />
-                  </div>
-                ))}
+        <ConditionalView condition={noResultmessage === null}>
+          <div id="review-summary-wrapper">
+            <ConditionalView condition={postReviewData !== ''}>
+              <PostReviewMessage postReviewData={postReviewData} />
+            </ConditionalView>
+            {Object.keys(reviewsSummary).map((item) => (
+              <div className="review-summary" key={reviewsSummary[item].Id}>
+                <ConditionalView condition={window.innerWidth < 768}>
+                  <DisplayStar
+                    starPercentage={reviewsSummary[item].Rating}
+                  />
+                  <div className="review-title">{reviewsSummary[item].Title}</div>
+                </ConditionalView>
+                <ReviewInformation
+                  reviewInformationData={reviewsSummary[item]}
+                  reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
+                    .ProductId].ReviewStatistics}
+                />
+                <ReviewDescription
+                  reviewDescriptionData={reviewsSummary[item]}
+                  reviewsComment={reviewsComment}
+                />
               </div>
-              <Pagination
-                currentPage={currentPage}
-                numberOfPages={numberOfPages}
-                prevButtonDisabled={prevButtonDisabled}
-                nextButtonDisabled={nextButtonDisabled}
-              />
-            </>
-          )}
-        {noResultmessage !== null
-          && (
-            <EmptyMessage emptyMessage={noResultmessage} />
-          )}
+            ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            numberOfPages={numberOfPages}
+            prevButtonDisabled={prevButtonDisabled}
+            nextButtonDisabled={nextButtonDisabled}
+          />
+        </ConditionalView>
+        <ConditionalView condition={noResultmessage !== null}>
+          <EmptyMessage emptyMessage={noResultmessage} />
+        </ConditionalView>
       </div>
     );
   }

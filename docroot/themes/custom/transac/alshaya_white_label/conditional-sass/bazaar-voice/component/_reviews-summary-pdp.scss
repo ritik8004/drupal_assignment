@@ -94,6 +94,7 @@
       color: $rr-review-summary-grey-text;
       margin-bottom: 0.9375rem;
       font-family: $alshaya-thin;
+      word-break: break-word;
 
       @include breakpoint($only-mobile) {
         margin-bottom: 1.5rem;
@@ -182,11 +183,15 @@
       }
 
       &-icon {
-        background: url(#{$base_theme_img_directory_path}/icons/recommendation-tick.svg) no-repeat;
-        display: inline-block;
-        width: 1.5rem;
-        height: 1.5rem;
-        font-size: 0;
+        @include icon(check) {
+          background: $rr-recommendation-icon-bg;
+          color: $rr-recommendation-icon;
+          border-radius: 50%;
+          font-size: 1.25rem;
+          margin-#{$right}: 0.3125rem;
+          position: relative;
+          top: 0.0625rem;
+        }
       }
     }
 
@@ -349,10 +354,10 @@
       border: 0.0625rem solid $rr-review-summary-btn-color;
       padding: 0.75rem;
       font-size: 0.875rem;
-      border-radius: 0.1875rem;
       line-height: 1;
       text-align: center;
       cursor: pointer;
+      display: inline-block;
     }
   }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import { getArraysIntersection } from '../../../utilities/write_review_util';
 
 export default class ReviewFilters extends React.Component {
   handleSelect = (selectedOption) => {
@@ -24,6 +25,7 @@ export default class ReviewFilters extends React.Component {
 
   processFilters = () => {
     const {
+      currentOptions,
       filterOptions,
     } = this.props;
     const availableFilters = [];
@@ -31,13 +33,23 @@ export default class ReviewFilters extends React.Component {
       Object.entries(filterOptions).forEach(([index]) => {
         const contextData = filterOptions[index].ReviewStatistics.ContextDataDistribution;
         Object.entries(contextData).forEach(([item, option]) => {
-          const options = Object.keys(option.Values).map((key) => ({
-            value: `contextdatavalue_${item}:${option.Values[key].Value}`,
-            label: `${option.Values[key].Value} (${option.Values[key].Count})`,
-          }));
-
-          availableFilters[item] = options;
-          availableFilters[item].label = option.Label;
+          if (item.includes('_filter')) {
+            const options = Object.keys(option.Values).map((key) => ({
+              value: `contextdatavalue_${item}:${option.Values[key].Value}`,
+              label: `${option.Values[key].Value} (${option.Values[key].Count})`,
+            }));
+            availableFilters[item] = options;
+            availableFilters[item].defaultValue = [{
+              value: 'none',
+              label: option.Label,
+            }];
+            if (currentOptions.length > 0) {
+              const selected = getArraysIntersection(currentOptions, options);
+              if (selected.length > 0) {
+                availableFilters[item].defaultValue = selected;
+              }
+            }
+          }
         });
       });
     }
@@ -49,6 +61,7 @@ export default class ReviewFilters extends React.Component {
 
   render() {
     const filterList = this.processFilters();
+
     if (filterList !== null) {
       return (
         <>
@@ -59,7 +72,8 @@ export default class ReviewFilters extends React.Component {
                 className="bv-select"
                 onChange={this.handleSelect}
                 options={filterList[item]}
-                defaultValue={{ value: 'none', label: filterList[item].label }}
+                defaultValue={filterList[item].defaultValue}
+                value={filterList[item].defaultValue}
               />
             </div>
           ))}

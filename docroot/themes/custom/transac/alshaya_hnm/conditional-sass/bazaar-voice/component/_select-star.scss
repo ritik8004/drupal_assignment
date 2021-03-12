@@ -1,0 +1,34 @@
+// select star
+.select-star {
+  &__wrap {
+    &.rating {
+      .star-counter {
+        label {
+          &:first-of-type {
+            span {
+              margin-#{$left}: -0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &-rating {
+    &__ico {
+      padding-#{$left}: 0;
+
+      &.ratingfull {
+        @include icon(rating-filled) {
+          font-size: 2.5rem;
+        }
+      }
+
+      &.rating {
+        @include icon(rating-empty) {
+          font-size: 2.5rem;
+        }
+      }
+    }
+  }
+}

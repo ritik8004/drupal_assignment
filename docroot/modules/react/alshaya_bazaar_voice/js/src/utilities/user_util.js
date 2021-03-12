@@ -24,9 +24,9 @@ export const setSessionCookie = (uasToken, maxAge) => {
  * @returns {uasToken}
  */
 export const getSessionCookie = () => {
-  const sessionCookie = Cookies.get('uas_token');
+  let sessionCookie = Cookies.get('uas_token');
 
-  if (sessionCookie === 'undefined') {
+  if (sessionCookie === undefined) {
     const requestUrl = '/get-uas-token';
     const request = doRequest(requestUrl);
 
@@ -34,15 +34,15 @@ export const getSessionCookie = () => {
       request.then((result) => {
         if (result.status === 200) {
           setSessionCookie(result.data, bazaarVoiceSettings.reviews.bazaar_voice.max_age);
+          sessionCookie = Cookies.get('uas_token');
         } else {
           Drupal.logJavascriptError('user-session', result.error);
         }
       });
     }
-  } else {
-    return sessionCookie;
   }
-  return null;
+
+  return sessionCookie;
 };
 
 export default {

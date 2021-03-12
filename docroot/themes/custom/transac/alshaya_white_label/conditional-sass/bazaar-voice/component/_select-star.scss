@@ -16,8 +16,8 @@
 
       .star-rating-label {
         width: 50%;
-        font-size: 0.9375rem;
-        font-family: $alshaya-thin;
+        font-size: 0.875rem;
+        color: $rr-form-label-txt;
 
         @include breakpoint($only-mobile) {
           width: 100%;
@@ -28,6 +28,16 @@
       .star-counter {
         width: 50%;
         text-align: $right;
+
+        &.rating-error {
+          .select-star-rating__ico {
+            &.rating {
+              &::before {
+                color: $rr-star-rating-error;
+              }
+            }
+          }
+        }
 
         html[lang=ar] & {
           text-align: right;
@@ -64,6 +74,16 @@
             }
           }
         }
+
+        &.rating-error {
+          .select-star-rating__ico {
+            &.rating {
+              &::before {
+                color: $rr-star-rating-error;
+              }
+            }
+          }
+        }
       }
     }
 
@@ -82,12 +102,14 @@
       &.ratingfull {
         @include icon(ratingfull) {
           font-size: 2rem;
+          color: $rr-stars-color;
         }
       }
 
       &.rating {
         @include icon(rating) {
           font-size: 2rem;
+          color: $rr-stars-color;
         }
       }
     }

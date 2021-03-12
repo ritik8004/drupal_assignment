@@ -1,23 +1,16 @@
 import React from 'react';
+import ConditionalView from '../../../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
 class TextArea extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errors: [],
-    };
-  }
-
-  handleChange = (e, minLength) => {
-    const { errors } = this.state;
-    const { name, value } = e.currentTarget;
+  handleChange = (e) => {
+    const { value, minLength, id } = e.currentTarget;
 
     if (value.length > 0) {
-      errors[name] = value.length < minLength
-        ? Drupal.t('Minimum characters limit for this field is ') + minLength
-        : null;
+      document.getElementById(`${id}-error`).innerHTML = value.length < minLength
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength })
+        : '';
     }
-    this.setState({ errors, [name]: value });
   };
 
   render() {
@@ -30,19 +23,12 @@ class TextArea extends React.Component {
       minLength,
       text,
     } = this.props;
-    const { errors } = this.state;
-
-    let focusClass = '';
-    if (defaultValue !== undefined && defaultValue !== '') {
-      focusClass = 'focus';
-    }
 
     return (
       <>
-        {text !== undefined
-          && (
+        <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
-          )}
+        </ConditionalView>
         <div className="write-review-type-textarea">
           <label>
             {label}
@@ -52,16 +38,14 @@ class TextArea extends React.Component {
           <textarea
             id={id}
             name={id}
-            className={focusClass}
-            onChange={(e) => this.handleChange(e, minLength)}
+            onChange={(e) => this.handleChange(e)}
             minLength={minLength}
             maxLength={maxLength}
-            noValidate
           >
             {defaultValue}
           </textarea>
           <div className="c-input__bar" />
-          <div id={`${label}-error`} className="error">{errors[id]}</div>
+          <div id={`${id}-error`} className="error" />
         </div>
       </>
     );

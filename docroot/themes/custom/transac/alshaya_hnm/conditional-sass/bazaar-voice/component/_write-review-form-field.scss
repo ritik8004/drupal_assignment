@@ -1,0 +1,44 @@
+.write-review-form-add {
+  .netpromoter-option {
+    .survey-block {
+      margin: 2rem 0;
+
+      .form-type-radio {
+        margin-#{$right}: 3.75%;
+
+        @include breakpoint($only-mobile) {
+          margin-#{$right}: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-#{$right}: 3%;
+        }
+
+        input[type=radio] {
+          & ~ label {
+            &::before {
+              width: 3.75rem;
+              height: 3rem;
+              font-size: 4rem;
+
+              @include breakpoint($upto-desktop) {
+                width: 2rem;
+                height: 3rem;
+                font-size: 3.75rem;
+                position: relative;
+                #{$left}: -0.75rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .write-review-form-actions {
+    button {
+      font-size: 0.8125rem;
+      font-family: $hnm-demibold;
+    }
+  }
+}
