@@ -64,8 +64,14 @@ export const triggerAddToCart = (
 
   // If there any error we throw from middleware.
   if (response.data.error === true) {
-    const errorMessage = response.data.error_message;
-    ReactDOM.render(<p>{response.data.error_message}</p>, document.getElementById('add-to-cart-error'));
+    let errorMessage = '';
+    if (response.data.error_code === '604') {
+      errorMessage = Drupal.t('The product that you are trying to add is not available.');
+      ReactDOM.render(<p>{errorMessage}</p>, document.getElementById('add-to-cart-error'));
+    } else {
+      errorMessage = response.data.error_message;
+      ReactDOM.render(<p>{response.data.error_message}</p>, document.getElementById('add-to-cart-error'));
+    }
     if (cartBtn.classList.contains('magv2-add-to-basket-loader')) {
       cartBtn.classList.remove('magv2-add-to-basket-loader');
       cartBtn.innerHTML = Drupal.t('Add To Bag');
@@ -416,7 +422,8 @@ export const addToCartConfigurable = (
     },
   )
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
+      Drupal.logJavascriptError('addToCartConfigurable', error, GTM_CONSTANTS.CART_ERRORS);
     });
 };
 
@@ -467,7 +474,8 @@ export const addToCartSimple = (
     },
   )
     .catch((error) => {
-      console.log(error.response);
+      // console.log(error.response);
+      Drupal.logJavascriptError('addToCartSimple', error, GTM_CONSTANTS.CART_ERRORS);
     });
 };
 

@@ -2482,6 +2482,13 @@ class Cart {
       }
     }
     catch (\Exception $e) {
+      if ($e->getCode() === 404) {
+        $error_code = 604;
+        $this->logger->error('Error while processing cart data. Error message: @message', [
+          '@message' => $e->getMessage(),
+        ]);
+        return $this->utility->getErrorResponse('', $error_code);
+      }
       $this->logger->error('Error while processing cart data. Error message: @message', [
         '@message' => $e->getMessage(),
       ]);
