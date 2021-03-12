@@ -494,7 +494,7 @@ class Cart {
    *
    * @param string $sku
    *   Sku.
-   * @param int|null $quantity
+   * @param int $quantity
    *   Quantity.
    * @param string $action
    *   Action to be performed (add/update/remove).
@@ -508,7 +508,7 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = [], string $variant_sku = NULL) {
+  public function addUpdateRemoveItem(string $sku, int $quantity, string $action, array $options = [], string $variant_sku = NULL) {
     $cart_id = (int) $this->getCartId();
     $alshaya_checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
@@ -555,7 +555,7 @@ class Cart {
         default:
           $cart_item = [
             'sku' => $sku,
-            'qty' => $quantity ?? 1,
+            'qty' => $quantity,
             'product_option' => $option_data,
             'quote_id' => $cart_id,
           ];
@@ -616,7 +616,7 @@ class Cart {
 
     $data['items'][] = [
       'sku' => $sku,
-      'qty' => $quantity ?? 1,
+      'qty' => $quantity,
       'quote_id' => $cart_id,
       'product_option' => (object) $option_data,
       'variant_sku' => $variant_sku,
