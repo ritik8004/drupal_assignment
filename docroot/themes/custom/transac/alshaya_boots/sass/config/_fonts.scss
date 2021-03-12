@@ -3,14 +3,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "BootsSharp-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -18,14 +13,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "BootsSharp-Light";
-  src: url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Light.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -33,14 +23,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "BootsSharp-Regular";
-  src: url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BootsSharp-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -48,14 +33,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Tahoma-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -63,14 +43,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_boots/fonts';
 
 @font-face {
   font-family: "Tahoma";
-  src: url("#{$base_theme_fonts_directory_path}/Tahoma.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/Tahoma.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/Tahoma.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/Tahoma.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Tahoma.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

@@ -96,10 +96,19 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
     $filters = $common_config[self::PAGE_TYPE]['filters'];
 
     $lang = $common_config['otherRequiredValues']['lang'];
+    $options_data = $this->alshayaProductListHelper->getCurrentSelectedProductOption($lang);
+
+    // Rule context will be like - 'brand_list__{brand_name_in_english}'.
+    $ruleContext = $options_data['ruleContext'];
+
     $algoliaSearchValues = [
       'local_storage_expire' => $common_config['otherRequiredValues']['local_storage_expire'],
       'filters_alias' => array_column($filters, 'identifier', 'alias'),
-      'option_page' => $this->alshayaProductListHelper->getCurrentSelectedProductOption($lang),
+      'option_page' => [
+        'option_key' => $options_data['option_key'],
+        'option_val' => $options_data['option_val'],
+      ],
+      'ruleContext' => $ruleContext,
     ];
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];

@@ -19,7 +19,9 @@ class PdpRelatedProducts extends React.Component {
     const { products } = this.state;
     const { skuItemCode, type } = this.props;
     const device = (window.innerWidth < 768) ? 'mobile' : 'desktop';
-    const url = Drupal.url(`related-products/${skuItemCode}/${type}/${device}?type=json&cacheable=1`);
+
+    // Base64 encode sku so the sku with slash doesn't break the endpoint.
+    const url = Drupal.url(`related-products/${btoa(skuItemCode)}/${type}/${device}?type=json&cacheable=1`);
     // If related products is already processed.
     if (products === null) {
       axios.get(url).then((response) => {

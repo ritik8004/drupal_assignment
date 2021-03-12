@@ -1,0 +1,121 @@
+// select star
+.select-star {
+  &__wrap {
+    display: inline-block;
+    font-size: 1rem;
+
+    &[class^="rating_"],
+    &[class*=" rating_"] {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        flex-flow: row wrap;
+      }
+
+      .star-rating-label {
+        width: 50%;
+        font-size: 0.875rem;
+        color: $rr-form-label-txt;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      .star-counter {
+        width: 50%;
+        text-align: $right;
+
+        &.rating-error {
+          .select-star-rating__ico {
+            &.rating {
+              &::before {
+                color: $rr-star-rating-error;
+              }
+            }
+          }
+        }
+
+        html[lang=ar] & {
+          text-align: right;
+          transform: rotate(180deg);
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          text-align: $left;
+          margin-#{$left}: -0.3125rem;
+        }
+      }
+    }
+
+    &.rating {
+      .star-rating-label {
+        font-family: $alshaya-bold;
+      }
+
+      .star-counter {
+        margin-bottom: 1.25rem;
+        margin-top: 0.25rem;
+
+        html[lang=ar] & {
+          margin-bottom: 1rem;
+          margin-top: 1rem;
+          transform: rotate(180deg);
+        }
+
+        label {
+          &:first-of-type {
+            span {
+              margin-#{$left}: -0.1875rem;
+            }
+          }
+        }
+
+        &.rating-error {
+          .select-star-rating__ico {
+            &.rating {
+              &::before {
+                color: $rr-star-rating-error;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+
+  &-rating {
+    &__ico {
+      padding-#{$left}: 0.125rem;
+      cursor: pointer;
+
+      &.ratingfull {
+        @include icon(ratingfull) {
+          font-size: 2rem;
+          color: $rr-stars-color;
+        }
+      }
+
+      &.rating {
+        @include icon(rating) {
+          font-size: 2rem;
+          color: $rr-stars-color;
+        }
+      }
+    }
+
+    &__input {
+      display: none;
+    }
+  }
+}

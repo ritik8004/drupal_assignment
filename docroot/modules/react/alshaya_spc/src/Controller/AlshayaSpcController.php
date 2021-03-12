@@ -614,12 +614,15 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get Products.
     $productList = [];
+    $number_of_items = 0;
     foreach ($order['items'] as $item) {
       if (in_array($item['sku'], array_keys($productList))) {
         continue;
       }
       // Populate price and other info from order response data.
       $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
+      // Calculate the ordered quantity of each sku.
+      $number_of_items += $productList[$item['sku']]['qtyOrdered'];
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
@@ -636,7 +639,7 @@ class AlshayaSpcController extends ControllerBase {
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
         'expected_delivery' => $delivery_method_description,
-        'number_of_items' => count($productList),
+        'number_of_items' => $number_of_items,
         'delivery_type_info' => $orderDetails,
         'totals' => $totals,
         'items' => $productList,
@@ -684,6 +687,8 @@ class AlshayaSpcController extends ControllerBase {
     if (!empty($data_apikey)) {
       $this->moduleHandler->alter('checkout_pixel_build', $build, $data_apikey);
     }
+    // Adding hook alter for bazaarvoice pixel integration.
+    $this->moduleHandler->alter('alshaya_spc_checkout_confirmation_order_build', $build, $order);
     return $build;
   }
 

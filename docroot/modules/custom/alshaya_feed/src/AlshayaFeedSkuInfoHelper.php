@@ -252,6 +252,7 @@ class AlshayaFeedSkuInfoHelper {
 
       if ($sku->bundle() == 'simple') {
         $parentProduct['sku'] = $parentProduct['group_id'];
+        $parentProduct['sanitized_sku'] = $this->skuManager->getSanitizedSku($parentProduct['sku']);
         unset($parentProduct['group_id']);
         $stockInfo = $this->skuInfoHelper->stockInfo($sku);
         $parentProduct['stock'] = [
@@ -268,6 +269,7 @@ class AlshayaFeedSkuInfoHelper {
         $product[$lang][0] = $parentProduct;
         unset($product[$lang][0]['group_id']);
         $product[$lang][0]['sku'] = $parentProduct['group_id'];
+        $product[$lang][0]['sanitized_sku'] = $this->skuManager->getSanitizedSku($parentProduct['group_id']);
         foreach ($combinations['by_sku'] ?? [] as $child_sku => $combination) {
           $child = SKU::loadFromSku($child_sku, $lang);
           if (!$child instanceof SKUInterface) {
@@ -277,6 +279,7 @@ class AlshayaFeedSkuInfoHelper {
 
           $variant = [
             'sku' => $child->getSku(),
+            'sanitized_sku' => $this->skuManager->getSanitizedSku($child->getSku()),
             'product_type' => $child->bundle(),
             'configurable_attributes' => $this->getConfigurableValues($child, $combination),
             'swatch_image' => $this->getSwatchImages($child, $combination, $swatches),

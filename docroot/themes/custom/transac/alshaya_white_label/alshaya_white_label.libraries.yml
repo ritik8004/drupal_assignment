@@ -501,7 +501,12 @@ postpay-checkout:
   css:
     theme:
       css/conditional-sass/postpay-checkout/postpay-checkout.ltr.css: {}
-      
+
+bazaar-voice:
+  css:
+    theme:
+      css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: {}
+
 store_finder:
   css:
     theme:

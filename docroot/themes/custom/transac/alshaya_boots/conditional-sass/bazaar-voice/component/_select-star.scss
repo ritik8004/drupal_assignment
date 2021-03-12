@@ -1,0 +1,11 @@
+// select star
+.select-star {
+  &__wrap {
+    &[class^="rating_"],
+    &[class*=" rating_"] {
+      .star-rating-label {
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}

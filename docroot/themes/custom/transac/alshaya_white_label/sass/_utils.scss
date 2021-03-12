@@ -350,11 +350,34 @@ body {
   white-space: nowrap;
 }
 
-@mixin force-ltr {
-  html[lang=ar] & {
-    direction: ltr;
-    display: inline-block;
+// This mixin can be used for tooltip with the below HTML structure
+// <div class="empty-stars">
+//    <div class="histogram-data"></div>
+// </div>
+// here the parent class (empty-stars) should have position relative.
+// Child class (histogram-data) should call the @mixin tooltip
+// .empty-stars:hover .histogram-data we have to call tooltip-display
+@mixin tooltip ($width) {
+  width: $width;
+  position: absolute;
+  #{$left}: 0%;
+  top: 100%;
+  margin: 0.625rem 0;
+  padding: 1rem;
+  border: 0.0625rem solid $rr-tooltip-border;
+  visibility: hidden;
+  opacity: 0;
+  text-align: $left;
+  transition: opacity 0.2s linear;
+  z-index: 100;
+  background: $rr-tooltip-bg;
 
-    @content;
+  @include breakpoint($only-mobile) {
+    #{$left}: -95%;
   }
+}
+
+@mixin tooltip-display () {
+  visibility: visible;
+  opacity: 1;
 }

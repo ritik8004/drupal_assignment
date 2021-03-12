@@ -1,0 +1,9 @@
+.bv-select {
+  .bvSelect__control {
+    .bvSelect__dropdown-indicator {
+      &::before {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}

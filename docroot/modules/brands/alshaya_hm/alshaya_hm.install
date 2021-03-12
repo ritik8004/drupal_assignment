@@ -15,6 +15,25 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * [5.19.0] Update the metatag translations.
+ */
+function alshaya_hm_update_8056() {
+  $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
+  $category_config->set('tags.title', '[alshaya_seo:page_title]')->save();
+  // Add ar translation for config.
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'metatag.metatag_defaults.taxonomy_term__acq_product_category');
+  $tags = [
+    'title' => '[alshaya_seo:page_title]',
+  ];
+  $config->set('tags', $tags);
+  $config->save();
+
+  _alshaya_hm_get_metatag_translations();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.12.0] Add fields in search_api_index to support MAPP.
  */
 function alshaya_hm_update_8055() {
@@ -1306,17 +1325,45 @@ function _alshaya_hm_get_metatag_translations() {
       'en' => 'Shop [term:parent:name] [term:name] [current-date:html_year] sale from [site:name]. Explore our [current-date:html_year] luxury and high-quality [term:name] for [term:parent:name] offers',
       'ar' => 'اكتشف عروض البيع [current-date:html_year] للرفاهية والجودة العالية [term:parent:name] [term:name] مجموعة',
     ],
-    'alshaya_seo_desc_start' => [
-      'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] for [term:parents:first]',
-      'ar' => 'تسوق نطاق حصري وفاخر [term:name] لـ [term:parents:first] من [alshaya_seo:brand_name]',
-    ],
     'alshaya_seo_sale_keywords' => [
       'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for [term:parents:first], [alshaya_seo:brand_name] [term:name] sale for [term:parents:first]',
       'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for [term:parents:first], [alshaya_seo:brand_name] [term:name] sale for [term:parents:first]',
     ],
     'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:name] for [term:parents:first], Shop [term:parents:first] [term:name], Shop [alshaya_seo:brand_name] [term:name], Shop [term:name] Collection for [term:parents:first], Shop [term:name] in [alshaya_seo:country], [alshaya_seo:term_cities]',
-      'ar' => 'متجر [term:name] مجموعة ل [term:parents:first] على الانترنت, تسوق [term:name] [alshaya_seo:brand_name], شراء [alshaya_seo:sub_categories] [alshaya_seo:brand_name]، شراء [alshaya_seo:sub_categories] شراء [alshaya_seo:sub_categories] على الانترنت،[alshaya_seo:term_cities], تسوق [term:name] ل [term:parents:first] على الانترنت في [alshaya_seo:country]',
+      'en' => 'Shop [term:name] Fashion, Shop [term:name] Clothing, Shop [alshaya_seo:brand_name] [term:name], Shop Collection for [term:parents:first], Shop [term:name] Fashion Products in [alshaya_seo:country], Shop [term:name] Fashion Products in [alshaya_seo:city1], Shop [term:name] Fashion Products in [alshaya_seo:city2]',
+      'ar' => 'تسوق أزياء [term:name] ، تسوق ملابس [term:name] من [alshaya_seo:brand_name]، تسوق تشكيلة [term:name]، تسوق منتجات أزياء [term:name] في [alshaya_seo:country]، تسوق منتجات أزياء [term:name] في [alshaya_seo:city1]، تسوق منتجات أزياء [term:name] في [alshaya_seo:city2]',
+    ],
+    'alshaya_seo_text_before_cod' => [
+      'en' => 'Compare [current-date:html_year] [term:name] fashion collection at the best prices of [alshaya_seo:sub_categories] and more.',
+      'ar' => 'قارن بين تشكيلات [term:name] لعام [current-date:html_year] وأفضل أسعار [alshaya_seo:sub_categories] و أكثر.',
+    ],
+    'alshaya_seo_l2_text_before_cod' => [
+      'en' => 'Compare [current-date:html_year] [term:name] fashion collection at the best prices of [alshaya_seo:sub_categories] and more.',
+      'ar' => 'قارن بين تشكيلات [term:name] لعام [current-date:html_year] وأفضل أسعار [alshaya_seo:sub_categories] و أكثر.',
+    ],
+    'alshaya_seo_l3_text_before_cod' => [
+      'en' => 'Pick from the updated collection of the latest fashion trends in [term:name] for [term:parents:first] at the best prices.',
+      'ar' => 'اختار من أحدث تشكيلة [term:name] لعام [current-date:html_year] التي تشمل أجدد الإصدارات والتصاميم بأسعار مميزة.',
+    ],
+    'alshaya_seo_desc_free_delivery_n_cod' => [
+      'en' => '✓ Amazing Offer ✓ Hassle-free Returns ✓ Fast Shipping!',
+      'ar' => '✓ عرض مذهل ✓ مرتجعات خالية من المتاعب ✓ شحن سريع!',
+    ],
+    'alshaya_seo_page_title' => [
+      'en' => ' Shop [term:name] Fashion Collection Online | [site:name]',
+      'ar' => 'تسوق مجموعة أزياء [term:name] اتش آند إم| [site:name]',
+    ],
+    'alshaya_seo_l3_page_title' => [
+      'en' => 'Shop [term:name] Collection for [term:parents:first] Online | [site:name]',
+      'ar' => 'تسوق مجموعة [term:name] [term:parents:first] اتش | [site:name]',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] fashion products online in [alshaya_seo:term_cities] and whole [alshaya_seo:country].',
+      'ar' => 'تسوق حصريا منتجات أزياء [term:name] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:term_cities]، وكل أنحاء [alshaya_seo:country].',
+    ],
+    'alshaya_seo_l3_desc_start' => [
+      'en' => 'A large selection of [alshaya_seo:brand_name] [term:name] for [term:parents:first] online in [alshaya_seo:term_cities] and whole [alshaya_seo:country].',
+      'ar' => 'مجموعة كبيرة من [term:name] [term:parents:first] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:term_cities]، وكل أنحاء [alshaya_seo:country].',
     ],
   ];
 

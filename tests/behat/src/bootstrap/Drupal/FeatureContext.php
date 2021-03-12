@@ -1384,7 +1384,7 @@ class FeatureContext extends CustomMinkContext
     $page = $this->getSession()->getPage();
     $element = $page->find('css', $class);
     if ($element !== null) {
-      $element-selectOption($value);
+      $element->selectOption($value);
     } else {
       echo 'Element not found';
     }
