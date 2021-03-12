@@ -533,6 +533,7 @@ class Cart {
         ],
       ];
     }
+
     if ($alshaya_checkout_settings['cart_operations_mode'] === 'native') {
       // Attempts done by the native mdc api for item update.
       static $nativeItemUpdateAttempts = 0;
