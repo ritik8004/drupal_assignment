@@ -875,11 +875,25 @@ class CartController {
         CartActions::CART_UPDATE_ITEM,
         CartActions::CART_REMOVE_ITEM,
       ]
-    )) {
-      if (empty($request_content['sku'])) {
-        $this->logger->error('Cart update operation not containing any sku.');
-        return 400;
-      }
+    ) && empty($request_content['sku'])) {
+      $this->logger->error('Cart update operation not containing any sku. Data: @request_data', [
+        '@request_data' => json_encode($request_content),
+      ]);
+      return 400;
+    }
+
+    // @todo This code is to analyse the cases when the quantity is null or 0,
+    // Remove it after the analysis.
+    if (in_array($request_content['action'],
+        [
+          CartActions::CART_ADD_ITEM,
+          CartActions::CART_UPDATE_ITEM,
+          CartActions::CART_REMOVE_ITEM,
+        ]
+      ) && empty($request_content['quantity'])) {
+      $this->logger->error('Cart update operation not containing any quantity. Data: @request_data', [
+        '@request_data' => json_encode($request_content),
+      ]);
     }
 
     // For new cart request, we don't need any further validations.
