@@ -15,6 +15,9 @@ set classes = [
         {% else %}
           <div id="product-zoom-container"></div>
         {% endif %}
+        {% if wishlist_enabled is defined and wishlist_enabled == true %}
+          <div id="wishlist-pdp"></div>
+        {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
