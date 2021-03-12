@@ -889,6 +889,7 @@ class CartController {
       $this->logger->error('Cart update operation not containing any quantity. Data: @request_data', [
         '@request_data' => json_encode($request_content),
       ]);
+      return 400;
     }
 
     // For new cart request, we don't need any further validations.
