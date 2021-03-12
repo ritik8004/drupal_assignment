@@ -1,5 +1,5 @@
 import React from 'react';
-import { getStorageInfo } from '../../../../js/utilities/sessionStorage';
+import { getSessionStorageInfo } from '../../../../js/utilities/sessionStorage';
 import {
   getWishListStorageKey,
   addProductToWishList,
@@ -14,7 +14,7 @@ class WishListPDP extends React.Component {
     let addedInWishList = false;
 
     if (!getUserDetails().id) {
-      const storageValues = getStorageInfo(getWishListStorageKey());
+      const storageValues = getSessionStorageInfo(getWishListStorageKey());
 
       if (storageValues) {
         const parentProductSku = Object.keys(getCurrentProductDetails())[0];

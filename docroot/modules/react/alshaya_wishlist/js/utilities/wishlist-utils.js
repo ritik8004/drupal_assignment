@@ -1,4 +1,4 @@
-import { getStorageInfo, setStorageInfo } from '../../../js/utilities/sessionStorage';
+import { getSessionStorageInfo, setSessionStorageInfo } from '../../../js/utilities/sessionStorage';
 import { getUserDetails } from './wishlist-data-helper';
 import dispatchCustomEvent from '../../../js/utilities/events';
 
@@ -15,7 +15,7 @@ function getWishListStorageKey() {
 function addProductToWishListForGuestUsers(productSku) {
   const storageKey = getWishListStorageKey();
   // Get the existing data.
-  let existing = getStorageInfo(storageKey);
+  let existing = getSessionStorageInfo(storageKey);
 
   // If no existing data, create an array.
   existing = existing || {};
@@ -24,7 +24,7 @@ function addProductToWishListForGuestUsers(productSku) {
   existing[productSku] = productSku;
 
   // Save back to storage.
-  setStorageInfo(existing, getWishListStorageKey());
+  setSessionStorageInfo(existing, getWishListStorageKey());
 }
 
 /**
@@ -45,13 +45,13 @@ function addProductToWishList(productSku) {
 function removeProductFromWishListForGuestUsers(productSku) {
   const storageKey = getWishListStorageKey();
   // Get the existing data.
-  const existing = getStorageInfo(storageKey);
+  const existing = getSessionStorageInfo(storageKey);
 
   // Remove the entry for given productSku from existing storage data.
   delete existing[productSku];
 
   // Save back to storage.
-  setStorageInfo(existing, getWishListStorageKey());
+  setSessionStorageInfo(existing, getWishListStorageKey());
 }
 
 /**

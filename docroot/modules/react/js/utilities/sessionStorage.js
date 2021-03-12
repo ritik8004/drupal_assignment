@@ -1,13 +1,13 @@
-export const setStorageInfo = (data, storageKey) => {
+export const setSessionStorageInfo = (data, storageKey) => {
   const dataToStore = (typeof data === 'object') ? JSON.stringify(data) : data;
   sessionStorage.setItem(storageKey, dataToStore);
 };
 
-export const removeStorageInfo = (storageKey) => {
+export const removeSessionStorageInfo = (storageKey) => {
   sessionStorage.removeItem(storageKey);
 };
 
-export const getStorageInfo = (storageKey) => {
+export const getSessionStorageInfo = (storageKey) => {
   const storageItem = sessionStorage.getItem(storageKey);
   if (!storageItem) {
     return null;
