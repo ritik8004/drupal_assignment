@@ -9,19 +9,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldStorageConfig;
 
 /**
- * Implements hook_update().
- *
- * Add translations
- */
-function alshaya_bazaar_voice_update_8001() {
-  // Add translations.
-  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
-  if ($translations = _alshaya_bazaar_voice_translations()) {
-    alshaya_i18n_save_translations($translations);
-  }
-}
-
-/**
  * Implements hook_install().
  *
  * Create new field (Disable BazaarVoice Rating and Reviews)
@@ -40,6 +27,11 @@ function alshaya_bazaar_voice_install() {
     'alshaya_acm_product_category',
     'install',
   );
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**

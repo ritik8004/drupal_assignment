@@ -2,11 +2,11 @@
 
 /**
  * @file
- * Contains Appointment related translations.
+ * Contains BazaarVoice related translations.
  */
 
 /**
- * Appointment translation.
+ * BazaarVoice translation.
  */
 function _alshaya_bazaar_voice_translations() {
   return [
