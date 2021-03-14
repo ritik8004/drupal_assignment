@@ -22,7 +22,7 @@ const IndividualReviewSlider = ({
               <span className="slider-header-label">
                 {
                   !(sliderData[item].ValueLabel) === true
-                    ? 'True to size'
+                    ? Drupal.t('True to size')
                     : sliderData[item].ValueLabel
                 }
               </span>

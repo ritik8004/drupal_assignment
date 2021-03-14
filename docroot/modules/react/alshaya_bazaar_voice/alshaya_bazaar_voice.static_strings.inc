@@ -63,14 +63,6 @@ function _alshaya_bazaar_voice_static_strings() {
       'value' => t('A confirmation will be sent through email. Manage your appointments online.'),
     ],
     [
-      'key' => 'first_name_label',
-      'value' => t('First name'),
-    ],
-    [
-      'key' => 'last_name_label',
-      'value' => t('Last name'),
-    ],
-    [
       'key' => 'email_address_label',
       'value' => t('Email address'),
     ],
@@ -97,6 +89,134 @@ function _alshaya_bazaar_voice_static_strings() {
     [
       'key' => 'text_min_chars_limit_error',
       'value' => t('Minimum characters limit for this field is %minLength characters.'),
+    ],
+    [
+      'key' => 'reviews',
+      'value' => t('reviews'),
+    ],
+    [
+      'key' => 'write_a_review',
+      'value' => t('Write a review'),
+    ],
+    [
+      'key' => 'star',
+      'value' => t('stars'),
+    ],
+    [
+      'key' => 'post_a_comment',
+      'value' => t('Post a Comment'),
+    ],
+    [
+      'key' => 'post_comment',
+      'value' => t('post comment'),
+    ],
+    [
+      'key' => 'terms_and_condition',
+      'value' => t('Terms and condition'),
+    ],
+    [
+      'key' => 'comment',
+      'value' => t('Comment'),
+    ],
+    [
+      'key' => 'screen_name',
+      'value' => t('Screen name'),
+    ],
+    [
+      'key' => 'review_comment_submission',
+      'value' => t('Thank you for submitting a comment! Your comment is being moderated and may take up to a few days to appear.'),
+    ],
+    [
+      'key' => 'review_recommendation_text',
+      'value' => t('I would recommend this product.'),
+    ],
+    [
+      'key' => 'clear_all',
+      'value' => t('Clear all'),
+    ],
+    [
+      'key' => 'ratings_reviews',
+      'value' => t('Ratings + Reviews'),
+    ],
+    [
+      'key' => 'report',
+      'value' => t('Report'),
+    ],
+    [
+      'key' => 'reported',
+      'value' => t('Reported'),
+    ],
+    [
+      'key' => 'previous_page',
+      'value' => t('Previous Page'),
+    ],
+    [
+      'key' => 'next_page',
+      'value' => t('Next Page'),
+    ],
+    [
+      'key' => 'rating',
+      'value' => t('Rating'),
+    ],
+    [
+      'key' => 'next_page',
+      'value' => t('Next Page'),
+    ],
+    [
+      'key' => 'no_review_found',
+      'value' => t('No review found.'),
+    ],
+    [
+      'key' => 'filter_sort',
+      'value' => t('Filter + Sort'),
+    ],
+    [
+      'key' => 'bv_auth_confirmation_message',
+      'value' => t('Thank you for your contribution.'),
+    ],
+    [
+      'key' => 'submission_msg',
+      'value' => t('We have verified your submission. If the content is approved it will be published within 72 hours.'),
+    ],
+    [
+      'key' => 'survey_exp_not_likely',
+      'value' => t('Not at all likely'),
+    ],
+    [
+      'key' => 'survey_exp_extremely_likely',
+      'value' => t('Extremely likely'),
+    ],
+    [
+      'key' => 'upload_pics',
+      'value' => t('Show us how it looks! Upload up to 5 pics'),
+    ],
+    [
+      'key' => 'upload_photo',
+      'value' => t('Upload a Photo'),
+    ],
+    [
+      'key' => 'recommend_this_product',
+      'value' => t('I would like to recommend this product.'),
+    ],
+    [
+      'key' => 'comment_moderation_text',
+      'value' => t('Thanks for submitting a review. Your review is being moderated and may take few days to appear.'),
+    ],
+    [
+      'key' => 'post_review',
+      'value' => t('Post review'),
+    ],
+    [
+      'key' => 'review_guidelines',
+      'value' => t('Review Guidelines'),
+    ],
+    [
+      'key' => 'review',
+      'value' => t('Review'),
+    ],
+    [
+      'key' => 'vote',
+      'value' => t('Vote'),
     ],
   ];
 }

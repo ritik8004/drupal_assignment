@@ -5,6 +5,7 @@ import ReviewCommentSubmission from '../review-comment-submission';
 import { getCurrentUserEmail } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -38,7 +39,7 @@ class ReviewCommentForm extends React.Component {
       <div className="review-comment-form">
         <form id="comment-form" onSubmit={this.handleSubmit}>
           <div className="comment-form-title">
-            {Drupal.t('Post a Comment')}
+            {getStringMessage('post_a_comment')}
           </div>
           <div className="comment-form-fields">
             <div className="form-item">
@@ -51,7 +52,7 @@ class ReviewCommentForm extends React.Component {
                 defaultValue={commentbox}
               />
               <div className="c-input__bar" />
-              <label className="comment-form-commentbox-label form-label">{Drupal.t('Comment')}</label>
+              <label className="comment-form-commentbox-label form-label">{getStringMessage('comment')}</label>
               <div id="commentbox-error" className="error" />
             </div>
 
@@ -66,7 +67,7 @@ class ReviewCommentForm extends React.Component {
                   defaultValue={nickname}
                 />
                 <div className="c-input__bar" />
-                <label className="comment-form-nickname form-label">{Drupal.t('Screen name')}</label>
+                <label className="comment-form-nickname form-label">{getStringMessage('screen_name')}</label>
                 <div id="nickname-error" className="error" />
               </div>
 
@@ -80,18 +81,18 @@ class ReviewCommentForm extends React.Component {
                   defaultValue={email}
                 />
                 <div className="c-input__bar" />
-                <label className="comment-form-email form-label">{Drupal.t('Email Address')}</label>
+                <label className="comment-form-email form-label">{getStringMessage('email_address_label')}</label>
                 <div id="email-error" className="error" />
               </div>
             </div>
 
             <div className="terms-conditions">
-              <a href={commentTncUri} target="_blank" rel="noopener noreferrer">{Drupal.t('Terms and condition')}</a>
+              <a href={commentTncUri} target="_blank" rel="noopener noreferrer">{getStringMessage('terms_and_condition')}</a>
             </div>
 
             <div className="form-button-wrapper">
-              <button className="form-cancel-btn" onClick={() => this.setState({ showCommentForm: false })} type="button">{Drupal.t('cancel')}</button>
-              <button type="submit" className="form-submit-btn">{Drupal.t('post comment')}</button>
+              <button className="form-cancel-btn" onClick={() => this.setState({ showCommentForm: false })} type="button">{getStringMessage('cancel')}</button>
+              <button type="submit" className="form-submit-btn">{getStringMessage('post_comment')}</button>
             </div>
           </div>
         </form>
@@ -167,7 +168,7 @@ class ReviewCommentForm extends React.Component {
         <>
           <div className="review-feedback-comment">
             <span className={`feedback-comment ${showCommentForm ? 'feedback-comment-disabled' : 'feedback-comment-active'}`}>
-              <button className="review-feedback-comment-btn" onClick={() => this.setState({ showCommentForm: true })} type="button" disabled={showCommentForm}>{Drupal.t('comment')}</button>
+              <button className="review-feedback-comment-btn" onClick={() => this.setState({ showCommentForm: true })} type="button" disabled={showCommentForm}>{getStringMessage('comment')}</button>
             </span>
           </div>
           {showCommentForm ? this.showCommentForm() : null}

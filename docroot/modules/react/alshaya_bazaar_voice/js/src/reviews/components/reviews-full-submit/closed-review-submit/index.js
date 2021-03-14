@@ -1,5 +1,6 @@
 import React from 'react';
 import { getLanguageCode } from '../../../../utilities/api/request';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const ClosedReviewSubmit = ({ destination }) => (
   <div>
@@ -8,7 +9,7 @@ const ClosedReviewSubmit = ({ destination }) => (
       className="closed-review-submit"
       href={`/${getLanguageCode()}/user/login?destination=${destination}`}
     >
-      {Drupal.t('Write a review')}
+      {getStringMessage('write_a_review')}
     </a>
   </div>
 );

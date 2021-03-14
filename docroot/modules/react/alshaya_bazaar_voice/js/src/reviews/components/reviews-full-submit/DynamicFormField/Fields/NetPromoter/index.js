@@ -1,5 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
 class NetPromoter extends React.Component {
   constructor(props) {
@@ -59,8 +60,8 @@ class NetPromoter extends React.Component {
               })}
             </div>
             <div className="survey-experience">
-              <div>{Drupal.t('Not at all likely')}</div>
-              <div>{Drupal.t('Extremely likely')}</div>
+              <div>{getStringMessage('survey_exp_not_likely')}</div>
+              <div>{getStringMessage('survey_exp_extremely_likely')}</div>
             </div>
           </div>
           <input type="hidden" id={id} name={id} required={required} value={promoterVal || ''} />
