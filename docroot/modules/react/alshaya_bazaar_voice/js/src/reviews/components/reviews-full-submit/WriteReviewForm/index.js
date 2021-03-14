@@ -29,14 +29,21 @@ export default class WriteReviewForm extends React.Component {
     document.addEventListener('reviewPosted', this.eventListener, false);
     // Load and display write a review form.
     showFullScreenLoader();
+    const { bazaarVoiceSettings } = this.state;
     const apiUri = `/${getLanguageCode()}/get-write-review-fields-configs`;
     const apiData = doRequest(apiUri);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.status === 200) {
           removeFullScreenLoader();
+          let fieldsData = result.data;
+          // Hide fields on write a review form based on category configurations.
+          if (bazaarVoiceSettings.reviews.hide_fields_write_review.length > 0) {
+            const hideFields = bazaarVoiceSettings.reviews.hide_fields_write_review;
+            fieldsData = this.getProcessedFields(fieldsData, hideFields);
+          }
           this.setState({
-            fieldsConfig: result.data,
+            fieldsConfig: fieldsData,
           });
         } else {
           removeFullScreenLoader();
@@ -89,6 +96,25 @@ export default class WriteReviewForm extends React.Component {
     if (!e.detail.HasErrors) {
       closeModal(e);
     }
+  };
+
+  getProcessedFields = (fieldsConfig, hideFields) => {
+    const fields = fieldsConfig;
+    let i = 0;
+    let index = 0;
+    Object.entries(fieldsConfig).forEach(([key, field]) => {
+      if (hideFields.find((id) => id === field['#id']) !== undefined) {
+        if (key !== -1) {
+          index = key;
+          if (i > 0) {
+            index = key - i;
+          }
+          fields.splice(index, 1);
+          i += 1;
+        }
+      }
+    });
+    return fields;
   };
 
   render() {
