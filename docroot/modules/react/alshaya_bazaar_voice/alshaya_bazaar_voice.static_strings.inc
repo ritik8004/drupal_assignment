@@ -100,6 +100,10 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'star',
+      'value' => t('star'),
+    ],
+    [
+      'key' => 'stars',
       'value' => t('stars'),
     ],
     [

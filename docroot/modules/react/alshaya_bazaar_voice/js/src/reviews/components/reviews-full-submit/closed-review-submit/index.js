@@ -6,7 +6,7 @@ const ClosedReviewSubmit = ({ destination }) => (
   <div>
     <a
       id="closed-review-submit"
-      className="closed-review-submit"
+      className="write-review-button"
       href={`/${getLanguageCode()}/user/login?destination=${destination}`}
     >
       {getStringMessage('write_a_review')}

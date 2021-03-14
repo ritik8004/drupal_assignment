@@ -38,6 +38,11 @@
         }
       }
     }
+
+    .bvSelect__single-value,
+    .bvSelect__input input {
+      color: $rr-review-summary-grey-text !important;
+    }
   }
 
   .bvSelect__menu {

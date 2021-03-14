@@ -12,6 +12,13 @@ export const validEmailRegex = RegExp(
   /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
 );
 
+export const getArraysIntersection = (currentOptions, options) => currentOptions.filter((n) => {
+  if (options.find((element) => element.value === n.value) !== undefined) {
+    return true;
+  }
+  return false;
+});
+
 /**
  * Prepare request data to be sent in submit review api.
  *
@@ -52,8 +59,9 @@ export const prepareRequest = (elements, fieldsConfig) => {
     params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
   // Set user authenticated string (UAS).
-  if (getCurrentUserEmail() !== null && getSessionCookie() !== undefined) {
-    params += `&user=${getSessionCookie()}`;
+  const userToken = getSessionCookie();
+  if (getCurrentUserEmail() !== null && userToken !== undefined) {
+    params += `&user=${userToken}`;
   }
   // Set product id
   params += `&productid=${bazaarVoiceSettings.productid}`;
