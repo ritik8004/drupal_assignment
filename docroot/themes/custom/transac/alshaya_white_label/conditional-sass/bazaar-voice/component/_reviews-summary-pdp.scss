@@ -344,6 +344,17 @@
     .review-title {
       margin-bottom: 0.5rem;
     }
+
+    .star-ratings-wrapper {
+      .inline-star {
+        .icon-ic_ratingfull,
+        .icon-ic_rating {
+          &::before {
+            font-size: 1.5rem;
+          }
+        }
+      }
+    }
   }
 
   .empty-review-summary {

@@ -55,7 +55,7 @@
     .review-feedback-comment,
     .review-comment-form {
       button {
-        width: 10.9375rem;
+        min-width: 10.9375rem;
         height: 2.5rem;
         background: $rr-review-summary-btn-color;
         color: $rr-review-summary-btn-text;
