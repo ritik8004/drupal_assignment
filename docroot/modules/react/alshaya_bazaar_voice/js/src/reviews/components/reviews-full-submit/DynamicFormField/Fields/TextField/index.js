@@ -50,10 +50,10 @@ class TextField extends React.Component {
       let fieldDefaultValue = null;
       if (getCurrentUserEmail() !== null && id === 'useremail') {
         fieldDefaultValue = getCurrentUserEmail();
-      } else if (id === 'useremail' && Cookies.get('BVUserEmail')) {
-        fieldDefaultValue = Cookies.get('BVUserEmail');
-      } else if (id === 'usernickname' && Cookies.get('BVUserNickname')) {
-        fieldDefaultValue = Cookies.get('BVUserNickname');
+      } else if (id === 'useremail' && Cookies.get('BvUserEmail')) {
+        fieldDefaultValue = Cookies.get('BvUserEmail');
+      } else if (id === 'usernickname' && Cookies.get('BvUserNickname')) {
+        fieldDefaultValue = Cookies.get('BvUserNickname');
       }
       return (
         <>

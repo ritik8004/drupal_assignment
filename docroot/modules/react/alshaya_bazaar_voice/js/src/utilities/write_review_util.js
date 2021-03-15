@@ -39,25 +39,18 @@ export const prepareRequest = (elements, fieldsConfig) => {
             if (Cookies.get('BvUserEmail') !== elements[id].value) {
               Cookies.remove('BvUserEmail');
               Cookies.remove('BvUserNickname');
-              Cookies.remove('BVUserId');
+              Cookies.remove('BvUserId');
             }
           } else {
-            params += `&${id}=${elements[id].value}`;
-            if (getCurrentUserEmail() === null) {
-              params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
-            }
+            params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
-        }
-        if (id === 'usernickname') {
-          if (Cookies.get('BvUserNickname') && Cookies.get('BvUserEmail') && Cookies.get('BVUserId')) {
-            if (Cookies.get('BvUserNickname') !== elements[id].value) {
-              params += `&${id}=${elements[id].value}`;
-              Cookies.set('BvUserNickname', elements[id].value);
-            }
-            params += `&User=${Cookies.get('BVUserId')}`;
-          } else {
+        } else if (id === 'usernickname' && Cookies.get('BvUserNickname')
+          && Cookies.get('BvUserEmail') && Cookies.get('bazaarVoiceUserId')) {
+          if (Cookies.get('BvUserNickname') !== elements[id].value) {
             params += `&${id}=${elements[id].value}`;
+            Cookies.set('BvUserNickname', elements[id].value);
           }
+          params += `&User=${Cookies.get('bazaarVoiceUserId')}`;
         } else {
           params += `&${id}=${elements[id].value}`;
         }
@@ -77,6 +70,11 @@ export const prepareRequest = (elements, fieldsConfig) => {
       return key;
     });
   }
+
+  if (getCurrentUserEmail() === null && !(Cookies.get('BvUserEmail'))) {
+    params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+  }
+
   // Set user authenticated string (UAS).
   const userToken = getSessionCookie();
   if (getCurrentUserEmail() !== null && userToken !== undefined) {
