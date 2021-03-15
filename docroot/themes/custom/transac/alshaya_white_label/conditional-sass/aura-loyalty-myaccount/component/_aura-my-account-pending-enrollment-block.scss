@@ -74,6 +74,10 @@
       }
     }
 
+    @include breakpoint($only-mobile) {
+      @include arabic-line-height(normal);
+    }
+
     .app-links {
       svg {
         g,
