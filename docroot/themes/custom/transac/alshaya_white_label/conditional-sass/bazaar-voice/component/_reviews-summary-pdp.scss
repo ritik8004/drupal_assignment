@@ -172,6 +172,7 @@
       font-family: $alshaya-bold;
       display: flex;
       align-items: center;
+      color: $rr-review-summary-txt;
 
       @include breakpoint($tablet) {
         margin-bottom: 0.625rem;
@@ -201,6 +202,7 @@
       align-items: center;
       margin: 2.5rem 0;
       font-size: 0.9375rem;
+      color: $rr-review-pagination;
 
       .prev-btn,
       .next-btn {
@@ -340,18 +342,30 @@
     .review-title {
       margin-bottom: 0.5rem;
     }
+
+    .star-ratings-wrapper {
+      .inline-star {
+        .icon-ic_ratingfull,
+        .icon-ic_rating {
+          &::before {
+            font-size: 1.5rem;
+          }
+        }
+      }
+    }
   }
 
   .empty-review-summary {
     display: flex;
     justify-content: center;
+    margin-top: 2rem;
 
     .write-review-button {
       min-width: 20.3125rem;
       height: 2.5rem;
       background: $rr-review-summary-btn-color;
       color: $rr-review-summary-btn-text;
-      border: 0.0625rem solid $rr-review-summary-btn-color;
+      border: 0.0625rem solid $rr-review-summary-btn-border;
       padding: 0.75rem;
       font-size: 0.875rem;
       line-height: 1;

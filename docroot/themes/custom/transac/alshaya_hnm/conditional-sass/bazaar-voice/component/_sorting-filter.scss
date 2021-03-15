@@ -1,0 +1,11 @@
+.review-filter-display-wrapper {
+  .filter-result {
+    li {
+      .bv-active-filter-button {
+        &::after {
+          font-size: 0.625rem;
+        }
+      }
+    }
+  }
+}
