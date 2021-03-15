@@ -24,19 +24,28 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $config = \Drupal::config('bazaar_voice.settings');
     // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked in bazaarVoice Settings Form.
-    $isBVDisabled = $config->get('pdp_rating_reviews');
-    if ($isBVDisabled) {
+    if ($config->get('pdp_rating_reviews')) {
       return;
     }
     // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked for any categories or its Parent Categories.
     $showRatingReviews = TRUE;
+    $hide_fields_write_review = [];
     $category = $productNode->get('field_category')->getValue();
     foreach ($category as $term) {
       $term_parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term['target_id']);
       foreach ($term_parents as $term_obj) {
+        // Enable R&R feature based on category.
         if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
           $showRatingReviews = FALSE;
+        }
+        // Get fields from category not be displayed in write a review form.
+        if (!empty($term_obj->get('field_write_review_form_fields')->getValue())) {
+          $field_ids = [];
+          foreach ($term_obj->get('field_write_review_form_fields')->getValue() as $value) {
+            $field_ids[] = $value['value'];
+          }
+          $hide_fields_write_review = $field_ids;
         }
       }
     }
@@ -86,6 +95,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
       ],
       'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
       'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
+      'hide_fields_write_review' => $hide_fields_write_review,
     ];
 
     // Adding template to render string values.
@@ -118,7 +128,7 @@ function alshaya_bazaar_voice_theme($existing, $type, $theme, $path) {
 /**
  * Implements hook_page_attachments().
  */
-function alshaya_bazaar_voice_page_attachments(array &$page){
+function alshaya_bazaar_voice_page_attachments(array &$page) {
   // Configurations must be on page before iovation's JavaScript loads.
   // Add script to generate the device finger printing string.
   $page['#attached']['html_head'][] = [[
@@ -135,36 +145,54 @@ function alshaya_bazaar_voice_page_attachments(array &$page){
 }
 
 /**
-  * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
-  * Updating build array for bv pixel integration.
-  *
-  * @param array $build
-  *   Reference to the build array of spc confirmation.
-  * @param string $order
-  *   Order details array.
-  */
-  function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
-    /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
-    $bazaar_voice_api_helper = \Drupal::service('bazaar_voice.api_helper');
-    if (!empty($build['#attached']['drupalSettings'])){
-      if ($bazaar_voice_api_helper->isBvConfigurationsAvailable()) {
-        $bazaarvoice_config = \Drupal::config('bazaar_voice.settings');
-        $locale = $bazaarvoice_config->get('locale');
-        // Attach bvpixel library to order confirmation page.
-        $build['#attached']['library'][] = 'alshaya_bazaar_voice/bvpixel_tracking';
-        if(!empty($build['#attached']['drupalSettings']['order_details'])) {
-          $build['#attached']['drupalSettings']['order_details']['bv_extra_params'] = [
-            'currency' => $order['base_currency_code'] ?? '',
-            'tax' => $order['base_tax_amount'] ?? '',
-            'shipping' => $order['shipping_incl_tax'] ?? '',
-            'city' => $order['shipping']['address']['city'] ?? '',
-            'country' => $order['shipping']['address']['country_id'] ?? '',
-            'nickname' => $order['customer_firstname'] ?? '',
-            'customer_is_guest' => $order['customer_is_guest'] ?? '',
-            'customer_id' => $order['customer_id'] ?? '',
-            'locale' => $locale ?? '',
-          ];
-        }
+ * Implements hook_alshaya_spc_checkout_confirmation_order_build_alter().
+ * Updating build array for bv pixel integration.
+ *
+ * @param array $build
+ *   Reference to the build array of spc confirmation.
+ * @param string $order
+ *   Order details array.
+ */
+function alshaya_bazaar_voice_alshaya_spc_checkout_confirmation_order_build_alter(array &$build, $order) {
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $bazaar_voice */
+  $bazaar_voice_api_helper = \Drupal::service('bazaar_voice.api_helper');
+  if (!empty($build['#attached']['drupalSettings'])){
+    if ($bazaar_voice_api_helper->isBvConfigurationsAvailable()) {
+      $bazaarvoice_config = \Drupal::config('bazaar_voice.settings');
+      $locale = $bazaarvoice_config->get('locale');
+      // Attach bvpixel library to order confirmation page.
+      $build['#attached']['library'][] = 'alshaya_bazaar_voice/bvpixel_tracking';
+      if(!empty($build['#attached']['drupalSettings']['order_details'])) {
+        $build['#attached']['drupalSettings']['order_details']['bv_extra_params'] = [
+          'currency' => $order['base_currency_code'] ?? '',
+          'tax' => $order['base_tax_amount'] ?? '',
+          'shipping' => $order['shipping_incl_tax'] ?? '',
+          'city' => $order['shipping']['address']['city'] ?? '',
+          'country' => $order['shipping']['address']['country_id'] ?? '',
+          'nickname' => $order['customer_firstname'] ?? '',
+          'customer_is_guest' => $order['customer_is_guest'] ?? '',
+          'customer_id' => $order['customer_id'] ?? '',
+          'locale' => $locale ?? '',
+        ];
       }
     }
   }
+}
+
+/**
+ * Implements allowed values callback.
+ */
+function alshaya_bazaar_voice_write_review_fields() {
+  $write_review_fields = [];
+  /** @var \Drupal\alshaya_bazaar_voice\AlshayaBazaarVoice $alshaya_bazaar_voice */
+  $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
+  // Get optional fields and set based on categories.
+  $fields_config = $alshaya_bazaar_voice->getWriteReviewFieldsConfig();
+  foreach ($fields_config as $key => $value) {
+    if ($value['#visible'] && $value['#type'] !== 'processed_text' && !$value['#required']) {
+      $write_review_fields[$value['#id']] = $value['#title'];
+    }
+  }
+
+  return $write_review_fields;
+}
