@@ -2,7 +2,7 @@ import React from 'react';
 import { getLanguageCode } from '../../../../utilities/api/request';
 
 const ClosedReviewSubmit = ({ destination }) => (
-  <div>
+  <div className="button-wrapper">
     <a
       id="closed-review-submit"
       className="write-review-button"
