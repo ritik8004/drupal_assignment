@@ -3,6 +3,7 @@ import RatingSummary from './RatingSummary';
 import DisplayStar from '../stars/DisplayStar';
 import ConditionalView from '../../../common/components/conditional-view';
 import smoothScrollTo from '../../../utilities/smoothScroll';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const InlineRating = ({
   reviewsData,
@@ -10,15 +11,17 @@ const InlineRating = ({
   <div className="inline-rating">
     <div className="aggregate-rating" itemProp="aggregateRating" itemScope="" itemType="">
       <div className="empty-stars">
-        <DisplayStar
-          starPercentage={reviewsData.ReviewStatistics.AverageOverallRating}
-        />
+        <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} href="#">
+          <DisplayStar
+            starPercentage={reviewsData.ReviewStatistics.AverageOverallRating}
+          />
+        </a>
         <ConditionalView condition={window.innerWidth >= 1024}>
           <div className="histogram-data">
             <div className="histogram-title">
               {reviewsData.ReviewStatistics.TotalReviewCount}
               {' '}
-              {Drupal.t('reviews')}
+              {getStringMessage('reviews')}
             </div>
             <RatingSummary
               histogramData={reviewsData.ReviewStatistics.RatingDistribution}

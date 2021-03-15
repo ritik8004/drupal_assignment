@@ -13,6 +13,21 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add translations for error_code 604.
+ */
+function alshaya_acm_product_update_8067() {
+  $strings = [
+    'The product that you are trying to add is not available.' => [
+      'ar' => 'المنتج الذي تحاول إضافته غير متوفر.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new Product and Stock resource v2.
  */
 function alshaya_acm_product_update_8066() {
@@ -226,18 +241,7 @@ function alshaya_acm_product_update_8057() {
  * Invalidate cache for promotions and requeue all impacted products.
  */
 function alshaya_acm_product_update_8056() {
-  \Drupal::cache('product_processed_data')->invalidateAll();
-
-  // Re-queue all the products that have a promotion mapped.
-  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiDataHelper $searchApiDataHelper */
-  $searchApiDataHelper = \Drupal::service('alshaya_search_api.data_helper');
-  $products = $searchApiDataHelper->getProductsWithDataInField('field_acq_promotion_label');
-
-  /** @var \Drupal\alshaya_acm_product\Service\ProductQueueUtility $queueUtility */
-  $queueUtility = \Drupal::service('alshaya_acm_product.product_queue_utility');
-  foreach ($products as $product) {
-    $queueUtility->queueProduct($product);
-  }
+  // Code here removed as functions used here are no longer supported.
 }
 
 /**
@@ -1349,6 +1353,9 @@ function alshaya_acm_product_install() {
     ],
     'Click <span class="coupon-code">@promotion.coupon_code</span> to get a Free Gift' => [
       'ar' => 'اضغط <span class="coupon-code">@promotion.coupon_code</span> للحصول على هدية مجانية',
+    ],
+    'The product that you are trying to add is not available.' => [
+      'ar' => 'المنتج الذي تحاول إضافته غير متوفر.',
     ],
   ];
 

@@ -84,7 +84,7 @@ services:
       - '@config.factory'
       - '@cache.data'
     calls:
-      - [ setAlgoliaReactHelper, [ '@?alshaya_algoila_react.helper' ] ]
+      - [ setAlgoliaReactHelper, [ '@?alshaya_algolia_react.helper' ] ]
 
   alshaya_acm_product_category.category_products_helper:
     class: Drupal\alshaya_acm_product_category\Service\CategoryProductsHelper

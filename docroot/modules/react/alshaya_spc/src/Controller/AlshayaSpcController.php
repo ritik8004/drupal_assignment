@@ -612,12 +612,15 @@ class AlshayaSpcController extends ControllerBase {
 
     // Get Products.
     $productList = [];
+    $number_of_items = 0;
     foreach ($order['items'] as $item) {
       if (in_array($item['sku'], array_keys($productList))) {
         continue;
       }
       // Populate price and other info from order response data.
       $productList[$item['sku']] = $this->orderHelper->getSkuDetails($item);
+      // Calculate the ordered quantity of each sku.
+      $number_of_items += $productList[$item['sku']]['qtyOrdered'];
     }
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
@@ -634,7 +637,7 @@ class AlshayaSpcController extends ControllerBase {
         'customer_name' => $order['firstname'] . ' ' . $order['lastname'],
         'mobile_number' => $phone_number,
         'expected_delivery' => $delivery_method_description,
-        'number_of_items' => count($productList),
+        'number_of_items' => $number_of_items,
         'delivery_type_info' => $orderDetails,
         'totals' => $totals,
         'items' => $productList,
@@ -673,10 +676,14 @@ class AlshayaSpcController extends ControllerBase {
 
     $build = $this->addCheckoutConfigSettings($build);
     // Added Olapic checkout pixel condition.
-    $data_apikey_field_name = 'olapic_' . $langcode . '_data_apikey';
-    $data_apikey = $this->configFactory->get('alshaya_olapic.settings')->get($data_apikey_field_name) ?? '';
-    if (!empty($data_apikey)) {
-      $this->moduleHandler->alter('checkout_pixel_build', $build, $data_apikey);
+    // Check first if alshaya olapic module is enabled.
+    if ($this->moduleHandler->moduleExists('alshaya_olapic')) {
+      $data_apikey_field_name = 'olapic_' . $langcode . '_data_apikey';
+      $data_apikey = $this->configFactory->get('alshaya_olapic.settings')->get($data_apikey_field_name) ?? '';
+      $base_currency_code = $order['base_currency_code'] ?? '';
+      if (!empty($data_apikey)) {
+        $this->moduleHandler->alter('checkout_pixel_build', $build, $data_apikey, $base_currency_code);
+      }
     }
     // Adding hook alter for bazaarvoice pixel integration.
     $this->moduleHandler->alter('alshaya_spc_checkout_confirmation_order_build', $build, $order);

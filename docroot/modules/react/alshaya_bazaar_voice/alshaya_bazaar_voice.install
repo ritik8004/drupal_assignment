@@ -11,34 +11,42 @@ use Drupal\field\Entity\FieldStorageConfig;
 /**
  * Implements hook_install().
  *
- * Create new field (Disable BazaarVoice Rating and Reviews)
+ * Update default configurations for the fields created for ratings & reviews.
  */
 function alshaya_bazaar_voice_install() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-
-  $fields = [
-    'field.storage.taxonomy_term.field_rating_review',
-    'field.field.taxonomy_term.acq_product_category.field_rating_review',
-    'core.entity_form_display.taxonomy_term.acq_product_category.default',
-  ];
-  $manager->updateConfigs(
-    $fields,
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    [
+      'core.entity_form_display.taxonomy_term.acq_product_category.default',
+      'core.entity_view_display.taxonomy_term.acq_product_category.default'
+    ],
     'alshaya_acm_product_category',
     'install',
+    AlshayaConfigManager::MODE_RESAVE
   );
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**
  * Implements hook_uninstall().
  *
- * Delete field (Disable BazaarVoice Rating and Reviews)
+ * Remove configurations created for ratings & reviews.
  */
 function alshaya_bazaar_voice_uninstall() {
-  $field = FieldStorageConfig::loadByName('taxonomy_term', 'field_rating_review');
-  if ($field) {
-    // Delete this field.
-    $field->delete();
+  // Delete fields created for ratings & reviews feature configuration.
+  $fields = ['field_write_review_form_fields', 'field_rating_review'];
+  foreach ($fields as $field_id) {
+    $field = FieldStorageConfig::loadByName('taxonomy_term', $field_id);
+    if ($field) {
+      $field->delete();
+    }
+  }
+  // Delete webform created to maintain write a review form configurations.
+  $webform = \Drupal::entityTypeManager()->getStorage('webform')->load('alshaya_bv_write_review');
+  if (!is_null($webform)) {
+    $webform->delete();
   }
 }
-

@@ -1,5 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
+import { getArraysIntersection } from '../../../utilities/write_review_util';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 export default class ReviewRatingsFilter extends React.Component {
   handleSelect = (selectedOption) => {
@@ -24,22 +26,36 @@ export default class ReviewRatingsFilter extends React.Component {
 
   processRatingFilters = () => {
     const {
+      currentOptions,
       filterOptions,
     } = this.props;
 
     if (filterOptions !== undefined && filterOptions !== null) {
+      const ratingFilter = [];
       let availableOptions = '';
       Object.entries(filterOptions).forEach(([index]) => {
         const contextData = filterOptions[index].ReviewStatistics.RatingDistribution;
 
         const options = Object.keys(contextData).map((item) => ({
           value: `rating:${contextData[item].RatingValue}`,
-          label: `${contextData[item].RatingValue} ${(contextData[item].RatingValue > 1) ? Drupal.t('stars') : Drupal.t('star')} (${contextData[item].Count})`,
+          label: `${contextData[item].RatingValue} ${(contextData[item].RatingValue > 1) ? getStringMessage('star') : getStringMessage('stars')} (${contextData[item].Count})`,
         }));
         availableOptions = options.reverse();
       });
 
-      return availableOptions;
+      ratingFilter.options = availableOptions;
+      ratingFilter.default = [{
+        value: 'none',
+        label: Drupal.t('Rating'),
+      }];
+      if (currentOptions.length > 0) {
+        const selected = getArraysIntersection(currentOptions, availableOptions);
+        if (selected.length > 0) {
+          ratingFilter.default = selected;
+        }
+      }
+
+      return ratingFilter;
     }
     return null;
   }
@@ -54,8 +70,9 @@ export default class ReviewRatingsFilter extends React.Component {
             classNamePrefix="bvSelect"
             className="bv-select"
             onChange={this.handleSelect}
-            options={ratingList}
-            defaultValue={{ value: 'none', label: Drupal.t('Rating') }}
+            options={ratingList.options}
+            defaultValue={ratingList.default}
+            value={ratingList.default}
           />
         </div>
       );

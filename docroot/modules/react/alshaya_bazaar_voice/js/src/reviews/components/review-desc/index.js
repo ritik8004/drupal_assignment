@@ -6,6 +6,7 @@ import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
 import ReviewPhoto from '../review-photo';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -48,9 +49,9 @@ const ReviewDescription = ({
                 && reviewDescriptionData.IsRecommended !== null}
               >
                 <div className="review-recommendation">
-                  <span className="review-recommendation-icon">{Drupal.t('recommendation-icon')}</span>
+                  <span className="review-recommendation-icon" />
                   <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
-                  <span className="review-recommendation-text">{Drupal.t('I would recommend this product.')}</span>
+                  <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
                 </div>
               </ConditionalView>
               <div className="review-feedback">

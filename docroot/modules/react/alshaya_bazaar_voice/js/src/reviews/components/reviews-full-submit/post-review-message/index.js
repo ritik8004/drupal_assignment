@@ -1,5 +1,6 @@
 import React from 'react';
 import DisplayStar from '../../../../rating/components/stars/DisplayStar';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const PostReviewMessage = ({
   postReviewData,
@@ -17,13 +18,13 @@ const PostReviewMessage = ({
             <span className="review-recommendation-icon" />
             <span>{`${Drupal.t('yes')},`}</span>
             <span className="review-recommendation-text">
-              {Drupal.t('I would like to recommend this product.')}
+              {getStringMessage('recommend_this_product')}
             </span>
           </div>
         )
         : ''}
     </div>
-    <div className="comment-moderation-block"><span className="comment-moderation-text">{Drupal.t('Thanks for submitting a review. Your review is being moderated and may take few days to appear.')}</span></div>
+    <div className="comment-moderation-block"><span className="comment-moderation-text">{getStringMessage('comment_moderation_text')}</span></div>
   </div>
 );
 

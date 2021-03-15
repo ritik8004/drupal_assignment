@@ -10,6 +10,7 @@
       margin-#{$left}: -50vw;
       margin-#{$right}: -50vw;
       width: 100vw;
+      margin-top: 1rem;
     }
 
     @include breakpoint($only-tablet) {
@@ -21,6 +22,8 @@
     }
 
     .rating-wrapper {
+      color: $rr-rating-section;
+
       @include breakpoint($tablet) {
         margin: 0 auto;
         max-width: 66.35rem;
@@ -156,10 +159,11 @@
           height: 2.5rem;
           background: $rr-review-summary-btn-color;
           color: $rr-review-summary-btn-text;
-          border: 0.0625rem solid $rr-review-summary-btn-color;
+          border: 0.0625rem solid $rr-review-summary-btn-border;
           padding: 0.75rem;
           font-size: 0.875rem;
           line-height: 1;
+          font-family: $alshaya-bold;
 
           @include breakpoint($only-mobile) {
             min-width: 100%;

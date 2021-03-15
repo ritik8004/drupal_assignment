@@ -36,7 +36,7 @@ class ReviewCommentForm extends React.Component {
       <div className="review-comment-form">
         <form id="comment-form" onSubmit={this.handleSubmit}>
           <div className="comment-form-title">
-            {Drupal.t('Post a Comment')}
+            {getStringMessage('post_a_comment')}
           </div>
           <div className="comment-form-fields">
             <input type="hidden" name="blackBox" id="ioBlackBox" />
@@ -52,7 +52,7 @@ class ReviewCommentForm extends React.Component {
               />
               <div className="c-input__bar" />
               <label className={`form-label ${commentbox ? 'active-label' : ''}`}>
-                {Drupal.t('Comment')}
+                {getStringMessage('comment')}
                 {'*'}
               </label>
               <div id="commentbox-error" className="error" />
@@ -70,7 +70,7 @@ class ReviewCommentForm extends React.Component {
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${nickname ? 'active-label' : ''}`}>
-                  {Drupal.t('Screen name')}
+                  {getStringMessage('screen_name')}
                   {'*'}
                 </label>
                 <div id="nickname-error" className="error" />
@@ -87,7 +87,7 @@ class ReviewCommentForm extends React.Component {
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
-                  {Drupal.t('Email Address')}
+                  {getStringMessage('email_address_label')}
                   {'*'}
                 </label>
                 <div id="email-error" className="error" />
@@ -95,12 +95,12 @@ class ReviewCommentForm extends React.Component {
             </div>
 
             <div className="terms-conditions">
-              <a href={commentTncUri} target="_blank" rel="noopener noreferrer">{Drupal.t('Terms and condition')}</a>
+              <a href={commentTncUri} target="_blank" rel="noopener noreferrer">{getStringMessage('terms_and_condition')}</a>
             </div>
 
             <div className="form-button-wrapper">
-              <button className="form-cancel-btn" onClick={() => this.setState({ showCommentForm: false })} type="button">{Drupal.t('cancel')}</button>
-              <button type="submit" className="form-submit-btn">{Drupal.t('post comment')}</button>
+              <button className="form-cancel-btn" onClick={() => this.setState({ showCommentForm: false })} type="button">{getStringMessage('cancel')}</button>
+              <button type="submit" className="form-submit-btn">{getStringMessage('post_comment')}</button>
             </div>
           </div>
         </form>
@@ -226,7 +226,7 @@ class ReviewCommentForm extends React.Component {
                 type="button"
                 disabled={showCommentForm}
               >
-                {Drupal.t('comment')}
+                {getStringMessage('comment')}
               </button>
             </span>
           </div>

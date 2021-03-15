@@ -1,6 +1,7 @@
 import React from 'react';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 class ReviewCommentSubmission extends React.Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class ReviewCommentSubmission extends React.Component {
             <span className="comment-description-text">{CommentText}</span>
           </div>
           <div className="comment-moderation-block">
-            <span className="comment-moderation-text">{Drupal.t('Thank you for submitting a comment! Your comment is being moderated and may take up to a few days to appear.')}</span>
+            <span className="comment-moderation-text">{getStringMessage('review_comment_submission')}</span>
           </div>
         </div>
       </div>

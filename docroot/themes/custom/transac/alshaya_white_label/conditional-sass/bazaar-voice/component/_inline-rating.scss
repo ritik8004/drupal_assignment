@@ -33,6 +33,7 @@
 
   .inline-star {
     position: relative;
+    #{$left}: -0.25rem;
 
     .star-ratings-front {
       position: absolute;
@@ -55,6 +56,20 @@
     .icon-ic_rating {
       @include icon(rating) {
         color: $rr-stars-color;
+      }
+    }
+  }
+}
+
+.review-detail-right {
+  .inline-star {
+    .star-ratings-front,
+    .star-ratings-back {
+      .icon-ic_ratingfull,
+      .icon-ic_rating {
+        &::before {
+          font-size: 1.5rem;
+        }
       }
     }
   }
