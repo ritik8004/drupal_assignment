@@ -19,6 +19,7 @@ export default class BvAuthConfirmation extends React.Component {
     const {
       bvAuthToken,
     } = this.props;
+
     const apiUri = '/data/authenticateuser.json';
     const params = `&authtoken=${bvAuthToken}`;
     const apiData = postAPIData(apiUri, params);
@@ -50,6 +51,7 @@ export default class BvAuthConfirmation extends React.Component {
       isModelOpen,
       isUserVerified,
     } = this.state;
+
     return (
       <Popup open={isModelOpen}>
         <div className="write-review-form">
