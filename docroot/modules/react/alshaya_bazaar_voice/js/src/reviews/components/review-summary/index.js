@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import ConditionalView from '../../../common/components/conditional-view';
 import ReviewInformation from '../review-info';
@@ -86,6 +87,28 @@ export default class ReviewSummary extends React.Component {
         filterParams += `&${type}=${item.value}`;
         return filterParams;
       });
+    }
+
+    // Store user information in bv cookies.
+    if (Cookies.get('bazaarVoiceUserId')) {
+      const params = `&productid=${bazaarVoiceSettings.productid}&User=${Cookies.get('bazaarVoiceUserId')}&Action=`;
+      const apiData = fetchAPIData('/data/submitreview.json', params);
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.error === undefined
+        && result.data !== undefined
+        && result.data.error === undefined) {
+            if (result.data.Data.Fields !== undefined
+               && result.data.Data.Fields.usernickname
+               && result.data.Data.Fields.useremail) {
+              Cookies.set('BvUserNickname', result.data.Data.Fields.usernickname.Value);
+              Cookies.set('BvUserEmail', result.data.Data.Fields.useremail.Value);
+            }
+          } else {
+            Drupal.logJavascriptError('review-comment-submit', result.error);
+          }
+        });
+      }
     }
 
     // Get review data from BazaarVoice based on available parameters.

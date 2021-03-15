@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { getCurrentUserEmail, getSessionCookie } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
@@ -26,10 +27,32 @@ export const prepareRequest = (elements, fieldsConfig) => {
     // Add input data from field types.
     try {
       if (elements[id].value !== null) {
-        params += `&${id}=${elements[id].value}`;
-
-        if (id === 'useremail' && getCurrentUserEmail() === null) {
-          params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
+        if (id === 'useremail') {
+          if (Cookies.get('BvUserEmail')) {
+            if (Cookies.get('BvUserEmail') !== elements[id].value) {
+              Cookies.remove('BvUserEmail');
+              Cookies.remove('BvUserNickname');
+              Cookies.remove('BVUserId');
+            }
+          } else {
+            params += `&${id}=${elements[id].value}`;
+            if (getCurrentUserEmail() === null) {
+              params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+            }
+          }
+        }
+        if (id === 'usernickname') {
+          if (Cookies.get('BvUserNickname') && Cookies.get('BvUserEmail') && Cookies.get('BVUserId')) {
+            if (Cookies.get('BvUserNickname') !== elements[id].value) {
+              params += `&${id}=${elements[id].value}`;
+              Cookies.set('BvUserNickname', elements[id].value);
+            }
+            params += `&User=${Cookies.get('BVUserId')}`;
+          } else {
+            params += `&${id}=${elements[id].value}`;
+          }
+        } else {
+          params += `&${id}=${elements[id].value}`;
         }
       }
     } catch (e) { return null; }
@@ -46,10 +69,6 @@ export const prepareRequest = (elements, fieldsConfig) => {
 
       return key;
     });
-  }
-  // Set callback url for BV auntheticated user.
-  if (getCurrentUserEmail() === null) {
-    params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
   // Set user authenticated string (UAS).
   if (getCurrentUserEmail() !== null && getSessionCookie() !== undefined) {

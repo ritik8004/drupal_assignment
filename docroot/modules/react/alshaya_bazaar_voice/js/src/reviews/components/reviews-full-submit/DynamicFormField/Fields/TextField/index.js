@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { validEmailRegex } from '../../../../../../utilities/write_review_util';
 import { getCurrentUserEmail } from '../../../../../../utilities/user_util';
 import ConditionalView from '../../../../../../common/components/conditional-view';
@@ -46,9 +47,13 @@ class TextField extends React.Component {
     const { labelActiveClass } = this.state;
 
     if (visible === true) {
-      let email = null;
-      if (getCurrentUserEmail() !== undefined && id === 'useremail') {
-        email = getCurrentUserEmail();
+      let fieldDefaultValue = null;
+      if (getCurrentUserEmail() !== null && id === 'useremail') {
+        fieldDefaultValue = getCurrentUserEmail();
+      } else if (id === 'useremail' && Cookies.get('BVUserEmail')) {
+        fieldDefaultValue = Cookies.get('BVUserEmail');
+      } else if (id === 'usernickname' && Cookies.get('BVUserNickname')) {
+        fieldDefaultValue = Cookies.get('BVUserNickname');
       }
       return (
         <>
@@ -60,11 +65,11 @@ class TextField extends React.Component {
               type="text"
               id={id}
               name={id}
-              defaultValue={(email !== null) ? email : defaultValue}
+              defaultValue={(fieldDefaultValue !== null) ? fieldDefaultValue : defaultValue}
               onChange={(e) => this.handleChange(e)}
               maxLength={maxLength}
               minLength={minLength}
-              readOnly={(email !== null) ? 1 : 0}
+              readOnly={(id === 'useremail' && getCurrentUserEmail() !== null) ? 1 : 0}
             />
             <div className="c-input__bar" />
             <label className={`${labelActiveClass}`}>

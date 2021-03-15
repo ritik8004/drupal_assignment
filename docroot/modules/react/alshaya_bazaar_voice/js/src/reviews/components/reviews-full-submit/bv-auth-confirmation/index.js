@@ -1,5 +1,6 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
+import Cookies from 'js-cookie';
 import { postAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import ConditionalView from '../../../../common/components/conditional-view';
@@ -17,7 +18,6 @@ export default class BvAuthConfirmation extends React.Component {
     const {
       bvAuthToken,
     } = this.props;
-
     const apiUri = '/data/authenticateuser.json';
     const params = `&authtoken=${bvAuthToken}`;
     const apiData = postAPIData(apiUri, params);
@@ -25,6 +25,8 @@ export default class BvAuthConfirmation extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           if (!result.data.HasErrors) {
+            const userId = result.data.Authentication.User;
+            Cookies.set('BVUserId', userId);
             this.setState({
               isUserVerified: true,
             });
@@ -47,7 +49,6 @@ export default class BvAuthConfirmation extends React.Component {
       isModelOpen,
       isUserVerified,
     } = this.state;
-
     return (
       <Popup open={isModelOpen}>
         <div className="write-review-form">
