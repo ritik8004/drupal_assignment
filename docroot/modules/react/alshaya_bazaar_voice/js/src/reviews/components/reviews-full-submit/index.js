@@ -4,6 +4,7 @@ import WriteReviewForm from './WriteReviewForm';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 import ClosedReviewSubmit from './closed-review-submit';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
@@ -49,7 +50,7 @@ export default class WriteReviewButton extends React.Component {
     return (
       <div className="button-wrapper">
         <div onClick={(e) => this.openModal(e)} className="write-review-button">
-          {Drupal.t('Write a review')}
+          {getStringMessage('write_a_review')}
         </div>
         <Popup
           open={isModelOpen}

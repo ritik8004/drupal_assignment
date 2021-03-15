@@ -9,6 +9,7 @@ import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messa
 import FormLinks from '../DynamicFormField/Fields/FormLinks';
 import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../utilities/api/request';
 import ConditionalView from '../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -117,7 +118,7 @@ export default class WriteReviewForm extends React.Component {
     return (
       <div className="write-review-form">
         <div className="title-block">
-          <SectionTitle>{Drupal.t('Write a Review')}</SectionTitle>
+          <SectionTitle>{getStringMessage('write_a_review')}</SectionTitle>
           <a className="close-modal" onClick={(e) => closeModal(e)} />
         </div>
         <BazaarVoiceMessages />
@@ -146,7 +147,7 @@ export default class WriteReviewForm extends React.Component {
                     name="cancel"
                     onClick={(e) => closeModal(e)}
                   >
-                    {Drupal.t('Cancel')}
+                    {getStringMessage('cancel')}
                   </button>
                   <button
                     id="preview-write-review"
@@ -154,12 +155,12 @@ export default class WriteReviewForm extends React.Component {
                     name="submit"
                     type="submit"
                   >
-                    {Drupal.t('Post review')}
+                    {getStringMessage('post_review')}
                   </button>
                 </div>
                 <FormLinks
-                  tnc={Drupal.t('Terms & Conditions')}
-                  reviewGuide={Drupal.t('Review Guidelines')}
+                  tnc={getStringMessage('terms_and_condition')}
+                  reviewGuide={getStringMessage('review_guidelines')}
                 />
               </form>
             </div>

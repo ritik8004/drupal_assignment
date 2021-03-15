@@ -1,4 +1,5 @@
 import React from 'react';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 export default class ReviewFiltersDisplay extends React.Component {
   handleClick = (selectedOption) => {
@@ -43,7 +44,7 @@ export default class ReviewFiltersDisplay extends React.Component {
             ))}
           </ul>
           <div className="clear-all-button">
-            <button type="button" onClick={() => this.handleClick('clearall')}>{Drupal.t('Clear all')}</button>
+            <button type="button" onClick={() => this.handleClick('clearall')}>{getStringMessage('clear_all')}</button>
           </div>
         </div>
       );

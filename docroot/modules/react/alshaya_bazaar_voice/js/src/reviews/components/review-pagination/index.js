@@ -1,5 +1,6 @@
 import React from 'react';
 import smoothScrollTo from '../../../utilities/smoothScroll';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 export default class Pagination extends React.Component {
   constructor(props) {
@@ -41,11 +42,11 @@ export default class Pagination extends React.Component {
     return (
       <div className="review-pagination">
         <div className="prev" onClick={(e) => this.navigatePage(e.target.value)}>
-          <button type="button" value="prev" className="prev-btn" disabled={prevButtonDisabled}>{Drupal.t('Previous Page')}</button>
+          <button type="button" value="prev" className="prev-btn" disabled={prevButtonDisabled}>{getStringMessage('previous_page')}</button>
         </div>
         <span>{`${currentPage}/${numberOfPages}`}</span>
         <div className="next" onClick={(e) => this.navigatePage(e.target.value)}>
-          <button type="button" value="next" className="next-btn" disabled={nextButtonDisabled}>{Drupal.t('Next Page')}</button>
+          <button type="button" value="next" className="next-btn" disabled={nextButtonDisabled}>{getStringMessage('next_page')}</button>
         </div>
       </div>
     );
