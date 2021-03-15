@@ -45,12 +45,12 @@ export const prepareRequest = (elements, fieldsConfig) => {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
         } else if (id === 'usernickname' && Cookies.get('BvUserNickname')
-          && Cookies.get('BvUserEmail') && Cookies.get('bazaarVoiceUserId')) {
+          && Cookies.get('BvUserEmail') && Cookies.get('BvUserId')) {
           if (Cookies.get('BvUserNickname') !== elements[id].value) {
             params += `&${id}=${elements[id].value}`;
             Cookies.set('BvUserNickname', elements[id].value);
           }
-          params += `&User=${Cookies.get('bazaarVoiceUserId')}`;
+          params += `&User=${Cookies.get('BvUserId')}`;
         } else {
           params += `&${id}=${elements[id].value}`;
         }

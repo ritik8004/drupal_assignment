@@ -27,7 +27,7 @@ export default class BvAuthConfirmation extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           if (!result.data.HasErrors) {
             const userId = result.data.Authentication.User;
-            Cookies.set('BVUserId', userId);
+            Cookies.set('BvUserId', userId);
             this.setState({
               isUserVerified: true,
             });

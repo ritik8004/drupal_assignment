@@ -91,8 +91,8 @@ export default class ReviewSummary extends React.Component {
     }
 
     // Store user information in bv cookies.
-    if (Cookies.get('bazaarVoiceUserId')) {
-      const params = `&productid=${bazaarVoiceSettings.productid}&User=${Cookies.get('bazaarVoiceUserId')}&Action=`;
+    if (Cookies.get('BvUserId') && !(Cookies.get('BvUserEmail')) && !(Cookies.get('BvUserNickname'))) {
+      const params = `&productid=${bazaarVoiceSettings.productid}&User=${Cookies.get('BvUserId')}&Action=`;
       const apiData = fetchAPIData('/data/submitreview.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
@@ -101,12 +101,14 @@ export default class ReviewSummary extends React.Component {
         && result.data.error === undefined) {
             if (result.data.Data.Fields !== undefined
                && result.data.Data.Fields.usernickname
-               && result.data.Data.Fields.useremail) {
+               && result.data.Data.Fields.useremail
+               && result.data.Data.Fields.usernickname.Value !== null
+               && result.data.Data.Fields.useremail.Value !== null) {
               Cookies.set('BvUserNickname', result.data.Data.Fields.usernickname.Value);
               Cookies.set('BvUserEmail', result.data.Data.Fields.useremail.Value);
             }
           } else {
-            Drupal.logJavascriptError('review-comment-submit', result.error);
+            Drupal.logJavascriptError('review-summary', result.error);
           }
         });
       }

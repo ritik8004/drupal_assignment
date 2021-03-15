@@ -129,7 +129,7 @@ class ReviewCommentForm extends React.Component {
       if (Cookies.get('BvUserEmail') && Cookies.get('BvUserEmail') !== email) {
         Cookies.remove('BvUserEmail');
         Cookies.remove('BvUserNickname');
-        Cookies.remove('BVUserId');
+        Cookies.remove('BvUserId');
       }
       let authParams = '';
       if (getCurrentUserEmail() === null && !(Cookies.get('BvUserEmail'))) {
@@ -140,13 +140,13 @@ class ReviewCommentForm extends React.Component {
         authParams += `&user=${getSessionCookie()}`;
       }
 
-      if (Cookies.get('BVUserId') && Cookies.get('BvUserEmail')
+      if (Cookies.get('BvUserId') && Cookies.get('BvUserEmail')
         && Cookies.get('BvUserNickname')) {
         if (Cookies.get('BvUserNickname') !== nickname) {
           authParams += `&UserNickname=${nickname}`;
           Cookies.set('BvUserNickname', nickname);
         }
-        authParams += `&User=${Cookies.get('BVUserId')}`;
+        authParams += `&User=${Cookies.get('BvUserId')}`;
       } else {
         authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
       }
