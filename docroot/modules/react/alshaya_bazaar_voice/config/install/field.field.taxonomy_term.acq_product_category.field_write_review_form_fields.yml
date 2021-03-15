@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_write_review_form_fields
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - options
+id: taxonomy_term.acq_product_category.field_write_review_form_fields
+field_name: field_write_review_form_fields
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Write review form fields'
+description: 'Please select the fields not to be displayed in write a review form.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
