@@ -1,4 +1,5 @@
 import React from 'react';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const UserReviewsDetails = ({
   totalReviewCount,
@@ -8,11 +9,11 @@ const UserReviewsDetails = ({
     return (
       <div className="user-reviews-details">
         <div className="review-count">
-          <div className="label">{Drupal.t('Review')}</div>
+          <div className="label">{getStringMessage('review')}</div>
           <div className="value">{totalReviewCount}</div>
         </div>
         <div className="review-vote">
-          <div className="label">{Drupal.t('Vote')}</div>
+          <div className="label">{getStringMessage('vote')}</div>
           <div className="value">{helpfulVoteCount}</div>
         </div>
       </div>

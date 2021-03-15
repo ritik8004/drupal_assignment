@@ -62,7 +62,7 @@ class ReviewFeedback extends React.Component {
       !== undefined && isSyndicatedReview === false) {
       return (
         <div className="review-feedback-vote">
-          <span className="feedback-label">{Drupal.t(`Was this ${contentTypeDisplayValue} helpful?`)}</span>
+          <span className="feedback-label">{Drupal.t('Was this @contentTypeDisplayValue helpful?', { '@contentTypeDisplayValue': contentTypeDisplayValue })}</span>
           <div className={`review-feedback-vote-${btnStatus}`}>
             <ReviewFeedbackPositive
               contentId={contentId}

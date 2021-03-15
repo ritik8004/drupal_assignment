@@ -4,6 +4,7 @@ import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import CombineDisplay from '../review-combine-display';
 import ConditionalView from '../../../common/components/conditional-view';
 import WriteReviewButton from '../reviews-full-submit';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const ReviewHistogram = ({
   overallSummary,
@@ -13,7 +14,7 @@ const ReviewHistogram = ({
   }
   return (
     <>
-      <div className="overall-summary-title">{Drupal.t('Ratings + Reviews')}</div>
+      <div className="overall-summary-title">{getStringMessage('ratings_reviews')}</div>
       <div className="overall-summary">
         { Object.keys(overallSummary).map((item) => (
           <React.Fragment key={item}>
