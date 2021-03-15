@@ -3,6 +3,7 @@ import RatingSummary from './RatingSummary';
 import DisplayStar from '../stars/DisplayStar';
 import ConditionalView from '../../../common/components/conditional-view';
 import smoothScrollTo from '../../../utilities/smoothScroll';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const InlineRating = ({
   reviewsData,
@@ -20,7 +21,7 @@ const InlineRating = ({
             <div className="histogram-title">
               {reviewsData.ReviewStatistics.TotalReviewCount}
               {' '}
-              {Drupal.t('reviews')}
+              {getStringMessage('reviews')}
             </div>
             <RatingSummary
               histogramData={reviewsData.ReviewStatistics.RatingDistribution}

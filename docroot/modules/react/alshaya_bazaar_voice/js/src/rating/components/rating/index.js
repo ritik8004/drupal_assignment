@@ -7,6 +7,7 @@ import smoothScrollTo from '../../../utilities/smoothScroll';
 import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -64,7 +65,7 @@ export default class Rating extends React.Component {
     return (
       <div className="inline-rating">
         <div className="aggregate-rating">
-          <a onClick={(e) => this.scrollToReviewSection(e)} className="write-review" href="#">{Drupal.t('Write a Review')}</a>
+          <a onClick={(e) => this.scrollToReviewSection(e)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
         </div>
       </div>
     );

@@ -1,4 +1,5 @@
 import React from 'react';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const RatingSummary = ({
   histogramData,
@@ -12,7 +13,7 @@ const RatingSummary = ({
           <span className="star-label">
             {value.RatingValue}
             {' '}
-            {Drupal.t('star')}
+            {getStringMessage('star')}
           </span>
           <div className="histogram-full-bar">
             <div style={{ width: `${((value.Count / totalReviewCount).toFixed(1)) * 100}%` }} className="histogram-dynamic-bar" />

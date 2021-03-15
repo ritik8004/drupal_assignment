@@ -27,6 +27,11 @@ function alshaya_bazaar_voice_install() {
     'alshaya_acm_product_category',
     'install',
   );
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
 }
 
 /**
@@ -41,4 +46,3 @@ function alshaya_bazaar_voice_uninstall() {
     $field->delete();
   }
 }
-
