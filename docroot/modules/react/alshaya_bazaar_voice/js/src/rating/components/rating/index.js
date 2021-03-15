@@ -49,6 +49,7 @@ export default class Rating extends React.Component {
 
   render() {
     const { reviewsData, bazaarVoiceSettings } = this.state;
+
     if (reviewsData !== undefined
       && reviewsData !== ''
       && reviewsData.TotalReviewCount > 0) {
