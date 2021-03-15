@@ -20,6 +20,7 @@ class ReviewCommentForm extends React.Component {
       nickname: '',
       submissionTime: '',
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +35,7 @@ class ReviewCommentForm extends React.Component {
     const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
-        <form id="comment-form" onSubmit={this.handleSubmit}>
+        <form id="comment-form" onSubmit={this.handleSubmit} noValidate>
           <div className="comment-form-title">
             {getStringMessage('post_a_comment')}
           </div>
@@ -151,9 +152,9 @@ class ReviewCommentForm extends React.Component {
         authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
       }
       // Add device finger printing string.
-      // if (e.target.elments.blackBox.value !== '') {
-      //   authParams += `&fp=${e.target.elments.blackBox.value}`;
-      // }
+      if (e.target.elements.blackBox.value !== '') {
+        authParams += `&fp=${e.target.elements.blackBox.value}`;
+      }
       const params = `&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
       const apiData = postAPIData('/data/submitreviewcomment.json', params);
       if (apiData instanceof Promise) {
