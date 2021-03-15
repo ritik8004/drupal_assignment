@@ -3,7 +3,7 @@ import { getLanguageCode } from '../../../../utilities/api/request';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 
 const ClosedReviewSubmit = ({ destination }) => (
-  <div>
+  <div className="button-wrapper">
     <a
       id="closed-review-submit"
       className="write-review-button"
