@@ -869,21 +869,25 @@ class CartController {
     $uid = (int) $this->cart->getDrupalInfo('uid');
     $session_customer_id = $this->cart->getDrupalInfo('customer_id');
 
-    $cart_item_updated = in_array($request_content['action'],
-      [
-        CartActions::CART_ADD_ITEM,
-        CartActions::CART_UPDATE_ITEM,
-        CartActions::CART_REMOVE_ITEM,
-      ]
-    );
-    if ($cart_item_updated && empty($request_content['sku'])) {
+    if (in_array($request_content['action'],
+        [
+          CartActions::CART_ADD_ITEM,
+          CartActions::CART_UPDATE_ITEM,
+          CartActions::CART_REMOVE_ITEM,
+        ]
+      ) && empty($request_content['sku'])) {
       $this->logger->error('Cart update operation not containing any sku. Data: @request_data', [
         '@request_data' => json_encode($request_content),
       ]);
       return 400;
     }
 
-    if ($cart_item_updated && empty($request_content['quantity'])) {
+    if (in_array($request_content['action'],
+        [
+          CartActions::CART_ADD_ITEM,
+          CartActions::CART_UPDATE_ITEM,
+        ]
+      ) && empty($request_content['quantity'])) {
       $this->logger->error('Cart update operation not containing any quantity. Data: @request_data', [
         '@request_data' => json_encode($request_content),
       ]);
