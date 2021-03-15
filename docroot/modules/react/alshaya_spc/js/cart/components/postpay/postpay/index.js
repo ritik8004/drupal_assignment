@@ -8,8 +8,7 @@ const PostpayCart = (props) => {
     && !(mobileOnly && window.innerWidth >= 768)) {
     return (
       <div
-        className={`${classNames} ${drupalSettings.postpay_widget_info.class} fadeInUp`}
-        style={{ animationDelay: '0.5s' }}
+        className={`${classNames} ${drupalSettings.postpay_widget_info.class}`}
         data-type={drupalSettings.postpay_widget_info['data-type']}
         data-amount={(amount * drupalSettings.postpay.currency_multiplier).toFixed(0)}
         data-currency={drupalSettings.postpay_widget_info['data-currency']}
