@@ -4,7 +4,7 @@ import { postAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
-import setSessionCookie from '../../../../utilities/user_util';
+import { setSessionCookie } from '../../../../utilities/user_util';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
