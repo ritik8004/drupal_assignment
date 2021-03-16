@@ -265,6 +265,8 @@ class ProductController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
+    // Base64 decode sku from url.
+    $sku = base64_decode($sku);
     $sku_entity = SKU::loadFromSku($sku);
     if (!($sku_entity instanceof SKU)) {
       throw new NotFoundHttpException();

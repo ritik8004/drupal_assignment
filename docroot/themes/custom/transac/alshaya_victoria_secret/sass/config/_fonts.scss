@@ -5,14 +5,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "GESSTwoLight-Light";
-  src: url("#{$base_theme_fonts_directory_path}/GESSTwoLight.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -20,12 +15,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "DroidArabicKufi";
-  src: url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -33,12 +25,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "DroidArabicKufi-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff");
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -46,14 +35,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "BentonSans-Book";
-  src: url("#{$base_theme_fonts_directory_path}/BentonSans-Book.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Book.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -61,14 +45,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "BentonSans-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -76,14 +55,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "BentonSans-Medium";
-  src: url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Medium.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -91,14 +65,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "BentonSans-Regular";
-  src: url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -106,14 +75,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "BentonSans-Light";
-  src: url("#{$base_theme_fonts_directory_path}/BentonSans-Light.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/BentonSans-Light.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -121,14 +85,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "HarrietDisplay";
-  src: url("#{$base_theme_fonts_directory_path}/HarrietDisplay.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/HarrietDisplay.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -149,13 +108,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "PinkSans";
-  src: url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/megamenu/PinkSans-100.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -163,13 +118,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "PinkSans-130";
-  src: url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/PinkSans-130.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -177,13 +128,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "PinkSlab";
-  src: url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/vsfonts/pink/titles/PinkSlab-130.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -191,13 +138,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "BentonSansCompMedium";
-  src: url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/vsfonts/sport/titles/BentonSansComp_Medium.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -206,13 +149,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 // new fonts neeeded for DY template for VS
 @font-face {
   font-family: "Pink Slab 190";
-  src: url("#{$base_theme_fonts_directory_path}/PinkSlab-190.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkSlab-190.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.svg#PinkSlab-190") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-190.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -220,13 +159,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Pink Outline 190";
-  src: url("#{$base_theme_fonts_directory_path}/PinkOutline-190.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkOutline-190.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.svg#PinkOutline-190") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-190.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -234,13 +169,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Pink Slab 130";
-  src: url("#{$base_theme_fonts_directory_path}/PinkSlab-130.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkSlab-130.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.svg#PinkSlab-130") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-130.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -248,13 +179,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Victoria INTL";
-  src: url("#{$base_theme_fonts_directory_path}/VictoriaINTL.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/VictoriaINTL.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.svg#VictoriaINTL") format("svg");
+    url("#{$base_theme_fonts_directory_path}/VictoriaINTL.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -262,13 +189,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Pink Sans 160";
-  src: url("#{$base_theme_fonts_directory_path}/PinkSans-160.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkSans-160.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkSans-160.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkSans-160.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkSans-160.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkSans-160.svg#PinkSans-160") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkSans-160.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -276,13 +199,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Pink Slab 100";
-  src: url("#{$base_theme_fonts_directory_path}/PinkSlab-100.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkSlab-100.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.svg#PinkSlab-100") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-100.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -290,13 +209,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Pink Slab 070";
-  src: url("#{$base_theme_fonts_directory_path}/PinkSlab-070.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkSlab-070.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.svg#PinkSlab-070") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkSlab-070.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -304,13 +219,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Pink Outline 100";
-  src: url("#{$base_theme_fonts_directory_path}/PinkOutline-100.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkOutline-100.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.svg#PinkOutline-100") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-100.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -318,13 +229,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Pink Outline 160";
-  src: url("#{$base_theme_fonts_directory_path}/PinkOutline-160.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkOutline-160.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.svg#PinkOutline-160") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-160.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -332,13 +239,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Pink Outline 130";
-  src: url("#{$base_theme_fonts_directory_path}/PinkOutline-130.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/PinkOutline-130.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.svg#PinkOutline-130") format("svg");
+    url("#{$base_theme_fonts_directory_path}/PinkOutline-130.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -346,13 +249,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_victoria_secre
 
 @font-face {
   font-family: "Gotcha Crush Regular";
-  src: url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.eot?#iefix") format("embedded-opentype"),
     url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.woff2") format("woff2"),
-    url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.svg#GotchaRegCrust") format("svg");
+    url("#{$base_theme_fonts_directory_path}/GotchaRegularCustom-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

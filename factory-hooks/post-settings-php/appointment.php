@@ -16,8 +16,6 @@ if (!empty($site_country_code) && $site_country_code['site_code'] === 'bp') {
   $env = alshaya_get_site_environment();
 
   $appointment_settings = [
-    'username' => 'bootsapiuser',
-    'password' => 'jG4@dF0p',
     'location_group_ext_id' => 'Boots',
     'timetrade_api_base_url' => 'https://api-stage.timetradesystems.co.uk',
     'timetrade_translation_base_url' => 'https://translation.account.services',

@@ -1,0 +1,76 @@
+.aggregate-rating {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  margin-top: 0.75rem;
+
+  @include breakpoint($only-mobile) {
+    padding: 0.5rem;
+    justify-content: center;
+  }
+
+  > span {
+    font-size: 0.875rem;
+    line-height: 2;
+    margin-#{$left}: 0.625rem;
+    color: $rr-review-count;
+
+    a {
+      text-decoration: underline;
+      color: $rr-review-count;
+      font-family: $alshaya-thin;
+    }
+  }
+
+  .write-review {
+    text-decoration: underline;
+    font-size: 0.875rem;
+  }
+}
+
+.star-ratings-wrapper {
+  display: flex;
+
+  .inline-star {
+    position: relative;
+    #{$left}: -0.25rem;
+
+    .star-ratings-front {
+      position: absolute;
+      overflow: hidden;
+    }
+
+    .star-ratings-front,
+    .star-ratings-back {
+      span {
+        padding: 0 0.125rem;
+      }
+    }
+
+    .icon-ic_ratingfull {
+      @include icon(ratingfull) {
+        color: $rr-stars-color;
+      }
+    }
+
+    .icon-ic_rating {
+      @include icon(rating) {
+        color: $rr-stars-color;
+      }
+    }
+  }
+}
+
+.review-detail-right {
+  .inline-star {
+    .star-ratings-front,
+    .star-ratings-back {
+      .icon-ic_ratingfull,
+      .icon-ic_rating {
+        &::before {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+}

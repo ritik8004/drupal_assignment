@@ -251,10 +251,10 @@ class AcqSkuPositionCommands extends DrushCommands {
           }
         }
         catch (\Exception $e) {
-          $this->logger->error('Error while processing data for product position for term: @tid. Message: @message', [
-            '@tids' => $term->tid,
+          $this->logger->error(dt('Error while processing data for product position for term: @tid. Message: @message', [
+            '@tid' => $term->tid,
             '@message' => $e->getMessage(),
-          ]);
+          ]));
         }
 
         // Invoke hook if there is at-least one operation done

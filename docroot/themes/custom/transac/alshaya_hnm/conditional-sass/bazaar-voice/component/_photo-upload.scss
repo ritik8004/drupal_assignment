@@ -1,0 +1,20 @@
+.write-review-type-photo-upload {
+  button {
+    font-size: 0.8125rem;
+    font-family: $hnm-demibold;
+  }
+
+  .image-wrapper {
+    .image-item {
+      .image-item__btn-wrapper {
+        button {
+          &::after {
+            font-size: 0.0625rem;
+            padding-top: 0.3125rem;
+            padding-#{$left}: 0.0625rem;
+          }
+        }
+      }
+    }
+  }
+}

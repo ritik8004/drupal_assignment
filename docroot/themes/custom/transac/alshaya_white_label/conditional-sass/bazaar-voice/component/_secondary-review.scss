@@ -1,0 +1,125 @@
+.secondary-summary {
+  .overall-product-rating {
+    padding: 3rem;
+    padding-bottom: 0;
+    font-family: $alshaya-thin;
+
+    @include breakpoint($only-mobile) {
+      padding: 2rem 1rem 0;
+    }
+
+    .secondary-star-container {
+      display: flex;
+      align-items: center;
+      padding-bottom: 1.25rem;
+
+      .overall-label {
+        width: 32%;
+        font-size: 0.875rem;
+
+        @include breakpoint($only-mobile) {
+          width: 42%;
+        }
+      }
+
+      .inline-star {
+        .icon-ic_ratingfull,
+        .icon-ic_rating {
+          #reviews-section & {
+            &::before {
+              font-size: 1.5rem;
+            }
+          }
+        }
+      }
+
+      .star-ratings-wrapper {
+        #reviews-section & {
+          margin-bottom: 0;
+          width: 35%;
+
+          @include breakpoint($only-tablet) {
+            width: 55%;
+          }
+
+          @include breakpoint($only-mobile) {
+            width: 45%;
+          }
+        }
+      }
+    }
+
+    .attribute-list {
+      padding-bottom: 1.25rem;
+
+      .slider-header {
+        span {
+          font-size: 0.875rem;
+        }
+      }
+    }
+  }
+}
+
+// user review left panel
+
+#reviews-section {
+  .review-detail-left {
+    .attribute-list {
+      .display-slider {
+        font-size: 0.625rem;
+
+        .slide-dot-container {
+          width: 44%;
+
+          .dynamic-dot {
+            width: 0.4375rem;
+            height: 0.4375rem;
+            top: -0.125rem;
+          }
+        }
+
+        .slider-label {
+          width: 13%;
+          font-size: 0.625rem;
+        }
+      }
+
+      .slider-header {
+        font-size: 0.875rem;
+        font-family: $alshaya-bold;
+
+        .slider-header-label {
+          color: $rr-review-summary-grey-text;
+          font-family: $alshaya-thin;
+        }
+      }
+    }
+
+    .secondary-star-container {
+      padding-top: 1.25rem;
+      display: flex;
+      align-items: center;
+
+      .star-ratings-wrapper {
+        margin-bottom: 0;
+        padding-right: 0.625rem;
+      }
+
+      .overall-label {
+        font-size: 0.875rem;
+        padding-right: 0.625rem;
+        font-family: $alshaya-bold;
+        color: $rr-review-summary-txt;
+
+        @include breakpoint($only-tablet) {
+          width: 34%;
+        }
+      }
+
+      .overall-rating {
+        display: none;
+      }
+    }
+  }
+}

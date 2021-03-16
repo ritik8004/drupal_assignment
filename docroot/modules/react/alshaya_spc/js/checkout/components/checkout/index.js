@@ -19,6 +19,8 @@ import {
   removeFullScreenLoader,
   isCnCEnabled,
   removeBillingFlagFromStorage,
+  addShippingInCart,
+  showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
@@ -28,6 +30,7 @@ import dispatchCustomEvent from '../../../utilities/events';
 import AuraCheckoutContainer from '../../../aura-loyalty/components/aura-checkout-rewards/aura-checkout-container';
 import isAuraEnabled from '../../../../../js/utilities/helper';
 import validateCartResponse from '../../../utilities/validation_util';
+import { getStorageInfo } from '../../../utilities/storage';
 
 window.fetchStore = 'idle';
 
@@ -69,42 +72,8 @@ export default class Checkout extends React.Component {
             redirectToCart();
             return;
           }
-
-          const cart = result;
-
-          // Set default as user selection for handling conditions.
-          cart.delivery_type = result.shipping.type;
-
-          // If CnC is not available and cart has CnC method selected.
-          if (cart.shipping.type === 'click_and_collect' && !isCnCEnabled(result)) {
-            cart.delivery_type = 'home_delivery';
-          }
-          // Process Removal of "same as billing" flag before we update the
-          // cart state. before the billing address component mounted. as
-          // setState will immidiately mount the components before localStorage
-          // update happens.
-          removeBillingFlagFromStorage({ cart });
-          dispatchCustomEvent('checkoutCartUpdate', { cart });
-          this.setState({
-            wait: false,
-            cart: { cart },
-          });
-
-          // If cart from stale cache.
-          if (cart.stale_cart !== undefined && cart.stale_cart === true) {
-            dispatchCustomEvent('spcCheckoutMessageUpdate', {
-              type: 'error',
-              message: drupalSettings.global_error_message,
-            });
-          }
-
-          // Get promo info.
-          if (typeof result.error === 'undefined') {
-            PromotionsDynamicLabelsUtil.apply(result);
-          }
-
-          // Event listerner to update any change in totals in cart object.
-          document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+          this.processAddressFromLocalStorage(result);
+          this.processCheckout(result);
         });
       } else {
         redirectToCart();
@@ -125,6 +94,62 @@ export default class Checkout extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('spcCheckoutMessageUpdate', this.handleMessageUpdateEvent, false);
+  }
+
+  processCheckout = (result) => {
+    const cart = result;
+    // Set default as user selection for handling conditions.
+    cart.delivery_type = result.shipping.type;
+
+    // If CnC is not available and cart has CnC method selected.
+    if (cart.shipping.type === 'click_and_collect' && !isCnCEnabled(result)) {
+      cart.delivery_type = 'home_delivery';
+    }
+    // Process Removal of "same as billing" flag before we update the
+    // cart state. before the billing address component mounted. as
+    // setState will immidiately mount the components before localStorage
+    // update happens.
+    removeBillingFlagFromStorage({ cart });
+    dispatchCustomEvent('checkoutCartUpdate', { cart });
+    this.setState({
+      wait: false,
+      cart: { cart },
+    });
+
+    // If cart from stale cache.
+    if (cart.stale_cart !== undefined && cart.stale_cart === true) {
+      dispatchCustomEvent('spcCheckoutMessageUpdate', {
+        type: 'error',
+        message: drupalSettings.global_error_message,
+      });
+    }
+
+    // Get promo info.
+    if (typeof result.error === 'undefined') {
+      PromotionsDynamicLabelsUtil.apply(result);
+    }
+  }
+
+  processAddressFromLocalStorage = (result) => {
+    let formdata = {};
+    if (result.shipping && result.shipping.method === null) {
+      const shippingAddress = getStorageInfo('shippingaddress-formdata');
+      if (shippingAddress) {
+        formdata = { static: shippingAddress.static };
+        showFullScreenLoader();
+        const cartInfo = addShippingInCart('update shipping', formdata);
+        if (cartInfo instanceof Promise) {
+          cartInfo.then((cartResult) => {
+            if (!(cartResult)) {
+              return;
+            }
+            this.processCheckout(cartResult);
+            // Remove the loader.
+            removeFullScreenLoader();
+          });
+        }
+      }
+    }
   }
 
   handleMessageUpdateEvent = (event) => {

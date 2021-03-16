@@ -1,0 +1,18 @@
+alshaya_bazaar_voice.bv_form_config:
+  path: '/get-write-review-fields-configs'
+  defaults:
+    _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::getWriteReviewFieldsConfig'
+  requirements:
+    _access: 'TRUE'
+alshaya_bazaar_voice.upload:
+  path: '/uploadfile'
+  defaults:
+    _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::uploadFile'
+  requirements:
+    _access: 'TRUE'
+alshaya_bazaar_voice.uas_token:
+  path: '/get-uas-token'
+  defaults:
+    _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::getUasToken'
+  requirements:
+    _access: 'TRUE'
