@@ -18,6 +18,7 @@ import Pagination from '../review-pagination';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getCurrentUserEmail } from '../../../utilities/user_util';
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
@@ -91,7 +92,7 @@ export default class ReviewSummary extends React.Component {
     }
 
     // Store user information in bv cookies.
-    if (Cookies.get('BvUserId') && !(Cookies.get('BvUserEmail')) && !(Cookies.get('BvUserNickname'))) {
+    if (Cookies.get('BvUserId') && !(Cookies.get('BvUserEmail')) && getCurrentUserEmail() === null) {
       const params = `&productid=${bazaarVoiceSettings.productid}&User=${Cookies.get('BvUserId')}&Action=`;
       const apiData = fetchAPIData('/data/submitreview.json', params);
       if (apiData instanceof Promise) {

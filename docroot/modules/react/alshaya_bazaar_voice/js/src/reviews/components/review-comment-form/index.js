@@ -210,10 +210,12 @@ class ReviewCommentForm extends React.Component {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
     let emailValue = '';
+    let nicknameValue = '';
     if (getCurrentUserEmail() !== null) {
       emailValue = getCurrentUserEmail();
     } else if (Cookies.get('BvUserEmail')) {
       emailValue = Cookies.get('BvUserEmail');
+      nicknameValue = Cookies.get('BvUserNickname') ? Cookies.get('BvUserNickname') : '';
     }
 
     if (ReviewId !== undefined) {
@@ -224,7 +226,7 @@ class ReviewCommentForm extends React.Component {
               <button
                 className="review-feedback-comment-btn"
                 onClick={() => this.setState({
-                  showCommentForm: true, showCommentSubmission: false, email: emailValue, nickname: Cookies.get('BvUserNickname') ? Cookies.get('BvUserNickname') : '', commentbox: '',
+                  showCommentForm: true, showCommentSubmission: false, email: emailValue, nickname: nicknameValue, commentbox: '',
                 })}
                 type="button"
                 disabled={showCommentForm}
