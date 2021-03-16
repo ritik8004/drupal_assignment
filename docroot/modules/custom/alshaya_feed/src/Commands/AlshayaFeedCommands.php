@@ -20,13 +20,19 @@ class AlshayaFeedCommands extends DrushCommands {
    */
   protected $configFactory;
 
-
   /**
    * Alshaya feed service.
    *
    * @var \Drupal\alshaya_feed\AlshayaFeed
    */
   protected $alshayaFeed;
+
+  /**
+   * Dynamic Yield config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $dynamicYieldConfig;
 
   /**
    * AlshayaFeedCommands constructor.
@@ -42,6 +48,7 @@ class AlshayaFeedCommands extends DrushCommands {
   ) {
     $this->configFactory = $configFactory->get('alshaya_feed.settings');
     $this->alshayaFeed = $alshaya_feed;
+    $this->dynamicYieldConfig = $configFactory->get('dynamic_yield.settings');
   }
 
   /**
@@ -65,6 +72,14 @@ class AlshayaFeedCommands extends DrushCommands {
    *   Generate products feed with batch of 200.
    */
   public function generateFeed(array $options = ['batch-size' => NULL]) {
+    $mode = $this->dynamicYieldConfig->get('mode');
+
+    // Do not generate xml feed if mode is set to `api` in dynamic yield config.
+    if (!empty($mode) && $mode === 'api') {
+      $this->logger()->notice('Skipping XML feed generation as mode is set to `api` in dynamic_yield.settings.');
+      return;
+    }
+
     $batch_size = $options['batch-size'] ?? $this->configFactory->get('batch_size');
     $batch = [
       'finished' => [__CLASS__, 'batchFinish'],
