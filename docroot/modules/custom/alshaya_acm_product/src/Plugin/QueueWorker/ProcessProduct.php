@@ -10,6 +10,7 @@ use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
@@ -77,6 +78,13 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   protected $productProcessedManager;
 
   /**
+   * The Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Works on a single queue item.
    *
    * @param mixed $data
@@ -110,8 +118,6 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $sku = $data['sku'];
       $nid = (int) $data['nid'];
     }
-
-    $this->getLogger('ProcessProduct')->notice(serialize($data));
 
     $entity = SKU::loadFromSku($sku);
 
@@ -257,6 +263,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    *   Cache Tags Invalidator.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The Entity Type Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -265,13 +273,15 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
                               SkuImagesManager $sku_images_manager,
                               EventDispatcherInterface $dispatcher,
                               CacheTagsInvalidatorInterface $cache_tags_invalidator,
-                              ProductProcessedManager $product_processed_manager) {
+                              ProductProcessedManager $product_processed_manager,
+                              EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->skuManager = $sku_manager;
     $this->imagesManager = $sku_images_manager;
     $this->dispatcher = $dispatcher;
     $this->cacheTagsInvalidator = $cache_tags_invalidator;
     $this->productProcessedManager = $product_processed_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -298,7 +308,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('event_dispatcher'),
       $container->get('cache_tags.invalidator'),
-      $container->get('alshaya_acm_product.product_processed_manager')
+      $container->get('alshaya_acm_product.product_processed_manager'),
+      $container->get('entity_type.manager')
     );
   }
 

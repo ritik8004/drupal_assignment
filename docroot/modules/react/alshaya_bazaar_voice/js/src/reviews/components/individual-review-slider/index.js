@@ -1,5 +1,6 @@
 import React from 'react';
 import isRTL from '../../../utilities/rtl';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const IndividualReviewSlider = ({
   sliderData,
@@ -22,7 +23,7 @@ const IndividualReviewSlider = ({
               <span className="slider-header-label">
                 {
                   !(sliderData[item].ValueLabel) === true
-                    ? 'True to size'
+                    ? getStringMessage('true_to_size')
                     : sliderData[item].ValueLabel
                 }
               </span>

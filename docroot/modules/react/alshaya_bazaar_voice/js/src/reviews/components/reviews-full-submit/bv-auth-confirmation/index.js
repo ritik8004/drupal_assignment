@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup';
 import { postAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import ConditionalView from '../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../js/utilities/strings';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -59,8 +60,8 @@ export default class BvAuthConfirmation extends React.Component {
           </div>
           <ConditionalView condition={isUserVerified === true}>
             <div className="auth-confirmation-message">
-              <h1>{Drupal.t('Thank you for your contribution.')}</h1>
-              <div className="submission-msg">{Drupal.t('We have verified your submission. If the content is approved it will be published within 72 hours.')}</div>
+              <h1>{getStringMessage('bv_auth_confirmation_message')}</h1>
+              <div className="submission-msg">{getStringMessage('submission_msg')}</div>
             </div>
           </ConditionalView>
         </div>

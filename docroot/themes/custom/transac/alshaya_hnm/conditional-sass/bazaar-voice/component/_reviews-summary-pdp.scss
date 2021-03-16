@@ -18,5 +18,18 @@
     &-title {
       font-family: $hnm-regular;
     }
+
+    .post-review-moderation {
+      .star-ratings-wrapper {
+        .inline-star {
+          .icon-ic_ratingfull,
+          .icon-ic_rating {
+            &::before {
+              font-size: 2rem;
+            }
+          }
+        }
+      }
+    }
   }
 }

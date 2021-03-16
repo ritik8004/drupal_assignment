@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_facets_pretty_paths;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -119,7 +120,11 @@ class AlshayaFacetsPrettyAliases {
       $insert->values($data);
       $insert->execute();
     }
+    catch (IntegrityConstraintViolationException $e) {
+      // Do nothing, other process might have entered the data already.
+    }
     catch (\Exception $e) {
+      // Log exceptions other than Integrity constraints.
       $this->logger->warning('Error occurred while inserting facet alias: %message', [
         '%message' => $e->getMessage(),
       ]);

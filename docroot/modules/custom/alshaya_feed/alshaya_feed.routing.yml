@@ -4,3 +4,10 @@ alshaya_feed.xml:
     _controller: '\Drupal\alshaya_feed\Controller\AlshayaFeedController::getFeed'
   requirements:
     _permission: 'access content'
+alshaya_feed.feed_settings:
+  path: '/admin/config/alshaya/feed-settings'
+  defaults:
+    _form: '\Drupal\alshaya_feed\Form\AlshayaFeedSettingsForm'
+    _title: 'Alshaya feed Settings'
+  requirements:
+    _permission: 'administer alshaya config'
