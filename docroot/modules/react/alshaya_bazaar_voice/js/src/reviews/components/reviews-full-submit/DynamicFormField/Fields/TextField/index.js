@@ -1,7 +1,6 @@
 import React from 'react';
-import Cookies from 'js-cookie';
 import { validEmailRegex } from '../../../../../../utilities/write_review_util';
-import { getCurrentUserEmail } from '../../../../../../utilities/user_util';
+import { getCurrentUserEmail, getSessionCookie } from '../../../../../../utilities/user_util';
 import ConditionalView from '../../../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
@@ -51,11 +50,11 @@ class TextField extends React.Component {
       if (id === 'useremail') {
         if (getCurrentUserEmail() !== null) {
           fieldDefaultValue = getCurrentUserEmail();
-        } else if (Cookies.get('BvUserEmail')) {
-          fieldDefaultValue = Cookies.get('BvUserEmail');
+        } else if (getSessionCookie('BvUserEmail') !== null) {
+          fieldDefaultValue = getSessionCookie('BvUserEmail');
         }
-      } else if (id === 'usernickname' && Cookies.get('BvUserNickname')) {
-        fieldDefaultValue = Cookies.get('BvUserNickname');
+      } else if (id === 'usernickname' && getSessionCookie('BvUserNickname') !== null) {
+        fieldDefaultValue = getSessionCookie('BvUserNickname');
       }
       return (
         <>

@@ -1,10 +1,10 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import Cookies from 'js-cookie';
 import { postAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import setSessionCookie from '../../../../utilities/user_util';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ export default class BvAuthConfirmation extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           if (!result.data.HasErrors) {
             const userId = result.data.Authentication.User;
-            Cookies.set('BvUserId', userId);
+            setSessionCookie('BvUserId', userId);
             this.setState({
               isUserVerified: true,
             });

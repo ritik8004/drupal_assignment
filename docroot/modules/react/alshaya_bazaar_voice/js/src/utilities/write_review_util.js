@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { getCurrentUserEmail, getSessionCookie } from './user_util';
+import { getCurrentUserEmail, getSessionCookie, setSessionCookie } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 
@@ -35,20 +35,20 @@ export const prepareRequest = (elements, fieldsConfig) => {
     try {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
-          if (Cookies.get('BvUserEmail') && Cookies.get('BvUserEmail') !== elements[id].value) {
+          if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== elements[id].value) {
             Cookies.remove('BvUserEmail');
             Cookies.remove('BvUserNickname');
             Cookies.remove('BvUserId');
           } else if (getCurrentUserEmail() !== null) {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
-        } else if (id === 'usernickname' && Cookies.get('BvUserNickname')
-          && Cookies.get('BvUserEmail') && Cookies.get('BvUserId')) {
-          if (Cookies.get('BvUserNickname') !== elements[id].value) {
+        } else if (id === 'usernickname' && getSessionCookie('BvUserNickname') !== null
+          && getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserId') !== null) {
+          if (getSessionCookie('BvUserNickname') !== elements[id].value) {
             params += `&${id}=${elements[id].value}`;
-            Cookies.set('BvUserNickname', elements[id].value);
+            setSessionCookie('BvUserNickname', elements[id].value);
           }
-          params += `&User=${Cookies.get('BvUserId')}`;
+          params += `&User=${getSessionCookie('BvUserId')}`;
         } else {
           params += `&${id}=${elements[id].value}`;
         }
@@ -69,12 +69,12 @@ export const prepareRequest = (elements, fieldsConfig) => {
     });
   }
 
-  if (getCurrentUserEmail() === null && !(Cookies.get('BvUserEmail'))) {
+  if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
     params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
 
   // Set user authenticated string (UAS).
-  const userToken = getSessionCookie();
+  const userToken = getSessionCookie('uas_token');
   if (getCurrentUserEmail() !== null && userToken !== undefined) {
     params += `&user=${userToken}`;
   }
