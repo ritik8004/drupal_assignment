@@ -121,6 +121,16 @@ body {
   }
 }
 
+body[class*="alias--user"] {
+  @include breakpoint($only-mobile) {
+    margin-top: 3.375rem;
+
+    html[lang=ar] & {
+      margin-top: 3.375rem;
+    }
+  }
+}
+
 .block-alshaya-algolia-react-autocomplete {
   &::before {
     @include breakpoint($only-tablet) {

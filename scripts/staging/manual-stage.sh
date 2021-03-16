@@ -108,6 +108,9 @@ do
   ssh $target "php -f /var/www/html/$AH_SITE_GROUP.$target_env/hooks/common/post-db-copy/000-acquia_required_scrub.php $AH_SITE_GROUP $target_env $site_db"
   ssh $target "php -f /var/www/html/$AH_SITE_GROUP.$target_env/hooks/common/post-db-copy/0000-clear_cache_tables.php $AH_SITE_GROUP $target_env $site_db"
 
+  echo "Creating QA accounts"
+  ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot; drush -l $uri alshaya-create-qa-accounts"
+
   if [[ "$type" == "reset" ]]; then
     echo
     echo "Initiating reset-individual-site-post-stage on $current_site in a screen."

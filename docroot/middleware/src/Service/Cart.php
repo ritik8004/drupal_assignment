@@ -494,7 +494,7 @@ class Cart {
    *
    * @param string $sku
    *   Sku.
-   * @param int|null $quantity
+   * @param int $quantity
    *   Quantity.
    * @param string $action
    *   Action to be performed (add/update/remove).
@@ -508,7 +508,7 @@ class Cart {
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function addUpdateRemoveItem(string $sku, ?int $quantity, string $action, array $options = [], string $variant_sku = NULL) {
+  public function addUpdateRemoveItem(string $sku, int $quantity, string $action, array $options = [], string $variant_sku = NULL) {
     $cart_id = (int) $this->getCartId();
     $alshaya_checkout_settings = $this->settings->getSettings('alshaya_checkout_settings');
 
@@ -555,7 +555,7 @@ class Cart {
         default:
           $cart_item = [
             'sku' => $sku,
-            'qty' => $quantity ?? 1,
+            'qty' => $quantity,
             'product_option' => $option_data,
             'quote_id' => $cart_id,
           ];
@@ -616,7 +616,7 @@ class Cart {
 
     $data['items'][] = [
       'sku' => $sku,
-      'qty' => $quantity ?? 1,
+      'qty' => $quantity,
       'quote_id' => $cart_id,
       'product_option' => (object) $option_data,
       'variant_sku' => $variant_sku,
@@ -2241,8 +2241,8 @@ class Cart {
    */
   private function prepareOrderFailedMessage(array $cart, array $data, string $exception_message, string $api, string $double_check_done) {
     $order_id = '';
-    if (isset($cart['cart'], $cart['cart']['extension_attributes'])) {
-      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'] ?? '';
+    if (isset($cart['cart'], $cart['cart']['extension_attributes'], $cart['cart']['extension_attributes']['real_reserved_order_id'])) {
+      $order_id = $cart['cart']['extension_attributes']['real_reserved_order_id'];
     }
 
     $message[] = 'exception:' . $exception_message;
@@ -2482,10 +2482,14 @@ class Cart {
       }
     }
     catch (\Exception $e) {
+      $error_code = $e->getCode();
+      if ($error_code === 404) {
+        $error_code = 604;
+      }
       $this->logger->error('Error while processing cart data. Error message: @message', [
         '@message' => $e->getMessage(),
       ]);
-      return $this->utility->getErrorResponse($e->getMessage(), $e->getCode());
+      return $this->utility->getErrorResponse($e->getMessage(), $error_code);
     }
 
     // Whether cart is stale or not.

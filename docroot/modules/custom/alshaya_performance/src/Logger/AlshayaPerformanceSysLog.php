@@ -44,6 +44,10 @@ class AlshayaPerformanceSysLog extends SysLog {
       return;
     }
 
+    if (PHP_SAPI === 'cli') {
+      $message .= '; cli_request_id="' . alshaya_get_cli_request_id() . '"';
+    }
+
     parent::log($level, $message, $context);
   }
 

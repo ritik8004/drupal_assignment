@@ -25,7 +25,7 @@ variables:
   ar_size_filter: 'Size'
   ar_filters: 'all filters'
   add_to_cart_link: 'add-to-cart-main'
-  language_add_to_cart_link: 'أضف إلى سلة التسوق'
+  language_add_to_cart_link: 'add-to-cart-main'
   create_account: 'create an account'
   sign_in: 'Sign in'
   find_store: 'Find Store'

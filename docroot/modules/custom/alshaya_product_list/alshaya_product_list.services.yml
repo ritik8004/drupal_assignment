@@ -9,6 +9,7 @@ services:
       - '@language_manager'
       - '@facets.manager'
       - '@logger.factory'
+      - '@alshaya_algolia_react.helper'
   alshaya_product_list.product_list_algolia_event:
     class: Drupal\alshaya_product_list\EventSubscriber\ProductListAlgoliaBlockEventSubscriber
     arguments:

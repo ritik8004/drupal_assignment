@@ -1,8 +1,16 @@
 .labels-container {
   .label {
-    position: absolute;
-    max-width: 5rem;
+    max-width: 3.125rem;
+    margin-bottom: 0.625rem;
     z-index: 0;
+
+    @include breakpoint($only-mobile) {
+      max-width: 2.375rem;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
 
     .c-pdp & {
       z-index: 5;
@@ -10,85 +18,97 @@
 
     .c-plp & {
       z-index: 1;
+      max-width: 2.375rem;
 
       @include breakpoint($only-mobile) {
         z-index: 0;
       }
     }
+  }
 
-    &.top {
-      &-left {
-        top: 0.5rem;
-        #{$left}: 0.5rem;
-        #{$right}: inherit;
+  &.top {
+    &-left {
+      position: absolute;
+      top: 0.625rem;
+      #{$left}: 0.625rem;
+      #{$right}: inherit;
+    }
 
-        @include breakpoint($only-tablet) {
-          top: 0.9375rem;
-          #{$left}: 0.9375rem;
-          #{$right}: inherit;
-        }
+    &-right {
+      position: absolute;
+      top: 0.625rem;
+      #{$right}: 0.625rem;
+      #{$left}: inherit;
+    }
+  }
 
-        @include breakpoint($desktop) {
-          top: 1rem;
-          #{$left}: 2rem;
-          #{$right}: inherit;
-        }
+  &.bottom {
+    &-left {
+      position: absolute;
+      bottom: 6rem;
+      #{$left}: 0.625rem;
+      #{$right}: inherit;
+
+      @include breakpoint($tablet) {
+        bottom: 7.2rem;
       }
 
-      &-right {
-        top: 0.5rem;
-        #{$right}: 0.5rem;
-        #{$left}: inherit;
-
-        @include breakpoint($only-tablet) {
-          top: 0.9375rem;
-          #{$right}: 0.9375rem;
-          #{$left}: inherit;
-        }
-
-        @include breakpoint($desktop) {
-          top: 1rem;
-          #{$right}: 2rem;
-          #{$left}: inherit;
-        }
+      @include breakpoint($desktop) {
+        bottom: 12.5rem;
       }
     }
 
-    &.bottom {
-      &-left {
+    &-right {
+      position: absolute;
+      bottom: 6rem;
+      #{$right}: 0.625rem;
+      #{$left}: inherit;
+
+      @include breakpoint($tablet) {
+        bottom: 7.2rem;
+      }
+
+      @include breakpoint($desktop) {
         bottom: 12.5rem;
-        #{$left}: 0.5rem;
-        #{$right}: inherit;
+      }
+    }
+  }
+}
 
-        @include breakpoint($only-tablet) {
-          bottom: 9.5rem;
-          #{$left}: 0.9375rem;
-          #{$right}: inherit;
-        }
+.magazine-layout,
+.nodetype--acq_product {
+  .labels-container {
+    &.bottom {
+      &-left,
+      &-right {
+        bottom: 0;
+      }
+    }
+  }
 
-        @include breakpoint($desktop) {
-          bottom: 8.5rem;
-          #{$left}: 2rem;
-          #{$right}: inherit;
+  .horizontal-upell,
+  .horizontal-related {
+    .labels-container {
+      &.top {
+        &-left,
+        &-right {
+          top: 0.625rem;
         }
       }
 
-      &-right {
-        bottom: 12.5rem;
-        #{$right}: 0.5rem;
-        #{$left}: inherit;
+      &.bottom {
+        &-left,
+        &-right {
+          bottom: 4.375rem;
 
-        @include breakpoint($only-tablet) {
-          bottom: 9.5rem;
-          #{$right}: 0.9375rem;
-          #{$left}: inherit;
+          @include breakpoint($only-mobile) {
+            bottom: 0;
+          }
         }
+      }
 
-        @include breakpoint($desktop) {
-          bottom: 8.5rem;
-          #{$right}: 2rem;
-          #{$left}: inherit;
-        }
+      .label {
+        max-width: 2.375rem;
       }
     }
   }

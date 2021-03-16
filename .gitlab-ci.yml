@@ -1,0 +1,112 @@
+image: acquia/ads-local:lando-php-7.3-nodejs-8
+
+stages:
+  - build
+  - validate
+  - setup_and_test
+  - deploy
+
+variables:
+  APP_NAME: Alshaya
+  BLT: ./vendor/bin/blt
+  BLT_DIR: ./vendor/acquia/blt
+  BLT_SCRIPT_DIR: ./blt/scripts/gitlab
+  SCRIPT_DIR: ./scripts/gitlab
+  MYSQL_DATABASE: drupal
+  MYSQL_ROOT_PASSWORD: drupal
+
+cache: &global_cache
+  key: ${CI_COMMIT_REF_SLUG}
+  policy: pull-push
+  paths:
+    - $HOME/.composer/cache
+    - $HOME/.drush/cache
+    - $HOME/.npm
+    - $HOME/.nvm
+    - $CI_PROJECT_DIR/docroot/middleware/vendor
+    - $CI_PROJECT_DIR/docroot/appointment/vendor
+    - $CI_PROJECT_DIR/docroot/core
+    - $CI_PROJECT_DIR/docroot/libraries
+    - $CI_PROJECT_DIR/docroot/modules/contrib
+    - $CI_PROJECT_DIR/docroot/themes/contrib
+    - $CI_PROJECT_DIR/docroot/profiles/contrib
+    - $CI_PROJECT_DIR/docroot/themes/custom/amp/node_modules
+    - $CI_PROJECT_DIR/docroot/themes/custom/non_transac/node_modules
+    - $CI_PROJECT_DIR/docroot/themes/custom/transac/node_modules
+    - $CI_PROJECT_DIR/vendor
+
+.global_cache:
+  cache:
+    <<: *global_cache
+    policy: pull-push
+  only:
+    variables:
+      - $GITLAB_CI
+      - $CI_COMMIT_SHA
+      - $CI_COMMIT_REF_NAME
+      - $CI_JOB_ID
+      - $CI_SERVER_VERSION
+      - $CI_COMMIT_BRANCH
+      - $CI_MERGE_REQUEST_ID
+      - $PERCY_TOKEN
+      - $MYSQL_DATABASE
+      - $MYSQL_ROOT_PASSWORD
+
+before_script:
+  # Update and install packages.
+  - apt-get update && apt-get install
+  - apt-get install rsync -y
+  # Install all dependencies via composer.
+  - composer validate --no-check-all --ansi
+  - composer install
+  - npm install npm@latest -g
+  - npm install -g yaml-cli
+
+build:
+  stage: build
+  extends: .global_cache
+  allow_failure: false
+  script:
+    # Debug.
+    - export
+    # Build middleware.
+    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/middleware
+    # Build appointment middleware.
+    - source $CI_PROJECT_DIR/blt/scripts/middleware-build.sh $CI_PROJECT_DIR/docroot/appointment
+
+validate:
+  stage: validate
+  extends:
+    - .global_cache
+    - build
+  allow_failure: false
+  script:
+    - $SCRIPT_DIR/validate.sh
+
+setup_and_test:
+  stage: setup_and_test
+  extends:
+    - .global_cache
+    - build
+  services:
+    - mysql:5.7
+  allow_failure: false
+  script:
+    - $SCRIPT_DIR/setup_env.sh
+    - $SCRIPT_DIR/setup_app.sh
+    - $SCRIPT_DIR/test.sh
+    - $BLT_SCRIPT_DIR/run_tests
+
+deploy:
+  stage: deploy
+  extends:
+    - .global_cache
+    - build
+  allow_failure: false
+  # see https://gitlab.com/gitlab-org/gitlab/-/issues/28732
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_ID =~ ".+"
+  script:
+    - $SCRIPT_DIR/setup_env.sh
+    - $SCRIPT_DIR/deploy_artifact.sh

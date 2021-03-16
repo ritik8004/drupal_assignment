@@ -202,11 +202,6 @@ $conductors = [
     'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
     'site_id' => 135,
   ],
-  'hmkw_dev2' => [
-    'hmac_id' => 'bb8596447880451fa689e65e53506429',
-    'hmac_secret' => 'NjE4NDYzYmMtNWRmNy00',
-    'site_id' => 109,
-  ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
     'hmac_secret' => 'NWE3ZDg1OGYtNmEwYi00',
@@ -223,6 +218,11 @@ $conductors = [
     'site_id' => 98,
   ],
   // H&M SA.
+  'hmsa_dev' => [
+    'hmac_id' => 'aa9714724c894af59aafdd60a2bfd09a',
+    'hmac_secret' => 'YjQxNWM0MmItODM0Ny00',
+    'site_id' => 136,
+  ],
   'hmsa_qa' => [
     'hmac_id' => 'd6e8ad54d1b74a9d8153028b42da4e38',
     'hmac_secret' => 'NDNkNDYzOGQtZjEyZC00',
@@ -239,6 +239,11 @@ $conductors = [
     'site_id' => 99,
   ],
   // H&M AE.
+  'hmae_dev' => [
+    'hmac_id' => 'c988092f47f54bb7bcc14fa2fd4fd950',
+    'hmac_secret' => 'ZTkwODE2YTEtYTE2Zi00',
+    'site_id' => 137,
+  ],
   'hmae_qa' => [
     'hmac_id' => '48f2b6197df649f6bf5437312319ab5b',
     'hmac_secret' => 'ZDI1OTgyNDEtNzlkMS00',
@@ -418,6 +423,11 @@ $conductors = [
     'hmac_secret' => 'YWFiMzI4M2QtMzY5ZC00',
     'site_id' => 23,
   ],
+  'bbwkw_sit_dev2' => [
+    'hmac_id' => '97178cd378894e4282ddb9032f3fbe94',
+    'hmac_secret' => 'OGQyMzYzNTEtZmE2Ni00',
+    'site_id' => 391,
+  ],
   'bbwkw_uat' => [
     'hmac_id' => '83c25968a20d44e7ba99d2d1ba72be4f',
     'hmac_secret' => 'MTM4ZWQ1YTktMjIwNC00',
@@ -438,6 +448,11 @@ $conductors = [
     'hmac_id' => '52fd839150734f1c8afe9db8c7f688e8',
     'hmac_secret' => 'ZTFjNTIzZTUtYzI3YS00',
     'site_id' => 24,
+  ],
+  'bbwsa_sit_dev2' => [
+    'hmac_id' => 'ceeabf88ea884eb396282267e0c42011',
+    'hmac_secret' => 'ODJmZjkzYjgtNTE4OS00',
+    'site_id' => 392,
   ],
   'bbwsa_uat' => [
     'hmac_id' => '70407a4dde2b4373b64b05c2f3690d4c',
@@ -465,6 +480,11 @@ $conductors = [
     'hmac_secret' => 'M2MyOWQ3YjgtNTJiNy00',
     'site_id' => 25,
   ],
+  'bbwae_sit_dev2' => [
+    'hmac_id' => '1a2892ecbe7c408fa319784a5015b217',
+    'hmac_secret' => 'ZjJiNWFjZjUtYTdiOS00',
+    'site_id' => 393,
+  ],
   'bbwae_uat' => [
     'hmac_id' => '6a3742c4234547a1ae827a0c402ab217',
     'hmac_secret' => 'ZjM3YzY3NWMtYTU3MC00',
@@ -486,6 +506,11 @@ $conductors = [
     'hmac_secret' => 'MWRmZGI4ZTMtYzM0MS00',
     'site_id' => 281,
   ],
+  'bbweg_sit_dev2' => [
+    'hmac_id' => 'f2b5fe12c0d644b98c7eb6effedd2ac9',
+    'hmac_secret' => 'ZmM3OWUxMTctOWQ4Mi00',
+    'site_id' => 394,
+  ],
   'bbweg_uat' => [
     'hmac_id' => '9617776441fb41468e602b6c2022117e',
     'hmac_secret' => 'ODM0NTc2NzktNzBiYS00',
@@ -505,6 +530,11 @@ $conductors = [
     'hmac_secret' => 'ZTQ0Y2VlZWQtOGQwNS00',
     'site_id' => 217,
   ],
+  'bbwbh_sit_dev2' => [
+    'hmac_id' => '4d8b4dffb3f74f51a9ad601b93ce0ee5',
+    'hmac_secret' => 'OWY2M2Q1ZWItMzYwZC00',
+    'site_id' => 395,
+  ],
   'bbwbh_uat' => [
     'hmac_id' => '0a6ddf6ca9d54b199aea494947dc6fc9',
     'hmac_secret' => 'MWExMGE0NDQtZGY5OS00',
@@ -523,6 +553,11 @@ $conductors = [
     'hmac_id' => '956ca0edd8b140b18aa06acf1432c995',
     'hmac_secret' => 'NmM2NjE0MDMtNjdhNC00',
     'site_id' => 218,
+  ],
+  'bbwqa_sit_dev2' => [
+    'hmac_id' => '9490374180c24d58b5a42e51cfcb08c4',
+    'hmac_secret' => 'MDA5OTYwMWEtMjBiNy00',
+    'site_id' => 396,
   ],
   'bbwqa_uat' => [
     'hmac_id' => '623cf547b8154a849e2eefe03cb94978',
@@ -633,6 +668,11 @@ $conductors = [
     'site_id' => 381,
   ],
   // FootLocker KW.
+  'flkw_dev' => [
+    'hmac_id' => '582a73e8a0534b77970fa38e525f62a1',
+    'hmac_secret' => 'MTU5MWJiODYtNTEwZS00',
+    'site_id' => 229,
+  ],
   'flkw_qa' => [
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
@@ -675,6 +715,11 @@ $conductors = [
     'site_id' => 128,
   ],
   // FootLocker AE.
+  'flae_dev' => [
+    'hmac_id' => 'ddd6506aa778421fa2b0c95a90c057d2',
+    'hmac_secret' => 'YTQ0MzYwMmMtNDI0ZS00',
+    'site_id' => 386,
+  ],
   'flae_qa' => [
     'hmac_id' => '61f09f6fe1474ce68cc8057f97188d2f',
     'hmac_secret' => 'MjU3YzZiOGEtNmI1Yi00',

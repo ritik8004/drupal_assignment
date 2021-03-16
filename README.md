@@ -27,9 +27,9 @@ See the [BLT documentation](http://blt.readthedocs.io/en/latest/) for informatio
 
 There are 2 git repositories on the project:
 * Github: used for local development, contains much more than what is needed
-to run the sites.
+  to run the sites.
 * Acquia Cloud: used on Acquia environments only, contains the strict minimum
-to run the sites.
+  to run the sites.
 
 The synchronisation between the 2 repositories is ensured by blt.
 Cf. `blt deploy`.
@@ -41,7 +41,7 @@ creates Pull Requests (PRs) against the main repository when he is ready.
 
 To prepare your local env:
 * Fork the main repository into your own repository, i.e. click on Fork button
-on https://github.com/acquia-pso/alshaya page.
+  on https://github.com/acquia-pso/alshaya page.
 * Clone the fork locally: `git clone git@github.com:<your_username>/alshaya.git`
 * Add a git remote for the main repository (aka upstream):
   * `cd alshaya`
@@ -74,9 +74,9 @@ To prepare your local env:
     * `composer blt-alias`
     * `vagrant up`
     * `vagrant ssh` to ssh into your vm
-    Note: Before running any below commands in your VM. Please check your composer version that's need to be
-    same as of your local machine. (Run `composer -v` both inside and outside).
-    If any case composer version of your local machine and VM is not matching then downgrade or upgrade the version as per your requirement. Then run : `composer self-update --1` (i.e 1.10.10)
+      Note: Before running any below commands in your VM. Please check your composer version that's need to be
+      same as of your local machine. (Run `composer -v` both inside and outside).
+      If any case composer version of your local machine and VM is not matching then downgrade or upgrade the version as per your requirement. Then run : `composer self-update --1` (i.e 1.10.10)
 
   * From inside VM:
     * `blt blt:init:git-hooks`
@@ -92,11 +92,11 @@ To prepare your local env:
 * Login using the default credentials: no-reply@acquia.com / admin
 
 # For Varnish:
-  * Access site through Varnish in local
-  * Comment out the code forcing SSL redirection in `docroot/.htaccess`
-  * Access the site on port 81
-  * To do any changes in VCL do it in `conf/varnish-4.vcl`, Run `vagrant ssh` and  then run `sh box/scripts/configure-varnish.sh`.
-  
+* Access site through Varnish in local
+* Comment out the code forcing SSL redirection in `docroot/.htaccess`
+* Access the site on port 81
+* To do any changes in VCL do it in `conf/varnish-4.vcl`, Run `vagrant ssh` and  then run `sh box/scripts/configure-varnish.sh`.
+
 Check for known issues during setup check here: https://alshayagroup.atlassian.net/wiki/spaces/ACSF/pages/589004885/Developer+Handbook#DeveloperHandbook-LocalWorkarounds
 
 Next builds can be done using: `blt refresh:local:drupal`
@@ -137,8 +137,8 @@ Notes:
 * `blt refresh:local` failed in drupal installation with EntityStorageException (...) entity with ID '...' already exists
   * The reason for this is in the existing configuration values that still exist in memcache. The workaround is that you either restart the vm using ​vagrant reload​ command, or you restart memcache service using sudo service memcached restart in your vm and restart `blt refresh:local` again
 * In case, updates done to default settings.php don't reflect in sites/g/settings/local.settigns.php:
-    * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
-    * `blt local:reset-settings-file` to reset local settings file.
+  * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
+  * `blt local:reset-settings-file` to reset local settings file.
 
 ### Create a new site
 
@@ -148,8 +148,8 @@ commercial features and integration with Conductor/Magento. `non_transac`
 profile is a light/static site without any commercial feature.`
 
 * Create a custom module in `docroot/modules/brands`. This module's goal is to
-enable the appropriate theme, place the blocks in the theme's regions and
-install the specific configuration. See existing brand modules for example.
+  enable the appropriate theme, place the blocks in the theme's regions and
+  install the specific configuration. See existing brand modules for example.
 * Install the new theme for the respective brand inside this brand module.
 * See "Create a new theme for the site." for specific instructions on creating a new theme.
 * Add a new brand support:
@@ -202,9 +202,9 @@ in local as and when required. All required changes are done.
 * Update super admin user
 * Enable dblog and other ui modules
 * Allows hooking into the script, we can create scripts/install-site-dev.sh
-which is already added to .gitignore and add any code we want to execute post
-this script (for instance command to shout loud in mac - `say installation
-done`). One argument - site code will be passed to this script.
+  which is already added to .gitignore and add any code we want to execute post
+  this script (for instance command to shout loud in mac - `say installation
+  done`). One argument - site code will be passed to this script.
 
 Script usage:
 * `blt local:sync "site" "env" "mode"`
@@ -280,14 +280,14 @@ Execution:
 * bin/behat features/mothercare/common/checkout.feature --profile=mcuat
 * The above command will run the checkout.feature script for MC and the profile used should be according to environment.
 * Another way to run: Use tags e.g
-bin/behat --@tagname --profile=mcuat
+  bin/behat --@tagname --profile=mcuat
 
 
 
 ### How to interpret the Behat reports:
-  * When the execution of the feature file is completed, navigate to site folder directory which is inside your parent directory. e.g (hmkw)
-  * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
-  * In order to share the reports, compress the html directory immediately after every run.
+* When the execution of the feature file is completed, navigate to site folder directory which is inside your parent directory. e.g (hmkw)
+* Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
+* In order to share the reports, compress the html directory immediately after every run.
 
 ### Test Results analysis:
 * If any scenarios fail, try re-running the script once to discard any network issues.

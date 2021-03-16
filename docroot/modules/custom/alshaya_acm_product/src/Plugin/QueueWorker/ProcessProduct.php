@@ -10,6 +10,7 @@ use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
@@ -77,9 +78,16 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   protected $productProcessedManager;
 
   /**
+   * The Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Works on a single queue item.
    *
-   * @param mixed $sku
+   * @param mixed $data
    *   The data that was passed to
    *   \Drupal\Core\Queue\QueueInterface::createItem() when the item was queued.
    *
@@ -101,7 +109,16 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    *
    * @see \Drupal\Core\Cron::processQueues()
    */
-  public function processItem($sku) {
+  public function processItem($data) {
+    if (is_string($data)) {
+      $sku = $data;
+      $nid = 0;
+    }
+    elseif (is_array($data)) {
+      $sku = $data['sku'];
+      $nid = (int) $data['nid'];
+    }
+
     $entity = SKU::loadFromSku($sku);
 
     // Sanity check.
@@ -110,6 +127,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         '@sku' => $sku,
       ]);
 
+      $this->deleteFromIndexes($nid);
       return;
     }
 
@@ -117,6 +135,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     // So either configurable SKU or simple one visible in frontend.
     $node = $entity->getPluginInstance()->getDisplayNode($entity, FALSE);
     if (!($node instanceof NodeInterface)) {
+      $this->deleteFromIndexes($nid);
+
       if (!($this->skuManager->isSkuFreeGift($entity))) {
         $this->getLogger('ProcessProduct')->notice('Skipping process of product with sku: @sku as Node not available', [
           '@sku' => $entity->getSku(),
@@ -177,6 +197,54 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   }
 
   /**
+   * Wrapper function to get active indexes.
+   *
+   * @return \Drupal\search_api\Entity\Index[]
+   *   Enabled and writable indexes array.
+   */
+  protected function getIndexes() {
+    static $indexes;
+    if (!empty($indexes)) {
+      return $indexes;
+    }
+
+    $indexes = $this->entityTypeManager->getStorage('search_api_index')->loadMultiple();
+
+    /** @var \Drupal\search_api\Entity\Index $index */
+    foreach ($indexes as $id => $index) {
+      if ($index->isReadOnly() || !($index->status())) {
+        unset($indexes[$id]);
+      }
+    }
+
+    return $indexes;
+  }
+
+  /**
+   * Wrapper function to delete nodes from Indexes.
+   */
+  protected function deleteFromIndexes(int $nid) {
+    if (empty($nid)) {
+      return;
+    }
+
+    $indexes = $this->getIndexes();
+    if (!$indexes) {
+      return;
+    }
+
+    // Remove the search items for all the entity's translations.
+    foreach ($indexes as $index) {
+      $index->trackItemsDeleted('entity:node', [$nid]);
+
+      $this->getLogger('ProcessProduct')->notice('Deleted product from index: @index, nid: @nid.', [
+        'nid' => $nid,
+        'index' => $index->id(),
+      ]);
+    }
+  }
+
+  /**
    * AcqPromotionAttachQueue constructor.
    *
    * @param array $configuration
@@ -195,6 +263,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    *   Cache Tags Invalidator.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The Entity Type Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -203,13 +273,15 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
                               SkuImagesManager $sku_images_manager,
                               EventDispatcherInterface $dispatcher,
                               CacheTagsInvalidatorInterface $cache_tags_invalidator,
-                              ProductProcessedManager $product_processed_manager) {
+                              ProductProcessedManager $product_processed_manager,
+                              EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->skuManager = $sku_manager;
     $this->imagesManager = $sku_images_manager;
     $this->dispatcher = $dispatcher;
     $this->cacheTagsInvalidator = $cache_tags_invalidator;
     $this->productProcessedManager = $product_processed_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -236,7 +308,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('event_dispatcher'),
       $container->get('cache_tags.invalidator'),
-      $container->get('alshaya_acm_product.product_processed_manager')
+      $container->get('alshaya_acm_product.product_processed_manager'),
+      $container->get('entity_type.manager')
     );
   }
 

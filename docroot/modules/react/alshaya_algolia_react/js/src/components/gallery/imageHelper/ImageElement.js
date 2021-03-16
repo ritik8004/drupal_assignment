@@ -5,11 +5,15 @@ const ImageElement = (props) => {
     src, title, alt, ...otherProps
   } = props;
 
+  const parsedTitle = (title !== undefined && title !== null)
+    ? title.replace(/<\/?[^>]+(>|$)/g, ' ')
+    : '';
+
   return (
     <img
       src={src}
-      alt={alt || title}
-      title={title || ''}
+      alt={alt || parsedTitle}
+      title={parsedTitle || ''}
       {...otherProps}
     />
   );

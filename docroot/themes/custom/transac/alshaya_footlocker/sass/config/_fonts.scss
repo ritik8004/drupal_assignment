@@ -3,14 +3,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 
 @font-face {
   font-family: "Roboto-Bold";
-  src: url("#{$base_theme_fonts_directory_path}/roboto-bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/roboto-bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Roboto-Bold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/roboto-bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Roboto-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/roboto-bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/roboto-bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/roboto-bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/roboto-bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -18,14 +13,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 
 @font-face {
   font-family: "Roboto-Regular";
-  src: url("#{$base_theme_fonts_directory_path}/roboto-regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/roboto-regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/Roboto-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/roboto-regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/Roboto-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/roboto-regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/roboto-regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/roboto-regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/roboto-regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -33,14 +23,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 
 @font-face {
   font-family: "DroidArabicKufi_Bold";
-  src: url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DroidArabicKufi-Bold.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -48,14 +33,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 
 @font-face {
   font-family: "DroidKufi_Regular";
-  src: url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/DroidKufi-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -63,14 +43,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 
 @font-face {
   font-family: "FootLocker-FLClassic";
-  src: url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLClassic.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -78,14 +53,9 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_footlocker/fon
 
 @font-face {
   font-family: "FootLocker-FLStandard";
-  src: url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.eot");
   src:
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.eot?#iefix") format("embedded-opentype"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.otf") format("opentype"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.svg") format("svg"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.ttf") format("truetype"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff") format("woff"),
-    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/FootLocker-FLStandard.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

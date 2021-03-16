@@ -425,7 +425,7 @@ class CustomCommand extends BltTasks {
       if (strpos($paragraph_yml, 'field.field.')) {
         $yaml_parsed = Yaml::parse(file_get_contents($paragraph_yml));
         return ($yaml_parsed['field_type'] == 'entity_reference_revisions'
-        && (empty($yaml_parsed['skip_translation_check']) || !empty($yaml_parsed['translatable'])));
+          && (empty($yaml_parsed['skip_translation_check']) || !empty($yaml_parsed['translatable'])));
       }
     });
 

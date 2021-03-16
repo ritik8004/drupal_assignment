@@ -12,7 +12,7 @@ $env = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   $env = $_ENV['AH_SITE_ENVIRONMENT'];
 }
-elseif (getenv('TRAVIS')) {
+elseif (getenv('TRAVIS') || getenv('CI_BUILD_ID')) {
   $env = 'travis';
 }
 

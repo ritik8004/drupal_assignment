@@ -5,6 +5,7 @@ namespace Drupal\alshaya_facets_pretty_paths;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Class Alshaya Facets Pretty Aliases.
@@ -30,17 +31,28 @@ class AlshayaFacetsPrettyAliases {
   protected $languageManager;
 
   /**
+   * Logger Factory.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
+   */
+  protected $logger;
+
+  /**
    * AlshayaFacetsPrettyPathsHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger factory.
    */
   public function __construct(Connection $connection,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
+    $this->logger = $logger_factory->get('alshaya_facets_pretty_paths');
   }
 
   /**
@@ -110,6 +122,12 @@ class AlshayaFacetsPrettyAliases {
     }
     catch (IntegrityConstraintViolationException $e) {
       // Do nothing, other process might have entered the data already.
+    }
+    catch (\Exception $e) {
+      // Log exceptions other than Integrity constraints.
+      $this->logger->warning('Error occurred while inserting facet alias: %message', [
+        '%message' => $e->getMessage(),
+      ]);
     }
 
     // Set the value in static array.
