@@ -45,31 +45,10 @@ class AlshayaPerformanceSysLog extends SysLog {
     }
 
     if (PHP_SAPI === 'cli') {
-      $message .= '; cli_request_id="' . self::getRequestId() . '"';
+      $message .= '; cli_request_id="' . alshaya_get_cli_request_id() . '"';
     }
 
     parent::log($level, $message, $context);
-  }
-
-  /**
-   * Get request id for current request.
-   *
-   * @return string
-   *   Unique UUID / request id.
-   */
-  public static function getRequestId() {
-    static $request_id = NULL;
-
-    if (is_null($request_id)) {
-      $request_id = date('Ymd') . '-' . sprintf('%05d-%05d-%05d-%05d',
-        mt_rand(0, 99999),
-        mt_rand(0, 99999),
-        mt_rand(0, 99999),
-        mt_rand(0, 99999)
-      );
-    }
-
-    return $request_id;
   }
 
 }
