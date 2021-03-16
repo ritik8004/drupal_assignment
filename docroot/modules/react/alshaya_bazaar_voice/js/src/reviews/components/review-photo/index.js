@@ -7,6 +7,7 @@ const ReviewPhoto = ({
   <div className="thumbnail-img-block">
     {Object.keys(photoCollection).map((item) => (
       <Popup
+        key={item}
         trigger={(
           <button type="button" className="thumbnail-img">
             <img src={photoCollection[item].Sizes.large.Url} />
