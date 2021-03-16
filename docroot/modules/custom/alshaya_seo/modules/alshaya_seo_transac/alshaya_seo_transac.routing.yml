@@ -21,11 +21,3 @@ alshaya_seo_transac.alshaya_seo_transac_settings:
     _form: 'Drupal\alshaya_seo_transac\Form\AlshayaSeoTransacSettings'
   requirements:
     _permission: 'administer site configuration'
-
-alshaya_seo.redirect_url_bulk_upload:
-  path: '/admin/config/search/redirect/redirect-url-bulk-add'
-  defaults:
-    _form: '\Drupal\alshaya_seo_transac\Form\AlshayaBulkUploadRedirectUrl'
-    _title: 'Bulk add redirects url'
-  requirements:
-    _permission: 'administer redirects'
