@@ -8,3 +8,9 @@ alshaya_feed.settings:
     batch_size:
       type: integer
       label: 'batch size to process feeds.'
+    categories_to_exclude:
+      type: sequence
+      label: 'List of words to exclude from categories.'
+    brand_fields:
+      type: sequence
+      label: 'List of brand specific fields for the feed.'
