@@ -127,7 +127,7 @@ class ReviewCommentForm extends React.Component {
         Cookies.remove('BvUserId');
       }
       let authParams = '';
-      if (getCurrentUserEmail() === null && !(getSessionCookie('BvUserEmail'))) {
+      if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
         authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
       }
       // Set user authenticated string (UAS).
