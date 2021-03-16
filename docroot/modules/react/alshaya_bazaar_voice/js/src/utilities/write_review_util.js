@@ -41,7 +41,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
               Cookies.remove('BvUserNickname');
               Cookies.remove('BvUserId');
             }
-          } else {
+          } else if (getCurrentUserEmail() !== null) {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
         } else if (id === 'usernickname' && Cookies.get('BvUserNickname')

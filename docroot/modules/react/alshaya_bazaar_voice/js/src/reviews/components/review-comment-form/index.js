@@ -23,12 +23,6 @@ class ReviewCommentForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    if (getCurrentUserEmail() !== null) {
-      this.setState({ email: getCurrentUserEmail() });
-    }
-  }
-
   showCommentForm = () => {
     const { commentbox, nickname, email } = this.state;
     const bazaarVoiceSettings = getbazaarVoiceSettings();
@@ -139,6 +133,7 @@ class ReviewCommentForm extends React.Component {
       // Set user authenticated string (UAS).
       if (getCurrentUserEmail() !== null && getSessionCookie() !== undefined) {
         authParams += `&user=${getSessionCookie()}`;
+        Cookies.set('BvUserNickname', nickname);
       }
 
       if (Cookies.get('BvUserId') && Cookies.get('BvUserEmail')
@@ -214,6 +209,13 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
+    let emailValue = '';
+    if (getCurrentUserEmail() !== null) {
+      emailValue = getCurrentUserEmail();
+    } else if (Cookies.get('BvUserEmail')) {
+      emailValue = Cookies.get('BvUserEmail');
+    }
+
     if (ReviewId !== undefined) {
       return (
         <>
@@ -222,7 +224,7 @@ class ReviewCommentForm extends React.Component {
               <button
                 className="review-feedback-comment-btn"
                 onClick={() => this.setState({
-                  showCommentForm: true, showCommentSubmission: false, email: Cookies.get('BvUserEmail') ? Cookies.get('BvUserEmail') : '', nickname: Cookies.get('BvUserNickname') ? Cookies.get('BvUserNickname') : '', commentbox: '',
+                  showCommentForm: true, showCommentSubmission: false, email: emailValue, nickname: Cookies.get('BvUserNickname') ? Cookies.get('BvUserNickname') : '', commentbox: '',
                 })}
                 type="button"
                 disabled={showCommentForm}
