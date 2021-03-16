@@ -8,6 +8,16 @@ const ReviewTooltip = ({
   reviewContextData,
 }) => {
   if (reviewTooltipData !== undefined) {
+    let age = '';
+    let gender = '';
+    if (reviewContextData.Age !== undefined || reviewContextData.Age_filter !== undefined) {
+      age = (reviewContextData.Age !== undefined)
+        ? reviewContextData.Age : reviewContextData.Age_filter;
+    }
+    if (reviewContextData.Gender !== undefined || reviewContextData.Gender_filter !== undefined) {
+      gender = (reviewContextData.Gender !== undefined)
+        ? reviewContextData.Gender : reviewContextData.Gender_filter;
+    }
     return (
       <div className="user-review-info">
         <div className="user-info">
@@ -21,8 +31,8 @@ const ReviewTooltip = ({
           />
           <UserPersonalDetails
             userNickname={reviewTooltipData.UserNickname}
-            userAgeValue={reviewContextData.Age.Value}
-            userGender={reviewContextData.Gender}
+            userAge={age}
+            userGender={gender}
           />
         </div>
       </div>
