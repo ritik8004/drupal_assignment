@@ -74,6 +74,7 @@ export default class ReviewFilters extends React.Component {
                 options={filterList[item]}
                 defaultValue={filterList[item].defaultValue}
                 value={filterList[item].defaultValue}
+                isSearchable={false}
               />
             </div>
           ))}
