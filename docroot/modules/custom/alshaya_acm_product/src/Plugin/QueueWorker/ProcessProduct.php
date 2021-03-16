@@ -119,8 +119,6 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $nid = (int) $data['nid'];
     }
 
-    $this->getLogger('ProcessProduct')->notice(serialize($data));
-
     $entity = SKU::loadFromSku($sku);
 
     // Sanity check.
