@@ -1,8 +1,9 @@
 import React from 'react';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const UserPersonalDetails = ({
   userNickname,
-  userAgeValue,
+  userAge,
   userGender,
 }) => {
   if (userNickname !== undefined) {
@@ -10,14 +11,16 @@ const UserPersonalDetails = ({
       <div className="user-personal-details">
         <div className="user-attributes">
           <span className="user-name">{`${userNickname}: `}</span>
-          <span className="user-attribute-value">{userAgeValue}</span>
+          <ConditionalView condition={userAge !== ''}>
+            <span className="user-attribute-value">{userAge.ValueLabel}</span>
+          </ConditionalView>
         </div>
-        {(userGender !== undefined) ? (
+        <ConditionalView condition={userGender !== ''}>
           <div className="user-attributes">
             <span className="user-name">{`${userGender.DimensionLabel}: `}</span>
-            <span className="user-attribute-value">{userGender.Value}</span>
+            <span className="user-attribute-value">{userGender.ValueLabel}</span>
           </div>
-        ) : null}
+        </ConditionalView>
       </div>
     );
   }

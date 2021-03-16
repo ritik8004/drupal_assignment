@@ -7,3 +7,9 @@ services:
     arguments: ['@path.matcher']
     tags:
       - { name: event_subscriber }
+  dynamic_yield.product_feed_api_wrapper:
+    class: Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper
+    arguments:
+      - '@config.factory'
+      - '@http_client'
+      - '@logger.factory'

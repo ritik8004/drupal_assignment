@@ -73,7 +73,7 @@ class TextField extends React.Component {
               readOnly={(id === 'useremail' && getCurrentUserEmail() !== null) ? 1 : 0}
             />
             <div className="c-input__bar" />
-            <label className={`${labelActiveClass}`}>
+            <label className={`${(defaultValue !== undefined) ? 'active-label' : labelActiveClass}`}>
               {label}
               {' '}
               {(required) ? '*' : '' }

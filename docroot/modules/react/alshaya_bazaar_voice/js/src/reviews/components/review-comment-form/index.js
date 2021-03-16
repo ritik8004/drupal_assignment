@@ -79,6 +79,7 @@ class ReviewCommentForm extends React.Component {
                   onChange={this.handleEmailChange}
                   className="form-input"
                   defaultValue={email}
+                  readOnly={(getCurrentUserEmail() !== null) ? 1 : 0}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
