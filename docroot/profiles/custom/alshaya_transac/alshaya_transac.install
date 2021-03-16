@@ -16,6 +16,18 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * [5.19.0] Enable mobile app module on all brands.
+ */
+function alshaya_transac_update_8134() {
+  // If module already not enabled.
+  if (!\Drupal::moduleHandler()->moduleExists('alshaya_mobile_app')) {
+    \Drupal::service('module_installer')->install(['alshaya_mobile_app']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.11.0]Updating the trigger field value in back_to_top settings
  * to make it visible after the specified value.
  */
@@ -870,6 +882,7 @@ function alshaya_transac_install() {
     'alshaya_spc',
     'alshaya_pdp_layouts',
     'alshaya_acm_dashboard',
+    'alshaya_mobile_app',
   ];
 
   // Add 10 MB per module we are going to enable above.
