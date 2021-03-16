@@ -2308,7 +2308,7 @@ class FeatureContext extends CustomMinkContext
   }
 
   /**
-   * @When /^I select a product in stock on "([^"]*)"$/
+   * @Given /^I select a product in stock on "([^"]*)"$/
    */
   public function iSelectAProductInStockOn($css)
   {
@@ -2336,6 +2336,164 @@ class FeatureContext extends CustomMinkContext
       }
       $this->getSession()->executeScript("jQuery('h2.field--name-name a').get(0).click();");
       break;
+    }
+  }
+
+  /**
+   * @Then I book first available slot
+   */
+  public function firstAvailableSlotIsBooked()
+  {
+    $page = $this->getSession()->getPage();
+    $all_dates = $page->findAll('css','ul.calendar-wrapper li');
+    $total_dates = count($all_dates);
+    for ($x = 0; $x < $total_dates; $x++) {
+      if ($x == 0) {
+        $child = 'li:first-child';
+      }
+      else {
+        $child = "li:nth-child($x)";
+      }
+      $this->iClickOnElement(".appointment-datepicker ul.calendar-wrapper $child");
+      $this->iWaitSeconds('5');
+      if (empty($page->find('css','.appointment-timeslots-wrapper .appointment-time-slots .appointment-slots-empty'))) {
+        $this->inOfElementShouldContain(".appointment-datepicker ul.calendar-wrapper $child", "class", "active");
+        $this->iWaitSeconds('10');
+        $this->iClickOnElement('.appointment-timeslots-wrapper .appointment-time-slots .morning-items-wrapper ul.morning-items li:first-child');
+        break;
+      }
+    }
+  }
+
+  /**
+   * @When I press :addCart button
+   * @param $addCart
+   */
+  public function pressAddCartButton($addCart) {
+    $page = $this->getSession()->getPage();
+    $algoliaenabled = $page->find('css', '#add-to-cart-main');
+    if (!empty($algoliaenabled)) {
+      $addCartButton = 'add-to-cart-main';
+    }
+    else {
+      $addCartButton = $addCart;
+    }
+    $button = $page->find('named', array('button', $addCartButton));
+    if (null === $button) {
+      throw new ElementNotFoundException($this->getDriver(), 'button', 'id|name|title|alt|value', $addCartButton);
+    }
+    $button->press();
+  }
+
+  /**
+   * @Then I fill in Qpay pin code
+   */
+  public function iFillinQpayPin()
+  {
+    $this->getSession()->executeScript("jQuery('#code').val('EWqkqrfnrM0=,g+8WOynUiEc=,AAgbpZAMi2s=,IHO+KVh/Zn8=,BPw/OgQmym0=,TGtG0oHxTgw=,');");
+  }
+
+  /**
+   * @Then I should see special price on newpdp having promotion :promotion
+   */
+  public function iShouldSeeSpecialPrice($promotion)
+  {
+    if (!empty($promotion)) {
+      $this->theElementShouldExist(".magv2-main .magv2-sidebar .magv2-pdp-price .magv2-pdp-price-container .magv2-pdp-final-price-wrapper .magv2-pdp-final-price-currency");
+      $this->theElementShouldExist(".magv2-main .magv2-sidebar .magv2-pdp-price .magv2-pdp-price-container .magv2-pdp-final-price-wrapper .magv2-pdp-final-price-amount");
+    }
+  }
+
+  /**
+   * @Then I select the Knet payment method
+   */
+  public function iSelectKnetPaymentMethod()
+  {
+    $page = $this->getSession()->getPage();
+    $newCheckoutKnet = $page->find('css', '#payment-method-checkout_com_upapi_knet');
+    if (!empty($newCheckoutKnet)) {
+      $element = 'payment-method-checkout_com_upapi_knet';
+    } else {
+      $element = 'payment-method-knet';
+    }
+    $this->getSession()->executeScript("jQuery('#'. $element).trigger('click');");
+    $this->iWaitSeconds(10);
+    $checkbox = $page->findField('#' . $element);
+
+    if ($checkbox !== null) {
+      if (!$checkbox->isChecked()) {
+        throw new \Exception(sprintf('Knet Payment method has not be checked on page.'));
+      }
+    }
+  }
+
+  /**
+   * @Then I select the Checkout payment method
+   */
+  public function iSelectCheckoutPaymentMethod()
+  {
+    $page = $this->getSession()->getPage();
+    $newCheckout = $page->find('css', '#payment-method-checkout_com_upapi');
+    if (!empty($newCheckout)) {
+      $element = 'payment-method-checkout_com_upapi';
+    } else {
+      $element = 'payment-method-checkout_com';
+    }
+    $this->getSession()->executeScript("jQuery('#'. $element).trigger('click');");
+    $this->iWaitSeconds(10);
+    $checkbox = $page->findField('#' . $element);
+
+    if ($checkbox !== null) {
+      if (!$checkbox->isChecked()) {
+        throw new \Exception(sprintf('Checkout Payment method has not be checked on page.'));
+      }
+    }
+  }
+
+  /**
+   * @Then I fill checkout card details having class :class with :value
+   */
+  public function iFillCheckoutCardDetailsWith($class, $value) {
+    $page = $this->getSession()->getPage();
+    $newCheckout = $page->find('css', '#payment-method-checkout_com_upapi');
+    if (!empty($newCheckout)) {
+      $element = '.payment-method-checkout_com_upapi';
+    } else {
+      $element = '.payment-method-checkout_com';
+    }
+    $card = $page->find('css', $element . $class);
+    if ($card !== null) {
+      $card->setValue($value);
+    } else {
+      echo 'Element not found';
+    }
+  }
+
+  /**
+   *  @Then the checkout payment checkbox should be checked
+   */
+  public function checkoutPaymentMethodSelected () {
+    $page = $this->getSession()->getPage();
+    $checkoutField = $page->find('css', '#payment-method-checkout_com_upapi');
+    if (!empty($checkoutField)) {
+      $checkoutField->isChecked();
+    } else {
+      $checkoutField = $page->find('css', '#payment-method-checkout_com');
+      $checkoutField->isChecked();
+    }
+  }
+
+  /**
+   *  @Then the Knet payment checkbox should be checked
+   */
+  public function checkoutKNETPaymentMethodSelected () {
+    $page = $this->getSession()->getPage();
+    $checkoutField = $page->find('css', '#payment-method-checkout_com_upapi_knet');
+    if (!empty($checkoutField)) {
+      $checkoutField->isChecked();
+    } else {
+      $checkoutField = $page->find('css', '#payment-method-knet');
+      $checkoutField->isChecked();
     }
   }
 }

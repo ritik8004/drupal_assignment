@@ -8,7 +8,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
 
   @cc @cnc @checkout_com
   Scenario: As a returning customer, I should be able to checkout using click and collect with credit card
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -48,10 +48,10 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
+    Then I select the Checkout payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    Then the checkout payment checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "4242424242424242"
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "03/22"
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "100"
@@ -98,7 +98,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -138,10 +138,10 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
+    Then I select the Checkout payment method
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then the "payment-method-checkout_com_upapi" checkbox should be checked
+    Then the checkout payment checkbox should be checked
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "4242424242424242"
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "03/22"
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "100"
