@@ -35,12 +35,10 @@ export const prepareRequest = (elements, fieldsConfig) => {
     try {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
-          if (Cookies.get('BvUserEmail')) {
-            if (Cookies.get('BvUserEmail') !== elements[id].value) {
-              Cookies.remove('BvUserEmail');
-              Cookies.remove('BvUserNickname');
-              Cookies.remove('BvUserId');
-            }
+          if (Cookies.get('BvUserEmail') && Cookies.get('BvUserEmail') !== elements[id].value) {
+            Cookies.remove('BvUserEmail');
+            Cookies.remove('BvUserNickname');
+            Cookies.remove('BvUserId');
           } else if (getCurrentUserEmail() !== null) {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
