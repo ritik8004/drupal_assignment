@@ -10,7 +10,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page with coupon-code fo
     And I wait for the page to load
     Then I should be on "/user" page
 
-  @desktop
+  @desktop @test
   Scenario: As an Authenticated user, I should be able to checkout promotions on PDP page with coupon-code for multiple products
     Given I am on "{spc_multiple_product_detail_page_coupon}"
     And I wait for the page to load
@@ -44,10 +44,11 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page with coupon-code fo
     And I wait for AJAX to finish
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
+    Then the promo code should be applied
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
+    And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     Then I should see "{order_summary}"
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
@@ -103,6 +104,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page with coupon-code fo
     And I wait for AJAX to finish
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
+    Then the promo code should be applied
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -159,6 +161,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page with coupon-code fo
     And I wait for AJAX to finish
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
+    Then the promo code should be applied
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -180,8 +183,3 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page with coupon-code fo
     Then I should see "{order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
     Then I should see "{order_detail}"
-
-
-
-
-
