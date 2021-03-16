@@ -18,6 +18,9 @@ function alshaya_facets_pretty_paths_update_8007() {
   $schema = alshaya_facets_pretty_paths_schema();
   \Drupal::database()->schema()->dropTable('facets_pretty_path');
   \Drupal::database()->schema()->createTable('facets_pretty_path', $schema['facets_pretty_path']);
+
+  // Queue all products so the aliases are created properly again.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 }
 
 /**
