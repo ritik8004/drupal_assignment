@@ -5,7 +5,9 @@ const ImageElement = (props) => {
     src, title, alt, ...otherProps
   } = props;
 
-  const parsedTitle = title.replace(/<\/?[^>]+(>|$)/g, ' ');
+  const parsedTitle = (title !== undefined && title !== null)
+    ? title.replace(/<\/?[^>]+(>|$)/g, ' ')
+    : '';
 
   return (
     <img
