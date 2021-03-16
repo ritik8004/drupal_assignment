@@ -16,6 +16,7 @@ import PostReviewMessage from '../reviews-full-submit/post-review-message';
 import Pagination from '../review-pagination';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
@@ -124,7 +125,7 @@ export default class ReviewSummary extends React.Component {
           } else {
             this.setState({
               currentTotal: result.data.TotalResults,
-              noResultmessage: Drupal.t('No review found.'),
+              noResultmessage: getStringMessage('no_review_found'),
             });
           }
         } else {
@@ -328,7 +329,7 @@ export default class ReviewSummary extends React.Component {
           <div className="rating-wrapper">
             <ReviewHistogram overallSummary={reviewsProduct} />
             <div className="sorting-filter-wrapper">
-              <div className="sorting-filter-title-block">{Drupal.t('Filter + Sort')}</div>
+              <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>
               <ReviewSorting
                 currentOption={currentSortOption}
                 sortOptions={bazaarVoiceSettings.reviews.bazaar_voice.sorting_options}
