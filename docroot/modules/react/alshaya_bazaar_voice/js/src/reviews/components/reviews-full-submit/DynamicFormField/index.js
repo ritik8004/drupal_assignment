@@ -9,6 +9,7 @@ import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
+import { getCurrentUserEmail } from '../../../../utilities/user_util';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
@@ -22,6 +23,12 @@ const DynamicFormField = (props) => {
         fieldProperty[cleanKey] = value;
       },
     );
+  }
+
+  if (fieldProperty.group_type === 'textfield') {
+    if (getCurrentUserEmail() !== undefined && fieldProperty.id === 'useremail') {
+      fieldProperty.defaultVal = getCurrentUserEmail();
+    }
   }
 
   if (fieldProperty.group_type === 'checkbox'
