@@ -134,7 +134,7 @@ class SocialMediaLinksResource extends ResourceBase {
         ];
 
         // Adding to property for using later to attach cacheable dependency.
-        $this->content[] = $menu_link_content;
+        $this->content[] = $menu_link_obj;
       }
 
       $response = new ResourceResponse($response_data);
