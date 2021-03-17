@@ -38,7 +38,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 
       {% if content.postpay %}
         {{ attach_library('alshaya_white_label/postpay-pdp') }}
-        <div class="postpay"> {{ content.postpay }} </div>
+        <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
       {% endif %}
 
         {% if content.promotions %}
@@ -71,7 +71,7 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
       <div class="content__sidebar">
         {% block sizeVolume %}
         {% endblock %}
-      
+
         <div class="basic-details-wrapper">
           {{ content.field_skus }}
           {% if quantity_limit_enabled == true %}

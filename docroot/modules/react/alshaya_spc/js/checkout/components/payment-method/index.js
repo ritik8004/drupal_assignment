@@ -156,10 +156,14 @@ export default class PaymentMethod extends React.Component {
     if (method.code === 'checkout_com_upapi_applepay' && !(CheckoutComUpapiApplePay.isAvailable())) {
       return (null);
     }
+    let postpayModeClass = '';
+    if (method.code === 'postpay') {
+      postpayModeClass = drupalSettings.postpay_widget_info.postpay_mode_class;
+    }
 
     return (
       <>
-        <div className={`payment-method fadeInUp payment-method-${method.code}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
+        <div className={`payment-method fadeInUp payment-method-${method.code} ${postpayModeClass}`} style={{ animationDelay: animationDelayValue }} onClick={() => changePaymentMethod(method.code)}>
           <div className="payment-method-top-panel">
             <input
               id={`payment-method-${method.code}`}
