@@ -1,4 +1,18 @@
 #reviews-section {
+  .no-review {
+    text-align: center;
+    min-height: 6.25rem;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border: 1px solid $rr-not-found-filter-result-border;
+    margin-top: 1.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin: 1.25rem 0.5rem 0;
+    }
+  }
+
   .review {
     &-summary {
       padding: 1.75rem 0.5rem 2.25rem;
