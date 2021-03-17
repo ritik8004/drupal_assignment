@@ -21,6 +21,7 @@ variables:
   find_store: 'Find Store'
   language_link: 'العربية'
   add_to_cart_link: 'add to bag'
+  add_free_gift: 'add-free-gift'
   subtotal: 'subtotal'
   order_total: 'Order Total'
   order_summary: 'Order Summary'
