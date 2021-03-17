@@ -217,7 +217,8 @@ class ReviewCommentForm extends React.Component {
       emailValue = getCurrentUserEmail();
     } else if (getSessionCookie('BvUserEmail') !== null) {
       emailValue = getSessionCookie('BvUserEmail');
-    } else if (getCurrentUserEmail() !== null && getSessionCookie('BvUserEmail') !== null) {
+    }
+    if (getCurrentUserEmail() !== null || getSessionCookie('BvUserEmail') !== null) {
       nicknameValue = getSessionCookie('BvUserNickname') !== null ? getSessionCookie('BvUserNickname') : '';
     }
 
