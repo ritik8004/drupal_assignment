@@ -17,7 +17,6 @@ import Pagination from '../review-pagination';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getCurrentUserEmail, setSessionCookie, getSessionCookie } from '../../../utilities/user_util';
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
@@ -88,28 +87,6 @@ export default class ReviewSummary extends React.Component {
         filterParams += `&${type}=${item.value}`;
         return filterParams;
       });
-    }
-
-    // Store user information in bv cookies.
-    if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') === null && getCurrentUserEmail() === null) {
-      const params = `&productid=${bazaarVoiceSettings.productid}&User=${getSessionCookie('BvUserId')}&Action=`;
-      const apiData = fetchAPIData('/data/submitreview.json', params);
-      if (apiData instanceof Promise) {
-        apiData.then((result) => {
-          if (result.error === undefined
-        && result.data !== undefined
-        && result.data.error === undefined) {
-            if (result.data.Data.Fields !== undefined
-              && result.data.Data.Fields.usernickname.Value !== null
-              && result.data.Data.Fields.useremail.Value !== null) {
-              setSessionCookie('BvUserNickname', result.data.Data.Fields.usernickname.Value);
-              setSessionCookie('BvUserEmail', result.data.Data.Fields.useremail.Value);
-            }
-          } else {
-            Drupal.logJavascriptError('review-summary', result.error);
-          }
-        });
-      }
     }
 
     // Get review data from BazaarVoice based on available parameters.

@@ -13,12 +13,17 @@
       align-items: center;
       padding-bottom: 1.25rem;
 
+      @include breakpoint($only-mobile) {
+        flex-wrap: wrap;
+      }
+
       .overall-label {
         width: 32%;
         font-size: 0.875rem;
 
         @include breakpoint($only-mobile) {
-          width: 42%;
+          width: auto;
+          flex-basis: 100%;
         }
       }
 
@@ -43,7 +48,7 @@
           }
 
           @include breakpoint($only-mobile) {
-            width: 45%;
+            width: auto;
           }
         }
       }
@@ -103,12 +108,12 @@
 
       .star-ratings-wrapper {
         margin-bottom: 0;
-        padding-right: 0.625rem;
+        padding-#{$right}: 0.625rem;
       }
 
       .overall-label {
         font-size: 0.875rem;
-        padding-right: 0.625rem;
+        padding-#{$right}: 0.625rem;
         font-family: $alshaya-bold;
         color: $rr-review-summary-txt;
 

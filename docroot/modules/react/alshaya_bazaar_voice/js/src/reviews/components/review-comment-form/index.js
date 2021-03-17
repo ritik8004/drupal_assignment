@@ -1,9 +1,10 @@
 import React from 'react';
-import Cookies from 'js-cookie';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import { getCurrentUserEmail, getSessionCookie, setSessionCookie } from '../../../utilities/user_util';
+import {
+  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
+} from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
@@ -123,9 +124,9 @@ class ReviewCommentForm extends React.Component {
       const { commentbox, nickname, email } = this.state;
       const bazaarVoiceSettings = getbazaarVoiceSettings();
       if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== email) {
-        Cookies.remove('BvUserEmail');
-        Cookies.remove('BvUserNickname');
-        Cookies.remove('BvUserId');
+        deleteSessionCookie('BvUserEmail');
+        deleteSessionCookie('BvUserNickname');
+        deleteSessionCookie('BvUserId');
       }
       let authParams = '';
       if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
@@ -216,6 +217,7 @@ class ReviewCommentForm extends React.Component {
       emailValue = getCurrentUserEmail();
     } else if (getSessionCookie('BvUserEmail') !== null) {
       emailValue = getSessionCookie('BvUserEmail');
+    } else if (getCurrentUserEmail() !== null && getSessionCookie('BvUserEmail') !== null) {
       nicknameValue = getSessionCookie('BvUserNickname') !== null ? getSessionCookie('BvUserNickname') : '';
     }
 

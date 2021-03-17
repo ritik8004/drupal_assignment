@@ -2,7 +2,6 @@ import React from 'react';
 import { validEmailRegex } from '../../../../../../utilities/write_review_util';
 import ConditionalView from '../../../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../../../js/utilities/strings';
-import { getCurrentUserEmail } from '../../../../../../utilities/user_util';
 
 class TextField extends React.Component {
   constructor(props) {
@@ -42,6 +41,7 @@ class TextField extends React.Component {
       visible,
       text,
       classLable,
+      readonly,
     } = this.props;
     const { labelActiveClass } = this.state;
 
@@ -60,10 +60,10 @@ class TextField extends React.Component {
               onChange={(e) => this.handleChange(e)}
               maxLength={maxLength}
               minLength={minLength}
-              readOnly={(id === 'useremail' && getCurrentUserEmail() !== null) ? 1 : 0}
+              readOnly={readonly}
             />
             <div className="c-input__bar" />
-            <label className={`${(defaultValue !== undefined) ? 'active-label' : labelActiveClass}`}>
+            <label className={`${(defaultValue !== undefined && defaultValue !== null) ? 'active-label' : labelActiveClass}`}>
               {label}
               {' '}
               {(required) ? '*' : '' }

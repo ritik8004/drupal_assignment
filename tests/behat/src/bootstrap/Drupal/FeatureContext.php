@@ -2338,4 +2338,19 @@ class FeatureContext extends CustomMinkContext
       break;
     }
   }
+
+  /**
+   * @Then /^the promo code should be applied$/
+   */
+  public function thePromoCodeShouldBeApplied()
+  {
+    $js = <<<JS
+    return jQuery('input#promo-code').val();
+JS;
+    $page = $this->getSession()->getPage();
+    $val = $this->getSession()->evaluateScript($js);
+    if ($val == '') {
+      throw new \Exception('Promo-code not applied');
+    }
+  }
 }

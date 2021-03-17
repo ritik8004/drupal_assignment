@@ -13,6 +13,7 @@ import { getCurrentUserEmail, getSessionCookie } from '../../../../utilities/use
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
+  let readonly = false;
 
   const { field: defField } = props;
   if (defField.length !== 0
@@ -29,10 +30,12 @@ const DynamicFormField = (props) => {
     if (fieldProperty.id === 'useremail') {
       if (getCurrentUserEmail() !== undefined) {
         fieldProperty.defaultVal = getCurrentUserEmail();
+        readonly = true;
       } else if (getSessionCookie('BvUserEmail') !== null) {
         fieldProperty.defaultVal = getSessionCookie('BvUserEmail');
       }
-    } else if (fieldProperty.id === 'usernickname' && getSessionCookie('BvUserNickname') !== null) {
+    } else if (fieldProperty.id === 'usernickname' && getSessionCookie('BvUserNickname') !== null
+      && getSessionCookie('BvUserEmail') !== null) {
       fieldProperty.defaultVal = getSessionCookie('BvUserNickname');
     }
   }
@@ -166,6 +169,7 @@ const DynamicFormField = (props) => {
       visible={fieldProperty.visible}
       text={fieldProperty.text}
       classLable={fieldProperty.class_name}
+      readonly={readonly}
     />
   );
 };
