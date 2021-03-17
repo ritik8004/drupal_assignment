@@ -26,6 +26,8 @@ const DynamicFormField = (props) => {
     );
   }
 
+  // Set default value for user nickname and email.
+  // For anonymous user, default value is from user cookies.
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
       if (getCurrentUserEmail() !== undefined) {

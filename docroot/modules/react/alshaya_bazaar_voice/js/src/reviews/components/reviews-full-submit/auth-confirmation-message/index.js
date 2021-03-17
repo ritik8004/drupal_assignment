@@ -24,8 +24,8 @@ export default class AuthConfirmationMessage extends React.Component {
             && result.data !== undefined
             && result.data.error === undefined) {
             if (result.data.Data.Fields !== undefined
-                    && result.data.Data.Fields.usernickname.Value !== null
-                    && result.data.Data.Fields.useremail.Value !== null) {
+              && result.data.Data.Fields.usernickname.Value !== null
+              && result.data.Data.Fields.useremail.Value !== null) {
               setSessionCookie('BvUserNickname', result.data.Data.Fields.usernickname.Value);
               setSessionCookie('BvUserEmail', result.data.Data.Fields.useremail.Value);
             }

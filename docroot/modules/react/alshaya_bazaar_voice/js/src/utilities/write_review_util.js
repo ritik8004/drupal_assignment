@@ -37,9 +37,10 @@ export const prepareRequest = (elements, fieldsConfig) => {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
           if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== elements[id].value) {
-            deleteSessionCookie('BvUserEmail');
-            deleteSessionCookie('BvUserNickname');
-            deleteSessionCookie('BvUserId');
+            const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
+            cookieValues.forEach((item) => {
+              deleteSessionCookie(item);
+            });
           } else if (getCurrentUserEmail() !== null) {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
