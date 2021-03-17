@@ -180,7 +180,7 @@
 
       &-text {
         font-family: $alshaya-thin;
-        padding-#{$left}: 0.313rem;
+        padding-#{$left}: 0.125rem;
       }
 
       &-icon {
@@ -189,7 +189,7 @@
           color: $rr-recommendation-icon;
           border-radius: 50%;
           font-size: 1.25rem;
-          margin-#{$right}: 0.3125rem;
+          margin-#{$right}: 0.125rem;
           position: relative;
           top: 0.0625rem;
         }
