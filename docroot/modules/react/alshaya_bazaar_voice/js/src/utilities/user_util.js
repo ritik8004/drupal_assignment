@@ -49,8 +49,10 @@ export const getSessionCookie = (key) => {
   return sessionCookie;
 };
 
-export const deleteSessionCookie = (key) => {
-  Cookies.remove(key);
+export const deleteSessionCookie = (keys) => {
+  keys.forEach((item) => {
+    Cookies.remove(item);
+  });
 };
 
 export default {

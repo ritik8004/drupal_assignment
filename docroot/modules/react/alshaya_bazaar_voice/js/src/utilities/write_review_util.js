@@ -38,9 +38,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
         if (id === 'useremail') {
           if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== elements[id].value) {
             const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
-            cookieValues.forEach((item) => {
-              deleteSessionCookie(item);
-            });
+            deleteSessionCookie(cookieValues);
           } else if (getCurrentUserEmail() !== null) {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
