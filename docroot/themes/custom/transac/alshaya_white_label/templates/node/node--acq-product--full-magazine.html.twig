@@ -37,9 +37,9 @@
 
           {% if content.postpay %}
             {{ attach_library('alshaya_white_label/postpay-pdp') }}
-            <div class="postpay"> {{ content.postpay }} </div>
+            <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
-          
+
           <div class="promotion-discount-wrapper">
             <div class="price--discount discount-{{ content.price_block_identifier }}">
               {% if content.price_block['#discount'] %}
