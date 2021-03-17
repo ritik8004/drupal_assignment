@@ -102,13 +102,13 @@ class LoyaltyClubProgressTracker {
       $response = $this->magentoApiWrapper->doRequest('GET', $endpoint);
       $data = [];
 
-      if (is_array($response['tier_progress_tracker'])) {
-        $values = reset($response['tier_progress_tracker']);
-        $data = [
-          'nextTierLevel' => $values['tier_code'] ?? '',
-          'userPoints' => $values['current_value'] ?? '',
-          'nextTierThreshold' => $values['max_value'] ?? '',
-        ];
+      foreach ($response['tier_progress_tracker'] ?? [] as $value) {
+        if (strpos($value['code'], 'UPG') !== FALSE) {
+          $data = $this->prepareProgressTrackerResponse($value);
+          break;
+        }
+
+        $data = $this->prepareProgressTrackerResponse($value);
       }
 
       $responseData = [
@@ -125,6 +125,20 @@ class LoyaltyClubProgressTracker {
       ]);
       return new JsonResponse($this->utility->getErrorResponse($e->getMessage(), $e->getCode()));
     }
+  }
+
+  /**
+   * Prepare progress tracker data from API response.
+   *
+   * @return array
+   *   Progress tracker data.
+   */
+  private function prepareProgressTrackerResponse($response_data) {
+    return [
+      'nextTierLevel' => $response_data['tier_code'] ?? '',
+      'userPoints' => $response_data['current_value'] ?? '',
+      'nextTierThreshold' => $response_data['max_value'] ?? '',
+    ];
   }
 
 }

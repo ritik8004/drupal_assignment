@@ -162,6 +162,19 @@ function getPriceToPointRatio() {
   return priceToPointRatio;
 }
 
+/**
+ * Helper function to get recognition accrual ratio.
+ */
+function getRecognitionAccrualRatio() {
+  let recognitionAccrualRatio = 0;
+  if (typeof drupalSettings.aura !== 'undefined'
+    && ({}).hasOwnProperty.call(drupalSettings.aura, 'recognitionAccrualRatio')) {
+    recognitionAccrualRatio = parseInt(drupalSettings.aura.recognitionAccrualRatio.toString(), 10);
+  }
+
+  return recognitionAccrualRatio;
+}
+
 export {
   getUserAuraStatus,
   getUserAuraTier,
@@ -175,4 +188,5 @@ export {
   getAuraConfig,
   getPointToPriceRatio,
   getPriceToPointRatio,
+  getRecognitionAccrualRatio,
 };
