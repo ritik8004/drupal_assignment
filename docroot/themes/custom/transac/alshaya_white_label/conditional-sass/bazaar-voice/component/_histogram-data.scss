@@ -57,8 +57,8 @@
             margin-top: 1rem;
 
             .histogram-title {
-              html[lang='ar'] & {
-                unicode-bidi: bidi-override;
+              @include breakpoint($only-mobile) {
+                display: flex;
               }
 
               @include icon(check) {
@@ -69,6 +69,15 @@
                 margin-#{$right}: 0.3125rem;
                 position: relative;
                 top: 0.1875rem;
+
+                html[lang=ar] & {
+                  unicode-bidi: isolate;
+                  direction: ltr;
+                }
+
+                @include breakpoint($only-mobile) {
+                  height: 1.25rem;
+                }
               }
             }
 
