@@ -1,8 +1,8 @@
 import React from 'react';
 import { validEmailRegex } from '../../../../../../utilities/write_review_util';
-import { getCurrentUserEmail, getSessionCookie } from '../../../../../../utilities/user_util';
 import ConditionalView from '../../../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../../../js/utilities/strings';
+import { getCurrentUserEmail } from '../../../../../../utilities/user_util';
 
 class TextField extends React.Component {
   constructor(props) {
@@ -46,16 +46,6 @@ class TextField extends React.Component {
     const { labelActiveClass } = this.state;
 
     if (visible === true) {
-      let fieldDefaultValue = null;
-      if (id === 'useremail') {
-        if (getCurrentUserEmail() !== null) {
-          fieldDefaultValue = getCurrentUserEmail();
-        } else if (getSessionCookie('BvUserEmail') !== null) {
-          fieldDefaultValue = getSessionCookie('BvUserEmail');
-        }
-      } else if (id === 'usernickname' && getSessionCookie('BvUserNickname') !== null) {
-        fieldDefaultValue = getSessionCookie('BvUserNickname');
-      }
       return (
         <>
           <ConditionalView condition={text !== undefined}>
@@ -66,7 +56,7 @@ class TextField extends React.Component {
               type="text"
               id={id}
               name={id}
-              defaultValue={(fieldDefaultValue !== null) ? fieldDefaultValue : defaultValue}
+              defaultValue={defaultValue}
               onChange={(e) => this.handleChange(e)}
               maxLength={maxLength}
               minLength={minLength}

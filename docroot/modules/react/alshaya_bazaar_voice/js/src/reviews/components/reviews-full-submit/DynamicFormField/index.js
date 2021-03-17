@@ -9,7 +9,7 @@ import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
-import { getCurrentUserEmail } from '../../../../utilities/user_util';
+import { getCurrentUserEmail, getSessionCookie } from '../../../../utilities/user_util';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
@@ -26,8 +26,14 @@ const DynamicFormField = (props) => {
   }
 
   if (fieldProperty.group_type === 'textfield') {
-    if (getCurrentUserEmail() !== undefined && fieldProperty.id === 'useremail') {
-      fieldProperty.defaultVal = getCurrentUserEmail();
+    if (fieldProperty.id === 'useremail') {
+      if (getCurrentUserEmail() !== undefined) {
+        fieldProperty.defaultVal = getCurrentUserEmail();
+      } else if (getSessionCookie('BvUserEmail') !== null) {
+        fieldProperty.defaultVal = getSessionCookie('BvUserEmail');
+      }
+    } else if (fieldProperty.id === 'usernickname' && getSessionCookie('BvUserNickname') !== null) {
+      fieldProperty.defaultVal = getSessionCookie('BvUserNickname');
     }
   }
 

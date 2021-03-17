@@ -49,7 +49,13 @@ export const getSessionCookie = (key) => {
   return sessionCookie;
 };
 
+export const deleteSessionCookie = (key) => {
+  Cookies.remove(key);
+};
+
 export default {
   getCurrentUserEmail,
+  setSessionCookie,
   getSessionCookie,
+  deleteSessionCookie,
 };

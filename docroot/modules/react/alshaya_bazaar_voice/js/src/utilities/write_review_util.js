@@ -1,5 +1,6 @@
-import Cookies from 'js-cookie';
-import { getCurrentUserEmail, getSessionCookie, setSessionCookie } from './user_util';
+import {
+  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
+} from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 
@@ -36,9 +37,9 @@ export const prepareRequest = (elements, fieldsConfig) => {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
           if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== elements[id].value) {
-            Cookies.remove('BvUserEmail');
-            Cookies.remove('BvUserNickname');
-            Cookies.remove('BvUserId');
+            deleteSessionCookie('BvUserEmail');
+            deleteSessionCookie('BvUserNickname');
+            deleteSessionCookie('BvUserId');
           } else if (getCurrentUserEmail() !== null) {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
