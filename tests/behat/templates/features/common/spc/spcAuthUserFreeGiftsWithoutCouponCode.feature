@@ -16,7 +16,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait for the page to load
     And the element "#block-content .free-gift-promotions" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list" should exist
-#    And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
+    And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     Then I press "{add_to_cart_link}"
