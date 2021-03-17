@@ -108,12 +108,12 @@
 
       .star-ratings-wrapper {
         margin-bottom: 0;
-        padding-right: 0.625rem;
+        padding-#{$right}: 0.625rem;
       }
 
       .overall-label {
         font-size: 0.875rem;
-        padding-right: 0.625rem;
+        padding-#{$right}: 0.625rem;
         font-family: $alshaya-bold;
         color: $rr-review-summary-txt;
 
