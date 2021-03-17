@@ -139,6 +139,7 @@ class NewCard extends React.Component {
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
               required
+              type="tel"
               name="spc-no-autocomplete-name"
               autoComplete="off"
               onChange={() => this.showCardType()}
@@ -151,6 +152,7 @@ class NewCard extends React.Component {
           <div className="spc-type-textfield spc-type-expiry">
             <Cleave
               id="spc-cc-expiry"
+              type="tel"
               htmlRef={(ref) => { this.ccExpiry = ref; }}
               options={{
                 date: true,
