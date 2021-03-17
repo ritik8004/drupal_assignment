@@ -50,7 +50,7 @@ set classes = [
 
           {% if content.postpay %}
             {{ attach_library('alshaya_white_label/postpay-pdp') }}
-            <div class="postpay"> {{ content.postpay }} </div>
+            <div class="postpay {{ content.postpay_mode_class }}"> {{ content.postpay }} </div>
           {% endif %}
 
           <div class="promotions promotions-full-view-mode">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
