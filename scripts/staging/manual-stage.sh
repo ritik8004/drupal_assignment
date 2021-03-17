@@ -155,5 +155,8 @@ do
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings origin_dir $files_folder -y"
     ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri cset stage_file_proxy.settings hotlink 1 -y"
   fi
+
+  echo "Enabling mobile app module for $current_site"
+  ssh $target "cd /var/www/html/$AH_SITE_GROUP.$target_env/docroot ; drush -l $uri pm:enable alshaya_mobile_app"
 done
 ssh $target 'rm -rf ~/manual-stage'
