@@ -1,5 +1,5 @@
-@javascript @smoke @desktop @newPdp @mcaeuat @flsauat @aeoaeuat
-Feature: Testing new PDP CNC Block for desktop
+@javascript @smoke @mobile @newPdp @mcaeuat @flsauat @aeoaeuat
+Feature: Testing new PDP CNC Block for Mobile
 
   Background:
     Given I am on "{np_plp_product_page}"
@@ -12,6 +12,7 @@ Feature: Testing new PDP CNC Block for desktop
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-title-wrapper.title" should exist
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-title-wrapper .magv2-pdp-section-title" should exist
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-title-wrapper .magv2-accordion" should exist
+    When I scroll to the ".magv2-pdp-click-and-collect-wrapper" element
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-content-wrapper" should exist
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-content-wrapper .magv2-pdp-section-text.click-collect-detail" should exist
     And the element ".magv2-pdp-click-and-collect-wrapper .magv2-click-collect-content-wrapper .instore-wrapper" should exist
@@ -20,7 +21,7 @@ Feature: Testing new PDP CNC Block for desktop
 
   @language
   Scenario: To verify user is able to see CNC Block
-    When I follow "{language_link}"
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     And I wait for AJAX to finish
     When I scroll to the ".magv2-pdp-standard-delivery-wrapper" element
@@ -50,7 +51,7 @@ Feature: Testing new PDP CNC Block for desktop
 
   @language
   Scenario: To verify user is able to search stores for CNC in second language
-    When I follow "{language_link}"
+    When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     And I wait for AJAX to finish
     When I scroll to the ".magv2-pdp-standard-delivery-wrapper" element

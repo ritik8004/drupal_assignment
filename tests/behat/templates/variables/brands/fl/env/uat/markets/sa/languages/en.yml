@@ -83,3 +83,5 @@ variables:
   filter_1: 'final_price'
   filter_2: 'attr_size_rest'
   filter_3: 'attr_gender'
+  np_plp_store: 'Jeddah'
+  np_plp_language_store: 'جدة'
