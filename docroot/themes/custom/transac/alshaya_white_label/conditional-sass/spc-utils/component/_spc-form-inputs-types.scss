@@ -108,7 +108,8 @@
       color: $spc-mobile-code;
     }
 
-    input[type=text] {
+    input[type=text],
+    input[type=tel] {
       height: 1.5rem;
       // No rtl.
       padding-left: 2.25rem !important;
