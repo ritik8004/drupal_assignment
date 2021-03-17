@@ -6,7 +6,8 @@ export default function SwatchList({ swatch, label }) {
   if (typeof swatch === 'undefined') {
     return (null);
   }
-  const [swatchType, swatchData] = swatch.trim().split(':');
+  const swatchType = swatch.trim().split(':')[0];
+  const swatchData = swatch.trim().split(':').slice(1).join(':');
 
   switch (swatchType) {
     case 'swatch_color':
