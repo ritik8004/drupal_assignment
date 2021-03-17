@@ -124,9 +124,10 @@ class ReviewCommentForm extends React.Component {
       const { commentbox, nickname, email } = this.state;
       const bazaarVoiceSettings = getbazaarVoiceSettings();
       if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== email) {
-        deleteSessionCookie('BvUserEmail');
-        deleteSessionCookie('BvUserNickname');
-        deleteSessionCookie('BvUserId');
+        const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
+        cookieValues.forEach((item) => {
+          deleteSessionCookie(item);
+        });
       }
       let authParams = '';
       if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
