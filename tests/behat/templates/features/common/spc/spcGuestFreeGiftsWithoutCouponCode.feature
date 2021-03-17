@@ -1,4 +1,4 @@
-@javascript @promotions @free-gifts @smoke @guest @bbwaeuat
+@javascript @promotions @free-gifts @smoke @guest @bbwaeuat @bbwsauat
 Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for Guest User
 
   @desktop
@@ -7,7 +7,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait for the page to load
     And the element "#block-content .free-gift-promotions" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list" should exist
-    And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
+#    And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     Then I press "{add_to_cart_link}"
@@ -40,6 +40,18 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     Then I press "edit-submit"
     And I wait for the page to load
     And I wait 10 seconds
+    When I add in the billing address with following:
+      | mobile   | {mobile}        |
+      | spc-area-select-selected-city | {city_option} |
+      | spc-area-select-selected      | {area_option} |
+      | address_line1                 | {street}      |
+      | dependent_locality            | {building}    |
+      | locality                      | {locality}    |
+      | address_line2                 | {floor}       |
+      | sorting_code                  | {landmark}    |
+      | postal_code                   | {postal_code} |
+    And I wait 5 seconds
+    And I wait for the page to load
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And I wait 10 seconds
     Then I should see "{order_summary}"

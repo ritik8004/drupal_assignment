@@ -1,4 +1,4 @@
-@javascript @promotions @free-gifts @smoke @auth @bbwaeuat
+@javascript @promotions @free-gifts @smoke @auth @bbwaeuat @bbwsauat
 Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for Authenticated User
 
   Background:
@@ -10,13 +10,13 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait for the page to load
     Then I should be on "/user" page
 
-  @desktop
+  @desktop @test
   Scenario: As an Authenticated user, I should be able to checkout promotions on PDP page without coupon
     Given I am on "{spc_single_product_detail_page_no_coupon}"
     And I wait for the page to load
     And the element "#block-content .free-gift-promotions" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list" should exist
-    And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
+#    And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
     Then I press "{add_to_cart_link}"
@@ -42,8 +42,20 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for AJAX to finish
+    And I wait for the page to load
+    When I add in the billing address with following:
+      | mobile   | {mobile}        |
+      | spc-area-select-selected-city | {city_option} |
+      | spc-area-select-selected      | {area_option} |
+      | address_line1                 | {street}      |
+      | dependent_locality            | {building}    |
+      | locality                      | {locality}    |
+      | address_line2                 | {floor}       |
+      | sorting_code                  | {landmark}    |
+      | postal_code                   | {postal_code} |
+    And I wait 5 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait 5 seconds
