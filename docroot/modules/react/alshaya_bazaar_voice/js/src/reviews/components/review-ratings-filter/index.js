@@ -73,6 +73,7 @@ export default class ReviewRatingsFilter extends React.Component {
             options={ratingList.options}
             defaultValue={ratingList.default}
             value={ratingList.default}
+            isSearchable={false}
           />
         </div>
       );
