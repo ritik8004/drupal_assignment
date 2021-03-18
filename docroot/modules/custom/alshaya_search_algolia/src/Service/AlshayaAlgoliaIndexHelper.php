@@ -314,11 +314,14 @@ class AlshayaAlgoliaIndexHelper {
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
+    // Used for highest discount.
+    $object['special_price'] = (float) $prices['special_price'];
 
     // Use max of selling prices for price in configurable products.
     if (!empty($prices['children'])) {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $object['price'] = max($selling_prices);
+      $object['special_price'] = max(array_filter(array_column($prices['children'], 'special_price')));
 
       $selling_prices = array_unique([
         min($selling_prices),
@@ -444,6 +447,8 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     $object['is_new'] = $sku->get('attr_is_new')->getString();
+    // Used for new arrivals.
+    $object['created'] = $sku->get('created')->getString();
     $this->updatePrettyPathAlias($object);
     unset($object['field_category_aliases']);
   }
