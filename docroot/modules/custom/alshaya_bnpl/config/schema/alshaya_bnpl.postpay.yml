@@ -1,0 +1,7 @@
+alshaya_bnpl.postpay:
+  type: config_object
+  label: 'Alshaya BNPL config'
+  mapping:
+    postpay_mode:
+      type: string
+      label: 'Postpay mode'
