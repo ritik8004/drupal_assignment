@@ -2,14 +2,21 @@
 Feature: SPC Checkout using Click & Collect store for Authenticated user using Checkout (2D) Cards
 
   Background:
-    Given I am on "{spc_product_listing_page}"
+    Given I am on "user/login"
+    And I wait 10 seconds
+    Then I fill in "edit-name" with "{spc_auth_user_email}"
+    And I fill in "edit-pass" with "{spc_auth_user_password}"
+    Then I press "edit-submit"
+    And I wait 10 seconds
+    Then I should be on "/user" page
+    When I am on "{spc_product_listing_page}"
     And I wait 10 seconds
     And I wait for the page to load
     Then I scroll to the ".region__highlighted " element
     And I wait 10 seconds
 
   @cc @cnc @checkout_com
-  Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card
+  Scenario: As an authenticated user, I should be able to checkout using click and collect with credit card
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -20,15 +27,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/cart/login" page
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait for AJAX to finish
-    And I wait 20 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -44,7 +43,6 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -81,15 +79,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/cart/login" page
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait for AJAX to finish
-    And I wait 20 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -105,7 +95,6 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -147,15 +136,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait for AJAX to finish
-    And I wait 20 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -171,7 +152,6 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -211,15 +191,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait for AJAX to finish
-    And I wait 20 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -235,7 +207,6 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
