@@ -97,17 +97,17 @@ function _alshaya_aura_react_translations() {
     'Terms & Conditions' => [
       'ar' => 'البنود و الظروف',
     ],
-    'The OTP is not valid. Please try again.' => [
-      'ar' => 'رمز الاستخدام لمرة واحدة غير صالح. يرجى المحاولة لاحقاً.',
+    'Incorrect OTP. Please enter a valid OTP.' => [
+      'ar' => 'رمز تحقق OTP غير صحيح. يرجى إعادة إدخال رمز تحقق OTP صالح',
     ],
     'The OTP couldn’t be verified. Please try again.' => [
       'ar' => 'لم يتم تأكيد رمز الاستخدام لمرة واحدة. يرجى المحاولة لاحقاً.',
     ],
-    'This mobile number is already registered.' => [
-      'ar' => 'رقم الهاتف مسجل من قبل',
+    'This phone number is already registered. Please sign-in or use a different phone number.' => [
+      'ar' => 'رقم الهاتف مسجل لدينا بالفعل. يرجى تسجيل الدخول أو استخدام رقم هاتف مختلف',
     ],
-    'This email address is already registered.' => [
-      'ar' => 'عنوان البريد الإلكتروني مسجل من قبل',
+    'This email address is already registered. Please sign-in or use a different email address.' => [
+      'ar' => 'البريد الإلكتروني مسجل لدينا بالفعل. يرجى تسجيل الدخول أو استخدام بريد إلكتروني مختلف',
     ],
     'Earn AURA points every time you shop! You can redeem your points to use on future purchases. Not applicable on purchases made using AURA points.' => [
       'ar' => 'اربح نقاط أورا في كل مرة تتسوق فيها! يمكنك استبدال نقاطك لاستخدامها في عمليات الشراء المستقبلية. لا ينطبق على عمليات الشراء التي تتم باستخدام نقاط أورا.',
@@ -190,8 +190,8 @@ function _alshaya_aura_react_translations() {
     'Link card using' => [
       'ar' => 'ربط البطاقة باستخدام',
     ],
-    'No card found. Please try again.' => [
-      'ar' => 'لم يتم العثور على بطاقة. يرجى المحاولة مرة أخرى.',
+    'Incorrect AURA card number. Please re-enter a valid AURA card number.' => [
+      'ar' => 'رقم AURA غير صحيح. يرجى إعادة إدخال رقم بطاقة AURA صحيح.',
     ],
     'Your loyalty points will be credited to this account.' => [
       'ar' => 'سيتم إضافة نقاط الولاء إلى هذا الحساب.',
@@ -270,6 +270,42 @@ function _alshaya_aura_react_translations() {
     ],
     'Sign in' => [
       'ar' => 'تسجيل الدخول',
+    ],
+    'A phone number is required to sign-up. Please enter your details to proceed.' => [
+      'ar' => 'رقم الهاتف مطلوب للتسجيل. يرجى إدخال بياناتك للمتابعة',
+    ],
+    'Your full name is required to sign-up. Please enter your details to proceed.' => [
+      'ar' => 'الاسم الكامل مطلوب للتسجيل. يرجى إدخال بياناتك للمتابعة',
+    ],
+    'Please enter a valid email address.' => [
+      'ar' => 'يرجى إدخال بريد إلكتروني صالح.',
+    ],
+    'An email address is required to sign-up. Please enter your details to proceed.' => [
+      'ar' => 'البريد الإلكتروني مطلوب للتسجيل. يرجى إدخال بياناتك للمتابعة',
+    ],
+    'A phone number is required to link your card. Please enter your details to proceed.' => [
+      'ar' => 'رقم الهاتف مطلوب لربط البطاقة. يرجى إدخال بياناتك للمتابعة.',
+    ],
+    'An email address is required to link your card. Please enter your details to proceed.' => [
+      'ar' => 'البريد الإلكتروني مطلوب للتسجيل. يرجى إدخال بياناتك للمتابعة',
+    ],
+    'This phone number isn’t registered. Please enter the same number used during sign-up.' => [
+      'ar' => 'رقم الهاتف غير مسجل. يرجى إدخال نفس الرقم المستخدم أثناء التسجيل.',
+    ],
+    'This email address isn’t registered. Please enter the same email address used during sign-up.' => [
+      'ar' => 'البريد الإلكتروني غير مسجل. يرجى إدخال نفس البريد الإلكتروني المستخدم أثناء التسجيل.',
+    ],
+    'Incorrect AURA card number. Please re-enter a valid AURA card number.' => [
+      'ar' => 'رقم AURA غير صحيح. يرجى إعادة إدخال رقم بطاقة AURA الصحيح.',
+    ],
+    'Your request couldn’t be processed. Please try again shortly.' => [
+      'ar' => 'لا يمكن إتمام طلبك. يرجى المحاولة مرة أخرى',
+    ],
+    'The number of points exceeds your order total. Please re-enter the number of points you’d like to redeem.' => [
+      'ar' => 'عدد النقاط يتجاوز إجمالي الطلبية. يرجى إعادة إدخال رقم النقاط التي ترغب في استخدامها.',
+    ],
+    'The number you’ve entered is invalid. Please re-enter the number of points you’d like to redeem.' => [
+      'ar' => 'الرقم الذي أدخلته غير صحيح. يرجى إعادة إدخال رقم النقاط التي ترغب في استخدامها.',
     ],
   ];
 }

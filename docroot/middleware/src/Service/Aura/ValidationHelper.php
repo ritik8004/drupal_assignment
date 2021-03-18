@@ -59,7 +59,7 @@ class ValidationHelper {
       return [];
     }
 
-    if ($value === 'cardNumber') {
+    if ($type === 'cardNumber' || $type === 'apcNumber') {
       if (empty($value) || !preg_match('/^\d+$/', $value)) {
         $this->logger->error('Card number is missing/invalid. Data: @data', [
           '@data' => $value,
@@ -69,7 +69,7 @@ class ValidationHelper {
       return [];
     }
 
-    if ($value === 'mobile') {
+    if ($type === 'mobile' || $type === 'phone') {
       if (empty($value) || !preg_match('/^\d+$/', $value)) {
         $this->logger->error('Mobile number is missing/invalid. Data: @data', [
           '@data' => $value,

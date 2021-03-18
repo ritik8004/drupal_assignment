@@ -12,11 +12,11 @@ function _alshaya_aura_static_strings() {
   return [
     [
       'key' => 'form_error_valid_mobile_number',
-      'value' => t('Please enter valid mobile number.'),
+      'value' => t('Please enter a valid phone number.'),
     ],
     [
       'key' => 'form_error_mobile_number',
-      'value' => t('Please enter mobile number.'),
+      'value' => t('Please enter phone number.'),
     ],
     [
       'key' => 'form_error_otp',
@@ -60,7 +60,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'form_error_full_name',
-      'value' => t('Please enter your full name.'),
+      'value' => t('Your full name is required to sign-up. Please enter your details to proceed.'),
     ],
     [
       'key' => 'form_error_email',
@@ -68,11 +68,11 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'form_error_email_not_valid',
-      'value' => t('The email address %mail is not valid.'),
+      'value' => t('Please enter a valid email address.'),
     ],
     [
       'key' => 'form_error_invalid_otp',
-      'value' => t('The OTP is not valid. Please try again.'),
+      'value' => t('Incorrect OTP. Please enter a valid OTP.'),
     ],
     [
       'key' => 'form_error_send_otp_failed_message',
@@ -84,11 +84,11 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'form_error_mobile_already_registered',
-      'value' => t('This mobile number is already registered.'),
+      'value' => t('This phone number is already registered. Please sign-in or use a different phone number.'),
     ],
     [
       'key' => 'form_error_email_already_registered',
-      'value' => t('This email address is already registered.'),
+      'value' => t('This email address is already registered. Please sign-in or use a different email address.'),
     ],
     [
       'key' => 'form_error_empty_card',
@@ -160,7 +160,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'checkout_no_card_found_try_again',
-      'value' => t('No card found. Please try again.'),
+      'value' => t('Incorrect AURA card number. Please re-enter a valid AURA card number.'),
     ],
     [
       'key' => 'checkout_points_to_be_credited_message',
@@ -208,7 +208,7 @@ function _alshaya_aura_static_strings() {
     ],
     [
       'key' => 'something_went_wrong',
-      'value' => t('Something went wrong. Please try again.'),
+      'value' => t('Your request couldn’t be processed. Please try again shortly.'),
     ],
     [
       'key' => 'not_you_question',
@@ -229,6 +229,46 @@ function _alshaya_aura_static_strings() {
     [
       'key' => 'link_your_card_now',
       'value' => t('link your card now'),
+    ],
+    [
+      'key' => 'signup_empty_mobile',
+      'value' => t('A phone number is required to sign-up. Please enter your details to proceed.'),
+    ],
+    [
+      'key' => 'signup_empty_email',
+      'value' => t('An email address is required to sign-up. Please enter your details to proceed.'),
+    ],
+    [
+      'key' => 'link_card_empty_mobile',
+      'value' => t('A phone number is required to link your card. Please enter your details to proceed.'),
+    ],
+    [
+      'key' => 'link_card_empty_email',
+      'value' => t('An email address is required to link your card. Please enter your details to proceed.'),
+    ],
+    [
+      'key' => 'link_card_empty_card_number',
+      'value' => t('A card number is required to link your card. Please enter your details to proceed.'),
+    ],
+    [
+      'key' => 'mobile_not_registered',
+      'value' => t('This phone number isn’t registered. Please enter the same number used during sign-up.'),
+    ],
+    [
+      'key' => 'email_not_registered',
+      'value' => t('This email address isn’t registered. Please enter the same email address used during sign-up.'),
+    ],
+    [
+      'key' => 'invalid_card_number',
+      'value' => t('Incorrect AURA card number. Please re-enter a valid AURA card number.'),
+    ],
+    [
+      'key' => 'points_exceed_order_total',
+      'value' => t('The number of points exceeds your order total. Please re-enter the number of points you’d like to redeem.'),
+    ],
+    [
+      'key' => 'invalid_points',
+      'value' => t('The number you’ve entered is invalid. Please re-enter the number of points you’d like to redeem.'),
     ],
   ];
 }

@@ -108,29 +108,29 @@ class SearchHelper {
       $search_response = $this->search('email', $input['value']);
 
       if (!empty($search_response['error'])) {
-        return $this->utility->getErrorResponse(AuraErrorCodes::NO_MOBILE_FOUND_MSG, AuraErrorCodes::INVALID_EMAIL);
+        return $this->utility->getErrorResponse(AuraErrorCodes::EMAIL_NOT_REGISTERED, AuraErrorCodes::INVALID_EMAIL);
       }
 
       return $search_response;
     }
 
-    if ($input['type'] === 'cardNumber') {
+    if ($input['type'] === 'cardNumber' || $input['type'] === 'apcNumber') {
       // Call search api to get mobile number to send otp.
       $search_response = $this->search('apcNumber', $input['value']);
 
       if (!empty($search_response['error'])) {
-        return $this->utility->getErrorResponse(AuraErrorCodes::NO_MOBILE_FOUND_MSG, AuraErrorCodes::INVALID_CARDNUMBER);
+        return $this->utility->getErrorResponse(AuraErrorCodes::INCORRECT_CARDNUMBER, AuraErrorCodes::INVALID_CARDNUMBER);
       }
 
       return $search_response;
     }
 
-    if ($input['type'] === 'mobile') {
+    if ($input['type'] === 'mobile' || $input['type'] === 'phone') {
       // Call search api to verify mobile number to send otp.
       $search_response = $this->search('phone', $input['value']);
 
       if (!empty($search_response['error'])) {
-        return $this->utility->getErrorResponse(AuraErrorCodes::NO_MOBILE_FOUND_MSG, AuraErrorCodes::INVALID_MOBILE);
+        return $this->utility->getErrorResponse(AuraErrorCodes::MOBILE_NOT_REGISTERED, AuraErrorCodes::INVALID_MOBILE);
       }
 
       return $search_response;
