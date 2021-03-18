@@ -134,7 +134,7 @@ class AlshayaBnplWidgetHelper {
     $bnplApiconfig['locale'] = 'en';
     $build['#attached']['drupalSettings']['postpay'] = $bnplApiconfig;
 
-    // @todo Remove this code after the POC.
+    // This is done to facilitate A/B testing.
     $postpay_mode = $this->configFactory->get('alshaya_bnpl.postpay')->get('postpay_mode');
 
     switch ($page_type) {
@@ -155,7 +155,7 @@ class AlshayaBnplWidgetHelper {
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_pdp';
         $build['postpay'] = $this->getBnplWidgetMarkup();
 
-        // @todo Remove this code after the POC.
+        // This is done to facilitate A/B testing.
         $build['postpay_mode_class']['#markup'] = '';
         if ($postpay_mode == 'hidden') {
           $build['postpay_mode_class']['#markup'] = 'postpay-hidden';
@@ -163,7 +163,7 @@ class AlshayaBnplWidgetHelper {
         break;
     }
 
-    // @todo Remove this code after the POC.
+    // This is done to facilitate A/B testing.
     $build['#attached']['drupalSettings']['postpay_widget_info']['postpay_mode_class'] = '';
     if ($postpay_mode == 'hidden') {
       $build['#attached']['library'][] = 'alshaya_bnpl/postpay_mode';
