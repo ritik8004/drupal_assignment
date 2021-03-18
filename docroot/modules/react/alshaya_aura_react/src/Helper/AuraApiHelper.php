@@ -153,12 +153,14 @@ class AuraApiHelper {
     $aura_dictionary_api_config = $this->getAuraApiConfig(
       [AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO,
         AuraDictionaryApiConstants::CASHBACK_REDEMPTION_RATIO,
+        AuraDictionaryApiConstants::RECOGNITION_ACCRUAL_RATIO,
       ],
       $this->languageManager->getCurrentLanguage()->getId());
 
     $data = [
       'priceToPointRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::CASHBACK_ACCRUAL_RATIO] ?? '',
       'pointToPriceRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::CASHBACK_REDEMPTION_RATIO] ?? '',
+      'recognitionAccrualRatio' => $aura_dictionary_api_config[AuraDictionaryApiConstants::RECOGNITION_ACCRUAL_RATIO] ?? '',
     ];
 
     return $data;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPriceToPointRatio } from '../../utilities/helper';
+import { getRecognitionAccrualRatio } from '../../utilities/helper';
 
 const AuraProgressNextTierMessage = (props) => {
   const {
@@ -10,7 +10,7 @@ const AuraProgressNextTierMessage = (props) => {
 
   const difference = nextTierThreshold - userPoints;
   const { currency_code: currencyCode } = drupalSettings.alshaya_spc.currency_config;
-  const differenceAmount = difference / getPriceToPointRatio();
+  const differenceAmount = difference / getRecognitionAccrualRatio();
 
   if (Number.isNaN(differenceAmount)) {
     return null;

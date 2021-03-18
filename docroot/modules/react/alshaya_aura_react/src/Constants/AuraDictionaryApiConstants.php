@@ -17,6 +17,11 @@ final class AuraDictionaryApiConstants {
   const CASHBACK_REDEMPTION_RATIO = 'APC_CASHBACK_REDEMPTION_RATIO';
 
   /**
+   * Aura recognition accrual ratio constant.
+   */
+  const RECOGNITION_ACCRUAL_RATIO = 'RECOGNITION_ACCRUAL_RATIO';
+
+  /**
    * Aura phone number prefix constant.
    */
   const EXT_PHONE_PREFIX = 'EXT_PHONE_PREFIX';
@@ -32,6 +37,7 @@ final class AuraDictionaryApiConstants {
   const ALL_DICTIONARY_API_CONSTANTS = [
     'CASHBACK_ACCRUAL_RATIO' => self::CASHBACK_ACCRUAL_RATIO,
     'CASHBACK_REDEMPTION_RATIO' => self::CASHBACK_REDEMPTION_RATIO,
+    'RECOGNITION_ACCRUAL_RATIO' => self::RECOGNITION_ACCRUAL_RATIO,
     'EXT_PHONE_PREFIX' => self::EXT_PHONE_PREFIX,
     'APC_TIER_TYPES' => self::APC_TIER_TYPES,
   ];
