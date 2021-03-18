@@ -42,7 +42,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -132,7 +131,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish

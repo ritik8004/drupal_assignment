@@ -25,12 +25,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 5 seconds
-    And I wait for the page to load
-    Then I should be on "/cart/login" page
-    And I wait 5 seconds
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -46,7 +41,6 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -71,12 +65,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 5 seconds
-    And I wait for the page to load
-    Then I should be on "/{language_short}/cart/login" page
-    And I wait 5 seconds
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -92,7 +81,6 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -114,12 +102,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait 5 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 5 seconds
-    And I wait for the page to load
-    Then I should be on "/cart/login" page
-    And I wait 5 seconds
-    When I click the anchor link ".edit-checkout-as-guest" on page
-    And I wait 5 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
@@ -135,7 +118,6 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait 5 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
