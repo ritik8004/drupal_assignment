@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat
+@javascript @guest @checkoutPayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat
 Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method for Guest User
 
   Background:
@@ -40,7 +40,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait 10 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -140,7 +139,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait 10 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -211,7 +209,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait 10 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish
@@ -282,7 +279,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait 10 seconds
     And I fill in the following:
       | fullname | {anon_username} |
-      | email    | {anon_email}    |
       | mobile   | {mobile}        |
     Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
     And I wait for AJAX to finish

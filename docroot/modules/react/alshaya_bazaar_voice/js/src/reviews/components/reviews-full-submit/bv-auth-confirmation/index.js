@@ -57,13 +57,13 @@ export default class BvAuthConfirmation extends React.Component {
             <div className="review-success-msg">
               <BazaarVoiceMessages />
             </div>
+            <ConditionalView condition={isUserVerified === true}>
+              <div className="auth-confirmation-message">
+                <h1>{getStringMessage('bv_auth_confirmation_message')}</h1>
+                <div className="submission-msg">{getStringMessage('submission_msg')}</div>
+              </div>
+            </ConditionalView>
           </div>
-          <ConditionalView condition={isUserVerified === true}>
-            <div className="auth-confirmation-message">
-              <h1>{getStringMessage('bv_auth_confirmation_message')}</h1>
-              <div className="submission-msg">{getStringMessage('submission_msg')}</div>
-            </div>
-          </ConditionalView>
         </div>
       </Popup>
     );
