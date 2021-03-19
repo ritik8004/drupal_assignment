@@ -1,2 +1,4 @@
 cache_time: 3600
 batch_size: 20
+categories_to_exclude: []
+brand_fields: []
