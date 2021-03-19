@@ -70,7 +70,7 @@ class ValidationHelper {
     }
 
     if ($type === 'mobile' || $type === 'phone') {
-      if (empty($value) || !preg_match('/^\d+$/', $value)) {
+      if (empty($value) || !preg_match('/^\+\d+$/', $value)) {
         $this->logger->error('Mobile number is missing/invalid. Data: @data', [
           '@data' => $value,
         ]);

@@ -67,7 +67,7 @@ function _alshaya_aura_react_translations() {
     'Say hello to AURA' => [
       'ar' => 'مرحباً بكم في أورا',
     ],
-    'Send one time PIN' => [
+    'Send One Time PIN' => [
       'ar' => 'إرسال رمز الاستخدام لمرة واحدة',
     ],
     'Resend code' => [
@@ -160,11 +160,11 @@ function _alshaya_aura_react_translations() {
     'Enter Aura Card Number' => [
       'ar' => 'إدخال رقم بطاقة أورا',
     ],
-    'Please enter valid mobile number.' => [
+    'Please enter a valid phone number.' => [
       'ar' => 'يرجى إدخال رقم هاتف صحيح.',
     ],
-    'Please enter mobile number.' => [
-      'ar' => 'يرجى إدخال رقم الهاتف.',
+    'Please enter phone number.' => [
+      'ar' => 'يرجى إدخال رقم هاتف صحيح.',
     ],
     'Please enter OTP.' => [
       'ar' => 'يرجى إدخال رمز الاستخدام لمرة واحدة.',
@@ -307,5 +307,6 @@ function _alshaya_aura_react_translations() {
     'The number you’ve entered is invalid. Please re-enter the number of points you’d like to redeem.' => [
       'ar' => 'الرقم الذي أدخلته غير صحيح. يرجى إعادة إدخال رقم النقاط التي ترغب في استخدامها.',
     ],
+
   ];
 }
