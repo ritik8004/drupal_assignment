@@ -145,6 +145,11 @@
     if (drupalSettings.superCategory && ($(window).width() > 1023)) {
       $('.block-facet-blockcategory-facet-search .c-facet__title.c-collapse__title', context).addClass('active');
     }
+
+    if ($(window).width() > 1024) {
+      $('.block-facet-blockcategory-facet-search .c-facet__title.c-collapse__title', context).addClass('active');
+    }
+
     $('.c-facet__title.c-collapse__title', context).once('algolia-search').on('click', function () {
       if ($(this).hasClass('active')) {
         $(this).removeClass('active');
