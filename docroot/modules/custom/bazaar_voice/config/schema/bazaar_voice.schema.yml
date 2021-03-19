@@ -59,3 +59,6 @@ bazaar_voice.settings:
     bv_content_types:
       type: string
       label: 'Content types of BazaarVoice used with reviews API like comments, products,etc.'
+    bv_routes_list:
+      type: string
+      label: 'List of routes which will be tracked for BazaarVoice analytics.'

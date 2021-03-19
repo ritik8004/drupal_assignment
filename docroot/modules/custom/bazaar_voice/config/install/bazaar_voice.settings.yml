@@ -17,3 +17,4 @@ write_review_guidlines: ''
 comment_form_tnc: ''
 bv_content_types: 'Products,Comments'
 comment_form_box_length: 100
+bv_routes_list: ''

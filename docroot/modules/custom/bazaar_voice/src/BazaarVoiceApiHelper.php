@@ -13,19 +13,6 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 class BazaarVoiceApiHelper {
 
   /**
-   * List of routes where bazaarvoice script to be loaded.
-   *
-   * @var array
-   */
-  const BAZAAR_VOICE_ROUTES = [
-    'entity.taxonomy_term.canonical:acq_product_category',
-    'entity.node.canonical:acq_product',
-    'acq_cart.cart',
-    'alshaya_spc.checkout',
-    'alshaya_spc.checkout.confirmation',
-  ];
-
-  /**
    * The config factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -144,8 +131,11 @@ class BazaarVoiceApiHelper {
   public function isCurrentRouteInBvList() {
     // Get current route identifier.
     $current_route_identifier = $this->getCurrentRouteIdentifier();
+    // Get list of routes where we add BazaarVoice script will be loaded.
+    $bazaarvoice_routes_config = $this->configFactory->get('bazaar_voice.settings')->get('bv_routes_list');
+    $bazaarvoice_routes_array = array_map('trim', explode("\n", $bazaarvoice_routes_config));
     // Check if route exists in the list defined.
-    if (in_array($current_route_identifier, self::BAZAAR_VOICE_ROUTES)) {
+    if (in_array($current_route_identifier, $bazaarvoice_routes_array)) {
       return TRUE;
     }
     return FALSE;
