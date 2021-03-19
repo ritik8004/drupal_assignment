@@ -21,7 +21,9 @@ const InlineRating = ({
             <div className="histogram-title">
               {reviewsData.ReviewStatistics.TotalReviewCount}
               {' '}
-              {getStringMessage('reviews')}
+              {reviewsData.ReviewStatistics.TotalReviewCount > 1
+                ? getStringMessage('reviews')
+                : getStringMessage('review')}
             </div>
             <RatingSummary
               histogramData={reviewsData.ReviewStatistics.RatingDistribution}

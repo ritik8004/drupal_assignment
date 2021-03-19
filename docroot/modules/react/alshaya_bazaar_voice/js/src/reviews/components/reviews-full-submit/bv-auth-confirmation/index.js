@@ -59,10 +59,10 @@ export default class BvAuthConfirmation extends React.Component {
             <div className="review-success-msg">
               <BazaarVoiceMessages />
             </div>
+            <AuthConfirmationMessage
+              isUserVerified={isUserVerified}
+            />
           </div>
-          <AuthConfirmationMessage
-            isUserVerified={isUserVerified}
-          />
         </div>
       </Popup>
     );

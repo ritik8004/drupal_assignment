@@ -24,3 +24,9 @@ postpay_cart:
     js/postpay_cart.js: { }
   dependencies:
     - alshaya_bnpl/postpay_sdk
+
+postpay_mode:
+  version: 1.x
+  css:
+    theme:
+      css/postpay_mode.css: {}

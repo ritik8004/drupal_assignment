@@ -50,9 +50,10 @@
       align-self: center;
 
       @include breakpoint($only-mobile) {
-        padding-top: 0.625rem;
-        border-bottom: 0;
         align-self: unset;
+        order: 2;
+        width: 18%;
+        padding: 0.625rem 0.25rem;
       }
     }
   }
@@ -67,7 +68,7 @@
     flex-flow: row wrap;
 
     @include breakpoint($only-mobile) {
-      width: 70%;
+      width: 82%;
     }
 
     li {
@@ -99,15 +100,18 @@
     align-self: center;
 
     @include breakpoint($only-mobile) {
-      width: 15%;
+      width: 100%;
       align-self: unset;
       padding-top: 0.375rem;
+      order: 3;
+      text-align: $right;
     }
 
     button {
       border: 0;
       font-size: 0.6875rem;
       background: transparent;
+      text-decoration: underline;
     }
   }
 }
