@@ -134,6 +134,9 @@ class AlshayaBnplWidgetHelper {
     $bnplApiconfig['locale'] = 'en';
     $build['#attached']['drupalSettings']['postpay'] = $bnplApiconfig;
 
+    // This is done to facilitate A/B testing.
+    $postpay_mode = $this->configFactory->get('alshaya_bnpl.postpay')->get('postpay_mode');
+
     switch ($page_type) {
       case 'cart':
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_cart';
@@ -151,7 +154,20 @@ class AlshayaBnplWidgetHelper {
       default:
         $build['#attached']['library'][] = 'alshaya_bnpl/postpay_pdp';
         $build['postpay'] = $this->getBnplWidgetMarkup();
+
+        // This is done to facilitate A/B testing.
+        $build['postpay_mode_class']['#markup'] = '';
+        if ($postpay_mode == 'hidden') {
+          $build['postpay_mode_class']['#markup'] = 'postpay-hidden';
+        }
         break;
+    }
+
+    // This is done to facilitate A/B testing.
+    $build['#attached']['drupalSettings']['postpay_widget_info']['postpay_mode_class'] = '';
+    if ($postpay_mode == 'hidden') {
+      $build['#attached']['library'][] = 'alshaya_bnpl/postpay_mode';
+      $build['#attached']['drupalSettings']['postpay_widget_info']['postpay_mode_class'] = 'postpay-hidden';
     }
 
     $currency_config = $this->configFactory->get('acq_commerce.currency');
