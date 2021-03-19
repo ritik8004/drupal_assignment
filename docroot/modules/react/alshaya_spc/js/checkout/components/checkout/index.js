@@ -72,6 +72,9 @@ export default class Checkout extends React.Component {
             redirectToCart();
             return;
           }
+          // Event listerner to update any change in totals in cart object.
+          document.addEventListener('updateTotalsInCart', this.handleTotalsUpdateEvent, false);
+
           this.processAddressFromLocalStorage(result);
           this.processCheckout(result);
         });
