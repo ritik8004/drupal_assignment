@@ -32,14 +32,6 @@ alshaya_acm_promotion.promotions_dynamic_labels_product:
   requirements:
     _permission: 'access content'
 
-alshaya_acm_promotion.promotions_dynamic_labels_product_sku:
-  path: 'rest/v1/promotions/dynamic-label-product/{sku}'
-  defaults:
-    _title: ''
-    _controller: '\Drupal\alshaya_acm_promotion\Controller\PromotionController::getPromotionDynamicLabelForProductSku'
-  requirements:
-    _permission: 'access content'
-
 alshaya_acm_promotion.promotions_dynamic_labels_cart:
   path: '/promotions/dynamic-label-cart'
   defaults:
