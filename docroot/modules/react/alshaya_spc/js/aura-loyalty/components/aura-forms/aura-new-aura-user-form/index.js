@@ -125,7 +125,7 @@ class AuraFormNewAuraUserModal extends React.Component {
 
           this.setState({
             messageType: 'error',
-            messageContent: result.data.error_message,
+            messageContent: getStringMessage(result.data.error_message),
           });
           removeFullScreenLoader();
           return;

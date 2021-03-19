@@ -86,7 +86,7 @@ class AuraFormSignUpOTPModal extends React.Component {
                 } else {
                   this.setState({
                     messageType: 'error',
-                    messageContent: result.data.error_message,
+                    messageContent: getStringMessage(result.data.error_message),
                   });
                 }
               } else {
