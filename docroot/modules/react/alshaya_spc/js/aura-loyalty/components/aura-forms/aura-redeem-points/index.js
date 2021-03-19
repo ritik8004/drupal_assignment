@@ -159,7 +159,7 @@ class AuraFormRedeemPoints extends React.Component {
     removeError('spc-aura-link-api-response-message');
     const { isoCurrencyCode } = getAuraConfig();
     const { points, money } = this.state;
-    const { cardNumber } = this.props;
+    const { cardNumber, totals, pointsInAccount } = this.props;
 
     if (points === null) {
       showError('spc-aura-link-api-response-message', getStringMessage('form_error_empty_points'));
@@ -167,9 +167,19 @@ class AuraFormRedeemPoints extends React.Component {
     }
 
     const maxPointsToRedeem = this.redemptionLimit();
+    const { base_grand_total: grandTotal } = totals;
+    const grandTotalPoints = Math.round(grandTotal * getPointToPriceRatio());
+    const pointsInInt = parseInt(points, 10);
+    let errorMsg = '';
 
-    if (parseInt(points, 10) > parseInt(maxPointsToRedeem, 10)) {
-      showError('spc-aura-link-api-response-message', `${getStringMessage('you_can_redeem_maximum')} ${maxPointsToRedeem} ${getStringMessage('points')}`);
+    if (pointsInInt > grandTotalPoints) {
+      errorMsg = getStringMessage('points_exceed_order_total');
+    } else if (pointsInInt > parseInt(pointsInAccount, 10)) {
+      errorMsg = `${getStringMessage('you_can_redeem_maximum')} ${maxPointsToRedeem} ${getStringMessage('points')}`;
+    }
+
+    if (errorMsg !== '') {
+      showError('spc-aura-link-api-response-message', errorMsg);
       return;
     }
 

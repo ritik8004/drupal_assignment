@@ -35,23 +35,65 @@ function validateMobile(type, data) {
 }
 
 /**
+ * Utility function to get validation error message.
+ */
+function getValidationErrorMessage(type, modalType) {
+  if (type === 'signUpOtpMobile' || type === 'signUpMobile') {
+    return 'signup_empty_mobile';
+  }
+
+  if (type === 'mobile' || type === 'mobileCheckout') {
+    if (modalType === 'link_card') {
+      return 'link_card_empty_mobile';
+    }
+    return 'form_error_mobile_number';
+  }
+
+  if (type === 'email' || type === 'emailCheckout') {
+    if (modalType === 'link_card') {
+      return 'link_card_empty_email';
+    }
+    return 'form_error_email';
+  }
+
+  if (type === 'signUpEmail') {
+    return 'signup_empty_email';
+  }
+
+  if (type === 'cardNumber' || type === 'cardNumberCheckout') {
+    if (modalType === 'link_card') {
+      return 'link_card_empty_card_number';
+    }
+    return 'form_error_empty_card';
+  }
+
+  return 'something_went_wrong';
+}
+
+/**
  * Utility function to validate input by element type.
  */
-function validateElementValueByType(type, context) {
+function validateElementValueByType(type, context, modalType) {
   const inputValue = getElementValueByType(type, context);
 
   if (type === 'mobile' || type === 'signUpOtpMobile' || type === 'signUpMobile' || type === 'mobileCheckout') {
     if (inputValue.length === 0 || inputValue.match(/^[0-9]+$/) === null) {
-      showError(getInlineErrorSelector(type)[type], getStringMessage('form_error_mobile_number'));
+      showError(
+        getInlineErrorSelector(type)[type],
+        getStringMessage(getValidationErrorMessage(type, modalType)),
+      );
       return false;
     }
     removeError(getInlineErrorSelector(type)[type]);
     return true;
   }
 
-  if (type === 'email' || type === 'emailCheckout') {
+  if (type === 'email' || type === 'emailCheckout' || type === 'signUpEmail') {
     if (inputValue.length === 0 || inputValue.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) === null) {
-      showError(getInlineErrorSelector(type)[type], getStringMessage('form_error_email'));
+      showError(
+        getInlineErrorSelector(type)[type],
+        getStringMessage(getValidationErrorMessage(type, modalType)),
+      );
       return false;
     }
     removeError(getInlineErrorSelector(type)[type]);
@@ -60,7 +102,10 @@ function validateElementValueByType(type, context) {
 
   if (type === 'cardNumber' || type === 'cardNumberCheckout') {
     if (inputValue.length === 0 || inputValue.match(/^[0-9]+$/) === null) {
-      showError(getInlineErrorSelector(type)[type], getStringMessage('form_error_empty_card'));
+      showError(
+        getInlineErrorSelector(type)[type],
+        getStringMessage(getValidationErrorMessage(type, modalType)),
+      );
       return false;
     }
     removeError(getInlineErrorSelector(type)[type]);
@@ -79,15 +124,6 @@ function validateElementValueByType(type, context) {
 
     if (splitedName.length === 1) {
       showError(getInlineErrorSelector(type)[type], getStringMessage('form_error_full_name'));
-      return false;
-    }
-    removeError(getInlineErrorSelector(type)[type]);
-    return true;
-  }
-
-  if (type === 'signUpEmail') {
-    if (inputValue.length === 0 || inputValue.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) === null) {
-      showError(getInlineErrorSelector(type)[type], getStringMessage('form_error_email'));
       return false;
     }
     removeError(getInlineErrorSelector(type)[type]);

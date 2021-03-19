@@ -378,13 +378,13 @@ class LoyaltyCustomerController {
       ];
 
       if ($request_content['action'] === 'add') {
-        $search_response = $this->auraSearchHelper->search($request_content['type'], $request_content['value']);
+        $search_response = $this->auraSearchHelper->searchUserDetails($request_content);
 
-        if (empty($search_response['data']['apc_identifier_number'])) {
+        if (!empty($search_response['error'])) {
           $this->logger->error('Error while trying to set loyalty card in cart. No card found. Request Data: @data.', [
             '@data' => json_encode($request_content),
           ]);
-          return new JsonResponse($this->utility->getErrorResponse('No card found. Please try again.', AuraErrorCodes::NO_CARD_FOUND));
+          return new JsonResponse($search_response);
         }
 
         $data['identifier_no'] = $search_response['data']['apc_identifier_number'];

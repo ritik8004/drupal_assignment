@@ -52,7 +52,7 @@ class AuraFormLinkCardOTPModal extends React.Component {
     this.resetModalMessages();
     removeError(getInlineErrorSelector('otp').otp);
     const { linkCardOption } = this.state;
-    const isValid = validateElementValueByType(linkCardOption, '.aura-modal-form');
+    const isValid = validateElementValueByType(linkCardOption, '.aura-modal-form', 'link_card');
 
     if (isValid === false) {
       return;

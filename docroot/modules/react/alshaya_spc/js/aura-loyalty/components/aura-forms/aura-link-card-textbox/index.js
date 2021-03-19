@@ -74,18 +74,9 @@ class AuraFormLinkCard extends React.Component {
         loyaltyCardLinkedToCart: false,
       });
 
-      let message = '';
-      if (stateValues.error_code === 'NO_CARD_FOUND') {
-        message = getStringMessage('checkout_no_card_found_try_again');
-      } else if (stateValues.error_code === 'MISSING_DATA') {
-        message = getStringMessage(stateValues.error_message) || '';
-      } else {
-        message = getStringMessage('something_went_wrong');
-      }
-
       this.showResponse({
         type: 'failure',
-        message,
+        message: getStringMessage(stateValues.error_message) || '',
       });
       return;
     }

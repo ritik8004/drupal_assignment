@@ -69,4 +69,19 @@ final class AuraErrorCodes {
    */
   const INVALID_EMAIL = 'INVALID_EMAIL';
 
+  /**
+   * Error message when mobile is not registered.
+   */
+  const MOBILE_NOT_REGISTERED = 'mobile_not_registered';
+
+  /**
+   * Error message when email is not registered.
+   */
+  const EMAIL_NOT_REGISTERED = 'email_not_registered';
+
+  /**
+   * Error message when card number is incorrect.
+   */
+  const INCORRECT_CARDNUMBER = 'invalid_card_number';
+
 }
