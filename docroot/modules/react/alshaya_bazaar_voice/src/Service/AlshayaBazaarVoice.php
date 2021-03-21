@@ -289,6 +289,9 @@ class AlshayaBazaarVoice {
 
   /**
    * Helper function to get the sorting options from configs.
+   *
+   * @return array
+   *   Sorting options value.
    */
   public function getSortingOptions() {
     $available_options = [];
@@ -297,14 +300,14 @@ class AlshayaBazaarVoice {
     $sort_options = $config->get('sort_options');
     $sort_option_labels = $config->get('sort_options_labels');
 
-    if (!empty($sort_option_labels)) {
-      foreach ($sort_option_labels as $key => $value) {
-        if ($key == 'none') {
-          $available_options[$key] = $sort_option_labels[$key];
-        }
-        $val = explode(':', $value['value']);
-        if (array_search($val[0], $sort_options, TRUE)) {
-          $available_options[$key] = $sort_option_labels[$key];
+    if (!empty($sort_options)) {
+      $available_options[] = $sort_option_labels[0];
+      foreach ($sort_options as $val) {
+        foreach ($sort_option_labels as $k => $v) {
+          $value = explode(':', $v['value']);
+          if ($value[0] === $val) {
+            $available_options[$k] = $sort_option_labels[$k];
+          }
         }
       }
     }
@@ -355,18 +358,6 @@ class AlshayaBazaarVoice {
     }
 
     return $translated_field_configs;
-  }
-
-  /**
-   * BazaarVoice web form fields configs.
-   *
-   * @return array
-   *   BazaarVoice web form fields configs.
-   */
-  public function getFileContents($url) {
-    $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url);
-
-    return $result;
   }
 
   /**
