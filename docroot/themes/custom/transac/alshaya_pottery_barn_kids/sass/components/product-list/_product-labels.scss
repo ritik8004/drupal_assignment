@@ -3,33 +3,7 @@
     &.bottom-right,
     &.bottom-left {
       @include breakpoint($tablet) {
-        bottom: auto;
-
-        .product-small & {
-          top: 10.5rem;
-        }
-
-        .product-large & {
-          top: 15.2rem;
-        }
-      }
-
-      @include breakpoint($only-tablet) {
-        .product-large & {
-          top: 16.5rem;
-        }
-      }
-
-      @include breakpoint($only-mobile) {
-        bottom: auto;
-
-        .product-small & {
-          top: 8rem;
-        }
-
-        .product-large & {
-          top: 18rem;
-        }
+        bottom: 0;
       }
     }
   }
