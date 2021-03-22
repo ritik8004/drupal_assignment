@@ -450,10 +450,6 @@ function _alshaya_pb_transac_save_metatag_translations() {
       'en' => 'Shop online for the best quality [term:name] at best prices.',
       'ar' => 'تسوق أونلاين لأفضل جودة [term:name] الدفع عند الاستلام.',
     ],
-    'alshaya_seo_l3_text_before_cod' => [
-      'en' => 'Shop online for the best quality [term:name] at best prices.',
-      'ar' => 'تسوق أونلاين لأفضل جودة [term:name] الدفع عند الاستلام.',
-    ],
     'alshaya_seo_desc_free_delivery_n_cod' => [
       'en' => 'Enjoy ✓ Free Returns and ✓ Cash on Delivery!',
       'ar' => 'ستمتع بمزايا ✓  الاسترجاع المجاني ✓  الدفع عند الاستلام!',

@@ -295,17 +295,18 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
             $token_service->replace('[alshaya_seo:city1]'),
             $token_service->replace('[alshaya_seo:city2]'),
           ]);
+
           foreach ($cities as &$city) {
             if (isset($sale) && $sale === TRUE) {
-              $city = (string) t('[term:name] sale in %city', ['%city' => $city]);
+              $city = (string) t('[term:name] sale in @city', ['@city' => $city]);
             }
             else {
-              $city = (string) t('Shop [term:name] in %city', ['%city' => $city]);
+              $city = (string) t('Shop [term:name] in @city', ['@city' => $city]);
             }
           }
 
           $cities = implode(', ', array_filter($cities));
-          $replacements[$original] = $token_service->replace(strip_tags($cities), ['term' => $category_term]);
+          $replacements[$original] = $token_service->replace($cities, ['term' => $category_term]);
           break;
 
         case 'term_name':
@@ -430,14 +431,8 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
               ? array_slice($sub_categories, 0, $sub_category_to_show)
               : $sub_categories;
           }
-          // Pop the last index of the array.
-          $last_index = array_pop($sub_categories);
-          $comma_separated_categories = implode(', ', $sub_categories);
 
-          $replacements[$original] = (string) t('@sub_cat and @last_cat', [
-            '@sub_cat' => $comma_separated_categories,
-            '@last_cat' => $last_index,
-          ]);
+          $replacements[$original] = implode(', ', $sub_categories);
           break;
 
         case 'desc_free_delivery_n_cod':

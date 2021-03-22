@@ -19,14 +19,11 @@ use Drupal\block\Entity\Block;
  */
 function alshaya_hm_update_8056() {
   $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
-  $category_config->set('tags.title', '[alshaya_seo:page_title]');
-  $category_config->set('tags.description', '[alshaya_seo:desc_start] [alshaya_seo:text_before_cod] [alshaya_seo:desc_free_delivery_n_cod]');
-  $category_config->save();
+  $category_config->set('tags.title', '[alshaya_seo:page_title]')->save();
   // Add ar translation for config.
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'metatag.metatag_defaults.taxonomy_term__acq_product_category');
   $tags = [
     'title' => '[alshaya_seo:page_title]',
-    'description' => '[alshaya_seo:desc_start] [alshaya_seo:text_before_cod] [alshaya_seo:desc_free_delivery_n_cod]',
   ];
   $config->set('tags', $tags);
   $config->save();
@@ -1361,12 +1358,12 @@ function _alshaya_hm_get_metatag_translations() {
       'ar' => 'تسوق مجموعة [term:name] [term:parents:first] اتش | [site:name]',
     ],
     'alshaya_seo_desc_start' => [
-      'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] fashion products online in [alshaya_seo:cities] and whole [alshaya_seo:country].',
-      'ar' => 'تسوق حصريا منتجات أزياء [term:name] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:cities]، وكل أنحاء [alshaya_seo:country].',
+      'en' => 'Shop exclusive and luxury [alshaya_seo:brand_name] [term:name] fashion products online in [alshaya_seo:term_cities] and whole [alshaya_seo:country].',
+      'ar' => 'تسوق حصريا منتجات أزياء [term:name] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:term_cities]، وكل أنحاء [alshaya_seo:country].',
     ],
     'alshaya_seo_l3_desc_start' => [
-      'en' => 'A large selection of [alshaya_seo:brand_name] [term:name] for [term:parents:first] online in [alshaya_seo:cities] and whole [alshaya_seo:country].',
-      'ar' => 'مجموعة كبيرة من [term:name] [term:parents:first] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:cities]، وكل أنحاء [alshaya_seo:country].',
+      'en' => 'A large selection of [alshaya_seo:brand_name] [term:name] for [term:parents:first] online in [alshaya_seo:term_cities] and whole [alshaya_seo:country].',
+      'ar' => 'مجموعة كبيرة من [term:name] [term:parents:first] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:term_cities]، وكل أنحاء [alshaya_seo:country].',
     ],
   ];
 
