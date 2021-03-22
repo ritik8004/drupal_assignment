@@ -30,7 +30,7 @@ const DynamicFormField = (props) => {
   // For anonymous user, default value is from user cookies.
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
-      if (getCurrentUserEmail() !== undefined) {
+      if (getCurrentUserEmail() !== null) {
         fieldProperty.defaultVal = getCurrentUserEmail();
         readonly = true;
       } else if (getSessionCookie('BvUserEmail') !== null) {
