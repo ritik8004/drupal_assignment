@@ -15,7 +15,7 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
- * [5.19.0] Update the metatag translations.
+ * [5.18.0] Update the metatag translations.
  */
 function alshaya_hm_update_8056() {
   $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
@@ -1343,7 +1343,7 @@ function _alshaya_hm_get_metatag_translations() {
     ],
     'alshaya_seo_l3_text_before_cod' => [
       'en' => 'Pick from the updated collection of the latest fashion trends in [term:name] for [term:parents:first] at the best prices.',
-      'ar' => 'اختار من أحدث تشكيلة [term:name] لعام [current-date:html_year] التي تشمل أجدد الإصدارات والتصاميم بأسعار مميزة.',
+      'ar' => ' اختار من أحدث تشكيلة [term:name] لعام [current-date:html_year] التي تشمل أجدد الإصدارات والتصاميم بأسعار مميزة.',
     ],
     'alshaya_seo_desc_free_delivery_n_cod' => [
       'en' => '✓ Amazing Offer ✓ Hassle-free Returns ✓ Fast Shipping!',
