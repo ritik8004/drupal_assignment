@@ -8,3 +8,14 @@
     }
   }
 }
+
+.mobilegallery {
+  .labels-container {
+    .label {
+      &.bottom-left,
+      &.bottom-right {
+        bottom: 1rem;
+      }
+    }
+  }
+}
