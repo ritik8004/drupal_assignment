@@ -1,0 +1,23 @@
+#reviews-section {
+  .review-detail-right {
+    .review-feedback {
+      .review-feedback-vote {
+        .feedback-positive,
+        .feedback-negative,
+        .feedback-report {
+          button {
+            background: transparent;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+          }
+        }
+
+        .feedback-report-disabled {
+          button {
+            background: transparent;
+          }
+        }
+      }
+    }
+  }
+}
