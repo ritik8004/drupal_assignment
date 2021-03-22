@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  setStorageInfo,
   getStorageInfo,
 } from '../../../utilities/storage';
+import { handleFeedbackSubmit } from '../../../utilities/feedback_util';
 
 class ReviewFeedbackNegative extends React.Component {
   constructor(props) {
@@ -16,19 +16,15 @@ class ReviewFeedbackNegative extends React.Component {
   handleNegativeCount = (contentId, voteText, contentType) => (e) => {
     e.preventDefault();
     const { positiveCount, negativeCount } = this.state;
-    const helpfulnessVoteObj = { contentId, positiveCount, negativeCount };
-    const event = new CustomEvent('handleFeedbackSubmit', {
+    handleFeedbackSubmit(contentId, voteText, contentType, positiveCount, negativeCount);
+    const event = new CustomEvent('handleFeedbackState', {
       bubbles: true,
       detail: {
         contentId,
-        voteText,
-        contentType,
       },
     });
     document.dispatchEvent(event);
     this.setState({ negativeCount: negativeCount + 1 });
-    helpfulnessVoteObj.negativeCount += 1;
-    setStorageInfo(helpfulnessVoteObj, `${contentType}-helpfulnessVote-${contentId}`);
   }
 
   render() {
