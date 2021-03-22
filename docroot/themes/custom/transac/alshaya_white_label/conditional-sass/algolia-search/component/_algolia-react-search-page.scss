@@ -12,7 +12,7 @@
         &-right,
         &-left {
           @include breakpoint($only-mobile) {
-            bottom: 9rem;
+            bottom: 0;
           }
         }
       }
