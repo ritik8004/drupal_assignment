@@ -45,18 +45,10 @@
     &.bottom {
       &-left {
         #{$left}: 1.25rem;
-
-        @include breakpoint($desktop) {
-          bottom: 6.5rem;
-        }
       }
 
       &-right {
         #{$right}: 1.25rem;
-
-        @include breakpoint($desktop) {
-          bottom: 6.5rem;
-        }
       }
     }
   }
@@ -68,11 +60,9 @@
       &.bottom {
         &-left,
         &-right {
-          @include breakpoint($only-tablet) {
-            bottom: 4.5rem;
-          }
+          bottom: 0;
 
-          @include breakpoint($desktop) {
+          @include breakpoint($only-mobile) {
             bottom: 5.5rem;
           }
         }
