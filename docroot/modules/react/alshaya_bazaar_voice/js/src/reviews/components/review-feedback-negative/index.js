@@ -29,13 +29,13 @@ class ReviewFeedbackNegative extends React.Component {
 
   render() {
     const { negativeCount } = this.state;
-    const { contentId, contentType } = this.props;
+    const { contentId, contentType, btnStatus } = this.props;
     const negativeText = 'Negative';
     const retrievedContentVote = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
     if (contentId !== undefined && negativeText !== undefined) {
       return (
         <span className="feedback-negative">
-          <button value={negativeText} type="button" onClick={this.handleNegativeCount(contentId, negativeText, contentType)} disabled={retrievedContentVote !== null}>
+          <button value={negativeText} type="button" onClick={this.handleNegativeCount(contentId, negativeText, contentType)} disabled={btnStatus !== 'active'}>
             <span className="feedback-option-label">{Drupal.t('no')}</span>
             <span className="feedback-count">
               (
