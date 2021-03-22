@@ -24,7 +24,7 @@ class AlshayaConfigValidator implements ConfigurationInterface {
     $rootNode
       ->children()
         ->arrayNode('variables')
-          // Validate the key starts with "url_, var_ or lang_".
+          // Validate the key starts with "url_, var_, product_, lang_, spc_, new_pdp_, algolia_plp_, new_checkout_ or boots_".
           ->beforeNormalization()
             ->ifTrue(function ($a) {
               $key = key($a);
@@ -33,9 +33,12 @@ class AlshayaConfigValidator implements ConfigurationInterface {
                      && !(substr($key, 0, 4) === 'spc_')
                      && !(substr($key, 0, 6) === 'boots_')
                      && !(substr($key, 0, 8) === 'product_')
+                     && !(substr($key, 0, 13) === 'new_checkout_')
+                     && !(substr($key, 0, 12) === 'algolia_plp_')
+                     && !(substr($key, 0, 8) === 'new_pdp_')
                      && !(substr($key, 0, 5) === 'lang_');
             })
-            ->thenInvalid('Invalid key for "%s", use variable with prefix "url_, var_, product_, lang_, spc_ or boots_".')
+            ->thenInvalid('Invalid key for "%s", use variable with prefix "url_, var_, product_, lang_, spc_, new_pdp_, algolia_plp_, new_checkout_ or boots_".')
             ->end()
           ->prototype('variable')->end()
         ->end()

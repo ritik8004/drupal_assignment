@@ -151,93 +151,104 @@
   }
 }
 
+@mixin removeMapFromAddressForm {
+  @include breakpoint($tablet) {
+    max-width: 32.5rem !important;
+
+    .spc-address-form {
+      grid-template-columns: 32.5rem !important;
+
+      .spc-address-form-sidebar {
+        overflow-y: visible;
+
+        .spc-checkout-section-title {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          z-index: 1;
+        }
+
+        .spc-filter-panel-header {
+          height: 4.0625rem;
+
+          .spc-filter-panel-back {
+            z-index: 2;
+          }
+        }
+
+        .close {
+          z-index: 1;
+        }
+
+        .spc-address-form-wrapper {
+          margin-top: 4.0625rem;
+          overflow-y: auto;
+          height: calc(100% - 3.5rem);
+        }
+      }
+    }
+
+    #click-and-collect-selected-store {
+      .spc-checkout-contact-information-fields {
+        padding-bottom: 7rem;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .spc-address-form-wrapper {
+      overflow-y: auto;
+      height: calc(100% - 3.5rem);
+    }
+
+    &.spc-address-form-guest-content,
+    &.spc-address-form-member-content {
+      overflow-y: hidden;
+    }
+  }
+
+  .spc-address-form-actions {
+    position: relative;
+  }
+
+  .spc-checkout-contact-information-fields {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+    padding-top: 2.1875rem;
+    padding-bottom: 0.625rem;
+
+    > div:nth-child(1) {
+      margin-bottom: 2rem;
+    }
+
+    > div:nth-child(2) {
+      margin-bottom: 1rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding-bottom: 1.25rem;
+    }
+  }
+
+  .delivery-address-fields {
+    border-top: 10px solid $spc-checkout-sidebar-bg;
+  }
+}
+
 // Temporary solution to be scrapped later in favor of drawer.
+// As we have removed map from the address form, we need to shrink the popup to only show the form.
 // @todo: Cleanup all address form css when we do drawer.
 .spc-checkout-delivery-information,
 .spc-billing-address-wrapper {
   .spc-address-list-member-overlay,
   .spc-address-form-guest-overlay {
     .popup-content:not(.spc-address-list-member-content) {
-      @include breakpoint($tablet) {
-        max-width: 32.5rem !important;
+      @include removeMapFromAddressForm;
+    }
 
-        .spc-address-form {
-          grid-template-columns: 32.5rem !important;
-
-          .spc-address-form-sidebar {
-            overflow-y: visible;
-
-            .spc-checkout-section-title {
-              position: absolute;
-              top: 0;
-              width: 100%;
-              z-index: 1;
-            }
-
-            .spc-filter-panel-header {
-              height: 4.0625rem;
-
-              .spc-filter-panel-back {
-                z-index: 2;
-              }
-            }
-
-            .close {
-              z-index: 1;
-            }
-
-            .spc-address-form-wrapper {
-              margin-top: 4.0625rem;
-              overflow-y: auto;
-              height: calc(100% - 3.5rem);
-            }
-          }
-        }
-
-        #click-and-collect-selected-store {
-          .spc-checkout-contact-information-fields {
-            padding-bottom: 7rem;
-          }
-        }
-      }
-
-      @include breakpoint($only-mobile) {
-        .spc-address-form-wrapper {
-          overflow-y: auto;
-          height: calc(100% - 3.5rem);
-        }
-
-        &.spc-address-form-guest-content,
-        &.spc-address-form-member-content {
-          overflow-y: hidden;
-        }
-      }
-
-      .spc-address-form-actions {
-        position: relative;
-      }
-
-      .spc-checkout-contact-information-fields {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.24);
-        padding-top: 2.1875rem;
-        padding-bottom: 0.625rem;
-
-        > div:nth-child(1) {
-          margin-bottom: 2rem;
-        }
-
-        > div:nth-child(2) {
-          margin-bottom: 1rem;
-        }
-
-        @include breakpoint($only-mobile) {
-          padding-bottom: 1.25rem;
-        }
-      }
-
-      .delivery-address-fields {
-        border-top: 10px solid $spc-checkout-sidebar-bg;
-      }
+    // Special case, we have a fresh authenticated user with no saved address,
+    // and he tries a CnC method. Opens the Billing address panel with no saved address.
+    .popup-content.spc-billing-address-form-no-saved-address {
+      @include removeMapFromAddressForm;
     }
   }
 }

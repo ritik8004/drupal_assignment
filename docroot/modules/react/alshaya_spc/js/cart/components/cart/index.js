@@ -251,7 +251,7 @@ export default class Cart extends React.Component {
           mobileOnly
         />
       );
-      postpayEligibilityMessage = <div id="postpay-eligibility-message" style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: drupalSettings.alshaya_spc.postpay_eligibility_message }} />;
+      postpayEligibilityMessage = <div className={`${drupalSettings.postpay_widget_info.postpay_mode_class}`}><div id="postpay-eligibility-message" style={{ display: 'none' }} dangerouslySetInnerHTML={{ __html: drupalSettings.alshaya_spc.postpay_eligibility_message }} /></div>;
       preContentActive = 'visible';
     }
     return (

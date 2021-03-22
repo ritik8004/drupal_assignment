@@ -137,8 +137,8 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
     $client = new Client($app_id, $app_secret_admin);
     $index_name = \Drupal::configFactory()->get('search_api.index.alshaya_algolia_index')->get('options.algolia_index_name');
     $languages = \Drupal::languageManager()->getLanguages();
-    $bv_objects = [];
     foreach ($languages as $language) {
+      $bv_objects = [];
       $name = $index_name . '_' . $language->getId();
       $index = $client->initIndex($name);
 
@@ -156,7 +156,8 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
           }
           $object['attr_bv_average_overall_rating'] = $data['ReviewStatistics'][$object['sku']]['AverageOverallRating'];
           $object['attr_bv_total_review_count'] = $data['ReviewStatistics'][$object['sku']]['TotalReviewCount'];
-          $object['attr_bv_rating'] = $data['ReviewStatistics'][$object['sku']]['RatingDistribution'];
+          $object['attr_bv_rating_distribution'] = $data['ReviewStatistics'][$object['sku']]['RatingDistribution'];
+          $object['attr_bv_rating'] = $data['ReviewStatistics'][$object['sku']]['RatingStars'];
           $bv_objects['results'][] = $object;
         }
 

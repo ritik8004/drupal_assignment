@@ -38,7 +38,7 @@ export default class ReviewRatingsFilter extends React.Component {
 
         const options = Object.keys(contextData).map((item) => ({
           value: `rating:${contextData[item].RatingValue}`,
-          label: `${contextData[item].RatingValue} ${(contextData[item].RatingValue > 1) ? getStringMessage('star') : getStringMessage('stars')} (${contextData[item].Count})`,
+          label: `${contextData[item].RatingValue} ${(contextData[item].RatingValue > 1) ? getStringMessage('stars') : getStringMessage('star')} (${contextData[item].Count})`,
         }));
         availableOptions = options.reverse();
       });
@@ -73,6 +73,7 @@ export default class ReviewRatingsFilter extends React.Component {
             options={ratingList.options}
             defaultValue={ratingList.default}
             value={ratingList.default}
+            isSearchable={false}
           />
         </div>
       );

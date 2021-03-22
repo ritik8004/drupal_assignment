@@ -2,8 +2,8 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import { postAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
-import ConditionalView from '../../../../common/components/conditional-view';
-import getStringMessage from '../../../../../../../js/utilities/strings';
+import { setSessionCookie } from '../../../../utilities/user_util';
+import AuthConfirmationMessage from '../auth-confirmation-message';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -26,6 +26,8 @@ export default class BvAuthConfirmation extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           if (!result.data.HasErrors) {
+            const userId = result.data.Authentication.User;
+            setSessionCookie('BvUserId', userId);
             this.setState({
               isUserVerified: true,
             });
@@ -57,13 +59,10 @@ export default class BvAuthConfirmation extends React.Component {
             <div className="review-success-msg">
               <BazaarVoiceMessages />
             </div>
+            <AuthConfirmationMessage
+              isUserVerified={isUserVerified}
+            />
           </div>
-          <ConditionalView condition={isUserVerified === true}>
-            <div className="auth-confirmation-message">
-              <h1>{getStringMessage('bv_auth_confirmation_message')}</h1>
-              <div className="submission-msg">{getStringMessage('submission_msg')}</div>
-            </div>
-          </ConditionalView>
         </div>
       </Popup>
     );

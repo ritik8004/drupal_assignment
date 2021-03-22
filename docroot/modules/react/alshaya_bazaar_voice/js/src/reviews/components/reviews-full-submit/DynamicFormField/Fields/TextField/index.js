@@ -41,6 +41,7 @@ class TextField extends React.Component {
       visible,
       text,
       classLable,
+      readonly,
     } = this.props;
     const { labelActiveClass } = this.state;
 
@@ -59,10 +60,10 @@ class TextField extends React.Component {
               onChange={(e) => this.handleChange(e)}
               maxLength={maxLength}
               minLength={minLength}
-              readOnly={(defaultValue !== undefined) ? 1 : 0}
+              readOnly={readonly}
             />
             <div className="c-input__bar" />
-            <label className={`${(defaultValue !== undefined) ? 'active-label' : labelActiveClass}`}>
+            <label className={`${(defaultValue !== undefined && defaultValue !== null) ? 'active-label' : labelActiveClass}`}>
               {label}
               {' '}
               {(required) ? '*' : '' }
