@@ -3,7 +3,6 @@ import Parser from 'html-react-parser';
 import Gallery from '../gallery';
 import Price from '../price';
 import Promotions from '../promotions';
-import Lables from '../labels';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
 
@@ -57,7 +56,13 @@ const Teaser = ({
             data--original-url={`${hit.url}`}
             className="list-product-gallery product-selected-url"
           >
-            <Gallery media={hit.media} title={hit.title} initiateSlider={initiateSlider} />
+            <Gallery
+              media={hit.media}
+              title={hit.title}
+              initiateSlider={initiateSlider}
+              labels={hit.product_labels}
+              sku={hit.sku}
+            />
           </a>
           <div className="product-plp-detail-wrapper">
             { collectionLabel.length > 0
@@ -84,7 +89,6 @@ const Teaser = ({
             {showSwatches ? <Swatches swatches={hit.swatches} url={hit.url} /> : null}
           </div>
         </div>
-        <Lables labels={hit.product_labels} sku={hit.sku} />
       </article>
     </div>
   );
