@@ -56,12 +56,14 @@ class ReviewFeedback extends React.Component {
               contentType={contentType}
               positiveCount={positiveCount}
               negativeCount={negativeCount}
+              btnStatus={btnStatus}
             />
             <ReviewFeedbackNegative
               contentId={contentId}
               contentType={contentType}
               positiveCount={positiveCount}
               negativeCount={negativeCount}
+              btnStatus={btnStatus}
             />
           </div>
           <ReviewInappropriate
