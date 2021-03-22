@@ -122,26 +122,6 @@ function alshaya_seo_transac_token_info() {
     'name' => t('Super Category.'),
   ];
 
-  $info['tokens']['alshaya_seo']['page_title'] = [
-    'name' => t('Page title.'),
-  ];
-
-  $info['tokens']['alshaya_seo']['l3_page_title'] = [
-    'name' => t('Level 3 Page title.'),
-  ];
-
-  $info['tokens']['alshaya_seo']['l2_text_before_cod'] = [
-    'name' => t('Level 2 Text before COD.'),
-  ];
-
-  $info['tokens']['alshaya_seo']['l3_text_before_cod'] = [
-    'name' => t('Level 3 Text before COD.'),
-  ];
-
-  $info['tokens']['alshaya_seo']['l3_desc_start'] = [
-    'name' => t('Level 3 start text in description.'),
-  ];
-
   return $info;
 }
 
@@ -185,8 +165,6 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
       $category_term = $data['term'];
     }
 
-    // Initialized $term_id.
-    $term_id = NULL;
     if (isset($category_term)) {
       $term_id = !empty($category_term) ? $category_term->id() : '';
       $sale_ids = \Drupal::service('alshaya_acm_product_category.sales_category_manager')->getCategorizationIds();
@@ -201,8 +179,6 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
 
     /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $categoryManager */
     $categoryManager = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-    // Get depth of category.
-    $term_depth = \Drupal::service('alshaya_acm_product.category_helper')->getCategoryLevel($term_id);
 
     foreach ($tokens as $name => $original) {
       // Find the desired token by name.
@@ -295,17 +271,18 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
             $token_service->replace('[alshaya_seo:city1]'),
             $token_service->replace('[alshaya_seo:city2]'),
           ]);
+
           foreach ($cities as &$city) {
             if (isset($sale) && $sale === TRUE) {
-              $city = (string) t('[term:name] sale in %city', ['%city' => $city]);
+              $city = (string) t('[term:name] sale in @city', ['@city' => $city]);
             }
             else {
-              $city = (string) t('Shop [term:name] in %city', ['%city' => $city]);
+              $city = (string) t('Shop [term:name] in @city', ['@city' => $city]);
             }
           }
 
           $cities = implode(', ', array_filter($cities));
-          $replacements[$original] = $token_service->replace(strip_tags($cities), ['term' => $category_term]);
+          $replacements[$original] = $token_service->replace($cities, ['term' => $category_term]);
           break;
 
         case 'term_name':
@@ -349,25 +326,6 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
           }
           else {
             $value = (string) t('alshaya_seo_text_before_cod');
-            // Check for category level 2.
-            if ($term_depth == 2) {
-              $value = (string) t('alshaya_seo_l2_text_before_cod');
-              // If token value doesn't return saved data
-              // then assign to original value i.e alshaya_seo_text_before_cod.
-              if ($value == 'alshaya_seo_l2_text_before_cod') {
-                $value = (string) t('alshaya_seo_text_before_cod');
-              }
-            }
-            // Check for category level 3.
-            elseif ($term_depth == 3) {
-              $value = (string) t('alshaya_seo_l3_text_before_cod');
-              // If token value doesn't return saved data
-              // then assign to original value i.e alshaya_seo_text_before_cod.
-              if ($value == 'alshaya_seo_l3_text_before_cod') {
-                $value = (string) t('alshaya_seo_text_before_cod');
-              }
-            }
-
             $replacements[$original] = $value == 'alshaya_seo_text_before_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
@@ -390,15 +348,6 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
           }
           else {
             $value = (string) t('alshaya_seo_desc_start');
-            // Check for category level 3.
-            if ($term_depth == 3) {
-              $value = (string) t('alshaya_seo_l3_desc_start');
-              // If token value doesn't return saved data
-              // then assign to original value i.e alshaya_seo_l3_desc_start.
-              if ($value == 'alshaya_seo_l3_desc_start') {
-                $value = (string) t('alshaya_seo_desc_start');
-              }
-            }
             $replacements[$original] = $value == 'alshaya_seo_desc_start' ? '' : $token_service->replace($value, ['term' => $category_term]);
           }
           break;
@@ -430,19 +379,13 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
               ? array_slice($sub_categories, 0, $sub_category_to_show)
               : $sub_categories;
           }
-          // Pop the last index of the array.
-          $last_index = array_pop($sub_categories);
-          $comma_separated_categories = implode(', ', $sub_categories);
 
-          $replacements[$original] = (string) t('@sub_cat and @last_cat', [
-            '@sub_cat' => $comma_separated_categories,
-            '@last_cat' => $last_index,
-          ]);
+          $replacements[$original] = implode(', ', $sub_categories);
           break;
 
         case 'desc_free_delivery_n_cod':
           $value = (string) t('alshaya_seo_desc_free_delivery_n_cod');
-          $replacements[$original] = $value == 'alshaya_seo_desc_free_delivery_n_cod' ? '' : $token_service->replace($value, ['term' => $category_term]);
+          $replacements[$original] = $value == 'alshaya_seo_desc_free_delivery_n_cod' ? '' : $value;
           break;
 
         case 'top_category':
@@ -464,20 +407,6 @@ function alshaya_seo_transac_tokens($type, $tokens, array $data, array $options,
         case 'super_category':
           $super_category = _alshaya_super_category_get_super_category_for_term();
           $replacements[$original] = isset($super_category) ? $super_category->label() : '';
-          break;
-
-        case 'page_title':
-          $value = (string) t('alshaya_seo_page_title');
-          // Check for category level 3.
-          if ($term_depth == 3) {
-            $value = (string) t('alshaya_seo_l3_page_title');
-            // If token value doesn't return saved data
-            // then assign to original value i.e alshaya_seo_l3_page_title.
-            if ($value == 'alshaya_seo_l3_page_title') {
-              $value = (string) t('alshaya_seo_page_title');
-            }
-          }
-          $replacements[$original] = $value == 'alshaya_seo_page_title' ? '' : $token_service->replace($value, ['term' => $category_term]);
           break;
       }
     }

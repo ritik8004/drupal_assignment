@@ -770,7 +770,7 @@ function alshaya_super_category_alshaya_config_save_alter(array &$data, $config_
   $meta_configs = [
     'metatag.metatag_defaults.node__advanced_page'                 => '[node:title] | ' . $token,
     'metatag.metatag_defaults.node__acq_promotion'                 => '[node:field_acq_promotion_label] | ' . $token,
-    'metatag.metatag_defaults.taxonomy_term__acq_product_category' => '[alshaya_seo:page_title]',
+    'metatag.metatag_defaults.taxonomy_term__acq_product_category' => '[alshaya_seo:term_name] | ' . $token . ' [alshaya_seo:country]',
   ];
 
   // Only for the meta tag configs.
