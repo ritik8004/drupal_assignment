@@ -5,13 +5,13 @@ import { getbazaarVoiceSettings } from './api/request';
 /**
  * Validates the form details.
  */
-export const processFormDetails = async (e) => {
+export const processFormDetails = (e) => {
   // Flag to determine if there is any error.
   let isError = false;
 
   // Check to ensure no required field is empty.
   Array.prototype.forEach.call(e.target.elements, (element) => {
-    if (!element.id) {
+    if (!element.id || element.id === 'ioBlackBox') {
       return;
     }
     if (!element.value.length) {

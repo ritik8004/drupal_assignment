@@ -25,7 +25,8 @@ class AlshayaYamlProcess {
 
   protected $collectedFilesList;
 
-  protected $alshayaMarkets = ['kw', 'sa', 'ae', 'eg'];
+  // List of markets for which the tests are available
+  protected $alshayaMarkets = ['kw', 'sa', 'ae', 'eg', 'qa'];
 
   protected $alshayaLanguages = ['en', 'ar'];
 
@@ -366,12 +367,14 @@ class AlshayaYamlProcess {
       $yaml['extensions']['Behat\MinkExtension']['base_url'] = $variables['variables']['url_base_uri'];
     }
 
+    // Setting the ScreenshotExtension configuration to capture the failed screenshots.
     $yaml['extensions']['Bex\Behat\ScreenshotExtension']['image_drivers'] = [
       'local' =>  [
         'screenshot_directory' => "%paths.base%/features/$profile-$viewport/screenshots",
       ],
     ];
-    //Running tags on test executions
+
+    // Running tags on test executions
     $tags = '';
     if ($viewport == 'mobile') {
       $yaml['extensions']['Behat\MinkExtension']['selenium2']['capabilities']['chrome']['switches'] = array("--window-size=375,667");
@@ -382,14 +385,14 @@ class AlshayaYamlProcess {
       $tags = "~@mobile";
     }
 
-    //Running specific tags on uat and prod environment on test executions
+    // Running specific tags on uat and prod environment on test executions
     $environment = explode('-', $profile);
     if (in_array($environment[2], ['prod', 'pprod', 'uat'])) {
       $tags = $tags . '&&' . $environment[0] . $environment[1] . $environment[2];
     }
     $yaml['suites']['default']['filters']['tags'] = $tags;
 
-    // Set the folder for report.
+    // Setting the folder for report.
     if (!empty($profile)) {
       $yaml['formatters'] = [
         'html' => [

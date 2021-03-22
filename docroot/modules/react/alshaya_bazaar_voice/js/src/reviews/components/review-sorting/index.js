@@ -28,6 +28,7 @@ export default class ReviewSorting extends React.Component {
           onChange={this.handleSelect}
           options={sortOptions}
           defaultValue={sortOptions[0]}
+          isSearchable={false}
         />
       </>
     );

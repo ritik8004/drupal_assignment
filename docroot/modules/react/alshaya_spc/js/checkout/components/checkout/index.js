@@ -134,13 +134,11 @@ export default class Checkout extends React.Component {
   }
 
   processAddressFromLocalStorage = (result) => {
-    let formdata = {};
     if (result.shipping && result.shipping.method === null) {
       const shippingAddress = getStorageInfo('shippingaddress-formdata');
       if (shippingAddress) {
-        formdata = { static: shippingAddress.static };
         showFullScreenLoader();
-        const cartInfo = addShippingInCart('update shipping', formdata);
+        const cartInfo = addShippingInCart('update shipping', shippingAddress);
         if (cartInfo instanceof Promise) {
           cartInfo.then((cartResult) => {
             if (!(cartResult)) {
