@@ -54,8 +54,8 @@ class TextField extends React.Component {
             <span className="country-code">{`+${countryMobileCode}`}</span>
             <input
               maxLength={countryMobileCodeMaxLength}
-              disabled={disabled}
               type="tel"
+              disabled={disabled}
               name={name}
               defaultValue={defaultValue}
             />

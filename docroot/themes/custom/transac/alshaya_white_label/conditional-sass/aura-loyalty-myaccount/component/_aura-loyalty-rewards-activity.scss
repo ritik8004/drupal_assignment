@@ -1,6 +1,12 @@
 .loyalty-club-rewards-wrapper {
   color: $aura-loyalty-activity-txt;
 
+  .reward-activity-statement {
+    @include breakpoint($upto-desktop) {
+      overflow-y: auto;
+    }
+  }
+
   .header-row,
   .reward-activity > div.statement-row {
     min-height: 3.125rem;
