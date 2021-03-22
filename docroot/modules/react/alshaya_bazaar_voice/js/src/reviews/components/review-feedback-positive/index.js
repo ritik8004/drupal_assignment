@@ -35,7 +35,7 @@ class ReviewFeedbackPositive extends React.Component {
     if (contentId !== undefined && positiveText !== undefined) {
       return (
         <span className="feedback-positive">
-          <button value={positiveText} type="button" onClick={this.handlePositiveCount(contentId, positiveText, contentType)} disabled={btnStatus === 'active' ? false : true}>
+          <button value={positiveText} type="button" onClick={this.handlePositiveCount(contentId, positiveText, contentType)} disabled={btnStatus !== 'active'}>
             <span className="feedback-option-label">{Drupal.t('yes')}</span>
             <span className="feedback-count">
               (
