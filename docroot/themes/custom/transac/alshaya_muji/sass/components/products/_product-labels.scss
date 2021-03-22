@@ -13,11 +13,17 @@
           #{$left}: 0.9375rem;
           #{$right}: inherit;
         }
+
+        @include breakpoint($desktop) {
+          top: 1rem;
+          #{$left}: 1.5rem;
+          #{$right}: inherit;
+        }
       }
 
       &-right {
         @include breakpoint($desktop) {
-          top: 0.5rem;
+          top: 1rem;
           #{$right}: 1.5rem;
           #{$left}: inherit;
         }
@@ -62,13 +68,7 @@
       &.bottom {
         &-left,
         &-right {
-          @include breakpoint($only-tablet) {
-            bottom: 4.5rem;
-          }
-
-          @include breakpoint($desktop) {
-            bottom: 5.5rem;
-          }
+          bottom: 0;
         }
       }
     }

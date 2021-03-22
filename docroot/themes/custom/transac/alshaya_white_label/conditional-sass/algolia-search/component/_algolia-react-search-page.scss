@@ -476,7 +476,7 @@ body[class*="super-category"] {
           &-right,
           &-left {
             @include breakpoint($only-mobile) {
-              bottom: 8rem;
+              bottom: 0;
             }
           }
         }
