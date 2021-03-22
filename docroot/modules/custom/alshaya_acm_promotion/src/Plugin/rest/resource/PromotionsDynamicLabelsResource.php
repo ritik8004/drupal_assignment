@@ -11,10 +11,10 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\rest\Plugin\ResourceBase;
+use http\Exception\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides a resource to get dynamic promo labels.
@@ -103,13 +103,13 @@ class PromotionsDynamicLabelsResource extends ResourceBase {
 
     try {
       if (!($sku instanceof SKUInterface)) {
-        throw (new NotFoundHttpException());
+        throw new InvalidArgumentException();
       }
 
       $get = $request->query->all();
       $cart = CartData::createFromArray($get);
     }
-    catch (NotFoundHttpException $e) {
+    catch (\InvalidArgumentException $e) {
       $response = new CacheableJsonResponse([]);
       $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));
       return $response;
