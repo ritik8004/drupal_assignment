@@ -134,6 +134,7 @@ class NewCard extends React.Component {
           <div className="spc-type-textfield spc-type-cc-number">
             <Cleave
               id="spc-cc-number"
+              type="tel"
               options={{
                 creditCard: true,
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
@@ -151,6 +152,7 @@ class NewCard extends React.Component {
           <div className="spc-type-textfield spc-type-expiry">
             <Cleave
               id="spc-cc-expiry"
+              type="tel"
               htmlRef={(ref) => { this.ccExpiry = ref; }}
               options={{
                 date: true,

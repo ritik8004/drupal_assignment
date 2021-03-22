@@ -1,0 +1,16 @@
+#reviews-section {
+  .review-comment {
+    button {
+      border-radius: 0.1875rem;
+    }
+  }
+
+  .review-inline-feedback {
+    .review-feedback-comment,
+    .review-comment-form {
+      button {
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}

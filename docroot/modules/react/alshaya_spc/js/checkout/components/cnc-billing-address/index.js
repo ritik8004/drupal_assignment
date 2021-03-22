@@ -121,7 +121,7 @@ export default class CnCBillingAddress extends React.Component {
                   {Drupal.t('please add your billing address.')}
                 </div>
                 <Popup
-                  className={getAddressPopupClassName()}
+                  className={`spc-billing-address-form-no-saved-address ${getAddressPopupClassName()}`}
                   open={isModalOpen}
                   closeOnEscape={false}
                   closeOnDocumentClick={false}

@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_bazaar_voice.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_install().
+ *
+ * Update default configurations for the fields created for ratings & reviews.
+ */
+function alshaya_bazaar_voice_install() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Create and configure fields in product category.
+  $manager->updateConfigs(
+    [
+      'core.entity_form_display.taxonomy_term.acq_product_category.default',
+      'core.entity_view_display.taxonomy_term.acq_product_category.default'
+    ],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+
+  // Add field for Rating filter to be used as facet filter.
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
+  if ($translations = _alshaya_bazaar_voice_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Remove configurations created for ratings & reviews.
+ */
+function alshaya_bazaar_voice_uninstall() {
+  // Delete fields created for ratings & reviews feature configuration.
+  $fields = ['field_write_review_form_fields', 'field_rating_review'];
+  foreach ($fields as $field_id) {
+    $field = FieldStorageConfig::loadByName('taxonomy_term', $field_id);
+    if ($field) {
+      $field->delete();
+    }
+  }
+  // Delete webform created to maintain write a review form configurations.
+  $webform = \Drupal::entityTypeManager()->getStorage('webform')->load('alshaya_bv_write_review');
+  if (!is_null($webform)) {
+    $webform->delete();
+  }
+}
