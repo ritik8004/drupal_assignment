@@ -380,9 +380,10 @@ class AlshayaBazaarVoice {
     $sharedKey = $config->get('shared_secret_key');
     $maxAge = $config->get('max_age');
     $userId = $this->currentUser->id();
+    $mail = $this->currentUser->getEmail();
 
     // URL-encoded query string.
-    $userStr = "date=" . urlencode(date('d-m-Y')) . "&userid=" . urlencode($userId) . "&maxage=" . urlencode($maxAge);
+    $userStr = "date=" . urlencode(date('d-m-Y')) . "&userid=" . urlencode($userId) . "&useremail=" . urlencode($mail) . "&maxage=" . urlencode($maxAge);
 
     // Encode the signature using HMAC SHA-256.
     $signature = hash_hmac('sha256', $userStr, $sharedKey);
