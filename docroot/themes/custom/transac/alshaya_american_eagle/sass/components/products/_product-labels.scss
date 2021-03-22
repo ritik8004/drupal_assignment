@@ -2,6 +2,8 @@
   .label {
     &.top {
       &-left {
+        #{$left}: 0;
+
         @include breakpoint($desktop) {
           top: 1rem;
           #{$left}: 1.25rem;
@@ -10,18 +12,18 @@
 
         @include breakpoint($only-mobile) {
           top: 1rem;
-          #{$left}: 1.25rem;
           #{$right}: inherit;
         }
 
         @include breakpoint($only-tablet) {
           top: 1rem;
-          #{$left}: 1.25rem;
           #{$right}: inherit;
         }
       }
 
       &-right {
+        #{$right}: 0;
+
         @include breakpoint($desktop) {
           top: 1rem;
           #{$right}: 1.25rem;
@@ -30,13 +32,11 @@
 
         @include breakpoint($only-mobile) {
           top: 1rem;
-          #{$right}: 1.25rem;
           #{$left}: inherit;
         }
 
         @include breakpoint($only-tablet) {
           top: 1rem;
-          #{$right}: 1.25rem;
           #{$left}: inherit;
         }
       }
