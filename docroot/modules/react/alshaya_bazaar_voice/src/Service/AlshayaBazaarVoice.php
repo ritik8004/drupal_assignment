@@ -8,6 +8,7 @@ use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Session\AccountProxy;
 use Symfony\Component\Yaml\Yaml;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Provides integration with BazaarVoice.
@@ -59,6 +60,13 @@ class AlshayaBazaarVoice {
   protected $entityRepository;
 
   /**
+   * SKU Manager service object.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * BazaarVoiceApiWrapper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -73,19 +81,23 @@ class AlshayaBazaarVoice {
    *   The current account object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager service object.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               Connection $connection,
                               AlshayaBazaarVoiceApiHelper $alshaya_bazaar_voice_api_helper,
                               AccountProxy $current_user,
-                              EntityRepositoryInterface $entityRepository) {
+                              EntityRepositoryInterface $entityRepository,
+                              SkuManager $sku_manager) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->connection = $connection;
     $this->alshayaBazaarVoiceApiHelper = $alshaya_bazaar_voice_api_helper;
     $this->currentUser = $current_user;
     $this->entityRepository = $entityRepository;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -98,7 +110,11 @@ class AlshayaBazaarVoice {
    *   BV attributes data to be indexed in algolia.
    */
   public function getDataFromBvReviewFeeds(array $skus) {
-    $skus = implode(',', $skus);
+    $sanitized_sku = [];
+    foreach ($skus as $sku) {
+      $sanitized_sku[] = $this->skuManager->getSanitizedSku($sku);
+    }
+    $skus = implode(',', $sanitized_sku);
     $extra_params = [
       'filter' => 'id:' . $skus,
       'stats' => 'reviews',
@@ -111,12 +127,15 @@ class AlshayaBazaarVoice {
     if (!$result['HasErrors'] && isset($result['Results'])) {
       $response = [];
       foreach ($result['Results'] as $value) {
+        $rating_distribution = $this->processRatingDistribution($value['ReviewStatistics']['RatingDistribution']);
         $response['ReviewStatistics'][$value['Id']] = [
           'AverageOverallRating' => $value['ReviewStatistics']['AverageOverallRating'],
           'TotalReviewCount' => $value['ReviewStatistics']['TotalReviewCount'],
-          'RatingDistribution' => $this->processRatingDistribution($value['ReviewStatistics']['RatingDistribution']),
+          'RatingDistribution' => $rating_distribution['rating_distribution'],
+          'RatingStars' => $rating_distribution['rating_stars'],
         ];
       }
+
       return $response;
     }
 
@@ -164,8 +183,10 @@ class AlshayaBazaarVoice {
     });
 
     $rating_range = [];
+    // Rating stars and histogram data.
     foreach ($rating as $value) {
-      $rating_range[] = 'rating_' . $value['RatingValue'] . '_' . $value['Count'];
+      $rating_range['rating_stars'][] = 'rating_' . $value['RatingValue'];
+      $rating_range['rating_distribution'][] = 'rating_' . $value['RatingValue'] . '_' . $value['Count'];
     }
 
     return $rating_range;
