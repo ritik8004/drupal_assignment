@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Controller;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
@@ -153,7 +154,8 @@ class ProductController extends ControllerBase {
     // Do nothing for requests from bots.
     if (Settings::get('product_quick_view_block_json_requests', 1)
       && $this->request->query->get('_wrapper_format') === 'json') {
-      return [];
+      // Return empty JSON response so full page with empty body is not loaded.
+      return new CacheableJsonResponse([]);
     }
 
     try {
