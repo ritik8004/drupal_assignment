@@ -29,7 +29,9 @@
             }
 
             var viewMode = $(form).closest('article[gtm-type="gtm-product-link"]').attr('data-vmode');
-            var productKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
+            // Decide the key from which we load product data.
+            // It will be in productInfo for all cases except matchback.
+            var productInfoKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
 
             var quantity = 1;
             // If quantity drop down available, use that value.
@@ -78,18 +80,18 @@
               variant: variant_sku,
             };
 
-            productData['product_name'] = settings.productInfo[page_main_sku].cart_title;
-            productData['image'] = settings.productInfo[page_main_sku].cart_image;
+            productData['product_name'] = settings[productInfoKey][page_main_sku].cart_title;
+            productData['image'] = settings[productInfoKey][page_main_sku].cart_image;
 
             // Configurable - normal as well as re-structured.
             if (is_configurable) {
-              productData['product_name'] = settings[productKey][page_main_sku].variants[variant_sku].cart_title;
-              productData['image'] = settings[productKey][page_main_sku].variants[variant_sku].cart_image;
+              productData['product_name'] = settings[productInfoKey][page_main_sku].variants[variant_sku].cart_title;
+              productData['image'] = settings[productInfoKey][page_main_sku].variants[variant_sku].cart_image;
             }
             // Simple grouped (re-structured).
-            else if (settings[productKey][page_main_sku]['group'] !== undefined) {
-              productData['product_name'] = settings[productKey][page_main_sku]['group'][currentSelectedVariant].cart_title;
-              productData['image'] = settings[productKey][page_main_sku]['group'][currentSelectedVariant].cart_image;
+            else if (settings[productInfoKey][page_main_sku]['group'] !== undefined) {
+              productData['product_name'] = settings[productInfoKey][page_main_sku]['group'][currentSelectedVariant].cart_title;
+              productData['image'] = settings[productInfoKey][page_main_sku]['group'][currentSelectedVariant].cart_image;
             }
 
             // Post to ajax for cart update/create.
@@ -109,7 +111,6 @@
                     return;
                   }
                   var closestForm = $(that).closest('form.sku-base-form');
-                  var cleaned_sku = $(form).attr('data-cleaned-sku');
 
                   // Showing the error message.
                   $(closestForm).find('.errors-container').html('<div class="error">' + response.error_message + '</div>');
@@ -155,7 +156,7 @@
                   });
                   $(form).trigger(cartNotification);
 
-                  var productInfo = drupalSettings.productInfo[productData.parentSku];
+                  var productInfo = drupalSettings[productInfoKey][productData.parentSku];
                   var options = [];
                   var productUrl = productInfo.url;
                   var price = productInfo.priceRaw;
