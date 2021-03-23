@@ -4,4 +4,3 @@ services:
     arguments: 
       - '@config.factory'
       - '@current_route_match'
-
