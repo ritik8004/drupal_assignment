@@ -12,7 +12,7 @@
       @include breakpoint($only-mobile) {
         position: fixed;
         background: $algolia-search-bar-background;
-        z-index: 2;
+        z-index: 10;
         width: 50%;
         top: 3.625rem;
         #{$right}: 0;
@@ -23,7 +23,7 @@
     .block-facet-blockcategory-facet-plp {
       @include breakpoint($only-mobile) {
         top: 3.625rem;
-        z-index: 2;
+        z-index: 10;
       }
     }
   }
