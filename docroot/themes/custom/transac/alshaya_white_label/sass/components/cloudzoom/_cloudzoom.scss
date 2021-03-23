@@ -31,8 +31,6 @@
     position: relative;
 
     .product-labels {
-      height: 5rem;
-      width: 5rem;
       z-index: 4;
 
       img {
@@ -357,6 +355,8 @@
 .cloudzoom__herocontainer {
   .product-labels {
     position: unset;
+    top: 0;
+    left: 0;
   }
 }
 

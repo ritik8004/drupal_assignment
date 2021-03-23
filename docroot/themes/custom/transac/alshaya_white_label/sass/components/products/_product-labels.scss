@@ -1,16 +1,8 @@
 .labels-container {
   .label {
-    max-width: 3.125rem;
-    margin-bottom: 0.625rem;
+    position: absolute;
+    max-width: 5rem;
     z-index: 0;
-
-    @include breakpoint($only-mobile) {
-      max-width: 2.375rem;
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
 
     .c-pdp & {
       z-index: 5;
@@ -18,97 +10,81 @@
 
     .c-plp & {
       z-index: 1;
-      max-width: 2.375rem;
 
       @include breakpoint($only-mobile) {
         z-index: 0;
       }
     }
-  }
 
-  &.top {
-    &-left {
-      position: absolute;
-      top: 0.625rem;
-      #{$left}: 0.625rem;
-      #{$right}: inherit;
-    }
+    &.top {
+      &-left {
+        top: 0.5rem;
+        #{$left}: 0.5rem;
+        #{$right}: inherit;
 
-    &-right {
-      position: absolute;
-      top: 0.625rem;
-      #{$right}: 0.625rem;
-      #{$left}: inherit;
-    }
-  }
+        @include breakpoint($only-tablet) {
+          top: 0.9375rem;
+          #{$left}: 0.9375rem;
+          #{$right}: inherit;
+        }
 
-  &.bottom {
-    &-left {
-      position: absolute;
-      bottom: 6rem;
-      #{$left}: 0.625rem;
-      #{$right}: inherit;
-
-      @include breakpoint($tablet) {
-        bottom: 7.2rem;
+        @include breakpoint($desktop) {
+          top: 1rem;
+          #{$left}: 2rem;
+          #{$right}: inherit;
+        }
       }
 
-      @include breakpoint($desktop) {
-        bottom: 12.5rem;
+      &-right {
+        top: 0.5rem;
+        #{$right}: 0.5rem;
+        #{$left}: inherit;
+
+        @include breakpoint($only-tablet) {
+          top: 0.9375rem;
+          #{$right}: 0.9375rem;
+          #{$left}: inherit;
+        }
+
+        @include breakpoint($desktop) {
+          top: 1rem;
+          #{$right}: 2rem;
+          #{$left}: inherit;
+        }
       }
     }
 
-    &-right {
-      position: absolute;
-      bottom: 6rem;
-      #{$right}: 0.625rem;
-      #{$left}: inherit;
-
-      @include breakpoint($tablet) {
-        bottom: 7.2rem;
-      }
-
-      @include breakpoint($desktop) {
-        bottom: 12.5rem;
-      }
-    }
-  }
-}
-
-.magazine-layout,
-.nodetype--acq_product {
-  .labels-container {
     &.bottom {
-      &-left,
+      &-left {
+        bottom: 0;
+        #{$left}: 0.5rem;
+        #{$right}: inherit;
+
+        @include breakpoint($only-tablet) {
+          #{$left}: 0.9375rem;
+          #{$right}: inherit;
+        }
+
+        @include breakpoint($desktop) {
+          #{$left}: 2rem;
+          #{$right}: inherit;
+        }
+      }
+
       &-right {
         bottom: 0;
-      }
-    }
-  }
+        #{$right}: 0.5rem;
+        #{$left}: inherit;
 
-  .horizontal-upell,
-  .horizontal-related {
-    .labels-container {
-      &.top {
-        &-left,
-        &-right {
-          top: 0.625rem;
+        @include breakpoint($only-tablet) {
+          #{$right}: 0.9375rem;
+          #{$left}: inherit;
         }
-      }
 
-      &.bottom {
-        &-left,
-        &-right {
-          bottom: 4.375rem;
-
-          @include breakpoint($only-mobile) {
-            bottom: 0;
-          }
+        @include breakpoint($desktop) {
+          #{$right}: 2rem;
+          #{$left}: inherit;
         }
-      }
-
-      .label {
-        max-width: 2.375rem;
       }
     }
   }
@@ -121,11 +97,7 @@
       &.bottom {
         &-left,
         &-right {
-          bottom: 0.5rem;
-
-          @include breakpoint($tablet) {
-            bottom: 8.5rem;
-          }
+          bottom: 0;
         }
       }
     }
@@ -176,12 +148,8 @@
       &.bottom {
         &-left,
         &-right {
-          @include breakpoint($only-tablet) {
-            bottom: 8.5rem;
-          }
-
           @include breakpoint($desktop) {
-            bottom: 12.5rem;
+            bottom: 0;
           }
         }
       }
@@ -195,8 +163,21 @@
       &.bottom {
         &-left,
         &-right {
-          bottom: 5.5rem;
+          bottom: 1.1rem;
         }
+      }
+    }
+  }
+}
+
+.image-label-wrapper {
+  position: relative;
+
+  .labels-container {
+    &.bottom {
+      &-left,
+      &-right {
+        bottom: 0;
       }
     }
   }

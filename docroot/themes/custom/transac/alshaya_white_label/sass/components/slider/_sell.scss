@@ -213,7 +213,6 @@
   .slick-slider .slick-slide img {
     width: 100%;
     margin: auto;
-    max-width: 11.625rem;
 
     @include breakpoint($upto-desktop) {
       object-fit: cover;
