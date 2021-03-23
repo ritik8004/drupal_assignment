@@ -4,7 +4,7 @@
       &-left {
         @include breakpoint($desktop) {
           top: 0;
-          #{$left}: 0;
+          #{$left}: 1rem;
           #{$right}: inherit;
 
           .cloudzoom.thumbnail-count-1 & {
@@ -28,7 +28,7 @@
       &-right {
         @include breakpoint($desktop) {
           top: 0;
-          #{$right}: 0;
+          #{$right}: 1rem;
           #{$left}: inherit;
 
           .cloudzoom.thumbnail-count-1 & {
@@ -53,13 +53,13 @@
     &.bottom {
       &-left {
         @include breakpoint($desktop) {
-          #{$left}: 0;
+          #{$left}: 1rem;
         }
       }
 
       &-right {
         @include breakpoint($desktop) {
-          #{$right}: 0;
+          #{$right}: 1rem;
         }
       }
     }
