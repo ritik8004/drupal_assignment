@@ -53,13 +53,13 @@
     &.bottom {
       &-left {
         @include breakpoint($desktop) {
-          #{$left}: 8.5rem;
+          #{$left}: 0;
         }
       }
 
       &-right {
         @include breakpoint($desktop) {
-          #{$right}: 8.5rem;
+          #{$right}: 0;
         }
       }
     }
