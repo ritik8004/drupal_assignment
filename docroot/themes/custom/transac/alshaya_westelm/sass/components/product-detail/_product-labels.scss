@@ -41,3 +41,30 @@
     }
   }
 }
+
+.image-label-wrapper,
+.alshaya_search_gallery {
+  .labels-container {
+    .label {
+      &.top {
+        &-left {
+          #{$left}: 0;
+        }
+
+        &-right {
+          #{$right}: 0;
+        }
+      }
+
+      &.bottom {
+        &-left {
+          #{$left}: 0;
+        }
+
+        &-right {
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}
