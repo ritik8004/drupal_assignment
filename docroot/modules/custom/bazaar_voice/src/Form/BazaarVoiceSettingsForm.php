@@ -184,6 +184,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Enter minimum character length for comment box text in comment form.'),
     ];
 
+    $form['basic_settings']['bv_routes_list'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Routes for BazaarVoice analytics'),
+      '#default_value' => $config->get('bv_routes_list'),
+      '#description' => $this->t('Specify routes by using their route name which will be tracked by BazaarVoice for analytics. BV pixel script will be loaded only for the routes in this list. Enter one route per line.'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -192,7 +199,6 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
-
     $this->configFactory()->getEditable('bazaar_voice.settings')
       ->set('api_base_url', $values['api_base_url'])
       ->set('conversations_apikey', $values['conversations_apikey'])
@@ -213,6 +219,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('comment_form_tnc', $values['comment_form_tnc'])
       ->set('bv_content_types', $values['bv_content_types'])
       ->set('comment_form_box_length', $values['comment_form_box_length'])
+      ->set('bv_routes_list', $values['bv_routes_list'])
       ->save();
 
     parent::submitForm($form, $form_state);
