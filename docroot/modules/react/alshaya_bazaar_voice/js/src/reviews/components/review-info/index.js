@@ -1,19 +1,17 @@
 import React from 'react';
-import moment from 'moment-timezone';
 import ReviewAttributes from '../review-attributes';
 import ReviewTooltip from '../review-tooltip';
 import ConditionalView from '../../../common/components/conditional-view';
 import IndividualReviewSlider from '../individual-review-slider';
 import IndividualReviewStar from '../individual-review-star';
-import getDateFormat from '../../../../../../js/utilities/dateFormats';
+import { getDate } from '../../../../../../js/utilities/dateUtility';
 
 const ReviewInformation = ({
   reviewInformationData,
   reviewTooltipInfo,
 }) => {
   if (reviewInformationData !== undefined) {
-    const date = new Date(reviewInformationData.SubmissionTime);
-    const dateStr = moment(date).format(getDateFormat());
+    const date = getDate(reviewInformationData.SubmissionTime);
     return (
       <div className="review-detail-left">
         <div className="review-user-details">
@@ -22,7 +20,7 @@ const ReviewInformation = ({
 
             <ConditionalView condition={window.innerWidth < 768}>
               <div className="review-detail-mobile">
-                <span className="review-date">{`${dateStr}`}</span>
+                <span className="review-date">{`${date}`}</span>
 
                 <ConditionalView condition={reviewInformationData.UserLocation !== null}>
                   <span className="user-detail-location">{reviewInformationData.UserLocation}</span>

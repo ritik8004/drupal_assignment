@@ -4,6 +4,7 @@ namespace Drupal\bazaar_voice;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Cache\CacheBackendInterface;
 
 /**
  * Class BazaarVoice Api Helper.
@@ -27,16 +28,26 @@ class BazaarVoiceApiHelper {
   protected $currentRouteMatch;
 
   /**
+   * Cache Backend service for alshaya.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * BazaarVoiceApiHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   Current route matcher service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service for alshaya.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, CurrentRouteMatch $currentRouteMatch) {
+  public function __construct(ConfigFactoryInterface $config_factory, CurrentRouteMatch $currentRouteMatch, CacheBackendInterface $cache) {
     $this->configFactory = $config_factory;
     $this->currentRouteMatch = $currentRouteMatch;
+    $this->cache = $cache;
   }
 
   /**
@@ -131,9 +142,21 @@ class BazaarVoiceApiHelper {
   public function isCurrentRouteInBvList() {
     // Get current route identifier.
     $current_route_identifier = $this->getCurrentRouteIdentifier();
-    // Get list of routes where we add BazaarVoice script will be loaded.
-    $bazaarvoice_routes_config = $this->configFactory->get('bazaar_voice.settings')->get('bv_routes_list');
-    $bazaarvoice_routes_array = array_map('trim', explode("\n", $bazaarvoice_routes_config));
+    $config_name = 'bv_routes_list';
+    // Check for cache first.
+    $cid = 'alshaya_bazaar_voice:' . $config_name;
+    if ($cache = $this->cache->get($cid)) {
+      $data = $cache->data;
+      // If cache hit.
+      if (!empty($data)) {
+        $bazaarvoice_routes_config = $data;
+      }
+    }
+    else {
+      // Get list of routes where we add BazaarVoice script will be loaded.
+      $bazaarvoice_routes_config = $this->configFactory->get('bazaar_voice.settings')->get('bv_routes_list');
+    }
+    $bazaarvoice_routes_array = array_map('trim', explode(PHP_EOL, $bazaarvoice_routes_config));
     // Check if route exists in the list defined.
     if (in_array($current_route_identifier, $bazaarvoice_routes_array)) {
       return TRUE;

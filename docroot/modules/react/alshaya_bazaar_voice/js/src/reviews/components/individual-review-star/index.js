@@ -8,7 +8,7 @@ const IndividualReviewStar = ({
     return null;
   }
   const IndividualReviewDisplay = Object.keys(customerValue).map((item) => {
-    if (customerValue[item].DisplayType === 'NORMAL' === true) {
+    if (customerValue[item].DisplayType === 'NORMAL') {
       return ([
         <div key={item} className="secondary-star-container">
           <div className="overall-label">

@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment-timezone';
 import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import ReviewFeedback from '../review-feedback';
 import ConditionalView from '../../../common/components/conditional-view';
@@ -8,15 +7,14 @@ import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
 import ReviewPhoto from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import getDateFormat from '../../../../../../js/utilities/dateFormats';
+import { getDate } from '../../../../../../js/utilities/dateUtility';
 
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
 }) => {
   if (reviewDescriptionData !== undefined) {
-    const date = new Date(reviewDescriptionData.SubmissionTime);
-    const dateStr = moment(date).format(getDateFormat());
+    const date = getDate(reviewDescriptionData.SubmissionTime);
     return (
       <div className="review-detail-right">
         <div className="review-details">
@@ -26,7 +24,7 @@ const ReviewDescription = ({
               starPercentage={reviewDescriptionData.Rating}
             />
             <div className="review-title">{reviewDescriptionData.Title}</div>
-            <div className="review-date">{`${dateStr}`}</div>
+            <div className="review-date">{`${date}`}</div>
           </ConditionalView>
 
           <div className="review-text">{reviewDescriptionData.ReviewText}</div>
