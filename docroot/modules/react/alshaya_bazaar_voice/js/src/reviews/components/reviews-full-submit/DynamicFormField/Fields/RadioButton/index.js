@@ -26,8 +26,8 @@ class RadioButton extends React.Component {
     } = this.props;
     const { activeId } = this.state;
     const recommend = {
-      0: 'No',
-      1: 'Yes',
+      0: Drupal.t('no'),
+      1: Drupal.t('yes'),
     };
 
     return (
