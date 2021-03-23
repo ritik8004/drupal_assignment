@@ -112,6 +112,8 @@
   .gallery-wrapper {
     .labels-container {
       .label {
+        z-index: 1;
+
         &.bottom {
           &-left,
           &-right {
