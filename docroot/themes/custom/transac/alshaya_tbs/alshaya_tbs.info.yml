@@ -22,7 +22,6 @@ regions:
   footer_secondary: 'Footer Secondary'
 
 libraries:
-  - alshaya_white_label/global_styles
   - alshaya_tbs/global_styles
 
 libraries-override:
