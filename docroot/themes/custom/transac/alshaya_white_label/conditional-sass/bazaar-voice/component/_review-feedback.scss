@@ -1,0 +1,61 @@
+#reviews-section {
+  .review-detail-right {
+    .review-feedback {
+      .review-feedback-vote {
+        display: flex;
+        align-items: center;
+
+        @include breakpoint($upto-desktop) {
+          flex-flow: row wrap;
+          width: 100%;
+        }
+
+        .feedback-positive,
+        .feedback-negative,
+        .feedback-report {
+          padding-#{$right}: 0.5rem;
+
+          button {
+            border: 0;
+            background: $rr-feedback-button-active-bg;
+          }
+        }
+
+        .review-feedback-vote-disabled {
+          .feedback-positive {
+            .feedback-count {
+              color: $rr-positive-feedback-txt;
+            }
+          }
+
+          .feedback-negative {
+            .feedback-count {
+              color: $rr-negative-feedback-txt;
+            }
+          }
+
+          .feedback-option-label {
+            text-decoration: none;
+          }
+        }
+
+        .feedback-report-disabled {
+          .feedback-option-label {
+            text-decoration: none;
+          }
+
+          button {
+            background: $rr-feedback-button-disable-bg;
+          }
+        }
+      }
+
+      .review-feedback-comment {
+        @include breakpoint($upto-desktop) {
+          width: 100%;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+  }
+}

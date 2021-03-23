@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Service;
 use Drupal\alshaya_acm_product\Plugin\QueueWorker\ProcessProduct;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\queue_unique\UniqueDatabaseQueue;
 
 /**
  * Class Product Queue Utility.
@@ -113,6 +114,19 @@ class ProductQueueUtility {
     foreach ($products as $nid => $sku) {
       $this->queueProduct($sku, $nid);
     }
+  }
+
+  /**
+   * Delete a claimed item from the unique queue.
+   *
+   * @param mixed $data
+   *   Queue Item Data.
+   */
+  public function deleteItem($data) {
+    $this->connection->delete(UniqueDatabaseQueue::TABLE_NAME)
+      ->condition('data', serialize($data))
+      ->condition('expire', 0, '>')
+      ->execute();
   }
 
   /**

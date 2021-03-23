@@ -108,9 +108,11 @@
                     $(that).trigger('click');
                     return;
                   }
+                  var closestForm = $(that).closest('form.sku-base-form');
                   var cleaned_sku = $(form).attr('data-cleaned-sku');
+
                   // Showing the error message.
-                  $('.error-container-' + cleaned_sku).html('<div class="error">' + response.error_message + '</div>');
+                  $(closestForm).find('.errors-container').html('<div class="error">' + response.error_message + '</div>');
 
                   // Process required data and trigger add to cart failure event.
                   productData.options = [];

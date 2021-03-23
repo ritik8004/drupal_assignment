@@ -224,8 +224,18 @@
 .horizontal-upell,
 .horizontal-related,
 .horizontal-crossell {
+  @include breakpoint($tablet) {
+    margin-bottom: 0;
+  }
+
   .view-product-slider {
     text-align: $left;
+  }
+}
+
+.horizontal-crossell {
+  @include breakpoint($tablet) {
+    padding-top: 0;
   }
 }
 

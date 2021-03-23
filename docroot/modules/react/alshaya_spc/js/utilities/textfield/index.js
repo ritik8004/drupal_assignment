@@ -50,7 +50,7 @@ class TextField extends React.Component {
             <span className="country-code">{`+${countryMobileCode}`}</span>
             <input
               maxLength={countryMobileCodeMaxLength}
-              type="text"
+              type="tel"
               name={name}
               defaultValue={defaultValue}
             />

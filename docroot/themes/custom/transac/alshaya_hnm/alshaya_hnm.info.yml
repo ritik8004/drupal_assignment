@@ -109,7 +109,7 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/postpay-pdp/postpay-pdp.ltr.css: css/conditional-sass/postpay-pdp/postpay-pdp.ltr.css
-        
+
   alshaya_white_label/store_finder:
     css:
       theme:
@@ -124,8 +124,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css: css/conditional-sass/advance-content-slider/advance-content-slider.ltr.css
-  
+
   alshaya_white_label/advanced-page:
     css:
       theme:
         css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css
+
+  alshaya_white_label/bazaar-voice:
+    css:
+      theme:
+        css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css

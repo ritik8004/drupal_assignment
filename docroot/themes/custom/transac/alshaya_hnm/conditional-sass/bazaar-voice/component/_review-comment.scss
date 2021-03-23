@@ -1,0 +1,18 @@
+#reviews-section {
+  #comment-form {
+    .comment-form {
+      &-title {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+
+  .review-inline-feedback {
+    .review-feedback-comment,
+    .review-comment-form {
+      button {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}

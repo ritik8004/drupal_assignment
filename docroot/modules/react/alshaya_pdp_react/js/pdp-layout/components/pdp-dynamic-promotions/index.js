@@ -25,7 +25,7 @@ class PdpDynamicPromotions extends React.Component {
   refreshDynamicPromoLabels = (skuMainCode, cartDataValue) => {
     if (cartDataValue !== null) {
       const cartDataUrl = Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartDataValue);
-      const url = Drupal.url(`promotions/dynamic-label-product/${skuMainCode}/?cacheable=1&context=web&${cartDataUrl}`);
+      const url = Drupal.url(`rest/v1/promotions/dynamic-label-product/${btoa(skuMainCode)}/?cacheable=1&context=web&${cartDataUrl}`);
 
       axios.get(url).then((response) => {
         if (response.data.length !== 0) {

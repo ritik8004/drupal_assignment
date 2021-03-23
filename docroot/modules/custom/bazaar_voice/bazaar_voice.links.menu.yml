@@ -1,0 +1,5 @@
+bazaar_voice.settings_form:
+  title: 'BazaarVoice'
+  description: 'Configure BazaarVoice module.'
+  route_name: bazaar_voice.settings_form
+  parent: system.admin_config_system
