@@ -14,7 +14,8 @@ use Drupal\node\NodeInterface;
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_feed_node_delete(NodeInterface $node) {
-  if (empty(\Drupal::config('dynamic_yield.settings')->get('feeds'))) {
+  // Check if dynamic yield settings mode is api. Default is xml.
+  if (\Drupal::config('dynamic_yield.settings')->get('mode') != 'api') {
     return;
   }
 
