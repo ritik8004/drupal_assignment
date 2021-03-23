@@ -9,6 +9,15 @@
   #cloud-zoom-big {
     width: 19.875rem !important;
   }
+
+  &__image {
+    .img-wrap {
+      @include breakpoint($tablet) {
+        height: auto;
+        overflow: auto;
+      }
+    }
+  }
 }
 
 #cloud-zoom-big {
