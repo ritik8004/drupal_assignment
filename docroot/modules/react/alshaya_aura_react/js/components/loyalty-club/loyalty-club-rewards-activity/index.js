@@ -210,20 +210,22 @@ class LoyaltyClubRewardsActivity extends React.Component {
             key="transaction-filter"
           />
         </div>
-        {noStatement === false
-        && (
-          <div className="header-row">
-            <span className="order-id">{Drupal.t('Order No.')}</span>
-            <span className="date">{Drupal.t('Date')}</span>
-            <span className="amount">{Drupal.t('Order Total')}</span>
-            <span className="type">{Drupal.t('Online / Offline')}</span>
-            <span className="aura-points">{Drupal.t('AURA points')}</span>
-            <span className="status">{Drupal.t('Status')}</span>
-          </div>
-        )}
+        <div className="reward-activity-statement">
+          {noStatement === false
+          && (
+            <div className="header-row">
+              <span className="order-id">{Drupal.t('Order No.')}</span>
+              <span className="date">{Drupal.t('Date')}</span>
+              <span className="amount">{Drupal.t('Order Total')}</span>
+              <span className="type">{Drupal.t('Online / Offline')}</span>
+              <span className="aura-points">{Drupal.t('AURA points')}</span>
+              <span className="status">{Drupal.t('Status')}</span>
+            </div>
+          )}
 
-        <div className="reward-activity">
-          {this.generateStatement()}
+          <div className="reward-activity">
+            {this.generateStatement()}
+          </div>
         </div>
       </div>
     );
