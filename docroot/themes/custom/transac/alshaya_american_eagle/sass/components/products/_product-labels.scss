@@ -2,6 +2,8 @@
   .label {
     &.top {
       &-left {
+        #{$left}: 0;
+
         @include breakpoint($desktop) {
           top: 1rem;
           #{$left}: 1.25rem;
@@ -10,18 +12,18 @@
 
         @include breakpoint($only-mobile) {
           top: 1rem;
-          #{$left}: 1.25rem;
           #{$right}: inherit;
         }
 
         @include breakpoint($only-tablet) {
           top: 1rem;
-          #{$left}: 1.25rem;
           #{$right}: inherit;
         }
       }
 
       &-right {
+        #{$right}: 0;
+
         @include breakpoint($desktop) {
           top: 1rem;
           #{$right}: 1.25rem;
@@ -30,13 +32,11 @@
 
         @include breakpoint($only-mobile) {
           top: 1rem;
-          #{$right}: 1.25rem;
           #{$left}: inherit;
         }
 
         @include breakpoint($only-tablet) {
           top: 1rem;
-          #{$right}: 1.25rem;
           #{$left}: inherit;
         }
       }
@@ -44,18 +44,22 @@
 
     &.bottom {
       &-left {
-        #{$left}: 1.25rem;
+        #{$left}: 0;
+        bottom: 1rem;
+        #{$right}: inherit;
 
         @include breakpoint($desktop) {
-          bottom: 6.5rem;
+          #{$left}: 1.25rem;
         }
       }
 
       &-right {
-        #{$right}: 1.25rem;
+        #{$right}: 0;
+        bottom: 1rem;
+        #{$left}: inherit;
 
         @include breakpoint($desktop) {
-          bottom: 6.5rem;
+          #{$right}: 1.25rem;
         }
       }
     }
@@ -68,11 +72,9 @@
       &.bottom {
         &-left,
         &-right {
-          @include breakpoint($only-tablet) {
-            bottom: 4.5rem;
-          }
+          bottom: 0;
 
-          @include breakpoint($desktop) {
+          @include breakpoint($only-mobile) {
             bottom: 5.5rem;
           }
         }

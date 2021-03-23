@@ -53,15 +53,13 @@
     &.bottom {
       &-left {
         @include breakpoint($desktop) {
-          bottom: 6.5rem;
-          #{$left}: 1.5rem;
+          #{$left}: 8.5rem;
         }
       }
 
       &-right {
         @include breakpoint($desktop) {
-          bottom: 6.5rem;
-          #{$right}: 1.5rem;
+          #{$right}: 8.5rem;
         }
       }
     }
@@ -74,13 +72,7 @@
       &.bottom {
         &-left,
         &-right {
-          @include breakpoint($only-tablet) {
-            bottom: 4.5rem;
-          }
-
-          @include breakpoint($desktop) {
-            bottom: 5.5rem;
-          }
+          bottom: 0;
         }
       }
     }
