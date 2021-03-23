@@ -129,23 +129,18 @@ class BazaarVoiceApiHelper {
    *   True or false.
    */
   public function isCurrentRouteInBvList() {
-    $static = &drupal_static(__FUNCTION__, []);
+    $bazaarvoice_routes_array = &drupal_static(__FUNCTION__, NULL);
 
-    $config_name = 'bv_routes_list';
-    $static_id = 'bazaar_voice:' . $config_name;
-
-    if (isset($static[$static_id])) {
-      $bazaarvoice_routes_config = $static[$static_id];
-    }
-    else {
+    if (!isset($bazaarvoice_routes_array)) {
       // Get list of routes where we add BazaarVoice script will be loaded.
-      $bazaarvoice_routes_config = $this->configFactory->get('bazaar_voice.settings')->get($config_name);
-      $static[$static_id] = $bazaarvoice_routes_config;
+      $bazaarvoice_routes_config = $this->configFactory->get('bazaar_voice.settings')->get('bv_routes_list');
+      $bazaarvoice_routes_array = array_map('trim', explode(PHP_EOL, $bazaarvoice_routes_config));
     }
-    $bazaarvoice_routes_array = array_map('trim', explode(PHP_EOL, $bazaarvoice_routes_config));
+
     // Get current route identifier.
     $current_route_identifier = $this->getCurrentRouteIdentifier();
-    // Check if route exists in the list defined.
+
+    // Check if current route exists in the route list.
     if (in_array($current_route_identifier, $bazaarvoice_routes_array)) {
       return TRUE;
     }
