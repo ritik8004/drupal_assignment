@@ -23,7 +23,7 @@
     .block-facet-blockcategory-facet-plp {
       @include breakpoint($only-mobile) {
         top: 3.625rem;
-        z-index: 2;
+        z-index: 10;
       }
     }
   }
