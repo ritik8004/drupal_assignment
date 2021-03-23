@@ -91,6 +91,16 @@
   }
 }
 
+.c-plp {
+  .c-products__item {
+    .alshaya_search_gallery {
+      .alshaya_search_mainimage {
+        z-index: 1;
+      }
+    }
+  }
+}
+
 .view-product-slider {
   .slick-slider {
     .slick-slide {
