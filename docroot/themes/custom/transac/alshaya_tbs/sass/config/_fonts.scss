@@ -138,6 +138,7 @@ $tbs-dw-bold: 'DrukWide-Bold-Cy-Web', 'Druk-Bold-Web', 'Arial';
 $tbs-dw-super: 'DrukWide-Super-Web', 'DrukCond-Super-Cy-Web', 'Arial';
 
 $body_font: $tbs-regular;
+$primary-font: $tbs-regular;
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in H&M theme.
 $arial: $tbs-regular;

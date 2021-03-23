@@ -14,6 +14,7 @@ $dir: rtl;
 @import "../../alshaya_white_label/sass/config/**/*";
 @import "config/**/*";
 @import "../../alshaya_white_label/sass/utils";
+@import "utils";
 
 // Utilities for building multilingual websites.
 @import "../../alshaya_white_label/sass/directional";
@@ -31,3 +32,4 @@ $dir: rtl;
 
 // Importing browser specific hot fixes.
 @import "../../alshaya_white_label/sass/hotfix";
+@import "hotfix";

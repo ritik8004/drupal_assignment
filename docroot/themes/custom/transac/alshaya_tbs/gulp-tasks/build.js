@@ -12,7 +12,7 @@ module.exports = function (gulp, plugins, options) {
     'compile:module-component-libraries-ltr'
     // 'compile:styleguide'
   ], function (cb) {
-    // Run linting last, otherwise its output gets lost.
+  // Run linting last, otherwise its output gets lost.
     plugins.runSequence(['lint:js-with-fail', 'lint:css-with-fail', 'lint:module-component-libraries-css-with-fail'], cb);
   });
 
