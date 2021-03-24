@@ -1234,8 +1234,9 @@ class Cart {
       CartActions::CART_BILLING_UPDATE,
       CartActions::CART_SHIPPING_UPDATE,
     ])) {
-      $this->logger->notice('Billing / Shipping address data: @address_data', [
+      $this->logger->notice('Billing / Shipping address data: @address_data. CartId: @cart_id', [
         '@address_data' => json_encode($data),
+        '@cart_id' => $cart_id,
       ]);
     }
 
