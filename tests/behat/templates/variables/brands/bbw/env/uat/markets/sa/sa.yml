@@ -4,3 +4,7 @@ variables:
   spc_product_listing_page: '/shop-bodycare/'
   spc_basket_page: '/shop-bodycare/'
   governorate: ''
+  spc_single_product_detail_page_coupon: '/buy-pink-gem-pocketbac-holder.html/'
+  spc_multiple_product_detail_page_coupon: '/buy-japanese-cherry-blossom-bath-fizzy.html/'
+  spc_single_product_detail_page_no_coupon: '/buy-warm-vanilla-sugar-travel-size-shower-gel.html/'
+  spc_multiple_product_detail_page_no_coupon: '/buy-magic-air-travel-size-shower-gel.html/'
