@@ -1,5 +1,4 @@
 import React from 'react';
-import { postAPIData } from '../../../utilities/api/apiData';
 import ReviewInappropriate from '../review-inappropriate';
 import ReviewFeedbackPositive from '../review-feedback-positive';
 import ReviewFeedbackNegative from '../review-feedback-negative';
@@ -14,7 +13,7 @@ class ReviewFeedback extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('handleFeedbackSubmit', this.handleFeedbackSubmit);
+    document.addEventListener('handleFeedbackState', this.handleFeedbackState);
     const { contentId, contentType } = this.props;
     const checkFeedbackInStorage = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
     if (checkFeedbackInStorage !== null) {
@@ -22,25 +21,13 @@ class ReviewFeedback extends React.Component {
     }
   }
 
-  handleFeedbackSubmit = (event) => {
+  handleFeedbackState = (event) => {
     event.preventDefault();
-    const { contentId, voteText, contentType } = event.detail;
-    if (contentId !== undefined && voteText !== undefined) {
-      const params = `&FeedbackType=helpfulness&ContentType=${contentType}&ContentId=${contentId}&Vote=${voteText}`;
-      const apiData = postAPIData('/data/submitfeedback.json', params);
-      if (apiData instanceof Promise) {
-        apiData.then((result) => {
-          if (result.error === undefined
-            && result.data !== undefined
-            && result.data.error === undefined) {
-            this.setState({ votedContentId: contentId });
-          } else {
-            Drupal.logJavascriptError(`review-${contentType}-feedback-submit`, result.error);
-          }
-        });
-      }
+    const { contentId } = event.detail;
+    if (contentId !== undefined) {
+      this.setState({ votedContentId: contentId });
     }
-  };
+  }
 
   render() {
     const {
@@ -62,19 +49,21 @@ class ReviewFeedback extends React.Component {
       !== undefined && isSyndicatedReview === false) {
       return (
         <div className="review-feedback-vote">
-          <span className="feedback-label">{Drupal.t(`Was this ${contentTypeDisplayValue} helpful?`)}</span>
+          <span className="feedback-label">{Drupal.t('Was this @contentTypeDisplayValue helpful?', { '@contentTypeDisplayValue': contentTypeDisplayValue })}</span>
           <div className={`review-feedback-vote-${btnStatus}`}>
             <ReviewFeedbackPositive
               contentId={contentId}
               contentType={contentType}
               positiveCount={positiveCount}
               negativeCount={negativeCount}
+              btnStatus={btnStatus}
             />
             <ReviewFeedbackNegative
               contentId={contentId}
               contentType={contentType}
               positiveCount={positiveCount}
               negativeCount={negativeCount}
+              btnStatus={btnStatus}
             />
           </div>
           <ReviewInappropriate

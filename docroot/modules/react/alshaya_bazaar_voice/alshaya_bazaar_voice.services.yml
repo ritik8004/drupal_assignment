@@ -14,3 +14,4 @@ services:
       - '@alshaya_bazaar_voice.api_helper'
       - '@current_user'
       - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'

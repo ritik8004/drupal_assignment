@@ -11,6 +11,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * [5.19.0] Install path_redirect_import module.
+ */
+function alshaya_seo_transac_update_8413() {
+  \Drupal::service('module_installer')->install(['path_redirect_import']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.3.0] Create table to store order id.
  */
 function alshaya_seo_transac_update_8412() {

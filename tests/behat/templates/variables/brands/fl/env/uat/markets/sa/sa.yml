@@ -1,6 +1,9 @@
 variables:
   url_product_page: 'buy-adidas-nmd-r1-grade-school-shoes-white-grey-white.html'
-  product_listing_page_url: "/shop-mens/"
-  spc_product_listing_page: '/shop-mens/'
+  product_listing_page_url: "/shop-womens/"
+  spc_product_listing_page: '/shop-womens/'
   spc_basket_page: '/shop-mens/'
   new_checkout_enabled: TRUE
+  np_plp_product_page: '/buy-nike-air-max-90-mens-shoes-wolf-grey-white-indigo-storm.html'
+  np_plp_page: '/shop-womens/'
+  new_pdp_enabled: TRUE

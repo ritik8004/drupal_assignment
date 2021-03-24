@@ -460,6 +460,7 @@
       .alshaya_search_mainimage {
         z-index: 5;
         height: auto;
+        position: relative;
       }
     }
 
@@ -527,15 +528,6 @@
 
         article .content {
           position: absolute;
-        }
-
-        .labels-container {
-          &.bottom {
-            &-left,
-            &-right {
-              bottom: 10.3125rem;
-            }
-          }
         }
 
         .product-plp-detail-wrapper,

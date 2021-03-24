@@ -248,7 +248,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    Then I select the Checkout payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
@@ -335,7 +335,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    Then I select the Checkout payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"
@@ -429,7 +429,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com" element on page
+    Then I select the Checkout payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_checkout_card}"

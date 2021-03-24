@@ -1,1 +1,4 @@
 section_id: ''
+mode: 'xml'
+host_url: 'https://dy-api.eu'
+feeds: []

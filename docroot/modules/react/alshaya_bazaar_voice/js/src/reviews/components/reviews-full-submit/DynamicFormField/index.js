@@ -9,9 +9,11 @@ import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
+import { getCurrentUserEmail, getSessionCookie } from '../../../../utilities/user_util';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
+  let readonly = false;
 
   const { field: defField } = props;
   if (defField.length !== 0
@@ -22,6 +24,22 @@ const DynamicFormField = (props) => {
         fieldProperty[cleanKey] = value;
       },
     );
+  }
+
+  // Set default value for user nickname and email.
+  // For anonymous user, default value is from user cookies.
+  if (fieldProperty.group_type === 'textfield') {
+    if (fieldProperty.id === 'useremail') {
+      if (getCurrentUserEmail() !== null) {
+        fieldProperty.defaultVal = getCurrentUserEmail();
+        readonly = true;
+      } else if (getSessionCookie('BvUserEmail') !== null) {
+        fieldProperty.defaultVal = getSessionCookie('BvUserEmail');
+      }
+    } else if (fieldProperty.id === 'usernickname' && getSessionCookie('BvUserNickname') !== null
+      && getSessionCookie('BvUserEmail') !== null) {
+      fieldProperty.defaultVal = getSessionCookie('BvUserNickname');
+    }
   }
 
   if (fieldProperty.group_type === 'checkbox'
@@ -153,6 +171,7 @@ const DynamicFormField = (props) => {
       visible={fieldProperty.visible}
       text={fieldProperty.text}
       classLable={fieldProperty.class_name}
+      readonly={readonly}
     />
   );
 };

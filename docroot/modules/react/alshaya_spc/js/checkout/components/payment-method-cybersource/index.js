@@ -288,6 +288,7 @@ class PaymentMethodCybersource extends React.Component {
                 creditCard: true,
                 onCreditCardTypeChanged: this.handleCardTypeChanged,
               }}
+              type="tel"
               onChange={() => this.showCardType()}
               onBlur={(e) => this.handleCardNumberChange(e, 'blur')}
               name="spc-no-autocomplete-cy-number"
@@ -300,6 +301,7 @@ class PaymentMethodCybersource extends React.Component {
           <div className="spc-type-textfield spc-type-expiry spc-cy-cc-expiry">
             <Cleave
               htmlRef={(ref) => { this.ccExpiry = ref; }}
+              type="tel"
               options={{
                 date: true,
                 dateMin: this.dateMin,

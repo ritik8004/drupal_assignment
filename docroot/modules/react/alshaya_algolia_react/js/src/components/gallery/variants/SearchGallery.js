@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
+import Labels from '../../labels';
 import { updateAfter } from '../../../utils';
 import ImageElement from '../imageHelper/ImageElement';
 import ConditionalView from '../../../../common/components/conditional-view';
@@ -49,7 +50,9 @@ class SearchGallery extends React.PureComponent {
   };
 
   render() {
-    const { media, title, initiateSlider } = this.props;
+    const {
+      media, title, initiateSlider, labels, sku,
+    } = this.props;
     const origObj = this;
     const mainImageUrl = typeof this.mainImage.url !== 'undefined' ? this.mainImage.url : '';
     const thumbnails = [];
@@ -80,6 +83,7 @@ class SearchGallery extends React.PureComponent {
             title={title}
             className="b-lazy"
           />
+          <Labels labels={labels} sku={sku} />
         </div>
         <ConditionalView condition={initiateSlider}>
           <div className="alshaya_search_slider" data-slider-status={sliderStatus}>

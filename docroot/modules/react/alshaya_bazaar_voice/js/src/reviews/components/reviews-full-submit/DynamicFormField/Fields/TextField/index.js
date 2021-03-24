@@ -1,6 +1,5 @@
 import React from 'react';
 import { validEmailRegex } from '../../../../../../utilities/write_review_util';
-import { getCurrentUserEmail } from '../../../../../../utilities/user_util';
 import ConditionalView from '../../../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
@@ -42,14 +41,11 @@ class TextField extends React.Component {
       visible,
       text,
       classLable,
+      readonly,
     } = this.props;
     const { labelActiveClass } = this.state;
 
     if (visible === true) {
-      let email = null;
-      if (getCurrentUserEmail() !== undefined && id === 'useremail') {
-        email = getCurrentUserEmail();
-      }
       return (
         <>
           <ConditionalView condition={text !== undefined}>
@@ -60,14 +56,14 @@ class TextField extends React.Component {
               type="text"
               id={id}
               name={id}
-              defaultValue={(email !== null) ? email : defaultValue}
+              defaultValue={defaultValue}
               onChange={(e) => this.handleChange(e)}
               maxLength={maxLength}
               minLength={minLength}
-              readOnly={(email !== null) ? 1 : 0}
+              readOnly={readonly}
             />
             <div className="c-input__bar" />
-            <label className={`${labelActiveClass}`}>
+            <label className={`${(defaultValue !== undefined && defaultValue !== null) ? 'active-label' : labelActiveClass}`}>
               {label}
               {' '}
               {(required) ? '*' : '' }

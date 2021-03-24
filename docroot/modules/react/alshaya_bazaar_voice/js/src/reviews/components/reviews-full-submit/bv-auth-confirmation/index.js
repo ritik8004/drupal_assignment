@@ -2,7 +2,8 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import { postAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
-import ConditionalView from '../../../../common/components/conditional-view';
+import { setSessionCookie } from '../../../../utilities/user_util';
+import AuthConfirmationMessage from '../auth-confirmation-message';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -25,6 +26,8 @@ export default class BvAuthConfirmation extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           if (!result.data.HasErrors) {
+            const userId = result.data.Authentication.User;
+            setSessionCookie('BvUserId', userId);
             this.setState({
               isUserVerified: true,
             });
@@ -56,13 +59,10 @@ export default class BvAuthConfirmation extends React.Component {
             <div className="review-success-msg">
               <BazaarVoiceMessages />
             </div>
+            <AuthConfirmationMessage
+              isUserVerified={isUserVerified}
+            />
           </div>
-          <ConditionalView condition={isUserVerified === true}>
-            <div className="auth-confirmation-message">
-              <h1>{Drupal.t('Thank you for your contribution.')}</h1>
-              <div className="submission-msg">{Drupal.t('We have verified your submission. If the content is approved it will be published within 72 hours.')}</div>
-            </div>
-          </ConditionalView>
         </div>
       </Popup>
     );

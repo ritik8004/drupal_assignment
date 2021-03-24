@@ -4,13 +4,14 @@ import {
   setStorageInfo,
   getStorageInfo,
 } from '../../../utilities/storage';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 class ReviewInappropriate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       disabled: false,
-      reportButtonText: Drupal.t('Report'),
+      reportButtonText: getStringMessage('report'),
     };
   }
 
@@ -48,7 +49,7 @@ class ReviewInappropriate extends React.Component {
     if (contentId !== undefined) {
       const reportedContentVote = getStorageInfo(`${contentType}-reportedVote-${contentId}`);
       const { disabled, reportButtonText } = this.state;
-      const newText = Drupal.t('Reported');
+      const newText = getStringMessage('reported');
       return (
         <>
           {reportedContentVote === null ? (

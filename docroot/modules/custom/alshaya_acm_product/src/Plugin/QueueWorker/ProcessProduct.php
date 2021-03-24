@@ -7,12 +7,16 @@ use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\Service\ProductProcessedManager;
+use Drupal\alshaya_acm_product\Service\ProductQueueUtility;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
+use Drupal\Core\Queue\RequeueException;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -77,42 +81,67 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   protected $productProcessedManager;
 
   /**
-   * Works on a single queue item.
+   * The Entity Type Manager.
    *
-   * @param mixed $data
-   *   The data that was passed to
-   *   \Drupal\Core\Queue\QueueInterface::createItem() when the item was queued.
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Product Queue Utility.
    *
-   * @throws \Drupal\Core\Queue\RequeueException
-   *   Processing is not yet finished. This will allow another process to claim
-   *   the item immediately.
-   * @throws \Exception
-   *   A QueueWorker plugin may throw an exception to indicate there was a
-   *   problem. The cron process will log the exception, and leave the item in
-   *   the queue to be processed again later.
-   * @throws \Drupal\Core\Queue\SuspendQueueException
-   *   More specifically, a SuspendQueueException should be thrown when a
-   *   QueueWorker plugin is aware that the problem will affect all subsequent
-   *   workers of its queue. For example, a callback that makes HTTP requests
-   *   may find that the remote server is not responding. The cron process will
-   *   behave as with a normal Exception, and in addition will not attempt to
-   *   process further items from the current item's queue during the current
-   *   cron run.
-   *
-   * @see \Drupal\Core\Cron::processQueues()
+   * @var \Drupal\alshaya_acm_product\Service\ProductQueueUtility
+   */
+  protected $queueUtility;
+
+  /**
+   * {@inheritdoc}
    */
   public function processItem($data) {
-    if (is_string($data)) {
-      $sku = $data;
-      $nid = 0;
-    }
-    elseif (is_array($data)) {
+    $sku = $data;
+    $nid = 0;
+
+    if (is_array($data)) {
       $sku = $data['sku'];
       $nid = (int) $data['nid'];
     }
 
-    $this->getLogger('ProcessProduct')->notice(serialize($data));
+    // Delete the item right away so we get new entry if updated in parallel.
+    $this->queueUtility->deleteItem($data);
 
+    try {
+      // Reset all static caches before processing a product.
+      $this->entityTypeManager->getStorage('node')->resetCache();
+      $this->entityTypeManager->getStorage('acq_sku')->resetCache();
+      drupal_static_reset('loadFromSku');
+
+      $this->processSku($sku, $nid);
+    }
+    catch (RequeueException $e) {
+      // @todo post Drupal 9 upgrade to handle Delayed Requeue Exception too.
+      // @see https://www.drupal.org/project/drupal/issues/3116478
+      // Here we already achieve that in a way by re-queuing the product in the
+      // end instead of releasing the lock.
+      $this->queueUtility->queueProduct($sku, $nid);
+    }
+    catch (\Exception $e) {
+      $this->getLogger('ProcessProduct')->error('Exception occurred while processing the product with sku: @sku, nid: @nid, exception: @message', [
+        '@sku' => $sku,
+        '@nid' => $nid,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  /**
+   * Process the product.
+   *
+   * @param string $sku
+   *   SKU to process.
+   * @param int $nid
+   *   Node ID of the SKU.
+   */
+  protected function processSku(string $sku, int $nid) {
     $entity = SKU::loadFromSku($sku);
 
     // Sanity check.
@@ -142,22 +171,32 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     // Disable re-queueing while processing.
     self::$processingItem = TRUE;
 
-    // Invalid cache tags for node.
-    if ($node) {
-      $this->cacheTagsInvalidator->invalidateTags($node->getCacheTagsToInvalidate());
-    }
+    // Do all invalidations in one go.
     // Invalid cache tags for sku.
-    $this->cacheTagsInvalidator->invalidateTags($entity->getCacheTagsToInvalidate());
+    $cache_tags = $entity->getCacheTagsToInvalidate();
+
+    if ($node) {
+      // Invalid cache tags for node if available.
+      $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
+    }
 
     // Invalidate our custom cache tags.
-    $sku_tags = ProductCacheManager::getAlshayaProductTags($entity);
-    $this->cacheTagsInvalidator->invalidateTags($sku_tags);
+    $cache_tags = Cache::mergeTags(
+      $cache_tags,
+      ProductCacheManager::getAlshayaProductTags($entity)
+    );
+
+    $this->cacheTagsInvalidator->invalidateTags($cache_tags);
 
     $variants = $entity->bundle() === 'configurable'
       ? Configurable::getChildSkus($entity)
       : [];
 
-    foreach ($node ? $node->getTranslationLanguages() : $entity->getTranslationLanguages() as $language) {
+    $translation_languages = $node
+      ? $node->getTranslationLanguages()
+      : $entity->getTranslationLanguages();
+
+    foreach ($translation_languages as $language) {
       $translation = SKU::loadFromSku($entity->getSku(), $language->getId());
 
       foreach ($variants as $variant) {
@@ -185,6 +224,7 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
         $this->dispatcher->dispatch(ProductUpdatedEvent::PRODUCT_PROCESSED_EVENT, $event);
       }
     }
+
     $this->getLogger('ProcessProduct')->notice('Processed product with sku: @sku', [
       '@sku' => $entity->getSku(),
     ]);
@@ -257,6 +297,10 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
    *   Cache Tags Invalidator.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The Entity Type Manager.
+   * @param \Drupal\alshaya_acm_product\Service\ProductQueueUtility $queue_utility
+   *   Product Queue Utility.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -265,13 +309,17 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
                               SkuImagesManager $sku_images_manager,
                               EventDispatcherInterface $dispatcher,
                               CacheTagsInvalidatorInterface $cache_tags_invalidator,
-                              ProductProcessedManager $product_processed_manager) {
+                              ProductProcessedManager $product_processed_manager,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ProductQueueUtility $queue_utility) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->skuManager = $sku_manager;
     $this->imagesManager = $sku_images_manager;
     $this->dispatcher = $dispatcher;
     $this->cacheTagsInvalidator = $cache_tags_invalidator;
     $this->productProcessedManager = $product_processed_manager;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->queueUtility = $queue_utility;
   }
 
   /**
@@ -298,7 +346,9 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('event_dispatcher'),
       $container->get('cache_tags.invalidator'),
-      $container->get('alshaya_acm_product.product_processed_manager')
+      $container->get('alshaya_acm_product.product_processed_manager'),
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_acm_product.product_queue_utility')
     );
   }
 

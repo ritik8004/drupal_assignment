@@ -2,7 +2,9 @@ import React from 'react';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import { getCurrentUserEmail } from '../../../utilities/user_util';
+import {
+  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
+} from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
@@ -19,17 +21,7 @@ class ReviewCommentForm extends React.Component {
       nickname: '',
       submissionTime: '',
     };
-    this.getUserEmail = this.getUserEmail.bind(this);
-  }
-
-  componentDidMount() {
-    this.getUserEmail();
-  }
-
-  getUserEmail() {
-    const emailValue = getCurrentUserEmail();
-    this.setState({ email: emailValue });
-    return emailValue;
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   showCommentForm = () => {
@@ -38,11 +30,12 @@ class ReviewCommentForm extends React.Component {
     const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
-        <form id="comment-form" onSubmit={this.handleSubmit}>
+        <form id="comment-form" onSubmit={this.handleSubmit} noValidate>
           <div className="comment-form-title">
-            {Drupal.t('Post a Comment')}
+            {getStringMessage('post_a_comment')}
           </div>
           <div className="comment-form-fields">
+            <input type="hidden" name="blackBox" id="ioBlackBox" />
             <div className="form-item">
               <input
                 type="text"
@@ -55,7 +48,7 @@ class ReviewCommentForm extends React.Component {
               />
               <div className="c-input__bar" />
               <label className={`form-label ${commentbox ? 'active-label' : ''}`}>
-                {Drupal.t('Comment')}
+                {getStringMessage('comment')}
                 {'*'}
               </label>
               <div id="commentbox-error" className="error" />
@@ -73,7 +66,7 @@ class ReviewCommentForm extends React.Component {
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${nickname ? 'active-label' : ''}`}>
-                  {Drupal.t('Screen name')}
+                  {getStringMessage('screen_name')}
                   {'*'}
                 </label>
                 <div id="nickname-error" className="error" />
@@ -87,10 +80,11 @@ class ReviewCommentForm extends React.Component {
                   onChange={this.handleEmailChange}
                   className="form-input"
                   defaultValue={email}
+                  readOnly={(getCurrentUserEmail() !== null) ? 1 : 0}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
-                  {Drupal.t('Email Address')}
+                  {getStringMessage('email_address_label')}
                   {'*'}
                 </label>
                 <div id="email-error" className="error" />
@@ -98,12 +92,12 @@ class ReviewCommentForm extends React.Component {
             </div>
 
             <div className="terms-conditions">
-              <a href={commentTncUri} target="_blank" rel="noopener noreferrer">{Drupal.t('Terms and condition')}</a>
+              <a href={commentTncUri} target="_blank" rel="noopener noreferrer">{getStringMessage('terms_and_condition')}</a>
             </div>
 
             <div className="form-button-wrapper">
-              <button className="form-cancel-btn" onClick={() => this.setState({ showCommentForm: false })} type="button">{Drupal.t('cancel')}</button>
-              <button type="submit" className="form-submit-btn">{Drupal.t('post comment')}</button>
+              <button className="form-cancel-btn" onClick={() => this.setState({ showCommentForm: false })} type="button">{getStringMessage('cancel')}</button>
+              <button type="submit" className="form-submit-btn">{getStringMessage('post_comment')}</button>
             </div>
           </div>
         </form>
@@ -122,13 +116,42 @@ class ReviewCommentForm extends React.Component {
     );
   }
 
-  handleSubmit = async (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    const isError = await processFormDetails(e);
+    const isError = processFormDetails(e);
     if (!isError) {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
-      const params = `&Action=submit&CommentText=${commentbox}&UserEmail=${email}&UserNickname=${nickname}&ReviewId=${ReviewId}`;
+      const bazaarVoiceSettings = getbazaarVoiceSettings();
+      if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== email) {
+        const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
+        deleteSessionCookie(cookieValues);
+      }
+      let authParams = '';
+      if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
+        authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+      }
+      // Set user authenticated string (UAS).
+      if (getCurrentUserEmail() !== null && getSessionCookie('uas_token') !== undefined) {
+        authParams += `&user=${getSessionCookie('uas_token')}`;
+        setSessionCookie('BvUserNickname', nickname);
+      }
+
+      if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
+        && getSessionCookie('BvUserNickname') !== null) {
+        if (getSessionCookie('BvUserNickname') !== nickname) {
+          authParams += `&UserNickname=${nickname}`;
+          setSessionCookie('BvUserNickname', nickname);
+        }
+        authParams += `&User=${getSessionCookie('BvUserId')}`;
+      } else {
+        authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
+      }
+      // Add device finger printing string.
+      if (e.target.elements.blackBox.value !== '') {
+        authParams += `&fp=${e.target.elements.blackBox.value}`;
+      }
+      const params = `&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
       const apiData = postAPIData('/data/submitreviewcomment.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
@@ -187,6 +210,17 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
+    let emailValue = '';
+    let nicknameValue = '';
+    if (getCurrentUserEmail() !== null) {
+      emailValue = getCurrentUserEmail();
+    } else if (getSessionCookie('BvUserEmail') !== null) {
+      emailValue = getSessionCookie('BvUserEmail');
+    }
+    if (getCurrentUserEmail() !== null || getSessionCookie('BvUserEmail') !== null) {
+      nicknameValue = getSessionCookie('BvUserNickname') !== null ? getSessionCookie('BvUserNickname') : '';
+    }
+
     if (ReviewId !== undefined) {
       return (
         <>
@@ -195,12 +229,12 @@ class ReviewCommentForm extends React.Component {
               <button
                 className="review-feedback-comment-btn"
                 onClick={() => this.setState({
-                  showCommentForm: true, showCommentSubmission: false, email: '', nickname: '', commentbox: '',
+                  showCommentForm: true, showCommentSubmission: false, email: emailValue, nickname: nicknameValue, commentbox: '',
                 })}
                 type="button"
                 disabled={showCommentForm}
               >
-                {Drupal.t('comment')}
+                {getStringMessage('comment')}
               </button>
             </span>
           </div>

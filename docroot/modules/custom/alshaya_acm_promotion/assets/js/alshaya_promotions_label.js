@@ -97,7 +97,7 @@
     var cartDataUrl = Drupal.alshayaSpc.getCartDataAsUrlQueryString(cartData);
     // We set cacheable=1 so it is always treated as anonymous user request.
     jQuery.ajax({
-      url: Drupal.url('promotions/dynamic-label-product/' + sku) + '?cacheable=1&context=web&' + cartDataUrl,
+      url: Drupal.url('rest/v1/promotions/dynamic-label-product/' + btoa(sku)) + '?cacheable=1&context=web&' + cartDataUrl,
       method: 'GET',
       async: true,
       success: function (response) {
