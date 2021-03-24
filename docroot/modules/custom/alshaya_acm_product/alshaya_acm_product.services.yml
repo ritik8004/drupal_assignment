@@ -28,6 +28,7 @@ services:
       - '@entity_type.manager'
       - '@database'
       - '@language_manager'
+      - '@config.factory'
 
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
