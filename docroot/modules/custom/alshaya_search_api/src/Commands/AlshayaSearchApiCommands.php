@@ -7,6 +7,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Entity\Index;
@@ -68,7 +69,9 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *   Database Connection.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
    *   The Date Time service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   Logger.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $drupal_logger
    *   Looger Factory.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
@@ -77,12 +80,15 @@ class AlshayaSearchApiCommands extends DrushCommands {
    */
   public function __construct(Connection $connection,
                               TimeInterface $date_time,
-                              LoggerChannelFactoryInterface $logger,
+                              LoggerChannelInterface $logger,
+                              LoggerChannelFactoryInterface $drupal_logger,
                               SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager) {
     $this->connection = $connection;
     $this->dateTime = $date_time;
-    $this->drupalLogger = $logger->get('alshaya_search_api');
+    $this->drupalLogger = $drupal_logger->get('alshaya_search_api');
+    $this->setLogger($logger);
+    self::$loggerStatic = $logger;
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
   }
