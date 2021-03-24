@@ -492,9 +492,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
 
       if ($q) {
-        $route_params = Url::fromUserInput($q)->getRouteParameters();
-        if (isset($route_params['taxonomy_term'])) {
-          $term = $this->termStorage->load($route_params['taxonomy_term']);
+        try {
+          $route_params = Url::fromUserInput($q)->getRouteParameters();
+          if (isset($route_params['taxonomy_term'])) {
+            $term = $this->termStorage->load($route_params['taxonomy_term']);
+          }
+        }
+        catch (\UnexpectedValueException $e) {
+          $this->getLogger('ProductCategoryTree')->notice('Invalid url in views ajax request, url: @url.', [
+            '@url' => $q,
+          ]);
         }
       }
     }
