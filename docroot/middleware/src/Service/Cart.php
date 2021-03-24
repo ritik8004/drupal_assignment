@@ -1229,6 +1229,16 @@ class Cart {
       ? $data['extension']['action'] ?? ''
       : $data['extension']->action ?? '';
 
+    // Log the shipping / billing address we pass to magento.
+    if (in_array($action, [
+      CartActions::CART_BILLING_UPDATE,
+      CartActions::CART_SHIPPING_UPDATE,
+    ])) {
+      $this->logger->notice('Billing / Shipping address data: @address_data', [
+        '@address_data' => json_encode($data),
+      ]);
+    }
+
     // We do not want to send the variant sku values to magento unnecessarily.
     // So we store it separately and remove it from $data.
     $skus = [];
