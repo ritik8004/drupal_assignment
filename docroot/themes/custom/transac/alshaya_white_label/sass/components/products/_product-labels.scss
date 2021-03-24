@@ -117,13 +117,7 @@
         &.bottom {
           &-left,
           &-right {
-            @include breakpoint($only-tablet) {
-              bottom: 4.5rem;
-            }
-
-            @include breakpoint($desktop) {
-              bottom: 1.5rem;
-            }
+            bottom: 0;
           }
         }
       }
