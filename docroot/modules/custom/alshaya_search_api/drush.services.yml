@@ -8,7 +8,6 @@ services:
     arguments:
       - '@database'
       - '@datetime.time'
-      - '@logger.channel.alshaya_search_api'
       - '@logger.factory'
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
