@@ -1,5 +1,5 @@
-@javascript @promotions @free-gifts @smoke @auth @bbwaeuat
-Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for Authenticated User
+@javascript @promotions @free-gifts @smoke @auth @bbwaeuat @bbwsauat @bpaeuat
+Feature: SPC to checkout promotions (Free Gifts) on PDP and cart page without coupon for Authenticated User
 
   Background:
     Given I am on "user/login"
@@ -11,7 +11,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     Then I should be on "/user" page
 
   @desktop
-  Scenario: As an Authenticated user, I should be able to checkout promotions on PDP page without coupon
+  Scenario: As an Authenticated user, I should be able to checkout promotions on PDP and cart page without coupon
     Given I am on "{spc_single_product_detail_page_no_coupon}"
     And I wait for the page to load
     And the element "#block-content .free-gift-promotions" should exist
@@ -19,6 +19,17 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
+    When I click on ".free-gift-message a" element
+    And I wait for AJAX to finish
+    And I wait 5 seconds
+    Then I should see an ".content--short-description" element
+    And I click on "span.read-more-description-link-gift" element
+    And I wait 5 seconds
+    Then I should see an "span.show-less-link" element
+    And I click on "span.show-less-link" element
+    And I wait 5 seconds
+    And I click on ".ui-dialog-titlebar-close" element
+    And I wait 5 seconds
     Then I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
@@ -29,6 +40,8 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     Then I should be on "/cart"
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
+    And the element "#block-content .spc-main .spc-cart-item .spc-product-tile-actions .qty .spcSelect__control--is-disabled" should exist
+    And the element ".spc-content .spc-cart-items .spc-cart-item:nth-child(2) .spc-product-tile" should exist
     And I wait 10 seconds
     And I wait for AJAX to finish
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
@@ -36,14 +49,23 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait 15 seconds
     Then I should see "2"
     And I wait 5 seconds
-    Then the price for product should be doubled
-    And I wait 10 seconds
-    And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for AJAX to finish
+    And I wait for the page to load
+    When I add in the billing address with following:
+      | mobile   | {mobile}        |
+      | spc-area-select-selected-city | {city_option} |
+      | spc-area-select-selected      | {area_option} |
+      | address_line1                 | {street}      |
+      | dependent_locality            | {building}    |
+      | locality                      | {locality}    |
+      | address_line2                 | {floor}       |
+      | sorting_code                  | {landmark}    |
+      | postal_code                   | {postal_code} |
+    And I wait 5 seconds
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait 5 seconds
@@ -63,7 +85,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     Then I should see "{order_detail}"
 
   @language
-  Scenario: As an Authenticated user, I should be able to checkout promotions on PDP page without coupon in second language
+  Scenario: As an Authenticated user, I should be able to checkout promotions on PDP and cart page without coupon in second language
     Given I am on "{spc_single_product_detail_page_no_coupon}"
     And I wait for the page to load
     When I follow "{language_link}"
@@ -74,6 +96,17 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
+    When I click on ".free-gift-message a" element
+    And I wait for AJAX to finish
+    And I wait 5 seconds
+    Then I should see an ".content--short-description" element
+    And I click on "span.read-more-description-link-gift" element
+    And I wait 5 seconds
+    Then I should see an "span.show-less-link" element
+    And I click on "span.show-less-link" element
+    And I wait 5 seconds
+    And I click on ".ui-dialog-titlebar-close" element
+    And I wait 5 seconds
     When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
@@ -81,7 +114,6 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
-    Then I should be on "/{language_short}/cart"
     And I wait 10 seconds
     And I wait for AJAX to finish
     And I wait for the page to load
@@ -94,18 +126,17 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait 15 seconds
     Then I should see "2"
     And I wait 5 seconds
-    Then the price for product should be doubled
-    And I wait 10 seconds
-    And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
+    And the element "#block-content .spc-main .spc-cart-item .spc-product-tile-actions .qty .spcSelect__control--is-disabled" should exist
+    And the element ".spc-content .spc-cart-items .spc-cart-item:nth-child(2) .spc-product-tile" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 50 seconds
     And I wait for the page to load
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then I should see "{order_summary}"
+    Then I should see "{language_order_summary}"
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     Then the "payment-method-checkout_com_upapi" checkbox should be checked
@@ -119,12 +150,12 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
     And I wait for the page to load
-    Then I should see "{order_confirm_text}"
+    Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
-    Then I should see "{order_detail}"
+    Then I should see "{language_order_detail}"
 
   @language @mobile
-  Scenario: As an Authenticated user, I should be able to checkout promotions on mobile for PDP page without coupon (mobile)
+  Scenario: As an Authenticated user, I should be able to checkout promotions on mobile for PDP and cart page without coupon (mobile)
     Given I am on "{spc_single_product_detail_page_no_coupon}"
     And I wait for the page to load
     And the element "#block-content .free-gift-promotions" should exist
@@ -132,6 +163,17 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-image" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-title" should exist
     And the element "#block-content .free-gift-promotions .free-gift-promo-list .free-gift-message" should exist
+    When I click on ".free-gift-message a" element
+    And I wait for AJAX to finish
+    And I wait 5 seconds
+    Then I should see an ".content--short-description" element
+    And I click on "span.read-more-description-link-gift" element
+    And I wait 5 seconds
+    Then I should see an "span.show-less-link" element
+    And I click on "span.show-less-link" element
+    And I wait 5 seconds
+    And I click on ".ui-dialog-titlebar-close" element
+    And I wait 5 seconds
     Then I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
@@ -142,6 +184,8 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     Then I should be on "/cart"
     Then the element "#block-content .spc-main .spc-content .spc-cart-item" should exist
     And the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
+    And the element "#block-content .spc-main .spc-cart-item .spc-product-tile-actions .qty .spcSelect__control--is-disabled" should exist
+    And the element ".spc-content .spc-cart-items .spc-cart-item:nth-child(2) .spc-product-tile" should exist
     And I wait 10 seconds
     And I wait for AJAX to finish
     Then I click on ".spc-product-tile-actions .spc-select .spcSelect__control" element
@@ -149,18 +193,15 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait 15 seconds
     Then I should see "2"
     And I wait 5 seconds
-    Then the price for product should be doubled
-    And I wait 10 seconds
-    And I wait for the page to load
     Then the element "#block-content .spc-main .spc-content .spc-cart-items .freegift-label" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 50 seconds
     And I wait for the page to load
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then I should see "{order_summary}"
+    Then I should see "{language_order_summary}"
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-checkout_com_upapi" element on page
     And I wait for AJAX to finish
     Then the "payment-method-checkout_com_upapi" checkbox should be checked
@@ -174,7 +215,7 @@ Feature: SPC to checkout promotions (Free Gifts) on PDP page without coupon for 
     And I wait for the page to load
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
-    Then I should see "{order_confirm_text}"
+    Then I should see "{language_order_confirm_text}"
     Then I should see "{spc_auth_user_email}"
-    Then I should see "{order_detail}"
+    Then I should see "{language_order_detail}"
     
