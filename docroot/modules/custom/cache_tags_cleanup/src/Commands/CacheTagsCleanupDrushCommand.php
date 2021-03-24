@@ -14,6 +14,13 @@ use Drupal\Core\Entity\Query\QueryFactory;
 class CacheTagsCleanupDrushCommand extends DrushCommands {
 
   /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * Database Connection.
    *
    * @var \Drupal\Core\Database\Connection
@@ -55,7 +62,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
    */
   public function __construct(Connection $connection, LoggerChannelFactoryInterface $logger_channel_factory, EntityManagerInterface $entityManager, QueryFactory $queryFactory) {
     $this->connection = $connection;
-    $this->logger = $logger_channel_factory->get('cache_tags_cleanup');
+    $this->drupalLogger = $logger_channel_factory->get('cache_tags_cleanup');
     $this->entityManager = $entityManager;
     $this->queryFactory = $queryFactory;
   }
@@ -109,7 +116,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
       // but not in entity table.
       $deleted_entities = array_diff($cachetags_ids, $entity_ids);
       if (!empty($deleted_entities)) {
-        $this->logger->notice(dt('Total @count cache tags found for deleted entities of type @type.', [
+        $this->drupalLogger->notice(dt('Total @count cache tags found for deleted entities of type @type.', [
           '@count' => count($deleted_entities),
           '@type' => $entity_type,
         ]));
@@ -121,7 +128,7 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
         foreach ($entity_chunk as $entity_value) {
           $cachetags_collection['cachetags'][] = $entity_type . ':' . $entity_value;
           if ($verbose) {
-            $this->logger->notice(dt('Cache tag entry found for deleted entity with id @id and entity type @type.', [
+            $this->drupalLogger->notice(dt('Cache tag entry found for deleted entity with id @id and entity type @type.', [
               '@id' => $entity_value,
               '@type' => $entity_type,
             ]));
@@ -135,18 +142,18 @@ class CacheTagsCleanupDrushCommand extends DrushCommands {
           $query = $this->connection->delete('cachetags');
           $query->condition('tag', $cachetags_collection['cachetags'], 'IN');
           $query->execute();
-          $this->logger->notice(dt('Cachetag entries deleted for all deleted entities of type @type.', [
+          $this->drupalLogger->notice(dt('Cachetag entries deleted for all deleted entities of type @type.', [
             '@type' => $entity_type,
           ]));
         }
       }
       catch (\Exception $e) {
-        $this->logger->error('Exception while deleting entry from cache_tags table. Message: @message.', [
+        $this->drupalLogger->error('Exception while deleting entry from cache_tags table. Message: @message.', [
           '@message' => $e->getMessage(),
         ]);
       }
     }
-    $this->logger->notice('Cache tags table does not have any entries anymore for deleted entities.');
+    $this->drupalLogger->notice('Cache tags table does not have any entries anymore for deleted entities.');
   }
 
 }
