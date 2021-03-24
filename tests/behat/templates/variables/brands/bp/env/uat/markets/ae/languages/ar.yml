@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://bpae3-pprod.factory.alshaya.com/ar'
+  url_base_uri: 'https://bpae3-uat.factory.alshaya.com/ar'
   boots_appointment_page: '/appointment/booking'
   beauty_appointment: 'Beauty and Skin'
   health_appointment: 'Health and Pharmacy'
