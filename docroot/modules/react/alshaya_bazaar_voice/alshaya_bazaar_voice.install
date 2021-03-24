@@ -26,13 +26,6 @@ function alshaya_bazaar_voice_install() {
     AlshayaConfigManager::MODE_RESAVE
   );
 
-  // Add field for Rating filter to be used as facet filter.
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_acm_product'
-  );
-  \Drupal::service('acq_sku.fields_manager')->addFields();
-
   // Add translations.
   module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
   if ($translations = _alshaya_bazaar_voice_translations()) {
