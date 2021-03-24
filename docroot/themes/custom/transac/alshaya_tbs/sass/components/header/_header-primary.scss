@@ -1,0 +1,94 @@
+header {
+  .c-header {
+    background: $header-bg;
+  }
+
+  .block-alshaya-react-mini-cart {
+    .acq-mini-cart {
+      @include breakpoint($desktop) {
+        padding-#{$right}: 1.625rem;
+      }
+    }
+
+    .cart-link {
+      @include breakpoint($only-mobile) {
+        margin-top: 0.875rem;
+        margin-bottom: 0;
+        background-size: cover;
+      }
+    }
+
+    .cart-link-total {
+      font-size: 1rem;
+      font-family: $tbs-medium;
+      color: $primary_minicart_text;
+      padding-#{$right}: 0;
+    }
+
+    .quantity {
+      background: $primary_minicart_quantity_bg;
+      font-size: 0.75rem;
+      width: 1.125rem;
+      height: 1.125rem;
+      top: -0.5rem;
+      #{$right}: -1.125rem;
+      #{$left}: unset;
+      color: $primary_minicart_quantity_text;
+      font-family: $tbs-medium;
+    }
+  }
+
+  .region__header {
+    .block-system-branding-block {
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.c-menu-primary {
+  .mobile--menu {
+    &::before {
+      @include breakpoint($upto-desktop) {
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      top: 0;
+      padding: 1.125rem 1rem 1rem;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .store {
+      top: 0.625rem;
+
+      @include icon(store-locator) {
+        font-size: 1.125rem;
+        top: 0;
+        #{$left}: 0;
+        color: $header_c_menu_icon_color;
+      }
+    }
+  }
+}
+
+.site-brand-home {
+  a {
+    text-align: center;
+
+    @include breakpoint($only-mobile) {
+      width: 2.1875rem;
+      height: 2.3125rem;
+      margin: 0 auto;
+      padding: 0.625rem 0;
+
+      img {
+        margin-#{$left}: 0.625rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+.block-alshaya-algolia-react-autocomplete {
+  #alshaya-algolia-autocomplete {
+    @include breakpoint($tablet) {
+      width: 23.75rem;
+    }
+
+    .react-autosuggest__container {
+      &::before {
+        background-color: transparent;
+
+        @include breakpoint($only-mobile) {
+          #{$left}: 0.5rem;
+        }
+      }
+
+      &::after {
+        content: '';
+        background: url(../../../imgs/icons/search-icon.svg) no-repeat;
+        display: inline-block;
+        width: 2.125rem;
+        height: 2.125rem;
+        top: 0.1875rem;
+
+        @include breakpoint($only-mobile) {
+          top: 50%;
+          margin-top: 0.125rem;
+          transform: translateY(-50%);
+          #{$left}: 0.9375rem;
+        }
+      }
+    }
+  }
+
+  .react-autosuggest__input {
+    border: none;
+    border-radius: 0;
+    height: 2.5rem;
+    background: $algolia-search-field-bg;
+    font-family: $tbs-medium;
+    font-size: 1rem;
+    color: $algolia-input-text;
+
+    &::placeholder {
+      font-size: 1rem;
+      color: $algolia-input-text;
+      font-family: $tbs-medium;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+        font-family: $tbs-regular;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+      margin: 0;
+      height: 3.5625rem;
+      padding: 1.25rem 0 1.25rem 4.0625rem;
+      margin-top: 0.3125rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    &.clear-icon.show-algolia-search-bar {
+      .algolia-search-cleartext-icon {
+        top: 50%;
+        margin-top: 0.25rem;
+        transform: translateY(-50%);
+        #{$right}: 0;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  body {
+    &:not(.no-sticky-algolia-search-bar) {
+      .block-alshaya-algolia-react-autocomplete {
+        padding: 0;
+      }
+    }
+
+    header {
+      .c-header__region {
+        padding-#{$right}: 1.25rem;
+      }
+    }
+
+    .block-alshaya-algolia-react-autocomplete {
+      &.focused {
+        .react-autosuggest__input {
+          padding-#{$left}: 4.0625rem !important;
+        }
+
+        #alshaya-algolia-autocomplete {
+          .react-autosuggest__container {
+            &::after {
+              opacity: 0;
+            }
+          }
+
+          .algolia-search-back-icon {
+            top: 1rem;
+            color: $algolia-input-text;
+          }
+        }
+      }
+    }
+  }
+}

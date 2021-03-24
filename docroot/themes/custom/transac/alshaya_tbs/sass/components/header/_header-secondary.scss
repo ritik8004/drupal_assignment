@@ -1,0 +1,39 @@
+.c-menu-secondary {
+  a {
+    font-size: 0.75rem;
+    padding-#{$left}: 1.125rem;
+    padding-#{$right}: 1.125rem;
+  }
+
+  @include breakpoint($desktop) {
+    .menu--account {
+      li:first-child a,
+      li:nth-child(2) a,
+      li:last-child a {
+        &::before {
+          content: '';
+          padding: 0;
+        }
+      }
+    }
+
+    .stores-finder {
+      &::before {
+        content: '';
+        padding: 0;
+      }
+    }
+
+    .block-language-blocklanguage-interface {
+      .ar {
+        a {
+          padding-#{$right}: 1.75rem;
+
+          &::before {
+            content: '';
+          }
+        }
+      }
+    }
+  }
+}
