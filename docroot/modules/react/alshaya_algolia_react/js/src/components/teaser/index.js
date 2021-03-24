@@ -5,6 +5,8 @@ import Price from '../price';
 import Promotions from '../promotions';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
+import DisplayStar from '../rating-stars';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType,
@@ -30,7 +32,6 @@ const Teaser = ({
     labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
   }
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
-
   return (
     <div className="c-products__item views-row">
       <article
@@ -82,6 +83,20 @@ const Teaser = ({
                 </div>
               </a>
             </h2>
+            <ConditionalView condition={
+                hit.attr_bv_total_review_count !== undefined
+                && hit.attr_bv_total_review_count > 0
+              }
+            >
+              <div className="listing-inline-star">
+                <DisplayStar
+                  starPercentage={hit.attr_bv_average_overall_rating}
+                />
+                (
+                {hit.attr_bv_total_review_count}
+                )
+              </div>
+            </ConditionalView>
             {hit.rendered_price
               ? Parser(hit.rendered_price)
               : <Price price={hit.original_price} final_price={hit.final_price} />}
