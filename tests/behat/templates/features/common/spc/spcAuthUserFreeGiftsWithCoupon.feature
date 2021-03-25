@@ -1,4 +1,4 @@
-@javascript @promotions @free-gifts @smoke @auth @bbwaeuat
+@javascript @promotions @free-gifts @smoke @auth
 Feature: SPC to checkout promotions (Free Gifts) on PDP page and cart with coupon-code for Authenticated User for single and multiple products
 
   Background:

@@ -1,4 +1,4 @@
-@javascript @returnUser @codPayment @homeDelivery @hmaeuat @bbwkwuat @auth @mckwuat @hmkwuat @hmsauat @flkwuat
+@javascript @returnUser @codPayment @homeDelivery @vsaeuat @hmaeuat @bbwkwuat @auth @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
 Feature: SPC Checkout Home Delivery COD for returning customer
 
   Background:
