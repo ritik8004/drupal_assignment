@@ -1,0 +1,5 @@
+track_js.settings:
+  title: 'TrackJS Settings'
+  description: 'Configure TrackJS module.'
+  route_name: track_js.settings
+  parent: system.admin_config_system
