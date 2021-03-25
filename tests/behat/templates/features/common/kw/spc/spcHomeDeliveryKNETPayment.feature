@@ -2,7 +2,7 @@
 Feature: SPC Checkout Home Delivery CC
 
   Background:
-    Given I am on "/buy-pure-white-cotton-scentportable-fragrance-refill.html/"
+    Given I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
 
