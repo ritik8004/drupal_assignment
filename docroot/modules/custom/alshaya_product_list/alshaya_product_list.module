@@ -124,12 +124,12 @@ function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$d
     $query = \Drupal::service('database')->select('node__field_attribute_name', 'an');
     $query->addField('av', 'field_attribute_value_value');
     $query->addField('an', 'entity_id');
-    $query->join('node__field_attribute_value', 'av', "an.entity_id = av.entity_id and av.bundle='product_list'");
+    $query->join('node__field_attribute_value', 'av', 'an.entity_id = av.entity_id');
     $query->condition('an.bundle', 'product_list');
+    $query->condition('av.bundle', 'product_list');
     $query->condition('an.field_attribute_name_value', 'attr_' . $data['attribute_code']);
     $attributes[$data['attribute_code']] = $query->execute()->fetchAllkeyed(0, 1);
   }
-  // If there are nodes, use first one.
   if (!empty($attributes[$data['attribute_code']][$data['attribute_value']])) {
     $nid = $attributes[$data['attribute_code']][$data['attribute_value']];
     $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $nid);
