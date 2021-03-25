@@ -44,12 +44,6 @@
     .bvSelect__control {
       height: 3.125rem;
 
-      .bvSelect__dropdown-indicator {
-        &::before {
-          top: 1.1875rem;
-        }
-      }
-
       .bvSelect__single-value {
         color: $rr-sort-filter-txt !important;
       }
