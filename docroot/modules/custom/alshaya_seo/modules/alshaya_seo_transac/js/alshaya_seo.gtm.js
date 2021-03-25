@@ -1329,6 +1329,11 @@ const productRecommendationsSuffix = 'pr-';
   };
 
   window.onerror = function (message, url, lineNo, columnNo, error) {
+    if (window.TrackJS !== undefined) {
+      window.TrackJS.track({message, url, lineNo, columnNo, error});
+      return;
+    }
+
     if (error !== null) {
       Drupal.logJavascriptError('Uncaught errors', error);
     }
