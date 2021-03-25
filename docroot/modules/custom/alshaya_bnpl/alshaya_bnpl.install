@@ -9,18 +9,14 @@
  * Implements hook_install().
  */
 function alshaya_bnpl_install() {
-  /** @var \Drupal\taxonomy\TermStorage $termStorage */
-  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-  $term = $termStorage->create([
-    'vid' => 'payment_method',
-    'name' => 'Instalments with postpay',
-    'field_payment_code' => 'postpay'
-  ]);
-  $term->save();
-
-  $term_ar = $term->addTranslation('ar', []);
-  $term_ar->setName('تقسيط بوست باي');
-  $term_ar->save();
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $postpay = $checkout_options_manager->loadPaymentMethod('postpay', 'Instalments with postpay');
+  $postpay = $postpay->hasTranslation('ar')
+    ? $postpay->getTranslation('ar')
+    : $postpay->addTranslation('ar', []);
+  $postpay->setName('تقسيط بوست باي');
+  $postpay->save();
 
   // Disable new postpay payment method by default
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
