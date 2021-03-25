@@ -85,7 +85,7 @@ notifications:
     on_failure: always
   email:
     recipients:
-      - nikunj.kotecha@acquia.com
+      - alshayateam@acquia.com
     on_success: never
     on_failure: always
 
