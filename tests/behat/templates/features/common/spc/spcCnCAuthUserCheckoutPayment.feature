@@ -1,4 +1,4 @@
-@javascript @checkoutPayment @auth @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat
+@javascript @checkoutPayment @auth @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat @flaeuat @bbwaeuat
 Feature: SPC Checkout using Click & Collect store for Authenticated user using Checkout (2D) Cards
 
   Background:
@@ -65,9 +65,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I wait 20 seconds
+    And I wait 50 seconds
     Then I should be on "/checkout/confirmation" page
 
   @cc @cnc @mobile @checkout_com

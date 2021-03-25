@@ -2475,7 +2475,7 @@ JS;
     } else {
       $element = '.payment-method-checkout_com';
     }
-    $card = $page->find('css', $element . $class);
+    $card = $page->find('css', $element . ' ' . $class);
     if ($card !== null) {
       $card->setValue($value);
     } else {

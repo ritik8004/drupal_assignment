@@ -20,7 +20,7 @@ variables:
   sign_in: 'Sign in'
   find_store: 'Find a Store'
   language_link: 'العربية'
-  add_to_cart_link: 'add to bag'
+  add_to_cart_link: 'Add to basket'
   subtotal: 'subtotal'
   order_total: 'Order Total'
   order_summary: 'Order Summary'

@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @pbsauat @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat
+@javascript @account @smoke @auth @pbsauat @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
 Feature: Test search functionality
 
   Background:
