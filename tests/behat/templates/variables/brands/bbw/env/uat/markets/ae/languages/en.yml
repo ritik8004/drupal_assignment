@@ -1,7 +1,7 @@
 variables:
   url_base_uri: 'http://bbwae-uat.factory.alshaya.com/en'
   collection_filter: 'Collection'
-  sort_filter: 'sort by'
+  sort_filter: ''
   price_filter: ''
   brand_filter: 'Product Type'
   color_filter: 'Fragrance Category'
@@ -84,3 +84,5 @@ variables:
   filter_1: 'attr_collection_1'
   filter_2: 'attr_fragrance_name'
   filter_3: 'attr_fragrance_category'
+  empty_bag: 'Your shopping bag is empty.'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'

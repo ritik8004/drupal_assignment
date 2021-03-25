@@ -1,4 +1,4 @@
-@javascript @auth @madaPayment @homeDelivery @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @hmsauat @flkwuat
+@javascript @auth @madaPayment @homeDelivery
 Feature: SPC Checkout Home Delivery MADA Card Payment for Authenticated user
 
   Background:

@@ -1,4 +1,4 @@
-@javascript @auth @codPayment @homeDelivery @hmaeuat @bbwkwuat @mckwuat @hmkwuat @hmsauat @flkwuat
+@javascript @auth @codPayment @homeDelivery @hmaeuat @bbwkwuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat @vssauat
 Feature: SPC Checkout Home Delivery COD for Authenticated Users
 
   Background:
