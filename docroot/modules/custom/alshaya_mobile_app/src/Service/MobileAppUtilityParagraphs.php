@@ -645,10 +645,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           }
         }
         if ($field_name == 'field_link' || $field_name == 'field_button_link') {
-          if (UrlHelper::isValid($row[0]['uri'])) {
-            $url_object = Url::fromUri($row[0]['uri']);
-            if (isset($url_object)) {
-              $row[0]['deeplink'] = $this->getDeepLinkFromUrl($url_object);
+          if (!empty($row)) {
+            if (UrlHelper::isValid($row[0]['uri'])) {
+              $url_object = Url::fromUri($row[0]['uri']);
+              if (isset($url_object)) {
+                $row[0]['deeplink'] = $this->getDeepLinkFromUrl($url_object);
+              }
             }
           }
         }
