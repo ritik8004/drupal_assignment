@@ -1,4 +1,4 @@
 variables:
-  spc_product_listing_page: '/beauty/shop-body-care/'
-  spc_basket_page: '/beauty/shop-body-care/'
-  product_listing_page_url: '/beauty/shop-body-care/'
+  spc_product_listing_page: '/victorias-secret/shop-bras/'
+  spc_basket_page: '/victorias-secret/shop-bras/'
+  product_listing_page_url: '/victorias-secret/shop-bras/'
