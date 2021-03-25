@@ -14,7 +14,9 @@ use Drupal\field\Entity\FieldStorageConfig;
  * Update default configurations for the fields created for ratings & reviews.
  */
 function alshaya_bazaar_voice_install() {
-  \Drupal::service('alshaya_config.manager')->updateConfigs(
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Create and configure fields in product category.
+  $manager->updateConfigs(
     [
       'core.entity_form_display.taxonomy_term.acq_product_category.default',
       'core.entity_view_display.taxonomy_term.acq_product_category.default'
@@ -23,6 +25,7 @@ function alshaya_bazaar_voice_install() {
     'install',
     AlshayaConfigManager::MODE_RESAVE
   );
+
   // Add translations.
   module_load_include('inc', 'alshaya_bazaar_voice', 'alshaya_bazaar_voice.translations');
   if ($translations = _alshaya_bazaar_voice_translations()) {

@@ -13,9 +13,9 @@ export const getCurrentUserEmail = () => {
   return email;
 };
 
-export const setSessionCookie = (uasToken, maxAge) => {
-  Cookies.remove('uas_token');
-  Cookies.set('uas_token', uasToken, { expires: maxAge });
+export const setSessionCookie = (key, value) => {
+  Cookies.remove(key);
+  Cookies.set(key, value, { expires: bazaarVoiceSettings.reviews.bazaar_voice.max_age });
 };
 
 /**
@@ -23,29 +23,41 @@ export const setSessionCookie = (uasToken, maxAge) => {
  *
  * @returns {uasToken}
  */
-export const getSessionCookie = () => {
-  let sessionCookie = Cookies.get('uas_token');
+export const getSessionCookie = (key) => {
+  let sessionCookie = Cookies.get(key);
 
   if (sessionCookie === undefined) {
-    const requestUrl = '/get-uas-token';
-    const request = doRequest(requestUrl);
+    if (key === 'uas_token') {
+      const requestUrl = '/get-uas-token';
+      const request = doRequest(requestUrl);
 
-    if (request instanceof Promise) {
-      request.then((result) => {
-        if (result.status === 200) {
-          setSessionCookie(result.data, bazaarVoiceSettings.reviews.bazaar_voice.max_age);
-          sessionCookie = Cookies.get('uas_token');
-        } else {
-          Drupal.logJavascriptError('user-session', result.error);
-        }
-      });
+      if (request instanceof Promise) {
+        request.then((result) => {
+          if (result.status === 200) {
+            setSessionCookie(key, result.data);
+            sessionCookie = Cookies.get(key);
+          } else {
+            Drupal.logJavascriptError('user-session', result.error);
+          }
+        });
+      }
+    } else {
+      return null;
     }
   }
 
   return sessionCookie;
 };
 
+export const deleteSessionCookie = (keys) => {
+  keys.forEach((item) => {
+    Cookies.remove(item);
+  });
+};
+
 export default {
   getCurrentUserEmail,
+  setSessionCookie,
   getSessionCookie,
+  deleteSessionCookie,
 };

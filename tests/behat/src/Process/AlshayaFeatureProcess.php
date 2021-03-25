@@ -40,45 +40,46 @@ class AlshayaFeatureProcess {
     $this->config = $parameters['variables'];
     $this->validFeatures = $parameters['features'] ?? [];
     $this->viewport = $parameters['viewport'];
+    // Adding test templates for functionalities likes new checkout, new pdp, spc, boots etc. based on sites/region/environment
     $environment = explode('-', $parameters['site']);
-    if (in_array($environment[2], ['local', 'dev2', 'qa', 'uat'])) {
-      if ($environment[0] == 'bp') {
-        $this->suiteLocators = [
-          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'boots'
-        ];
-      } else {
-        if ($environment[1] == 'kw') {
-          $this->suiteLocators = [
-            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc',
-            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc'
-          ];
-        } else {
-          $this->suiteLocators = [
-            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc'
-          ];
-        }
+    $this->suiteLocators = array();
+    if ($parameters['variables']['new_pdp_enabled']) {
+      $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'newPDP';
+    }
+    else {
+      $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'oldPDP';
+    }
+    if (in_array($environment[2], ['dev3', 'local', 'dev2', 'qa', 'uat'])) {
+      if ($environment[0] == 'bp' || $environment[0] == 'hm') {
+        $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'boots';
       }
+      if ($environment[1] == 'kw' || $environment[1] == 'qa') {
+        $this->suiteLocators[] =
+          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc';
+      }
+      if ($environment[1] == 'qa' && $parameters['variables']['new_checkout_enabled']) {
+        $this->suiteLocators[] =
+          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'spc' . DIRECTORY_SEPARATOR . 'newCheckout';
+      }
+      $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'spc';
     }
     else if (in_array($environment[2], ['prod','pprod'])) {
       if ($environment[0] == 'bp') {
-        $this->suiteLocators = [
-          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'boots'
-        ];
-      } else {
-        if ($environment[1] == 'kw') {
-          $this->suiteLocators = [
-            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc',
-            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'kw'
-          ];
-        } else {
-          $this->suiteLocators = [
-            $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc'
-          ];
-        }
+        $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'boots';
       }
+      if ($environment[1] == 'kw' || $environment[1] == 'qa') {
+        $this->suiteLocators[] =
+          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . $environment[1];
+      }
+      if ($environment[1] == 'qa' && $parameters['variables']['new_checkout_enabled']) {
+        $this->suiteLocators[] =
+          $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . $environment[1] . DIRECTORY_SEPARATOR . 'newCheckout';
+      }
+      $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . 'prod' . DIRECTORY_SEPARATOR . 'spc';
     }
     else {
-      $this->suiteLocators = [$this->sourcePath . DIRECTORY_SEPARATOR . 'common', $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0]];
+      $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . 'common';
+      $this->suiteLocators[] = $this->sourcePath . DIRECTORY_SEPARATOR . $environment[0];
     }
   }
 
@@ -286,7 +287,7 @@ class AlshayaFeatureProcess {
       }
 
       if (!empty($this->validFeatures)
-          && !in_array(str_replace('.feature', '', $key), $this->validFeatures)
+        && !in_array(str_replace('.feature', '', $key), $this->validFeatures)
       ) {
         continue;
       }
@@ -318,7 +319,7 @@ class AlshayaFeatureProcess {
     }
 
     if (is_file($this->basePath . DIRECTORY_SEPARATOR . $path)
-        || is_dir($this->basePath . DIRECTORY_SEPARATOR . $path)
+      || is_dir($this->basePath . DIRECTORY_SEPARATOR . $path)
     ) {
       return realpath($this->basePath . DIRECTORY_SEPARATOR . $path);
     }

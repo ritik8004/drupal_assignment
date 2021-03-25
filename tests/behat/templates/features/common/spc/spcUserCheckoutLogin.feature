@@ -1,11 +1,11 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @hmsauat @flkwuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat
 Feature: Test the Checkout Login functionality
 
   Scenario: As a user, I should be able to see cart content added as anonymous user once I log into the site
     Given I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait for the page to load
     When I press "{add_to_cart_link}"
     And I wait 10 seconds

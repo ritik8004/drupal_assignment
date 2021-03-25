@@ -20,12 +20,12 @@ const RecommendedProduct = ({ item, itemKey }) => {
                 />
               )
               : null}
+            <ProductLozenges labels={item.labels} sku={itemKey} />
           </div>
           <div className="product-title">{item.title}</div>
           <div className="spc-product-price">
             <SpecialPrice price={item.original_price} finalPrice={item.final_price} />
           </div>
-          <ProductLozenges labels={item.labels} sku={itemKey} />
         </a>
         <div className="spc-promotions">
           {item.promo.map((key) => <CartPromotion key={key} promo={key} link />)}

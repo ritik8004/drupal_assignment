@@ -61,7 +61,7 @@ Feature: Testing new PDP page for Mobile
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "#add-to-cart-main"
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
@@ -70,9 +70,10 @@ Feature: Testing new PDP page for Mobile
     And I wait 5 seconds
     Then I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I wait 5 seconds
+    And I click on "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
+    And I wait 10 seconds
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-currency" element
     And I should see an "#block-alshayareactcartminicartblock #mini-cart-wrapper .cart-link-total .price .price-amount" element
-    And I click on "#block-alshayareactcartminicartblock #mini-cart-wrapper .acq-mini-cart a.cart-link" element
     And I wait 10 seconds
     Then I should be on "/{language_short}/cart" page
 
@@ -80,7 +81,7 @@ Feature: Testing new PDP page for Mobile
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "#add-to-cart-main"
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification col-1 img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification col-2 .qty" element

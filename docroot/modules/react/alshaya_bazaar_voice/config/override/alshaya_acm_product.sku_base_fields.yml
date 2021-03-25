@@ -1,7 +1,0 @@
-fields:
-  bv_rating:
-    label: 'Rating'
-    cardinality: -1
-    facet: 1
-    index: 1
-    translatable: 0

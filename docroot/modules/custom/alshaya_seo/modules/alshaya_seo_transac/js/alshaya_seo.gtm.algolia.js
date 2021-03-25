@@ -93,7 +93,7 @@
     if (!$(this).hasClass('is-active')) {
       var selectedVal = document.createElement('div');
       var facetTitle = $(this).attr('datadrupalfacetlabel');
-      selectedVal.innerHTML = $(this).find('span.facet-item__value').html();
+      selectedVal.innerHTML = $(this).find('span.facet-item__value, a.facet-item__value').html();
       selectedVal.querySelectorAll('span.facet-item__count').forEach(function (item, index) {
         item.parentNode.removeChild(item);
       });

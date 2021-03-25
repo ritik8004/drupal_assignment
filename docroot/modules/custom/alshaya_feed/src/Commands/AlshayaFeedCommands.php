@@ -14,6 +14,13 @@ use Drush\Commands\DrushCommands;
 class AlshayaFeedCommands extends DrushCommands {
 
   /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * Config factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -76,7 +83,7 @@ class AlshayaFeedCommands extends DrushCommands {
 
     // Do not generate xml feed if mode is set to `api` in dynamic yield config.
     if (!empty($mode) && $mode === 'api') {
-      $this->logger()->notice('Skipping XML feed generation as mode is set to `api` in dynamic_yield.settings.');
+      $this->drupalLogger->notice('Skipping XML feed generation as mode is set to `api` in dynamic_yield.settings.');
       return;
     }
 

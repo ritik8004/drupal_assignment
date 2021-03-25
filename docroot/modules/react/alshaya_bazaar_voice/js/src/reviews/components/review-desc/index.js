@@ -7,13 +7,14 @@ import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
 import ReviewPhoto from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getDate } from '../../../../../../js/utilities/dateUtility';
 
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
 }) => {
   if (reviewDescriptionData !== undefined) {
-    const date = new Date(reviewDescriptionData.SubmissionTime);
+    const date = getDate(reviewDescriptionData.SubmissionTime);
     return (
       <div className="review-detail-right">
         <div className="review-details">
@@ -23,7 +24,7 @@ const ReviewDescription = ({
               starPercentage={reviewDescriptionData.Rating}
             />
             <div className="review-title">{reviewDescriptionData.Title}</div>
-            <div className="review-date">{`${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}, ${date.getFullYear()}`}</div>
+            <div className="review-date">{`${date}`}</div>
           </ConditionalView>
 
           <div className="review-text">{reviewDescriptionData.ReviewText}</div>

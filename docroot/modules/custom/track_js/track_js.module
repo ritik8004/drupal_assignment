@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * Module file for TrackJS.
+ */
+
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function track_js_page_attachments(array &$attachments) {
+  $settings = \Drupal::config('track_js.settings');
+  $token = $settings->get('token');
+
+  $cache_tags = $attachments['#cache']['tags'] ?? [];
+  $attachments['#cache']['tags'] = Cache::mergeTags(
+    $settings->getCacheTags(),
+    $cache_tags
+  );
+
+  // Do nothing if token not set.
+  if (empty($token)) {
+    return;
+  }
+
+  // Do nothing if not configured to show on admin pages and current page
+  // is admin page.
+  $admin_pages = $settings->get('admin_pages');
+  if ($admin_pages === 'hidden' && \Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  $attachments['#attached']['library'][] = 'track_js/main';
+
+  $config = [];
+  $config['token'] = $token;
+
+  $application = $settings->get('application');
+  if (!empty($application)) {
+    $config['application'] = $application;
+  }
+
+  $init_script = [
+    [
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => Markup::create('window.TrackJS && TrackJS.install(' . json_encode($config) . ');'),
+    ],
+    'track_js_init',
+  ];
+
+  $library_script = [
+    [
+      '#tag' => 'script',
+      '#attributes' => [
+        'src' => $settings->get('library'),
+        'crossorigin' => TRUE,
+      ],
+    ],
+    'track_js_library',
+  ];
+
+  array_unshift($attachments['#attached']['html_head'], $init_script);
+  array_unshift($attachments['#attached']['html_head'], $library_script);
+}

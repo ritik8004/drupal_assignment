@@ -1,4 +1,4 @@
-@javascript @guest @codPayment @homeDelivery @hmaeuat @bbwkwuat @mckwuat @vsaeuat @hmkwuat @hmsauat @flkwuat
+@javascript @guest @codPayment @homeDelivery @hmaeuat @bbwkwuat @mckwuat @vsaeuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat
 Feature: SPC Checkout Home Delivery COD
 
   Background:
@@ -8,7 +8,7 @@ Feature: SPC Checkout Home Delivery COD
 
   @cod @hd
   Scenario: As a Guest, I should be able to checkout using COD
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -92,7 +92,7 @@ Feature: SPC Checkout Home Delivery COD
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -182,7 +182,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"

@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @pbaeuat @pbkwuat @pbsauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vsaeuat @vssauat @pbaeuat @pbkwuat @pbsauat @flkwuat @bbwkwuat @hmkwuat @hmsauat @mcsauat @mcaeuat @vskwuat @vsaeuat @flkwuat @flsauat @flaeuat @bbwsauat @bbwaeuat
 Feature: Test basket page
 
   Background:
@@ -7,7 +7,7 @@ Feature: Test basket page
     And I wait for the page to load
 
   Scenario: As a Guest, I should be able to add more quantity
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -55,7 +55,7 @@ Feature: Test basket page
 
   @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -84,7 +84,7 @@ Feature: Test basket page
 
   @mobile
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -103,7 +103,7 @@ Feature: Test basket page
     And I should see "{vat}"
 
   Scenario: As a Guest, I should be able to remove products from the basket
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -129,7 +129,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -150,7 +150,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -206,7 +206,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -227,7 +227,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -250,7 +250,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -276,7 +276,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"

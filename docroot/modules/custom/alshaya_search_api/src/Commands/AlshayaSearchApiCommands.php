@@ -7,7 +7,7 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Entity\Index;
 use Drush\Commands\DrushCommands;
@@ -18,6 +18,13 @@ use Drush\Commands\DrushCommands;
  * @package Drupal\alshaya_search_api\Commands
  */
 class AlshayaSearchApiCommands extends DrushCommands {
+
+  /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
 
   /**
    * Database Connection.
@@ -61,8 +68,8 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *   Database Connection.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
    *   The Date Time service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   Logger.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $drupal_logger
+   *   Looger Factory.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -70,13 +77,14 @@ class AlshayaSearchApiCommands extends DrushCommands {
    */
   public function __construct(Connection $connection,
                               TimeInterface $date_time,
-                              LoggerChannelInterface $logger,
+                              LoggerChannelFactoryInterface $drupal_logger,
                               SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager) {
     $this->connection = $connection;
     $this->dateTime = $date_time;
-    $this->setLogger($logger);
-    self::$loggerStatic = $logger;
+    $this->drupalLogger = $drupal_logger->get('alshaya_search_api');
+    $this->setLogger($this->drupalLogger);
+    self::$loggerStatic = $this->drupalLogger;
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
   }
@@ -243,13 +251,13 @@ class AlshayaSearchApiCommands extends DrushCommands {
     // Validate index.
     $index = Index::load($index_id);
     if (empty($index)) {
-      $this->logger->error(dt('Index id is invalid: @index', [
+      $this->drupalLogger->error(dt('Index id is invalid: @index', [
         '@index' => $index_id,
       ]));
       return;
     }
     if (empty($options['skus'])) {
-      $this->logger->error(dt('SKU not found.'));
+      $this->drupalLogger->error(dt('SKU not found.'));
       return;
     }
 
@@ -274,7 +282,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     // Process the batch.
     drush_backend_batch_process();
 
-    $this->logger->notice(dt('Process finished'));
+    $this->drupalLogger->notice(dt('Process finished'));
   }
 
   /**
@@ -352,7 +360,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
       return str_replace('entity:node/', '', $a);
     }, $item_ids);
 
-    $this->logger->warning(dt('Deleting items from index @items', [
+    $this->drupalLogger->warning(dt('Deleting items from index @items', [
       '@items' => json_encode($item_ids),
     ]));
 
@@ -375,7 +383,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
       return;
     }
 
-    $this->logger->warning(dt('Indexing items @items', [
+    $this->drupalLogger->warning(dt('Indexing items @items', [
       '@items' => json_encode($item_ids),
     ]));
 
@@ -443,7 +451,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
       return;
     }
 
-    $this->logger->warning(dt('Adding entries for search_api_item for items @items', [
+    $this->drupalLogger->warning(dt('Adding entries for search_api_item for items @items', [
       '@items' => json_encode($item_ids),
     ]));
 

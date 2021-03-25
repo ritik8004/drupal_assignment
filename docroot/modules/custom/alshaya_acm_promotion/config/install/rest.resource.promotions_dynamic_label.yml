@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_promotion
+    - serialization
+    - simple_oauth
+id: promotions_dynamic_label
+plugin_id: promotions_dynamic_label
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

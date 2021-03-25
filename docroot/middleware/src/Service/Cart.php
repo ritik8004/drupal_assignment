@@ -720,7 +720,7 @@ class Cart {
     ];
 
     // If shipping address add by address id.
-    $carrier_info = $shipping_data['carrier_info'];
+    $carrier_info = $shipping_data['carrier_info'] ?? NULL;
     $fields_data = !empty($shipping_data['customer_address_id'])
       ? $shipping_data['address']
       : $this->formatAddressForShippingBilling($shipping_data);
@@ -1229,6 +1229,17 @@ class Cart {
       ? $data['extension']['action'] ?? ''
       : $data['extension']->action ?? '';
 
+    // Log the shipping / billing address we pass to magento.
+    if (in_array($action, [
+      CartActions::CART_BILLING_UPDATE,
+      CartActions::CART_SHIPPING_UPDATE,
+    ])) {
+      $this->logger->notice('Billing / Shipping address data: @address_data. CartId: @cart_id', [
+        '@address_data' => json_encode($data),
+        '@cart_id' => $cart_id,
+      ]);
+    }
+
     // We do not want to send the variant sku values to magento unnecessarily.
     // So we store it separately and remove it from $data.
     $skus = [];
@@ -1379,7 +1390,6 @@ class Cart {
    */
   public function getHomeDeliveryShippingMethods(array $data) {
     static $static;
-
     if (empty($data['address']['country_id'])) {
       $this->logger->error('Error in getting shipping methods for HD as country id not available. Data:@data', [
         '@data' => json_encode($data),
@@ -1426,6 +1436,12 @@ class Cart {
     // Resetting the array keys or key might not start with 0 if first method is
     // cnc related and we filter it out.
     $static[$key] = array_values($static[$key]);
+    if (empty($static[$key])) {
+      $this->logger->error('Empty response while getting shipping methods from MDC. Data:@data , Cart id:@cart_id', [
+        '@data' => json_encode($data),
+        '@cart_id' => $this->getCartId(),
+      ]);
+    }
 
     $cache = [
       'key' => $key,

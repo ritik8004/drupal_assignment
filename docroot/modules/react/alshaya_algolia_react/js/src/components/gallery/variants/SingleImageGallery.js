@@ -1,8 +1,11 @@
 import React from 'react';
+import Labels from '../../labels';
 import ImageElement from '../imageHelper/ImageElement';
 
 const SingleImageGallery = (props) => {
-  const { title, media } = props;
+  const {
+    title, media, labels, sku,
+  } = props;
 
   // Clone media items, so that .shift() deletes items from
   // cloned array, keep original array reusable on state change.
@@ -20,6 +23,7 @@ const SingleImageGallery = (props) => {
           title={title}
           className="b-lazy"
         />
+        <Labels labels={labels} sku={sku} />
       </div>
     </div>
   );

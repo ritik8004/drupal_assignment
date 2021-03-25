@@ -1,0 +1,4 @@
+library: 'https://cdn.trackjs.com/agent/v3/latest/t.js'
+token: ''
+application: ''
+admin_pages: 'hidden'

@@ -1,14 +1,14 @@
-@javascript @KNetPayment @guest @homeDelivery @bbwkwuat
+@javascript @KNetPayment @guest @homeDelivery @bbwkwuat @flkwuat
 Feature: SPC Checkout Home Delivery CC
 
   Background:
-    Given I am on "{spc_product_listing_page}"
+    Given I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
 
   @cc @hd @Knet
   Scenario: As a Guest, I should be able to checkout using CC
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -47,7 +47,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -104,7 +104,7 @@ Feature: SPC Checkout Home Delivery CC
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -142,7 +142,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -168,7 +168,7 @@ Feature: SPC Checkout Home Delivery CC
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".c-products__item"
+    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -206,7 +206,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-method-checkout_com_upapi_knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish

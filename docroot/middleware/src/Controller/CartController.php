@@ -557,11 +557,12 @@ class CartController {
             ]);
             return new JsonResponse($shipping_methods);
           }
-
-          $shipping_info['carrier_info'] = [
-            'code' => $shipping_methods[0]['carrier_code'],
-            'method' => $shipping_methods[0]['method_code'],
-          ];
+          if (!empty($shipping_methods)) {
+            $shipping_info['carrier_info'] = [
+              'code' => $shipping_methods[0]['carrier_code'],
+              'method' => $shipping_methods[0]['method_code'],
+            ];
+          }
 
           $this->logger->notice('Shipping update manual for HD. Data: @data Address: @address Cart: @cart_id', [
             '@address' => json_encode($shipping_info),
