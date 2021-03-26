@@ -1328,19 +1328,16 @@ const productRecommendationsSuffix = 'pr-';
     }
   };
 
-  window.onerror = function (message, url, lineNo, columnNo, error) {
-    if (window.TrackJS !== undefined) {
-      window.TrackJS.track({message, url, lineNo, columnNo, error});
-      return;
-    }
-
-    if (error !== null) {
-      Drupal.logJavascriptError('Uncaught errors', error);
-    }
-    else if (message !== null) {
-      Drupal.logJavascriptError('Uncaught errors', message);
-    }
-    return true;
-  };
+  // If TrackJS is enabled we let it track the errors.
+  if (window.TrackJS === undefined) {
+    window.onerror = function (message, url, lineNo, columnNo, error) {
+      if (error !== null) {
+        Drupal.logJavascriptError('Uncaught errors', error);
+      } else if (message !== null) {
+        Drupal.logJavascriptError('Uncaught errors', message);
+      }
+      return true;
+    };
+  }
 
 })(jQuery, Drupal, dataLayer);
