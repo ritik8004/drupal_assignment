@@ -351,7 +351,7 @@ export const fetchAvailableStores = (coords) => {
     [skuItemCode] = Object.keys(productInfo);
   }
   const baseUrl = window.location.origin;
-  const apiUrl = Drupal.url(`stores/product/${skuItemCode}/${coords.lat}/${coords.lng}?json`);
+  const apiUrl = Drupal.url(`stores/product/${btoa(skuItemCode)}/${coords.lat}/${coords.lng}?json`);
   const GET_STORE_URL = `${baseUrl}${apiUrl}`;
   return axios.get(GET_STORE_URL);
 };
