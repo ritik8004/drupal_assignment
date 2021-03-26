@@ -9,6 +9,11 @@
         background: $default_background_color;
       }
     }
+
+    &:hover,
+    &.is-active {
+      color: $header_secondary_menu_link_hover;
+    }
   }
 
   @include breakpoint($desktop) {

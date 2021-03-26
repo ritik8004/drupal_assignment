@@ -89,8 +89,9 @@ header {
     li {
       .mobile--search {
         &::before {
-          top: -0.125rem;
-          left: -0.5rem;
+          top: 0;
+          left: -0.625rem;
+          font-size: 1.75rem;
         }
       }
     }
