@@ -542,7 +542,7 @@ class SkuManager {
         $child_sku_entity = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
 
         if ($child_sku_entity instanceof SKU) {
-          $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity, '', TRUE);
+          $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity, '', $specialPrice);
           $price = $prices['children'][$child_sku_code]['price'];
           $final_price = $prices['children'][$child_sku_code]['final_price'];
           if ($specialPrice) {
