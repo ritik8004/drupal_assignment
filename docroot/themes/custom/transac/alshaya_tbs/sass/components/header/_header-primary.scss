@@ -1,8 +1,4 @@
 header {
-  .c-header {
-    background: $header-bg;
-  }
-
   .block-alshaya-react-mini-cart {
     @include breakpoint($only-tablet) {
       position: absolute !important;
@@ -27,19 +23,16 @@ header {
     .cart-link-total {
       font-size: 1rem;
       font-family: $tbs-medium;
-      color: $primary_minicart_text;
       padding-#{$right}: 0;
     }
 
     .quantity {
-      background: $primary_minicart_quantity_bg;
       font-size: 0.75rem;
       width: 1.125rem;
       height: 1.125rem;
       top: -0.5rem;
       #{$right}: -1.125rem;
       #{$left}: unset;
-      color: $primary_minicart_quantity_text;
       font-family: $tbs-medium;
     }
   }
@@ -105,7 +98,6 @@ header {
         font-size: 1.125rem;
         top: 0;
         #{$left}: 0;
-        color: $header_c_menu_icon_color;
       }
     }
   }

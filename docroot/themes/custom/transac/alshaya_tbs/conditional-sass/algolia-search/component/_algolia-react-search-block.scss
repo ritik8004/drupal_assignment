@@ -38,11 +38,9 @@
     background: $algolia-search-field-bg;
     font-family: $tbs-medium;
     font-size: 1rem;
-    color: $algolia-input-text;
 
     &::placeholder {
       font-size: 1rem;
-      color: $algolia-input-text;
       font-family: $tbs-medium;
 
       @include breakpoint($only-mobile) {
@@ -117,7 +115,6 @@
           .algolia-search-back-icon {
             top: 50%;
             transform: translateY(-50%);
-            color: $algolia-input-text;
           }
         }
       }
