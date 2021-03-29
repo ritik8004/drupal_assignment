@@ -121,7 +121,6 @@ function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$d
   static $attributes;
   // Get nids for given attribute code.
   if (empty($attributes[$data['attribute_code']])) {
-    // Get Product nids for which translation is not available.
     $query = \Drupal::service('database')->select('node__field_attribute_name', 'an');
     $query->addField('av', 'field_attribute_value_value');
     $query->addField('an', 'entity_id');
