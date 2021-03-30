@@ -103,21 +103,17 @@
               },
               data: JSON.stringify(post_data),
               error: function (error) {
-                Drupal.logViaTrackJs({
-                  message: 'Add to cart ajax call failed.',
-                  request: post_data,
-                  response: error
+                var cartNotification = new CustomEvent('product-add-to-cart-error', {
+                  bubbles: true,
+                  detail: {
+                    postData: post_data,
+                  },
                 });
+                form[0].dispatchEvent(cartNotification);
               },
               success: function (response) {
                 // If there any error we throw from middleware.
                 if (response.error === true) {
-                  Drupal.logViaTrackJs({
-                    message: 'Add to cart failed.',
-                    request: post_data,
-                    response: response
-                  });
-
                   if (response.error_code === '400') {
                     Drupal.alshayaSpc.clearCartData();
                     $(that).trigger('click');
@@ -142,6 +138,7 @@
                   var cartNotification = new CustomEvent('product-add-to-cart-failed', {
                     bubbles: true,
                     detail: {
+                      postData: post_data,
                       productData: productData,
                       message: response.error_message,
                     },
@@ -150,11 +147,6 @@
                   form[0].dispatchEvent(cartNotification);
                 }
                 else if (response.cart_id) {
-                  Drupal.logViaTrackJs({
-                    message: 'Add to cart successful.',
-                    request: post_data
-                  });
-
                   if ((response.response_message === null || response.response_message.status === 'success')
                     && (typeof response.items[productData.variant] !== 'undefined' || typeof response.items[productData.parentSku] !== 'undefined')) {
                     var cartItem = typeof response.items[productData.variant] !== 'undefined' ? response.items[productData.variant] : response.items[productData.parentSku];
@@ -168,6 +160,7 @@
                   // Trigger the success event for other listeners.
                   var cartNotification = jQuery.Event('product-add-to-cart-success', {
                     detail: {
+                      postData: post_data,
                       productData: productData,
                       cartData: response,
                     }
@@ -269,12 +262,6 @@
                     );
                   }
                 }
-
-                Drupal.logViaTrackJs({
-                  message: 'Add to cart finished with unknown status.',
-                  request: post_data,
-                  response: response
-                });
               }
             });
           }
