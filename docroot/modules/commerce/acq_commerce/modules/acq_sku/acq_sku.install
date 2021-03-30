@@ -13,6 +13,22 @@ use Drupal\acq_sku\ConductorCategorySyncHelper;
 use Symfony\Component\Yaml\Yaml;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Make crosssell, upsell, related fields non-translatable.
+ */
+function acq_sku_update_8026() {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  $fields = ['crosssell', 'upsell', 'related'];
+  foreach ($fields as $field) {
+    // Update fields definition.
+    $storage_definition = $manager->getFieldStorageDefinition($field, 'acq_sku');
+    $storage_definition->setTranslatable(FALSE);
+    $manager->updateFieldStorageDefinition($storage_definition);
+  }
+}
+
+/**
  * Set non_cli_image_download.
  */
 function acq_sku_update_8025() {
