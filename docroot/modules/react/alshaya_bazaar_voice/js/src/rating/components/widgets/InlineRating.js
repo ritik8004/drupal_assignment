@@ -1,9 +1,9 @@
 import React from 'react';
 import RatingSummary from './RatingSummary';
-import DisplayStar from '../stars/DisplayStar';
 import ConditionalView from '../../../common/components/conditional-view';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import DisplayStar from '../stars';
 
 const InlineRating = ({
   reviewsData,

@@ -5,8 +5,8 @@ import Price from '../price';
 import Promotions from '../promotions';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
-import DisplayStar from '../rating-stars';
 import ConditionalView from '../../../common/components/conditional-view';
+import DisplayStar from '../stars';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType,
@@ -89,9 +89,7 @@ const Teaser = ({
               }
             >
               <div className="listing-inline-star">
-                <DisplayStar
-                  starPercentage={hit.attr_bv_average_overall_rating}
-                />
+                <DisplayStar starPercentage={hit.attr_bv_average_overall_rating} />
                 (
                 {hit.attr_bv_total_review_count}
                 )
