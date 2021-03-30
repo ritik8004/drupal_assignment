@@ -463,3 +463,8 @@ advanced-page:
   css:
     theme:
       css/conditional-sass/advanced-page/advanced-page.ltr.css: {}
+
+style-review-stars:
+  css:
+    theme:
+      css/conditional-sass/style-review-stars/style-review-stars.ltr.css: {}
