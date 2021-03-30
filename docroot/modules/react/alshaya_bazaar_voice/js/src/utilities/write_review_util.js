@@ -42,13 +42,17 @@ export const prepareRequest = (elements, fieldsConfig) => {
           } else if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
-        } else if (id === 'usernickname' && getSessionCookie('BvUserNickname') !== null
-          && getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserId') !== null) {
-          if (getSessionCookie('BvUserNickname') !== elements[id].value) {
-            params += `&${id}=${elements[id].value}`;
+        } else if (id === 'usernickname') {
+          if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserId') !== null
+            && getSessionCookie('BvUserNickname') !== null) {
+            if (getSessionCookie('BvUserNickname') !== elements[id].value) {
+              params += `&${id}=${elements[id].value}`;
+              setSessionCookie('BvUserNickname', elements[id].value);
+            }
+            params += `&User=${getSessionCookie('BvUserId')}`;
+          } else if (getCurrentUserEmail() !== null) {
             setSessionCookie('BvUserNickname', elements[id].value);
           }
-          params += `&User=${getSessionCookie('BvUserId')}`;
         } else {
           params += `&${id}=${elements[id].value}`;
         }
