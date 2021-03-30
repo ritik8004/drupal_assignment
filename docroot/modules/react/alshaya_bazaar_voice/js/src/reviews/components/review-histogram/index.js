@@ -1,10 +1,10 @@
 import React from 'react';
 import RatingSummary from '../../../rating/components/widgets/RatingSummary';
-import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import CombineDisplay from '../review-combine-display';
 import ConditionalView from '../../../common/components/conditional-view';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import DisplayStar from '../../../rating/components/stars';
 
 const ReviewHistogram = ({
   overallSummary,
