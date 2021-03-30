@@ -377,6 +377,9 @@ class AlshayaOptionsListHelper {
     ];
     $link = '';
     $this->moduleHandler->alter('alshaya_search_filter_link', $link, $data);
+    // Instead of creating link before and passing it to the alter function to
+    // be overridden in the later case we initialize the link here only if it is
+    // empty.
     if (empty($link)) {
       $link = Url::fromUri('internal:/search', $url_options)->toString();
     }
