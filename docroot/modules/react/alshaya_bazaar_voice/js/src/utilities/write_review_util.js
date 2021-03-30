@@ -43,14 +43,15 @@ export const prepareRequest = (elements, fieldsConfig) => {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
         } else if (id === 'usernickname') {
-          if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserId') !== null
-            && getSessionCookie('BvUserNickname') !== null) {
+          if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
+            && getSessionCookie('BvUserNickname') !== null && getCurrentUserEmail() === null) {
             if (getSessionCookie('BvUserNickname') !== elements[id].value) {
               params += `&${id}=${elements[id].value}`;
               setSessionCookie('BvUserNickname', elements[id].value);
             }
             params += `&User=${getSessionCookie('BvUserId')}`;
-          } else if (getCurrentUserEmail() !== null) {
+          } else {
+            params += `&${id}=${elements[id].value}`;
             setSessionCookie('BvUserNickname', elements[id].value);
           }
         } else {
