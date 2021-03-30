@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat
+@javascript @guest @checkoutPayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat @flaeuat @bbwaeuat
 Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method for Guest User
 
   Background:
@@ -31,7 +31,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds
     When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
+    When I wait 30 seconds
     And I wait for AJAX to finish
     When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
     And I wait 5 seconds
@@ -200,7 +200,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds
     When I select the first autocomplete option for "{language_store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
+    When I wait 30 seconds
     And I wait for AJAX to finish
     When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
     And I wait 5 seconds
@@ -270,7 +270,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 5 seconds
     When I select the first autocomplete option for "{language_store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
+    When I wait 30 seconds
     And I wait for AJAX to finish
     When I click jQuery ".popup-overlay  #click-and-collect-list-view li[data-index=0] .spc-store-name-wrapper" element on page
     And I wait 5 seconds

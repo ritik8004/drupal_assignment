@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_track_js_page_attachments(array &$page) {
+  $page['#attached']['library'][] = 'alshaya_track_js/main';
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function alshaya_track_js_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'alshaya_spc' && isset($libraries['add_to_cart'])) {
+    // Add code to integrate Alshaya events with TrackJS.
+    $libraries['add_to_cart']['dependencies'][] = 'alshaya_track_js/add_to_cart';
+  }
+}

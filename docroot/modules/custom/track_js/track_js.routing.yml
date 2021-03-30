@@ -1,0 +1,7 @@
+track_js.settings:
+  path: '/admin/config/system/track-js/settings'
+  defaults:
+    _form: '\Drupal\track_js\Form\TrackJsSettingsForm'
+    _title: 'TrackJS Settings'
+  requirements:
+    _permission: 'administer site configuration'
