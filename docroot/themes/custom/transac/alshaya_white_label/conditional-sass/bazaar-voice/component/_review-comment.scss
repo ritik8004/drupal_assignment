@@ -66,6 +66,7 @@
         font-family: $alshaya-bold;
 
         @include breakpoint($only-mobile) {
+          min-width: auto;
           margin-top: 2.5rem;
           width: 100%;
           border-radius: unset;
