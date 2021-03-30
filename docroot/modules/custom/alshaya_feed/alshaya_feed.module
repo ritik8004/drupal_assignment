@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\alshaya_acm_product\Plugin\QueueWorker\PostProcessProduct;
+use Drupal\node\NodeInterface;
+
+/**
+ * Post process SKU when node is deleted.
+ *
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_feed_node_delete(NodeInterface $node) {
+  // Check if dynamic yield settings mode is api. Default is xml.
+  if (\Drupal::config('dynamic_yield.settings')->get('mode') != 'api') {
+    return;
+  }
+
+  if ($node->bundle() == 'acq_product') {
+    $sku = $node->get('field_skus')->getString();
+    // Add sku to post process product queue.
+    \Drupal::service('queue')->get(PostProcessProduct::QUEUE_NAME)->createItem($sku);
+  }
+}

@@ -1,0 +1,16 @@
+.secondary-summary {
+  .overall-product-rating {
+    .secondary-star-container {
+      .inline-star {
+        .icon-ic_ratingfull,
+        .icon-ic_rating {
+          #reviews-section & {
+            &::before {
+              font-size: 2rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

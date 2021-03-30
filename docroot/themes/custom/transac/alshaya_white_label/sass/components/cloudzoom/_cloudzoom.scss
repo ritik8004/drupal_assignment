@@ -25,10 +25,9 @@
 
   .cloudzoom__herocontainer {
     position: relative;
+    margin-bottom: 1.5rem;
 
     .product-labels {
-      height: 5rem;
-      width: 5rem;
       z-index: 4;
 
       img {
@@ -40,11 +39,17 @@
     @include breakpoint($only-tablet) {
       width: 100%;
       float: none;
+      margin-bottom: 2.5rem;
     }
 
     @include breakpoint($desktop) {
       width: calc(100% - (5.75rem + 1rem));
       float: $right;
+      margin-bottom: 5rem;
+    }
+
+    .acq-content-product-modal & {
+      margin-bottom: 1.5rem;
     }
   }
 
@@ -571,7 +576,7 @@
       background-repeat: no-repeat;
       background-size: auto 100%;
       background-position: center center;
-      background-color: $white-five;
+      background-color: $product-image-zoom-placeholder-bg;
     }
   }
 }

@@ -34,8 +34,8 @@ Feature: SPC Checkout Home Delivery CC
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
+      | spc-area-select-selected-city | {governorate} |
+      | spc-area-select-selected      | {city_option} |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | locality                      | {locality}    |
@@ -47,14 +47,14 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I scroll to the "#spc-payment-methods" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
     And I wait 10 seconds
-    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
+    And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect.bank"
     And I wait 2 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select "{spc_Knet_month}" from "debitMonthSelect"
@@ -142,7 +142,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
@@ -206,7 +206,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-knet" element on page
+    And I select the Knet payment method
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish

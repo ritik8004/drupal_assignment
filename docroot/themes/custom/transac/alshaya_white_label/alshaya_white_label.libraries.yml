@@ -3,7 +3,6 @@ global_styles:
     theme:
       css/colors.css: {}
   js:
-    vendor/js/calc.min.js: {}
     js/custom.js: {}
     js/menu.js: {}
     js/form.js: {}
@@ -439,7 +438,12 @@ postpay-checkout:
   css:
     theme:
       css/conditional-sass/postpay-checkout/postpay-checkout.ltr.css: {}
-      
+
+bazaar-voice:
+  css:
+    theme:
+      css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: {}
+
 store_finder:
   css:
     theme:

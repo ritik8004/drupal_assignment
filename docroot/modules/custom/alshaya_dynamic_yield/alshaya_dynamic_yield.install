@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_dynamic_yield.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config for DY product delta feed.
+ */
+function alshaya_dynamic_yield_update_8001() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['dynamic_yield.settings'],
+    'dynamic_yield',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+  $manager->updateConfigs(
+    ['alshaya_feed.settings'],
+    'alshaya_feed',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}

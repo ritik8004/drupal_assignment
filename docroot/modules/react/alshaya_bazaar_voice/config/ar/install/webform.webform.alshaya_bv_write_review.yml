@@ -1,0 +1,12 @@
+title: 'أكتب مراجعة'
+elements: |
+  rating:
+    '#title': 'التقييم الإجمالي'
+  title:
+    '#title': 'عنوان التقييم'
+  reviewtext:
+    '#title': 'تقييم المنتج'
+  useremail:
+    '#title': 'البريد الإلكتروني'
+  usernickname:
+    '#title': 'اسم المستخدم'

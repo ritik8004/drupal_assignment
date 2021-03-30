@@ -1,0 +1,35 @@
+#reviews-section {
+  .review {
+    &-feedback {
+      &-comment {
+        button {
+          text-transform: uppercase;
+          font-family: $hnm-demibold;
+        }
+      }
+    }
+
+    &-comment-form {
+      button {
+        text-transform: uppercase;
+      }
+    }
+
+    &-title {
+      font-family: $hnm-regular;
+    }
+
+    .post-review-moderation {
+      .star-ratings-wrapper {
+        .inline-star {
+          .icon-ic_ratingfull,
+          .icon-ic_rating {
+            &::before {
+              font-size: 2rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
