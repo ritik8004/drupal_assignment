@@ -24,7 +24,6 @@ const AssetGallery = ({
           title={title}
           className="b-lazy"
         />
-        <Labels labels={labels} sku={sku} />
       </div>
       <div className="alshaya_search_hoverimage">
         <ImageElement
@@ -33,8 +32,8 @@ const AssetGallery = ({
           title={title}
           className="b-lazy"
         />
-        <Labels labels={labels} sku={sku} />
       </div>
+      <Labels labels={labels} sku={sku} />
     </div>
   );
 };
