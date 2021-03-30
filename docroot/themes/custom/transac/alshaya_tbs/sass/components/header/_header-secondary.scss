@@ -35,8 +35,14 @@
           padding-#{$right}: 1.75rem;
 
           &::before {
-            content: '';
+            font-size: 0;
           }
+        }
+      }
+
+      .en {
+        a::after {
+          font-size: 0;
         }
       }
     }

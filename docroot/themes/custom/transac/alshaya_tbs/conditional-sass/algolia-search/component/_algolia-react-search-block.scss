@@ -29,6 +29,13 @@
         }
       }
     }
+
+    .react-autosuggest__suggestions-container {
+      &--open {
+        border: none;
+        background-color: $algolia-search-bar-suggestion-background;
+      }
+    }
   }
 
   .react-autosuggest__input {
@@ -53,7 +60,9 @@
       width: 100%;
       margin: 0;
       height: 3.5625rem;
-      padding: 1.25rem 0 1.25rem 4.0625rem;
+      padding: 1.25rem;
+      padding-#{$right}: 0;
+      padding-#{$left}: 4.0625rem;
       margin-top: 0.3125rem;
     }
   }

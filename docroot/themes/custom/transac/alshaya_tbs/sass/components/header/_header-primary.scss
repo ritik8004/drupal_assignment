@@ -17,13 +17,17 @@ header {
         margin-top: 0.875rem;
         margin-bottom: 0;
         background-size: cover;
+
+        html[lang=ar] & {
+          margin-top: 1.125rem;
+        }
       }
     }
 
     .cart-link-total {
       font-size: 1rem;
       font-family: $tbs-medium;
-      padding-#{$right}: 0;
+      padding-right: 0;
     }
 
     .quantity {
@@ -75,6 +79,8 @@ header {
     @include breakpoint($only-mobile) {
       top: 0;
       padding: 1.125rem 1rem 1rem;
+      padding-#{$right}: 1rem;
+      padding-#{$left}: 1rem;
     }
   }
 
@@ -83,7 +89,7 @@ header {
       .mobile--search {
         &::before {
           top: 0;
-          left: -0.625rem;
+          #{$left}: -0.625rem;
           font-size: 1.75rem;
         }
       }
@@ -114,12 +120,14 @@ header {
       font-size: 0;
       margin-top: 0;
       padding: 0.3125rem 0.875rem 0.664rem 0.625rem;
+      padding-#{$left}: 0.625rem;
+      padding-#{$right}: 0.875rem;
 
       &::before {
         font-size: 1.6rem;
         position: relative;
         top: -0.125rem;
-        left: -0.375rem;
+        #{$left}: -0.375rem;
       }
     }
 
@@ -149,6 +157,41 @@ header {
 
       img {
         margin-#{$left}: 0.625rem;
+      }
+    }
+  }
+}
+
+html[lang='ar'] {
+  .cart-link-total .price-currency.suffix {
+    padding-right: 0;
+  }
+
+  .block-system-branding-block {
+    .site-brand-home img {
+      width: auto;
+      margin-top: 0;
+      height: auto;
+      max-width: 100%;
+    }
+  }
+
+  .c-menu-primary {
+    @include breakpoint($only-tablet) {
+      .store {
+        &::before {
+          top: 0;
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .mobile--menu {
+        top: 0.3125rem;
+      }
+
+      .store {
+        top: 0.8125rem;
       }
     }
   }
