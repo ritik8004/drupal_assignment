@@ -61,7 +61,7 @@ log_message()
 log_message_and_details()
 {
   message=$1
-  echo "$message. Date `date`, Tag $tag, Stack $stack" | tee -a ${log_file}
+  echo "$message. Date `date`, Tag $tag, Stack $stack, Mode $mode" | tee -a ${log_file}
   echo
 }
 
@@ -137,6 +137,7 @@ fi
 if [ "$mode" = "prep" ]
 then
   log_message_and_details "Release preparation completed"
+  sh $slack_file "Release preparation completed for tag $tag"
   exit
 fi
 
@@ -199,6 +200,8 @@ then
 
       drush --root=$docroot -l "${site}${base_uri}" cr -y &>> ${log_file}
       log_message_and_details "$site: CR done"
+
+      sh $slack_file "$site: UPDB done and site put back online"
     fi
   done
 
