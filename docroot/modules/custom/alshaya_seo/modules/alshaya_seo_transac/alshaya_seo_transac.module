@@ -185,6 +185,16 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
  * Implements hook_datalayer_alter().
  */
 function alshaya_seo_transac_datalayer_alter(&$data_layer) {
+  // Update userUid with MDC customer_id.
+  // By default we are setting userUid with customer_id.
+  $current_user = \Drupal::entityTypeManager()->getStorage('user')->load($data_layer['userUid']);
+  // If current user is having customer_id then cutomer_id
+  // value is stored otherwise default value is 0.
+  // Handle by typecasting.
+  $customer_id = (int) $current_user->get('acq_customer_id')->getString();
+
+  // Always output active uid.
+  $data_layer['userUid'] = $customer_id;
   if (!_alshaya_seo_process_gtm()) {
     return;
   }
