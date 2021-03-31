@@ -144,11 +144,6 @@ header {
   a {
     text-align: center;
 
-    @include breakpoint($only-tablet) {
-      margin-#{$left}: 2.5rem;
-      width: 2.5rem;
-    }
-
     @include breakpoint($only-mobile) {
       width: 2.1875rem;
       height: 2.3125rem;
@@ -157,6 +152,17 @@ header {
 
       img {
         margin-#{$left}: 0.625rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-#{$left}: 2.5rem;
+      width: 2.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      img {
+        max-width: 3.3125rem;
       }
     }
   }
@@ -173,6 +179,10 @@ html[lang='ar'] {
       margin-top: 0;
       height: auto;
       max-width: 100%;
+
+      @include breakpoint($desktop) {
+        max-width: 3.3125rem;
+      }
     }
   }
 
