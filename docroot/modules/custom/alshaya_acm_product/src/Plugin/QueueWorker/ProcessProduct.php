@@ -112,7 +112,6 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
     try {
       // Reset all static caches before processing a product.
       $this->entityTypeManager->getStorage('node')->resetCache();
-      $this->entityTypeManager->getStorage('acq_sku')->resetCache();
       drupal_static_reset('loadFromSku');
 
       $this->processSku($sku, $nid);
