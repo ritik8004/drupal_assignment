@@ -36,8 +36,7 @@ const DynamicFormField = (props) => {
       } else if (getSessionCookie('BvUserEmail') !== null) {
         fieldProperty.defaultVal = getSessionCookie('BvUserEmail');
       }
-    } else if (fieldProperty.id === 'usernickname' && getSessionCookie('BvUserNickname') !== null
-      && getSessionCookie('BvUserEmail') !== null) {
+    } else if (fieldProperty.id === 'usernickname' && getSessionCookie('BvUserNickname') !== null) {
       fieldProperty.defaultVal = getSessionCookie('BvUserNickname');
     }
   }
