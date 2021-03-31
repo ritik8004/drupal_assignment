@@ -28,7 +28,7 @@ class Slider extends React.Component {
       text,
     } = this.props;
     const { sliderVal, activeId } = this.state;
-    let rangeLength = Object.keys(options).length;
+    const rangeLength = Object.keys(options).length;
 
     return (
       <>
