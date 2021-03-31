@@ -70,7 +70,6 @@ function alshaya_white_label_preprocess_html(&$variables) {
   // BazaarVoice reviews and ratings.
   if (\Drupal::service('module_handler')->moduleExists('alshaya_bazaar_voice')) {
     $variables['#attached']['library'][] = 'alshaya_white_label/bazaar-voice';
-    $variables['#attached']['library'][] = 'alshaya_white_label/style-review-stars';
   }
   // Alias path class.
   $alias_class = preg_replace("/\//", '-', $alias);
@@ -414,7 +413,9 @@ function alshaya_white_label_preprocess_block(&$variables) {
 
   if ($variables['plugin_id'] == 'search_api_algolia_autocomplete_block') {
     $variables['#attached']['library'][] = 'alshaya_white_label/algolia_search';
-    $variables['#attached']['library'][] = 'alshaya_white_label/style-review-stars';
+    if (\Drupal::service('module_handler')->moduleExists('alshaya_bazaar_voice')) {
+      $variables['#attached']['library'][] = 'alshaya_white_label/style-review-stars';
+    }
   }
 
   if ($variables['plugin_id'] == 'alshaya_main_menu') {
