@@ -9,6 +9,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldStorageConfig;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Provide sorting option Top rated in srp/plp.
+ */
+function alshaya_bazaar_voice_update_8001() {
+  _add_sort_option_in_plp_srp_config_form();
+}
+
+/**
  * Implements hook_install().
  *
  * Update default configurations for the fields created for ratings & reviews.
@@ -31,6 +40,8 @@ function alshaya_bazaar_voice_install() {
   if ($translations = _alshaya_bazaar_voice_translations()) {
     alshaya_i18n_save_translations($translations);
   }
+  // Provide sorting option Top rated in srp/plp.
+  _add_sort_option_in_plp_srp_config_form();
 }
 
 /**
@@ -52,4 +63,38 @@ function alshaya_bazaar_voice_uninstall() {
   if (!is_null($webform)) {
     $webform->delete();
   }
+}
+
+/**
+ * Add sorting option (Top rated) in srp/plp configuration form.
+ */
+function _add_sort_option_in_plp_srp_config_form() {
+  // Update srp sorting configurations.
+  $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
+  $labels = $config->get('sort_options_labels');
+  $new_labels = [
+    [
+      'value' => 'attr_bv_average_overall_rating ASC',
+      'label' => ''
+    ],
+    [
+      'value' => 'attr_bv_average_overall_rating DESC',
+      'label' => 'Top Rated'
+    ],
+  ];
+  $labels = array_merge($labels, $new_labels);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+
+  // Update plp sorting configurations.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
+  // Update available option.
+  $available_sort_options = $config->get('available_sort_options');
+  $available_sort_options['attr_bv_average_overall_rating'] = 'Top Rated';
+  $config->set('available_sort_options', $available_sort_options);
+  // Update sorting options labels
+  $labels = $config->get('sort_options_labels');
+  $labels = array_merge($labels, $new_labels);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
 }

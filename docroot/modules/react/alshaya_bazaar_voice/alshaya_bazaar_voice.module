@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -196,4 +197,11 @@ function alshaya_bazaar_voice_write_review_fields() {
   }
 
   return $write_review_fields;
+}
+
+/**
+ * Implements hook_alshaya_srp_sort_settings_form_alter().
+ */
+function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['sort_options']['#options']['attr_bv_average_overall_rating'] = t('Top Rated');
 }
