@@ -33,3 +33,32 @@ $redwood: #b14a4f;
 $chestnut: #dc5c60;
 $light-coral: #df8281;
 $surf-crest: #c5ccc1;
+
+/* ------- 2. Primary Colors ------- */
+// Global elements.
+$default_background_color: $cyprus;
+
+// Header
+$header_bg: $cyprus;
+$header_secondary_bg: $cyprus;
+$header_secondary_menu_link: $white;
+$header_my_account_h3_title: $white;
+$header_secondary_menu_link_hover_bg: $cyprus;
+$header_secondary_menu_link_hover: $stem-green;
+
+// Algolia search bar.
+$algolia-search-bar-background: $cyprus;
+$algolia-search-field-bg: $nourishing-white;
+$algolia-input-text: $cyprus;
+$algolia-input-placeholder-text: $cyprus;
+$algolia-search-clear-text-icon: $cyprus;
+$algolia-trending-title-text: $cyprus;
+$algolia-search-bar-suggestion-background: $white;
+
+// Mini Cart.
+$primary_minicart_quantity_text: $cyprus;
+$primary_minicart_text: $white;
+$primary_minicart_quantity_bg: $stem-green;
+
+// C-menu primary i:e Mobile and tablet header menu links.
+$header_c_menu_icon_color: $white;
