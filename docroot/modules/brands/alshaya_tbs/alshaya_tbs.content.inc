@@ -8,7 +8,7 @@
 use Drupal\block_content\Entity\BlockContent;
 
 /**
- * Create default content for mothercare.
+ * Create default content for the body shop.
  */
 function alshaya_tbs_create_default_content() {
   // Create copyright block content.
@@ -16,15 +16,16 @@ function alshaya_tbs_create_default_content() {
 }
 
 /**
- * Create copyright block content for mothercare.
+ * Create copyright block content for the body shop.
  */
 function alshaya_tbs_create_copyright_block() {
   // Create copyright block content.
+  // @todo update block content with proper copy right text for the body shop.
   $block_content = BlockContent::create([
     'info' => 'Copyright',
     'uuid' => '340b823b-e16c-457a-bc03-4a096f8ae171',
     'body' => [
-      'value' => "<p>&copy; Copyright Mothercare UK Limited 2017</p>",
+      'value' => "<p>&copy; Copyright</p>",
       'format' => 'rich_text',
     ],
     'type' => 'basic',

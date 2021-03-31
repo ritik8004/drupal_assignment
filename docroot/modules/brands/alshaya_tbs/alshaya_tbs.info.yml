@@ -3,9 +3,8 @@ type: module
 description: 'The dedicated module for The Body Shop brand.'
 package: Alshaya
 core: 8.x
-
-themes:
-  - alshaya_white_label
-
 dependencies:
-  - alshaya_white_label:alshaya_mobile_app
+  - alshaya_block:alshaya_block
+  - alshaya_i18n:alshaya_i18n
+  - alshaya_block:alshaya_paragraph_block
+  - alshaya_stores_finder:alshaya_stores_migrate

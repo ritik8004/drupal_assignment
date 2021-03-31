@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_tbs\EventSubscriber;
+namespace Drupal\alshaya_tbs_transac\EventSubscriber;
 
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
@@ -13,7 +13,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 /**
  * Contains Product Info Requested Event Subscriber methods.
  *
- * @package Drupal\alshaya_mc\EventSubscriber
+ * @package Drupal\alshaya_tbs_transac\EventSubscriber
  */
 class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
