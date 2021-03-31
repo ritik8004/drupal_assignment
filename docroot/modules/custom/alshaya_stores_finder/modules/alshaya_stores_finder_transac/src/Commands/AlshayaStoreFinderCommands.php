@@ -12,6 +12,13 @@ use Drush\Commands\DrushCommands;
 class AlshayaStoreFinderCommands extends DrushCommands {
 
   /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * Stores finder manager.
    *
    * @var \Drupal\alshaya_stores_finder_transac\StoresFinderManager
@@ -28,7 +35,7 @@ class AlshayaStoreFinderCommands extends DrushCommands {
    */
   public function __construct(LoggerChannelFactoryInterface $logger_factory,
                               StoresFinderManager $storesFinderManager) {
-    $this->logger = $logger_factory->get('alshaya_stores_finder');
+    $this->drupalLogger = $logger_factory->get('alshaya_stores_finder');
     $this->storesFinderManager = $storesFinderManager;
   }
 
@@ -42,7 +49,7 @@ class AlshayaStoreFinderCommands extends DrushCommands {
    * @aliases aass,sync-stores
    */
   public function syncStores() {
-    $this->logger->info(dt('Synchronizing all stores, please wait...'));
+    $this->drupalLogger->info(dt('Synchronizing all stores, please wait...'));
 
     $this->storesFinderManager->syncStores();
   }

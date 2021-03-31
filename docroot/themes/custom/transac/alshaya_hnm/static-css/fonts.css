@@ -1,0 +1,132 @@
+@font-face {
+  font-family: 'hnm-icons';
+  src: url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/alshaya-icons.eot?p1AKYu');
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/alshaya-icons.eot?p1AKYu#iefix') format('embedded-opentype'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/alshaya-icons.ttf?p1AKYu') format('truetype'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/alshaya-icons.woff?p1AKYu') format('woff'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/alshaya-icons.svg?p1AKYsu#alshaya-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Regular';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-Regular.woff2') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Semi Bold';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-SemiBold.woff2') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-SemiBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Bold';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-Bold.woff2') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Italic';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-Italic.woff2') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Light';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-Light.woff2') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSans-Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Regular';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-Regular.woff2?jAKPu') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-Regular.woff?jAKPu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Semi Bold';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-SemiBold.woff2?jDKPu') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-SemiBold.woff?jDKPu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Bold';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-Bold.woff2?jDKZu') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-Bold.woff?jDKZu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Sans Arabic Light';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-Light.woff2?jNKZu') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSansArabic-Light.woff?jNKZu') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Serif Regular';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSerif-Regular.woff2') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSerif-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Serif Italic';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSerif-Italic.woff2') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSerif-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HM Serif SemiBold';
+  src:
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSerif-SemiBold.woff2') format('woff2'),
+    url('https://kw.hm.com/themes/custom/transac/alshaya_hnm/fonts/HMSerif-SemiBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

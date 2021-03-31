@@ -1,7 +1,7 @@
 variables:
   url_base_uri: 'http://bbwae-uat.factory.alshaya.com/en'
   collection_filter: 'Collection'
-  sort_filter: 'sort by'
+  sort_filter: ''
   price_filter: ''
   brand_filter: 'Product Type'
   color_filter: 'Fragrance Category'
@@ -9,7 +9,7 @@ variables:
   filters: 'all filters'
   promotional_filter: ''
   language_collection_filter: 'نوع المنتج'
-  language_sort_filter: 'رتبي حسب'
+  language_sort_filter: ''
   language_price_filter: ''
   language_brand_filter: 'المجموعة'
   language_color_filter: 'فئة العطر'
@@ -84,3 +84,5 @@ variables:
   filter_1: 'attr_collection_1'
   filter_2: 'attr_fragrance_name'
   filter_3: 'attr_fragrance_category'
+  empty_bag: ''
+  language_empty_bag: ''

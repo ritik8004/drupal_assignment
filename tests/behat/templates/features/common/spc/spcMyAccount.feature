@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @mckwuat @hmkwuat @hmsauat @flkwuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @mckwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat
 Feature: Test the My Account functionality
 
   Background:

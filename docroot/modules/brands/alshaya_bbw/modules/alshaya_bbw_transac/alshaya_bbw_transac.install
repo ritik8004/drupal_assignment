@@ -11,7 +11,7 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
- * [5.19.0] Update the metatag translations.
+ * [6.0.0] Update the metatag translations.
  */
 function alshaya_bbw_transac_update_8013() {
   $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
@@ -348,15 +348,15 @@ function _alshaya_bbw_transac_save_metatag_translations() {
       'en' => 'Products for @parent Online',
     ],
     'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:name] Body Online, Shop [term:name] Online, Shop [term:name] Products in [alshaya_seo:country], Shop [term:name] Collection, Shop [term:name] Products in [alshaya_seo:city1], Shop [term:name] Products in [alshaya_seo:city2]',
-      'ar' => 'تسوق [term:name] اونلاين، تسوق منتجات [term:name] اونلاين، تسوق منتجات [term:name] في [alshaya_seo:country]، تسوق مجموعة [term:name]، تسوق منتجات [term:name] في [alshaya_seo:city1]، تسوق منتجات [term:name] في [alshaya_seo:city2] ',
+      'en' => 'Shop [term:name] Body Online, Shop [term:name] Online, Shop [term:name] Products in [alshaya_seo:country], Shop [term:name] Collection, [alshaya_seo:product_cities].',
+      'ar' => 'تسوق [term:name] اونلاين، تسوق منتجات [term:name] اونلاين، تسوق منتجات [term:name] في [alshaya_seo:country]، تسوق مجموعة [term:name]، [alshaya_seo:product_cities].',
     ],
     'alshaya_seo_text_before_cod' => [
-      'en' => 'Compare [current-date:html_year] [term:name] collections at the best prices of [alshaya_seo:sub_categories] and more.',
+      'en' => 'Compare [current-date:html_year] [term:name] collections at the best prices [alshaya_seo:sub_categories] and more.',
       'ar' => 'قارن بين تشكيلات [current-date:html_year] في [term:name] وأفضل أسعار [alshaya_seo:sub_categories]، وأكثر.',
     ],
     'alshaya_seo_l2_text_before_cod' => [
-      'en' => 'Choose from a wide range of [term:name] products of [alshaya_seo:sub_categories] and more.',
+      'en' => 'Choose from a wide range of [term:name] products [alshaya_seo:sub_categories] and more.',
       'ar' => 'اختر من مجموعة كبيرة من منتجات [term:name] في [alshaya_seo:sub_categories] وأكث.',
     ],
     'alshaya_seo_desc_free_delivery_n_cod' => [

@@ -1,7 +1,10 @@
 import React from 'react';
+import Labels from '../../labels';
 import ImageElement from '../imageHelper/ImageElement';
 
-const AssetGallery = ({ media, title }) => {
+const AssetGallery = ({
+  media, title, labels, sku,
+}) => {
   if (typeof media === 'undefined') {
     return (null);
   }
@@ -21,6 +24,7 @@ const AssetGallery = ({ media, title }) => {
           title={title}
           className="b-lazy"
         />
+        <Labels labels={labels} sku={sku} />
       </div>
       <div className="alshaya_search_hoverimage">
         <ImageElement
@@ -29,6 +33,7 @@ const AssetGallery = ({ media, title }) => {
           title={title}
           className="b-lazy"
         />
+        <Labels labels={labels} sku={sku} />
       </div>
     </div>
   );
