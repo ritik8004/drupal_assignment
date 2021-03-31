@@ -6,6 +6,7 @@ import SizeGroupFilter from '../algolia/widgets/SizeGroupFilter';
 import RefinementList from '../algolia/widgets/RefinementList';
 import PriceFilter from '../algolia/widgets/PriceFilter';
 import renderWidget from './RenderWidget';
+import StarRatingFilter from '../algolia/widgets/StarRatingFilter';
 
 const WidgetManager = React.memo((props) => {
   const
@@ -57,6 +58,17 @@ const WidgetManager = React.memo((props) => {
           name={name}
           attribute={filter.identifier}
           granularity={parseInt(filter.widget.config.granularity, 10)}
+          itemCount={itemCount}
+        />
+      );
+      break;
+
+    case 'star_rating':
+      currentWidget = (
+        <StarRatingFilter
+          name={name}
+          attribute={filter.identifier}
+          searchable={false}
           itemCount={itemCount}
         />
       );
