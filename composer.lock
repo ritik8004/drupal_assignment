@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b466a7725de24fb08fde5501f4b0accd",
+    "content-hash": "8c7c7bbdfd481f219ec65775c112b3d5",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -16116,15 +16116,6 @@
             "dist": {
                 "type": "zip",
                 "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip"
-            },
-            "type": "drupal-library"
-        },
-        {
-            "name": "hubspot/pace",
-            "version": "1.0.2",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/hubspot/pace/archive/v1.0.2.zip"
             },
             "type": "drupal-library"
         },
