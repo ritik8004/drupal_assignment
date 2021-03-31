@@ -1,0 +1,161 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_mc.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_tbs_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_tbs', 'inc', 'alshaya_tbs.content');
+
+  // Enable and set alshaya_mothercare as default theme and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_the_body_shop');
+
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all The Body Shop Stores');
+  $config->save();
+
+  // Setting all products buyable to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 0)
+    ->save();
+
+  // Create default content for TBS.
+  alshaya_tbs_create_default_content();
+
+  $strings = [
+    'seo_brand_name' => [
+      'en' => 'The Body Shop',
+      'ar' => 'The Body Shop',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+
+  // Install metatag transalations.
+  _alshaya_tbs_get_metatag_translations();
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+
+  // Save english site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('en', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->save();
+
+  // Save default logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
+    ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+
+  // Save arabic logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
+    ->save();
+
+}
+
+/**
+ * Get translations of metatag.
+ */
+function _alshaya_tbs_get_metatag_translations() {
+  $strings = [
+    'alshaya_seo_sale_title_suffix' => [
+      'en' => '[current-date:html_year] Sale',
+      'ar' => 'عروض [current-date:html_year]',
+    ],
+    'alshaya_seo_sale_text_before_cod' => [
+      'en' => 'Explore [current-date:html_year] [term:name] collections and get the best prices in [alshaya_seo:country].',
+      'ar' => 'اكتشف مجموعات [term:name] واحصل على أفضل الأسعار في [alshaya_seo:country].',
+    ],
+    'alshaya_seo_sale_desc_start' => [
+      'en' => 'Buy mothercare - [term:name] - [current-date:html_year] sale and offers',
+      'ar' => 'عروض وخصومات الرعاية الأم - [term:name] - [current-date:html_year]',
+    ],
+    'alshaya_seo_sale_keywords' => [
+      'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+      'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
+    ],
+    'alshaya_seo_keywords' => [
+      'en' => 'Shop [term:name] Collection Online, Shop [term:name], Shop best [term:name] products,Shop [term:name] in [alshaya_seo:country], Buy [alshaya_seo:brand_name] [term:name] online, [alshaya_seo:term_cities]',
+      'ar' => 'تسوق مجموعة [term:name] أونلاين، تسوق [term:name]، تسوق أفضل منتجات [term:name]، تسوق [term:name] في [alshaya_seo:country]، اشتري [alshaya_seo:brand_name] [term:name] أونلاين، تسوق [alshaya_seo:term_cities]',
+    ],
+    'alshaya_seo_text_before_cod' => [
+      'en' => 'Find a wide range of [term:name] collections varying at the best price and quality to meet all demands.',
+      'ar' => 'احصل على مجموعة كبيرة من اختيارات [term:name] متنوعة بأفضل سعر وجودة .',
+    ],
+    'alshaya_seo_l2_text_before_cod' => [
+      'en' => 'Explore the best deals on [term:name] available at the best prices. A wide range of mothers and babies’ products from top brands.',
+      'ar' => ' احصل على مجموعة كبيرة من اختيارات [term:name] متنوعة بأفضل سعر وجودة لتلبي كل التطلعات.',
+    ],
+    'alshaya_seo_l3_text_before_cod' => [
+      'en' => 'Explore the variety of top quality [term:name] collection at the best prices and delivery to all [alshaya_seo:country].',
+      'ar' => 'أفضل العلامات التجارية [term:name] عالية الجودة بأفضل الأسعار وتوصيل متاح لكل [alshaya_seo:country].',
+    ],
+    'alshaya_seo_desc_free_delivery_n_cod' => [
+      'en' => 'Enjoy ✓ Free Returns and ✓ Cash on Delivery!',
+      'ar' => 'ستمتع بمزايا ✓  الاسترجاع المجاني ✓  الدفع عند الاستلام!',
+    ],
+    'alshaya_seo_page_title' => [
+      'en' => 'Shop [term:name] Collection Online | [site:name]',
+      'ar' => 'تسوق مجموعة أزياء [term:name] اتش آند إم | [site:name]',
+    ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop [alshaya_seo:brand_name] [term:name] collection online in [alshaya_seo:cities] and whole [alshaya_seo:country].',
+      'ar' => 'تسوق مجموعة [term:name] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:cities]، وكل أنحاء [alshaya_seo:country].',
+    ],
+    'alshaya_seo_l3_desc_start' => [
+      'en' => 'Shop [alshaya_seo:brand_name][term:name] collection in [alshaya_seo:cities] and [alshaya_seo:country] from top brand.',
+      'ar' => 'تسوق تشكيلة [term:name] من [alshaya_seo:brand_name] في [alshaya_seo:cities]، و[alshaya_seo:country] لأفضل العلامات التجارية.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

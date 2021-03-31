@@ -1,0 +1,11 @@
+name: 'Alshaya Thebodyshop'
+type: module
+description: 'The dedicated module for The Body Shop brand.'
+package: Alshaya
+core: 8.x
+
+themes:
+  - alshaya_white_label
+
+dependencies:
+  - alshaya_white_label:alshaya_mobile_app
