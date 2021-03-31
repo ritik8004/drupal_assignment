@@ -50,8 +50,8 @@ function alshaya_tbs_install() {
 
   // Configure map marker on checkout for CnC and appointment booking.
   \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
-    ->set('map_marker.active', '/modules/brands/alshaya_bp/images/tbs-pin-active.svg')
-    ->set('map_marker.in_active', '/modules/brands/alshaya_bp/images/tbs-pin-inactive.svg')
+    ->set('map_marker.active', '/modules/brands/alshaya_tbs/images/tbs-pin-active.svg')
+    ->set('map_marker.in_active', '/modules/brands/alshaya_tbs/images/tbs-pin-inactive.svg')
     ->save();
 }
 
