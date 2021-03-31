@@ -12,7 +12,7 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * [5.19.0] Update the metatag translations.
+ * [6.0.0] Update the metatag translations.
  */
 function alshaya_pb_transac_update_8017() {
   $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
@@ -439,12 +439,12 @@ function _alshaya_pb_transac_save_metatag_translations() {
       'ar' => 'تسوق [term:name]المنتجات عبر الإنترنت، تسوق [term:name] إكسسوارات في [alshaya_seo:country]، تسوق [term:name] إكسسوارات، تسوق [term:name]',
     ],
     'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:name] Products Online, Shop [term:name] in [alshaya_seo:country], [alshaya_seo:term_cities]',
-      'ar' => 'تسوق منتجات [term:name] أونلاين، تسوق [term:name] في [alshaya_seo:country]، [alshaya_seo:term_cities]',
+      'en' => 'Shop [term:name] Products Online, Shop [term:name] in [alshaya_seo:country], [alshaya_seo:product_cities].',
+      'ar' => 'تسوق منتجات [term:name] أونلاين، تسوق [term:name] في [alshaya_seo:country]،[alshaya_seo:product_cities].',
     ],
     'alshaya_seo_text_before_cod' => [
-      'en' => 'Compare [current-date:html_year] [term:name] collection specs and prices of [alshaya_seo:sub_categories].',
-      'ar' => 'قارن [current-date:html_year] [term:name] أسعار ومواصفات [alshaya_seo:sub_categories].',
+      'en' => 'Compare [current-date:html_year] [term:name] collection specs and prices [alshaya_seo:and_sub_categories].',
+      'ar' => 'قارن [current-date:html_year] [term:name] أسعار ومواصفات [alshaya_seo:and_sub_categories].',
     ],
     'alshaya_seo_l2_text_before_cod' => [
       'en' => 'Shop online for the best quality [term:name] at best prices.',

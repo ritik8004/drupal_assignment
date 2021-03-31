@@ -8,6 +8,7 @@ use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Session\AccountProxy;
 use Symfony\Component\Yaml\Yaml;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Provides integration with BazaarVoice.
@@ -59,6 +60,13 @@ class AlshayaBazaarVoice {
   protected $entityRepository;
 
   /**
+   * SKU Manager service object.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * BazaarVoiceApiWrapper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -73,19 +81,23 @@ class AlshayaBazaarVoice {
    *   The current account object.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   Entity Repository service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager service object.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               Connection $connection,
                               AlshayaBazaarVoiceApiHelper $alshaya_bazaar_voice_api_helper,
                               AccountProxy $current_user,
-                              EntityRepositoryInterface $entityRepository) {
+                              EntityRepositoryInterface $entityRepository,
+                              SkuManager $sku_manager) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->connection = $connection;
     $this->alshayaBazaarVoiceApiHelper = $alshaya_bazaar_voice_api_helper;
     $this->currentUser = $current_user;
     $this->entityRepository = $entityRepository;
+    $this->skuManager = $sku_manager;
   }
 
   /**
@@ -98,7 +110,11 @@ class AlshayaBazaarVoice {
    *   BV attributes data to be indexed in algolia.
    */
   public function getDataFromBvReviewFeeds(array $skus) {
-    $skus = implode(',', $skus);
+    $sanitized_sku = [];
+    foreach ($skus as $sku) {
+      $sanitized_sku[] = $this->skuManager->getSanitizedSku($sku);
+    }
+    $skus = implode(',', $sanitized_sku);
     $extra_params = [
       'filter' => 'id:' . $skus,
       'stats' => 'reviews',
@@ -111,12 +127,15 @@ class AlshayaBazaarVoice {
     if (!$result['HasErrors'] && isset($result['Results'])) {
       $response = [];
       foreach ($result['Results'] as $value) {
+        $rating_distribution = $this->processRatingDistribution($value['ReviewStatistics']['RatingDistribution']);
         $response['ReviewStatistics'][$value['Id']] = [
           'AverageOverallRating' => $value['ReviewStatistics']['AverageOverallRating'],
           'TotalReviewCount' => $value['ReviewStatistics']['TotalReviewCount'],
-          'RatingDistribution' => $this->processRatingDistribution($value['ReviewStatistics']['RatingDistribution']),
+          'RatingDistribution' => $rating_distribution['rating_distribution'],
+          'RatingStars' => $rating_distribution['rating_stars'],
         ];
       }
+
       return $response;
     }
 
@@ -164,8 +183,10 @@ class AlshayaBazaarVoice {
     });
 
     $rating_range = [];
+    // Rating stars and histogram data.
     foreach ($rating as $value) {
-      $rating_range[] = 'rating_' . $value['RatingValue'] . '_' . $value['Count'];
+      $rating_range['rating_stars'][] = 'rating_' . $value['RatingValue'];
+      $rating_range['rating_distribution'][] = 'rating_' . $value['RatingValue'] . '_' . $value['Count'];
     }
 
     return $rating_range;
@@ -289,6 +310,9 @@ class AlshayaBazaarVoice {
 
   /**
    * Helper function to get the sorting options from configs.
+   *
+   * @return array
+   *   Sorting options value.
    */
   public function getSortingOptions() {
     $available_options = [];
@@ -297,14 +321,14 @@ class AlshayaBazaarVoice {
     $sort_options = $config->get('sort_options');
     $sort_option_labels = $config->get('sort_options_labels');
 
-    if (!empty($sort_option_labels)) {
-      foreach ($sort_option_labels as $key => $value) {
-        if ($key == 'none') {
-          $available_options[$key] = $sort_option_labels[$key];
-        }
-        $val = explode(':', $value['value']);
-        if (array_search($val[0], $sort_options, TRUE)) {
-          $available_options[$key] = $sort_option_labels[$key];
+    if (!empty($sort_options)) {
+      $available_options[] = $sort_option_labels[0];
+      foreach ($sort_options as $val) {
+        foreach ($sort_option_labels as $k => $v) {
+          $value = explode(':', $v['value']);
+          if ($value[0] === $val) {
+            $available_options[$k] = $sort_option_labels[$k];
+          }
         }
       }
     }
@@ -358,18 +382,6 @@ class AlshayaBazaarVoice {
   }
 
   /**
-   * BazaarVoice web form fields configs.
-   *
-   * @return array
-   *   BazaarVoice web form fields configs.
-   */
-  public function getFileContents($url) {
-    $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url);
-
-    return $result;
-  }
-
-  /**
    * Generate UAS token to use in write a review form for authenticated user.
    *
    * @return string
@@ -380,10 +392,10 @@ class AlshayaBazaarVoice {
     $sharedKey = $config->get('shared_secret_key');
     $maxAge = $config->get('max_age');
     $userId = $this->currentUser->id();
+    $mail = $this->currentUser->getEmail();
 
     // URL-encoded query string.
-    $userStr = "date=" . urlencode(date('d-m-Y')) . "&userid=" . urlencode($userId) . "&maxage=" . urlencode($maxAge);
-
+    $userStr = "date=" . urlencode(date('Ymd')) . "&userid=" . urlencode($userId) . "&EmailAddress=" . urlencode($mail) . "&maxage=" . urlencode($maxAge);
     // Encode the signature using HMAC SHA-256.
     $signature = hash_hmac('sha256', $userStr, $sharedKey);
     // Concatenate the signature and hex-encoded string of parameters.

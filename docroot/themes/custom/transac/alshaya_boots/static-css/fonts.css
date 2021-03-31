@@ -1,0 +1,97 @@
+@font-face {
+  font-family: "BootsSharp-Bold";
+  src:
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/BootsSharp-Bold.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/BootsSharp-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BootsSharp-Light";
+  src:
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/BootsSharp-Light.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/BootsSharp-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BootsSharp-Regular";
+  src:
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/BootsSharp-Regular.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/BootsSharp-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tahoma-Bold";
+  src:
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tahoma-Bold.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tahoma-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tahoma";
+  src:
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tahoma.woff2") format("woff2"),
+    url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Tahoma.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GE_SS_Two_Light";
+  src: url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/GE_SS_Two_Light.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GESSTwoMedium";
+  src: url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/GESSTwoMedium.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ginger-bold-webfont";
+  src: url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Ginger-bold-webfont.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ginger-light-webfont";
+  src: url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Ginger-light-webfont.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ginger-regular-webfont";
+  src: url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Ginger-regular-webfont.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Ginger-thin-webfont";
+  src: url("https://www.kw.boots.com/themes/custom/transac/alshaya_boots/fonts/Ginger-thin-webfont.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

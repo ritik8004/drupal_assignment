@@ -1,4 +1,6 @@
-import { getCurrentUserEmail, getSessionCookie } from './user_util';
+import {
+  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
+} from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 
@@ -33,10 +35,27 @@ export const prepareRequest = (elements, fieldsConfig) => {
     // Add input data from field types.
     try {
       if (elements[id].value !== null) {
-        params += `&${id}=${elements[id].value}`;
-
-        if (id === 'useremail' && getCurrentUserEmail() === null) {
-          params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
+        if (id === 'useremail') {
+          if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== elements[id].value) {
+            const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
+            deleteSessionCookie(cookieValues);
+          } else if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
+            params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
+          }
+        } else if (id === 'usernickname') {
+          if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
+            && getSessionCookie('BvUserNickname') !== null && getCurrentUserEmail() === null) {
+            if (getSessionCookie('BvUserNickname') !== elements[id].value) {
+              params += `&${id}=${elements[id].value}`;
+              setSessionCookie('BvUserNickname', elements[id].value);
+            }
+            params += `&User=${getSessionCookie('BvUserId')}`;
+          } else {
+            params += `&${id}=${elements[id].value}`;
+            setSessionCookie('BvUserNickname', elements[id].value);
+          }
+        } else {
+          params += `&${id}=${elements[id].value}`;
         }
       }
     } catch (e) { return null; }
@@ -54,12 +73,13 @@ export const prepareRequest = (elements, fieldsConfig) => {
       return key;
     });
   }
-  // Set callback url for BV auntheticated user.
-  if (getCurrentUserEmail() === null) {
+
+  if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
     params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
+
   // Set user authenticated string (UAS).
-  const userToken = getSessionCookie();
+  const userToken = getSessionCookie('uas_token');
   if (getCurrentUserEmail() !== null && userToken !== undefined) {
     params += `&user=${userToken}`;
   }

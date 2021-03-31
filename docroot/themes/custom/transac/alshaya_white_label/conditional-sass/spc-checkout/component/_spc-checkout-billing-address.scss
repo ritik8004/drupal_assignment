@@ -54,6 +54,7 @@
       padding: 1rem 1.25rem;
       display: block;
       position: relative;
+      min-height: 4.75rem;
 
       @include arabic-line-height(1.5);
 

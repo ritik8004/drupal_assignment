@@ -1,0 +1,7 @@
+.aggregate-rating {
+  justify-content: center;
+
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.25rem;
+  }
+}

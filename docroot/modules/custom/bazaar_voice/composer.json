@@ -1,0 +1,13 @@
+{
+    "name": "bazaar_voice",
+    "type": "drupal-module",
+    "description": "Integrate Bazaarvoice api for ratings and reviews feature.",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/bazaar_voice",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/bazaar_voice",
+        "source": "http://cgit.drupalcode.org/bazaar_voice"
+    }
+}

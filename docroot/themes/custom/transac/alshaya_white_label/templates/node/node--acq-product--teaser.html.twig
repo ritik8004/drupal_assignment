@@ -12,11 +12,13 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
   {% else %}
     <a class="above-mobile-block product-link" href="{{ path('entity.node.canonical', {'node': node.id}) }}">
   {% endif %}
-    {% if content.image is not null %}
-      {{ content.image }}
-    {% endif %}
+    <div class="image-label-wrapper">
+      {% if content.image is not null %}
+        {{ content.image }}
+      {% endif %}
 
-    {{ content.labels }}
+      {{ content.labels }}
+    </div>
 
     {{ title_prefix }}
     {% if not page %}

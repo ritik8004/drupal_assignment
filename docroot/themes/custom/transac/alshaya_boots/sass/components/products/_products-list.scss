@@ -164,4 +164,28 @@
   .field--name-field-acq-promotion-description {
     font-size: 0.875rem;
   }
+
+  .alshaya_search_gallery {
+    .labels-container {
+      .label {
+        &.bottom {
+          &-left {
+            #{$left}: 0;
+
+            @include breakpoint($only-tablet) {
+              #{$left}: 0.9375rem;
+            }
+          }
+
+          &-right {
+            #{$right}: 0;
+
+            @include breakpoint($only-tablet) {
+              #{$right}: 0.9375rem;
+            }
+          }
+        }
+      }
+    }
+  }
 }
