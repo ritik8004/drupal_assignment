@@ -95,7 +95,8 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
       $privilege_customer = 'Regular Customer';
       $email = '';
       $customer_type = 'New Customer';
-
+      // Initialize the custom_id value as 0.
+      $customer_id = 0;
       if ($this->currentUser->isAuthenticated()) {
         $current_user = $this->userStorage->load($current_user_id);
         $email = $current_user->get('mail')->getString();
