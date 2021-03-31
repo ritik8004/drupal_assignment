@@ -10,6 +10,23 @@
     }
   }
 
+  @include breakpoint($upto-desktop) {
+    a {
+      font-size: 0.875rem;
+      font-family: $tbs-medium;
+      padding: 1rem 1.25rem;
+    }
+
+    li {
+      border-color: $menu-secondary-border;
+      margin: 0;
+
+      &::after {
+        margin-#{$right}: 1rem;
+      }
+    }
+  }
+
   @include breakpoint($desktop) {
     .menu--account {
       li:first-child a,
