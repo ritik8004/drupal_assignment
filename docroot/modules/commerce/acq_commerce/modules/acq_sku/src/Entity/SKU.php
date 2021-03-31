@@ -766,7 +766,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['crosssell'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Cross sell SKU'))
       ->setDescription(t('Reference to all Cross sell SKUs.'))
-      ->setTranslatable(TRUE)
+      ->setTranslatable(FALSE)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => 5,
@@ -777,7 +777,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['upsell'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Up sell SKU'))
       ->setDescription(t('Reference to all up sell SKUs.'))
-      ->setTranslatable(TRUE)
+      ->setTranslatable(FALSE)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => 6,
@@ -788,7 +788,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['related'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Related SKU'))
       ->setDescription(t('Reference to all related SKUs.'))
-      ->setTranslatable(TRUE)
+      ->setTranslatable(FALSE)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => 7,
