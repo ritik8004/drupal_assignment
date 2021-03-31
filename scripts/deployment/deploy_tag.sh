@@ -59,6 +59,7 @@ log_message()
 }
 
 log_message "============================================"
+log_message "Deployment Mode: $mode"
 log_message "Tag to deploy: $tag"
 log_message "Tag currently deployed: $deployment_identifier"
 log_message "Deployment Branch: $branch"
