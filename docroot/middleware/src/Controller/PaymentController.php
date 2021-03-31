@@ -241,14 +241,6 @@ class PaymentController {
     ];
 
     switch ($request->query->get('type')) {
-      case 'knet':
-        $payment_data['data'] = [
-          'transaction_id' => $request->query->get('knet_transaction_id', ''),
-          'payment_id' => $request->query->get('knet_payment_id', ''),
-          'result_code' => $request->query->get('knet_result', ''),
-        ];
-        break;
-
       case 'qpay';
         $payment_data['data'] = [
           'transaction_id' => $request->query->get('confirmation_id', ''),
@@ -258,7 +250,6 @@ class PaymentController {
           'date' => $request->query->get('requested_on', ''),
         ];
         break;
-
     }
 
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));
