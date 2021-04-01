@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -208,4 +209,11 @@ function alshaya_bazaar_voice_alshaya_my_account_links_alter(array &$links) {
     'route' => 'alshaya_bazaar_voice.user_reviews',
     'weight' => 41,
   ];
+}
+
+/**
+ * Implements hook_alshaya_srp_sort_settings_form_alter().
+ */
+function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['sort_options']['#options']['attr_bv_average_overall_rating'] = t('Top Rated');
 }

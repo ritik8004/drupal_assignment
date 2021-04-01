@@ -1,5 +1,5 @@
 import React from 'react';
-import DisplayStar from '../../../rating/components/stars/DisplayStar';
+import DisplayStar from '../../../rating/components/stars';
 
 const IndividualReviewStar = ({
   customerValue,
