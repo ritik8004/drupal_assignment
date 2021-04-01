@@ -158,7 +158,6 @@ function alshaya_seo_page_attachments(array &$attachments) {
   // Adding Product schema for PDP.
   if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')) {
     $product_schema_data = _alshaya_seo_transac_pdp_rich_snippet();
-    //print_r($product_schema_data);die;
     if (!empty($product_schema_data)) {
       $product_script = [
           '#type' => 'html_tag',
