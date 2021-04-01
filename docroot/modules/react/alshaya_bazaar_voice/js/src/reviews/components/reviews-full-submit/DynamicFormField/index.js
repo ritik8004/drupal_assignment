@@ -119,6 +119,7 @@ const DynamicFormField = (props) => {
         maxLength={fieldProperty.maxlength}
         minLength={fieldProperty.minlength}
         text={fieldProperty.text}
+        placeholder={fieldProperty.placeholder}
       />
     );
   }
