@@ -389,15 +389,6 @@ function alshaya_mobile_app_update_8004() {
       ],
       'alshaya_mobile_app'
     );
-
-  $configManager->updateConfigs(
-    [
-      'rest.resource.knet_finalize_request',
-      'rest.resource.knet_init_request',
-    ],
-    'alshaya_mobile_app',
-    'optional'
-  );
 }
 
 /**
