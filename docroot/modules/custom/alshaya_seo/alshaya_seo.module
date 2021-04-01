@@ -143,10 +143,7 @@ function alshaya_seo_page_attachments(array &$attachments) {
     $gkg_data['contactPoint'][] = $contact;
   }
 
-  // Invoke the alter hook to allow all modules to update the data.
-  \Drupal::moduleHandler()->alter('alshaya_seo_google_knowledge_graph', $gkg_data);
-
-  $attachments['#attached']['html_head']['alshaya_seo'] = [
+  $gkg_script =
     [
       '#type' => 'html_tag',
       '#tag' => 'script',
@@ -156,9 +153,26 @@ function alshaya_seo_page_attachments(array &$attachments) {
       // Adding PHP_EOL on both sides to make it look exactly same as expected.
       '#value' => PHP_EOL . json_encode($gkg_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
       '#weight' => 100,
-    ],
-    'gpg',
   ];
+  $attachments['#attached']['html_head'][] = [$gkg_script, 'gkg_data'];
+  // Adding Product schema for PDP.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')) {
+    $product_schema_data = _alshaya_seo_transac_pdp_rich_snippet();
+    //print_r($product_schema_data);die;
+    if (!empty($product_schema_data)) {
+      $product_script = [
+          '#type' => 'html_tag',
+          '#tag' => 'script',
+          '#attributes' => [
+            'type' => 'application/ld+json',
+          ],
+          // Adding PHP_EOL on both sides to make it look exactly same as expected.
+          '#value' => PHP_EOL . json_encode($product_schema_data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL,
+          '#weight' => 110,
+      ];
+      $attachments['#attached']['html_head'][] = [$product_script, 'product_data'];
+    }
+  }
 }
 
 /**
