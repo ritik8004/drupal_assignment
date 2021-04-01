@@ -8,7 +8,7 @@
 /**
  * Implements hook_install().
  */
-function alshaya_tbs_install() {
+function alshaya_tbs_transac_install() {
   // Enable and set alshaya_the_body_shop as default theme and set the site logo,
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_the_body_shop');
@@ -27,9 +27,6 @@ function alshaya_tbs_install() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('all_products_buyable', 0)
     ->save();
-
-  // Create default content for TBS.
-  alshaya_tbs_create_default_content();
 
   $strings = [
     'seo_brand_name' => [

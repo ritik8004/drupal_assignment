@@ -11,7 +11,6 @@ use Drupal\block_content\Entity\BlockContent;
  * Create default content for the body shop.
  */
 function alshaya_tbs_create_default_content() {
-  // Create copyright block content.
   alshaya_tbs_create_copyright_block();
 }
 
@@ -19,7 +18,6 @@ function alshaya_tbs_create_default_content() {
  * Create copyright block content for the body shop.
  */
 function alshaya_tbs_create_copyright_block() {
-  // Create copyright block content.
   // @todo update block content with proper copy right text for the body shop.
   $block_content = BlockContent::create([
     'info' => 'Copyright',

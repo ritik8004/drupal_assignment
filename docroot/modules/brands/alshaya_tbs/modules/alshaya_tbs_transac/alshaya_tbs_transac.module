@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Module file.
+ * Module file with hooks specific to TBS brand.
  */
 
 use Drupal\acq_sku\Entity\SKU;
@@ -12,7 +12,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
-function alshaya_tbs_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -20,15 +20,15 @@ function alshaya_tbs_node_view(array &$build, EntityInterface $entity, EntityVie
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
-      $return = _alshaya_mc_get_product_description($sku_entity);
+      $product_description = _alshaya_mc_get_product_description($sku_entity);
 
       // If short description not available, check other consecutive fields.
-      if (empty($return['short_desc']['value']['#markup'])) {
-        foreach ($return['description'] as $short_description) {
+      if (empty($product_description['short_desc']['value']['#markup'])) {
+        foreach ($product_description['description'] as $short_description) {
           // If value is available in next field, then
           // use it and no need to process further.
           if (!empty($short_description['value']['#markup'])) {
-            $return['short_desc'] = $short_description;
+            $product_description['short_desc'] = $short_description;
             break;
           }
         }
@@ -37,14 +37,14 @@ function alshaya_tbs_node_view(array &$build, EntityInterface $entity, EntityVie
       // Trim the short description.
       /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
       $product_helper = \Drupal::service('alshaya_acm_product.helper');
-      $short_desc = $product_helper->createShortDescription($return['short_desc']['value']['#markup']);
+      $short_desc = $product_helper->createShortDescription($product_description['short_desc']['value']['#markup']);
       // If there is 'readmore' available only then process.
       if (!empty($short_desc['read_more'])) {
         $short_desc['html'] = $product_helper->processShortDescEllipsis($short_desc['html']);
       }
-      $return['short_desc']['value']['#markup'] = $short_desc['html'];
-      $build['short_desc'] = $return['short_desc'];
-      $build['description'] = $return['description'];
+      $product_description['short_desc']['value']['#markup'] = $short_desc['html'];
+      $build['short_desc'] = $product_description['short_desc'];
+      $build['description'] = $product_description['description'];
     }
   }
 }
@@ -52,19 +52,19 @@ function alshaya_tbs_node_view(array &$build, EntityInterface $entity, EntityVie
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
-function alshaya_tbs_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+function alshaya_tbs_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($view_mode == 'modal') {
-    $return = _alshaya_tbs_get_product_description($sku_entity);
-    $build['short_desc'] = $return['short_desc'];
-    $build['description'] = $return['description'];
+    $product_description = _alshaya_tbs_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $product_description['short_desc'];
+    $build['description'] = $product_description['description'];
   }
 }
 
 /**
  * Get product description from SKU.
  */
-function _alshaya_tbs_get_product_description($sku_entity) {
-  $return = [];
+function _alshaya_tbs_transac_get_product_description($sku_entity) {
+  $product_description = [];
   // Prepare $at_glance variable.
   $at_glance['label'] = [
     '#markup' => t('At a glance'),
@@ -146,13 +146,13 @@ function _alshaya_tbs_get_product_description($sku_entity) {
   // Check comments in MMCPA-218 for sequence requirements.
   // $build['short_desc'] contains the description that should be
   // displayed before 'Read More'.
-  $return['short_desc'] = $at_glance;
-  $return['description'][] = $at_glance;
-  $return['description'][] = $description;
+  $product_description['short_desc'] = $at_glance;
+  $product_description['description'][] = $at_glance;
+  $product_description['description'][] = $description;
   if (!empty($specifications)) {
-    $return['description'][] = $specifications;
+    $product_description['description'][] = $specifications;
   }
-  $return['description'][] = $whats_in_box;
+  $product_description['description'][] = $whats_in_box;
 
-  return $return;
+  return $product_description;
 }
