@@ -54,7 +54,6 @@ export default class UserReviews extends React.Component {
     }
   }
 
-
   render() {
     const {
       reviewsSummary,
