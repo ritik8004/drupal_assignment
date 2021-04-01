@@ -165,7 +165,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
       $tags = Cache::mergeTags($tags, $term->getCacheTags());
 
       // Add selected sub category terms if grouping enabled.
-      if ($term->get('field_group_by_sub_categories')->getString()) {
+      if ($term->hasField('field_group_by_sub_categories') && $term->get('field_group_by_sub_categories')->getString()) {
         $selected_subcategories = $term->get('field_select_sub_categories_plp')->getValue();
         foreach ($selected_subcategories as $selected_subcategory) {
           $tags[] = 'taxonomy_term:' . $selected_subcategory['value'];
@@ -190,7 +190,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
 
-    if ($term instanceof TermInterface && $term->hasField('field_group_by_sub_categories')) {
+    if ($term instanceof TermInterface && $term->bundle() === 'acq_product_category') {
       if ($term->get('field_group_by_sub_categories')->getString()) {
         $cachetags = $this->getCacheTags();
 
