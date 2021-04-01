@@ -20,7 +20,7 @@ function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, E
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
-      $product_description = _alshaya_mc_get_product_description($sku_entity);
+      $product_description = _alshaya_tbs_transac_get_product_description($sku_entity);
 
       // If short description not available, check other consecutive fields.
       if (empty($product_description['short_desc']['value']['#markup'])) {
