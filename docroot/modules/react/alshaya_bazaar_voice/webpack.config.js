@@ -5,6 +5,7 @@ var config = {
   entry: {
     rating: './js/src/rating',
     reviews: './js/src/reviews',
+    myaccount: './js/src/myaccount',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

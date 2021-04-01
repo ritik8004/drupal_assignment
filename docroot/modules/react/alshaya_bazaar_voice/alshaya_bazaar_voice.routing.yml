@@ -16,3 +16,15 @@ alshaya_bazaar_voice.uas_token:
     _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceController::getUasToken'
   requirements:
     _access: 'TRUE'
+alshaya_bazaar_voice.user_reviews:
+  path: '/user/{user}/reviews'
+  defaults:
+    _controller: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceUserController::getUserReviews'
+    _title: 'Reviews'
+  requirements:
+    _custom_access: '\Drupal\alshaya_bazaar_voice\Controller\AlshayaBazaarVoiceUserController::checkAccess'
+    user: \d+
+  options:
+    parameters:
+      user:
+        type: entity:user

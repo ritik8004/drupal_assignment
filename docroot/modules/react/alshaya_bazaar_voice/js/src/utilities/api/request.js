@@ -4,12 +4,17 @@ export function getLanguageCode() {
   return drupalSettings.path.currentLanguage;
 }
 
-export function getbazaarVoiceSettings() {
+export function getbazaarVoiceSettings($context = 'pdp') {
   const settings = [];
-  Object.entries(drupalSettings.productInfo).forEach(([key]) => {
-    settings.productid = key;
-    settings.reviews = drupalSettings.productInfo[key].alshaya_bazaar_voice;
-  });
+  if ($context === 'pdp') {
+    Object.entries(drupalSettings.productInfo).forEach(([key]) => {
+      settings.productid = key;
+      settings.reviews = drupalSettings.productInfo[key].alshaya_bazaar_voice;
+    });
+  }
+  if ($context === 'user') {
+    settings.reviews = drupalSettings.userInfo;
+  }
 
   return settings;
 }
