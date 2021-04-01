@@ -110,7 +110,7 @@ class ProductCategoryTermId extends ArgumentDefaultPluginBase implements Cacheab
       && (($taxonomy_term = Term::load($taxonomy_tid)) instanceof TermInterface)) {
 
       // Support group by sub-categories.
-      if ($taxonomy_term->get('field_group_by_sub_categories')->getString()) {
+      if ($taxonomy_term->hasField('field_group_by_sub_categories') && $taxonomy_term->get('field_group_by_sub_categories')->getString()) {
         $terms = array_column($taxonomy_term->get('field_select_sub_categories_plp')->getValue() ?? [], 'value');
       }
       else {
