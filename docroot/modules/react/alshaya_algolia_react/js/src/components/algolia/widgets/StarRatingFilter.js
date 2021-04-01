@@ -1,4 +1,5 @@
 import React from 'react';
+import DisplayStar from '../../stars';
 import connectRefinementList from '../connectors/connectRefinementList';
 
 // StarRatingFilter used to display overall counts per star.
@@ -14,7 +15,9 @@ function StarRatingFilter(props) {
   Object.entries(items).forEach(([key, values]) => {
     ratingItems[key] = values;
     const label = values.label.split('_');
-    ratingItems[key].label = (label[1] > 1) ? `${label[1]} ${Drupal.t('stars')}` : `${label[1]} ${Drupal.t('star')}`;
+    const star = label[1];
+    ratingItems[key].label = (star > 1) ? `${star} ${Drupal.t('stars')}` : `${star} ${Drupal.t('star')}`;
+    ratingItems[key].star = star;
   });
 
   return (
@@ -30,11 +33,14 @@ function StarRatingFilter(props) {
         >
           <span className="facet-item__value">
             {item.label}
-            <span className="facet-item__count">
-              (
-              {item.count}
-              )
-            </span>
+            <div className="listing-inline-star">
+              <DisplayStar starPercentage={item.star} />
+              <span className="facet-item__count">
+                (
+                {item.count}
+                )
+              </span>
+            </div>
           </span>
         </li>
       ))}
