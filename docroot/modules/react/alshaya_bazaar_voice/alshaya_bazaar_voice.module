@@ -200,6 +200,18 @@ function alshaya_bazaar_voice_write_review_fields() {
 }
 
 /**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_bazaar_voice_alshaya_my_account_links_alter(array &$links) {
+  // Add reviews links for my account page.
+  $links['user_reviews'] = [
+    'text' => t('Reviews'),
+    'route' => 'alshaya_bazaar_voice.user_reviews',
+    'weight' => 41,
+  ];
+}
+
+/**
  * Implements hook_alshaya_srp_sort_settings_form_alter().
  */
 function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
