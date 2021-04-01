@@ -30,6 +30,10 @@
       width: 25%;
       border-#{$right}: 0.125rem solid $rr-slider-seperator-border;
       height: 0.1875rem;
+
+      &.slide-range-3 {
+        width: 50%;
+      }
     }
 
     .dynamic-dot {
@@ -39,6 +43,7 @@
       border-radius: 50%;
       position: absolute;
       top: -0.25rem;
+      margin-#{$left}: -0.1875rem;
     }
   }
 }
