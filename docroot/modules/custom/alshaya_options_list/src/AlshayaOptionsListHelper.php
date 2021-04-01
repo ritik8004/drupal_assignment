@@ -370,13 +370,18 @@ class AlshayaOptionsListHelper {
         'f[0]' => $attributeCode . ':',
       ],
     ];
-    $link = Url::fromUri('internal:/search', $url_options)->toString();
     $data = [
       'attribute_code' => $attributeCode,
       'attribute_value' => $value,
       'append_value' => TRUE,
     ];
+    // Initializing the link here to be altered by the subsequent function.
+    $link = '';
     $this->moduleHandler->alter('alshaya_search_filter_link', $link, $data);
+    // If the link is empty after the alter, set the default value.
+    if (empty($link)) {
+      $link = Url::fromUri('internal:/search', $url_options)->toString();
+    }
 
     // Whether we just return the link as is or we add attribute value.
     if (!$data['append_value']) {

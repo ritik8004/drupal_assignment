@@ -28,6 +28,7 @@ class Slider extends React.Component {
       text,
     } = this.props;
     const { sliderVal, activeId } = this.state;
+    const rangeLength = Object.keys(options).length;
 
     return (
       <>
@@ -46,7 +47,7 @@ class Slider extends React.Component {
               <span className="selectedLabel">{activeId}</span>
             </div>
             <div className="range-slider-block" id={`${id}-error`}>
-              <div className="range-slider">
+              <div className={`range-slider range-${rangeLength}`}>
                 {Object.values(options).map((sliderLabel, i) => {
                   const sliderValue = i + 1;
                   return (
