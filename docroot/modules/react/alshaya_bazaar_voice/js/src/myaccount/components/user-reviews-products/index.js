@@ -12,6 +12,9 @@ export default class UserReviewsProducts extends React.Component {
       reviewsIndividualSummary,
       reviewsProduct,
     } = this.props;
+    if (reviewsIndividualSummary === null && reviewsProduct === null) {
+      return null;
+    }
     return (
       <div className="product-block">
         <div className="product-image-block">

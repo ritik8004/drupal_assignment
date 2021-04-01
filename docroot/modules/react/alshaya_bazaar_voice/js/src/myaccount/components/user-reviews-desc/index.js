@@ -13,6 +13,9 @@ export default class UserReviewsDescription extends React.Component {
     const {
       reviewsIndividualSummary,
     } = this.props;
+    if (reviewsIndividualSummary === null) {
+      return null;
+    }
     const reviewDate = getDate(reviewsIndividualSummary.SubmissionTime);
     return (
       <div className="reviews-block">

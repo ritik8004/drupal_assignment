@@ -2,7 +2,7 @@ import React from 'react';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import DisplayStar from '../../../rating/components/stars/DisplayStar';
+import DisplayStar from '../../../rating/components/stars';
 import { fetchAPIData } from '../../../utilities/api/apiData';
 import IndividualReviewSlider from '../../../reviews/components/individual-review-slider';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
