@@ -81,7 +81,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       $breadcrumb->addCacheableDependency($term);
 
       $options = [];
-      if (!$term->get('field_display_as_clickable_link')->getString()) {
+      if ($term->hasField('field_display_as_clickable_link') && !$term->get('field_display_as_clickable_link')->getString()) {
         // Make term link non-clickable.
         $options = [
           'attributes' => [
@@ -90,7 +90,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
         ];
       }
       // Remove term name from breadcrumb if checked for any category.
-      $remove_term_from_breadcrumb = $term->get('field_remove_term_in_breadcrumb')->getString();
+      $remove_term_from_breadcrumb = $term->hasField('field_remove_term_in_breadcrumb') ? $term->get('field_remove_term_in_breadcrumb')->getString() : '';
       if (!$remove_term_from_breadcrumb) {
         // Add term to breadcrumb.
         $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()], $options));
