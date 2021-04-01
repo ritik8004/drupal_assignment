@@ -24142,6 +24142,11 @@
                 "shasum": ""
             },
             "type": "vm",
+            "extra": {
+                "patches_applied": {
+                    "Fix provisioning on new macs": "https://patch-diff.githubusercontent.com/raw/geerlingguy/drupal-vm/pull/2137.patch"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
