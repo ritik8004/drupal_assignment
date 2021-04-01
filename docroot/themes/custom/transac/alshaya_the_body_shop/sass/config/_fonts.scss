@@ -112,6 +112,76 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 }
 
 @font-face {
+  font-family: "29LT-Bukra-Condensed-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Condensed-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Condensed-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "29LT-Bukra-Wide-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Wide-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/29LT-Bukra-Wide-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MizanAR-Medium";
+  src:
+    url("#{$base_theme_fonts_directory_path}/MizanAR-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/MizanAR-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mada-Bold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Mada-Bold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Mada-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mada-SemiBold";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Mada-SemiBold.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Mada-SemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mada-Medium";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Mada-Medium.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Mada-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mada-Regular";
+  src:
+    url("#{$base_theme_fonts_directory_path}/Mada-Regular.woff2") format("woff2"),
+    url("#{$base_theme_fonts_directory_path}/Mada-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'alshaya-icons';
   src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?D7b5iy');
   src:
@@ -124,28 +194,42 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
   font-display: swap;
 }
 
-// Font Family
-$tbs-regular: 'WorkSans-Regular', 'Arial';
+// TBS specific font family
+// English fonts.
+// Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
+$tbs-regular: 'WorkSans-Regular', 'Mada-Regular', 'Arial';
 $tbs-light: 'WorkSans-Light', 'Arial';
-$tbs-medium: 'WorkSans-Medium', 'Arial';
-$tbs-semibold: 'WorkSans-SemiBold', 'Arial';
-$tbs-bold: 'WorkSans-Bold', 'Arial';
-
-$tbs-recoleta-medium: 'Recoleta-Medium', 'Arial';
+$tbs-medium: 'WorkSans-Medium', 'Mada-Medium', 'Arial';
+$tbs-semibold: 'WorkSans-SemiBold', 'Mada-SemiBold', 'Arial';
+$tbs-bold: 'WorkSans-Bold', 'Mada-Bold', 'Arial';
+$tbs-recoleta-medium: 'Recoleta-Medium', 'MizanAR-Medium', 'Arial';
 $tbs-recoleta-semibold: 'Recoleta-SemiBold', 'Arial';
+$tbs-dw-bold: 'DrukWide-Bold-Cy-Web', '29LT-Bukra-Wide-Bold', 'Arial';
+$tbs-dw-super: 'DrukWide-Super-Web', 'Arial';
+$tbs-dc-super: 'DrukCond-Super-Cy-Web', '29LT-Bukra-Condensed-Bold', 'Arial';
+$tbs-druk-bold: 'Druk-Bold-Web', 'Arial';
 
-$tbs-dw-bold: 'DrukWide-Bold-Cy-Web', 'Druk-Bold-Web', 'Arial';
-$tbs-dw-super: 'DrukWide-Super-Web', 'DrukCond-Super-Cy-Web', 'Arial';
+// Arabic fonts.
+// Adding En fonts so browser prints English characters & numbers correctly in arabic.
+$tbs-arabic-regular: 'Mada-Regular', 'WorkSans-Regular', 'Arial';
+$tbs-arabic-medium: 'Mada-Medium', 'WorkSans-Medium', 'Arial';
+$tbs-arabic-semibold: 'Mada-SemiBold', 'WorkSans-SemiBold', 'Arial';
+$tbs-arabic-bold: 'Mada-Bold', 'WorkSans-Bold', 'Arial';
+$tbs-recoleta-arabic-medium: 'MizanAR-Medium', 'Recoleta-Medium', 'Arial';
+$tbs-dw-arabic-bold: '29LT-Bukra-Wide-Bold', 'DrukWide-Bold-Cy-Web', 'Arial';
+$tbs-dc-arabic-super: '29LT-Bukra-Condensed-Bold', 'DrukCond-Super-Cy-Web', 'Arial';
 
 $body_font: $tbs-regular;
 $primary-font: $tbs-regular;
 
-// Override font variables coming from MC, without this we get a 404 as font files are no longer present in H&M theme.
+// Override font variables coming from MC, without this we get a 404 as font files are no longer present in TBS theme.
 $arial: $tbs-regular;
-$arial-nodir: $tbs-regular;
+$arial-nodir: $tbs-arabic-regular;
 $alshaya-bold: $tbs-bold;
+$alshaya-arabic-bold: $tbs-arabic-bold;
 $alshaya-bold-nodir: $tbs-bold;
 $alshaya-thin: $tbs-regular;
+$alshaya-arabic-thin: $tbs-arabic-regular;
 $alshaya-thin-nodir: $tbs-regular;
 
 $alshaya-icons: 'alshaya-icons';
