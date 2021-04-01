@@ -165,7 +165,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
       $tags = Cache::mergeTags($tags, $term->getCacheTags());
 
       // Add selected sub category terms if grouping enabled.
-      if ($term->hasField('field_group_by_sub_categories') && $term->get('field_group_by_sub_categories')->getString()) {
+      if ($term->bundle() === 'acq_product_category' && $term->get('field_group_by_sub_categories')->getString()) {
         $selected_subcategories = $term->get('field_select_sub_categories_plp')->getValue();
         foreach ($selected_subcategories as $selected_subcategory) {
           $tags[] = 'taxonomy_term:' . $selected_subcategory['value'];
