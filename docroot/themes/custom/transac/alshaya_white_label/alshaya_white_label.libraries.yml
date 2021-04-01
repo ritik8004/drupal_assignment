@@ -439,6 +439,8 @@ bazaar-voice:
   css:
     theme:
       css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/style-review-stars
 
 store_finder:
   css:
@@ -459,3 +461,8 @@ advanced-page:
   css:
     theme:
       css/conditional-sass/advanced-page/advanced-page.ltr.css: {}
+
+style-review-stars:
+  css:
+    theme:
+      css/conditional-sass/style-review-stars/style-review-stars.ltr.css: {}

@@ -1,5 +1,4 @@
 import React from 'react';
-import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import ReviewFeedback from '../review-feedback';
 import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
@@ -8,6 +7,7 @@ import ReviewAdditionalAttributes from '../review-additional-attributes';
 import ReviewPhoto from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
+import DisplayStar from '../../../rating/components/stars';
 
 const ReviewDescription = ({
   reviewDescriptionData,

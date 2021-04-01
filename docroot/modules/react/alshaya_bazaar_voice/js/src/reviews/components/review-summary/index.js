@@ -1,5 +1,4 @@
 import React from 'react';
-import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import ConditionalView from '../../../common/components/conditional-view';
 import ReviewInformation from '../review-info';
 import ReviewDescription from '../review-desc';
@@ -17,6 +16,7 @@ import Pagination from '../review-pagination';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import DisplayStar from '../../../rating/components/stars';
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;

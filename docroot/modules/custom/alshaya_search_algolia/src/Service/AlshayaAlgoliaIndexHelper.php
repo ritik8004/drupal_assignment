@@ -989,17 +989,20 @@ class AlshayaAlgoliaIndexHelper {
   /**
    * Helps to prepare fields to create replicas.
    *
+   * @param array $sort_label_options
+   *   The list of options label.
    * @param array $sort_options
    *   The list of options.
+   *
+   * @return array
+   *   Formated array of sorting options.
    */
-  public function prepareFieldsToSort(array $sort_options) {
+  public function prepareFieldsToSort(array $sort_label_options, array $sort_options) {
     $sorts = [];
-    foreach ($sort_options as $value) {
-      if ($value !== 0) {
-        if ($value != 'created') {
-          $sorts[] = ['field' => $value, 'direction' => 'asc'];
-        }
-        $sorts[] = ['field' => $value, 'direction' => 'desc'];
+    foreach ($sort_label_options as $sort_label_option) {
+      $value = explode(' ', $sort_label_option['value']);
+      if (!empty($sort_label_option['label']) && array_search(trim($value[0]), $sort_options, TRUE)) {
+        $sorts[] = ['field' => $value[0], 'direction' => strtolower($value[1])];
       }
     }
 
