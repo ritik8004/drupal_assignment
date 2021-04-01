@@ -22,4 +22,11 @@ do
   ~/manual-stage.sh ${site} $target_env $mode &>> ${log_file}
   echo "Finished staging for ${site} ${target_env} ${mode} `date`" &>> ${log_file}
   echo "" &>> ${log_file}
+
+  if [[ "$mode" == "reset" ]]; then
+    echo "" &>> ${log_file}
+    echo "Sleeping for 30 minutes before starting for next site" &>> ${log_file}
+    sleep 1800
+    echo "" &>> ${log_file}
+  fi
 done
