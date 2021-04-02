@@ -168,10 +168,6 @@ jquery_mobile_touch_swipe:
   js:
     vendor/js/jquery.touchSwipe.min.js: {}
 
-pace:
-  js:
-    /libraries/pace/pace.min.js: {}
-
 magazine_attribute:
   js:
     js/magazine_attribute.js: {}
