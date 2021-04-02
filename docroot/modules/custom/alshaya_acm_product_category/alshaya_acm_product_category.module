@@ -669,7 +669,7 @@ function alshaya_acm_product_category_block_access(Block $block, $operation, Acc
         return;
       }
 
-      $result = AccessResult::forbiddenIf(($term->hasField('field_group_by_sub_categories') && $term->get('field_group_by_sub_categories')->getString()));
+      $result = AccessResult::forbiddenIf($term->bundle() !== 'acq_product_category' || $term->get('field_group_by_sub_categories')->getString());
       $result->addCacheTags($term->getCacheTags());
       return $result;
     }
