@@ -145,6 +145,7 @@ header {
   .back--link {
     font-family: $tbs-medium;
     font-size: 0.875rem;
+    text-transform: capitalize;
   }
 
   .main--menu {
@@ -187,6 +188,7 @@ header {
     li.menu--one__list-item {
       .menu--one__link {
         padding: 1rem 1.25rem;
+        text-transform: capitalize;
       }
     }
   }
@@ -286,6 +288,7 @@ html[lang='ar'] {
   .one {
     font-family: $tbs-light;
     font-size: 0.75rem;
+    text-transform: uppercase;
   }
 
   .active {
@@ -307,6 +310,7 @@ html[lang='ar'] {
         font-size: 1rem;
         font-family: $tbs-medium;
         border-color: $menu-border-desktop;
+        text-transform: uppercase;
       }
     }
 

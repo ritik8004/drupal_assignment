@@ -15,6 +15,7 @@
       font-size: 0.875rem;
       font-family: $tbs-medium;
       padding: 1rem 1.25rem;
+      text-transform: capitalize;
     }
 
     li {
@@ -33,8 +34,17 @@
       li:nth-child(2) a,
       li:last-child a {
         &::before {
-          content: '';
-          padding: 0;
+          font-size: 0;
+        }
+      }
+
+      li:last-child a {
+        @at-root {
+          .logged-in & {
+            &::before {
+              font-size: 0;
+            }
+          }
         }
       }
     }
