@@ -26,7 +26,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
@@ -81,7 +81,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
@@ -134,7 +134,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
@@ -184,7 +184,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
@@ -256,7 +256,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
@@ -326,7 +326,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
