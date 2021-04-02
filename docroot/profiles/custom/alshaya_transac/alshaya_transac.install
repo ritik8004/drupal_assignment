@@ -16,6 +16,29 @@ use Drupal\facets\Entity\Facet;
 /**
  * Implements hook_update_N().
  *
+ * [5.18.0] Uninstall the unused KNET module and disable the knet plugins.
+ */
+function alshaya_transac_update_8136()
+{
+  // Disabling these modules for transac profile only, as these modules are
+  // still in use by some non-transac sites.
+  \Drupal::service('module_installer')->uninstall(['alshaya_acm_knet']);
+  \Drupal::service('module_installer')->uninstall(['alshaya_knet']);
+
+  // Disable the config so that plugin not found error is not thrown.
+  alshaya_config_install_configs(
+    [
+      'rest.resource.knet_finalize_request',
+      'rest.resource.knet_init_request'
+    ],
+    'alshaya_mobile_app',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.11.0]Updating the trigger field value in back_to_top settings
  * to make it visible after the specified value.
  */
