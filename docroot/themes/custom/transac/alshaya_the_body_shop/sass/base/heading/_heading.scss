@@ -1,0 +1,7 @@
+%page-title {
+  color: $page_title;
+}
+
+.c-page-title {
+  @extend %page-title;
+}
