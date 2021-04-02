@@ -58,6 +58,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
         return TRUE;
       }
     }
+    return FALSE;
   }
 
   /**

@@ -511,7 +511,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       return $term;
     }
 
-    return $term;
+    return NULL;
   }
 
   /**
