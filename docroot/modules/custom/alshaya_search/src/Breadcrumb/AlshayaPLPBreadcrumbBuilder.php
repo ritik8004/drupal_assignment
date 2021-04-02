@@ -52,7 +52,12 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function applies(RouteMatchInterface $route_match) {
     // Breadcrumb for 'plp' pages.
-    return $route_match->getRouteName() == 'entity.taxonomy_term.canonical';
+    if ($route_match->getRouteName() == 'entity.taxonomy_term.canonical') {
+      $term = $route_match->getParameter('taxonomy_term');
+      if ($term->bundle() === 'acq_product_category') {
+        return TRUE;
+      }
+    }
   }
 
   /**
@@ -90,7 +95,7 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
         ];
       }
       // Remove term name from breadcrumb if checked for any category.
-      $remove_term_from_breadcrumb = $term->bundle() === 'acq_product_category' ? $term->get('field_remove_term_in_breadcrumb')->getString() : '';
+      $remove_term_from_breadcrumb = $term->get('field_remove_term_in_breadcrumb')->getString();
       if (!$remove_term_from_breadcrumb) {
         // Add term to breadcrumb.
         $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()], $options));
