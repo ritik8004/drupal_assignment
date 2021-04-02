@@ -1,0 +1,95 @@
+@font-face {
+  font-family: "BBWTradeGothicLTStd_Bold";
+  src:
+    url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/BBWTradeGothicLTStd-Bd2.woff2") format("woff2"),
+    url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/BBWTradeGothicLTStd-Bd2.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BBWTradeGothicLTStd";
+  src:
+    url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/BBWTradeGothicLTStd.woff2") format("woff2"),
+    url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/BBWTradeGothicLTStd.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi_Bold";
+  src:
+    url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/DroidArabicKufi-Bold.woff2") format("woff2"),
+    url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/DroidArabicKufi-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidKufi_Regular";
+  src:
+    url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/DroidKufi-Regular.woff2") format("woff2"),
+    url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/DroidKufi-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JustLovely";
+  src: url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/JustLovely.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JustLovelyExtras";
+  src: url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/JustLovelyExtras.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JustLovelySlanted";
+  src: url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/JustLovelySlanted.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JustLovelySlantedWide";
+  src: url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/JustLovelySlantedWide.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TrendSansFour-Italic";
+  src: url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/TrendSansFour-Italic.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TrendSansOne";
+  src: url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/TrendSansOne.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TrendSansTwo";
+  src: url("https://www.bathandbodyworks.com.kw/themes/custom/transac/alshaya_bathbodyworks/fonts/TrendSansTwo.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

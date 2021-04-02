@@ -1,0 +1,252 @@
+@font-face {
+  font-family: "GESSTwoLight-Light";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/GESSTwoLight.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/GESSTwoLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/DroidArabicKufi.woff") format("woff"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/DroidArabicKufi.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi-Bold";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/DroidArabicKufi-Bold.woff") format("woff"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/DroidArabicKufi-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Book";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Book.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Book.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Bold";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Bold.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Medium";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Medium.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Regular";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Regular.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSans-Light";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/BentonSans-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HarrietDisplay";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/HarrietDisplay.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/HarrietDisplay.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'vs-icons';
+  src: url('https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-icons.eot?myjxod');
+  src:
+    url('https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-icons.eot?myjxod#iefix') format('embedded-opentype'),
+    url('https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-icons.ttf?myjxod') format('truetype'),
+    url('https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-icons.woff?myjxod') format('woff'),
+    url('https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/alshaya-icons.svg?myjxod#alshaya-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PinkSans";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/vsfonts/pink/megamenu/PinkSans-100.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/vsfonts/pink/megamenu/PinkSans-100.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PinkSans-130";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/vsfonts/pink/PinkSans-130.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/vsfonts/pink/PinkSans-130.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PinkSlab";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/vsfonts/pink/titles/PinkSlab-130.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/vsfonts/pink/titles/PinkSlab-130.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BentonSansCompMedium";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/vsfonts/sport/titles/BentonSansComp_Medium.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/vsfonts/sport/titles/BentonSansComp_Medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 190";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSlab-190.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSlab-190.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 190";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkOutline-190.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkOutline-190.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 130";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSlab-130.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSlab-130.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Victoria INTL";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/VictoriaINTL.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/VictoriaINTL.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Sans 160";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSans-160.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSans-160.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 100";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSlab-100.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSlab-100.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Slab 070";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSlab-070.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkSlab-070.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 100";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkOutline-100.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkOutline-100.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 160";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkOutline-160.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkOutline-160.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pink Outline 130";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkOutline-130.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/PinkOutline-130.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gotcha Crush Regular";
+  src:
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/GotchaRegularCustom-Regular.woff2") format("woff2"),
+    url("https://www.victoriassecret.ae/themes/custom/transac/alshaya_victoria_secret/fonts/GotchaRegularCustom-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

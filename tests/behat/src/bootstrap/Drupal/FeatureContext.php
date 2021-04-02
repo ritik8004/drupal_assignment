@@ -2427,14 +2427,13 @@ JS;
     $page = $this->getSession()->getPage();
     $newCheckoutKnet = $page->find('css', '#payment-method-checkout_com_upapi_knet');
     if (!empty($newCheckoutKnet)) {
-      $element = 'payment-method-checkout_com_upapi_knet';
+      $element = '#payment-method-checkout_com_upapi_knet';
     } else {
-      $element = 'payment-method-knet';
+      $element = '#payment-method-knet';
     }
-    $this->getSession()->executeScript("jQuery('#'. $element).trigger('click');");
+    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
     $this->iWaitSeconds(10);
     $checkbox = $page->findField('#' . $element);
-
     if ($checkbox !== null) {
       if (!$checkbox->isChecked()) {
         throw new \Exception(sprintf('Knet Payment method has not be checked on page.'));
@@ -2448,15 +2447,15 @@ JS;
   public function iSelectCheckoutPaymentMethod()
   {
     $page = $this->getSession()->getPage();
-    $newCheckout = $page->find('css', '#payment-method-checkout_com_upapi');
+    $newCheckout = $page->find('css', '#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi');
     if (!empty($newCheckout)) {
-      $element = 'payment-method-checkout_com_upapi';
+      $element = '#payment-method-checkout_com_upapi';
     } else {
-      $element = 'payment-method-checkout_com';
+      $element = '#payment-method-checkout_com';
     }
-    $this->getSession()->executeScript("jQuery('#'. $element).trigger('click');");
+    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
     $this->iWaitSeconds(10);
-    $checkbox = $page->findField('#' . $element);
+    $checkbox = $page->findField($element);
 
     if ($checkbox !== null) {
       if (!$checkbox->isChecked()) {
@@ -2476,7 +2475,7 @@ JS;
     } else {
       $element = '.payment-method-checkout_com';
     }
-    $card = $page->find('css', $element . $class);
+    $card = $page->find('css', $element . ' ' . $class);
     if ($card !== null) {
       $card->setValue($value);
     } else {

@@ -157,6 +157,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
         $availability = $skuManager->isProductInStock($sku_entity);
 
         // Prepare rich snippet.
+        $snippet['@context'] = 'http://schema.org';
         $snippet['@type'] = 'Product';
         $snippet['name'] = $product_title;
         $snippet['description'] = $product_description;
@@ -351,13 +352,6 @@ function alshaya_seo_transac_preprocess_alshaya_cart_product_name(&$variables) {
   $sku_attributes['gtm-size'] = isset($variables['sku_attributes'], $variables['sku_attributes']['attr_size']) ? $variables['sku_attributes']['attr_size']['value'] : '';
 
   $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($sku_attributes);
-}
-
-/**
- * Implements hook_alshaya_seo_google_knowledge_graph_alter().
- */
-function alshaya_seo_transac_alshaya_seo_google_knowledge_graph_alter(&$gkg_data) {
-  $gkg_data = _alshaya_seo_transac_pdp_rich_snippet($gkg_data);
 }
 
 /**

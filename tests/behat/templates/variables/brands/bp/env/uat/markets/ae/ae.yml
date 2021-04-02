@@ -1,2 +1,4 @@
-
-
+variables:
+  spc_single_product_detail_page_coupon: '/buy-marnys-omega-junior-36-syrup.html/'
+  spc_multiple_product_detail_page_coupon: '/buy-marnys-omega-junior-36-syrup.html/'
+  spc_single_product_detail_page_no_coupon: '/buy-aptamil-2-follow-formula-milk-900g.html/'

@@ -1,0 +1,108 @@
+@import "../../../alshaya_white_label/sass/config/_colors.scss";
+
+/* ------- 1. Brand Colors ------- */
+$cyprus: #004236;
+$brighton-green: #e4e726;
+$stem-green: #d6ce4b;
+$dark-green: #00352b;
+$terracotta: #a7674c;
+$natural-warmth: #d2ad93;
+$natural-warmth-two: #e8d6c9;
+$natural-warmth-three: #f5ece6;
+$nourishing-white: #f8f3e8;
+$activist-green: #00ab00;
+$poster-orange: #ff4233;
+$joyful-yellow: #ffcf00;
+$repurposed-blue: #0077d5;
+$white: #fff;
+$silver: #f4f4f4;
+$grey: #e1e1e1;
+$grey-two: #aaa;
+$metal: #626262;
+$balck: #000;
+$dark-olive-green: #66703a;
+$dollar-bill: #8bb057;
+$dark-khaki: #b7c072;
+$cadet-blue: #569294;
+$ucla-blue: #626b95;
+$deep-chestnut: #b35e42;
+$earth-yellow: #d7a269;
+$gamboge: #e39a1c;
+$indian-yellow: #e4b150;
+$redwood: #b14a4f;
+$chestnut: #dc5c60;
+$light-coral: #df8281;
+$surf-crest: #c5ccc1;
+$white-smoke: #f6f6f6;
+
+/* ------- 2. Primary Colors ------- */
+// Global elements.
+$default_background_color: $cyprus;
+$page_title: $cyprus;
+$primary_input_border: $cyprus;
+$primary_form_link: $cyprus;
+$primary_btn_bg: $cyprus;
+$primary_btn_text: $white;
+$primary_form_input: $cyprus;
+$primary_text: $cyprus;
+$primary_form_input: $cyprus;
+$primary_input_label: $cyprus;
+
+// Header
+$header_bg: $cyprus;
+$header_secondary_bg: $cyprus;
+$header_secondary_menu_link: $white;
+$header_my_account_h3_title: $white;
+$header_secondary_menu_link_hover_bg: $cyprus;
+$header_secondary_menu_link_hover: $stem-green;
+$header_border: $cyprus;
+$header_secondary_menu_link_mobile: $cyprus;
+
+// Algolia search bar.
+$algolia-search-bar-background: $cyprus;
+$algolia-search-field-bg: $nourishing-white;
+$algolia-input-text: $cyprus;
+$algolia-input-placeholder-text: $cyprus;
+$algolia-search-clear-text-icon: $cyprus;
+$algolia-trending-title-text: $cyprus;
+$algolia-search-bar-suggestion-background: $white;
+
+// Mini Cart.
+$primary_minicart_quantity_text: $cyprus;
+$primary_minicart_text: $white;
+$primary_minicart_quantity_bg: $stem-green;
+
+// C-menu primary i:e Mobile and tablet header menu links.
+$header_c_menu_icon_color: $white;
+$header_toggle_sign_active_tab: $cyprus;
+$header_toggle_sign_active_tab_bg: $white;
+$header_toggle_sign_default: $white-smoke;
+$header_mobile_menu_arrow: $cyprus;
+$header_mobile_menu_close_bg: $cyprus;
+$menu-secondary-border: $_screeching_white;
+$menu-border-desktop: $cyprus;
+
+// Mega menu
+$mm_l3_link: $cyprus;
+$mm_l2_link: $cyprus;
+$mm_bg: $cyprus;
+$mm_l1_border: $_screeching_white;
+$mm_l1_link: $white;
+$mm_l1_link_hover_border_to_fill_space: $cyprus;
+$mm_l1_link_hover: $stem-green;
+$mm_l1_link_active_border: $cyprus;
+$mm_bg_tbs: $white;
+$mm-link-border: $cyprus;
+$mm_l3_link_hover: $cyprus;
+$mm_term_image_bg: $white;
+$mm_l2_link_border_hover: $cyprus;
+
+// User login page
+$newsletter_submit_btn: $brighton-green;
+$user_login_section_title: $cyprus;
+$social_auth_login_button_border: $cyprus;
+$social_auth_login_button_border: $cyprus;
+$social-network-text: $cyprus;
+$user_login_link_btn_text: $cyprus;
+$user_login_sub_text: $cyprus;
+$title: $cyprus;

@@ -21,6 +21,13 @@ use Drush\Exceptions\UserAbortException;
 class AcqSkuPositionCommands extends DrushCommands {
 
   /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * Module Handler service.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -122,7 +129,7 @@ class AcqSkuPositionCommands extends DrushCommands {
                               CategoryManagerInterface $categoryManager,
                               I18nHelper $i18n_helper,
                               ConfigFactoryInterface $configFactory) {
-    $this->logger = $logger->get('acq_sku_position');
+    $this->drupalLogger = $logger->get('acq_sku_position');
     $this->apiWrapper = $api_wrapper;
     $this->connection = $connection;
     $this->moduleHandler = $moduleHandler;
@@ -157,7 +164,7 @@ class AcqSkuPositionCommands extends DrushCommands {
    * @throws \Drush\Exceptions\UserAbortException
    */
   public function syncPositions($position_type = 'position', array $options = ['category-source' => 'magento']) {
-    $this->logger->notice('Product position sync in progress...');
+    $this->drupalLogger->notice('Product position sync in progress...');
 
     // If invalid option for category source.
     if (!in_array($options['category-source'], ['drupal', 'magento'])) {
@@ -191,7 +198,7 @@ class AcqSkuPositionCommands extends DrushCommands {
           }
         }
         catch (\Exception $e) {
-          $this->logger->error(dt('Exception while fetching position for category @name (tid: @tid). The category probably does not exist in commerce backend', [
+          $this->drupalLogger->error(dt('Exception while fetching position for category @name (tid: @tid). The category probably does not exist in commerce backend', [
             '@name' => $term->name,
             '@tid' => $term->tid,
           ]));
@@ -200,7 +207,7 @@ class AcqSkuPositionCommands extends DrushCommands {
 
         // Skip sync if error found in the response for a particular category.
         if (is_array($response) && isset($response['message'])) {
-          $this->logger->error(dt('Error in position sync for @name (tid: @tid). Response: @message', [
+          $this->drupalLogger->error(dt('Error in position sync for @name (tid: @tid). Response: @message', [
             '@name' => $term->name,
             '@tid' => $term->tid,
             '@message' => $response['message'],
@@ -209,7 +216,7 @@ class AcqSkuPositionCommands extends DrushCommands {
         }
 
         // Start product position sync for this category.
-        $this->logger->notice(dt('Product position sync for !name (tid: !tid) in progress...', [
+        $this->drupalLogger->notice(dt('Product position sync for !name (tid: !tid) in progress...', [
           '!name' => $term->name,
           '!tid' => $term->tid,
         ]));
@@ -251,7 +258,7 @@ class AcqSkuPositionCommands extends DrushCommands {
           }
         }
         catch (\Exception $e) {
-          $this->logger->error(dt('Error while processing data for product position for term: @tid. Message: @message', [
+          $this->drupalLogger->error(dt('Error while processing data for product position for term: @tid. Message: @message', [
             '@tid' => $term->tid,
             '@message' => $e->getMessage(),
           ]));
@@ -268,9 +275,9 @@ class AcqSkuPositionCommands extends DrushCommands {
     // Allow other modules to take action after position sync finished.
     $this->moduleHandler->invokeAll('acq_sku_position_sync_finished');
 
-    $this->logger->notice(dt('Product position sync completed!'));
+    $this->drupalLogger->notice(dt('Product position sync completed!'));
 
-    $this->logger()->notice(dt('Inserted @inserted_count new positions, Updated @updated_count positions, Skipped @skipped_count positions, Deleted @deleted_count positions.', [
+    $this->drupalLogger->notice(dt('Inserted @inserted_count new positions, Updated @updated_count positions, Skipped @skipped_count positions, Deleted @deleted_count positions.', [
       '@inserted_count' => $this->inserted,
       '@updated_count' => $this->updated,
       '@skipped_count' => $this->skipped,
