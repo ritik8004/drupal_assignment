@@ -258,6 +258,7 @@ class PaymentController {
           'date' => $request->query->get('requested_on', ''),
         ];
         break;
+
     }
 
     $response->headers->setCookie(CookieHelper::create('middleware_payment_error', json_encode($payment_data), strtotime('+1 year')));

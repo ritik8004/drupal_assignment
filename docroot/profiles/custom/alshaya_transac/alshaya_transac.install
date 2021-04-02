@@ -12,13 +12,14 @@ use Drupal\Core\Site\Settings;
 use Drupal\block\BlockInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\facets\Entity\Facet;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_update_N().
  *
  * [6.1.0] Uninstall the unused KNET module and disable the knet plugins.
  */
-function alshaya_transac_update_8134()
+function alshaya_transac_update_8136()
 {
   // Disabling these modules for transac profile only, as these modules are
   // still in use by some non-transac sites.
@@ -47,6 +48,16 @@ function alshaya_transac_update_8134()
     'alshaya_mobile_app',
     'override',
   );
+
+  foreach (Role::loadMultiple(['anonymous', 'authenticated']) as $role) {
+    if ($role->hasPermission('restful get knet_init_request')) {
+      $role->revokePermission('restful get knet_init_request');
+    }
+    if ($role->hasPermission('restful get knet_finalize_request')) {
+      $role->revokePermission('restful get knet_finalize_request');
+    }
+    $role->save();
+  }
 }
 
 /**
