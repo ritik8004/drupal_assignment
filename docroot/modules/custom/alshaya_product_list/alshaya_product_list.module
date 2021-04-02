@@ -118,15 +118,20 @@ function alshaya_product_list_module_implements_alter(&$implementations, $hook) 
  * Implements hook_alshaya_search_filter_link_alter().
  */
 function alshaya_product_list_alshaya_search_filter_link_alter(&$link, array &$data) {
-  // Get node for given brand and value.
-  $nids = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
-    ->condition('field_attribute_name', 'attr_' . $data['attribute_code'])
-    ->condition('field_attribute_value', $data['attribute_value'])
-    ->execute();
-
-  // If there are nodes, use first one.
-  if (!empty($nids) && is_array($nids)) {
-    $nid = reset($nids);
+  static $attributes;
+  // Get nids for given attribute code.
+  if (empty($attributes[$data['attribute_code']])) {
+    $query = \Drupal::service('database')->select('node__field_attribute_name', 'an');
+    $query->addField('av', 'field_attribute_value_value');
+    $query->addField('an', 'entity_id');
+    $query->join('node__field_attribute_value', 'av', 'an.entity_id = av.entity_id and av.bundle = an.bundle');
+    $query->condition('an.bundle', 'product_list');
+    $query->condition('an.field_attribute_name_value', 'attr_' . $data['attribute_code']);
+    $attributes[$data['attribute_code']] = $query->execute()->fetchAllkeyed(0, 1);
+  }
+  // If node exist for the given attribute code and value.
+  if (!empty($attributes[$data['attribute_code']][$data['attribute_value']])) {
+    $nid = $attributes[$data['attribute_code']][$data['attribute_value']];
     $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/node/' . $nid);
     $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $data['append_value'] = FALSE;
