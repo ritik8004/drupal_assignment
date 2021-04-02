@@ -12,15 +12,6 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
- * [6.0.0] Remove full stop from meta description.
- */
-function alshaya_vs_transac_update_8015() {
-  _alshaya_vs_transac_save_metatag_translations();
-}
-
-/**
- * Implements hook_update_N().
- *
  * [6.0.0] Update the metatag translations.
  */
 function alshaya_vs_transac_update_8014() {
