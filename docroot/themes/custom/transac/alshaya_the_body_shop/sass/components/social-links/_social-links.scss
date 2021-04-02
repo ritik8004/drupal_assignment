@@ -8,50 +8,48 @@
   ul {
     margin-#{$left}: -0.75rem;
   }
-
-  li:not(:last-child) {
-    margin-#{$right}: 0.625rem;
-  }
 }
 
-.ic-social {
-  &-facebook {
-    &::before {
-      @include ic-social;
+.c-social-links {
+  .c-social-links {
+    &--facebook {
+      &::before {
+        @include ic-social;
 
-      background-image: url(#{$tbs_theme_img_directory_path}/icons/facebook.svg);
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/facebook.svg);
+      }
     }
-  }
 
-  &-instagram {
-    &::before {
-      @include ic-social;
+    &--instagram {
+      &::before {
+        @include ic-social;
 
-      background-image: url(#{$tbs_theme_img_directory_path}/icons/instagram.png);
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/instagram.png);
+      }
     }
-  }
 
-  &-twitter {
-    &::before {
-      @include ic-social;
+    &--twitter {
+      &::before {
+        @include ic-social;
 
-      background-image: url(#{$tbs_theme_img_directory_path}/icons/twitter.svg);
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/twitter.svg);
+      }
     }
-  }
 
-  &-youtube {
-    &::before {
-      @include ic-social;
+    &--youtube {
+      &::before {
+        @include ic-social;
 
-      background-image: url(#{$tbs_theme_img_directory_path}/icons/youtube.svg);
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/youtube.svg);
+      }
     }
-  }
 
-  &-pinterest {
-    &::before {
-      @include ic-social;
+    &--pinterest {
+      &::before {
+        @include ic-social;
 
-      background-image: url(#{$tbs_theme_img_directory_path}/icons/pinterest.svg);
+        background-image: url(#{$tbs_theme_img_directory_path}/icons/pinterest.svg);
+      }
     }
   }
 }
