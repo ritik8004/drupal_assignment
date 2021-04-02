@@ -68,20 +68,6 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-  field_promo_block_seo_text:
-    weight: 5
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    type: text_default
-    region: content
-  field_promo_block_seo_title:
-    weight: 4
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    type: text_default
-    region: content
   field_promotion_image_mobile:
     weight: 1
     label: hidden
@@ -93,3 +79,6 @@ content:
     region: content
 hidden:
   field_promo_block_visible_on: true
+  field_promo_block_seo_text: true
+  field_promo_block_seo_title: true
+
