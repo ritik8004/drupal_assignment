@@ -18,6 +18,7 @@ $white: #fff;
 $silver: #f4f4f4;
 $grey: #e1e1e1;
 $grey-two: #aaa;
+$grey-three: #888;
 $metal: #626262;
 $balck: #000;
 $dark-olive-green: #66703a;
@@ -61,6 +62,9 @@ $header_secondary_menu_link_hover_bg: $cyprus;
 $header_secondary_menu_link_hover: $stem-green;
 $header_border: $cyprus;
 $header_secondary_menu_link_mobile: $cyprus;
+
+//Buttons
+$primary_btn_bg: $cyprus;
 
 // Algolia search bar.
 $algolia-search-bar-background: $cyprus;
@@ -132,3 +136,21 @@ $accordion_border: $light-green;
 $newsletter_success: $success-green;
 $copyright_footer_paragraph: $white;
 
+// SPC Checkout
+$spc-checkout_section_title: $cyprus;
+
+// SPC
+$spc-promotion-link: $poster-orange;
+$spc-product-title: $cyprus;
+$spc-product-price: $cyprus;
+$spc-product-attributes: $grey-three;
+$spc-select-qty: $cyprus;
+$spc-totals-line-order-color: $cyprus;
+$spc-select-border: $cyprus;
+$spc-promo-code-text: $cyprus;
+$spc-mobile-cart-preview: $cyprus;
+$spc-select-qty-dropdown-icon: $cyprus;
+
+// Product detail page
+$pdp_product_special_price_text: $poster-orange;
+$pdp_product_discount_price: $poster-orange;

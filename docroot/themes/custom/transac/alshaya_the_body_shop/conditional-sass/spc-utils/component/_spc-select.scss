@@ -1,0 +1,16 @@
+.spc-select {
+  .spcSelect__control {
+    font-family: $tbs-medium;
+
+    .css-1uccc91-singleValue {
+      color: $spc-select-qty;
+    }
+
+    .spcSelect__dropdown-indicator {
+      @include icon('dropdown-expand') {
+        font-size: 2.25rem;
+        color: $spc-select-qty-dropdown-icon;
+      }
+    }
+  }
+}
