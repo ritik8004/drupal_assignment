@@ -112,7 +112,6 @@
         "drush/drush": "^9.0.0",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
-        "hubspot/pace": "^1.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
@@ -182,18 +181,6 @@
                 "type": "drupal-library",
                 "dist": {
                     "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        "pace": {
-            "type": "package",
-            "package": {
-                "name": "hubspot/pace",
-                "version": "1.0.2",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/hubspot/pace/archive/v1.0.2.zip",
                     "type": "zip"
                 }
             }

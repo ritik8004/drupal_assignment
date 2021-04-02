@@ -157,12 +157,6 @@ function alshaya_white_label_preprocess_html(&$variables) {
 
   $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
 
-  // If loader is enabled for the site, attach PACE library.
-  $progressConfig = \Drupal::config('alshaya_master.loader_settings');
-  if ($progressConfig->get('alshaya_page_progress_loader') == 1) {
-    $variables['#attached']['library'][] = 'alshaya_white_label/pace';
-  }
-
   // Add class for sites with super menu.
   if (isset($variables['page']['menu_secondary']['supermenu'])) {
     $variables['attributes']['class'][] = 'supermenu';
