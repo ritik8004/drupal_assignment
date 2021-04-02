@@ -2447,7 +2447,7 @@ JS;
   public function iSelectCheckoutPaymentMethod()
   {
     $page = $this->getSession()->getPage();
-    $newCheckout = $page->find('css', '#payment-method-checkout_com_upapi');
+    $newCheckout = $page->find('css', '#spc-checkout .spc-main .spc-content #spc-payment-methods .payment-methods div.payment-method-checkout_com_upapi');
     if (!empty($newCheckout)) {
       $element = '#payment-method-checkout_com_upapi';
     } else {
@@ -2455,7 +2455,7 @@ JS;
     }
     $this->getSession()->executeScript("jQuery('$element').trigger('click');");
     $this->iWaitSeconds(10);
-    $checkbox = $page->findField('#' . $element);
+    $checkbox = $page->findField($element);
 
     if ($checkbox !== null) {
       if (!$checkbox->isChecked()) {
