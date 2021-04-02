@@ -327,9 +327,6 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   switch ($order['payment']['method']) {
     case 'knet':
-      // Although this payment method is not in use, we shall not remove the
-      // related code, as there could be some orders which are placed using the
-      // knet payment method.
       $orderDetails['payment']['transactionId'] = $payment_info['transaction_id'];
       $orderDetails['payment']['paymentId'] = $payment_info['payment_id'];
       $orderDetails['payment']['resultCode'] = 'CAPTURED';

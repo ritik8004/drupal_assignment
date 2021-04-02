@@ -241,6 +241,14 @@ class PaymentController {
     ];
 
     switch ($request->query->get('type')) {
+      case 'knet':
+        $payment_data['data'] = [
+          'transaction_id' => $request->query->get('knet_transaction_id', ''),
+          'payment_id' => $request->query->get('knet_payment_id', ''),
+          'result_code' => $request->query->get('knet_result', ''),
+        ];
+        break;
+
       case 'qpay';
         $payment_data['data'] = [
           'transaction_id' => $request->query->get('confirmation_id', ''),
