@@ -18,21 +18,34 @@ use Drupal\facets\Entity\Facet;
  *
  * [5.18.0] Uninstall the unused KNET module and disable the knet plugins.
  */
-function alshaya_transac_update_8136()
+function alshaya_transac_update_8134()
 {
   // Disabling these modules for transac profile only, as these modules are
   // still in use by some non-transac sites.
   \Drupal::service('module_installer')->uninstall(['alshaya_acm_knet']);
   \Drupal::service('module_installer')->uninstall(['alshaya_knet']);
 
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $configManager */
+  $configManager = \Drupal::service('alshaya_config.manager');
+
   // Disable the config so that plugin not found error is not thrown.
-  alshaya_config_install_configs(
+  $configManager->updateConfigs(
     [
       'rest.resource.knet_finalize_request',
       'rest.resource.knet_init_request'
     ],
     'alshaya_mobile_app',
     'optional'
+  );
+
+  // Disable the resource related permissions.
+  $configManager->updateConfigs(
+    [
+      'user.role.anonymous',
+      'user.role.authenticated'
+    ],
+    'alshaya_mobile_app',
+    'override',
   );
 }
 
