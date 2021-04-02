@@ -381,7 +381,7 @@ function _alshaya_vs_transac_save_metatag_translations() {
       'ar' => 'اكتشف احدث تشكيلة [alshaya_seo:and_sub_categories] بنماذج وأنماط مختلفة أونلاين .',
     ],
     'alshaya_seo_desc_start' => [
-      'en' => 'Shop sexy and comfortable Victoria’s Secret [alshaya_seo:super_category] [term:name] products.',
+      'en' => 'Shop sexy and comfortable Victoria’s Secret [alshaya_seo:super_category] [term:name] products',
       'ar' => 'تسوق منتجات [alshaya_seo:super_category] [term:name] المريحة والجذابة',
     ],
     'alshaya_seo_desc_free_delivery_n_cod' => [
