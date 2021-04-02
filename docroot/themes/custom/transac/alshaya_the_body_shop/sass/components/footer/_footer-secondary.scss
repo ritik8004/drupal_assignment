@@ -46,9 +46,13 @@
 }
 
 .c-footer__logo--mastercard {
-  background-image: url(#{$tbs_theme_img_directory_path}/cards/card-mastercard.svg);
+  mask-image: url(#{$base_theme_img_directory_path}/cards/master-card-secure-code-black.svg);
   width: 4.25rem;
   height: 1.25rem;
+  background-color: #fff;
+  background-image: none;
+  mask-size: contain;
+  mask-repeat: no-repeat;
 }
 
 .c-footer__logo--visa {
