@@ -510,6 +510,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     if ($term instanceof TermInterface && $term->getVocabularyId() == self::VOCABULARY_ID) {
       return $term;
     }
+    $term = NULL;
 
     return $term;
   }

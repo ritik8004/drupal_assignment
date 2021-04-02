@@ -52,7 +52,13 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function applies(RouteMatchInterface $route_match) {
     // Breadcrumb for 'plp' pages.
-    return $route_match->getRouteName() == 'entity.taxonomy_term.canonical';
+    if ($route_match->getRouteName() == 'entity.taxonomy_term.canonical') {
+      $term = $route_match->getParameter('taxonomy_term');
+      if ($term->bundle() === 'acq_product_category') {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
   /**
