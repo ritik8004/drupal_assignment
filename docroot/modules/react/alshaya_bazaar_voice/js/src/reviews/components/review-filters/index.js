@@ -1,8 +1,16 @@
 import React from 'react';
 import Select from 'react-select';
 import { getArraysIntersection } from '../../../utilities/write_review_util';
+import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 
 export default class ReviewFilters extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      bazaarVoiceSettings: getbazaarVoiceSettings(),
+    };
+  }
+
   handleSelect = (selectedOption) => {
     const {
       currentOptions,
@@ -28,6 +36,8 @@ export default class ReviewFilters extends React.Component {
       currentOptions,
       filterOptions,
     } = this.props;
+    const { bazaarVoiceSettings } = this.state;
+    const pdpFilterOptions = bazaarVoiceSettings.reviews.bazaar_voice.filter_options;
     const availableFilters = [];
     if (filterOptions !== undefined && filterOptions !== null) {
       Object.entries(filterOptions).forEach(([index]) => {
@@ -36,7 +46,7 @@ export default class ReviewFilters extends React.Component {
           if (item.includes('_filter')) {
             const options = Object.keys(option.Values).map((key) => ({
               value: `contextdatavalue_${item}:${option.Values[key].Value}`,
-              label: `${option.Values[key].Value} (${option.Values[key].Count})`,
+              label: `${pdpFilterOptions[item][option.Values[key].Value]} (${option.Values[key].Count})`,
             }));
             availableFilters[item] = options;
             availableFilters[item].defaultValue = [{
