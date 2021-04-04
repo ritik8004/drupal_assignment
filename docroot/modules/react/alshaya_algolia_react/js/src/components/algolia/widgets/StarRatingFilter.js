@@ -32,8 +32,8 @@ function StarRatingFilter(props) {
           }}
         >
           <span className="facet-item__value">
-            {item.label}
             <div className="listing-inline-star">
+              <div className="rating-label">{item.label}</div>
               <DisplayStar starPercentage={item.star} />
               <span className="facet-item__count">
                 (
