@@ -134,6 +134,21 @@
         }
       }
     }
+
+    .listing-inline-star {
+      justify-content: $left;
+      margin-bottom: 0;
+
+      .rating-label {
+        margin-#{$right}: 0.5rem;
+      }
+
+      .star-ratings-wrapper {
+        .inline-star {
+          top: 0.0625rem;
+        }
+      }
+    }
   }
 
   .filter__inner {
