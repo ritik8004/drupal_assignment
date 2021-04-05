@@ -1,0 +1,30 @@
+.address {
+  .address--edit,
+  .address--delete {
+    a {
+      border: 0.0625rem solid $address-edit-delete-btn-border;
+      color: $address-edit-delete-btn-text;
+      text-align: center;
+    }
+  }
+
+  .address--primary {
+    letter-spacing: 0;
+  }
+}
+
+.form-type-select {
+  .select2-selection__arrow {
+    @include icon(dropdown-expand, after) {
+      color: $spc-select-qty-dropdown-icon;
+    }
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-type-select {
+    &::after {
+      display: none;
+    }
+  }
+}
