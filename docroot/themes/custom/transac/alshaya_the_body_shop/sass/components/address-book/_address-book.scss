@@ -1,0 +1,13 @@
+.address {
+  .address--edit,
+  .address--delete {
+    a {
+      border: 0.0625rem solid $address-edit-delete-btn-border;
+      color: $address-edit-delete-btn-text;
+    }
+  }
+
+  .address--primary {
+    letter-spacing: 0;
+  }
+}
