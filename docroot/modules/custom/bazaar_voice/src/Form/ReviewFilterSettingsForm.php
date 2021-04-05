@@ -36,7 +36,7 @@ class ReviewFilterSettingsForm extends ConfigFormBase {
       '#type' => 'textarea',
       '#title' => $this->t('PDP filter options'),
       '#default_value' => $config->get('pdp_filter_options'),
-      '#description' => $this->t('Provide filter options to be shown in pdp review page.'),
+      '#description' => $this->t('Provide filter options to be shown in pdp review page, each option value should added in new line.'),
     ];
 
     return parent::buildForm($form, $form_state);

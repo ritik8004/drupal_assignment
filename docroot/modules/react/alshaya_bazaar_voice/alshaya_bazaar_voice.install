@@ -15,6 +15,10 @@ use Drupal\field\Entity\FieldStorageConfig;
  */
 function alshaya_bazaar_voice_update_8001() {
   _add_sort_option_in_plp_srp_config_form();
+   // Add configurations for PDP reviews filter options.
+  $manager->updateConfigs(['bazaar_voice_filter_review.settings'],
+    'bazaar_voice'
+  );
 }
 
 /**
@@ -42,10 +46,6 @@ function alshaya_bazaar_voice_install() {
   }
   // Provide sorting option Top rated in srp/plp.
   _add_sort_option_in_plp_srp_config_form();
-  // Add configurations for PDP reviews filter options.
-  $manager->updateConfigs(['bazaar_voice_filter_review.settings'],
-    'bazaar_voice'
-  );
 }
 
 /**

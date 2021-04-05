@@ -4,13 +4,6 @@ import { getArraysIntersection } from '../../../utilities/write_review_util';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 
 export default class ReviewFilters extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      bazaarVoiceSettings: getbazaarVoiceSettings(),
-    };
-  }
-
   handleSelect = (selectedOption) => {
     const {
       currentOptions,
@@ -36,7 +29,7 @@ export default class ReviewFilters extends React.Component {
       currentOptions,
       filterOptions,
     } = this.props;
-    const { bazaarVoiceSettings } = this.state;
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
     const pdpFilterOptions = bazaarVoiceSettings.reviews.bazaar_voice.filter_options;
     const availableFilters = [];
     if (filterOptions !== undefined && filterOptions !== null) {
