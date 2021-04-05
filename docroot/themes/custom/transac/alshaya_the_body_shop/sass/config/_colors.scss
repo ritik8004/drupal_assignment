@@ -37,6 +37,7 @@ $surf-crest: #c5ccc1;
 $white-smoke: #f6f6f6;
 $light-green: #3a857e;
 $success-green: #39b54a;
+$alizarin: #e51b23;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -51,8 +52,10 @@ $primary_text: $cyprus;
 $primary_form_input: $cyprus;
 $primary_input_label: $cyprus;
 $primary_border: $light-green;
-$primary_btn_text: $white;
 $primary_checkbox_filled: $cyprus;
+$primary_btn_text: $white;
+$primary_link: $cyprus;
+$primary_link-hover: $cyprus;
 
 // Header
 $header_bg: $cyprus;
@@ -158,3 +161,18 @@ $spc-select-qty-dropdown-icon: $cyprus;
 // Product detail page
 $pdp_product_special_price_text: $poster-orange;
 $pdp_product_discount_price: $poster-orange;
+
+// Checkout Global.
+$checkout_header_border-bottom: $cyprus;
+$checkout_header_bg: $cyprus;
+$checkout_section_titles: $cyprus;
+$checkout_guest_button_bg: $white;
+$checkout_guest_button_border: $cyprus;
+$checkout_guest_button_txt: $cyprus;
+
+// Checkout Login Page.
+$checkout_login_submit_button_background: $cyprus;
+$checkout_login_link_text: $cyprus;
+
+// Form elements.
+$primary_input_inline_error: $alizarin;

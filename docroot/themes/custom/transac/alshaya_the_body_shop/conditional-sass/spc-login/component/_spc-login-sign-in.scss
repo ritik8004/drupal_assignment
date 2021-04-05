@@ -1,0 +1,30 @@
+.alias--cart-login {
+  .site-brand-wrapper {
+    background: $checkout_header_bg;
+  }
+
+  .multistep-login {
+    fieldset {
+      .fieldset-legend {
+        font-family: $tbs-recoleta-semibold;
+        text-transform: capitalize;
+      }
+    }
+
+    .ashaya-spc-login-form {
+      .form-actions {
+        button {
+          font-size: 1rem;
+          font-family: $tbs-semibold;
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .edit-checkout-as-guest {
+      font-size: 1rem;
+      font-family: $tbs-semibold;
+      text-transform: capitalize;
+    }
+  }
+}
