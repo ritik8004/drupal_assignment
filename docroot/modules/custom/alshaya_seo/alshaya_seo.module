@@ -107,6 +107,8 @@ function alshaya_seo_page_attachments(array &$attachments) {
   $gkg_data['@type'] = 'Organization';
   $gkg_data['name'] = \Drupal::config('system.site')->get('name');
   $gkg_data['logo'] = Url::fromUserInput(theme_get_setting('logo.url'), ['absolute' => TRUE])->toString();
+  // Adding url parameter for schema organization.
+  $gkg_data['url'] = Url::fromRoute('<front>')->setAbsolute()->toString();
   $node = \Drupal::routeMatch()->getParameter('node');
   $content_type = NULL;
   if ($node instanceof NodeInterface) {
