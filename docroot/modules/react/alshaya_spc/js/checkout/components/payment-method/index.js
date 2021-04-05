@@ -8,6 +8,7 @@ import {
   placeOrder,
   removeFullScreenLoader,
   setUpapiApplePayCofig,
+  showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
 import PaymentMethodCybersource from '../payment-method-cybersource';
@@ -60,6 +61,20 @@ export default class PaymentMethod extends React.Component {
 
     if (method.code === 'cybersource') {
       return this.paymentMethodCybersource.current.validateBeforePlaceOrder();
+    }
+
+    if (method.code === 'knet') {
+      showFullScreenLoader();
+
+      const paymentData = {
+        payment: {
+          method: 'knet',
+          additional_data: {},
+        },
+      };
+
+      this.finalisePayment(paymentData);
+      return false;
     }
 
     return true;
