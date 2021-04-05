@@ -9,6 +9,51 @@ use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Implements hook_update_N().
+ *
+ * Installing configs files which is dependent on alshaya_media.
+ */
+function alshaya_media_update_8105() {
+  // Storage config file for lightning_media_document.
+  $media_document_config = [
+    'field.storage.media.field_media_document'
+  ];
+  alshaya_config_install_configs($media_document_config, 'lightning_media_document');
+
+  // Storage config files for lightning_media_video
+  $media_video_configs = [
+    'field.storage.media.field_media_oembed_video',
+    'field.storage.media.field_media_video_file',
+  ];
+  alshaya_config_install_configs($media_video_configs, 'lightning_media_video');
+
+  // Config dependency in file A dependent on config file B.
+  // Config files for lightning_media_image.
+  $media_image_configs = [
+    'entity_browser.browser.image_browser',
+    'field.storage.media.field_media_image',
+    'field.field.media.image.field_media_image',
+    'media.type.image',
+    'views.view.image_browser',
+  ];
+  alshaya_config_install_configs($media_image_configs, 'lightning_media_image');
+
+  // Install config files.
+  $alshaya_media_configs = [
+    'field.field.media.video.field_media_document',
+    'field.field.media.video.field_media_oembed_video',
+    'media.type.video',
+  ];
+  alshaya_config_install_configs($alshaya_media_configs, 'alshaya_media');
+  // Override config files.
+  $alshaya_media_override_config = [
+    'core.entity_form_display.media.video.default',
+  ];
+  alshaya_config_install_configs($alshaya_media_override_config, 'alshaya_media', 'override');
+
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_media_update_8104() {
   $media_video_file_configs_to_delete = [
