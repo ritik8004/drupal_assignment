@@ -161,7 +161,7 @@
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
         $('#magv2_cart_notification').addClass('has--notification');
-        // Check for Match back PDP notification.
+        // On Mobile - Check for Match back PDP notification.
         if ($(window).width() < 768 && $('.matchback-cart-notification').length > 0) {
           // Copy over the crossell products inside matchback.
           var element = $('.horizontal-crossell.mobile-only-block').clone();
@@ -184,14 +184,14 @@
             $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
           });
         }
-        // If magazine layout is enabled.
+        // On Mobile - If magazine layout is enabled.
         else if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
           $('#cart_notification').addClass('cart-notification-animate');
           // For New PDP layout mobile cart icon.
           $('#magv2_cart_notification').addClass('cart-notification-animate');
           $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
         }
-        // If default PDP or new PDP.
+        // Above Mobile res / default PDP / new PDP.
         else {
           // Scroll to top.
           $('html, body').animate({
