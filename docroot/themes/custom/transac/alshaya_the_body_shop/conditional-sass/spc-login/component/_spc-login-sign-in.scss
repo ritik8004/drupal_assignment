@@ -6,7 +6,7 @@
   .multistep-login {
     fieldset {
       .fieldset-legend {
-        font-family: $tbs-recoleta-semibold;
+        font-family: $alshaya-semibold;
         text-transform: capitalize;
       }
     }
@@ -15,7 +15,7 @@
       .form-actions {
         button {
           font-size: 1rem;
-          font-family: $tbs-semibold;
+          font-family: $alshaya-medium;
           text-transform: capitalize;
         }
       }
@@ -23,7 +23,7 @@
 
     .edit-checkout-as-guest {
       font-size: 1rem;
-      font-family: $tbs-semibold;
+      font-family: $alshaya-medium;
       text-transform: capitalize;
     }
   }
