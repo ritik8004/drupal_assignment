@@ -154,20 +154,28 @@
       });
 
       $.fn.cartNotificationScroll = function () {
+        // Fade In the the notification.
         $('#cart_notification').fadeIn();
-        // For New PDP layout mobile cart icon.
         $('#magv2_cart_notification').fadeIn();
+        // Add classes to indicate notification is present.
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
-        // For New PDP layout mobile cart icon.
         $('#magv2_cart_notification').addClass('has--notification');
+        // Check for Match back PDP notification.
         if ($(window).width() < 768 && $('.matchback-cart-notification').length > 0) {
+          // Copy over the crossell products inside matchback.
           var element = $('.horizontal-crossell.mobile-only-block').clone();
           $('.matchback-cart-notification').append(element);
           $('body').addClass('matchback-notification-overlay');
+          // Invoke blazy so that CS images can load.
           if (typeof Drupal.blazy !== 'undefined') {
             setTimeout(Drupal.blazy.revalidate, 500);
           }
+          // Scroll to top for matchback notification.
+          $('html, body').animate({
+            scrollTop: 0
+          }, 'slow');
+          // Add event listener for match back close button.
           $('.matchback-cart-notification .matchback-cart-notification-close').on('mousedown', function () {
             $('#cart_notification').removeClass('has--notification');
             // For New PDP layout mobile cart icon.
@@ -183,14 +191,16 @@
           $('#magv2_cart_notification').addClass('cart-notification-animate');
           $('.promotions').find('.promotions-dynamic-label').trigger('cart:notification:animation:complete');
         }
+        // If default PDP or new PDP.
         else {
+          // Scroll to top.
           $('html, body').animate({
             scrollTop: 0
           }, 'slow');
 
+          // Fadeout after few seconds.
           setTimeout(function () {
             $('#cart_notification').fadeOut();
-            // For New PDP layout mobile cart icon.
             $('#magv2_cart_notification').fadeOut();
             // Trigger a custom event cart:notification:animation:complete
             // Use this whenever we need to handle any JS animations after
