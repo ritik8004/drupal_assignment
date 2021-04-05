@@ -49,3 +49,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/spc-cart/spc-cart.ltr.css: css/conditional-sass/spc-cart/spc-cart.ltr.css
+
+  alshaya_white_label/spc-login:
+    css:
+      theme:
+        css/conditional-sass/spc-login/spc-login.ltr.css: css/conditional-sass/spc-login/spc-login.ltr.css
