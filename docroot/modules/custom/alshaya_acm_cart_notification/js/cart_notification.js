@@ -174,7 +174,7 @@
           // Scroll to top for matchback notification.
           $('html, body').animate({
             scrollTop: 0
-          }, 'slow');
+          }, 10);
           // Add event listener for match back close button.
           $('.matchback-cart-notification .matchback-cart-notification-close').on('mousedown', function () {
             $('#cart_notification').removeClass('has--notification');
