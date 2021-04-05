@@ -1,3 +1,10 @@
+bazaar_voice.review_filter_settings_form:
+  title: 'Review filter settings'
+  base_route_name: bazaar_voice.review_filter_settings_form
+  parent_id: bazaar_voice.review_filter_settings_form
+  names:
+    - bazaar_voice_filter_review.settings
+
 bazaar_voice.review_settings_form:
   title: 'Review sort settings'
   base_route_name: bazaar_voice.review_settings_form

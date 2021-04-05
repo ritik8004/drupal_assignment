@@ -36,5 +36,6 @@ function bazaar_voice_local_tasks_alter(&$local_tasks) {
   // Change config translation local task hierarchy.
   if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.bazaar_voice.review_settings_form'])) {
     $local_tasks['config_translation.local_tasks:config_translation.item.overview.bazaar_voice.review_settings_form']['parent_id'] = 'bazaar_voice.review_settings_form';
+		$local_tasks['config_translation.local_tasks:config_translation.item.overview.bazaar_voice.review_filter_settings_form']['parent_id'] = 'bazaar_voice.review_filter_settings_form';
   }
 }
