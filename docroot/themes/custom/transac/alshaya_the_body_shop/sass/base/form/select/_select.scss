@@ -1,0 +1,3 @@
+@mixin select-wrapper($wrapper-width) {
+  @include icon('dropdown-expand', after);
+}

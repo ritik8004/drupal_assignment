@@ -11,3 +11,19 @@
     letter-spacing: 0;
   }
 }
+
+.form-type-select {
+  .select2-selection__arrow {
+    @include icon(dropdown-expand, after) {
+      color: $spc-select-qty-dropdown-icon;
+    }
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  .form-type-select {
+    &::after {
+      display: none;
+    }
+  }
+}
