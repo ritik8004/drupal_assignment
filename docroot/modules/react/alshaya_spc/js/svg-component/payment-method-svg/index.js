@@ -65,7 +65,7 @@ const PaymentMethodIcon = (props) => {
       </svg>
     );
   }
-  if (methodName === 'checkout_com_upapi_knet') {
+  if (methodName === 'knet' || methodName === 'checkout_com_upapi_knet') {
     return (
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="156px" height="99px" viewBox="0 0 156 99" enableBackground="new 0 0 156 99" space="preserve">
         <image

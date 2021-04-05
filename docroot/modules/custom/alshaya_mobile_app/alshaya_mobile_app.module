@@ -51,6 +51,15 @@ function alshaya_mobile_app_config_translation_info_alter(&$info) {
 }
 
 /**
+ * Implements hook_alshaya_knet_success_route_alter().
+ */
+function alshaya_mobile_app_alshaya_knet_success_route_alter(string &$route, array $state_data) {
+  if (isset($state_data['context']) && $state_data['context'] === 'mobile') {
+    $route = 'alshaya_mobile_app.mobile_complete';
+  }
+}
+
+/**
  * Implements hook_alshaya_acm_product_light_product_data_alter().
  */
 function alshaya_mobile_app_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {

@@ -12,44 +12,6 @@ use Drupal\Core\Site\Settings;
 use Drupal\block\BlockInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\facets\Entity\Facet;
-use Drupal\user\Entity\Role;
-
-/**
- * Implements hook_update_N().
- *
- * [6.1.0] Uninstall the unused KNET module and disable the knet plugins.
- */
-function alshaya_transac_update_8134()
-{
-  // Disabling these modules for transac profile only, as these modules are
-  // still in use by some non-transac sites.
-  \Drupal::service('module_installer')->uninstall(['alshaya_acm_knet']);
-  \Drupal::service('module_installer')->uninstall(['alshaya_knet']);
-
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $configManager */
-  $configManager = \Drupal::service('alshaya_config.manager');
-
-  // Disable the config so that plugin not found error is not thrown.
-  $configManager->updateConfigs(
-    [
-      'rest.resource.knet_finalize_request',
-      'rest.resource.knet_init_request'
-    ],
-    'alshaya_mobile_app',
-    'optional'
-  );
-
-  // Disable the resource related permissions.
-  foreach (Role::loadMultiple(['anonymous', 'authenticated']) as $role) {
-    if ($role->hasPermission('restful get knet_init_request')) {
-      $role->revokePermission('restful get knet_init_request');
-    }
-    if ($role->hasPermission('restful get knet_finalize_request')) {
-      $role->revokePermission('restful get knet_finalize_request');
-    }
-    $role->save();
-  }
-}
 
 /**
  * Implements hook_update_N().
@@ -897,6 +859,7 @@ function alshaya_transac_install() {
     'alshaya_stores_finder_transac',
     'alshaya_super_category',
     'alshaya_user',
+    'alshaya_acm_knet',
     'alshaya_acm_checkoutcom',
     'alshaya_static_html',
     'alshaya_product_options',
