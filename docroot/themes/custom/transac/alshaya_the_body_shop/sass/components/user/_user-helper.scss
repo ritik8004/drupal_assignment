@@ -1,0 +1,12 @@
+.c-user--node {
+  &.l-two--sf {
+    @include breakpoint($only-mobile) {
+      aside.c-sidebar-first {
+        .my-account-mobile-title1 {
+          font-family: $alshaya-semibold;
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+}
