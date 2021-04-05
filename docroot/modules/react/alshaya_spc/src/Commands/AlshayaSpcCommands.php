@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_spc\Commands;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\alshaya_knet\Knet\KnetApiWrapper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Site\Settings;
@@ -141,6 +142,114 @@ class AlshayaSpcCommands extends DrushCommands {
       $this->apiWrapper->updateStoreContext($langcode);
 
       switch ($type) {
+        case 'knet':
+          $credentials = Settings::get('knet');
+          $wrapper = new KnetApiWrapper(
+            Settings::get('alshaya_knet.settings')['knet_base_url'],
+            $credentials['tranportal_id'],
+            $credentials['tranportal_password']
+          );
+
+          $info = $wrapper->getTransactionInfoByTrackingId(
+            $data['order_id'],
+            $cart['totals']['grand_total']
+          );
+
+          $status = strtolower($info['result'] ?? '');
+
+          if (in_array($status, ['success', 'captured'])) {
+            try {
+              // Set the values in keys as expected by Magento.
+              $info['payment_id'] = $info['paymentid'];
+              $info['post_date'] = $info['postdate'];
+              $info['transaction_id'] = $info['tranid'] ?? '';
+              $info['auth_code'] = $info['auth'];
+              $info['tracking_id'] = $info['trackid'];
+              $info['customer_id'] = (int) $info['udf2'];
+              $info['quote_id'] = (int) $info['udf3'];
+
+              $update = [];
+              $update['payment'] = [
+                'method' => 'knet',
+                'additional_data' => $info,
+              ];
+              $update['extension'] = [
+                'action' => 'update payment',
+                'attempted_payment' => 1,
+              ];
+
+              $cart = $this->apiWrapper->updateCart($payment['cart_id'], $update);
+              if (empty($cart)) {
+                throw new \Exception('Update payment data in cart failed, please check other logs to know the reason');
+              }
+
+              $this->placeOrder($update['payment'], $payment['cart_id'], $langcode);
+
+              $this->getLogger('PendingPaymentCheck')->notice('KNET Payment successful, order placed. Cart id: @cart_id, Data: @data, KNET response: @info', [
+                '@data' => $payment['data'],
+                '@cart_id' => $payment['cart_id'],
+                '@info' => json_encode($info),
+              ]);
+            }
+            catch (\Exception $e) {
+              $this->getLogger('PendingPaymentCheck')->notice('KNET Payment successful, order failed. Cart id: @cart_id, Data: @data, KNET response: @info, Exception: @exception', [
+                '@data' => $payment['data'],
+                '@cart_id' => $payment['cart_id'],
+                '@info' => json_encode($info),
+                '@exception' => $e->getMessage(),
+              ]);
+            }
+
+            // If place order attempted and failed, add log with exception.
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          elseif (strpos($status, 'transaction not found') !== FALSE) {
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment transaction not found, which means user cancelled. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          elseif (strpos($status, 'not captured') !== FALSE) {
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment failed. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          elseif ($status && $info['amt'] != $cart['totals']['grand_total']) {
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment is possibly complete, but it seems amount does not match. Please check again. Deleting entry now. Cart id: @cart_id, Cart total: @total, Data: @data, KNET response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
+              '@total' => $cart['totals']['grand_total'],
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          elseif ($status && $payment['timestamp'] < strtotime('-1 hour')) {
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment not complete, deleting entry as it is already 1 hour now. Cart id: @cart_id, Data: @data, KNET response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
+            ]);
+
+            $this->deletePaymentDataByCartId($payment['cart_id']);
+          }
+          else {
+            $this->getLogger('PendingPaymentCheck')->notice('KNET Payment not complete or info not available, not deleting entry to retry later. Cart id: @cart_id, Data: @data, KNET response: @info', [
+              '@data' => $payment['data'],
+              '@cart_id' => $payment['cart_id'],
+              '@info' => json_encode($info),
+            ]);
+          }
+
+          break;
+
         case 'checkout_com':
           $cart_amount = $this->checkoutComApi->getCheckoutAmount($cart['totals']['base_grand_total'], $cart['totals']['quote_currency_code']);
           $payment_info = $this->checkoutComApi->getChargesInfo($payment['unique_id']);

@@ -53,6 +53,16 @@ payment.checkout_com_apple_pay_save:
     controller: App\Controller\CheckoutComPaymentController::saveApplePayPayment
     methods: POST
 
+payment.knet_payment_response:
+    path: /payment/knet-response
+    controller: App\Controller\KnetPaymentController::handleKnetResponse
+    methods: POST
+
+payment.knet_payment_error:
+    path: /payment/knet-error/{state_key}
+    controller: App\Controller\KnetPaymentController::handleKnetError
+    methods: GET
+
 payment.cybersource_payment_token:
     path: /payment/cybersource/get-token
     controller: App\Controller\CyberSourcePaymentController::getCybersourceToken

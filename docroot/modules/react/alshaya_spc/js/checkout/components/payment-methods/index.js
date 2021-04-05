@@ -59,6 +59,14 @@ export default class PaymentMethods extends React.Component {
         message = parse(getStringMessage('place_order_failed_error', {
           '@transaction_data': transactionData,
         }));
+      } else if (paymentErrorInfo.payment_method !== undefined
+        && paymentErrorInfo.payment_method === 'knet'
+        && paymentErrorInfo.data !== undefined) {
+        message = parse(getStringMessage('knet_error', {
+          '@transaction_id': paymentErrorInfo.data.transaction_id,
+          '@payment_id': paymentErrorInfo.data.payment_id,
+          '@result_code': paymentErrorInfo.data.result_code,
+        }));
       } else if (paymentErrorInfo.status !== undefined
         && paymentErrorInfo.status === 'declined') {
         message = getStringMessage('transaction_failed');
