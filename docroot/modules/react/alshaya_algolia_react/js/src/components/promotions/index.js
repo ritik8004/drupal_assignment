@@ -2,13 +2,15 @@ import React from 'react';
 
 const Promotion = ({ promotion }) => (
   <span className="sku-promotion-item">
-    {(drupalSettings.algoliaSearch.pageSubType !== 'undefined' && drupalSettings.algoliaSearch.pageSubType === 'promotion') ? (
-      <span className="sku-promotion-text">{promotion.text}</span>
-    ) : (
-      <a className="sku-promotion-link" href={promotion[`url_${drupalSettings.path.currentLanguage}`]}>
-        {promotion.text}
-      </a>
-    )}
+    {(drupalSettings.algoliaSearch.pageSubType !== 'undefined'
+      && drupalSettings.algoliaSearch.pageSubType === 'promotion'
+      && Number(drupalSettings.path.currentPath.slice(5)) === promotion.id) ? (
+        <span className="sku-promotion-text">{promotion.text}</span>
+      ) : (
+        <a className="sku-promotion-link" href={promotion[`url_${drupalSettings.path.currentLanguage}`]}>
+          {promotion.text}
+        </a>
+      )}
   </span>
 );
 
