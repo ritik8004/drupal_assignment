@@ -1,0 +1,87 @@
+.labels-wrapper {
+  > div {
+    position: absolute;
+    max-width: 80px;
+    z-index: 1;
+
+    &.top-left {
+      top: 0.5rem;
+      #{$left}: 0.5rem;
+
+      @include breakpoint($tablet) {
+        top: 0.9375rem;
+        #{$left}: 0.9375rem;
+      }
+
+      .c-plp & {
+        top: 0;
+        #{$left}: 0;
+
+        @include breakpoint($tablet) {
+          top: 0;
+          #{$left}: 0;
+        }
+      }
+    }
+
+    &.top-right {
+      top: 0.5rem;
+      #{$right}: 0.5rem;
+
+      @include breakpoint($tablet) {
+        top: 0.9375rem;
+        #{$right}: 0.9375rem;
+      }
+
+      .c-plp & {
+        top: 0;
+        #{$right}: 0;
+
+        @include breakpoint($tablet) {
+          top: 0;
+          #{$right}: 0;
+        }
+      }
+    }
+
+    &.bottom-left {
+      bottom: 0.5rem;
+      #{$left}: 0.5rem;
+
+      @include breakpoint($tablet) {
+        bottom: 0.9375rem;
+        #{$left}: 0.9375rem;
+      }
+
+      .c-plp & {
+        bottom: 0;
+        #{$left}: 0;
+
+        @include breakpoint($tablet) {
+          bottom: 0;
+          #{$left}: 0;
+        }
+      }
+    }
+
+    &.bottom-right {
+      bottom: 0.5rem;
+      #{$right}: 0.5rem;
+
+      @include breakpoint($tablet) {
+        bottom: 0.9375rem;
+        #{$right}: 0.9375rem;
+      }
+
+      .c-plp & {
+        bottom: 0;
+        #{$right}: 0;
+
+        @include breakpoint($tablet) {
+          bottom: 0;
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+}

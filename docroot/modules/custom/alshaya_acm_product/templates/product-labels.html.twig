@@ -1,7 +1,46 @@
-<div class="labels-container" data-type="{{ type }}" data-sku="{{ sku }}" data-main-sku="{{ mainsku }}">
-  {% for label in labels %}
-    <div class="label {{ label.position }}">
-      {{ label.image }}
-    </div>
-  {% endfor %}
+{% set topRight, topLeft, bottomRight, bottomLeft, noPosition = [], [], [], [], [] %}
+
+{% for label in labels %}
+  {% if (label.position == 'top-right') %}
+    {% set topRight = topRight|merge([label.image]) %}
+  {% elseif (label.position == 'top-left') %}
+    {% set topLeft = topLeft|merge([label.image]) %}
+  {% elseif (label.position == 'bottom-left') %}
+    {% set bottomLeft = bottomLeft|merge([label.image]) %}
+  {% elseif (label.position == 'bottom-right') %}
+    {% set bottomRight = bottomRight|merge([label.image]) %}
+  {% else %}
+    {# Collect all unsupported positions in a diff array #}
+    {% set noPosition = noPosition|merge([label.image]) %}
+  {% endif %}
+{% endfor %}
+
+{% macro getlabels(item, position, positionClass) %}
+  <div class="labels-container {{ positionClass }}">
+    {% for item in position %}
+      <div class="label">{{ item }}</div>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+<div class="labels-wrapper" data-type="{{ type }}" data-sku="{{ sku }}" data-main-sku="{{ mainsku }}">
+  {% if topRight %}
+    {{ _self.getlabels(item, topRight, 'top-right') }}
+  {% endif %}
+
+  {% if topLeft %}
+    {{ _self.getlabels(item, topLeft, 'top-left') }}
+  {% endif %}
+
+  {% if bottomLeft %}
+    {{ _self.getlabels(item, bottomLeft, 'bottom-left') }}
+  {% endif %}
+
+  {% if bottomRight %}
+    {{ _self.getlabels(item, bottomRight, 'bottom-right') }}
+  {% endif %}
+
+{#  {% if noPosition %}#}
+{#    {{ _self.getlabels(item, noPosition, 'not-supported') }}#}
+{#  {% endif %}#}
 </div>
