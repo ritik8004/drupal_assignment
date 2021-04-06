@@ -384,6 +384,19 @@ export const cartLocalStorageHasSameItems = (newCart) => {
 };
 
 /**
+ * Send a custom message in FE for 604 status code.
+ *
+ * @param {*} cartResult
+ */
+export const customStockErrorMessage = (cartResult) => {
+  let errorMessage = cartResult.error_message;
+  if (cartResult.error_code === '604') {
+    errorMessage = Drupal.t('The product that you are trying to add is not available.');
+  }
+  return errorMessage;
+};
+
+/**
  * Validation on cart items.
  *
  * @param {*} cartResult
@@ -417,10 +430,7 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
 
   // If error/exception, show at cart top.
   if (cartResult.error !== undefined) {
-    let errorMessage = cartResult.error_message;
-    if (cartResult.error_code === '604') {
-      errorMessage = Drupal.t('The product that you are trying to add is not available.');
-    }
+    const errorMessage = customStockErrorMessage(cartResult);
     dispatchCustomEvent('spcCartMessageUpdate', {
       type: 'error',
       message: errorMessage,
