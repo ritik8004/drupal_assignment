@@ -41,6 +41,13 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
   protected $routerBuilder;
 
   /**
+   * Alshaya Facets Pretty Paths Helper service.
+   *
+   * @var \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper
+   */
+  protected $helper;
+
+  /**
    * AlshayaFacetsPrettyPathsCommands constructor.
    *
    * @param \Drupal\facets\FacetManager\DefaultFacetManager $facets_manager
@@ -49,13 +56,17 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
    *   Config Factory service object.
    * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
    *   The router builder service.
+   * @param \Drupal\alshaya_facets_pretty_paths\AlshayaFacetsPrettyPathsHelper $helper
+   *   Alshaya Facets Pretty Paths Helper service.
    */
   public function __construct(DefaultFacetManager $facets_manager,
                               ConfigFactoryInterface $config_factory,
-                              RouteBuilderInterface $router_builder) {
+                              RouteBuilderInterface $router_builder,
+                              AlshayaFacetsPrettyPathsHelper $helper) {
     $this->facetManager = $facets_manager;
     $this->configFactory = $config_factory;
     $this->routerBuilder = $router_builder;
+    $this->helper = $helper;
   }
 
   /**
@@ -123,27 +134,7 @@ class AlshayaFacetsPrettyPathsCommands extends DrushCommands {
     // Set url alias and meta info type for facets.
     foreach ($facets as $facet) {
       if ($facet->getFacetSourceId() == 'search_api:' . $mapping['id']) {
-        $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'url_alias', $facet->getUrlAlias());
-        $alias = $mapping['alias'][$facet->id()] ?? strtolower(str_replace(' ', '_', $facet->get('name')));
-        $facet->setUrlAlias($alias);
-        $meta_info_type = [
-          'type' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX,
-          'prefix_text' => '',
-          'visibility' => [
-            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
-            AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
-          ],
-        ];
-        if (strpos($facet->id(), 'price') > -1) {
-          $meta_info_type['type'] = AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX;
-          $meta_info_type['prefix_text'] = 'at';
-          $meta_info_type['visibility'] = [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION];
-        }
-        elseif (strpos($facet->id(), 'size') > -1) {
-          $meta_info_type['prefix_text'] = 'Size';
-        }
-        $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'meta_info_type', $meta_info_type);
-        $facet->save();
+        $this->helper->populateThirdPartySettings($facet, $type);
       }
     }
 
