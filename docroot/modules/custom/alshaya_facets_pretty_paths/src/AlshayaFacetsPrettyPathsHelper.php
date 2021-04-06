@@ -10,6 +10,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -643,6 +644,57 @@ class AlshayaFacetsPrettyPathsHelper {
     }
 
     return $status;
+  }
+
+  /**
+   * Populate the third party settings for meta tag info.
+   *
+   * @param \Drupal\facets\FacetInterface $facet
+   *   Facet to populate the config into.
+   * @param string $type
+   *   Facet type (PLP / PROMO / Search).
+   *
+   * @see AlshayaSearchApiFacetsManager::createFacet()
+   */
+  public function populateThirdPartySettings(FacetInterface $facet, string $type) {
+    if (!$this->isPrettyPathEnabled($type)) {
+      // Do nothing if pretty path is not enabled.
+      return;
+    }
+
+    if ($facet->getThirdPartySetting('alshaya_facets_pretty_paths', 'meta_info_type')) {
+      // Do nothing if third party settings are already populated.
+      return;
+    }
+
+    $mapping = _alshaya_facets_pretty_paths_get_mappings()[$type];
+
+    // Set proper alias.
+    $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'url_alias', $facet->getUrlAlias());
+    $alias = $mapping['alias'][$facet->id()] ?? strtolower(str_replace(' ', '_', $facet->get('name')));
+    $facet->setUrlAlias($alias);
+
+    // Set the meta information.
+    $meta_info_type = [
+      'type' => AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_PREFIX,
+      'prefix_text' => '',
+      'visibility' => [
+        AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_TITLE,
+        AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION,
+      ],
+    ];
+
+    if (strpos($facet->id(), 'price') > -1) {
+      $meta_info_type['type'] = AlshayaFacetsPrettyPathsHelper::FACET_META_TYPE_SUFFIX;
+      $meta_info_type['prefix_text'] = 'at';
+      $meta_info_type['visibility'] = [AlshayaFacetsPrettyPathsHelper::VISIBLE_IN_META_DESCRIPTION];
+    }
+    elseif (strpos($facet->id(), 'size') > -1) {
+      $meta_info_type['prefix_text'] = 'Size';
+    }
+
+    $facet->setThirdPartySetting('alshaya_facets_pretty_paths', 'meta_info_type', $meta_info_type);
+    $facet->save();
   }
 
 }
