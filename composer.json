@@ -102,7 +102,7 @@
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
         "drupal/user_registrationpassword": "^1.0",
-        "drupal/video_embed_field": "2.0.0-alpha2",
+        "drupal/video_embed_field": "^2.0",
         "drupal/views_ajax_get": "1.x-dev#3055c44",
         "drupal/views_block_filter_block": "^1.0@beta",
         "drupal/views_field_view": "1.0-beta2",
@@ -405,7 +405,7 @@
                 "Log response of delete requests": "patches/search_api_algolia/CORE-25535-log-delete-requests.patch"
             },
             "drupal/lightning_media": {
-                "Changes in config files for lightning media": "patches/lightning_media/lightning_media_config_changes_0.patch"
+                "Changes in config files for lightning media": "patches/lightning_media/lightning_media_config_changes.patch"
             }
         },
         "installer-paths": {
