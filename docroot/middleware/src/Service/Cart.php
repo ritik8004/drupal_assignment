@@ -977,9 +977,14 @@ class Cart {
       'extension' => (object) $extension,
     ];
 
+    // Adding a log to confirm/get what data we send to middleware from browser.
+    $this->logger->notice('Cart updatePayment data: @data. CartId: @cart_id', [
+      '@data' => json_encode($data),
+      '@cart_id' => $this->getCartId(),
+    ]);
     $update['payment'] = [
       'method' => $data['method'],
-      'additional_data' => $data['additional_data'],
+      'additional_data' => $data['additional_data'] ?? [],
     ];
 
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
