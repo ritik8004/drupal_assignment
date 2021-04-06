@@ -1,3 +1,7 @@
 @mixin select-wrapper($wrapper-width) {
   @include icon('dropdown-expand', after);
 }
+
+.select2-dropdown {
+  border-color: $contact-form-select-dropdown-border;
+}
