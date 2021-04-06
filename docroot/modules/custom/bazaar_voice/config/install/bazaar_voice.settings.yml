@@ -20,4 +20,4 @@ bv_routes_list: ''
 reviews_list_settings: 'load_more'
 reviews_initial_load: 5
 reviews_on_loadmore: 10
-reviews_per_page: 10
+reviews_per_page: 5
