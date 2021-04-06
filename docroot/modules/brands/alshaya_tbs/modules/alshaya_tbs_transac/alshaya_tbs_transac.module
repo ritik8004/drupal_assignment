@@ -1,0 +1,158 @@
+<?php
+
+/**
+ * @file
+ * Module file with hooks specific to TBS brand.
+ */
+
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($sku_entity instanceof SKU && $view_mode == 'full') {
+      $product_description = _alshaya_tbs_transac_get_product_description($sku_entity);
+
+      // If short description not available, check other consecutive fields.
+      if (empty($product_description['short_desc']['value']['#markup'])) {
+        foreach ($product_description['description'] as $short_description) {
+          // If value is available in next field, then
+          // use it and no need to process further.
+          if (!empty($short_description['value']['#markup'])) {
+            $product_description['short_desc'] = $short_description;
+            break;
+          }
+        }
+      }
+
+      // Trim the short description.
+      /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+      $product_helper = \Drupal::service('alshaya_acm_product.helper');
+      $short_desc = $product_helper->createShortDescription($product_description['short_desc']['value']['#markup']);
+      // If there is 'readmore' available only then process.
+      if (!empty($short_desc['read_more'])) {
+        $short_desc['html'] = $product_helper->processShortDescEllipsis($short_desc['html']);
+      }
+      $product_description['short_desc']['value']['#markup'] = $short_desc['html'];
+      $build['short_desc'] = $product_description['short_desc'];
+      $build['description'] = $product_description['description'];
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_tbs_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    $product_description = _alshaya_tbs_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $product_description['short_desc'];
+    $build['description'] = $product_description['description'];
+  }
+}
+
+/**
+ * Get product description from SKU.
+ */
+function _alshaya_tbs_transac_get_product_description($sku_entity) {
+  $product_description = [];
+  // Prepare $at_glance variable.
+  $at_glance['label'] = [
+    '#markup' => t('At a glance'),
+  ];
+  $at_glance['value'] = [
+    '#markup' => $sku_entity->get('attr_at_glance')->getString(),
+  ];
+
+  // Prepare $description variable.
+  $description['label'] = [
+    '#markup' => t('Features and benefits'),
+  ];
+  $description_value = '';
+
+  if ($body = $sku_entity->get('attr_description')->getValue()) {
+    $description_value = $body[0]['value'];
+  }
+
+  if ($bullet_points = $sku_entity->get('attr_bullet_points')
+    ->getString()) {
+    $description_value .= '<div class="bullet-points-wrapper">';
+    $description_value .= $bullet_points;
+    $description_value .= '</div>';
+  }
+
+  $description['value'] = [
+    '#markup' => $description_value,
+  ];
+
+  // If specifications are enabled, prepare the specification variable.
+  if (\Drupal::config('alshaya_acm.settings')
+    ->get('pdp_show_specifications')) {
+    $specifications['label'] = [
+      '#markup' => t('Specifications'),
+    ];
+
+    $specifications['value'] = [
+      "#theme" => 'item_list',
+      '#items' => [],
+    ];
+
+    if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
+      $specifications['value']['#items'][] = t('Style Code: @value', [
+        '@value' => $attr_style_code,
+      ]);
+    }
+
+    if ($attr_color = $sku_entity->get('attr_color')->getString()) {
+      $specifications['value']['#items'][] = t('Color: @value', [
+        '@value' => $attr_color,
+      ]);
+    }
+
+    if ($attr_season = $sku_entity->get('attr_season')->getString()) {
+      $specifications['value']['#items'][] = t('Season: @value', [
+        '@value' => $attr_season,
+      ]);
+    }
+
+    if ($attr_brand = $sku_entity->get('attr_product_brand')
+      ->getString()) {
+      $specifications['value']['#items'][] = t('Product brand: @value', [
+        '@value' => $attr_brand,
+      ]);
+    }
+  }
+
+  // Prepare $whats_in_box variable.
+  $whats_in_box['label'] = [
+    '#markup' => t("What's In The Box"),
+  ];
+
+  $whats_in_box['value'] = [
+    '#markup' => $sku_entity->get('attr_whats_in_the_box')->getString(),
+  ];
+
+  // Add all variables to $build in the sequence in
+  // which they should be displayed.
+  // Check comments in MMCPA-218 for sequence requirements.
+  // $build['short_desc'] contains the description that should be
+  // displayed before 'Read More'.
+  $product_description['short_desc'] = $at_glance;
+  $product_description['description'][] = $at_glance;
+  $product_description['description'][] = $description;
+  if (!empty($specifications)) {
+    $product_description['description'][] = $specifications;
+  }
+  $product_description['description'][] = $whats_in_box;
+
+  return $product_description;
+}

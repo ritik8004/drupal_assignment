@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b466a7725de24fb08fde5501f4b0accd",
+    "content-hash": "ebaea4cd8cedca5fc98691d180c69f44",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -3670,17 +3670,17 @@
         },
         {
             "name": "drupal/acsf",
-            "version": "2.67.0",
+            "version": "2.69.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acsf.git",
-                "reference": "8.x-2.67"
+                "reference": "8.x-2.69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-2.67.zip",
-                "reference": "8.x-2.67",
-                "shasum": "6b13bb9d82215c787a025447f11262597b4e85d3"
+                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-2.69.zip",
+                "reference": "8.x-2.69",
+                "shasum": "649186e899e719f8886ab385706bf56e6afe1183"
             },
             "require": {
                 "drupal/acsf_duplication": "*",
@@ -3699,8 +3699,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.67",
-                    "datestamp": "1600955383",
+                    "version": "8.x-2.69",
+                    "datestamp": "1612957028",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3770,7 +3770,7 @@
         },
         {
             "name": "drupal/acsf_duplication",
-            "version": "2.67.0",
+            "version": "2.69.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "^8 || ^9"
@@ -3778,8 +3778,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.67",
-                    "datestamp": "1600955383",
+                    "version": "8.x-2.69",
+                    "datestamp": "1612957028",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3840,7 +3840,7 @@
         },
         {
             "name": "drupal/acsf_theme",
-            "version": "2.67.0",
+            "version": "2.69.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/acsf_variables": "*",
@@ -3849,8 +3849,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.67",
-                    "datestamp": "1600955383",
+                    "version": "8.x-2.69",
+                    "datestamp": "1612957028",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3911,7 +3911,7 @@
         },
         {
             "name": "drupal/acsf_variables",
-            "version": "2.67.0",
+            "version": "2.69.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "^8 || ^9"
@@ -3919,8 +3919,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.67",
-                    "datestamp": "1600955383",
+                    "version": "8.x-2.69",
+                    "datestamp": "1612957028",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16120,15 +16120,6 @@
             "type": "drupal-library"
         },
         {
-            "name": "hubspot/pace",
-            "version": "1.0.2",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/hubspot/pace/archive/v1.0.2.zip"
-            },
-            "type": "drupal-library"
-        },
-        {
             "name": "instaclick/php-webdriver",
             "version": "1.4.7",
             "source": {
@@ -24151,6 +24142,11 @@
                 "shasum": ""
             },
             "type": "vm",
+            "extra": {
+                "patches_applied": {
+                    "Fix provisioning on new macs": "https://patch-diff.githubusercontent.com/raw/geerlingguy/drupal-vm/pull/2137.patch"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"

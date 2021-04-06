@@ -93,10 +93,6 @@
             box-shadow: none;
             border: none;
           }
-
-          .alshaya_search_gallery {
-            max-height: 24rem !important;
-          }
         }
       }
     }
@@ -182,6 +178,20 @@
 
             @include breakpoint($only-tablet) {
               #{$right}: 0.9375rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.l-one--w.lhn-without-sidebar {
+    .c-products-list.product-small {
+      .c-products__item {
+        article {
+          .alshaya_search_gallery {
+            @include breakpoint($desktop) {
+              max-height: 20.25rem !important;
             }
           }
         }

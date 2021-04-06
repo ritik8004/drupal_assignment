@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_mc.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_tbs_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_tbs', 'inc', 'alshaya_tbs.content');
+
+  // Create default content for TBS.
+  alshaya_tbs_create_default_content();
+}

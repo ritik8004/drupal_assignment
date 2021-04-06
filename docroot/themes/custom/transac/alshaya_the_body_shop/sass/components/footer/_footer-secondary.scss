@@ -1,0 +1,68 @@
+.c-footer-secondary {
+  .l-container {
+    max-width: 74.875rem;
+  }
+}
+
+.c-footer__copy {
+  color: $copyright_footer_text;
+  float: #{$left};
+
+  @include breakpoint($only-mobile) {
+    float: none;
+    padding: 1.5rem 1.25rem;
+  }
+
+  @include breakpoint($tablet) {
+    height: 3.375rem;
+  }
+
+  .field--name-body {
+    p {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.c-footer__logos {
+  float: #{$right};
+  line-height: 3.375rem;
+  padding-#{$right}: 0;
+
+  li:not(:last-child) {
+    margin-#{$right}: 1.875rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    float: none;
+  }
+}
+
+.c-footer__logo--mastercard,
+.c-footer__logo--visa,
+.c-footer__logo--verisign {
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.c-footer__logo--mastercard {
+  mask-image: url(#{$base_theme_img_directory_path}/cards/master-card-secure-code-black.svg);
+  width: 4.25rem;
+  height: 1.25rem;
+  background-color: #fff;
+  background-image: none;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
+.c-footer__logo--visa {
+  background-image: url(#{$tbs_theme_img_directory_path}/cards/card-visa.svg);
+  width: 3.25rem;
+  height: 1.25rem;
+}
+
+.c-footer__logo--verisign {
+  background-image: url(#{$tbs_theme_img_directory_path}/cards/card-verisign.svg);
+  width: 3.5rem;
+  height: 1.625rem;
+}

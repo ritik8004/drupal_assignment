@@ -112,7 +112,6 @@
         "drush/drush": "^9.0.0",
         "endroid/qr-code": "^3.6",
         "hgoebl/mobile-detect": "^1.4.2",
-        "hubspot/pace": "^1.0",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
@@ -185,18 +184,6 @@
                     "type": "zip"
                 }
             }
-        },
-        "pace": {
-            "type": "package",
-            "package": {
-                "name": "hubspot/pace",
-                "version": "1.0.2",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/hubspot/pace/archive/v1.0.2.zip",
-                    "type": "zip"
-                }
-            }
         }
     },
     "autoload-dev": {
@@ -210,6 +197,9 @@
         },
         "enable-patching": true,
         "patches": {
+            "geerlingguy/drupal-vm": {
+                "Fix provisioning on new macs": "https://patch-diff.githubusercontent.com/raw/geerlingguy/drupal-vm/pull/2137.patch"
+            },
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
             },
