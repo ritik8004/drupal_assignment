@@ -70,15 +70,23 @@ export default class UserReviews extends React.Component {
                   reviewsIndividualSummary={reviewsSummary[item]}
                   reviewsProduct={reviewsProduct}
                 />
-                <DisplayStar
-                  starPercentage={reviewsSummary[item].Rating}
-                />
-                <UserReviewsDescription
-                  reviewsIndividualSummary={reviewsSummary[item]}
-                />
-                <IndividualReviewSlider
-                  sliderData={reviewsSummary[item].SecondaryRatings}
-                />
+                <div className="user-reviews">
+                  <div className="user-desc">
+                    <DisplayStar
+                      starPercentage={reviewsSummary[item].Rating}
+                    />
+                    <UserReviewsDescription
+                      reviewsIndividualSummary={reviewsSummary[item]}
+                    />
+                  </div>
+                  <ConditionalView condition={window.innerWidth > 767}>
+                    <div className="user-secondary-rating">
+                      <IndividualReviewSlider
+                        sliderData={reviewsSummary[item].SecondaryRatings}
+                      />
+                    </div>
+                  </ConditionalView>
+                </div>
               </div>
             ))}
           </div>

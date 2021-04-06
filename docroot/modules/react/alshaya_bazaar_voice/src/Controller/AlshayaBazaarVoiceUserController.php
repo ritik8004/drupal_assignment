@@ -90,6 +90,7 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
     $build['#attached']['drupalSettings']['userInfo'] = $settings;
     $build['myaccount']['#markup'] = '<div id="myaccount-reviews"></div>';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/myaccount';
+    $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
     $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
     $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
 
