@@ -763,9 +763,10 @@ class CartController {
           $extension['attempted_payment'] = 1;
         }
 
-        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method', [
+        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method Data: @data', [
           '@cart_id' => $this->cart->getCartId(),
           '@method' => $request_content['payment_info']['payment']['method'],
+          '@data' => json_encode($request_content['payment_info']['payment']),
         ]);
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;
