@@ -95,6 +95,13 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
   protected $queueUtility;
 
   /**
+   * Static cache for all the products processed in current process.
+   *
+   * @var array
+   */
+  protected static $processedProducts = [];
+
+  /**
    * {@inheritdoc}
    */
   public function processItem($data) {
@@ -108,6 +115,34 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
 
     // Delete the item right away so we get new entry if updated in parallel.
     $this->queueUtility->deleteItem($data);
+
+    // If the product is already processed once in the current drush request
+    // requeue and do not process again in same request.
+    if (isset(self::$processedProducts[$sku], self::$processedProducts[$sku][$nid])) {
+      // Kill the process if we have already re-queued the product once.
+      if (self::$processedProducts[$sku][$nid] > 1) {
+        $this->getLogger('ProcessProduct')->notice('Killing the process as product re-queued twice already in current process. Sku: @sku, nid: @nid.', [
+          '@sku' => $sku,
+          '@nid' => $nid,
+        ]);
+
+        exit(0);
+      }
+
+      $this->getLogger('ProcessProduct')->notice('Re-queuing product as it is already processed in current process. Sku: @sku, nid: @nid.', [
+        '@sku' => $sku,
+        '@nid' => $nid,
+      ]);
+
+      // Increase the counter so we can kill the process after re-queuing twice.
+      self::$processedProducts[$sku][$nid]++;
+
+      $this->queueUtility->queueProduct($sku, $nid);
+      return;
+    }
+
+    // Update static cache to record - product is processed already once.
+    self::$processedProducts[$sku][$nid] = 1;
 
     try {
       // Reset all static caches before processing a product.
@@ -271,8 +306,8 @@ class ProcessProduct extends QueueWorkerBase implements ContainerFactoryPluginIn
       $index->trackItemsDeleted('entity:node', [$nid]);
 
       $this->getLogger('ProcessProduct')->notice('Deleted product from index: @index, nid: @nid.', [
-        'nid' => $nid,
-        'index' => $index->id(),
+        '@nid' => $nid,
+        '@index' => $index->id(),
       ]);
     }
   }
