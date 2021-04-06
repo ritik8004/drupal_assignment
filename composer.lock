@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de30f7fc3f751c1eaba2684226fc6fbf",
+    "content-hash": "5276abd518e33be16408e9ebe100e974",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -9583,8 +9583,7 @@
                     "npm-asset"
                 ],
                 "patches_applied": {
-                    "Adding files to config install": "patches/lightning_media/lightning_media_install_config.patch",
-                    "Removing files to config optional": "patches/lightning_media/lightning_media_remove_config.patch"
+                    "Changes in config files for lightning media": "patches/lightning_media/lightning_media_config_changes_0.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

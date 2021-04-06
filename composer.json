@@ -405,8 +405,7 @@
                 "Log response of delete requests": "patches/search_api_algolia/CORE-25535-log-delete-requests.patch"
             },
             "drupal/lightning_media": {
-                "Adding files to config install": "patches/lightning_media/lightning_media_install_config.patch",
-                "Removing files to config optional": "patches/lightning_media/lightning_media_remove_config.patch"
+                "Changes in config files for lightning media": "patches/lightning_media/lightning_media_config_changes_0.patch"
             }
         },
         "installer-paths": {
