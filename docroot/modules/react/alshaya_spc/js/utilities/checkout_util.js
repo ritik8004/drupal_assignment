@@ -417,9 +417,13 @@ export const cartValidationOnUpdate = (cartResult, redirect) => {
 
   // If error/exception, show at cart top.
   if (cartResult.error !== undefined) {
+    let errorMessage = cartResult.error_message;
+    if (cartResult.error_code === '604') {
+      errorMessage = Drupal.t('The product that you are trying to add is not available.');
+    }
     dispatchCustomEvent('spcCartMessageUpdate', {
       type: 'error',
-      message: cartResult.error_message,
+      message: errorMessage,
     });
     return;
   }

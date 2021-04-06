@@ -98,9 +98,13 @@ export default class CartItem extends React.Component {
 
         let messageInfo = null;
         if (cartResult.error !== undefined) {
+          let errorMessage = cartResult.error_message;
+          if (cartResult.error_code === '604') {
+            errorMessage = Drupal.t('The product that you are trying to add is not available.');
+          }
           messageInfo = {
             type: 'error',
-            message: cartResult.error_message,
+            message: errorMessage,
           };
         } else {
           messageInfo = {
