@@ -89,6 +89,15 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 7, 'ar' => 6],
     ],
+    'eg' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 13, 'ar' => 12],
+    ],
   ],
   'mc_uat' => [
     'url' => 'https://mcmena-uat2.store.alshaya.com',
