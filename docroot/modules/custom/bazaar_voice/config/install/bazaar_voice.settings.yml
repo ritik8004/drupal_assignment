@@ -3,8 +3,8 @@ conversations_apikey: ''
 shared_secret_key: ''
 max_age: 1
 api_version: 5.4
-locale: 'en_AE'
-content_locale: 'en_AE,en_KW,ar_AE'
+locale: 'en_US'
+content_locale: 'en_US,en_AE'
 bvpixel_base_url: 'https://apps.bazaarvoice.com/deployments'
 client_name: ''
 site_id: 'main_site'
@@ -16,7 +16,7 @@ write_review_guidlines: '/writing-guidelines'
 comment_form_tnc: '/terms-and-conditions'
 bv_content_types: 'Products,Comments'
 comment_form_box_length: 100
-bv_routes_list: "entity.taxonomy_term.canonical:acq_product_category\r\nentity.node.canonical:acq_product\r\nacq_cart.cart\r\nalshaya_spc.checkout\r\nalshaya_spc.checkout.confirmation"
+bv_routes_list: ''
 reviews_pagination_type: 'load_more'
 reviews_initial_load: 5
 reviews_on_loadmore: 10
