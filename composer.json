@@ -145,10 +145,10 @@
             "type": "package",
             "package": {
                 "name": "claviska/jquery-minicolors",
-                "version": "2.2.6",
+                "version": "2.3.5",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
+                    "url": "https://github.com/claviska/jquery-minicolors/archive/2.3.5.zip",
                     "type": "zip"
                 }
             }
@@ -165,10 +165,10 @@
             "type": "package",
             "package": {
                 "name": "hgoebl/mobile-detect",
-                "version": "1.4.2",
+                "version": "1.4.4",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/v1.4.4.zip",
                     "type": "zip"
                 }
             }
