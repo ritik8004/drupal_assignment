@@ -2,12 +2,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.media.field_document
+    - field.storage.media.field_media_document
     - media.type.video
   module:
     - file
-id: media.video.field_document
-field_name: field_document
+id: media.video.field_media_document
+field_name: field_media_document
 entity_type: media
 bundle: video
 label: 'Video File Upload'

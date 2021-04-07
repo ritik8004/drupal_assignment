@@ -8,7 +8,7 @@
         "acquia/acsf-tools": "dev-10.x-dev",
         "acquia/blt": "^9.0.0",
         "acquia/http-hmac-php": "~3.2",
-        "acquia/lightning": "^4.1",
+        "acquia/lightning": "~4.1.11",
         "aws/aws-sdk-php": "^3.138",
         "charliekassel/array-diff": "^0.0.2",
         "ckeditor/font": "^4.9",
@@ -102,7 +102,7 @@
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
         "drupal/user_registrationpassword": "^1.0",
-        "drupal/video_embed_field": "2.0.0-alpha2",
+        "drupal/video_embed_field": "^2.0",
         "drupal/views_ajax_get": "1.x-dev#3055c44",
         "drupal/views_block_filter_block": "^1.0@beta",
         "drupal/views_field_view": "1.0-beta2",
@@ -268,11 +268,10 @@
                 "Cacheable Ajax response": "https://www.drupal.org/files/issues/2701085-16-cacheable_ajax_response-D83.patch",
                 "Add a new setting so that allow_insecure_derivates can be enabled only for certain image styles": "https://www.drupal.org/files/issues/2020-09-26/3059836-21.patch",
                 "Argument 2 passed to Drupal\\jsonapi\\Routing\\Routes must be an instance of ResourceType": "https://www.drupal.org/files/issues/2019-05-23/jsonapi_2996114.patch",
-                "CORE-6959 - Race condition on style directory creation": "https://www.drupal.org/files/issues/2019-02-28/file-prepare-directory-race-condition-3036494-3.patch",
                 "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-11-14/3007424-68.patch",
                 "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
-                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2020-11-29/1521996-218.patch",
+                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2020-07-23/1521996-200.patch",
                 "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2019-06-20/termStorage-loadChildren-sorted-by-weight-3063118-6-D8.6.16.patch",
                 "Config set - drush config:set for other than default collections raises exception": "https://www.drupal.org/files/issues/2019-08-20/drush_cset_for_other_than_default_collections-3011276-6.patch",
                 "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
@@ -293,7 +292,7 @@
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
             },
             "drupal/redirect": {
-                "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
+                "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/2021-02-22/redirect-query-wildcard-2885889-8.x-1.6.patch"
             },
             "drupal/simple_oauth": {
                 "Do not add extra cache tags": "https://www.drupal.org/files/issues/2019-09-11/3080626-2.patch",
@@ -360,11 +359,9 @@
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
-            "drupal/metatag": {
-                "metatag_get_default_tags() does not revert config override language": "https://www.drupal.org/files/issues/2020-01-31/metatag-default-config-3108052-6.patch"
-            },
             "drupal/pathauto": {
-                "Imporvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch"
+                "Improvement: Avoid update query for key_value table": "https://www.drupal.org/files/issues/2020-11-23/3184164-2.patch",
+                "TypeError: Argument 5 passed to AliasUniquifier::__construct()": "https://www.drupal.org/files/issues/2021-02-15/3131460-15.patch"
             },
             "drupal/r4032login": {
                 "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2020-04-27/2941064-38-complete.patch"
@@ -398,13 +395,17 @@
             },
             "drupal/replicate_ui": {
                 "Overriding the replicate feature for content types": "https://www.drupal.org/files/issues/2020-10-05/content-type-feature-3159253-8.patch",
-                "Fix warning for config entity values": "https://www.drupal.org/files/issues/2020-10-05/fix-large-number-of-entries-warning-3174826-2.patch"
+                "Fix warning for config entity values": "https://www.drupal.org/files/issues/2020-10-05/fix-large-number-of-entries-warning-3174826-2.patch",
+                "Large number of entries for warning related to replicate ui task": "https://www.drupal.org/files/issues/2021-02-24/3174826-replicate_ui-3.patch"
             },
             "drupal/search_api_algolia": {
                 "Allow to override maxValuesPerFacet Algolia setting": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/1.patch?v=2",
                 "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch",
                 "Allow debugging data pushed to Algolia": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/2.patch?v=2",
                 "Log response of delete requests": "patches/search_api_algolia/CORE-25535-log-delete-requests.patch"
+            },
+            "drupal/lightning_media": {
+                "Create install config directory with dependent configs for alshaya_media module": "patches/lightning_media/lightning_media_config_changes.patch"
             }
         },
         "installer-paths": {
