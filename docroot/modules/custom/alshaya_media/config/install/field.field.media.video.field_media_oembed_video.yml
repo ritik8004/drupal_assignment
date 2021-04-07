@@ -2,12 +2,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.media.field_media_video_embed_field
+    - field.storage.media.field_media_oembed_video
     - media.type.video
-  module:
-    - video_embed_field
-id: media.video.field_media_video_embed_field
-field_name: field_media_video_embed_field
+id: media.video.field_media_oembed_video
+field_name: field_media_oembed_video
 entity_type: media
 bundle: video
 label: 'Video URL'
@@ -21,4 +19,5 @@ settings:
     vimeo: '0'
     youtube: '0'
     youtube_playlist: '0'
-field_type: video_embed_field
+field_type: string
+

@@ -77,18 +77,22 @@ export default class ReviewSummary extends React.Component {
     }
   }
 
-  getReviews = (options, type, explicitTrigger = false, offset = this.getOffsetValue()) => {
+  getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
-    // Add sorting parameters.
-    const sortParams = (type === 'sort') ? `&${type}=${options}` : '';
-
-    // Add filtering parameters.
+    let sortParams = '';
     let filterParams = '';
-    if (type === 'filter' && options.length > 0) {
-      options.map((item) => {
-        filterParams += `&${type}=${item.value}`;
-        return filterParams;
-      });
+    if (extraParams !== undefined) {
+      // Add sorting parameters.
+      if (extraParams.currentSortOption.length > 0) {
+        sortParams = `&${extraParams.sortType}=${extraParams.currentSortOption}`;
+      }
+      // Add filtering parameters.
+      if (extraParams.currentFilterOptions.length > 0) {
+        extraParams.currentFilterOptions.map((item) => {
+          filterParams += `&${extraParams.filterType}=${item.value}`;
+          return filterParams;
+        });
+      }
     }
 
     // Get review data from BazaarVoice based on available parameters.
@@ -101,7 +105,7 @@ export default class ReviewSummary extends React.Component {
         removeFullScreenLoader();
         if (result.error === undefined && result.data !== undefined) {
           if (result.data.Results.length > 0) {
-            if (type === undefined) {
+            if (extraParams === undefined) {
               this.setState({
                 totalReviews: result.data.TotalResults,
                 reviewsProduct: result.data.Includes.Products,
@@ -184,7 +188,7 @@ export default class ReviewSummary extends React.Component {
     this.setState({
       currentSortOption: option.value, currentPage: 1, offset: 0, loadMoreLimit: initialLimit,
     }, () => {
-      this.getReviews(option.value, 'sort');
+      this.processSortAndFilters();
     });
   }
 
@@ -210,8 +214,23 @@ export default class ReviewSummary extends React.Component {
     currentFilterOptions.push(option);
 
     this.setState({ currentPage: 1, offset: 0, loadMoreLimit: initialLimit }, () => {
-      this.getReviews(currentFilterOptions, 'filter');
+      this.processSortAndFilters();
     });
+  }
+
+  /**
+   * Process sort + filters options value and get reviews from bazaarvoice.
+   */
+  processSortAndFilters = () => {
+    const extraParams = [];
+    const { currentSortOption } = this.state;
+    const { currentFilterOptions } = this.state;
+    extraParams.sortType = 'sort';
+    extraParams.filterType = 'filter';
+    extraParams.currentSortOption = currentSortOption;
+    extraParams.currentFilterOptions = currentFilterOptions;
+    // Get reviews from bazaarvoice.
+    this.getReviews(extraParams, true);
   }
 
   /**
@@ -233,7 +252,7 @@ export default class ReviewSummary extends React.Component {
     }
 
     this.setState({ currentPage: 1, offset: 0, loadMoreLimit: initialLimit }, () => {
-      this.getReviews(currentFilterOptions, 'filter');
+      this.processSortAndFilters();
     });
   }
 
@@ -242,16 +261,10 @@ export default class ReviewSummary extends React.Component {
    */
   nextPage() {
     const {
-      currentFilterOptions, currentSortOption, offset, paginationLimit,
+      offset, paginationLimit,
     } = this.state;
     this.setState({ offset: offset + paginationLimit }, () => {
-      if (currentFilterOptions && currentFilterOptions.length > 0) {
-        this.getReviews(currentFilterOptions, 'filter', true);
-      } else if (currentSortOption) {
-        this.getReviews(currentSortOption, 'sort', true);
-      } else {
-        this.getReviews(undefined, undefined, true);
-      }
+      this.processSortAndFilters();
       this.setState((prevState) => ({ currentPage: prevState.currentPage + 1 }), () => {
         const { currentPage, numberOfPages } = this.state;
         this.changePaginationButtonStatus(currentPage, numberOfPages);
@@ -264,16 +277,10 @@ export default class ReviewSummary extends React.Component {
    */
   previousPage() {
     const {
-      currentFilterOptions, currentSortOption, offset, paginationLimit,
+      offset, paginationLimit,
     } = this.state;
     this.setState({ offset: offset - paginationLimit }, () => {
-      if (currentFilterOptions && currentFilterOptions.length > 0) {
-        this.getReviews(currentFilterOptions, 'filter', true);
-      } else if (currentSortOption) {
-        this.getReviews(currentSortOption, 'sort', true);
-      } else {
-        this.getReviews(undefined, undefined, true);
-      }
+      this.processSortAndFilters();
       this.setState((prevState) => ({ currentPage: prevState.currentPage - 1 }), () => {
         const { currentPage, numberOfPages } = this.state;
         this.changePaginationButtonStatus(currentPage, numberOfPages);
@@ -300,18 +307,9 @@ export default class ReviewSummary extends React.Component {
   }
 
   loadMore() {
-    const {
-      currentFilterOptions, currentSortOption,
-    } = this.state;
     const initialLimit = bazaarVoiceSettings.reviews.bazaar_voice.reviews_on_loadmore;
     this.setState((prev) => ({ loadMoreLimit: prev.loadMoreLimit + initialLimit }), () => {
-      if (currentFilterOptions && currentFilterOptions.length > 0) {
-        this.getReviews(currentFilterOptions, 'filter', true);
-      } else if (currentSortOption) {
-        this.getReviews(currentSortOption, 'sort', true);
-      } else {
-        this.getReviews(undefined, undefined, true);
-      }
+      this.processSortAndFilters();
     });
   }
 
