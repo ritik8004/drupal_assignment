@@ -12,7 +12,7 @@ const ReviewResponseDisplay = ({
   const timeAgo = new TimeAgo('en-US');
   let keyIndex = 0;
   const reviewResponseDisplay = Object.values(reviewResponses).map((responseObj) => {
-    if (responseObj.response !== null) {
+    if (responseObj.Response !== null) {
       return ([
         <div className="response-submission-wrapper" key={keyIndex}>
           <div className="response-submission-box">
@@ -29,7 +29,7 @@ const ReviewResponseDisplay = ({
     }
     keyIndex += 1;
     return '';
-  }, {});
+  });
 
   if (reviewResponseDisplay && reviewResponseDisplay.length > 0) {
     return reviewResponseDisplay;
