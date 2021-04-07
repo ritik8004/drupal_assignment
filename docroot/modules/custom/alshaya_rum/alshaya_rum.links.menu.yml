@@ -1,6 +1,0 @@
-alshaya_rum.alshaya_rum_config:
-  title: Alshaya rum config
-  parent: alshaya_master.alshaya_admin
-  route_name: alshaya_rum.alshaya_rum_config
-  description: Configure real usage monitoring for Alshaya.
-  weight: 10
