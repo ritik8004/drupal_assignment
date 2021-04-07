@@ -31,7 +31,6 @@ $all-filter-height-desktop: calc(100vh - 5.3125rem - 8.25rem);
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   // Main all filters div theming.
-  // Filter Head.
   .all-filters,
   .all-filters-algolia {
     max-width: 31.25rem;
@@ -77,82 +76,58 @@ $all-filter-height-desktop: calc(100vh - 5.3125rem - 8.25rem);
       }
     }
 
-    &__head {
-      border-bottom: 1px solid $plp_all_filter_head_border;
-      padding: 1.625rem 1rem;
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
+    .filter__inner {
       @include breakpoint($only-mobile) {
-        padding: 0.375rem 1rem;
-        min-height: 3.75rem;
+        height: $all-filter-height-mobile;
+        padding-bottom: 0;
       }
 
       @include breakpoint($only-tablet) {
-        min-height: 6.25rem;
+        height: $all-filter-height-tablet;
+        padding-bottom: 0;
       }
 
-      // Back Button
-      .facet-all-back,
-      .back-facet-list {
-        cursor: pointer;
+      @include breakpoint($desktop) {
+        height: $all-filter-height-desktop;
+        padding-bottom: 0;
+      }
 
-        @include icon(chevron#{$left}, before) {
-          color: $plp_all_filter_close_btn;
-          font-size: 2rem;
-          width: 2rem;
-          cursor: pointer;
-          pointer-events: none;
+      .c-facet {
+        &.show-facet {
+          ul {
+            @include breakpoint($only-mobile) {
+              height: $all-filter-height-mobile;
+              padding-bottom: 0;
+            }
+
+            @include breakpoint($tablet) {
+              height: $all-filter-height-tablet;
+            }
+
+            @include breakpoint($desktop) {
+              height: $all-filter-height-desktop;
+            }
+          }
+        }
+
+        &.c-accordion:not(.block-facet-blockcategory-facet-search) ul,
+        &.c-collapse-item:not(.block-facet-blockcategory-facet-search) ul {
+          @include breakpoint($only-mobile) {
+            height: $all-filter-height-mobile;
+            padding-bottom: 0;
+          }
+
+          @include breakpoint($tablet) {
+            height: $all-filter-height-tablet;
+            max-height: none;
+          }
+
+          @include breakpoint($desktop) {
+            height: $all-filter-height-desktop;
+          }
         }
       }
 
-      .filter-sort-title {
-        color: $plp_all_filter_title;
-        text-align: center;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: normal;
-
-        @include breakpoint($only-mobile) {
-          line-height: 2.9375rem;
-        }
-
-        .selected-facets,
-        .sort-for-label {
-          display: none;
-        }
-      }
-
-      // Close button
-      .facet-all-apply,
-      .facet-apply-all,
-      .all-filters-close {
-        cursor: pointer;
-        line-height: 1;
-
-        @include icon('close') {
-          font-size: 3rem;
-          line-height: 1.5rem;
-          width: auto;
-          color: $plp_all_filter_close_btn;
-        }
-      }
-
-      .facet-all-back,
-      .facet-all-apply,
-      .facet-apply-all,
-      .all-filters-close,
-      .back-facet-list {
-        display: flex;
-        align-items: center;
-      }
-    }
-
-    &__inner {
       // filter scroll at all resolutions.
       overflow-y: auto;
 
@@ -427,6 +402,93 @@ $all-filter-height-desktop: calc(100vh - 5.3125rem - 8.25rem);
       }
     }
 
+    .filter__head {
+      border-bottom: 1px solid $plp_all_filter_head_border;
+      padding: 1.625rem 1rem;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      @include breakpoint($only-mobile) {
+        padding: 0.375rem 1rem;
+        min-height: 3.75rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        min-height: 6.25rem;
+      }
+
+      // Back Button
+      .facet-all-back,
+      .back-facet-list {
+        cursor: pointer;
+
+        @include icon(chevron#{$left}, before) {
+          color: $plp_all_filter_close_btn;
+          font-size: 2rem;
+          width: 2rem;
+          cursor: pointer;
+          pointer-events: none;
+        }
+      }
+
+      .filter-sort-title {
+        color: $plp_all_filter_title;
+        text-align: center;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: normal;
+
+        @include breakpoint($only-mobile) {
+          line-height: 2.9375rem;
+        }
+
+        .selected-facets,
+        .sort-for-label {
+          display: none;
+        }
+      }
+
+      // Close button
+      .facet-all-apply,
+      .facet-apply-all,
+      .all-filters-close {
+        cursor: pointer;
+        line-height: 1;
+
+        @include icon('close') {
+          font-size: 3rem;
+          line-height: 1.5rem;
+          width: auto;
+          color: $plp_all_filter_close_btn;
+        }
+      }
+
+      .facet-all-back,
+      .facet-all-apply,
+      .facet-apply-all,
+      .all-filters-close,
+      .back-facet-list {
+        display: flex;
+        align-items: center;
+      }
+
+      @include breakpoint($only-mobile) {
+        height: 3.75rem;
+      }
+
+      @include breakpoint($tablet) {
+        height: 5.3125rem;
+      }
+    }
+  }
+
+  // Filter Head
+  .all-filters .filter,
+  .all-filters-algolia .filter {
     &__foot {
       padding: 0 1.25rem 1.25rem;
       text-align: center;
@@ -544,69 +606,6 @@ $all-filter-height-desktop: calc(100vh - 5.3125rem - 8.25rem);
       ul {
         margin-bottom: 0;
       }
-    }
-  }
-
-  .filter__inner {
-    @include breakpoint($only-mobile) {
-      height: $all-filter-height-mobile;
-      padding-bottom: 0;
-    }
-
-    @include breakpoint($only-tablet) {
-      height: $all-filter-height-tablet;
-      padding-bottom: 0;
-    }
-
-    @include breakpoint($desktop) {
-      height: $all-filter-height-desktop;
-      padding-bottom: 0;
-    }
-
-    .c-facet {
-      &.show-facet {
-        ul {
-          @include breakpoint($only-mobile) {
-            height: $all-filter-height-mobile;
-            padding-bottom: 0;
-          }
-
-          @include breakpoint($tablet) {
-            height: $all-filter-height-tablet;
-          }
-
-          @include breakpoint($desktop) {
-            height: $all-filter-height-desktop;
-          }
-        }
-      }
-
-      &.c-accordion:not(.block-facet-blockcategory-facet-search) ul,
-      &.c-collapse-item:not(.block-facet-blockcategory-facet-search) ul {
-        @include breakpoint($only-mobile) {
-          height: $all-filter-height-mobile;
-          padding-bottom: 0;
-        }
-
-        @include breakpoint($tablet) {
-          height: $all-filter-height-tablet;
-          max-height: none;
-        }
-
-        @include breakpoint($desktop) {
-          height: $all-filter-height-desktop;
-        }
-      }
-    }
-  }
-
-  .filter__head {
-    @include breakpoint($only-mobile) {
-      height: 3.75rem;
-    }
-
-    @include breakpoint($tablet) {
-      height: 5.3125rem;
     }
   }
 }
