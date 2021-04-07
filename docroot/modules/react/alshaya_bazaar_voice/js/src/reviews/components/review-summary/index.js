@@ -81,8 +81,9 @@ export default class ReviewSummary extends React.Component {
     let filterParams = '';
     if (extraParams !== undefined) {
       // Add sorting parameters.
-      sortParams = (extraParams.currentSortOption.length > 0)
-        ? `&${extraParams.sortType}=${extraParams.currentSortOption}` : '';
+      if (extraParams.currentSortOption.length > 0) {
+        sortParams = `&${extraParams.sortType}=${extraParams.currentSortOption}`;
+      }
       // Add filtering parameters.
       if (extraParams.currentFilterOptions.length > 0) {
         extraParams.currentFilterOptions.map((item) => {
