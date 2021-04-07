@@ -170,7 +170,7 @@ export default class ReviewSummary extends React.Component {
    */
   getReviewLimit() {
     const { loadMoreLimit, paginationLimit } = this.state;
-    if (bazaarVoiceSettings.reviews.bazaar_voice.reviews_list_settings === 'pagination') {
+    if (bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type === 'pagination') {
       return paginationLimit;
     }
     return loadMoreLimit;
@@ -332,7 +332,7 @@ export default class ReviewSummary extends React.Component {
       numberOfPages,
       loadMoreLimit,
     } = this.state;
-    const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_list_settings;
+    const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type;
     if (totalReviews === '') {
       return (
         <>

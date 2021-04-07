@@ -59,7 +59,7 @@ bazaar_voice.settings:
     bv_routes_list:
       type: string
       label: 'List of routes which will be tracked for BazaarVoice analytics.'
-    reviews_list_settings:
+    reviews_pagination_type:
       type: string
       label: 'Review listing settings has either load more or pagination to list reviews.'
     reviews_initial_load:
