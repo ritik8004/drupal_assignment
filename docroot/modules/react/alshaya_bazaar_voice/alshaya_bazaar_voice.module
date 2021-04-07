@@ -71,6 +71,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
       'user' => [
         'user_email' => \Drupal::currentUser()->getEmail(),
         'user_id' => \Drupal::currentUser()->id(),
+        'user_name' => \Drupal::currentUser()->getUsername(),
       ],
       'product' => [
         'url' => $productNode->toUrl()->toString(),
@@ -108,7 +109,6 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
     $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
-
     $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['alshaya_bazaar_voice'] = $settings;
   }
 }
