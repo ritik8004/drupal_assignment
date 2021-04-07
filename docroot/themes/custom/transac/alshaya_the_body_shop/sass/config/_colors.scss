@@ -37,6 +37,7 @@ $surf-crest: #c5ccc1;
 $white-smoke: #f6f6f6;
 $success-green: #39b54a;
 $alizarin: #e51b23;
+$grey-four: #ddd;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -266,3 +267,8 @@ $breadcrumb_bg: $white;
 $breadcrumb_link: $cyprus;
 $breadcrumb_link_active: $cyprus;
 $breadcrumb_link_hover: $cyprus;
+
+// Back to top
+$btt_bg: $_gray_98;
+$btt-border: $grey-four;
+$btt_text: $black;
