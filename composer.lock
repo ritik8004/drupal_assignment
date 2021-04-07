@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c305415037bc37ef6ee544820759d7a5",
+    "content-hash": "47d6011468aa04e98e3ca0868f321360",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -9583,7 +9583,7 @@
                     "npm-asset"
                 ],
                 "patches_applied": {
-                    "Changes in config files for lightning media": "patches/lightning_media/lightning_media_config_changes.patch"
+                    "Create install config directory with dependent configs for alshaya_media module": "patches/lightning_media/lightning_media_config_changes.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

@@ -135,7 +135,7 @@ function alshaya_media_update_8104() {
  * Adding support of `webm` file for `field_document` of `Video` media type.
  */
 function alshaya_media_update_8103() {
-  alshaya_config_install_configs(['field.field.media.video.field_document'],  'alshaya_media');
+  alshaya_config_install_configs(['field.field.media.video.field_document'], 'alshaya_media');
 }
 
 /**

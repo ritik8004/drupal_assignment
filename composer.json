@@ -405,7 +405,7 @@
                 "Log response of delete requests": "patches/search_api_algolia/CORE-25535-log-delete-requests.patch"
             },
             "drupal/lightning_media": {
-                "Changes in config files for lightning media": "patches/lightning_media/lightning_media_config_changes.patch"
+                "Create install config directory with dependent configs for alshaya_media module": "patches/lightning_media/lightning_media_config_changes.patch"
             }
         },
         "installer-paths": {
