@@ -230,5 +230,13 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'no_user_review_found',
       'value' => t('You have not submitted any reviews.'),
     ],
+    [
+      'key' => 'no_reviews_yet',
+      'value' => t('No reviews yet'),
+    ],
+    [
+      'key' => 'first_to_review',
+      'value' => t('Tell others what you think. Be the first to review this product!'),
+    ],
   ];
 }
