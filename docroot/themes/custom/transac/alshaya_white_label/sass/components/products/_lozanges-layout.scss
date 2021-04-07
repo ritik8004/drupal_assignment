@@ -1,8 +1,14 @@
 .labels-wrapper {
-  > div {
+  > .labels-container {
     position: absolute;
-    max-width: 80px;
+    // Safety for super large images.
+    max-width: 5rem;
     z-index: 1;
+
+    > .label img {
+      width: 100%;
+      height: auto;
+    }
 
     &.top-left {
       top: 0.5rem;
@@ -83,5 +89,21 @@
         }
       }
     }
+  }
+
+  .labels-container > .label {
+    margin-bottom: 0.625rem;
+
+    .c-pdp & {
+      // PDP lozenges are 20px apart on desktop.
+      @include breakpoint($desktop) {
+        margin-bottom: 1.25rem;
+      }
+    }
+  }
+
+  .labels-container > .label:only-child,
+  .labels-container > .label:last-child {
+    margin-bottom: 0;
   }
 }

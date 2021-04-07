@@ -1,5 +1,8 @@
 import React from 'react';
 
+// Supported label positions.
+const ALLOWED_POSITIONS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+
 const ProductLozenges = ({ labels, sku }) => {
   if (typeof labels === 'undefined' || labels.length === 0) {
     return (null);
@@ -26,14 +29,23 @@ const ProductLozenges = ({ labels, sku }) => {
         <div className="product-labels">
           <div className="labels-wrapper" data-type="plp" data-sku={sku} data-main-sku={sku}>
             {
-              bifercatedLabelsList.map((key) => (
-                <div className={`labels-container ${key}`} key={`${key}-label-container`}>
-                  <LabelItems
-                    bifercatedLabels={bifercatedLabels}
-                    directionKey={key}
-                  />
-                </div>
-              ))
+              bifercatedLabelsList.map((key) => {
+                if (ALLOWED_POSITIONS.includes(key)) {
+                  return (
+                    <div
+                      className={`labels-container ${key}`}
+                      key={`${key}-label-container`}
+                    >
+                      <LabelItems
+                        bifercatedLabels={bifercatedLabels}
+                        directionKey={key}
+                      />
+                    </div>
+                  );
+                }
+
+                return null;
+              })
             }
           </div>
         </div>

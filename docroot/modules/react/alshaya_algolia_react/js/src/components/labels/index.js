@@ -1,6 +1,9 @@
 import React from 'react';
 import ImageElement from '../gallery/imageHelper/ImageElement';
 
+// Supported label positions.
+const ALLOWED_POSITIONS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+
 const Labels = ({ labels, sku }) => {
   if (typeof labels === 'undefined' || labels.length === 0) {
     return (null);
@@ -27,14 +30,23 @@ const Labels = ({ labels, sku }) => {
         <div className="product-labels">
           <div className="labels-wrapper" data-type="plp" data-sku={sku} data-main-sku={sku}>
             {
-              bifercatedLabelsList.map((key) => (
-                <div className={`labels-container ${key}`} key={`${key}-label-container`}>
-                  <LabelItems
-                    bifercatedLabels={bifercatedLabels}
-                    directionKey={key}
-                  />
-                </div>
-              ))
+              bifercatedLabelsList.map((key) => {
+                // Only render labels in supported positions.
+                if (ALLOWED_POSITIONS.includes(key)) {
+                  return (
+                    <div
+                      className={`labels-container ${key}`}
+                      key={`${key}-label-container`}
+                    >
+                      <LabelItems
+                        bifercatedLabels={bifercatedLabels}
+                        directionKey={key}
+                      />
+                    </div>
+                  );
+                }
+                return null;
+              })
             }
           </div>
         </div>
