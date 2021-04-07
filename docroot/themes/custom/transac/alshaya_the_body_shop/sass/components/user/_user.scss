@@ -1,0 +1,13 @@
+#block-content {
+  .order-items {
+    li {
+      a.order-detail-page {
+        transform: rotate(-90deg);
+
+        @include icon('dropdown-expand', after) {
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+}
