@@ -165,10 +165,10 @@
             "type": "package",
             "package": {
                 "name": "hgoebl/mobile-detect",
-                "version": "1.4.5",
+                "version": "1.4.4",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/v1.4.5.zip",
+                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/v1.4.4.zip",
                     "type": "zip"
                 }
             }
