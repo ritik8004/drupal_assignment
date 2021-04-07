@@ -11,18 +11,6 @@ use Drupal\field\Entity\FieldStorageConfig;
 /**
  * Implements hook_update_N().
  *
- * Update pagination type configuration for reviews.
- */
-function alshaya_bazaar_voice_update_8002() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(['bazaar_voice.settings'],
-    'bazaar_voice'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add field for Rating filter to be used as facet.
  */
 function alshaya_bazaar_voice_update_8001() {
@@ -45,6 +33,14 @@ function alshaya_bazaar_voice_update_8001() {
   }
   // Provide sorting option Top rated in srp/plp.
   _add_sort_option_in_plp_srp_config_form();
+   // Add configurations for PDP reviews filter options.
+  $manager->updateConfigs(['bazaar_voice_filter_review.settings'],
+    'bazaar_voice'
+  );
+  // Update pagination type configuration for reviews.
+  $manager->updateConfigs(['bazaar_voice.settings'],
+    'bazaar_voice'
+  );
 }
 
 /**
