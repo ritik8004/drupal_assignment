@@ -13,7 +13,7 @@ use Drupal\field\Entity\FieldStorageConfig;
  *
  * Update pagination type configuration for reviews.
  */
-function alshaya_bazaar_voice_update_8004() {
+function alshaya_bazaar_voice_update_8002() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(['bazaar_voice.settings'],
     'bazaar_voice'
