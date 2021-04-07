@@ -10,11 +10,10 @@ const ReviewResponseDisplay = ({
   }
   TimeAgo.addLocale(en);
   const timeAgo = new TimeAgo('en-US');
-  let keyIndex = 0;
-  const reviewResponseDisplay = Object.values(reviewResponses).map((responseObj) => {
-    if (responseObj.Response !== null) {
-      return ([
-        <div className="response-submission-wrapper" key={keyIndex}>
+  return (
+    <div>
+      {reviewResponses.map((responseObj) => (
+        <div className="response-submission-wrapper" key={responseObj.Date}>
           <div className="response-submission-box">
             <div className="response-user-details">
               <span className="response-user-name">{responseObj.Name}</span>
@@ -24,17 +23,10 @@ const ReviewResponseDisplay = ({
               <span className="response-description-text">{responseObj.Response}</span>
             </div>
           </div>
-        </div>,
-      ]);
-    }
-    keyIndex += 1;
-    return '';
-  });
-
-  if (reviewResponseDisplay && reviewResponseDisplay.length > 0) {
-    return reviewResponseDisplay;
-  }
-  return (null);
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export default ReviewResponseDisplay;
