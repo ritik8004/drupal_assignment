@@ -157,25 +157,9 @@ export default class StyleFinder extends React.Component {
       );
     }, this);
     if (counter === 1) {
-      optionListClass = 'style-finder-type-list';
-      optionList = Object.keys(answer).map(function listOptionsStep(index) {
-        return (
-          <li
-            className="list-item"
-            key={index.nid}
-            onClick={(e) => this.handleStepSubmit(
-              e,
-              index,
-              answer[index].attrCode,
-              answer[index].choice, 1,
-            )}
-          >
-            {answer[index].title}
-          </li>
-        );
-      }, this);
-    } else if (counter === 2) {
       optionListClass = 'style-finder-lining-list';
+    } else if (counter === 2) {
+      optionListClass = 'style-finder-step-coverage-wrapper';
     } else if (counter === 3) {
       optionListClass = 'style-finder-step-coverage-wrapper';
     }
