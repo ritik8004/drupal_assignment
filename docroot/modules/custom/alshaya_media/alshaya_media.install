@@ -49,6 +49,7 @@ function alshaya_media_update_8105() {
   
   $alshaya_media_override = [
     'core.entity_form_display.media.video.default',
+    'core.entity_view_display.media.video.embedded'
   ];
   $manager->updateConfigs($alshaya_media_override, 'alshaya_media', 'override', $manager::MODE_REPLACE);
 
@@ -69,11 +70,11 @@ function alshaya_media_update_8105() {
   $connection->insert('media_revision__field_media_image')->from($image_rev_query)->execute();
   
   // media__field_media_video_embed_field ==> media__field_media_oembed_video
-  $document_query = $connection->select('media__field_media_video_embed_field', 'mvd')->fields('mvd');
-  $connection->insert('media__field_media_oembed_video')->from($document_query)->execute();
+  $video_query = $connection->select('media__field_media_video_embed_field', 'mvd')->fields('mvd');
+  $connection->insert('media__field_media_oembed_video')->from($video_query)->execute();
   // media_revision__field_media_video_embed_field ==> media_revision__field_media_oembed_video
-  $document_query = $connection->select('media_revision__field_media_video_embed_field', 'mrvd')->fields('mrvd');
-  $connection->insert('media_revision__field_media_oembed_video')->from($document_query)->execute();
+  $video_rev_query = $connection->select('media_revision__field_media_video_embed_field', 'mrvd')->fields('mrvd');
+  $connection->insert('media_revision__field_media_oembed_video')->from($video_rev_query)->execute();
   
   // Deleting of old fields and storage configs
   // for media entity type.
