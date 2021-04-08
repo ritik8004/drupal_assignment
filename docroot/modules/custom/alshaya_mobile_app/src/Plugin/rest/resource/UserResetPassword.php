@@ -174,7 +174,7 @@ class UserResetPassword extends ResourceBase {
     // If last login time is greater than timestamp
     // or hash check is false. Expire one time login link.
     if (($user->getLastLoginTime() >= $timestamp) || !(Crypt::hashEquals($hash, user_pass_rehash($user, $timestamp)))) {
-      return $this->mobileAppUtility->sendStatusResponse($this->t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one.'));
+      return $this->mobileAppUtility->sendStatusResponse($this->t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new.'));
     }
 
     if ($errors = $this->validateNewPassword($user, $new_password)) {
