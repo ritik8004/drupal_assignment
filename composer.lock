@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a97b6f0c20e150eb7a4f6a5a8c419224",
+    "content-hash": "f85e6c0577e981680796c6bfdebae8f3",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -24229,11 +24229,6 @@
                 "shasum": ""
             },
             "type": "vm",
-            "extra": {
-                "patches_applied": {
-                    "Fix provisioning on new macs": "https://patch-diff.githubusercontent.com/raw/geerlingguy/drupal-vm/pull/2137.patch"
-                }
-            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
