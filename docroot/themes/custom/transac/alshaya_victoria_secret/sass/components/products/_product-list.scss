@@ -127,6 +127,26 @@
     }
   }
 
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 19.5rem;
+          }
+        }
+      }
+
+      &.product-large {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 26.5rem;
+          }
+        }
+      }
+    }
+  }
+
   &.lhn-without-sidebar {
     .c-products-list.product-small {
       @include breakpoint($desktop) {

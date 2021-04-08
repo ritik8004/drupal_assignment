@@ -1,13 +1,16 @@
 .labels-wrapper {
   > .labels-container {
     position: absolute;
-    // Safety for super large images.
-    max-width: 5rem;
     z-index: 1;
 
-    > .label img {
-      width: 100%;
-      height: auto;
+    > .label {
+      // Safety for super large images.
+      max-width: 5rem;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
     }
 
     &.top-left {

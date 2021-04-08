@@ -1,7 +1,9 @@
 .labels-wrapper {
   > .labels-container {
-    // Safety for super large images.
-    max-width: 2.375rem;
+    .label:not(:only-child) {
+      // Safety for super large images.
+      max-width: 2.375rem;
+    }
 
     &.top-left {
       top: 0.625rem;
@@ -72,7 +74,7 @@
     }
   }
 
-  .labels-container {
+  .labels-container .label:not(:only-child) {
     // PLP Lozenges (Desktop + Mobile)- Size: 38px each (Added as global max-width for FL).
     // PDP Lozenges (Desktop) - Size 50px each.
     // PDP Lozenges (Mobile) - Size 38px each.
