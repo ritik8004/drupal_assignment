@@ -231,6 +231,9 @@ $alshaya-bold-nodir: $tbs-bold;
 $alshaya-thin: $tbs-regular;
 $alshaya-arabic-thin: $tbs-arabic-regular;
 $alshaya-thin-nodir: $tbs-regular;
+$alshaya-medium: $tbs-medium;
+$alshaya-super-bold: $tbs-dw-bold;
+$alshaya-semibold: $tbs-recoleta-semibold;
 
 $alshaya-icons: 'alshaya-icons';
 
@@ -317,6 +320,8 @@ $icons: (
   new-whatsapp-default: "\e94b",
   new-whatsapp-hover: "\e94c",
   store-locator: "\e94d",
+  dropdown-collapse: "\e94e",
+  dropdown-expand: "\e94f"
 );
 
 @mixin iconbase() {

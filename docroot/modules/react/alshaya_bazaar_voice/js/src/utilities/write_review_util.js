@@ -77,9 +77,9 @@ export const prepareRequest = (elements, fieldsConfig) => {
   if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
     params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
-
+  const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
   // Set user authenticated string (UAS).
-  const userToken = getSessionCookie('uas_token');
+  const userToken = getSessionCookie(currentUserKey);
   if (getCurrentUserEmail() !== null && userToken !== undefined) {
     params += `&user=${userToken}`;
   }

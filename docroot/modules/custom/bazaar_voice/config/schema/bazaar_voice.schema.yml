@@ -41,9 +41,6 @@ bazaar_voice.settings:
     write_review_submission:
       type: boolean
       label: 'Enable Closed submission for unauthorized user.'
-    reviews_limit_per_page:
-      type: integer
-      label: 'Number of reviews to be shown per page of PDP.'
     write_review_tnc:
       type: string
       label: 'URL of BazaarVoice Write Review Terms and Conditon.'
@@ -62,3 +59,15 @@ bazaar_voice.settings:
     bv_routes_list:
       type: string
       label: 'List of routes which will be tracked for BazaarVoice analytics.'
+    reviews_pagination_type:
+      type: string
+      label: 'Review listing settings has either load more or pagination to list reviews.'
+    reviews_initial_load:
+      type: integer
+      label: 'Number of reviews on first page load.'
+    reviews_on_loadmore:
+      type: integer
+      label: 'Number of reviews per click of load more.'
+    reviews_per_page:
+      type: integer
+      label: 'Number of reviews per page.'

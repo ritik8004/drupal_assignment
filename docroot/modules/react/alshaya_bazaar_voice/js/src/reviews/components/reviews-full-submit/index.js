@@ -49,7 +49,8 @@ export default class WriteReviewButton extends React.Component {
     }
     if (bazaarVoiceSettings.reviews.user.user_id !== 0) {
       // Set uas token in cookies if user is logged in.
-      getSessionCookie('uas_token');
+      const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
+      getSessionCookie(currentUserKey);
     }
 
     return (

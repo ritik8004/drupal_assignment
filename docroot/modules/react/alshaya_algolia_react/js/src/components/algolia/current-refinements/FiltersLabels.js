@@ -40,6 +40,13 @@ function selectedFiltersLables(attribute, value, filter) {
       break;
     }
 
+    case 'star_rating': {
+      const selctionVal = value.replace('rating_', '');
+      selctionText = (selctionVal > 1)
+        ? `${selctionVal} ${Drupal.t('stars')}` : `${selctionVal} ${Drupal.t('star')}`;
+      break;
+    }
+
     case 'checkbox':
     default:
       selctionText = value.trim();
