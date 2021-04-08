@@ -1,6 +1,6 @@
 import React from 'react';
-import Labels from '../../labels';
 import ImageElement from '../imageHelper/ImageElement';
+import Lozenges from '../../../../common/components/lozenges';
 
 const AssetGallery = ({
   media, title, labels, sku,
@@ -33,7 +33,7 @@ const AssetGallery = ({
           className="b-lazy"
         />
       </div>
-      <Labels labels={labels} sku={sku} />
+      <Lozenges labels={labels} sku={sku} />
     </div>
   );
 };

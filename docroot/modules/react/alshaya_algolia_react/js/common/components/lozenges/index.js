@@ -3,7 +3,7 @@ import React from 'react';
 // Supported label positions.
 const ALLOWED_POSITIONS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
-const ProductLozenges = ({ labels, sku }) => {
+const Lozenges = ({ labels, sku }) => {
   if (typeof labels === 'undefined' || labels.length === 0) {
     return (null);
   }
@@ -43,7 +43,6 @@ const ProductLozenges = ({ labels, sku }) => {
                     </div>
                   );
                 }
-
                 return null;
               })
             }
@@ -73,4 +72,4 @@ const LabelItems = ({ bifercatedLabels, directionKey }) => (
   </>
 );
 
-export default ProductLozenges;
+export default Lozenges;
