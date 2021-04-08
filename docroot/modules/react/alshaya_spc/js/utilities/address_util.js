@@ -487,6 +487,9 @@ export const checkoutAddressProcess = (e) => {
       document.getElementById('mobile-error').innerHTML = getStringMessage('form_error_valid_mobile_number');
       document.getElementById('mobile-error').classList.add('error');
       isError = true;
+      const mobileFieldsSelector = '.spc-checkout-contact-information-fields .spc-type-tel';
+      const mobileErrorElement = document.querySelector(mobileFieldsSelector);
+      smoothScrollToAddressField(mobileErrorElement, true);
     } else {
       // Remove error class and any error message.
       document.getElementById('mobile-error').innerHTML = '';
