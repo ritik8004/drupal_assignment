@@ -100,10 +100,10 @@ function hook_acq_sku_clean_synced_data_alter(&$context_results) {
 /**
  * Alter old categories data that needs to be deleted after category sync.
  *
- * @param array $result
- *   Result array to alter.
+ * @param array $orphan_categories
+ *   Array containing orphan category term ids.
  */
-function hook_acq_sku_sync_categories_delete_alter(array &$result) {
+function hook_acq_sku_sync_categories_delete_alter(array &$orphan_categories) {
 
 }
 
