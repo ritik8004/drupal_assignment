@@ -66,6 +66,7 @@
         "drupal/mobile_number": "^1.0@alpha",
         "drupal/paragraphs": "^1.6",
         "drupal/password_policy": "^3.0",
+        "drupal/path_redirect_import": "^1.0@beta",
         "drupal/pathauto": "^1.6",
         "drupal/pcb": "^1.0",
         "drupal/profile": "^1.0@alpha",
