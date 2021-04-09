@@ -16,6 +16,12 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 (new Dotenv(FALSE))->loadEnv(dirname(__DIR__) . '/.env');
 
 $home = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_SERVER['HOME'] : '/home/vagrant';
+
+// Ensure we use development mode in local.
+if (!isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+  $_SERVER['APP_ENV'] = 'dev';
+}
+
 if (file_exists($home . '/settings/.env')) {
   // Load the .env files from Server Home.
   (new Dotenv(FALSE))->loadEnv($home . '/settings/.env');
