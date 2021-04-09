@@ -44,7 +44,6 @@ function alshaya_media_update_8105() {
     'field.field.media.video.field_media_document',
     'field.field.media.video.field_media_oembed_video',
     'media.type.video',
-    'core.entity_view_display.media.video.embedded',
   ];
   $manager->updateConfigs($alshaya_media_configs, 'alshaya_media');
   
@@ -95,7 +94,7 @@ function alshaya_media_update_8105() {
     'core.entity_view_display.media.image.media_library',
     'core.entity_view_display.media.image.thumbnail',
   ];
-  $manager->updateConfigs($media_image_optional_configs, 'lightning_media_image', 'optional', $manager::MODE_REPLACE);
+  $manager->updateConfigs($media_image_optional_configs, 'lightning_media_image', 'optional');
   
   // Replace the configs for media document.
   $media_document_optional_configs = [
@@ -109,7 +108,12 @@ function alshaya_media_update_8105() {
     'core.entity_view_display.media.document.thumbnail',
     'media.type.document',
   ];
-  $manager->updateConfigs($media_document_optional_configs, 'lightning_media_document', 'optional', $manager::MODE_REPLACE);
+  $manager->updateConfigs($media_document_optional_configs, 'lightning_media_document', 'optional');
+
+  $alshaya_media_optional = [
+    'core.entity_view_display.media.video.embedded',
+  ];
+  $manager->updateConfigs($alshaya_media_optional, 'alshaya_media', 'optional');
 }
 
 /**
