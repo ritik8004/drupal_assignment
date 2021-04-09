@@ -17,7 +17,7 @@ export const getDate = (date) => {
 export const getTimeAgoDate = (date, countryCode, langCode) => {
   if (langCode === 'en') {
     TimeAgo.addLocale(en);
-  } else if(langCode === 'ar') {
+  } else if (langCode === 'ar') {
     TimeAgo.addLocale(ar);
   }
   const timeAgo = new TimeAgo(`${langCode}-${countryCode}`);
