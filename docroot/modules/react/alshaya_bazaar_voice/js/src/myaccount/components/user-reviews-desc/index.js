@@ -1,7 +1,7 @@
 import React from 'react';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import ConditionalView from '../../../common/components/conditional-view';
-import ReviewPhoto from '../../../reviews/components/review-photo';
+import ReviewPhotos from '../../../reviews/components/review-photo';
 import IndividualReviewSlider from '../../../reviews/components/individual-review-slider';
 
 const UserReviewsDescription = ({
@@ -27,7 +27,7 @@ const UserReviewsDescription = ({
         <ConditionalView condition={reviewsIndividualSummary.Photos
           && reviewsIndividualSummary.Photos.length > 0}
         >
-          <ReviewPhoto photoCollection={reviewsIndividualSummary.Photos} />
+          <ReviewPhotos photoCollection={reviewsIndividualSummary.Photos} />
         </ConditionalView>
       </div>
     </div>
