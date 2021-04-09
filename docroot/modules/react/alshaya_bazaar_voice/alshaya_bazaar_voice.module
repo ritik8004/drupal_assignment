@@ -66,6 +66,8 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $sorting_options = $alshayaBazaarVoice->getSortingOptions();
 
     \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
 
     $settings = [
       'user' => [
@@ -96,7 +98,8 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
         'write_review_tnc' => $config->get('write_review_tnc'),
         'write_review_guidlines' => $config->get('write_review_guidlines'),
         'comment_form_tnc' => $config->get('comment_form_tnc'),
-        'comment_form_box_length' => $config->get('comment_form_box_length')
+        'comment_form_box_length' => $config->get('comment_form_box_length'),
+        'country_code' => $country_code,
       ],
       'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
       'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),

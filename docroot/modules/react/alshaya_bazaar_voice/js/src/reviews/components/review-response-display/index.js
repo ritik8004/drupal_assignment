@@ -1,6 +1,6 @@
 import React from 'react';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
+import { getbazaarVoiceSettings, getLanguageCode } from '../../../utilities/api/request';
+import { getTimeAgoDate } from '../../../../../../js/utilities/dateUtility';
 
 const ReviewResponseDisplay = ({
   reviewResponses,
@@ -8,8 +8,8 @@ const ReviewResponseDisplay = ({
   if (reviewResponses === null) {
     return null;
   }
-  TimeAgo.addLocale(en);
-  const timeAgo = new TimeAgo('en-US');
+  const bazaarVoiceSettings = getbazaarVoiceSettings();
+  const countryCode = bazaarVoiceSettings.reviews.bazaar_voice.country_code;
   return (
     <div>
       {reviewResponses.map((responseObj) => (
@@ -17,7 +17,7 @@ const ReviewResponseDisplay = ({
           <div className="response-submission-box">
             <div className="response-user-details">
               <span className="response-user-name">{responseObj.Name}</span>
-              <span className="response-submission-date">{timeAgo.format(new Date(responseObj.Date))}</span>
+              <span className="response-submission-date">{getTimeAgoDate(responseObj.Date, countryCode, getLanguageCode())}</span>
             </div>
             <div className="response-description">
               <span className="response-description-text">{responseObj.Response}</span>
