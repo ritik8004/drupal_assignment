@@ -83,6 +83,8 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
         'passkey' => $config->get('conversations_apikey'),
         'locale' => $config->get('locale'),
         'max_age' => $config->get('max_age'),
+        'reviews_initial_load' => $config->get('reviews_initial_load'),
+        'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
         'user_id' => $this->currentUser->id(),
       ],
     ];
