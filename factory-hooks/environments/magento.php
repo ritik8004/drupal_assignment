@@ -550,6 +550,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ],
   ],
   'bbw_oms_sit' => [
     'url' => 'https://bbw-test.store.alshaya.com',
@@ -1161,6 +1164,12 @@ $magentos = [
       'magento_lang_prefix' => [
         'en' => 'qat_en',
         'ar' => 'qat_ar',
+      ],
+    ],
+    'jo' => [
+      'magento_lang_prefix' => [
+        'en' => 'jor_en',
+        'ar' => 'jor_ar',
       ],
     ],
   ],
