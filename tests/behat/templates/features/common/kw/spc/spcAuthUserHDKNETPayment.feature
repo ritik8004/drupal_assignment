@@ -14,7 +14,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait for the page to load
 
   @cc @hd @Knet
-  Scenario: As an authenticated user, I should be able to checkout using CC
+  Scenario: As an authenticated user, I should be able to checkout using KNET Payment
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -25,9 +25,9 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     And I wait for the page to load
     When I add in the billing address with following:
@@ -48,11 +48,9 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
-    And I wait 2 seconds
+    And I wait 10 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select "{spc_Knet_month}" from "debitMonthSelect"
     And I select "{spc_Knet_year}" from "debitYearSelect"
@@ -97,7 +95,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I should see "{continue_shopping_text}"
 
   @cc @hd @language @desktop @Knet
-  Scenario: As an authenticated user, I should be able to checkout using COD in second language
+  Scenario: As an authenticated user, I should be able to checkout using KNET payment in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -111,9 +109,9 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     And I wait for the page to load
     When I add in the billing address with following:
@@ -133,11 +131,9 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
-    And I wait 2 seconds
+    And I wait 10 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select "{spc_Knet_month}" from "debitMonthSelect"
     And I select "{spc_Knet_year}" from "debitYearSelect"
@@ -151,7 +147,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     Then I should be on "/{language_short}/checkout/confirmation" page
 
   @cc @hd @language @mobile @Knet
-  Scenario: As an authenticated user, I should be able to checkout using COD in second language
+  Scenario: As an authenticated user, I should be able to checkout using KNET payment in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -165,9 +161,9 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     And I wait for the page to load
     When I add in the billing address with following:
@@ -187,11 +183,9 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
-    And I wait 2 seconds
+    And I wait 10 seconds
     Then I fill in "debitNumber" with "{spc_Knet_card}"
     And I select "{spc_Knet_month}" from "debitMonthSelect"
     And I select "{spc_Knet_year}" from "debitYearSelect"
