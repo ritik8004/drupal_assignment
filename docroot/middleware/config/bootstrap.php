@@ -17,8 +17,17 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 $home = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_SERVER['HOME'] : '/home/vagrant';
 
+$env = 'local';
+
+if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+  $env = $_ENV['AH_SITE_ENVIRONMENT'];
+}
+elseif (getenv('TRAVIS') || getenv('CI_BUILD_ID')) {
+  $env = 'travis';
+}
+
 // Ensure we use development mode in local.
-if (!isset($_ENV['AH_SITE_ENVIRONMENT'])) {
+if ($env === 'local') {
   $_SERVER['APP_ENV'] = 'dev';
 }
 
