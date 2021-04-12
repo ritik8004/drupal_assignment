@@ -512,6 +512,7 @@ export const checkoutAddressProcess = (e) => {
 
     if (isError) {
       removeFullScreenLoader();
+      addressFormInlineErrorScroll();
       // Remove loading class.
       document.getElementById('save-address').classList.remove('loading');
       return false;
