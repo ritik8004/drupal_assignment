@@ -1,0 +1,8 @@
+mapping:
+  area_parent: 'address_district_segment'
+  administrative_area: 'address_city_segment'
+  locality: 'address_landmark_segment'
+max_length:
+  address_landmark_segment:
+    en: 250
+    ar: 125
