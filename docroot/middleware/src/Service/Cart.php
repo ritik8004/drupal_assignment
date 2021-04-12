@@ -1716,7 +1716,7 @@ class Cart {
       $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
       $doubleCheckEnabled = $checkout_settings['place_order_double_check_after_exception'];
-      if ($doubleCheckEnabled) {
+      if ($doubleCheckEnabled && $this->isUpapiPaymentMethod($data['paymentMethod']['method'])) {
         $double_check_done = 'yes';
         try {
           $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
