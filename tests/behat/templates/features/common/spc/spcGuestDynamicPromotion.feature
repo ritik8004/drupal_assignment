@@ -43,13 +43,15 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | fullname | {anon_username} |
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    When I add in the billing address with following:
+    When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | locality                      | {locality}    |
       | address_line2                 | {floor}       |
+      | sorting_code                  | {landmark}    |
+      | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -118,9 +120,9 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | fullname | {anon_username} |
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    When I add in the billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
+    When fill in billing address with following:
+      | spc-area-select-selected-city | {city_option} |
+      | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | locality                      | {locality}    |
@@ -192,12 +194,15 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | fullname | {anon_username} |
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    When I add in the billing address with following:
+    When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
+      | locality                      | {locality}    |
       | address_line2                 | {floor}       |
+      | sorting_code                  | {landmark}    |
+      | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
     And I wait 50 seconds
     And I wait for the page to load
@@ -264,7 +269,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | fullname | {anon_username} |
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    When I add in the billing address with following:
+    When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -273,7 +278,8 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I wait 10 seconds
+    Then I click jQuery "#address-form-action #save-address" element on page
+    And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
@@ -290,7 +296,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
-    Then I should see "{spc_auth_user_email}"
+    Then I should see "{anon_email}"
     Then I should see "{order_detail}"
     Then the element ".discount-total" should exist
 
@@ -331,7 +337,6 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And I wait 30 seconds
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
-    And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
     And I wait for the page to load
@@ -339,16 +344,17 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | fullname | {anon_username} |
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    When I add in the billing address with following:
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
+    When fill in billing address with following:
+      | spc-area-select-selected-city | {city_option} |
+      | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | locality                      | {locality}    |
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I wait 10 seconds
+    Then I click jQuery "#address-form-action #save-address" element on page
+    And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
@@ -361,11 +367,8 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait 50 seconds
     And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
     Then I should see "{language_continue_shopping_text}"
-    Then I should see "{spc_auth_user_email}"
+    Then I should see "{anon_email}"
     Then I should see "{language_order_detail}"
     Then the element ".discount-total" should exist
 
@@ -412,7 +415,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | fullname | {anon_username} |
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
-    When I add in the billing address with following:
+    When fill in billing address with following:
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -421,7 +424,8 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I wait 10 seconds
+    Then I click jQuery "#address-form-action #save-address" element on page
+    And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
@@ -438,7 +442,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     Then I should be on "/checkout/confirmation" page
     And I wait for the page to load
     Then I should see "{order_confirm_text}"
-    Then I should see "{spc_auth_user_email}"
+    Then I should see "{anon_email}"
     Then I should see "{order_detail}"
     Then the element ".discount-total" should exist
 
