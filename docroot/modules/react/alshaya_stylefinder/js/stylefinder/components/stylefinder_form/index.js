@@ -114,9 +114,10 @@ export default class StyleFinder extends React.Component {
 
       // Filter rule conditions based on selections.
       const conditions = [];
+      const { locale } = drupalSettings.styleFinder;
       answerSelected.forEach((item) => {
         const condition = {
-          field: item.attrCode, // Condition
+          field: `lng:${locale}:${item.attrCode}`, // Condition
           arguments: [{
             action: 'IS', // Action type IS / IS_NOT / CONTAINS / EQ / GT / GTE / LT / LTE
             value: item.choice, // Value of condition
