@@ -28,6 +28,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\StringTranslation\TranslationManager;
 
 /**
  * Class Alshaya Gtm Manager.
@@ -255,6 +256,13 @@ class AlshayaGtmManager {
   protected $productCategoryHelper;
 
   /**
+   * Translation Manager Helper.
+   *
+   * @var \Drupal\Core\StringTranslation\TranslationManager
+   */
+  protected $translations;
+
+  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -293,6 +301,8 @@ class AlshayaGtmManager {
    *   Entity Repository object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $productCategoryHelper
    *   Product Category Helper.
+   * @param \Drupal\Core\StringTranslation\TranslationManager $translations
+   *   Translations helper.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -311,7 +321,8 @@ class AlshayaGtmManager {
                               ModuleHandlerInterface $module_handler,
                               OrdersManager $orders_manager,
                               EntityRepositoryInterface $entityRepository,
-                              ProductCategoryHelper $productCategoryHelper) {
+                              ProductCategoryHelper $productCategoryHelper,
+                              TranslationManager $translations) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -330,6 +341,7 @@ class AlshayaGtmManager {
     $this->ordersManager = $orders_manager;
     $this->entityRepository = $entityRepository;
     $this->productCategoryHelper = $productCategoryHelper;
+    $this->translations = $translations;
   }
 
   /**
@@ -449,7 +461,7 @@ class AlshayaGtmManager {
 
     if (!in_array('brand', $gtm_disabled_vars)) {
       // Site name.
-      $gtm_brand = $this->configFactory->get('system.site')->get('name');
+      $gtm_brand = $this->configFactory->get('system.site')->getOriginal('name', FALSE);
       $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
       if ($sku->hasField('attr_brand')) {
         $attributes['gtm-brand'] = $sku->get('attr_brand')->getString() ?: $gtm_brand;
