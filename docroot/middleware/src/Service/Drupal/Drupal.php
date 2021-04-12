@@ -142,7 +142,7 @@ class Drupal {
    *   Items data with info from drupal.
    */
   public function getCartItemDrupalStock($sku) {
-    $url = sprintf('/rest/v2/stock/%s', base64_encode($sku));
+    $url = sprintf('/rest/v1/product-status/%s', base64_encode($sku));
     // Bypass CloudFlare to get fresh stock data.
     // Rules are added in CF to disable caching for urls having the following
     // query string.
@@ -162,10 +162,20 @@ class Drupal {
    *   CnC status for cart.
    */
   public function getCncStatusForCart(string $skus_list = '') {
-    $url = sprintf('/spc/cart/cnc-status?skus=%s', $skus_list);
-    $response = $this->invokeApi('GET', $url);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
+    $skus = explode($skus_list);
+    if (empty($skus)) {
+      return FALSE;
+    }
+    foreach ($skus as $sku) {
+      $url = sprintf('/rest/v1/product-status/%s', base64_encode($sku));
+      $response = $this->invokeApi('GET', $url);
+      $result = $response->getBody()->getContents();
+      $result = json_decode($result, TRUE);
+      if (!$result['cnc_enabled']) {
+        return FALSE;
+      }
+    }
+    return TRUE;
   }
 
   /**
