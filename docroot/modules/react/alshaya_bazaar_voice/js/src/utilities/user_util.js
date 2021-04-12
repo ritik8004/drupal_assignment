@@ -13,6 +13,16 @@ export const getCurrentUserEmail = () => {
   return email;
 };
 
+/**
+ * Get username of current user.
+ *
+ * @returns {userName}
+ */
+export const getCurrentUserName = () => {
+  const userName = bazaarVoiceSettings.reviews.user.user_name;
+  return userName;
+};
+
 export const setSessionCookie = (key, value) => {
   Cookies.remove(key);
   Cookies.set(key, value, { expires: bazaarVoiceSettings.reviews.bazaar_voice.max_age });
@@ -27,7 +37,8 @@ export const getSessionCookie = (key) => {
   let sessionCookie = Cookies.get(key);
 
   if (sessionCookie === undefined) {
-    if (key === 'uas_token') {
+    const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
+    if (key === currentUserKey) {
       const requestUrl = '/get-uas-token';
       const request = doRequest(requestUrl);
 

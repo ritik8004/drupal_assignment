@@ -5,7 +5,116 @@
  * Install file for alshaya_media.
  */
 
+use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Installing configs files which is dependent on alshaya_media.
+ */
+function alshaya_media_update_8105() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Storage config file for lightning_media_document.
+  $media_document_config = [
+    'field.storage.media.field_media_document',
+  ];
+  $manager->updateConfigs($media_document_config, 'lightning_media_document');
+
+  // Storage config files for lightning_media_video.
+  $media_video_configs = [
+    'field.storage.media.field_media_oembed_video',
+    'field.storage.media.field_media_video_file',
+  ];
+  $manager->updateConfigs($media_video_configs, 'lightning_media_video');
+
+  // Config dependency in file A dependent on config file B.
+  // Config files for lightning_media_image.
+  $media_image_configs = [
+    'entity_browser.browser.image_browser',
+    'field.storage.media.field_media_image',
+    'field.field.media.image.field_media_image',
+    'media.type.image',
+    'views.view.image_browser',
+  ];
+  $manager->updateConfigs($media_image_configs, 'lightning_media_image');
+
+  // Install config files.
+  $alshaya_media_configs = [
+    'field.field.media.video.field_media_document',
+    'field.field.media.video.field_media_oembed_video',
+    'media.type.video',
+  ];
+  $manager->updateConfigs($alshaya_media_configs, 'alshaya_media');
+  
+  $alshaya_media_override = [
+    'core.entity_form_display.media.video.default',
+  ];
+  $manager->updateConfigs($alshaya_media_override, 'alshaya_media', 'override', $manager::MODE_RESAVE);
+
+  $connection = \Drupal::database();
+
+  // media__field_document ==> media__field_media_document
+  $document_query = $connection->select('media__field_document', 'mfd')->fields('mfd');
+  $connection->insert('media__field_media_document')->from($document_query)->execute();
+  // media_revision__field_document ==> media_revision__field_media_document
+  $document_rev_query = $connection->select('media_revision__field_document', 'mrfd')->fields('mrfd');
+  $connection->insert('media_revision__field_media_document')->from($document_rev_query)->execute();
+  
+  // media__image ==> media__field_media_image
+  $image_query = $connection->select('media__image', 'mimg')->fields('mimg');
+  $connection->insert('media__field_media_image')->from($image_query)->execute();
+  // media_revision__image ==> media_revision__field_media_image
+  $image_rev_query = $connection->select('media_revision__image', 'mrimg')->fields('mrimg');
+  $connection->insert('media_revision__field_media_image')->from($image_rev_query)->execute();
+  
+  // media__field_media_video_embed_field ==> media__field_media_oembed_video
+  $video_query = $connection->select('media__field_media_video_embed_field', 'mvd')->fields('mvd');
+  $connection->insert('media__field_media_oembed_video')->from($video_query)->execute();
+  // media_revision__field_media_video_embed_field ==> media_revision__field_media_oembed_video
+  $video_rev_query = $connection->select('media_revision__field_media_video_embed_field', 'mrvd')->fields('mrvd');
+  $connection->insert('media_revision__field_media_oembed_video')->from($video_rev_query)->execute();
+  
+  // Deleting of old fields and storage configs
+  // for media entity type.
+  FieldConfig::loadByName('media', 'video', 'field_media_video_embed_field')->delete();
+  FieldConfig::loadByName('media', 'video', 'field_document')->delete();
+  FieldConfig::loadByName('media', 'document', 'field_document')->delete();
+  FieldConfig::loadByName('media', 'image', 'image')->delete();
+
+  // Replace the configs for media image.
+  $media_image_optional_configs = [
+    'field.field.media.image.field_media_in_library',
+    'core.entity_form_display.media.image.default',
+    'core.entity_form_display.media.image.media_browser',
+    'core.entity_form_display.media.image.media_library',
+    'core.entity_form_mode.media.media_browser',
+    'core.entity_view_display.media.image.default',
+    'core.entity_view_display.media.image.embedded',
+    'core.entity_view_display.media.image.media_library',
+    'core.entity_view_display.media.image.thumbnail',
+  ];
+  $manager->updateConfigs($media_image_optional_configs, 'lightning_media_image', 'optional');
+  
+  // Replace the configs for media document.
+  $media_document_optional_configs = [
+    'field.field.media.document.field_media_document',
+    'field.field.media.document.field_media_in_library',
+    'core.entity_form_display.media.document.default',
+    'core.entity_form_display.media.document.media_library',
+    'core.entity_view_display.media.document.default',
+    'core.entity_view_display.media.document.embedded',
+    'core.entity_view_display.media.document.media_library',
+    'core.entity_view_display.media.document.thumbnail',
+    'media.type.document',
+  ];
+  $manager->updateConfigs($media_document_optional_configs, 'lightning_media_document', 'optional');
+
+  $alshaya_media_optional = [
+    'core.entity_view_display.media.video.embedded',
+  ];
+  $manager->updateConfigs($alshaya_media_optional, 'alshaya_media', 'optional');
+}
 
 /**
  * Implements hook_update_N().

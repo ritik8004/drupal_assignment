@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_media_oembed_video
+    - media.type.video
+id: media.video.field_media_oembed_video
+field_name: field_media_oembed_video
+entity_type: media
+bundle: video
+label: 'Video URL'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_providers:
+    vimeo: '0'
+    youtube: '0'
+    youtube_playlist: '0'
+field_type: string
+
