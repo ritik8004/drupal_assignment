@@ -3,7 +3,7 @@ import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
 import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
+  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie, getCurrentUserName,
 } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
@@ -131,9 +131,10 @@ class ReviewCommentForm extends React.Component {
       if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
         authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
       }
+      const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
       // Set user authenticated string (UAS).
-      if (getCurrentUserEmail() !== null && getSessionCookie('uas_token') !== undefined) {
-        authParams += `&user=${getSessionCookie('uas_token')}`;
+      if (getCurrentUserEmail() !== null && getSessionCookie(currentUserKey) !== undefined) {
+        authParams += `&user=${getSessionCookie(currentUserKey)}`;
         setSessionCookie('BvUserNickname', nickname);
       }
 
@@ -212,13 +213,17 @@ class ReviewCommentForm extends React.Component {
     const { showCommentForm, showCommentSubmission } = this.state;
     let emailValue = '';
     let nicknameValue = '';
+    // Set default value for user email.
     if (getCurrentUserEmail() !== null) {
       emailValue = getCurrentUserEmail();
     } else if (getSessionCookie('BvUserEmail') !== null) {
       emailValue = getSessionCookie('BvUserEmail');
     }
-    if (getCurrentUserEmail() !== null || getSessionCookie('BvUserEmail') !== null) {
-      nicknameValue = getSessionCookie('BvUserNickname') !== null ? getSessionCookie('BvUserNickname') : '';
+    // Set default value for user nickname.
+    if (getSessionCookie('BvUserNickname') !== null) {
+      nicknameValue = getSessionCookie('BvUserNickname');
+    } else if (getCurrentUserName() !== null) {
+      nicknameValue = getCurrentUserName();
     }
 
     if (ReviewId !== undefined) {

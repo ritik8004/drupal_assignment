@@ -239,11 +239,11 @@ class MagazineDetailPage extends ResourceBase {
             $res['type'] = $item->bundle();
             foreach ($video as $items) {
               $res1['media_id'] = (int) $items->id();
-              if (!empty($items->field_media_video_embed_field->getValue())) {
-                $res1['embed_video_url'] = $items->field_media_video_embed_field->getValue()[0]['value'];
+              if (!empty($items->field_media_oembed_video->getValue())) {
+                $res1['embed_video_url'] = $items->field_media_oembed_video->getValue()[0]['value'];
               }
-              if (!empty($items->field_document->entity)) {
-                $res1['video_url'] = file_create_url($items->field_document->entity->getFileUri());
+              if (!empty($items->field_media_document->entity)) {
+                $res1['video_url'] = file_create_url($items->field_media_document->entity->getFileUri());
               }
               if (!empty($items->field_media_in_library->getValue())) {
                 $res1['media_library_flag'] = (int) $items->field_media_in_library->getValue()[0]['value'];
