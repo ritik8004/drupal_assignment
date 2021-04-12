@@ -15,6 +15,7 @@
     .product-image-block {
       width: 5rem;
       height: 6.25rem;
+      flex-shrink: 0;
 
       img {
         width: 100%;
@@ -171,6 +172,26 @@
             font-family: $alshaya-thin;
             color: $rr-review-summary-grey-text;
           }
+        }
+      }
+    }
+  }
+}
+
+body[class*="reviews"] {
+  @include breakpoint($only-mobile) {
+    .c-user--node {
+      &.l-two--sf {
+        aside.c-sidebar-first {
+          display: none;
+        }
+      }
+    }
+
+    .c-user--node {
+      main {
+        #block-page-title {
+          display: block;
         }
       }
     }
