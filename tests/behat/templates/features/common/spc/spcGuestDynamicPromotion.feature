@@ -121,8 +121,8 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
+      | spc-area-select-selected-city | {language_city_option} |
+      | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | locality                      | {locality}    |
@@ -345,8 +345,8 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
       | email    | {anon_email}    |
       | mobile   | {mobile}        |
     When fill in billing address with following:
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
+      | spc-area-select-selected-city | {language_city_option} |
+      | spc-area-select-selected      | {language_area_option} |
       | address_line1                 | {street}      |
       | dependent_locality            | {building}    |
       | locality                      | {locality}    |
@@ -445,4 +445,4 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) or (Add 2 more to get 
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
     Then the element ".discount-total" should exist
-
+    
