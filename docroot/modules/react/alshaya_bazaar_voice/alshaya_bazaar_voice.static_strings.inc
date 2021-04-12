@@ -238,5 +238,9 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'first_to_review',
       'value' => t('Tell others what you think. Be the first to review this product!'),
     ],
+    [
+      'key' => 'load_more',
+      'value' => t('Load more'),
+    ],
   ];
 }

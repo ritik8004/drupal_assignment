@@ -12,16 +12,18 @@ const UserReviewsProducts = ({
       <div className="product-image-block">
         <img src={reviewsProduct[reviewsIndividualSummary.ProductId].ImageUrl} />
       </div>
-      <div className="product-title">
-        <a href={reviewsProduct[reviewsIndividualSummary.ProductId].ProductPageUrl}>
-          <span>{reviewsProduct[reviewsIndividualSummary.ProductId].Name}</span>
-        </a>
-      </div>
-      <div className="product-item-code">
-        {Drupal.t('Item Code')}
-        {' '}
-        :
-        { reviewsProduct[reviewsIndividualSummary.ProductId].Id }
+      <div className="product-desc-block">
+        <div className="product-title">
+          <a href={reviewsProduct[reviewsIndividualSummary.ProductId].ProductPageUrl}>
+            <span>{reviewsProduct[reviewsIndividualSummary.ProductId].Name}</span>
+          </a>
+        </div>
+        <div className="product-item-code">
+          {Drupal.t('Item Code')}
+          {' '}
+          :
+          { reviewsProduct[reviewsIndividualSummary.ProductId].Id }
+        </div>
       </div>
     </div>
   );
