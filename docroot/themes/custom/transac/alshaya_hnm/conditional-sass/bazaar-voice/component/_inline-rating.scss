@@ -1,4 +1,10 @@
 .aggregate-rating {
+  @include breakpoint($only-mobile) {
+    padding: 0 0.5rem 0.25rem;
+    padding-#{$left}: 0;
+    margin-top: 0.25rem;
+  }
+
   > span {
     a {
       font-family: $hnm-regular;

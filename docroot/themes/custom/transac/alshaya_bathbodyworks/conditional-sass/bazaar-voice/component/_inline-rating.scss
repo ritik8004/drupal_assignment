@@ -1,7 +1,5 @@
 .aggregate-rating {
-  justify-content: center;
-
   @include breakpoint($only-mobile) {
-    padding: 0 0.5rem 0.625rem;
+    padding: 0 0.5rem 1.25rem;
   }
 }
