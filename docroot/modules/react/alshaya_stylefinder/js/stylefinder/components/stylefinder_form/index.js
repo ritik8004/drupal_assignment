@@ -134,7 +134,7 @@ export default class StyleFinder extends React.Component {
         type: 'include', // Include or exclude
         slots: [], // Position in widget
       }];
-      console.log(realtimeRules);
+
       // DY API for Product recommendation with real time rules.
       styleFinderDyApi(realtimeRules);
     }
