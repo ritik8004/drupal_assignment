@@ -20,7 +20,6 @@ services:
       - '@alshaya_acm_customer.orders_manager'
       - '@entity.repository'
       - '@alshaya_acm_product.category_helper'
-      - '@string_translation'
     calls:
       - [setStoreFinderUtility, ['@?alshaya_stores_finder_transac.utility']]
   alshaya_seo_transac.alshaya_sitemap_manager:

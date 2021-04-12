@@ -28,7 +28,6 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityRepositoryInterface;
-use Drupal\Core\StringTranslation\TranslationManager;
 
 /**
  * Class Alshaya Gtm Manager.
@@ -256,13 +255,6 @@ class AlshayaGtmManager {
   protected $productCategoryHelper;
 
   /**
-   * Translation Manager Helper.
-   *
-   * @var \Drupal\Core\StringTranslation\TranslationManager
-   */
-  protected $translations;
-
-  /**
    * AlshayaGtmManager constructor.
    *
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -301,8 +293,6 @@ class AlshayaGtmManager {
    *   Entity Repository object.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $productCategoryHelper
    *   Product Category Helper.
-   * @param \Drupal\Core\StringTranslation\TranslationManager $translations
-   *   Translations helper.
    */
   public function __construct(CurrentRouteMatch $currentRouteMatch,
                               ConfigFactoryInterface $configFactory,
@@ -321,8 +311,7 @@ class AlshayaGtmManager {
                               ModuleHandlerInterface $module_handler,
                               OrdersManager $orders_manager,
                               EntityRepositoryInterface $entityRepository,
-                              ProductCategoryHelper $productCategoryHelper,
-                              TranslationManager $translations) {
+                              ProductCategoryHelper $productCategoryHelper) {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $configFactory;
     $this->cartStorage = $cartStorage;
@@ -341,7 +330,6 @@ class AlshayaGtmManager {
     $this->ordersManager = $orders_manager;
     $this->entityRepository = $entityRepository;
     $this->productCategoryHelper = $productCategoryHelper;
-    $this->translations = $translations;
   }
 
   /**
