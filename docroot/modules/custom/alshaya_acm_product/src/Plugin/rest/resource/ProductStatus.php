@@ -11,6 +11,7 @@ use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Provides a resource to get stock details.
