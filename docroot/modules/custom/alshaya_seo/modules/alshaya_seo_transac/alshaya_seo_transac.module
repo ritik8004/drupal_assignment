@@ -185,9 +185,8 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
  * Implements hook_datalayer_alter().
  */
 function alshaya_seo_transac_datalayer_alter(&$data_layer) {
-  // Check for data layer user uid greater then 0.
+  // Set data layer userUid as customer id only for logged in users.
   if ($data_layer['userUid'] > 0) {
-    // Set data layer userUid as customer id.
     $data_layer['userUid'] = _alshaya_seo_transac_datalayer_user_id($data_layer['userUid']);
   }
 
