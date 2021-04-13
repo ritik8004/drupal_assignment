@@ -334,8 +334,10 @@ class CartController {
 
     if (empty($data['payment']['methods']) && !empty($data['shipping']['method'])) {
       $methods = $this->cart->getPaymentMethods();
-      $data['payment']['methods'] = $methods ?? [];
-      $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
+      if (!empty($methods)) {
+        $data['payment']['methods'] = $methods;
+        $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
+      }
     }
 
     // Re-use the processing done for cart page.
@@ -368,10 +370,7 @@ class CartController {
     // If payment method is not available in the list, we set the first
     // available payment method.
     if (!empty($response['payment'])) {
-      $this->logger->notice('Payment data: @payment', [
-        '@payment' => json_encode($response['payment']),
-      ]);
-      $codes = (!empty($response['payment']['methods'])) ? array_column($response['payment']['methods'], 'code') : [];
+      $codes = array_column($response['payment']['methods'], 'code');
       if (!empty($response['payment']['method'])
         && !in_array($response['payment']['method'], $codes)) {
         unset($response['payment']['method']);
