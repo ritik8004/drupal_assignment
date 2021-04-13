@@ -142,7 +142,7 @@ class Drupal {
    *   Items data with info from drupal.
    */
   public function getCartItemDrupalStock($sku) {
-    return getProductStatus($sku);
+    return $this->getProductStatus($sku);
   }
 
   /**
@@ -160,7 +160,7 @@ class Drupal {
     }
     $skus = explode(',', $skus_list);
     foreach ($skus as $sku) {
-      $result = getProductStatus($sku);
+      $result = $this->getProductStatus($sku);
       if (!$result['cnc_enabled']) {
         return FALSE;
       }
