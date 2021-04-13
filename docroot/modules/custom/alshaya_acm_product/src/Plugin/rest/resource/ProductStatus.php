@@ -40,13 +40,6 @@ class ProductStatus extends ResourceBase {
   protected $moduleHandler;
 
   /**
-   * The custom cache tag for this API.
-   *
-   * @var string
-   */
-  public const CACHE_PREFIX = 'acq_sku_stock:';
-
-  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -87,7 +80,7 @@ class ProductStatus extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('alshaya_mobile_app'),
+      $container->get('logger.factory')->get('alshaya_acm_product'),
       $container->get('alshaya_acm_product.sku_info'),
       $container->get('module_handler')
     );
@@ -115,17 +108,14 @@ class ProductStatus extends ResourceBase {
     $data['max_sale_qty'] = $stockInfo['max_sale_qty'];
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $data['cnc_enabled'] = alshaya_acm_product_available_click_collect($sku);
-    if (!$data['cnc_enabled']) {
-      $data['cnc_enabled'] = FALSE;
-    }
     $response = new ResourceResponse($data);
 
     $cacheableMetadata = $response->getCacheableMetadata();
-    $cacheableMetadata->addCacheContexts($skuEntity->getCacheContexts());
-    $cacheableMetadata->addCacheTags(array_merge(
+    $cacheableMetadata->addCacheContexts(['url']);
+    $cacheableMetadata->addCacheTags(Cache::mergeTags(
       $skuEntity->getCacheTags(),
       [
-        self::CACHE_PREFIX . $skuEntity->id(),
+        StockResource::CACHE_PREFIX . $skuEntity->id(),
         'config:alshaya_click_collect.settings',
       ]
     ));
