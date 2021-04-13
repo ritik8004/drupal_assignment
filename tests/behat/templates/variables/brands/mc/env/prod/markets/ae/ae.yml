@@ -2,3 +2,4 @@ variables:
   spc_product_listing_page: '/shop-baby-clothing/new-arrivals/'
   spc_basket_page: '/shop-baby-clothing/new-arrivals/'
   product_listing_page_url: "/shop-baby-clothing/new-arrivals/"
+  spc_promotion_listing_page: '/buy-little-star-top-and-leggings-set.html/'
