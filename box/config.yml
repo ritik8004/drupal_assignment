@@ -22,6 +22,7 @@ drupal_build_composer_project: false
 # projects own `composer.json` successfully.
 drupal_build_composer: false
 drupal_composer_path: false
+composer_version: 1.10.20
 drupal_composer_install_dir: "/var/www/alshaya"
 drupal_core_path: "/var/www/alshaya/docroot"
 ssh_home: /var/www/alshaya
@@ -94,6 +95,7 @@ pre_provision_scripts:
 
 post_provision_tasks_dir: "../../../acquia/blt/scripts/drupal-vm/post-provision.yml"
 post_provision_scripts:
+  - "../../../../box/scripts/composer-v1.sh"
   - "../../../acquia/blt/scripts/drupal-vm/post-provision.php"
   - "../../../../box/scripts/configure-solr.sh"
   - "../../../../box/scripts/configure-varnish.sh"
@@ -179,6 +181,10 @@ apache_vhosts:
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
   - servername: "local.alshaya-bbwqa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-bbwjo.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
@@ -338,6 +344,22 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-tbskw.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-tbsae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-tbssa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-tbseg.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
 mysql_databases:
   - name: drupal
     encoding: utf8mb4
@@ -392,6 +414,10 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_bbwqa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_bbwjo
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 
@@ -548,6 +574,22 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_mueg
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_tbskw
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_tbsae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_tbssa
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_tbseg
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

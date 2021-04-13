@@ -24,14 +24,29 @@
     margin-#{$right}: 1.5%;
     margin-bottom: 1rem;
 
-    &:nth-child(5n),
-    &:last-of-type {
+    &:nth-child(4n+1) {
       margin-#{$right}: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      &:nth-child(3n+2) {
+        margin-#{$right}: 0;
+      }
     }
 
     @include breakpoint($only-mobile) {
       width: 32%;
       margin-#{$right}: 1.8%;
+    }
+  }
+
+  .bv-select {
+    .bvSelect__control {
+      height: 3.125rem;
+
+      .bvSelect__single-value {
+        color: $rr-sort-filter-txt !important;
+      }
     }
   }
 }

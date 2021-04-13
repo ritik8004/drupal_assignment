@@ -3,7 +3,7 @@ import { getLanguageCode, getbazaarVoiceSettings } from '../../../../../../utili
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 const tncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.write_review_tnc}`;
-const guidlinesUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.write_review_tnc}`;
+const guidlinesUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.write_review_guidlines}`;
 const FormLinks = ({
   tnc, reviewGuide,
 }) => (

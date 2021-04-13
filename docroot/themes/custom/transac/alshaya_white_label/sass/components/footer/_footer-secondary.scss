@@ -43,7 +43,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    background: white;
+    background: $social-icons-bg;
   }
 
   @include breakpoint($desktop) {

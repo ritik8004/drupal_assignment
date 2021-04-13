@@ -160,7 +160,7 @@ export default class WriteReviewForm extends React.Component {
           <ConditionalView condition={dynamicFields.length > 0}>
             <div className="write-review-form-wrapper">
               <form className="write-review-form-add" onSubmit={this.handleSubmit} noValidate>
-                <div className="write-review-fields">
+                <div className="write-review-fields clearfix">
                   {dynamicFields}
                   <input type="hidden" name="blackBox" id="ioBlackBox" />
                 </div>

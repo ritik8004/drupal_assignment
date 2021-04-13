@@ -449,7 +449,7 @@ class AlshayaGtmManager {
 
     if (!in_array('brand', $gtm_disabled_vars)) {
       // Site name.
-      $gtm_brand = $this->configFactory->get('system.site')->get('name');
+      $gtm_brand = $this->configFactory->get('system.site')->getOriginal('name', FALSE);
       $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
       if ($sku->hasField('attr_brand')) {
         $attributes['gtm-brand'] = $sku->get('attr_brand')->getString() ?: $gtm_brand;

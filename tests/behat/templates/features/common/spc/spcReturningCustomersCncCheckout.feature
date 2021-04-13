@@ -1,4 +1,4 @@
-@javascript @returnUser @checkoutPayment @clickCollect @hmaeuat @auth @hmkwuat @hmsauat @flkwuat @bbwsauat
+@javascript @returnUser @checkoutPayment @clickCollect @hmaeuat @auth @hmkwuat @hmsauat @flkwuat @bbwsauat @flaeuat @bbwaeuat @vsaeuat
 Feature: SPC Checkout using Click & Collect store for returning customer using Checkout (2D) Card Payment Method
 
   Background:
@@ -30,30 +30,15 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait 10 seconds
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 30 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay #click-and-collect-list-view li:nth-child(1) .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 5 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "4242424242424242"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "4543474002249996"
     And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "100"
+    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "956"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 5 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -80,7 +65,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-title-price .spc-product-title a" should exist
-#  And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-attributes" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .sub-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .value .price .price-amount" should exist
@@ -119,22 +103,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait 5 seconds
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 30 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay #click-and-collect-list-view li:nth-child(1) .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 5 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -169,7 +138,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-title-price .spc-product-title a" should exist
-#    And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-attributes" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .sub-total" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .value .price .price-currency" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .block-content .total-line-item .value .price .price-amount" should exist

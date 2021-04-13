@@ -22,6 +22,7 @@ class TextArea extends React.Component {
       maxLength,
       minLength,
       text,
+      placeholder,
     } = this.props;
 
     return (
@@ -41,6 +42,7 @@ class TextArea extends React.Component {
             onChange={(e) => this.handleChange(e)}
             minLength={minLength}
             maxLength={maxLength}
+            placeholder={placeholder}
           >
             {defaultValue}
           </textarea>

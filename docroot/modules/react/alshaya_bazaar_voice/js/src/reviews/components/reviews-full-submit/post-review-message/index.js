@@ -1,6 +1,6 @@
 import React from 'react';
-import DisplayStar from '../../../../rating/components/stars/DisplayStar';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import DisplayStar from '../../../../rating/components/stars';
 
 const PostReviewMessage = ({
   postReviewData,

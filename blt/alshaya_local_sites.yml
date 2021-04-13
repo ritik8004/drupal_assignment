@@ -53,6 +53,10 @@ sites:
     module: alshaya_bbw
     type: alshaya_transac
     country: qa
+  bbwjo:
+    module: alshaya_bbw
+    type: alshaya_transac
+    country: jo
   vskw:
     module: alshaya_vs
     type: alshaya_transac
@@ -204,5 +208,21 @@ sites:
     country: ae
   mueg:
     module: alshaya_mu
+    type: alshaya_transac
+    country: eg
+  tbskw:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: kw
+  tbssa:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: sa
+  tbsae:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: ae
+  tbseg:
+    module: alshaya_tbs
     type: alshaya_transac
     country: eg

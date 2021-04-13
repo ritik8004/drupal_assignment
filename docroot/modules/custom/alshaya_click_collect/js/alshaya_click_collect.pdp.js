@@ -328,7 +328,7 @@
                 }
 
                 var storeDisplayAjax = Drupal.ajax({
-                  url: Drupal.url('stores/product/' + lastSku + '/' + asCoords.lat + '/' + asCoords.lng),
+                  url: Drupal.url('stores/product/' + btoa(lastSku) + '/' + asCoords.lat + '/' + asCoords.lng),
                   element: $trigger.get(0),
                   base: false,
                   progress: {type: 'throbber'},

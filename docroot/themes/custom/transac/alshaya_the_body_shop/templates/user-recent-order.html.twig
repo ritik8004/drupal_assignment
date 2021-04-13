@@ -1,0 +1,160 @@
+{{ attach_library('alshaya_acm_customer/recent-order') }}
+{{ attach_library('alshaya_white_label/tooltip') }}
+<table class="user__order--detail recent__orders--list">
+	<tbody class="recent__orders--body">
+		<tr class="order-summary-row">
+			<td class="order-transaction">
+				<div class="light tablet-light">{{ 'Order ID' | t }}</div>
+				<div class="dark">{{ order.id }}</div>
+				<div class="light order--date--time">{{ order.date }}</div>
+
+				<div class="mobile-only">
+					<div class="dark order--items">{{ order.item_names | join(', ') }}</div>
+					<div class="light">
+						{% trans %}
+						Total:
+						{{ order.total_quantity }}
+						item
+						{% plural order.total_quantity %}
+						Total:
+						{{ order.total_quantity }}
+						items
+						{% endtrans %}
+					</div>
+				</div>
+			</td>
+
+			<td class="above-mobile">
+				<div class="dark order--items">{{ order.item_names | join(', ') }}</div>
+				<div class="light">
+					<div class="item-count">
+						{% trans %}
+						Total:
+						{{ order.total_quantity }}
+						item
+						{% plural order.total_quantity %}
+						Total:
+						{{ order.total_quantity }}
+						items
+						{% endtrans %}
+					</div>
+					{% if order.cancelled_items_count > 0 %}
+						<div class="cancel-item">
+							<a href="#cancel-order-item-{{ order.id }}" class="cancel-link">{{ '@count Cancelled'|t({'@count': order.cancelled_items_count})}}</a>
+						</div>
+					{% endif %}
+				</div>
+
+
+				<div class="tablet-only">
+					<div class="button {{ order.status.class }}">{{ order.status.text }}</div>
+				</div>
+			</td>
+
+			<td class="mobile-only toggle--icon">
+				<div class="button {{ order.status.class }}">{{ order.status.text }}</div>
+				<div class="icon-ic_dropdown-expand"></div>
+			</td>
+
+			<td class="desktop-only">
+				<div class="button {{ order.status.class }}">{{ order.status.text }}</div>
+			</td>
+
+			<td class="above-mobile toggle--icon">
+				<div class="light">{{ "Order Total"|t }}</div>
+				<div class="dark">{{ order.totals.grand }}</div>
+				<div class="icon-ic_dropdown-expand"></div>
+			</td>
+		</tr>
+
+		{% for item in order.items %}
+			{{ _self.order_item(item, false) }}
+		{% endfor %}
+
+		{% if order.cancelled_items_count > 0 %}
+			<tr id="cancel-order-item-{{ order.id }}" class="order-item-row">
+				<td colspan="4">
+					<div>{{ "Cancelled Items"|t }}</div>
+				</td>
+			</tr>
+			{% for item in order.cancelled_items %}
+				{{ _self.order_item(item, true) }}
+			{% endfor %}
+			{% if order.refund_text is not empty %}
+				<tr class="order-item-row">
+					<td class="cancelled-item-refund-text" colspan="4">
+						<div class="tooltip-anchor info">
+							<span>{{ order.refund_text }}</span>
+						</div>
+					</td>
+				</tr>
+			{% endif %}
+		{% endif %}
+
+		<tr class="order-item-row order__detail--link">
+			<td colspan="4" class="desktop-only">
+				<a href="{{ path('alshaya_acm_customer.orders_detail', {'user': order.user_id, 'order_id': order.id}) }}">{{ 'View order details'| t }}</a>
+			</td>
+			<td colspan="3" class="tablet-only">
+				<a href="{{ path('alshaya_acm_customer.orders_detail', {'user': order.user_id, 'order_id': order.id}) }}">{{ 'View order details'| t }}</a>
+			</td>
+			<td colspan="3" class="mobile-only">
+				<a href="{{ path('alshaya_acm_customer.orders_detail', {'user': order.user_id, 'order_id': order.id}) }}">{{ 'View order details'| t }}</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+{# Provides the markup for each item in the order #}
+{% macro order_item(item, cancelled) %}
+	<tr class="order-item-row">
+		{% if item.image and cancelled %}
+			<td class="order-item-image">
+				<div class="image-wrapper">
+					{{ item.image }}
+					<span>{{ 'Cancelled' | t }}</span>
+				</div>
+			</td>
+		{% else %}
+			<td>{{ item.image }}</td>
+		{% endif %}
+		<td class="order__details--summary order__details--description">
+			<div class="dark">{{ item.name }}</div>
+			{% if item.attributes is not empty %}
+				{% for attribute in item.attributes %}
+					<div class="light">
+						{% trans %}
+						{{ attribute.label }}:
+						{{ attribute.value }}
+						{% endtrans %}
+					</div>
+				{% endfor %}
+			{% endif %}
+			<div class="light">{{ 'Item code' | t }}
+				{{ item.sku }}</div>
+			<div class="light">{{ 'Quantity' | t }}:
+				{{ item.ordered }}</div>
+
+			<div class="tablet-only">
+				<div class="light">{{ 'Unit Price' | t }}</div>
+				<span class="currency-code dark prefix">{{ item.price }}</span>
+			</div>
+
+			<div class="mobile-only">
+				<div class="light">{{ 'Total' | t }}</div>
+				<span class="currency-code dark prefix">{{ item.total_price }}</span>
+			</div>
+		</td>
+
+		<td class="desktop-only order__details--summary">
+			<div class="light">{{ 'Unit Price' | t }}</div>
+			<span class="currency-code dark prefix">{{ item.price }}</span>
+		</td>
+
+		<td class="above-mobile total--price order__details--summary">
+			<div class="light">{{ 'Total' | t }}</div>
+			<span class="currency-code dark prefix">{{ item.total_price }}</span>
+		</td>
+	</tr>
+{% endmacro %}
+

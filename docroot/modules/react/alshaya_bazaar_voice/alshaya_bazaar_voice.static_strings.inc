@@ -226,5 +226,13 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'true_to_size',
       'value' => t('True to size'),
     ],
+    [
+      'key' => 'no_user_review_found',
+      'value' => t('You have not submitted any reviews.'),
+    ],
+    [
+      'key' => 'load_more',
+      'value' => t('Load more'),
+    ],
   ];
 }

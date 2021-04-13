@@ -1,4 +1,4 @@
 variables:
-  product_listing_page_url: '/shop-outdoor/'
-  spc_product_listing_page: '/shop-outdoor/'
-  spc_basket_page: '/shop-outdoor/'
+  product_listing_page_url: '/flat-20/'
+  spc_product_listing_page: '/flat-20/'
+  spc_basket_page: '/flat-20/'

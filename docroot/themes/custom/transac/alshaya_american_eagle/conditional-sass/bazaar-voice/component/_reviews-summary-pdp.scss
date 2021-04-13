@@ -1,0 +1,14 @@
+#reviews-section {
+  .review {
+    &-title {
+      text-transform: uppercase;
+    }
+  }
+
+  .user {
+    &-detail-nickname {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+  }
+}

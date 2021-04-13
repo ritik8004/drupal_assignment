@@ -149,13 +149,6 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This option should be checked to enable closed submission for unauthorized user on the site.'),
     ];
 
-    $form['basic_settings']['reviews_limit_per_page'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Number of reviews per page.'),
-      '#default_value' => $config->get('reviews_limit_per_page'),
-      '#description' => $this->t('Number of reviews to be shown per page of PDP'),
-    ];
-
     $form['basic_settings']['write_review_tnc'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Write a review T&C url'),
@@ -184,6 +177,66 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Enter minimum character length for comment box text in comment form.'),
     ];
 
+    $form['basic_settings']['bv_routes_list'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Routes for BazaarVoice analytics'),
+      '#default_value' => $config->get('bv_routes_list'),
+      '#description' => $this->t('Specify routes by using their route name which will be tracked by BazaarVoice for analytics. BV pixel script will be loaded only for the routes in this list. Enter one route per line.'),
+    ];
+
+    $form['basic_settings']['reviews_pagination_type'] = [
+      '#type' => 'radios',
+      '#weight' => 1,
+      '#title' => $this->t('Choose either load more or pagination for reviews'),
+      '#description' => $this->t('Specify if you wish to show all the reviews with load more or pagination options respectively.'),
+      '#options' => [
+        'load_more' => $this->t('Load more'),
+        'pagination' => $this->t('Pagination'),
+      ],
+      '#default_value' => $config->get('reviews_pagination_type'),
+    ];
+    $form['basic_settings']['reviews_pagination_type']['reviews_initial_load'] = [
+      '#type' => 'textfield',
+      '#weight' => 2,
+      '#title' => $this->t('Number of reviews on initial load'),
+      '#default_value' => $config->get('reviews_initial_load'),
+      '#description' => $this->t('Load specific number of reviews on initial load of PDP and my account.'),
+      '#states' => [
+        'visible' => [
+          'input[name="reviews_pagination_type"]' => [
+            'value' => 'load_more',
+          ],
+        ],
+      ],
+    ];
+    $form['basic_settings']['reviews_pagination_type']['reviews_on_loadmore'] = [
+      '#type' => 'textfield',
+      '#weight' => 3,
+      '#title' => $this->t('Number of reviews on load more click'),
+      '#default_value' => $config->get('reviews_on_loadmore'),
+      '#description' => $this->t('Load specific number of reviews on click of load more button on PDP and my account.'),
+      '#states' => [
+        'visible' => [
+          'input[name="reviews_pagination_type"]' => [
+            'value' => 'load_more',
+          ],
+        ],
+      ],
+    ];
+    $form['basic_settings']['reviews_pagination_type']['reviews_per_page'] = [
+      '#type' => 'textfield',
+      '#weight' => 4,
+      '#title' => $this->t('Number of reviews per page'),
+      '#default_value' => $config->get('reviews_per_page'),
+      '#description' => $this->t('Display a specific number of reviews per page on PDP and my account.'),
+      '#states' => [
+        'visible' => [
+          'input[name="reviews_pagination_type"]' => [
+            'value' => 'pagination',
+          ],
+        ],
+      ],
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -192,7 +245,6 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
-
     $this->configFactory()->getEditable('bazaar_voice.settings')
       ->set('api_base_url', $values['api_base_url'])
       ->set('conversations_apikey', $values['conversations_apikey'])
@@ -207,12 +259,16 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('environment', $values['environment'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
       ->set('write_review_submission', $values['write_review_submission'])
-      ->set('reviews_limit_per_page', $values['reviews_limit_per_page'])
       ->set('write_review_tnc', $values['write_review_tnc'])
       ->set('write_review_guidlines', $values['write_review_guidlines'])
       ->set('comment_form_tnc', $values['comment_form_tnc'])
       ->set('bv_content_types', $values['bv_content_types'])
       ->set('comment_form_box_length', $values['comment_form_box_length'])
+      ->set('bv_routes_list', $values['bv_routes_list'])
+      ->set('reviews_pagination_type', $values['reviews_pagination_type'])
+      ->set('reviews_initial_load', $values['reviews_initial_load'])
+      ->set('reviews_on_loadmore', $values['reviews_on_loadmore'])
+      ->set('reviews_per_page', $values['reviews_per_page'])
       ->save();
 
     parent::submitForm($form, $form_state);

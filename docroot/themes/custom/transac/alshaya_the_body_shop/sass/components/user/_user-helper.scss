@@ -1,0 +1,25 @@
+.c-user--node {
+  &.l-two--sf {
+    @include breakpoint($only-mobile) {
+      aside.c-sidebar-first {
+        .my-account-mobile-title1 {
+          font-family: $alshaya-semibold;
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+
+  .c-sidebar-first {
+    @include breakpoint($upto-tablet) {
+      .my-account-nav {
+        a {
+          @include icon('dropdown-expand', after) {
+            font-size: 2rem;
+            transform: translateY(-50%) rotate(-90deg);
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+track_js.settings:
+  type: config_object
+  label: 'TrackJS settings'
+  mapping:
+    library:
+      type: string
+      label: 'TrackJS Library'
+    token:
+      type: string
+      label: 'TrackJS Token'
+    application:
+      type: string
+      label: 'TrackJS Application'
+    admin_pages:
+      type: string
+      label: 'Track the errors on admin pages or not'

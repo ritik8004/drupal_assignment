@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat  @flkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
+@javascript @account @smoke @auth @pbsauat @hmaeuat @hmkwqa @mckwuat @vssauat @vsaeuat @bbwkwuat @hmkwuat @bbwaeuat @flkwuat @hmsauat @mcsauat @mcaeuat @flaeuat @pbkwuat @pbsauat @pbaeuat
 Feature: Test the adding address to existing user account
 
   Background:
@@ -21,11 +21,10 @@ Feature: Test the adding address to existing user account
     When I fill in "full_name" with "{spc_full_name}"
     And I fill in "field_address[0][address][mobile_number][mobile]" with "{mobile}"
     Then I scroll to the "#address-book-form-open" element
-    Then I select "{city_option}" from "field_address[0][address][area_parent]" address
-    And I wait 2 seconds
     Then I select "{governorate}" from "field_address[0][address][area_parent]" address
-    And I wait 2 seconds
-    Then I select "{address_area_field}" from "field_address[0][address][administrative_area]" address
+    And I wait 5 seconds
+    Then I select "{city_option}" from "field_address[0][address][administrative_area]" address
+    And I wait 5 seconds
     When I scroll to the ".country-field-wrapper" element
     When fill in billing address with following:
       | field_address[0][address][address_line1]             | {street}      |

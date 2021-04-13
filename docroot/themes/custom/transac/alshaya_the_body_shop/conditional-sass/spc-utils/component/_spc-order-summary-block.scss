@@ -1,0 +1,22 @@
+.spc-order-summary-block {
+  .hero-total {
+    .total-line-item {
+      color: $spc-totals-line-order-color;
+    }
+  }
+
+  .product-content {
+    .product-item {
+      .spc-product-title {
+        a {
+          font-size: 0.8125rem;
+          font-family: $alshaya-medium;
+        }
+      }
+    }
+  }
+
+  .total-line-item {
+    text-transform: capitalize;
+  }
+}

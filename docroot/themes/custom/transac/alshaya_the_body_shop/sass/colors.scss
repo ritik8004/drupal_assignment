@@ -1,0 +1,24 @@
+@import "config/**/*";
+
+/* ---------- Color Module Styles ----------- */
+
+body {
+  color: $primary_text;
+}
+
+a,
+.link {
+  color: $primary_link;
+}
+
+a:hover,
+a:focus,
+.link:hover,
+.link:focus {
+  color: $primary_link-hover;
+}
+
+a:active,
+.link:active {
+  color: $primary_link-hover;
+}

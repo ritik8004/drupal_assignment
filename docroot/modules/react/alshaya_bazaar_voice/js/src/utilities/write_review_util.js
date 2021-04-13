@@ -39,16 +39,21 @@ export const prepareRequest = (elements, fieldsConfig) => {
           if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== elements[id].value) {
             const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
             deleteSessionCookie(cookieValues);
-          } else if (getCurrentUserEmail() !== null) {
+          } else if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
             params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
           }
-        } else if (id === 'usernickname' && getSessionCookie('BvUserNickname') !== null
-          && getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserId') !== null) {
-          if (getSessionCookie('BvUserNickname') !== elements[id].value) {
+        } else if (id === 'usernickname') {
+          if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
+            && getSessionCookie('BvUserNickname') !== null && getCurrentUserEmail() === null) {
+            if (getSessionCookie('BvUserNickname') !== elements[id].value) {
+              params += `&${id}=${elements[id].value}`;
+              setSessionCookie('BvUserNickname', elements[id].value);
+            }
+            params += `&User=${getSessionCookie('BvUserId')}`;
+          } else {
             params += `&${id}=${elements[id].value}`;
             setSessionCookie('BvUserNickname', elements[id].value);
           }
-          params += `&User=${getSessionCookie('BvUserId')}`;
         } else {
           params += `&${id}=${elements[id].value}`;
         }
@@ -72,9 +77,9 @@ export const prepareRequest = (elements, fieldsConfig) => {
   if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
     params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
-
+  const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
   // Set user authenticated string (UAS).
-  const userToken = getSessionCookie('uas_token');
+  const userToken = getSessionCookie(currentUserKey);
   if (getCurrentUserEmail() !== null && userToken !== undefined) {
     params += `&user=${userToken}`;
   }

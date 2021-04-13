@@ -1,19 +1,21 @@
 import React from 'react';
-import DisplayStar from '../../../rating/components/stars/DisplayStar';
 import ReviewFeedback from '../review-feedback';
 import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
-import ReviewPhoto from '../review-photo';
+import ReviewPhotos from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getDate } from '../../../../../../js/utilities/dateUtility';
+import DisplayStar from '../../../rating/components/stars';
+import ReviewResponseDisplay from '../review-response-display';
 
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
 }) => {
   if (reviewDescriptionData !== undefined) {
-    const date = new Date(reviewDescriptionData.SubmissionTime);
+    const date = getDate(reviewDescriptionData.SubmissionTime);
     return (
       <div className="review-detail-right">
         <div className="review-details">
@@ -23,7 +25,7 @@ const ReviewDescription = ({
               starPercentage={reviewDescriptionData.Rating}
             />
             <div className="review-title">{reviewDescriptionData.Title}</div>
-            <div className="review-date">{`${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}, ${date.getFullYear()}`}</div>
+            <div className="review-date">{`${date}`}</div>
           </ConditionalView>
 
           <div className="review-text">{reviewDescriptionData.ReviewText}</div>
@@ -39,10 +41,14 @@ const ReviewDescription = ({
 
           {
             (reviewDescriptionData.Photos && reviewDescriptionData.Photos.length > 0)
-              ? <ReviewPhoto photoCollection={reviewDescriptionData.Photos} />
+              ? <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
               : null
           }
-
+          <ConditionalView condition={reviewDescriptionData.Photos
+            && reviewDescriptionData.Photos.length > 0}
+          >
+            <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
+          </ConditionalView>
           <div className="review-inline-feedback">
             <div>
               <ConditionalView condition={reviewDescriptionData.IsRecommended !== false
@@ -53,6 +59,12 @@ const ReviewDescription = ({
                   <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
                   <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
                 </div>
+              </ConditionalView>
+              <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
+                <ReviewResponseDisplay
+                  reviewId={reviewDescriptionData.Id}
+                  reviewResponses={reviewDescriptionData.ClientResponses}
+                />
               </ConditionalView>
               <div className="review-feedback">
                 <ReviewFeedback

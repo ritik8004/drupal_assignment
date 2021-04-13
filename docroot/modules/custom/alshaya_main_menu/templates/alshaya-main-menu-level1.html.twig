@@ -61,7 +61,7 @@
 
         {% if level1.icon is not empty %}
           <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>
-            <span class="icon"><img src="{{ level1.icon.url }}"/></span>
+            <span class="icon"><img src="{{ level1.icon.url }}" alt="{{ level1.label }}"/></span>
             {{ level1.label }}
           </{{ level1.tag }}>
         {% else %}

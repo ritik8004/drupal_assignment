@@ -8,6 +8,34 @@
 global $magentos;
 
 $magentos = [
+  // The body shop.
+  'tbs_qa' => [
+    'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
+      'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
+      'access_token' => '5um6y5nxl3oqms9qw0jai36qkryrrocg',
+      'access_token_secret' => '4cfruica5gbgdn2eq269ndl5rccubslc',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 3],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 13, 'ar' => 12],
+    ],
+  ],
   // Mothercare.
   'mc_qa' => [
     'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
@@ -88,6 +116,15 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 7, 'ar' => 6],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 9, 'ar' => 8],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 11, 'ar' => 10],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 13, 'ar' => 12],
     ],
   ],
   'mc_uat' => [
@@ -534,6 +571,9 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
     ],
   ],
   'bbw_apc' => [
@@ -1200,6 +1240,12 @@ $magentos = [
       'magento_lang_prefix' => [
         'en' => 'qat_en',
         'ar' => 'qat_ar',
+      ],
+    ],
+    'jo' => [
+      'magento_lang_prefix' => [
+        'en' => 'jor_en',
+        'ar' => 'jor_ar',
       ],
     ],
   ],

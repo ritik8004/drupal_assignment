@@ -395,8 +395,7 @@ class AlshayaBazaarVoice {
     $mail = $this->currentUser->getEmail();
 
     // URL-encoded query string.
-    $userStr = "date=" . urlencode(date('d-m-Y')) . "&userid=" . urlencode($userId) . "&useremail=" . urlencode($mail) . "&maxage=" . urlencode($maxAge);
-
+    $userStr = "date=" . urlencode(date('Ymd')) . "&userid=" . urlencode($userId) . "&EmailAddress=" . urlencode($mail) . "&maxage=" . urlencode($maxAge);
     // Encode the signature using HMAC SHA-256.
     $signature = hash_hmac('sha256', $userStr, $sharedKey);
     // Concatenate the signature and hex-encoded string of parameters.

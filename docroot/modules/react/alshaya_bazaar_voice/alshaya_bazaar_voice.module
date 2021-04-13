@@ -6,7 +6,9 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -63,13 +65,19 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     // Get avalable sorting options from config.
     $sorting_options = $alshayaBazaarVoice->getSortingOptions();
+    // Get the filter options to be rendered on review summary.
+    $filter_options = \Drupal::config('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
+    $filter_options = Yaml::parse($filter_options);
 
     \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
 
     $settings = [
       'user' => [
         'user_email' => \Drupal::currentUser()->getEmail(),
         'user_id' => \Drupal::currentUser()->id(),
+        'user_name' => \Drupal::currentUser()->getUsername(),
       ],
       'product' => [
         'url' => $productNode->toUrl()->toString(),
@@ -86,12 +94,17 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
         'stats' => 'Reviews',
         'Include' => $config->get('bv_content_types'),
         'sorting_options' => $sorting_options,
-        'reviews_per_page' => $config->get('reviews_limit_per_page'),
+        'filter_options' => $filter_options,
+        'reviews_pagination_type' => $config->get('reviews_pagination_type'),
+        'reviews_initial_load' => $config->get('reviews_initial_load'),
+        'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
+        'reviews_per_page' => $config->get('reviews_per_page'),
         'write_review_submission' => $config->get('write_review_submission'),
         'write_review_tnc' => $config->get('write_review_tnc'),
         'write_review_guidlines' => $config->get('write_review_guidlines'),
         'comment_form_tnc' => $config->get('comment_form_tnc'),
-        'comment_form_box_length' => $config->get('comment_form_box_length')
+        'comment_form_box_length' => $config->get('comment_form_box_length'),
+        'country_code' => $country_code,
       ],
       'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
       'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
@@ -107,7 +120,6 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
     $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
-
     $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['alshaya_bazaar_voice'] = $settings;
   }
 }
@@ -196,4 +208,23 @@ function alshaya_bazaar_voice_write_review_fields() {
   }
 
   return $write_review_fields;
+}
+
+/**
+ * Implements hook_alshaya_my_account_links_alter().
+ */
+function alshaya_bazaar_voice_alshaya_my_account_links_alter(array &$links) {
+  // Add reviews links for my account page.
+  $links['user_reviews'] = [
+    'text' => t('Reviews'),
+    'route' => 'alshaya_bazaar_voice.user_reviews',
+    'weight' => 41,
+  ];
+}
+
+/**
+ * Implements hook_alshaya_srp_sort_settings_form_alter().
+ */
+function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['sort_options']['#options']['attr_bv_average_overall_rating'] = t('Top Rated');
 }

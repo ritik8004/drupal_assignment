@@ -16,7 +16,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I wait 10 seconds
 
   @cc @hd @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com)
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com)
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
     And I wait for the page to load
@@ -29,7 +29,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
@@ -58,7 +58,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @desktop @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -76,7 +76,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
@@ -105,7 +105,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @mobile @checkout_com
-  Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
+  Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -121,7 +121,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods #delivery-method-home_delivery" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish

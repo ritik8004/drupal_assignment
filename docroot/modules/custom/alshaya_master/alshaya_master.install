@@ -11,6 +11,17 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall alshaya_rum module.
+ */
+function alshaya_master_update_8044() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_rum')) {
+    \Drupal::service('module_installer')->uninstall(['alshaya_rum']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add free gift translations.
  */
 function alshaya_master_update_8043() {

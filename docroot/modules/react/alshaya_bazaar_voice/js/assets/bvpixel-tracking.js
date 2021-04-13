@@ -47,4 +47,4 @@
     },
   };
 })(jQuery, Drupal, drupalSettings);
-  
+
