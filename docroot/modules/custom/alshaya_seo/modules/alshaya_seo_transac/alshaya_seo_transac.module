@@ -185,10 +185,10 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
  * Implements hook_datalayer_alter().
  */
 function alshaya_seo_transac_datalayer_alter(&$data_layer) {
-  // Skip for anonymous user.
-  if ($data_layer['userUid'] !=0 ) {
-    $customer_id = _alshaya_seo_transac_datalayer_user_id($data_layer['userUid']);
-    $data_layer['userUid'] = isset($customer_id) ? $customer_id : 0;
+  // Check for data layer user uid greater then 0.
+  if ($data_layer['userUid'] > 0) {
+    // Set data layer userUid as customer id.
+    $data_layer['userUid'] = _alshaya_seo_transac_datalayer_user_id($data_layer['userUid']);
   }
 
   if (!_alshaya_seo_process_gtm()) {
@@ -686,13 +686,14 @@ function _alshaya_seo_transac_alshaya_algolia_react_plp_prerender(array $build) 
  */
 function _alshaya_seo_transac_datalayer_user_id($uid) {
   $user_customer_id = &drupal_static(__FUNCTION__);
-  if (!isset($user_customer_id)) {
+  // Check if user customer id is set to some value.
+  if (!isset($user_customer_id[$uid])) {
     $current_user = \Drupal::entityTypeManager()->getStorage('user')->load($uid);
     // If current user is having customer_id then cutomer_id
     // value is stored otherwise default value is 0.
     // Handle by typecasting.
-    $user_customer_id = (int) $current_user->get('acq_customer_id')->getString();
+    $user_customer_id[$uid] = (int) $current_user->get('acq_customer_id')->getString();
   }
 
-  return $user_customer_id;
+  return $user_customer_id[$uid];
 }
