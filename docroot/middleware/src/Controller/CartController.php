@@ -368,7 +368,10 @@ class CartController {
     // If payment method is not available in the list, we set the first
     // available payment method.
     if (!empty($response['payment'])) {
-      $codes = array_column($response['payment']['methods'], 'code');
+      $this->logger->notice('The payment object in response is Payment: @payment', [
+        '@payment' => json_encode($response['payment']),
+      ]);
+      $codes = (!empty($response['payment']['methods'])) ? array_column($response['payment']['methods'], 'code') : [];
       if (!empty($response['payment']['method'])
         && !in_array($response['payment']['method'], $codes)) {
         unset($response['payment']['method']);
