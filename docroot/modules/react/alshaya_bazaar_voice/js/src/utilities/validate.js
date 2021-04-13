@@ -15,7 +15,8 @@ export const processFormDetails = (e) => {
       return;
     }
     if (!element.value.length) {
-      document.getElementById(`${element.id}-error`).innerHTML = getStringMessage('empty_field_default_error');
+      const title = getStringMessage('screen_name');
+      document.getElementById(`${element.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': title });
       document.getElementById(`${element.id}-error`).classList.add('error');
       document.getElementById(`${element.id}`).classList.add('error');
       isError = true;

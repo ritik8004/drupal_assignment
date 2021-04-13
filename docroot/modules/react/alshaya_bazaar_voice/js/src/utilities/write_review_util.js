@@ -110,6 +110,7 @@ export const validateRequest = (elements, fieldsConfig) => {
     const id = fieldsConfig[key]['#id'];
     const required = fieldsConfig[key]['#required'];
     const groupType = fieldsConfig[key]['#group_type'];
+    const title = fieldsConfig[key]['#title'];
     // Validate input data from field types.
     try {
       if (required) {
@@ -117,12 +118,12 @@ export const validateRequest = (elements, fieldsConfig) => {
           switch (groupType) {
             case 'textfield':
             case 'textarea':
-              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_field_default_error');
+              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': title });
               document.getElementById(`${id}-error`).classList.add('error');
               isError = true;
               break;
             case 'select':
-              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_select_field_default_error');
+              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_select_field_default_error', { '%fieldTitle': title });
               document.getElementById(`${id}-error`).classList.add('error');
               isError = true;
               break;

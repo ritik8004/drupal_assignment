@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import 'element-closest-polyfill';
 import ConditionalView from '../../../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
 export default class SelectField extends React.Component {
   constructor(props) {
@@ -15,6 +16,13 @@ export default class SelectField extends React.Component {
 
   onMenuClose = () => {
     this.selectRef.current.select.inputRef.closest('.bv-select').classList.remove('open');
+  };
+
+  handleChange = (selectedOption) => {
+    const { id } = this.props;
+    if (selectedOption.value.length > 0) {
+      document.getElementById(`${id}-error`).innerHTML = '';
+    }
   };
 
   render() {
@@ -54,6 +62,8 @@ export default class SelectField extends React.Component {
             isSearchable={false}
             isDisabled={false}
             hidden={visible}
+            onChange={this.handleChange}
+            placeholder={getStringMessage('selectlist_placeholder')}
           />
           <div id={`${id}-error`} className="error" />
         </div>
