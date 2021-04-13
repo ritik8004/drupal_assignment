@@ -142,14 +142,7 @@ class Drupal {
    *   Items data with info from drupal.
    */
   public function getCartItemDrupalStock($sku) {
-    $url = sprintf('/rest/v1/product-status/%s', base64_encode($sku));
-    // Bypass CloudFlare to get fresh stock data.
-    // Rules are added in CF to disable caching for urls having the following
-    // query string.
-    // The query string is added since same APIs are used by MAPP also.
-    $response = $this->invokeApi('GET', $url, ['query' => ['_cf_cache_bypass' => '1']]);
-    $result = $response->getBody()->getContents();
-    return json_decode($result, TRUE);
+    return getProductStatus($sku);
   }
 
   /**
@@ -162,20 +155,42 @@ class Drupal {
    *   CnC status for cart.
    */
   public function getCncStatusForCart(string $skus_list = '') {
-    $skus = explode($skus_list);
-    if (empty($skus)) {
+    if (empty($skus_list)) {
       return FALSE;
     }
+    $skus = explode(',', $skus_list);
     foreach ($skus as $sku) {
-      $url = sprintf('/rest/v1/product-status/%s', base64_encode($sku));
-      $response = $this->invokeApi('GET', $url);
-      $result = $response->getBody()->getContents();
-      $result = json_decode($result, TRUE);
+      $result = getProductStatus($sku);
       if (!$result['cnc_enabled']) {
         return FALSE;
       }
     }
     return TRUE;
+  }
+
+  /**
+   * Get Product status.
+   *
+   * @param string $sku
+   *   SKU.
+   *
+   * @return array
+   *   Product status with info from drupal.
+   */
+  public function getProductStatus($sku) {
+    static $product_status;
+    if (isset($product_status[$sku])) {
+      return $product_status[$sku];
+    }
+    $url = sprintf('/rest/v1/product-status/%s', base64_encode($sku));
+    // Bypass CloudFlare to get fresh stock data.
+    // Rules are added in CF to disable caching for urls having the following
+    // query string.
+    // The query string is added since same APIs are used by MAPP also.
+    $response = $this->invokeApi('GET', $url, ['query' => ['_cf_cache_bypass' => '1']]);
+    $result = $response->getBody()->getContents();
+    $product_status[$sku] = json_decode($result, TRUE);
+    return $product_status[$sku];
   }
 
   /**
