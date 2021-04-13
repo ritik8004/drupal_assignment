@@ -12,7 +12,7 @@
         &-right,
         &-left {
           @include breakpoint($only-mobile) {
-            bottom: 9rem;
+            bottom: 0;
           }
         }
       }
@@ -131,6 +131,21 @@
           span {
             color: $algolia_react-facet-item-color;
           }
+        }
+      }
+    }
+
+    .listing-inline-star {
+      justify-content: $left;
+      margin-bottom: 0;
+
+      .rating-label {
+        margin-#{$right}: 0.5rem;
+      }
+
+      .star-ratings-wrapper {
+        .inline-star {
+          top: 0.0625rem;
         }
       }
     }
@@ -476,7 +491,7 @@ body[class*="super-category"] {
           &-right,
           &-left {
             @include breakpoint($only-mobile) {
-              bottom: 8rem;
+              bottom: 0;
             }
           }
         }

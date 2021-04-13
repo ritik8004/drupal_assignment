@@ -369,7 +369,7 @@ class AlshayaProductDeltaFeedHelper {
 
       $sku = $this->skuInfoHelper->getEntityTranslation($sku, $lang);
       $locale = AlshayaI18nLanguages::getLocale($lang);
-      $locale_key_prefix = 'lng:' . strtolower($locale) . ':';
+      $locale_key_prefix = 'lng:' . $locale . ':';
       // Prepare default fields.
       $default_fields = $this->getSkuDetails($node, $sku, $lang, $locale_key_prefix);
 

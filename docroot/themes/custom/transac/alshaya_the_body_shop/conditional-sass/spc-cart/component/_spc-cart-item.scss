@@ -1,0 +1,15 @@
+.spc-cart-items {
+  .spc-cart-item {
+    .spc-product-title {
+      a {
+        font-size: 0.8125rem;
+        font-family: $alshaya-medium;
+        text-transform: capitalize;
+      }
+    }
+
+    .spc-product-attributes-wrapper {
+      font-size: 0.6875rem;
+    }
+  }
+}

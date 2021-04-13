@@ -557,11 +557,12 @@ class CartController {
             ]);
             return new JsonResponse($shipping_methods);
           }
-
-          $shipping_info['carrier_info'] = [
-            'code' => $shipping_methods[0]['carrier_code'],
-            'method' => $shipping_methods[0]['method_code'],
-          ];
+          if (!empty($shipping_methods)) {
+            $shipping_info['carrier_info'] = [
+              'code' => $shipping_methods[0]['carrier_code'],
+              'method' => $shipping_methods[0]['method_code'],
+            ];
+          }
 
           $this->logger->notice('Shipping update manual for HD. Data: @data Address: @address Cart: @cart_id', [
             '@address' => json_encode($shipping_info),
@@ -762,9 +763,10 @@ class CartController {
           $extension['attempted_payment'] = 1;
         }
 
-        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method', [
+        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method Data: @data', [
           '@cart_id' => $this->cart->getCartId(),
           '@method' => $request_content['payment_info']['payment']['method'],
+          '@data' => json_encode($request_content['payment_info']['payment']),
         ]);
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;

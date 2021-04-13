@@ -23,6 +23,13 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
   use SiteAliasManagerAwareTrait;
 
   /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * Database Connection.
    *
    * @var \Drupal\Core\Database\Connection
@@ -59,7 +66,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
                               Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory) {
-    $this->logger = $logger_channel_factory->get('alshaya_brand');
+    $this->drupalLogger = $logger_channel_factory->get('alshaya_brand');
     $this->connection = $connection;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
@@ -88,7 +95,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $unused_assets = $this->getUnusedAssets();
 
     if (empty($unused_assets)) {
-      $this->logger()->notice('No asset files to check.');
+      $this->drupalLogger->notice('No asset files to check.');
       return;
     }
 
@@ -157,7 +164,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $unused_assets = $this->getUnusedAssets();
 
     if (empty($unused_assets)) {
-      $this->logger()->notice('No unused asset available.');
+      $this->drupalLogger->notice('No unused asset available.');
       return;
     }
 
@@ -206,7 +213,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     'dry-run' => FALSE,
   ]) {
     if (!$this->configFactory->get('alshaya_brand.settings')->get('brand_main_site')) {
-      $this->logger()->notice('Skipping as not main site of the brand.');
+      $this->drupalLogger->notice('Skipping as not main site of the brand.');
       return;
     }
 
@@ -216,7 +223,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $domains = $this->getBrandDomains();
 
     if (empty($domains)) {
-      $this->logger()->notice('Failed to fetch domains.');
+      $this->drupalLogger->notice('Failed to fetch domains.');
       return;
     }
 
@@ -246,7 +253,7 @@ class AlshayaBrandAssetsCommands extends DrushCommands implements SiteAliasManag
     $unused_brand_assets_merged = array_unique(call_user_func_array('array_merge', $unused_brand_assets));
 
     if (empty($unused_brand_assets_merged)) {
-      $this->logger()->notice('No unused brand assets found.');
+      $this->drupalLogger->notice('No unused brand assets found.');
       return;
     }
 

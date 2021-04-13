@@ -31,10 +31,23 @@ const IndividualReviewSlider = ({
             <div className="display-slider">
               <div className="slider-label">{sliderData[item].MinLabel}</div>
               <div className="slide-dot-container">
-                <div className="slide-dot" />
-                <div className="slide-dot" />
-                <div className="slide-dot" />
-                <div className="slide-dot" />
+                {
+                  (sliderData[item].ValueRange) === 3
+                    ? (
+                      <>
+                        <div className={`slide-dot slide-range-${sliderData[item].ValueRange}`} />
+                        <div className={`slide-dot slide-range-${sliderData[item].ValueRange}`} />
+                      </>
+                    )
+                    : (
+                      <>
+                        <div className="slide-dot" />
+                        <div className="slide-dot" />
+                        <div className="slide-dot" />
+                        <div className="slide-dot" />
+                      </>
+                    )
+                }
                 {
                   (direction === 'rtl')
                     ? (

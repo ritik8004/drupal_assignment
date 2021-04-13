@@ -3,6 +3,7 @@
     position: absolute;
     max-width: 5rem;
     z-index: 0;
+    line-height: 0;
 
     .c-pdp & {
       z-index: 5;
@@ -10,10 +11,6 @@
 
     .c-plp & {
       z-index: 1;
-
-      @include breakpoint($only-mobile) {
-        z-index: 0;
-      }
     }
 
     &.top {
@@ -56,36 +53,32 @@
 
     &.bottom {
       &-left {
-        bottom: 12.5rem;
+        bottom: 0;
         #{$left}: 0.5rem;
         #{$right}: inherit;
 
         @include breakpoint($only-tablet) {
-          bottom: 9.5rem;
           #{$left}: 0.9375rem;
           #{$right}: inherit;
         }
 
         @include breakpoint($desktop) {
-          bottom: 8.5rem;
           #{$left}: 2rem;
           #{$right}: inherit;
         }
       }
 
       &-right {
-        bottom: 12.5rem;
+        bottom: 0;
         #{$right}: 0.5rem;
         #{$left}: inherit;
 
         @include breakpoint($only-tablet) {
-          bottom: 9.5rem;
           #{$right}: 0.9375rem;
           #{$left}: inherit;
         }
 
         @include breakpoint($desktop) {
-          bottom: 8.5rem;
           #{$right}: 2rem;
           #{$left}: inherit;
         }
@@ -101,11 +94,7 @@
       &.bottom {
         &-left,
         &-right {
-          bottom: 0.5rem;
-
-          @include breakpoint($tablet) {
-            bottom: 8.5rem;
-          }
+          bottom: 0;
         }
       }
     }
@@ -120,16 +109,12 @@
   .gallery-wrapper {
     .labels-container {
       .label {
+        z-index: 1;
+
         &.bottom {
           &-left,
           &-right {
-            @include breakpoint($only-tablet) {
-              bottom: 4.5rem;
-            }
-
-            @include breakpoint($desktop) {
-              bottom: 1.5rem;
-            }
+            bottom: 0;
           }
         }
       }
@@ -156,12 +141,8 @@
       &.bottom {
         &-left,
         &-right {
-          @include breakpoint($only-tablet) {
-            bottom: 8.5rem;
-          }
-
           @include breakpoint($desktop) {
-            bottom: 12.5rem;
+            bottom: 0;
           }
         }
       }
@@ -175,8 +156,22 @@
       &.bottom {
         &-left,
         &-right {
-          bottom: 5.5rem;
+          bottom: 1.1rem;
         }
+      }
+    }
+  }
+}
+
+.image-label-wrapper,
+.spc-product-recommended-image {
+  position: relative;
+
+  .labels-container {
+    &.bottom {
+      &-left,
+      &-right {
+        bottom: 0;
       }
     }
   }

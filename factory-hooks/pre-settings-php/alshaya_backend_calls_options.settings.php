@@ -111,6 +111,9 @@ $settings['alshaya_backend_calls_options'] = [
     'cart_get' => [
       'timeout' => 10,
     ],
+    'get_categories' => [
+      'timeout' => 300,
+    ],
   ],
   'appointment_booking' => [
     'default' => [

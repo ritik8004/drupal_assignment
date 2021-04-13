@@ -11,9 +11,13 @@ site_id: 'main_site'
 environment: 'staging'
 pdp_rating_reviews: false
 write_review_submission: false
-reviews_limit_per_page: 5
-write_review_tnc: ''
-write_review_guidlines: ''
-comment_form_tnc: ''
+write_review_tnc: '/terms-and-conditions'
+write_review_guidlines: '/writing-guidelines'
+comment_form_tnc: '/terms-and-conditions'
 bv_content_types: 'Products,Comments'
 comment_form_box_length: 100
+bv_routes_list: ''
+reviews_pagination_type: 'load_more'
+reviews_initial_load: 5
+reviews_on_loadmore: 10
+reviews_per_page: 5

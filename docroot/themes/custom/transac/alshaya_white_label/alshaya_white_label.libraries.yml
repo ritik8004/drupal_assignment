@@ -3,7 +3,6 @@ global_styles:
     theme:
       css/colors.css: {}
   js:
-    vendor/js/calc.min.js: {}
     js/custom.js: {}
     js/menu.js: {}
     js/form.js: {}
@@ -168,10 +167,6 @@ plp_search_js:
 jquery_mobile_touch_swipe:
   js:
     vendor/js/jquery.touchSwipe.min.js: {}
-
-pace:
-  js:
-    /libraries/pace/pace.min.js: {}
 
 magazine_attribute:
   js:
@@ -506,6 +501,8 @@ bazaar-voice:
   css:
     theme:
       css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/style-review-stars
 
 store_finder:
   css:
@@ -526,3 +523,13 @@ advanced-page:
   css:
     theme:
       css/conditional-sass/advanced-page/advanced-page.ltr.css: {}
+
+style-review-stars:
+  css:
+    theme:
+      css/conditional-sass/style-review-stars/style-review-stars.ltr.css: {}
+
+myaccount-reviews:
+  css:
+    theme:
+      css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css: {}

@@ -408,6 +408,7 @@ class ClickCollectController extends ControllerBase {
    *   Return Ajax response with commands.
    */
   public function getProductStoresJson($sku, $lat, $lon) {
+    $sku = base64_decode($sku);
     $data = $this->getProductStores($sku, $lat, $lon);
     // Condition to get only Json response
     // for click and collect pdp.

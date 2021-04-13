@@ -1,0 +1,18 @@
+.webform-submission-alshaya-contact-form {
+  .form-submit {
+    font-size: 1rem;
+    font-family: $alshaya-medium;
+  }
+}
+
+.alias--contact {
+  .webform-submission-alshaya-contact-form {
+    .contact-us-feedback {
+      width: 100%;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+}

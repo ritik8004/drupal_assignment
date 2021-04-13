@@ -1,0 +1,31 @@
+#myaccount-reviews {
+  .product-block {
+    .product-desc-block {
+      .product-title {
+        font-family: $bp-bold;
+      }
+    }
+  }
+
+  .review {
+    &-title,
+    &-date,
+    &-text {
+      font-family: $bp-thin;
+    }
+  }
+
+  .user-reviews {
+    .user-secondary-rating {
+      .attribute-list {
+        .slider-header {
+          font-family: $bp-bold;
+
+          .slider-header-label {
+            font-family: $bp-thin;
+          }
+        }
+      }
+    }
+  }
+}

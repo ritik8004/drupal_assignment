@@ -615,7 +615,7 @@
       #{$left}: 0;
       background: $lhn_sticky-filter-background;
       width: 100%;
-      z-index: 2;
+      z-index: 10;
       height: 3.75rem;
       box-shadow: 0 0.125rem 0.25rem 0 $lhn_sticky-header-desktop-shadow;
     }

@@ -1,0 +1,13 @@
+main:
+  version: 1
+  js:
+    js/alshaya_track_js.main.js: { weight: -1 }
+  dependencies:
+    - core/drupal
+
+add_to_cart:
+  version: 1
+  js:
+    js/alshaya_track_js.add_to_cart.js: {}
+  dependencies:
+    - core/drupal
