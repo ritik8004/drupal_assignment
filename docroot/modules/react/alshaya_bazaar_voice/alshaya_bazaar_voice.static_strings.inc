@@ -76,11 +76,11 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'empty_field_default_error',
-      'value' => t('Please enter value for this field.'),
+      'value' => t('Please enter value for %fieldTitle.'),
     ],
     [
       'key' => 'empty_select_field_default_error',
-      'value' => t('Please select value for this field.'),
+      'value' => t('Please select value for %fieldTitle.'),
     ],
     [
       'key' => 'valid_email_error',
@@ -233,6 +233,10 @@ function _alshaya_bazaar_voice_static_strings() {
     [
       'key' => 'load_more',
       'value' => t('Load more'),
+    ],
+    [
+      'key' => 'selectlist_placeholder',
+      'value' => t('Select...'),
     ],
   ];
 }
