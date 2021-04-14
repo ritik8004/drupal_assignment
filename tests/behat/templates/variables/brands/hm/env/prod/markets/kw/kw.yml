@@ -3,3 +3,4 @@ variables:
   product_listing_page_url: "/shop-women/shop-product/dresses/"
   spc_product_listing_page: '/shop-women/shop-product/dresses/'
   spc_basket_page: '/shop-women/shop-product/dresses/'
+  spc_promotion_listing_page: '/buy-7-pack-cotton-briefs-pink-days-week.html/'

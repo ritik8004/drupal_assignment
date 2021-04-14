@@ -3,7 +3,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Guest user
 
   @desktop @dynamic
   Scenario: As a Guest User, I should be able to add coupon promotions & get discount direct on Cart page
-    Given I am on "{spc_product_listing_page}"
+    Given I am on "{spc_promotion_listing_page}"
     And I wait for the page to load
     And the element ".promotions" should exist
     When I select a product in stock on ".c-products__item"
@@ -73,7 +73,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Guest user
 
   @language @dynamic
   Scenario: As a Guest user, I should be able to add coupon promotions & get discount direct on Cart page
-    Given I am on "{spc_product_listing_page}"
+    Given I am on "{spc_promotion_listing_page}"
     And I wait for the page to load
     When I follow "{language_link}"
     And I wait for the page to load
@@ -145,7 +145,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Guest user
 
   @mobile @dynamic
   Scenario: As a Guest User, I should be able to add coupon promotions & get discount direct on Cart page
-    Given I am on "{spc_product_listing_page}"
+    Given I am on "{spc_promotion_listing_page}"
     And I wait for the page to load
     And the element ".promotions" should exist
     When I select a product in stock on ".c-products__item"

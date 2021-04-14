@@ -100,7 +100,7 @@ variables:
   payment_type: 'Pay on Delivery'
   payment_type_text: 'payment method:'
   continue_shopping_text: 'continue shopping'
-  governorate: ''
+  governorate: 'Abha'
   address_area_field: 'Abqaiq'
   spc_search_keyword: 'sport'
   filter_1: 'attr_actual_color_label_code'
