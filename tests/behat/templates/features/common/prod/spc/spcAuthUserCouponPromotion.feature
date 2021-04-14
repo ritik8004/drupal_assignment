@@ -1,4 +1,4 @@
-@javascript @coupon-promotion @discount @smoke @auth @pbsauat
+@javascript @coupon-promotion @discount @smoke @auth
 Feature: SPC to add coupon promotions & get discount in cart page for Authenticated user
 
   Background:
@@ -60,16 +60,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
-    And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
-    Then I should see "{order_confirm_text}"
-    Then I should see "{spc_auth_user_email}"
-    Then I should see "{order_detail}"
-    Then the element ".discount-total" should exist
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @language @dynamic
   Scenario: As an Authenticated User, I should be able to add coupon promotions & get discount direct on Cart page
@@ -124,16 +115,8 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
-    And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
-    Then I should see "{language_order_confirm_text}"
-    Then I should see "{spc_auth_user_email}"
-    Then I should see "{language_order_detail}"
-    Then the element ".discount-total" should exist
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+
 
   @mobile @dynamic
   Scenario: As an Authenticated User, I should be able to add coupon promotions & get discount direct on Cart page
@@ -185,13 +168,4 @@ Feature: SPC to add coupon promotions & get discount in cart page for Authentica
     And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
-    And  I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
-    And I wait 50 seconds
-    And I wait for AJAX to finish
-    And I wait for the page to load
-    Then I should be on "/checkout/confirmation" page
-    And I wait for the page to load
-    Then I should see "{order_confirm_text}"
-    Then I should see "{spc_auth_user_email}"
-    Then I should see "{order_detail}"
-    Then the element ".discount-total" should exist
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
