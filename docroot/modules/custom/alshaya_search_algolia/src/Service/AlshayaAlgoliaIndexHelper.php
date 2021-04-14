@@ -309,7 +309,7 @@ class AlshayaAlgoliaIndexHelper {
 
     // Restore the language manager to it's original language.
     $this->languageManager->setConfigOverrideLanguage($original_language);
-    $prices = $this->skuManager->getMinPrices($sku, $product_color, TRUE);
+    $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
