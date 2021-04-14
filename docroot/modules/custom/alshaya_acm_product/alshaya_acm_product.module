@@ -371,7 +371,6 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'mainImage' => '',
       'hoverImage' => '',
-      'losanges' => '',
     ],
   ];
 
@@ -540,7 +539,16 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->getCacheTags());
 
-      if ($view_mode == 'full') {
+      if ($view_mode == 'search_result') {
+        $build['labels'] = [
+          '#theme' => 'product_labels',
+          '#labels' => $skuManager->getLabels($sku_entity, 'plp'),
+          '#sku' => $sku_identifier,
+          '#mainsku' => $sku_identifier,
+          '#type' => 'plp',
+        ];
+      }
+      elseif ($view_mode == 'full') {
         $sku = $skuManager->getSkuForNode($entity, TRUE);
         if (empty($sku)) {
           throw new NotFoundHttpException();
