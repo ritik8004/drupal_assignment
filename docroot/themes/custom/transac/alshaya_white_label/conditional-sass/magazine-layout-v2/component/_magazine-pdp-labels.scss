@@ -9,3 +9,14 @@
     }
   }
 }
+
+.labels-wrapper {
+  > .labels-container {
+    &.top-left,
+    &.top-right {
+      @include breakpoint($only-mobile) {
+        top: 5.375rem !important;
+      }
+    }
+  }
+}
