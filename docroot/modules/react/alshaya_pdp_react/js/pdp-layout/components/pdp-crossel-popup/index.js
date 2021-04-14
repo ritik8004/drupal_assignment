@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import PdpInfo from '../pdp-info';
 import PdpGallery from '../pdp-gallery';
-import PdpProductLabels from '../pdp-product-labels';
 import PdpPopupContainer from '../utilities/pdp-popup-container';
 import PdpPopupWrapper from '../utilities/pdp-popup-wrapper';
 import PdpCart from '../pdp-cart';
@@ -11,6 +10,8 @@ import {
   showFullScreenLoader,
   removeFullScreenLoader,
 } from '../../../../../js/utilities/showRemoveFullScreenLoader';
+import Lozenges
+  from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 
 class CrossellPopupContent extends React.Component {
   constructor(props) {
@@ -130,7 +131,7 @@ class CrossellPopupContent extends React.Component {
               miniFullScreenGallery={false}
               animateMobileGallery={false}
             >
-              <PdpProductLabels skuCode={relatedSku} variantSelected={relatedSku} labels={labels} context="related" />
+              <Lozenges labels={labels} sku={relatedSku} />
             </PdpGallery>
             <PdpInfo
               title={title}
