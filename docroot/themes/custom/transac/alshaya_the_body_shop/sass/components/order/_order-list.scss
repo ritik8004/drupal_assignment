@@ -2,6 +2,16 @@
   .form-type-select {
     @include select-wrapper(9.375rem);
   }
+
+  .form-text {
+    border-#{$right}: 0;
+  }
+
+  .form-actions {
+    &::after {
+      border-#{$left}: 0;
+    }
+  }
 }
 
 .recent__orders--list {
