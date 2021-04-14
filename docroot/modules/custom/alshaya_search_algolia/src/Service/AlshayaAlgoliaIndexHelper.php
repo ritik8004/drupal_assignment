@@ -314,19 +314,19 @@ class AlshayaAlgoliaIndexHelper {
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
     // Used for highest discount.
-    $object['special_price'] = (float) $prices['special_price'];
+    $object['discount'] = $this->skuManager->getDiscountedPercent($object['price'], $object['final_price']);
     // Use max of selling prices for price in configurable products.
     if (!empty($prices['children'])) {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $object['price'] = max($selling_prices);
       // Use max of special prices in configurable products.
-      $special_price = array_filter(array_column($prices['children'], 'special_price'));
-      if (empty($special_price)) {
+      $discount = array_filter(array_column($prices['children'], 'discount'));
+      if (empty($discount)) {
         // If special prices is NULL in configurable products set 0.
-        $object['special_price'] = 0;
+        $object['discount'] = 0;
       }
       else {
-        $object['special_price'] = max($special_price);
+        $object['discount'] = max($discount);
       }
       $selling_prices = array_unique([
         min($selling_prices),
