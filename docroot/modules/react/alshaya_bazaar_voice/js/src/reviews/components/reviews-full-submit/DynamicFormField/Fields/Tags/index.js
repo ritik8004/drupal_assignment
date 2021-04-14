@@ -22,6 +22,7 @@ class Tags extends React.Component {
       label,
       defaultValue,
       text,
+      question,
     } = this.props;
     const { tagVal } = this.state;
 
@@ -29,6 +30,9 @@ class Tags extends React.Component {
       <>
         <ConditionalView condition={text !== undefined}>
           <div className="head-row">{text}</div>
+        </ConditionalView>
+        <ConditionalView condition={question !== undefined}>
+          <div className="write-review-type-tags-question">{question}</div>
         </ConditionalView>
         <div className="write-review-type-tags" id={`${id}-error`}>
           <input

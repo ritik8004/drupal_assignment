@@ -17,6 +17,7 @@ export default class WriteReviewButton extends React.Component {
 
   openModal = (e) => {
     e.preventDefault();
+    document.body.classList.add('open-form-modal');
 
     this.setState({
       isModelOpen: true,
@@ -25,6 +26,7 @@ export default class WriteReviewButton extends React.Component {
 
   closeModal = (e) => {
     e.preventDefault();
+    document.body.classList.remove('open-form-modal');
 
     this.setState({
       isModelOpen: false,
