@@ -4,10 +4,11 @@ import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
-import ReviewPhoto from '../review-photo';
+import ReviewPhotos from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
+import ReviewResponseDisplay from '../review-response-display';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -40,10 +41,14 @@ const ReviewDescription = ({
 
           {
             (reviewDescriptionData.Photos && reviewDescriptionData.Photos.length > 0)
-              ? <ReviewPhoto photoCollection={reviewDescriptionData.Photos} />
+              ? <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
               : null
           }
-
+          <ConditionalView condition={reviewDescriptionData.Photos
+            && reviewDescriptionData.Photos.length > 0}
+          >
+            <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
+          </ConditionalView>
           <div className="review-inline-feedback">
             <div>
               <ConditionalView condition={reviewDescriptionData.IsRecommended !== false
@@ -54,6 +59,12 @@ const ReviewDescription = ({
                   <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
                   <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
                 </div>
+              </ConditionalView>
+              <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
+                <ReviewResponseDisplay
+                  reviewId={reviewDescriptionData.Id}
+                  reviewResponses={reviewDescriptionData.ClientResponses}
+                />
               </ConditionalView>
               <div className="review-feedback">
                 <ReviewFeedback

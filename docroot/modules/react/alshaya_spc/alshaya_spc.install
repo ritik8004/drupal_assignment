@@ -9,6 +9,34 @@ use Symfony\Component\Lock\Store\PdoStore;
 use Drupal\Core\Database\Database;
 use Doctrine\DBAL\DBALException;
 use Drupal\Core\Utility\UpdateException;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.1.0] Remove old KNET payment method.
+ */
+function alshaya_spc_update_8009() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+
+  // Remove from excluded payment methods.
+  $data = $config->get('exclude_payment_methods');
+  unset($data['knet']);
+  $config->set('exclude_payment_methods', $data);
+
+  // Remove from partial fullfilment excluded payment methods.
+  $data = $config->get('refund_exclude_payment_methods');
+  unset($data['knet']);
+  $config->set('refund_exclude_payment_methods', $data);
+
+  $config->save(TRUE);
+
+  // Delete the KNET payment method taxonomy term.
+  $payment_method_term = \Drupal::service('alshaya_acm_checkout.options_manager')->loadPaymentMethod('knet');
+  if ($payment_method_term instanceof Term) {
+    $payment_method_term->delete();
+  }
+}
 
 /**
  * Implements hook_update_N().

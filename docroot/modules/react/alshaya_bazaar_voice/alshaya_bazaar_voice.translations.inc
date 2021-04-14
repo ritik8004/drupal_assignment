@@ -61,5 +61,14 @@ function _alshaya_bazaar_voice_translations() {
     'Post a Comment' => [
       'ar' => 'كتابة تعليق',
     ],
+    'Select...' => [
+      'ar' => 'أختر...',
+    ],
+    'Please enter value for %fieldTitle.' => [
+      'ar' => 'يرجى ادخال قيمة إلى %fieldTitle.',
+    ],
+    'Please select value for %fieldTitle.' => [
+      'ar' => 'يرجى اختيار قيمة إلى %fieldTitle.',
+    ],
   ];
 }

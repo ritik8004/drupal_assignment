@@ -6,7 +6,6 @@ use App\EventListener\StockEventListener;
 use App\Service\CheckoutCom\APIWrapper;
 use App\Service\Config\SystemSettings;
 use App\Service\Drupal\Drupal;
-use App\Service\Knet\KnetHelper;
 use App\Service\Magento\MagentoApiWrapper;
 use App\Service\Magento\MagentoInfo;
 use App\Service\Magento\CartActions;
@@ -70,13 +69,6 @@ class Cart {
    * @var \App\Service\CheckoutCom\APIWrapper
    */
   protected $checkoutComApi;
-
-  /**
-   * K-Net Helper.
-   *
-   * @var \App\Service\Knet\KnetHelper
-   */
-  protected $knetHelper;
 
   /**
    * Payment Data provider.
@@ -173,8 +165,6 @@ class Cart {
    *   Utility Service.
    * @param \App\Service\CheckoutCom\APIWrapper $checkout_com_api
    *   Checkout.com API Wrapper.
-   * @param \App\Service\Knet\KnetHelper $knet_helper
-   *   K-Net Helper.
    * @param \App\Service\PaymentData $payment_data
    *   Payment Data provider.
    * @param \App\Service\Config\SystemSettings $settings
@@ -205,7 +195,6 @@ class Cart {
     MagentoApiWrapper $magento_api_wrapper,
     Utility $utility,
     APIWrapper $checkout_com_api,
-    KnetHelper $knet_helper,
     PaymentData $payment_data,
     SystemSettings $settings,
     SessionStorage $session,
@@ -223,7 +212,6 @@ class Cart {
     $this->magentoApiWrapper = $magento_api_wrapper;
     $this->utility = $utility;
     $this->checkoutComApi = $checkout_com_api;
-    $this->knetHelper = $knet_helper;
     $this->paymentData = $payment_data;
     $this->settings = $settings;
     $this->session = $session;
@@ -989,9 +977,14 @@ class Cart {
       'extension' => (object) $extension,
     ];
 
+    // Adding a log to confirm/get what data we send to middleware from browser.
+    $this->logger->notice('Cart updatePayment data: @data. CartId: @cart_id', [
+      '@data' => json_encode($data),
+      '@cart_id' => $this->getCartId(),
+    ]);
     $update['payment'] = [
       'method' => $data['method'],
-      'additional_data' => $data['additional_data'],
+      'additional_data' => $data['additional_data'] ?? [],
     ];
 
     $expire = (int) $_ENV['CACHE_TIME_LIMIT_PAYMENT_METHOD_SELECTED'];
@@ -1069,24 +1062,6 @@ class Cart {
 
     // Method specific code.
     switch ($method) {
-      case 'knet':
-        $cart = $this->getCart();
-
-        $response = $this->knetHelper->initKnetRequest(
-          $cart['totals']['grand_total'],
-          $this->getCartId(),
-          $cart['cart']['extension_attributes']['real_reserved_order_id'],
-          $this->getCartCustomerId()
-        );
-
-        if (isset($response['redirectUrl']) && !empty($response['redirectUrl'])) {
-          $response['payment_type'] = 'knet';
-          $this->paymentData->setPaymentData($this->getCartId(), $response['id'], $response['data']);
-          throw new \Exception($response['redirectUrl'], 302);
-        }
-
-        throw new \Exception('Failed to initiate K-Net request.', 500);
-
       case 'checkout_com_upapi':
         switch ($additional_info['card_type']) {
           case 'new':

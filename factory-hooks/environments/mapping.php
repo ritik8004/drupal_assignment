@@ -173,6 +173,12 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'bbwqa_dev',
       ],
     ],
+    'bbwjo' => [
+      'dev' => [
+        'magento' => 'bbw_qa',
+        'conductor' => 'bbwjo_dev',
+      ],
+    ],
     'mckw' => [
       'dev' => [
         'magento' => 'mc_upgrade',

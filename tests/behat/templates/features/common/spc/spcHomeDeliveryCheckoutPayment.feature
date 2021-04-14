@@ -43,7 +43,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 50 seconds
+    And I wait 20 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method

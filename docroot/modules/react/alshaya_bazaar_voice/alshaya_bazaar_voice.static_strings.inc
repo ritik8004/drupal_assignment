@@ -76,11 +76,11 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'empty_field_default_error',
-      'value' => t('Please enter value for this field.'),
+      'value' => t('Please enter value for %fieldTitle.'),
     ],
     [
       'key' => 'empty_select_field_default_error',
-      'value' => t('Please select value for this field.'),
+      'value' => t('Please select value for %fieldTitle.'),
     ],
     [
       'key' => 'valid_email_error',
@@ -231,8 +231,20 @@ function _alshaya_bazaar_voice_static_strings() {
       'value' => t('You have not submitted any reviews.'),
     ],
     [
+      'key' => 'no_reviews_yet',
+      'value' => t('No reviews yet'),
+    ],
+    [
+      'key' => 'first_to_review',
+      'value' => t('Tell others what you think. Be the first to review this product!'),
+    ],
+    [
       'key' => 'load_more',
       'value' => t('Load more'),
+    ],
+    [
+      'key' => 'selectlist_placeholder',
+      'value' => t('Select...'),
     ],
   ];
 }

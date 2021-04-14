@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 
-const ReviewPhoto = ({
+const ReviewPhotos = ({
   photoCollection,
 }) => (
   <div className="thumbnail-img-block">
@@ -29,4 +29,4 @@ const ReviewPhoto = ({
   </div>
 );
 
-export default ReviewPhoto;
+export default ReviewPhotos;
