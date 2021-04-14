@@ -18,7 +18,7 @@
         .select2-selection__arrow {
           &::after {
             border: 0.0625rem solid $contact-form-select-dropdown-border;
-            border-left: none;
+            border-#{$left}: none;
           }
         }
       }
