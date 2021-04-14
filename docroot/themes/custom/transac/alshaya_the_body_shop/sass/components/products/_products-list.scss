@@ -1,0 +1,32 @@
+.c-plp {
+  .c-products__item {
+    text-align: #{$left};
+    font-size: 1rem;
+
+    .field--name-name {
+      padding: 0;
+      font-family: $alshaya-medium;
+    }
+
+    .price {
+      font-size: 0.875rem;
+      font-family: $alshaya-bold;
+
+      @include breakpoint($only-tablet) {
+        font-size: 1.125rem;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 1.5rem;
+      }
+    }
+
+    article {
+      &:hover {
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+}
