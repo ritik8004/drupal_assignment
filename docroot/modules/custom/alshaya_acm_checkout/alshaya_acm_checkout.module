@@ -216,15 +216,6 @@ function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, arr
     $cod_ar->setName('نقداً عند التسليم');
     $cod_ar->save();
 
-    // Cybersource.
-    $cybersource = $checkout_options_manager->loadPaymentMethod('cybersource');
-    $cybersource->setName('Credit Card');
-    $cybersource->save();
-
-    $cybersource_ar = $cybersource->addTranslation('ar', []);
-    $cybersource_ar->setName('البطاقة الإئتمانية');
-    $cybersource_ar->save();
-
     $country_code = Settings::get('country_code');
 
     // Checkout.com.
@@ -251,11 +242,6 @@ function alshaya_acm_checkout_alshaya_profile_installed_final_task($profile, arr
   // This is just to create click and collect method term during install.
   $checkout_options_manager->loadShippingMethod($code, $default_name, '', $acq_checkout_settings->get('click_collect_method_carrier_code'), $acq_checkout_settings->get('click_collect_method_method_code'), $default_order_description);
 
-  // Configure allowed credit cards for cybersource.
-  $configFactory = \Drupal::configFactory()->getEditable('acq_cybersource.settings');
-  // Allowed list is received in comments of MMCPA-164.
-  $configFactory->set('allowed_cc_types', 'VI,MC,DN');
-  $configFactory->save();
 }
 
 /**
@@ -302,67 +288,6 @@ function alshaya_acm_checkout_get_region_id_from_name($region, $country_code = '
  */
 function _alshaya_acm_checkout_get_last_order_from_session() {
   return \Drupal::service('alshaya_spc.order_helper')->getLastOrder();
-}
-
-/**
- * Implements hook_acq_cybersource_before_get_token_cart_alter().
- */
-function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartInterface $cart, array $form_data, array &$errors) {
-  $terms_accepted = isset($form_data['checkout_terms'], $form_data['checkout_terms']['terms']) && !empty($form_data['checkout_terms']['terms']);
-  $billing = $form_data['billing_address'];
-
-  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-
-  // Do all validations first.
-  if (!$terms_accepted) {
-    $errors['checkout_terms[terms]'] = t('Please agree to the Terms and Conditions.', [], ['context' => 'alshaya_static_text|agree_terms_and_condition']);
-  }
-
-  if (empty($billing['same_as_shipping']) || $billing['same_as_shipping'] != 1) {
-    if ($violations = $address_book_manager->validateAddress($billing['address']['billing'])) {
-      foreach ($violations as $field => $message) {
-        $errors['billing_address[address][billing][' . $field . ']'] = $message;
-      }
-    }
-  }
-
-  // When all other validations pass.
-  if (empty($errors)) {
-    /* @var \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper*/
-    $checkout_helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
-    if (!$checkout_helper->isReservedOrderSetInCart($cart)) {
-      $errors['global'] = acq_commerce_api_down_global_error_message();
-    }
-  }
-
-  if (!empty($errors)) {
-    return;
-  }
-
-  /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
-  $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
-
-  // Cybersource requires billing info to be available before it processes
-  // credit card. This info is set in the signed fields by Magento. To ensure
-  // we have the values set, we need to pass it to Magento before we start
-  // payment process.
-  if (!empty($billing['same_as_shipping']) && $billing['same_as_shipping'] == 1) {
-    $helper->setBillingFromShipping();
-  }
-  else {
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-    $address = $address_book_manager->getMagentoAddressFromAddressArray($billing['address']['billing']);
-    $helper->setBillingInfo(FALSE, $address);
-  }
-
-  Analytics::addAnalyticsInfoToCart(
-    $cart,
-    $form_data['ga_client_id'],
-    $form_data['tracking_id']
-  );
-
 }
 
 /**
