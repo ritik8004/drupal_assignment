@@ -10,7 +10,7 @@
   {% elseif (label.position == 'bottom-right') %}
     {% set bottomRight = bottomRight|merge([label.image]) %}
   {% else %}
-    {# Collect all unsupported positions in a diff array #}
+    {# Collect all unsupported positions in a diff array, but we dont render this. #}
     {% set noPosition = noPosition|merge([label.image]) %}
   {% endif %}
 {% endfor %}
@@ -39,8 +39,4 @@
   {% if bottomRight %}
     {{ _self.getlabels(item, bottomRight, 'bottom-right') }}
   {% endif %}
-
-{#  {% if noPosition %}#}
-{#    {{ _self.getlabels(item, noPosition, 'not-supported') }}#}
-{#  {% endif %}#}
 </div>
