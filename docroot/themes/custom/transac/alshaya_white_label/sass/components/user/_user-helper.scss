@@ -804,7 +804,10 @@ main .user-register-form {
               font-size: 1.25rem;
               text-align: center;
               width: 100%;
-              top: -3.6875rem;
+
+              @include breakpoint($tablet) {
+                top: -3.6875rem;
+              }
             }
           }
         }
