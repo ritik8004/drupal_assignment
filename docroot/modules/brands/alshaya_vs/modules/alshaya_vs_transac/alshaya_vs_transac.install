@@ -12,26 +12,6 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
- * [6.0.0] Update the metatag translations.
- */
-function alshaya_vs_transac_update_8014() {
-  $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
-  $category_config->set('tags.title', '[alshaya_seo:page_title]');
-  $category_config->save();
-  // Add ar translation for config.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'metatag.metatag_defaults.taxonomy_term__acq_product_category');
-  $tags = [
-    'title' => '[alshaya_seo:page_title]',
-  ];
-  $config->set('tags', $tags);
-  $config->save();
-
-  _alshaya_vs_transac_save_metatag_translations();
-}
-
-/**
- * Implements hook_update_N().
- *
  * [5.14.0] Adds lining and coverage fields in the sku base field existing config.
  * [5.14.0] Reindex to udpate the processed node titles.
  */
@@ -354,6 +334,10 @@ function _alshaya_vs_transac_save_metatag_translations() {
       'en' => 'Get cool and comfortable Victorias Secret [alshaya_seo:super_category] sale and offers',
       'ar' => 'الحصول على فيكتوريا سيكريت [alshaya_seo:super_category] صفقات على الانترنت والخصومات ',
     ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop cool and comfortable Victorias Secret [alshaya_seo:super_category] [term:name] products',
+      'ar' => 'شراء مجموعة كبيرة ومريحة ',
+    ],
     'alshaya_seo_sale_keywords' => [
       'en' => 'Shop [alshaya_seo:super_category] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] sale Collection',
       'ar' => 'Shop [alshaya_seo:super_category] [term:name] sale Online, Shop [term:name] sale in [alshaya_seo:country], Shop [alshaya_seo:super_category] [term:name] sale Collection',
@@ -375,22 +359,6 @@ function _alshaya_vs_transac_save_metatag_translations() {
     ],
     'Collection for @parent Online' => [
       'en' => 'for @parent Online',
-    ],
-    'alshaya_seo_text_before_cod' => [
-      'en' => 'Explore latest collection [alshaya_seo:and_sub_categories] in different styles, patterns and sizes online.',
-      'ar' => 'اكتشف احدث تشكيلة [alshaya_seo:and_sub_categories] بنماذج وأنماط مختلفة أونلاين .',
-    ],
-    'alshaya_seo_desc_start' => [
-      'en' => 'Shop sexy and comfortable Victoria’s Secret [alshaya_seo:super_category] [term:name] products',
-      'ar' => 'تسوق منتجات [alshaya_seo:super_category] [term:name] المريحة والجذابة',
-    ],
-    'alshaya_seo_desc_free_delivery_n_cod' => [
-      'en' => 'Enjoy ✓ Free Returns and ✓ Cash on Delivery!',
-      'ar' => 'ستمتع بمزايا ✓  الاسترجاع المجاني ✓  الدفع عند الاستلام!',
-    ],
-    'alshaya_seo_page_title' => [
-      'en' => 'Shop  [alshaya_seo:super_category] [term:name] Online | [supercategory:meta_title] [alshaya_seo:country]',
-      'ar' => 'تسوق [alshaya_seo:super_category] [term:name] فيكتوريا سيكريت | [supercategory:meta_title] [alshaya_seo:country]',
     ],
   ];
 

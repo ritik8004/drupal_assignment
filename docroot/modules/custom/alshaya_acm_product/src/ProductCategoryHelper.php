@@ -9,7 +9,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Class Product Category Helper.
@@ -38,13 +37,6 @@ class ProductCategoryHelper {
   protected $languageManager;
 
   /**
-   * Config Factory service object.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * ProductCategoryHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -53,17 +45,13 @@ class ProductCategoryHelper {
    *   Database connection.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory service object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               Connection $connection,
-                              LanguageManagerInterface $language_manager,
-                              ConfigFactoryInterface $config_factory) {
+                              LanguageManagerInterface $language_manager) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->connection = $connection;
     $this->languageManager = $language_manager;
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -305,29 +293,6 @@ class ProductCategoryHelper {
       $entity = $entity->getTranslation($langcode);
     }
     return $entity;
-  }
-
-  /**
-   * Get category level.
-   *
-   * @param int $tid
-   *   Term id.
-   *
-   * @return int
-   *   Category level.
-   */
-  public function getCategoryLevel($tid) {
-    $depth = 0;
-    if (!empty($tid)) {
-      $depth = (int) taxonomy_term_depth_get_by_tid($tid);
-      // Super category status.
-      $super_category_status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
-      if ($super_category_status == TRUE) {
-        $depth = $depth - 1;
-      }
-    }
-
-    return $depth;
   }
 
 }
