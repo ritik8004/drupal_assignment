@@ -1,9 +1,9 @@
 import React from 'react';
 import Slider from 'react-slick';
-import Labels from '../../labels';
 import { updateAfter } from '../../../utils';
 import ImageElement from '../imageHelper/ImageElement';
 import ConditionalView from '../../../../common/components/conditional-view';
+import Lozenges from '../../../../common/components/lozenges';
 
 const SliderElement = ({
   src, title, mouseenter, mouseout,
@@ -83,7 +83,7 @@ class SearchGallery extends React.PureComponent {
             title={title}
             className="b-lazy"
           />
-          <Labels labels={labels} sku={sku} />
+          <Lozenges labels={labels} sku={sku} />
         </div>
         <ConditionalView condition={initiateSlider}>
           <div className="alshaya_search_slider" data-slider-status={sliderStatus}>

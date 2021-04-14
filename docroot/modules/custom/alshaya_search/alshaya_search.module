@@ -154,6 +154,7 @@ function alshaya_search_theme($existing, $type, $theme, $path) {
         'mainImage' => [],
         'thumbnails' => [],
         'class' => NULL,
+        'losanges' => '',
       ],
       'template' => 'alshaya_search_gallery',
     ],
