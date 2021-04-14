@@ -741,10 +741,21 @@ class SkuImagesManager {
           }
         }
 
+        $losanges = [
+          '#theme' => 'product_labels',
+          '#labels' => $this->skuManager->getLabels($sku, 'plp'),
+          '#sku' => strtolower(Html::cleanCssIdentifier($sku->getSku())),
+          '#mainsku' => strtolower(Html::cleanCssIdentifier($sku->getSku())),
+          '#type' => 'plp',
+        ];
+
+        $gallery['#losanges'] = $losanges;
+
         if ($this->productDisplaySettings->get('gallery_show_hover_image')) {
           $gallery = [
             '#theme' => 'alshaya_assets_gallery',
             '#mainImage' => $search_main_image,
+            '#losanges' => $losanges,
           ];
 
           if ($search_hover_image) {
@@ -756,6 +767,7 @@ class SkuImagesManager {
             '#theme' => 'alshaya_search_gallery',
             '#mainImage' => $search_main_image,
             '#thumbnails' => $thumbnails,
+            '#losanges' => $losanges,
           ];
         }
 
