@@ -81,3 +81,18 @@
     height: 4.535rem;
   }
 }
+
+@include breakpoint($upto-desktop) {
+  .c-my-account-nav {
+    h3 {
+      color: $cyprus;
+      font-size: 0.875rem;
+      font-family: $alshaya-medium;
+    }
+
+    h3,
+    li {
+      border-color: $header-my-acc-heading-border;
+    }
+  }
+}
