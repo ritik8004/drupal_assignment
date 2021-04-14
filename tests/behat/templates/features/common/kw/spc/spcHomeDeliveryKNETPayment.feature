@@ -1,8 +1,8 @@
-@javascript @KNetPayment @guest @homeDelivery @bbwkwuat
+@javascript @KNetPayment @guest @homeDelivery @bbwkwuat @flkwuat
 Feature: SPC Checkout Home Delivery CC
 
   Background:
-    Given I am on "{spc_product_listing_page}"
+    Given I am on "{spc_basket_page}"
     And I wait 10 seconds
     And I wait for the page to load
 

@@ -120,9 +120,13 @@
                     return;
                   }
                   var closestForm = $(that).closest('form.sku-base-form');
+                  let errorMessage = response.error_message;
+                  if (response.error_code === '604') {
+                    errorMessage = Drupal.t('The product that you are trying to add is not available.');
+                  }
 
                   // Showing the error message.
-                  $(closestForm).find('.errors-container').html('<div class="error">' + response.error_message + '</div>');
+                  $(closestForm).find('.errors-container').html('<div class="error">' + errorMessage + '</div>');
 
                   // Process required data and trigger add to cart failure event.
                   productData.options = [];

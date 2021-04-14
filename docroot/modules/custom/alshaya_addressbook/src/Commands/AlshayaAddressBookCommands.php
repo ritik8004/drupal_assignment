@@ -15,6 +15,13 @@ use Drush\Commands\DrushCommands;
 class AlshayaAddressBookCommands extends DrushCommands {
 
   /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * Alshaya address book manager.
    *
    * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface
@@ -31,7 +38,7 @@ class AlshayaAddressBookCommands extends DrushCommands {
    */
   public function __construct(LoggerChannelFactoryInterface $loggerChannelFactory,
                               AlshayaAddressBookManagerInterface $alshayaAddressBookManager) {
-    $this->logger = $loggerChannelFactory->get('alshaya_addressbook');
+    $this->drupalLogger = $loggerChannelFactory->get('alshaya_addressbook');
     $this->alshayaAddressBookManager = $alshayaAddressBookManager;
   }
 
@@ -45,17 +52,17 @@ class AlshayaAddressBookCommands extends DrushCommands {
   public function syncAreas() {
     // DM Version check.
     if ($this->alshayaAddressBookManager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $this->logger->error('Incorrect DM version for this command.');
+      $this->drupalLogger->error('Incorrect DM version for this command.');
       return;
     }
 
     // Update the area list.
-    $this->logger->notice('Synchronizing all areas, please wait...');
+    $this->drupalLogger->notice('Synchronizing all areas, please wait...');
 
     // Import DM data.
     $this->alshayaAddressBookManager->syncAreas();
 
-    $this->logger->notice('Done.');
+    $this->drupalLogger->notice('Done.');
   }
 
   /**
@@ -68,7 +75,7 @@ class AlshayaAddressBookCommands extends DrushCommands {
   public function syncFormFields() {
     // DM Version check.
     if ($this->alshayaAddressBookManager->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $this->logger->error('Incorrect DM version for this command.');
+      $this->drupalLogger->error('Incorrect DM version for this command.');
       return;
     }
 
@@ -76,7 +83,7 @@ class AlshayaAddressBookCommands extends DrushCommands {
     $this->alshayaAddressBookManager->resetMagentoFormFields();
     // Invalidate checkout page cache.
     Cache::invalidateTags(['page_manager_route_name:alshaya_spc.checkout']);
-    $this->logger->notice('Form fields cache reset.');
+    $this->drupalLogger->notice('Form fields cache reset.');
   }
 
 }

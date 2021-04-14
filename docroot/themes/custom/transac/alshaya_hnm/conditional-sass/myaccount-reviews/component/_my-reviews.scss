@@ -1,0 +1,10 @@
+#myaccount-reviews {
+  .star-ratings-wrapper {
+    .icon-ic_ratingfull,
+    .icon-ic_rating {
+      &::before {
+        font-size: 2rem;
+      }
+    }
+  }
+}

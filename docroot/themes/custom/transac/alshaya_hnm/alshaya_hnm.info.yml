@@ -134,3 +134,13 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css: css/conditional-sass/bazaar-voice/bazaar-voice.ltr.css
+
+  alshaya_white_label/style-review-stars:
+    css:
+      theme:
+        css/conditional-sass/style-review-stars/style-review-stars.ltr.css: css/conditional-sass/style-review-stars/style-review-stars.ltr.css
+
+  alshaya_white_label/myaccount-reviews:
+    css:
+      theme:
+        css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css: css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css

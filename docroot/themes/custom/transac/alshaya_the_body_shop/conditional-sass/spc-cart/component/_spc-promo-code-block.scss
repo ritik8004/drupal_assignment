@@ -1,0 +1,13 @@
+.spc-promo-code-block {
+  .promo-submit {
+    font-family: $alshaya-medium;
+    text-transform: capitalize;
+  }
+
+  #promo-code {
+    font-size: 0.875rem;
+    color: $spc-promo-code-text;
+    border: 1px solid $spc-promo-code-text;
+    height: 3.1875rem;
+  }
+}

@@ -19,7 +19,7 @@ function alshaya_bazaar_voice_install() {
   $manager->updateConfigs(
     [
       'core.entity_form_display.taxonomy_term.acq_product_category.default',
-      'core.entity_view_display.taxonomy_term.acq_product_category.default'
+      'core.entity_view_display.taxonomy_term.acq_product_category.default',
     ],
     'alshaya_acm_product_category',
     'install',
@@ -31,6 +31,25 @@ function alshaya_bazaar_voice_install() {
   if ($translations = _alshaya_bazaar_voice_translations()) {
     alshaya_i18n_save_translations($translations);
   }
+  // Add field for Rating filter to be used as facet.
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+  // Update widget type as star rating.
+  $facet_ids = [
+    'plp_bv_rating',
+    'promo_bv_rating',
+    'bv_rating',
+  ];
+  foreach ($facet_ids as $facet_id) {
+    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
+      ->set('widget.type', 'star_rating')
+      ->save();
+  }
+  // Provide sorting option Top rated in srp/plp.
+  _add_sort_option_in_plp_srp_config_form();
 }
 
 /**
@@ -52,4 +71,38 @@ function alshaya_bazaar_voice_uninstall() {
   if (!is_null($webform)) {
     $webform->delete();
   }
+}
+
+/**
+ * Add sorting option (Top rated) in srp/plp configuration form.
+ */
+function _add_sort_option_in_plp_srp_config_form() {
+  // Update srp sorting configurations.
+  $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
+  $labels = $config->get('sort_options_labels');
+  $new_labels = [
+    [
+      'value' => 'attr_bv_average_overall_rating ASC',
+      'label' => '',
+    ],
+    [
+      'value' => 'attr_bv_average_overall_rating DESC',
+      'label' => 'Top Rated',
+    ],
+  ];
+  $labels = array_merge($labels, $new_labels);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
+
+  // Update plp sorting configurations.
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
+  // Update available option.
+  $available_sort_options = $config->get('available_sort_options');
+  $available_sort_options['attr_bv_average_overall_rating'] = 'Top Rated';
+  $config->set('available_sort_options', $available_sort_options);
+  // Update sorting options labels.
+  $labels = $config->get('sort_options_labels');
+  $labels = array_merge($labels, $new_labels);
+  $config->set('sort_options_labels', $labels);
+  $config->save();
 }

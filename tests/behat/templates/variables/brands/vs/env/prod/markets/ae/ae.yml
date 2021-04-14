@@ -1,4 +1,4 @@
 variables:
-  spc_product_listing_page: '/victorias-secret/shop-sport/all-sport/'
-  spc_basket_page: '/victorias-secret/shop-sport/all-sport/'
-  product_listing_page_url: "/victorias-secret/shop-sport/all-sport/"
+  spc_product_listing_page: '/victorias-secret/shop-sleep/all-sleep/'
+  spc_basket_page: '/victorias-secret/shop-sleep/all-sleep/'
+  product_listing_page_url: "/victorias-secret/shop-sleep/all-sleep/"

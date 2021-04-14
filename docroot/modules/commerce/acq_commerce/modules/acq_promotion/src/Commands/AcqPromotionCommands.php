@@ -15,6 +15,13 @@ use Drush\Commands\DrushCommands;
  */
 class AcqPromotionCommands extends DrushCommands implements SiteAliasManagerAwareInterface {
 
+  /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
   use SiteAliasManagerAwareTrait;
 
   /**
@@ -35,7 +42,7 @@ class AcqPromotionCommands extends DrushCommands implements SiteAliasManagerAwar
   public function __construct(AcqPromotionsManager $acqPromotionsManager,
                               LoggerChannelFactoryInterface $loggerChannelFactory) {
     $this->acqPromotionsManager = $acqPromotionsManager;
-    $this->logger = $loggerChannelFactory->get('acq_promotion');
+    $this->drupalLogger = $loggerChannelFactory->get('acq_promotion');
   }
 
   /**
@@ -59,17 +66,17 @@ class AcqPromotionCommands extends DrushCommands implements SiteAliasManagerAwar
    */
   public function syncPromotions(array $options = ['types' => NULL]) {
     if ($types = $options['types']) {
-      $this->logger->notice(dt('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]));
+      $this->drupalLogger->notice(dt('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]));
       $types = explode(',', $types);
       $types = array_map('trim', $types);
       $this->acqPromotionsManager->syncPromotions($types);
     }
     else {
-      $this->logger->notice(dt('Synchronizing all commerce promotions, this usually takes some time...'));
+      $this->drupalLogger->notice(dt('Synchronizing all commerce promotions, this usually takes some time...'));
       $this->acqPromotionsManager->syncPromotions();
     }
 
-    $this->logger->notice(dt('Promotion sync completed.'));
+    $this->drupalLogger->notice(dt('Promotion sync completed.'));
   }
 
   /**
@@ -103,7 +110,7 @@ class AcqPromotionCommands extends DrushCommands implements SiteAliasManagerAwar
     $attach = $this->processManager()->process($command);
     $attach->run($attach->showRealtime());
 
-    $this->logger->notice(dt('Promotions synced and queue-run started in screens.'));
+    $this->drupalLogger->notice(dt('Promotions synced and queue-run started in screens.'));
   }
 
 }

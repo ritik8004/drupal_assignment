@@ -171,7 +171,9 @@ class UserResetPassword extends ResourceBase {
       return $this->mobileAppUtility->sendStatusResponse($this->t('You have tried to use a one-time login link that has expired. Please request a new one.'));
     }
 
-    if (!(Crypt::hashEquals($hash, user_pass_rehash($user, $timestamp)))) {
+    // If last login time is greater than timestamp
+    // or hash check is false. Expire one time login link.
+    if (($user->getLastLoginTime() >= $timestamp) || !(Crypt::hashEquals($hash, user_pass_rehash($user, $timestamp)))) {
       return $this->mobileAppUtility->sendStatusResponse($this->t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new.'));
     }
 
@@ -191,6 +193,12 @@ class UserResetPassword extends ResourceBase {
         $customer_id = $user->get('acq_customer_id')->getString();
         $this->apiWrapper->updateCustomerPass(['customer_id' => $customer_id], $new_password);
         _alshaya_user_password_policy_history_insert_password_hash($user, $new_password);
+
+        // Update last login time.
+        // This is to replicate behaviour on web frontend
+        // so as to expire the one time login link.
+        $user->setLastLoginTime($current);
+        $user->save();
       }
     }
     catch (\Exception $e) {

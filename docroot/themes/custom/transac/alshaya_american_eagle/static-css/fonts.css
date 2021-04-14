@@ -1,0 +1,145 @@
+@font-face {
+  font-family: "AvenirNext-DemiBold";
+  src:
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNext-DemiBold.woff2") format("woff2"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNext-DemiBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNext";
+  src:
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNext.woff2") format("woff2"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNext.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNextLTW01-Regular";
+  src:
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTW01-Regular.woff2") format("woff2"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTW01-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tahoma-Bold";
+  src:
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/Tahoma-Bold.woff2") format("woff2"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/Tahoma-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tahoma";
+  src:
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/Tahoma.woff2") format("woff2"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/Tahoma.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNext LT Pro";
+  src:
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-Bold.woff2") format("woff2"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Avenir-Next-LT-Pro-Heavy-Condensed";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/Avenir-Next-LT-Pro-Heavy-Condensed_5190.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNext-Bold";
+  src:
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-Bold.woff2") format("woff2"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNext-Bold-Condensed";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-BoldCn.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNext-Demi-Italic";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-DemiIt.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNextLTPro-Heavy";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-Heavy.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNextLTPro-Italic";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-It.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNextLTPro-Light";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-Light.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNextLTPro-MediumIt";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-MediumIt.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AvenirNextLTPro-UltLtCn";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/AvenirNextLTPro-UltLtCn.otf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DidonesqueW05-Bold";
+  src: url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/DidonesqueW05-Bold.eot?#iefix") format("embedded-opentype");
+  src:
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/DidonesqueW05-Bold.woff") format("woff"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/DidonesqueW05-Bold.ttf") format("truetype"),
+    url("https://www.americaneagle.com.kw/themes/custom/transac/alshaya_american_eagle/fonts/DidonesqueW05-Bold.svg#DidonesqueW05-Bold") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

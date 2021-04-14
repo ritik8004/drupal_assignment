@@ -34,6 +34,13 @@ class AcqSkuDrushCommands extends DrushCommands {
 
   use StringTranslationTrait;
 
+  /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
   const DELETE_BATCH_COUNT = 200;
 
   /**
@@ -199,7 +206,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->ingestApiWrapper = $ingestAPIWrapper;
     $this->conductorCategoryManager = $conductorCategoryManager;
     $this->productOptionsManager = $productOptionsManager;
-    $this->logger = $loggerChannelFactory->get('acq_sku');
+    $this->drupalLogger = $loggerChannelFactory->get('acq_sku');
     $this->connection = $connection;
     $this->entityTypeManager = $entityTypeManager;
     $this->queryFactory = $queryFactory;
@@ -343,7 +350,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       }
     }
     else {
-      $this->logger->notice(dt('Not cleaning(deleting) old terms as there is no term update/create.'));
+      $this->drupalLogger->notice(dt('Not cleaning(deleting) old terms as there is no term update/create.'));
     }
 
     $this->output->writeln(dt('Done.'));
@@ -359,9 +366,9 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @aliases acspo,sync-commerce-product-options
    */
   public function syncProductOptions() {
-    $this->logger->notice(dt('Synchronizing all commerce product options, please wait...'));
+    $this->drupalLogger->notice(dt('Synchronizing all commerce product options, please wait...'));
     $this->productOptionsManager->synchronizeProductOptions();
-    $this->logger->notice(dt('Product attribute sync completed.'));
+    $this->drupalLogger->notice(dt('Product attribute sync completed.'));
   }
 
   /**
@@ -822,7 +829,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $skus = array_filter(explode(',', $skus));
     $verbose = $options['verbose'];
 
-    $this->logger()->notice('Checking all media...');
+    $this->drupalLogger->notice('Checking all media...');
 
     $select = $this->connection->select('acq_sku_field_data');
     $select->fields('acq_sku_field_data', ['sku']);
@@ -861,7 +868,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     batch_set($batch);
     drush_backend_batch_process();
 
-    $this->logger()->notice('Processed all skus to find missing media items.');
+    $this->drupalLogger->notice('Processed all skus to find missing media items.');
   }
 
   /**
@@ -956,9 +963,9 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @aliases cat-sync-process
    */
   public function catSyncProcess() {
-    $this->logger->notice(dt('Processing category sync for push mode. Please wait ...'));
+    $this->drupalLogger->notice(dt('Processing category sync for push mode. Please wait ...'));
     $this->categorySyncHelper->processCatSync();
-    $this->logger->notice(dt('Processing category sync completed.'));
+    $this->drupalLogger->notice(dt('Processing category sync completed.'));
   }
 
   /**
