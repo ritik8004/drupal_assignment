@@ -125,3 +125,4 @@ Feature: SPC to add Free shipping promotion on cart for Authenticated user
     And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I wait 10 seconds
     And I scroll to the "#spc-payment-methods" element
+    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
