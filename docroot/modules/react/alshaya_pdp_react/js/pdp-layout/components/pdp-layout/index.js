@@ -11,12 +11,13 @@ import PdpStandardDelivery from '../pdp-standard-delivery';
 import PdpSharePanel from '../pdp-share-panel';
 import PdpClickCollect from '../pdp-click-and-collect';
 import PdpRelatedProducts from '../pdp-related-products';
-import PdpProductLabels from '../pdp-product-labels';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
 import magv2Sticky from '../../../../../js/utilities/magv2StickySidebar';
 import magv2StickyHeader from '../../../../../js/utilities/magv2StickyHeader';
+import Lozenges
+  from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -187,7 +188,7 @@ const PdpLayout = () => {
             miniFullScreenGallery={isTouchDevice}
             animateMobileGallery
           >
-            <PdpProductLabels skuCode={skuItemCode} variantSelected={variant} labels={labels} context="main" />
+            <Lozenges labels={labels} sku={skuItemCode} />
           </PdpGallery>
         </div>
         <div className="magv2-sidebar" ref={sidebarContainer}>

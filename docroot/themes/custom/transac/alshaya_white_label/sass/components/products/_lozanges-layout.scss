@@ -16,6 +16,7 @@
     &.top-left {
       top: 0.5rem;
       #{$left}: 0.5rem;
+      text-align: $left;
 
       @include breakpoint($tablet) {
         top: 0.9375rem;
@@ -36,6 +37,7 @@
     &.top-right {
       top: 0.5rem;
       #{$right}: 0.5rem;
+      text-align: $right;
 
       @include breakpoint($tablet) {
         top: 0.9375rem;
@@ -56,6 +58,7 @@
     &.bottom-left {
       bottom: 0.5rem;
       #{$left}: 0.5rem;
+      text-align: $left;
 
       @include breakpoint($tablet) {
         bottom: 0.9375rem;
@@ -76,6 +79,7 @@
     &.bottom-right {
       bottom: 0.5rem;
       #{$right}: 0.5rem;
+      text-align: $right;
 
       @include breakpoint($tablet) {
         bottom: 0.9375rem;
