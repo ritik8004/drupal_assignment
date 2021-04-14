@@ -319,10 +319,10 @@ class AlshayaAlgoliaIndexHelper {
     if (!empty($prices['children'])) {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $object['price'] = max($selling_prices);
-      // Use max of special prices in configurable products.
+      // Use Dicount in configurable products.
       $discount = array_filter(array_column($prices['children'], 'discount'));
       if (empty($discount)) {
-        // If special prices is NULL in configurable products set 0.
+        // If Discount is NULL in configurable products set 0.
         $object['discount'] = 0;
       }
       else {
