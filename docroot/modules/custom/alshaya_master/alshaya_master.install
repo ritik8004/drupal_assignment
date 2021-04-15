@@ -1642,7 +1642,7 @@ function alshaya_master_install() {
       'ar' => 'أقل من @stop',
     ],
     '@start - @stop' => [
-      'ar' => '@stop - @start',
+      'ar' => '@start - @stop',
     ],
     'Features and benefits' => [
       'ar' => 'المزايا و الفوائد',
