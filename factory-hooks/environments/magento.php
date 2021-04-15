@@ -265,6 +265,12 @@ $magentos = [
     'eg' => [
       'store_id' => ['en' => 8, 'ar' => 7],
     ],
+    'bh' => [
+      'store_id' => ['en' => 10, 'ar' => 9],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 12, 'ar' => 11],
+    ],
   ],
   'hm_uat' => [
     'url' => 'https://hm-uat2.store.alshaya.com',
