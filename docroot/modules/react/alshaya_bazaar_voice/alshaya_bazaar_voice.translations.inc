@@ -92,7 +92,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'شكراً على إبداء رأيك! سوف يتم التصيف كي تتم مشاهدته في أقرب وقت.',
     ],
     'I would recommend this product.' => [
-      'ar' => 'إني أنصح بهذا المنتج.',
+      'ar' => 'سوف أوصي بهذا المنتج',
     ],
   ];
 }
