@@ -48,7 +48,7 @@
 }
 
 .price {
-  text-align: $left;
+  display: inline-block;
 
   html[lang=ar] & {
     direction: ltr;
