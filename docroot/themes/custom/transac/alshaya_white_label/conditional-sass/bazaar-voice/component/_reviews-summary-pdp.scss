@@ -429,4 +429,26 @@
       display: inline-block;
     }
   }
+
+  .load-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 4.5rem;
+
+    .load-more {
+      width: 10.625rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-border;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1;
+      text-align: center;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin: 0 0.5rem;
+      }
+    }
+  }
 }
