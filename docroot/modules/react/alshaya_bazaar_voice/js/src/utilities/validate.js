@@ -42,8 +42,9 @@ export const processFormDetails = (e) => {
   const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length;
   if (targetElementCommentbox !== undefined
     && targetElementCommentbox.value.toString().length < commentMinLength) {
+    const label = getStringMessage('comment');
     document.getElementById(`${targetElementCommentbox.id}`).classList.add('error');
-    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': commentMinLength });
+    document.getElementById(`${targetElementCommentbox.id}-error`).innerHTML = getStringMessage('text_min_chars_limit_error', { '%minLength': targetElementCommentbox.minLength, '%fieldTitle': label });
     document.getElementById(`${targetElementCommentbox.id}-error`).classList.add('error');
     isError = true;
   }
