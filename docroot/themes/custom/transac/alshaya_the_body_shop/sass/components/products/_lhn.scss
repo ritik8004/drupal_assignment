@@ -7,4 +7,16 @@
       }
     }
   }
+
+  ul {
+    li {
+      font-size: 0.875rem;
+
+      a.lhn-3 {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
