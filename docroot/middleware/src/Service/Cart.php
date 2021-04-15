@@ -1883,6 +1883,7 @@ class Cart {
       'order_id' => (int) $order_id,
       'cart' => $cart['cart'],
       'payment_method' => $payment_method,
+      'customer_id' => $this->getCartCustomerId(),
     ];
 
     $this->drupal->triggerCheckoutEvent('place order success', $data);
