@@ -4,6 +4,7 @@
       &-comment {
         button {
           font-family: $bp-thin;
+          border-radius: 0.1875rem;
         }
       }
     }
@@ -43,6 +44,12 @@
 
   .empty-review-summary {
     .write-review-button {
+      border-radius: 0.1875rem;
+    }
+  }
+
+  .load-more-wrapper {
+    .load-more {
       border-radius: 0.1875rem;
     }
   }
