@@ -156,7 +156,9 @@ class AlshayaSpcCheckoutEventController extends ControllerBase {
         }
 
         // Clear the customer order cache.
-        $this->ordersManager->clearOrderCache($customer_id, $account_id);
+        if (!empty($customer_id)) {
+          $this->ordersManager->clearOrderCache($customer_id, $account_id);
+        }
 
         // While debugging we log the whole cart object.
         $this->logger->debug('Placed order for cart: @cart', [
