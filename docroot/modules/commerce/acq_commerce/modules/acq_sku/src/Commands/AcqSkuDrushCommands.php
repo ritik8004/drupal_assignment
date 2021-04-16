@@ -687,9 +687,9 @@ class AcqSkuDrushCommands extends DrushCommands {
         ];
       }
 
+      $context_results = &$context['sandbox']['results'];
       // Allow other modules to add data to be deleted when cleaning up.
-      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context);
-
+      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context_results);
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_id'] = 0;
       $context['sandbox']['max'] = count($context['sandbox']['results']);
@@ -976,6 +976,25 @@ class AcqSkuDrushCommands extends DrushCommands {
   public function processBlacklistedProduct() {
     $event = new ProcessBlackListedProductsEvent();
     $this->dispatcher->dispatch(ProcessBlackListedProductsEvent::EVENT_NAME, $event);
+  }
+
+  /**
+   * Drush command to get the item count we need to delete.
+   *
+   * Get the items count we need to delete during commerce data cleanup.
+   *
+   * @validate-module-enabled acq_sku
+   *
+   * @command acq_sku:get-item-delete-count
+   *
+   * @usage drush acq_sku:get-item-delete-count
+   *   Get the items count we need to delete during commerce data cleanup.
+   */
+  public function getItemCountTodelete() {
+    $result = $this->connection->query("select nid as entity_id, 'node' as type from node where type in ('acq_product', 'acq_promotion', 'store') union select id as entity_id, 'acq_sku' as type from acq_sku union select tid as entity_id, 'taxonomy_term' as type from taxonomy_term_data where vid='acq_product_category'");
+    $data = $result->fetchAll(\PDO::FETCH_ASSOC);
+    $this->moduleHandler->alter('acq_sku_clean_synced_data', $data);
+    print count($data);
   }
 
 }
