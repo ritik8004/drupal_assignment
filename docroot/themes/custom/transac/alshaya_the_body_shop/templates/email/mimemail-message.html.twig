@@ -3,16 +3,17 @@
   <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <style type="text/css">
-        body,p {font-family: Arial, helvetica; font-size: 13px; line-height: 1.31; color: #333;}
+        body,p {font-family: Arial, helvetica; font-size: 13px; line-height: 1.31; color: #004236;}
         h1 {font-size: 24px; color: #004236; border-bottom: 1px solid #ddd; padding-bottom: 15px; font-weight: normal; text-transform: capitalize;}
-        a { color: #004236; text-decoration: none;}
+        a { color: #004236; font-weight: bold; text-decoration: underline;}
         .bold { font-weight: bold; }
-        .button { text-transform: uppercase; background: #004236; font-size: 12px; color: #fff; padding: 10px 30px; margin: 10px 0; display: inline-block;}
+        .button { text-transform: uppercase; background: #004236; font-size: 12px; color: #f8f3e8; padding: 10px 30px; margin: 10px 0; display: inline-block;}
         p { margin-bottom: 16px;}
         #center {min-height: 200px; padding: 0 25px;}
         #header {border-bottom: 1px solid #004236; padding: 25px 25px 25px 25px; margin-bottom: 23px;}
-        .footer {margin-top: 50px;}
-        u + #mimemail-body a {color: #004236;}
+        .footer {margin-top: 50px; background-color: #004236;}
+        .footer p {color: #f8f3e8;}
+        u + #mimemail-body a {color: #f5ece6;}
         u + #mimemail-body .button {color: #fff !important;}
         #mimemail-body.ar {text-align: right;}
         @media only screen and (max-device-width: 480px) {
@@ -24,8 +25,8 @@
       </style>
   </head>
   <body id="mimemail-body" class="{{ lang }}" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
-    <div id="header">
-      <img src="{{ email_logo }}" width="100%" alt="logo" title="logo"/>
+    <div id="header" style="text-align: center; background: #004236;">
+      <img src="{{ email_logo }}" style="max-width: 55px;" width="100%" alt="logo" title="logo"/>
     </div>
     <div id="center">
       <div id="main">
@@ -33,7 +34,7 @@
       </div>
     </div>
     <div class="footer" style="border-top: 2px solid #004236; text-align: center;">
-      <div style="padding-top: 30px; padding-bottom: 50px;">
+      <div style="padding-top: 20px; padding-bottom: 20px;">
         {% for name, link in links %}
           <a href="{{ link }}" target="_blank" style="text-decoration: none;">
             <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/imgs/icons/{{ name }}-icon.png" alt="{{ name|t }}" width="24.3px" title="{{ name|t }}" />
