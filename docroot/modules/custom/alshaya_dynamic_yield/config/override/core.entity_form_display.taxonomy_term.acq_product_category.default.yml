@@ -1,0 +1,17 @@
+dependencies:
+  config:
+    - field.field.taxonomy_term.acq_product_category.field_dy_category
+third_party_settings:
+  field_group:
+    group_configuration:
+      children:
+        - field_dy_category
+content:
+  field_dy_category:
+    weight: 16
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content

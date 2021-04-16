@@ -15,29 +15,6 @@ use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_update_N().
- *
- * Create new field (DY Category) for acq_product_category taxonomy.
- */
-function alshaya_acm_product_category_update_8047() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-
-  $fields = [
-    'field.storage.taxonomy_term.field_dy_category',
-    'field.field.taxonomy_term.acq_product_category.field_dy_category',
-    'core.entity_form_display.taxonomy_term.acq_product_category.default',
-    'core.entity_view_display.taxonomy_term.acq_product_category.default',
-  ];
-  $manager->updateConfigs(
-    $fields,
-    'alshaya_acm_product_category',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
-  );
-}
-
-/**
- * Implements hook_update_N().
  * 
  * Updating entity view display to hide DY banner name
  * from PLP and advanced page from website.
