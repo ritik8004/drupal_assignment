@@ -13,6 +13,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
     - field.field.taxonomy_term.acq_product_category.field_display_view_all
     - field.field.taxonomy_term.acq_product_category.field_dy_banner
+    - field.field.taxonomy_term.acq_product_category.field_dy_category
     - field.field.taxonomy_term.acq_product_category.field_group_by_sub_categories
     - field.field.taxonomy_term.acq_product_category.field_icon
     - field.field.taxonomy_term.acq_product_category.field_image_text_bg_color
@@ -132,6 +133,7 @@ third_party_settings:
         - field_meta_tags
         - field_pdp_image_slider_position
         - field_dy_banner
+        - field_dy_category
         - field_show_on_department_page
         - field_display_view_all
         - field_cta
@@ -404,6 +406,14 @@ content:
     region: content
   field_dy_banner:
     weight: 14
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_dy_category:
+    weight: 16
     settings:
       size: 60
       placeholder: ''

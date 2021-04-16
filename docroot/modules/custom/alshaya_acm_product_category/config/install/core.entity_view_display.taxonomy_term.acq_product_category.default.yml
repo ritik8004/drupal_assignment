@@ -26,6 +26,7 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
   - field.field.taxonomy_term.acq_product_category.field_display_view_all
   - field.field.taxonomy_term.acq_product_category.field_dy_banner
+  - field.field.taxonomy_term.acq_product_category.field_dy_category
   - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
   - field.field.taxonomy_term.acq_product_category.field_plp_menu
   - field.field.taxonomy_term.acq_product_category.field_icon
@@ -70,6 +71,7 @@ hidden:
   field_display_as_clickable_link: true
   field_display_view_all: true
   field_dy_banner: true
+  field_dy_category: true
   field_icon: true
   field_image_text_bg_color: true
   field_image_text_font_color: true

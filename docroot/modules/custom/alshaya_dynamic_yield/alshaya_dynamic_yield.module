@@ -5,9 +5,22 @@
  * Primary module hooks for Alshaya Dynamic Yield module.
  */
 
+use Drupal\taxonomy\TermInterface;
+
 /**
  * Implements hook_page_attachments().
  */
 function alshaya_dynamic_yield_page_attachments(array &$page) {
   $page['#attached']['library'][] = 'alshaya_dynamic_yield/alshaya_dynamic_yield.product_modal';
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_alter().
+ */
+function alshaya_dynamic_yield_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
+  if (!empty($category['custom_attributes'])) {
+    if (isset($category['custom_attributes']['dy_categories'])) {
+      $term->get('field_dy_category')->setValue($category['custom_attributes']['dy_categories']['value']);
+    }
+  }
 }
