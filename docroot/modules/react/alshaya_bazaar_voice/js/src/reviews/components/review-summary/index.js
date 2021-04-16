@@ -418,9 +418,7 @@ export default class ReviewSummary extends React.Component {
             />
           </ConditionalView>
           <ConditionalView condition={reviewSettings === 'load_more' && loadMoreLimit < currentTotal}>
-            <div className="load-more-wrapper">
-              <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
-            </div>
+            <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
           </ConditionalView>
         </ConditionalView>
         <ConditionalView condition={noResultmessage !== null}>
