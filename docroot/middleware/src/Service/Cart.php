@@ -1868,6 +1868,7 @@ class Cart {
   public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
     $email = $this->getCartCustomerEmail();
+    $customer_id = $this->getCartCustomerId();
 
     // Remove cart id and other caches from session.
     $this->removeCartFromSession();
@@ -1883,7 +1884,7 @@ class Cart {
       'order_id' => (int) $order_id,
       'cart' => $cart['cart'],
       'payment_method' => $payment_method,
-      'customer_id' => $this->getCartCustomerId(),
+      'customer_id' => $customer_id,
     ];
 
     $this->drupal->triggerCheckoutEvent('place order success', $data);
