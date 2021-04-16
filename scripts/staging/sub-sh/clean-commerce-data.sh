@@ -5,13 +5,27 @@ uri="$1"
 echo "Truncate acq_sku% tables to speed up commerce data cleaning."
 drush --uri=$uri sqlq "SHOW TABLES LIKE 'acq_sku%'" | xargs -I acq_sku_tables drush --uri=$uri sqlq "TRUNCATE table acq_sku_tables"
 
+# Max attempts to perform.
+max_data_clean_attempts=5
+
+# Flag to store current attempt.
+current_attempt=0
+
 while :
 do
   drush --uri=$uri clean-synced-data -y
   to_clean=$(drush --uri=$uri sqlq "select count(*) from (select nid from node where type in ('acq_product', 'acq_promotion', 'store') union select id from acq_sku union select tid from taxonomy_term_data where vid='acq_product_category') as tmp")
   echo "$to_clean items to clean"
 
+  ((current_attempt+=1))
+
   if [ $to_clean == "0" ]
+  then
+    break
+  fi
+
+  # If reached max attempts limit.
+  if [ $max_data_clean_attempts == $current_attempt ]
   then
     break
   fi
