@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6e031598a47e0b78d2df2abd3c2c4df6",
+    "content-hash": "0a16914b55eb5fc9c0fe7babe20c3d30",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1131,12 +1131,12 @@
             "version": "v5.7.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/dropzone/dropzone.git",
+                "url": "git@github.com:enyo/dropzone.git",
                 "reference": "78424e9c97b569e698cc9175e9bc424168219162"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dropzone/dropzone/zipball/78424e9c97b569e698cc9175e9bc424168219162",
+                "url": "https://api.github.com/repos/enyo/dropzone/zipball/78424e9c97b569e698cc9175e9bc424168219162",
                 "reference": "78424e9c97b569e698cc9175e9bc424168219162"
             },
             "type": "bower-asset"
@@ -13243,7 +13243,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch"
+                    "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch",
+                    "Base-uri policy": "https://git.drupalcode.org/project/seckit/-/merge_requests/5.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
