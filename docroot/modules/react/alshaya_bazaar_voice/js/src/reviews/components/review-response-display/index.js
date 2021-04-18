@@ -13,7 +13,7 @@ const ReviewResponseDisplay = ({
   return (
     <div>
       {reviewResponses.map((responseObj) => (
-        <div class="comment-submission-details">
+        <div className="comment-submission-details">
           <div className="comment-submission-wrapper" key={responseObj.Date}>
             <div className="comment-submission-box">
               <div className="comment-user-details">
