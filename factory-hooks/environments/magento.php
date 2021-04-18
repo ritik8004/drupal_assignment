@@ -613,6 +613,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 36, 'ar' => 33],
     ],
+    'jo' => [
+      'store_id' => ['en' => 42, 'ar' => 39],
+    ],
   ],
   'bbw_prod' => [
     'url' => 'https://bbw.store.alshaya.com',
