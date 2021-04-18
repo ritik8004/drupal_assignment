@@ -384,7 +384,7 @@ body {
   opacity: 1;
 }
 
-// RR thumbnail image
+// RR thumbnail image container style
 @mixin thumbnail-container () {
   border: 0;
   background: $rr-thumbnail-img-bg;
@@ -403,6 +403,7 @@ body {
   @content;
 }
 
+// RR thumbnail image style for my reviews, PDP and write a review form.
 @mixin thumbnail-style () {
   height: 100%;
   width: 100%;
