@@ -89,32 +89,6 @@ function alshaya_acm_checkout_acq_checkout_pane_pane_info_alter(array &$definiti
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Add markup to show selected card type.
-  if (isset($form['acm_payment_methods'], $form['acm_payment_methods']['payment_details_wrapper'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource'], $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource']['title'])) {
-    $cc_form =& $form['acm_payment_methods']['payment_details_wrapper']['payment_method_cybersource'];
-
-    $cc_form['card_types'] = [
-      '#markup' => '
-        <div class="card-types-wrapper">
-          <span class="card-type card-type-visa"></span>
-          <span class="card-type card-type-mastercard"></span>
-          <span class="card-type card-type-diners-club"></span>
-        </div>
-      ',
-    ];
-
-    if (isset($cc_form['payment_details'], $cc_form['payment_details']['cc_cvv'])) {
-      $cc_cvv_help = t('This code is a three or four digit number printed on the front or back of the credit card');
-      $cc_form['payment_details']['cc_cvv']['#prefix'] = '<div class="cvv-wrapper">';
-      $cc_form['payment_details']['cc_cvv']['#suffix'] = '<div class="cvv-help-text-wrapper"><div class="mobile-tooltip-icon"><span class="tooltip-icon"></span><span class="tooltip-content"><p>' . $cc_cvv_help . '</p></span></div><div class="cc_cvv_help_text">' . $cc_cvv_help . '</div></div></div>';
-    }
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_presave().
  */
 function alshaya_acm_checkout_taxonomy_term_presave(EntityInterface $entity) {
