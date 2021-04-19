@@ -18,9 +18,7 @@ function alshaya_dynamic_yield_page_attachments(array &$page) {
  * Implements hook_acq_sku_commerce_category_alter().
  */
 function alshaya_dynamic_yield_acq_sku_commerce_category_alter(TermInterface $term, array $category, $parent) {
-  if (!empty($category['custom_attributes'])) {
-    if (isset($category['custom_attributes']['dy_categories'])) {
-      $term->get('field_dy_category')->setValue($category['custom_attributes']['dy_categories']['value']);
-    }
+  if (!empty($category['custom_attributes']) && isset($category['custom_attributes']['dy_categories'])) {
+    $term->get('field_dy_category')->setValue($category['custom_attributes']['dy_categories']['value']);
   }
 }

@@ -29,9 +29,9 @@ function alshaya_dynamic_yield_update_8002() {
       'core.entity_form_display.taxonomy_term.acq_product_category.default',
       'core.entity_view_display.taxonomy_term.acq_product_category.default',
     ],
-    'alshaya_dynamic_yield',
-    'override',
-    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
   );
 }
 
