@@ -87,10 +87,10 @@
     }
 
     .thumbnail-img {
-      @include thumbnail-container ();
+      @include bv-photo-upload-container ();
 
       img {
-        @include thumbnail-style ();
+        @include bv-photo-upload-image ();
       }
     }
   }

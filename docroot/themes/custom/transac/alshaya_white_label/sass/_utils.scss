@@ -385,7 +385,7 @@ body {
 }
 
 // RR thumbnail image container style
-@mixin thumbnail-container () {
+@mixin bv-photo-upload-container () {
   border: 0;
   background: $rr-thumbnail-img-bg;
   box-sizing: border-box;
@@ -404,7 +404,7 @@ body {
 }
 
 // RR thumbnail image style for my reviews, PDP and write a review form.
-@mixin thumbnail-style () {
+@mixin bv-photo-upload-image () {
   height: 100%;
   width: 100%;
   object-fit: contain;

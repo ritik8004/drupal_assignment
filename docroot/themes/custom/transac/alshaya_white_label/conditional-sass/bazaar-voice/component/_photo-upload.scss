@@ -38,7 +38,7 @@
       background: $rr-thumbnail-img-bg;
 
       img {
-        @include thumbnail-style ();
+        @include bv-photo-upload-image ();
       }
 
       .exception-error {
