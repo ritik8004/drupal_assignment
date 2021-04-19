@@ -8,16 +8,14 @@ import ReviewPhoto from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getLanguageCode } from '../../../utilities/api/request';
 
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
 }) => {
   if (reviewDescriptionData !== undefined) {
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const langLocale = bazaarVoiceSettings.reviews.bazaar_voice.locale;
-    const date = getDate(reviewDescriptionData.SubmissionTime, langLocale);
+    const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
     return (
       <div className="review-detail-right">
         <div className="review-details">
