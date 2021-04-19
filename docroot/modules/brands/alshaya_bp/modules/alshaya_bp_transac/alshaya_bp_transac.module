@@ -232,8 +232,8 @@ function alshaya_bp_transac_form_alshaya_srp_sort_settings_form_alter(&$form, Fo
 /**
  * Implements hook_acq_sku_clean_synced_data_alter().
  */
-function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context) {
-  foreach ($context['sandbox']['results'] as $key => $data) {
+function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context_results) {
+  foreach ($context_results as $key => $data) {
     if ($data['type'] == 'taxonomy_term') {
       // Query for categories mapped in I&A pages.
       $value = \Drupal::database()->select('taxonomy_term__field_remove_shop_prefix', 'frsp')
@@ -243,7 +243,7 @@ function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context) {
       ->execute()
       ->fetchCol();
       if (reset($value)) {
-        unset($context['sandbox']['results'][$key]);
+        unset($context_results[$key]);
       }
     }
   }
