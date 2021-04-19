@@ -603,6 +603,11 @@ $conductors = [
     'hmac_secret' => 'ZTNlZjk3NTEtZDM4Yi00',
     'site_id' => 411,
   ],
+  'bbwjo_uat' => [
+    'hmac_id' => 'bc66cec14b3c44cba6556e0740d0aed0',
+    'hmac_secret' => 'MmIyMWMxMDMtOTE3Zi00',
+    'site_id' => 414,
+  ],
   // VictoriaSecret KW.
   'vskw_qa' => [
     'hmac_id' => 'd00662613f144789831ebfe3d5885e37',
