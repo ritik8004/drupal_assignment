@@ -269,6 +269,7 @@ class AlshayaProductDeltaFeedHelper {
     );
     // Get all category fields.
     $this->getFormattedProductCategories($fields, $node, $lang);
+    $this->getDyCategories($fields, $node, $lang);
     $description = $this->skuManager->getDescription($sku, 'full');
     $longText = $this->renderer->renderPlain($description)->__toString();
     $fields['description'] = !empty($longText) ? $this->getTruncatedDescription($longText, 1000, '') : '';
@@ -497,6 +498,75 @@ class AlshayaProductDeltaFeedHelper {
     });
 
     $fields['categories'] = !empty($parsed_categories) ? implode('|', array_unique($parsed_categories)) : '';
+  }
+
+  /**
+   * Wrapper function get DY categories.
+   *
+   * @param array $fields
+   *   Fields list.
+   * @param \Drupal\node\NodeInterface $node
+   *   The node object.
+   * @param string|null $lang
+   *   The lang code.
+   */
+  private function getDyCategories(array &$fields, NodeInterface $node, $lang = NULL) {
+    $categories = $node->get('field_category')->referencedEntities();
+
+    // Return if no categories attached to product.
+    if (empty($categories)) {
+      $fields['dy_categories'] = '';
+      return $fields;
+    }
+
+    foreach ($categories as $term) {
+      $term = $this->skuInfoHelper->getEntityTranslation($term, $lang);
+
+      // Skip if category is not enabled.
+      if (!$term->get('field_commerce_status')->getString()) {
+        continue;
+      }
+
+      $dy_category = $term->get('field_dy_category')->getString();
+
+      // Skip if dy_category field is empty or NONE.
+      if (empty($dy_category) || $dy_category === 'NONE') {
+        continue;
+      }
+
+      /** @var \Drupal\taxonomy\TermStorage $termStorage */
+      $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
+      $parents = $termStorage->loadAllParents($term->id());
+
+      // Loading parents of the first category having value in
+      // dy_category field for the product.
+      if (!empty($parents)) {
+        $parent_categories = [];
+        foreach ($parents as $parent) {
+          $parent_categories[] = $parent->label();
+        }
+        $dy_categories = array_reverse($parent_categories);
+      }
+
+      // Loading children of the first category having value in
+      // dy_category field for the product.
+      $children_tree = $termStorage->loadTree('acq_product_category', $term->id());
+
+      if (!empty($children_tree)) {
+        foreach ($children_tree as $child) {
+          $parent = reset($child->parents);
+          if (empty($dy_categories[$parent])) {
+            $dy_categories[$parent] = $child->name;
+          }
+        }
+      }
+
+      break;
+    }
+
+    $fields['dy_categories'] = !empty($dy_categories) ? implode('|', $dy_categories) : '';
+
+    return $fields;
   }
 
 }
