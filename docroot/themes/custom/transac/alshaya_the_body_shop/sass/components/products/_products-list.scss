@@ -29,4 +29,18 @@
       }
     }
   }
+
+  .c-page-title__description {
+    font-size: 1rem;
+  }
+}
+
+.c-content__region {
+  .term-description-mobile-only {
+    &.c-page-title__description {
+      @include breakpoint($only-mobile) {
+        padding: 0 1.25rem;
+      }
+    }
+  }
 }
