@@ -9,7 +9,35 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
+use Drupal\user\Entity\Role;
 
+/**
+ * Implements hook_update_N().
+ *
+ * [6.3.0] Delete the memory limit policy for /skus/list API.
+ */
+function alshaya_acm_product_update_8069() {
+  \Drupal::configFactory()->getEditable('memory_limit_policy.memory_limit_policy.path_based_memory')->delete();
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $configManager */
+  $configManager = \Drupal::service('alshaya_config.manager');
+
+  // Disable the config so that plugin not found error is not thrown.
+  $configManager->updateConfigs(
+    [
+      'rest.resource.sku_images',
+    ],
+    'alshaya_acm_product',
+    'install'
+  );
+
+  // Disable the resource related permissions.
+  foreach (Role::load('alshaya_magento_consumer') as $role) {
+    if ($role->hasPermission('restful post sku_images')) {
+      $role->revokePermission('restful post sku_images');
+    }
+    $role->save();
+  }
+}
 /**
  * Implements hook_update_N().
  *
