@@ -13,14 +13,16 @@ const ReviewResponseDisplay = ({
   return (
     <div>
       {reviewResponses.map((responseObj) => (
-        <div className="response-submission-wrapper" key={responseObj.Date}>
-          <div className="response-submission-box">
-            <div className="response-user-details">
-              <span className="response-user-name">{responseObj.Name}</span>
-              <span className="response-submission-date">{getTimeAgoDate(responseObj.Date, countryCode, getLanguageCode())}</span>
-            </div>
-            <div className="response-description">
-              <span className="response-description-text">{responseObj.Response}</span>
+        <div className="comment-submission-details">
+          <div className="comment-submission-wrapper" key={responseObj.Date}>
+            <div className="comment-submission-box">
+              <div className="comment-user-details">
+                <span className="comment-user-nickname admin">{responseObj.Name}</span>
+                <span className="comment-user-date">{getTimeAgoDate(responseObj.Date, countryCode, getLanguageCode())}</span>
+              </div>
+              <div className="comment-description">
+                <span className="comment-description-text">{responseObj.Response}</span>
+              </div>
             </div>
           </div>
         </div>

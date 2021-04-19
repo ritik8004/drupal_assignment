@@ -140,6 +140,10 @@
         &:not(:only-child)::after {
           content: ',';
         }
+
+        &.admin {
+          font-family: $alshaya-bold;
+        }
       }
 
       &-date {

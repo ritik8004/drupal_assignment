@@ -9,16 +9,14 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
 import ReviewResponseDisplay from '../review-response-display';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getLanguageCode } from '../../../utilities/api/request';
 
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
 }) => {
   if (reviewDescriptionData !== undefined) {
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const langLocale = bazaarVoiceSettings.reviews.bazaar_voice.locale;
-    const date = getDate(reviewDescriptionData.SubmissionTime, langLocale);
+    const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
     return (
       <div className="review-detail-right">
         <div className="review-details">
@@ -63,12 +61,6 @@ const ReviewDescription = ({
                   <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
                 </div>
               </ConditionalView>
-              <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
-                <ReviewResponseDisplay
-                  reviewId={reviewDescriptionData.Id}
-                  reviewResponses={reviewDescriptionData.ClientResponses}
-                />
-              </ConditionalView>
               <div className="review-feedback">
                 <ReviewFeedback
                   negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
@@ -82,6 +74,12 @@ const ReviewDescription = ({
             <ReviewCommentForm
               ReviewId={reviewDescriptionData.Id}
             />
+            <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
+              <ReviewResponseDisplay
+                reviewId={reviewDescriptionData.Id}
+                reviewResponses={reviewDescriptionData.ClientResponses}
+              />
+            </ConditionalView>
             <div className="review-comment-display">
               <ReviewCommentDisplay
                 reviewId={reviewDescriptionData.Id}

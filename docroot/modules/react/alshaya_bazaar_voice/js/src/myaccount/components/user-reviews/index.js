@@ -110,7 +110,9 @@ export default class UserReviews extends React.Component {
           </div>
         </ConditionalView>
         <ConditionalView condition={initialLimit < currentTotal}>
-          <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+          <div className="load-more-wrapper">
+            <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+          </div>
         </ConditionalView>
         <ConditionalView condition={noResultmessage !== null}>
           <EmptyMessage emptyMessage={noResultmessage} />
