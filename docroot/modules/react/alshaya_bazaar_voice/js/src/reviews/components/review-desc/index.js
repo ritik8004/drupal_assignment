@@ -61,12 +61,6 @@ const ReviewDescription = ({
                   <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
                 </div>
               </ConditionalView>
-              <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
-                <ReviewResponseDisplay
-                  reviewId={reviewDescriptionData.Id}
-                  reviewResponses={reviewDescriptionData.ClientResponses}
-                />
-              </ConditionalView>
               <div className="review-feedback">
                 <ReviewFeedback
                   negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
@@ -80,6 +74,12 @@ const ReviewDescription = ({
             <ReviewCommentForm
               ReviewId={reviewDescriptionData.Id}
             />
+            <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
+              <ReviewResponseDisplay
+                reviewId={reviewDescriptionData.Id}
+                reviewResponses={reviewDescriptionData.ClientResponses}
+              />
+            </ConditionalView>
             <div className="review-comment-display">
               <ReviewCommentDisplay
                 reviewId={reviewDescriptionData.Id}
