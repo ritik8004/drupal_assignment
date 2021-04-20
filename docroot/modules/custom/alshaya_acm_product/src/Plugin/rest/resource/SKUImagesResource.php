@@ -27,6 +27,7 @@ class SKUImagesResource extends ResourceBase {
    *   Array containing SKUs and language code.
    */
   public function post(array $request) {
+    // @todo Remove the rest API in future release.
     return [];
   }
 
