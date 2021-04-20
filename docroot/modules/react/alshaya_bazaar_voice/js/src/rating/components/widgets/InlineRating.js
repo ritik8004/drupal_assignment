@@ -5,13 +5,22 @@ import smoothScrollTo from '../../../utilities/smoothScroll';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../stars';
 
+function clickHandler(e, callbackFn) {
+  if (callbackFn === undefined) {
+    smoothScrollTo(e, '#reviews-section');
+  } else {
+    e.preventDefault();
+    callbackFn(e);
+  }
+}
 const InlineRating = ({
   reviewsData,
+  childClickHandler
 }) => (
   <div className="inline-rating">
     <div className="aggregate-rating" itemProp="aggregateRating" itemScope="" itemType="">
       <div className="empty-stars">
-        <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} href="#">
+        <a onClick={(e) => clickHandler(e, childClickHandler)} href="#">
           <DisplayStar
             starPercentage={reviewsData.ReviewStatistics.AverageOverallRating}
           />
@@ -34,7 +43,7 @@ const InlineRating = ({
       </div>
       <span>
         (
-        <a onClick={(e) => smoothScrollTo(e, '#reviews-section')} href="#">{reviewsData.TotalReviewCount}</a>
+        <a onClick={(e) => clickHandler(e, childClickHandler)} href="#">{reviewsData.TotalReviewCount}</a>
         )
       </span>
     </div>
