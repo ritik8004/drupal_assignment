@@ -25,7 +25,6 @@ function dynamic_yield_page_attachments(array &$page) {
       '#tag' => 'script',
       '#attributes' => [
         'src' => $dynamic_yield->getDynamicYieldStaticScriptCode(),
-        'async' => true,
       ],
     ],
       'spath',
@@ -35,7 +34,6 @@ function dynamic_yield_page_attachments(array &$page) {
       '#tag' => 'script',
       '#attributes' => [
         'src' => $dynamic_yield->getDynamicYieldDynamicScriptCode(),
-        'async' => true,
       ],
     ],
       'dpath',
