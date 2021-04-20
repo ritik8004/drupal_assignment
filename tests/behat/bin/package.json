@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "chromedriver": "^88"
+    "chromedriver": "^90"
   }
 }
