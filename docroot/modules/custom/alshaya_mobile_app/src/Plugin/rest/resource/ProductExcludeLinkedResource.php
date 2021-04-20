@@ -377,7 +377,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     if ($sku->bundle() === 'configurable') {
       $data['swatch_data'] = $this->getSwatchData($sku);
       $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
-
       foreach ($data['cart_combinations']['by_sku'] ?? [] as $values) {
         $child = SKU::loadFromSku($values['sku']);
         if (!$child instanceof SKUInterface) {
@@ -530,6 +529,18 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
 
     $size_labels = $this->skuInfoHelper->getSizeLabels($sku);
+    $size_types = [
+      'size',
+      'band_size',
+      'cup_size',
+      'size_shoe_eu',
+      'size_shoe_uk',
+      'size_shoe_us',
+    ];
+    $other_attribute_types = [
+      'fragrance',
+      'color',
+    ];
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
       $combinations['attribute_sku'][$attribute_code] = [
         'attribute_code' => $attribute_code,
@@ -540,8 +551,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
           'value' => $value,
           'skus' => $skus,
         ];
-
-        if ($attribute_code == 'size') {
+        // Checking for attribute codes for size and other attributes.
+        if (in_array($attribute_code, $size_types) ||
+        in_array($attribute_code, $other_attribute_types)) {
           if (!empty($size_labels[$value])) {
             $attr_value['label'] = $size_labels[$value];
           }
