@@ -1,0 +1,98 @@
+.c-menu-secondary {
+  a {
+    font-size: 0.75rem;
+    padding-#{$left}: 1.125rem;
+    padding-#{$right}: 1.125rem;
+
+    &:hover,
+    &.is-active {
+      color: $header_secondary_menu_link_hover;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    a {
+      font-size: 0.875rem;
+      font-family: $tbs-medium;
+      padding: 1rem 1.25rem;
+      text-transform: capitalize;
+    }
+
+    li {
+      border-color: $menu-secondary-border;
+      margin: 0;
+
+      &::after {
+        margin-#{$right}: 1rem;
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .menu--account {
+      li:first-child a,
+      li:nth-child(2) a,
+      li:last-child a {
+        &::before {
+          font-size: 0;
+        }
+      }
+
+      li:last-child a {
+        @at-root {
+          .logged-in & {
+            &::before {
+              font-size: 0;
+            }
+          }
+        }
+      }
+    }
+
+    .stores-finder {
+      &::before {
+        content: '';
+        padding: 0;
+      }
+    }
+
+    .block-language-blocklanguage-interface {
+      .ar {
+        a {
+          padding-#{$right}: 1.75rem;
+
+          &::before {
+            font-size: 0;
+          }
+        }
+      }
+
+      .en {
+        a::after {
+          font-size: 0;
+        }
+      }
+    }
+  }
+}
+
+.branding__menu {
+  @include breakpoint($only-tablet) {
+    height: 4.535rem;
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .c-my-account-nav {
+    h3 {
+      color: $cyprus;
+      font-size: 0.875rem;
+      font-family: $alshaya-medium;
+    }
+
+    h3,
+    li {
+      border-color: $header-my-acc-heading-border;
+    }
+  }
+}

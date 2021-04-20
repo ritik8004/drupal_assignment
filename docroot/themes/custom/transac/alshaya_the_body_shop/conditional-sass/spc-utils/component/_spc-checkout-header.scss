@@ -1,0 +1,16 @@
+.alias--checkout,
+.alias--checkout-confirmation {
+  .site-brand-home {
+    background: $spc-checkout-header-bg;
+
+    @include breakpoint($only-mobile) {
+      align-items: initial;
+
+      a {
+        img {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+  }
+}

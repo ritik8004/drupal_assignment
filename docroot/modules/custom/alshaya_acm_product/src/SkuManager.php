@@ -494,11 +494,9 @@ class SkuManager {
       'price' => 0,
       'final_price' => 0,
     ];
-
     if ($sku_entity->bundle() == 'simple') {
       $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
       $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
-
       if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
         $price = $final_price;
       }
@@ -510,7 +508,6 @@ class SkuManager {
         'price' => $price,
         'final_price' => $final_price,
       ];
-
       $this->productCacheManager->set($sku_entity, $cache_key, $prices);
       return $prices;
     }
@@ -527,7 +524,6 @@ class SkuManager {
     else {
       $children = $this->getValidChildSkusAsString($sku_entity);
     }
-
     $sku_price = 0;
 
     foreach ($children ?? [] as $child_sku_code) {
@@ -538,7 +534,6 @@ class SkuManager {
           $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity);
           $price = $prices['children'][$child_sku_code]['price'];
           $final_price = $prices['children'][$child_sku_code]['final_price'];
-
           if ($prices['children'][$child_sku_code]['final_price'] == $price) {
             $prices['children'][$child_sku_code]['final_price'] = 0;
           }

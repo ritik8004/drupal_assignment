@@ -206,3 +206,19 @@ sites:
     module: alshaya_mu
     type: alshaya_transac
     country: eg
+  tbskw:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: kw
+  tbssa:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: sa
+  tbsae:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: ae
+  tbseg:
+    module: alshaya_tbs
+    type: alshaya_transac
+    country: eg

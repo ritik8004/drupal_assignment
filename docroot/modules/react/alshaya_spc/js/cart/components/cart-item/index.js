@@ -16,7 +16,7 @@ import DynamicPromotionProductItem
   from '../dynamic-promotion-banner/DynamicPromotionProductItem';
 import CartItemFree from '../cart-item-free';
 import { getStorageInfo } from '../../../utilities/storage';
-import { isQtyLimitReached } from '../../../utilities/checkout_util';
+import { isQtyLimitReached, customStockErrorMessage } from '../../../utilities/checkout_util';
 import validateCartResponse from '../../../utilities/validation_util';
 import TrashIconSVG from '../../../svg-component/trash-icon-svg';
 import CartPromotionFreeGift from '../cart-promotion-freegift';
@@ -98,9 +98,10 @@ export default class CartItem extends React.Component {
 
         let messageInfo = null;
         if (cartResult.error !== undefined) {
+          const errorMessage = customStockErrorMessage(cartResult);
           messageInfo = {
             type: 'error',
-            message: cartResult.error_message,
+            message: errorMessage,
           };
         } else {
           messageInfo = {

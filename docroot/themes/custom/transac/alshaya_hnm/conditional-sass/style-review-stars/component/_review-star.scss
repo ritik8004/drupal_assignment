@@ -1,0 +1,20 @@
+.star-ratings-wrapper {
+  .inline-star {
+    .icon-ic_ratingfull {
+      @include icon(rating-filled) {
+        color: $rr-stars-color;
+      }
+    }
+
+    .icon-ic_rating {
+      @include icon(rating-empty) {
+        color: $rr-stars-color;
+      }
+    }
+  }
+}
+
+.listing-inline-star {
+  margin-bottom: 0.25rem;
+  justify-content: $left;
+}

@@ -34,6 +34,13 @@ class AcqSkuDrushCommands extends DrushCommands {
 
   use StringTranslationTrait;
 
+  /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
   const DELETE_BATCH_COUNT = 200;
 
   /**
@@ -199,7 +206,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->ingestApiWrapper = $ingestAPIWrapper;
     $this->conductorCategoryManager = $conductorCategoryManager;
     $this->productOptionsManager = $productOptionsManager;
-    $this->logger = $loggerChannelFactory->get('acq_sku');
+    $this->drupalLogger = $loggerChannelFactory->get('acq_sku');
     $this->connection = $connection;
     $this->entityTypeManager = $entityTypeManager;
     $this->queryFactory = $queryFactory;
@@ -343,7 +350,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       }
     }
     else {
-      $this->logger->notice(dt('Not cleaning(deleting) old terms as there is no term update/create.'));
+      $this->drupalLogger->notice(dt('Not cleaning(deleting) old terms as there is no term update/create.'));
     }
 
     $this->output->writeln(dt('Done.'));
@@ -359,9 +366,9 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @aliases acspo,sync-commerce-product-options
    */
   public function syncProductOptions() {
-    $this->logger->notice(dt('Synchronizing all commerce product options, please wait...'));
+    $this->drupalLogger->notice(dt('Synchronizing all commerce product options, please wait...'));
     $this->productOptionsManager->synchronizeProductOptions();
-    $this->logger->notice(dt('Product attribute sync completed.'));
+    $this->drupalLogger->notice(dt('Product attribute sync completed.'));
   }
 
   /**
@@ -687,9 +694,9 @@ class AcqSkuDrushCommands extends DrushCommands {
         ];
       }
 
+      $context_results = &$context['sandbox']['results'];
       // Allow other modules to add data to be deleted when cleaning up.
-      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context);
-
+      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context_results);
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_id'] = 0;
       $context['sandbox']['max'] = count($context['sandbox']['results']);
@@ -822,7 +829,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $skus = array_filter(explode(',', $skus));
     $verbose = $options['verbose'];
 
-    $this->logger()->notice('Checking all media...');
+    $this->drupalLogger->notice('Checking all media...');
 
     $select = $this->connection->select('acq_sku_field_data');
     $select->fields('acq_sku_field_data', ['sku']);
@@ -861,7 +868,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     batch_set($batch);
     drush_backend_batch_process();
 
-    $this->logger()->notice('Processed all skus to find missing media items.');
+    $this->drupalLogger->notice('Processed all skus to find missing media items.');
   }
 
   /**
@@ -956,9 +963,9 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @aliases cat-sync-process
    */
   public function catSyncProcess() {
-    $this->logger->notice(dt('Processing category sync for push mode. Please wait ...'));
+    $this->drupalLogger->notice(dt('Processing category sync for push mode. Please wait ...'));
     $this->categorySyncHelper->processCatSync();
-    $this->logger->notice(dt('Processing category sync completed.'));
+    $this->drupalLogger->notice(dt('Processing category sync completed.'));
   }
 
   /**
@@ -976,6 +983,25 @@ class AcqSkuDrushCommands extends DrushCommands {
   public function processBlacklistedProduct() {
     $event = new ProcessBlackListedProductsEvent();
     $this->dispatcher->dispatch(ProcessBlackListedProductsEvent::EVENT_NAME, $event);
+  }
+
+  /**
+   * Drush command to get the item count we need to delete.
+   *
+   * Get the items count we need to delete during commerce data cleanup.
+   *
+   * @validate-module-enabled acq_sku
+   *
+   * @command acq_sku:get-item-delete-count
+   *
+   * @usage drush acq_sku:get-item-delete-count
+   *   Get the items count we need to delete during commerce data cleanup.
+   */
+  public function getItemCountTodelete() {
+    $result = $this->connection->query("select nid as entity_id, 'node' as type from node where type in ('acq_product', 'acq_promotion', 'store') union select id as entity_id, 'acq_sku' as type from acq_sku union select tid as entity_id, 'taxonomy_term' as type from taxonomy_term_data where vid='acq_product_category'");
+    $data = $result->fetchAll(\PDO::FETCH_ASSOC);
+    $this->moduleHandler->alter('acq_sku_clean_synced_data', $data);
+    print count($data);
   }
 
 }

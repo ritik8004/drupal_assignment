@@ -309,17 +309,25 @@ class AlshayaAlgoliaIndexHelper {
 
     // Restore the language manager to it's original language.
     $this->languageManager->setConfigOverrideLanguage($original_language);
-
     $prices = $this->skuManager->getMinPrices($sku, $product_color);
     $object['original_price'] = (float) $prices['price'];
     $object['price'] = (float) $prices['price'];
     $object['final_price'] = (float) $prices['final_price'];
-
+    // Used for highest discount.
+    $object['discount'] = $this->skuManager->getDiscountedPercent($object['price'], $object['final_price']);
     // Use max of selling prices for price in configurable products.
     if (!empty($prices['children'])) {
       $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
       $object['price'] = max($selling_prices);
-
+      // Use Dicount in configurable products.
+      $discount = array_filter(array_column($prices['children'], 'discount'));
+      if (empty($discount)) {
+        // If Discount is NULL in configurable products set 0.
+        $object['discount'] = 0;
+      }
+      else {
+        $object['discount'] = max($discount);
+      }
       $selling_prices = array_unique([
         min($selling_prices),
         max($selling_prices),
@@ -444,6 +452,8 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     $object['is_new'] = $sku->get('attr_is_new')->getString();
+    // Used for new arrivals.
+    $object['new_arrivals'] = $sku->get('created')->getString();
     $this->updatePrettyPathAlias($object);
     unset($object['field_category_aliases']);
   }
@@ -989,17 +999,20 @@ class AlshayaAlgoliaIndexHelper {
   /**
    * Helps to prepare fields to create replicas.
    *
+   * @param array $sort_label_options
+   *   The list of options label.
    * @param array $sort_options
    *   The list of options.
+   *
+   * @return array
+   *   Formated array of sorting options.
    */
-  public function prepareFieldsToSort(array $sort_options) {
+  public function prepareFieldsToSort(array $sort_label_options, array $sort_options) {
     $sorts = [];
-    foreach ($sort_options as $value) {
-      if ($value !== 0) {
-        if ($value != 'created') {
-          $sorts[] = ['field' => $value, 'direction' => 'asc'];
-        }
-        $sorts[] = ['field' => $value, 'direction' => 'desc'];
+    foreach ($sort_label_options as $sort_label_option) {
+      $value = explode(' ', $sort_label_option['value']);
+      if (!empty($sort_label_option['label']) && array_search(trim($value[0]), $sort_options, TRUE)) {
+        $sorts[] = ['field' => $value[0], 'direction' => strtolower($value[1])];
       }
     }
 
