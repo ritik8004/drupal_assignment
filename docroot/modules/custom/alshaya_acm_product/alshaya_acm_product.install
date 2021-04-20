@@ -14,7 +14,7 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
- * [6.3.0] Delete the configs for /skus/list API.
+ * [6.2.0] Delete the configs for /skus/list API.
  */
 function alshaya_acm_product_update_8069() {
   // Deleting the memory limit policy for /skus/list API.
