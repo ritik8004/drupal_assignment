@@ -753,9 +753,9 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       $variables['delivery_address']['postal_code'] = $values[0]['postal_code'];
     }
 
-    $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
+    $dm_version = AlshayaAddressBookManagerInterface::DM_VERSION;
 
-    if ($dm_version == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if ($dm_version) {
       $variables['delivery_address']['administrative_area'] = _alshaya_addressbook_get_area_from_id($values[0]['administrative_area']);
 
       // Get full mapping to see if we need to display parent.
@@ -913,13 +913,6 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
  *   Term name.
  */
 function _alshaya_addressbook_get_area_from_id($tid) {
-  $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
-
-  // Return as is for older version.
-  if ($dm_version != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-    return $tid;
-  }
-
   $term = Term::load($tid);
 
   if ($term) {

@@ -470,7 +470,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   public function getAddressArrayFromMagentoAddress(array $magento_address, $default_lang = FALSE) {
     $address = [];
 
-    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if (AlshayaAddressBookManagerInterface::DM_VERSION) {
       $mapping = $this->getMagentoFieldMappings();
 
       // Flip the mapping to make it easy below.
@@ -652,7 +652,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     // City is core attribute in Magento and hard to remove validation.
     $magento_address['city'] = self::INVISIBLE_CHARACTER;
 
-    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if (AlshayaAddressBookManagerInterface::DM_VERSION) {
       $mapping = $this->getMagentoFieldMappings();
       $custom_fields = $this->getMagentoCustomFields();
 
@@ -1220,7 +1220,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     $field = 'address_area_segment';
 
-    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if (AlshayaAddressBookManagerInterface::DM_VERSION) {
       $mappings = $this->getMagentoFieldMappings();
       $field = $mappings['administrative_area'];
     }
@@ -1248,7 +1248,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   String value for the area or NULL.
    */
   public function getAddressShippingAreaParentValue(array $address, array $magento_address, $langcode = 'en') {
-    if ($this->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if (!AlshayaAddressBookManagerInterface::DM_VERSION) {
       return $address['locality'];
     }
 
@@ -1260,22 +1260,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       : '';
 
     return $this->areasTermsHelper->getShippingAreaLabel($value, $langcode);
-  }
-
-  /**
-   * Wrapper function to get current DM Version from config.
-   *
-   * @return mixed
-   *   Current DM Version.
-   */
-  public function getDmVersion() {
-    static $dm_version;
-
-    if (!isset($dm_version)) {
-      $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
-    }
-
-    return $dm_version;
   }
 
   /**

@@ -10,7 +10,7 @@ interface AlshayaAddressBookManagerInterface {
   /**
    * Delivery Matrix version 2.
    */
-  const DM_VERSION_2 = '2';
+  const DM_VERSION = '2';
 
   /**
    * Area vocabulary name.

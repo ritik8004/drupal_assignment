@@ -82,8 +82,6 @@ class AddressBookAreasTermsHelper {
     $this->languageManager = $languageManager;
     $this->configFactory = $config_factory;
     $this->cache = $cache;
-    $this->dmVersion = $this->configFactory->get('alshaya_addressbook.settings')
-      ->get('dm_version');
   }
 
   /**
@@ -138,8 +136,8 @@ class AddressBookAreasTermsHelper {
    *   List or areas.
    */
   public function getAllAreasWithParent($parent = NULL, bool $location_key = FALSE) {
-    if (empty($parent) && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      // Parent is required in DM_VERSION_2, not throwing error though.
+    if (empty($parent) && AlshayaAddressBookManagerInterface::DM_VERSION) {
+      // Parent is required in DM_VERSION 2, not throwing error though.
       return [];
     }
 
@@ -168,7 +166,7 @@ class AddressBookAreasTermsHelper {
         /* \Drupal\taxonomy\Entity\Term $term */
         $term = $this->entityRepository->getTranslationFromContext($term);
 
-        if ($this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+        if (AlshayaAddressBookManagerInterface::DM_VERSION) {
           if ($location_key) {
             $term_list[$term->get('field_location_id')->getString()] = $term->label();
           }
@@ -315,7 +313,7 @@ class AddressBookAreasTermsHelper {
    */
   public function getShippingAreaLabel($value, $langcode = 'en') {
     // For DM V2, we will have it id instead of string.
-    if ($value && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if ($value && AlshayaAddressBookManagerInterface::DM_VERSION) {
       $term = $this->getLocationTermFromLocationId($value);
 
       if (empty($term)) {
