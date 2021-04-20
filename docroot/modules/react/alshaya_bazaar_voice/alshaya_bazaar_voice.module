@@ -72,6 +72,8 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
+    // Get sanitized sku.
+    $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
 
     $settings = [
       'user' => [
@@ -120,7 +122,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
     $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
-    $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['alshaya_bazaar_voice'] = $settings;
+    $build['#attached']['drupalSettings']['productInfo'][$sanitized_sku]['alshaya_bazaar_voice'] = $settings;
   }
 }
 
