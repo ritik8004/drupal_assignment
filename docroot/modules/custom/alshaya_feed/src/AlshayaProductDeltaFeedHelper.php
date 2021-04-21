@@ -511,6 +511,7 @@ class AlshayaProductDeltaFeedHelper {
    *   The lang code.
    */
   private function getDyCategories(array &$fields, NodeInterface $node, $lang = NULL) {
+    $number_of_dy_categories = 3;
     $categories = $node->get('field_category')->referencedEntities();
 
     // Return if no categories attached to product.
@@ -518,6 +519,9 @@ class AlshayaProductDeltaFeedHelper {
       $fields['dy_categories'] = '';
       return $fields;
     }
+
+    $dy_categories = [];
+    $extra_dy_categories = [];
 
     foreach ($categories as $term) {
       $term = $this->skuInfoHelper->getEntityTranslation($term, $lang);
@@ -527,44 +531,41 @@ class AlshayaProductDeltaFeedHelper {
         continue;
       }
 
-      $dy_category = $term->get('field_dy_category')->getString();
+      $dy_category_level = $term->get('field_dy_category')->getString();
 
       // Skip if dy_category field is empty or NONE.
-      if (empty($dy_category) || $dy_category === 'NONE') {
+      if (empty($dy_category_level) || $dy_category_level === 'NONE') {
         continue;
       }
 
-      /** @var \Drupal\taxonomy\TermStorage $termStorage */
-      $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
-      $parents = $termStorage->loadAllParents($term->id());
-
-      // Loading parents of the first category having value in
-      // dy_category field for the product.
-      if (!empty($parents)) {
-        $parent_categories = [];
-        foreach ($parents as $parent) {
-          $parent_categories[] = $parent->label();
-        }
-        $dy_categories = array_reverse($parent_categories);
+      // Pick one category for each level and the rest as extra.
+      if (empty($dy_categories[$dy_category_level])) {
+        $dy_categories[$dy_category_level] = $term->label();
       }
-
-      // Loading children of the first category having value in
-      // dy_category field for the product.
-      $children_tree = $termStorage->loadTree('acq_product_category', $term->id());
-
-      if (!empty($children_tree)) {
-        foreach ($children_tree as $child) {
-          $parent = reset($child->parents);
-          if (empty($dy_categories[$parent])) {
-            $dy_categories[$parent] = $child->name;
-          }
-        }
+      else {
+        $extra_dy_categories[] = $term->label();
       }
-
-      break;
     }
 
-    $fields['dy_categories'] = !empty($dy_categories) ? implode('|', $dy_categories) : '';
+    // Return if no dy_categories attached to product.
+    if (empty($dy_categories)) {
+      $fields['dy_categories'] = '';
+      return $fields;
+    }
+
+    $size_of_dy_categories = count($dy_categories);
+
+    // If dy_categories array size is less than required
+    // number_of_dy_categories then add the remaining categories
+    // from extra_dy_categories array if present.
+    if ($size_of_dy_categories < $number_of_dy_categories && !empty($extra_dy_categories)) {
+      $dy_categories = array_merge(
+        $dy_categories,
+        array_slice($extra_dy_categories, 0, $number_of_dy_categories - $size_of_dy_categories)
+      );
+    }
+
+    $fields['dy_categories'] = implode('|', $dy_categories);
 
     return $fields;
   }
