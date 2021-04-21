@@ -27,6 +27,7 @@
   }
   catch (e) {
     // Do nothing here.
+    // Dummy comment to allow changing file name.
   }
 
   // Adding class at field-promo-block level to differentiate department page drop down.
