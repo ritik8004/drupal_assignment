@@ -101,7 +101,7 @@
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
-        "drupal/user_registrationpassword": "^1.0",
+        "drupal/user_registrationpassword": "^1.0@alpha",
         "drupal/video_embed_field": "^2.0",
         "drupal/views_ajax_get": "1.x-dev#3055c44",
         "drupal/views_block_filter_block": "^1.0@beta",
@@ -271,7 +271,7 @@
                 "Allow trailing slash to be added for home page": "https://www.drupal.org/files/issues/2019-07-05/3066086-2.patch",
                 "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-11-14/3007424-68.patch",
                 "CORE-9545: Not update entity base table on entity update": "https://www.drupal.org/files/issues/2019-07-16/3061094-7.patch",
-                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2020-07-23/1521996-200.patch",
+                "Password reset form reveals whether an email or username is in use": "https://www.drupal.org/files/issues/2021-04-21/1521996-310.patch",
                 "TermStorage::loadChildren returned elements are not sorted by weight, name": "https://www.drupal.org/files/issues/2019-06-20/termStorage-loadChildren-sorted-by-weight-3063118-6-D8.6.16.patch",
                 "Config set - drush config:set for other than default collections raises exception": "https://www.drupal.org/files/issues/2019-08-20/drush_cset_for_other_than_default_collections-3011276-6.patch",
                 "CORE-11129 - Form states on multivalued select list field": "https://www.drupal.org/files/issues/2019-05-26/states-multiselect-1149078-109.patch",
@@ -332,10 +332,6 @@
             "drupal/restrict_role_login_by_ip": {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
                 "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch"
-            },
-            "drupal/user_registrationpassword": {
-                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch",
-                "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
             },
             "drupal/seckit": {
                 "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch"
