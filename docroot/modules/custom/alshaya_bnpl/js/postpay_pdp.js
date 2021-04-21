@@ -27,12 +27,16 @@
     else {
       variant = $('.selected-variant-sku', element).val();
     }
-
-    var variantInfo = drupalSettings[productKey][sku]['variants'][variant];
+    if (typeof drupalSettings[productKey][sku]['variants'] !== 'undefined') {
+      var variantPrice = drupalSettings[productKey][sku]['variants'][variant]['gtm_price'];
+    }
+    else {
+      var variantPrice = drupalSettings[productKey][sku]['priceRaw'];
+    }
 
     // No need to add a condition to check if the amount is changed, Postpay
     // takes care of that.
-    $('.postpay-widget', product).attr('data-amount', (variantInfo['gtm_price'].replace(',', '') * drupalSettings.postpay.currency_multiplier).toFixed(0));
+    $('.postpay-widget', product).attr('data-amount', (variantPrice.replace(',', '') * drupalSettings.postpay.currency_multiplier).toFixed(0));
     postpay.ui.refresh();
   }
 })(jQuery, Drupal);
