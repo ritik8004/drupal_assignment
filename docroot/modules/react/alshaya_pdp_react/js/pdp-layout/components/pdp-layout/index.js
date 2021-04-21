@@ -223,6 +223,7 @@ const PdpLayout = () => {
           ) : null}
           <PpdRatingsReviews
             getPanelData={getPanelData}
+            removePanelData={removePanelData}
           />
           <div className="addtobag-button-wrapper" ref={addToBagContainer}>
             {stockStatus ? (

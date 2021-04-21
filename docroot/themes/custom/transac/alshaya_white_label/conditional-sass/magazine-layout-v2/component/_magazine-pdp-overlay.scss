@@ -2,7 +2,8 @@ body {
   &.desc-overlay,
   &.overlay-select,
   &.overlay-crossel,
-  &.overlay-related-select {
+  &.overlay-related-select,
+  &.ratings-reviews-overlay {
     overflow: hidden;
 
     &::before {

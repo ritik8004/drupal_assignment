@@ -5,7 +5,7 @@ import ReviewSummary from '../../../../../alshaya_bazaar_voice/js/src/reviews/co
 
 const PpdRatingsReviews = (props) => {
   const {
-    getPanelData,
+    getPanelData, removePanelData,
   } = props;
 
   const closeModal = () => {
@@ -21,8 +21,16 @@ const PpdRatingsReviews = (props) => {
       document.querySelector('body').classList.add('ratings-reviews-overlay');
     }, 150);
     return (
-      <div id="reviews-section">
-        <ReviewSummary />
+      <div id="reviews-section" className="magv2-ratings-reviews-popup-container">
+        <div className="magv2-ratings-reviews-popup-wrapper">
+          <div className="magv2-ratings-reviews-popup-header-wrapper">
+            <a className="close" onClick={() => closeModal()}>×</a>
+            <div className="magv2-ratings-reviews-popup-title">Ratings & Reviews</div>
+          </div>
+          <div className="magv2-ratings-reviews-popup-content-wrapper">
+            <ReviewSummary />
+          </div>
+        </div>
       </div>
     );
   };
