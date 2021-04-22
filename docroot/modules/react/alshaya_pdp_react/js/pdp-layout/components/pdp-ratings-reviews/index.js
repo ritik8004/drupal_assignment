@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { closeModalHelper } from '../../../utilities/pdp_layout';
 import Rating from '../../../../../alshaya_bazaar_voice/js/src/rating/components/rating';
-import ReviewSummary from '../../../../../alshaya_bazaar_voice/js/src/reviews/components/review-summary'
+import ReviewSummary from '../../../../../alshaya_bazaar_voice/js/src/reviews/components/review-summary';
 
 const PpdRatingsReviews = (props) => {
   const {
@@ -28,16 +28,16 @@ const PpdRatingsReviews = (props) => {
             <div className="magv2-ratings-reviews-popup-title">Ratings & Reviews</div>
           </div>
           <div className="magv2-ratings-reviews-popup-content-wrapper">
-            <ReviewSummary />
+            <ReviewSummary isNewPdpLayout="true" />
           </div>
         </div>
       </div>
     );
   };
 
-  const myFn = (e) => {
+  const myFn = () => {
     getPanelData(openModal());
-  }
+  };
 
   useEffect(() => {
     closeModalHelper('ratings-reviews-overlay', 'reviews-wrapper', closeModal);
@@ -45,7 +45,7 @@ const PpdRatingsReviews = (props) => {
   []);
 
   return (
-    <Rating childClickHandler={myFn}/>
+    <Rating childClickHandler={myFn} />
   );
 };
 

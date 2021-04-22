@@ -330,6 +330,10 @@ export default class ReviewSummary extends React.Component {
       numberOfPages,
       loadMoreLimit,
     } = this.state;
+    const {
+      isNewPdpLayout,
+    } = this.props;
+
     const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type;
     if (totalReviews === '') {
       return (
@@ -357,7 +361,7 @@ export default class ReviewSummary extends React.Component {
       <div className="reviews-wrapper">
         <div className="histogram-data-section">
           <div className="rating-wrapper">
-            <ReviewHistogram overallSummary={reviewsProduct} />
+            <ReviewHistogram overallSummary={reviewsProduct} isNewPdpLayout={isNewPdpLayout} />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>
               <ReviewSorting
@@ -391,7 +395,7 @@ export default class ReviewSummary extends React.Component {
             </ConditionalView>
             {Object.keys(reviewsSummary).map((item) => (
               <div className="review-summary" key={reviewsSummary[item].Id}>
-                <ConditionalView condition={window.innerWidth < 768}>
+                <ConditionalView condition={(window.innerWidth < 768) || isNewPdpLayout}>
                   <DisplayStar
                     starPercentage={reviewsSummary[item].Rating}
                   />
@@ -401,10 +405,12 @@ export default class ReviewSummary extends React.Component {
                   reviewInformationData={reviewsSummary[item]}
                   reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
                     .ProductId].ReviewStatistics}
+                  isNewPdpLayout={isNewPdpLayout}
                 />
                 <ReviewDescription
                   reviewDescriptionData={reviewsSummary[item]}
                   reviewsComment={reviewsComment}
+                  isNewPdpLayout={isNewPdpLayout}
                 />
               </div>
             ))}

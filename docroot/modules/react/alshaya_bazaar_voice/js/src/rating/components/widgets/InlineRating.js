@@ -15,7 +15,7 @@ function clickHandler(e, callbackFn) {
 }
 const InlineRating = ({
   reviewsData,
-  childClickHandler
+  childClickHandler,
 }) => (
   <div className="inline-rating">
     <div className="aggregate-rating" itemProp="aggregateRating" itemScope="" itemType="">

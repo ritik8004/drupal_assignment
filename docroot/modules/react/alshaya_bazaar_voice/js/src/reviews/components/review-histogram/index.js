@@ -7,11 +7,16 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 
 const ReviewHistogram = ({
-  overallSummary,
+  overallSummary, isNewPdpLayout,
 }) => {
   if (overallSummary === undefined) {
     return null;
   }
+
+  if (isNewPdpLayout === undefined) {
+    isNewPdpLayout = false;
+  }
+
   return (
     <>
       <div className="overall-summary-title">{getStringMessage('ratings_reviews')}</div>
@@ -19,7 +24,7 @@ const ReviewHistogram = ({
         { Object.keys(overallSummary).map((item) => (
           <React.Fragment key={item}>
             <div className="histogram-wrapper" key={item}>
-              <ConditionalView condition={window.innerWidth < 768}>
+              <ConditionalView condition={(window.innerWidth < 768) || isNewPdpLayout}>
                 <WriteReviewButton />
               </ConditionalView>
               <DisplayStar
@@ -45,7 +50,7 @@ const ReviewHistogram = ({
                   histogramData={overallSummary[item].ReviewStatistics.RatingDistribution}
                   totalReviewCount={overallSummary[item].ReviewStatistics.TotalReviewCount}
                 />
-                <ConditionalView condition={window.innerWidth < 768}>
+                <ConditionalView condition={(window.innerWidth < 768) || isNewPdpLayout}>
                   <div className="secondary-summary">
                     <CombineDisplay
                       starSliderCombine={
@@ -60,7 +65,7 @@ const ReviewHistogram = ({
               </div>
             </div>
             <div className="secondary-summary">
-              <ConditionalView condition={window.innerWidth > 767}>
+              <ConditionalView condition={(window.innerWidth > 767) && (!isNewPdpLayout)}>
                 <WriteReviewButton />
                 <CombineDisplay
                   starSliderCombine={
