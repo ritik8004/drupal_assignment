@@ -29,7 +29,7 @@
     }
     var variantPrice = (drupalSettings[productKey][sku]['type'] != 'simple') ?
       drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
-      drupalSettings[productKey][sku]['priceRaw'];
+      drupalSettings[productKey][sku]['gtm_attributes']['price'];
 
     // No need to add a condition to check if the amount is changed, Postpay
     // takes care of that.
