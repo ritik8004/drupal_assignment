@@ -12,7 +12,9 @@ const PostReviewMessage = ({
     />
     <div className="review-title">{postReviewData.Review.Title}</div>
     <div className="review-text">{postReviewData.Review.ReviewText}</div>
-    <ConditionalView condition={postReviewData.Review.IsRecommended !== null}>
+    <ConditionalView condition={postReviewData.Review.IsRecommended !== null
+      && postReviewData.Review.IsRecommended}
+    >
       <div className="review-recommendation">
         <span className="review-recommendation-icon" />
         <span>{`${getStringMessage('yes')},`}</span>
