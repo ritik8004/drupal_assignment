@@ -27,7 +27,7 @@
     else {
       variant = $('.selected-variant-sku', element).val();
     }
-    var variantPrice = (typeof drupalSettings[productKey][sku]['variants'] !== 'undefined') ?
+    var variantPrice = (drupalSettings[productKey][sku]['type'] != 'simple') ?
       drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
       drupalSettings[productKey][sku]['priceRaw'];
 
