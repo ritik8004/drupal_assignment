@@ -13,9 +13,8 @@ const ReviewHistogram = ({
     return null;
   }
 
-  if (isNewPdpLayout === undefined) {
-    isNewPdpLayout = false;
-  }
+  let newPdp = isNewPdpLayout;
+  newPdp = (newPdp === undefined) ? false : newPdp;
 
   return (
     <>
@@ -24,7 +23,7 @@ const ReviewHistogram = ({
         { Object.keys(overallSummary).map((item) => (
           <React.Fragment key={item}>
             <div className="histogram-wrapper" key={item}>
-              <ConditionalView condition={(window.innerWidth < 768) || isNewPdpLayout}>
+              <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
                 <WriteReviewButton />
               </ConditionalView>
               <DisplayStar
@@ -50,7 +49,7 @@ const ReviewHistogram = ({
                   histogramData={overallSummary[item].ReviewStatistics.RatingDistribution}
                   totalReviewCount={overallSummary[item].ReviewStatistics.TotalReviewCount}
                 />
-                <ConditionalView condition={(window.innerWidth < 768) || isNewPdpLayout}>
+                <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
                   <div className="secondary-summary">
                     <CombineDisplay
                       starSliderCombine={
@@ -65,7 +64,7 @@ const ReviewHistogram = ({
               </div>
             </div>
             <div className="secondary-summary">
-              <ConditionalView condition={(window.innerWidth > 767) && (!isNewPdpLayout)}>
+              <ConditionalView condition={(window.innerWidth > 767) && (!newPdp)}>
                 <WriteReviewButton />
                 <CombineDisplay
                   starSliderCombine={

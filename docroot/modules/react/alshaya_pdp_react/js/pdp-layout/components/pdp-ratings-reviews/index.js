@@ -35,7 +35,7 @@ const PpdRatingsReviews = (props) => {
     );
   };
 
-  const myFn = () => {
+  const openRatingsReviewPanel = () => {
     getPanelData(openModal());
   };
 
@@ -45,7 +45,7 @@ const PpdRatingsReviews = (props) => {
   []);
 
   return (
-    <Rating childClickHandler={myFn} />
+    <Rating childClickHandler={openRatingsReviewPanel} />
   );
 };
 

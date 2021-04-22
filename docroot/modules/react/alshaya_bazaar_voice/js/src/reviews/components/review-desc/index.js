@@ -16,9 +16,8 @@ const ReviewDescription = ({
   reviewsComment,
   isNewPdpLayout,
 }) => {
-  if (isNewPdpLayout === undefined) {
-    isNewPdpLayout = false;
-  }
+  let newPdp = isNewPdpLayout;
+  newPdp = (newPdp === undefined) ? false : newPdp;
 
   if (reviewDescriptionData !== undefined) {
     const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
@@ -26,7 +25,7 @@ const ReviewDescription = ({
       <div className="review-detail-right">
         <div className="review-details">
 
-          <ConditionalView condition={(window.innerWidth > 767) && (!isNewPdpLayout)}>
+          <ConditionalView condition={(window.innerWidth > 767) && (!newPdp)}>
             <DisplayStar
               starPercentage={reviewDescriptionData.Rating}
             />
