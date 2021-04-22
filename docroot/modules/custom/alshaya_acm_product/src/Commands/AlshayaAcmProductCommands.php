@@ -962,4 +962,35 @@ class AlshayaAcmProductCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Sync products having only one translation.
+   *
+   * @command alshaya_acm_product:sync-single-trnaslation-products
+   *
+   * @aliases sstp, sync-single-trnaslation-products
+   */
+  public function syncSingleTranslationProduct() {
+    $query = $this->connection->query('SELECT nf.nid, min(nf.langcode) as langcode
+      FROM {node_field_data} nf
+      group by nid having count(nid) = 1');
+    $result = $query->fetchAll();
+
+    if (empty($result)) {
+      $this->yell('All the products have 2 translations.');
+      return;
+    }
+
+    $message = dt('Found following entries in node_field_data which have single translation. Entries: @entries', [
+      '@entries' => print_r($result, TRUE),
+    ]);
+
+    $this->io()->writeln($message);
+
+    if (!$this->io()->confirm(dt('Do you want to sync them?'))) {
+      throw new UserAbortException();
+    }
+
+    $this->io()->writeln(dt('All products having single translation have been re-synced.'));
+  }
+
 }
