@@ -27,12 +27,9 @@
     else {
       variant = $('.selected-variant-sku', element).val();
     }
-    if (typeof drupalSettings[productKey][sku]['variants'] !== 'undefined') {
-      var variantPrice = drupalSettings[productKey][sku]['variants'][variant]['gtm_price'];
-    }
-    else {
-      var variantPrice = drupalSettings[productKey][sku]['priceRaw'];
-    }
+    var variantPrice = (typeof drupalSettings[productKey][sku]['variants'] !== 'undefined') ?
+      drupalSettings[productKey][sku]['variants'][variant]['gtm_price'] :
+      drupalSettings[productKey][sku]['priceRaw'];
 
     // No need to add a condition to check if the amount is changed, Postpay
     // takes care of that.
