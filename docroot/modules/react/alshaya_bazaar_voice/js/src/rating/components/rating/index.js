@@ -49,13 +49,14 @@ export default class Rating extends React.Component {
 
   render() {
     const { reviewsData, bazaarVoiceSettings } = this.state;
+    const { childClickHandler } = this.props;
 
     if (reviewsData !== undefined
       && reviewsData !== ''
       && reviewsData.TotalReviewCount > 0) {
       return (
         <div className="rating-wrapper">
-          <InlineRating reviewsData={reviewsData} />
+          <InlineRating childClickHandler={childClickHandler} reviewsData={reviewsData} />
           <ConditionalView condition={bazaarVoiceSettings.reviews.bv_auth_token !== null}>
             <BvAuthConfirmation bvAuthToken={bazaarVoiceSettings.reviews.bv_auth_token} />
           </ConditionalView>

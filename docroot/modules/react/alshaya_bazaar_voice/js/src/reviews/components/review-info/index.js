@@ -10,7 +10,11 @@ import { getLanguageCode } from '../../../utilities/api/request';
 const ReviewInformation = ({
   reviewInformationData,
   reviewTooltipInfo,
+  isNewPdpLayout,
 }) => {
+  let newPdp = isNewPdpLayout;
+  newPdp = (newPdp === undefined) ? false : newPdp;
+
   if (reviewInformationData !== undefined) {
     const date = getDate(reviewInformationData.SubmissionTime, getLanguageCode());
     return (
@@ -19,7 +23,7 @@ const ReviewInformation = ({
           <div className="review-tooltip">
             <span className="user-detail-nickname">{reviewInformationData.UserNickname}</span>
 
-            <ConditionalView condition={window.innerWidth < 768}>
+            <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
               <div className="review-detail-mobile">
                 <span className="review-date">{`${date}`}</span>
 
@@ -37,13 +41,13 @@ const ReviewInformation = ({
             />
           </div>
 
-          <ConditionalView condition={window.innerWidth > 767}>
+          <ConditionalView condition={(window.innerWidth > 767) && (!newPdp)}>
             <div className="user-detail-location">{reviewInformationData.UserLocation}</div>
           </ConditionalView>
 
         </div>
 
-        <ConditionalView condition={window.innerWidth > 767}>
+        <ConditionalView condition={(window.innerWidth > 767) && (!newPdp)}>
           <div className="horizontal-border" />
         </ConditionalView>
 
