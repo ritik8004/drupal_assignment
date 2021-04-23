@@ -21,7 +21,6 @@ function alshaya_addressbook_update_8309() {
     'alshaya_addressbook',
     'install',
   );
-  \Drupal::cache('addressbook')->invalidateAll();
 }
 
 /**

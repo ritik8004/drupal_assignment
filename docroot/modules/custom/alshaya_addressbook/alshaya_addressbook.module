@@ -753,20 +753,16 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       $variables['delivery_address']['postal_code'] = $values[0]['postal_code'];
     }
 
-    $dm_version = AlshayaAddressBookManagerInterface::DM_VERSION;
+    $variables['delivery_address']['administrative_area'] = _alshaya_addressbook_get_area_from_id($values[0]['administrative_area']);
 
-    if ($dm_version) {
-      $variables['delivery_address']['administrative_area'] = _alshaya_addressbook_get_area_from_id($values[0]['administrative_area']);
+    // Get full mapping to see if we need to display parent.
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+    if ($address_book_manager->isAreaParentUsed()) {
+      $parent = $address_book_manager->getLocationParentTerm($values[0]['administrative_area']);
 
-      // Get full mapping to see if we need to display parent.
-      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-      if ($address_book_manager->isAreaParentUsed()) {
-        $parent = $address_book_manager->getLocationParentTerm($values[0]['administrative_area']);
-
-        if ($parent) {
-          $variables['delivery_address']['area_parent'] = $parent->label();
-        }
+      if ($parent) {
+        $variables['delivery_address']['area_parent'] = $parent->label();
       }
     }
 
