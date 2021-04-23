@@ -232,8 +232,8 @@ function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, 
  */
 function alshaya_bazaar_voice_preprocess_node(&$variables) {
   // Add bazaavoice related strings.
-  \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
   if ($variables['node']->bundle() === 'acq_product') { 
+    \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
     $variables['bazaar_voice_strings'] = [
       '#theme' => 'alshaya_bazaar_voice_reviews',
       '#strings' => _alshaya_bazaar_voice_static_strings(),
