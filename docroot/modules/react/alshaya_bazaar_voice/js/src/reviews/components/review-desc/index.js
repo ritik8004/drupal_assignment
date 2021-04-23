@@ -14,14 +14,18 @@ import { getLanguageCode } from '../../../utilities/api/request';
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
+  isNewPdpLayout,
 }) => {
+  let newPdp = isNewPdpLayout;
+  newPdp = (newPdp === undefined) ? false : newPdp;
+
   if (reviewDescriptionData !== undefined) {
     const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
     return (
       <div className="review-detail-right">
         <div className="review-details">
 
-          <ConditionalView condition={window.innerWidth > 767}>
+          <ConditionalView condition={(window.innerWidth > 767) && (!newPdp)}>
             <DisplayStar
               starPercentage={reviewDescriptionData.Rating}
             />
