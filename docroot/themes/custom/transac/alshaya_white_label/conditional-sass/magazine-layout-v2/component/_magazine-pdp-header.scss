@@ -35,6 +35,10 @@
       transform: translateY(0%);
       transition: all 0.45s cubic-bezier(0.4, 0, 0.8, 1);
     }
+
+    .postpay {
+      display: none;
+    }
   }
 
   &.magv2-pdp-non-sticky-header {
