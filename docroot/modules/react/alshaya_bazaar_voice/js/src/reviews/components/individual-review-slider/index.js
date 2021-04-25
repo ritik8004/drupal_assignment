@@ -52,14 +52,14 @@ const IndividualReviewSlider = ({
                   (direction === 'rtl')
                     ? (
                       <div
-                        className="dynamic-dot"
-                        style={{ right: `${((((sliderData[item].Value > 0) ? sliderData[item].Value : sliderData[item].AverageRating) / sliderData[item].ValueRange).toFixed(1)) * 100}%` }}
+                        className={`dynamic-dot slide-range-${sliderData[item].ValueRange} ${(sliderData[item].Value > 0) ? `dot-${sliderData[item].Value}` : ''}`}
+                        style={{ right: `${(sliderData[item].AverageRating > 0) ? (sliderData[item].AverageRating / sliderData[item].ValueRange).toFixed(1) * 100 : null}%` }}
                       />
                     )
                     : (
                       <div
-                        className="dynamic-dot"
-                        style={{ left: `${((((sliderData[item].Value > 0) ? sliderData[item].Value : sliderData[item].AverageRating) / sliderData[item].ValueRange).toFixed(1)) * 100}%` }}
+                        className={`dynamic-dot slide-range-${sliderData[item].ValueRange} ${(sliderData[item].Value > 0) ? `dot-${sliderData[item].Value}` : ''}`}
+                        style={{ left: `${(sliderData[item].AverageRating > 0) ? (sliderData[item].AverageRating / sliderData[item].ValueRange).toFixed(1) * 100 : null}%` }}
                       />
                     )
                 }
