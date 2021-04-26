@@ -14,37 +14,31 @@ import { getLanguageCode } from '../../../utilities/api/request';
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
+  isNewPdpLayout,
 }) => {
+  let newPdp = isNewPdpLayout;
+  newPdp = (newPdp === undefined) ? false : newPdp;
+
   if (reviewDescriptionData !== undefined) {
     const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
     return (
       <div className="review-detail-right">
         <div className="review-details">
 
-          <ConditionalView condition={window.innerWidth > 767}>
+          <ConditionalView condition={(window.innerWidth > 767) && (!newPdp)}>
             <DisplayStar
               starPercentage={reviewDescriptionData.Rating}
             />
             <div className="review-title">{reviewDescriptionData.Title}</div>
             <div className="review-date">{`${date}`}</div>
           </ConditionalView>
-
           <div className="review-text">{reviewDescriptionData.ReviewText}</div>
-
           <ReviewAdditionalAttributes
-            reviewAdditionalAttributesData={reviewDescriptionData.TagDimensions}
+            additionalFieldsData={reviewDescriptionData.AdditionalFields}
+            additionalFieldsOrder={reviewDescriptionData.AdditionalFieldsOrder}
+            tagDimensionsData={reviewDescriptionData.TagDimensions}
+            tagDimensionsOrder={reviewDescriptionData.TagDimensionsOrder}
           />
-
-          <ReviewAdditionalAttributes
-            reviewAdditionalAttributesData={reviewDescriptionData.AdditionalFields}
-            includes="_textarea"
-          />
-
-          {
-            (reviewDescriptionData.Photos && reviewDescriptionData.Photos.length > 0)
-              ? <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
-              : null
-          }
           <ConditionalView condition={reviewDescriptionData.Photos
             && reviewDescriptionData.Photos.length > 0}
           >
