@@ -14,7 +14,7 @@ write_review_submission: false
 write_review_tnc: '/terms-and-conditions'
 write_review_guidlines: '/writing-guidelines'
 comment_form_tnc: '/terms-and-conditions'
-bv_content_types: 'Products,Comments'
+bv_content_types: 'Products,Comments,Authors'
 comment_form_box_length: 100
 bv_routes_list: ''
 reviews_pagination_type: 'load_more'
