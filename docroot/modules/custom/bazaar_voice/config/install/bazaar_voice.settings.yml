@@ -15,7 +15,8 @@ write_review_tnc: '/terms-and-conditions'
 write_review_guidlines: '/writing-guidelines'
 comment_form_tnc: '/terms-and-conditions'
 bv_content_types: 'Products,Comments'
-comment_form_box_length: 100
+comment_box_min_length: 100
+comment_box_max_length: 2000
 bv_routes_list: ''
 reviews_pagination_type: 'load_more'
 reviews_initial_load: 5
