@@ -18,6 +18,7 @@ import magv2Sticky from '../../../../../js/utilities/magv2StickySidebar';
 import magv2StickyHeader from '../../../../../js/utilities/magv2StickyHeader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
+import PpdRatingsReviews from '../pdp-ratings-reviews';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
@@ -220,6 +221,10 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
+          <PpdRatingsReviews
+            getPanelData={getPanelData}
+            removePanelData={removePanelData}
+          />
           <div className="addtobag-button-wrapper" ref={addToBagContainer}>
             {stockStatus ? (
               <PdpCart

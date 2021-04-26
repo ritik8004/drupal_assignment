@@ -35,6 +35,7 @@ class ReviewCommentForm extends React.Component {
           <div className="comment-form-title">
             {getStringMessage('post_a_comment')}
           </div>
+          <BazaarVoiceMessages />
           <div className="comment-form-fields">
             <input type="hidden" name="blackBox" id="ioBlackBox" />
             <div className="form-item">
@@ -248,8 +249,6 @@ class ReviewCommentForm extends React.Component {
           </div>
           {showCommentForm ? this.showCommentForm() : null}
           {showCommentSubmission ? this.showCommentSubmission() : null}
-          {showCommentForm
-           && (<BazaarVoiceMessages />)}
         </>
       );
     }

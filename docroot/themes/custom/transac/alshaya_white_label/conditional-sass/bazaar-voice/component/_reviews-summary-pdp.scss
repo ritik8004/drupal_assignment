@@ -112,6 +112,10 @@
       @include breakpoint($tablet) {
         padding-top: 2.188rem;
       }
+
+      .comment-moderation-block {
+        margin-top: 0.5rem;
+      }
     }
 
     &-feedback {
@@ -142,6 +146,15 @@
     &-comment-form,
     &-comment-display {
       flex-basis: 100%;
+    }
+
+    &-comment-form {
+      .exception-error {
+        ul {
+          padding: 0;
+          line-height: 1.5;
+        }
+      }
     }
 
     &-detail-mobile {
