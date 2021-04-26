@@ -592,6 +592,25 @@ $conductors = [
   'bbwqa_prod' => [
     'site_id' => 225,
   ],
+  // BathBodyWorks JO.
+  'bbwjo_dev' => [
+    'hmac_id' => '03499c078b15440896a2c37a33ed5e31',
+    'hmac_secret' => 'ZGE5MWYzMjQtMzU2Yi00',
+    'site_id' => 410,
+  ],
+  'bbwjo_qa' => [
+    'hmac_id' => 'f04500e8d72a4bb6b46127d333a23574',
+    'hmac_secret' => 'ZTNlZjk3NTEtZDM4Yi00',
+    'site_id' => 411,
+  ],
+  'bbwjo_uat' => [
+    'hmac_id' => 'bc66cec14b3c44cba6556e0740d0aed0',
+    'hmac_secret' => 'MmIyMWMxMDMtOTE3Zi00',
+    'site_id' => 414,
+  ],
+  'bbwjo_prod' => [
+    'site_id' => 415,
+  ],
   // VictoriaSecret KW.
   'vskw_qa' => [
     'hmac_id' => 'd00662613f144789831ebfe3d5885e37',
