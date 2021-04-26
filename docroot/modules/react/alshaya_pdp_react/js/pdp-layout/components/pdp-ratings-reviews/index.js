@@ -25,7 +25,7 @@ const PpdRatingsReviews = (props) => {
         <div className="magv2-ratings-reviews-popup-wrapper">
           <div className="magv2-ratings-reviews-popup-header-wrapper">
             <a className="close" onClick={() => closeModal()}>×</a>
-            <div className="magv2-ratings-reviews-popup-title">Ratings & Reviews</div>
+            <div className="magv2-ratings-reviews-popup-title">{Drupal.t('Ratings & Reviews')}</div>
           </div>
           <div className="magv2-ratings-reviews-popup-content-wrapper">
             <ReviewSummary isNewPdpLayout="true" />
