@@ -43,8 +43,13 @@ export default class Rating extends React.Component {
     }
   }
 
-  scrollToReviewSection = (e) => {
-    smoothScrollTo(e, '#reviews-section');
+  clickHandler = (e, callbackFn) => {
+    if (callbackFn === undefined) {
+      smoothScrollTo(e, '#reviews-section');
+    } else {
+      e.preventDefault();
+      callbackFn(e);
+    }
   }
 
   render() {
@@ -66,7 +71,7 @@ export default class Rating extends React.Component {
     return (
       <div className="inline-rating">
         <div className="aggregate-rating">
-          <a onClick={(e) => this.scrollToReviewSection(e)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
+          <a onClick={(e) => this.clickHandler(e, childClickHandler)} className="write-review" href="#">{getStringMessage('write_a_review')}</a>
         </div>
       </div>
     );
