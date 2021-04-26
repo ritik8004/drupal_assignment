@@ -1,4 +1,5 @@
 import React from 'react';
+import TextareaAutosize from 'react-autosize-textarea';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
@@ -37,7 +38,7 @@ class ReviewCommentForm extends React.Component {
           <div className="comment-form-fields">
             <input type="hidden" name="blackBox" id="ioBlackBox" />
             <div className="form-item">
-              <textarea
+              <TextareaAutosize
                 type="text"
                 id="commentbox"
                 name="commentbox"
