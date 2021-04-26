@@ -20,6 +20,8 @@ function alshaya_master_update_8046() {
       'ar' => 'إذا كان حسابك صالحًا ، فسيتم إرسال بريد إلكتروني يحتوي على تعليمات لإعادة تعيين كلمة المرور الخاصة بك.',
     ],
   ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
