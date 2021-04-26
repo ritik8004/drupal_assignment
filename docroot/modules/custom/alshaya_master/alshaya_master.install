@@ -8,6 +8,23 @@
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Config\FileStorage;
 
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add string translation for - Forgot password message.
+ */
+function alshaya_master_update_8044() {
+  $strings = [
+    'If %identifier is a valid account, an email will be sent with instructions to reset your password.' => [
+      'en' => 'If your account is valid, an email will be sent with instructions to reset your password.',
+      'ar' => 'إذا كان حسابك صالحًا ، فسيتم إرسال بريد إلكتروني يحتوي على تعليمات لإعادة تعيين كلمة المرور الخاصة بك.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -1126,12 +1143,6 @@ function alshaya_master_install() {
     'Store Number' => [
       'ar' => 'رقم المحل',
     ],
-    'Further instructions have been sent to your email address.' => [
-      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
-    ],
-    'Further instructions have been sent to your e-mail address.' => [
-      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
-    ],
     'Please agree to the Terms and Conditions.' => [
       'ar' => 'يرجى الموافقة على الشروط والأحكام',
     ],
@@ -2105,6 +2116,10 @@ function alshaya_master_install() {
     ],
     'to get a Free Gift' => [
       'ar' => 'للحصول على هدية مجانية'
+    ],
+    'If %identifier is a valid account, an email will be sent with instructions to reset your password.' => [
+      'en' => 'If your account is valid, an email will be sent with instructions to reset your password.',
+      'ar' => 'إذا كان حسابك صالحًا ، فسيتم إرسال بريد إلكتروني يحتوي على تعليمات لإعادة تعيين كلمة المرور الخاصة بك.',
     ],
   ];
 
