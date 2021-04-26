@@ -334,6 +334,9 @@ export default class ReviewSummary extends React.Component {
       isNewPdpLayout,
     } = this.props;
 
+    let newPdp = isNewPdpLayout;
+    newPdp = (newPdp === undefined) ? false : newPdp;
+
     const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type;
     if (totalReviews === '') {
       return (
@@ -395,7 +398,7 @@ export default class ReviewSummary extends React.Component {
             </ConditionalView>
             {Object.keys(reviewsSummary).map((item) => (
               <div className="review-summary" key={reviewsSummary[item].Id}>
-                <ConditionalView condition={(window.innerWidth < 768) || isNewPdpLayout}>
+                <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
                   <DisplayStar
                     starPercentage={reviewsSummary[item].Rating}
                   />
