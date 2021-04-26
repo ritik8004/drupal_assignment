@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd2f0f5e8edd055659de09f4292cc193",
+    "content-hash": "3e3448fb7b51319c6e8b6be07ea80dc1",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -1138,7 +1138,7 @@
             "version": "3.6.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "e786e3d9707ffd9b0dd330ca135b66344dcef85a"
             },
             "dist": {
@@ -25597,7 +25597,6 @@
         "drupal/sharethis": 10,
         "drupal/social_api": 20,
         "drupal/stage_file_proxy": 5,
-        "drupal/user_registrationpassword": 15,
         "drupal/views_ajax_get": 20,
         "drupal/views_block_filter_block": 10,
         "sensiolabs-de/deprecation-detector": 20

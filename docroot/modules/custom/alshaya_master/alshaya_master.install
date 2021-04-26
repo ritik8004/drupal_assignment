@@ -1143,12 +1143,6 @@ function alshaya_master_install() {
     'Store Number' => [
       'ar' => 'رقم المحل',
     ],
-    'Further instructions have been sent to your email address.' => [
-      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
-    ],
-    'Further instructions have been sent to your e-mail address.' => [
-      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
-    ],
     'Please agree to the Terms and Conditions.' => [
       'ar' => 'يرجى الموافقة على الشروط والأحكام',
     ],
@@ -2123,7 +2117,8 @@ function alshaya_master_install() {
     'to get a Free Gift' => [
       'ar' => 'للحصول على هدية مجانية'
     ],
-    'If your account is valid, an email will be sent with instructions to reset your password.' => [
+    'If %identifier is a valid account, an email will be sent with instructions to reset your password.' => [
+      'en' => 'If your account is valid, an email will be sent with instructions to reset your password.',
       'ar' => 'إذا كان حسابك صالحًا ، فسيتم إرسال بريد إلكتروني يحتوي على تعليمات لإعادة تعيين كلمة المرور الخاصة بك.',
     ],
   ];
