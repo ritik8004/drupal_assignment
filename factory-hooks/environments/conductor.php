@@ -608,6 +608,9 @@ $conductors = [
     'hmac_secret' => 'MmIyMWMxMDMtOTE3Zi00',
     'site_id' => 414,
   ],
+  'bbwjo_prod' => [
+    'site_id' => 415,
+  ],
   // VictoriaSecret KW.
   'vskw_qa' => [
     'hmac_id' => 'd00662613f144789831ebfe3d5885e37',
