@@ -128,7 +128,7 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'review_comment_submission',
-      'value' => t('Thank you for submitting a comment! Your comment is being moderated and may take up to a few days to appear.'),
+      'value' => t('Thanks for submitting your comment! It is currently being moderated and will be visible shortly.'),
     ],
     [
       'key' => 'review_recommendation_text',
