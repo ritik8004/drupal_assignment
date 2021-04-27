@@ -335,11 +335,12 @@ class AcqSkuDrushCommands extends DrushCommands {
 
         // Confirmation to delete old categories.
         if ($this->io()->confirm(dt('Are you sure you want to clean these old categories'), FALSE)) {
+          $orphan_categories = array_keys($orphan_categories);
 
           // Allow other modules to skipping the deleting of terms.
           $this->moduleHandler->alter('acq_sku_sync_categories_delete', $orphan_categories);
 
-          foreach ($orphan_categories as $tid => $rs) {
+          foreach ($orphan_categories as $tid) {
             $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
             if ($term instanceof TermInterface) {
               // Delete the term.
