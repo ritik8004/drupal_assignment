@@ -19,6 +19,21 @@ function _alshaya_bazaar_voice_translations() {
     'True to size' => [
       'ar' => 'نفس المقاس',
     ],
+    'Clear all' => [
+      'ar' => 'امسح كل التعليق',
+    ],
+    'star' => [
+      'ar' => 'احفظ التعليق',
+    ],
+    'of' => [
+      'ar' => 'من',
+    ],
+    'Item Code' => [
+      'ar' => 'رمز المنتج',
+    ],
+    'Thanks for submitting your comment! It is currently being moderated and will be visible shortly.' => [
+      'ar' => 'شكرا لإرسال تعليقك! سوف نقوم بمراجعته، وسيظهر على الموقع قريباً.',
+    ],
     'stars' => [
       'ar' => 'نجوم',
     ],
