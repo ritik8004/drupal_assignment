@@ -2,7 +2,8 @@ import React from 'react';
 
 import CartPromotion from '../../cart/components/cart-promotion';
 import SpecialPrice from '../special-price';
-import ProductLozenges from '../product-lozenges';
+import Lozenges
+  from '../../../../alshaya_algolia_react/js/common/components/lozenges';
 
 const RecommendedProduct = ({ item, itemKey }) => {
   const itemUrl = `product-quick-view/${item.nid}/nojs`;
@@ -20,7 +21,7 @@ const RecommendedProduct = ({ item, itemKey }) => {
                 />
               )
               : null}
-            <ProductLozenges labels={item.labels} sku={itemKey} />
+            <Lozenges labels={item.labels} sku={itemKey} />
           </div>
           <div className="product-title">{item.title}</div>
           <div className="spc-product-price">
