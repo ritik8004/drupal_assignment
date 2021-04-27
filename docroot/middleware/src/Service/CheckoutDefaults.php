@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\CartActions;
 use Psr\Log\LoggerInterface;
+use App\Service\Magento\MagentoCustomer;
 
 /**
  * Class CheckoutDefaults.
@@ -51,6 +52,13 @@ class CheckoutDefaults {
   protected $logger;
 
   /**
+   * Magento Customer service.
+   *
+   * @var \App\Service\Magento\MagentoCustomer
+   */
+  protected $magentoCustomer;
+
+  /**
    * Orders constructor.
    *
    * @param \App\Service\Cart $cart
@@ -63,17 +71,21 @@ class CheckoutDefaults {
    *   Utility Service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
+   * @param \App\Service\Magento\MagentoCustomer $magento_customer
+   *   Magento Customer service.
    */
   public function __construct(Cart $cart,
                               Drupal $drupal,
                               Orders $orders,
                               Utility $utility,
-                              LoggerInterface $logger) {
+                              LoggerInterface $logger,
+                              MagentoCustomer $magento_customer) {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->orders = $orders;
     $this->utility = $utility;
     $this->logger = $logger;
+    $this->magentoCustomer = $magento_customer;
   }
 
   /**
@@ -153,9 +165,23 @@ class CheckoutDefaults {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   private function applyDefaultShipping(array $order) {
+    // Get customer address ids.
+    $customer = $this->magentoCustomer->getCustomerByMail($order['customer_email']);
+
+    if (!empty($customer) && isset($customer['addresses'])) {
+      $customer_address_ids = array_column($customer['addresses'], 'id');
+    }
+
     $address = $order['shipping']['commerce_address'];
 
     if (strpos($order['shipping']['method'], 'click_and_collect') === 0) {
+      // Return false if address id is not set or address id from last order
+      // doesn't exist in customer's address id list.
+      if (empty($order['billing_commerce_address']['customer_address_id'])
+        || !in_array($order['billing_commerce_address']['customer_address_id'], $customer_address_ids)) {
+        return FALSE;
+      }
+
       $store = $this->drupal->getStoreInfo($order['shipping']['extension_attributes']['store_code']);
 
       // We get a string value if store node is not present in Drupal. So in
@@ -177,7 +203,10 @@ class CheckoutDefaults {
       return FALSE;
     }
 
-    if (empty($address['customer_address_id'])) {
+    // Return false if address id is not set or address id from last order
+    // doesn't exist in customer's address id list.
+    if (empty($address['customer_address_id'])
+      || !in_array($address['customer_address_id'], $customer_address_ids)) {
       return FALSE;
     }
 
