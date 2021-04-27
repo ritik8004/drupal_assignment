@@ -1,4 +1,7 @@
 import React from 'react';
+import PostpayCart
+  from '../../../../../alshaya_spc/js/cart/components/postpay/postpay';
+import Postpay from '../../../../../alshaya_spc/js/utilities/postpay';
 
 const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
@@ -12,6 +15,17 @@ const PdpInfo = ({
   }
 
   const specialPriceClass = (parseInt(finalPrice, 10) < parseInt(pdpProductPrice, 10)) ? 'has-special-price' : '';
+
+  let postpay;
+  if (Postpay.isPostpayEnabled()) {
+    postpay = (
+      <PostpayCart
+        amount={finalPrice}
+        classNames=""
+        pageType="pdp"
+      />
+    );
+  }
 
   return (
     <div className={(shortDetail ? 'magv2-compact-detail-wrapper' : 'magv2-detail-wrapper')}>
@@ -55,6 +69,7 @@ const PdpInfo = ({
           </div>
         </div>
       </div>
+      {postpay}
     </div>
   );
 };

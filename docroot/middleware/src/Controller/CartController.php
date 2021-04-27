@@ -334,8 +334,10 @@ class CartController {
 
     if (empty($data['payment']['methods']) && !empty($data['shipping']['method'])) {
       $methods = $this->cart->getPaymentMethods();
-      $data['payment']['methods'] = $methods ?? [];
-      $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
+      if (!empty($methods)) {
+        $data['payment']['methods'] = $methods;
+        $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
+      }
     }
 
     // Re-use the processing done for cart page.

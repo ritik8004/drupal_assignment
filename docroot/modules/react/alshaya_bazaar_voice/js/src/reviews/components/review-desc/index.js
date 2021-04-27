@@ -4,46 +4,46 @@ import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
-import ReviewPhoto from '../review-photo';
+import ReviewPhotos from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
+import ReviewResponseDisplay from '../review-response-display';
+import { getLanguageCode } from '../../../utilities/api/request';
 
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
+  isNewPdpLayout,
 }) => {
+  let newPdp = isNewPdpLayout;
+  newPdp = (newPdp === undefined) ? false : newPdp;
+
   if (reviewDescriptionData !== undefined) {
-    const date = getDate(reviewDescriptionData.SubmissionTime);
+    const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
     return (
       <div className="review-detail-right">
         <div className="review-details">
 
-          <ConditionalView condition={window.innerWidth > 767}>
+          <ConditionalView condition={(window.innerWidth > 767) && (!newPdp)}>
             <DisplayStar
               starPercentage={reviewDescriptionData.Rating}
             />
             <div className="review-title">{reviewDescriptionData.Title}</div>
             <div className="review-date">{`${date}`}</div>
           </ConditionalView>
-
           <div className="review-text">{reviewDescriptionData.ReviewText}</div>
-
           <ReviewAdditionalAttributes
-            reviewAdditionalAttributesData={reviewDescriptionData.TagDimensions}
+            additionalFieldsData={reviewDescriptionData.AdditionalFields}
+            additionalFieldsOrder={reviewDescriptionData.AdditionalFieldsOrder}
+            tagDimensionsData={reviewDescriptionData.TagDimensions}
+            tagDimensionsOrder={reviewDescriptionData.TagDimensionsOrder}
           />
-
-          <ReviewAdditionalAttributes
-            reviewAdditionalAttributesData={reviewDescriptionData.AdditionalFields}
-            includes="_textarea"
-          />
-
-          {
-            (reviewDescriptionData.Photos && reviewDescriptionData.Photos.length > 0)
-              ? <ReviewPhoto photoCollection={reviewDescriptionData.Photos} />
-              : null
-          }
-
+          <ConditionalView condition={reviewDescriptionData.Photos
+            && reviewDescriptionData.Photos.length > 0}
+          >
+            <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
+          </ConditionalView>
           <div className="review-inline-feedback">
             <div>
               <ConditionalView condition={reviewDescriptionData.IsRecommended !== false
@@ -51,7 +51,7 @@ const ReviewDescription = ({
               >
                 <div className="review-recommendation">
                   <span className="review-recommendation-icon" />
-                  <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
+                  <span>{`${reviewDescriptionData.IsRecommended ? getStringMessage('yes') : getStringMessage('no')},`}</span>
                   <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
                 </div>
               </ConditionalView>
@@ -68,6 +68,12 @@ const ReviewDescription = ({
             <ReviewCommentForm
               ReviewId={reviewDescriptionData.Id}
             />
+            <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
+              <ReviewResponseDisplay
+                reviewId={reviewDescriptionData.Id}
+                reviewResponses={reviewDescriptionData.ClientResponses}
+              />
+            </ConditionalView>
             <div className="review-comment-display">
               <ReviewCommentDisplay
                 reviewId={reviewDescriptionData.Id}

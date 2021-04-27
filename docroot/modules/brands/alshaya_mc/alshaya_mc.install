@@ -10,28 +10,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * [6.0.0] Update the metatag translations.
- */
-function alshaya_mc_update_8320() {
-  $category_config = \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category');
-  $category_config->set('tags.title', '[alshaya_seo:page_title]');
-  $category_config->set('tags.description', '[alshaya_seo:desc_start] [alshaya_seo:text_before_cod] [alshaya_seo:desc_free_delivery_n_cod]');
-  $category_config->save();
-  // Add ar translation for config.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'metatag.metatag_defaults.taxonomy_term__acq_product_category');
-  $tags = [
-    'title' => '[alshaya_seo:page_title]',
-    'description' => '[alshaya_seo:desc_start] [alshaya_seo:text_before_cod] [alshaya_seo:desc_free_delivery_n_cod]',
-  ];
-  $config->set('tags', $tags);
-  $config->save();
-
-  _alshaya_mc_get_metatag_translations();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update config for enable_lhn_tree_search
  * for sidebar visibility in search page.
  * Queue items for alshaya_algolia_index.
@@ -451,41 +429,17 @@ function _alshaya_mc_get_metatag_translations() {
       'en' => 'Buy mothercare - [term:name] - [current-date:html_year] sale and offers',
       'ar' => 'عروض وخصومات الرعاية الأم - [term:name] - [current-date:html_year]',
     ],
+    'alshaya_seo_desc_start' => [
+      'en' => 'Shop [alshaya_seo:brand_name] [term:name]',
+      'ar' => 'شراء [term:name] من [alshaya_seo:brand_name]',
+    ],
     'alshaya_seo_sale_keywords' => [
       'en' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
       'ar' => '[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers for , [alshaya_seo:brand_name] [term:name] sale[term:name] sale, [term:name] promotions, [term:name], [term:name] sale in [alshaya_seo:country], [alshaya_seo:term_cities], [term:name] offers, [term:name] online offers, [term:name] online sale, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] offers, [alshaya_seo:brand_name] [term:name] sale, [alshaya_seo:brand_name] [term:name] sale [alshaya_seo:top_category]',
     ],
     'alshaya_seo_keywords' => [
-      'en' => 'Shop [term:name] Collection Online, Shop [term:name], Shop best [term:name] products,Shop [term:name] in [alshaya_seo:country], Buy [alshaya_seo:brand_name] [term:name] online, [alshaya_seo:term_cities]',
-      'ar' => 'تسوق مجموعة [term:name] أونلاين، تسوق [term:name]، تسوق أفضل منتجات [term:name]، تسوق [term:name] في [alshaya_seo:country]، اشتري [alshaya_seo:brand_name] [term:name] أونلاين، تسوق [alshaya_seo:term_cities]',
-    ],
-    'alshaya_seo_text_before_cod' => [
-      'en' => 'Find a wide range of [term:name] collections varying at the best price and quality to meet all demands.',
-      'ar' => 'احصل على مجموعة كبيرة من اختيارات [term:name] متنوعة بأفضل سعر وجودة .',
-    ],
-    'alshaya_seo_l2_text_before_cod' => [
-      'en' => 'Explore the best deals on [term:name] available at the best prices. A wide range of mothers and babies’ products from top brands.',
-      'ar' => ' احصل على مجموعة كبيرة من اختيارات [term:name] متنوعة بأفضل سعر وجودة لتلبي كل التطلعات.',
-    ],
-    'alshaya_seo_l3_text_before_cod' => [
-      'en' => 'Explore the variety of top quality [term:name] collection at the best prices and delivery to all [alshaya_seo:country].',
-      'ar' => 'أفضل العلامات التجارية [term:name] عالية الجودة بأفضل الأسعار وتوصيل متاح لكل [alshaya_seo:country].',
-    ],
-    'alshaya_seo_desc_free_delivery_n_cod' => [
-      'en' => 'Enjoy ✓ Free Returns and ✓ Cash on Delivery!',
-      'ar' => 'ستمتع بمزايا ✓  الاسترجاع المجاني ✓  الدفع عند الاستلام!',
-    ],
-    'alshaya_seo_page_title' => [
-      'en' => 'Shop [term:name] Collection Online | [site:name]',
-      'ar' => 'تسوق مجموعة أزياء [term:name] اتش آند إم | [site:name]',
-    ],
-    'alshaya_seo_desc_start' => [
-      'en' => 'Shop [alshaya_seo:brand_name] [term:name] collection online in [alshaya_seo:cities] and whole [alshaya_seo:country].',
-      'ar' => 'تسوق مجموعة [term:name] من [alshaya_seo:brand_name] أونلاين في [alshaya_seo:cities]، وكل أنحاء [alshaya_seo:country].',
-    ],
-    'alshaya_seo_l3_desc_start' => [
-      'en' => 'Shop [alshaya_seo:brand_name][term:name] collection in [alshaya_seo:cities] and [alshaya_seo:country] from top brand.',
-      'ar' => 'تسوق تشكيلة [term:name] من [alshaya_seo:brand_name] في [alshaya_seo:cities]، و[alshaya_seo:country] لأفضل العلامات التجارية.',
+      'en' => 'Shop [term:name] Collection Online, Shop Newborn [term:name], Shop [term:name] for [term:parent:name], Shop [term:parent:name] [term:name], Shop [term:name] in [alshaya_seo:country], Buy [alshaya_seo:brand_name] [term:name] online, [alshaya_seo:term_cities]',
+      'ar' => 'تسوق تشكيلة [term:name] اون لاين, تسوق [term:name] [term:parent:name] من [alshaya_seo:brand_name], اشتري [term:name] من [alshaya_seo:brand_name], اشتري [term:name] [term:parent:name] من [alshaya_seo:brand_name], [alshaya_seo:term_cities], تسوق [term:name] اون لاين في [alshaya_seo:country]',
     ],
   ];
 

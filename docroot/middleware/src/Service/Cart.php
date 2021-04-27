@@ -1716,7 +1716,7 @@ class Cart {
       $cartReservedOrderId = $cart['cart']['extension_attributes']['real_reserved_order_id'];
 
       $doubleCheckEnabled = $checkout_settings['place_order_double_check_after_exception'];
-      if ($doubleCheckEnabled) {
+      if ($doubleCheckEnabled && !$this->isUpapiPaymentMethod($data['paymentMethod']['method']) && !$this->isPostpayPaymentMethod($data['paymentMethod']['method'])) {
         $double_check_done = 'yes';
         try {
           $lastOrder = $this->orders->getLastOrder((int) $this->getCartCustomerId());
@@ -1868,6 +1868,7 @@ class Cart {
   public function processPostOrderPlaced(int $order_id, string $payment_method) {
     $cart = $this->getCart();
     $email = $this->getCartCustomerEmail();
+    $customer_id = $this->getCartCustomerId();
 
     // Remove cart id and other caches from session.
     $this->removeCartFromSession();
@@ -1883,6 +1884,7 @@ class Cart {
       'order_id' => (int) $order_id,
       'cart' => $cart['cart'],
       'payment_method' => $payment_method,
+      'customer_id' => $customer_id,
     ];
 
     $this->drupal->triggerCheckoutEvent('place order success', $data);

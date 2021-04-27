@@ -9,6 +9,46 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.2.0] Delete the configs for /skus/list API.
+ */
+function alshaya_acm_product_update_8069() {
+  // Deleting the memory limit policy for /skus/list API.
+  \Drupal::configFactory()->getEditable('memory_limit_policy.memory_limit_policy.path_based_memory')->delete();
+  // Deleting the sku_images rest config.
+  \Drupal::configFactory()->getEditable('rest.resource.sku_images')->delete();
+  // Disable the resource related permissions.
+  $role = Role::load('alshaya_magento_consumer');
+  if ($role->hasPermission('restful post sku_images')) {
+    $role->revokePermission('restful post sku_images');
+  }
+  $role->save();
+}
+/**
+ * Implements hook_update_N().
+ *
+ * Add new Product Status resource.
+ */
+function alshaya_acm_product_update_8068() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'rest.resource.product_status',
+  ],
+    'alshaya_acm_product',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+
+  // Rebuild router.
+  \Drupal::service('router.builder')->rebuild();
+}
 
 /**
  * Implements hook_update_N().

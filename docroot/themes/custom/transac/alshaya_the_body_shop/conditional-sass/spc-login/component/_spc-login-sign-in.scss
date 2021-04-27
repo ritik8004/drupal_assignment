@@ -1,6 +1,27 @@
 .alias--cart-login {
   .site-brand-wrapper {
     background: $checkout_header_bg;
+
+    @include breakpoint($only-mobile) {
+      align-items: initial;
+    }
+
+    a {
+      img {
+        margin-#{$left}: 0;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        height: 7rem;
+
+        a {
+          height: 2.875rem;
+          margin: 0;
+        }
+      }
+    }
   }
 
   .multistep-login {
@@ -18,6 +39,12 @@
           font-family: $alshaya-medium;
           text-transform: capitalize;
         }
+      }
+    }
+
+    .form-item {
+      .js-form-required {
+        text-transform: capitalize;
       }
     }
 

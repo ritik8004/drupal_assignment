@@ -1,0 +1,6 @@
+.spc-type-textfield {
+  input:focus ~ label,
+  input.focus ~ label {
+    font-family: $tbs-light;
+  }
+}

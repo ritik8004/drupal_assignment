@@ -484,7 +484,6 @@ header {
         font-size: 0.875rem;
         padding: 0.625rem 1.5rem;
         line-height: 1;
-        color: $mm_l1_link;
         margin-top: 0;
         text-transform: capitalize;
 
@@ -706,11 +705,8 @@ header {
 
       &:hover {
         a.menu--one__link {
-          color: $primary_link-hover !important;
-
           &::after {
-            background-color: $primary_link-hover;
-            visibility: visible;
+            background-color: $mm_l1_link_active_border;
           }
         }
 
@@ -737,7 +733,7 @@ header {
           color: $mm_l1_link;
 
           &::after {
-            background-color: $primary_link-hover;
+            background-color: $mm_l1_link_active_border;
             visibility: visible;
           }
         }

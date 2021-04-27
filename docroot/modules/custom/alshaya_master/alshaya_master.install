@@ -11,6 +11,37 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - Forgot password message.
+ */
+function alshaya_master_update_8046() {
+  $strings = [
+    'If %identifier is a valid account, an email will be sent with instructions to reset your password.' => [
+      'en' => 'If your account is valid, an email will be sent with instructions to reset your password.',
+      'ar' => 'إذا كان حسابك صالحًا ، فسيتم إرسال بريد إلكتروني يحتوي على تعليمات لإعادة تعيين كلمة المرور الخاصة بك.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update arabic string translation for price filter options - '@start - @stop'.
+ */
+function alshaya_master_update_8045() {
+  $strings = [
+    '@start - @stop' => [
+      'ar' => '@start - @stop',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstall alshaya_rum module.
  */
 function alshaya_master_update_8044() {
@@ -1137,12 +1168,6 @@ function alshaya_master_install() {
     'Store Number' => [
       'ar' => 'رقم المحل',
     ],
-    'Further instructions have been sent to your email address.' => [
-      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
-    ],
-    'Further instructions have been sent to your e-mail address.' => [
-      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
-    ],
     'Please agree to the Terms and Conditions.' => [
       'ar' => 'يرجى الموافقة على الشروط والأحكام',
     ],
@@ -1642,7 +1667,7 @@ function alshaya_master_install() {
       'ar' => 'أقل من @stop',
     ],
     '@start - @stop' => [
-      'ar' => '@stop - @start',
+      'ar' => '@start - @stop',
     ],
     'Features and benefits' => [
       'ar' => 'المزايا و الفوائد',
@@ -2116,6 +2141,10 @@ function alshaya_master_install() {
     ],
     'to get a Free Gift' => [
       'ar' => 'للحصول على هدية مجانية'
+    ],
+    'If %identifier is a valid account, an email will be sent with instructions to reset your password.' => [
+      'en' => 'If your account is valid, an email will be sent with instructions to reset your password.',
+      'ar' => 'إذا كان حسابك صالحًا ، فسيتم إرسال بريد إلكتروني يحتوي على تعليمات لإعادة تعيين كلمة المرور الخاصة بك.',
     ],
   ];
 

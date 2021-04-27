@@ -18,6 +18,7 @@ import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 
+const bazaarVoiceSettings = getbazaarVoiceSettings();
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
 
@@ -27,6 +28,7 @@ export default class ReviewSummary extends React.Component {
       reviewsSummary: '',
       reviewsProduct: '',
       reviewsComment: '',
+      reviewsAuthors: '',
       currentSortOption: '',
       currentFilterOptions: [],
       noResultmessage: null,
@@ -38,11 +40,13 @@ export default class ReviewSummary extends React.Component {
       currentPage: 1,
       prevButtonDisabled: true,
       nextButtonDisabled: false,
-      bazaarVoiceSettings: getbazaarVoiceSettings(),
+      loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
+      paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
     };
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
     this.changePaginationButtonStatus = this.changePaginationButtonStatus.bind(this);
+    this.loadMore = this.loadMore.bind(this);
   }
 
   /**
@@ -74,37 +78,41 @@ export default class ReviewSummary extends React.Component {
     }
   }
 
-  getReviews = (options, type, explicitTrigger = false, offset = this.getOffsetValue()) => {
+  getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
-    const { bazaarVoiceSettings } = this.state;
-    // Add sorting parameters.
-    const sortParams = (type === 'sort') ? `&${type}=${options}` : '';
-
-    // Add filtering parameters.
+    let sortParams = '';
     let filterParams = '';
-    if (type === 'filter' && options.length > 0) {
-      options.map((item) => {
-        filterParams += `&${type}=${item.value}`;
-        return filterParams;
-      });
+    if (extraParams !== undefined) {
+      // Add sorting parameters.
+      if (extraParams.currentSortOption.length > 0) {
+        sortParams = `&${extraParams.sortType}=${extraParams.currentSortOption}`;
+      }
+      // Add filtering parameters.
+      if (extraParams.currentFilterOptions.length > 0) {
+        extraParams.currentFilterOptions.map((item) => {
+          filterParams += `&${extraParams.filterType}=${item.value}`;
+          return filterParams;
+        });
+      }
     }
 
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/reviews.json';
-    const limit = this.getLimitConfigValue(bazaarVoiceSettings);
-    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${limit}&Offset=${offset}${sortParams}${filterParams}`;
+    const reviewLimit = this.getReviewLimit();
+    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         removeFullScreenLoader();
         if (result.error === undefined && result.data !== undefined) {
           if (result.data.Results.length > 0) {
-            if (type === undefined) {
+            if (extraParams === undefined) {
               this.setState({
                 totalReviews: result.data.TotalResults,
                 reviewsProduct: result.data.Includes.Products,
                 reviewsComment: result.data.Includes.Comments,
-                numberOfPages: Math.ceil(result.data.TotalResults / limit),
+                reviewsAuthors: result.data.Includes.Authors,
+                numberOfPages: Math.ceil(result.data.TotalResults / reviewLimit),
               }, () => {
                 const { currentPage, numberOfPages } = this.state;
                 this.changePaginationButtonStatus(currentPage, numberOfPages);
@@ -116,8 +124,9 @@ export default class ReviewSummary extends React.Component {
               reviewsSummary: result.data.Results,
               reviewsProduct: result.data.Includes.Products,
               reviewsComment: result.data.Includes.Comments,
+              reviewsAuthors: result.data.Includes.Authors,
               noResultmessage: null,
-              numberOfPages: Math.ceil(result.data.TotalResults / limit),
+              numberOfPages: Math.ceil(result.data.TotalResults / reviewLimit),
             }, () => {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
@@ -164,19 +173,25 @@ export default class ReviewSummary extends React.Component {
   }
 
   /**
-   * Get limit configuration value..
+   * Get Limit value for reviews.
    */
-  getLimitConfigValue() {
-    const { bazaarVoiceSettings } = this.state;
-    return bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page;
+  getReviewLimit() {
+    const { loadMoreLimit, paginationLimit } = this.state;
+    if (bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type === 'pagination') {
+      return paginationLimit;
+    }
+    return loadMoreLimit;
   }
 
   /**
    * Process the sort option value when get from the select list.
    */
   processSortOption = (option) => {
-    this.setState({ currentSortOption: option.value, currentPage: 1, offset: 0 }, () => {
-      this.getReviews(option.value, 'sort');
+    const initialLimit = bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load;
+    this.setState({
+      currentSortOption: option.value, currentPage: 1, offset: 0, loadMoreLimit: initialLimit,
+    }, () => {
+      this.processSortAndFilters();
     });
   }
 
@@ -185,7 +200,7 @@ export default class ReviewSummary extends React.Component {
    */
   addFilters = (option) => {
     const { currentFilterOptions } = this.state;
-
+    const initialLimit = bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load;
     // Remove multi filter option from same filter list.
     if (currentFilterOptions.length > 0) {
       currentFilterOptions.map((item, key) => {
@@ -201,9 +216,24 @@ export default class ReviewSummary extends React.Component {
     }
     currentFilterOptions.push(option);
 
-    this.setState({ currentPage: 1, offset: 0 }, () => {
-      this.getReviews(currentFilterOptions, 'filter');
+    this.setState({ currentPage: 1, offset: 0, loadMoreLimit: initialLimit }, () => {
+      this.processSortAndFilters();
     });
+  }
+
+  /**
+   * Process sort + filters options value and get reviews from bazaarvoice.
+   */
+  processSortAndFilters = () => {
+    const extraParams = [];
+    const { currentSortOption } = this.state;
+    const { currentFilterOptions } = this.state;
+    extraParams.sortType = 'sort';
+    extraParams.filterType = 'filter';
+    extraParams.currentSortOption = currentSortOption;
+    extraParams.currentFilterOptions = currentFilterOptions;
+    // Get reviews from bazaarvoice.
+    this.getReviews(extraParams, true);
   }
 
   /**
@@ -211,6 +241,7 @@ export default class ReviewSummary extends React.Component {
    */
   removeFilters = (option) => {
     let { currentFilterOptions } = this.state;
+    const initialLimit = bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load;
     const index = currentFilterOptions.indexOf(option);
     if (index !== -1) {
       currentFilterOptions.splice(index, 1);
@@ -223,8 +254,8 @@ export default class ReviewSummary extends React.Component {
       });
     }
 
-    this.setState({ currentPage: 1, offset: 0 }, () => {
-      this.getReviews(currentFilterOptions, 'filter');
+    this.setState({ currentPage: 1, offset: 0, loadMoreLimit: initialLimit }, () => {
+      this.processSortAndFilters();
     });
   }
 
@@ -233,17 +264,10 @@ export default class ReviewSummary extends React.Component {
    */
   nextPage() {
     const {
-      currentFilterOptions, currentSortOption, offset, bazaarVoiceSettings,
+      offset, paginationLimit,
     } = this.state;
-    const limit = this.getLimitConfigValue(bazaarVoiceSettings);
-    this.setState({ offset: offset + limit }, () => {
-      if (currentFilterOptions && currentFilterOptions.length > 0) {
-        this.getReviews(currentFilterOptions, 'filter', true);
-      } else if (currentSortOption) {
-        this.getReviews(currentSortOption, 'sort', true);
-      } else {
-        this.getReviews(undefined, undefined, true);
-      }
+    this.setState({ offset: offset + paginationLimit }, () => {
+      this.processSortAndFilters();
       this.setState((prevState) => ({ currentPage: prevState.currentPage + 1 }), () => {
         const { currentPage, numberOfPages } = this.state;
         this.changePaginationButtonStatus(currentPage, numberOfPages);
@@ -256,17 +280,10 @@ export default class ReviewSummary extends React.Component {
    */
   previousPage() {
     const {
-      currentFilterOptions, currentSortOption, offset, bazaarVoiceSettings,
+      offset, paginationLimit,
     } = this.state;
-    const limit = this.getLimitConfigValue(bazaarVoiceSettings);
-    this.setState({ offset: offset - limit }, () => {
-      if (currentFilterOptions && currentFilterOptions.length > 0) {
-        this.getReviews(currentFilterOptions, 'filter', true);
-      } else if (currentSortOption) {
-        this.getReviews(currentSortOption, 'sort', true);
-      } else {
-        this.getReviews(undefined, undefined, true);
-      }
+    this.setState({ offset: offset - paginationLimit }, () => {
+      this.processSortAndFilters();
       this.setState((prevState) => ({ currentPage: prevState.currentPage - 1 }), () => {
         const { currentPage, numberOfPages } = this.state;
         this.changePaginationButtonStatus(currentPage, numberOfPages);
@@ -292,11 +309,19 @@ export default class ReviewSummary extends React.Component {
     }
   }
 
+  loadMore() {
+    const initialLimit = bazaarVoiceSettings.reviews.bazaar_voice.reviews_on_loadmore;
+    this.setState((prev) => ({ loadMoreLimit: prev.loadMoreLimit + initialLimit }), () => {
+      this.processSortAndFilters();
+    });
+  }
+
   render() {
     const {
       reviewsSummary,
       reviewsProduct,
       reviewsComment,
+      reviewsAuthors,
       currentSortOption,
       currentFilterOptions,
       noResultmessage,
@@ -307,14 +332,30 @@ export default class ReviewSummary extends React.Component {
       nextButtonDisabled,
       currentPage,
       numberOfPages,
-      bazaarVoiceSettings,
+      loadMoreLimit,
     } = this.state;
+    const {
+      isNewPdpLayout,
+    } = this.props;
 
+    let newPdp = isNewPdpLayout;
+    newPdp = (newPdp === undefined) ? false : newPdp;
+
+    const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type;
     if (totalReviews === '') {
       return (
         <>
-          <div className="empty-review-summary">
-            <WriteReviewButton />
+          <div className="histogram-data-section">
+            <div className="rating-wrapper">
+              <div className="overall-summary-title">{getStringMessage('ratings_reviews')}</div>
+              <div className="empty-review-summary">
+                <div className="no-review-section">
+                  <p className="no-review-title">{getStringMessage('no_reviews_yet')}</p>
+                  <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
+                </div>
+                <WriteReviewButton />
+              </div>
+            </div>
           </div>
           <ConditionalView condition={postReviewData !== ''}>
             <PostReviewMessage postReviewData={postReviewData} />
@@ -327,7 +368,7 @@ export default class ReviewSummary extends React.Component {
       <div className="reviews-wrapper">
         <div className="histogram-data-section">
           <div className="rating-wrapper">
-            <ReviewHistogram overallSummary={reviewsProduct} />
+            <ReviewHistogram overallSummary={reviewsProduct} isNewPdpLayout={isNewPdpLayout} />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>
               <ReviewSorting
@@ -361,7 +402,7 @@ export default class ReviewSummary extends React.Component {
             </ConditionalView>
             {Object.keys(reviewsSummary).map((item) => (
               <div className="review-summary" key={reviewsSummary[item].Id}>
-                <ConditionalView condition={window.innerWidth < 768}>
+                <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
                   <DisplayStar
                     starPercentage={reviewsSummary[item].Rating}
                   />
@@ -369,22 +410,31 @@ export default class ReviewSummary extends React.Component {
                 </ConditionalView>
                 <ReviewInformation
                   reviewInformationData={reviewsSummary[item]}
-                  reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
-                    .ProductId].ReviewStatistics}
+                  reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
+                    .AuthorId].ReviewStatistics}
+                  isNewPdpLayout={isNewPdpLayout}
                 />
                 <ReviewDescription
                   reviewDescriptionData={reviewsSummary[item]}
                   reviewsComment={reviewsComment}
+                  isNewPdpLayout={isNewPdpLayout}
                 />
               </div>
             ))}
           </div>
-          <Pagination
-            currentPage={currentPage}
-            numberOfPages={numberOfPages}
-            prevButtonDisabled={prevButtonDisabled}
-            nextButtonDisabled={nextButtonDisabled}
-          />
+          <ConditionalView condition={reviewSettings === 'pagination'}>
+            <Pagination
+              currentPage={currentPage}
+              numberOfPages={numberOfPages}
+              prevButtonDisabled={prevButtonDisabled}
+              nextButtonDisabled={nextButtonDisabled}
+            />
+          </ConditionalView>
+          <ConditionalView condition={reviewSettings === 'load_more' && loadMoreLimit < currentTotal}>
+            <div className="load-more-wrapper">
+              <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+            </div>
+          </ConditionalView>
         </ConditionalView>
         <ConditionalView condition={noResultmessage !== null}>
           <EmptyMessage emptyMessage={noResultmessage} />

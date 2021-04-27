@@ -9,37 +9,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldStorageConfig;
 
 /**
- * Implements hook_update_N().
- *
- * Add field for Rating filter to be used as facet.
- */
-function alshaya_bazaar_voice_update_8001() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_acm_product'
-  );
-  \Drupal::service('acq_sku.fields_manager')->addFields();
-  // Update widget type as star rating.
-  $facet_ids = [
-    'plp_bv_rating',
-    'promo_bv_rating',
-    'bv_rating',
-  ];
-  foreach ($facet_ids as $facet_id) {
-    \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
-      ->set('widget.type', 'star_rating')
-      ->save();
-  }
-  // Provide sorting option Top rated in srp/plp.
-  _add_sort_option_in_plp_srp_config_form();
-   // Add configurations for PDP reviews filter options.
-  $manager->updateConfigs(['bazaar_voice_filter_review.settings'],
-    'bazaar_voice'
-  );
-}
-
-/**
  * Implements hook_install().
  *
  * Update default configurations for the fields created for ratings & reviews.

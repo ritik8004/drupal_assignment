@@ -371,6 +371,7 @@
 
 .magazine-layout-node .gallery-wrapper .pdp-asset {
   position: relative;
+  line-height: 0;
 }
 
 @include breakpoint($mobile) {

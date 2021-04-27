@@ -79,6 +79,8 @@
 
   // Type = TextArea.
   .write-review-type-textarea {
+    margin-bottom: 1.5rem;
+
     label {
       display: inline-block;
       margin-bottom: 0.5rem;
@@ -236,6 +238,12 @@
     display: inline-flex;
     margin-#{$right}: 0.625rem;
     margin-bottom: 1rem;
+
+    &-question {
+      margin-top: 1rem;
+      margin-bottom: 1.25rem;
+      color: $rr-form-label-txt;
+    }
 
     &.radio-error {
       input[type=checkbox] {

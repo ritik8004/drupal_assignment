@@ -9,6 +9,24 @@
     font-size: 0.875rem;
   }
 
+  ul {
+    &.js-pager__items {
+      margin-top: 3rem;
+
+      a {
+        font-size: 0.875rem;
+        line-height: 1.29;
+        text-transform: uppercase;
+        padding: 0.62625rem 3.9375rem;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          width: 100%;
+        }
+      }
+    }
+  }
+
   .region__content {
     .block-page-title-block.mobile {
       h1 {
@@ -81,6 +99,7 @@
           text-transform: uppercase;
           font-family: $vs-bold;
           border: none;
+          margin-bottom: 0;
 
           a {
             display: block;
@@ -199,6 +218,26 @@
     }
   }
 
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 19.5rem;
+          }
+        }
+      }
+
+      &.product-large {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            max-height: 26.5rem;
+          }
+        }
+      }
+    }
+  }
+
   &.lhn-without-sidebar {
     .c-products-list.product-small {
       @include breakpoint($desktop) {
@@ -253,24 +292,6 @@
       input[type=checkbox] ~ label::before {
         @include breakpoint($only-mobile) {
           top: 0;
-        }
-      }
-    }
-  }
-
-  ul {
-    &.js-pager__items {
-      margin-top: 3rem;
-
-      a {
-        font-size: 0.875rem;
-        line-height: 1.29;
-        text-transform: uppercase;
-        padding: 0.62625rem 3.9375rem;
-
-        @include breakpoint($only-mobile) {
-          display: block;
-          width: 100%;
         }
       }
     }
