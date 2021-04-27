@@ -137,7 +137,6 @@ class AddressBookAreasTermsHelper {
    */
   public function getAllAreasWithParent($parent = NULL, bool $location_key = FALSE) {
     if (empty($parent)) {
-      // Parent is required in DM_VERSION 2, not throwing error though.
       return [];
     }
 
