@@ -1,9 +1,10 @@
 import React from 'react';
+import TextareaAutosize from 'react-autosize-textarea';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
 import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
+  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie, getCurrentUserName,
 } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
@@ -34,14 +35,16 @@ class ReviewCommentForm extends React.Component {
           <div className="comment-form-title">
             {getStringMessage('post_a_comment')}
           </div>
+          <BazaarVoiceMessages />
           <div className="comment-form-fields">
             <input type="hidden" name="blackBox" id="ioBlackBox" />
             <div className="form-item">
-              <input
+              <TextareaAutosize
                 type="text"
                 id="commentbox"
                 name="commentbox"
-                minLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length}
+                minLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_box_min_length}
+                maxLength={bazaarVoiceSettings.reviews.bazaar_voice.comment_box_max_length}
                 onChange={this.handleCommentboxChange}
                 className="form-input"
                 defaultValue={commentbox}
@@ -131,9 +134,10 @@ class ReviewCommentForm extends React.Component {
       if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
         authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
       }
+      const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
       // Set user authenticated string (UAS).
-      if (getCurrentUserEmail() !== null && getSessionCookie('uas_token') !== undefined) {
-        authParams += `&user=${getSessionCookie('uas_token')}`;
+      if (getCurrentUserEmail() !== null && getSessionCookie(currentUserKey) !== undefined) {
+        authParams += `&user=${getSessionCookie(currentUserKey)}`;
         setSessionCookie('BvUserNickname', nickname);
       }
 
@@ -198,8 +202,9 @@ class ReviewCommentForm extends React.Component {
 
   handleCommentboxChange = (e) => {
     if (e.target.value.length > 0) {
+      const label = getStringMessage('comment');
       document.getElementById(`${e.target.id}-error`).innerHTML = e.target.value.length < e.target.minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength })
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label })
         : '';
     } else {
       document.getElementById(`${e.target.id}-error`).innerHTML = '';
@@ -212,13 +217,17 @@ class ReviewCommentForm extends React.Component {
     const { showCommentForm, showCommentSubmission } = this.state;
     let emailValue = '';
     let nicknameValue = '';
+    // Set default value for user email.
     if (getCurrentUserEmail() !== null) {
       emailValue = getCurrentUserEmail();
     } else if (getSessionCookie('BvUserEmail') !== null) {
       emailValue = getSessionCookie('BvUserEmail');
     }
-    if (getCurrentUserEmail() !== null || getSessionCookie('BvUserEmail') !== null) {
-      nicknameValue = getSessionCookie('BvUserNickname') !== null ? getSessionCookie('BvUserNickname') : '';
+    // Set default value for user nickname.
+    if (getSessionCookie('BvUserNickname') !== null) {
+      nicknameValue = getSessionCookie('BvUserNickname');
+    } else if (getCurrentUserName() !== null) {
+      nicknameValue = getCurrentUserName();
     }
 
     if (ReviewId !== undefined) {
@@ -240,8 +249,6 @@ class ReviewCommentForm extends React.Component {
           </div>
           {showCommentForm ? this.showCommentForm() : null}
           {showCommentSubmission ? this.showCommentSubmission() : null}
-          {showCommentForm
-           && (<BazaarVoiceMessages />)}
         </>
       );
     }

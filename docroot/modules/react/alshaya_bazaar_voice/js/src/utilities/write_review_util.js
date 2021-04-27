@@ -64,7 +64,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
   });
 
   // Add photo urls uploaded from photo upload.
-  if (elements.photoCount.value > 0) {
+  if (elements.photoCount !== undefined && elements.photoCount.value > 0) {
     const count = Number(elements.photoCount.value);
     [...Array(count)].map((key, index) => {
       const photoId = `photourl_${(index + 1)}`;
@@ -77,9 +77,9 @@ export const prepareRequest = (elements, fieldsConfig) => {
   if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
     params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
-
+  const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
   // Set user authenticated string (UAS).
-  const userToken = getSessionCookie('uas_token');
+  const userToken = getSessionCookie(currentUserKey);
   if (getCurrentUserEmail() !== null && userToken !== undefined) {
     params += `&user=${userToken}`;
   }
@@ -110,6 +110,7 @@ export const validateRequest = (elements, fieldsConfig) => {
     const id = fieldsConfig[key]['#id'];
     const required = fieldsConfig[key]['#required'];
     const groupType = fieldsConfig[key]['#group_type'];
+    const title = fieldsConfig[key]['#title'];
     // Validate input data from field types.
     try {
       if (required) {
@@ -117,12 +118,12 @@ export const validateRequest = (elements, fieldsConfig) => {
           switch (groupType) {
             case 'textfield':
             case 'textarea':
-              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_field_default_error');
+              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': title });
               document.getElementById(`${id}-error`).classList.add('error');
               isError = true;
               break;
             case 'select':
-              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_select_field_default_error');
+              document.getElementById(`${id}-error`).innerHTML = getStringMessage('empty_select_field_default_error', { '%fieldTitle': title });
               document.getElementById(`${id}-error`).classList.add('error');
               isError = true;
               break;

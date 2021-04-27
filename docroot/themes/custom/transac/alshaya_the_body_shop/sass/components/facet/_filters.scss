@@ -1,0 +1,11 @@
+.c-facet.c-accordion,
+.c-facet.c-collapse-item {
+  margin-bottom: 0.875rem;
+}
+
+.filter-fixed-top {
+  .c-facet.c-accordion,
+  .c-facet.c-collapse-item {
+    margin-bottom: 0;
+  }
+}

@@ -17,6 +17,7 @@ export default class WriteReviewButton extends React.Component {
 
   openModal = (e) => {
     e.preventDefault();
+    document.body.classList.add('open-form-modal');
 
     this.setState({
       isModelOpen: true,
@@ -25,6 +26,7 @@ export default class WriteReviewButton extends React.Component {
 
   closeModal = (e) => {
     e.preventDefault();
+    document.body.classList.remove('open-form-modal');
 
     this.setState({
       isModelOpen: false,
@@ -49,7 +51,8 @@ export default class WriteReviewButton extends React.Component {
     }
     if (bazaarVoiceSettings.reviews.user.user_id !== 0) {
       // Set uas token in cookies if user is logged in.
-      getSessionCookie('uas_token');
+      const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
+      getSessionCookie(currentUserKey);
     }
 
     return (

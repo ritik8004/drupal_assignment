@@ -1,5 +1,6 @@
 import React from 'react';
 import ConditionalView from '../../../../../../common/components/conditional-view';
+import getStringMessage from '../../../../../../../../../js/utilities/strings';
 
 class RadioButton extends React.Component {
   constructor(props) {
@@ -26,8 +27,8 @@ class RadioButton extends React.Component {
     } = this.props;
     const { activeId } = this.state;
     const recommend = {
-      0: Drupal.t('no'),
-      1: Drupal.t('yes'),
+      0: getStringMessage('no'),
+      1: getStringMessage('yes'),
     };
 
     return (

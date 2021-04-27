@@ -12,11 +12,12 @@ class TextField extends React.Component {
   }
 
   handleChange = (e) => {
+    const { label } = this.props;
     const { value, minLength, id } = e.currentTarget;
     let activeClass = '';
     if (value.length > 0) {
       document.getElementById(`${id}-error`).innerHTML = value.length < minLength
-        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength })
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': minLength, '%fieldTitle': label })
         : '';
       activeClass = 'active-label';
     }

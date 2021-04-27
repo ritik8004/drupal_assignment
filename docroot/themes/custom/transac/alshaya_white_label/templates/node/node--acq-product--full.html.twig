@@ -222,6 +222,8 @@ set classes = [
 <div id="dy-recommendation"></div>
 
 {% if content.reviews_section %}
-  {{ content.bazaar_voice_strings }}
-  {{content.reviews_section}}
+  {% if bazaar_voice_strings %}
+    {{ bazaar_voice_strings }}
+  {% endif %}
+  {{ content.reviews_section }}
 {% endif %}

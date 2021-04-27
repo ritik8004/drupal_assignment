@@ -477,18 +477,12 @@ class SkuManager {
    *   SKU Entity.
    * @param string $color
    *   Color value to limit the scope of skus to get price.
-   * @param bool $specialPrice
-   *   Boolean flag to indicate if we want to load with specialPrice.
    *
    * @return array
    *   Minimum final price and associated initial price.
    */
-  public function getMinPrices(SKU $sku_entity, string $color = '', $specialPrice = FALSE) {
-    $cache_key = implode(':', array_filter([
-      'product_price',
-      $color,
-      $specialPrice,
-    ]));
+  public function getMinPrices(SKU $sku_entity, string $color = '') {
+    $cache_key = implode(':', array_filter(['product_price', $color]));
     $cache = $this->productCacheManager->get($sku_entity, $cache_key);
 
     // Do not process the same thing again and again.
@@ -500,15 +494,9 @@ class SkuManager {
       'price' => 0,
       'final_price' => 0,
     ];
-    if ($specialPrice) {
-      $prices['special_price'] = 0;
-    }
     if ($sku_entity->bundle() == 'simple') {
       $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
       $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
-      if ($specialPrice) {
-        $special_price = (float) acq_commerce_get_clean_price($sku_entity->get('special_price')->getString());
-      }
       if ((empty($price) && $final_price > 0) || ($final_price >= $price)) {
         $price = $final_price;
       }
@@ -520,9 +508,6 @@ class SkuManager {
         'price' => $price,
         'final_price' => $final_price,
       ];
-      if ($specialPrice) {
-        $prices['special_price'] = $special_price;
-      }
       $this->productCacheManager->set($sku_entity, $cache_key, $prices);
       return $prices;
     }
@@ -546,12 +531,9 @@ class SkuManager {
         $child_sku_entity = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
 
         if ($child_sku_entity instanceof SKU) {
-          $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity, '', $specialPrice);
+          $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity);
           $price = $prices['children'][$child_sku_code]['price'];
           $final_price = $prices['children'][$child_sku_code]['final_price'];
-          if ($specialPrice) {
-            $special_price = $prices['children'][$child_sku_code]['special_price'];
-          }
           if ($prices['children'][$child_sku_code]['final_price'] == $price) {
             $prices['children'][$child_sku_code]['final_price'] = 0;
           }
@@ -573,9 +555,6 @@ class SkuManager {
               $sku_price = $new_sku_price;
               $prices['price'] = $price;
               $prices['final_price'] = $final_price;
-              if ($specialPrice) {
-                $prices['special_price'] = $special_price;
-              }
             }
             // Is the difference between initial an final bigger?
             elseif ($price != 0

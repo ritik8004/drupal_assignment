@@ -2,12 +2,12 @@ import React from 'react';
 
 const PostpayCart = (props) => {
   const {
-    amount, isCartPage, classNames, mobileOnly,
+    amount, classNames, mobileOnly, pageType,
   } = props;
-  if (isCartPage === true
-    && !(mobileOnly && window.innerWidth >= 768)) {
+  if ((pageType === 'cart' && !(mobileOnly && window.innerWidth >= 768))
+    || pageType === 'pdp') {
     return (
-      <div className={`${drupalSettings.postpay_widget_info.postpay_mode_class}`}>
+      <div className={`postpay ${drupalSettings.postpay_widget_info.postpay_mode_class}`}>
         <div
           className={`${classNames} ${drupalSettings.postpay_widget_info.class}`}
           data-type={drupalSettings.postpay_widget_info['data-type']}

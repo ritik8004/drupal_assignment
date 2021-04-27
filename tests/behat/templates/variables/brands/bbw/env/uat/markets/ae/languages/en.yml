@@ -45,7 +45,7 @@ variables:
   language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
-  area_option: 'Al Barsha'
+  area_option: 'Abu Hail'
   city_option: 'Dubai'
   street: 'Street A'
   building: 'Building B'

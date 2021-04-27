@@ -69,12 +69,16 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $filter_options = \Drupal::config('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
     $filter_options = Yaml::parse($filter_options);
 
-    \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
+    // Get sanitized sku.
+    $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
 
     $settings = [
       'user' => [
         'user_email' => \Drupal::currentUser()->getEmail(),
         'user_id' => \Drupal::currentUser()->id(),
+        'user_name' => \Drupal::currentUser()->getUsername(),
       ],
       'product' => [
         'url' => $productNode->toUrl()->toString(),
@@ -92,29 +96,30 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
         'Include' => $config->get('bv_content_types'),
         'sorting_options' => $sorting_options,
         'filter_options' => $filter_options,
-        'reviews_per_page' => $config->get('reviews_limit_per_page'),
+        'reviews_pagination_type' => $config->get('reviews_pagination_type'),
+        'reviews_initial_load' => $config->get('reviews_initial_load'),
+        'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
+        'reviews_per_page' => $config->get('reviews_per_page'),
         'write_review_submission' => $config->get('write_review_submission'),
         'write_review_tnc' => $config->get('write_review_tnc'),
         'write_review_guidlines' => $config->get('write_review_guidlines'),
         'comment_form_tnc' => $config->get('comment_form_tnc'),
-        'comment_form_box_length' => $config->get('comment_form_box_length')
+        'comment_box_min_length' => $config->get('comment_box_min_length'),
+        'comment_box_max_length' => $config->get('comment_box_max_length'),
+        'country_code' => $country_code,
       ],
       'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
       'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
       'hide_fields_write_review' => $hide_fields_write_review,
     ];
 
-    // Adding template to render string values.
-    $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
-    $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
     $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
     $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/rating';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
     $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
-
-    $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['alshaya_bazaar_voice'] = $settings;
+    $build['#attached']['drupalSettings']['productInfo'][$sanitized_sku]['alshaya_bazaar_voice'] = $settings;
   }
 }
 
@@ -221,4 +226,18 @@ function alshaya_bazaar_voice_alshaya_my_account_links_alter(array &$links) {
  */
 function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['sort_options']['#options']['attr_bv_average_overall_rating'] = t('Top Rated');
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function alshaya_bazaar_voice_preprocess_node(&$variables) {
+  // Add bazaavoice related strings.
+  if ($variables['node']->bundle() === 'acq_product') { 
+    \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+    $variables['bazaar_voice_strings'] = [
+      '#theme' => 'alshaya_bazaar_voice_reviews',
+      '#strings' => _alshaya_bazaar_voice_static_strings(),
+    ];
+  }
 }

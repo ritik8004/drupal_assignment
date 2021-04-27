@@ -114,9 +114,10 @@ export default class StyleFinder extends React.Component {
 
       // Filter rule conditions based on selections.
       const conditions = [];
+      const { locale } = drupalSettings.styleFinder;
       answerSelected.forEach((item) => {
         const condition = {
-          field: item.attrCode, // Condition
+          field: `lng:${locale}:${item.attrCode}`, // Condition
           arguments: [{
             action: 'IS', // Action type IS / IS_NOT / CONTAINS / EQ / GT / GTE / LT / LTE
             value: item.choice, // Value of condition
@@ -157,25 +158,9 @@ export default class StyleFinder extends React.Component {
       );
     }, this);
     if (counter === 1) {
-      optionListClass = 'style-finder-type-list';
-      optionList = Object.keys(answer).map(function listOptionsStep(index) {
-        return (
-          <li
-            className="list-item"
-            key={index.nid}
-            onClick={(e) => this.handleStepSubmit(
-              e,
-              index,
-              answer[index].attrCode,
-              answer[index].choice, 1,
-            )}
-          >
-            {answer[index].title}
-          </li>
-        );
-      }, this);
-    } else if (counter === 2) {
       optionListClass = 'style-finder-lining-list';
+    } else if (counter === 2) {
+      optionListClass = 'style-finder-step-coverage-wrapper';
     } else if (counter === 3) {
       optionListClass = 'style-finder-step-coverage-wrapper';
     }

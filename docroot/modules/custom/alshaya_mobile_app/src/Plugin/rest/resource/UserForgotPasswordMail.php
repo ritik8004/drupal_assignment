@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Drupal\user\UserInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
  * Class User Forgot Password Mail.
@@ -33,6 +34,13 @@ class UserForgotPasswordMail extends ResourceBase {
   protected $mobileAppUtility;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * UserForgotPasswordMail constructor.
    *
    * @param array $configuration
@@ -47,6 +55,8 @@ class UserForgotPasswordMail extends ResourceBase {
    *   Logger channel.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
    */
   public function __construct(
     array $configuration,
@@ -54,10 +64,12 @@ class UserForgotPasswordMail extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    MobileAppUtility $mobile_app_utility
+    MobileAppUtility $mobile_app_utility,
+    LanguageManagerInterface $language_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -70,7 +82,8 @@ class UserForgotPasswordMail extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('alshaya_mobile_app.utility')
+      $container->get('alshaya_mobile_app.utility'),
+      $container->get('language_manager')
     );
   }
 
@@ -105,8 +118,11 @@ class UserForgotPasswordMail extends ResourceBase {
       );
     }
 
+    // Get the languacode for the current request.
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
     // Send the password reset email.
-    $mail = _user_mail_notify('password_reset', $user, $user->getPreferredLangcode());
+    $mail = _user_mail_notify('password_reset', $user, $langcode);
     if (empty($mail)) {
       return $this->mobileAppUtility->sendStatusResponse(
         $this->t('Unable to send email. Contact the site administrator if the problem persists')

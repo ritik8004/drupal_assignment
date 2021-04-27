@@ -234,7 +234,7 @@ export default class Cart extends React.Component {
       postpay = (
         <PostpayCart
           amount={totals.base_grand_total}
-          isCartPage
+          pageType="cart"
           classNames="spc-postpay-mobile-preview"
           mobileOnly
         />

@@ -2,7 +2,7 @@
 
 /* ------- 1. Brand Colors ------- */
 $cyprus: #004236;
-$brighton-green: #e4e726;
+$brighton-green: #3a857e;
 $stem-green: #d6ce4b;
 $dark-green: #00352b;
 $terracotta: #a7674c;
@@ -35,9 +35,9 @@ $chestnut: #dc5c60;
 $light-coral: #df8281;
 $surf-crest: #c5ccc1;
 $white-smoke: #f6f6f6;
-$light-green: #3a857e;
 $success-green: #39b54a;
 $alizarin: #e51b23;
+$grey-four: #ddd;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -49,7 +49,7 @@ $primary_form_input: $cyprus;
 $primary_text: $cyprus;
 $primary_form_input: $cyprus;
 $primary_input_label: $cyprus;
-$primary_border: $light-green;
+$primary_border: $brighton-green;
 $primary_checkbox_filled: $cyprus;
 $primary_btn_text: $nourishing-white;
 $primary_link: $cyprus;
@@ -62,6 +62,10 @@ $order_search_form_label: $cyprus;
 $primary_input_focus_border: $cyprus;
 $primary_button_disabled: $silver;
 $primary_button_disabled_text: $metal;
+$primary_brand_button: $cyprus;
+$primary_brand_button_text: $cyprus;
+$primary_dropdown_arrow_bg: $white;
+$primary_dropdown_arrow_border: $cyprus;
 
 // Header
 $header_bg: $cyprus;
@@ -99,6 +103,12 @@ $header_mobile_menu_arrow: $cyprus;
 $header_mobile_menu_close_bg: $cyprus;
 $menu-secondary-border: $_screeching_white;
 $menu-border-desktop: $cyprus;
+$header_c_menu_text: $cyprus;
+$header_toggle_sign_active_tab_logged_in: $black-two;
+$header-my-acc-heading-border: $_screeching_white;
+
+// Header my account nav.
+$header_my_account_link_hover: $cyprus;
 
 // Mega menu
 $mm_l3_link: $cyprus;
@@ -116,7 +126,7 @@ $mm_term_image_bg: $white;
 $mm_l2_link_border_hover: $cyprus;
 
 // User login page
-$newsletter_submit_btn: $brighton-green;
+$newsletter_submit_btn: $stem-green;
 $user_login_section_title: $cyprus;
 $social_auth_login_button_border: $cyprus;
 $social_auth_login_button_border: $cyprus;
@@ -136,13 +146,13 @@ $footer_title_h3: $natural-warmth-three;
 $copyright_footer_text: $natural-warmth-three;
 $newsletter_submit_btn: $stem-green;
 $newsletter_input_field: $dark-green;
-$social_link_title: $brighton-green;
+$social_link_title: $stem-green;
 $social_links: $white;
 $newsletter_desc_text: $natural-warmth-three;
 $social-icons-bg: $cyprus;
 $lang_switch: $white;
 $lang_switch_active: $white;
-$accordion_border: $light-green;
+$accordion_border: $brighton-green;
 $newsletter_success: $success-green;
 $copyright_footer_paragraph: $white;
 
@@ -170,6 +180,8 @@ $spc-checkout-confirmation-success-txt: $cyprus;
 $spc-checkout-order-detail-label: $cyprus;
 $spc-checkout-print-header-title: $cyprus;
 $spc-checkout-print-titile: $cyprus;
+$spc-checkout-payment-method-txt: $cyprus;
+$spc-checkout-billing-empty-cnc: $cyprus;
 
 // SPC
 $spc-promotion-link: $poster-orange;
@@ -182,6 +194,12 @@ $spc-select-border: $cyprus;
 $spc-promo-code-text: $cyprus;
 $spc-mobile-cart-preview: $cyprus;
 $spc-select-qty-dropdown-icon: $cyprus;
+$spc-post-content-checkout-bg: $cyprus;
+$spc-customer-service-title: $natural-warmth-three;
+$spc-order-summary-discount-text: $black;
+$spc_tooltip_icon: $cyprus;
+$spc-promo-code-remove-cross: $cyprus;
+$spc_tooltip_question_icon: $black;
 
 // Product detail page
 $pdp_product_special_price_text: $poster-orange;
@@ -194,6 +212,9 @@ $checkout_section_titles: $cyprus;
 $checkout_guest_button_bg: $white;
 $checkout_guest_button_border: $cyprus;
 $checkout_guest_button_txt: $cyprus;
+$checkout_footer_bg: $cyprus;
+$checkout_footer_txt: $natural-warmth-three;
+$checkout_footer_border: $dark-green;
 
 // Checkout Login Page.
 $checkout_login_submit_button_background: $cyprus;
@@ -207,7 +228,7 @@ $primary_input_inline_error: $alizarin;
 $default_msg_bg: $cyprus;
 $my_account_nav: $cyprus;
 $my_account_nav_active: $black;
-$my_account_nav_hover: $light-green;
+$my_account_nav_hover: $brighton-green;
 $user_order_help_text: $cyprus;
 $user_order_help_text_links: $cyprus;
 $address_tile_border: $grey-two;
@@ -242,5 +263,105 @@ $primary_radiobtn_label: $cyprus;
 // Dropdown
 $primary_dropdown_text: $cyprus;
 $primary_dropdown_border: $cyprus;
+$primary_dropdown_arrow_bg: $white;
 
 $user_signup_logo: $cyprus;
+
+// My account Order listing
+$block_acm_customer_txt: $cyprus;
+$order_recent_orders_row_hover: $silver;
+$order_recent_order_order_detail_link_bg: $grey;
+$order_recent_order_order_detail_link: $cyprus;
+$user_order_list_text: $cyprus;
+$user_order_list_hover_bg: $silver;
+$order_detail_delivery_details_row_bg: $stem-green;
+$order_detail_order_details_row: $stem-green;
+$order_detail_order_details_row_td_blend: $dark-khaki;
+$order_detail_delivery_details_row_td_blend: $dark-khaki;
+$order_detail_delivery_details_row_content: $cyprus;
+$_spc-billing-help: $cyprus;
+$spc_tooltip_icon: $cyprus;
+$spc-checkout-billing-help-text: $cyprus;
+$order_search_form_border: $cyprus;
+$order_search_form_icon: $white;
+
+// Breadcrumb.
+$breadcrumb_bg: $white;
+$breadcrumb_link: $cyprus;
+$breadcrumb_link_active: $cyprus;
+$breadcrumb_link_hover: $cyprus;
+
+// Back to top
+$btt_bg: $_gray_98;
+$btt-border: $grey-four;
+$btt_text: $black;
+
+// 404
+$maintenance_link: $cyprus;
+$content_pagetitle: $cyprus;
+$maintenance_body_bg: $cyprus;
+$maintenance_container_bg: $nourishing-white;
+$maintenance_container_border: $cyprus;
+$maintenance_container_border_top: $cyprus;
+
+// Store finder page.
+$store_finder_text: $cyprus;
+$store_finder_search_label: $cyprus;
+$store_finder_search_input: $cyprus;
+$store_finder_glossary_text: $cyprus;
+$store_finder_search_input_border: $cyprus;
+$store_finder_border_hover: $cyprus;
+$store_finder_text_hover: $cyprus;
+$store_finder_icon: $cyprus;
+$store_finder_header_desktop: $cyprus;
+$store_finder_subheader: $cyprus;
+$store_finder_glossary_text_hover: $cyprus;
+$store-finder-glossary: $grey-three;
+$store_finder_search_input_mobile_border: $cyprus;
+$store_finder_backbtn: $cyprus;
+
+// Store finder search results.
+$store_finder_search_results_border: $warm-grey-two;
+$store_finder_search_results_tile_link: $cyprus;
+$store_finder_search_results_counter_bg: $cyprus;
+$store_finder_search_results_hour_label: $cyprus;
+$store_finder_search_results_tile_icon: $cyprus;
+$store_finder_search_results_label: $cyprus;
+
+// Store finder glossary.
+$store_finder_glossary_border: $cyprus;
+$store_finder_glossary_text_border: $warm-grey-two;
+$store_finder_glossary_icon: $cyprus;
+$store_finder_glossary_alphabet: $cyprus;
+
+// PLP
+$lhn_l3: $cyprus;
+$lhn_l2: $cyprus;
+$plp_promotion_description: $cyprus;
+$accordion_title: $cyprus;
+$plp_tile_product_title: $cyprus;
+$plp_tile_product_title_hover: $brighton-green;
+$plp_tile_product_text: $cyprus;
+$plp_search_count: $cyprus;
+$plp_grid_active_color: $cyprus;
+$algolia-react-progressbar-fill: $cyprus;
+$algolia-react-progressbar-text: $grey-three;
+$algolia_react-facet-item-color: $cyprus;
+$plp_facet_count_number: $grey-three;
+$plp_all_filter_title: $cyprus;
+$plp_all_filter_button_color: $cyprus;
+$plp_clear_all_btn_disabled: $grey-three;
+$plp_filter_icon: $cyprus;
+$algolia-react-search-page-title: $cyprus;
+$plp_facet_count_number: $cyprus;
+$category_facet_txt: $cyprus;
+$plp_facet_filter: $cyprus;
+$plp_filter_active_tick: $cyprus;
+
+// Section divider
+$section_divider_text: $cyprus;
+$section_divider_border: $cyprus;
+
+// Promo blocks
+$promo_link: $cyprus;
+$promo_text: $cyprus;

@@ -9,7 +9,7 @@ import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
-import { getCurrentUserEmail, getSessionCookie } from '../../../../utilities/user_util';
+import { getCurrentUserEmail, getSessionCookie, getCurrentUserName } from '../../../../utilities/user_util';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
@@ -36,8 +36,12 @@ const DynamicFormField = (props) => {
       } else if (getSessionCookie('BvUserEmail') !== null) {
         fieldProperty.defaultVal = getSessionCookie('BvUserEmail');
       }
-    } else if (fieldProperty.id === 'usernickname' && getSessionCookie('BvUserNickname') !== null) {
-      fieldProperty.defaultVal = getSessionCookie('BvUserNickname');
+    } else if (fieldProperty.id === 'usernickname') {
+      if (getSessionCookie('BvUserNickname') !== null) {
+        fieldProperty.defaultVal = getSessionCookie('BvUserNickname');
+      } else if (getCurrentUserName() !== null) {
+        fieldProperty.defaultVal = getCurrentUserName();
+      }
     }
   }
 
@@ -63,6 +67,7 @@ const DynamicFormField = (props) => {
         label={fieldProperty.title}
         defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         text={fieldProperty.text}
+        question={fieldProperty.question}
       />
     );
   }

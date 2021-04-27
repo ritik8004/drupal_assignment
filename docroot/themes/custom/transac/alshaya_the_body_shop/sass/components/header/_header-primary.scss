@@ -38,6 +38,10 @@ header {
       #{$right}: -1.125rem;
       #{$left}: unset;
       font-family: $alshaya-medium;
+
+      @include breakpoint($only-mobile) {
+        #{$left}: 1rem;
+      }
     }
   }
 
@@ -77,10 +81,14 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      top: 0;
+      top: 0.125rem;
       padding: 1.125rem 1rem 1rem;
       padding-#{$right}: 1rem;
       padding-#{$left}: 1rem;
+
+      body.logged-in & {
+        top: 0.5625rem;
+      }
     }
   }
 
@@ -105,6 +113,11 @@ header {
         top: 0;
         #{$left}: 0;
       }
+    }
+
+    a {
+      font-family: $alshaya-medium;
+      text-transform: capitalize;
     }
   }
 
@@ -195,6 +208,7 @@ header {
 
   .menu__list-item {
     margin: 0;
+    font-family: $alshaya-medium;
   }
 
   .menu__in {
@@ -294,6 +308,17 @@ html[lang='ar'] {
   .active {
     font-family: $tbs-semibold;
     font-size: 1rem;
+  }
+
+  @include breakpoint($upto-desktop) {
+    .account--logged_in,
+    .shop {
+      color: $header_toggle_sign_active_tab_logged_in;
+
+      &.active {
+        color: $header_toggle_sign_active_tab;
+      }
+    }
   }
 }
 

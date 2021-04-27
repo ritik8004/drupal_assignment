@@ -12,6 +12,7 @@
   }
 
   input:focus ~ label,
+  textarea:focus ~ label,
   label.active-label {
     top: -1.375rem;
     bottom: 0;
@@ -46,5 +47,11 @@
       display: flex;
       justify-content: flex-end;
     }
+  }
+}
+
+body {
+  &.open-form-modal {
+    overflow: hidden;
   }
 }

@@ -17,6 +17,10 @@
 
       &-fields {
         margin: 1.25rem 0;
+
+        textarea {
+          resize: none;
+        }
       }
     }
 
@@ -139,6 +143,10 @@
       &-nickname {
         &:not(:only-child)::after {
           content: ',';
+        }
+
+        &.admin {
+          font-family: $alshaya-bold;
         }
       }
 

@@ -1094,9 +1094,9 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
 }
 
 /**
- * Implements hook_preprocess_mimemail_messages().
+ * Implements hook_preprocess_mimemail_message().
  */
-function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
+function alshaya_white_label_preprocess_mimemail_message(&$variables) {
   // Currently we have alshaya_white_label theme enabled for non-transac sites
   // too. We don't need to modify anything around mails for non-transac sites
   // so we simply skip execution if installed profile is not transac.
