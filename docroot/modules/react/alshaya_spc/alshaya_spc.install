@@ -14,6 +14,28 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Add new Checkout Settings resource.
+ */
+function alshaya_spc_update_8010() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'rest.resource.checkout_settings',
+  ],
+    'alshaya_spc',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+
+  // Rebuild router.
+  \Drupal::service('router.builder')->rebuild();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.1.0] Remove old KNET payment method.
  */
 function alshaya_spc_update_8009() {
