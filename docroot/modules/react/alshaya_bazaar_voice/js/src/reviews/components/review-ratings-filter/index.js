@@ -40,7 +40,7 @@ export default class ReviewRatingsFilter extends React.Component {
           value: `rating:${contextData[item].RatingValue}`,
           label: `${contextData[item].RatingValue} ${(contextData[item].RatingValue > 1) ? getStringMessage('stars') : getStringMessage('star')} (${contextData[item].Count})`,
         }));
-        availableOptions = options.reverse();
+        availableOptions = options;
       });
 
       ratingFilter.options = availableOptions;
