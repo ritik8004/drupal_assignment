@@ -48,8 +48,6 @@ variables:
   language_vat: 'تتضمن ضريبة القيمة المضافة'
   vat: 'Inclusive of VAT'
   language_checkout_link: 'إتمام الشراء بأمان'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهبي للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
   city_option: 'Abqaiq'
@@ -95,4 +93,8 @@ variables:
   billing_text: 'Billing address:'
   governorate: ''
   address_area_field: 'Abqaiq'
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: 'إليك منتجاتنا المفضلة'
 

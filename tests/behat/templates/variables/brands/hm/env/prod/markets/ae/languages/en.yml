@@ -63,6 +63,8 @@ variables:
   language_city_option: 'دبي'
   store_area: 'Dubai - United Arab Emirates'
   cart_promotional: ''
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
   cs_payment_type: 'Credit Card/Debit Card'
   cnc_delivery_type: 'Click and Collect'
   language_cnc_delivery_type: 'Click and Collect'
@@ -89,6 +91,6 @@ variables:
   billing_text: 'Billing address:'
   continue_shopping_text: 'continue shopping'
   language_continue_shopping_text: 'تابع التسوق'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهب للتسوق"
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: 'إليك منتجاتنا المفضلة'
   language_vat: 'تتضمن ضريبة القيمة المضافة'

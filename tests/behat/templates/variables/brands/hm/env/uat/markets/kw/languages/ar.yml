@@ -52,8 +52,8 @@ variables:
   language_delivery_type_text: 'التوصيل متوقع خلال:'
   language_payment_type_text: 'طريقة الدفع:'
   vat: 'تتضمن ضريبة القيمة المضافة'
-  language_continue_shopping: 'go shopping'
-  continue_shopping: "اذهب للتسوق"
+  continue_shopping: 'إليك منتجاتنا المفضلة'
+  language_continue_shopping: 'Here are some of our favorites'
   language_street: 'Street A'
   language_building: 'Building B'
   language_locality: 'Block AB'
