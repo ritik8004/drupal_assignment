@@ -7,6 +7,7 @@ const PdpInfo = ({
   title, pdpProductPrice, finalPrice,
   shortDetail = false, brandLogo,
   brandLogoAlt, brandLogoTitle, animateTitlePrice,
+  hidepostpay,
 }) => {
   let discountPercantage = null;
 
@@ -17,10 +18,10 @@ const PdpInfo = ({
   const specialPriceClass = (parseInt(finalPrice, 10) < parseInt(pdpProductPrice, 10)) ? 'has-special-price' : '';
 
   let postpay;
-  if (Postpay.isPostpayEnabled()) {
+  if (Postpay.isPostpayEnabled() && !hidepostpay) {
     postpay = (
       <PostpayCart
-        amount={finalPrice}
+        amount={finalPrice.replace(',', '')}
         classNames=""
         pageType="pdp"
       />
