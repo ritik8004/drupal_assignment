@@ -79,9 +79,10 @@ tooling:
     cmd: /app/vendor/acquia/blt/bin/blt
 
   blt-init:
+    service: appserver
     description: Initialize BLT aliases, git hooks and settings.
     cmd:
-      - appserver: blt blt-alias
+      - appserver: composer blt-alias
       - appserver: blt blt:init:git-hooks
       - appserver: blt blt:init:settings
 
