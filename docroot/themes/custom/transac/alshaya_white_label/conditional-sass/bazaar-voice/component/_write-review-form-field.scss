@@ -55,7 +55,8 @@
       @include bv-placeholder-active;
     }
 
-    &.user-basic-info {
+    &.user-nickname,
+    &.user-email {
       float: $left;
       width: 48%;
       margin-bottom: 3.5rem;
@@ -71,13 +72,11 @@
       }
     }
 
-    &.user-basic-info {
-      &:nth-child(2n-1) {
-        margin-#{$right}: 2.625rem;
+    &.user-nickname {
+      margin-#{$right}: 2.625rem;
 
-        @include breakpoint($only-mobile) {
-          margin-#{$right}: 0;
-        }
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0;
       }
     }
   }
