@@ -41,8 +41,8 @@ as per the instructions above.
 
 All steps are executed on your host OS.
 
-  * `lando composer install` - This will install all the composer packages.
   * `lando start` - this will configure and set up your containers and services.
+  * `lando composer install` - This will install all the composer packages.
   * `lando blt-init` - this initialize BLT aliases, git hooks and settings.
   * `lando frontend-setup` - see notes on BLT below
   * `lando frontend-build` - see notes on BLT below
