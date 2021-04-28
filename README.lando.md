@@ -32,18 +32,18 @@ password on each use, which is a minor irritation.
 
 ### Build steps
 
+Requirements
+* Docker
+* Lando
+
 Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
 as per the instructions above.
 
 All steps are executed on your host OS.
 
-  * `composer clear-cache`
-  * `composer install`
-  * `composer blt-alias`
+  * `lando composer install` - This will install all the composer packages.
   * `lando start` - this will configure and set up your containers and services.
-
-  * `lando blt blt:init:git-hooks`
-  * `lando blt blt:init:settings`
+  * `lando blt-init` - this initialize BLT aliases, git hooks and settings.
   * `lando frontend-setup` - see notes on BLT below
   * `lando frontend-build` - see notes on BLT below
   * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build
