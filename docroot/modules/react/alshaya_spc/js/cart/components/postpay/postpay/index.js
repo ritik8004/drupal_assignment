@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const PostpayCart = (props) => {
   const {
     amount, classNames, mobileOnly, pageType,
   } = props;
+
+  useEffect(() => {
+    if (pageType === 'pdp') {
+      window.postpay.ui.refresh();
+    }
+  });
+
   if ((pageType === 'cart' && !(mobileOnly && window.innerWidth >= 768))
     || pageType === 'pdp') {
     return (
