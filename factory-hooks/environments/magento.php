@@ -638,6 +638,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 38, 'ar' => 35],
     ],
+    'jo' => [
+      'store_id' => ['en' => 44, 'ar' => 41],
+    ],
   ],
   // Foot Locker.
   'fl_qa' => [

@@ -1242,4 +1242,42 @@ html[lang=ar] {
     color: $gray44;
     font-size: 0.6875rem;
   }
+
+  .delivery-in-only-city,
+  .same-day-delivery {
+    border: 1px solid rgba(147, 205, 255, 0.9);
+    padding: 0.625rem;
+    font-size: 0.8125rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+
+  .delivery-in-only-city {
+    @include icon(store) {
+      color: $mm_mobile_icon;
+      top: -0.125rem;
+      font-size: 1.625rem;
+    }
+  }
+
+  .same-day-delivery {
+    &::before {
+      background: url('../imgs/icons/same-day.svg') no-repeat;
+      width: 2rem;
+      position: relative;
+      top: 0.375rem;
+      #{$left}: 0.4375rem;
+
+      html[lang=ar] & {
+        #{$left}: -0.1875rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$left}: -0.1875rem;
+        width: 2.125rem;
+      }
+    }
+  }
 }
