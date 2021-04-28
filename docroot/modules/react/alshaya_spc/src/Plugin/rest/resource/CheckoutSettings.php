@@ -81,7 +81,10 @@ class CheckoutSettings extends ResourceBase {
     $data['cnc_subtitle_available'] = $settings->get('checkout_click_collect_available');
     $data['cnc_subtitle_unavailable'] = $settings->get('checkout_click_collect_unavailable');
     $data['checkout_hd_subtitle'] = $this->t('Standard delivery for purchases over KD 250');
-    return new ResourceResponse($data);
+
+    $response = new ResourceResponse($data);
+    $response->getCacheableMetadata()->addCacheTags(['config:alshaya_click_collect.settings']);
+    return $response;
   }
 
 }
