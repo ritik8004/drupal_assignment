@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a resource to get checkout delivery messages.
+ * Provides a resource to get checkout settings.
  *
  * @RestResource(
  *   id = "checkout_settings",
@@ -29,7 +29,7 @@ class CheckoutSettings extends ResourceBase {
   protected $configFactory;
 
   /**
-   * ProductResource constructor.
+   * CheckoutSettings constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -53,7 +53,7 @@ class CheckoutSettings extends ResourceBase {
     ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->configFactory = $config_factory->get('alshaya_click_collect.settings');
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -74,12 +74,13 @@ class CheckoutSettings extends ResourceBase {
    * Responds to GET requests.
    *
    * @return \Drupal\rest\ResourceResponse
-   *   The response containing list of categories.
+   *   The response containing checkout settings.
    */
   public function get() {
-    $data['checkout_click_collect_available'] = $this->configFactory->get('checkout_click_collect_available');
-    $data['checkout_click_collect_unavailable'] = $this->configFactory->get('checkout_click_collect_unavailable');
-    $data['checkout_home_delivery'] = $this->t('Standard delivery for purchases over KD 250');
+    $settings = $this->configFactory->get('alshaya_click_collect.settings');
+    $data['cnc_subtitle_available'] = $settings->get('checkout_click_collect_available');
+    $data['cnc_subtitle_unavailable'] = $settings->get('checkout_click_collect_unavailable');
+    $data['checkout_hd_subtitle'] = $this->t('Standard delivery for purchases over KD 250');
     return new ResourceResponse($data);
   }
 
