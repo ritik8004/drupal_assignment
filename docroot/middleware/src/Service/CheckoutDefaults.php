@@ -165,23 +165,9 @@ class CheckoutDefaults {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   private function applyDefaultShipping(array $order) {
-    // Get customer address ids.
-    $customer = $this->magentoCustomer->getCustomerByMail($order['customer_email']);
-
-    if (!empty($customer) && isset($customer['addresses'])) {
-      $customer_address_ids = array_column($customer['addresses'], 'id');
-    }
-
     $address = $order['shipping']['commerce_address'];
 
     if (strpos($order['shipping']['method'], 'click_and_collect') === 0) {
-      // Return false if address id is not set or address id from last order
-      // doesn't exist in customer's address id list.
-      if (empty($order['billing_commerce_address']['customer_address_id'])
-        || !in_array($order['billing_commerce_address']['customer_address_id'], $customer_address_ids)) {
-        return FALSE;
-      }
-
       $store = $this->drupal->getStoreInfo($order['shipping']['extension_attributes']['store_code']);
 
       // We get a string value if store node is not present in Drupal. So in
@@ -203,10 +189,15 @@ class CheckoutDefaults {
       return FALSE;
     }
 
-    // Return false if address id is not set or address id from last order
-    // doesn't exist in customer's address id list.
-    if (empty($address['customer_address_id'])
-      || !in_array($address['customer_address_id'], $customer_address_ids)) {
+    if (empty($address['customer_address_id'])) {
+      return FALSE;
+    }
+
+    $customer_address_ids = $this->getCustomerAddressIdsByCustomerId($order['customer_id']);
+
+    // Return false if address id from last order doesn't
+    // exist in customer's address id list.
+    if (!in_array($address['customer_address_id'], $customer_address_ids)) {
       return FALSE;
     }
 
@@ -452,6 +443,14 @@ class CheckoutDefaults {
       return FALSE;
     }
 
+    $customer_address_ids = $this->getCustomerAddressIdsByCustomerId($billing['customer_id']);
+
+    // Return if address id from last order doesn't
+    // exist in customer's address id list.
+    if (!in_array($billing['customer_address_id'], $customer_address_ids)) {
+      return $updated;
+    }
+
     $updated = $this->cart->updateBilling($billing);
 
     // If billing update has error.
@@ -460,6 +459,26 @@ class CheckoutDefaults {
     }
 
     return $updated;
+  }
+
+  /**
+   * Get customer's address ids by customer id.
+   *
+   * @param string $customer_id
+   *   Customer Id.
+   *
+   * @return array
+   *   Address ids of customer or empty array.
+   */
+  private function getCustomerAddressIdsByCustomerId($customer_id) {
+    // Get customer address ids.
+    $customer = $this->magentoCustomer->getCustomerById($customer_id);
+
+    if (!empty($customer['error']) || !isset($customer['addresses'])) {
+      return [];
+    }
+
+    return array_column($customer['addresses'], 'id');
   }
 
 }
