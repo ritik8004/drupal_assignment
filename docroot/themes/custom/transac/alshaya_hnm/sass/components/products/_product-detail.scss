@@ -102,41 +102,102 @@
     }
 
     .content--item-code {
-      color: $gray44;
-      font-size: 0.8125rem !important;
-
       @include breakpoint($only-mobile) {
         display: none;
       }
+
+      color: $pdp_product_itemcode;
+      font-size: 0.8125rem !important;
     }
 
     .price {
+      color: $pdp_product_price;
+      font-family: $hnm-demibold;
       font-size: 0.9375rem;
-      color: $hnm-black-three;
-      font-family: $hnm-regular;
 
       @include breakpoint($only-mobile) {
         font-size: 0.875rem;
-      }
-
-      @include breakpoint($upto-tablet) {
-        font-size: 0.875rem;
-      }
-    }
-
-    h1 {
-      span {
-        font-size: 1.25rem;
-        color: $hnm-black-three;
       }
     }
   }
 
   &__main {
+    .gallery-wrapper {
+      @include breakpoint($mobile) {
+        min-height: 31.75rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        .mobilegallery {
+          padding-bottom: 1.1875rem;
+        }
+      }
+    }
+
     @include breakpoint($only-mobile) {
       .order-quantity-limit-message.mobile-only {
         bottom: 4.1875rem;
       }
+    }
+  }
+
+  h1 {
+    span {
+      font-size: 1.25rem;
+      color: $hnm-black-three;
+    }
+  }
+
+  .price {
+    font-size: 0.9375rem;
+    color: $hnm-black-three;
+    font-family: $hnm-regular;
+
+    @include breakpoint($upto-tablet) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .content--item-code {
+    color: $gray44;
+    font-size: 0.6875rem;
+  }
+
+  .delivery-in-only-city {
+    @include icon(store) {
+      color: $mm_mobile_icon;
+      top: -0.125rem;
+      font-size: 1.625rem;
+    }
+  }
+
+  .same-day-delivery {
+    &::before {
+      background: url('../imgs/icons/same-day.svg') no-repeat;
+      width: 2rem;
+      position: relative;
+      top: 0.375rem;
+      #{$left}: 0.4375rem;
+
+      html[lang=ar] & {
+        #{$left}: -0.1875rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$left}: -0.1875rem;
+        width: 2.125rem;
+      }
+    }
+  }
+
+  .delivery-in-only-city,
+  .same-day-delivery {
+    border: 1px solid rgba(147, 205, 255, 0.9);
+    padding: 0.625rem;
+    font-size: 0.8125rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
     }
   }
 }
@@ -741,7 +802,6 @@
     // hidding fields which cannot be themed as per the design.
     .sku-base-form {
       button[type="submit"] {
-        background: $primary_btn_bg;
         text-transform: uppercase;
         padding-#{$left}: 2.938rem;
         font-size: 0.8125rem;
@@ -750,12 +810,6 @@
 
         &:hover {
           background-color: $gray44;
-        }
-
-        @include breakpoint($tablet) {
-          margin-#{$left}: 0;
-          float: $left;
-          margin-top: 1.45rem;
         }
 
         @include icon(shopping-bag) {
@@ -782,6 +836,12 @@
             margin-#{$right}: 0.625rem;
             position: static;
           }
+        }
+
+        @include breakpoint($tablet) {
+          float: $left;
+          margin-top: 1.45rem;
+          margin-#{$left}: 0;
         }
       }
     }
