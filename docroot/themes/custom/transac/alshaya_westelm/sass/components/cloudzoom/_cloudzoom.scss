@@ -23,6 +23,10 @@
 .cloudzoom__image {
   .img-wrap {
     height: auto;
+
+    @include breakpoint($desktop) {
+      min-height: 20rem;
+    }
   }
 
   .hover-text {

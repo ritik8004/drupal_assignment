@@ -16,6 +16,10 @@
         height: auto;
         overflow: auto;
       }
+
+      @include breakpoint($desktop) {
+        min-height: 31.5rem;
+      }
     }
   }
 }
