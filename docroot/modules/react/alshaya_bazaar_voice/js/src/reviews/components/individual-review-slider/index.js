@@ -1,11 +1,10 @@
 import React from 'react';
-import isRTL from '../../../utilities/rtl';
+import DynamicDot from '../dynamic-dot';
 import getStringMessage from '../../../../../../js/utilities/strings';
 
 const IndividualReviewSlider = ({
   sliderData,
 }) => {
-  const direction = isRTL() === true ? 'rtl' : 'ltr';
   if (sliderData === null) {
     return null;
   }
@@ -48,21 +47,11 @@ const IndividualReviewSlider = ({
                       </>
                     )
                 }
-                {
-                  (direction === 'rtl')
-                    ? (
-                      <div
-                        className={`dynamic-dot slide-range-${sliderData[item].ValueRange} ${(sliderData[item].Value > 0) ? `dot-${sliderData[item].Value}` : ''}`}
-                        style={{ right: `${(sliderData[item].AverageRating > 0) ? (sliderData[item].AverageRating / sliderData[item].ValueRange).toFixed(1) * 100 : null}%` }}
-                      />
-                    )
-                    : (
-                      <div
-                        className={`dynamic-dot slide-range-${sliderData[item].ValueRange} ${(sliderData[item].Value > 0) ? `dot-${sliderData[item].Value}` : ''}`}
-                        style={{ left: `${(sliderData[item].AverageRating > 0) ? (sliderData[item].AverageRating / sliderData[item].ValueRange).toFixed(1) * 100 : null}%` }}
-                      />
-                    )
-                }
+                <DynamicDot
+                  sliderValue={sliderData[item].Value}
+                  sliderValueRange={sliderData[item].ValueRange}
+                  sliderAverageRating={sliderData[item].AverageRating}
+                />
               </div>
               <div className="slider-label">{sliderData[item].MaxLabel}</div>
             </div>
