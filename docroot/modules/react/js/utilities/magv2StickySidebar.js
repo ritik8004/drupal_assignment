@@ -21,8 +21,18 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
   };
 
   // Helper function for making the element sticky.
-  const stickyElement = (elem) => {
-    const element = elem;
+  const stickyElement = (area) => {
+    let element = '';
+    const removeClasses = ['sticky-element', 'contain'];
+    if (area === 'sidebar') {
+      element = siderbarwrapper;
+      // Remove classes from gallery.
+      gallerycontainer.classList.remove(...removeClasses);
+    } else {
+      element = gallerycontainer;
+      // Remove classes from gallery.
+      siderbarwrapper.classList.remove(...removeClasses);
+    }
     const gallerywrapper = gallerycontainer;
     const crosssellwrapper = crosssellcontainer;
     const maincontainerwrapper = maincontainer;
@@ -50,6 +60,7 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
       }
     } else {
       element.classList.remove('sticky-element');
+      element.classList.remove('contain');
       element.classList.remove('magv2-main-contain');
     }
 
@@ -77,9 +88,9 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
     const galleryWrapper = gallerycontainer;
 
     if (galleryWrapper.offsetHeight > siderbarwrapper.offsetHeight) {
-      stickyElement(siderbarwrapper);
+      stickyElement('sidebar');
     } else {
-      stickyElement(galleryWrapper);
+      stickyElement('gallery');
     }
   });
 };
