@@ -21,7 +21,7 @@ const PdpInfo = ({
   if (Postpay.isPostpayEnabled() && !hidepostpay) {
     postpay = (
       <PostpayCart
-        amount={finalPrice}
+        amount={finalPrice.replace(',', '')}
         classNames=""
         pageType="pdp"
       />
