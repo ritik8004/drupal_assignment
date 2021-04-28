@@ -25,6 +25,10 @@
     box-shadow: none;
   }
 
+  .postpay {
+    display: none;
+  }
+
   &.magv2-pdp-sticky-header {
     opacity: 1;
 
@@ -34,10 +38,6 @@
       top: 0;
       transform: translateY(0%);
       transition: all 0.45s cubic-bezier(0.4, 0, 0.8, 1);
-    }
-
-    .postpay {
-      display: none;
     }
   }
 
