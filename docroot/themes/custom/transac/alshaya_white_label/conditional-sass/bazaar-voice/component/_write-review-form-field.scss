@@ -27,52 +27,52 @@
     padding: 0.5rem;
   }
 
-  .write-review-type {
-    &-textfield {
-      position: relative;
-      margin-bottom: 1.5rem;
+  // Type = Text.
+  .write-review-type-textfield {
+    position: relative;
+    margin-bottom: 1.5rem;
 
-      input[type=text],
-      input[type=email] {
-        height: 1.5rem;
-        font-size: 0.875rem;
-      }
+    input[type=text],
+    input[type=email] {
+      height: 1.5rem;
+      font-size: 0.875rem;
+    }
 
-      label {
-        @include bv-placeholder-label;
+    label {
+      @include bv-placeholder-label;
 
-        &.active-label {
-          @include bv-placeholder-active;
-        }
-      }
-
-      input:focus ~ label,
-      input.focus ~ label {
+      &.active-label {
         @include bv-placeholder-active;
       }
+    }
 
-      &.user-basic-info {
-        float: $left;
-        width: 48%;
-        margin-bottom: 3.5rem;
-        min-height: 2.5rem;
-        margin-top: 1.5rem;
+    input:focus ~ label,
+    input.focus ~ label {
+      @include bv-placeholder-active;
+    }
 
-        @include breakpoint($only-mobile) {
-          width: 100%;
-        }
+    &.user-nickname,
+    &.user-email {
+      float: $left;
+      width: 48%;
+      margin-bottom: 3.5rem;
+      min-height: 2.5rem;
+      margin-top: 1.5rem;
 
-        @include breakpoint($only-tablet) {
-          width: 45.5%;
-        }
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
 
-        &:nth-child(2n-1) {
-          margin-#{$right}: 2.625rem;
+      @include breakpoint($only-tablet) {
+        width: 45.5%;
+      }
+    }
 
-          @include breakpoint($only-mobile) {
-            margin-#{$right}: 0;
-          }
-        }
+    &.user-nickname {
+      margin-#{$right}: 2.625rem;
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0;
       }
     }
   }

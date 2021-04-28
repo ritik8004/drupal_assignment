@@ -139,6 +139,15 @@
           text-align: center;
           width: 50%;
 
+          span {
+            visibility: visible;
+            #{$left}: -0.75rem;
+
+            @include breakpoint($upto-desktop) {
+              #{$left}: -0.25rem;
+            }
+          }
+
           &::before {
             #{$left}: 45%;
           }
@@ -219,6 +228,7 @@
       .selectedLabel {
         color: $rr-selected-slider-value;
         font-style: italic;
+        padding-#{$left}: 0.1875rem;
       }
     }
   }
