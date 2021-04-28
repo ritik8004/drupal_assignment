@@ -37,6 +37,7 @@ const PdpCrossellUpsellImageContent = ({
       finalPrice={finalPrice}
       pdpProductPrice={pdpProductPrice}
       animateTitlePrice={false}
+      hidepostpay
     />
     {productPromotions ? (
       <div className="promotions promotions-full-view-mode">
