@@ -45,8 +45,6 @@ variables:
   vat: ''
   language_vat: ''
   language_checkout_link: 'إتمام الشراء بأمان'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهب للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
   city_option: ''
@@ -84,6 +82,10 @@ variables:
   language_payment_type_text: 'طريقة الدفع:'
   language_store_area: 'دبي'
   language_billing_city_option: ''
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: "إليك منتجاتنا المفضلة"
   billing_city_option: ''
   billing_street: 'St. Santa Marlo'
   billing_building: 'Broadway'
