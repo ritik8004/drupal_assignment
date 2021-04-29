@@ -26,14 +26,19 @@ class DynamicYieldController extends ControllerBase {
     // does not exist.
     if ($dyid_cookie && !$request->cookies->get('_dyid_server')) {
       // Add _dyid_server cookie.
+      // The name of the cookie.
+      // The value of the cookie.
+      // The time the cookie expires.
+      // The path on the server in which the cookie will be available on.
+      // The domain that the cookie is available to.
+      // Whether the cookie is secure.
       $response->headers->setCookie(new Cookie(
         '_dyid_server',
         $dyid_cookie,
         strtotime('+1 year'),
         '/',
         NULL,
-        NULL,
-        FALSE
+        TRUE
       ));
     }
 
