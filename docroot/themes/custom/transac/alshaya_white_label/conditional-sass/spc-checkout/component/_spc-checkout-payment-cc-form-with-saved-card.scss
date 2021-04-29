@@ -50,15 +50,7 @@
         .spc-payment-save-card {
           padding-#{$left}: 2rem;
         }
-      }
 
-      &:last-child {
-        padding-bottom: 0;
-        margin-bottom: 0;
-        border-bottom: none;
-      }
-
-      &.spc-checkout-card-option-new-card {
         .payment-form-wrapper {
           padding-top: 1.75rem;
 
@@ -76,6 +68,12 @@
             }
           }
         }
+      }
+
+      &:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: none;
       }
     }
   }
