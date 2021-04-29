@@ -128,7 +128,6 @@ class ReviewCommentForm extends React.Component {
       const bazaarVoiceSettings = getbazaarVoiceSettings();
       const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
       let authParams = '';
-      authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
       authParams += getUserEmailParams(email, nicknameKey);
       const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
       // Set user authenticated string (UAS).
