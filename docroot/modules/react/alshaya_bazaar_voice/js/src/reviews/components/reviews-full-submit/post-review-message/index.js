@@ -1,7 +1,7 @@
 import React from 'react';
 import getStringMessage from '../../../../../../../js/utilities/strings';
-import DisplayStar from '../../../../rating/components/stars';
 import ConditionalView from '../../../../common/components/conditional-view';
+import DisplayStar from '../../../../rating/components/stars';
 
 const PostReviewMessage = ({
   postReviewData,
@@ -12,7 +12,9 @@ const PostReviewMessage = ({
     />
     <div className="review-title">{postReviewData.Review.Title}</div>
     <div className="review-text">{postReviewData.Review.ReviewText}</div>
-    <ConditionalView condition={postReviewData.Review.IsRecommended !== null}>
+    <ConditionalView condition={postReviewData.Review.IsRecommended !== null
+      && postReviewData.Review.IsRecommended}
+    >
       <div className="review-recommendation">
         <span className="review-recommendation-icon" />
         <span>{`${getStringMessage('yes')},`}</span>

@@ -4,7 +4,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
-import ReviewPhotos from '../review-photo';
+import ReviewPhoto from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
@@ -28,27 +28,17 @@ const ReviewDescription = ({
             <div className="review-title">{reviewDescriptionData.Title}</div>
             <div className="review-date">{`${date}`}</div>
           </ConditionalView>
-
           <div className="review-text">{reviewDescriptionData.ReviewText}</div>
-
           <ReviewAdditionalAttributes
-            reviewAdditionalAttributesData={reviewDescriptionData.TagDimensions}
+            additionalFieldsData={reviewDescriptionData.AdditionalFields}
+            additionalFieldsOrder={reviewDescriptionData.AdditionalFieldsOrder}
+            tagDimensionsData={reviewDescriptionData.TagDimensions}
+            tagDimensionsOrder={reviewDescriptionData.TagDimensionsOrder}
           />
-
-          <ReviewAdditionalAttributes
-            reviewAdditionalAttributesData={reviewDescriptionData.AdditionalFields}
-            includes="_textarea"
-          />
-
-          {
-            (reviewDescriptionData.Photos && reviewDescriptionData.Photos.length > 0)
-              ? <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
-              : null
-          }
           <ConditionalView condition={reviewDescriptionData.Photos
             && reviewDescriptionData.Photos.length > 0}
           >
-            <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
+            <ReviewPhoto photoCollection={reviewDescriptionData.Photos} />
           </ConditionalView>
           <div className="review-inline-feedback">
             <div>
