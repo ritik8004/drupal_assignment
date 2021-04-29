@@ -1,20 +1,18 @@
 import React from 'react';
 import DynamicDot from '../dynamic-dot';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import ConditionalView from '../../../common/components/conditional-view';
 
 const IndividualReviewSlider = ({
   sliderData,
-  secondaryRatingsOrder,
 }) => {
   if (sliderData === null) {
     return null;
   }
   return (
     <>
-      {secondaryRatingsOrder.map((item) => (
-        <ConditionalView key={sliderData[item].Id} condition={sliderData[item].DisplayType === 'SLIDER'}>
-          <div className="attribute-list">
+      {Object.keys(sliderData).map((item) => (((sliderData[item].DisplayType) === 'SLIDER') === true
+        ? (
+          <div className="attribute-list" key={item}>
             <div className="slider-header">
               <span>
                 {sliderData[item].Label}
@@ -58,8 +56,8 @@ const IndividualReviewSlider = ({
               <div className="slider-label">{sliderData[item].MaxLabel}</div>
             </div>
           </div>
-        </ConditionalView>
-      ))}
+        )
+        : null))}
     </>
   );
 };

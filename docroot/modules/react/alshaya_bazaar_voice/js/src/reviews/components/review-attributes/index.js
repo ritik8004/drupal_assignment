@@ -1,17 +1,16 @@
 import React from 'react';
 
 const ReviewAttributes = ({
-  contextDataValues,
-  contextDataValuesOrder,
+  reviewAttributesData,
 }) => {
-  if (contextDataValuesOrder.length > 0) {
+  if (reviewAttributesData !== undefined) {
     return (
       <div className="review-attributes">
         <div className="review-attributes-wrapper">
-          {contextDataValuesOrder.map((item) => (
-            <div className="review-attributes-details" key={contextDataValues[item].Id}>
-              <span className="attribute-name">{`${contextDataValues[item].DimensionLabel}: `}</span>
-              <span className="attribute-value">{contextDataValues[item].ValueLabel}</span>
+          {Object.keys(reviewAttributesData).map((item) => (
+            <div className="review-attributes-details" key={reviewAttributesData[item].Id}>
+              <span className="attribute-name">{`${reviewAttributesData[item].DimensionLabel}: `}</span>
+              <span className="attribute-value">{reviewAttributesData[item].ValueLabel}</span>
             </div>
           ))}
         </div>

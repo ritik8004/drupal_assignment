@@ -28,13 +28,23 @@ const ReviewDescription = ({
             <div className="review-title">{reviewDescriptionData.Title}</div>
             <div className="review-date">{`${date}`}</div>
           </ConditionalView>
+
           <div className="review-text">{reviewDescriptionData.ReviewText}</div>
+
           <ReviewAdditionalAttributes
-            additionalFieldsData={reviewDescriptionData.AdditionalFields}
-            additionalFieldsOrder={reviewDescriptionData.AdditionalFieldsOrder}
-            tagDimensionsData={reviewDescriptionData.TagDimensions}
-            tagDimensionsOrder={reviewDescriptionData.TagDimensionsOrder}
+            reviewAdditionalAttributesData={reviewDescriptionData.TagDimensions}
           />
+
+          <ReviewAdditionalAttributes
+            reviewAdditionalAttributesData={reviewDescriptionData.AdditionalFields}
+            includes="_textarea"
+          />
+
+          {
+            (reviewDescriptionData.Photos && reviewDescriptionData.Photos.length > 0)
+              ? <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
+              : null
+          }
           <ConditionalView condition={reviewDescriptionData.Photos
             && reviewDescriptionData.Photos.length > 0}
           >
