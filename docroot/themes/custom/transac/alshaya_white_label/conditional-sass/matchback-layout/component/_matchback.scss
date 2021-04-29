@@ -253,7 +253,7 @@
     letter-spacing: normal;
     text-align: center;
     color: $grey-light;
-    margin-top: 1.3125rem;
+    margin-top: 2.3125rem;
   }
 }
 
@@ -275,5 +275,12 @@
   #block-alshayareactcartminicartblock {
     display: block !important;
     z-index: 10 !important;
+  }
+}
+
+.cloudzoom__thumbnails-matchback_gallery {
+  @include breakpoint($tablet) {
+    position: relative;
+    max-height: 18.625rem;
   }
 }

@@ -355,6 +355,11 @@
 
   &.no-cart-form {
     min-height: 12rem;
+
+    .sell--image > a {
+      line-height: 0;
+      display: block;
+    }
   }
 
   @include breakpoint($tablet) {
