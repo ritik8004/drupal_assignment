@@ -1,7 +1,7 @@
 import React from 'react';
 import getStringMessage from '../../../../../../../js/utilities/strings';
-import DisplayStar from '../../../../rating/components/stars';
 import ConditionalView from '../../../../common/components/conditional-view';
+import DisplayStar from '../../../../rating/components/stars';
 
 const PostReviewMessage = ({
   postReviewData,
