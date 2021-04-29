@@ -4,7 +4,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
-import ReviewPhoto from '../review-photo';
+import ReviewPhotos from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
@@ -38,7 +38,7 @@ const ReviewDescription = ({
           <ConditionalView condition={reviewDescriptionData.Photos
             && reviewDescriptionData.Photos.length > 0}
           >
-            <ReviewPhoto photoCollection={reviewDescriptionData.Photos} />
+            <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
           </ConditionalView>
           <div className="review-inline-feedback">
             <div>
