@@ -15,10 +15,8 @@
   }
 
   .vat-text-footer {
-    margin-bottom: 1rem;
+    margin: 1rem 0;
     font-size: 0.75rem;
-    margin-top: 1.25rem;
-    display: block;
   }
 
   .spc-main {
@@ -149,6 +147,11 @@
         margin-#{$right}: 2rem;
       }
     }
+  }
+
+  .vat-text-footer {
+    margin-top: 1.25rem;
+    display: block;
   }
 }
 

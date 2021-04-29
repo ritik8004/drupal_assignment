@@ -264,7 +264,28 @@ header {
       }
     }
   }
+}
 
+/*
+	SITE HEADER - MOBILE MENU
+*/
+
+.block-views-exposed-filter-blocksearch-page {
+  form {
+    @include breakpoint($only-mobile) {
+      border: 0.5rem solid $header_blocksearch_border;
+      box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+    }
+  }
+
+  input {
+    @include breakpoint($only-mobile) {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.c-menu-primary {
   #block-exposedformsearchpage,
   .block-views-exposed-filter-blocksearch-page {
     display: none;
@@ -457,25 +478,6 @@ header {
 }
 
 /*
-	SITE HEADER - MOBILE MENU
-*/
-
-.block-views-exposed-filter-blocksearch-page {
-  form {
-    @include breakpoint($only-mobile) {
-      border: 0.5rem solid $header_blocksearch_border;
-      box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
-    }
-  }
-
-  input {
-    @include breakpoint($only-mobile) {
-      font-size: 0.875rem;
-    }
-  }
-}
-
-/*
 	SITE HEADER - MAIN NAVIGATION
 */
 .mobile--menu {
@@ -543,19 +545,6 @@ header {
             margin-top: 0.125rem;
           }
         }
-
-        & > ul.menu--two__list {
-          &::after {
-            content: '';
-            height: 1px;
-            width: 100%;
-            background: $mm_mobile_icon;
-            position: absolute;
-            top: -0.9375rem;
-            opacity: 0.24;
-            #{$left}: 0;
-          }
-        }
       }
 
       a {
@@ -571,6 +560,21 @@ header {
             display: inherit;
             width: 100%;
             margin-top: 0.125rem;
+          }
+        }
+      }
+
+      &:hover {
+        & > ul.menu--two__list {
+          &::after {
+            content: '';
+            height: 1px;
+            width: 100%;
+            background: $mm_mobile_icon;
+            position: absolute;
+            top: -0.9375rem;
+            opacity: 0.24;
+            #{$left}: 0;
           }
         }
       }
@@ -646,14 +650,16 @@ header {
           p {
             color: $mm_l2_p_hover;
           }
-
-          &::after {
-            background: url('../imgs/icons/icon-chevron-next--hover.svg');
-          }
         }
 
         &::after {
           background: url('../imgs/icons/icon-chevron-next.svg');
+        }
+
+        &:hover {
+          &::after {
+            background: url('../imgs/icons/icon-chevron-next--hover.svg');
+          }
         }
       }
 

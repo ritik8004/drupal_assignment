@@ -41,7 +41,13 @@
       border: none;
       background: $spc-cart-item-alert;
       color: $spc-cart-item-filled-text;
+    }
+  }
+}
 
+.spc-cart-item-alerts:not(:empty) {
+  .spc-cart-item-alerts-item:not(:empty) {
+    &[data-filled=true] {
       .freegift-label {
         background: $primary_btn_bg;
         margin: -0.25rem -0.375rem;

@@ -633,8 +633,6 @@
 
 body {
   &.filter-open-no-scroll {
-    cursor: pointer;
-
     @include breakpoint($only-mobile) {
       overflow: hidden;
       position: fixed;
@@ -752,7 +750,6 @@ html[lang=ar] {
   }
 }
 
-// Fix for products misalignment on PLP/Promo Pages & Search.
 .c-products-list {
   position: relative;
   padding-bottom: 1rem;
@@ -786,7 +783,10 @@ html[lang=ar] {
       margin-#{$left}: 0;
     }
   }
+}
 
+// Fix for products misalignment on PLP/Promo Pages & Search.
+.c-products-list {
   .view-alshaya-product-list,
   &.view-search,
   &.block-views-blockalshaya-product-list-block-1,
@@ -794,7 +794,9 @@ html[lang=ar] {
     width: 100%;
     clear: both;
   }
+}
 
+.c-products-list {
   &.view-search,
   &.view-algolia-plp {
     @include breakpoint($only-mobile) {
@@ -813,6 +815,12 @@ html[lang=ar] {
         flex-wrap: wrap;
       }
     }
+  }
+}
+
+body {
+  &.filter-open-no-scroll {
+    cursor: pointer;
   }
 }
 

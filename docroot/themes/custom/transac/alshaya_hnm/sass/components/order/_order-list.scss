@@ -66,31 +66,6 @@
     height: 2.1875rem;
     width: 2.1875rem;
   }
-
-  @include breakpoint($upto-tablet) {
-    height: 2.1875rem;
-
-    .form-item-search {
-      label {
-        display: block;
-        background-color: $order_customer_search_label_bg;
-        border: 1px solid $secondary_border;
-        width: 100%;
-        position: relative;
-        line-height: 2.0625rem;
-        color: $title;
-        height: 2.1875rem;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-
-        @include icon(search, before) {
-          font-weight: bold;
-          font-size: 1rem;
-        }
-      }
-    }
-  }
 }
 
 .recent__orders--list {
@@ -134,25 +109,6 @@
   .order__detail--link {
     a {
       color: $content_link_color;
-    }
-  }
-
-  .recent__orders--body {
-    .icon-ic_chevrondown {
-      @include icon(dropdown-expand, before) {
-        position: absolute;
-        top: 50%;
-        #{$right}: 0.3125rem;
-        transform: translate(-50%, -50%);
-        color: $primary_dark_color;
-        font-size: 2.125rem;
-      }
-    }
-
-    &.open--accordion {
-      .icon-ic_chevrondown {
-        @include icon(dropdown-collapse, before);
-      }
     }
   }
 }
@@ -217,11 +173,59 @@
   }
 }
 
+.alshaya-acm-customer-order-list-search {
+  @include breakpoint($upto-tablet) {
+    height: 2.1875rem;
+
+    .form-item-search {
+      label {
+        display: block;
+        background-color: $order_customer_search_label_bg;
+        border: 1px solid $secondary_border;
+        width: 100%;
+        position: relative;
+        line-height: 2.0625rem;
+        color: $title;
+        height: 2.1875rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        @include icon(search, before) {
+          font-weight: bold;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
 .block-alshaya-my-account-links {
   .my-account-mobile-title1 {
     @include breakpoint($only-mobile) {
       margin-bottom: 0.4rem;
       padding-top: 0.75rem;
+    }
+  }
+}
+
+.recent__orders--list {
+  .recent__orders--body {
+    .icon-ic_chevrondown {
+      @include icon(dropdown-expand, before) {
+        position: absolute;
+        top: 50%;
+        #{$right}: 0.3125rem;
+        transform: translate(-50%, -50%);
+        color: $primary_dark_color;
+        font-size: 2.125rem;
+      }
+    }
+
+    &.open--accordion {
+      .icon-ic_chevrondown {
+        @include icon(dropdown-collapse, before);
+      }
     }
   }
 }

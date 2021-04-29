@@ -88,7 +88,6 @@
       background: $section_divider_bg;
       z-index: 2;
       padding: 0 2.1875rem;
-      color: $options_divider_between_text;
 
       @include breakpoint($tablet) {
         padding: 0.1875rem 0.875rem 0;
@@ -100,6 +99,10 @@
   .attribute-title,
   .divider span {
     font-family: $alshaya-bold;
+  }
+
+  .divider span {
+    color: $options_divider_between_text;
   }
 
   .attribute-title {

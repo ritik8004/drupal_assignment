@@ -41,12 +41,6 @@
         margin-bottom: 0;
       }
     }
-
-    @include breakpoint($only-mobile) {
-      .order-quantity-limit-message.mobile-only {
-        bottom: 3rem;
-      }
-    }
   }
 
   &__sidebar {
@@ -112,7 +106,9 @@
       margin-bottom: 0.25rem;
     }
   }
+}
 
+.short-description-wrapper {
   .show-less-link,
   .read-more-description-link,
   .read-more-description-link-mobile {
@@ -166,24 +162,6 @@
       button[type="submit"] {
         text-transform: uppercase;
         float: $right;
-        font-family: $alshaya-thin;
-        line-height: 1.8;
-        padding: 0.5rem 0;
-        margin-#{$left}: 1rem;
-        width: 70%;
-
-        @include breakpoint($only-tablet) {
-          width: 65%;
-
-          html[lang="ar"] & {
-            float: left !important;
-            margin-top: 2rem !important;
-          }
-        }
-
-        html[lang="ar"] & {
-          line-height: 0;
-        }
       }
     }
   }
@@ -269,6 +247,31 @@
   }
 }
 
+.field--name-field-skus {
+  .sku-base-form {
+    button[type="submit"] {
+      font-family: $alshaya-thin;
+      line-height: 1.8;
+      padding: 0.5rem 0;
+      margin-#{$left}: 1rem;
+      width: 70%;
+
+      @include breakpoint($only-tablet) {
+        width: 65%;
+
+        html[lang="ar"] & {
+          float: left !important;
+          margin-top: 2rem !important;
+        }
+      }
+
+      html[lang="ar"] & {
+        line-height: 0;
+      }
+    }
+  }
+}
+
 #drupal-modal {
   .acq-content-product {
     .sku-base-form {
@@ -286,6 +289,16 @@
   &.thumbnail-count-1 {
     #cloud-zoom-big {
       #{$left}: 145.8% !important;
+    }
+  }
+}
+
+.content {
+  &__main {
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message.mobile-only {
+        bottom: 3rem;
+      }
     }
   }
 }

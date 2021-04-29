@@ -51,8 +51,6 @@
     line-height: 1.4;
 
     html[lang=ar] & {
-      padding: 0.619rem 0 0;
-
       @include breakpoint($only-tablet) {
         line-height: 1.6;
       }
@@ -60,6 +58,10 @@
 
     text-transform: uppercase;
     padding: 0.6875rem;
+
+    html[lang=ar] & {
+      padding: 0.619rem 0 0;
+    }
 
     &:hover,
     &.active {
@@ -85,9 +87,6 @@
   }
 
   .input--wrapper {
-    position: absolute;
-    #{$left}: 19%;
-
     [id^=edit-actions] {
       top: 0;
       height: 2.5rem;
@@ -121,21 +120,6 @@
         padding-#{$right}: 0;
         padding-top: 0.225rem;
       }
-    }
-
-    @include breakpoint($desktop) {
-      width: 57% !important;
-    }
-
-    @include breakpoint($only-mobile) {
-      #{$left}: 0;
-      width: 100%;
-      position: relative;
-    }
-
-    @include breakpoint($only-tablet) {
-      #{$left}: 16%;
-      width: 47% !important;
     }
   }
 
@@ -570,6 +554,26 @@
           }
         }
       }
+    }
+  }
+
+  .input--wrapper {
+    position: absolute;
+    #{$left}: 19%;
+
+    @include breakpoint($desktop) {
+      width: 57% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      #{$left}: 0;
+      width: 100%;
+      position: relative;
+    }
+
+    @include breakpoint($only-tablet) {
+      #{$left}: 16%;
+      width: 47% !important;
     }
   }
 }

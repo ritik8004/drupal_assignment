@@ -66,77 +66,6 @@ header {
         }
       }
     }
-
-    /*
-      SITE HEADER - LOGO
-    */
-    .block-system-branding-block {
-      @include breakpoint($only-mobile) {
-        width: 100%;
-      }
-
-      .site-brand-home {
-        @include breakpoint($desktop) {
-          margin-#{$right}: 1.25rem;
-        }
-
-        @include breakpoint($only-tablet) {
-          html[lang="ar"] & {
-            width: 100%;
-          }
-        }
-
-        @include breakpoint($only-mobile) {
-          width: 100%;
-          margin-#{$left}: 1.1875rem;
-
-          html[lang=ar] & {
-            margin-#{$left}: 0.5625rem;
-          }
-        }
-
-        a {
-          margin: auto;
-          max-width: 21.875rem;
-
-          @include breakpoint($only-tablet) {
-            margin-top: 0.3125rem;
-
-            html[lang="ar"] & {
-              max-width: 15.8125rem;
-              margin-top: 0;
-            }
-          }
-
-          @include breakpoint($only-mobile) {
-            max-width: 11.25rem;
-            margin-top: 0.375rem;
-
-            html[lang=ar] & {
-              max-width: 10.9375rem;
-              margin-top: 2px;
-            }
-          }
-        }
-
-        img {
-          html[lang="ar"] & {
-            width: auto;
-            height: auto;
-            max-width: 100%;
-          }
-
-          @include breakpoint($only-tablet) {
-            width: 100%;
-
-            html[lang="ar"] & {
-              max-width: 100%;
-              margin-top: -0.625rem;
-            }
-          }
-        }
-      }
-    }
   }
 
   #block-alshaya-white-label-search,
@@ -304,7 +233,26 @@ header {
       }
     }
   }
+}
 
+/*
+	SITE HEADER - MOBILE VIEW
+*/
+
+header .block-views-exposed-filter-blocksearch-page {
+  @include breakpoint($upto-desktop) {
+    form {
+      box-shadow: 0 0.5px 0 0 $header_branding_shadow;
+      border: 0.5rem solid $header_search_border_mobile;
+    }
+
+    .form-item-keywords {
+      width: 100%;
+    }
+  }
+}
+
+.c-menu-primary {
   #block-exposedformsearchpage {
     input {
       color: $primary_input;
@@ -405,23 +353,6 @@ header {
 }
 
 /*
-	SITE HEADER - MOBILE VIEW
-*/
-
-header .block-views-exposed-filter-blocksearch-page {
-  @include breakpoint($upto-desktop) {
-    form {
-      box-shadow: 0 0.5px 0 0 $header_branding_shadow;
-      border: 0.5rem solid $header_search_border_mobile;
-    }
-
-    .form-item-keywords {
-      width: 100%;
-    }
-  }
-}
-
-/*
 	SITE HEADER - MAIN NAVIGATION
 */
 
@@ -479,7 +410,21 @@ header .block-views-exposed-filter-blocksearch-page {
             visibility: visible;
           }
         }
+      }
 
+      .menu--one__link {
+        &.active {
+          border-bottom: none;
+          color: $mm_l1_link;
+
+          &::after {
+            background-color: $primary_link-hover;
+            visibility: visible;
+          }
+        }
+      }
+
+      &:hover {
         & > ul.menu--two__list {
           border-bottom: 2px solid $mm_l1_border;
           transform: none;
@@ -494,18 +439,6 @@ header .block-views-exposed-filter-blocksearch-page {
             opacity: 0.24;
             transition: all 0.3s ease-out;
             #{$left}: 0;
-          }
-        }
-      }
-
-      .menu--one__link {
-        &.active {
-          border-bottom: none;
-          color: $mm_l1_link;
-
-          &::after {
-            background-color: $primary_link-hover;
-            visibility: visible;
           }
         }
       }
@@ -591,7 +524,9 @@ header .block-views-exposed-filter-blocksearch-page {
         width: 20rem;
       }
     }
+  }
 
+  .main--menu {
     .menu__link {
       @include arabic-letter-spacing;
 
@@ -790,6 +725,79 @@ header .block-views-exposed-filter-blocksearch-page {
     @include breakpoint($only-mobile) {
       .hamburger--menu {
         padding: 0.3125rem;
+      }
+    }
+  }
+}
+
+/*
+	SITE HEADER - LOGO
+*/
+header .region__header {
+  .block-system-branding-block {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+
+    .site-brand-home {
+      @include breakpoint($desktop) {
+        margin-#{$right}: 1.25rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        html[lang="ar"] & {
+          width: 100%;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-#{$left}: 1.1875rem;
+
+        html[lang=ar] & {
+          margin-#{$left}: 0.5625rem;
+        }
+      }
+
+      a {
+        margin: auto;
+        max-width: 21.875rem;
+
+        @include breakpoint($only-tablet) {
+          margin-top: 0.3125rem;
+
+          html[lang="ar"] & {
+            max-width: 15.8125rem;
+            margin-top: 0;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          max-width: 11.25rem;
+          margin-top: 0.375rem;
+
+          html[lang=ar] & {
+            max-width: 10.9375rem;
+            margin-top: 2px;
+          }
+        }
+      }
+
+      img {
+        html[lang="ar"] & {
+          width: auto;
+          height: auto;
+          max-width: 100%;
+        }
+
+        @include breakpoint($only-tablet) {
+          width: 100%;
+
+          html[lang="ar"] & {
+            max-width: 100%;
+            margin-top: -0.625rem;
+          }
+        }
       }
     }
   }

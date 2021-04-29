@@ -46,23 +46,6 @@
         }
       }
     }
-
-    @include breakpoint($desktop) {
-      li:first-child a,
-      li:nth-child(2) a {
-        @include icon(user);
-      }
-
-      li:last-child a {
-        @include icon(login);
-
-        @at-root {
-          .logged-in & {
-            @include icon(logout);
-          }
-        }
-      }
-    }
   }
 
   li {
@@ -149,6 +132,25 @@
   .block-language-blocklanguage-interface {
     @include breakpoint($upto-desktop) {
       display: none;
+    }
+  }
+
+  .menu--account {
+    @include breakpoint($desktop) {
+      li:first-child a,
+      li:nth-child(2) a {
+        @include icon(user);
+      }
+
+      li:last-child a {
+        @include icon(login);
+
+        @at-root {
+          .logged-in & {
+            @include icon(logout);
+          }
+        }
+      }
     }
   }
 
@@ -286,21 +288,6 @@
   z-index: 11;
   background-color: $header_bg;
 
-  &::before {
-    @include breakpoint($upto-desktop) {
-      content: '';
-      background-color: transparent;
-      position: absolute;
-      left: 0;
-      right: 0;
-      z-index: -1;
-      top: 0;
-      bottom: 0;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
-    }
-  }
-
   @include breakpoint($desktop) {
     z-index: 6;
   }
@@ -314,6 +301,23 @@
   @include breakpoint($only-mobile) {
     box-shadow: 0 0 0.125rem $header_branding_shadow;
     position: fixed;
+  }
+}
+
+.branding__menu {
+  &::before {
+    @include breakpoint($upto-desktop) {
+      content: '';
+      background-color: transparent;
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
   }
 }
 

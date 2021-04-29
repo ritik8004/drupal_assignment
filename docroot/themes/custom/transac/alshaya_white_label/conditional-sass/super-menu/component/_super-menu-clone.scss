@@ -2,7 +2,6 @@
 $super-menu-height: 1.875rem;
 
 // Super-menu--two styling.
-// Super-menu--two visibility.
 .menu--super-menu--clone {
   float: $left;
   z-index: 1;
@@ -12,7 +11,6 @@ $super-menu-height: 1.875rem;
   max-width: none;
   height: $super-menu-height;
   background: $header_secondary_bg;
-  display: none;
 
   ul {
     &.menu {
@@ -64,6 +62,11 @@ $super-menu-height: 1.875rem;
       }
     }
   }
+}
+
+// Super-menu--two visibility.
+.menu--super-menu--clone {
+  display: none;
 }
 
 // We need to show it only on overlay.

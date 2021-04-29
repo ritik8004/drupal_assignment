@@ -104,18 +104,6 @@
       margin-top: 4rem;
     }
   }
-
-  .section-title {
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
-  }
-
-  .login-separator {
-    &.bottom {
-      display: none;
-    }
-  }
 }
 
 .c-user-login.user-page {
@@ -350,6 +338,20 @@
 
   .block-alshaya-social-login {
     margin-bottom: 2.5rem;
+  }
+}
+
+.c-user-login {
+  .section-title {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+
+  .login-separator {
+    &.bottom {
+      display: none;
+    }
   }
 }
 

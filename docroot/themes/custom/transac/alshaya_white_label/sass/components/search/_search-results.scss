@@ -93,12 +93,6 @@ header,
       }
     }
   }
-
-  .block-views-exposed-filter-blocksearch-page {
-    .form-item-keywords {
-      float: $left;
-    }
-  }
 }
 
 .search-api-autocomplete-suggestion {
@@ -116,6 +110,14 @@ header,
 
 .form-autocomplete.ui-autocomplete-loading {
   background-size: 2rem;
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page {
+    .form-item-keywords {
+      float: $left;
+    }
+  }
 }
 
 .ajax-progress.ajax-progress-fullscreen {

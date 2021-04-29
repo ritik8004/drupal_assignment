@@ -1,4 +1,3 @@
-// Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   .all-filters {
     .facet-all-clear,
@@ -30,7 +29,10 @@
       }
     }
   }
+}
 
+// Css for filters on products listing page and search page.
+.c-plp .c-content__region {
   // Filter Head
   .all-filters,
   .all-filters-algolia,

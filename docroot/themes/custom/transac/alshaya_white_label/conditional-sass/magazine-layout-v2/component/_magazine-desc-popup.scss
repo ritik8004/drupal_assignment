@@ -94,7 +94,21 @@
 
       &-price-container {
         text-align: center;
+      }
 
+      &-title {
+        font-size: 0.875rem;
+        line-height: normal;
+        margin: 0 auto 0.1875rem;
+        color: $magv2-text;
+        text-align: center;
+        max-width: 11.3125rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      &-price-container {
         &.has-special-price {
           .magv2-pdp-discount-percentage {
             border-radius: 0.125rem;
@@ -114,18 +128,6 @@
             }
           }
         }
-      }
-
-      &-title {
-        font-size: 0.875rem;
-        line-height: normal;
-        margin: 0 auto 0.1875rem;
-        color: $magv2-text;
-        text-align: center;
-        max-width: 11.3125rem;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
       }
     }
   }

@@ -10,7 +10,9 @@
     .facet-item__count {
       display: block;
     }
+  }
 
+  .block-facet-blockcategory-facet-search {
     ul {
       @include breakpoint($desktop) {
         padding-top: 0;

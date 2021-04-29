@@ -257,8 +257,10 @@ hr {
       padding-top: calc(100% - 5.75rem);
     }
   }
+}
 
-  // Style 1 row 3 col promo block h4 on wiswig, use as promo title when corrsponding promo block title break to two lines
+// Style 1 row 3 col promo block h4 on wiswig, use as promo title when corrsponding promo block title break to two lines
+.paragraph--type--_-row-3-col-flex {
   h4 {
     margin: 0;
   }

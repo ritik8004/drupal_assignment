@@ -9,10 +9,6 @@
       }
     }
   }
-
-  select.select2-select.form-select {
-    border-color: $primary_input_border;
-  }
 }
 
 .user__address--column {
@@ -108,8 +104,6 @@
     padding-#{$left}: 2.125rem;
     padding-bottom: 0;
     padding-top: 0.125rem;
-    font-weight: normal;
-    letter-spacing: normal;
 
     @include breakpoint($tablet) {
       width: auto;
@@ -128,12 +122,23 @@
     }
   }
 
+  .address--primary {
+    font-weight: normal;
+    letter-spacing: normal;
+  }
+
   &:hover,
   &.default {
     .address--primary {
       font-weight: normal;
       color: $address_button_text;
     }
+  }
+}
+
+.address-book-address .form-type-select {
+  select.select2-select.form-select {
+    border-color: $primary_input_border;
   }
 }
 

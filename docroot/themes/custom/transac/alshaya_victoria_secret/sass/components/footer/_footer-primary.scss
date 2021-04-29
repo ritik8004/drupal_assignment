@@ -31,10 +31,6 @@
       flex-basis: 28%;
       flex-grow: 1;
     }
-
-    @include breakpoint($desktop) {
-      flex-basis: 27%;
-    }
   }
 
   .footer__categories {
@@ -66,6 +62,12 @@
   .footer__about {
     @include breakpoint($desktop) {
       flex-basis: 26%;
+    }
+  }
+
+  .footer_primary-right-block {
+    @include breakpoint($desktop) {
+      flex-basis: 27%;
     }
   }
 
@@ -247,12 +249,6 @@
         font-family: $vs-regular;
       }
 
-      &.ar {
-        a {
-          font-family: $vs-arabic-regular;
-        }
-      }
-
       a {
         text-decoration: none;
         text-transform: none;
@@ -300,6 +296,21 @@ html[lang=ar] {
     @include breakpoint($tablet) {
       width: auto;
       margin-right: 5%;
+    }
+  }
+}
+
+.c-footer-primary,
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        &.ar {
+          a {
+            font-family: $vs-arabic-regular;
+          }
+        }
+      }
     }
   }
 }

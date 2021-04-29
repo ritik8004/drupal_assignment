@@ -63,32 +63,6 @@
         background: $spc-cart-item-qty-disabled;
       }
     }
-
-    .spcSelect__dropdown-indicator {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      @include icon('chevrondown') {
-        font-size: 1.75rem;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: transform 0.125s ease-in-out;
-      }
-
-      svg {
-        visibility: hidden;
-      }
-    }
-
-    &--menu-is-open {
-      .spcSelect__dropdown-indicator {
-        &::before {
-          transform: translateY(-50%) rotate(180deg);
-        }
-      }
-    }
   }
 
   .spcSelect__menu {
@@ -120,6 +94,34 @@
           pointer-events: none;
           opacity: 0.5;
           background: $greyish !important;
+        }
+      }
+    }
+  }
+
+  .spcSelect__control {
+    .spcSelect__dropdown-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include icon('chevrondown') {
+        font-size: 1.75rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.125s ease-in-out;
+      }
+
+      svg {
+        visibility: hidden;
+      }
+    }
+
+    &--menu-is-open {
+      .spcSelect__dropdown-indicator {
+        &::before {
+          transform: translateY(-50%) rotate(180deg);
         }
       }
     }

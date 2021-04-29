@@ -109,19 +109,6 @@
       }
     }
   }
-
-  .c-content__region {
-    .user-form,
-    .change-pwd-form {
-      .field--name-field-subscribe-newsletter {
-        label {
-          @include breakpoint($tablet) {
-            margin-#{$left}: -0.875rem;
-          }
-        }
-      }
-    }
-  }
 }
 
 .c-user-login {
@@ -173,6 +160,22 @@
   top: 0.375rem;
   font-size: 0.625rem;
   text-transform: uppercase;
+}
+
+.c-user-register,
+.c-user-register {
+  .c-content__region {
+    .user-form,
+    .change-pwd-form {
+      .field--name-field-subscribe-newsletter {
+        label {
+          @include breakpoint($tablet) {
+            margin-#{$left}: -0.875rem;
+          }
+        }
+      }
+    }
+  }
 }
 
 .alias--user-register-complete {

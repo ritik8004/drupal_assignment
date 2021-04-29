@@ -214,17 +214,6 @@
 }
 
 .c-footer-menu--help {
-  @include breakpoint($only-mobile) {
-    margin-bottom: 2.25em;
-    border-bottom: 1px solid $white;
-    max-width: 100%;
-  }
-
-  @include breakpoint($only-tablet) {
-    display: block;
-    margin-top: 1.5rem;
-  }
-
   @include breakpoint($desktop) {
     width: 30%;
     margin-#{$left}: 5%;
@@ -432,6 +421,19 @@
       padding: 0;
       display: block;
     }
+  }
+}
+
+.c-footer-menu--help {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 2.25em;
+    border-bottom: 1px solid $white;
+    max-width: 100%;
+  }
+
+  @include breakpoint($only-tablet) {
+    display: block;
+    margin-top: 1.5rem;
   }
 }
 
