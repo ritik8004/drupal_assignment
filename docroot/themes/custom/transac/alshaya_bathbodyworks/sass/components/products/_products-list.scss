@@ -149,9 +149,25 @@
   }
 
   .c-products__item {
+    font-size: 0.875rem;
+
     .out-of-stock span {
       height: 2.5rem;
       line-height: 2.1;
+      text-transform: uppercase;
+    }
+
+    @include breakpoint($desktop) {
+      &:hover {
+        article::after,
+        .alshaya_search_slider {
+          display: none;
+        }
+      }
+    }
+
+    .field--name-name {
+      margin-bottom: 0.3125rem;
       text-transform: uppercase;
     }
   }
@@ -171,24 +187,6 @@
       @include breakpoint($only-mobile) {
         max-width: 100%;
       }
-    }
-  }
-
-  .c-products__item {
-    font-size: 0.875rem;
-
-    @include breakpoint($desktop) {
-      &:hover {
-        article::after,
-        .alshaya_search_slider {
-          display: none;
-        }
-      }
-    }
-
-    .field--name-name {
-      margin-bottom: 0.3125rem;
-      text-transform: uppercase;
     }
   }
 

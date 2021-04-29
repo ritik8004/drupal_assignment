@@ -10,6 +10,31 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * [performance] Installs advagg and it's sub-modules if it is not enabled.
+ */
+function alshaya_performance_update_8008() {
+  if (!(\Drupal::moduleHandler()->moduleExists('advagg'))) {
+    \Drupal::service('module_installer')->install(['advagg',
+    'advagg_css_minify',
+    'advagg_js_minify',
+    'advagg_cdn',
+    'advagg_bundler']);
+    // Setting required config for advagg js minifigy.
+    $js_minify_config = \Drupal::configFactory()->getEditable('advagg_js_minify.settings');
+    $js_minify_config->set('minifier', 5);
+    $js_minify_config->save();
+    // Setting required config for advagg bundler.
+    $bundler_config = \Drupal::configFactory()->getEditable('advagg_bundler.settings');
+    $bundler_config->set('css.max', 2);
+    $bundler_config->set('js.max', 2);
+    $bundler_config->save();
+  }
+
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [5.13.0]Installs cache_tags_cleanup module if it is not enabled.
  */
 function alshaya_performance_update_8007() {
@@ -118,4 +143,20 @@ function alshaya_performance_update_8001() {
 function alshaya_performance_install() {
   // Set log mode from settings.
   alshaya_performance_reset_log_mode();
+  if (!(\Drupal::moduleHandler()->moduleExists('advagg'))) {
+    \Drupal::service('module_installer')->install(['advagg',
+    'advagg_css_minify',
+    'advagg_js_minify',
+    'advagg_cdn',
+    'advagg_bundler']);
+    // Setting required config for advagg js minifigy.
+    $js_minify_config = \Drupal::configFactory()->getEditable('advagg_js_minify.settings');
+    $js_minify_config->set('minifier', 5);
+    $js_minify_config->save();
+    // Setting required config for advagg bundler.
+    $bundler_config = \Drupal::configFactory()->getEditable('advagg_bundler.settings');
+    $bundler_config->set('css.max', 2);
+    $bundler_config->set('js.max', 2);
+    $bundler_config->save();
+  }
 }

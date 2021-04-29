@@ -16,6 +16,7 @@
 
       &:hover {
         cursor: pointer;
+        color: $plp_sub_cat_block_cat_title_hover;
       }
 
       @include breakpoint($only-tablet) {
@@ -26,10 +27,6 @@
       @include breakpoint($only-mobile) {
         margin-#{$right}: 0.25rem;
         min-width: 5.625rem;
-      }
-
-      &:hover {
-        color: $plp_sub_cat_block_cat_title_hover;
       }
 
       .sub-category-title {
