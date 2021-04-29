@@ -42,29 +42,7 @@
         }
       }
     }
-  }
 
-  // MM L1 hover.
-  .active--menu--links {
-    li.menu--one__list-item {
-      @include breakpoint($desktop) {
-        &:hover {
-          a.menu--one__link {
-            @include mm-l1-highlight;
-          }
-        }
-      }
-    }
-
-    &:hover {
-      li.menu--one__list-item a.menu--one__link {
-        border-bottom: none;
-      }
-    }
-  }
-
-  // MM L1 active.
-  li.menu--one__list-item {
     &:hover {
       @include breakpoint($desktop) {
         a.menu--one__link {
@@ -105,12 +83,32 @@
 
       @include breakpoint($desktop) {
         margin-top: 0;
+        padding: 0.625rem 0;
       }
     }
 
     ul.menu--two__list {
       @include breakpoint($desktop) {
         max-width: 67.5rem;
+      }
+    }
+  }
+
+  // MM L1 hover.
+  .active--menu--links {
+    li.menu--one__list-item {
+      @include breakpoint($desktop) {
+        &:hover {
+          a.menu--one__link {
+            @include mm-l1-highlight;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      li.menu--one__list-item a.menu--one__link {
+        border-bottom: none;
       }
     }
   }
@@ -170,6 +168,7 @@
 }
 
 .highlights {
+  .hightlight__title,
   .title {
     font-weight: bold;
   }
@@ -189,22 +188,6 @@
           padding-bottom: 0.3125rem;
           padding-top: 0.3125rem;
         }
-      }
-    }
-  }
-}
-
-.highlights {
-  .hightlight__title {
-    font-weight: bold;
-  }
-}
-
-.block-alshaya-main-menu {
-  li.menu--one__list-item {
-    .menu--one__link {
-      @include breakpoint($desktop) {
-        padding: 0.625rem 0;
       }
     }
   }

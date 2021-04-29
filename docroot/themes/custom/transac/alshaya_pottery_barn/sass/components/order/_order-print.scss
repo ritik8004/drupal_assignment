@@ -49,10 +49,28 @@ body {
       .price-amount {
         font-weight: normal;
       }
-    }
-  }
 
-  .user__order--detail {
+      .blend {
+        background-color: $order_print_order_details_row_bg_blend;
+      }
+
+      .dark {
+        color: $order_print_order_details_row_label;
+      }
+
+      td {
+        &:nth-child(2) {
+          div {
+            color: $order_print_order_details_item_row_details;
+
+            &.dark {
+              color: $order_print_order_details_row_label;
+            }
+          }
+        }
+      }
+    }
+
     background-color: $order_print_order_details_row_bg;
 
     .dark {
@@ -88,28 +106,6 @@ body {
       .price-type__wrapper {
         .price {
           color: $order_print_delivery_details_price_label;
-        }
-      }
-    }
-
-    .order-item-row {
-      .blend {
-        background-color: $order_print_order_details_row_bg_blend;
-      }
-
-      .dark {
-        color: $order_print_order_details_row_label;
-      }
-
-      td {
-        &:nth-child(2) {
-          div {
-            color: $order_print_order_details_item_row_details;
-
-            &.dark {
-              color: $order_print_order_details_row_label;
-            }
-          }
         }
       }
     }

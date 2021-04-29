@@ -28,6 +28,15 @@
     input.form-text {
       display: inline-block;
     }
+
+    .field--type-mobile-number {
+      .form-item {
+        &.form-type-tel {
+          margin-top: 0;
+          width: 100%;
+        }
+      }
+    }
   }
 
   .c-content .messages--error {
@@ -69,19 +78,6 @@
 
       .field--name-field-privilege-card-number {
         margin-top: 3rem;
-      }
-    }
-  }
-}
-
-.c-user-edit {
-  .user-form {
-    .field--type-mobile-number {
-      .form-item {
-        &.form-type-tel {
-          margin-top: 0;
-          width: 100%;
-        }
       }
     }
   }
