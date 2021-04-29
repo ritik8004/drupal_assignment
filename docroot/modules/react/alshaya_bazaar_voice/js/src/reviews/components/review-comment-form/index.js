@@ -153,7 +153,7 @@ class ReviewCommentForm extends React.Component {
       }
       // Add device finger printing string.
       if (e.target.elements.blackBox.value !== '') {
-        authParams += `&fp=${e.target.elements.blackBox.value}`;
+        authParams += `&fp=${encodeURIComponent(e.target.elements.blackBox.value)}`;
       }
       const params = `&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
       const apiData = postAPIData('/data/submitreviewcomment.json', params);
