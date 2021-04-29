@@ -9,7 +9,8 @@ import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
-import { getCurrentUserEmail, getSessionCookie, getCurrentUserName } from '../../../../utilities/user_util';
+import { getCurrentUserEmail, getSessionCookie } from '../../../../utilities/user_util';
+import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
@@ -28,19 +29,19 @@ const DynamicFormField = (props) => {
 
   // Set default value for user nickname and email.
   // For anonymous user, default value is from user cookies.
+  const bazaarVoiceSettings = getbazaarVoiceSettings();
+  const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
       if (getCurrentUserEmail() !== null) {
         fieldProperty.defaultVal = getCurrentUserEmail();
         readonly = true;
-      } else if (getSessionCookie('BvUserEmail') !== null) {
-        fieldProperty.defaultVal = getSessionCookie('BvUserEmail');
+      } else if (getSessionCookie('bv_user_email') !== null) {
+        fieldProperty.defaultVal = getSessionCookie('bv_user_email');
       }
     } else if (fieldProperty.id === 'usernickname') {
-      if (getSessionCookie('BvUserNickname') !== null) {
-        fieldProperty.defaultVal = getSessionCookie('BvUserNickname');
-      } else if (getCurrentUserName() !== null) {
-        fieldProperty.defaultVal = getCurrentUserName();
+      if (getSessionCookie(nicknameKey) !== null) {
+        fieldProperty.defaultVal = getSessionCookie(nicknameKey);
       }
     }
   }

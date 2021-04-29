@@ -3,7 +3,8 @@ import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
 import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie, getCurrentUserName,
+  getCurrentUserEmail, getSessionCookie, setSessionCookie, getUserEmailParams,
+  getUserNicknameParams,
 } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
@@ -123,28 +124,20 @@ class ReviewCommentForm extends React.Component {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
       const bazaarVoiceSettings = getbazaarVoiceSettings();
-      if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== email) {
-        const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
-        deleteSessionCookie(cookieValues);
-      }
+      const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
       let authParams = '';
-      if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
-        authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
-      }
+      authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+      authParams += getUserEmailParams(email, nicknameKey);
       const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
       // Set user authenticated string (UAS).
       if (getCurrentUserEmail() !== null && getSessionCookie(currentUserKey) !== undefined) {
         authParams += `&user=${getSessionCookie(currentUserKey)}`;
-        setSessionCookie('BvUserNickname', nickname);
+        setSessionCookie(nicknameKey, nickname);
       }
 
-      if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
-        && getSessionCookie('BvUserNickname') !== null) {
-        if (getSessionCookie('BvUserNickname') !== nickname) {
-          authParams += `&UserNickname=${nickname}`;
-          setSessionCookie('BvUserNickname', nickname);
-        }
-        authParams += `&User=${getSessionCookie('BvUserId')}`;
+      if (getSessionCookie('bv_user_id') !== null && getSessionCookie('bv_user_email') !== null
+        && getSessionCookie(nicknameKey) !== null) {
+        authParams += getUserNicknameParams(nicknameKey, nickname);
       } else {
         authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
       }
@@ -212,19 +205,19 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
     let emailValue = '';
     let nicknameValue = '';
     // Set default value for user email.
     if (getCurrentUserEmail() !== null) {
       emailValue = getCurrentUserEmail();
-    } else if (getSessionCookie('BvUserEmail') !== null) {
-      emailValue = getSessionCookie('BvUserEmail');
+    } else if (getSessionCookie('bv_user_email') !== null) {
+      emailValue = getSessionCookie('bv_user_email');
     }
     // Set default value for user nickname.
-    if (getSessionCookie('BvUserNickname') !== null) {
-      nicknameValue = getSessionCookie('BvUserNickname');
-    } else if (getCurrentUserName() !== null) {
-      nicknameValue = getCurrentUserName();
+    if (getSessionCookie(nicknameKey) !== null) {
+      nicknameValue = getSessionCookie(nicknameKey);
     }
 
     if (ReviewId !== undefined) {

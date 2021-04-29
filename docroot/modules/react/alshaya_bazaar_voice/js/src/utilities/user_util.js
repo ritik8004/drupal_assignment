@@ -13,16 +13,6 @@ export const getCurrentUserEmail = () => {
   return email;
 };
 
-/**
- * Get username of current user.
- *
- * @returns {userName}
- */
-export const getCurrentUserName = () => {
-  const userName = bazaarVoiceSettings.reviews.user.user_name;
-  return userName;
-};
-
 export const setSessionCookie = (key, value) => {
   Cookies.remove(key);
   Cookies.set(key, value, { expires: bazaarVoiceSettings.reviews.bazaar_voice.max_age });
@@ -66,9 +56,35 @@ export const deleteSessionCookie = (keys) => {
   });
 };
 
+export const getUserEmailParams = (email, nicknameKey) => {
+  let params = '';
+  // Delete existing cookies for user info.
+  if (getSessionCookie('bv_user_email') !== null && getSessionCookie('bv_user_email') !== email) {
+    const cookieValues = ['bv_user_email', nicknameKey, 'bv_user_id'];
+    deleteSessionCookie(cookieValues);
+  }
+  // Set auth paramters for anonymous users.
+  if (getCurrentUserEmail() === null && getSessionCookie('bv_user_email') === null) {
+    params += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+  }
+  return params;
+};
+
+export const getUserNicknameParams = (nicknameKey, nickname) => {
+  let params = '';
+  if (getSessionCookie(nicknameKey) !== nickname) {
+    params += `&UserNickname=${nickname}`;
+    setSessionCookie(nicknameKey, nickname);
+  }
+  params += `&User=${getSessionCookie('bv_user_id')}`;
+  return params;
+};
+
 export default {
   getCurrentUserEmail,
   setSessionCookie,
   getSessionCookie,
   deleteSessionCookie,
+  getUserEmailParams,
+  getUserNicknameParams,
 };

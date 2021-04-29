@@ -1,5 +1,6 @@
 import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, deleteSessionCookie,
+  getCurrentUserEmail, getSessionCookie, setSessionCookie, getUserEmailParams,
+  getUserNicknameParams,
 } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
@@ -35,24 +36,16 @@ export const prepareRequest = (elements, fieldsConfig) => {
     // Add input data from field types.
     try {
       if (elements[id].value !== null) {
+        const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
         if (id === 'useremail') {
-          if (getSessionCookie('BvUserEmail') !== null && getSessionCookie('BvUserEmail') !== elements[id].value) {
-            const cookieValues = ['BvUserEmail', 'BvUserNickname', 'BvUserId'];
-            deleteSessionCookie(cookieValues);
-          } else if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
-            params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
-          }
+          params += getUserEmailParams(elements[id].value, nicknameKey);
         } else if (id === 'usernickname') {
-          if (getSessionCookie('BvUserId') !== null && getSessionCookie('BvUserEmail') !== null
-            && getSessionCookie('BvUserNickname') !== null && getCurrentUserEmail() === null) {
-            if (getSessionCookie('BvUserNickname') !== elements[id].value) {
-              params += `&${id}=${elements[id].value}`;
-              setSessionCookie('BvUserNickname', elements[id].value);
-            }
-            params += `&User=${getSessionCookie('BvUserId')}`;
+          if (getSessionCookie('bv_user_id') !== null && getSessionCookie('bv_user_email') !== null
+            && getSessionCookie(nicknameKey) !== null && getCurrentUserEmail() === null) {
+            params += getUserNicknameParams(nicknameKey, elements[id].value);
           } else {
             params += `&${id}=${elements[id].value}`;
-            setSessionCookie('BvUserNickname', elements[id].value);
+            setSessionCookie(nicknameKey, elements[id].value);
           }
         } else {
           params += `&${id}=${elements[id].value}`;
@@ -74,7 +67,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
     });
   }
 
-  if (getCurrentUserEmail() === null && getSessionCookie('BvUserEmail') === null) {
+  if (getCurrentUserEmail() === null && getSessionCookie('bv_user_email') === null) {
     params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
   }
   const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
