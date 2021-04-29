@@ -148,14 +148,6 @@
     width: 40%;
     float: $left;
   }
-
-  @include breakpoint($only-mobile) {
-    margin-bottom: 1.875rem;
-  }
-
-  @include breakpoint($only-tablet) {
-    margin-top: 0;
-  }
 }
 
 .c-footer-menu--category {
@@ -233,6 +225,16 @@
   }
 }
 
+.c-footer-menu--help {
+  @include breakpoint($only-mobile) {
+    margin-bottom: 1.875rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0;
+  }
+}
+
 .c-footer-menu--about {
   @include breakpoint($desktop) {
     margin-#{$left}: 0;
@@ -287,10 +289,6 @@
     li {
       &:first-child {
         position: relative;
-
-        &::after {
-          display: none;
-        }
 
         a {
           text-transform: capitalize;
@@ -406,6 +404,19 @@
         margin-bottom: 0.625rem;
         text-align: center;
         padding-#{$left}: 0;
+      }
+    }
+  }
+}
+
+.c-footer-primary .language-switcher-language-url,
+.only-first-time .language-switcher-language-url {
+  ul {
+    li {
+      &:first-child {
+        &::after {
+          display: none;
+        }
       }
     }
   }

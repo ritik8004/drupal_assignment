@@ -213,7 +213,9 @@
 
       &-measurement-container {
         margin: 0.9375rem 0 0.625rem;
+      }
 
+      &-measurement-container {
         @include breakpoint($tablet) {
           display: flex;
           align-items: center;

@@ -1,6 +1,5 @@
 html {
   box-sizing: border-box;
-  min-height: 100%;
 }
 
 *,
@@ -9,8 +8,12 @@ html {
   box-sizing: inherit;
 }
 
+html,
 body {
   min-height: 100%;
+}
+
+body {
   font-family: $arial;
 }
 

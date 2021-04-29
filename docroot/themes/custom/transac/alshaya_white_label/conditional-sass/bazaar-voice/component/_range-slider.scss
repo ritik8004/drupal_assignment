@@ -52,10 +52,6 @@
 
       &:nth-of-type(3) {
         text-align: center;
-
-        &::before {
-          #{$left}: 42.3%;
-        }
       }
 
       &:nth-of-type(4),
@@ -84,6 +80,12 @@
       &:nth-of-type(2) {
         &::before {
           #{$left}: 45%;
+        }
+      }
+
+      &:nth-of-type(3) {
+        &::before {
+          #{$left}: 42.3%;
         }
       }
 

@@ -1,6 +1,3 @@
 {
-  "extends": "stylelint-config-standard",
-  "rules": {
-    "no-duplicate-selectors": true
-  }
+  "extends": "stylelint-config-standard"
 }

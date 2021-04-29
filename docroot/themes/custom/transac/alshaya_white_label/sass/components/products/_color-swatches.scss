@@ -23,6 +23,16 @@
         a,
         span {
           height: 2.375rem;
+        }
+
+        img {
+          height: 2.375rem;
+          width: 2.375rem;
+          padding: 1px;
+        }
+
+        a,
+        span {
           border: none;
           position: relative;
           padding: 0;
@@ -55,12 +65,6 @@
             -webkit-appearance: none;
             box-shadow: 0 0 0 1px $pdp_white_color_attribute;
           }
-        }
-
-        img {
-          height: 2.375rem;
-          width: 2.375rem;
-          padding: 1px;
         }
       }
     }

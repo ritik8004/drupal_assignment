@@ -1,9 +1,5 @@
 .c-delivery-menu {
   text-transform: none;
-
-  @include breakpoint($only-mobile) {
-    margin: 1rem auto;
-  }
 }
 
 .c-delivery-menu__tab {
@@ -56,5 +52,11 @@
       text-transform: capitalize;
       font-size: 0.8125rem;
     }
+  }
+}
+
+.c-delivery-menu {
+  @include breakpoint($only-mobile) {
+    margin: 1rem auto;
   }
 }

@@ -49,42 +49,6 @@
       }
     }
   }
-
-  .collection-labels {
-    display: flex;
-    font-size: 0.6875rem;
-    color: $collection_label_default;
-    line-height: 1.25rem;
-    flex-wrap: wrap;
-
-    li {
-      margin-right: 0 !important;
-
-      &.attr_product_environment {
-        color: $collection_label_environment;
-      }
-
-      &.attr_product_collection {
-        color: $collection_label_collection;
-      }
-
-      &.attr_product_quality {
-        color: $collection_label_default;
-      }
-    }
-
-    li[class^="attr_product_"]:first-child::before {
-      content: none;
-    }
-
-    li[class^="attr_product_"]::before {
-      color: $collection_label_default;
-      content: '•';
-      display: inline-block;
-      text-align: center;
-      width: 21px;
-    }
-  }
 }
 
 .description-details {
@@ -154,6 +118,44 @@
           }
         }
       }
+    }
+  }
+}
+
+.magazine__gallery--container {
+  .collection-labels {
+    display: flex;
+    font-size: 0.6875rem;
+    color: $collection_label_default;
+    line-height: 1.25rem;
+    flex-wrap: wrap;
+
+    li {
+      margin-right: 0 !important;
+
+      &.attr_product_environment {
+        color: $collection_label_environment;
+      }
+
+      &.attr_product_collection {
+        color: $collection_label_collection;
+      }
+
+      &.attr_product_quality {
+        color: $collection_label_default;
+      }
+    }
+
+    li[class^="attr_product_"]:first-child::before {
+      content: none;
+    }
+
+    li[class^="attr_product_"]::before {
+      color: $collection_label_default;
+      content: '•';
+      display: inline-block;
+      text-align: center;
+      width: 21px;
     }
   }
 }

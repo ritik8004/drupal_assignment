@@ -98,15 +98,14 @@
 }
 
 .mobile--only--sell .sell-sku {
-  .field__items {
-    @include breakpoint($only-mobile) {
-      padding: 0;
-    }
-  }
-
   .sku-base-form {
+    .js-form-submit {
+      text-transform: uppercase;
+      background: $primary_btn_bg;
+      margin-top: 1rem;
+    }
+
     .js-form-wrapper {
-      max-width: none;
       float: $left;
 
       .form-type-select {
@@ -150,13 +149,6 @@
         }
       }
     }
-
-    .js-form-submit {
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      background: $primary_btn_bg;
-      margin-top: 1rem;
-    }
   }
 
   @include breakpoint($only-mobile) {
@@ -172,6 +164,26 @@
         label {
           display: none;
         }
+      }
+    }
+  }
+}
+
+.mobile--only--sell {
+  .sell-sku {
+    .field__items {
+      @include breakpoint($only-mobile) {
+        padding: 0;
+      }
+    }
+
+    .sku-base-form {
+      .js-form-wrapper {
+        max-width: none;
+      }
+
+      .js-form-submit {
+        margin-bottom: 1.5rem;
       }
     }
   }

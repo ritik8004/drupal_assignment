@@ -6,7 +6,13 @@
     .dark {
       font-size: 0.875rem;
     }
+  }
 
+  .order-details-row {
+    width: 100%;
+  }
+
+  .order-item-row {
     &:nth-of-type(even) {
       background-color: $order_detail_order_details_row_bg;
     }
@@ -14,10 +20,6 @@
     &:last-child {
       border-bottom: 0;
     }
-  }
-
-  .order-details-row {
-    width: 100%;
   }
 
   .total-row {

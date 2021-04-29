@@ -174,83 +174,6 @@
       width: 2.125rem;
     }
   }
-
-  @include breakpoint($upto-tablet) {
-    text-align: $left;
-    position: relative;
-
-    .form-item-search {
-      width: 47.5%;
-      margin-#{$right}: 2.5%;
-      height: 2.1875rem;
-
-      input {
-        -webkit-animation: fadeEffect 2s;
-        animation: fadeEffect 2s;
-        display: none;
-        position: absolute;
-        width: 105%;
-        top: 2.875rem;
-        #{$left}: 0;
-        margin-#{$left}: -2.5%;
-        #{$right}: -2.5%;
-        border: 0.5625rem solid $primary_border;
-        padding: 1rem 0.5rem 0.9375rem 1rem;
-        background: $primary_bg;
-      }
-
-      label {
-        display: block;
-        background-color: $primary_bg;
-        border: 1px solid $order_search_form_border;
-        padding-#{$left}: 0.625rem;
-        width: 100%;
-        position: relative;
-        line-height: 2.0625rem;
-        color: $order_search_form_label_mobile;
-        height: 2.1875rem;
-
-        @include icon(search, before) {
-          pointer-events: none;
-          line-height: 1.1;
-          text-align: center;
-          font-size: 1.875rem;
-          margin-#{$right}: 0.3125rem;
-          display: inline-block;
-          vertical-align: middle;
-          padding: 0;
-        }
-      }
-    }
-
-    .form-type-select {
-      width: 48%;
-
-      select {
-        height: 2.1875rem;
-        width: 100%;
-        direction: $dir;
-      }
-    }
-
-    .form-actions {
-      display: none;
-    }
-
-    &.active--search {
-      margin-bottom: 4.3125rem;
-
-      .form-item-search {
-        label {
-          background-color: transparent;
-        }
-
-        input {
-          display: block;
-        }
-      }
-    }
-  }
 }
 
 .c-order-list .orders-list-pager-wrapper {
@@ -444,14 +367,6 @@
     a {
       color: $order_recent_order_order_detail_link;
     }
-
-    td.tablet-only {
-      @include breakpoint($only-tablet) {
-        margin-top: 0;
-        width: 100%;
-        display: table-cell;
-      }
-    }
   }
 
   .order--items {
@@ -479,7 +394,15 @@
 
   .order-item-row {
     display: none;
+  }
 
+  .total--price {
+    @include breakpoint($only-tablet) {
+      vertical-align: bottom;
+    }
+  }
+
+  .order-item-row {
     td .tablet-only {
       margin-top: 1.875rem;
     }
@@ -492,9 +415,13 @@
     }
   }
 
-  .total--price {
-    @include breakpoint($only-tablet) {
-      vertical-align: bottom;
+  .order__detail--link {
+    td.tablet-only {
+      @include breakpoint($only-tablet) {
+        margin-top: 0;
+        width: 100%;
+        display: table-cell;
+      }
     }
   }
 }
@@ -602,6 +529,85 @@
 
   @include breakpoint($only-tablet) {
     top: -4.2rem;
+  }
+}
+
+.alshaya-acm-customer-order-list-search {
+  @include breakpoint($upto-tablet) {
+    text-align: $left;
+    position: relative;
+
+    .form-item-search {
+      width: 47.5%;
+      margin-#{$right}: 2.5%;
+      height: 2.1875rem;
+
+      input {
+        -webkit-animation: fadeEffect 2s;
+        animation: fadeEffect 2s;
+        display: none;
+        position: absolute;
+        width: 105%;
+        top: 2.875rem;
+        #{$left}: 0;
+        margin-#{$left}: -2.5%;
+        #{$right}: -2.5%;
+        border: 0.5625rem solid $primary_border;
+        padding: 1rem 0.5rem 0.9375rem 1rem;
+        background: $primary_bg;
+      }
+
+      label {
+        display: block;
+        background-color: $primary_bg;
+        border: 1px solid $order_search_form_border;
+        padding-#{$left}: 0.625rem;
+        width: 100%;
+        position: relative;
+        line-height: 2.0625rem;
+        color: $order_search_form_label_mobile;
+        height: 2.1875rem;
+
+        @include icon(search, before) {
+          pointer-events: none;
+          line-height: 1.1;
+          text-align: center;
+          font-size: 1.875rem;
+          margin-#{$right}: 0.3125rem;
+          display: inline-block;
+          vertical-align: middle;
+          padding: 0;
+        }
+      }
+    }
+
+    .form-type-select {
+      width: 48%;
+
+      select {
+        height: 2.1875rem;
+        width: 100%;
+        direction: $dir;
+      }
+    }
+
+    .form-actions {
+      display: none;
+    }
+
+    &.active--search {
+      margin-bottom: 4.3125rem;
+
+      .form-item-search {
+        label {
+          background-color: transparent;
+        }
+
+        input {
+          display: block;
+        }
+      }
+    }
   }
 }
 

@@ -22,12 +22,6 @@
       min-height: 35.8125rem;
     }
   }
-
-  @include breakpoint($only-mobile) {
-    .order-quantity-limit-message.mobile-only {
-      bottom: 3rem;
-    }
-  }
 }
 
 .pdp-modal-overlay {
@@ -453,6 +447,16 @@
         .subtitle {
           line-height: 0.9;
         }
+      }
+    }
+  }
+}
+
+.content {
+  &__main {
+    @include breakpoint($only-mobile) {
+      .order-quantity-limit-message.mobile-only {
+        bottom: 3rem;
       }
     }
   }

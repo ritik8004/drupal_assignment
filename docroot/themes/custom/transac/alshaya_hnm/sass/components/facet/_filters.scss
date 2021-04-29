@@ -142,35 +142,6 @@
         }
       }
     }
-
-    .filters-active {
-      .block-views-exposed-filter-blockalshaya-product-list-block-1,
-      .block-views-exposed-filter-blockalshaya-product-list-block-2,
-      .block-views-exposed-filter-blocksearch-page {
-        .fieldset-wrapper {
-          .form-type-radio {
-            label {
-              padding-#{$left}: 3.875rem;
-
-              @include breakpoint($desktop) {
-                padding-#{$left}: 4.5rem;
-              }
-
-              &::before {
-                font-size: 3.2rem;
-                top: 0.1875rem !important;
-                #{$left}: 0.625rem;
-                margin-top: 0.0625rem;
-
-                @include breakpoint($desktop) {
-                  #{$left}: 1.125rem;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
   }
 }
 
@@ -198,6 +169,37 @@
     .site-brand-home {
       a {
         width: 2.5rem;
+      }
+    }
+  }
+}
+
+.c-plp .c-content__region {
+  .filters-active {
+    .block-views-exposed-filter-blockalshaya-product-list-block-1,
+    .block-views-exposed-filter-blockalshaya-product-list-block-2,
+    .block-views-exposed-filter-blocksearch-page {
+      .fieldset-wrapper {
+        .form-type-radio {
+          label {
+            padding-#{$left}: 3.875rem;
+
+            @include breakpoint($desktop) {
+              padding-#{$left}: 4.5rem;
+            }
+
+            &::before {
+              font-size: 3.2rem;
+              top: 0.1875rem !important;
+              #{$left}: 0.625rem;
+              margin-top: 0.0625rem;
+
+              @include breakpoint($desktop) {
+                #{$left}: 1.125rem;
+              }
+            }
+          }
+        }
       }
     }
   }

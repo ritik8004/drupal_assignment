@@ -1,8 +1,4 @@
 .c-social-links {
-  text-align: center;
-  padding-top: 0.25rem;
-  padding-bottom: 1.125rem;
-
   li {
     vertical-align: middle;
 
@@ -32,6 +28,14 @@
       padding-#{$left}: 0.4375rem;
     }
   }
+}
+
+//specific to H&M brand
+
+.c-social-links {
+  text-align: center;
+  padding-top: 0.25rem;
+  padding-bottom: 1.125rem;
 
   @include breakpoint($tablet) {
     padding-top: 0.625rem;
@@ -42,8 +46,6 @@
     padding-bottom: 1.125rem;
   }
 }
-
-//specific to H&M brand
 
 .alshaya-social {
   .auth-link {

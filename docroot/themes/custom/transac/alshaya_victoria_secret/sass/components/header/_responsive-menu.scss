@@ -2,14 +2,6 @@
   @include breakpoint($upto-tablet) {
     display: none;
   }
-
-  @include breakpoint($only-tablet) {
-    display: none !important;
-
-    &.show-search {
-      display: block !important;
-    }
-  }
 }
 
 header {
@@ -52,10 +44,6 @@ header {
     @include breakpoint($upto-tablet) {
       height: 2.625rem;
     }
-
-    @include breakpoint($upto-desktop) {
-      background-position: center;
-    }
   }
 
   .c-header__region {
@@ -83,6 +71,15 @@ header {
     @include breakpoint($upto-desktop) {
       width: 100%;
       border: 0.5rem solid $header_search_border_mobile;
+    }
+  }
+
+  .block-cart-mini-block,
+  .block-alshaya-react-mini-cart {
+    .cart-link {
+      @include breakpoint($upto-desktop) {
+        background-position: center;
+      }
     }
   }
 
@@ -188,7 +185,9 @@ header {
         box-shadow: none;
       }
     }
+  }
 
+  body {
     html[lang="ar"] & {
       margin-top: 5.5rem;
 
@@ -298,24 +297,6 @@ header {
   @include breakpoint($only-mobile) {
     width: calc(100% - 2.8125rem) !important;
   }
-
-  @include breakpoint($upto-desktop) {
-    top: 5.7rem;
-  }
-
-  h3 {
-    @include breakpoint($upto-desktop) {
-      text-transform: uppercase;
-      font-family: $vs-bold;
-    }
-  }
-
-  li::after {
-    @include breakpoint($upto-desktop) {
-      font-size: 1.5rem;
-      #{$right}: -0.1875rem;
-    }
-  }
 }
 
 .menu--active .mobile--close {
@@ -325,6 +306,16 @@ header {
 }
 
 .branding__menu {
+  .block-alshaya-search {
+    @include breakpoint($only-tablet) {
+      display: none !important;
+
+      &.show-search {
+        display: block !important;
+      }
+    }
+  }
+
   .c-header__region .block-system-branding-block {
     @include breakpoint($upto-desktop) {
       display: none;
@@ -344,6 +335,26 @@ header {
   &.navbar-fixed-top {
     @include breakpoint($upto-desktop) {
       position: static;
+    }
+  }
+}
+
+.c-my-account-nav {
+  @include breakpoint($upto-desktop) {
+    top: 5.7rem;
+  }
+
+  h3 {
+    @include breakpoint($upto-desktop) {
+      text-transform: uppercase;
+      font-family: $vs-bold;
+    }
+  }
+
+  li::after {
+    @include breakpoint($upto-desktop) {
+      font-size: 1.5rem;
+      #{$right}: -0.1875rem;
     }
   }
 }

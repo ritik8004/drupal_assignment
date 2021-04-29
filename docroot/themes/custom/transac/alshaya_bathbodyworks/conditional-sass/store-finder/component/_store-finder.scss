@@ -51,10 +51,6 @@
   }
 
   .input--wrapper {
-    position: absolute;
-    #{$left}: 19%;
-    overflow: hidden !important;
-
     [id^=edit-actions] {
       top: 0;
       height: 2.5rem;
@@ -90,40 +86,6 @@
         padding-top: 0.225rem;
       }
     }
-
-    @include breakpoint($desktop) {
-      width: 57% !important;
-    }
-
-    html[lang=ar] & {
-      right: 12%;
-
-      @include breakpoint($desktop) {
-        width: 64% !important;
-      }
-
-      @include breakpoint($only-tablet) {
-        right: 14%;
-        width: 49% !important;
-      }
-
-      @include breakpoint($only-mobile) {
-        right: 0;
-        width: 100%;
-        position: relative;
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      #{$left}: 0;
-      width: 100%;
-      position: relative;
-    }
-
-    @include breakpoint($only-tablet) {
-      #{$left}: 16%;
-      width: 47% !important;
-    }
   }
 
   .c-content__region,
@@ -140,12 +102,71 @@
   .label--location {
     color: $store_finder_search_label !important;
     display: block;
-    width: 7.75rem;
-    padding-#{$left}: 2rem;
 
     @include breakpoint($only-mobile) {
       display: none;
     }
+  }
+
+  button {
+    &[id^=edit-submit-stores-finder] {
+      background: none;
+      width: auto;
+
+      @include breakpoint($desktop) {
+        margin-top: -0.1875rem;
+      }
+    }
+  }
+
+  .current-location,
+  .back-to-glossary {
+    &:hover,
+    &.active {
+      border: 1px solid $store_finder_border_hover;
+      color: $store_finder_text_hover;
+    }
+  }
+
+  .current-location {
+    &::before {
+      margin-#{$right}: 0;
+    }
+  }
+
+  .current-location {
+    @include breakpoint($only-tablet) {
+      &::before {
+        #{$left}: 0.5rem;
+        bottom: 0.6875rem;
+      }
+    }
+  }
+
+  .current-location {
+    line-height: 2.5;
+
+    @include breakpoint($only-mobile) {
+      line-height: 2;
+    }
+  }
+
+  .list-view-link {
+    @include icon(list, before) {
+      margin-top: -0.56rem;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 0.5rem;
+
+        html[lang=ar] & {
+          margin-top: -0.4375rem;
+        }
+      }
+    }
+  }
+
+  .label--location {
+    padding-#{$left}: 2rem;
 
     &::before {
       html[lang=ar] & {
@@ -171,6 +192,8 @@
       }
     }
 
+    width: 7.75rem;
+
     @include breakpoint($desktop) {
       padding-#{$left}: 1.5rem;
       width: 15% !important;
@@ -184,103 +207,16 @@
       width: 100%;
       padding-#{$left}: 0;
     }
-
-    .block-store-finder-form__form__label__wrapper {
-      float: $right;
-    }
-  }
-
-  button {
-    &[id^=edit-submit-stores-finder] {
-      background: none;
-      width: auto;
-
-      @include breakpoint($desktop) {
-        margin-top: -0.1875rem;
-      }
-    }
-  }
-
-  .current-location,
-  .back-to-glossary {
-    &:hover,
-    &.active {
-      border: 1px solid $store_finder_border_hover;
-      color: $store_finder_text_hover;
-    }
-  }
-
-  .current-location {
-    line-height: 2.5;
-
-    &::before {
-      margin-#{$right}: 0;
-    }
-
-    @include breakpoint($only-tablet) {
-      &::before {
-        #{$left}: 0.5rem;
-        bottom: 0.6875rem;
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      line-height: 2;
-    }
-
-    @include breakpoint($desktop) {
-      html[lang=ar] & {
-        padding-top: 0.25rem;
-      }
-    }
-  }
-
-  .list-view-link {
-    @include icon(list, before) {
-      margin-top: -0.56rem;
-
-      @include breakpoint($only-tablet) {
-        margin-#{$right}: 0.5rem;
-
-        html[lang=ar] & {
-          margin-top: -0.4375rem;
-        }
-      }
-    }
-
-    @include breakpoint($tablet) {
-      margin-right: 0.625rem;
-
-      html[lang=ar] & {
-        margin-right: 0;
-        margin-left: 0.625rem;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      html[lang=ar] & {
-        margin-right: -0.5rem;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      &::before {
-        margin-#{$right}: 0;
-        margin-#{$left}: 0;
-      }
-
-      html[lang=ar] & {
-        margin-right: 0;
-        margin-left: 0.625rem;
-      }
-    }
   }
 
   .list-view-link,
   .map-view-link {
     text-transform: uppercase;
+  }
+
+  .list-view-link,
+  .map-view-link {
     padding: 0.6875rem;
-    line-height: 1.5;
 
     html[lang=ar] & {
       padding: 0.619rem 0 0;
@@ -417,11 +353,16 @@
     .map-view-link,
     .list-view-link {
       border: 1px solid $warm-grey-two;
-      height: 2.5rem;
+    }
 
+    .current-location,
+    .list-view-link,
+    .map-view-link {
       @include breakpoint($desktop) {
         width: 11%;
       }
+
+      height: 2.5rem;
     }
   }
 
@@ -433,6 +374,35 @@
 
     @include breakpoint($desktop) {
       margin: 0;
+    }
+  }
+
+  .list-view-link {
+    @include breakpoint($tablet) {
+      margin-right: 0.625rem;
+
+      html[lang=ar] & {
+        margin-right: 0;
+        margin-left: 0.625rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        margin-right: -0.5rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      &::before {
+        margin-#{$right}: 0;
+        margin-#{$left}: 0;
+      }
+
+      html[lang=ar] & {
+        margin-right: 0;
+        margin-left: 0.625rem;
+      }
     }
   }
 
@@ -452,6 +422,14 @@
 
       html[lang=ar] & {
         margin-top: 0;
+      }
+    }
+  }
+
+  .current-location {
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        padding-top: 0.25rem;
       }
     }
   }
@@ -483,23 +461,6 @@
             width: 72% !important;
           }
         }
-      }
-    }
-  }
-
-  .form--inline {
-    .current-location,
-    .cc-near-me {
-      @include breakpoint($only-tablet) {
-        line-height: 1.5;
-        padding-#{$left}: 2.5rem !important;
-      }
-
-      &::before {
-        background-image: url(../../../imgs/icons/my-location.svg);
-        background-size: 100%;
-        height: 1.875rem;
-        width: 1.875rem;
       }
     }
   }
@@ -546,5 +507,83 @@
   .hours--wrapper .hours--label,
   .hours--wrapper .open--hours {
     border-bottom: 1px solid $warm-grey-two !important;
+  }
+}
+
+.path--store-finder .input--wrapper,
+.nodetype--store .input--wrapper {
+  position: absolute;
+  #{$left}: 19%;
+  overflow: hidden !important;
+
+  @include breakpoint($desktop) {
+    width: 57% !important;
+  }
+
+  html[lang=ar] & {
+    right: 12%;
+
+    @include breakpoint($desktop) {
+      width: 64% !important;
+    }
+
+    @include breakpoint($only-tablet) {
+      right: 14%;
+      width: 49% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      right: 0;
+      width: 100%;
+      position: relative;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    #{$left}: 0;
+    width: 100%;
+    position: relative;
+  }
+
+  @include breakpoint($only-tablet) {
+    #{$left}: 16%;
+    width: 47% !important;
+  }
+}
+
+.path--store-finder,
+.nodetype--store {
+  .form--inline {
+    .current-location,
+    .cc-near-me {
+      @include breakpoint($only-tablet) {
+        line-height: 1.5;
+      }
+    }
+
+    .current-location,
+    .cc-near-me {
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: 2.5rem !important;
+      }
+
+      &::before {
+        background-image: url(../../../imgs/icons/my-location.svg);
+        background-size: 100%;
+        height: 1.875rem;
+        width: 1.875rem;
+      }
+    }
+  }
+
+  .label--location {
+    .block-store-finder-form__form__label__wrapper {
+      float: $right;
+    }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    line-height: 1.5;
   }
 }

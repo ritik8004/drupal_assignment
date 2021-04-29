@@ -18,44 +18,6 @@
         max-height: unset;
       }
     }
-
-    .facet-item {
-      padding-#{$left}: 1.125rem !important;
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-      min-height: auto;
-      position: relative;
-
-      span {
-        font-size: 0.75rem;
-        line-height: 2;
-        margin-#{$left}: 0;
-
-        &.facet-item__count {
-          color: $plp_facet_count_number;
-          padding-#{$left}: 0.5rem;
-        }
-      }
-
-      label {
-        &::before {
-          display: none;
-        }
-      }
-
-      &.is-active:not(.facet-item--expanded) {
-        background: $plp_filter_active_item;
-
-        @include icon(check, after) {
-          font-size: 1.5rem;
-          position: absolute;
-          top: 50%;
-          color: $plp_filter_active_tick;
-          transform: translateY(-50%);
-          #{$right}: 1rem;
-        }
-      }
-    }
   }
 
   .c-accordion__title,
@@ -820,6 +782,49 @@ body {
             width: 1.3125rem;
             height: 1.3125rem;
           }
+        }
+      }
+    }
+  }
+}
+
+.c-facet.c-accordion:not(.block-facet-blockcategory-facet-search):not(.algolia-plp-category-facet),
+.c-facet.c-collapse-item:not(.block-facet-blockcategory-facet-search) {
+  ul {
+    .facet-item {
+      span {
+        font-size: 0.75rem;
+        line-height: 2;
+        margin-#{$left}: 0;
+
+        &.facet-item__count {
+          color: $plp_facet_count_number;
+          padding-#{$left}: 0.5rem;
+        }
+      }
+
+      label {
+        &::before {
+          display: none;
+        }
+      }
+
+      padding-#{$left}: 1.125rem !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      min-height: auto;
+      position: relative;
+
+      &.is-active:not(.facet-item--expanded) {
+        background: $plp_filter_active_item;
+
+        @include icon(check, after) {
+          font-size: 1.5rem;
+          position: absolute;
+          top: 50%;
+          color: $plp_filter_active_tick;
+          transform: translateY(-50%);
+          #{$right}: 1rem;
         }
       }
     }

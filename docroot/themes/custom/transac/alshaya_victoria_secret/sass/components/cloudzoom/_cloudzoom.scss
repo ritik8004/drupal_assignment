@@ -34,12 +34,6 @@
       border: 1px solid $gallery_arrows_border;
     }
   }
-
-  .slick-next {
-    @include breakpoint($desktop) {
-      bottom: auto;
-    }
-  }
 }
 
 .cloudzoom {
@@ -145,16 +139,6 @@
       }
     }
   }
-
-  .cloudzoom {
-    .cloudzoom__herocontainer {
-      .cloudzoom__image {
-        .hover-text {
-          display: none;
-        }
-      }
-    }
-  }
 }
 
 @include breakpoint($only-tablet) {
@@ -190,6 +174,26 @@
       .slick-next,
       .slick-prev {
         top: 0 !important;
+      }
+    }
+  }
+}
+
+#lightSlider {
+  .slick-next {
+    @include breakpoint($desktop) {
+      bottom: auto;
+    }
+  }
+}
+
+.pdp-modal-overlay {
+  .cloudzoom {
+    .cloudzoom__herocontainer {
+      .cloudzoom__image {
+        .hover-text {
+          display: none;
+        }
       }
     }
   }

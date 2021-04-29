@@ -367,15 +367,6 @@
     .field--name-field-title {
       margin-top: 1.875rem;
     }
-
-    .field--name-field-link {
-      a {
-        font-size: 0.875rem;
-        line-height: 1;
-        color: $promo_panel_content;
-        position: static;
-      }
-    }
   }
 
   & .field--name-field-paragraph-content {
@@ -407,6 +398,17 @@
 
     .field--name-field-paragraph-content:nth-child(3n) {
       margin-#{$right}: 0;
+    }
+  }
+
+  .paragraph--type--offers-bordered {
+    .field--name-field-link {
+      a {
+        font-size: 0.875rem;
+        line-height: 1;
+        color: $promo_panel_content;
+        position: static;
+      }
     }
   }
 }
