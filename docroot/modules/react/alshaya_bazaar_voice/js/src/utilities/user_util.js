@@ -56,6 +56,11 @@ export const deleteSessionCookie = (keys) => {
   });
 };
 
+export const getUserNicknameKey = () => {
+  const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
+  return nicknameKey;
+};
+
 export const getUserEmailParams = (email, nicknameKey) => {
   let params = '';
   // Delete existing cookies for user info.
@@ -85,6 +90,7 @@ export default {
   setSessionCookie,
   getSessionCookie,
   deleteSessionCookie,
+  getUserNicknameKey,
   getUserEmailParams,
   getUserNicknameParams,
 };

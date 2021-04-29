@@ -1,6 +1,7 @@
 import {
   getCurrentUserEmail, getSessionCookie, setSessionCookie, getUserEmailParams,
   getUserNicknameParams,
+  getUserNicknameKey,
 } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
@@ -36,7 +37,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
     // Add input data from field types.
     try {
       if (elements[id].value !== null) {
-        const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
+        const nicknameKey = getUserNicknameKey();
         if (id === 'useremail') {
           params += getUserEmailParams(elements[id].value, nicknameKey);
         } else if (id === 'usernickname') {

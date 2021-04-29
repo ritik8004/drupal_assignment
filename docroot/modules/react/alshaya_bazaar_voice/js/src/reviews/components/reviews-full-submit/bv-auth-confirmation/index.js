@@ -2,7 +2,10 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import { postAPIData, fetchAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
-import { setSessionCookie, getSessionCookie, getCurrentUserEmail } from '../../../../utilities/user_util';
+import {
+  setSessionCookie, getSessionCookie, getCurrentUserEmail,
+  getUserNicknameKey,
+} from '../../../../utilities/user_util';
 import AuthConfirmationMessage from '../auth-confirmation-message';
 import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
 
@@ -49,8 +52,8 @@ export default class BvAuthConfirmation extends React.Component {
   };
 
   setAnonymousUserCookies = () => {
+    const nicknameKey = getUserNicknameKey();
     const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
     // Store user information in bv cookies.
     if (getSessionCookie('bv_user_id') !== null && getCurrentUserEmail() === null) {
       const params = `&productid=${bazaarVoiceSettings.productid}&User=${getSessionCookie('bv_user_id')}&Action=`;

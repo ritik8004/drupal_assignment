@@ -6,6 +6,7 @@ import ReviewCommentSubmission from '../review-comment-submission';
 import {
   getCurrentUserEmail, getSessionCookie, setSessionCookie, getUserEmailParams,
   getUserNicknameParams,
+  getUserNicknameKey,
 } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
@@ -126,7 +127,7 @@ class ReviewCommentForm extends React.Component {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
       const bazaarVoiceSettings = getbazaarVoiceSettings();
-      const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
+      const nicknameKey = getUserNicknameKey();
       let authParams = '';
       authParams += getUserEmailParams(email, nicknameKey);
       const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
@@ -206,8 +207,7 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
+    const nicknameKey = getUserNicknameKey();
     let emailValue = '';
     let nicknameValue = '';
     // Set default value for user email.

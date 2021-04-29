@@ -9,8 +9,7 @@ import StarRating from './Fields/StarRating';
 import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
-import { getCurrentUserEmail, getSessionCookie } from '../../../../utilities/user_util';
-import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
+import { getCurrentUserEmail, getSessionCookie, getUserNicknameKey } from '../../../../utilities/user_util';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
@@ -29,8 +28,7 @@ const DynamicFormField = (props) => {
 
   // Set default value for user nickname and email.
   // For anonymous user, default value is from user cookies.
-  const bazaarVoiceSettings = getbazaarVoiceSettings();
-  const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
+  const nicknameKey = getUserNicknameKey();
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
       if (getCurrentUserEmail() !== null) {
