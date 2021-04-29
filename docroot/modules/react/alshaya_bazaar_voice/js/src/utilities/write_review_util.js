@@ -87,7 +87,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
   params += `&productid=${bazaarVoiceSettings.productid}`;
   // Add device finger printing string.
   if (elements.blackBox.value !== '') {
-    params += `&fp=${elements.blackBox.value}`;
+    params += `&fp=${encodeURIComponent(elements.blackBox.value)}`;
   }
   // Add tnc status and it must be true only.
   params += `&agreedtotermsandconditions=${true}`;
