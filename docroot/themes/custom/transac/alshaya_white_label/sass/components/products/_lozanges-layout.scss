@@ -23,7 +23,8 @@
         #{$left}: 0.9375rem;
       }
 
-      .c-plp & {
+      .c-plp &,
+      .view-product-slider & {
         top: 0;
         #{$left}: 0;
 
@@ -44,7 +45,8 @@
         #{$right}: 0.9375rem;
       }
 
-      .c-plp & {
+      .c-plp &,
+      .view-product-slider & {
         top: 0;
         #{$right}: 0;
 
@@ -65,7 +67,8 @@
         #{$left}: 0.9375rem;
       }
 
-      .c-plp & {
+      .c-plp &,
+      .view-product-slider & {
         bottom: 0;
         #{$left}: 0;
 
@@ -86,7 +89,8 @@
         #{$right}: 0.9375rem;
       }
 
-      .c-plp & {
+      .c-plp &,
+      .view-product-slider & {
         bottom: 0;
         #{$right}: 0;
 

@@ -441,6 +441,12 @@
     @include breakpoint($only-mobile) {
       padding-bottom: 0;
     }
+
+    #product-image-gallery-mobile {
+      @include breakpoint($only-mobile) {
+        max-height: 31.25rem;
+      }
+    }
   }
 }
 
