@@ -57,7 +57,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
   });
 
   // Add photo urls uploaded from photo upload.
-  if (elements.photoCount.value > 0) {
+  if (elements.photoCount !== undefined && elements.photoCount.value > 0) {
     const count = Number(elements.photoCount.value);
     [...Array(count)].map((key, index) => {
       const photoId = `photourl_${(index + 1)}`;
