@@ -338,7 +338,8 @@
                 "Check for empty account object in submit handler": "https://www.drupal.org/files/issues/2019-07-15/check-empty-account-object-3067845-01.patch"
             },
             "drupal/seckit": {
-                "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch"
+                "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch",
+                "Base-uri policy": "https://git.drupalcode.org/project/seckit/-/merge_requests/5.diff"
             },
             "drupal/views_ajax_get": {
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch",
