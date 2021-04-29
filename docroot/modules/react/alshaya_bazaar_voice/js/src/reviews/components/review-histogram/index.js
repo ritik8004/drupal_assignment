@@ -51,9 +51,6 @@ const ReviewHistogram = ({
                       starSliderCombine={
                         overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
                       }
-                      secondaryRatingsOrder={
-                        overallSummary[item].ReviewStatistics.SecondaryRatingsAveragesOrder
-                      }
                     />
                   </div>
                 </ConditionalView>
@@ -65,9 +62,6 @@ const ReviewHistogram = ({
                 <CombineDisplay
                   starSliderCombine={
                     overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
-                  }
-                  secondaryRatingsOrder={
-                    overallSummary[item].ReviewStatistics.SecondaryRatingsAveragesOrder
                   }
                 />
               </ConditionalView>

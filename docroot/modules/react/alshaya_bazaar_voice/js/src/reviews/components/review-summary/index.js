@@ -28,7 +28,6 @@ export default class ReviewSummary extends React.Component {
       reviewsSummary: '',
       reviewsProduct: '',
       reviewsComment: '',
-      reviewsAuthors: '',
       currentSortOption: '',
       currentFilterOptions: [],
       noResultmessage: null,
@@ -111,7 +110,6 @@ export default class ReviewSummary extends React.Component {
                 totalReviews: result.data.TotalResults,
                 reviewsProduct: result.data.Includes.Products,
                 reviewsComment: result.data.Includes.Comments,
-                reviewsAuthors: result.data.Includes.Authors,
                 numberOfPages: Math.ceil(result.data.TotalResults / reviewLimit),
               }, () => {
                 const { currentPage, numberOfPages } = this.state;
@@ -124,7 +122,6 @@ export default class ReviewSummary extends React.Component {
               reviewsSummary: result.data.Results,
               reviewsProduct: result.data.Includes.Products,
               reviewsComment: result.data.Includes.Comments,
-              reviewsAuthors: result.data.Includes.Authors,
               noResultmessage: null,
               numberOfPages: Math.ceil(result.data.TotalResults / reviewLimit),
             }, () => {
@@ -321,7 +318,6 @@ export default class ReviewSummary extends React.Component {
       reviewsSummary,
       reviewsProduct,
       reviewsComment,
-      reviewsAuthors,
       currentSortOption,
       currentFilterOptions,
       noResultmessage,
@@ -403,8 +399,8 @@ export default class ReviewSummary extends React.Component {
                 </ConditionalView>
                 <ReviewInformation
                   reviewInformationData={reviewsSummary[item]}
-                  reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
-                    .AuthorId].ReviewStatistics}
+                  reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
+                    .ProductId].ReviewStatistics}
                 />
                 <ReviewDescription
                   reviewDescriptionData={reviewsSummary[item]}

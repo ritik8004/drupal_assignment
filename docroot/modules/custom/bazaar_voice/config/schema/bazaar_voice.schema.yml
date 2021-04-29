@@ -50,12 +50,9 @@ bazaar_voice.settings:
     comment_form_tnc:
       type: string
       label: 'URL of BazaarVoice Comment Form Terms and Condition.'
-    comment_box_min_length:
+    comment_form_box_length:
       type: integer
       label: 'Minimum character length for comment box text in comment form.'
-    comment_box_max_length:
-      type: integer
-      label: 'Maximum character length for comment box text in comment form.'
     bv_content_types:
       type: string
       label: 'Content types of BazaarVoice used with reviews API like comments, products,etc.'

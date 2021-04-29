@@ -170,18 +170,11 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('URL of Comment Form Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
     ];
 
-    $form['basic_settings']['comment_box_min_length'] = [
+    $form['basic_settings']['comment_form_box_length'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Comment minimum character length'),
-      '#default_value' => $config->get('comment_box_min_length'),
+      '#default_value' => $config->get('comment_form_box_length'),
       '#description' => $this->t('Enter minimum character length for comment box text in comment form.'),
-    ];
-
-    $form['basic_settings']['comment_box_max_length'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Comment maximum character length'),
-      '#default_value' => $config->get('comment_box_max_length'),
-      '#description' => $this->t('Enter maximum character length for comment box text in comment form.'),
     ];
 
     $form['basic_settings']['bv_routes_list'] = [
@@ -270,8 +263,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('write_review_guidlines', $values['write_review_guidlines'])
       ->set('comment_form_tnc', $values['comment_form_tnc'])
       ->set('bv_content_types', $values['bv_content_types'])
-      ->set('comment_box_min_length', $values['comment_box_min_length'])
-      ->set('comment_box_max_length', $values['comment_box_max_length'])
+      ->set('comment_form_box_length', $values['comment_form_box_length'])
       ->set('bv_routes_list', $values['bv_routes_list'])
       ->set('reviews_pagination_type', $values['reviews_pagination_type'])
       ->set('reviews_initial_load', $values['reviews_initial_load'])

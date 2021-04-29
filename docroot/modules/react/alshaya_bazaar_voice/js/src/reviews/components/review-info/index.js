@@ -48,18 +48,15 @@ const ReviewInformation = ({
         </ConditionalView>
 
         <ReviewAttributes
-          contextDataValues={reviewInformationData.ContextDataValues}
-          contextDataValuesOrder={reviewInformationData.ContextDataValuesOrder}
+          reviewAttributesData={reviewInformationData.ContextDataValues}
         />
 
         <IndividualReviewSlider
           sliderData={reviewInformationData.SecondaryRatings}
-          secondaryRatingsOrder={reviewInformationData.SecondaryRatingsOrder}
         />
 
         <IndividualReviewStar
           customerValue={reviewInformationData.SecondaryRatings}
-          secondaryRatingsOrder={reviewInformationData.SecondaryRatingsOrder}
         />
 
       </div>
