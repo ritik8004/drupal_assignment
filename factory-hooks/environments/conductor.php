@@ -1282,10 +1282,15 @@ $conductors = [
   'bpqa_prod' => [
     'site_id' => 266,
   ],
+  'tbsae_dev' => [
+    'hmac_id' => '6e1da4b4ebf848d0bd9a509588eea524',
+    'hmac_secret' => 'OTFmM2MyMzQtMWIzOC00',
+    'site_id' => 417,
+  ],
   'tbsae_qa' => [
-    'hmac_id' => '66764a4f8f9146aaab1352fb66897fad',
-    'hmac_secret' => 'YWY2ZmY0MjItZmQ2OS00',
-    'site_id' => 6,
+    'hmac_id' => '42b2b7d9dcf040468474bd7f9cab6a3e',
+    'hmac_secret' => 'ODgzZTQwOTctYWIzNi00',
+    'site_id' => 416,
   ],
   'tbskw_qa' => [
     'hmac_id' => '1c981b44daae428fae5fb6b2a3812214',
