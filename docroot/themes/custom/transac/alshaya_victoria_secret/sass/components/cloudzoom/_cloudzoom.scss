@@ -64,6 +64,7 @@
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 25rem;
           margin: auto;
+          min-height: 10rem;
 
           img {
             height: auto !important;

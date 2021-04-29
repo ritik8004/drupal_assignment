@@ -24,6 +24,10 @@
   .img-wrap {
     height: auto;
 
+    @include breakpoint($only-tablet) {
+      min-height: 10rem;
+    }
+
     @include breakpoint($desktop) {
       min-height: 20rem;
     }

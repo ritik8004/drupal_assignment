@@ -53,6 +53,10 @@
   figure {
     .pdp-image-zoom-wrapper {
       height: 100%;
+
+      @include breakpoint($only-mobile) {
+        min-height: 50vh;
+      }
     }
 
     img {
