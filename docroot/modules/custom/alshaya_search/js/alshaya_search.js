@@ -194,7 +194,7 @@
                 clearTimeout(setTimeoutConst);
                 $(this)
                   .closest('.alshaya_search_gallery')
-                  .find('.alshaya_search_mainimage img')
+                  .find('.alshaya_search_mainimage > img')
                   .attr('src', $(this).find('img').attr('rel'));
               },
               function () {
@@ -202,7 +202,7 @@
                 var el = $(this);
                 // Delay the resetting of main image post hover out.
                 setTimeoutConst = setTimeout(function () {
-                  el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
+                  el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage > img').attr('src',
                     el.parent().find('li:first-child').find('img').attr('rel')
                   );
                 }, 500);
