@@ -38,29 +38,7 @@
         }
       }
     }
-  }
 
-  // MM L1 hover.
-  .active--menu--links {
-    li.menu--one__list-item {
-      @include breakpoint($desktop) {
-        &:hover {
-          a.menu--one__link {
-            @include mm-l1-highlight;
-          }
-        }
-      }
-    }
-
-    &:hover {
-      li.menu--one__list-item a.menu--one__link {
-        border-bottom: none;
-      }
-    }
-  }
-
-  // MM L1 active.
-  li.menu--one__list-item {
     &:hover {
       @include breakpoint($desktop) {
         a.menu--one__link {
@@ -108,6 +86,25 @@
     ul.menu--two__list {
       @include breakpoint($desktop) {
         border-top-width: 1rem;
+      }
+    }
+  }
+
+  // MM L1 hover.
+  .active--menu--links {
+    li.menu--one__list-item {
+      @include breakpoint($desktop) {
+        &:hover {
+          a.menu--one__link {
+            @include mm-l1-highlight;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      li.menu--one__list-item a.menu--one__link {
+        border-bottom: none;
       }
     }
   }
@@ -163,6 +160,7 @@
 }
 
 .highlights {
+  .hightlight__title,
   .title {
     font-weight: bold;
   }
@@ -205,11 +203,5 @@
         }
       }
     }
-  }
-}
-
-.highlights {
-  .hightlight__title {
-    font-weight: bold;
   }
 }

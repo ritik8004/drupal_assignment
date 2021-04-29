@@ -35,6 +35,7 @@
       span {
         font-weight: normal;
         font-size: 1.25rem;
+        font-family: $muji-bold;
       }
     }
 
@@ -62,6 +63,19 @@
         font-family: $alshaya-thin;
       }
     }
+
+    .promotions a {
+      font-size: 1rem;
+      text-decoration: none;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 1rem;
+      }
+
+      @include breakpoint($desktop) {
+        margin-top: 0.5rem;
+      }
+    }
   }
 
   &__sidebar {
@@ -87,6 +101,13 @@
 }
 
 .short-description-wrapper {
+  .read-more-description-link,
+  .read-more-description-link-gift {
+    font-weight: normal;
+    text-decoration: underline;
+    text-transform: capitalize;
+  }
+
   .field {
     &__label {
       @include breakpoint($only-mobile) {
@@ -121,6 +142,7 @@
 
         label {
           color: $pdp_attribute_label;
+          font-size: 0.75rem;
         }
 
         select[id^=edit-quantity] {
@@ -158,10 +180,6 @@
           .select2-selection__arrow::after {
             content: none;
           }
-        }
-
-        label {
-          font-size: 0.75rem;
         }
       }
 
@@ -238,6 +256,7 @@
   }
 }
 
+// specific to size select.
 #configurable_ajax {
   @include breakpoint($upto-desktop) {
     margin-bottom: 1rem;
@@ -267,10 +286,7 @@
       margin-top: 0.5rem;
     }
   }
-}
 
-// specific to size select.
-#configurable_ajax {
   // original size-guide link added via module.
   & > .size-guide-form-and-link-wrapper > a.size-guide-link {
     position: absolute;
@@ -417,34 +433,6 @@
         @include u-visibility(block);
       }
     }
-  }
-}
-
-.short-description-wrapper {
-  .read-more-description-link,
-  .read-more-description-link-gift {
-    font-weight: normal;
-    text-decoration: underline;
-    text-transform: capitalize;
-  }
-}
-
-.content__title_wrapper {
-  .promotions a {
-    font-size: 1rem;
-    text-decoration: none;
-
-    @include breakpoint($only-tablet) {
-      margin-top: 1rem;
-    }
-
-    @include breakpoint($desktop) {
-      margin-top: 0.5rem;
-    }
-  }
-
-  h1 span {
-    font-family: $muji-bold;
   }
 }
 
