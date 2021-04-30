@@ -14,8 +14,8 @@ import PdpRelatedProducts from '../pdp-related-products';
 import PdpPromotionLabel from '../pdp-promotion-label';
 import PpdPanel from '../pdp-popup-panel';
 import PdpFreeGift from '../pdp-free-gift';
-import magv2Sticky from '../../../../../js/utilities/magv2StickySidebar';
-import magv2StickyHeader from '../../../../../js/utilities/magv2StickyHeader';
+import magv2Sticky from '../../../utilities/magv2StickySidebar';
+import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
 import PpdRatingsReviews from '../pdp-ratings-reviews';
