@@ -30,7 +30,7 @@ const magv2Sticky = (sidebar, gallery, crossell, main) => {
       gallerycontainer.classList.remove(...removeClasses);
     } else {
       element = gallerycontainer;
-      // Remove classes from gallery.
+      // Remove classes from sidebar.
       siderbarwrapper.classList.remove(...removeClasses);
     }
     const gallerywrapper = gallerycontainer;
