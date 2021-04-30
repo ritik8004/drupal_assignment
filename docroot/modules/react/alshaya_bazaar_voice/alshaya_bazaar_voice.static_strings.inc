@@ -246,5 +246,17 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'selectlist_placeholder',
       'value' => t('Select...'),
     ],
+    [
+      'key' => 'commentbox',
+      'value' => t('Comment'),
+    ],
+    [
+      'key' => 'nickname',
+      'value' => t('Screen name'),
+    ],
+    [
+      'key' => 'email',
+      'value' => t('Email address'),
+    ],
   ];
 }
