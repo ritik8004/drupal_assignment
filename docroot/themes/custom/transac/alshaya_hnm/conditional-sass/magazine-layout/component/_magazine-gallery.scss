@@ -85,6 +85,37 @@
       width: 21px;
     }
   }
+
+  figure {
+    .pdp-image-zoom-wrapper {
+      height: 100%;
+
+      @include breakpoint($only-mobile) {
+        min-height: 50vh;
+      }
+    }
+
+    img {
+      &.b-lazy {
+        transition: opacity 500ms ease-in-out;
+        opacity: 1;
+        max-width: 1rem;
+        max-height: 1rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      &.b-lazy.b-loaded {
+        max-width: initial;
+        max-height: initial;
+        position: initial;
+        top: initial;
+        transform: initial;
+      }
+    }
+  }
 }
 
 .description-details {

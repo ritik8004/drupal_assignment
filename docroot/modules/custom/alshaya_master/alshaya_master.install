@@ -11,6 +11,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update Lazyload placeholder image.
+ */
+function alshaya_master_update_8047() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_master.settings'],
+    'alshaya_master',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - Forgot password message.
  */
 function alshaya_master_update_8046() {
