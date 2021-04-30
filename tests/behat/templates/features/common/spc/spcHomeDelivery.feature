@@ -86,7 +86,7 @@ Feature: SPC Checkout Home Delivery COD
     And I should see "{vat}"
     And I should see "{continue_shopping_text}"
 
-  @cod @hd @language @desktop @test12
+  @cod @hd @language @desktop
   Scenario: As a Guest, I should be able to checkout using COD in second language
     When I follow "{language_link}"
     And I wait for the page to load
