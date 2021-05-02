@@ -27,11 +27,12 @@ const ReviewHistogram = ({
                 <WriteReviewButton />
               </ConditionalView>
               <DisplayStar
-                starPercentage={overallSummary[item].ReviewStatistics.AverageOverallRating}
+                starPercentage={overallSummary[item].FilteredReviewStatistics.AverageOverallRating}
               />
               <div className="average-rating">
                 {(
-                  parseFloat(overallSummary[item].ReviewStatistics.AverageOverallRating).toFixed(1)
+                  parseFloat(overallSummary[item].FilteredReviewStatistics.AverageOverallRating)
+                    .toFixed(1)
                 )}
               </div>
               <div className="histogram-data">
@@ -39,24 +40,25 @@ const ReviewHistogram = ({
                   {
                     Drupal.t('@customerCount% of Customers Recommended the Product', {
                       '@customerCount': ((
-                        overallSummary[item].ReviewStatistics.RecommendedCount
-                        / overallSummary[item].ReviewStatistics.TotalReviewCount).toFixed(1) * 100
+                        overallSummary[item].FilteredReviewStatistics.RecommendedCount
+                        / overallSummary[item].FilteredReviewStatistics.TotalReviewCount)
+                        .toFixed(1) * 100
                       ),
                     })
                   }
                 </div>
                 <RatingSummary
-                  histogramData={overallSummary[item].ReviewStatistics.RatingDistribution}
-                  totalReviewCount={overallSummary[item].ReviewStatistics.TotalReviewCount}
+                  histogramData={overallSummary[item].FilteredReviewStatistics.RatingDistribution}
+                  totalReviewCount={overallSummary[item].FilteredReviewStatistics.TotalReviewCount}
                 />
                 <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
                   <div className="secondary-summary">
                     <CombineDisplay
                       starSliderCombine={
-                        overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
+                        overallSummary[item].FilteredReviewStatistics.SecondaryRatingsAverages
                       }
                       secondaryRatingsOrder={
-                        overallSummary[item].ReviewStatistics.SecondaryRatingsAveragesOrder
+                        overallSummary[item].FilteredReviewStatistics.SecondaryRatingsAveragesOrder
                       }
                     />
                   </div>
@@ -68,10 +70,10 @@ const ReviewHistogram = ({
                 <WriteReviewButton />
                 <CombineDisplay
                   starSliderCombine={
-                    overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
+                    overallSummary[item].FilteredReviewStatistics.SecondaryRatingsAverages
                   }
                   secondaryRatingsOrder={
-                    overallSummary[item].ReviewStatistics.SecondaryRatingsAveragesOrder
+                    overallSummary[item].FilteredReviewStatistics.SecondaryRatingsAveragesOrder
                   }
                 />
               </ConditionalView>
