@@ -10,6 +10,7 @@ import FormLinks from '../DynamicFormField/Fields/FormLinks';
 import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../utilities/api/request';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
+import smoothScrollTo from '../../../../utilities/smoothScroll';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -77,6 +78,9 @@ export default class WriteReviewForm extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           removeFullScreenLoader();
+          if (result.data.HasErrors && result.data.FormErrors !== null) {
+            smoothScrollTo(e, '.title-block');
+          }
           // Dispatch event after review submit.
           const event = new CustomEvent('reviewPosted', { detail: result.data });
           document.dispatchEvent(event);
