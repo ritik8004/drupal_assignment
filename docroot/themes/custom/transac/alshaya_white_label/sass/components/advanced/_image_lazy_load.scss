@@ -1,31 +1,12 @@
-.cloudzoom {
-  .cloudzoom__herocontainer,
-  .cloudzoom__thumbnails {
-    img {
-      &.b-lazy {
-        transition: opacity 500ms ease-in-out;
-        opacity: 1;
-        max-width: 1rem;
-        max-height: 1rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-
-      &.b-lazy.b-loaded {
-        max-width: initial;
-        max-height: initial;
-        position: initial;
-        top: initial;
-        transform: initial;
-
-        @include breakpoint($only-tablet) {
-          max-width: 100%;
-        }
-      }
-    }
-  }
+.b-lazy:not(.b-loaded) {
+  transition: opacity 500ms ease-in-out;
+  opacity: 1;
+  max-width: 1rem;
+  max-height: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .cloudzoom {
@@ -34,29 +15,6 @@
       .slick-slide {
         position: relative;
       }
-    }
-  }
-}
-
-.c-plp {
-  img {
-    &.b-lazy {
-      transition: opacity 500ms ease-in-out;
-      opacity: 1;
-      max-width: 1rem;
-      max-height: 1rem;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    &.b-lazy.b-loaded {
-      max-width: 100%;
-      max-height: initial;
-      position: initial;
-      top: initial;
-      transform: initial;
     }
   }
 }
