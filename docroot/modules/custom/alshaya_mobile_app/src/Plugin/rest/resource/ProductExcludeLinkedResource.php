@@ -38,6 +38,20 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ProductExcludeLinkedResource extends ResourceBase {
 
   /**
+   * List of attributes for api.
+   */
+  const ATTRIBUTE_LIST = [
+    'size',
+    'band_size',
+    'cup_size',
+    'size_shoe_eu',
+    'size_shoe_uk',
+    'size_shoe_us',
+    'fragrance',
+    'color',
+  ];
+
+  /**
    * SKU Manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
@@ -529,18 +543,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
 
     $size_labels = $this->skuInfoHelper->getSizeLabels($sku);
-    $size_types = [
-      'size',
-      'band_size',
-      'cup_size',
-      'size_shoe_eu',
-      'size_shoe_uk',
-      'size_shoe_us',
-    ];
-    $other_attribute_types = [
-      'fragrance',
-      'color',
-    ];
+
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
       $combinations['attribute_sku'][$attribute_code] = [
         'attribute_code' => $attribute_code,
@@ -552,8 +555,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
           'skus' => $skus,
         ];
         // Checking for attribute codes for size and other attributes.
-        if (in_array($attribute_code, $size_types) ||
-        in_array($attribute_code, $other_attribute_types)) {
+        if (in_array($attribute_code, self::ATTRIBUTE_LIST)) {
           if (!empty($size_labels[$value])) {
             $attr_value['label'] = $size_labels[$value];
           }
