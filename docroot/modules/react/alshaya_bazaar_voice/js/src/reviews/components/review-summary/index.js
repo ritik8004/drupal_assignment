@@ -42,6 +42,7 @@ export default class ReviewSummary extends React.Component {
       nextButtonDisabled: false,
       loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
       paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
+      reviewedByCurrentUser: false,
     };
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
@@ -118,7 +119,6 @@ export default class ReviewSummary extends React.Component {
                 this.changePaginationButtonStatus(currentPage, numberOfPages);
               });
             }
-
             this.setState({
               currentTotal: result.data.TotalResults,
               reviewsSummary: result.data.Results,
@@ -131,6 +131,13 @@ export default class ReviewSummary extends React.Component {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
             });
+            // Check if current user has already posted review.
+            const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
+            if (Object.keys(result.data.Includes.Authors).includes(currentUserId)) {
+              this.setState({
+                reviewedByCurrentUser: true,
+              });
+            }
           } else {
             this.setState({
               currentTotal: result.data.TotalResults,
@@ -333,6 +340,7 @@ export default class ReviewSummary extends React.Component {
       currentPage,
       numberOfPages,
       loadMoreLimit,
+      reviewedByCurrentUser,
     } = this.state;
     const {
       isNewPdpLayout,
@@ -353,7 +361,9 @@ export default class ReviewSummary extends React.Component {
                   <p className="no-review-title">{getStringMessage('no_reviews_yet')}</p>
                   <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
                 </div>
-                <WriteReviewButton />
+                <WriteReviewButton
+                  reviewedByCurrentUser={reviewedByCurrentUser}
+                />
               </div>
             </div>
           </div>
@@ -368,7 +378,11 @@ export default class ReviewSummary extends React.Component {
       <div className="reviews-wrapper">
         <div className="histogram-data-section">
           <div className="rating-wrapper">
-            <ReviewHistogram overallSummary={reviewsProduct} isNewPdpLayout={isNewPdpLayout} />
+            <ReviewHistogram
+              overallSummary={reviewsProduct}
+              isNewPdpLayout={isNewPdpLayout}
+              reviewedByCurrentUser={reviewedByCurrentUser}
+            />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>
               <ReviewSorting

@@ -6,6 +6,7 @@ import ClosedReviewSubmit from './closed-review-submit';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getSessionCookie } from '../../../utilities/user_util';
+import ConditionalView from '../../../common/components/conditional-view';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
@@ -41,7 +42,7 @@ export default class WriteReviewButton extends React.Component {
     const {
       isModelOpen,
     } = this.state;
-
+    const { reviewedByCurrentUser } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings();
     if (bazaarVoiceSettings.reviews.user.user_id === 0
       && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission) {
@@ -56,21 +57,33 @@ export default class WriteReviewButton extends React.Component {
     }
 
     return (
-      <div className="button-wrapper">
-        <div onClick={(e) => this.openModal(e)} className="write-review-button">
-          {getStringMessage('write_a_review')}
-        </div>
-        <Popup
-          open={isModelOpen}
-          className="write_review"
-          closeOnDocumentClick={false}
-          closeOnEscape={false}
-        >
-          <WriteReviewForm
-            closeModal={(e) => this.closeModal(e)}
-          />
-        </Popup>
-      </div>
+      <>
+        <ConditionalView condition={!reviewedByCurrentUser}>
+          <div className="button-wrapper">
+            <div onClick={(e) => this.openModal(e)} className="write-review-button">
+              {getStringMessage('write_a_review')}
+            </div>
+            <Popup
+              open={isModelOpen}
+              className="write_review"
+              closeOnDocumentClick={false}
+              closeOnEscape={false}
+            >
+              <WriteReviewForm
+                closeModal={(e) => this.closeModal(e)}
+              />
+            </Popup>
+          </div>
+        </ConditionalView>
+        <ConditionalView condition={reviewedByCurrentUser}>
+          <div className="button-wrapper">
+            <div className="write-review-button disabled">
+              {getStringMessage('write_a_review')}
+            </div>
+          </div>
+          <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
+        </ConditionalView>
+      </>
     );
   }
 }
