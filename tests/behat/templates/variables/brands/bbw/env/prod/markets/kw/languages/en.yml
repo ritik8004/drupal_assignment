@@ -67,7 +67,7 @@ variables:
   language_continue_shopping_text: 'تابع التسوق'
   language_order_confirm_text: 'تأكيد الطلبية'
   language_delivery_type: 'خدمة التوصيل للمنزل'
-  language_payment_type: 'نقداً عند التوصيل'
+  language_payment_type: 'نقداً عند التسليم'
   cart_promotional: ''
   cs_payment_type: 'Credit Card/Debit Card'
   cnc_delivery_type: 'Click and Collect'

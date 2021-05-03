@@ -69,3 +69,5 @@ variables:
   order_detail: 'تفاصيل الطلبية'
   delivery_type_text: 'التوصيل متوقع خلال:'
   payment_type_text: 'طريقة الدفع:'
+  language_payment_type: 'Cash on Delivery'
+  payment_type: 'نقداً عند التسليم'
