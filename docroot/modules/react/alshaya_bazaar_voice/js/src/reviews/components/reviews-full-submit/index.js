@@ -81,7 +81,7 @@ export default class WriteReviewButton extends React.Component {
               {getStringMessage('write_a_review')}
             </div>
           </div>
-          <div className="already-reviewed-text">You have already reviewed the product.</div>
+          <div className="already-reviewed-text">{getStringMessage('already_reviewed_message')}</div>
         </ConditionalView>
       </>
     );

@@ -109,5 +109,8 @@ function _alshaya_bazaar_voice_translations() {
     'I would recommend this product.' => [
       'ar' => 'سوف أوصي بهذا المنتج',
     ],
+    'You have already reviewed the product.' => [
+      'ar' => 'لقد قمت بالفعل بمراجعة المنتج',
+    ],
   ];
 }
