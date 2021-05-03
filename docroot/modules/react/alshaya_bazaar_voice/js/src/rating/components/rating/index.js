@@ -24,22 +24,24 @@ export default class Rating extends React.Component {
   componentDidMount() {
     showFullScreenLoader();
     const { bazaarVoiceSettings } = this.state;
-
-    const apiUri = '/data/products.json';
-    const params = `&filter=id:${bazaarVoiceSettings.productid}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
-    const apiData = fetchAPIData(apiUri, params);
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
-          removeFullScreenLoader();
-          this.setState({
-            reviewsData: result.data.Results[0],
-          });
-        } else {
-          removeFullScreenLoader();
-          Drupal.logJavascriptError('review-statistics', result.error);
-        }
-      });
+    // Check reviews setting exist.
+    if (bazaarVoiceSettings.reviews !== undefined) {
+      const apiUri = '/data/products.json';
+      const params = `&filter=id:${bazaarVoiceSettings.productid}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
+      const apiData = fetchAPIData(apiUri, params);
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.error === undefined && result.data !== undefined) {
+            removeFullScreenLoader();
+            this.setState({
+              reviewsData: result.data.Results[0],
+            });
+          } else {
+            removeFullScreenLoader();
+            Drupal.logJavascriptError('review-statistics', result.error);
+          }
+        });
+      }
     }
   }
 
@@ -54,6 +56,10 @@ export default class Rating extends React.Component {
 
   render() {
     const { reviewsData, bazaarVoiceSettings } = this.state;
+    // Return empty if reviews settings unavailable.
+    if (bazaarVoiceSettings.reviews === undefined) {
+      return null;
+    }
     const { childClickHandler } = this.props;
 
     if (reviewsData !== undefined
