@@ -38,9 +38,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ProductExcludeLinkedResource extends ResourceBase {
 
   /**
-   * List of attributes for api.
+   * List of attributes with label for api.
    */
-  const ATTRIBUTE_LIST = [
+  const ATTRIBUTES_WITH_LABEL = [
     'size',
     'band_size',
     'cup_size',
@@ -555,7 +555,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
           'skus' => $skus,
         ];
         // Checking for attribute codes for size and other attributes.
-        if (in_array($attribute_code, self::ATTRIBUTE_LIST)) {
+        if (in_array($attribute_code, self::ATTRIBUTES_WITH_LABEL)) {
           if (!empty($size_labels[$value])) {
             $attr_value['label'] = $size_labels[$value];
           }
