@@ -8,13 +8,14 @@ import ReviewPhoto from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
+import { getLanguageCode } from '../../../utilities/api/request';
 
 const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
 }) => {
   if (reviewDescriptionData !== undefined) {
-    const date = getDate(reviewDescriptionData.SubmissionTime);
+    const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
     return (
       <div className="review-detail-right">
         <div className="review-details">
@@ -45,7 +46,7 @@ const ReviewDescription = ({
               >
                 <div className="review-recommendation">
                   <span className="review-recommendation-icon" />
-                  <span>{`${reviewDescriptionData.IsRecommended ? Drupal.t('yes') : Drupal.t('no')},`}</span>
+                  <span>{`${reviewDescriptionData.IsRecommended ? getStringMessage('yes') : getStringMessage('no')},`}</span>
                   <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
                 </div>
               </ConditionalView>

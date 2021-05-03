@@ -3,6 +3,7 @@ import { getDate } from '../../../../../../js/utilities/dateUtility';
 import ConditionalView from '../../../common/components/conditional-view';
 import ReviewPhoto from '../../../reviews/components/review-photo';
 import IndividualReviewSlider from '../../../reviews/components/individual-review-slider';
+import { getLanguageCode } from '../../../utilities/api/request';
 
 const UserReviewsDescription = ({
   reviewsIndividualSummary,
@@ -10,7 +11,7 @@ const UserReviewsDescription = ({
   if (reviewsIndividualSummary === null) {
     return null;
   }
-  const reviewDate = getDate(reviewsIndividualSummary.SubmissionTime);
+  const reviewDate = getDate(reviewsIndividualSummary.SubmissionTime, getLanguageCode());
   return (
     <div className="reviews-block">
       <div className="review-title">{reviewsIndividualSummary.Title}</div>
