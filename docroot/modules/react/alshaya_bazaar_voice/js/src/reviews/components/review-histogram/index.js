@@ -7,7 +7,7 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 
 const ReviewHistogram = ({
-  overallSummary, isNewPdpLayout,
+  overallSummary, isNewPdpLayout, reviewedByCurrentUser,
 }) => {
   if (overallSummary === undefined) {
     return null;
@@ -24,7 +24,9 @@ const ReviewHistogram = ({
           <React.Fragment key={item}>
             <div className="histogram-wrapper" key={item}>
               <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
-                <WriteReviewButton />
+                <WriteReviewButton
+                  reviewedByCurrentUser={reviewedByCurrentUser}
+                />
               </ConditionalView>
               <DisplayStar
                 starPercentage={overallSummary[item].ReviewStatistics.AverageOverallRating}
@@ -65,7 +67,9 @@ const ReviewHistogram = ({
             </div>
             <div className="secondary-summary">
               <ConditionalView condition={(window.innerWidth > 767) && (!newPdp)}>
-                <WriteReviewButton />
+                <WriteReviewButton
+                  reviewedByCurrentUser={reviewedByCurrentUser}
+                />
                 <CombineDisplay
                   starSliderCombine={
                     overallSummary[item].ReviewStatistics.SecondaryRatingsAverages
