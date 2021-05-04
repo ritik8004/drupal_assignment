@@ -87,11 +87,12 @@ export const getUserNicknameParams = (nicknameKey, nickname) => {
 };
 
 /**
-   * Get products reviewed by current user.
-   */
-export const getCurrentUserReviews = (currentUserId) => {
+ * Get reviews posted by user.
+ * @param userId
+ */
+export const getUserReviews = (userId) => {
   const apiUri = '/data/authors.json';
-  const params = `&filter=id:${currentUserId}&Include=Reviews`;
+  const params = `&filter=id:${userId}&Include=Reviews`;
   const apiData = fetchAPIData(apiUri, params);
   if (apiData instanceof Promise) {
     return apiData
@@ -116,5 +117,5 @@ export default {
   getUserNicknameKey,
   getUserEmailParams,
   getUserNicknameParams,
-  getCurrentUserReviews,
+  getUserReviews,
 };

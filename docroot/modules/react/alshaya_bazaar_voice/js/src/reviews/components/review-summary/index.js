@@ -17,7 +17,7 @@ import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
-import { getCurrentUserReviews } from '../../../utilities/user_util';
+import { getUserReviews } from '../../../utilities/user_util';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 export default class ReviewSummary extends React.Component {
@@ -84,7 +84,7 @@ export default class ReviewSummary extends React.Component {
     showFullScreenLoader();
 
     // Check if current user has already posted review on current PDP.
-    const currentUserReviews = getCurrentUserReviews(bazaarVoiceSettings.reviews.user.user_id);
+    const currentUserReviews = getUserReviews(bazaarVoiceSettings.reviews.user.user_id);
     if (currentUserReviews !== null) {
       currentUserReviews.then((userReviews) => {
         const productReviewed = Object.values(userReviews).find(
