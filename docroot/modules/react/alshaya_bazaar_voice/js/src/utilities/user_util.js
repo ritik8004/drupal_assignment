@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { doRequest, getbazaarVoiceSettings } from './api/request';
+import { fetchAPIData } from './api/apiData';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -85,6 +86,28 @@ export const getUserNicknameParams = (nicknameKey, nickname) => {
   return params;
 };
 
+/**
+   * Get products reviewed by current user.
+   */
+export const getCurrentUserReviews = (currentUserId) => {
+  const apiUri = '/data/authors.json';
+  const params = `&filter=id:${currentUserId}&Include=Reviews`;
+  const apiData = fetchAPIData(apiUri, params);
+  if (apiData instanceof Promise) {
+    return apiData
+      .then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          if (result.data.Results.length > 0) {
+            return result.data.Includes.Reviews;
+          }
+        }
+        return null;
+      })
+      .catch((error) => error);
+  }
+  return null;
+};
+
 export default {
   getCurrentUserEmail,
   setSessionCookie,
@@ -93,4 +116,5 @@ export default {
   getUserNicknameKey,
   getUserEmailParams,
   getUserNicknameParams,
+  getCurrentUserReviews,
 };

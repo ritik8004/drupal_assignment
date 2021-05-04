@@ -17,6 +17,7 @@ import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
+import { getCurrentUserReviews } from '../../../utilities/user_util';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 export default class ReviewSummary extends React.Component {
@@ -81,8 +82,21 @@ export default class ReviewSummary extends React.Component {
 
   getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
-    // Check if current user has already posted review on current product.
-    this.checkCurrentUserReviews();
+
+    // Check if current user has already posted review on current PDP.
+    const currentUserReviews = getCurrentUserReviews(bazaarVoiceSettings.reviews.user.user_id);
+    if (currentUserReviews !== null) {
+      currentUserReviews.then((userReviews) => {
+        const productReviewed = Object.values(userReviews).find(
+          (review) => review.ProductId === bazaarVoiceSettings.productid,
+        );
+        if (productReviewed !== undefined) {
+          this.setState({
+            reviewedByCurrentUser: true,
+          });
+        }
+      });
+    }
 
     let sortParams = '';
     let filterParams = '';
@@ -317,30 +331,6 @@ export default class ReviewSummary extends React.Component {
     this.setState((prev) => ({ loadMoreLimit: prev.loadMoreLimit + initialLimit }), () => {
       this.processSortAndFilters();
     });
-  }
-
-  /**
-   * Get products reviewed by current user.
-   */
-  checkCurrentUserReviews() {
-    const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
-    const apiUri = '/data/authors.json';
-    const params = `&filter=id:${currentUserId}&Include=Products,Reviews`;
-    const apiData = fetchAPIData(apiUri, params);
-    if (apiData instanceof Promise) {
-      apiData.then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
-          if (result.data.Results.length > 0) {
-            const productKeys = Object.keys(result.data.Includes.Products);
-            if (productKeys.includes(bazaarVoiceSettings.productid)) {
-              this.setState({
-                reviewedByCurrentUser: true,
-              });
-            }
-          }
-        }
-      });
-    }
   }
 
   render() {
