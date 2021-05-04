@@ -58,7 +58,7 @@ export default class WriteReviewForm extends React.Component {
   componentWillUnmount() {
     this.isComponentMounted = false;
     document.removeEventListener('reviewPosted', this.eventListener, false);
-    // fix Warning: Can't perform a React state update on an unmounted component.
+    // Fix Warning: Can't perform a React state update on an unmounted component.
     this.setState = () => {};
   }
 

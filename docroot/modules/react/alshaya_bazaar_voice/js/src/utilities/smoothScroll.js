@@ -10,7 +10,7 @@ smoothscroll.polyfill();
  */
 export default function smoothScrollTo(e, selector, event) {
   if (event === 'post_review') {
-    // Prevents React from resetting its properties:
+    // Prevents React from resetting its properties.
     e.persist();
   } else {
     e.preventDefault();
