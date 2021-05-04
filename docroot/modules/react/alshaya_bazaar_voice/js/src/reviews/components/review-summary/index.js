@@ -108,7 +108,7 @@ export default class ReviewSummary extends React.Component {
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/reviews.json';
     const reviewLimit = this.getReviewLimit();
-    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
+    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&FilteredStats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -426,7 +426,7 @@ export default class ReviewSummary extends React.Component {
                 <ReviewInformation
                   reviewInformationData={reviewsSummary[item]}
                   reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
-                    .AuthorId].ReviewStatistics}
+                    .AuthorId].FilteredReviewStatistics}
                   isNewPdpLayout={isNewPdpLayout}
                 />
                 <ReviewDescription

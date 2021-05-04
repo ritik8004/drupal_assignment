@@ -34,7 +34,7 @@ export default class ReviewRatingsFilter extends React.Component {
       const ratingFilter = [];
       let availableOptions = '';
       Object.entries(filterOptions).forEach(([index]) => {
-        const contextData = filterOptions[index].ReviewStatistics.RatingDistribution;
+        const contextData = filterOptions[index].FilteredReviewStatistics.RatingDistribution;
 
         const options = Object.keys(contextData).map((item) => ({
           value: `rating:${contextData[item].RatingValue}`,
