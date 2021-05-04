@@ -58,6 +58,8 @@ export default class WriteReviewForm extends React.Component {
   componentWillUnmount() {
     this.isComponentMounted = false;
     document.removeEventListener('reviewPosted', this.eventListener, false);
+    // fix Warning: Can't perform a React state update on an unmounted component.
+    this.setState = () => {};
   }
 
   handleSubmit = (e) => {
@@ -79,7 +81,7 @@ export default class WriteReviewForm extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           removeFullScreenLoader();
           if (result.data.HasErrors && result.data.FormErrors !== null) {
-            smoothScrollTo(e, '.title-block');
+            smoothScrollTo(e, '.title-block', 'post_review');
           }
           // Dispatch event after review submit.
           const event = new CustomEvent('reviewPosted', { detail: result.data });

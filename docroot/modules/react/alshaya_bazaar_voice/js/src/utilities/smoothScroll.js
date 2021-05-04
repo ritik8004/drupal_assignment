@@ -8,8 +8,14 @@ smoothscroll.polyfill();
  * Smooth Scroll to element in Reviews and Rating.
  * @param selector
  */
-export default function smoothScrollTo(e, selector) {
-  e.preventDefault();
+export default function smoothScrollTo(e, selector, event) {
+  if (event === 'post_review') {
+    // Prevents React from resetting its properties:
+    e.persist();
+  } else {
+    e.preventDefault();
+  }
+
   document.querySelector(selector).scrollIntoView({
     behavior: 'smooth',
   });
