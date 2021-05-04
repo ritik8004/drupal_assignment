@@ -81,6 +81,9 @@ export default class ReviewSummary extends React.Component {
 
   getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
+    // Check if current user has already posted review on current product.
+    this.checkCurrentUserReviews();
+
     let sortParams = '';
     let filterParams = '';
     if (extraParams !== undefined) {
@@ -131,13 +134,6 @@ export default class ReviewSummary extends React.Component {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
             });
-            // Check if current user has already posted review.
-            const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
-            if (Object.keys(result.data.Includes.Authors).includes(currentUserId)) {
-              this.setState({
-                reviewedByCurrentUser: true,
-              });
-            }
           } else {
             this.setState({
               currentTotal: result.data.TotalResults,
@@ -321,6 +317,30 @@ export default class ReviewSummary extends React.Component {
     this.setState((prev) => ({ loadMoreLimit: prev.loadMoreLimit + initialLimit }), () => {
       this.processSortAndFilters();
     });
+  }
+
+  /**
+   * Get products reviewed by current user.
+   */
+  checkCurrentUserReviews() {
+    const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
+    const apiUri = '/data/authors.json';
+    const params = `&filter=id:${currentUserId}&Include=Products,Reviews`;
+    const apiData = fetchAPIData(apiUri, params);
+    if (apiData instanceof Promise) {
+      apiData.then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          if (result.data.Results.length > 0) {
+            const productKeys = Object.keys(result.data.Includes.Products);
+            if (productKeys.includes(bazaarVoiceSettings.productid)) {
+              this.setState({
+                reviewedByCurrentUser: true,
+              });
+            }
+          }
+        }
+      });
+    }
   }
 
   render() {
