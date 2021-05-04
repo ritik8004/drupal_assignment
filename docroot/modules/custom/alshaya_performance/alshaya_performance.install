@@ -14,22 +14,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  */
 function alshaya_performance_update_8008() {
   if (!(\Drupal::moduleHandler()->moduleExists('advagg'))) {
-    \Drupal::service('module_installer')->install(['advagg',
+    \Drupal::service('module_installer')->install([
     'advagg_css_minify',
     'advagg_js_minify',
-    'advagg_cdn',
     'advagg_bundler']);
-    // Setting required config for advagg js minifigy.
-    $js_minify_config = \Drupal::configFactory()->getEditable('advagg_js_minify.settings');
-    $js_minify_config->set('minifier', 5);
-    $js_minify_config->save();
-    // Setting required config for advagg bundler.
-    $bundler_config = \Drupal::configFactory()->getEditable('advagg_bundler.settings');
-    $bundler_config->set('css.max', 2);
-    $bundler_config->set('js.max', 2);
-    $bundler_config->save();
   }
 
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  // Setting required config for advagg js minify and bundler.
+  $performance_config_override = ['advagg_bundler.settings', 'advagg_js_minify.settings'];
+  $manager->updateConfigs(
+    $performance_config_override,
+    'alshaya_performance',
+    'override',
+    $manager::MODE_RESAVE
+  );
 }
 
 /**
@@ -143,20 +144,13 @@ function alshaya_performance_update_8001() {
 function alshaya_performance_install() {
   // Set log mode from settings.
   alshaya_performance_reset_log_mode();
-  if (!(\Drupal::moduleHandler()->moduleExists('advagg'))) {
-    \Drupal::service('module_installer')->install(['advagg',
-    'advagg_css_minify',
-    'advagg_js_minify',
-    'advagg_cdn',
-    'advagg_bundler']);
-    // Setting required config for advagg js minifigy.
-    $js_minify_config = \Drupal::configFactory()->getEditable('advagg_js_minify.settings');
-    $js_minify_config->set('minifier', 5);
-    $js_minify_config->save();
-    // Setting required config for advagg bundler.
-    $bundler_config = \Drupal::configFactory()->getEditable('advagg_bundler.settings');
-    $bundler_config->set('css.max', 2);
-    $bundler_config->set('js.max', 2);
-    $bundler_config->save();
-  }
+  
+  $js_minify_config = \Drupal::configFactory()->getEditable('advagg_js_minify.settings');
+  $js_minify_config->set('minifier', 5);
+  $js_minify_config->save();
+  // Setting required config for advagg bundler.
+  $bundler_config = \Drupal::configFactory()->getEditable('advagg_bundler.settings');
+  $bundler_config->set('css.max', 2);
+  $bundler_config->set('js.max', 2);
+  $bundler_config->save();
 }
