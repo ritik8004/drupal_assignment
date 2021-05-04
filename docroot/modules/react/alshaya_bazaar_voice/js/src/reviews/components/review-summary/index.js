@@ -83,19 +83,21 @@ export default class ReviewSummary extends React.Component {
   getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
 
-    // Check if current user has already posted review on current PDP.
-    const currentUserReviews = getUserReviews(bazaarVoiceSettings.reviews.user.user_id);
-    if (currentUserReviews !== null) {
-      currentUserReviews.then((userReviews) => {
-        const productReviewed = Object.values(userReviews).find(
-          (review) => review.ProductId === bazaarVoiceSettings.productid,
-        );
-        if (productReviewed !== undefined) {
-          this.setState({
-            reviewedByCurrentUser: true,
-          });
-        }
-      });
+    // Check if current logged in user has already posted review on current PDP.
+    if (bazaarVoiceSettings.reviews.user.user_id !== 0) {
+      const currentUserReviews = getUserReviews(bazaarVoiceSettings.reviews.user.user_id);
+      if (currentUserReviews !== null) {
+        currentUserReviews.then((userReviews) => {
+          const productReviewed = Object.values(userReviews).find(
+            (review) => review.ProductId === bazaarVoiceSettings.productid,
+          );
+          if (productReviewed !== undefined) {
+            this.setState({
+              reviewedByCurrentUser: true,
+            });
+          }
+        });
+      }
     }
 
     let sortParams = '';
