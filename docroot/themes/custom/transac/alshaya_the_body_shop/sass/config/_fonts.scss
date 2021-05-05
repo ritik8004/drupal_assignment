@@ -219,9 +219,6 @@ $tbs-recoleta-arabic-medium: 'MizanAR-Medium', 'Recoleta-Medium', 'Arial';
 $tbs-dw-arabic-bold: '29LT-Bukra-Wide-Bold', 'DrukWide-Bold-Cy-Web', 'Arial';
 $tbs-dc-arabic-super: '29LT-Bukra-Condensed-Bold', 'DrukCond-Super-Cy-Web', 'Arial';
 
-$body_font: $tbs-regular;
-$primary-font: $tbs-regular;
-
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in TBS theme.
 $arial: $tbs-regular;
 $arial-nodir: $tbs-arabic-regular;
