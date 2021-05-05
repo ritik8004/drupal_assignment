@@ -45,3 +45,4 @@ max_discount_to_log: 80
 enable_size_grouping_filter: 0
 pause_videos_download: FALSE
 delivery_in_only_city_key: 0
+single_translation_product_process_limit: 100
