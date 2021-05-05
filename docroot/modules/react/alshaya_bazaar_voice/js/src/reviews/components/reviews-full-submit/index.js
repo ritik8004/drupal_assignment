@@ -5,7 +5,6 @@ import smoothScrollTo from '../../../utilities/smoothScroll';
 import ClosedReviewSubmit from './closed-review-submit';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getSessionCookie } from '../../../utilities/user_util';
 import ConditionalView from '../../../common/components/conditional-view';
 
 export default class WriteReviewButton extends React.Component {
@@ -49,11 +48,6 @@ export default class WriteReviewButton extends React.Component {
       return (
         <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
       );
-    }
-    if (bazaarVoiceSettings.reviews.user.user_id !== 0) {
-      // Set uas token in cookies if user is logged in.
-      const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
-      getSessionCookie(currentUserKey);
     }
 
     return (

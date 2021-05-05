@@ -17,6 +17,7 @@ import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
+import { getCurrentUserStorage, setCurrentUserUasToken } from '../../../utilities/user_util';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 export default class ReviewSummary extends React.Component {
@@ -58,7 +59,14 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-
+    const userId = bazaarVoiceSettings.reviews.user.user_id;
+    if (userId !== 0) {
+      const currentUserStorage = getCurrentUserStorage(userId);
+      // Set uas token if user not found in storage.
+      if (currentUserStorage === null) {
+        setCurrentUserUasToken(userId);
+      }
+    }
     this.getReviews();
   }
 

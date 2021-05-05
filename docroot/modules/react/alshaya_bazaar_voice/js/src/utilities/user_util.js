@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { doRequest, getbazaarVoiceSettings } from './api/request';
+import { getStorageInfo, setStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -85,6 +86,37 @@ export const getUserNicknameParams = (nicknameKey, nickname) => {
   return params;
 };
 
+export const getCurrentUserStorage = (userId) => {
+  const userStorage = getStorageInfo('bvuser') !== null
+    ? getStorageInfo('bvuser') : [];
+  let currentUserObj = null;
+  if (userStorage.length > 0) {
+    currentUserObj = userStorage.find((user) => user.userId === userId);
+  }
+  return currentUserObj;
+};
+
+export const setCurrentUserUasToken = (userId) => {
+  const userStorage = getStorageInfo('bvuser') !== null
+    ? getStorageInfo('bvuser') : [];
+  const requestUrl = '/get-uas-token';
+  const request = doRequest(requestUrl);
+  if (request instanceof Promise) {
+    request.then((result) => {
+      if (result.status === 200) {
+        const currentUserObj = {
+          userId,
+          uasToken: result.data,
+        };
+        userStorage.push(currentUserObj);
+        setStorageInfo(JSON.stringify(userStorage), 'bvuser');
+      } else {
+        Drupal.logJavascriptError('user-session', result.error);
+      }
+    });
+  }
+};
+
 export default {
   getCurrentUserEmail,
   setSessionCookie,
@@ -93,4 +125,6 @@ export default {
   getUserNicknameKey,
   getUserEmailParams,
   getUserNicknameParams,
+  getCurrentUserStorage,
+  setCurrentUserUasToken,
 };
