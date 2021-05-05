@@ -32,7 +32,16 @@ class ReviewFeedbackPositive extends React.Component {
     const { positiveCount } = this.state;
     const { contentId, contentType, btnStatus } = this.props;
     const positiveText = 'Positive';
-    const retrievedContentVote = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
+    const retrievedContentVote = getStorageInfo(contentType);
+    let storagePositiveCount = null;
+    if (retrievedContentVote !== null) {
+      retrievedContentVote.find((review) => {
+        if (review.id === contentId && review.positiveCount >= 0) {
+          storagePositiveCount = review.positiveCount;
+        }
+        return storagePositiveCount;
+      });
+    }
     if (contentId !== undefined && positiveText !== undefined) {
       return (
         <span className="feedback-positive">
@@ -40,7 +49,7 @@ class ReviewFeedbackPositive extends React.Component {
             <span className="feedback-option-label">{getStringMessage('yes')}</span>
             <span className="feedback-count">
               (
-              {retrievedContentVote !== null ? retrievedContentVote.positiveCount : positiveCount}
+              {storagePositiveCount !== null ? storagePositiveCount : positiveCount}
               )
             </span>
           </button>

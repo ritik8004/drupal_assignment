@@ -15,9 +15,14 @@ class ReviewFeedback extends React.Component {
   componentDidMount() {
     document.addEventListener('handleFeedbackState', this.handleFeedbackState);
     const { contentId, contentType } = this.props;
-    const checkFeedbackInStorage = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
-    if (checkFeedbackInStorage !== null) {
-      this.setState({ votedContentId: contentId });
+    const retrievedContentVote = getStorageInfo(contentType);
+    if (retrievedContentVote !== null) {
+      retrievedContentVote.find((review) => {
+        if (review.id === contentId && review.positiveCount >= 0 && review.negativeCount >= 0) {
+          this.setState({ votedContentId: contentId });
+        }
+        return null;
+      });
     }
   }
 
