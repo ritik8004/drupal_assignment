@@ -26,15 +26,15 @@ function alshaya_bp_transac_update_8014() {
       'core.entity_view_display.node.product_list.default',
     ],
     'alshaya_product_list',
-    'override',
-    AlshayaConfigManager::MODE_MERGE
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
   );
 
   // Create and enable the new product list lhn block.
   $alshayaConfigManager->updateConfigs(
     ['block.block.productlistlhnblock'],
     'alshaya_product_list',
-    'override'
+    'install',
   );
 }
 

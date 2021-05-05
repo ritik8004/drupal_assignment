@@ -1,5 +1,0 @@
-dependencies:
-  config:
-    - field.field.node.product_list.field_show_in_lhn_options_list
-hidden:
-  field_show_in_lhn_options_list: true

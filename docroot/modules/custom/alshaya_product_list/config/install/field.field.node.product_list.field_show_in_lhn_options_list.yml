@@ -11,7 +11,7 @@ field_name: field_show_in_lhn_options_list
 entity_type: node
 bundle: product_list
 label: 'Show in LHN Options List'
-description: ''
+description: '`None` value is treated as `Same as LHN`.'
 required: false
 translatable: false
 skip_translation_check: 0
