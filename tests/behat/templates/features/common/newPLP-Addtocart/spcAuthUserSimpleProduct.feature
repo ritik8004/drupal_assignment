@@ -23,7 +23,6 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
     And I wait for AJAX to finish
 
-
    @language
   Scenario: As an Authenticated User, I should be able to add products to cart on product listing page
      When I follow "{language_link}"
@@ -39,8 +38,3 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user
      Then the quantity "qty-text-wrapper" should be "decreased"
      When I click on "#block-alshayareactcartminicartblock a.cart-link" element
      And I wait for AJAX to finish
-
-
-
-
-
