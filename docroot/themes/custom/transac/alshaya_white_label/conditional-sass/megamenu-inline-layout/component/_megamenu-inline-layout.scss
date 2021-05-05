@@ -5,6 +5,12 @@
         position: relative;
         column-width: auto !important;
 
+        .menu--four__list-item {
+          .menu-two__link-wrapper > a {
+            font-family: $arial;
+          }
+        }
+
         .menu--two__list-item {
           &:not(.move-to-right) {
             height: 3rem;
