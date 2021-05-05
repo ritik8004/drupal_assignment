@@ -59,3 +59,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css: css/conditional-sass/magazine-layout-v2/magazine-layout-v2.ltr.css
+
+  alshaya_white_label/megamenu_inline_layout:
+    css:
+      theme:
+        css/conditional-sass/megamenu-inline-layout/megamenu-inline-layout.ltr.css: css/conditional-sass/megamenu-inline-layout/megamenu-inline-layout.ltr.css
