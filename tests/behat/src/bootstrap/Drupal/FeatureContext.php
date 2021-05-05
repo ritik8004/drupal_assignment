@@ -2453,7 +2453,7 @@ JS;
     } else {
       $element = '#payment-method-checkout_com';
     }
-    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
+    $this->getSession()->executeScript("jQuery('$element').siblings('label').trigger('click');");
     $this->iWaitSeconds(10);
     $checkbox = $page->findField($element);
 
@@ -2510,4 +2510,29 @@ JS;
       $checkoutField->isChecked();
     }
   }
+
+
+  /**
+   * @Given /^the quantity "([^"]*)" should be "([^"]*)"$/
+   */
+  public function theQuantityShouldBe($element, $value) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.addtobag-button')->click();
+    $this->iWaitForAjaxToFinish();
+    $qty_before_click = $element->find('css', '.qty-text-wrapper .qty')->getText();
+    $page->find('css', $element)->click();
+    $this->iWaitForAjaxToFinish();
+    $qty_after_click = $element->find('css', '.qty-text-wrapper .qty')->getText();
+    if ($value == 'increased') {
+      if ($qty_after_click != $qty_before_click + 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+    else {
+      if ($qty_after_click != $qty_before_click - 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+  }
+
 }

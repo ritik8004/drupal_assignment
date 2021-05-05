@@ -12,4 +12,29 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user
 
   @desktop @plp-addtocart
   Scenario: As an Authenticated User, I should be able to add products to cart on product listing page
-    Given I am on "{spc_product_listing_page}"
+    Given I am on "/shop-eye-lashes-eye-brows-accessories/"
+    And I press "Add" button
+    And I wait for AJAX to finish
+    Then the element ".qty-text-wrapper" should exist
+    When I click on ".qty-sel-btn--up" element
+    And the quantity " " should be " "
+    When I click on "qty-sel-btn--down" element
+    Then the quantity "qty-text-wrapper" should be "decreased"
+    When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+    And I wait for AJAX to finish
+
+   @language
+  Scenario: As an Authenticated User, I should be able to add products to cart on product listing page
+     When I follow "{language_link}"
+     And I wait for the page to load
+     And I wait for AJAX to finish
+     Given I am on "/shop-eye-lashes-eye-brows-accessories/"
+     And I press "إضافة" button
+     And I wait for AJAX to finish
+     Then the element ".qty-text-wrapper" should exist
+     When I click on ".qty-sel-btn--up" element
+     And the quantity " " should be " "
+     When I click on "qty-sel-btn--down" element
+     Then the quantity "qty-text-wrapper" should be "decreased"
+     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
+     And I wait for AJAX to finish
