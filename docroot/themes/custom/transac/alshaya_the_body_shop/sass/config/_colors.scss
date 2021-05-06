@@ -66,6 +66,7 @@ $primary_brand_button: $cyprus;
 $primary_brand_button_text: $cyprus;
 $primary_dropdown_arrow_bg: $white;
 $primary_dropdown_arrow_border: $cyprus;
+$primary_dropdown_option_border: $warm-grey-two;
 
 // Header
 $header_bg: $cyprus;
@@ -205,6 +206,18 @@ $spc_tooltip_question_icon: $black;
 // Product detail page
 $pdp_product_special_price_text: $poster-orange;
 $pdp_product_discount_price: $poster-orange;
+$pdp_product_price: $cyprus;
+$pdp_product_special_price: $poster-orange;
+$pdp_product_itemcode: $grey-light;
+$pdp_product_itemcode_value: $cyprus;
+$pdp_title_section_border: $warm-grey-two;
+$pdp-product-qty-label: $grey-light;
+$pdp_skus_border: $warm-grey-two;
+$pdp_sidebar_label: $cyprus;
+$pdp_sidebar_link: $cyprus;
+$pdp_product_delivery-border: $warm-grey-two;
+$pdp_accordion_title: $cyprus;
+$pdp-product-size-label: $grey-light;
 
 // Checkout Global.
 $checkout_header_border-bottom: $cyprus;
@@ -242,6 +255,25 @@ $address-edit-delete-btn-text: $cyprus;
 
 // Product Add to cart form
 $pac_item: $cyprus;
+$pdp_cc_storefinder_label: $grey-light;
+$pdp_cc_storefinder_input: $cyprus;
+$pdp_cc_btn_bg: $cyprus;
+$pdp_cc_btn_text: $nourishing-white;
+$pdp_desc_wrapper_border: $cyprus;
+$pdp_desc_wrapper_close_bg: $cyprus;
+$pdp_product_select_option_label: $grey-light;
+$pdp_size_selected_text: $cyprus;
+$pdp_size_option_selected_text: $balck;
+$pdp_size_option_selected_bg: $white-four;
+$pdp_size_option_border: $warm-grey-two;
+$pdp_size_option_text: $balck;
+$pdp_size_option_border_picked: $cyprus;
+$pdp_color_option_selected_bg_picked: $cyprus;
+$pdp_color_option_selected_text_picked: $white;
+$pdp_color_option_selected_bg: $white;
+$pdp_color_option_selected_text: $cyprus;
+$pdp_color_option_border: $cyprus;
+$pdp_form_item_arrow: $cyprus;
 
 // Basket
 $basket_available_code: $cyprus;
@@ -378,3 +410,10 @@ $hp_slider_arrows_dark: $cyprus;
 // Modal
 $modal_close_bg: $cyprus;
 $modal_close_icon: $white;
+
+// Accordion
+$accordion_sub_title: $grey-light;
+
+// Sharethis
+$sharethis_icon: $cyprus;
+$sharethis_icon_hover: $cyprus;
