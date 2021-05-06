@@ -2535,4 +2535,36 @@ JS;
     }
   }
 
+  /**
+   * Wait for AJAX to finish.
+   */
+  public function iWaitForAjaxToFinish() {
+    $this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+  }
+
+  /**
+   * @Given /^I select the collection store$/
+   */
+  public function iSelectTheCollectionStore()
+  {
+    $page = $this->getSession()->getPage();
+    $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
+    if ($empty_delivery_info !== null) {
+      $empty_delivery_info->click();
+      $this->iWaitForAjaxToFinish();
+      $this->theElementShouldExist('.spc-cnc-stores-list-map');
+      $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
+      $this->iWaitForAjaxToFinish();
+      $page->find('css', 'button.select-store')->click();
+      $this->getSession()->executeScript('jQuery("input#fullname").val("Test User")');
+      $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("555233224")');
+      if ($page->find('css', 'input[name="email"]')) {
+        $this->getSession()->executeScript('jQuery("input[name=\"email\"]").val("user@test.com")');
+      }
+      $page->find('css', 'button#save-address')->click();
+      $this->iWaitForAjaxToFinish();
+    }
+    $this->theElementShouldExist('.delivery-information-preview');
+  }
+
 }

@@ -9,7 +9,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Guest user
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".content__title_wrapper .promotions" should exist
@@ -82,7 +82,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Guest user
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".content__title_wrapper .promotions" should exist
@@ -151,7 +151,7 @@ Feature: SPC to add coupon promotions & get discount in cart page for Guest user
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".content__title_wrapper .promotions" should exist

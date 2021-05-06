@@ -10,7 +10,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) for Guest user
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".promotions-full-view-mode" should exist
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -86,7 +86,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) for Guest user
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".promotions-full-view-mode" should exist
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -160,7 +160,7 @@ Feature: SPC to add dynamic promotions (Buy 2 Get 1 free) for Guest user
     And I wait 10 seconds
     And I wait for the page to load
     And the element ".promotions-full-view-mode" should exist
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     And I click on "#block-alshayareactcartminicartblock a.cart-link" element

@@ -18,7 +18,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -30,7 +30,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then the element ".delivery-information-preview" should exist
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -59,7 +59,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -71,7 +71,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then the element ".delivery-information-preview" should exist
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -104,7 +104,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -116,7 +116,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then the element ".delivery-information-preview" should exist
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -149,7 +149,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -161,7 +161,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then the element ".delivery-information-preview" should exist
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
