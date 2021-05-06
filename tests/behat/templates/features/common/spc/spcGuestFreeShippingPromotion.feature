@@ -5,7 +5,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
   Scenario: As a Guest User , I should be able to add Free shipping promotion of product on cart
     Given I am on "{spc_promotion_listing_page}"
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -62,14 +62,13 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
     Then I should see "{anon_email}"
     Then I should see "{order_detail}"
 
-
   @language @guest @free-shipping @promotion
   Scenario: As a Guest User, I should be able to add Free shipping promotion of product on cart for second language
     Given I am on "{spc_promotion_listing_page}"
     And I wait for the page to load
     When I follow "{language_link}"
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -127,7 +126,7 @@ Feature: SPC to add Free shipping promotion on cart for Guest user
   Scenario: As a Guest User, I should be able to add Free shipping promotion of product on cart
     Given I am on "{spc_promotion_listing_page}"
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
