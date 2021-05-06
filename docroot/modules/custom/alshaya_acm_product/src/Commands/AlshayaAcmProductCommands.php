@@ -991,23 +991,30 @@ class AlshayaAcmProductCommands extends DrushCommands {
    *
    * @command alshaya_acm_product:sync-single-trnaslation-products
    *
-   * @aliases sstp, sync-single-trnaslation-products
+   * @aliases sync-single-translation-products
+   *
+   * @usage sync-single-translation-products 6
+   *   Checks and mentions the count and nids of untranslated AR nodes.
    */
-  public function syncSingleTranslationProduct() {
-    $query = $this->connection->query('SELECT ns.field_skus_value, min(nf.langcode) as langcode
-      FROM {node_field_data} nf
-      INNER JOIN node__field_skus ns ON ns.entity_id = nf.nid
-      WHERE nf.type = "acq_product"
-      group by nid having count(nid) = 1');
-    $result = $query->fetchAllKeyed(0, 1);
+  public function syncSingleTranslationProduct($page_size = 3) {
+    $query = $this->connection->select('node_field_data', 'nf');
+    $query->join('node__field_skus', 'ns', 'ns.entity_id = nf.nid');
+    $query->addField('ns', 'field_skus_value');
+    $query->addField('nf', 'langcode');
+    $query->condition('nf.type', 'acq_product');
+    $query->groupBy('nf.nid');
+    $query->having('count(nf.nid) = 1');
+    $result = $query->execute()->fetchAllKeyed(0, 1);
 
     if (empty($result)) {
-      $this->yell('All the products have 2 translations.');
+      $this->drupalLogger->info('All the products have 2 translations.');
       return;
     }
-    $default_count = $this->configFactory->get('alshaya_acm_product.settings')->get('single_translation_product_process_limit');
+    $default_count = Settings::get('single_translation_product_process_limit', 100);
     if (count($result) > $default_count) {
-      if (!$this->io()->confirm(dt('The number of the products having only one translation are more than @count, Do you want to sync them?', ['@count' => $default_count]))) {
+      $message = 'The number of the products having only one translation are more than @count';
+      $this->drupalLogger->info($message . '.', ['@count' => $default_count]);
+      if (!$this->io()->confirm(dt($message . ', Do you want to sync them?', ['@count' => $default_count]))) {
         throw new UserAbortException();
       }
     }
@@ -1015,22 +1022,19 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $lang_store_mapping = $this->i18nHelper->getStoreLanguageMapping();
     $skus_grouped_by_store = [];
     foreach ($result as $sku => $langcode) {
-      $store_id = $lang_store_mapping['ar'];
-      if ($langcode == 'ar') {
-        $store_id = $lang_store_mapping['en'];
-      }
+      $store_id = ($langcode == 'ar') ? $lang_store_mapping['en'] : $lang_store_mapping['ar'];
       $skus_grouped_by_store[$store_id][] = $sku;
     }
 
     foreach ($lang_store_mapping as $langcode => $store_id) {
       if (!empty($skus_grouped_by_store[$store_id])) {
-        foreach (array_chunk($skus_grouped_by_store[$store_id], 6) as $chunk) {
-          $this->ingestApi->productFullSync($store_id, $langcode, implode(',', $chunk), '', 2);
+        foreach (array_chunk($skus_grouped_by_store[$store_id], $page_size) as $chunk) {
+          $this->ingestApi->productFullSync($store_id, $langcode, implode(',', $chunk), '', $page_size);
         }
+        $this->drupalLogger->info('All products having single translation for language @langcode have been re-synced', ['@langcode' => $langcode]);
       }
     }
-
-    $this->io()->writeln(dt('All products having single translation have been re-synced.'));
+    $this->drupalLogger->info('All products having single translation have been re-synced.');
   }
 
 }

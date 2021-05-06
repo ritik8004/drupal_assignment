@@ -14,16 +14,6 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
- * [6.2.0] Added configuration for single_translation_product_process_limit.
- */
-function alshaya_acm_product_update_8070() {
-  // Adding configuration for single_translation_product_process_limit.
-  alshaya_config_install_configs(['alshaya_acm_product.settings'], 'alshaya_acm_product');
-}
-
-/**
- * Implements hook_update_N().
- *
  * [6.2.0] Delete the configs for /skus/list API.
  */
 function alshaya_acm_product_update_8069() {
