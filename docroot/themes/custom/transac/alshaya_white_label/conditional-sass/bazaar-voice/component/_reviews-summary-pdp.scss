@@ -62,7 +62,7 @@
     }
 
     &-count {
-      border-bottom: 0.0625rem solid $rr-reviews-summary-border;
+      border-#{$right}: 0.0625rem solid $rr-reviews-summary-border;
     }
 
     &-count,
@@ -70,6 +70,11 @@
       padding: 0.625rem 1rem;
       text-align: center;
       font-family: $alshaya-thin;
+      width: 50%;
+
+      .label {
+        margin-bottom: 0.5rem;
+      }
     }
 
     &-title {
@@ -237,16 +242,6 @@
       display: flex;
     }
 
-    &-reviews-details {
-      flex-basis: 35%;
-    }
-
-    &-personal-details {
-      flex-basis: 65%;
-      padding: 0.625rem 0.9375rem;
-      border-#{$left}: 0.0625rem solid $rr-reviews-summary-border;
-    }
-
     &-name {
       font-family: $alshaya-bold;
     }
@@ -281,7 +276,7 @@
     }
 
     &-info {
-      padding: 0.9375rem 0.875rem;
+      padding: 1.25rem;
       border-bottom: 0.0625rem solid $rr-reviews-summary-border;
       font-family: $alshaya-bold;
     }
