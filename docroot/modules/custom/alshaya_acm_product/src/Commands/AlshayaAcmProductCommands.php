@@ -1033,7 +1033,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
         }
         $this->drupalLogger->info('All products having single translation for language @langcode have been re-synced. SKUs: @skus', [
           '@langcode' => $langcode,
-          '@skus' => print_r($skus_grouped_by_store[$store_id], TRUE),
+          '@skus' => implode(',', $skus_grouped_by_store[$store_id]),
         ]);
       }
     }
