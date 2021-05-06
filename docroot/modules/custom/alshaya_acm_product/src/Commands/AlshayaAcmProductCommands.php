@@ -992,9 +992,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
    * @command alshaya_acm_product:sync-single-trnaslation-products
    *
    * @aliases sync-single-translation-products
-   *
    * @usage sync-single-translation-products 6
-   *   Checks and mentions the count and nids of untranslated AR nodes.
    */
   public function syncSingleTranslationProduct($page_size = 3) {
     $query = $this->connection->select('node_field_data', 'nf');
