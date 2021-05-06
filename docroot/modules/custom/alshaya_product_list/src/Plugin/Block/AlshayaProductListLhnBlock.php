@@ -181,12 +181,6 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
    */
   protected function productListLhnBuild($term, $langcode) {
     static $build = NULL;
-
-    // Adding static cache as this block is invoked in
-    // alshaya_white_label_preprocess_page().
-    if (isset($build)) {
-      return $build;
-    }
     $build = [];
     $parent_id = 0;
     $context = [
