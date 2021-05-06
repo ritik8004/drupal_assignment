@@ -250,7 +250,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
 
-  @cc @hd @checkout_com @mastercard @mada
+  @cc @hd @checkout_com @mastercard @mada @test12
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
@@ -280,9 +280,9 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cc-number input" with "{spc_mada_master_card}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-expiry input" with "{spc_mada_master_card_expiry}"
-    And I fill in an element having class ".payment-method-checkout_com .spc-type-cvv input" with "{spc_mada_master_card_cvv}"
+    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_master_card}"
+    Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_master_card_expiry}"
+    Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
     And I wait 10 seconds
     And I scroll to the ".spc-section-billing-address" element
     When I add CnC billing address with following:

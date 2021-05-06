@@ -36,9 +36,9 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for AJAX to finish
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "4543474002249996"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "956"
+    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 5 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
@@ -109,9 +109,9 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     Then the checkout payment checkbox should be checked
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cc-number input" with "4242424242424242"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-expiry input" with "03/22"
-    And I fill in an element having class ".payment-method-checkout_com_upapi .spc-type-cvv input" with "100"
+    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_checkout_card}"
+    And I fill checkout card details having class ".spc-type-expiry input" with "{spc_checkout_expiry}"
+    And I fill checkout card details having class ".spc-type-cvv input" with "{spc_checkout_cvv}"
     And I scroll to the ".spc-section-billing-address" element
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
