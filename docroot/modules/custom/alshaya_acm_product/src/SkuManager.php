@@ -3809,4 +3809,22 @@ class SkuManager {
       );
   }
 
+  /**
+   * To validate EAN 13 digit barcode.
+   *
+   * @param bool $barcode
+   *   Barcode number.
+   *
+   * @return bool
+   *   Return a boolean value.
+   */
+  public function validateEanBarcode($barcode) {
+    // Check to see if barcode is 13 digits long.
+    if (!preg_match("/^[0-9]{13}$/", $barcode)) {
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
 }
