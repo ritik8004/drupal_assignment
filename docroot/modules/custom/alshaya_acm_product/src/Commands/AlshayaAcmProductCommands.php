@@ -997,8 +997,8 @@ class AlshayaAcmProductCommands extends DrushCommands {
   public function syncSingleTranslationProduct($page_size = 3) {
     $query = $this->connection->select('node_field_data', 'nf');
     $query->join('node__field_skus', 'ns', 'ns.entity_id = nf.nid');
-    $query->addExpression('min(ns.field_skus_value)', 'field_skus_value');
-    $query->addExpression('min(nf.langcode)', 'langcode');
+    $query->addExpression('GROUP_CONCAT(ns.field_skus_value)', 'field_skus_value');
+    $query->addExpression('GROUP_CONCAT(nf.langcode)', 'langcode');
     $query->condition('nf.type', 'acq_product');
     $query->groupBy('nf.nid');
     $query->having('count(nf.nid) = 1');
