@@ -306,7 +306,7 @@ class ProductController extends ControllerBase {
         if ($this->acmConfig->get('display_crosssell')) {
           $data = [
             'section_title' => $this->t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
-            'views_display_id' => ($this->acmConfig->get('show_crosssell_as_matchback') && $device == 'desktop') ? 'block_matchback' : 'block_product_slider',
+            'views_display_id' => $this->acmConfig->get('show_crosssell_as_matchback') ? ($device == 'desktop' ? 'block_matchback' : 'block_matchback_mobile') : 'block_product_slider',
           ];
         }
       }
