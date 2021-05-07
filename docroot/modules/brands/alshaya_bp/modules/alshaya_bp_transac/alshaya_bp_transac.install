@@ -55,9 +55,15 @@ function alshaya_bp_transac_update_8014() {
     $new_block = Block::load($block_id);
     if ($new_block instanceof BlockInterface) {
       // Keep the blocks disabled.
+      $new_block->setWeight(abs($new_block->getWeight()));
       $new_block->disable();
       $new_block->save();
     }
+  }
+  // Set weight of new block same as old block.
+  $brand_block = Block::load('productlistbrandcategory');
+  if ($brand_block instanceof BlockInterface) {
+    $brand_block->setWeight(abs($brand_block->getWeight()))->save();
   }
 }
 
