@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.matchback
+    - core.entity_view_mode.node.matchback_mobile
     - core.entity_view_mode.node.product_category_carousel
     - core.entity_view_mode.node.teaser
     - node.type.acq_product
@@ -288,6 +289,38 @@ display:
           relationship: none
           view_mode: matchback
       title: Matchback
+      display_description: ''
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  block_matchback_mobile:
+    display_plugin: block
+    id: block_matchback_mobile
+    display_title: 'Block: Matchback Mobile'
+    position: 3
+    display_options:
+      display_extenders:
+        views_ajax_get:
+          ajax_get: false
+      style:
+        type: default
+        options: {  }
+      defaults:
+        style: false
+        row: false
+        title: false
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: matchback_mobile
+      title: 'Matchback Mobile'
       display_description: ''
     cache_metadata:
       max-age: -1
