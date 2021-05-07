@@ -1,0 +1,42 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.matchback_mobile
+    - field.field.node.acq_product.body
+    - field.field.node.acq_product.field_category
+    - field.field.node.acq_product.field_category_original
+    - field.field.node.acq_product.field_meta_tags
+    - field.field.node.acq_product.field_product_color
+    - field.field.node.acq_product.field_skus
+    - node.type.acq_product
+  module:
+    - acq_sku
+    - user
+id: node.acq_product.matchback_mobile
+targetEntityType: node
+bundle: acq_product
+mode: matchback_mobile
+content:
+  field_skus:
+    weight: 1
+    label: hidden
+    settings:
+      view_mode: full
+    third_party_settings: {  }
+    type: sku_formatter
+    region: content
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  body: true
+  field_category: true
+  field_category_original: true
+  field_meta_tags: true
+  field_product_color: true
+  langcode: true
+  search_api_excerpt: true
+  sharethis: true

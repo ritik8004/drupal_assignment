@@ -31,7 +31,9 @@
             var viewMode = $(form).closest('article[gtm-type="gtm-product-link"]').attr('data-vmode');
             // Decide the key from which we load product data.
             // It will be in productInfo for all cases except matchback.
-            var productInfoKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
+            var productInfoKey = (viewMode === 'matchback' || viewMode === 'matchback_mobile')
+              ? viewMode
+              : 'productInfo';
 
             var quantity = 1;
             // If quantity drop down available, use that value.
