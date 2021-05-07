@@ -2467,7 +2467,7 @@ JS;
   /**
    * @Then I fill checkout card details having class :class with :value
    */
-  public function iFillCheckoutCardDetailsWith($class, $value) {
+  public function iFillCheckoutCardDetailsHavingClassWith($class, $value) {
     $page = $this->getSession()->getPage();
     $newCheckout = $page->find('css', '#payment-method-checkout_com_upapi');
     if (!empty($newCheckout)) {
@@ -2565,6 +2565,16 @@ JS;
       $this->iWaitForAjaxToFinish();
     }
     $this->theElementShouldExist('.delivery-information-preview');
+  }
+
+  /**
+   * @Given /^I select "([^"]*)" option from "([^"]*)"$/
+   */
+  public function iSelectOptionFrom($select, $field_name) {
+    if ($field_name) {
+      $val = $this->getSession()->evaluateScript("return document.querySelector('select[name=\"{$field_name}\"] option:nth-child(2)').value");
+      $this->selectOptionAddress($field_name, $val);
+    }
   }
 
 }
