@@ -1,35 +1,31 @@
 <?php
 
-namespace Drupal\alshaya_acm_product_category\Plugin\Block;
+namespace Drupal\alshaya_product_list\Plugin\Block;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\taxonomy\TermInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryHelper;
 
 /**
- * Provides category LHN block.
+ * Provides Product List LHN block.
  *
  * @Block(
- *   id = "alshaya_category_lhn_block",
- *   admin_label = @Translation("Category LHN Block"),
+ *   id = "alshaya_product_list_lhn_block",
+ *   admin_label = @Translation("Product List LHN Block"),
  * )
  */
-class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * Config to enable/disable the lhn category tree.
-   */
-  const ENABLE_DISABLE_CONFIG = 'alshaya_acm_product_category.settings';
+  const CONTENT_TYPE = 'product_list';
+  const VOCAB_ID = 'acq_product_category';
 
   /**
    * Stores the configuration factory.
@@ -67,6 +63,13 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
   protected $moduleHandler;
 
   /**
+   * Entity Storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Product Category Helper.
    *
    * @var \Drupal\alshaya_acm_product_category\ProductCategoryHelper
@@ -92,6 +95,8 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
    *   Route match service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryHelper $productCategoryHelper
    *   Product category Helper.
    */
@@ -103,6 +108,7 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
                               LanguageManagerInterface $language_manager,
                               RouteMatchInterface $route_match,
                               ModuleHandlerInterface $module_handler,
+                              EntityTypeManagerInterface $entity_type_manager,
                               ProductCategoryHelper $productCategoryHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
@@ -110,6 +116,7 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
     $this->languageManager = $language_manager;
     $this->routeMatch = $route_match;
     $this->moduleHandler = $module_handler;
+    $this->entityTypeManager = $entity_type_manager;
     $this->productCategoryHelper = $productCategoryHelper;
   }
 
@@ -126,6 +133,7 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
       $container->get('language_manager'),
       $container->get('current_route_match'),
       $container->get('module_handler'),
+      $container->get('entity_type.manager'),
       $container->get('alshaya_acm_product_category.helper'),
     );
   }
@@ -134,50 +142,58 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function build() {
-    static $build = NULL;
-
-    // Adding static cache as this block is invoked in
-    // alshaya_white_label_preprocess_page().
-    if (isset($build)) {
-      return $build;
-    }
-
     $build = [];
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $current_route_name = $this->routeMatch->getRouteName();
+    if ($current_route_name === 'entity.node.canonical') {
+      // Get the node object from current route.
+      $node = $this->routeMatch->getParameter('node');
+      if ($node->bundle() === self::CONTENT_TYPE) {
+        if ($node->get('field_show_in_lhn_options_list')) {
+          $product_list_lhn_options_list_value = $node->get('field_show_in_lhn_options_list')[0];
+          if ($product_list_lhn_options_list_value === NULL) {
+            $product_list_lhn_value = 'Same as LHN';
+          }
+          else {
+            $product_list_lhn_value = $node->get('field_show_in_lhn_options_list')->getValue()[0]['value'];
+          }
+          $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
+            'vid' => self::VOCAB_ID,
+            'langcode' => $langcode,
+          ]);
+          if (empty($vocab_list)) {
+            return [];
+          }
+          switch ($product_list_lhn_value) {
+            case "Same as LHN":
+              foreach ($vocab_list as $term) {
+                if ($term->get('field_show_in_lhn')) {
+                  $term_show_lhn_value = $term->get('field_show_in_lhn')->getValue()[0]['value'];
+                  if ($term_show_lhn_value === '1') {
+                    $build = $this->productCategoryHelper->productCategoryBuild($this->getBaseId(), $term, $langcode);
+                  }
+                }
+              }
+              break;
 
-    // Get the term object from current route.
-    $term = $this->productCategoryTree->getCategoryTermFromRoute();
-    if (!$term instanceof TermInterface) {
+            case "Yes":
+              foreach ($vocab_list as $term) {
+                $build = $this->productCategoryHelper->productCategoryBuild($this->getBaseId(), $term, $langcode);
+              }
+              break;
+          }
+        }
+      }
       return $build;
     }
-
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-
-    $build = $this->productCategoryHelper->productCategoryBuild($this->getBaseId(), $term, $langcode);
-
-    return $build;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function access(AccountInterface $account, $return_as_object = FALSE) {
-    $term = $this->routeMatch->getParameter('taxonomy_term');
-    $department_pages = alshaya_advanced_page_get_pages();
-    $config = $this->configFactory->get(self::ENABLE_DISABLE_CONFIG);
-    // Not allow if department page exists for category or lhn is disabled.
-    return AccessResult::allowedif(empty($department_pages[$term->id()]) && $config->get('enable_lhn_tree'));
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    // Get cache tags of enable/disable lhn block config.
-    $config_cache_tags = $this->configFactory
-      ->get(self::ENABLE_DISABLE_CONFIG)
-      ->getCacheTags();
-
-    $cache_tags = array_merge($config_cache_tags, [ProductCategoryTree::CACHE_TAG]);
+    $cache_merge_tags = $this->routeMatch->getParameter('node')->getCacheTags();
+    $cache_tags = array_merge($cache_merge_tags, [ProductCategoryTree::CACHE_TAG]);
 
     return Cache::mergeTags(
       parent::getCacheTags(),
