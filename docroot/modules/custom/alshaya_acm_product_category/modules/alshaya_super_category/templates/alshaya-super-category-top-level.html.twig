@@ -6,8 +6,12 @@
       {% else %}
         <li class="menu__list-item menu--one__list-item">
       {% endif %}
-      <div class="menu__link-wrapper menu-two__link-wrapper">
-        <a class="menu__link menu--one__link {{ level1.class }}" href="{{ level1.path }}" title="{{ level1.meta_title }}" data-super-category-label="{{ level1.label }}">{{ level1.label }}</a>
+        <div class="menu__link-wrapper menu-two__link-wrapper">
+          {% if level1.imgPath is not null and level1.imgPath is not empty %}
+            <a class="menu__link menu--one__link {{ level1.class }}" href="{{ level1.path }}" title="{{ level1.meta_title }}" data-super-category-label="{{ level1.label }} ">
+              <img class="image-container" data-hover-image="{{ level1.inactive_path }}" data-org-image="{{ level1.imgPath }}" src="{{ level1.imgPath }}" alt="{{ level1.label }}">
+            </a>
+          {% endif %}
       </div>
       </li>
     {% endfor %}

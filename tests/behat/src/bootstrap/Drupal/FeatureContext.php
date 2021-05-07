@@ -2453,7 +2453,7 @@ JS;
     } else {
       $element = '#payment-method-checkout_com';
     }
-    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
+    $this->getSession()->executeScript("jQuery('$element').siblings('label').trigger('click');");
     $this->iWaitSeconds(10);
     $checkbox = $page->findField($element);
 
@@ -2467,7 +2467,7 @@ JS;
   /**
    * @Then I fill checkout card details having class :class with :value
    */
-  public function iFillCheckoutCardDetailsWith($class, $value) {
+  public function iFillCheckoutCardDetailsHavingClassWith($class, $value) {
     $page = $this->getSession()->getPage();
     $newCheckout = $page->find('css', '#payment-method-checkout_com_upapi');
     if (!empty($newCheckout)) {
@@ -2510,4 +2510,71 @@ JS;
       $checkoutField->isChecked();
     }
   }
+
+
+  /**
+   * @Given /^the quantity "([^"]*)" should be "([^"]*)"$/
+   */
+  public function theQuantityShouldBe($element, $value) {
+    $page = $this->getSession()->getPage();
+    $page->find('css', '.addtobag-button')->click();
+    $this->iWaitForAjaxToFinish();
+    $qty_before_click = $element->find('css', '.qty-text-wrapper .qty')->getText();
+    $page->find('css', $element)->click();
+    $this->iWaitForAjaxToFinish();
+    $qty_after_click = $element->find('css', '.qty-text-wrapper .qty')->getText();
+    if ($value == 'increased') {
+      if ($qty_after_click != $qty_before_click + 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+    else {
+      if ($qty_after_click != $qty_before_click - 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+  }
+
+  /**
+   * Wait for AJAX to finish.
+   */
+  public function iWaitForAjaxToFinish() {
+    $this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+  }
+
+  /**
+   * @Given /^I select the collection store$/
+   */
+  public function iSelectTheCollectionStore()
+  {
+    $page = $this->getSession()->getPage();
+    $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
+    if ($empty_delivery_info !== null) {
+      $empty_delivery_info->click();
+      $this->iWaitForAjaxToFinish();
+      $this->theElementShouldExist('.spc-cnc-stores-list-map');
+      $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
+      $this->iWaitForAjaxToFinish();
+      $page->find('css', 'button.select-store')->click();
+      $this->getSession()->executeScript('jQuery("input#fullname").val("Test User")');
+      $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("555233224")');
+      if ($page->find('css', 'input[name="email"]')) {
+        $this->getSession()->executeScript('jQuery("input[name=\"email\"]").val("user@test.com")');
+      }
+      $page->find('css', 'button#save-address')->click();
+      $this->iWaitForAjaxToFinish();
+    }
+    $this->theElementShouldExist('.delivery-information-preview');
+  }
+
+  /**
+   * @Given /^I select "([^"]*)" option from "([^"]*)"$/
+   */
+  public function iSelectOptionFrom($select, $field_name) {
+    if ($field_name) {
+      $val = $this->getSession()->evaluateScript("return document.querySelector('select[name=\"{$field_name}\"] option:nth-child(2)').value");
+      $this->selectOptionAddress($field_name, $val);
+    }
+  }
+
 }

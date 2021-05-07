@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import OrderSummaryBlock from '../../utilities/order-summary-block';
 import OrderSummary from './OrderSummary';
 import VatFooterText from '../../utilities/vat-footer';
@@ -54,7 +55,7 @@ const CheckoutConfirmationPrint = React.forwardRef((props, ref) => {
         <VatFooterText />
         <div className="customer-service-text">
           <div className="title">{Drupal.t('CUSTOMER SERVICE')}</div>
-          <div className="content" dangerouslySetInnerHTML={{ __html: customerServiceText.value }} />
+          <div className="content">{ parse(customerServiceText.value) }</div>
         </div>
         <div className="logos">
           <img src="/themes/custom/transac/alshaya_white_label/imgs/cards/veri-sign-black.svg" />

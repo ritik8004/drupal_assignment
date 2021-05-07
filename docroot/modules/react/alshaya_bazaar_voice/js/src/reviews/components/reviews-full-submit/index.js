@@ -6,6 +6,7 @@ import ClosedReviewSubmit from './closed-review-submit';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import ConditionalView from '../../../common/components/conditional-view';
+import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
@@ -13,6 +14,22 @@ export default class WriteReviewButton extends React.Component {
     this.state = {
       isModelOpen: false,
     };
+  }
+
+  componentDidMount() {
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const { reviewedByCurrentUser } = this.props;
+    const query = new URLSearchParams(document.referrer);
+    const openPopup = query.get('openPopup');
+    // To display write review popup on page load.
+    if (bazaarVoiceSettings.reviews.user.user_id > 0
+       && getStorageInfo('openPopup')
+       && !reviewedByCurrentUser
+       && openPopup !== null) {
+      this.setState({
+        isModelOpen: true,
+      });
+    }
   }
 
   openModal = (e) => {
@@ -31,6 +48,8 @@ export default class WriteReviewButton extends React.Component {
     this.setState({
       isModelOpen: false,
     });
+    // Disable write review popup onload.
+    setStorageInfo(false, 'openPopup');
 
     if (e.detail.HasErrors !== undefined && !e.detail.HasErrors) {
       smoothScrollTo(e, '#post-review-message');

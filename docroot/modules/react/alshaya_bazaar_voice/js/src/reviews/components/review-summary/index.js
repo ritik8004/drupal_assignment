@@ -17,7 +17,7 @@ import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
-import { getCurrentUserStorage, setCurrentUserUasToken } from '../../../utilities/user_util';
+import { getCurrentUserStorage, setCurrentUserUasToken, getUserReviews } from '../../../utilities/user_util';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 export default class ReviewSummary extends React.Component {
@@ -89,6 +89,24 @@ export default class ReviewSummary extends React.Component {
 
   getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
+
+    // Check if current logged in user has already posted review on current PDP.
+    if (bazaarVoiceSettings.reviews.user.user_id !== 0) {
+      const currentUserReviews = getUserReviews(bazaarVoiceSettings.reviews.user.user_id);
+      if (currentUserReviews !== null) {
+        currentUserReviews.then((userReviews) => {
+          const productReviewed = Object.values(userReviews).find(
+            (review) => review.ProductId === bazaarVoiceSettings.productid,
+          );
+          if (productReviewed !== undefined) {
+            this.setState({
+              reviewedByCurrentUser: true,
+            });
+          }
+        });
+      }
+    }
+
     let sortParams = '';
     let filterParams = '';
     if (extraParams !== undefined) {
@@ -108,7 +126,7 @@ export default class ReviewSummary extends React.Component {
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/reviews.json';
     const reviewLimit = this.getReviewLimit();
-    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
+    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&FilteredStats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -139,13 +157,6 @@ export default class ReviewSummary extends React.Component {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
             });
-            // Check if current user has already posted review.
-            const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
-            if (Object.keys(result.data.Includes.Authors).includes(currentUserId)) {
-              this.setState({
-                reviewedByCurrentUser: true,
-              });
-            }
           } else {
             this.setState({
               currentTotal: result.data.TotalResults,
@@ -433,7 +444,7 @@ export default class ReviewSummary extends React.Component {
                 <ReviewInformation
                   reviewInformationData={reviewsSummary[item]}
                   reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
-                    .AuthorId].ReviewStatistics}
+                    .AuthorId].FilteredReviewStatistics}
                   isNewPdpLayout={isNewPdpLayout}
                 />
                 <ReviewDescription

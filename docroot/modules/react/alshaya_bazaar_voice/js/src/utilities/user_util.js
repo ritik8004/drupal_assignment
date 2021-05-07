@@ -1,5 +1,6 @@
 import { doRequest, getbazaarVoiceSettings } from './api/request';
 import { getStorageInfo, setStorageInfo } from './storage';
+import { fetchAPIData } from './api/apiData';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -59,8 +60,32 @@ export const getCurrentUserStorage = (userId) => {
   return user;
 };
 
+/**
+ * Get reviews posted by user.
+ * @param userId
+ */
+export const getUserReviews = (userId) => {
+  const apiUri = '/data/authors.json';
+  const params = `&filter=id:${userId}&Include=Reviews`;
+  const apiData = fetchAPIData(apiUri, params);
+  if (apiData instanceof Promise) {
+    return apiData
+      .then((result) => {
+        if (result.error === undefined && result.data !== undefined) {
+          if (result.data.Results.length > 0) {
+            return result.data.Includes.Reviews;
+          }
+        }
+        return null;
+      })
+      .catch((error) => error);
+  }
+  return null;
+};
+
 export default {
   getCurrentUserEmail,
   getCurrentUserStorage,
   setCurrentUserUasToken,
+  getUserReviews,
 };

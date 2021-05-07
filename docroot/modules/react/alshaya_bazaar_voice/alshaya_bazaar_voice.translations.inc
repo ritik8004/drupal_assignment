@@ -112,5 +112,14 @@ function _alshaya_bazaar_voice_translations() {
     'You have already reviewed the product.' => [
       'ar' => 'لقدم قمت بعرض المنتج من قبل.',
     ],
+    'years' => [
+      'ar' => 'سنوات',
+    ],
+    'Review' => [
+      'ar' => 'المراجعة',
+    ],
+    'Vote' => [
+      'ar' => 'تصويت',
+    ],
   ];
 }

@@ -60,9 +60,9 @@ const Lozenges = ({ labels, sku }) => {
 const LabelItems = ({ bifercatedLabels, directionKey }) => (
   <>
     {
-      bifercatedLabels[directionKey].map((labelItem) => (
+      bifercatedLabels[directionKey].map((labelItem, index) => (
         // BE to provide and add a unique key here.
-        <div className="label" key={labelItem.image.url}>
+        <div className="label" key={`label-${index}`}>
           <ImageElement
             src={labelItem.image.url}
             alt={labelItem.image.alt}

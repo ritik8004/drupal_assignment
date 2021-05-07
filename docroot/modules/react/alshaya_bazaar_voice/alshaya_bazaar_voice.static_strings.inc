@@ -262,5 +262,9 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'already_reviewed_message',
       'value' => t('You have already reviewed the product.'),
     ],
+    [
+      'key' => 'user_age',
+      'value' => t('years'),
+    ],
   ];
 }

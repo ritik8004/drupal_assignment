@@ -1,0 +1,40 @@
+@include breakpoint($desktop) {
+  .menu--one__list-item {
+    .menu--two__list {
+      .menu__links__wrapper {
+        .menu--two__list-item {
+          &:not(.move-to-right) {
+            &::after {
+              color: $menu-chevron;
+              #{$right}: 0.2rem;
+            }
+          }
+
+          ul.menu--three__list {
+            margin-top: -0.25rem !important;
+          }
+
+          ul.menu--four__list {
+            margin-top: 0 !important;
+          }
+
+          ul.menu--three__list,
+          ul.menu--four__list {
+            li {
+              margin: 7px 0;
+
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .has--three-levels .menu--four__list-item > .menu-two__link-wrapper a:hover {
+    text-decoration: underline;
+    color: $mm_l3_link_hover;
+  }
+}
