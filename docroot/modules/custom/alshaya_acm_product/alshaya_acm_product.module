@@ -371,6 +371,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'mainImage' => '',
       'hoverImage' => '',
+      'losanges' => '',
     ],
   ];
 
@@ -539,16 +540,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->getCacheTags());
 
-      if ($view_mode == 'search_result') {
-        $build['labels'] = [
-          '#theme' => 'product_labels',
-          '#labels' => $skuManager->getLabels($sku_entity, 'plp'),
-          '#sku' => $sku_identifier,
-          '#mainsku' => $sku_identifier,
-          '#type' => 'plp',
-        ];
-      }
-      elseif ($view_mode == 'full') {
+      if ($view_mode == 'full') {
         $sku = $skuManager->getSkuForNode($entity, TRUE);
         if (empty($sku)) {
           throw new NotFoundHttpException();
@@ -615,14 +607,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
-        // Same day delivery.
-        if (isset($flags_status['same_day_delivery']) && $flags_status['same_day_delivery']['status']) {
+         // Same day delivery.
+         if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['same_day_delivery']['text'])) {
           $build['same_day_delivery_text']['#markup'] = $flags_config['same_day_delivery']['text'];
           $build['same_day_delivery_sub_text']['#markup'] = $flags_config['same_day_delivery']['sub_text'];
         }
 
         // Delivery in only city.
-        if (isset($flags_config['delivery_in_only_city']) && !empty($flags_config['delivery_in_only_city']['text'])) {
+        if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['delivery_in_only_city']['text'])) {
           $build['delivery_in_only_city_text']['#markup'] = $flags_config['delivery_in_only_city']['text'];
         }
 

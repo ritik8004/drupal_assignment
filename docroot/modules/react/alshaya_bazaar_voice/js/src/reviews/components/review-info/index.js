@@ -5,13 +5,14 @@ import ConditionalView from '../../../common/components/conditional-view';
 import IndividualReviewSlider from '../individual-review-slider';
 import IndividualReviewStar from '../individual-review-star';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
+import { getLanguageCode } from '../../../utilities/api/request';
 
 const ReviewInformation = ({
   reviewInformationData,
   reviewTooltipInfo,
 }) => {
   if (reviewInformationData !== undefined) {
-    const date = getDate(reviewInformationData.SubmissionTime);
+    const date = getDate(reviewInformationData.SubmissionTime, getLanguageCode());
     return (
       <div className="review-detail-left">
         <div className="review-user-details">
@@ -47,15 +48,18 @@ const ReviewInformation = ({
         </ConditionalView>
 
         <ReviewAttributes
-          reviewAttributesData={reviewInformationData.ContextDataValues}
+          contextDataValues={reviewInformationData.ContextDataValues}
+          contextDataValuesOrder={reviewInformationData.ContextDataValuesOrder}
         />
 
         <IndividualReviewSlider
           sliderData={reviewInformationData.SecondaryRatings}
+          secondaryRatingsOrder={reviewInformationData.SecondaryRatingsOrder}
         />
 
         <IndividualReviewStar
           customerValue={reviewInformationData.SecondaryRatings}
+          secondaryRatingsOrder={reviewInformationData.SecondaryRatingsOrder}
         />
 
       </div>

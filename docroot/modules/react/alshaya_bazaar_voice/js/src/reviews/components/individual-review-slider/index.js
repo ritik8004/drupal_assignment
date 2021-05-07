@@ -1,9 +1,11 @@
 import React from 'react';
 import isRTL from '../../../utilities/rtl';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import ConditionalView from '../../../common/components/conditional-view';
 
 const IndividualReviewSlider = ({
   sliderData,
+  secondaryRatingsOrder,
 }) => {
   const direction = isRTL() === true ? 'rtl' : 'ltr';
   if (sliderData === null) {
@@ -11,9 +13,9 @@ const IndividualReviewSlider = ({
   }
   return (
     <>
-      {Object.keys(sliderData).map((item) => (((sliderData[item].DisplayType) === 'SLIDER') === true
-        ? (
-          <div className="attribute-list" key={item}>
+      {secondaryRatingsOrder.map((item) => (
+        <ConditionalView key={sliderData[item].Id} condition={sliderData[item].DisplayType === 'SLIDER'}>
+          <div className="attribute-list">
             <div className="slider-header">
               <span>
                 {sliderData[item].Label}
@@ -67,8 +69,8 @@ const IndividualReviewSlider = ({
               <div className="slider-label">{sliderData[item].MaxLabel}</div>
             </div>
           </div>
-        )
-        : null))}
+        </ConditionalView>
+      ))}
     </>
   );
 };

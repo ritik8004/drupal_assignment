@@ -23,21 +23,28 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 /**
  * Implements hook_acq_sku_sync_categories_delete_alter().
  */
-function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$result) {
-  if (!empty($result)) {
-    foreach ($result as $tid => $rs) {
-      // Get all advanced department page.
-      $all_dpt_page = alshaya_advanced_page_get_pages();
-      // If department page node exists for the given term, don't delete it.
-      if (isset($all_dpt_page[$tid]) && !empty($dpt_nid = $all_dpt_page[$tid])) {
-        $dpt_node = Node::load($dpt_nid);
-        if ($dpt_node instanceof Node) {
-          unset($result[$tid]);
-          \Drupal::logger('alshaya_advanced_page')->notice('Extra term having tid @tid with department node @nid exists in drupal but not in magento.', [
-            '@tid' => $tid,
-            '@nid' => $dpt_nid,
-          ]);
-        }
+function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$orphan_categories) {
+  if (empty($orphan_categories)) {
+    return;
+  }
+
+  // Get all advanced department page.
+  $all_dpt_page = alshaya_advanced_page_get_pages();
+
+  foreach ($orphan_categories as $index => $tid) {
+    $dpt_nid = $all_dpt_page[$tid] ?? 0;
+
+    // If department page node exists for the given term, don't delete it.
+    if (!empty($dpt_nid)) {
+      $dpt_node = Node::load($dpt_nid);
+
+      if ($dpt_node instanceof Node) {
+        unset($orphan_categories[$index]);
+
+        \Drupal::logger('alshaya_advanced_page')->notice('Extra term having tid @tid with department node @nid exists in drupal but not in magento.', [
+          '@tid' => $tid,
+          '@nid' => $dpt_nid,
+        ]);
       }
     }
   }

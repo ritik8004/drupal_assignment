@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19af1349de983410e10b802c73c5a2cf",
+    "content-hash": "051df63ed45743ae0db4bac922cc8fa7",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -13488,7 +13488,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch"
+                    "Remove generator": "https://www.drupal.org/files/issues/2020-03-02/seckit-8.x-1.x-2795025-remove_generator-21.patch",
+                    "Base-uri policy": "https://git.drupalcode.org/project/seckit/-/merge_requests/5.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

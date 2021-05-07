@@ -160,6 +160,7 @@ class AlshayaBnplWidgetHelper {
         if ($postpay_mode == 'hidden') {
           $build['postpay_mode_class']['#markup'] = 'postpay-hidden';
         }
+        $build['#attached']['drupalSettings']['postpay_widget_info'] = $this->getBnplWidgetInfo();
         break;
     }
 

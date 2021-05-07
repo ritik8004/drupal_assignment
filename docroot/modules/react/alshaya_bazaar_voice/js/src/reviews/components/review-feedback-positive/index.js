@@ -3,6 +3,7 @@ import {
   getStorageInfo,
 } from '../../../utilities/storage';
 import { handleFeedbackSubmit } from '../../../utilities/feedback_util';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 class ReviewFeedbackPositive extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class ReviewFeedbackPositive extends React.Component {
       return (
         <span className="feedback-positive">
           <button value={positiveText} type="button" onClick={this.handlePositiveCount(contentId, positiveText, contentType)} disabled={btnStatus !== 'active'}>
-            <span className="feedback-option-label">{Drupal.t('yes')}</span>
+            <span className="feedback-option-label">{getStringMessage('yes')}</span>
             <span className="feedback-count">
               (
               {retrievedContentVote !== null ? retrievedContentVote.positiveCount : positiveCount}

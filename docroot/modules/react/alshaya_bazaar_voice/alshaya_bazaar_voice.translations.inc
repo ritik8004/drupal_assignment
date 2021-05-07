@@ -19,6 +19,21 @@ function _alshaya_bazaar_voice_translations() {
     'True to size' => [
       'ar' => 'نفس المقاس',
     ],
+    'Clear all' => [
+      'ar' => 'امسح كل التعليق',
+    ],
+    'star' => [
+      'ar' => 'احفظ التعليق',
+    ],
+    'of' => [
+      'ar' => 'من',
+    ],
+    'Item Code' => [
+      'ar' => 'رمز المنتج',
+    ],
+    'Thanks for submitting your comment! It is currently being moderated and will be visible shortly.' => [
+      'ar' => 'شكرا لإرسال تعليقك! سوف نقوم بمراجعته، وسيظهر على الموقع قريباً.',
+    ],
     'stars' => [
       'ar' => 'نجوم',
     ],
@@ -60,6 +75,39 @@ function _alshaya_bazaar_voice_translations() {
     ],
     'Post a Comment' => [
       'ar' => 'كتابة تعليق',
+    ],
+    'Select...' => [
+      'ar' => 'أختر...',
+    ],
+    'Please enter value for %fieldTitle.' => [
+      'ar' => 'يرجى ادخال قيمة إلى %fieldTitle.',
+    ],
+    'Please select value for %fieldTitle.' => [
+      'ar' => 'يرجى اختيار قيمة إلى %fieldTitle.',
+    ],
+    'Show us how it looks! Upload up to 5 pics' => [
+      'ar' => 'أرنا كيف يبدو المنتج! حمّل لغاية 5 صور',
+    ],
+    'Review Guidelines' => [
+      'ar' => 'إرشادات المراجعة',
+    ],
+    'Yes' => [
+      'ar' => 'نعم',
+    ],
+    'No' => [
+      'ar' => 'ل',
+    ],
+    'The email address %mail is not valid. Please enter a valid email address.' => [
+      'ar' => 'البريد الإلكتروني %mail غير صالح. يرجى إدخال بريد إلكتروني صالح.',
+    ],
+    'Please enter a minimum of %minLength characters for %fieldTitle.' => [
+      'ar' => 'الرجاء إدخال %minLength حرف كحد أدنى لـ %fieldTitle.',
+    ],
+    'Thanks for submitting your review! It is currently being moderated and will be visible shortly.' => [
+      'ar' => 'شكراً على إبداء رأيك! سوف يتم التصيف كي تتم مشاهدته في أقرب وقت.',
+    ],
+    'I would recommend this product.' => [
+      'ar' => 'سوف أوصي بهذا المنتج',
     ],
   ];
 }
