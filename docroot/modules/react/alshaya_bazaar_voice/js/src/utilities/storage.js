@@ -33,14 +33,13 @@ export const updateStorageInfo = (contentType, contentObj, contentId) => {
     ? getStorageInfo(contentType) : [];
   let contentExists = false;
   if (storageList !== null) {
-    console.log(contentObj);
     const updatedStorage = storageList.map((contentStorage) => {
       // Check if current content already exists in storage.
       if (contentStorage.id === contentId) {
         const storageObj = { ...contentStorage };
-        const returnedTarget = Object.assign(storageObj, contentObj);
+        const mergedStorage = Object.assign(storageObj, contentObj);
         contentExists = true;
-        return returnedTarget;
+        return mergedStorage;
       }
       return contentStorage;
     });
