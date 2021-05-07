@@ -37,7 +37,7 @@ function alshaya_bp_transac_update_8014() {
   $manager->updateConfigs(
     ['search_api.index.acquia_search_index'],
     'alshaya_search',
-    'install',
+    'optional',
     AlshayaConfigManager::MODE_MERGE
   );
   
