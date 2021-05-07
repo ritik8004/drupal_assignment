@@ -114,6 +114,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
   params += `&agreedtotermsandconditions=${true}`;
   // Set action type.
   params += '&action=submit';
+
   return params;
 };
 

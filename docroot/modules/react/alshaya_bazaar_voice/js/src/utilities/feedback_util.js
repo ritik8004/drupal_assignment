@@ -1,6 +1,6 @@
 import { postAPIData } from './api/apiData';
 import {
-  setStorageInfo, getStorageInfo,
+  updateStorageInfo,
 } from './storage';
 
 export const handleFeedbackSubmit = (contentId, voteText,
@@ -13,34 +13,14 @@ export const handleFeedbackSubmit = (contentId, voteText,
         if (result.error === undefined
             && result.data !== undefined
             && result.data.error === undefined) {
-          const storageList = getStorageInfo(contentType) !== null
-            ? getStorageInfo(contentType) : [];
-          let flag = false;
           const positiveCountVal = (voteText === 'Positive') ? positiveCount + 1 : positiveCount;
           const negativeCountVal = (voteText === 'Negative') ? negativeCount + 1 : negativeCount;
-          if (storageList !== null) {
-            const updatedStorageList = storageList.map((contentStorage) => {
-              if (contentStorage.id === contentId) {
-                const storageObj = { ...contentStorage };
-                storageObj.positiveCount = positiveCountVal;
-                storageObj.negativeCount = negativeCountVal;
-                flag = true;
-                return storageObj;
-              }
-              return contentStorage;
-            });
-            if (flag) {
-              setStorageInfo(JSON.stringify(updatedStorageList), contentType);
-            } else {
-              const helpfulnessVoteObj = {
-                id: contentId,
-                postiveCount: positiveCountVal,
-                negativeCount: negativeCountVal,
-              };
-              storageList.push(helpfulnessVoteObj);
-              setStorageInfo(JSON.stringify(storageList), contentType);
-            }
-          }
+          const helpfulnessVoteObj = {
+            id: contentId,
+            positiveCount: positiveCountVal,
+            negativeCount: negativeCountVal,
+          };
+          updateStorageInfo(contentType, helpfulnessVoteObj, contentId);
         } else {
           Drupal.logJavascriptError(`review-${contentType}-feedback-submit`, result.error);
         }

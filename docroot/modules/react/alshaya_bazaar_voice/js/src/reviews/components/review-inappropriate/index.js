@@ -1,7 +1,7 @@
 import React from 'react';
 import { postAPIData } from '../../../utilities/api/apiData';
 import {
-  setStorageInfo,
+  updateStorageInfo,
   getStorageInfo,
 } from '../../../utilities/storage';
 import getStringMessage from '../../../../../../js/utilities/strings';
@@ -32,31 +32,11 @@ class ReviewInappropriate extends React.Component {
         if (result.error === undefined
           && result.data !== undefined
           && result.data.error === undefined) {
-          const storageList = getStorageInfo(contentType) !== null
-            ? getStorageInfo(contentType) : [];
-          let contentExists = false;
-          if (storageList !== null) {
-            const updatedStorage = storageList.map((contentStorage) => {
-              // Check if current content already exists in storage.
-              if (contentStorage.id === contentId) {
-                const storageObj = { ...contentStorage };
-                storageObj.reported = 1;
-                contentExists = true;
-                return storageObj;
-              }
-              return contentStorage;
-            });
-            if (contentExists) {
-              setStorageInfo(JSON.stringify(updatedStorage), contentType);
-            } else {
-              const reportedVoteObj = {
-                id: contentId,
-                reported: 1,
-              };
-              storageList.push(reportedVoteObj);
-              setStorageInfo(JSON.stringify(storageList), contentType);
-            }
-          }
+          const reportVoteObj = {
+            id: contentId,
+            reported: 1,
+          };
+          updateStorageInfo(contentType, reportVoteObj, contentId);
         } else {
           Drupal.logJavascriptError(`review-${contentType}-report-feedback`, result.error);
         }
