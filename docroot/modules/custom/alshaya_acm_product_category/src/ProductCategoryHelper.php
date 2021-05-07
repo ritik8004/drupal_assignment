@@ -68,12 +68,12 @@ class ProductCategoryHelper {
    *
    * @param string $baseID
    *   Block base id.
-   * @param \Drupal\taxonomy\TermInterface $term
+   * @param object $term
    *   Taxonomy term.
    * @param string $langcode
    *   Language code.
    */
-  public function productCategoryBuild($baseID, TermInterface $term, $langcode) {
+  public function productCategoryBuild($baseID, $term, $langcode) {
     $parent_id = 0;
 
     $context = [
