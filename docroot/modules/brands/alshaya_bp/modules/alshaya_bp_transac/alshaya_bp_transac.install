@@ -9,6 +9,7 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\block\Entity\Block;
 use Drupal\facets\Entity\Facet;
+use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_update_N().
@@ -38,9 +39,11 @@ function alshaya_bp_transac_update_8014() {
 
   foreach ($blocks as $block_id) {
     $new_block = Block::load($block_id);
-    // Keep the blocks disabled.
-    $new_block->disable();
-    $new_block->save();
+    if ($new_block instanceof BlockInterface) {
+      // Keep the blocks disabled.
+      $new_block->disable();
+      $new_block->save();
+    }
   }
 }
 
