@@ -12,6 +12,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryHelper;
 
 /**
  * Provides Product List LHN block.
@@ -69,6 +70,13 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
   protected $entityTypeManager;
 
   /**
+   * Product Category Helper.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryHelper
+   */
+  protected $productCategoryHelper;
+
+  /**
    * AlshayaCategoryLhnBlock constructor.
    *
    * @param array $configuration
@@ -89,6 +97,8 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
    *   Module Handler service object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryHelper $productCategoryHelper
+   *   Product category Helper.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -98,7 +108,8 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
                               LanguageManagerInterface $language_manager,
                               RouteMatchInterface $route_match,
                               ModuleHandlerInterface $module_handler,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ProductCategoryHelper $productCategoryHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
@@ -106,6 +117,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
     $this->routeMatch = $route_match;
     $this->moduleHandler = $module_handler;
     $this->entityTypeManager = $entity_type_manager;
+    $this->productCategoryHelper = $productCategoryHelper;
   }
 
   /**
@@ -121,7 +133,8 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
       $container->get('language_manager'),
       $container->get('current_route_match'),
       $container->get('module_handler'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('alshaya_acm_product_category.helper'),
     );
   }
 
@@ -135,8 +148,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
     if ($current_route_name === 'entity.node.canonical') {
       // Get the node object from current route.
       $node = $this->routeMatch->getParameter('node');
-      $bundle = $node->bundle();
-      if ($bundle === self::CONTENT_TYPE) {
+      if ($node->bundle() === self::CONTENT_TYPE) {
         if ($node->get('field_show_in_lhn_options_list')) {
           $product_list_lhn_options_list_value = $node->get('field_show_in_lhn_options_list')[0];
           if ($product_list_lhn_options_list_value === NULL) {
@@ -158,7 +170,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
                 if ($term->get('field_show_in_lhn')) {
                   $term_show_lhn_value = $term->get('field_show_in_lhn')->getValue()[0]['value'];
                   if ($term_show_lhn_value === '1') {
-                    $build = $this->productListLhnBuild($term, $langcode);
+                    $build = $this->productCategoryHelper->productCategoryBuild($this->getBaseId(), $term, $langcode);
                   }
                 }
               }
@@ -166,7 +178,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
 
             case "Yes":
               foreach ($vocab_list as $term) {
-                $build = $this->productListLhnBuild($term, $langcode);
+                $build = $this->productCategoryHelper->productCategoryBuild($this->getBaseId(), $term, $langcode);
               }
               break;
           }
@@ -174,79 +186,6 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
       }
       return $build;
     }
-  }
-
-  /**
-   * Function to build the LHN.
-   */
-  protected function productListLhnBuild($term, $langcode) {
-    static $build = NULL;
-    $build = [];
-    $parent_id = 0;
-    $context = [
-      'block' => $this->getBaseId(),
-      'term' => $term,
-      'depth_offset' => 0,
-    ];
-    // Invoke the alter hook to allow all modules to update parent_id.
-    $this->moduleHandler->alter('product_category_parent', $parent_id, $context);
-
-    // Get the term tree.
-    $term_data = $this->productCategoryTree->getCategoryTreeWithIncludeInMenu($langcode, $parent_id);
-
-    // If no data, no need to render the block.
-    if (empty($term_data)) {
-      return $build;
-    }
-
-    $lhn_tree = [];
-
-    // Get all parents of the given term.
-    $parents = $this->productCategoryTree->getCategoryTermParents($term);
-
-    // If parent exists for the current term. Here doing
-    // `$context['depth_offset'] + 1` as $parents array contains the current
-    // term as well.
-    if ((count($parents) - ($context['depth_offset'] + 1)) > 0) {
-      // Get root parent term.
-      /** @var \Drupal\taxonomy\Entity\Term $root_parent_term*/
-      $root_parent_term = array_pop($parents);
-
-      if (!empty($context['depth_offset'])) {
-        $root_parent_term = array_pop($parents);
-      }
-
-      $lhn_tree = $term_data[$root_parent_term->id()]['child'];
-    }
-    elseif (!empty($context['depth_offset'])) {
-      $parent_child_terms = !empty($term_data[key($parents)]['child']) ? $term_data[key($parents)]['child'] : [];
-      $lhn_tree = count($parents) == 1 ? $term_data : $parent_child_terms;
-      if (count($parents) == 1) {
-        $context['depth_offset'] = 2;
-      }
-    }
-    else {
-      $parent_child_terms = !empty($term_data[key($parents)]['child']) ? $term_data[key($parents)]['child'] : [];
-      $lhn_tree = count($parents) == 1 ? $parent_child_terms : [];
-    }
-
-    if (empty($lhn_tree)) {
-      return $build;
-    }
-
-    $lhn_tree = array_filter($lhn_tree, function ($tree_term) {
-      return $tree_term['lhn'];
-    });
-
-    $build = [
-      '#theme' => 'alshaya_lhn_tree',
-      '#lhn_cat_tree' => $lhn_tree,
-      '#current_term' => $term->id(),
-      '#depth_offset' => $context['depth_offset'],
-      '#current_term_parent_id' => $term->get('parent')->getString(),
-    ];
-
-    return $build;
   }
 
   /**
