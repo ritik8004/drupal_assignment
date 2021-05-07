@@ -1,10 +1,9 @@
 import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, getUserEmailParams,
-  getUserNicknameParams,
-  getUserNicknameKey,
+  getCurrentUserEmail, getCurrentUserStorage,
 } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
+import { setStorageInfo, getStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -31,22 +30,48 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  */
 export const prepareRequest = (elements, fieldsConfig) => {
   let params = '';
+  const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
+  const currentUserStorage = getCurrentUserStorage(currentUserId);
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
     // Add input data from field types.
     try {
       if (elements[id].value !== null) {
-        const nicknameKey = getUserNicknameKey();
+        const userStorage = getStorageInfo('bvuser') !== null ? getStorageInfo('bvuser') : [];
+        let contentExists = false;
         if (id === 'useremail') {
-          params += getUserEmailParams(elements[id].value, nicknameKey);
+          if (currentUserId === 0 && currentUserStorage !== null) {
+            if (currentUserStorage.bvUserId === undefined
+              || (currentUserStorage.email !== undefined
+              && currentUserStorage.email !== elements[id].value)) {
+              params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
+            }
+          }
+          params += `&${id}=${elements[id].value}`;
         } else if (id === 'usernickname') {
-          if (getSessionCookie('bv_user_id') !== null && getSessionCookie('bv_user_email') !== null
-            && getSessionCookie(nicknameKey) !== null && getCurrentUserEmail() === null) {
-            params += getUserNicknameParams(nicknameKey, elements[id].value);
+          if (currentUserId === 0 && currentUserStorage.email !== undefined
+            && currentUserStorage.bvUserId !== undefined
+            && currentUserStorage.nickname !== undefined) {
+            if (currentUserStorage.nickname !== elements[id].value) {
+              params += `&UserNickname=${elements[id].value}`;
+              const updatedStorage = userStorage.map((contentStorage) => {
+                // Check if current content already exists in storage.
+                if (contentStorage.userId === currentUserId) {
+                  const storageObj = { ...contentStorage };
+                  storageObj.nickname = elements[id].value;
+                  contentExists = true;
+                  return storageObj;
+                }
+                return contentStorage;
+              });
+              if (contentExists) {
+                setStorageInfo(JSON.stringify(updatedStorage), 'bvuser');
+              }
+            }
+            params += `&User=${currentUserStorage.bvUserId}`;
           } else {
             params += `&${id}=${elements[id].value}`;
-            setSessionCookie(nicknameKey, elements[id].value);
           }
         } else {
           params += `&${id}=${elements[id].value}`;
@@ -68,14 +93,16 @@ export const prepareRequest = (elements, fieldsConfig) => {
     });
   }
 
-  if (getCurrentUserEmail() === null && getSessionCookie('bv_user_email') === null) {
-    params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+  if (currentUserId === 0 && currentUserStorage !== null) {
+    if (currentUserStorage.bvUserId === undefined || currentUserStorage.email === undefined) {
+      params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+    }
   }
-  const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
   // Set user authenticated string (UAS).
-  const userToken = getSessionCookie(currentUserKey);
-  if (getCurrentUserEmail() !== null && userToken !== undefined) {
-    params += `&user=${userToken}`;
+  if (getCurrentUserEmail() !== null && currentUserStorage !== null) {
+    if (currentUserStorage.uasToken !== undefined) {
+      params += `&user=${currentUserStorage.uasToken}`;
+    }
   }
   // Set product id
   params += `&productid=${bazaarVoiceSettings.productid}`;
@@ -87,7 +114,6 @@ export const prepareRequest = (elements, fieldsConfig) => {
   params += `&agreedtotermsandconditions=${true}`;
   // Set action type.
   params += '&action=submit';
-
   return params;
 };
 

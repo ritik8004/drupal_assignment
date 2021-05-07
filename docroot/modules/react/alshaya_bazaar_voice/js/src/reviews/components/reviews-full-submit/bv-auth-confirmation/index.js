@@ -3,11 +3,11 @@ import Popup from 'reactjs-popup';
 import { postAPIData, fetchAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
 import {
-  setSessionCookie, getSessionCookie, getCurrentUserEmail,
-  getUserNicknameKey,
+  getCurrentUserStorage,
 } from '../../../../utilities/user_util';
 import AuthConfirmationMessage from '../auth-confirmation-message';
 import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
+import { setStorageInfo, getStorageInfo } from '../../../../utilities/storage';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -30,12 +30,11 @@ export default class BvAuthConfirmation extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           if (!result.data.HasErrors) {
-            const userId = result.data.Authentication.User;
-            setSessionCookie('bv_user_id', userId);
+            const bvUserId = result.data.Authentication.User;
             this.setState({
               isUserVerified: true,
             }, () => {
-              this.setAnonymousUserCookies();
+              this.setAnonymousUserCookies(bvUserId);
             });
           }
         } else {
@@ -51,12 +50,14 @@ export default class BvAuthConfirmation extends React.Component {
     });
   };
 
-  setAnonymousUserCookies = () => {
-    const nicknameKey = getUserNicknameKey();
+  setAnonymousUserCookies = (bvUserId) => {
     const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const userStorage = getStorageInfo('bvuser') !== null ? getStorageInfo('bvuser') : [];
+    const currentUserStorage = getCurrentUserStorage(bazaarVoiceSettings.reviews.user.user_id);
+    let contentExists = false;
     // Store user information in bv cookies.
-    if (getSessionCookie('bv_user_id') !== null && getCurrentUserEmail() === null) {
-      const params = `&productid=${bazaarVoiceSettings.productid}&User=${getSessionCookie('bv_user_id')}&Action=`;
+    if (currentUserStorage !== null && bazaarVoiceSettings.reviews.user.user_id === 0) {
+      const params = `&productid=${bazaarVoiceSettings.productid}&User=${bvUserId}&Action=`;
       const apiData = fetchAPIData('/data/submitreview.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
@@ -66,8 +67,23 @@ export default class BvAuthConfirmation extends React.Component {
             if (result.data.Data.Fields !== undefined
               && result.data.Data.Fields.usernickname.Value !== null
               && result.data.Data.Fields.useremail.Value !== null) {
-              setSessionCookie(nicknameKey, result.data.Data.Fields.usernickname.Value);
-              setSessionCookie('bv_user_email', result.data.Data.Fields.useremail.Value);
+              if (userStorage !== null) {
+                const updatedStorage = userStorage.map((contentStorage) => {
+                  // Check if current content already exists in storage.
+                  if (contentStorage.userId === 0) {
+                    const storageObj = { ...contentStorage };
+                    storageObj.nickname = result.data.Data.Fields.usernickname.Value;
+                    storageObj.email = result.data.Data.Fields.useremail.Value;
+                    storageObj.bvUserId = bvUserId;
+                    contentExists = true;
+                    return storageObj;
+                  }
+                  return contentStorage;
+                });
+                if (contentExists) {
+                  setStorageInfo(JSON.stringify(updatedStorage), 'bvuser');
+                }
+              }
             }
           } else {
             Drupal.logJavascriptError('review-summary', result.error);

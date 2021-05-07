@@ -4,14 +4,13 @@ import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
 import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, getUserEmailParams,
-  getUserNicknameParams,
-  getUserNicknameKey,
+  getCurrentUserEmail, getCurrentUserStorage,
 } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -128,19 +127,79 @@ class ReviewCommentForm extends React.Component {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
       const bazaarVoiceSettings = getbazaarVoiceSettings();
-      const nicknameKey = getUserNicknameKey();
+      const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
+      const currentUserStorage = getCurrentUserStorage(bazaarVoiceSettings.reviews.user.user_id);
       let authParams = '';
-      authParams += getUserEmailParams(email, nicknameKey);
-      const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
-      // Set user authenticated string (UAS).
-      if (getCurrentUserEmail() !== null && getSessionCookie(currentUserKey) !== undefined) {
-        authParams += `&user=${getSessionCookie(currentUserKey)}`;
-        setSessionCookie(nicknameKey, nickname);
+      const userId = bazaarVoiceSettings.reviews.user.user_id;
+      // Set auth paramters for anonymous users.
+      if (currentUserId === 0 && currentUserStorage !== null) {
+        if (currentUserStorage.bvUserId === undefined
+          || (currentUserStorage.email !== undefined && currentUserStorage.email !== email)) {
+          authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+        }
       }
-
-      if (getSessionCookie('bv_user_id') !== null && getSessionCookie('bv_user_email') !== null
-        && getSessionCookie(nicknameKey) !== null) {
-        authParams += getUserNicknameParams(nicknameKey, nickname);
+      // Set user authenticated string (UAS).
+      if (currentUserStorage !== null) {
+        const userStorage = getStorageInfo('bvuser') !== null ? getStorageInfo('bvuser') : [];
+        let contentExists = false;
+        if (currentUserId !== 0 && currentUserStorage.uasToken !== undefined) {
+          authParams += `&user=${currentUserStorage.uasToken}&UserNickname=${nickname}`;
+          if (userStorage !== null) {
+            const updatedStorage = userStorage.map((contentStorage) => {
+              // Check if current content already exists in storage.
+              if (contentStorage.userId === userId) {
+                const storageObj = { ...contentStorage };
+                storageObj.nickname = nickname;
+                storageObj.email = email;
+                contentExists = true;
+                return storageObj;
+              }
+              return contentStorage;
+            });
+            if (contentExists) {
+              setStorageInfo(JSON.stringify(updatedStorage), 'bvuser');
+            } else {
+              const currentUserObj = {
+                userId,
+                nickname,
+                email,
+              };
+              userStorage.push(currentUserObj);
+              setStorageInfo(JSON.stringify(userStorage), 'bvuser');
+            }
+          }
+        } else if (currentUserId === 0 && currentUserStorage.email !== undefined
+          && currentUserStorage.bvUserId !== undefined
+          && currentUserStorage.nickname !== undefined) {
+          if (currentUserStorage.nickname !== nickname) {
+            authParams += `&UserNickname=${nickname}`;
+            const updatedStorage = userStorage.map((contentStorage) => {
+              // Check if current content already exists in storage.
+              if (contentStorage.userId === userId) {
+                const storageObj = { ...contentStorage };
+                storageObj.nickname = nickname;
+                storageObj.email = email;
+                contentExists = true;
+                return storageObj;
+              }
+              return contentStorage;
+            });
+            if (contentExists) {
+              setStorageInfo(JSON.stringify(updatedStorage), 'bvuser');
+            } else {
+              const currentUserObj = {
+                userId,
+                nickname,
+                email,
+              };
+              userStorage.push(currentUserObj);
+              setStorageInfo(JSON.stringify(userStorage), 'bvuser');
+            }
+          }
+          authParams += `&User=${currentUserStorage.bvUserId}`;
+        } else {
+          authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
+        }
       } else {
         authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
       }
@@ -208,18 +267,19 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
-    const nicknameKey = getUserNicknameKey();
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const currentUserStorage = getCurrentUserStorage(bazaarVoiceSettings.reviews.user.user_id);
     let emailValue = '';
     let nicknameValue = '';
     // Set default value for user email.
     if (getCurrentUserEmail() !== null) {
       emailValue = getCurrentUserEmail();
-    } else if (getSessionCookie('bv_user_email') !== null) {
-      emailValue = getSessionCookie('bv_user_email');
+    } else if (currentUserStorage !== null) {
+      emailValue = currentUserStorage.email !== undefined ? currentUserStorage.email : '';
     }
     // Set default value for user nickname.
-    if (getSessionCookie(nicknameKey) !== null) {
-      nicknameValue = getSessionCookie(nicknameKey);
+    if (currentUserStorage !== null) {
+      nicknameValue = currentUserStorage.nickname !== undefined ? currentUserStorage.nickname : '';
     }
 
     if (ReviewId !== undefined) {

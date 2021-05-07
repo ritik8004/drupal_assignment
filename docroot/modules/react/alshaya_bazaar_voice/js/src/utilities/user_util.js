@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { doRequest, getbazaarVoiceSettings } from './api/request';
 import { getStorageInfo, setStorageInfo } from './storage';
 
@@ -14,117 +13,54 @@ export const getCurrentUserEmail = () => {
   return email;
 };
 
-export const setSessionCookie = (key, value) => {
-  Cookies.remove(key);
-  Cookies.set(key, value, { expires: bazaarVoiceSettings.reviews.bazaar_voice.max_age });
-};
-
-/**
- * Get UAS Token of current user.
- *
- * @returns {uasToken}
- */
-export const getSessionCookie = (key) => {
-  let sessionCookie = Cookies.get(key);
-
-  if (sessionCookie === undefined) {
-    const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
-    if (key === currentUserKey) {
-      const requestUrl = '/get-uas-token';
-      const request = doRequest(requestUrl);
-
-      if (request instanceof Promise) {
-        request.then((result) => {
-          if (result.status === 200) {
-            setSessionCookie(key, result.data);
-            sessionCookie = Cookies.get(key);
-          } else {
-            Drupal.logJavascriptError('user-session', result.error);
-          }
-        });
-      }
-    } else {
-      return null;
-    }
-  }
-
-  return sessionCookie;
-};
-
-export const deleteSessionCookie = (keys) => {
-  keys.forEach((item) => {
-    Cookies.remove(item);
-  });
-};
-
-export const getUserNicknameKey = () => {
-  const nicknameKey = `user_nickname_${bazaarVoiceSettings.reviews.user.user_id}`;
-  return nicknameKey;
-};
-
-export const getUserEmailParams = (email, nicknameKey) => {
-  let params = '';
-  // Delete existing cookies for user info.
-  if (getSessionCookie('bv_user_email') !== null && getSessionCookie('bv_user_email') !== email) {
-    const cookieValues = ['bv_user_email', nicknameKey, 'bv_user_id'];
-    deleteSessionCookie(cookieValues);
-  }
-  // Set auth paramters for anonymous users.
-  if (getCurrentUserEmail() === null && getSessionCookie('bv_user_email') === null) {
-    params += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
-  }
-  return params;
-};
-
-export const getUserNicknameParams = (nicknameKey, nickname) => {
-  let params = '';
-  if (getSessionCookie(nicknameKey) !== nickname) {
-    params += `&UserNickname=${nickname}`;
-    setSessionCookie(nicknameKey, nickname);
-  }
-  params += `&User=${getSessionCookie('bv_user_id')}`;
-  return params;
-};
-
-export const getCurrentUserStorage = (userId) => {
-  const userStorage = getStorageInfo('bvuser') !== null
-    ? getStorageInfo('bvuser') : [];
-  let currentUserObj = null;
-  if (userStorage.length > 0) {
-    currentUserObj = userStorage.find((user) => user.userId === userId);
-  }
-  return currentUserObj;
-};
-
 export const setCurrentUserUasToken = (userId) => {
   const userStorage = getStorageInfo('bvuser') !== null
     ? getStorageInfo('bvuser') : [];
   const requestUrl = '/get-uas-token';
   const request = doRequest(requestUrl);
-  if (request instanceof Promise) {
-    request.then((result) => {
-      if (result.status === 200) {
-        const currentUserObj = {
-          userId,
-          uasToken: result.data,
-        };
-        userStorage.push(currentUserObj);
-        setStorageInfo(JSON.stringify(userStorage), 'bvuser');
-      } else {
-        Drupal.logJavascriptError('user-session', result.error);
-      }
-    });
+  let currentUserObj = null;
+  // Initliaze user object for anonmymous user.
+  if (userId === 0) {
+    currentUserObj = {
+      userId,
+    };
+    userStorage.push(currentUserObj);
+    setStorageInfo(JSON.stringify(userStorage), 'bvuser');
+  } else if (request instanceof Promise) {
+    return request
+      .then((result) => {
+        if (result.status === 200) {
+          currentUserObj = {
+            userId,
+            uasToken: result.data,
+          };
+          if (currentUserObj !== null) {
+            userStorage.push(currentUserObj);
+            setStorageInfo(JSON.stringify(userStorage), 'bvuser');
+            return userStorage;
+          }
+        }
+        return null;
+      })
+      .catch((error) => error);
   }
+  return userStorage;
+};
+
+export const getCurrentUserStorage = (userId) => {
+  const userStorage = getStorageInfo('bvuser') !== null
+    ? getStorageInfo('bvuser') : [];
+  let user = null;
+  let currentUserObj;
+  if (userStorage.length > 0) {
+    currentUserObj = userStorage.find((userObj) => userObj.userId === userId);
+  }
+  user = currentUserObj !== undefined ? currentUserObj : setCurrentUserUasToken(userId);
+  return user;
 };
 
 export default {
   getCurrentUserEmail,
-  setSessionCookie,
-  getSessionCookie,
-  deleteSessionCookie,
-  getUserNicknameKey,
-  getUserEmailParams,
-  getUserNicknameParams,
   getCurrentUserStorage,
   setCurrentUserUasToken,
 };
