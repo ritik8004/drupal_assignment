@@ -85,7 +85,6 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
       ];
     }
     // Prepare the output of processed items and show.
-    $batch['operations'][] = [[__CLASS__, 'batchGenerate'], []];
     batch_set($batch);
     drush_backend_batch_process();
   }
@@ -101,7 +100,6 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
   public static function batchStart($total, &$context) {
     $context['results']['total'] = $total;
     $context['results']['count'] = 0;
-    $context['results']['items'] = [];
     $context['results']['timestart'] = microtime(TRUE);
   }
 
@@ -118,6 +116,7 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public static function batchProcess(array $nids, &$context) {
+    $context['results']['items'] = [];
     $context['results']['count'] += count($nids);
 
     $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
@@ -174,19 +173,6 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
       '@count' => $context['results']['count'],
       '@total' => $context['results']['total'],
     ]);
-  }
-
-  /**
-   * Batch API callback; Write output in message.
-   *
-   * @param mixed|array $context
-   *   The batch current context.
-   */
-  public static function batchGenerate(&$context) {
-    if (empty($context['results']['items'])) {
-      return;
-    }
-
     $context['message'] = json_encode($context['results']['items']);
   }
 

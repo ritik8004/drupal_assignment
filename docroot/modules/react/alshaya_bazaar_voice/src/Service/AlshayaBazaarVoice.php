@@ -128,12 +128,14 @@ class AlshayaBazaarVoice {
       $response = [];
       foreach ($result['Results'] as $value) {
         $rating_distribution = $this->processRatingDistribution($value['ReviewStatistics']['RatingDistribution']);
-        $response['ReviewStatistics'][$value['Id']] = [
-          'AverageOverallRating' => $value['ReviewStatistics']['AverageOverallRating'],
-          'TotalReviewCount' => $value['ReviewStatistics']['TotalReviewCount'],
-          'RatingDistribution' => $rating_distribution['rating_distribution'],
-          'RatingStars' => $rating_distribution['rating_stars'],
-        ];
+        if ($value['ReviewStatistics']['TotalReviewCount'] > 0) {
+          $response['ReviewStatistics'][$value['Id']] = [
+            'AverageOverallRating' => $value['ReviewStatistics']['AverageOverallRating'],
+            'TotalReviewCount' => $value['ReviewStatistics']['TotalReviewCount'],
+            'RatingDistribution' => $rating_distribution['rating_distribution'],
+            'RatingStars' => ['rating_' . round($value['ReviewStatistics']['AverageOverallRating'])],
+          ];
+        }
       }
 
       return $response;
@@ -185,7 +187,6 @@ class AlshayaBazaarVoice {
     $rating_range = [];
     // Rating stars and histogram data.
     foreach ($rating as $value) {
-      $rating_range['rating_stars'][] = 'rating_' . $value['RatingValue'];
       $rating_range['rating_distribution'][] = 'rating_' . $value['RatingValue'] . '_' . $value['Count'];
     }
 
