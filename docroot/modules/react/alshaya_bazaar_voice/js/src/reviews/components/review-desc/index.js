@@ -9,7 +9,7 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
 import ReviewResponseDisplay from '../review-response-display';
-import { getLanguageCode } from '../../../utilities/api/request';
+import { getbazaarVoiceSettings, getLanguageCode } from '../../../utilities/api/request';
 
 const ReviewDescription = ({
   reviewDescriptionData,
@@ -18,6 +18,7 @@ const ReviewDescription = ({
 }) => {
   let newPdp = isNewPdpLayout;
   newPdp = (newPdp === undefined) ? false : newPdp;
+  const bazaarVoiceSettings = getbazaarVoiceSettings();
 
   if (reviewDescriptionData !== undefined) {
     const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
@@ -65,21 +66,29 @@ const ReviewDescription = ({
                 />
               </div>
             </div>
-            <ReviewCommentForm
-              ReviewId={reviewDescriptionData.Id}
-            />
+            <ConditionalView
+              condition={bazaarVoiceSettings.reviews.bazaar_voice.user_submitted_comments}
+            >
+              <ReviewCommentForm
+                ReviewId={reviewDescriptionData.Id}
+              />
+            </ConditionalView>
             <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
               <ReviewResponseDisplay
                 reviewId={reviewDescriptionData.Id}
                 reviewResponses={reviewDescriptionData.ClientResponses}
               />
             </ConditionalView>
-            <div className="review-comment-display">
-              <ReviewCommentDisplay
-                reviewId={reviewDescriptionData.Id}
-                reviewsComment={reviewsComment}
-              />
-            </div>
+            <ConditionalView
+              condition={bazaarVoiceSettings.reviews.bazaar_voice.user_submitted_comments}
+            >
+              <div className="review-comment-display">
+                <ReviewCommentDisplay
+                  reviewId={reviewDescriptionData.Id}
+                  reviewsComment={reviewsComment}
+                />
+              </div>
+            </ConditionalView>
           </div>
         </div>
       </div>

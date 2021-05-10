@@ -47,6 +47,9 @@ bazaar_voice.settings:
     write_review_guidlines:
       type: string
       label: 'URL of BazaarVoice Write review Guidelines.'
+    user_submitted_comments:
+      type: boolean
+      label: 'Enable or Disable User Submitted Comments.'
     comment_form_tnc:
       type: string
       label: 'URL of BazaarVoice Comment Form Terms and Condition.'

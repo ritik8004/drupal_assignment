@@ -13,6 +13,7 @@ pdp_rating_reviews: false
 write_review_submission: false
 write_review_tnc: '/terms-and-conditions'
 write_review_guidlines: '/writing-guidelines'
+user_submitted_comments: true
 comment_form_tnc: '/terms-and-conditions'
 bv_content_types: 'Products,Comments,Authors'
 comment_box_min_length: 100
