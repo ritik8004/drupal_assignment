@@ -211,3 +211,12 @@ function _alshaya_spc_global_error_message() {
 function alshaya_spc_preprocess_page(&$variables) {
   $variables['#attached']['drupalSettings']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
 }
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_spc_page_attachments_alter(&$page) {
+  /** @var \Drupal\alshaya_spc\Controller\AlshayaSpcCartController $cartController */
+  $cartController = \Drupal::service('alshaya_spc.cart_controller');
+  $page['#attached']['drupalSettings']['cart'] = $cartController->getSettings();
+}

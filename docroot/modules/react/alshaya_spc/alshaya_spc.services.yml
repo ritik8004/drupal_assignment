@@ -73,3 +73,9 @@ services:
       - ['setPurgeProcessor', ['@?purge.processors']]
       - ['setPurgeInvalidationFactory', ['@?purge.invalidation.factory']]
 
+  alshaya_spc.cart_controller:
+    class: Drupal\alshaya_spc\Controller\AlshayaSpcCartController
+    arguments:
+      - '@request_stack'
+      - '@router.admin_context'
+      - '@config.factory'
