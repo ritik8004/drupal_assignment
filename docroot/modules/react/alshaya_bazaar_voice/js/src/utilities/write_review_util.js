@@ -1,8 +1,9 @@
 import {
-  getCurrentUserEmail, getCurrentUserStorage, updateUserStorageData,
+  getCurrentUserEmail, getCurrentUserStorage,
 } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
+import { updateStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -39,6 +40,16 @@ export const prepareRequest = (elements, fieldsConfig) => {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
           if (currentUserId === 0 && currentUserStorage !== null) {
+            // Add email value to anonymous user storage.
+            if (currentUserStorage.email === undefined
+              || (currentUserStorage.email !== undefined
+              && currentUserStorage.email !== elements[id].value)) {
+              const userObj = {
+                id: currentUserId,
+                email: elements[id].value,
+              };
+              updateStorageInfo('bvuser', userObj, currentUserId);
+            }
             if (currentUserStorage.bvUserId === undefined
               || (currentUserStorage.email !== undefined
               && currentUserStorage.email !== elements[id].value)) {
@@ -46,11 +57,16 @@ export const prepareRequest = (elements, fieldsConfig) => {
             }
           }
         } else if (id === 'usernickname') {
+          // Add nickname value to user storage.
           if (currentUserStorage !== null) {
             if (currentUserStorage.nickname === undefined
               || (currentUserStorage.nickname !== undefined
               && currentUserStorage.nickname !== elements[id].value)) {
-              updateUserStorageData(currentUserId, elements[id].value);
+              const userObj = {
+                id: currentUserId,
+                nickname: elements[id].value,
+              };
+              updateStorageInfo('bvuser', userObj, currentUserId);
             }
           }
         }
