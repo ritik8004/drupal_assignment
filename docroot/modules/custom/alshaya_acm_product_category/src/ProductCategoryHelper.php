@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product_category;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class Product Category Helper.
