@@ -26,12 +26,12 @@
   </categories>
   <short_description>
     {% if product.short_description is not empty %}
-      {{ product.short_description|raw }}
+      {{ product.short_description | spaceless | striptags | raw }}
     {% endif %}
   </short_description>
   <description>
     {% if product.description is not empty %}
-      {{ product.description|raw }}
+      {{ product.description | spaceless | striptags | raw }}
     {% endif %}
   </description>
   <custom_attributes>
