@@ -83,7 +83,7 @@ export default class ReviewSummary extends React.Component {
     showFullScreenLoader();
 
     // Check if current logged in user has already posted review on current PDP.
-    if (bazaarVoiceSettings.reviews.user.current_product_reviewed) {
+    if (bazaarVoiceSettings.reviews.user.is_reviewed) {
       this.setState({
         reviewedByCurrentUser: true,
       });
