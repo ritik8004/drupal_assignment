@@ -67,7 +67,7 @@ const ReviewDescription = ({
               </div>
             </div>
             <ConditionalView
-              condition={bazaarVoiceSettings.reviews.bazaar_voice.user_submitted_comments}
+              condition={bazaarVoiceSettings.reviews.bazaar_voice.comment_submission}
             >
               <ReviewCommentForm
                 ReviewId={reviewDescriptionData.Id}
@@ -80,7 +80,7 @@ const ReviewDescription = ({
               />
             </ConditionalView>
             <ConditionalView
-              condition={bazaarVoiceSettings.reviews.bazaar_voice.user_submitted_comments}
+              condition={bazaarVoiceSettings.reviews.bazaar_voice.comment_submission}
             >
               <div className="review-comment-display">
                 <ReviewCommentDisplay
