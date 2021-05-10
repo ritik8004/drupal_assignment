@@ -35,7 +35,7 @@ class AlshayaSpcCartController extends ControllerBase {
   protected $configFactory;
 
   /**
-   * SystemSettings constructor.
+   * Cart Controller constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
@@ -51,14 +51,7 @@ class AlshayaSpcCartController extends ControllerBase {
   }
 
   /**
-   * Instantiates a new instance of this class.
-   *
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   * @param \Drupal\Core\Routing\AdminContext $admin_context
-   *   The admin context.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   Config Factory service object.
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
@@ -84,7 +77,7 @@ class AlshayaSpcCartController extends ControllerBase {
     $settings = $this->readSettingsFromCode();
 
     // Get middleware timeouts.
-    $timeouts = array_map(function($key) {
+    $timeouts = array_map(function ($key) {
       return $key['timeout'];
     }, $settings['alshaya_backend_calls_options']['middleware']);
 
