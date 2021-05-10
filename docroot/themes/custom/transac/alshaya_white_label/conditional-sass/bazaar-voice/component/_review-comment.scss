@@ -20,6 +20,8 @@
 
         textarea {
           resize: none;
+          font-size: 1rem;
+          height: 1.5rem !important;
         }
       }
     }
@@ -143,6 +145,10 @@
       &-nickname {
         &:not(:only-child)::after {
           content: ',';
+        }
+
+        &.admin {
+          font-family: $alshaya-bold;
         }
       }
 

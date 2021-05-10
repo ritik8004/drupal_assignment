@@ -1,0 +1,27 @@
+.cloudzoom {
+  .cloudzoom__herocontainer {
+    @include breakpoint($desktop) {
+      width: calc(100% - (6.375rem + 0.25rem));
+    }
+
+    .cloudzoom__image {
+      .img-wrap {
+        @include breakpoint($desktop) {
+          height: auto;
+          // Adding some buffer and restricting height in case of very tall aspect ratio.
+          max-height: 37.5rem;
+          // Adding some height for loader icon
+          min-height: 20rem;
+        }
+      }
+    }
+  }
+}
+
+#lightSlider {
+  .slick-slide {
+    width: 5.5625rem !important;
+    height: 7.875rem !important;
+    padding: 0;
+  }
+}

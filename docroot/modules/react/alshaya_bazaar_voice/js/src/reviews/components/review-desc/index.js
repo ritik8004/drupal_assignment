@@ -4,10 +4,11 @@ import ConditionalView from '../../../common/components/conditional-view';
 import ReviewCommentForm from '../review-comment-form';
 import ReviewCommentDisplay from '../review-comment-display';
 import ReviewAdditionalAttributes from '../review-additional-attributes';
-import ReviewPhoto from '../review-photo';
+import ReviewPhotos from '../review-photo';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import DisplayStar from '../../../rating/components/stars';
+import ReviewResponseDisplay from '../review-response-display';
 import { getLanguageCode } from '../../../utilities/api/request';
 
 const ReviewDescription = ({
@@ -37,7 +38,7 @@ const ReviewDescription = ({
           <ConditionalView condition={reviewDescriptionData.Photos
             && reviewDescriptionData.Photos.length > 0}
           >
-            <ReviewPhoto photoCollection={reviewDescriptionData.Photos} />
+            <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
           </ConditionalView>
           <div className="review-inline-feedback">
             <div>
@@ -63,6 +64,12 @@ const ReviewDescription = ({
             <ReviewCommentForm
               ReviewId={reviewDescriptionData.Id}
             />
+            <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
+              <ReviewResponseDisplay
+                reviewId={reviewDescriptionData.Id}
+                reviewResponses={reviewDescriptionData.ClientResponses}
+              />
+            </ConditionalView>
             <div className="review-comment-display">
               <ReviewCommentDisplay
                 reviewId={reviewDescriptionData.Id}

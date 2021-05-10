@@ -373,8 +373,47 @@
 
   .empty-review-summary {
     display: flex;
-    justify-content: center;
-    margin-top: 2rem;
+
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+      justify-content: center;
+    }
+
+    .no-review-section {
+      width: 60%;
+
+      @include breakpoint($only-mobile) {
+        width: 76%;
+        text-align: center;
+      }
+
+      &::before {
+        content: '';
+        display: table;
+        border-top: 1px solid $rr-reviews-summary-border;
+        width: 4.25rem;
+        margin-top: -0.5rem;
+
+        @include breakpoint($only-mobile) {
+          margin: 0 auto;
+        }
+      }
+
+      .no-review-msg {
+        font-size: 0.8125rem;
+        color: $rr-review-summary-grey-text;
+      }
+    }
+
+    .button-wrapper {
+      width: 40%;
+      text-align: $right;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin-top: 0.5rem;
+      }
+    }
 
     .write-review-button {
       min-width: 20.3125rem;
@@ -388,6 +427,28 @@
       text-align: center;
       cursor: pointer;
       display: inline-block;
+    }
+  }
+
+  .load-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 4.5rem;
+
+    .load-more {
+      width: 10.625rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-border;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1;
+      text-align: center;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin: 0 0.5rem;
+      }
     }
   }
 }

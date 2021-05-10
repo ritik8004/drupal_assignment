@@ -222,6 +222,8 @@
       float: none;
       width: 25%;
       text-align: $right;
+      position: relative;
+      min-height: 1rem;
     }
 
     h1 {

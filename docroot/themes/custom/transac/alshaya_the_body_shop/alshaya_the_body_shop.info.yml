@@ -70,6 +70,11 @@ libraries-override:
       theme:
         css/conditional-sass/store-finder/store-finder.ltr.css: css/conditional-sass/store-finder/store-finder.ltr.css
 
+  alshaya_white_label/tooltip:
+    css:
+      theme:
+        css/conditional-sass/tooltip/tooltip.ltr.css: css/conditional-sass/tooltip/tooltip.ltr.css
+
   alshaya_white_label/promo-blocks:
     css:
       theme:

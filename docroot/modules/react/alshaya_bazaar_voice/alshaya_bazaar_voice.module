@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -64,8 +65,15 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     // Get avalable sorting options from config.
     $sorting_options = $alshayaBazaarVoice->getSortingOptions();
+    // Get the filter options to be rendered on review summary.
+    $filter_options = \Drupal::config('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
+    $filter_options = Yaml::parse($filter_options);
 
     \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
+    // Get sanitized sku.
+    $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
 
     $settings = [
       'user' => [
@@ -88,6 +96,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
         'stats' => 'Reviews',
         'Include' => $config->get('bv_content_types'),
         'sorting_options' => $sorting_options,
+        'filter_options' => $filter_options,
         'reviews_pagination_type' => $config->get('reviews_pagination_type'),
         'reviews_initial_load' => $config->get('reviews_initial_load'),
         'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
@@ -114,7 +123,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
     $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
-    $build['#attached']['drupalSettings']['productInfo'][$sku->getSku()]['alshaya_bazaar_voice'] = $settings;
+    $build['#attached']['drupalSettings']['productInfo'][$sanitized_sku]['alshaya_bazaar_voice'] = $settings;
   }
 }
 

@@ -338,8 +338,17 @@ export default class ReviewSummary extends React.Component {
     if (totalReviews === '') {
       return (
         <>
-          <div className="empty-review-summary">
-            <WriteReviewButton />
+          <div className="histogram-data-section">
+            <div className="rating-wrapper">
+              <div className="overall-summary-title">{getStringMessage('ratings_reviews')}</div>
+              <div className="empty-review-summary">
+                <div className="no-review-section">
+                  <p className="no-review-title">{getStringMessage('no_reviews_yet')}</p>
+                  <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
+                </div>
+                <WriteReviewButton />
+              </div>
+            </div>
           </div>
           <ConditionalView condition={postReviewData !== ''}>
             <PostReviewMessage postReviewData={postReviewData} />
@@ -413,7 +422,9 @@ export default class ReviewSummary extends React.Component {
             />
           </ConditionalView>
           <ConditionalView condition={reviewSettings === 'load_more' && loadMoreLimit < currentTotal}>
-            <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+            <div className="load-more-wrapper">
+              <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+            </div>
           </ConditionalView>
         </ConditionalView>
         <ConditionalView condition={noResultmessage !== null}>

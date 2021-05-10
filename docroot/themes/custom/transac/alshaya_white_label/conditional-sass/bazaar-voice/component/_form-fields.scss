@@ -49,3 +49,9 @@
     }
   }
 }
+
+body {
+  &.open-form-modal {
+    overflow: hidden;
+  }
+}

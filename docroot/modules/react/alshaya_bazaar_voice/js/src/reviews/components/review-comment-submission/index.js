@@ -1,6 +1,6 @@
 import React from 'react';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
+import { getbazaarVoiceSettings, getLanguageCode } from '../../../utilities/api/request';
+import { getTimeAgoDate } from '../../../../../../js/utilities/dateUtility';
 import getStringMessage from '../../../../../../js/utilities/strings';
 
 class ReviewCommentSubmission extends React.Component {
@@ -11,15 +11,15 @@ class ReviewCommentSubmission extends React.Component {
   }
 
   render() {
-    TimeAgo.addLocale(en);
-    const timeAgo = new TimeAgo('en-US');
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const countryCode = bazaarVoiceSettings.reviews.bazaar_voice.country_code;
     const { UserNickname, SubmissionTime, CommentText } = this.props;
     return (
       <div className="comment-submission-details">
         <div className="comment-submission-wrapper">
           <div className="comment-user-details">
             <span className="comment-user-nickname">{UserNickname}</span>
-            <span className="comment-user-date">{timeAgo.format(new Date(SubmissionTime))}</span>
+            <span className="comment-user-date">{getTimeAgoDate(SubmissionTime, countryCode, getLanguageCode())}</span>
           </div>
           <div className="comment-description">
             <span className="comment-description-text">{CommentText}</span>

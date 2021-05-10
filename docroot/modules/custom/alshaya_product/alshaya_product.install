@@ -12,6 +12,24 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Add new view mode 'matchback_mobile' for acq_product node bundle and a new views display.
+ */
+function alshaya_product_update_8032() {
+  $configs = [
+    'core.entity_view_mode.node.matchback_mobile',
+    'core.entity_view_display.node.acq_product.matchback_mobile',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_product');
+
+  $configs = [
+    'views.view.product_slider',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_product', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adds new block display for brand list.
  */
 function alshaya_product_update_8031() {

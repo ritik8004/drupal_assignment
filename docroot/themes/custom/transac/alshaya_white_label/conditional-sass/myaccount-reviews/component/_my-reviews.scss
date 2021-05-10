@@ -15,6 +15,7 @@
     .product-image-block {
       width: 5rem;
       height: 6.25rem;
+      flex-shrink: 0;
 
       img {
         width: 100%;
@@ -86,25 +87,10 @@
     }
 
     .thumbnail-img {
-      border: 0;
-      background: #fff;
-      box-sizing: border-box;
-      vertical-align: top;
-      margin: 0;
-      margin-bottom: 1%;
-      margin-#{$right}: 1%;
-      height: 8.75rem;
-      width: 8.75rem;
-      overflow: hidden;
-      zoom: 1;
-      flex-shrink: 0;
+      @include bv-photo-upload-container ();
 
       img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        object-position: center;
-        zoom: 1;
+        @include bv-photo-upload-image ();
       }
     }
   }
@@ -171,6 +157,48 @@
             font-family: $alshaya-thin;
             color: $rr-review-summary-grey-text;
           }
+        }
+      }
+    }
+  }
+
+  .load-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 4.5rem;
+
+    .load-more {
+      width: 10.625rem;
+      background: $rr-review-summary-btn-color;
+      color: $rr-review-summary-btn-text;
+      border: 0.0625rem solid $rr-review-summary-btn-border;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1;
+      text-align: center;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        margin: 0 0.5rem;
+      }
+    }
+  }
+}
+
+body[class*="reviews"] {
+  @include breakpoint($only-mobile) {
+    .c-user--node {
+      &.l-two--sf {
+        aside.c-sidebar-first {
+          display: none;
+        }
+      }
+    }
+
+    .c-user--node {
+      main {
+        #block-page-title {
+          display: block;
         }
       }
     }

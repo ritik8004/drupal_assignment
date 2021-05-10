@@ -29,3 +29,11 @@ bazaar_voice.review_sort_label_settings_form:
     _title: 'Review Sort Labels'
   requirements:
     _permission: 'administer site configuration'
+
+bazaar_voice.review_filter_settings_form:
+  path: '/admin/config/system/bazaar_voice/filter-settings'
+  defaults:
+    _form: '\Drupal\bazaar_voice\Form\ReviewFilterSettingsForm'
+    _title: 'Review Filters Settings'
+  requirements:
+    _permission: 'administer site configuration'

@@ -48,6 +48,8 @@
           height: auto;
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 37.5rem;
+          // Adding some height for loader icon
+          min-height: 20rem;
 
           .acq-content-product-modal & {
             img {
@@ -62,6 +64,7 @@
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 25rem;
           margin: auto;
+          min-height: 10rem;
 
           img {
             height: auto !important;

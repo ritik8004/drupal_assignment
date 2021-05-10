@@ -49,6 +49,24 @@
       }
     }
   }
+
+  figure {
+    .pdp-image-zoom-wrapper {
+      height: 100%;
+
+      @include breakpoint($desktop) {
+        min-height: 37.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        min-height: 18.75rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        min-height: 50vh;
+      }
+    }
+  }
 }
 
 .description-details {
