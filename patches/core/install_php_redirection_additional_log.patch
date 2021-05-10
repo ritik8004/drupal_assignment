@@ -1,0 +1,24 @@
+diff --git a/core/lib/Drupal/Core/DrupalKernel.php b/core/lib/Drupal/Core/DrupalKernel.php
+index 69972b1cce..d70d4f9763 100644
+--- a/core/lib/Drupal/Core/DrupalKernel.php
++++ b/core/lib/Drupal/Core/DrupalKernel.php
+@@ -701,6 +701,9 @@ public function handle(Request $request, $type = self::MASTER_REQUEST, $catch =
+       // installed yet (i.e., if no $databases array has been defined in the
+       // settings.php file) and we are not already installing.
+       if (!Database::getConnectionInfo() && !InstallerKernel::installationAttempted() && PHP_SAPI !== 'cli') {
++        if (Settings::get('installer_redirection_log', FALSE)) {
++          $this->container->get('logger.factory')->get('DrupalKernel')->error($e->getMessage());
++        }
+         $response = new RedirectResponse($request->getBasePath() . '/core/install.php', 302, ['Cache-Control' => 'no-cache']);
+       }
+       else {
+@@ -741,6 +744,9 @@ public function handle(Request $request, $type = self::MASTER_REQUEST, $catch =
+    */
+   protected function handleException(\Exception $e, $request, $type) {
+     if ($this->shouldRedirectToInstaller($e, $this->container ? $this->container->get('database') : NULL)) {
++      if (Settings::get('installer_redirection_log', FALSE)) {
++        $this->container->get('logger.factory')->get('DrupalKernel')->error($e->getMessage());
++      }
+       return new RedirectResponse($request->getBasePath() . '/core/install.php', 302, ['Cache-Control' => 'no-cache']);
+     }
+ 
