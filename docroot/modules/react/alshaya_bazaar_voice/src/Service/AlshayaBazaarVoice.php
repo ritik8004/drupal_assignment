@@ -405,15 +405,15 @@ class AlshayaBazaarVoice {
   }
 
   /**
-   * Get authors data from BV api.
+   * Check if product has been reviewed by current user.
    *
    * @param string $productId
    *   product Id.
    *
    * @return bool
-   *   Check if product has been reviewed by current user.
+   *   true if product has been reviewed by current user.
    */
-  public function isProductReviewedByCurrentUser($productId) {
+  public function isReviewedByCurrentUser($productId) {
     $userId = $this->currentUser->id();
     $extra_params = [
       'filter' => 'id:' . $userId,
