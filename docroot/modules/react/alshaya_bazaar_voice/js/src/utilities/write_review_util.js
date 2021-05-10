@@ -1,9 +1,8 @@
 import {
-  getCurrentUserEmail, getCurrentUserStorage,
+  getCurrentUserEmail, getCurrentUserStorage, updateUserStorageData,
 } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
-import { setStorageInfo, getStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -38,44 +37,24 @@ export const prepareRequest = (elements, fieldsConfig) => {
     // Add input data from field types.
     try {
       if (elements[id].value !== null) {
-        const userStorage = getStorageInfo('bvuser') !== null ? getStorageInfo('bvuser') : [];
-        let contentExists = false;
         if (id === 'useremail') {
           if (currentUserId === 0 && currentUserStorage !== null) {
             if (currentUserStorage.bvUserId === undefined
               || (currentUserStorage.email !== undefined
               && currentUserStorage.email !== elements[id].value)) {
-              params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}`;
+              params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
             }
           }
-          params += `&${id}=${elements[id].value}`;
         } else if (id === 'usernickname') {
-          if (currentUserId === 0 && currentUserStorage.email !== undefined
-            && currentUserStorage.bvUserId !== undefined
-            && currentUserStorage.nickname !== undefined) {
-            if (currentUserStorage.nickname !== elements[id].value) {
-              params += `&UserNickname=${elements[id].value}`;
-              const updatedStorage = userStorage.map((contentStorage) => {
-                // Check if current content already exists in storage.
-                if (contentStorage.userId === currentUserId) {
-                  const storageObj = { ...contentStorage };
-                  storageObj.nickname = elements[id].value;
-                  contentExists = true;
-                  return storageObj;
-                }
-                return contentStorage;
-              });
-              if (contentExists) {
-                setStorageInfo(JSON.stringify(updatedStorage), 'bvuser');
-              }
+          if (currentUserStorage !== null) {
+            if (currentUserStorage.nickname === undefined
+              || (currentUserStorage.nickname !== undefined
+              && currentUserStorage.nickname !== elements[id].value)) {
+              updateUserStorageData(currentUserId, elements[id].value);
             }
-            params += `&User=${currentUserStorage.bvUserId}`;
-          } else {
-            params += `&${id}=${elements[id].value}`;
           }
-        } else {
-          params += `&${id}=${elements[id].value}`;
         }
+        params += `&${id}=${elements[id].value}`;
       }
     } catch (e) { return null; }
 
@@ -93,15 +72,12 @@ export const prepareRequest = (elements, fieldsConfig) => {
     });
   }
 
-  if (currentUserId === 0 && currentUserStorage !== null) {
-    if (currentUserStorage.bvUserId === undefined || currentUserStorage.email === undefined) {
-      params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
-    }
-  }
   // Set user authenticated string (UAS).
-  if (getCurrentUserEmail() !== null && currentUserStorage !== null) {
-    if (currentUserStorage.uasToken !== undefined) {
+  if (currentUserStorage !== null) {
+    if (getCurrentUserEmail() !== null && currentUserStorage.uasToken !== undefined) {
       params += `&user=${currentUserStorage.uasToken}`;
+    } else if (currentUserId === 0 && currentUserStorage.bvUserId !== undefined) {
+      params += `&User=${currentUserStorage.bvUserId}`;
     }
   }
   // Set product id

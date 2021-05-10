@@ -1,16 +1,9 @@
 import { doRequest, getbazaarVoiceSettings } from './api/request';
-import { getStorageInfo, setStorageInfo } from './storage';
+import { getStorageInfo, updateStorageInfo } from './storage';
 import { fetchAPIData } from './api/apiData';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
-function saveUserInLocalStorage(currentUserObj) {
-  const userStorage = getStorageInfo('bvuser') !== null
-    ? getStorageInfo('bvuser') : [];
-  userStorage.push(currentUserObj);
-  setStorageInfo(JSON.stringify(userStorage), 'bvuser');
-  return userStorage;
-}
 /**
  * Get email address of current user.
  *
@@ -22,25 +15,27 @@ export const getCurrentUserEmail = () => {
 };
 
 export const setCurrentUserStorage = (userId) => {
-  let userStorage = null;
+  const userStorage = getStorageInfo('bvuser') !== null
+    ? getStorageInfo('bvuser') : [];
   const requestUrl = '/get-uas-token';
   const request = doRequest(requestUrl);
   let currentUserObj = null;
   // Initliaze user object for anonmymous user.
   if (userId === 0) {
     currentUserObj = {
-      userId,
+      id: userId,
     };
-    userStorage = saveUserInLocalStorage(currentUserObj);
+    updateStorageInfo('bvuser', currentUserObj, userId);
   } else if (request instanceof Promise) {
     return request
       .then((result) => {
         if (result.status === 200) {
           currentUserObj = {
-            userId,
+            id: userId,
             uasToken: result.data,
+            email: getCurrentUserEmail(),
           };
-          userStorage = saveUserInLocalStorage(currentUserObj);
+          updateStorageInfo('bvuser', currentUserObj, userId);
         }
         return null;
       })
@@ -53,7 +48,7 @@ export const getCurrentUserStorage = (userId) => {
   const userStorage = getStorageInfo('bvuser') !== null
     ? getStorageInfo('bvuser') : [];
   if (userStorage.length > 0) {
-    const currentUserObj = userStorage.find((userObj) => userObj.userId === userId);
+    const currentUserObj = userStorage.find((userObj) => userObj.id === userId);
     if (currentUserObj) {
       return currentUserObj;
     }
@@ -84,9 +79,27 @@ export const getUserReviews = (userId) => {
   return null;
 };
 
+/**
+ * Update storage data of current user.
+ * @param userId
+ * @param nickname
+ * @param email
+ */
+export const updateUserStorageData = (userId, nickname, email) => {
+  const userObj = {
+    id: userId,
+    nickname,
+  };
+  if (email !== undefined) {
+    userObj.email = email;
+  }
+  updateStorageInfo('bvuser', userObj, userId);
+};
+
 export default {
   getCurrentUserEmail,
   getCurrentUserStorage,
   setCurrentUserStorage,
   getUserReviews,
+  updateUserStorageData,
 };

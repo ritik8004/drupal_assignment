@@ -7,7 +7,7 @@ import {
 } from '../../../../utilities/user_util';
 import AuthConfirmationMessage from '../auth-confirmation-message';
 import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
-import { setStorageInfo, getStorageInfo } from '../../../../utilities/storage';
+import { updateStorageInfo } from '../../../../utilities/storage';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -52,11 +52,10 @@ export default class BvAuthConfirmation extends React.Component {
 
   setAnonymousUserCookies = (bvUserId) => {
     const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const userStorage = getStorageInfo('bvuser') !== null ? getStorageInfo('bvuser') : [];
-    const currentUserStorage = getCurrentUserStorage(bazaarVoiceSettings.reviews.user.user_id);
-    let contentExists = false;
+    const userId = bazaarVoiceSettings.reviews.user.user_id;
+    const currentUserStorage = getCurrentUserStorage(userId);
     // Store user information in bv cookies.
-    if (currentUserStorage !== null && bazaarVoiceSettings.reviews.user.user_id === 0) {
+    if (currentUserStorage !== null && userId === 0) {
       const params = `&productid=${bazaarVoiceSettings.productid}&User=${bvUserId}&Action=`;
       const apiData = fetchAPIData('/data/submitreview.json', params);
       if (apiData instanceof Promise) {
@@ -67,23 +66,13 @@ export default class BvAuthConfirmation extends React.Component {
             if (result.data.Data.Fields !== undefined
               && result.data.Data.Fields.usernickname.Value !== null
               && result.data.Data.Fields.useremail.Value !== null) {
-              if (userStorage !== null) {
-                const updatedStorage = userStorage.map((contentStorage) => {
-                  // Check if current content already exists in storage.
-                  if (contentStorage.userId === 0) {
-                    const storageObj = { ...contentStorage };
-                    storageObj.nickname = result.data.Data.Fields.usernickname.Value;
-                    storageObj.email = result.data.Data.Fields.useremail.Value;
-                    storageObj.bvUserId = bvUserId;
-                    contentExists = true;
-                    return storageObj;
-                  }
-                  return contentStorage;
-                });
-                if (contentExists) {
-                  setStorageInfo(JSON.stringify(updatedStorage), 'bvuser');
-                }
-              }
+              const userObj = {
+                id: userId,
+                nickname: result.data.Data.Fields.usernickname.Value,
+                email: result.data.Data.Fields.useremail.Value,
+                bvUserId,
+              };
+              updateStorageInfo('bvuser', userObj, userId);
             }
           } else {
             Drupal.logJavascriptError('review-summary', result.error);

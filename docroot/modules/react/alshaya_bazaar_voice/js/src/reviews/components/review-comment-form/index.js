@@ -4,13 +4,12 @@ import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
 import {
-  getCurrentUserEmail, getCurrentUserStorage,
+  getCurrentUserEmail, getCurrentUserStorage, updateUserStorageData,
 } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getStorageInfo, setStorageInfo } from '../../../utilities/storage';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -140,61 +139,16 @@ class ReviewCommentForm extends React.Component {
       }
       // Set user authenticated string (UAS).
       if (currentUserStorage !== null) {
-        const userStorage = getStorageInfo('bvuser') !== null ? getStorageInfo('bvuser') : [];
-        let contentExists = false;
         if (currentUserId !== 0 && currentUserStorage.uasToken !== undefined) {
           authParams += `&user=${currentUserStorage.uasToken}&UserNickname=${nickname}`;
-          if (userStorage !== null) {
-            const updatedStorage = userStorage.map((contentStorage) => {
-              // Check if current content already exists in storage.
-              if (contentStorage.userId === userId) {
-                const storageObj = { ...contentStorage };
-                storageObj.nickname = nickname;
-                storageObj.email = email;
-                contentExists = true;
-                return storageObj;
-              }
-              return contentStorage;
-            });
-            if (contentExists) {
-              setStorageInfo(JSON.stringify(updatedStorage), 'bvuser');
-            } else {
-              const currentUserObj = {
-                userId,
-                nickname,
-                email,
-              };
-              userStorage.push(currentUserObj);
-              setStorageInfo(JSON.stringify(userStorage), 'bvuser');
-            }
-          }
+          // Update current user in storage.
+          updateUserStorageData(userId, nickname, email);
         } else if (currentUserId === 0 && currentUserStorage.email !== undefined
           && currentUserStorage.bvUserId !== undefined
           && currentUserStorage.nickname !== undefined) {
           if (currentUserStorage.nickname !== nickname) {
             authParams += `&UserNickname=${nickname}`;
-            const updatedStorage = userStorage.map((contentStorage) => {
-              // Check if current content already exists in storage.
-              if (contentStorage.userId === userId) {
-                const storageObj = { ...contentStorage };
-                storageObj.nickname = nickname;
-                storageObj.email = email;
-                contentExists = true;
-                return storageObj;
-              }
-              return contentStorage;
-            });
-            if (contentExists) {
-              setStorageInfo(JSON.stringify(updatedStorage), 'bvuser');
-            } else {
-              const currentUserObj = {
-                userId,
-                nickname,
-                email,
-              };
-              userStorage.push(currentUserObj);
-              setStorageInfo(JSON.stringify(userStorage), 'bvuser');
-            }
+            updateUserStorageData(userId, nickname, email);
           }
           authParams += `&User=${currentUserStorage.bvUserId}`;
         } else {
