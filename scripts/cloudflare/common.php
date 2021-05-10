@@ -80,3 +80,31 @@ function clear_cache_for_domain(string $zone, string $domain) {
 
   return $result;
 }
+
+function clear_cache_for_url(string $zone, string $domain, string $url) {
+  $data = [
+    'files' => ['https://' . $url],
+  ];
+
+  $api_url = 'https://api.cloudflare.com/client/v4/zones/' . $zone . '/purge_cache';
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $api_url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+  $headers = [];
+  $headers[] = 'Content-Type: application/json';
+  $headers[] = 'Authorization: Bearer ' . $GLOBALS['api_key'];
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+  $result = curl_exec($ch);
+  if (curl_errno($ch)) {
+    echo 'Error:' . curl_error($ch);
+    return '';
+  }
+  curl_close($ch);
+
+  return $result;
+}
