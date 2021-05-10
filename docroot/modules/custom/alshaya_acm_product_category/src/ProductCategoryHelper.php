@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product_category;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class Product Category Helper.
@@ -68,12 +69,12 @@ class ProductCategoryHelper {
    *
    * @param string $baseID
    *   Block base id.
-   * @param object $term
+   * @param \Drupal\taxonomy\TermInterface $term
    *   Taxonomy term.
    * @param string $langcode
    *   Language code.
    */
-  public function productCategoryBuild($baseID, $term, $langcode) {
+  public function productCategoryBuild($baseID, TermInterface $term, $langcode) {
     $parent_id = 0;
 
     $context = [
