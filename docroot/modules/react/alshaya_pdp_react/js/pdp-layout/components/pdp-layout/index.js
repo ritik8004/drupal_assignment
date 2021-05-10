@@ -21,7 +21,7 @@ import Lozenges
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
-  const [panelContent, setPanelContent] = useState([]);
+  const [panelContent, setPanelContent] = useState(null);
   const { productInfo } = drupalSettings;
   let skuItemCode = '';
 
@@ -148,15 +148,11 @@ const PdpLayout = () => {
   []);
 
   const getPanelData = useCallback((data) => {
-    setPanelContent([...panelContent, data]);
+    setPanelContent(data);
   }, [panelContent]);
 
   const removePanelData = useCallback(() => {
-    if (panelContent !== undefined) {
-      const panelData = [...panelContent];
-      panelData.splice(-1, 1);
-      setPanelContent(panelData);
-    }
+    setPanelContent(null);
   }, [panelContent]);
 
   return (skuItemCode) ? (
@@ -270,7 +266,7 @@ const PdpLayout = () => {
           ))}
         </div>
       ) : null}
-      <PpdPanel panelContent={panelContent} skuItemCode={skuItemCode} />
+      <PpdPanel panelContent={panelContent} />
     </>
   ) : emptyRes;
 };
