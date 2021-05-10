@@ -99,6 +99,11 @@
           margin-#{$left}: 0.875rem;
           width: calc(100% - (5.5625rem + 0.875rem));
         }
+
+        &.fix-button {
+          border: 0.9375rem solid;
+          height: 5rem;
+        }
       }
     }
 
