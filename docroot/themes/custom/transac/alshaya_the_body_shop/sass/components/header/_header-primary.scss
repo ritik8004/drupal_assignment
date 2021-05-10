@@ -213,20 +213,34 @@ header {
 
   .menu__in {
     margin-#{$right}: 1rem;
+    background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
+
+    &::after {
+      content: '';
+    }
   }
 
   .menu__back {
     margin-#{$left}: 1.25rem;
     margin-#{$right}: 0.625rem;
+    background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
+    transform: rotate(-180deg);
+    width: 0.75rem;
+    height: 1.0625rem;
 
     html[lang=ar] & {
       transform: rotate(180deg);
+    }
+
+    &::after {
+      content: '';
     }
   }
 
   .menu--two__list-item {
     .menu__in {
       margin-#{$right}: 1rem;
+      margin-top: -2rem;
     }
   }
 }
