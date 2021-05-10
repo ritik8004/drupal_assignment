@@ -74,11 +74,16 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     // Get sanitized sku.
     $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
 
+    // Check if logged in user has already reviewed the product.
+    $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
+    $current_product_reviewed = $alshaya_bazaar_voice->isProductReviewedByCurrentUser($sanitized_sku);
+
     $settings = [
       'user' => [
         'user_email' => \Drupal::currentUser()->getEmail(),
         'user_id' => \Drupal::currentUser()->id(),
         'user_name' => \Drupal::currentUser()->getUsername(),
+        'current_product_reviewed' => $current_product_reviewed,
       ],
       'product' => [
         'url' => $productNode->toUrl()->toString(),
