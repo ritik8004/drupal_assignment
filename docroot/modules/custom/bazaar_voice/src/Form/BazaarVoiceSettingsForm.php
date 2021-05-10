@@ -168,8 +168,8 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#title' => $this->t('User Submitted Comments'),
       '#description' => $this->t('Select Enabled to let users comment on reviews. Users will be able to read the comments along with the reviews.'),
       '#options' => [
-        TRUE => $this->t('Enabled'),
-        FALSE => $this->t('Disabled'),
+        0 => $this->t('Disabled'),
+        1 => $this->t('Enabled'),
       ],
       '#default_value' => $config->get('user_submitted_comments'),
     ];
@@ -182,7 +182,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#states' => [
         'visible' => [
           'input[name="user_submitted_comments"]' => [
-            'value' => 'enabled',
+            'value' => 1,
           ],
         ],
       ],
@@ -196,7 +196,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#states' => [
         'visible' => [
           'input[name="user_submitted_comments"]' => [
-            'value' => 'enabled',
+            'value' => 1,
           ],
         ],
       ],
@@ -210,7 +210,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#states' => [
         'visible' => [
           'input[name="user_submitted_comments"]' => [
-            'value' => 'enabled',
+            'value' => 1,
           ],
         ],
       ],
