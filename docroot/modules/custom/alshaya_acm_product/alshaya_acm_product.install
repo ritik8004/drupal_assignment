@@ -53,6 +53,23 @@ function alshaya_acm_product_update_8068() {
 /**
  * Implements hook_update_N().
  *
+ * Change in a local storage cache time.
+ */
+function alshaya_acm_product_update_8068() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    $manager::MODE_REPLACE_KEY,
+    ['replace_keys' => ['local_storage_cache_time']]
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add translations for error_code 604.
  */
 function alshaya_acm_product_update_8067() {
