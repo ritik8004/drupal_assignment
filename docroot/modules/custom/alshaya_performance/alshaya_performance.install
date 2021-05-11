@@ -150,20 +150,4 @@ function alshaya_performance_update_8001() {
 function alshaya_performance_install() {
   // Set log mode from settings.
   alshaya_performance_reset_log_mode();
-  
-  // Setting required config for advagg css minify.
-  $css_minify_config = \Drupal::configFactory()->getEditable('advagg_css_minify.settings');
-  $css_minify_config->set('add_license', false);
-  $css_minify_config->save();
-
-  // Setting required config for advagg js minify.
-  $js_minify_config = \Drupal::configFactory()->getEditable('advagg_js_minify.settings');
-  $js_minify_config->set('minifier', 5);
-  $js_minify_config->set('add_license', false);
-  $js_minify_config->save();
-  // Setting required config for advagg bundler.
-  $bundler_config = \Drupal::configFactory()->getEditable('advagg_bundler.settings');
-  $bundler_config->set('css.max', 2);
-  $bundler_config->set('js.max', 2);
-  $bundler_config->save();
 }
