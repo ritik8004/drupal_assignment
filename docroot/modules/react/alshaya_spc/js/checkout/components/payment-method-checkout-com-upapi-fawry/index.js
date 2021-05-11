@@ -35,7 +35,7 @@ const PaymentMethodCheckoutComUpapiFawry = (props) => {
         </div>
         <div className="c-input__bar" />
         <label>{Drupal.t('Email')}</label>
-        <div id="fawry-email-error" className="error" />
+        <div id="fawry-email-error" />
       </div>
       <div className="spc-type-textfield">
         <label>{Drupal.t('Mobile Number')}</label>
@@ -50,7 +50,7 @@ const PaymentMethodCheckoutComUpapiFawry = (props) => {
           />
         </div>
         <div className="c-input__bar" />
-        <div id="fawry-mobile-number-error" className="error" />
+        <div id="fawry-mobile-number-error" />
       </div>
       <div className="fawry-suffix-description">
         <p>
