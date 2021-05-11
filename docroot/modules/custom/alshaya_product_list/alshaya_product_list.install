@@ -24,7 +24,7 @@ function alshaya_product_list_update_8002() {
     ],
     'alshaya_product_list',
     'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
+    AlshayaConfigManager::MODE_MERGE
   );
 
   // Create and enable the new product list lhn block.
