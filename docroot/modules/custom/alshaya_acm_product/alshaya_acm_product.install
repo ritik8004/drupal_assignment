@@ -16,7 +16,7 @@ use Drupal\user\Entity\Role;
  *
  * [6.2.0] Delete the configs for /skus/list API.
  */
-function alshaya_acm_product_update_8069() {
+function alshaya_acm_product_update_8070() {
   // Deleting the memory limit policy for /skus/list API.
   \Drupal::configFactory()->getEditable('memory_limit_policy.memory_limit_policy.path_based_memory')->delete();
   // Deleting the sku_images rest config.
@@ -33,7 +33,7 @@ function alshaya_acm_product_update_8069() {
  *
  * Add new Product Status resource.
  */
-function alshaya_acm_product_update_8068() {
+function alshaya_acm_product_update_8069() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs([
@@ -48,6 +48,23 @@ function alshaya_acm_product_update_8068() {
 
   // Rebuild router.
   \Drupal::service('router.builder')->rebuild();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change in a local storage cache time.
+ */
+function alshaya_acm_product_update_8068() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    $manager::MODE_REPLACE_KEY,
+    ['replace_keys' => ['local_storage_cache_time']]
+  );
 }
 
 /**

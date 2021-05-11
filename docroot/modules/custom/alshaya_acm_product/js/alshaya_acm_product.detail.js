@@ -43,13 +43,35 @@
       // Trigger matchback color change on main product color change.
       $('article[data-vmode="full"] form:first .form-item-configurable-swatch').once('product-swatch-change').on('change', function () {
         var selected = $(this).val();
+        var viewMode = $('.horizontal-crossell article.entity--type-node').attr('data-vmode');
 
-        $('article[data-vmode="matchback"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
+        $('article[data-vmode="' + viewMode + '"] .form-item-configurable-swatch option[value="' + selected + '"]').each(function () {
           var swatchSelector = $(this).parent().siblings('.select2Option');
 
           if (typeof swatchSelector !== 'undefined') {
             var selectedIndex = $(this).index();
             swatchSelector.find('a[data-select-index="' + selectedIndex + '"]').trigger('click');
+
+            // Add selected sku id in matchback product URL.
+            var sku = $(this).parents('form').attr('data-sku');
+            var selectedValue = $(this).text();
+            var variants = drupalSettings[viewMode][sku].variants
+            var selectedId = '';
+
+            // Get the entity id of the color selected.
+            $.each(variants, function (key, value) {
+              $.each(value.configurableOptions, function (i, e) {
+                if (e.attribute_id === 'attr_color' && e.value === selectedValue) {
+                  selectedId = value.id;
+                }
+              });
+              if (selectedId !== '') {
+                var productLinkSelector = $('article[data-sku="' + sku + '"]').find('a.full-prod-link');
+                var productLinkValue = productLinkSelector.attr('href').split('?')[0];
+                productLinkSelector.attr('href', productLinkValue + '?selected=' + selectedId);
+                return false;
+              }
+            });
           }
         });
       });
@@ -86,9 +108,7 @@
       $('.sku-base-form').once('load').each(function () {
         var sku = $(this).attr('data-sku');
         var viewMode = $(this).parents('article.entity--type-node').attr('data-vmode');
-        var productKey = (viewMode === 'matchback')
-          ? 'matchback'
-          : 'productInfo';
+        var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
 
         // Fill the view mode form field.
         $(this).parents('article.entity--type-node[data-vmode="' + viewMode + '"]').find('.product-view-mode').val(viewMode);
@@ -116,6 +136,9 @@
 
           if (selected === '' && drupalSettings.showImagesFromChildrenAfterAllOptionsSelected) {
             Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, drupalSettings[productKey][sku].gallery);
+          }
+          else if (viewMode === 'matchback_mobile' && $(window).width() < 768) {
+            Drupal.updateMatchbackMobileImage(node, variantInfo['matchback_teaser_image']);
           }
           else {
             Drupal.updateGallery(node, drupalSettings[productKey][sku].layout, variantInfo.gallery);
@@ -193,7 +216,7 @@
       // Show images for oos product on PDP.
       $('.out-of-stock').once('load').each(function () {
         var sku = $(this).parents('article.entity--type-node:first').attr('data-sku');
-        var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+        var productKey = Drupal.getProductKeyForProductViewMode($(this).parents('article.entity--type-node').attr('data-vmode'));
 
         if (typeof drupalSettings[productKey] === 'undefined' || typeof drupalSettings[productKey][sku] === 'undefined') {
           return;
@@ -212,7 +235,8 @@
       if ($('.price-suffix-matchback').length) {
         $('select.edit-quantity').once('product-edit-quantity').on('change', function () {
           var quantity = $(this).val();
-          var productKey = ($(this).parents('article.entity--type-node').attr('data-vmode') == 'matchback') ? 'matchback' : 'productInfo';
+          var productKey = Drupal.getProductKeyForProductViewMode($(this).parents('article.entity--type-node').attr('data-vmode'));
+
           var eachSelector = $('.price-block-' + drupalSettings[productKey][$(this).closest('form').attr('data-sku')].identifier + ' .price-suffix-matchback');
 
           if (quantity > 1) {
@@ -254,6 +278,15 @@
       });
     }
   });
+
+  Drupal.updateMatchbackMobileImage = function (product, matchback_mobile_image) {
+    if (matchback_mobile_image === '' || matchback_mobile_image === null) {
+      return;
+    }
+    else {
+      $(product).find('.matchback-image-wrapper img').attr('src', matchback_mobile_image);
+    }
+  };
 
   Drupal.updateGallery = function (product, layout, gallery) {
     if (gallery === '' || gallery === null) {
@@ -415,7 +448,7 @@
       var orderLimitMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').siblings('.order-quantity-limit-message');
       var orderLimitMobileMsgSelector = selectedInput.closest('.field--name-field-skus.field__items').parents('.acq-content-product').find('.order-quantity-limit-message.mobile-only');
       var viewMode = selectedInput.parents('article.entity--type-node').attr('data-vmode');
-      var productKey = (viewMode === 'matchback') ? 'matchback' : 'productInfo';
+      var productKey = Drupal.getProductKeyForProductViewMode(viewMode);
       var parentInfo = typeof drupalSettings[productKey][sku] !== "undefined" ? drupalSettings[productKey][sku] : '';
       // At parent level, sku and selected will be same.
       var variantInfo = (typeof drupalSettings[productKey][sku] !== "undefined"
@@ -519,5 +552,13 @@
       $('.content__title_wrapper').addClass('show-sticky-wrapper');
     }
   });
+
+  Drupal.getProductKeyForProductViewMode = function (viewMode) {
+    var productKey = (viewMode === 'matchback' || viewMode === 'matchback_mobile')
+      ? viewMode
+      : 'productInfo';
+
+    return productKey
+  };
 
 })(jQuery, Drupal, drupalSettings);

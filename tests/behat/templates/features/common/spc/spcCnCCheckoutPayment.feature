@@ -1,4 +1,4 @@
-@javascript @guest @checkoutPayment @clickCollect @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat @flaeuat @bbwaeuat
+@javascript @guest @checkoutPayment @clickCollect @vsaeqa @hmsaqa @hmaeuat @mckwuat @hmkwuat @hmsauat @flkwuat @vssauat @vsaeuat @flaeuat @bbwaeuat
 Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method for Guest User
 
   Background:
@@ -25,10 +25,11 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I wait 20 seconds
     And I select the collection store
+    And I wait 30 seconds
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish

@@ -1,5 +1,5 @@
 import { doRequest, getbazaarVoiceSettings } from './api/request';
-import { fetchAPIData } from './api/apiData';
+import { getStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -30,30 +30,25 @@ export const getUasToken = () => {
 };
 
 /**
- * Get reviews posted by user.
- * @param userId
+ * Validate to open writa a review form on page load.
+ *
+ * @returns {boolean}
  */
-export const getUserReviews = (userId) => {
-  const apiUri = '/data/authors.json';
-  const params = `&filter=id:${userId}&Include=Reviews`;
-  const apiData = fetchAPIData(apiUri, params);
-  if (apiData instanceof Promise) {
-    return apiData
-      .then((result) => {
-        if (result.error === undefined && result.data !== undefined) {
-          if (result.data.Results.length > 0) {
-            return result.data.Includes.Reviews;
-          }
-        }
-        return null;
-      })
-      .catch((error) => error);
+export const isOpenWriteReviewForm = () => {
+  const query = new URLSearchParams(document.referrer);
+  const openPopup = query.get('openPopup');
+  if (bazaarVoiceSettings.reviews !== undefined
+    && bazaarVoiceSettings.reviews.user.user_id > 0
+    && getStorageInfo('openPopup')
+    && openPopup !== null
+    && !bazaarVoiceSettings.reviews.user.is_reviewed) {
+    return true;
   }
-  return null;
+  return false;
 };
 
 export default {
   getCurrentUserEmail,
   getUasToken,
-  getUserReviews,
+  isOpenWriteReviewForm,
 };

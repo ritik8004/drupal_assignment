@@ -54,18 +54,19 @@
 }
 
 .cloudzoom {
-  &.thumbnail-count-1 {
-    .cloudzoom__herocontainer {
-      @include breakpoint($tablet) {
-        margin-#{$right}: 3.125rem;
-      }
+  @include breakpoint($desktop) {
+    &.thumbnail-count-1 {
+      margin-#{$right}: 3.125rem;
+    }
+
+    &:not(.thumbnail-count-1) {
+      margin-#{$right}: 6.125rem;
     }
   }
 
   .cloudzoom__herocontainer {
     @include breakpoint($desktop) {
       width: calc(100% - (6.5rem + 8rem));
-      margin-#{$right}: 6.125rem;
     }
   }
 

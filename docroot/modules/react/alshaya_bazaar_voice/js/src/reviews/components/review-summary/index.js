@@ -17,7 +17,7 @@ import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
-import { getUasToken, getUserReviews, getCurrentUserEmail } from '../../../utilities/user_util';
+import { getUasToken, getCurrentUserEmail } from '../../../utilities/user_util';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
@@ -108,20 +108,10 @@ export default class ReviewSummary extends React.Component {
     showFullScreenLoader();
 
     // Check if current logged in user has already posted review on current PDP.
-    if (bazaarVoiceSettings.reviews.user.user_id !== 0) {
-      const currentUserReviews = getUserReviews(bazaarVoiceSettings.reviews.user.user_id);
-      if (currentUserReviews !== null) {
-        currentUserReviews.then((userReviews) => {
-          const productReviewed = Object.values(userReviews).find(
-            (review) => review.ProductId === bazaarVoiceSettings.productid,
-          );
-          if (productReviewed !== undefined) {
-            this.setState({
-              reviewedByCurrentUser: true,
-            });
-          }
-        });
-      }
+    if (bazaarVoiceSettings.reviews.user.is_reviewed) {
+      this.setState({
+        reviewedByCurrentUser: true,
+      });
     }
 
     let sortParams = '';

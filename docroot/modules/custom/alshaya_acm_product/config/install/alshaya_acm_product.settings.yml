@@ -4,7 +4,7 @@ list_view_items_per_page: 12
 list_view_auto_page_load_count: 3
 back_to_list: '1'
 auto_load_trigger_offset: 800
-local_storage_cache_time: 60
+local_storage_cache_time: 15
 pdp_gallery_pager_limit: 5
 brand_logo_base_path: 'media/attribute/swatch'
 brand_logo_extension: 'jpg'
