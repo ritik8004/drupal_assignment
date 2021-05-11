@@ -21,7 +21,9 @@ function alshaya_acm_product_update_8068() {
   $manager->updateConfigs(
     ['alshaya_acm_product.settings'],
     'alshaya_acm_product',
-    'install'
+    'install',
+    $manager::MODE_REPLACE_KEY,
+    ['replace_keys' => ['local_storage_cache_time']]
   );
 }
 
