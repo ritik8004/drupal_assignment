@@ -14,7 +14,7 @@ class AlshayaCartConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'algolia_cart_config_form';
+    return 'alshaya_cart_config_form';
   }
 
   /**
