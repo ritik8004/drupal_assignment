@@ -75,7 +75,7 @@ class CheckoutComUpapiFawry extends AlshayaSpcPaymentMethodPluginBase implements
       ],
       [
         'key' => 'fawry_payment_option_suffix_description',
-        'value' => $this->t("Pay for your order through any of @fawry_cash_point_link at your convenient time and location across Egypt."),
+        'value' => $this->t("Pay for your order through any of <a href='#'>Fawry's cash points</a> at your convenient time and location across Egypt."),
       ],
       [
         'key' => 'fawry_checkout_confirmation_message_prefix',
