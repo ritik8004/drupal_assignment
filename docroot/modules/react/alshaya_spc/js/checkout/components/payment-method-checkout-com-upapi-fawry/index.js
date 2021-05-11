@@ -1,11 +1,9 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import getStringMessage from '../../../utilities/strings';
 
 const PaymentMethodCheckoutComUpapiFawry = (props) => {
   const countryMobileCodeMaxLength = drupalSettings.mobile_maxlength;
-
-  let fawrySuffixText = getStringMessage('fawry_payment_option_suffix_description');
-  fawrySuffixText = fawrySuffixText.split('@fawry_cash_point_link');
 
   const {
     cart: {
@@ -56,9 +54,9 @@ const PaymentMethodCheckoutComUpapiFawry = (props) => {
       </div>
       <div className="fawry-suffix-description">
         <p>
-          {fawrySuffixText[0]}
-          <a href="#">{Drupal.t("Fawry's cash points")}</a>
-          {fawrySuffixText[1]}
+          {
+            parse(getStringMessage('fawry_payment_option_suffix_description'))
+          }
         </p>
       </div>
     </div>
