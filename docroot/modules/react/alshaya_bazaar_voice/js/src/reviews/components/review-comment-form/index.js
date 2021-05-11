@@ -37,6 +37,7 @@ class ReviewCommentForm extends React.Component {
           <div className="comment-form-title">
             {getStringMessage('post_a_comment')}
           </div>
+          <BazaarVoiceMessages />
           <div className="comment-form-fields">
             <input type="hidden" name="blackBox" id="ioBlackBox" />
             <div className="form-item">
@@ -145,7 +146,7 @@ class ReviewCommentForm extends React.Component {
       }
       // Add device finger printing string.
       if (e.target.elements.blackBox.value !== '') {
-        authParams += `&fp=${e.target.elements.blackBox.value}`;
+        authParams += `&fp=${encodeURIComponent(e.target.elements.blackBox.value)}`;
       }
       const params = `&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
       const apiData = postAPIData('/data/submitreviewcomment.json', params);
@@ -240,8 +241,6 @@ class ReviewCommentForm extends React.Component {
           </div>
           {showCommentForm ? this.showCommentForm() : null}
           {showCommentSubmission ? this.showCommentSubmission() : null}
-          {showCommentForm
-           && (<BazaarVoiceMessages />)}
         </>
       );
     }

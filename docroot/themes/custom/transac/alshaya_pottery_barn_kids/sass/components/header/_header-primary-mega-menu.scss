@@ -48,25 +48,39 @@
         }
       }
     }
-  }
-}
 
-.block-alshaya-main-menu {
-  @include breakpoint($desktop) {
-    .menu__list-item.menu--one__list-item.has-child {
-      .menu--two__list {
-        margin-top: 0.1875rem;
-        padding-top: 0.5rem;
-      }
-    }
-  }
-
-  li.menu--one__list-item {
     @include breakpoint($desktop) {
       &:hover {
         div.menu--one__link {
           box-shadow: 0 0.125rem 0 0 $mm_l1_link_active_shadow;
         }
+      }
+    }
+
+    // MM L1 active.
+    &:hover {
+      @include breakpoint($desktop) {
+        a.menu--one__link {
+          box-shadow: 0 0.125rem 0 0 $mm_l1_link_active_shadow;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .menu--one__link {
+        &.active {
+          box-shadow: 0 0.125rem 0 0 $mm_l1_link_active_shadow;
+          border-bottom: inherit;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .menu__list-item.menu--one__list-item.has-child {
+      .menu--two__list {
+        margin-top: 0.1875rem;
+        padding-top: 0.5rem;
       }
     }
   }
@@ -86,26 +100,6 @@
     &:hover {
       li.menu--one__list-item a.menu--one__link {
         border-bottom: inherit;
-      }
-    }
-  }
-
-  // MM L1 active.
-  li.menu--one__list-item {
-    &:hover {
-      @include breakpoint($desktop) {
-        a.menu--one__link {
-          box-shadow: 0 0.125rem 0 0 $mm_l1_link_active_shadow;
-        }
-      }
-    }
-
-    @include breakpoint($desktop) {
-      .menu--one__link {
-        &.active {
-          box-shadow: 0 0.125rem 0 0 $mm_l1_link_active_shadow;
-          border-bottom: inherit;
-        }
       }
     }
   }

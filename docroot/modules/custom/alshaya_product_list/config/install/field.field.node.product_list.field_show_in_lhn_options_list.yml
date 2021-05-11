@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_show_in_lhn_options_list
+    - node.type.product_list
+  module:
+    - options
+id: node.product_list.field_show_in_lhn_options_list
+field_name: field_show_in_lhn_options_list
+entity_type: node
+bundle: product_list
+label: 'Show in LHN Options List'
+description: '`None` value is treated as `Same as LHN`.'
+required: false
+translatable: false
+skip_translation_check: 0
+default_value:
+  -
+    value: 'Same as LHN'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

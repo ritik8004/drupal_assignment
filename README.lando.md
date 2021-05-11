@@ -17,7 +17,13 @@ support for this functionality.
 ### Host resolution
 
 Because we're not using .lndo URLs which get resolved by public DNS, we need to edit our own /etc/hosts files to add
-entries for the Alshaya sites - in the same way that the Vagrant VM plugin does this for us when using DrupalVM.
+entries for the Alshaya sites - in the same way that the Vagrant VM plugin does this for us when using DrupalVM, example:
+```
+127.0.0.1  local.alshaya-aeoae.com
+127.0.0.1  local.alshaya-bpkw.com
+127.0.0.1  local.alshaya-pbkkw.com
+127.0.0.1  local.alshaya-muae.com
+```
 
 ### SSH
 
@@ -32,21 +38,22 @@ password on each use, which is a minor irritation.
 
 ### Build steps
 
+Requirements
+* Docker
+* Lando
+
 Ensure that you've added your sites to the /etc/hosts file on your local machine, and that you've copied your SSH keys
 as per the instructions above.
 
 All steps are executed on your host OS.
 
-  * `composer clear-cache`
-  * `composer install`
-  * `composer blt-alias`
   * `lando start` - this will configure and set up your containers and services.
-
-  * `lando blt blt:init:git-hooks`
-  * `lando blt blt:init:settings`
+  * `lando composer install` - This will install all the composer packages.
+  * `lando blt-init` - this will initialize BLT aliases, git hooks and settings.
   * `lando frontend-setup` - see notes on BLT below
   * `lando frontend-build` - see notes on BLT below
-  * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build
+  * `lando blt refresh:local <sitename>` - where <sitename> is the site you want to build. If you don't specify the
+     site name, you will be able to pick the name from a list.
 
 You should now be able to access the site in your browser at https://local.alshaya-<sitename>.com/
 
@@ -132,11 +139,10 @@ For example, `lando behat-run --profile=hm-kw-uat-en-desktop`.
 
 ### Observing Behat
 
-You will need a vnc viewer in order to do this.  Recommended is "RealVNC Viewer". On mac, install either using
-`homebrew cask install vnc-viewer` or from the DMG file on the RealVNC site.
-
-To observe, before running tests, point your VNC viewer at `localhost` on port `4444`.  If asked for a password, you
-should use `secret`.
+On the latest MacOS you can use **Screen Sharing** app to connect using `localhost:4444`. If you are using an older
+version of MacOS, you can install "RealVNC Viewer" either using -`homebrew cask install vnc-viewer` or from the DMG file
+on the RealVNC site.
+If asked for a password, you should use `secret`.
 
 Now run the tests, and you should be able to observe the browser activity.
 
@@ -146,8 +152,8 @@ Performance is not as good as a dedicated VM, for a number of reasons, but mostl
 
 We have made some attempt to improve this by using `excludes` within `.lando.yml` to exclude vendor folder from shares.
 Instead, it's contents are copied into the container at build time. However, this does mean that containers **must be
-rebuilt after each composer operation that changes the contents of your vendor folder**, for example `composer install`
-or `composer update`.  Luckily this doesn't take long.  To do this, use `lando rebuild -y`.
+rebuilt after each composer operation that changes the contents of your vendor folder**, for example
+`lando composer install` or `lando composer update`. Luckily this doesn't take long. To do this, use `lando rebuild -y`.
 
 On local, it has been found that updating docker preferences on mac to only mount project folder and $HOME/.lando
 folder into containers.

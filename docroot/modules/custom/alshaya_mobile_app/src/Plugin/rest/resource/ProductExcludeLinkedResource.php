@@ -38,6 +38,20 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ProductExcludeLinkedResource extends ResourceBase {
 
   /**
+   * List of attributes with label for api.
+   */
+  const ATTRIBUTES_WITH_LABEL = [
+    'size',
+    'band_size',
+    'cup_size',
+    'size_shoe_eu',
+    'size_shoe_uk',
+    'size_shoe_us',
+    'fragrance',
+    'color',
+  ];
+
+  /**
    * SKU Manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
@@ -377,7 +391,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
     if ($sku->bundle() === 'configurable') {
       $data['swatch_data'] = $this->getSwatchData($sku);
       $data['cart_combinations'] = $this->getConfigurableCombinations($sku);
-
       foreach ($data['cart_combinations']['by_sku'] ?? [] as $values) {
         $child = SKU::loadFromSku($values['sku']);
         if (!$child instanceof SKUInterface) {
@@ -530,6 +543,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
     }
 
     $size_labels = $this->skuInfoHelper->getSizeLabels($sku);
+
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
       $combinations['attribute_sku'][$attribute_code] = [
         'attribute_code' => $attribute_code,
@@ -540,8 +554,8 @@ class ProductExcludeLinkedResource extends ResourceBase {
           'value' => $value,
           'skus' => $skus,
         ];
-
-        if ($attribute_code == 'size') {
+        // Checking for attribute codes for size and other attributes.
+        if (in_array($attribute_code, self::ATTRIBUTES_WITH_LABEL)) {
           if (!empty($size_labels[$value])) {
             $attr_value['label'] = $size_labels[$value];
           }

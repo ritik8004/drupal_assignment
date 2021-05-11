@@ -88,6 +88,8 @@
     padding-#{$left}: 2.125rem;
     padding-bottom: 0;
     padding-top: 0.425rem;
+    font-weight: normal;
+    letter-spacing: normal;
 
     @include breakpoint($tablet) {
       width: auto;
@@ -104,11 +106,6 @@
       margin: 0 0.625rem;
       #{$left}: 0;
     }
-  }
-
-  .address--primary {
-    font-weight: normal;
-    letter-spacing: normal;
   }
 
   &:hover,

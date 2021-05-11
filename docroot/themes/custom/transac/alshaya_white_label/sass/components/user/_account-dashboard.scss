@@ -125,6 +125,15 @@
       a {
         font-family: $arial;
         font-weight: bold;
+        display: inline-block;
+
+        @include breakpoint($only-tablet) {
+          margin-top: 0.4rem;
+        }
+
+        @include breakpoint($desktop) {
+          margin-top: 0.2rem;
+        }
       }
 
       img {
@@ -142,18 +151,6 @@
           width: 58%;
           margin-#{$left}: 0;
           min-width: 0;
-        }
-      }
-
-      a {
-        display: inline-block;
-
-        @include breakpoint($only-tablet) {
-          margin-top: 0.4rem;
-        }
-
-        @include breakpoint($desktop) {
-          margin-top: 0.2rem;
         }
       }
     }

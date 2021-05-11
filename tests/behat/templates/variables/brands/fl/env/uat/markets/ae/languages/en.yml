@@ -40,8 +40,8 @@ variables:
   language_excluding_delivery: 'قبل التوصيل'
   language_vat: ''
   language_checkout_link: 'إتمام الشراء بأمان'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهب للتسوق"
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: 'إليك منتجاتنا المفضلة'
   mobile_language_class: 'ar'
   language_short: 'ar'
   area_option: 'Abu Dhabi Mall'
@@ -83,3 +83,5 @@ variables:
   filter_1: 'final_price'
   filter_2: 'attr_size_rest'
   filter_3: 'attr_gender'
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
