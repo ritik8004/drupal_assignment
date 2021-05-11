@@ -2539,7 +2539,7 @@ JS;
    * Wait for AJAX to finish.
    */
   public function iWaitForAjaxToFinish() {
-    $this->getSession()->wait(10000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    $this->getSession()->wait(50000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
   }
 
   /**

@@ -328,6 +328,17 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['sub_brand_logo_alt'] = $sub_brand_logo['sub_brand_logo_alt'];
     $variables['#attached']['library'][] = 'alshaya_white_label/sub-brand-logo';
   }
+
+  // Product List LHN Block
+  if($node_bundle === 'product_list') {
+    $lhn_block = \Drupal::entityTypeManager()->getStorage('block')->load('productlistlhnblock');
+    if (empty($lhn_block->getPlugin()->build())) {
+      $variables['enable_lhn_tree'] = 0;
+    }
+    else {
+      $variables['enable_lhn_tree'] = 1;
+    }
+  }
 }
 
 /**

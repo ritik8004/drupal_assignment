@@ -27,7 +27,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 30 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I select the collection store
@@ -68,7 +68,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I select the collection store
@@ -113,7 +113,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I select the collection store
@@ -158,7 +158,7 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     When I click on "#block-content #spc-cart .spc-sidebar .spc-order-summary-block a.checkout-link" element
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .click-and-collect" element on page
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I select the collection store
