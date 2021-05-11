@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import { doRequest, getbazaarVoiceSettings } from './api/request';
+import { getStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -85,6 +86,24 @@ export const getUserNicknameParams = (nicknameKey, nickname) => {
   return params;
 };
 
+/**
+ * Validate to open writa a review form on page load.
+ *
+ * @returns {boolean}
+ */
+export const isOpenWriteReviewForm = () => {
+  const query = new URLSearchParams(document.referrer);
+  const openPopup = query.get('openPopup');
+  if (bazaarVoiceSettings.reviews !== undefined
+    && bazaarVoiceSettings.reviews.user.user_id > 0
+    && getStorageInfo('openPopup')
+    && openPopup !== null
+    && !bazaarVoiceSettings.reviews.user.is_reviewed) {
+    return true;
+  }
+  return false;
+};
+
 export default {
   getCurrentUserEmail,
   setSessionCookie,
@@ -93,4 +112,5 @@ export default {
   getUserNicknameKey,
   getUserEmailParams,
   getUserNicknameParams,
+  isOpenWriteReviewForm,
 };
