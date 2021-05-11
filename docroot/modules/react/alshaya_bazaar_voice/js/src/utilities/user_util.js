@@ -1,5 +1,4 @@
 import { doRequest, getbazaarVoiceSettings } from './api/request';
-import { getStorageInfo, updateStorageInfo } from './storage';
 import { fetchAPIData } from './api/apiData';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
@@ -14,44 +13,18 @@ export const getCurrentUserEmail = () => {
   return email;
 };
 
-export const setCurrentUserStorage = (userId) => {
-  const userStorage = getStorageInfo('bvuser') !== null
-    ? getStorageInfo('bvuser') : [];
+export const getUasToken = () => {
   const requestUrl = '/get-uas-token';
   const request = doRequest(requestUrl);
-  let currentUserObj = null;
-  // Initliaze user object for anonmymous user.
-  if (userId === 0) {
-    currentUserObj = {
-      id: userId,
-    };
-    updateStorageInfo('bvuser', currentUserObj, userId);
-  } else if (request instanceof Promise) {
+  if (request instanceof Promise) {
     return request
       .then((result) => {
         if (result.status === 200) {
-          currentUserObj = {
-            id: userId,
-            uasToken: result.data,
-            email: getCurrentUserEmail(),
-          };
-          updateStorageInfo('bvuser', currentUserObj, userId);
+          return result.data;
         }
         return null;
       })
       .catch((error) => error);
-  }
-  return userStorage;
-};
-
-export const getCurrentUserStorage = (userId) => {
-  const userStorage = getStorageInfo('bvuser') !== null
-    ? getStorageInfo('bvuser') : [];
-  if (userStorage.length > 0) {
-    const currentUserObj = userStorage.find((userObj) => userObj.id === userId);
-    if (currentUserObj) {
-      return currentUserObj;
-    }
   }
   return null;
 };
@@ -79,27 +52,8 @@ export const getUserReviews = (userId) => {
   return null;
 };
 
-/**
- * Update storage data of current user.
- * @param userId
- * @param nickname
- * @param email
- */
-export const updateUserStorageData = (userId, nickname, email) => {
-  const userObj = {
-    id: userId,
-    nickname,
-  };
-  if (email !== undefined) {
-    userObj.email = email;
-  }
-  updateStorageInfo('bvuser', userObj, userId);
-};
-
 export default {
   getCurrentUserEmail,
-  getCurrentUserStorage,
-  setCurrentUserStorage,
+  getUasToken,
   getUserReviews,
-  updateUserStorageData,
 };

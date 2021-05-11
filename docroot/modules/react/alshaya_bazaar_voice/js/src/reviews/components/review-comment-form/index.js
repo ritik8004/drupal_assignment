@@ -4,12 +4,13 @@ import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
 import {
-  getCurrentUserEmail, getCurrentUserStorage, updateUserStorageData,
+  getCurrentUserEmail,
 } from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -126,31 +127,32 @@ class ReviewCommentForm extends React.Component {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
       const bazaarVoiceSettings = getbazaarVoiceSettings();
-      const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
-      const currentUserStorage = getCurrentUserStorage(bazaarVoiceSettings.reviews.user.user_id);
-      let authParams = '';
       const userId = bazaarVoiceSettings.reviews.user.user_id;
+      const userStorage = getStorageInfo(`bvuser_${userId}`);
+      let authParams = '';
       // Set auth paramters for anonymous users.
-      if (currentUserId === 0 && currentUserStorage !== null) {
-        if (currentUserStorage.bvUserId === undefined
-          || (currentUserStorage.email !== undefined && currentUserStorage.email !== email)) {
+      if (userId === 0 && userStorage !== null) {
+        if (userStorage.bvUserId === undefined
+          || (userStorage.email !== undefined && userStorage.email !== email)) {
           authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
         }
       }
       // Set user authenticated string (UAS).
-      if (currentUserStorage !== null) {
-        if (currentUserId !== 0 && currentUserStorage.uasToken !== undefined) {
-          authParams += `&user=${currentUserStorage.uasToken}&UserNickname=${nickname}`;
+      if (userStorage !== null) {
+        if (userId !== 0 && userStorage.uasToken !== undefined) {
+          authParams += `&user=${userStorage.uasToken}&UserNickname=${nickname}`;
           // Update current user in storage.
-          updateUserStorageData(userId, nickname, email);
-        } else if (currentUserId === 0 && currentUserStorage.email !== undefined
-          && currentUserStorage.bvUserId !== undefined
-          && currentUserStorage.nickname !== undefined) {
-          if (currentUserStorage.nickname !== nickname) {
+          userStorage.nickname = nickname;
+          setStorageInfo(userStorage, `bvuser_${userId}`);
+        } else if (userId === 0 && userStorage.email !== undefined
+          && userStorage.bvUserId !== undefined
+          && userStorage.nickname !== undefined) {
+          if (userStorage.nickname !== nickname) {
             authParams += `&UserNickname=${nickname}`;
-            updateUserStorageData(userId, nickname, email);
+            userStorage.nickname = nickname;
+            setStorageInfo(userStorage, `bvuser_${userId}`);
           }
-          authParams += `&User=${currentUserStorage.bvUserId}`;
+          authParams += `&User=${userStorage.bvUserId}`;
         } else {
           authParams += `&UserEmail=${email}&UserNickname=${nickname}`;
         }
@@ -222,18 +224,18 @@ class ReviewCommentForm extends React.Component {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
     const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const currentUserStorage = getCurrentUserStorage(bazaarVoiceSettings.reviews.user.user_id);
+    const userStorage = getStorageInfo(`bvuser_${bazaarVoiceSettings.reviews.user.user_id}`);
     let emailValue = '';
     let nicknameValue = '';
     // Set default value for user email.
     if (getCurrentUserEmail() !== null) {
       emailValue = getCurrentUserEmail();
-    } else if (currentUserStorage !== null) {
-      emailValue = currentUserStorage.email !== undefined ? currentUserStorage.email : '';
+    } else if (userStorage !== null) {
+      emailValue = userStorage.email !== undefined ? userStorage.email : '';
     }
     // Set default value for user nickname.
-    if (currentUserStorage !== null) {
-      nicknameValue = currentUserStorage.nickname !== undefined ? currentUserStorage.nickname : '';
+    if (userStorage !== null) {
+      nicknameValue = userStorage.nickname !== undefined ? userStorage.nickname : '';
     }
 
     if (ReviewId !== undefined) {

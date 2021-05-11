@@ -10,7 +10,8 @@ import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
 import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
-import { getCurrentUserEmail, getCurrentUserStorage } from '../../../../utilities/user_util';
+import { getCurrentUserEmail } from '../../../../utilities/user_util';
+import { getStorageInfo } from '../../../../utilities/storage';
 
 const DynamicFormField = (props) => {
   const fieldProperty = [];
@@ -30,20 +31,20 @@ const DynamicFormField = (props) => {
   // Set default value for user nickname and email.
   // For anonymous user, default value is from user cookies.
   const bazaarVoiceSettings = getbazaarVoiceSettings();
-  const currentUserStorage = getCurrentUserStorage(bazaarVoiceSettings.reviews.user.user_id);
+  const userStorage = getStorageInfo(`bvuser_${bazaarVoiceSettings.reviews.user.user_id}`);
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
       if (getCurrentUserEmail() !== null) {
         fieldProperty.defaultVal = getCurrentUserEmail();
         readonly = true;
-      } else if (currentUserStorage !== null) {
-        if (currentUserStorage.email !== undefined) {
-          fieldProperty.defaultVal = currentUserStorage.email;
+      } else if (userStorage !== null) {
+        if (userStorage.email !== undefined) {
+          fieldProperty.defaultVal = userStorage.email;
         }
       }
-    } else if (fieldProperty.id === 'usernickname' && currentUserStorage !== null) {
-      if (currentUserStorage.nickname !== undefined) {
-        fieldProperty.defaultVal = currentUserStorage.nickname;
+    } else if (fieldProperty.id === 'usernickname' && userStorage !== null) {
+      if (userStorage.nickname !== undefined) {
+        fieldProperty.defaultVal = userStorage.nickname;
       }
     }
   }

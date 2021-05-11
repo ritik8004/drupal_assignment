@@ -1,9 +1,9 @@
 import {
-  getCurrentUserEmail, getCurrentUserStorage,
+  getCurrentUserEmail,
 } from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
-import { updateStorageInfo } from './storage';
+import { setStorageInfo, getStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -30,8 +30,9 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  */
 export const prepareRequest = (elements, fieldsConfig) => {
   let params = '';
-  const currentUserId = bazaarVoiceSettings.reviews.user.user_id;
-  const currentUserStorage = getCurrentUserStorage(currentUserId);
+  const userId = bazaarVoiceSettings.reviews.user.user_id;
+  const userStorage = getStorageInfo(`bvuser_${userId}`);
+
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
@@ -39,34 +40,28 @@ export const prepareRequest = (elements, fieldsConfig) => {
     try {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
-          if (currentUserId === 0 && currentUserStorage !== null) {
+          if (userId === 0 && userStorage !== null) {
             // Add email value to anonymous user storage.
-            if (currentUserStorage.email === undefined
-              || (currentUserStorage.email !== undefined
-              && currentUserStorage.email !== elements[id].value)) {
-              const userObj = {
-                id: currentUserId,
-                email: elements[id].value,
-              };
-              updateStorageInfo('bvuser', userObj, currentUserId);
+            if (userStorage.email === undefined
+              || (userStorage.email !== undefined
+              && userStorage.email !== elements[id].value)) {
+              userStorage.email = elements[id].value;
+              setStorageInfo(userStorage, `bvuser_${userId}`);
             }
-            if (currentUserStorage.bvUserId === undefined
-              || (currentUserStorage.email !== undefined
-              && currentUserStorage.email !== elements[id].value)) {
+            if (userStorage.bvUserId === undefined
+              || (userStorage.email !== undefined
+              && userStorage.email !== elements[id].value)) {
               params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
             }
           }
         } else if (id === 'usernickname') {
           // Add nickname value to user storage.
-          if (currentUserStorage !== null) {
-            if (currentUserStorage.nickname === undefined
-              || (currentUserStorage.nickname !== undefined
-              && currentUserStorage.nickname !== elements[id].value)) {
-              const userObj = {
-                id: currentUserId,
-                nickname: elements[id].value,
-              };
-              updateStorageInfo('bvuser', userObj, currentUserId);
+          if (userStorage !== null) {
+            if (userStorage.nickname === undefined
+              || (userStorage.nickname !== undefined
+              && userStorage.nickname !== elements[id].value)) {
+              userStorage.nickname = elements[id].value;
+              setStorageInfo(userStorage, `bvuser_${userId}`);
             }
           }
         }
@@ -89,11 +84,11 @@ export const prepareRequest = (elements, fieldsConfig) => {
   }
 
   // Set user authenticated string (UAS).
-  if (currentUserStorage !== null) {
-    if (getCurrentUserEmail() !== null && currentUserStorage.uasToken !== undefined) {
-      params += `&user=${currentUserStorage.uasToken}`;
-    } else if (currentUserId === 0 && currentUserStorage.bvUserId !== undefined) {
-      params += `&User=${currentUserStorage.bvUserId}`;
+  if (userStorage !== null) {
+    if (getCurrentUserEmail() !== null && userStorage.uasToken !== undefined) {
+      params += `&user=${userStorage.uasToken}`;
+    } else if (userId === 0 && userStorage.bvUserId !== undefined) {
+      params += `&User=${userStorage.bvUserId}`;
     }
   }
   // Set product id
