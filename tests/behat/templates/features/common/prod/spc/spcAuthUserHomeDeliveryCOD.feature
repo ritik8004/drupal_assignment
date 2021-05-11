@@ -1,4 +1,4 @@
-@javascript @auth @codPayment @homeDelivery
+@javascript @auth @codPayment @homeDelivery @vssaprod
 Feature: SPC Checkout Home Delivery COD for Authenticated Users
 
   Background:
@@ -46,7 +46,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
@@ -88,7 +88,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
@@ -130,7 +130,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
@@ -172,7 +172,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
