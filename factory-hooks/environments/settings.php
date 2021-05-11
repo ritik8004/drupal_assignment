@@ -339,6 +339,20 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
         ],
       ],
     ],
+    'tbs' => [
+      'default' => [
+        'default' => [
+          'dynamic_yield.settings' => [
+            'section_id' => '9877876',
+          ],
+          'live' => [
+            'dynamic_yield.settings' => [
+              'section_id' => '9877879',
+            ],
+          ],
+        ],
+      ],
+    ],
     'default' => [
       'default' => [
         'default' => [
