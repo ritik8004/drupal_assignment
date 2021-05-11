@@ -420,14 +420,16 @@ class AlshayaBazaarVoice {
       'Include' => 'Reviews',
     ];
     $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/authors.json', $extra_params);
-    $url = $request['url'];
-    $request_options['query'] = $request['query'];
-    $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
-    if (!$result['HasErrors'] && isset($result['Includes'])) {
-      if (isset($result['Includes']['Reviews'])) {
-        foreach ($result['Includes']['Reviews'] as $review) {
-          if ($review['ProductId'] === $productId) {
-            return TRUE;
+    if (isset($request['url']) && isset($request['query'])) {
+      $url = $request['url'];
+      $request_options['query'] = $request['query'];
+      $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
+      if (!$result['HasErrors'] && isset($result['Includes'])) {
+        if (isset($result['Includes']['Reviews'])) {
+          foreach ($result['Includes']['Reviews'] as $review) {
+            if ($review['ProductId'] === $productId) {
+              return TRUE;
+            }
           }
         }
       }
