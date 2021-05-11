@@ -1,0 +1,68 @@
+import React from 'react';
+import getStringMessage from '../../../utilities/strings';
+
+const PaymentMethodCheckoutComUpapiFawry = (props) => {
+  const countryMobileCodeMaxLength = drupalSettings.mobile_maxlength;
+
+  let fawrySuffixText = getStringMessage('fawry_payment_option_suffix_description');
+  fawrySuffixText = fawrySuffixText.split('@fawry_cash_point_link');
+
+  const {
+    cart: {
+      cart: {
+        billing_address: {
+          email,
+          telephone,
+        },
+      },
+    },
+  } = props;
+
+  return (
+    <div className="payment-form-wrapper">
+      <div className="fawry-prefix-description">
+        <p>
+          {getStringMessage('fawry_payment_option_prefix_description')}
+        </p>
+      </div>
+      <div className="spc-type-textfield">
+        <div className="field-wrapper">
+          <input
+            type="email"
+            name="fawry-email"
+            readOnly="readOnly"
+            required
+            defaultValue={email}
+          />
+        </div>
+        <div className="c-input__bar" />
+        <label>{Drupal.t('Email')}</label>
+        <div id="fawry-email-error" className="error" />
+      </div>
+      <div className="spc-type-textfield">
+        <label>{Drupal.t('Mobile Number')}</label>
+        <div className="field-wrapper">
+          <input
+            maxLength={countryMobileCodeMaxLength}
+            type="tel"
+            name="fawry-mobile-number"
+            readOnly="readOnly"
+            required
+            defaultValue={telephone}
+          />
+        </div>
+        <div className="c-input__bar" />
+        <div id="fawry-mobile-number-error" className="error" />
+      </div>
+      <div className="fawry-suffix-description">
+        <p>
+          {fawrySuffixText[0]}
+          <a href="#">{Drupal.t("Fawry's cash points")}</a>
+          {fawrySuffixText[1]}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default PaymentMethodCheckoutComUpapiFawry;
