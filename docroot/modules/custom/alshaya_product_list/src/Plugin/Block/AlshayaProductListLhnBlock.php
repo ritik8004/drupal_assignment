@@ -159,7 +159,6 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
           }
           $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
             'vid' => self::VOCAB_ID,
-            'langcode' => $langcode,
           ]);
           if (empty($vocab_list)) {
             return [];
