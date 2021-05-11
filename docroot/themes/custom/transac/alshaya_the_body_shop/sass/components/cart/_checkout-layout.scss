@@ -19,4 +19,10 @@
       font-size: 0.875rem;
     }
   }
+
+  p:last-child {
+    .light {
+      font-family: $alshaya-thin;
+    }
+  }
 }

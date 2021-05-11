@@ -6,6 +6,8 @@
     .field--name-name {
       padding: 0;
       font-family: $alshaya-medium;
+      font-size: 1rem;
+      text-transform: capitalize;
     }
 
     .price {
@@ -32,6 +34,36 @@
 
   .c-page-title__description {
     font-size: 1rem;
+  }
+
+  .c-products-list {
+    &.product-small {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: 26.125rem;
+          max-height: none;
+        }
+
+        @include breakpoint($upto-desktop) {
+          max-height: none !important;
+        }
+
+        .alshaya_search_mainimage {
+          @include breakpoint($only-mobile) {
+            height: auto !important;
+          }
+        }
+      }
+    }
+
+    &.product-large {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: 35.3125rem;
+          max-height: none;
+        }
+      }
+    }
   }
 }
 
