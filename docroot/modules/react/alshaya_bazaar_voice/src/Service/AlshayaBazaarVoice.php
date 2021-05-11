@@ -404,4 +404,38 @@ class AlshayaBazaarVoice {
     return $uas;
   }
 
+  /**
+   * Check if product has been reviewed by current user.
+   *
+   * @param string $productId
+   *   product Id.
+   *
+   * @return bool
+   *   true if product has been reviewed by current user.
+   */
+  public function isReviewedByCurrentUser($productId) {
+    $userId = $this->currentUser->id();
+    $extra_params = [
+      'filter' => 'id:' . $userId,
+      'Include' => 'Reviews',
+    ];
+    $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/authors.json', $extra_params);
+    if (isset($request['url']) && isset($request['query'])) {
+      $url = $request['url'];
+      $request_options['query'] = $request['query'];
+      $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
+      if (!$result['HasErrors'] && isset($result['Includes'])) {
+        if (isset($result['Includes']['Reviews'])) {
+          foreach ($result['Includes']['Reviews'] as $review) {
+            if ($review['ProductId'] === $productId) {
+              return TRUE;
+            }
+          }
+        }
+      }
+    }
+
+    return FALSE;
+  }
+
 }
