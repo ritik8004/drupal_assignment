@@ -163,11 +163,29 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('URL of Write Review Guidelines. URL format should be /url-name e.g /review-guidelines'),
     ];
 
+    $form['basic_settings']['comment_submission'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Comments Submission'),
+      '#description' => $this->t('Select Enabled to let users comment on reviews. Users will be able to read the comments along with the reviews.'),
+      '#options' => [
+        0 => $this->t('Disabled'),
+        1 => $this->t('Enabled'),
+      ],
+      '#default_value' => $config->get('comment_submission'),
+    ];
+
     $form['basic_settings']['comment_form_tnc'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Comments T&C url'),
       '#default_value' => $config->get('comment_form_tnc'),
       '#description' => $this->t('URL of Comment Form Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
+      '#states' => [
+        'visible' => [
+          'input[name="comment_submission"]' => [
+            'value' => 1,
+          ],
+        ],
+      ],
     ];
 
     $form['basic_settings']['comment_box_min_length'] = [
@@ -175,6 +193,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Comment minimum character length'),
       '#default_value' => $config->get('comment_box_min_length'),
       '#description' => $this->t('Enter minimum character length for comment box text in comment form.'),
+      '#states' => [
+        'visible' => [
+          'input[name="comment_submission"]' => [
+            'value' => 1,
+          ],
+        ],
+      ],
     ];
 
     $form['basic_settings']['comment_box_max_length'] = [
@@ -182,6 +207,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#title' => $this->t('Comment maximum character length'),
       '#default_value' => $config->get('comment_box_max_length'),
       '#description' => $this->t('Enter maximum character length for comment box text in comment form.'),
+      '#states' => [
+        'visible' => [
+          'input[name="comment_submission"]' => [
+            'value' => 1,
+          ],
+        ],
+      ],
     ];
 
     $form['basic_settings']['bv_routes_list'] = [
@@ -277,6 +309,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('reviews_initial_load', $values['reviews_initial_load'])
       ->set('reviews_on_loadmore', $values['reviews_on_loadmore'])
       ->set('reviews_per_page', $values['reviews_per_page'])
+      ->set('comment_submission', $values['comment_submission'])
       ->save();
 
     parent::submitForm($form, $form_state);

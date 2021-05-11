@@ -103,6 +103,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
         'write_review_submission' => $config->get('write_review_submission'),
         'write_review_tnc' => $config->get('write_review_tnc'),
         'write_review_guidlines' => $config->get('write_review_guidlines'),
+        'comment_submission' => $config->get('comment_submission'),
         'comment_form_tnc' => $config->get('comment_form_tnc'),
         'comment_box_min_length' => $config->get('comment_box_min_length'),
         'comment_box_max_length' => $config->get('comment_box_max_length'),

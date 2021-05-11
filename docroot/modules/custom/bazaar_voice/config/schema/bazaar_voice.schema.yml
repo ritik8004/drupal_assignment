@@ -47,6 +47,9 @@ bazaar_voice.settings:
     write_review_guidlines:
       type: string
       label: 'URL of BazaarVoice Write review Guidelines.'
+    comment_submission:
+      type: boolean
+      label: 'Check to disable the comment feature on PDP.'
     comment_form_tnc:
       type: string
       label: 'URL of BazaarVoice Comment Form Terms and Condition.'
