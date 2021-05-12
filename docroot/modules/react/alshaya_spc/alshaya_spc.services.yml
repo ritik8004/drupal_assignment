@@ -72,4 +72,3 @@ services:
       - ['setPurger', ['@?purge.purgers']]
       - ['setPurgeProcessor', ['@?purge.processors']]
       - ['setPurgeInvalidationFactory', ['@?purge.invalidation.factory']]
-

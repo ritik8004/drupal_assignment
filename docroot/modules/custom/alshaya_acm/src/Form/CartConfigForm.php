@@ -33,6 +33,7 @@ class CartConfigForm extends ConfigFormBase {
     $config->set('max_cart_qty', $form_state->getValue('max_cart_qty'));
     $config->set('checkout_feature', $form_state->getValue('checkout_feature'));
     $config->set('checkout_disabled_page', $form_state->getValue('checkout_disabled_page'));
+    $config->set('version', $form_state->getValue('version'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -70,6 +71,14 @@ class CartConfigForm extends ConfigFormBase {
       '#description' => $this->t('Page to redirect the users to when checkout is disabled. Leave blank to redirect to home page.'),
       '#required' => FALSE,
       '#default_value' => $config->get('checkout_disabled_page'),
+    ];
+
+    $form['version'] = [
+      '#title' => $this->t('Cart version'),
+      '#type' => 'radios',
+      '#options' => [1 => 'v1', 2 => 'v2'],
+      '#default_value' => $config->get('version') ?? 1,
+      '#required' => TRUE,
     ];
 
     return parent::buildForm($form, $form_state);
