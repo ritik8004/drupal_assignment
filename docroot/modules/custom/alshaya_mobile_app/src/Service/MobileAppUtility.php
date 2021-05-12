@@ -330,6 +330,10 @@ class MobileAppUtility {
         case 'magazine_article':
           $return = $this->pageDeepLink($object->id(), 'magazine-detail');
           break;
+
+        case 'product_list':
+          $return = $this->pageDeepLink($object->id(), 'product_list');
+          break;
       }
     }
     elseif ($object instanceof SKUInterface) {
