@@ -117,6 +117,10 @@ header {
           top: 0;
           #{$left}: -0.625rem;
           font-size: 1.75rem;
+
+          html[lang=ar] & {
+            top: 0.125rem;
+          }
         }
       }
     }
