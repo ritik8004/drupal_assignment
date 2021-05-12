@@ -100,6 +100,10 @@
       color: $fawry-banner;
       line-height: 1.67;
       max-width: 24.125rem;
+
+      @include breakpoint($upto-desktop) {
+        max-width: 13.125rem;
+      }
     }
 
     &:last-child {
