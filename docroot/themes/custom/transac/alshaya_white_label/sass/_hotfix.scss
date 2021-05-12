@@ -116,13 +116,6 @@ body.ucbrowser {
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
-    &::after {
-      height: 34px;
-    }
-  }
-
   @include breakpoint($only-mobile) {
     .c-menu-primary {
       .mobile--search,
@@ -304,35 +297,11 @@ html[lang=ar] {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
     }
-
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
-      label {
-        width: 103% !important;
-      }
-    }
-  }
-
-  @include breakpoint($upto-desktop) {
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
-      label {
-        width: 103% !important;
-      }
-    }
   }
 
   .ucbrowser {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.55rem;
-    }
-
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
-      // Fix for direction attribute support for UC browser.
-      // Select elements for size and quantity.
-      select {
-        padding-left: 40px !important;
-      }
     }
   }
 
