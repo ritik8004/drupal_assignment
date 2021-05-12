@@ -238,7 +238,6 @@ class AcqPromotionsManager {
       // Log a message for admin to check errors in data.
       if (count($nids) > 1) {
         $this->logger->critical('Multiple nodes found for rule id @rule_id', ['@rule_id' => $rule_id]);
-        return NULL;
       }
 
       // We only load the first node.
@@ -357,7 +356,20 @@ class AcqPromotionsManager {
     if (isset($promotion_label_languages[$site_default_langcode])) {
       $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
     }
-
+    if ($violations = $promotion_node->validate()) {
+      foreach ($violations->getByFields(['field_acq_promotion_rule_id']) as $violation) {
+        $errors[] = (string) $violation->getMessage();
+      }
+      if (!empty($errors)) {
+        $this->logger->critical('There are some validation errors for the rule_id @rule_id. Errors: @errors',
+          [
+            '@rule_id' => $promotion['rule_id'],
+            '@errors' => implode('.', $errors),
+          ]
+        );
+        return NULL;
+      }
+    }
     $status = $promotion_node->save();
     // Create promotion translations based on the language codes available in
     // promotion labels.
@@ -459,13 +471,12 @@ class AcqPromotionsManager {
           $event = new PromotionMappingUpdatedEvent($detached);
           $this->dispatcher->dispatch(PromotionMappingUpdatedEvent::EVENT_NAME, $event);
         }
+        $this->logger->notice('Promotion @node having rule_id: @rule_id created or updated successfully with @attach items in attach queue.', [
+          '@node' => $promotion_node->getTitle(),
+          '@rule_id' => $promotion['rule_id'],
+          '@attach' => !empty($attach_data) ? count($attach_data) : 0,
+        ]);
       }
-
-      $this->logger->notice('Promotion @node having rule_id: @rule_id created or updated successfully with @attach items in attach queue.', [
-        '@node' => $promotion_node->getTitle(),
-        '@rule_id' => $promotion['rule_id'],
-        '@attach' => !empty($attach_data) ? count($attach_data) : 0,
-      ]);
     }
   }
 
