@@ -86,11 +86,13 @@ class CheckoutComUpapiFawry extends AlshayaSpcPaymentMethodPluginBase implements
     return [
       [
         'key' => 'fawry_payment_option_prefix_description',
-        'value' => t('You’ll receive your Fawry reference number on the contact details below once you’ve placed your order.​'),
+        'value' => t('Once the product is successfully requested, we will send you Fawry Ref. No. to the below contact details'),
       ],
       [
         'key' => 'fawry_payment_option_suffix_description',
-        'value' => t("Pay for your order through any of <a href='#' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt."),
+        'value' => t("Pay for your order through any of <a href='@fawry_link' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt.",
+          ['@fawry_link' => 'https://fawry.com/storelocator']
+        ),
       ],
       [
         'key' => 'fawry_checkout_confirmation_message_prefix',
