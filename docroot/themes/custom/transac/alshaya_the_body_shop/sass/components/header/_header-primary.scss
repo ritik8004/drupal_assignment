@@ -17,6 +17,7 @@ header {
         margin-top: 0.875rem;
         margin-bottom: 0;
         background-size: cover;
+        margin-#{$right}: 0.75rem;
 
         html[lang=ar] & {
           margin-top: 1.125rem;
@@ -53,12 +54,24 @@ header {
         display: none;
       }
     }
+
+    #block-alshaya-white-label-search,
+    .block-views-exposed-filter-blocksearch-page {
+      top: 0;
+      background: transparent;
+    }
   }
 
   .region__header {
     .block-system-branding-block {
       @include breakpoint($only-mobile) {
         width: 100%;
+      }
+
+      .site-brand-home {
+        @include breakpoint($desktop) {
+          min-width: 14rem;
+        }
       }
     }
   }
@@ -67,6 +80,11 @@ header {
     @include breakpoint($only-tablet) {
       margin-top: 1.125rem;
       padding-bottom: 1.125rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-top: 1.25rem;
+      padding-bottom: 1.625rem;
     }
   }
 }
@@ -99,6 +117,10 @@ header {
           top: 0;
           #{$left}: -0.625rem;
           font-size: 1.75rem;
+
+          html[lang=ar] & {
+            top: 0.125rem;
+          }
         }
       }
     }
@@ -213,7 +235,13 @@ header {
 
   .menu__in {
     margin-#{$right}: 1rem;
-    background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
+    background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
+
+    html[lang=ar] & {
+      background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
+      top: 0.125rem;
+      margin-left: 1.5rem;
+    }
 
     &::after {
       content: '';
@@ -224,12 +252,11 @@ header {
     margin-#{$left}: 1.25rem;
     margin-#{$right}: 0.625rem;
     background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
-    transform: rotate(-180deg);
     width: 0.75rem;
     height: 1.0625rem;
 
     html[lang=ar] & {
-      transform: rotate(180deg);
+      background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
     }
 
     &::after {
@@ -254,6 +281,10 @@ header {
       height: 2.3125rem;
       margin: 0 auto;
       padding: 0.625rem 0;
+      position: absolute;
+      #{$left}: 0;
+      #{$right}: 0;
+      top: 0;
     }
 
     @include breakpoint($only-tablet) {
@@ -340,12 +371,20 @@ html[lang='ar'] {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    ul.menu--one__list {
+      display: flex !important;
+      justify-content: center;
+    }
+
     li.menu--one__list-item {
+      padding: 0 1.625rem;
+
       .menu--one__link {
         font-size: 1rem;
         font-family: $alshaya-medium;
         border-color: $menu-border-desktop;
         text-transform: uppercase;
+        padding: 0;
       }
     }
 
@@ -401,6 +440,12 @@ html[lang='ar'] {
           }
         }
       }
+    }
+  }
+
+  .c-header {
+    .block-views-exposed-filter-blocksearch-page {
+      #{$left}: 0;
     }
   }
 }

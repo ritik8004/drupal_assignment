@@ -2,6 +2,9 @@
   > .labels-container {
     position: absolute;
     z-index: 1;
+    // Add a small default space for blazy to realise there is a image here to be rendered.
+    min-width: 0.625rem;
+    min-height: 0.625rem;
 
     > .label {
       // Safety for super large images.
