@@ -31,7 +31,7 @@ export default class BvAuthConfirmation extends React.Component {
             this.setState({
               isUserVerified: true,
             }, () => {
-              this.setAnonymousUserCookies(bvUserId);
+              this.setAnonymousUserStorage(bvUserId);
             });
           }
         } else {
@@ -47,7 +47,7 @@ export default class BvAuthConfirmation extends React.Component {
     });
   };
 
-  setAnonymousUserCookies = (bvUserId) => {
+  setAnonymousUserStorage = (bvUserId) => {
     const bazaarVoiceSettings = getbazaarVoiceSettings();
     const userId = bazaarVoiceSettings.reviews.user.user_id;
     const userStorage = getStorageInfo(`bvuser_${userId}`);

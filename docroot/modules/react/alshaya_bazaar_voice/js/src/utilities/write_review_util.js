@@ -1,9 +1,6 @@
-import {
-  getCurrentUserEmail,
-} from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
-import { setStorageInfo, getStorageInfo } from './storage';
+import { getStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -46,7 +43,6 @@ export const prepareRequest = (elements, fieldsConfig) => {
               || (userStorage.email !== undefined
               && userStorage.email !== elements[id].value)) {
               userStorage.email = elements[id].value;
-              setStorageInfo(userStorage, `bvuser_${userId}`);
             }
             if (userStorage.bvUserId === undefined
               || (userStorage.email !== undefined
@@ -61,7 +57,6 @@ export const prepareRequest = (elements, fieldsConfig) => {
               || (userStorage.nickname !== undefined
               && userStorage.nickname !== elements[id].value)) {
               userStorage.nickname = elements[id].value;
-              setStorageInfo(userStorage, `bvuser_${userId}`);
             }
           }
         }
@@ -85,7 +80,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (getCurrentUserEmail() !== null && userStorage.uasToken !== undefined) {
+    if (bazaarVoiceSettings.reviews.user.user_id !== 0 && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
     } else if (userId === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;
@@ -102,7 +97,11 @@ export const prepareRequest = (elements, fieldsConfig) => {
   // Set action type.
   params += '&action=submit';
 
-  return params;
+  const requestParams = {
+    params,
+    userStorage,
+  };
+  return requestParams;
 };
 
 /**

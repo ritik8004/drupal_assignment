@@ -11,6 +11,7 @@ import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import smoothScrollTo from '../../../../utilities/smoothScroll';
+import { setStorageInfo } from '../../../../utilities/storage';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -75,7 +76,7 @@ export default class WriteReviewForm extends React.Component {
     const apiUri = '/data/submitreview.json';
 
     // Post the review data to BazaarVoice.
-    const apiData = postAPIData(apiUri, request);
+    const apiData = postAPIData(apiUri, request.params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
@@ -86,6 +87,7 @@ export default class WriteReviewForm extends React.Component {
           // Dispatch event after review submit.
           const event = new CustomEvent('reviewPosted', { detail: result.data });
           document.dispatchEvent(event);
+          setStorageInfo(request.userStorage, `bvuser_${request.userStorage.id}`);
         } else {
           removeFullScreenLoader();
           Drupal.logJavascriptError('review-write-review-form', result.error);

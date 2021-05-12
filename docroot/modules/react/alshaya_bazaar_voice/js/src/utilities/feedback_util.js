@@ -1,6 +1,6 @@
 import { postAPIData } from './api/apiData';
 import {
-  updateStorageInfo,
+  updateStorageInfo, getStorageInfo,
 } from './storage';
 
 export const handleFeedbackSubmit = (contentId, voteText,
@@ -29,6 +29,30 @@ export const handleFeedbackSubmit = (contentId, voteText,
   }
 };
 
+export const getFeedbackInfo = (contentType, contentId, voteType) => {
+  const retrievedFeedback = getStorageInfo(contentType);
+  let checkFeedbackVote = false;
+  if (retrievedFeedback !== null) {
+    if (voteType === 'positiveCount' || voteType === 'negativeCount') {
+      if (retrievedFeedback.positiveCount >= 0 && retrievedFeedback.negativeCount >= 0) {
+        checkFeedbackVote = true;
+      }
+    }
+    if (voteType === 'report') {
+      if (retrievedFeedback.reported === 0) {
+        checkFeedbackVote = true;
+      }
+    }
+    const contentStorage = retrievedFeedback.find((storage) => (storage.id === contentId
+      && checkFeedbackVote));
+    if (contentStorage !== undefined) {
+      return contentStorage;
+    }
+  }
+  return null;
+};
+
 export default {
   handleFeedbackSubmit,
+  getFeedbackInfo,
 };

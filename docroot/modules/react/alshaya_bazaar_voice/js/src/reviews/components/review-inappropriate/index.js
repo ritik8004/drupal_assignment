@@ -2,9 +2,9 @@ import React from 'react';
 import { postAPIData } from '../../../utilities/api/apiData';
 import {
   updateStorageInfo,
-  getStorageInfo,
 } from '../../../utilities/storage';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getFeedbackInfo } from '../../../utilities/feedback_util';
 
 class ReviewInappropriate extends React.Component {
   constructor(props) {
@@ -47,15 +47,12 @@ class ReviewInappropriate extends React.Component {
   render() {
     const { contentId, contentType } = this.props;
     if (contentId !== undefined) {
-      const reportedContentVote = getStorageInfo(contentType);
+      const feedbackStorage = getFeedbackInfo(contentType, contentId, 'positiveCount');
       let reported = false;
-      if (reportedContentVote !== null) {
-        reportedContentVote.find((review) => {
-          if (review.id === contentId && review.reported === 1) {
-            reported = true;
-          }
-          return reported;
-        });
+      if (feedbackStorage !== null && feedbackStorage.reported !== undefined) {
+        if (feedbackStorage.reported === 1) {
+          reported = true;
+        }
       }
       const { disabled, reportButtonText } = this.state;
       const newText = getStringMessage('reported');

@@ -3,14 +3,13 @@ import TextareaAutosize from 'react-autosize-textarea';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import {
-  getCurrentUserEmail,
-} from '../../../utilities/user_util';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+
+const bazaarVoiceSettings = getbazaarVoiceSettings();
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -28,7 +27,6 @@ class ReviewCommentForm extends React.Component {
 
   showCommentForm = () => {
     const { commentbox, nickname, email } = this.state;
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
     const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
@@ -84,7 +82,7 @@ class ReviewCommentForm extends React.Component {
                   onChange={this.handleEmailChange}
                   className="form-input"
                   defaultValue={email}
-                  readOnly={(getCurrentUserEmail() !== null) ? 1 : 0}
+                  readOnly={bazaarVoiceSettings.reviews.user.user_email !== null ? 1 : 0}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
@@ -126,9 +124,9 @@ class ReviewCommentForm extends React.Component {
     if (!isError) {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
-      const bazaarVoiceSettings = getbazaarVoiceSettings();
       const userId = bazaarVoiceSettings.reviews.user.user_id;
       const userStorage = getStorageInfo(`bvuser_${userId}`);
+      let storageUpdated = false;
       let authParams = '';
       // Set auth paramters for anonymous users.
       if (userId === 0 && userStorage !== null) {
@@ -143,14 +141,14 @@ class ReviewCommentForm extends React.Component {
           authParams += `&user=${userStorage.uasToken}&UserNickname=${nickname}`;
           // Update current user in storage.
           userStorage.nickname = nickname;
-          setStorageInfo(userStorage, `bvuser_${userId}`);
+          storageUpdated = true;
         } else if (userId === 0 && userStorage.email !== undefined
           && userStorage.bvUserId !== undefined
           && userStorage.nickname !== undefined) {
           if (userStorage.nickname !== nickname) {
             authParams += `&UserNickname=${nickname}`;
             userStorage.nickname = nickname;
-            setStorageInfo(userStorage, `bvuser_${userId}`);
+            storageUpdated = true;
           }
           authParams += `&User=${userStorage.bvUserId}`;
         } else {
@@ -177,6 +175,9 @@ class ReviewCommentForm extends React.Component {
               this.setState({
                 showCommentSubmission: false,
               });
+              if (storageUpdated) {
+                setStorageInfo(userStorage, `bvuser_${userId}`);
+              }
               return;
             }
             if (response.SubmissionId !== null) {
@@ -223,13 +224,12 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
     const userStorage = getStorageInfo(`bvuser_${bazaarVoiceSettings.reviews.user.user_id}`);
     let emailValue = '';
     let nicknameValue = '';
     // Set default value for user email.
-    if (getCurrentUserEmail() !== null) {
-      emailValue = getCurrentUserEmail();
+    if (bazaarVoiceSettings.reviews.user.user_email !== null) {
+      emailValue = bazaarVoiceSettings.reviews.user.user_email;
     } else if (userStorage !== null) {
       emailValue = userStorage.email !== undefined ? userStorage.email : '';
     }

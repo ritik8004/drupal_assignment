@@ -3,16 +3,6 @@ import { getStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
-/**
- * Get email address of current user.
- *
- * @returns {email}
- */
-export const getCurrentUserEmail = () => {
-  const email = bazaarVoiceSettings.reviews.user.user_email;
-  return email;
-};
-
 export const getUasToken = () => {
   const requestUrl = '/get-uas-token';
   const request = doRequest(requestUrl);
@@ -48,7 +38,6 @@ export const isOpenWriteReviewForm = () => {
 };
 
 export default {
-  getCurrentUserEmail,
   getUasToken,
   isOpenWriteReviewForm,
 };

@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  getStorageInfo,
-} from '../../../utilities/storage';
-import { handleFeedbackSubmit } from '../../../utilities/feedback_util';
+import { getFeedbackInfo, handleFeedbackSubmit } from '../../../utilities/feedback_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
 
 class ReviewFeedbackNegative extends React.Component {
@@ -32,16 +29,7 @@ class ReviewFeedbackNegative extends React.Component {
     const { negativeCount } = this.state;
     const { contentId, contentType, btnStatus } = this.props;
     const negativeText = 'Negative';
-    const retrievedContentVote = getStorageInfo(contentType);
-    let storageNegativeCount = null;
-    if (retrievedContentVote !== null) {
-      retrievedContentVote.find((review) => {
-        if (review.id === contentId && review.negativeCount >= 0) {
-          storageNegativeCount = review.negativeCount;
-        }
-        return storageNegativeCount;
-      });
-    }
+    const feedbackFromStorage = getFeedbackInfo(contentType, contentId, 'negativeCount');
     if (contentId !== undefined && negativeText !== undefined) {
       return (
         <span className="feedback-negative">
@@ -49,7 +37,7 @@ class ReviewFeedbackNegative extends React.Component {
             <span className="feedback-option-label">{getStringMessage('no')}</span>
             <span className="feedback-count">
               (
-              {storageNegativeCount !== null ? storageNegativeCount : negativeCount}
+              {feedbackFromStorage !== null ? feedbackFromStorage.negativeCount : negativeCount}
               )
             </span>
           </button>

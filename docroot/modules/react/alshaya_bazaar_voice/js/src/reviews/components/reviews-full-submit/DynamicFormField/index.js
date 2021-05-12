@@ -10,7 +10,6 @@ import PhotoUpload from './Fields/PhotoUpload';
 import RadioButton from './Fields/RadioButton';
 import NetPromoter from './Fields/NetPromoter';
 import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
-import { getCurrentUserEmail } from '../../../../utilities/user_util';
 import { getStorageInfo } from '../../../../utilities/storage';
 
 const DynamicFormField = (props) => {
@@ -34,8 +33,8 @@ const DynamicFormField = (props) => {
   const userStorage = getStorageInfo(`bvuser_${bazaarVoiceSettings.reviews.user.user_id}`);
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
-      if (getCurrentUserEmail() !== null) {
-        fieldProperty.defaultVal = getCurrentUserEmail();
+      if (bazaarVoiceSettings.reviews.user.user_email !== null) {
+        fieldProperty.defaultVal = bazaarVoiceSettings.reviews.user.user_email;
         readonly = true;
       } else if (userStorage !== null) {
         if (userStorage.email !== undefined) {
