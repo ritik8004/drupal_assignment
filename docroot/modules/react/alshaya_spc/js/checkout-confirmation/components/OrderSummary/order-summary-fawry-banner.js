@@ -1,4 +1,5 @@
 import React from 'react';
+import parse from 'html-react-parser';
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
 
 const OrderSummaryFawryBanner = (props) => {
@@ -6,7 +7,7 @@ const OrderSummaryFawryBanner = (props) => {
     animationDelay: animationDelayValue,
   } = props;
 
-  const value = 'Please complete your payment at the nearest Fawry Cash Point using your reference number.';
+  const value = parse(Drupal.t("Pay for your order through any of <a href='#' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt."));
 
   return (
     <div className="spc-order-summary-item order-summary-banner-fawry fadeInUp" style={{ animationDelay: animationDelayValue }}>

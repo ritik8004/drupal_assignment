@@ -1,7 +1,9 @@
 import React from 'react';
+import moment from 'moment';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
 import OrderSummaryFawryBanner from './order-summary-fawry-banner';
+import PriceElement from '../../../utilities/special-price/PriceElement';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -98,14 +100,27 @@ const OrderSummary = () => {
   // Customer name on shipping.
   const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
 
+  // Fawry details.
+  // Fawry details.
+  const {
+    payment: {
+      referenceNumber,
+      paymentExpiryTime,
+    },
+    totals: {
+      base_grand_total: baseGrandTotal,
+    },
+  } = drupalSettings.order_details;
+  const priceTotal = <PriceElement amount={baseGrandTotal} />;
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
         <ConditionalView condition={methodCode !== undefined && methodCode === 'checkout_com_upapi_fawry'}>
           <OrderSummaryFawryBanner animationDelay="0.5s" />
-          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Amount Due')} value="EGP 400.00" />
-          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Reference number')} value="991843368" />
-          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Complete payment by')} value="31 April 2021, 11:20 am" />
+          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Amount Due')} value={priceTotal} />
+          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Reference number')} value={referenceNumber} />
+          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Complete payment by')} value={moment(paymentExpiryTime).format('DD MMMM YYYY, HH:mm a')} />
         </ConditionalView>
         <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('confirmation email sent to')} value={customEmail} />
         <OrderSummaryItem animationDelay="0.6s" label={Drupal.t('order number')} value={orderNumber} />
