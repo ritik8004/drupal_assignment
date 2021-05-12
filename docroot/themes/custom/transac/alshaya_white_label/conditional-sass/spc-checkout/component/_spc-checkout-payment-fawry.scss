@@ -22,33 +22,18 @@
 
     .fawry-prefix-description {
       font-size: 0.875rem;
-      color: #222;
+      color: $fawry-desc-prefix;
       line-height: 1.14;
     }
 
     .fawry-suffix-description {
       font-size: 0.75rem;
-      color: #777;
+      color: $fawry-desc-suffix;
       line-height: 1.67;
 
       a {
         text-decoration: underline;
       }
     }
-  }
-}
-
-.spc-order-summary-item.order-summary-banner-fawry {
-  background: red;
-
-  span:first-child {
-    font-size: 0.75rem;
-    color: #0078ff;
-    line-height: 1.67;
-    max-width: 386px;
-  }
-
-  span:last-child {
-    max-width: 74px;
   }
 }
