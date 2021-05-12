@@ -68,30 +68,38 @@ class CheckoutComUpapiFawry extends AlshayaSpcPaymentMethodPluginBase implements
    * {@inheritdoc}
    */
   public function processBuild(array &$build) {
-    $strings = [
-      [
-        'key' => 'fawry_payment_option_prefix_description',
-        'value' => $this->t('You’ll receive your Fawry reference number on the contact details below once you’ve placed your order.​'),
-      ],
-      [
-        'key' => 'fawry_payment_option_suffix_description',
-        'value' => $this->t("Pay for your order through any of <a href='#' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt."),
-      ],
-      [
-        'key' => 'fawry_checkout_confirmation_message_prefix',
-        'value' => $this->t('Cash payment with Fawry'),
-      ],
-      [
-        'key' => 'fawry_checkout_confirmation_message',
-        'value' => $this->t('Amount due - @amount. Please complete your payment at the nearest Fawry cash point using your reference #@reference_no by @date_and_time.​'),
-      ],
-    ];
-
-    $build['#strings'] = array_merge($build['#strings'], $strings);
+    $build['#strings'] = array_merge($build['#strings'], self::getFawryStaticText());
 
     $config = $this->apiWrapper->getCheckoutcomUpApiConfig();
     $build['#attached']['drupalSettings']['checkoutComUpapiFawry'] = [
       'fawry_expiry_time' => $config['fawry_expiry_time'],
+    ];
+  }
+
+  /**
+   * Strings related to Fawry payment-method.
+   *
+   * @return array
+   *   Translated strings array.
+   */
+  public static function getFawryStaticText() {
+    return [
+      [
+        'key' => 'fawry_payment_option_prefix_description',
+        'value' => t('You’ll receive your Fawry reference number on the contact details below once you’ve placed your order.​'),
+      ],
+      [
+        'key' => 'fawry_payment_option_suffix_description',
+        'value' => t("Pay for your order through any of <a href='#' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt."),
+      ],
+      [
+        'key' => 'fawry_checkout_confirmation_message_prefix',
+        'value' => t('Cash payment with Fawry'),
+      ],
+      [
+        'key' => 'fawry_checkout_confirmation_message',
+        'value' => t('Amount due - @amount. Please complete your payment at the nearest Fawry cash point using your reference #@reference_no by @date_and_time.​'),
+      ],
     ];
   }
 

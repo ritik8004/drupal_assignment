@@ -1,13 +1,14 @@
 import React from 'react';
 import parse from 'html-react-parser';
 import PaymentMethodIcon from '../../../svg-component/payment-method-svg';
+import getStringMessage from '../../../utilities/strings';
 
 const OrderSummaryFawryBanner = (props) => {
   const {
     animationDelay: animationDelayValue,
   } = props;
 
-  const value = parse(Drupal.t("Pay for your order through any of <a href='#' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt."));
+  const value = parse(getStringMessage('fawry_payment_option_suffix_description'));
 
   return (
     <div className="spc-order-summary-item order-summary-banner-fawry fadeInUp" style={{ animationDelay: animationDelayValue }}>
