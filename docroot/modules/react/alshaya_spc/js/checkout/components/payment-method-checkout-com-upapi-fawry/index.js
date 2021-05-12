@@ -12,6 +12,9 @@ class PaymentMethodCheckoutComUpapiFawry extends React.Component {
   }
 
   render() {
+    // Get email and mobile number from billing address.
+    let emailAddress;
+    let mobileNumber;
     const {
       cart: {
         cart: {
@@ -22,6 +25,17 @@ class PaymentMethodCheckoutComUpapiFawry extends React.Component {
         },
       },
     } = this.props;
+    emailAddress = email;
+    mobileNumber = telephone;
+
+    // If user is authenticated user then get
+    // email and mobile number from profile.
+    const { isCustomer, uid } = drupalSettings.user;
+    if (isCustomer && uid !== undefined && uid > 0) {
+      const { userEmailID, userPhone } = drupalSettings.userDetails;
+      emailAddress = (userEmailID !== '') ? userEmailID : email;
+      mobileNumber = (userPhone !== '') ? userPhone : telephone;
+    }
 
     return (
       <div className="payment-form-wrapper">
@@ -32,16 +46,16 @@ class PaymentMethodCheckoutComUpapiFawry extends React.Component {
           type="email"
           name="fawry-email"
           disabled
-          defaultValue={email !== '' ? email : ''}
-          className={email !== '' && email !== '' ? 'focus' : ''}
+          defaultValue={emailAddress !== '' ? emailAddress : ''}
+          className={emailAddress !== '' && emailAddress !== '' ? 'focus' : ''}
           label={Drupal.t('Email')}
         />
         <TextField
           type="tel"
           name="fawry-mobile-number"
           disabled
-          defaultValue={telephone !== '' ? cleanMobileNumber(telephone) : ''}
-          className={telephone !== '' && telephone !== '' ? 'focus' : ''}
+          defaultValue={mobileNumber !== '' ? cleanMobileNumber(mobileNumber) : ''}
+          className={mobileNumber !== '' && mobileNumber !== '' ? 'focus' : ''}
           label={Drupal.t('Mobile Number')}
         />
         <div className="fawry-suffix-description">
