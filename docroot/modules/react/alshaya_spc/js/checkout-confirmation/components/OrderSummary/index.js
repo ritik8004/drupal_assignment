@@ -101,7 +101,6 @@ const OrderSummary = () => {
   const customerShippingName = drupalSettings.order_details.delivery_type_info.customerNameShipping;
 
   // Fawry details.
-  // Fawry details.
   const {
     payment: {
       referenceNumber,
