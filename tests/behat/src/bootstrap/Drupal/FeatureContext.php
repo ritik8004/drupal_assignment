@@ -2539,7 +2539,7 @@ JS;
    * Wait for AJAX to finish.
    */
   public function iWaitForAjaxToFinish() {
-    $this->getSession()->wait(50000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    $this->getSession()->wait(80000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
   }
 
   /**
@@ -2552,9 +2552,12 @@ JS;
     if ($empty_delivery_info !== null) {
       $empty_delivery_info->click();
       $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
       $this->theElementShouldExist('.spc-cnc-stores-list-map');
+      $this->iWaitSeconds('20');
       $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
       $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
       $page->find('css', 'button.select-store')->click();
       $this->getSession()->executeScript('jQuery("input#fullname").val("Test User")');
       $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("555233224")');
@@ -2563,6 +2566,7 @@ JS;
       }
       $page->find('css', 'button#save-address')->click();
       $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
     }
     $this->theElementShouldExist('.delivery-information-preview');
   }
