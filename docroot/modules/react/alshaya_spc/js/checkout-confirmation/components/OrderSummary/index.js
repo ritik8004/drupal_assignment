@@ -103,6 +103,9 @@ const OrderSummary = () => {
       <div className="spc-order-summary-order-preview">
         <ConditionalView condition={methodCode !== undefined && methodCode === 'checkout_com_upapi_fawry'}>
           <OrderSummaryFawryBanner animationDelay="0.5s" />
+          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Amount Due')} value="EGP 400.00" />
+          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Reference number')} value="991843368" />
+          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Complete payment by')} value="31 April 2021, 11:20 am" />
         </ConditionalView>
         <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('confirmation email sent to')} value={customEmail} />
         <OrderSummaryItem animationDelay="0.6s" label={Drupal.t('order number')} value={orderNumber} />
