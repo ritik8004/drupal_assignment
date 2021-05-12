@@ -1,6 +1,0 @@
-alshaya_spc.cart_settings_form:
-  title: 'Alshaya Cart settings'
-  parent: alshaya_master.alshaya_admin
-  description: 'Administer Cart configurations.'
-  route_name: alshaya_spc.cart_settings_form
-  weight: 1
