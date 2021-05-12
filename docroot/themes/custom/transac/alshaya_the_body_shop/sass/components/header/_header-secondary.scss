@@ -33,13 +33,13 @@
 
       html[lang=ar] & {
         background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
-        background-position: 0;
+        background-position: 0 center;
         margin-left: 1.5rem;
 
         &:hover,
         &.is-active {
           background-image: url("../imgs/icons/ic-arrow-left.svg");
-          background-position: 0;
+          background-position: 0 center;
         }
       }
     }
@@ -57,6 +57,11 @@
   @include breakpoint($only-tablet) {
     a {
       background-position: 98.25%;
+
+      &:hover,
+      &.is-active {
+        background-position: 98.25%;
+      }
     }
   }
 
