@@ -175,9 +175,6 @@ class ReviewCommentForm extends React.Component {
               this.setState({
                 showCommentSubmission: false,
               });
-              if (storageUpdated) {
-                setStorageInfo(userStorage, `bvuser_${userId}`);
-              }
               return;
             }
             if (response.SubmissionId !== null) {
@@ -186,6 +183,9 @@ class ReviewCommentForm extends React.Component {
                 showCommentSubmission: true,
                 showCommentForm: false,
               });
+              if (storageUpdated) {
+                setStorageInfo(userStorage, `bvuser_${userId}`);
+              }
             }
           } else {
             Drupal.logJavascriptError('review-comment-submit', result.error);

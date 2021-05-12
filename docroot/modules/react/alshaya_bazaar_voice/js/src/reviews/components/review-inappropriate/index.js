@@ -47,18 +47,12 @@ class ReviewInappropriate extends React.Component {
   render() {
     const { contentId, contentType } = this.props;
     if (contentId !== undefined) {
-      const feedbackStorage = getFeedbackInfo(contentType, contentId, 'positiveCount');
-      let reported = false;
-      if (feedbackStorage !== null && feedbackStorage.reported !== undefined) {
-        if (feedbackStorage.reported === 1) {
-          reported = true;
-        }
-      }
+      const feedbackStorage = getFeedbackInfo(contentType, contentId, 'report');
       const { disabled, reportButtonText } = this.state;
       const newText = getStringMessage('reported');
       return (
         <>
-          {!reported ? (
+          {feedbackStorage === null ? (
             <span className={`feedback-report ${disabled ? 'feedback-report-disabled' : 'feedback-report-active'}`}>
               <button type="button" onClick={this.reportContent(contentId, newText, contentType)} disabled={disabled}>
                 <span className="feedback-option-label">{reportButtonText}</span>

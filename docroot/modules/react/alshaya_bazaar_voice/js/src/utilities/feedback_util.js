@@ -30,22 +30,21 @@ export const handleFeedbackSubmit = (contentId, voteText,
 };
 
 export const getFeedbackInfo = (contentType, contentId, voteType) => {
-  const retrievedFeedback = getStorageInfo(contentType);
+  const feedbackStorage = getStorageInfo(contentType);
   let checkFeedbackVote = false;
-  if (retrievedFeedback !== null) {
-    if (voteType === 'positiveCount' || voteType === 'negativeCount') {
-      if (retrievedFeedback.positiveCount >= 0 && retrievedFeedback.negativeCount >= 0) {
-        checkFeedbackVote = true;
+  if (feedbackStorage !== null) {
+    const contentStorage = feedbackStorage.find((content) => {
+      if (content.id === contentId) {
+        if ((voteType === 'positiveCount' || voteType === 'negativeCount')
+          && (content.positiveCount !== undefined && content.negativeCount !== undefined)) {
+          checkFeedbackVote = true;
+        } else if (voteType === 'report' && content.reported !== undefined) {
+          checkFeedbackVote = true;
+        }
       }
-    }
-    if (voteType === 'report') {
-      if (retrievedFeedback.reported === 0) {
-        checkFeedbackVote = true;
-      }
-    }
-    const contentStorage = retrievedFeedback.find((storage) => (storage.id === contentId
-      && checkFeedbackVote));
-    if (contentStorage !== undefined) {
+      return checkFeedbackVote;
+    });
+    if (checkFeedbackVote) {
       return contentStorage;
     }
   }

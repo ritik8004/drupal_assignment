@@ -83,11 +83,12 @@ export default class WriteReviewForm extends React.Component {
           removeFullScreenLoader();
           if (result.data.HasErrors && result.data.FormErrors !== null) {
             smoothScrollTo(e, '.title-block', 'post_review');
+          } else if (request.userStorage !== null) {
+            setStorageInfo(request.userStorage, `bvuser_${request.userStorage.id}`);
           }
           // Dispatch event after review submit.
           const event = new CustomEvent('reviewPosted', { detail: result.data });
           document.dispatchEvent(event);
-          setStorageInfo(request.userStorage, `bvuser_${request.userStorage.id}`);
         } else {
           removeFullScreenLoader();
           Drupal.logJavascriptError('review-write-review-form', result.error);
