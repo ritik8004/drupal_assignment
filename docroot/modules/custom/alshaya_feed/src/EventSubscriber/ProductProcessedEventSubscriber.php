@@ -64,7 +64,7 @@ class ProductProcessedEventSubscriber implements EventSubscriberInterface {
   public function onProductProcessed(ProductUpdatedEvent $event) {
     // Check if dynamic yield settings mode is api. Default is xml.
     if ($this->dyConfig->get('mode') == 'api') {
-      $this->queueFactory->get(PostProcessProduct::QUEUE_NAME)->createItem($event->getSku());
+      $this->queueFactory->get(PostProcessProduct::QUEUE_NAME)->createItem($event->getSku()->getSku());
     }
   }
 
