@@ -255,18 +255,8 @@ function alshaya_bp_transac_acq_sku_clean_synced_data_alter(&$context_results) {
  * Implements hook_views_query_alter().
  */
 function alshaya_bp_transac_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
-  if ($view->id() == 'product_category_level_3' && $view->current_display === 'entity_reference_1') {
-    foreach ($query->where as &$condition_group) {
-      foreach ($condition_group['conditions'] as &$condition) {
-        // Boolean field value is made 5 so that terms appear irrespective of TRUE or FALSE.
-        if ($condition['field'] == 'taxonomy_term__field_category_include_menu.field_category_include_menu_value') {
-          $condition['value'] = 5;
-          $condition['operator']='!=';
-        }
-      }
-    }
-  }
-  if ($view->id() == 'product_category_level_2_3' && $view->current_display === 'block_2') {
+  if (($view->id() == 'product_category_level_3' && $view->current_display === 'entity_reference_1') ||
+  ($view->id() == 'product_category_level_2_3' && $view->current_display === 'block_2')) {
     foreach ($query->where as &$condition_group) {
       foreach ($condition_group['conditions'] as &$condition) {
         // Boolean field value is made 5 so that terms appear irrespective of TRUE or FALSE.
