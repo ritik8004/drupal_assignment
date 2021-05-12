@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_mobile_app module.
+ */
+function alshaya_fl_transac_update_8011() {
+  \Drupal::service('module_installer')->install(['alshaya_mobile_app']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable size guide for Footlocker.
  */
 function alshaya_fl_transac_update_8010() {
