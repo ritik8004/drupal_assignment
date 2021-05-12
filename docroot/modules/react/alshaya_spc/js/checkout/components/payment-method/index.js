@@ -35,7 +35,6 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodPostpay = React.createRef();
     this.paymentMethodCybersource = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
-    this.paymentMethodCheckoutComUpapiFawry = React.createRef();
   }
 
   componentDidMount() {

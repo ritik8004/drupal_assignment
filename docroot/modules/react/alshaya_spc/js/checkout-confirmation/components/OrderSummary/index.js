@@ -1,6 +1,7 @@
 import React from 'react';
 import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
+import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -66,7 +67,7 @@ const OrderSummary = () => {
   }
 
   const {
-    method, transactionId, paymentId, resultCode, bankDetails, orderDate,
+    method, transactionId, paymentId, resultCode, bankDetails, orderDate, methodCode,
   } = drupalSettings.order_details.payment;
 
   // Get Billing info.
@@ -100,6 +101,9 @@ const OrderSummary = () => {
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
+        <ConditionalView condition={methodCode !== undefined && methodCode === 'checkout_com_upapi_fawry'}>
+          <OrderSummaryFawryBanner animationDelay="0.5s" />
+        </ConditionalView>
         <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('confirmation email sent to')} value={customEmail} />
         <OrderSummaryItem animationDelay="0.6s" label={Drupal.t('order number')} value={orderNumber} />
 

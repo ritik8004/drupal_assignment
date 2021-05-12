@@ -38,3 +38,17 @@
   }
 }
 
+.spc-order-summary-item.order-summary-banner-fawry {
+  background: red;
+
+  span:first-child {
+    font-size: 0.75rem;
+    color: #0078ff;
+    line-height: 1.67;
+    max-width: 386px;
+  }
+
+  span:last-child {
+    max-width: 74px;
+  }
+}
