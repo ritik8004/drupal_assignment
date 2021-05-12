@@ -101,6 +101,11 @@
       line-height: 1.67;
       max-width: 24.125rem;
 
+      > a {
+        color: $fawry-banner;
+        text-decoration: underline;
+      }
+
       @include breakpoint($upto-desktop) {
         max-width: 13.125rem;
       }
