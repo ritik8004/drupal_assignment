@@ -121,5 +121,8 @@ function _alshaya_bazaar_voice_translations() {
     'Vote' => [
       'ar' => 'تصويت',
     ],
+    'Load more' => [
+      'ar' => 'تحميل المزيد من',
+    ],
   ];
 }
