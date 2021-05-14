@@ -238,7 +238,7 @@ header {
     background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
 
     html[lang=ar] & {
-      background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
+      background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
       top: 0.125rem;
       margin-left: 1.5rem;
     }
@@ -251,7 +251,7 @@ header {
   .menu__back {
     margin-#{$left}: 1.25rem;
     margin-#{$right}: 0.625rem;
-    background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
+    background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
     width: 0.75rem;
     height: 1.0625rem;
 

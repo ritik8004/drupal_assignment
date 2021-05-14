@@ -32,13 +32,13 @@
       }
 
       html[lang=ar] & {
-        background: url('../imgs/icons/ic-arrow-left.svg') no-repeat;
+        background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
         background-position: 0 center;
         margin-left: 1.5rem;
 
         &:hover,
         &.is-active {
-          background-image: url("../imgs/icons/ic-arrow-left.svg");
+          background-image: url("../imgs/icons/ic-arrow-left.svg?1234");
           background-position: 0 center;
         }
       }
