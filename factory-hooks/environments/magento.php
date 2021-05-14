@@ -36,6 +36,33 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
   ],
+  'tbs_uat' => [
+    'url' => 'https://ri-uat.store.alshaya.com',
+    'magento_secrets' => [
+      'consumer_key' => 'k7354eyo76v0novunidn99wu7o9mafjm',
+      'consumer_secret' => 'enwl857ymegc2bptwg1cjddcfccr1rga',
+      'access_token' => 'e4wdjveiqgwg78zd5ip2nirm51abo0k1',
+      'access_token_secret' => '5pim4yvsqa3h4wkttznsonma6qgoo9xl',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 15],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 6],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 9, 'ar' => 12],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 21, 'ar' => 18],
+    ],
+    'bh' => [
+      'store_id' => ['en' => 27, 'ar' => 24],
+    ],
+    'qa' => [
+      'store_id' => ['en' => 33, 'ar' => 30],
+    ],
+  ],
   // Mothercare.
   'mc_qa' => [
     'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',

@@ -1312,6 +1312,11 @@ $conductors = [
     'hmac_secret' => 'MWJiYTk5ZmItYzIwMC00',
     'site_id' => 329,
   ],
+  'tbskw_uat' => [
+    'hmac_id' => 'cbe72e31734d430c9d38749329f2d68d',
+    'hmac_secret' => 'OTliMTUzZmMtZWUzNi00',
+    'site_id' => 420,
+  ],
 ];
 
 // Default values for each ACM middleware.
