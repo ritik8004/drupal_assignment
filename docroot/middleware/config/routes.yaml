@@ -53,16 +53,6 @@ payment.checkout_com_apple_pay_save:
     controller: App\Controller\CheckoutComPaymentController::saveApplePayPayment
     methods: POST
 
-payment.cybersource_payment_token:
-    path: /payment/cybersource/get-token
-    controller: App\Controller\CyberSourcePaymentController::getCybersourceToken
-    methods: POST
-
-payment.cybersource_payment_finalise:
-    path: /payment/cybersource/finalise
-    controller: App\Controller\CyberSourcePaymentController::finaliseCybersource
-    methods: POST
-
 payment.payment_success:
   path: /payment/success/{langcode}
   controller: App\Controller\PaymentController::handlePaymentSuccess
