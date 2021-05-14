@@ -2560,7 +2560,7 @@ JS;
       $this->iWaitSeconds('20');
       $page->find('css', 'button.select-store')->click();
       $this->getSession()->executeScript('jQuery("input#fullname").val("Test User")');
-      $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("555233224")');
+      $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("55667788")');
       if ($page->find('css', 'input[name="email"]')) {
         $this->getSession()->executeScript('jQuery("input[name=\"email\"]").val("user@test.com")');
       }
