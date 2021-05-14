@@ -269,7 +269,8 @@
                 "CORE-8488 - Add log trace for 500 error" : "patches/core/missing-handler-check-cache.patch",
                 "CORE-24231 - Adding log trace for 500 error on user login page" : "patches/core/traces-for-form-error.patch",
                 "CORE-26360 - Allow skipping form alter for the specific form": "https://git.drupalcode.org/project/drupal/-/merge_requests/156.patch?v=2",
-                "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch"
+                "CORE-26565 - Allow debugging cache updates": "patches/core/CORE-26565_debug_cache_entry.patch",
+                "CORE-28805 - Additional logs for debugging install.php redirection issue": "patches/core/install_php_redirection_additional_log.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
