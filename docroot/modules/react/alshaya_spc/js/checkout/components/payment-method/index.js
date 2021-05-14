@@ -10,7 +10,6 @@ import {
   setUpapiApplePayCofig,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
-import PaymentMethodCybersource from '../payment-method-cybersource';
 import { removeStorageInfo } from '../../../utilities/storage';
 import PaymentMethodApplePay from '../payment-method-apple-pay';
 import ApplePay from '../../../utilities/apple_pay';
@@ -31,7 +30,6 @@ export default class PaymentMethod extends React.Component {
     this.paymentMethodCheckoutComUpapi = React.createRef();
     this.paymentMethodApplePay = React.createRef();
     this.paymentMethodPostpay = React.createRef();
-    this.paymentMethodCybersource = React.createRef();
     this.paymentMethodCheckoutComUpapiApplePay = React.createRef();
   }
 
@@ -56,10 +54,6 @@ export default class PaymentMethod extends React.Component {
 
     if (method.code === 'checkout_com_upapi_applepay') {
       return this.paymentMethodCheckoutComUpapiApplePay.current.validateBeforePlaceOrder();
-    }
-
-    if (method.code === 'cybersource') {
-      return this.paymentMethodCybersource.current.validateBeforePlaceOrder();
     }
 
     return true;
@@ -218,16 +212,6 @@ export default class PaymentMethod extends React.Component {
                 postpay={drupalSettings.postpay}
                 postpayWidgetInfo={drupalSettings.postpay_widget_info}
                 cart={cart}
-              />
-            </div>
-          </ConditionalView>
-
-          <ConditionalView condition={(isSelected && method.code === 'cybersource')}>
-            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
-              <PaymentMethodCybersource
-                ref={this.paymentMethodCybersource}
-                cart={cart}
-                finalisePayment={this.finalisePayment}
               />
             </div>
           </ConditionalView>

@@ -14,6 +14,33 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * [6.3.0] Remove old cybersource payment method.
+ */
+function alshaya_spc_update_8011() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+
+  // Remove from excluded payment methods.
+  $exclude_payment_methods_data = $config->get('exclude_payment_methods');
+  unset($exclude_payment_methods_data['cybersource']);
+  $config->set('exclude_payment_methods', $exclude_payment_methods_data);
+
+  // Remove from refund_exclude_payment_methods.
+  $refund_exclude_payment_methods_data = $config->get('refund_exclude_payment_methods');
+  unset($refund_exclude_payment_methods_data['cybersource']);
+  $config->set('refund_exclude_payment_methods', $refund_exclude_payment_methods_data);
+
+  $config->save();
+
+  // Delete the KNET payment method taxonomy term.
+  $payment_method_term = \Drupal::service('alshaya_acm_checkout.options_manager')->loadPaymentMethod('cybersource');
+  if ($payment_method_term instanceof Term) {
+    $payment_method_term->delete();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new Checkout Settings resource.
  */
 function alshaya_spc_update_8010() {
