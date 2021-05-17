@@ -10,6 +10,3 @@ dependencies:
   - sessions_expire:sessions_expire
   - cache_tags_cleanup:cache_tags_cleanup
   - alshaya_config:alshaya_config
-  - advagg:advagg_css_minify
-  - advagg:advagg_js_minify
-  - advagg:advagg_bundler
