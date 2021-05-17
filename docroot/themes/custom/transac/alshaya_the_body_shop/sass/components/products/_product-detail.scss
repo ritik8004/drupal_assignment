@@ -43,6 +43,10 @@
         padding: 0.5rem;
         padding-#{$left}: 1rem;
         width: 6rem;
+
+        @include breakpoint($only-tablet) {
+          width: 5.5625rem !important;
+        }
       }
 
       &::after {
@@ -57,6 +61,10 @@
         #{$right}: 1rem;
         top: 1.35rem;
         position: absolute;
+
+        @include breakpoint($only-tablet) {
+          z-index: 3;
+        }
       }
 
       label {
@@ -90,10 +98,20 @@
       }
     }
 
+    .form-item.form-type-select.form-item-quantity {
+      @include breakpoint($only-tablet) {
+        float: #{$left};
+      }
+    }
+
     .sku-base-form {
       button[type="submit"] {
         height: 3.125rem;
         font-family: $tbs-semibold;
+
+        @include breakpoint($only-tablet) {
+          margin-top: 1.45rem;
+        }
 
         @include breakpoint($desktop) {
           margin-#{$left}: 0.875rem;
@@ -131,6 +149,12 @@
         }
       }
 
+      @include breakpoint($only-tablet) {
+        &::after {
+          content: '';
+        }
+      }
+
       label {
         @include breakpoint($only-mobile) {
           font-size: 0.75rem;
@@ -156,7 +180,7 @@
       margin-#{$left}: 0.875rem;
       height: 3.125rem;
       font-family: $tbs-semibold;
-      width: calc(100% - (5.5625rem + 0.875rem));
+      width: calc(100% - 6.4375rem);
     }
 
     > div,
@@ -164,6 +188,10 @@
       @include breakpoint($only-mobile) {
         margin-#{$right}: 0;
         width: 68%;
+      }
+
+      @include breakpoint($tablet) {
+        width: 100%;
       }
     }
   }
