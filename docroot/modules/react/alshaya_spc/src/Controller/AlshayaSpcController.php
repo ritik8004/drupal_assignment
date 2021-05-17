@@ -5,6 +5,7 @@ namespace Drupal\alshaya_spc\Controller;
 use Drupal\alshaya_i18n\AlshayaI18nLanguages;
 use Drupal\alshaya_spc\Helper\AlshayaSpcOrderHelper;
 use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CashOnDelivery;
+use Drupal\alshaya_spc\Plugin\SpcPaymentMethod\CheckoutComUpapiFawry;
 use Drupal\alshaya_user\AlshayaUserInfo;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Controller\ControllerBase;
@@ -648,6 +649,11 @@ class AlshayaSpcController extends ControllerBase {
 
     if ($orderDetails['payment']['methodCode'] === 'cashondelivery') {
       $strings = array_merge($strings, CashOnDelivery::getCodSurchargeStrings());
+    }
+
+    // Get static text for Fawry payment.
+    if ($orderDetails['payment']['methodCode'] === 'checkout_com_upapi_fawry') {
+      $strings = array_merge($strings, CheckoutComUpapiFawry::getFawryStaticText());
     }
 
     $cache_tags = [];
