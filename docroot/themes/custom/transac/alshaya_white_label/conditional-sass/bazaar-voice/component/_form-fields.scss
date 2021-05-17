@@ -21,9 +21,13 @@
     font-size: 0.75rem;
   }
 
-  input.form-input {
-    font-size: 1rem;
-    height: 1.5rem;
+  input,
+  textarea {
+    &.form-input {
+      font-size: 1rem;
+      height: 1.5rem;
+      background: none;
+    }
   }
 
   &-two-column {
