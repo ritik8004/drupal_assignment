@@ -74,7 +74,7 @@ const GroupSelectOption = ({
           </ul>
         </div>
         <div className="magv2-confirm-size-btn">
-          <button className="magv2-button" type="submit" value="Confirm Size" onClick={(e) => closeModal(e)}>{Drupal.t('Confirm Size')}</button>
+          <button className="magv2-button add-to-cart-button" type="submit" value="Confirm Size" onClick={(e) => closeModal(e)}>{Drupal.t('Confirm Size')}</button>
         </div>
       </div>
     </div>
