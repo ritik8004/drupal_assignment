@@ -1,4 +1,4 @@
 variables:
-  spc_product_listing_page: '/buy-2-get-1-free-en/'
-  spc_basket_page: '/shop-womens/accessories/socks/'
-  product_listing_page_url: '/shop-womens/accessories/socks/'
+  spc_product_listing_page: '/shop-womens/'
+  spc_basket_page: '/shop-womens/'
+  product_listing_page_url: '/shop-womens/'

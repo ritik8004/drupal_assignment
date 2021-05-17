@@ -17,7 +17,7 @@ Feature: Testing new PLP-Add to cart functionality for Authenticated user
     And I wait for AJAX to finish
     Then the element ".qty-text-wrapper" should exist
     When I click on ".qty-sel-btn--up" element
-    And the quantity " " should be " "
+    And the quantity " " should be "increased"
     When I click on "qty-sel-btn--down" element
     Then the quantity "qty-text-wrapper" should be "decreased"
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
