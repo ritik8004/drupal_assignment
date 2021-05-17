@@ -2,12 +2,9 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import { postAPIData, fetchAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
-import {
-  setSessionCookie, getSessionCookie, getCurrentUserEmail,
-  getUserNicknameKey,
-} from '../../../../utilities/user_util';
 import AuthConfirmationMessage from '../auth-confirmation-message';
 import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
+import { setStorageInfo, getStorageInfo } from '../../../../utilities/storage';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -30,12 +27,11 @@ export default class BvAuthConfirmation extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           if (!result.data.HasErrors) {
-            const userId = result.data.Authentication.User;
-            setSessionCookie('bv_user_id', userId);
+            const bvUserId = result.data.Authentication.User;
             this.setState({
               isUserVerified: true,
             }, () => {
-              this.setAnonymousUserCookies();
+              this.setAnonymousUserStorage(bvUserId);
             });
           }
         } else {
@@ -51,12 +47,13 @@ export default class BvAuthConfirmation extends React.Component {
     });
   };
 
-  setAnonymousUserCookies = () => {
-    const nicknameKey = getUserNicknameKey();
+  setAnonymousUserStorage = (bvUserId) => {
     const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const userId = bazaarVoiceSettings.reviews.user.user_id;
+    const userStorage = getStorageInfo(`bvuser_${userId}`);
     // Store user information in bv cookies.
-    if (getSessionCookie('bv_user_id') !== null && getCurrentUserEmail() === null) {
-      const params = `&productid=${bazaarVoiceSettings.productid}&User=${getSessionCookie('bv_user_id')}&Action=`;
+    if (userStorage !== null && userId === 0) {
+      const params = `&productid=${bazaarVoiceSettings.productid}&User=${bvUserId}&Action=`;
       const apiData = fetchAPIData('/data/submitreview.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {
@@ -66,8 +63,10 @@ export default class BvAuthConfirmation extends React.Component {
             if (result.data.Data.Fields !== undefined
               && result.data.Data.Fields.usernickname.Value !== null
               && result.data.Data.Fields.useremail.Value !== null) {
-              setSessionCookie(nicknameKey, result.data.Data.Fields.usernickname.Value);
-              setSessionCookie('bv_user_email', result.data.Data.Fields.useremail.Value);
+              userStorage.bvUserId = bvUserId;
+              userStorage.nickname = result.data.Data.Fields.usernickname.Value;
+              userStorage.email = result.data.Data.Fields.useremail.Value;
+              setStorageInfo(userStorage, `bvuser_${userId}`);
             }
           } else {
             Drupal.logJavascriptError('review-summary', result.error);
