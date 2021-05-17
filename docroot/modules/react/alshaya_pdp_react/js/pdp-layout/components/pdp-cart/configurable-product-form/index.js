@@ -250,7 +250,7 @@ class ConfigurableProductForm extends React.Component {
           <>
             <div className="magv2-add-to-basket-container" ref={this.button}>
               <button
-                className="magv2-button"
+                className="magv2-button add-to-cart-button"
                 id={`add-to-cart-${context}`}
                 type="submit"
                 onClick={(e) => addToCartConfigurable(
