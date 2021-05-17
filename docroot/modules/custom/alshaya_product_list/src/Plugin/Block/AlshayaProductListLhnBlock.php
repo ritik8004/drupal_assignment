@@ -197,7 +197,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
       ->get('alshaya_product_list.settings')
       ->getCacheTags();
     $cache_merge_tags = $this->routeMatch->getParameter('node')->getCacheTags();
-    $cache_tags = array_merge($cache_merge_tags, [ProductCategoryTree::CACHE_TAG]);
+    $cache_tags = array_merge($config_cache_tags, $cache_merge_tags, [ProductCategoryTree::CACHE_TAG]);
 
     return Cache::mergeTags(
       parent::getCacheTags(),

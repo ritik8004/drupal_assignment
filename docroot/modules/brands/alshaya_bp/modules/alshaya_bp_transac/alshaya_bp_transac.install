@@ -14,7 +14,7 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  * 
- * Install alshaya_bp_transac.settings file.
+ * Install alshaya_product_list.settings file.
  */
 function alshaya_bp_transac_update_8015() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
