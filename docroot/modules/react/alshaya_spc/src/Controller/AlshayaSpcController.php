@@ -715,6 +715,14 @@ class AlshayaSpcController extends ControllerBase {
       $status[$key] = FALSE;
 
       switch ($key) {
+        case 'fullname':
+          // If full name is not empty.
+          if (!empty($value) && !empty($value[0]) && !empty($value[1])) {
+            $status[$key] = TRUE;
+          }
+          $status[$key] = FALSE;
+          break;
+
         case 'mobile':
           $country_code = _alshaya_custom_get_site_level_country_code();
           $country_mobile_code = '+' . $this->mobileUtil->getCountryCode($country_code);
