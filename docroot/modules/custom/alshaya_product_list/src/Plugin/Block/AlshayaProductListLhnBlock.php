@@ -26,7 +26,6 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
 
   const CONTENT_TYPE = 'product_list';
   const VOCAB_ID = 'acq_product_category';
-  const TERM_NAME = 'Shop by department';
 
   /**
    * Stores the configuration factory.
@@ -160,7 +159,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
           }
           $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
             'vid' => self::VOCAB_ID,
-            'name' => self::TERM_NAME,
+            'name' => $this->configFactory->get('alshaya_bp_transac.settings')->get('parent_term_name'),
             'depth_level' => 1,
           ]);
           if (empty($vocab_list)) {
@@ -194,8 +193,11 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function getCacheTags() {
+    $config_cache_tags = $this->configFactory
+      ->get('alshaya_bp_transac.settings')
+      ->getCacheTags();
     $cache_merge_tags = $this->routeMatch->getParameter('node')->getCacheTags();
-    $cache_tags = array_merge($cache_merge_tags, [ProductCategoryTree::CACHE_TAG]);
+    $cache_tags = array_merge($config_cache_tags, $cache_merge_tags, [ProductCategoryTree::CACHE_TAG]);
 
     return Cache::mergeTags(
       parent::getCacheTags(),
