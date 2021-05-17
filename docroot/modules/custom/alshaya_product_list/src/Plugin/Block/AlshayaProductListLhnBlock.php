@@ -26,6 +26,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
 
   const CONTENT_TYPE = 'product_list';
   const VOCAB_ID = 'acq_product_category';
+  const TERM_NAME = 'Shop by department';
 
   /**
    * Stores the configuration factory.
@@ -159,6 +160,8 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
           }
           $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
             'vid' => self::VOCAB_ID,
+            'name' => self::TERM_NAME,
+            'depth_level' => 1,
           ]);
           if (empty($vocab_list)) {
             return [];
