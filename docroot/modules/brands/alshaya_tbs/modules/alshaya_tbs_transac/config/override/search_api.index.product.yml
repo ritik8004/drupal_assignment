@@ -1,0 +1,101 @@
+field_settings:
+  attr_target_area:
+    label: 'Target Area'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_target_area
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_concern:
+    label: 'Concern'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_concern
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_range:
+    label: 'Range'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_range
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_product_type_hb:
+    label: 'Product Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_product_type_hb
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_category_type:
+    label: 'Category Type'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_category_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_vegan:
+    label: 'Vegan'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_vegan
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_free_form:
+    label: 'Free Form'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_free_form
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_finish:
+    label: 'Finish'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_finish
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_scent:
+    label: 'Scent'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_scent
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_coverage:
+    label: 'Coverage'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_coverage
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku

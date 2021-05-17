@@ -111,6 +111,7 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   $client->copyIndex('dummy', $name);
   $index = $client->initIndex($name);
 
+  $settings = $settingsSource;
   if ($migrate_index) {
     $settings['attributesForFaceting'] = $settingsSource['attributesForFaceting'];
   }
@@ -118,7 +119,6 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
     $settings['attributesForFaceting'] = $facets;
   }
 
-  $settings = $settingsSource;
   $settings['searchableAttributes'] = $searchable_attributes;
   $settings['ranking'] = $ranking;
   unset($settings['replicas']);
