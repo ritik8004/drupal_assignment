@@ -16,7 +16,7 @@ use Drupal\taxonomy\Entity\Term;
  *
  * Adds Fawry payment method and other related data.
  */
-function alshaya_spc_update_8011() {
+function alshaya_spc_update_8012() {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
   $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $checkoutcom_upapi_fawry = $checkout_options_manager->loadPaymentMethod('checkout_com_upapi_fawry', 'Pay with Fawry');
@@ -52,6 +52,33 @@ function alshaya_spc_update_8011() {
   ];
 
   alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.3.0] Remove old cybersource payment method.
+ */
+function alshaya_spc_update_8011() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+
+  // Remove from excluded payment methods.
+  $exclude_payment_methods_data = $config->get('exclude_payment_methods');
+  unset($exclude_payment_methods_data['cybersource']);
+  $config->set('exclude_payment_methods', $exclude_payment_methods_data);
+
+  // Remove from refund_exclude_payment_methods.
+  $refund_exclude_payment_methods_data = $config->get('refund_exclude_payment_methods');
+  unset($refund_exclude_payment_methods_data['cybersource']);
+  $config->set('refund_exclude_payment_methods', $refund_exclude_payment_methods_data);
+
+  $config->save();
+
+  // Delete the KNET payment method taxonomy term.
+  $payment_method_term = \Drupal::service('alshaya_acm_checkout.options_manager')->loadPaymentMethod('cybersource');
+  if ($payment_method_term instanceof Term) {
+    $payment_method_term->delete();
+  }
 }
 
 /**

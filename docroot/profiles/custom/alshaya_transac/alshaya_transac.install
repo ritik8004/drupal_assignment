@@ -17,6 +17,16 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * [6.3.0] Uninstall acq_cybersource module from
+ * docroot/modules/commerce/acq_commerce/modules.
+ */
+function alshaya_transac_update_8135() {
+  \Drupal::service('module_installer')->uninstall(['acq_cybersource']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.1.0] Uninstall the unused KNET module and disable the knet plugins.
  */
 function alshaya_transac_update_8134()
