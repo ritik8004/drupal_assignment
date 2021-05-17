@@ -191,7 +191,7 @@
 
 .basic-details-wrapper {
   @include breakpoint($only-mobile) {
-    margin-bottom: 2rem;
+    margin-bottom: 0;
   }
 
   .field--name-field-skus {
@@ -1252,6 +1252,7 @@ html[lang=ar] {
 
     @include breakpoint($only-mobile) {
       width: 100%;
+      margin-bottom: 0;
     }
   }
 
