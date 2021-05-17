@@ -94,9 +94,7 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    $devel_env = getenv('DEVEL_ENV');
-
-    if (!empty($devel_env) && $devel_env === 'lando') {
+    if (getenv('LANDO')) {
       // If we're running Lando, our best option is to flush our memcache
       // services.
       $this->say('Flushing memcache servers.');
@@ -236,7 +234,7 @@ class LocalCommand extends BltTasks {
     if (!isset($path)) {
       $path = '/var/www/alshaya/files-private';
 
-      if (getenv('DEVEL_ENV') == 'lando') {
+      if (getenv('LANDO')) {
         $path = '/app/files-private';
       }
 
@@ -290,7 +288,9 @@ class LocalCommand extends BltTasks {
 
     $info['profile'] = $site_data['type'];
 
-    $info['local']['url'] = 'local.alshaya-' . $site . '.com';
+    $info['local']['url'] = getenv('LANDO')
+      ? $site . '.alshaya.lndo.site'
+      : 'local.alshaya-' . $site . '.com';
     $info['local']['alias'] = 'self';
 
     foreach ($this->stacks as $alias_prefix) {

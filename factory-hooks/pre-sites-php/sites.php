@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Customisation of sites.php for local dev env.
@@ -14,5 +15,10 @@ if (!isset($_ENV['AH_SITE_ENVIRONMENT'])) {
 
   foreach ($data['sites'] as $site_code => $site_info) {
     $sites['local.alshaya-' . $site_code . '.com'] = 'g';
+
+    if (getenv('LANDO')) {
+      $sites[$site_code . '.alshaya.lndo.site'] = 'g';
+      $sites[$site_code . '.varnish.alshaya.lndo.site'] = 'g';
+    }
   }
 }

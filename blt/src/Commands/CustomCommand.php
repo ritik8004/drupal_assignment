@@ -254,7 +254,9 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site ($list):");
     }
-    $uri = "local.alshaya-$site.com";
+    $uri = getenv('LANDO')
+      ? $site . '.alshaya.lndo.site'
+      : 'local.alshaya-' . $site . '.com';
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 
@@ -301,7 +303,9 @@ class CustomCommand extends BltTasks {
     else {
       $country_code = $this->ask("Enter country code for the site:, ($list):");
     }
-    $uri = "local.alshaya-$site.com";
+    $uri = getenv('LANDO')
+      ? $site . '.alshaya.lndo.site'
+      : 'local.alshaya-' . $site . '.com';
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
 

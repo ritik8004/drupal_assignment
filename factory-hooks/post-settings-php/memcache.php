@@ -111,6 +111,13 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
       global $host_site_code;
       $settings['memcache']['key_prefix'] = $host_site_code;
+
+      if (getenv('LANDO')) {
+        $settings['memcache']['servers'] = [
+          'memcache1:11211' => 'default',
+          'memcache2:11211' => 'default',
+        ];
+      }
     }
   }
 }

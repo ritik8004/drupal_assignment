@@ -11,30 +11,36 @@
  * Database configuration.
  */
 
-$hostname = $_SERVER['HTTP_HOST'];
-
 $dir = dirname(DRUPAL_ROOT);
 
+// Web requests.
 if (!empty($_SERVER['HTTP_HOST'])) {
   $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
-  $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
 }
+// Drush requests.
 else {
-  $host_site_code = 'default_local';
   foreach ($_SERVER['argv'] as $arg) {
-    preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
-    if (!empty($matches)) {
-      $host_site_code = $matches[1];
+    if (strpos($arg, '--uri') > -1) {
+      $url = str_replace('--uri=', '', $arg);
+      $url = str_replace('https://', '', $url);
+      $url = str_replace('http://', '', $url);
+
+      $hostname_parts = explode('.', $url);
       break;
     }
   }
 }
 
+// Support LANDO and Vagrant both.
+$host_site_code = getenv('LANDO')
+  ? $hostname_parts[0]
+  : str_replace('alshaya-', '', $hostname_parts[1]);
+
 // We set "drupal" as a default database if no domain found. This assures it won't throw errors on empty --uri parameter
 $drupal_database = ( $host_site_code == 'default_local' ? 'drupal' : 'drupal_alshaya_' . str_replace('-', '_', $host_site_code) );
 $host = 'localhost';
 
-if (isset($_ENV['DEVEL_ENV']) && ($_ENV['DEVEL_ENV'] == 'lando')) {
+if (getenv('LANDO')) {
   $host = 'database';
 }
 
@@ -182,11 +188,3 @@ $settings['file_public_path'] = 'sites/g/files/' . $host_site_code;
 $settings['trusted_host_patterns'] = array(
   '^.+$',
 );
-
-if (isset($_ENV['DEVEL_ENV']) && ($_ENV['DEVEL_ENV'] == 'lando')) {
-  # Lando memcache configuration.
-  $settings['memcache']['servers'] = [
-    'memcache1:11211' => 'default',
-    'memcache2:11211' => 'default',
-  ];
-}

@@ -219,7 +219,6 @@ switch ($env_name) {
     $settings['linked_skus_timeout'] = 5;
 
     // Specific/development modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
 
     // Increase autologout timeout on local so we are not always logged out.
@@ -237,7 +236,6 @@ switch ($env_name) {
   case 'dev3':
   case 'test':
     // Specific/development modules to be enabled on this env.
-    $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
     $settings['additional_modules'][] = 'purge_ui';
 
@@ -254,3 +252,6 @@ switch ($env_name) {
     break;
 
 }
+
+// Disable importing translations from remote.
+$config['locale.settings']['translation']['use_source'] = 'local';
