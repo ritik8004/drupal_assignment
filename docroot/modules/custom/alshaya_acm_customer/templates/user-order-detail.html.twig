@@ -139,10 +139,10 @@
           </div>
 
           {% if order_details.payment.referenceNumber %}
-          <div class="mobile-only payment--details">
-            <div class="label font-small">{{ "Reference No"|t }}</div>
-            <div class="dark">{{ order_details.payment.referenceNumber }}</div>
-          </div>
+            <div class="mobile-only payment--details">
+              <div class="label font-small">{{ "Reference No"|t }}</div>
+              <div class="dark">{{ order_details.payment.referenceNumber }}</div>
+            </div>
           {% endif %}
 
           {% if order_details.payment.banktransfer_payment_details %}
