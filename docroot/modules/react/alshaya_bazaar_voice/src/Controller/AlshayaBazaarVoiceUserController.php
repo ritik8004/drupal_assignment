@@ -86,6 +86,7 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
         'reviews_initial_load' => $config->get('reviews_initial_load'),
         'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
         'user_id' => $this->currentUser->id(),
+        'stats' => 'Reviews',
       ],
     ];
 
