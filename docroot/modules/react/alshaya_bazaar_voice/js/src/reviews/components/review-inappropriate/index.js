@@ -1,10 +1,10 @@
 import React from 'react';
 import { postAPIData } from '../../../utilities/api/apiData';
 import {
-  setStorageInfo,
-  getStorageInfo,
+  updateStorageInfo,
 } from '../../../utilities/storage';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getFeedbackInfo } from '../../../utilities/feedback_util';
 
 class ReviewInappropriate extends React.Component {
   constructor(props) {
@@ -32,11 +32,11 @@ class ReviewInappropriate extends React.Component {
         if (result.error === undefined
           && result.data !== undefined
           && result.data.error === undefined) {
-          const reportedVoteObj = {
-            contentId,
-            reported: 'Yes',
+          const reportVoteObj = {
+            id: contentId,
+            reported: 1,
           };
-          setStorageInfo(reportedVoteObj, `${contentType}-reportedVote-${contentId}`);
+          updateStorageInfo(contentType, reportVoteObj, contentId);
         } else {
           Drupal.logJavascriptError(`review-${contentType}-report-feedback`, result.error);
         }
@@ -47,12 +47,12 @@ class ReviewInappropriate extends React.Component {
   render() {
     const { contentId, contentType } = this.props;
     if (contentId !== undefined) {
-      const reportedContentVote = getStorageInfo(`${contentType}-reportedVote-${contentId}`);
+      const feedbackStorage = getFeedbackInfo(contentType, contentId, 'report');
       const { disabled, reportButtonText } = this.state;
       const newText = getStringMessage('reported');
       return (
         <>
-          {reportedContentVote === null ? (
+          {feedbackStorage === null ? (
             <span className={`feedback-report ${disabled ? 'feedback-report-disabled' : 'feedback-report-active'}`}>
               <button type="button" onClick={this.reportContent(contentId, newText, contentType)} disabled={disabled}>
                 <span className="feedback-option-label">{reportButtonText}</span>
