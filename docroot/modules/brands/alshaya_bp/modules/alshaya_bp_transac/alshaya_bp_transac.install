@@ -14,6 +14,21 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  * 
+ * Install alshaya_bp_transac.settings file.
+ */
+function alshaya_bp_transac_update_8015() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_product_list.settings'],
+    'alshaya_product_list',
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.2.0] Installing brand_category filter.
  */
 function alshaya_bp_transac_update_8014() {
