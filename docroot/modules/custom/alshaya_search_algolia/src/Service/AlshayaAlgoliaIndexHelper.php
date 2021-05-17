@@ -828,7 +828,7 @@ class AlshayaAlgoliaIndexHelper {
     }
 
     foreach ($swatches['swatches'] as $key => $swatch) {
-      if ($index_product_image_url) {
+      if ($index_product_image_url && ($swatch['swatch_type'] == 'image')) {
         $child = SKU::loadFromSku($swatch['child_sku_code']);
         $swatch_product_image = $child->getThumbnail();
         // If we have image for the product.
