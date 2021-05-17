@@ -49,6 +49,9 @@ function alshaya_spc_update_8012() {
     ],
     'Reference number' => [
       'ar' => 'رقم المرجع'
+    ],
+    'Reference No' => [
+      'ar' => 'رقم المرجع'
     ]
   ];
 

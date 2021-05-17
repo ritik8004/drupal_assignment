@@ -69,11 +69,6 @@ class CheckoutComUpapiFawry extends AlshayaSpcPaymentMethodPluginBase implements
    */
   public function processBuild(array &$build) {
     $build['#strings'] = array_merge($build['#strings'], self::getFawryStaticText());
-
-    $config = $this->apiWrapper->getCheckoutcomUpApiConfig();
-    $build['#attached']['drupalSettings']['checkoutComUpapiFawry'] = [
-      'fawry_expiry_time' => $config['fawry_expiry_time'],
-    ];
   }
 
   /**
