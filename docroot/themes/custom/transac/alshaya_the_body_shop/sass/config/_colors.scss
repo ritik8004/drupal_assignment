@@ -107,6 +107,7 @@ $menu-border-desktop: $cyprus;
 $header_c_menu_text: $cyprus;
 $header_toggle_sign_active_tab_logged_in: $black-two;
 $header-my-acc-heading-border: $_screeching_white;
+$header_c_menu_search_active_icon: $white;
 
 // Header my account nav.
 $header_my_account_link_hover: $cyprus;
@@ -218,6 +219,7 @@ $pdp_sidebar_link: $cyprus;
 $pdp_product_delivery-border: $warm-grey-two;
 $pdp_accordion_title: $cyprus;
 $pdp-product-size-label: $grey-light;
+$pdp_sell_title: $cyprus;
 
 // Checkout Global.
 $checkout_header_border-bottom: $cyprus;
@@ -367,6 +369,8 @@ $store_finder_glossary_border: $cyprus;
 $store_finder_glossary_text_border: $warm-grey-two;
 $store_finder_glossary_icon: $cyprus;
 $store_finder_glossary_alphabet: $cyprus;
+$store_finder_individual_hour_border: $warm-grey-two;
+$store_finder_search_results_hour_icon_open: $cyprus;
 
 // PLP
 $lhn_l3: $cyprus;
@@ -426,3 +430,9 @@ $minicart_notification_border: $cyprus;
 $minicart_notification_product_title: $cyprus;
 $minicart_notification_btn_bg: $cyprus;
 $minicart_notification_text: $grey-light;
+
+// Out of stock button
+$oos_btn_bg: $poster-orange;
+
+// Product listing page and search page
+$plp_promotion_link: $poster-orange;
