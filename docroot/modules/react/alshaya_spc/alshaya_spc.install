@@ -23,8 +23,7 @@ function alshaya_spc_update_8012() {
   $checkoutcom_upapi_fawry = $checkoutcom_upapi_fawry->hasTranslation('ar')
     ? $checkoutcom_upapi_fawry->getTranslation('ar')
     : $checkoutcom_upapi_fawry->addTranslation('ar', []);
-  // @todo Need translation here.
-  $checkoutcom_upapi_fawry->setName('Pay with Fawry AR');
+  $checkoutcom_upapi_fawry->setName('ادفع عبر خدمة فوري');
   $checkoutcom_upapi_fawry->save();
 
   // Disable new fawry method by default
@@ -35,20 +34,25 @@ function alshaya_spc_update_8012() {
   $config->set('refund_exclude_payment_methods', $data);
   $config->save();
 
-  // @todo Add translations below.
   $strings = [
-    'You’ll receive your Fawry reference number on the contact details below once you’ve placed your order.​' => [
-      'ar' => '',
+    'Once the product is successfully requested, we will send you Fawry Ref. No. to the below contact details' => [
+      'ar' => 'سوف يصلك الرقم المرجعي لخدمة فوري على تفاصيل الاتصال أدناه، بمجرد إتمام الطلبية.',
     ],
-    "Pay for your order through any of <a href='#'>Fawry's cash points</a> at your convenient time and location across Egypt." => [
-      'ar' => '',
+    "Pay for your order through any of <a href='@fawry_link' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt." => [
+      'ar' => "قم بدفع مبلغ الطلبية عن طريق خدمة فوري من أي <a href='@fawry_link'target='_blank'>نقطة دفع نقدي،</a> وفي أي وقت ومكان في جميع أرجاء مصر.",
     ],
-    'Cash payment with Fawry' => [
-      'ar' => '',
+    'Complete payment by' => [
+      'ar' => 'إتمام الدفع من خلال',
     ],
-    'Amount due - @amount. Please complete your payment at the nearest Fawry cash point using your reference #@reference_no by @date_and_time.​' => [
-      'ar' => '',
+    'Amount Due' => [
+      'ar' => 'المبلغ المستحق'
     ],
+    'Reference number' => [
+      'ar' => 'رقم المرجع'
+    ],
+    'Reference No' => [
+      'ar' => 'رقم المرجع'
+    ]
   ];
 
   alshaya_i18n_save_translations($strings);
