@@ -256,11 +256,6 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
         ],
       ];
 
-      // To avoid issues in JS we always add the cybersource js library.
-      if ($payment_plugin == 'cybersource') {
-        $pane_form['payment_details_wrapper']['payment_method_' . $payment_plugin]['#attached']['library'][] = 'acq_cybersource/cybersource';
-      }
-
       // We add apple pay JS, so early validation can be performed regarding
       // browser support, if a non supported browser we can disable the Apple
       // Pay payment Option while listing down all available payment options.
