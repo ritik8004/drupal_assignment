@@ -476,4 +476,29 @@ class LocalCommand extends BltTasks {
     }
   }
 
+  /**
+   * Add new QA account.
+   *
+   * @param string $mail
+   *   Mail address of QA.
+   *
+   * @command local:add-qa-account
+   *
+   * @description Add QA account for creation on restaging on all non-prod envs.
+   */
+  public function addQaAccount(string $mail) {
+    foreach ($this->envs as $env) {
+      foreach ($this->stacks as $stack) {
+        $this->io()->writeln("$env - $stack");
+        $task = $this->taskDrush();
+        $task->interactive(FALSE);
+        $task->drush('ssh "echo ' . $mail . ' >> ~/qa_accounts.txt"')
+          ->alias($stack . $env)
+          ->printOutput(TRUE);
+        $result = $task->run();
+        $this->io()->writeln($result->getMessage());
+      }
+    }
+  }
+
 }
