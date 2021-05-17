@@ -80,7 +80,7 @@ export default class PdpHeader extends React.PureComponent {
               <div className="magv2-add-to-basket-container" ref={this.button}>
                 {(configurableCombinations) ? (
                   <button
-                    className="magv2-button"
+                    className="magv2-button add-to-cart-button"
                     type="submit"
                     id="add-to-cart-sticky"
                     onClick={(e) => addToCartConfigurable(e, 'add-to-cart-sticky', configurableCombinations, skuCode, productInfo, pdpLabelRefresh, context, null)}
@@ -89,7 +89,7 @@ export default class PdpHeader extends React.PureComponent {
                   </button>
                 ) : (
                   <button
-                    className="magv2-button"
+                    className="magv2-button add-to-cart-button"
                     type="submit"
                     id="add-to-cart-sticky"
                     onClick={(e) => addToCartSimple(e, 'add-to-cart-sticky', skuCode, productInfo, pdpLabelRefresh, context, null)}
