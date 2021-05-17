@@ -1291,6 +1291,8 @@ const productRecommendationsSuffix = 'pr-';
    * @param category
    */
   Drupal.logJavascriptError = function (context, error, category) {
+    console.log(error);
+
     var message = (error && error.message !== undefined)
       ? error.message
       : error;
