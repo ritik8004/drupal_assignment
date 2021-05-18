@@ -1,4 +1,4 @@
-@javascript @returnUser @madaPayment @auth @vssauat
+@javascript @returnUser @madaPayment @auth @vssauat @pbsauat @pbaeuat @pbkwuat
 Feature: SPC Checkout using Click & Collect store for returning customer
 
   Background:
@@ -11,7 +11,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -103,7 +103,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -198,7 +198,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -250,12 +250,12 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait for the page to load
     Then I should be on "/{language_short}/checkout/confirmation" page
 
-  @cc @hd @checkout_com @mastercard @mada @test12
+  @cc @hd @checkout_com @mastercard @mada
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -344,7 +344,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -439,7 +439,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
