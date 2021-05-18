@@ -34,7 +34,7 @@ export default class ReviewFilters extends React.Component {
     const availableFilters = [];
     if (filterOptions !== undefined && filterOptions !== null) {
       Object.entries(filterOptions).forEach(([index]) => {
-        const contextData = filterOptions[index].ReviewStatistics.ContextDataDistribution;
+        const contextData = filterOptions[index].FilteredReviewStatistics.ContextDataDistribution;
         Object.entries(contextData).forEach(([item, option]) => {
           if (item.includes('_filter')) {
             const options = Object.keys(option.Values).map((key) => ({

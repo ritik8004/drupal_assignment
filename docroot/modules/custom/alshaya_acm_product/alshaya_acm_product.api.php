@@ -145,5 +145,19 @@ function hook_alshaya_acm_product_remove_disabled_products_alter(array &$data, S
 }
 
 /**
+ * Allow other modules to add/alter attributes value.
+ *
+ * @param array $attributes
+ *   Product attributes data.
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU Entity.
+ * @param string $field_name
+ *   Product attribute field name.
+ */
+function hook_sku_product_attribute_alter(array &$attributes, SKUInterface $sku, string $field_name) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
