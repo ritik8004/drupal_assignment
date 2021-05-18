@@ -10,7 +10,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\User;
+use Drupal\user\Entity\Role;
 
+/**
+ * Implements hook_update_N().
+ *
+ * [6.2.0] Delete the cart_promotions resource config.
+ */
+function alshaya_mobile_app_update_8079() {
+  // Deleting the sku_images rest config.
+  \Drupal::configFactory()->getEditable('rest.resource.cart_promotions')->delete();
+  // Disable the resource related permissions.
+  $role = Role::load('anonymous');
+  if ($role->hasPermission('restful get cart_promotions')) {
+    $role->revokePermission('restful get cart_promotions');
+  }
+  $role->save();
+}
 /**
  * Implements hook_update_N().
  *
