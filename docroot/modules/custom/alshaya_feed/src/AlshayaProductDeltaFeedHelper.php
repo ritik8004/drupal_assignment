@@ -499,4 +499,24 @@ class AlshayaProductDeltaFeedHelper {
     $fields['categories'] = !empty($parsed_categories) ? implode('|', array_unique($parsed_categories)) : '';
   }
 
+  /**
+   * Delta Feed data for SKU without stock.
+   *
+   * @param string $sku
+   *   The product sku string.
+   *
+   * @return array
+   *   Data array.
+   */
+  public function prepareFeedDataforSkuOos(string $sku) {
+    $fields['sku'] = $sku;
+    foreach ($this->languageManager->getLanguages() as $lang => $language) {
+      $locale_key_prefix = 'lng:' . AlshayaI18nLanguages::getLocale($lang) . ':';
+      $fields[$locale_key_prefix . 'in_stock'] = FALSE;
+      $fields[$locale_key_prefix . 'quantity'] = 0;
+    }
+
+    return $fields;
+  }
+
 }

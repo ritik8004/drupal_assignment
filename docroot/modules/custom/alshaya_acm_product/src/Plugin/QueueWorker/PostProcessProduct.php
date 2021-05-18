@@ -143,15 +143,15 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
       // Get children of the SKU.
       $children = $this->skuManager->getChildSkus($sku);
 
-      // If children is empty then it's a simple SKU, delete SKU from feed.
+      // If children is empty then it's a simple SKU, set SKU oos in delta feed.
       if (empty($children)) {
-        $this->deleteFromFeed($feeds, $sku);
+        $this->productFeedStockUpdate($feeds, $sku);
         return;
       }
 
-      // Delete each child SKU from feed.
+      // Set SKU oos in delta feed.
       foreach ($children as $child_sku) {
-        $this->deleteFromFeed($feeds, $child_sku->getSku());
+        $this->productFeedStockUpdate($feeds, $child_sku->getSku());
         return;
       }
     }
@@ -159,7 +159,7 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
     $feed_data = $this->productDeltaFeedHelper->prepareProductFeedData($node->id());
 
     if (empty($feed_data)) {
-      $this->deleteFromFeed($feeds, $sku);
+      $this->productFeedStockUpdate($feeds, $sku);
 
       $this->getLogger('PostProcessProduct')->warning('Feed data is empty for sku: @sku, node id: @nid.', [
         '@sku' => $sku,
@@ -187,12 +187,31 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
    * @param string $sku
    *   SKU.
    */
-  private function deleteFromFeed(array $feeds, string $sku) {
+  public function deleteFromFeed(array $feeds, string $sku) {
     foreach ($feeds as $feed) {
       $this->dyProductDeltaFeedApiWrapper->productFeedDelete($feed['api_key'], $feed['id'], $sku);
     }
 
     $this->getLogger('PostProcessProduct')->notice('DY delete API invoked. Processed product with sku: @sku.', [
+      '@sku' => $sku,
+    ]);
+  }
+
+  /**
+   * Update Sku stock info on delta feed.
+   *
+   * @param array $feeds
+   *   Feeds array.
+   * @param string $sku
+   *   SKU.
+   */
+  private function productFeedStockUpdate(array $feeds, string $sku) {
+    foreach ($feeds as $feed) {
+      $data['data'] = $this->productDeltaFeedHelper->prepareFeedDataforSkuOos($sku);
+      $this->dyProductDeltaFeedApiWrapper->productFeedPartialUpdate($feed['api_key'], $feed['id'], $sku, $data);
+    }
+
+    $this->getLogger('PostProcessProduct')->notice('DY partial update API invoked. Processed product with sku: @sku.', [
       '@sku' => $sku,
     ]);
   }
