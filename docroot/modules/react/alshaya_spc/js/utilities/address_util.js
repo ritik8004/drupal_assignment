@@ -281,10 +281,33 @@ export const addEditAddressToCustomer = (e) => {
   const target = e.target.elements;
   // Validate mobile number.
   const mobile = e.target.elements.mobile.value.trim();
-  const validationRequest = validateInfo({ mobile });
+
+  const validationData = {
+    mobile: target.mobile.value.trim(),
+    fullname: extractFirstAndLastName(target.fullname.value.trim()),
+  };
+
+  const validationRequest = validateInfo(validationData);
   if (validationRequest instanceof Promise) {
     validationRequest.then((result) => {
       if (result.status === 200 && result.data.status) {
+        let validName = true;
+        // If invalid full name.
+        if (result.data.fullname === false) {
+          validName = false;
+          removeFullScreenLoader();
+          document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
+          document.getElementById('fullname-error').classList.add('error');
+          return;
+        }
+
+        // If name is valid.
+        if (validName === true) {
+          // Remove error class and any error message.
+          document.getElementById('fullname-error').innerHTML = '';
+          document.getElementById('fullname-error').classList.remove('error');
+        }
+
         // If not valid mobile number.
         if (result.data.mobile === false) {
           // Removing loader in case validation fail.
@@ -465,6 +488,7 @@ export const checkoutAddressProcess = (e) => {
 
   const validationData = {
     mobile: e.target.elements.mobile.value,
+    fullname: extractFirstAndLastName(e.target.elements.fullname.value.trim()),
   };
   const targetElementEmail = e.target.elements.email;
   if (targetElementEmail !== undefined && targetElementEmail.value.toString().length > 0) {
@@ -491,6 +515,17 @@ export const checkoutAddressProcess = (e) => {
       // Remove error class and any error message.
       document.getElementById('mobile-error').innerHTML = '';
       document.getElementById('mobile-error').classList.remove('error');
+    }
+
+    // If invalid full name.
+    if (response.data.fullname === false) {
+      document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
+      document.getElementById('fullname-error').classList.add('error');
+      isError = true;
+    } else {
+      // Remove error class and any error message.
+      document.getElementById('fullname-error').innerHTML = '';
+      document.getElementById('fullname-error').classList.remove('error');
     }
 
     // Do the processing only if we did email validation.
@@ -631,10 +666,32 @@ export const processBillingUpdateFromForm = (e, shipping) => {
 
   const target = e.target.elements;
 
-  const validationRequest = validateInfo({ mobile: target.mobile.value.trim() });
+  const validationData = {
+    mobile: target.mobile.value.trim(),
+    fullname: extractFirstAndLastName(target.fullname.value.trim()),
+  };
+
+  const validationRequest = validateInfo(validationData);
   if (validationRequest instanceof Promise) {
     validationRequest.then((result) => {
       if (result.status === 200 && result.data.status) {
+        let validName = true;
+        // If invalid full name.
+        if (result.data.fullname === false) {
+          removeFullScreenLoader();
+          validName = false;
+          document.getElementById('fullname-error').innerHTML = getStringMessage('form_error_full_name');
+          document.getElementById('fullname-error').classList.add('error');
+          return;
+        }
+
+        // If name is valid, remove error.
+        if (validName === true) {
+          // Remove error class and any error message.
+          document.getElementById('fullname-error').innerHTML = '';
+          document.getElementById('fullname-error').classList.remove('error');
+        }
+
         // If not valid mobile number.
         if (result.data.mobile === false) {
           // Removing loader in case validation fail.
