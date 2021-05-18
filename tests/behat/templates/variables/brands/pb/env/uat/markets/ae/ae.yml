@@ -1,4 +1,4 @@
 variables:
-  product_listing_page_url: '/shop-outdoor/'
-  spc_product_listing_page: '/shop-outdoor/'
-  spc_basket_page: '/shop-outdoor/'
+  product_listing_page_url: '/shop-decor-cushions/'
+  spc_product_listing_page: '/shop-decor-cushions/'
+  spc_basket_page: '/shop-decor-cushions/'
