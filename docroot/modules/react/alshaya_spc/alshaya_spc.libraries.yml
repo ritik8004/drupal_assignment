@@ -48,6 +48,7 @@ add_to_cart_api_v2:
   footer: true
   js:
     assets/js/add_to_cart_v2.js: { }
+    assets/js/cart_utilities_v2.js: { }
   dependencies:
     - alshaya_spc/cart_utilities
 
