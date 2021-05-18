@@ -1,4 +1,4 @@
-@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat
+@javascript @smoke @pbsauat @hmaeuat @mckwuat @vssauat @bbwkwuat @hmkwuat @hmsauat @flkwuat @flaeuat @bbwaeuat @vsaeuat @pbaeuat @pbkwuat @pbsauat
 Feature: Test the Checkout Login functionality
 
   Scenario: As a user, I should be able to see cart content added as anonymous user once I log into the site
@@ -7,7 +7,7 @@ Feature: Test the Checkout Login functionality
     And I wait for the page to load
     When I select a product in stock on ".c-products__item"
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
