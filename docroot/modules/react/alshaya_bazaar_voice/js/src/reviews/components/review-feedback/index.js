@@ -2,7 +2,7 @@ import React from 'react';
 import ReviewInappropriate from '../review-inappropriate';
 import ReviewFeedbackPositive from '../review-feedback-positive';
 import ReviewFeedbackNegative from '../review-feedback-negative';
-import { getStorageInfo } from '../../../utilities/storage';
+import { getFeedbackInfo } from '../../../utilities/feedback_util';
 
 class ReviewFeedback extends React.Component {
   constructor(props) {
@@ -15,8 +15,8 @@ class ReviewFeedback extends React.Component {
   componentDidMount() {
     document.addEventListener('handleFeedbackState', this.handleFeedbackState);
     const { contentId, contentType } = this.props;
-    const checkFeedbackInStorage = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
-    if (checkFeedbackInStorage !== null) {
+    const retrievedContentVote = getFeedbackInfo(contentType, contentId, 'positiveCount');
+    if (retrievedContentVote !== null) {
       this.setState({ votedContentId: contentId });
     }
   }

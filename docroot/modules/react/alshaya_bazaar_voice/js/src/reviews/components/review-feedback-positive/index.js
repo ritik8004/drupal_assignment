@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  getStorageInfo,
-} from '../../../utilities/storage';
-import { handleFeedbackSubmit } from '../../../utilities/feedback_util';
+import { handleFeedbackSubmit, getFeedbackInfo } from '../../../utilities/feedback_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
 
 class ReviewFeedbackPositive extends React.Component {
@@ -32,7 +29,7 @@ class ReviewFeedbackPositive extends React.Component {
     const { positiveCount } = this.state;
     const { contentId, contentType, btnStatus } = this.props;
     const positiveText = 'Positive';
-    const retrievedContentVote = getStorageInfo(`${contentType}-helpfulnessVote-${contentId}`);
+    const feedbackStorage = getFeedbackInfo(contentType, contentId, 'positiveCount');
     if (contentId !== undefined && positiveText !== undefined) {
       return (
         <span className="feedback-positive">
@@ -40,7 +37,7 @@ class ReviewFeedbackPositive extends React.Component {
             <span className="feedback-option-label">{getStringMessage('yes')}</span>
             <span className="feedback-count">
               (
-              {retrievedContentVote !== null ? retrievedContentVote.positiveCount : positiveCount}
+              {feedbackStorage !== null ? feedbackStorage.positiveCount : positiveCount}
               )
             </span>
           </button>

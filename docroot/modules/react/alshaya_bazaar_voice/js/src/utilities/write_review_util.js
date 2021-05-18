@@ -1,10 +1,6 @@
-import {
-  getCurrentUserEmail, getSessionCookie, setSessionCookie, getUserEmailParams,
-  getUserNicknameParams,
-  getUserNicknameKey,
-} from './user_util';
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
+import { getStorageInfo } from './storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -31,26 +27,40 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  */
 export const prepareRequest = (elements, fieldsConfig) => {
   let params = '';
+  const userId = bazaarVoiceSettings.reviews.user.user_id;
+  const userStorage = getStorageInfo(`bvuser_${userId}`);
+
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
     // Add input data from field types.
     try {
       if (elements[id].value !== null) {
-        const nicknameKey = getUserNicknameKey();
         if (id === 'useremail') {
-          params += getUserEmailParams(elements[id].value, nicknameKey);
-        } else if (id === 'usernickname') {
-          if (getSessionCookie('bv_user_id') !== null && getSessionCookie('bv_user_email') !== null
-            && getSessionCookie(nicknameKey) !== null && getCurrentUserEmail() === null) {
-            params += getUserNicknameParams(nicknameKey, elements[id].value);
-          } else {
-            params += `&${id}=${elements[id].value}`;
-            setSessionCookie(nicknameKey, elements[id].value);
+          if (userId === 0 && userStorage !== null) {
+            // Add email value to anonymous user storage.
+            if (userStorage.email === undefined
+              || (userStorage.email !== undefined
+              && userStorage.email !== elements[id].value)) {
+              userStorage.email = elements[id].value;
+            }
+            if (userStorage.bvUserId === undefined
+              || (userStorage.email !== undefined
+              && userStorage.email !== elements[id].value)) {
+              params += `&HostedAuthentication_AuthenticationEmail=${elements[id].value}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
+            }
           }
-        } else {
-          params += `&${id}=${elements[id].value}`;
+        } else if (id === 'usernickname') {
+          // Add nickname value to user storage.
+          if (userStorage !== null) {
+            if (userStorage.nickname === undefined
+              || (userStorage.nickname !== undefined
+              && userStorage.nickname !== elements[id].value)) {
+              userStorage.nickname = elements[id].value;
+            }
+          }
         }
+        params += `&${id}=${elements[id].value}`;
       }
     } catch (e) { return null; }
 
@@ -68,14 +78,13 @@ export const prepareRequest = (elements, fieldsConfig) => {
     });
   }
 
-  if (getCurrentUserEmail() === null && getSessionCookie('bv_user_email') === null) {
-    params += `&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
-  }
-  const currentUserKey = `uas_token_${bazaarVoiceSettings.reviews.user.user_id}`;
   // Set user authenticated string (UAS).
-  const userToken = getSessionCookie(currentUserKey);
-  if (getCurrentUserEmail() !== null && userToken !== undefined) {
-    params += `&user=${userToken}`;
+  if (userStorage !== null) {
+    if (bazaarVoiceSettings.reviews.user.user_id !== 0 && userStorage.uasToken !== undefined) {
+      params += `&user=${userStorage.uasToken}`;
+    } else if (userId === 0 && userStorage.bvUserId !== undefined) {
+      params += `&User=${userStorage.bvUserId}`;
+    }
   }
   // Set product id
   params += `&productid=${bazaarVoiceSettings.productid}`;
@@ -88,7 +97,11 @@ export const prepareRequest = (elements, fieldsConfig) => {
   // Set action type.
   params += '&action=submit';
 
-  return params;
+  const requestParams = {
+    params,
+    userStorage,
+  };
+  return requestParams;
 };
 
 /**
