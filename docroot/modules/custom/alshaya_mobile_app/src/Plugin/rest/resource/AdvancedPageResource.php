@@ -138,7 +138,9 @@ class AdvancedPageResource extends ResourceBase {
       if ($page !== 'front') {
         $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
       }
-      $is_front_page = TRUE;
+      else {
+        $is_front_page = TRUE;
+      }
     }
 
     try {
