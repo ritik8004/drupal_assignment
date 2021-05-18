@@ -79,7 +79,8 @@
 
                 // Update cart.
                 var cartData = Drupal.alshayaSpc.fetchCartData();
-                sendNotitifications(cartData);
+                product.totalQty = quantity;
+                sendNotitifications(cartData, product);
 
                 // Update local storage.
                 updateLocalStorage(product);
@@ -138,16 +139,6 @@
       let updateLocalStorage = function (productData) {
         var productInfo = productData.productInfo;
         var langCode = $('html').attr('lang');
-
-        // @todo uncomment and fix this
-        // if (response.response_message === null || response.response_message.status === 'success') {
-        //   if (typeof response.items[productData.variant] !== 'undefined') {
-        //     productData.totalQty = response.items[productData.variant];
-        //   } else if (typeof response.items[productData.parentSku] !== 'undefined') {
-        //     productData.totalQty = response.items[productData.parentSku];
-        //   }
-        // }
-
         var productUrl = productInfo.url;
         var price = productInfo.priceRaw;
         var promotions = productInfo.promotionsRaw;
@@ -305,7 +296,7 @@
       };
 
       // Send event notifications.
-      let sendNotitifications = function (cartData) {
+      let sendNotitifications = function (cartData, product) {
         var event = null;
         // Triggering event to notify react component.
         // @todo find a way to pass productData
@@ -313,7 +304,7 @@
           bubbles: true,
           detail: {
             data: () => cartData,
-            //productData: ???,
+            productData: product,
           },
         });
         document.dispatchEvent(event);

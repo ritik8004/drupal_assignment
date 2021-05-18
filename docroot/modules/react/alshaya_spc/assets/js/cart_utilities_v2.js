@@ -25,7 +25,7 @@
         },
       });
     }
-    console.log(cartData.cart_id);
+
     return cartData.cart_id;
   };
 
@@ -38,7 +38,7 @@
     // @todo remove proxy.
     $.ajax({
       async: false,
-      url: '/proxy.php?url=' + encodeURI(settings.cart.url + '/' + settings.cart.store + '/rest/V1/guest-carts/' + cartId + '/totals'),
+      url: '/proxy.php?url=' + encodeURI(settings.cart.url + '/' + settings.cart.store + '/rest/V1/guest-carts/' + cartId + '/getCart'),
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -58,26 +58,26 @@
   // Process cart data.
   Drupal.alshayaSpc.processCartData = function (data) {
     var cartData = {
-      cart_id: Drupal.alshayaSpc.getCartId(),
+      cart_id: Drupal.alshayaSpc.getCartId(), //@todo check why this is not the same as data.cart.id
       uid: (drupalSettings.user.uid) ? drupalSettings.user.uid : 0,
       langcode: $('html').attr('lang'),
-      customer: (data.customer) ? (data.customer) : null,
-      coupon_code: null, //@todo where to find this?
-      appliedRules: null, //@todo where to find this?
-      items_qty: data.items_qty,
-      cart_total: data.base_grand_total,
-      minicart_total: data.base_grand_total, //@todo confirm this
-      surcharge: null, //@todo confirm this?
+      customer: data.cart.customer,
+      coupon_code: null, //@todo where to find this? cart.totals.coupon_code
+      appliedRules: data.cart.applied_rule_ids,
+      items_qty: data.cart.items_qty,
+      cart_total: data.totals.base_grand_total,
+      minicart_total: data.totals.base_grand_total, //@todo confirm this
+      surcharge: data.cart.extension_attributes.surcharge,
       response_message: null,
       in_stock: true,
       is_error: false,
       stale_cart: false, //@todo confirm this?
       totals: {
-        subtotal_incl_tax: data.subtotal_incl_tax,
+        subtotal_incl_tax: data.totals.subtotal_incl_tax,
         shipping_incl_tax: null,
-        base_grand_total: data.base_grand_total,
-        base_grand_total_without_surcharge: data.base_grand_total,
-        discount_amount: data.discount_amount,
+        base_grand_total: data.totals.base_grand_total,
+        base_grand_total_without_surcharge: data.totals.base_grand_total,
+        discount_amount: data.totals.discount_amount,
         surcharge: 0,
       },
       items: [],
@@ -86,12 +86,12 @@
     if (typeof data.shipping !== 'undefined') {
       // For click_n_collect we don't want to show this line at all.
       if (data.shipping.type !== 'click_and_collect') {
-        cartData.totals.shipping_incl_tax = data.shipping_incl_tax;
+        cartData.totals.shipping_incl_tax = data.totals.shipping_incl_tax;
       }
     }
 
-    if (typeof data.surcharge !== 'undefined' && data.surcharge.amount > 0 && data.surcharge.is_applied) {
-      cartData.totals.surcharge = data.surcharge.amount;
+    if (typeof data.cart.extension_attributes.surcharge !== 'undefined' && data.cart.extension_attributes.surcharge.amount > 0 && data.cart.extension_attributes.surcharge.is_applied) {
+      cartData.totals.surcharge = data.cart.extension_attributes.surcharge.amount;
       // We don't show surcharge amount on cart total and on mini cart.
       cartData.totals.base_grand_total_without_surcharge -= cartData.totals.surcharge;
       cartData.minicart_total -= cartData.totals.surcharge;
@@ -105,15 +105,14 @@
       };
     }
 
-    if (typeof data.items !== 'undefined') {
-      data.items.forEach(function (item) {
-          //@todo Cart.php uses sku as keys but sku isn't available on the response.
-          cartData.items[item.item_id] = {
+    if (typeof data.cart.items !== 'undefined') {
+      data.cart.items.forEach(function (item) {
+          cartData.items[item.sku] = {
             id: item.item_id,
             title: item.name,
             qty: item.qty,
             price: item.price,
-            sku: '??????', //@todo sku not available
+            sku: item.sku,
             freeItem: false,
             in_stock: null, //@todo get stock information
             stock: null, //@todo get stock information
@@ -121,12 +120,14 @@
 
           if (typeof item.extension_attributes !== 'undefined' && typeof item.extension_attributes.error_message !== 'undefined') {
             cartData.items[item.item_id].error_msg = item.extension_attributes.error_message;
-            cartData.is_error = TRUE;
+            cartData.is_error = true;
           }
 
           // This is to determine whether item to be shown free or not in cart.
-          //@todo this
+          //@todo this ^
 
+          // Get stock data.
+          //@todo this ^
         },
       );
     }
