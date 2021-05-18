@@ -93,6 +93,11 @@ export default class PaymentMethod extends React.Component {
 
             Drupal.logJavascriptError('finalise payment', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
           }
+
+          // Enable the 'place order' CTA.
+          dispatchCustomEvent('updatePlaceOrderCTA', {
+            status: true,
+          });
         }
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.

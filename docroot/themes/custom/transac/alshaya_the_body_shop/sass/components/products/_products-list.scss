@@ -97,6 +97,16 @@
       }
     }
   }
+
+  .region__content {
+    .block-page-title-block.mobile {
+      h1 {
+        @include breakpoint($only-mobile) {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
 }
 
 .c-content__region {
