@@ -13,7 +13,7 @@ use Drupal\block\BlockInterface;
 
 /**
  * Implements hook_update_N().
- * 
+ *
  * [6.2.0] Installing brand_category filter.
  */
 function alshaya_bp_transac_update_8014() {
