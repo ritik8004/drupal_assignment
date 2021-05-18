@@ -80,3 +80,7 @@ googlemapapi:
     - core/drupalSettings
   js:
     js/google-maps-api.js: {}
+
+cart_utilities_v1:
+  js:
+    assets/js/cart_utilities_v1.js: {}
