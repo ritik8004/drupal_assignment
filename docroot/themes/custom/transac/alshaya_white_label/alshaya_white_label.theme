@@ -20,28 +20,6 @@ use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\file\Entity\File;
 
 /**
- * Implements hook_css_alter().
- */
-function alshaya_white_label_css_alter(&$css, $assets) {
-  $language_manager = \Drupal::service('language_manager');
-  $language = $language_manager->getCurrentLanguage();
-  $direction = $language->getDirection();
-
-  // We don't do anything for ltr languages.
-  if ($direction == 'ltr') {
-    return;
-  }
-
-  foreach ($css as $name => $data) {
-    if (strpos($name, '.ltr.') && isset($data['data'])) {
-      $data['data'] = str_replace('.ltr.', '.rtl.', $data['data']);
-      $css[str_replace('.ltr.', '.rtl.', $name)] = $data;
-      unset($css[$name]);
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_html().
  */
 function alshaya_white_label_preprocess_html(&$variables) {

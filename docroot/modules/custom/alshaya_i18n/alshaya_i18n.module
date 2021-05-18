@@ -170,3 +170,25 @@ function alshaya_i18n_alshaya_i18n_onetime_translation_add() {
     \Drupal::state()->set('locale.translation.formulae', $formulae);
   }
 }
+
+
+/**
+ * Implements hook_css_alter().
+ */
+function alshaya_i18n_css_alter(&$css, $assets) {
+  /** @var \Drupal\Core\Language\LanguageManagerInterface $language_manager */
+  $language_manager = \Drupal::service('language_manager');
+
+  // We don't do anything for ltr languages.
+  if ($language_manager->getCurrentLanguage()->getDirection() == 'ltr') {
+    return;
+  }
+
+  foreach ($css as $name => $data) {
+    if (strpos($name, '.ltr.') && isset($data['data'])) {
+      $data['data'] = str_replace('.ltr.', '.rtl.', $data['data']);
+      $css[str_replace('.ltr.', '.rtl.', $name)] = $data;
+      unset($css[$name]);
+    }
+  }
+}
