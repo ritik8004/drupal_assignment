@@ -130,7 +130,8 @@ $mm_term_image_bg: $white;
 $mm_l2_link_border_hover: $cyprus;
 
 // User login page
-$newsletter_submit_btn: $stem-green;
+$newsletter_submit_btn-bg: $stem-green;
+$newsletter_submit_input_text: $white;
 $user_login_section_title: $cyprus;
 $social_auth_login_button_border: $cyprus;
 $social_auth_login_button_border: $cyprus;
@@ -241,7 +242,7 @@ $checkout_login_link_text: $cyprus;
 $checkout_login_submit_button_text: $nourishing-white;
 
 // Form elements.
-$primary_input_inline_error: $alizarin;
+$primary_input_inline_error: $poster-orange;
 
 // My account
 $default_msg_bg: $cyprus;

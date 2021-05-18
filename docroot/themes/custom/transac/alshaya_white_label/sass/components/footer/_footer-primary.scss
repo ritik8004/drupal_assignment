@@ -130,7 +130,7 @@
   }
 
   .cols-6 & {
-    &:last-child {
+    &:last-child:not(:first-child) {
       @include breakpoint($desktop) {
         padding-#{$left}: 1rem;
       }
