@@ -159,7 +159,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
           }
           $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
             'vid' => self::VOCAB_ID,
-            'name' => $this->configFactory->get('alshaya_product_list.settings')->get('parent_term_name'),
+            'name' => $this->configFactory->get('alshaya_product_list.settings')->get('product_list_lhn_term'),
             'depth_level' => 1,
           ]);
           if (empty($vocab_list)) {
