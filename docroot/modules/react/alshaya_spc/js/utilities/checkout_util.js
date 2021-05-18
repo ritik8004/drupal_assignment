@@ -156,6 +156,11 @@ export const placeOrder = (paymentMethod) => {
         Drupal.logJavascriptError('place-order', `${paymentMethod}: ${response.data.error_message}`, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
         removeFullScreenLoader();
         controlPlaceOrderCTA('enable');
+
+        // Enable the 'place order' CTA.
+        dispatchCustomEvent('updatePlaceOrderCTA', {
+          status: true,
+        });
       },
       (error) => {
         // Processing of error here.
