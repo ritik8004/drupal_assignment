@@ -1,4 +1,4 @@
-@javascript @appointment @desktop @bpaeuat
+@javascript @appointment @desktop @bpaeuat @bpaeqa
 Feature: Test Boots functionality
 
   Background:

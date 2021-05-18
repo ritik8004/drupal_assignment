@@ -1,4 +1,4 @@
-@javascript @KNetPayment @guest @homeDelivery @bbwkwuat @flkwuat @hmkwqa
+@javascript @KNetPayment @guest @homeDelivery @pbkwuat
 Feature: SPC Checkout Home Delivery Knet Payment for Guest User
 
   Background:
@@ -11,7 +11,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -107,7 +107,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -171,7 +171,7 @@ Feature: SPC Checkout Home Delivery Knet Payment for Guest User
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
