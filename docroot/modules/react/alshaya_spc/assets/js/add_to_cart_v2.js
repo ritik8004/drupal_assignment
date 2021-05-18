@@ -16,30 +16,6 @@
         $('.error-container-' + cleanedSku).html('');
       };
 
-      // Update cart.
-      let updateCart = function (cartId) {
-        // @todo remove proxy.
-        $.ajax({
-          url: '/proxy.php?url=' + encodeURI(settings.cart.url + '/' + settings.cart.store + '/rest/V1/guest-carts/' + cartId + '/totals'),
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          error: function (response) {
-            console.log('error', response);
-          },
-          success: function (response) {
-            console.log(response);
-
-            var cartData = Drupal.alshayaSpc.processCartData(response);
-
-            //updateLocalStorage(cartId, cartData); //@todo enable this
-
-            sendNotitifications(cartData);
-          },
-        });
-      };
-
       $('.edit-add-to-cart', context).once('spc-add-to-cart').on('mousedown', function () {
         // Check for ife error.
         if ($(this).closest('form').hasClass('ajax-submit-prevented')) {
@@ -102,7 +78,11 @@
                 clearFormErrors(form);
 
                 // Update cart.
-                updateCart(cartId);
+                var cartData = Drupal.alshayaSpc.fetchCartData();
+                sendNotitifications(cartData);
+
+                // Update local storage.
+                updateLocalStorage(product);
               })
               .fail(function () {
                 showFormErrorMessage(form, product, Drupal.t('Error adding item to the cart.'));
@@ -155,14 +135,18 @@
       };
 
       // Update local storage.
-      let updateLocalStorage = function (cartId) {
-        if (response.response_message === null || response.response_message.status === 'success') {
-          if (typeof response.items[productData.variant] !== 'undefined') {
-            productData.totalQty = response.items[productData.variant];
-          } else if (typeof response.items[productData.parentSku] !== 'undefined') {
-            productData.totalQty = response.items[productData.parentSku];
-          }
-        }
+      let updateLocalStorage = function (productData) {
+        var productInfo = productData.productInfo;
+        var langCode = $('html').attr('lang');
+
+        // @todo uncomment and fix this
+        // if (response.response_message === null || response.response_message.status === 'success') {
+        //   if (typeof response.items[productData.variant] !== 'undefined') {
+        //     productData.totalQty = response.items[productData.variant];
+        //   } else if (typeof response.items[productData.parentSku] !== 'undefined') {
+        //     productData.totalQty = response.items[productData.parentSku];
+        //   }
+        // }
 
         var productUrl = productInfo.url;
         var price = productInfo.priceRaw;
@@ -174,7 +158,7 @@
         var maxSaleQtyParent = productInfo.max_sale_qty_parent;
         var gtmAttributes = productInfo.gtm_attributes;
         var isNonRefundable = productInfo.is_non_refundable;
-        options = [];
+        var options = [];
 
         if (productInfo.type === 'configurable') {
           var productVariantInfo = productInfo['variants'][productData.variant];
@@ -287,6 +271,7 @@
           variant: variantSku,
           product_name: productName,
           image: productImage,
+          productInfo: productInfo,
         };
 
         return product;
@@ -328,7 +313,7 @@
           bubbles: true,
           detail: {
             data: () => cartData,
-            productData: null,
+            //productData: ???,
           },
         });
         document.dispatchEvent(event);

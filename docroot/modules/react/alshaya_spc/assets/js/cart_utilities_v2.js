@@ -29,6 +29,32 @@
     return cartData.cart_id;
   };
 
+  // Update cart.
+  Drupal.alshayaSpc.fetchCartData = function () {
+    var settings = drupalSettings;
+    var cartId = Drupal.alshayaSpc.getCartId();
+    var cartData = null;
+
+    // @todo remove proxy.
+    $.ajax({
+      async: false,
+      url: '/proxy.php?url=' + encodeURI(settings.cart.url + '/' + settings.cart.store + '/rest/V1/guest-carts/' + cartId + '/totals'),
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      error: function (response) {
+        console.log('error', response);
+      },
+      success: function (response) {
+        console.log(response);
+        cartData = Drupal.alshayaSpc.processCartData(response);
+      },
+    });
+
+    return cartData;
+  };
+
   // Process cart data.
   Drupal.alshayaSpc.processCartData = function (data) {
     var cartData = {
