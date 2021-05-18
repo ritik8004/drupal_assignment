@@ -500,7 +500,7 @@ class AlshayaProductDeltaFeedHelper {
   }
 
   /**
-   * Delta Feed data for SKU without stock.
+   * Delta Feed data to make SKU OOS.
    *
    * @param string $sku
    *   The product sku string.

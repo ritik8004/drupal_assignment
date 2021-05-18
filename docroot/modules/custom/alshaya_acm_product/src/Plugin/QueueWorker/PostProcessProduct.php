@@ -145,13 +145,13 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
 
       // If children is empty then it's a simple SKU, set SKU oos in delta feed.
       if (empty($children)) {
-        $this->productFeedStockUpdate($feeds, $sku);
+        $this->markProductOutOfStock($feeds, $sku);
         return;
       }
 
       // Set SKU oos in delta feed.
       foreach ($children as $child_sku) {
-        $this->productFeedStockUpdate($feeds, $child_sku->getSku());
+        $this->markProductOutOfStock($feeds, $child_sku->getSku());
         return;
       }
     }
@@ -159,7 +159,7 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
     $feed_data = $this->productDeltaFeedHelper->prepareProductFeedData($node->id());
 
     if (empty($feed_data)) {
-      $this->productFeedStockUpdate($feeds, $sku);
+      $this->markProductOutOfStock($feeds, $sku);
 
       $this->getLogger('PostProcessProduct')->warning('Feed data is empty for sku: @sku, node id: @nid.', [
         '@sku' => $sku,
@@ -205,7 +205,7 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
    * @param string $sku
    *   SKU.
    */
-  private function productFeedStockUpdate(array $feeds, string $sku) {
+  private function markProductOutOfStock(array $feeds, string $sku) {
     foreach ($feeds as $feed) {
       $data['data'] = $this->productDeltaFeedHelper->prepareFeedDataforSkuOos($sku);
       $this->dyProductDeltaFeedApiWrapper->productFeedPartialUpdate($feed['api_key'], $feed['id'], $sku, $data);
