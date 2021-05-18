@@ -18,7 +18,7 @@ use Drupal\user\Entity\Role;
  * [6.2.0] Delete the cart_promotions resource config.
  */
 function alshaya_mobile_app_update_8079() {
-  // Deleting the sku_images rest config.
+  // Deleting the cart_promotions rest config.
   \Drupal::configFactory()->getEditable('rest.resource.cart_promotions')->delete();
   // Disable the resource related permissions.
   $role = Role::load('anonymous');
