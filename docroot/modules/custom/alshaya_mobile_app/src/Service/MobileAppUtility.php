@@ -135,7 +135,7 @@ class MobileAppUtility {
    *
    * @var \Drupal\Core\Config\Config
    */
-  protected $currencyConfig;
+  protected $configFactory;
 
   /**
    * API Wrapper object.
@@ -252,7 +252,7 @@ class MobileAppUtility {
     $this->productCategoryTree = $product_category_tree;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
-    $this->currencyConfig = $config_factory->get('acq_commerce.currency');
+    $this->configFactory = $config_factory;
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
     $this->redirectRepository = $redirect_repsitory;
@@ -420,18 +420,26 @@ class MobileAppUtility {
    *
    * @param string $alias
    *   The alias to use to get entity.
+   * @param bool $is_front_page
+   *   TRUE if homepage else FALSE.
    * @param string $bundle
    *   (optional) The bundle to validate entity against.
    *
    * @return \Drupal\node\NodeInterface|bool
    *   The node object, or FALSE if nothing found.
    */
-  public function getNodeFromAlias($alias, $bundle = '') {
-    // Get the internal path of given alias and get route parameters.
-    $internal_path = $this->aliasManager->getPathByAlias(
-      '/' . $alias,
-      $this->getAliasLang($alias)
-    );
+  public function getNodeFromAlias($alias, $is_front_page, $bundle = '') {
+    if (!$is_front_page) {
+      // Get the internal path of given alias and get route parameters.
+      $internal_path = $this->aliasManager->getPathByAlias(
+        '/' . $alias,
+        $this->getAliasLang($alias)
+      );
+    }
+    else {
+      // Get the node id from alshaya_master.home for homepage only.
+      $internal_path = '/node/' . $this->configFactory->get('alshaya_master.home')->get('entity')['id'];
+    }
     // Return false if there is no path associated with the alias.
     if ('/' . $alias === $internal_path) {
       return FALSE;

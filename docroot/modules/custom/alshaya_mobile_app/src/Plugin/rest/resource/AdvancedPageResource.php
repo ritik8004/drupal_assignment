@@ -132,13 +132,17 @@ class AdvancedPageResource extends ResourceBase {
   public function get() {
     // Path alias of advanced page.
     $alias = $this->requestStack->query->get('url');
+    $is_front_page = FALSE;
     if (!$alias) {
       $page = $this->requestStack->query->get('page');
-      $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
+      if ($page !== 'front') {
+        $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
+      }
+      $is_front_page = TRUE;
     }
 
     try {
-      $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
+      $node = $this->mobileAppUtility->getNodeFromAlias($alias, $is_front_page, self::NODE_TYPE);
     }
     catch (\Exception $e) {
       // Redirect to 404.
