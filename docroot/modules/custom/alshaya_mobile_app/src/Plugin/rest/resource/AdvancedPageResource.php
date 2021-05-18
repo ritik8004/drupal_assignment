@@ -144,7 +144,12 @@ class AdvancedPageResource extends ResourceBase {
     }
 
     try {
-      $node = $this->mobileAppUtility->getNodeFromAlias($alias, $is_front_page, self::NODE_TYPE);
+      if (!$is_front_page) {
+        $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
+      }
+      else {
+        $node = $this->entityTypeManager->getStorage('node')->load($this->configFactory->get('alshaya_master.home')->get('entity')['id']);
+      }
     }
     catch (\Exception $e) {
       // Redirect to 404.
