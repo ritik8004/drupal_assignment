@@ -191,7 +191,9 @@
         margin-#{$right}: 7.5%;
 
         @include breakpoint($only-mobile) {
-          margin-#{$right}: 2.5%;
+          margin-#{$right}: 1.5%;
+          flex-basis: 9%;
+          text-align: center;
         }
 
         @include breakpoint($only-tablet) {
