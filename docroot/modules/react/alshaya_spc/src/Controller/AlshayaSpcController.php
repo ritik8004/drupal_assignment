@@ -717,7 +717,7 @@ class AlshayaSpcController extends ControllerBase {
       switch ($key) {
         case 'fullname':
           // If full name is not empty.
-          if (!empty($value) && !empty(trim($value[0])) && !empty(trim($value[1]))) {
+          if (!empty($value) && !empty(trim($value['firstname'])) && !empty(trim($value['lastname']))) {
             $status[$key] = TRUE;
           }
           break;
