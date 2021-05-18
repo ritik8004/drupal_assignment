@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://mckw4-qa2.factory.alshaya.com/en/'
+  url_base_uri: 'https://mcae4-test.factory.alshaya.com/en'
   collection_filter: 'Collection'
   sort_filter: 'sort by'
   price_filter: 'Price'

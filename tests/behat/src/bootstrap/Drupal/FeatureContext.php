@@ -2517,12 +2517,11 @@ JS;
    */
   public function theQuantityShouldBe($element, $value) {
     $page = $this->getSession()->getPage();
-    $page->find('css', '.addtobag-button')->click();
-    $this->iWaitForAjaxToFinish();
-    $qty_before_click = $element->find('css', '.qty-text-wrapper .qty')->getText();
+    $qty_before_click = $page->find('css', '.qty-text-wrapper .qty')->getText();
     $page->find('css', $element)->click();
     $this->iWaitForAjaxToFinish();
-    $qty_after_click = $element->find('css', '.qty-text-wrapper .qty')->getText();
+    $this->iWaitSeconds('20');
+    $qty_after_click = $page->find('css', '.qty-text-wrapper .qty')->getText();
     if ($value == 'increased') {
       if ($qty_after_click != $qty_before_click + 1) {
         throw new \Exception(sprintf('Quantity doesn\'t match'));
@@ -2559,8 +2558,16 @@ JS;
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
       $page->find('css', 'button.select-store')->click();
-      $this->getSession()->executeScript('jQuery("input#fullname").val("Test User")');
-      $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("55667788")');
+      $script = <<<JS
+        jQuery("input#fullname").val("Test User");
+        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
+        var value = "55667788";
+        if (maxlength == 9) {
+            value = value + "9";
+        }
+        jQuery("input[name=\"mobile\"]").val(value);
+JS;
+      $this->getSession()->executeScript($script);
       if ($page->find('css', 'input[name="email"]')) {
         $this->getSession()->executeScript('jQuery("input[name=\"email\"]").val("user@test.com")');
       }
@@ -2603,14 +2610,26 @@ JS;
 JS;
       $session->executeScript($script);
       $page->find('css', '.spc-address-form-guest-overlay #spc-area-select-selected-city')->click();
+      $this->iWaitSeconds('5');
       $page->find('css', '.spc-address-form-guest-overlay .spc-filter-area-panel-list-wrapper ul li:first-child')->click();
       $page->find('css', '.spc-address-form-guest-overlay #spc-area-select-selected')->click();
+      $this->iWaitSeconds('5');
       $page->find('css', '.spc-address-form-guest-overlay .spc-filter-area-panel-list-wrapper ul li:first-child')->click();
       $page->find('css', 'button#save-address')->click();
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
     }
     $this->theElementShouldExist('.delivery-information-preview');
+  }
+
+  /**
+   * @Given /^I click an element using xpath "([^"]*)"$/
+   */
+  public function iClickAnElementUsingXpath($arg1)
+  {
+    $session = $this->getSession();
+    $element = $session->getPage()->find('xpath',"$arg1");
+    $element->click();
   }
 
 }
