@@ -132,24 +132,15 @@ class AdvancedPageResource extends ResourceBase {
   public function get() {
     // Path alias of advanced page.
     $alias = $this->requestStack->query->get('url');
-    $is_front_page = FALSE;
-    if (!$alias) {
-      $page = $this->requestStack->query->get('page');
-      if ($page !== 'front') {
-        $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
-      }
-      else {
-        $is_front_page = TRUE;
-      }
+    $page = $this->requestStack->query->get('page');
+    if (!$alias && $page !== 'front') {
+      $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
     }
 
     try {
-      if (!$is_front_page) {
-        $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
-      }
-      else {
-        $node = $this->entityTypeManager->getStorage('node')->load($this->configFactory->get('alshaya_master.home')->get('entity')['id']);
-      }
+      $node = ($page === 'front')
+        ? $this->entityTypeManager->getStorage('node')->load($this->configFactory->get('alshaya_master.home')->get('entity')['id'])
+        : $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
     }
     catch (\Exception $e) {
       // Redirect to 404.
