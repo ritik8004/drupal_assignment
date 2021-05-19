@@ -5,6 +5,7 @@ import Price from '../price';
 import Promotions from '../promotions';
 import { storeClickedItem } from '../../utils';
 import Swatches from '../swatch';
+import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
 
@@ -13,7 +14,9 @@ const Teaser = ({
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
   const collectionLabel = [];
-  const [initiateSlider, setInitiateSlider] = useState(false);
+  const [initSlider, setInitiateSlider] = useState(false);
+  const [slider, setSlider] = useState(false);
+  const isDesktop = window.innerWidth > 1024;
   if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
@@ -46,10 +49,21 @@ const Teaser = ({
         // eslint-disable-next-line no-underscore-dangle
         data-insights-query-id={hit.__queryID}
         gtm-type="gtm-product-link"
-        onMouseEnter={() => {
-          setInitiateSlider(true);
-        }}
         {...overridenGtm}
+        onMouseEnter={() => {
+          if (isDesktop) {
+            setInitiateSlider(true);
+            if (slider !== false) {
+              slider.slickGoTo(0, true);
+              slider.slickPlay();
+            }
+          }
+        }}
+        onMouseLeave={() => {
+          if (isDesktop && (slider !== false)) {
+            slider.slickPause();
+          }
+        }}
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
@@ -60,9 +74,10 @@ const Teaser = ({
             <Gallery
               media={hit.media}
               title={hit.title}
-              initiateSlider={initiateSlider}
               labels={hit.product_labels}
               sku={hit.sku}
+              initSlider={initSlider}
+              setSlider={setSlider}
             />
           </a>
           <div className="product-plp-detail-wrapper">
@@ -102,6 +117,12 @@ const Teaser = ({
             {showSwatches ? <Swatches swatches={hit.swatches} url={hit.url} /> : null}
           </div>
         </div>
+        <AddToBagContainer
+          url={hit.url}
+          sku={hit.sku}
+          stockQty={hit.stock_quantity}
+          productData={hit.atb_product_data}
+        />
       </article>
     </div>
   );

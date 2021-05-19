@@ -317,12 +317,15 @@
   }
 }
 
-.mobile--overlay .branding__menu {
-  &::before {
-    background: $header_mobile_menu_overlay;
-    position: absolute;
-    z-index: 9;
-    opacity: 1;
+.mobile--overlay,
+.overlay-product-modal {
+  .branding__menu {
+    &::before {
+      background: $header_mobile_menu_overlay;
+      position: absolute;
+      z-index: 9;
+      opacity: 1;
+    }
   }
 }
 

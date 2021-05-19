@@ -18,8 +18,6 @@
         setTimeout(function () {
           $('.search-lightSlider.slick-initialized').slick('refresh');
          }, 300);
-         // Adjust height of PLP tiles.
-         Drupal.plpListingProductTileHeight('full_page', null);
       });
       $('.large-col-grid').once().on('click', function () {
         $('.small-col-grid').removeClass('active');
@@ -29,8 +27,6 @@
         setTimeout(function () {
           $('.search-lightSlider.slick-initialized').slick('refresh');
          }, 300);
-         // Adjust height of PLP tiles.
-         Drupal.plpListingProductTileHeight('full_page', null);
       });
 
       // On filter selection keeping the selected layout.
@@ -163,10 +159,6 @@
       updateSortTitle();
       updateFacetTitlesWithSelected();
       updateCategoryTitle();
-
-      $(window).on('blazySuccess', function (event, element) {
-        Drupal.plpListingProductTileHeight('row', element);
-      });
 
       // Back to PLP and loading a PLP/SRP with facets active in URL.
       if (context === $(document)[0]) {

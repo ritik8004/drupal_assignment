@@ -128,7 +128,7 @@
     &.product-small {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 23.5rem;
+          height: 23.5rem;
         }
 
         .alshaya_search_mainimage {
@@ -138,13 +138,6 @@
         }
       }
     }
-
-    &.view-search {
-      @include breakpoint($only-mobile) {
-        padding-#{$left}: 0;
-        padding-#{$right}: 0;
-      }
-    }
   }
 
   &.l-two--sf {
@@ -152,11 +145,7 @@
       &.product-small {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 23.5rem;
-
-            &:hover {
-              max-height: 23.5rem !important;
-            }
+            height: 23.5rem;
           }
         }
       }

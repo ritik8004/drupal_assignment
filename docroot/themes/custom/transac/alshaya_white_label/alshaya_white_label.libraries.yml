@@ -462,6 +462,13 @@ advanced-page:
     theme:
       css/conditional-sass/advanced-page/advanced-page.ltr.css: {}
 
+plp-add-to-cart:
+  css:
+      theme:
+        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/alshaya-react-animate
+
 style-review-stars:
   css:
     theme:

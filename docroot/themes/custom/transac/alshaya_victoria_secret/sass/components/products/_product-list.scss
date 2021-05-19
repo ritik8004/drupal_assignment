@@ -130,7 +130,7 @@
 
     // required for tablet landscape as well.
     @include breakpoint($desktop - 1) {
-      min-height: 31rem;
+      min-height: auto;
     }
 
     article:hover {
@@ -152,7 +152,7 @@
 
     .alshaya_search_gallery {
       @include breakpoint($desktop) {
-        max-height: 24.5rem;
+        height: 24.5rem;
       }
 
       .alshaya_search_mainimage {
@@ -171,7 +171,7 @@
   .c-products-list.product-small {
     .alshaya_search_gallery {
       @include breakpoint($desktop) {
-        max-height: 20.5rem;
+        height: 24.5rem;
       }
 
       .alshaya_search_mainimage {
@@ -193,7 +193,7 @@
   .c-products-list.product-large {
     @include breakpoint($desktop) {
       .alshaya_search_gallery {
-        max-height: 26.5rem;
+        height: 26.5rem;
 
         .alshaya_search_mainimage {
           height: 26.5rem;
@@ -203,13 +203,13 @@
 
     @include breakpoint($only-tablet) {
       .alshaya_search_gallery {
-        max-height: 29.125rem;
+        height: 29.125rem;
       }
     }
 
     @include breakpoint($only-mobile) {
       .alshaya_search_gallery {
-        max-height: 31.125rem;
+        height: 31.125rem;
 
         .alshaya_search_mainimage {
           height: 31.125rem;
@@ -223,7 +223,7 @@
       &.product-small {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 19.5rem;
+            height: 19.5rem;
           }
         }
       }
@@ -231,7 +231,7 @@
       &.product-large {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 26.5rem;
+            height: 26.5rem;
           }
         }
       }
@@ -242,22 +242,25 @@
     .c-products-list.product-small {
       @include breakpoint($desktop) {
         .alshaya_search_gallery {
-          max-height: 24.5rem;
+          height: 24.5rem;
 
           .alshaya_search_mainimage {
             height: 24.5rem;
 
             // in search page, the height is a bit big for most of the images.
             img {
-              height: 100%;
+              height: auto;
               object-fit: cover;
+              width: 100%;
             }
           }
         }
 
         .c-products__item article:hover {
           .alshaya_search_gallery {
-            max-height: none;
+            .img-wrapper {
+              max-height: 21.5rem;
+            }
           }
         }
       }
@@ -266,16 +269,10 @@
     .c-products-list.product-large {
       @include breakpoint($desktop) {
         .alshaya_search_gallery {
-          max-height: 33rem;
+          height: 33rem;
 
           .alshaya_search_mainimage {
             height: 33rem;
-          }
-        }
-
-        .c-products__item article:hover {
-          .alshaya_search_gallery {
-            max-height: none;
           }
         }
       }
