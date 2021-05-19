@@ -67,7 +67,7 @@ export default class WriteReviewForm extends React.Component {
     const { fieldsConfig } = this.state;
     e.preventDefault();
 
-    const isError = validateRequest(e.target.elements, fieldsConfig);
+    const isError = validateRequest(e.target.elements, fieldsConfig, e);
     if (isError) {
       return;
     }
