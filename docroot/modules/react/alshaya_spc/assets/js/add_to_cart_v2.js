@@ -28,94 +28,105 @@
         $.when(Drupal.alshayaSpc.getCartId())
           .then(function (cartId) {
             var product = getProduct(form);
-            var quantity = getQuantity(form);
 
             // Add item and update cart.
-            $.when(addItemToCart(form, cartId, product, quantity))
+            $.when(addItemToCart(form, cartId, product))
               .then(function (response) {
-                //@todo test this
-                if (response.error === true) {
-                  if (response.error_code === '400') {
+                  // console.log('wait');
+                  // console.log(response);
+                setTimeout(function () {
+                  // console.log('start');
+                  if (response.http_code === 400) {
                     Drupal.alshayaSpc.clearCartData();
                     $(that).trigger('click');
                     return;
                   }
+                  //@todo test this
+                  if (response.error === true) {
+                    // Showing the error message.
+                    var closestForm = $(that).closest('form.sku-base-form');
+                    let errorMessage = response.error_message;
+                    if (response.error_code === '604') {
+                      errorMessage = Drupal.t('The product that you are trying to add is not available.');
+                    }
+                    $(closestForm).find('.errors-container').html('<div class="error">' + errorMessage + '</div>');
 
-                  // Showing the error message.
-                  var closestForm = $(that).closest('form.sku-base-form');
-                  let errorMessage = response.error_message;
-                  if (response.error_code === '604') {
-                    errorMessage = Drupal.t('The product that you are trying to add is not available.');
+                    // Process required data and trigger add to cart failure event.
+                    productData.options = [];
+
+                    // Get the key-value pair of selected option name and value.
+                    $('#configurable_ajax select').each(function () {
+                      var configLabel = $(this).attr('data-default-title');
+                      var configValue = $(this).find('option:selected').text();
+                      productData.options.push(configLabel + ': ' + configValue);
+                    });
+
+                    // Prepare the event.
+                    var cartNotification = new CustomEvent('product-add-to-cart-failed', {
+                      bubbles: true,
+                      detail: {
+                        postData: postData,
+                        productData: productData,
+                        message: response.error_message,
+                      },
+                    });
+                    // Dispatch event so that handlers can process it.
+                    // @todo this is not doing anything because alshaya_track_js module is disabled
+                    form[0].dispatchEvent(cartNotification);
+                    return;
                   }
-                  $(closestForm).find('.errors-container').html('<div class="error">' + errorMessage + '</div>');
 
-                  // Process required data and trigger add to cart failure event.
-                  productData.options = [];
+                  // Clean error messages.
+                  clearFormErrors(form);
 
-                  // Get the key-value pair of selected option name and value.
-                  $('#configurable_ajax select').each(function () {
-                    var configLabel = $(this).attr('data-default-title');
-                    var configValue = $(this).find('option:selected').text();
-                    productData.options.push(configLabel + ': ' + configValue);
-                  });
+                  // Update cart.
+                  var cartData = Drupal.alshayaSpc.getCart();
+                  console.log(cartData);
+                  product.totalQty = product.quantity; //@todo review this
+                  sendNotitifications(cartData, product);
 
-                  // Prepare the event.
-                  var cartNotification = new CustomEvent('product-add-to-cart-failed', {
-                    bubbles: true,
-                    detail: {
-                      postData: postData,
-                      productData: productData,
-                      message: response.error_message,
-                    },
-                  });
-                  // Dispatch event so that handlers can process it.
-                  // @todo this is not doing anything because alshaya_track_js module is disabled
-                  form[0].dispatchEvent(cartNotification);
-                  return;
-                }
-
-                // Clean error messages.
-                clearFormErrors(form);
-
-                // Update cart.
-                var cartData = Drupal.alshayaSpc.fetchCartData();
-                product.totalQty = quantity;
-                sendNotitifications(cartData, product);
-
-                // Update local storage.
-                updateLocalStorage(product);
+                  // Update local storage.
+                  updateLocalStorage(product);
+                }, 50);
               })
-              .fail(function () {
+              .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
                 showFormErrorMessage(form, product, Drupal.t('Error adding item to the cart.'));
                 // This error is typically caused by invalid cartId. Force a new cart to be created.
                 Drupal.alshayaSpc.clearCartData();
               });
           })
-          .fail(function () {
-            showFormErrorMessage(form, cartId, Drupal.t('Error creating a cart.'));
+          .fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            showFormErrorMessage(form, [], Drupal.t('Error creating a cart.'));
           });
       });
 
       // Add product to cart.
-      let addItemToCart = function (form, cartId, product, quantity) {
+      let addItemToCart = function (form, cartId, product) {
+        // console.log(cartId);
         var postData = {
           "cartItem": {
             "quote_id": cartId,
             "sku": product.variant,
-            "qty": quantity,
+            "qty": product.quantity,
           },
         };
+
+        // console.log(postData);
 
         // @todo remove proxy.
         return $.ajax({
           async: false,
+          timeout: settings.cart.timeouts['cart_update'] * 1000,
           url: '/proxy.php?url=' + encodeURI(settings.cart.url + '/' + settings.cart.store + '/rest/V1/guest-carts/' + cartId + '/items'),
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           data: JSON.stringify(postData),
-          error: function () {
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
             return false;
           },
           success: function (response) {
@@ -256,7 +267,7 @@
 
         // Prepare product data.
         var product = {
-          //quantity: quantity, //@todo add this somewhere
+          quantity: getQuantity(form),
           parentSku: pageMainSku,
           sku: currentSelectedVariant,
           variant: variantSku,
@@ -276,7 +287,7 @@
           quantity = $('[name="quantity"]', form).val();
         }
 
-        return quantity;
+        return parseFloat(quantity);
       };
 
       // Show message and track error.
@@ -299,11 +310,12 @@
       let sendNotitifications = function (cartData, product) {
         var event = null;
         // Triggering event to notify react component.
-        // @todo find a way to pass productData
         event = new CustomEvent('refreshMiniCart', {
           bubbles: true,
           detail: {
-            data: () => cartData,
+            data: function () {
+              return cartData;
+            },
             productData: product,
           },
         });
@@ -312,7 +324,9 @@
         event = new CustomEvent('refreshCart', {
           bubbles: true,
           detail: {
-            data: () => cartData,
+            data: function () {
+              return cartData;
+            },
           },
         });
         document.dispatchEvent(event);
