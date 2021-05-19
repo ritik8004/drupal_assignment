@@ -482,6 +482,12 @@ class AlshayaSpcOrderHelper {
           $orderDetails['payment']['bankDetails'] = $this->renderer->renderPlain($bank_transfer);
         }
         break;
+
+      case 'checkout_com_upapi_fawry':
+        $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
+        $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+
+        break;
     }
 
     return $orderDetails;

@@ -360,6 +360,11 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
       }
       break;
 
+    case 'checkout_com_upapi_fawry':
+      $orderDetails['payment']['referenceNumber'] = $payment_info['reference_number'];
+      $orderDetails['payment']['paymentExpiryTime'] = $payment_info['payment_expiry_time'];
+
+      break;
   }
 
   return $orderDetails;

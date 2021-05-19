@@ -152,6 +152,7 @@ $_corn_silk: #fffade;
 $_cancelled: #f77;
 $_gray_222: #222;
 $_postpay_blue: #8abbd5;
+$blueberri_boy: #0078ff;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1686,3 +1687,8 @@ $rr-form-head-row-border: $marine-blue-two;
 $rr-thumbnail-img-bg: $white-smoke-light;
 $rr-write-review-disabled-btn: $light-greyish;
 $rr-write-review-disabled-border: $light-greyish;
+
+// Fawry colors.
+$fawry-desc-prefix: $_gray_222;
+$fawry-desc-suffix: $grey-light;
+$fawry-banner: $blueberri_boy;
