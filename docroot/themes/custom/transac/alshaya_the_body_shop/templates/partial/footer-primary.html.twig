@@ -1,0 +1,51 @@
+{% extends '@alshaya_white_label/partial/footer-primary.html.twig' %}
+{% block footer_menu_newsletter %}
+<div class="primary--footer--right">
+  <div class="language--switcher mobile-only-block only-first-time" style="display: none;">
+    {{ page.footer_primary.languageswitcher_2 }}
+    <span class="language-switcher-close"></span>
+  </div>
+  <div class="language--switcher mobile-only-block">  
+    {{ page.footer_primary.languageswitcher_2 }}
+  </div>
+
+  <div class="above-mobile-block">
+    {{ page.footer_primary.alshayanewslettersubscription }}
+  </div>
+
+  <div class="footer--social above-mobile-block">
+    {{ page.footer_primary.sociallinks }}
+  </div>
+
+  <div class="language--switcher tablet-only-block">
+    {{ page.footer_primary.languageswitcher_2 }}
+  </div>
+
+  {{ page.footer_primary|without('alshayanewslettersubscription', 'shopby', 'aboutbrand', 'alshaya_help', 'footerstaticlinks', 'languageswitcher_2', 'sociallinks') }}
+</div>
+
+<div class="footer--menu">
+  {% if page.footer_primary.shopby is not empty %}
+  <div class="footer--categories">
+    {{ page.footer_primary.shopby }}
+  </div>
+  {% endif %}
+
+  <div class="footer--abouthelp">
+    {{ page.footer_primary.aboutbrand }}
+    {{ page.footer_primary.alshaya_help}}
+  </div>
+
+  {% if page.footer_primary.footerstaticlinks is not empty %}
+  <div class="footer--static-links">
+    {{ page.footer_primary.footerstaticlinks }}
+  </div>
+  {% endif %}
+</div>
+<div class="mobile-only-block">
+  {{ page.footer_primary.alshayanewslettersubscription }}
+</div>
+<div class="footer--social mobile-only-block">
+  {{ page.footer_primary.sociallinks }}
+</div>
+{% endblock %}
