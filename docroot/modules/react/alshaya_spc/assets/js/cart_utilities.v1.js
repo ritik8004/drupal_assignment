@@ -35,15 +35,23 @@
    *   The url to send the request to.
    * @param {string} method
    *   The request method.
+   * @param {object} data
+   *   The object to send for POST request.
    */
-  const callMiddlewareApi = function(url, method) {
-    return $.ajax({
+  const callMiddlewareApi = function(url, method, data) {
+    const ajaxCallParams = {
       url: i18nMiddleWareUrl(url),
       method: method,
       headers: {
         'Content-Type': 'application/json',
       }
-    })
+    }
+
+    if (typeof data !== 'undefined') {
+      ajaxCallParams.data = data;
+    }
+
+    return $.ajax(ajaxCallParams)
     .then(
       function (response) {
         // Return the data in the expected format.
@@ -77,6 +85,19 @@
    */
   Drupal.alshayaSpc.restoreCart = function() {
     return callMiddlewareApi('cart/restore', 'GET');
+  }
+
+  /**
+   * Calls the cart update API.
+   *
+   * @param {object} data
+   *   The data object to send in the API call.
+   */
+  Drupal.alshayaSpc.updateCart = function(data) {
+    return callMiddlewareApi('cart/update', 'POST', JSON.stringify(data))
+      .then(function(response) {
+        return response.data;
+      });
   }
 
 })(jQuery, Drupal, drupalSettings);
