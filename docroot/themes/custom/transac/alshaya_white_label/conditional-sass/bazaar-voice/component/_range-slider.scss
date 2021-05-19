@@ -231,6 +231,10 @@
         color: $rr-selected-slider-value;
         font-style: italic;
         padding-#{$left}: 0.1875rem;
+
+        html[lang=ar] & {
+          padding-right: 0.3125rem;
+        }
       }
     }
   }
