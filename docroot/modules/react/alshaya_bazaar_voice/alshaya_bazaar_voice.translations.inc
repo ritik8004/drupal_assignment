@@ -23,7 +23,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'امسح كل التعليق',
     ],
     'star' => [
-      'ar' => 'احفظ التعليق',
+      'ar' => 'نجمة',
     ],
     'of' => [
       'ar' => 'من',
