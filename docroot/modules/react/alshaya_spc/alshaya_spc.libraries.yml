@@ -81,6 +81,6 @@ googlemapapi:
   js:
     js/google-maps-api.js: {}
 
-cart_utilities_v1:
+cart_utilities.v1:
   js:
-    assets/js/cart_utilities_v1.js: {}
+    assets/js/cart_utilities.v1.js: {}
