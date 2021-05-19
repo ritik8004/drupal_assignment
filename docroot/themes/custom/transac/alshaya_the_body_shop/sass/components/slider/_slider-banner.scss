@@ -6,5 +6,7 @@
 }
 
 .slick-next {
-  transform: rotate(180deg);
+  &::before {
+    transform: rotate(180deg);
+  }
 }
