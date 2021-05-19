@@ -8,10 +8,10 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
 
   @cc @cnc @desktop @cybersource
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (cybersource)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -60,10 +60,10 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
 
   @cc @cnc @mobile @cybersource
   Scenario: As a Guest, I should be able to checkout using click and collect  with credit card
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -115,10 +115,10 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -170,10 +170,10 @@ Feature:SPC Checkout Click & Collect using CyberSource Payment Method for Guest 
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element

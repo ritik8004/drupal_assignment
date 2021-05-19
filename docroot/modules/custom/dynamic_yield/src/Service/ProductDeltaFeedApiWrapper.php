@@ -188,6 +188,44 @@ class ProductDeltaFeedApiWrapper {
   }
 
   /**
+   * Wrapper function to invoke Partial API.
+   *
+   * @param string $apiKey
+   *   API Key.
+   * @param string $feedId
+   *   Feed Id.
+   * @param string $itemId
+   *   Item Id (SKU).
+   * @param array $data
+   *   List of fields and values to update feed.
+   *
+   * @return array|null
+   *   API Response.
+   */
+  public function productFeedPartialUpdate(string $apiKey, string $feedId, string $itemId, array $data) {
+    if (empty($apiKey) || empty($feedId) || empty($itemId) || empty($data)) {
+      $this->logger->info('API key, Feed Id, Item Id and Data is required. API Key: @apiKey. Feed Id: @feedId. Item Id: @itemId. Data: @data.', [
+        '@apiKey' => $apiKey,
+        '@feedId' => $feedId,
+        '@itemId' => $itemId,
+        '@data' => json_encode($data),
+      ]);
+      return NULL;
+    }
+
+    $url = $this->getDyProductFeedApiUrl($feedId, $itemId, 'partial_update');
+    $options = [
+      'headers' => [
+        'DY-API-key' => $apiKey,
+      ],
+      'body' => json_encode($data),
+    ];
+    $response = $this->invokeProductFeedApi($url, 'POST', $options);
+
+    return $response;
+  }
+
+  /**
    * Wrapper function to invoke upsert API.
    *
    * Upsert - To insert a new item into feed or fully override an existing item.

@@ -183,12 +183,12 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 
 @font-face {
   font-family: 'alshaya-icons';
-  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?D7b5iy');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?D7b5ir');
   src:
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?D7b5iy#iefix') format('embedded-opentype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?D7b5iy') format('truetype'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5iy') format('woff'),
-    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?D7b5iy#alshaya-icons') format('svg');
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?D7b5ir#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?D7b5ir') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?D7b5ir') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?D7b5ir#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -318,7 +318,8 @@ $icons: (
   new-whatsapp-hover: "\e94c",
   store-locator: "\e94d",
   dropdown-collapse: "\e94e",
-  dropdown-expand: "\e94f"
+  dropdown-expand: "\e94f",
+  ic-arrow-left: "\e950"
 );
 
 @mixin iconbase() {

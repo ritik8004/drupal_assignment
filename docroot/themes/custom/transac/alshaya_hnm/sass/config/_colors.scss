@@ -76,6 +76,7 @@ $_tooltip_blue: #007aff;
 $black: $hnm-black-three;
 $tropical_green: #007b5f;
 $mariner: #283d5a;
+$sky_blue: #93cdff;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -765,3 +766,5 @@ $rr-form-head-row-border: $hnm-black-three;
 
 // same day delivery
 $pdp_product_same_day: $hnm-black-three;
+$pdp_product_same_day_btn_border: $sky_blue;
+$pdp_product_same_day_btn_bg: $white-five;

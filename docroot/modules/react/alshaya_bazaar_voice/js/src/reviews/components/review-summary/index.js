@@ -17,8 +17,11 @@ import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
+import { getUasToken } from '../../../utilities/user_util';
+import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
+
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
 
@@ -58,7 +61,30 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-
+    const userId = bazaarVoiceSettings.reviews.user.user_id;
+    const userStorage = getStorageInfo(`bvuser_${userId}`);
+    // Set uas token if user not found in storage.
+    if (userStorage === null) {
+      let currentUserObj = null;
+      // Initliaze user object for anonmymous user.
+      if (userId === 0) {
+        currentUserObj = {
+          id: userId,
+        };
+        setStorageInfo(currentUserObj, `bvuser_${userId}`);
+      } else {
+        getUasToken().then((uasTokenValue) => {
+          if (uasTokenValue !== null) {
+            currentUserObj = {
+              id: userId,
+              uasToken: uasTokenValue,
+              email: bazaarVoiceSettings.reviews.user.user_email,
+            };
+            setStorageInfo(currentUserObj, `bvuser_${userId}`);
+          }
+        });
+      }
+    }
     this.getReviews();
   }
 
@@ -108,7 +134,7 @@ export default class ReviewSummary extends React.Component {
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/reviews.json';
     const reviewLimit = this.getReviewLimit();
-    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&FilteredStats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
+    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&Stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&FilteredStats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -426,7 +452,7 @@ export default class ReviewSummary extends React.Component {
                 <ReviewInformation
                   reviewInformationData={reviewsSummary[item]}
                   reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
-                    .AuthorId].FilteredReviewStatistics}
+                    .AuthorId].ReviewStatistics}
                   isNewPdpLayout={isNewPdpLayout}
                 />
                 <ReviewDescription

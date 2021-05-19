@@ -23,6 +23,16 @@
       }
     }
 
+    .has--special--price {
+      .price {
+        font-size: 0.875rem;
+
+        @include breakpoint($desktop) {
+          font-size: 1.25rem;
+        }
+      }
+    }
+
     article {
       &:hover {
         &::after {
@@ -61,6 +71,38 @@
         @include breakpoint($desktop) {
           height: 35.3125rem;
           max-height: none;
+        }
+      }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 21.125rem;
+            max-height: none;
+          }
+        }
+      }
+
+      &.product-large {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 28.625rem;
+            max-height: none;
+          }
+        }
+      }
+    }
+  }
+
+  .region__content {
+    .block-page-title-block.mobile {
+      h1 {
+        @include breakpoint($only-mobile) {
+          font-size: 1.5rem;
         }
       }
     }

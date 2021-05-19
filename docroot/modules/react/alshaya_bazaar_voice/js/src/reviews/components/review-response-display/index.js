@@ -11,7 +11,7 @@ const ReviewResponseDisplay = ({
   const bazaarVoiceSettings = getbazaarVoiceSettings();
   const countryCode = bazaarVoiceSettings.reviews.bazaar_voice.country_code;
   return (
-    <div>
+    <div className="brand-response-block">
       {reviewResponses.map((responseObj) => (
         <div className="comment-submission-details">
           <div className="comment-submission-wrapper" key={responseObj.Date}>

@@ -1,9 +1,9 @@
 .alshaya_search_slider {
   // Need this in px for JS consistency for slider.
   width: 15.6875rem;
+  height: 0;
   margin: 0 auto;
   position: relative;
-  margin-top: 0.625rem;
 
   .product-small & {
     width: 12.5rem;
@@ -25,52 +25,136 @@
           height: 2.5rem;
         }
       }
-
-      &:hover {
-        &::after {
-          content: '';
-          display: block;
-          border: 1px solid $plp_tile_hover_slider_nav;
-          position: absolute;
-          top: 0;
-          left: -1px;
-          right: -1px;
-          bottom: 0;
-        }
-      }
-    }
-  }
-
-  .slick-prev,
-  .slick-next {
-    z-index: 99;
-    top: calc(50% - 1rem);
-
-    &::before {
-      background-color: transparent;
-    }
-  }
-
-  .slick-prev {
-    left: -2rem;
-
-    .product-small & {
-      left: -1.8125rem;
-    }
-  }
-
-  .slick-next {
-    right: -2rem;
-
-    .product-small & {
-      right: -1.8125rem;
     }
   }
 
   // Center non slider thumbnails.
-  ul > div.slick-list {
-    > .slick-track {
-      margin: 0 auto;
+  ul {
+    & > div.slick-list {
+      & > .slick-track {
+        margin: 0 auto;
+      }
+    }
+
+    &.slick-slider {
+      margin: 0;
+    }
+  }
+}
+
+#hits,
+#plp-hits,
+.view-alshaya-product-list {
+  .c-products__item {
+    .alshaya_search_mainimage {
+      img {
+        width: auto;
+      }
+    }
+
+    .alshaya_search_gallery {
+      .img-wrapper {
+        position: relative;
+        width: 100%;
+      }
+
+      .alshaya_search_slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+        margin-top: 0;
+        z-index: 1;
+
+        .slick-track {
+          display: flex;
+          align-items: center;
+        }
+
+        .slick-slide {
+          width: 100% !important;
+          margin: 0;
+
+          img {
+            height: auto;
+            width: 100%;
+            max-width: none;
+          }
+        }
+
+        .slick-dots {
+          margin: 0;
+          bottom: 0;
+          width: 100%;
+          background-color: $plp-hover-slider-dot-container-bg-color;
+          height: 0;
+          transition: height 0.2s ease-in-out;
+
+          li {
+            margin: 0 0.25rem;
+            background-color: $plp-hover-slider-dot-color;
+            border: 0;
+            width: 0.25rem;
+            height: 0.25rem;
+
+            button {
+              width: 0.25rem;
+              height: 0.25rem;
+
+              &::before {
+                content: '';
+                width: 0.25rem;
+                height: 0.25rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    article:hover {
+      .alshaya_search_gallery {
+        .alshaya_search_mainimage {
+          .img-wrapper {
+            > img {
+              @include breakpoint($desktop) {
+                visibility: hidden;
+              }
+            }
+          }
+        }
+
+        .alshaya_search_slider {
+          .slick-dots {
+            height: 1rem;
+            transition: height 0.2s ease-in-out;
+            display: flex !important;
+            justify-content: center;
+            align-items: flex-end;
+          }
+
+          img {
+            @include breakpoint($desktop) {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.view-alshaya-product-list {
+  .c-products__item {
+    .alshaya_search_gallery {
+      .alshaya_search_slider {
+        .slick-slide {
+          img {
+            max-width: 100%;
+          }
+        }
+      }
     }
   }
 }

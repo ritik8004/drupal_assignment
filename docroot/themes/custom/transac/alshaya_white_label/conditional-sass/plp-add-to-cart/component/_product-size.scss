@@ -1,0 +1,76 @@
+.attribute-wrapper {
+  position: relative;
+  margin: 0.875rem 0;
+
+  label {
+    font-size: 0.75rem;
+  }
+
+  ul.attribute-options-list {
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline-flex;
+      padding: 0.5rem;
+      margin: 0.313rem 0.625rem 0.313rem 0;
+      border: 1px solid $plp-quick-view-product-size-border;
+      color: $plp-quick-view-product-size-text;
+      text-align: center;
+      font-size: 0.875rem;
+      line-height: 1;
+      justify-content: center;
+      align-items: center;
+      height: 2.5rem;
+      min-width: 2.5rem;
+
+      &:hover,
+      &.active {
+        background-color: $plp-quick-view-product-size-active-bg;
+        color: $plp-quick-view-product-size-text-active;
+        border-color: $plp-quick-view-product-size-border-hover;
+        cursor: pointer;
+      }
+
+      &.disabled {
+        cursor: text;
+        background: url(../../../imgs/icons/disabled.png) no-repeat;
+        background-size: 100% 100%;
+        border-color: $plp-quick-view-product-size-text-disabled;
+        color: $plp-quick-view-product-size-text-disabled;
+        pointer-events: none;
+      }
+    }
+  }
+
+  &_band_size {
+    .size-guide-link {
+      top: 0;
+    }
+  }
+
+  &_size {
+    @include breakpoint($upto-desktop) {
+      display: inline-block;
+      float: $left;
+      margin: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      width: 13.125rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 14.375rem;
+    }
+
+    + .alshaya-select-wrapper {
+      width: 5rem;
+
+      @include breakpoint($upto-desktop) {
+        float: $right;
+        margin-#{$left}: 1rem;
+      }
+    }
+  }
+}

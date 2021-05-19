@@ -4,11 +4,19 @@
 
     @include breakpoint($only-mobile) {
       align-items: initial;
+
+      a {
+        #{$left}: calc(50% - 1.156rem);
+      }
     }
 
     a {
       img {
         margin-#{$left}: 0;
+
+        @include breakpoint($only-tablet) {
+          max-width: 3.3125rem;
+        }
       }
     }
 
@@ -53,5 +61,13 @@
       font-family: $alshaya-medium;
       text-transform: capitalize;
     }
+  }
+
+  .c-footer {
+    border-top: 0.0625rem solid $checkout_footer_border;
+  }
+
+  .c-post-content {
+    border-top: none;
   }
 }

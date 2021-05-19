@@ -1,7 +1,7 @@
 .block-alshaya-algolia-react-autocomplete {
   #alshaya-algolia-autocomplete {
     @include breakpoint($tablet) {
-      width: 23.75rem;
+      width: 24.625rem;
     }
 
     .react-autosuggest__container {
@@ -96,12 +96,6 @@
             margin-top: 0.3125rem;
           }
         }
-      }
-    }
-
-    header {
-      .c-header__region {
-        padding-#{$right}: 1.25rem;
       }
     }
 

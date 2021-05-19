@@ -17,7 +17,7 @@ Feature: Test MiniCart page
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
@@ -51,7 +51,7 @@ Feature: Test MiniCart page
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
@@ -85,7 +85,7 @@ Feature: Test MiniCart page
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
@@ -106,7 +106,7 @@ Feature: Test MiniCart page
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification col-1 img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification col-2 .qty" element

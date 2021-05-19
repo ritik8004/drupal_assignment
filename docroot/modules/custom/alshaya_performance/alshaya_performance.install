@@ -10,38 +10,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * [performance] Installs advagg and it's sub-modules if it is not enabled.
- */
-function alshaya_performance_update_8008() {
-  if (!(\Drupal::moduleHandler()->moduleExists('advagg'))) {
-    \Drupal::service('module_installer')->install([
-    'advagg_css_minify',
-    'advagg_js_minify',
-    'advagg_bundler']);
-  }
-
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  // Setting required config for advagg bundler.
-  $manager->updateConfigs(
-    ['advagg_bundler.settings'],
-    'advagg_bundler'
-  );
-  // Setting required config for advagg css minify.
-  $manager->updateConfigs(
-    ['advagg_css_minify.settings'],
-    'advagg_css_minify'
-  );
-  // Setting required config for advagg js minify.
-  $manager->updateConfigs(
-    ['advagg_js_minify.settings'],
-    'advagg_js_minify'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * [5.13.0]Installs cache_tags_cleanup module if it is not enabled.
  */
 function alshaya_performance_update_8007() {

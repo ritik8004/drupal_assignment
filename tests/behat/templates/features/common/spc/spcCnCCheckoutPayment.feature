@@ -11,7 +11,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -95,7 +95,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{add_to_cart_link}"
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -150,7 +150,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -204,7 +204,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click on "[id^='edit-add-to-cart-']" element
+    When I press "{language_add_to_cart_link}"
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element

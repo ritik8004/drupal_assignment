@@ -1,0 +1,95 @@
+error_messages:
+  -
+    value: 'ERROR_ACCESS_DENIED'
+    label: 'Your request could not be processed. Please try again shortly.'
+  -
+    value: 'ERROR_FORM_DUPLICATE'
+    label: 'This nickname is already in use. Please select a different nickname.'
+  -
+    value: 'ERROR_FORM_DUPLICATE_NICKNAME'
+    label: 'This nickname is already in use. Please select a different nickname.'
+  -
+    value: 'ERROR_FORM_EMOJI'
+    label: 'Emojis are not supported. You may use text and numbers to proceed.'
+  -
+    value: 'ERROR_FORM_INVALID_EMAILADDRESS'
+    label: 'The email address is not in the correct format. Please enter a valid email address.'
+  -
+    value: 'ERROR_FORM_INVALID_IPADDRESS'
+    label: 'Invalid API key value.'
+  -
+    value: 'ERROR_FORM_INVALID_OPTION'
+    label: 'The selected option has been removed.'
+  -
+    value: 'ERROR_FORM_PATTERN_MISMATCH'
+    label: 'This field is not in the correct format. Please amend to proceed.'
+  -
+    value: 'ERROR_FORM_PROFANITY'
+    label: 'The message contains inappropriate language. Please ensure your review follows our guidelines.'
+  -
+    value: 'ERROR_FORM_REJECTED'
+    label: 'The submission was rejected.'
+  -
+    value: 'ERROR_FORM_REQUIRED'
+    label: 'A required field was not supplied. Please fill in all required details.'
+  -
+    value: 'ERROR_FORM_REQUIRED_EITHER'
+    label: 'Both of the required hosted authentication parameters are missing.'
+  -
+    value: 'ERROR_FORM_REQUIRED_NICKNAME'
+    label: 'A nickname is required. Please enter a valid nickname.'
+  -
+    value: 'ERROR_FORM_REQUIRES_TRUE'
+    label: 'I have read & accept the terms & conditions required to submit my review.'
+  -
+    value: 'ERROR_FORM_RESTRICTED'
+    label: 'You must be 18 years or over to submit your review. Please read our terms & conditions for more details.'
+  -
+    value: 'ERROR_FORM_SUBMITTED_NICKNAME'
+    label: 'This nickname is already in use. Please select a different nickname.'
+  -
+    value: 'ERROR_FORM_TOO_FEW'
+    label: 'One or more options must be selected to proceed.'
+  -
+    value: 'ERROR_FORM_TOO_HIGH'
+    label: 'Too many options have been selected. Please remove one or more options to proceed.'
+  -
+    value: 'ERROR_FORM_TOO_LONG'
+    label: 'This message exceeds the character limit. Please submit a shorter message to proceed.'
+  -
+    value: 'ERROR_FORM_TOO_LOW'
+    label: 'This message is below the character limit. Please submit a longer message to proceed.'
+  -
+    value: 'ERROR_FORM_TOO_SHORT'
+    label: 'This message is below the character limit. Please submit a longer message to proceed.'
+  -
+    value: 'ERROR_FORM_UPLOAD_IO'
+    label: 'The file could not be uploaded. Please ensure the file type is valid.'
+  -
+    value: 'ERROR_DUPLICATE_SUBMISSION'
+    label: 'You have already submitted a review for this product.'
+  -
+    value: 'ERROR_PARAM_INVALID_API_KEY'
+    label: 'Invalid API Key value.'
+  -
+    value: 'ERROR_PARAM_INVALID_LOCALE'
+    label: 'Invalid locale code.'
+  -
+    value: 'ERROR_PARAM_INVALID_PARAMETERS'
+    label: 'Invalid parameter in content submission.'
+  -
+    value: 'ERROR_PARAM_MISSING_SUBJECT_ID'
+    label: 'Submission is missing a product to submit against. A product id is REQUIRED for review submission.'
+  -
+    value: 'ERROR_PARAM_MISSING_USER_ID'
+    label: 'This client does not allow unauthenticated submissions. A valid UserId is required.'
+  -
+    value: 'ERROR_REQUEST_LIMIT_REACHED'
+    label: 'Rate limiting error - too many requests per time interval.'
+  -
+    value: 'ERROR_UNKNOWN'
+    label: 'Your request could not be processed. Please try again shortly.'
+  -
+    value: 'ERROR_UNSUPPORTED'
+    label: 'This feature is currently not supported.'
+langcode: en

@@ -11,6 +11,7 @@ import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import smoothScrollTo from '../../../../utilities/smoothScroll';
+import { setStorageInfo } from '../../../../utilities/storage';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -66,7 +67,7 @@ export default class WriteReviewForm extends React.Component {
     const { fieldsConfig } = this.state;
     e.preventDefault();
 
-    const isError = validateRequest(e.target.elements, fieldsConfig);
+    const isError = validateRequest(e.target.elements, fieldsConfig, e);
     if (isError) {
       return;
     }
@@ -75,13 +76,15 @@ export default class WriteReviewForm extends React.Component {
     const apiUri = '/data/submitreview.json';
 
     // Post the review data to BazaarVoice.
-    const apiData = postAPIData(apiUri, request);
+    const apiData = postAPIData(apiUri, request.params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           removeFullScreenLoader();
           if (result.data.HasErrors && result.data.FormErrors !== null) {
             smoothScrollTo(e, '.title-block', 'post_review');
+          } else if (request.userStorage !== null) {
+            setStorageInfo(request.userStorage, `bvuser_${request.userStorage.id}`);
           }
           // Dispatch event after review submit.
           const event = new CustomEvent('reviewPosted', { detail: result.data });

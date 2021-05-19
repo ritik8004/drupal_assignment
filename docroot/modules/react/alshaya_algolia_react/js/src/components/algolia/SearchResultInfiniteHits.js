@@ -15,7 +15,6 @@ export default connectInfiniteHits(({
         if (hits.length > 0) {
           Drupal.blazyRevalidate();
           Drupal.algoliaReact.stickyfacetfilter();
-          Drupal.refreshGrids();
         }
         removeLoader();
         // Trigger back to search page.

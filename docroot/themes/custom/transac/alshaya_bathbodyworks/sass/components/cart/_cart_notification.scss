@@ -1,4 +1,5 @@
-#cart_notification {
+#cart_notification,
+#static_minicart_notification {
   @include breakpoint($only-mobile) {
     #{$right}: 0.15rem;
     top: 3.2rem;

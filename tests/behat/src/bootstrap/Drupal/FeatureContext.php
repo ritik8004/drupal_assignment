@@ -2560,7 +2560,7 @@ JS;
       $this->iWaitSeconds('20');
       $page->find('css', 'button.select-store')->click();
       $this->getSession()->executeScript('jQuery("input#fullname").val("Test User")');
-      $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("555233224")');
+      $this->getSession()->executeScript('jQuery("input[name=\"mobile\"]").val("55667788")');
       if ($page->find('css', 'input[name="email"]')) {
         $this->getSession()->executeScript('jQuery("input[name=\"email\"]").val("user@test.com")');
       }
@@ -2579,6 +2579,38 @@ JS;
       $val = $this->getSession()->evaluateScript("return document.querySelector('select[name=\"{$field_name}\"] option:nth-child(2)').value");
       $this->selectOptionAddress($field_name, $val);
     }
+  }
+
+  /**
+   * @Then /^I select the home delivery address$/
+   */
+  public function iSelectTheHomeDeliveryAddress()
+  {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
+    if ($empty_delivery_info !== null) {
+      $empty_delivery_info->click();
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $script = <<<JS
+        jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
+        jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
+        jQuery(".spc-address-form-guest-overlay input[name=\"mobile\"]").val("556677889");
+        jQuery(".spc-address-form-guest-overlay input#address_line1").val("Street A");
+        jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
+        jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
+JS;
+      $session->executeScript($script);
+      $page->find('css', '.spc-address-form-guest-overlay #spc-area-select-selected-city')->click();
+      $page->find('css', '.spc-address-form-guest-overlay .spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+      $page->find('css', '.spc-address-form-guest-overlay #spc-area-select-selected')->click();
+      $page->find('css', '.spc-address-form-guest-overlay .spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+      $page->find('css', 'button#save-address')->click();
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+    }
+    $this->theElementShouldExist('.delivery-information-preview');
   }
 
 }

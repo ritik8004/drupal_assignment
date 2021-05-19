@@ -4,8 +4,8 @@
     .c-collapse-item {
       .c-collapse__title {
         @include icon('dropdown-expand', after) {
-          #{$right}: 1.5625rem;
-          font-size: 1.5rem;
+          #{$right}: 1rem;
+          font-size: 2rem;
         }
       }
     }
@@ -23,10 +23,20 @@
   .block-facet-blockcategory-facet-plp {
     .c-accordion__title {
       &.c-collapse__title {
-        font-size: 1.5rem;
+        font-size: 1.125rem;
         font-family: $alshaya-semibold;
+
+        @include breakpoint($upto-desktop) {
+          font-size: 0.875rem;
+          font-family: $alshaya-medium;
+        }
       }
     }
+  }
+
+  .c-page-title {
+    font-family: $alshaya-semibold;
+    font-size: 1.875rem;
   }
 
   .c-facet.c-accordion {
@@ -40,6 +50,18 @@
   }
 }
 
+.c-facet.c-accordion,
+.c-facet.c-collapse-item {
+  .c-accordion__title,
+  .c-collapse__title {
+    &.active {
+      &::after {
+        font-size: 2rem;
+      }
+    }
+  }
+}
+
 #plp-hits,
 #hits {
   &::before {
@@ -47,7 +69,7 @@
     display: block;
     width: 100%;
     height: 1px;
-    background-color: $grey-four;
+    background-color: $plp_title_section_border;
     margin-bottom: 2.75rem;
   }
 }

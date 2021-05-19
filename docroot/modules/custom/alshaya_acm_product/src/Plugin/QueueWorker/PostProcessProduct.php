@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_feed\AlshayaProductDeltaFeedHelper;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Processes product after any updates.
@@ -51,6 +52,13 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
   protected $productDeltaFeedHelper;
 
   /**
+   * Sku Manager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * PostProcessProduct constructor.
    *
    * @param array $configuration
@@ -65,17 +73,21 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
    *   Config Factory.
    * @param \Drupal\alshaya_feed\AlshayaProductDeltaFeedHelper $product_delta_feed_helper
    *   Product Feed Helper.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku Manager service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               ProductDeltaFeedApiWrapper $product_feed_api_wrapper,
                               ConfigFactoryInterface $config_factory,
-                              AlshayaProductDeltaFeedHelper $product_delta_feed_helper) {
+                              AlshayaProductDeltaFeedHelper $product_delta_feed_helper,
+                              SkuManager $skuManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->dyProductDeltaFeedApiWrapper = $product_feed_api_wrapper;
     $this->dyConfig = $config_factory->get('dynamic_yield.settings');
     $this->productDeltaFeedHelper = $product_delta_feed_helper;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -128,22 +140,26 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
     }
 
     if (!($node instanceof NodeInterface) || $skuDelete) {
-      foreach ($feeds as $feed) {
-        $this->dyProductDeltaFeedApiWrapper->productFeedDelete($feed['api_key'], $feed['id'], $sku);
+      // Get children of the SKU.
+      $children = $this->skuManager->getChildSkus($sku);
+
+      // If children is empty then it's a simple SKU, set SKU oos in delta feed.
+      if (empty($children)) {
+        $this->markProductOutOfStock($feeds, $sku);
+        return;
       }
 
-      $this->getLogger('PostProcessProduct')->notice('DY delete API invoked. Processed product with sku: @sku.', [
-        '@sku' => $sku,
-      ]);
-      return;
+      // Set SKU oos in delta feed.
+      foreach ($children as $child_sku) {
+        $this->markProductOutOfStock($feeds, $child_sku->getSku());
+        return;
+      }
     }
 
     $feed_data = $this->productDeltaFeedHelper->prepareProductFeedData($node->id());
 
     if (empty($feed_data)) {
-      foreach ($feeds as $feed) {
-        $this->dyProductDeltaFeedApiWrapper->productFeedDelete($feed['api_key'], $feed['id'], $sku);
-      }
+      $this->markProductOutOfStock($feeds, $sku);
 
       $this->getLogger('PostProcessProduct')->warning('Feed data is empty for sku: @sku, node id: @nid.', [
         '@sku' => $sku,
@@ -161,6 +177,43 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
         '@sku' => $sku,
       ]);
     }
+  }
+
+  /**
+   * Delete SKU from feeds.
+   *
+   * @param array $feeds
+   *   Feeds array.
+   * @param string $sku
+   *   SKU.
+   */
+  public function deleteFromFeed(array $feeds, string $sku) {
+    foreach ($feeds as $feed) {
+      $this->dyProductDeltaFeedApiWrapper->productFeedDelete($feed['api_key'], $feed['id'], $sku);
+    }
+
+    $this->getLogger('PostProcessProduct')->notice('DY delete API invoked. Processed product with sku: @sku.', [
+      '@sku' => $sku,
+    ]);
+  }
+
+  /**
+   * Update Sku stock info on delta feed.
+   *
+   * @param array $feeds
+   *   Feeds array.
+   * @param string $sku
+   *   SKU.
+   */
+  private function markProductOutOfStock(array $feeds, string $sku) {
+    foreach ($feeds as $feed) {
+      $data['data'] = $this->productDeltaFeedHelper->prepareFeedDataforSkuOos($sku);
+      $this->dyProductDeltaFeedApiWrapper->productFeedPartialUpdate($feed['api_key'], $feed['id'], $sku, $data);
+    }
+
+    $this->getLogger('PostProcessProduct')->notice('DY partial update API invoked. Processed product with sku: @sku.', [
+      '@sku' => $sku,
+    ]);
   }
 
   /**
@@ -185,7 +238,8 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
       $plugin_definition,
       $container->get('dynamic_yield.product_feed_api_wrapper'),
       $container->get('config.factory'),
-      $container->get('alshaya_feed.product_delta_feed')
+      $container->get('alshaya_feed.product_delta_feed'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
