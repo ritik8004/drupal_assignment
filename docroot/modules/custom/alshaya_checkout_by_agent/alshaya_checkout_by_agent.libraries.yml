@@ -1,0 +1,3 @@
+smart_agent:
+  js:
+    js/smart_agent.js: {}

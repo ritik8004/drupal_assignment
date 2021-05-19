@@ -1223,6 +1223,26 @@ class Cart {
       unset($data['items'][$key]['variant_sku']);
     }
 
+    // JIRA Ticket No.: CORE-29691
+    // Add smart agent details in extension attribute to track
+    // orders by in-store devices.
+    $cookies = $this->request->cookies->get('smartAgent');
+
+    if (!empty($cookies)) {
+      if (isset($data['extension'])) {
+        $data['extension'] = !is_array($data['extension'])
+          ? (array) $data['extension']
+          : $data['extension'];
+      }
+
+      $data['extension']['smart_agent_email'] = json_decode(base64_decode($cookies))->email;
+
+      // Logging data sent to updateCart API call.
+      $this->logger->info('Request data of updateCart API call with smart agent details: @data.', [
+        '@data' => json_encode($data),
+      ]);
+    }
+
     $request_options = [
       'timeout' => $this->magentoInfo->getPhpTimeout('cart_update'),
       'json' => (object) $data,

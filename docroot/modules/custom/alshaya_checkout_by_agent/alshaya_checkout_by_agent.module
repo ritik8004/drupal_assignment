@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_checkout_by_agent_user_login(UserInterface $account) {
+  $request = \Drupal::request();
+  $current_user_agent = $request->headers->get('User-Agent');
+  $current_client_ip = $request->getClientIP();
+  $smart_agent_config = \Drupal::config('alshaya_checkout_by_agent.settings');
+  $smart_user_agents = $smart_agent_config->get('smart_user_agents');
+  $smart_agent_ips = $smart_agent_config->get('smart_agent_ips');
+  $is_smart_user_agent = TRUE;
+  $is_smart_client_ip = TRUE;
+
+  // Check if current user agent is in the list of smart user agents.
+  foreach ($smart_user_agents ?? [] as $smart_agent) {
+    if (strpos($current_user_agent, $smart_agent)) {
+      $is_smart_user_agent = TRUE;
+      break;
+    }
+    $is_smart_user_agent = FALSE;
+  }
+
+  // Check if current client IP is in the list of smart client IPs.
+  foreach ($smart_agent_ips ?? [] as $smart_agent_ip) {
+    if (strpos($current_client_ip, $smart_agent_ip)) {
+      $is_smart_client_ip = TRUE;
+      break;
+    }
+    $is_smart_client_ip = FALSE;
+  }
+
+  // Return if user doesn't have 'smartagent' role and
+  // user agent and IP is not in the config.
+  if (!in_array('smartagent', $account->getRoles())
+    || !$is_smart_user_agent
+    || !$is_smart_client_ip) {
+    return;
+  }
+
+  $user_details = [
+    'name' => $account->getDisplayName(),
+    'email' => $account->getEmail(),
+    'userAgent' => $current_user_agent,
+    'clientIP' => $current_client_ip,
+  ];
+
+  setcookie('smartAgent', base64_encode(json_encode($user_details)), ['path' => '/', 'secure' => TRUE]);
+  user_logout();
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function alshaya_checkout_by_agent_page_attachments(array &$attachments) {
+  // @TODO: Add conditions on which pages we need this library on.
+  $attachments['#attached']['library'][] = 'alshaya_checkout_by_agent/smart_agent';
+}
