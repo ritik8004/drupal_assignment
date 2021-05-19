@@ -1,4 +1,4 @@
 variables:
   spc_product_listing_page: '/shop-body-care/featured/'
   spc_basket_page: '/shop-body-care/featured/'
-  governorate: ''
+  spc_plp_add_to_cart: '/shop-baby-clothing/'

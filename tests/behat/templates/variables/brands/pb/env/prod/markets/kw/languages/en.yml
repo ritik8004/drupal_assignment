@@ -23,6 +23,7 @@ variables:
   ar_color_filter: ''
   ar_promotional_filter: 'Promotions'
   ar_size_filter: 'Size'
+  spc_search_keyword: 'wood'
   ar_filters: 'all filters'
   add_to_cart_link: 'add to cart'
   language_add_to_cart_link: 'أضف إلى سلة التسوق'

@@ -2513,21 +2513,25 @@ JS;
 
 
   /**
-   * @Given /^the quantity "([^"]*)" should be "([^"]*)"$/
+   * @Given /^the product quantity should be "([^"]*)"$/
    */
-  public function theQuantityShouldBe($element, $value) {
+  public function theQuantityShouldBe($value) {
     $page = $this->getSession()->getPage();
-    $qty_before_click = $page->find('css', '.qty-text-wrapper .qty')->getText();
-    $page->find('css', $element)->click();
-    $this->iWaitForAjaxToFinish();
-    $this->iWaitSeconds('20');
-    $qty_after_click = $page->find('css', '.qty-text-wrapper .qty')->getText();
+    $qty_before_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
     if ($value == 'increased') {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--up').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
       if ($qty_after_click != $qty_before_click + 1) {
         throw new \Exception(sprintf('Quantity doesn\'t match'));
       }
     }
     else {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--down').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
       if ($qty_after_click != $qty_before_click - 1) {
         throw new \Exception(sprintf('Quantity doesn\'t match'));
       }
@@ -2623,13 +2627,30 @@ JS;
   }
 
   /**
-   * @Given /^I click an element using xpath "([^"]*)"$/
+   * @Given /^the cart quantity should be "([^"]*)"$/
    */
-  public function iClickAnElementUsingXpath($arg1)
-  {
-    $session = $this->getSession();
-    $element = $session->getPage()->find('xpath',"$arg1");
-    $element->click();
+  public function theCartQuantityShouldBe($value){
+    $page = $this->getSession()->getPage();
+    $qty_before_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+    if ($value == 'increased') {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--up').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+      if ($qty_after_click != $qty_before_click + 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+    else {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--down').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+      if ($qty_after_click != $qty_before_click - 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+
   }
 
 }

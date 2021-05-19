@@ -29,6 +29,7 @@ variables:
   ar_size_filter: 'Size'
   ar_filters: 'all filters'
   create_account: 'create an account'
+  spc_search_keyword: 'dress'
   empty_bag: 'Your shopping bag is empty'
   language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
   sign_in: 'Sign in'
