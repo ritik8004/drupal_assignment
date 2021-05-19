@@ -501,6 +501,26 @@ class AlshayaProductDeltaFeedHelper {
   }
 
   /**
+   * Delta Feed data to make SKU OOS.
+   *
+   * @param string $sku
+   *   The product sku string.
+   *
+   * @return array
+   *   Data array.
+   */
+  public function prepareFeedDataforSkuOos(string $sku) {
+    $fields['sku'] = $sku;
+    foreach ($this->languageManager->getLanguages() as $lang => $language) {
+      $locale_key_prefix = 'lng:' . AlshayaI18nLanguages::getLocale($lang) . ':';
+      $fields[$locale_key_prefix . 'in_stock'] = FALSE;
+      $fields[$locale_key_prefix . 'quantity'] = 0;
+    }
+
+    return $fields;
+  }
+
+  /**
    * Wrapper function get DY categories.
    *
    * @param array $fields
