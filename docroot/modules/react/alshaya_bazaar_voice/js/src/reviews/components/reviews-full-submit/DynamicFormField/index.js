@@ -70,7 +70,7 @@ const DynamicFormField = (props) => {
         label={fieldProperty.title}
         defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
         text={fieldProperty.text}
-        question={fieldProperty.question}
+        placeholder={fieldProperty.placeholder}
       />
     );
   }
