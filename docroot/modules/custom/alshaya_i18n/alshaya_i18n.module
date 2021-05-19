@@ -171,7 +171,6 @@ function alshaya_i18n_alshaya_i18n_onetime_translation_add() {
   }
 }
 
-
 /**
  * Implements hook_css_alter().
  */
