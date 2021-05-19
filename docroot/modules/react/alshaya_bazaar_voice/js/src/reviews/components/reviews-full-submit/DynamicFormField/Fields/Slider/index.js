@@ -40,7 +40,6 @@ class Slider extends React.Component {
             <div className="selectedValue">
               <span>
                 {label}
-                {' '}
                 {(required) ? '*' : '' }
                 {':'}
               </span>
