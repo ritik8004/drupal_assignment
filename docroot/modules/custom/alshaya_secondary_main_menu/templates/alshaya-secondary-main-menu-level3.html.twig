@@ -1,0 +1,15 @@
+<ul class="menu__list menu--three__list">
+  <div class="level-three__wrapper">
+    <span class="back--link"><span class="menu__back"></span> <span>{{ data.title }}</span></span>
+    {% for key, level3 in data.below %}
+      <li class="menu__list-item menu--three__list-item {{ level3.class|join(' ') }}">
+        <div class="menu__link-wrapper menu-two__link-wrapper">
+          <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class|join(' ') }} {{ data.sub-nav-class }}" {{ level3.tag_attr }}>{{ level3.title }}</{{ level3.tag }}>
+        </div>
+        {% if level3.below is not empty %}
+          {{ alshaya_secondary_main_menu('alshaya_secondary_main_menu_level4', level3) }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </div>
+</ul>

@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_secondary_main_menu
+  theme:
+    - alshaya_pottery_barn
+id: alshayasecondarymainmenu
+theme: alshaya_pottery_barn
+region: header
+weight: -58
+provider: null
+plugin: alshaya_secondary_main_menu
+settings:
+  id: alshaya_secondary_main_menu
+  label: 'Alshaya secondary main menu'
+visibility: {  }

@@ -1,0 +1,123 @@
+<?php
+
+use Drupal\Core\Link;
+
+/**
+ * @file
+ * Module file.
+ */
+
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_secondary_main_menu_theme($existing, $type, $theme, $path) {
+
+  return [
+    'alshaya_secondary_main_menu_level1' => [
+      'template' => 'alshaya-secondary-main-menu-level1',
+      'variables' => [
+        'items' => NULL,
+        'column_tree' => NULL,
+        'menu_type' => NULL,
+        'settings' => [],
+      ],
+    ],
+    'alshaya_secondary_main_menu_level2' => [
+      'template' => 'alshaya-secondary-main-menu-level2',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+    'alshaya_secondary_main_menu_level3' => [
+      'template' => 'alshaya-secondary-main-menu-level3',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
+  ];
+}
+
+
+/**
+ * Prepares variables for menu items.
+ *
+ * @param array $variables
+ *   An associative array containing menu items.
+ */
+function template_preprocess_alshaya_secondary_main_menu_level1(array &$variables) {
+   if ($variables['menu_type'] == 'default' ) {
+     _alshaya_secondary_main_menu_process_tag_attributes($variables['column_tree']);
+   }
+   else {
+    _alshaya_secondary_main_menu_process_tag_attributes($variables['items']);
+   }
+ }
+
+ /**
+ * Prepares href for anchor tag for given term data.
+ */
+function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
+  foreach ($data as &$record) {
+
+    if (isset($record['l1_object'])) {
+      $record['l1_object']['tag'] = 'div';
+      $record['l1_object']['tag_attr'] = '';
+        $record['l1_object']['tag'] = 'a';
+        $record['l1_object']['tag_attr'] = "href={$record['l1_object']['url']->toString()}";
+
+      if (!empty($record['columns'])) {
+
+        foreach ($record['columns'] as $key => $value) {
+          foreach ($value as $key1 => $l2) {
+            $record['columns'][$key][$key1]['tag'] = 'div';
+            $record['columns'][$key][$key1]['tag_attr'] = '';
+              $record['columns'][$key][$key1]['tag'] = 'a';
+
+              $record['columns'][$key][$key1]['tag_attr'] = "href={$l2['url']->toString()}";
+
+            if (!empty($l2['below'])) {
+              _alshaya_secondary_main_menu_process_tag_attributes_columns($record['columns'][$key][$key1]['below']);
+            }
+          }
+        }
+      }
+    }
+    else {
+
+      $record['tag'] = 'div';
+      $record['tag_attr'] = '';
+        $record['tag'] = 'a';
+        $record['tag_attr'] = "href={$record['url']}";
+      if (!empty($record['below'])) {
+        _alshaya_secondary_main_menu_process_tag_attributes($record['below']);
+
+      }
+    }
+  }
+}
+
+/**
+ * Prepares href for anchor tag for given term data in columns.
+ */
+function _alshaya_secondary_main_menu_process_tag_attributes_columns(array &$data) {
+  foreach ($data as $key => $value) {
+    $data[$key]['tag'] = 'div';
+    $data[$key]['tag_attr'] = '';
+      $data[$key]['tag'] = 'a';
+      $data[$key]['tag_attr'] = "href={$value['url']->toString()}";
+
+    if (isset($value['below'])) {
+      _alshaya_secondary_main_menu_process_tag_attributes_columns($value['below']);
+    }
+  }
+}
+
+
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_secondary_main_menu_preprocess_alshaya_secondary_main_menu_level2(&$variables) {
+  $variables['menu_type'] = \Drupal::config('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
+}
