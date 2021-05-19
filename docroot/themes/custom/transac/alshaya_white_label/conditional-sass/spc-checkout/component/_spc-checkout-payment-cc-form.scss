@@ -11,10 +11,6 @@
   .payment-method-bottom-panel {
     padding: 1.25rem;
     padding-#{$left}: 3rem;
-
-    @include breakpoint($only-mobile) {
-      padding-#{$left}: 2.25rem;
-    }
   }
 
   input {
@@ -124,7 +120,7 @@
       line-height: 1.5;
 
       @include breakpoint($only-mobile) {
-        max-width: 13.0625rem;
+        max-width: 15rem;
       }
 
       &::before {
