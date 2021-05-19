@@ -52,6 +52,13 @@ function setClickedItem(storageDetails) {
 
 function storeClickedItem(event, pageType) {
   const articleNode = event.target.closest('.node--view-mode-search-result');
+
+  // This happens when we display the Add To Bag configurable drawer. The drawer
+  // component is outside it's parent article in the DOM so we get an error.
+  if (articleNode === null) {
+    return;
+  }
+
   const storageDetails = {
     sku: articleNode.getAttribute('data-sku'),
     grid_type: articleNode.classList.contains('product-large') ? 'large' : 'small',

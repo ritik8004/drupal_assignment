@@ -85,3 +85,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/style-review-stars/style-review-stars.ltr.css: css/conditional-sass/style-review-stars/style-review-stars.ltr.css
+
+  alshaya_white_label/plp-add-to-cart:
+    css:
+      theme:
+        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css

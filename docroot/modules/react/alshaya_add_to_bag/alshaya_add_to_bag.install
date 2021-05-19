@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_add_to_bag_install() {
+  // Queue all products to index data for add to bag.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_add_to_bag', 'alshaya_add_to_bag.static_strings');
+  if ($translations = _alshaya_add_to_bag_get_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Remove configurations created for AddToBag feature.
+ */
+function alshaya_add_to_bag_uninstall() {
+  // Remove product_info rest resource.
+  \Drupal::configFactory()->getEditable('rest.resource.product_info')->delete();
+}

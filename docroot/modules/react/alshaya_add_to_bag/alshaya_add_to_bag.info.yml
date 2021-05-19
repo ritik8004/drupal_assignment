@@ -1,0 +1,7 @@
+name: Alshaya Add to Bag
+type: module
+description: 'Module to provide an Add to Bag CTA for products on different pages.'
+package: 'Alshaya'
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - alshaya_spc:alshaya_spc
