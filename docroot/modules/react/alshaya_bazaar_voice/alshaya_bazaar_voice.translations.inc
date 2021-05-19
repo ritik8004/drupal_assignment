@@ -124,5 +124,11 @@ function _alshaya_bazaar_voice_translations() {
     'Load more' => [
       'ar' => 'تحميل المزيد من',
     ],
+    'No reviews yet.' => [
+      'ar' => 'لم تتم مراجعته بعد.',
+    ],
+    'Tell others what you think. Be the first to review this product.' => [
+      'ar' => 'أخبر الآخرين عن رأيك. كن أول من يراجع هذا المنتج.',
+    ],
   ];
 }
