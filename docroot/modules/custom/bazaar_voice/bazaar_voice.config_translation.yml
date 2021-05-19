@@ -1,3 +1,10 @@
+bazaar_voice.error_messages_settings_form:
+  title: 'Error messages settings'
+  base_route_name: bazaar_voice.error_messages_settings_form
+  parent_id: bazaar_voice.error_messages_settings_form
+  names:
+    - bazaar_voice_error_messages.settings
+
 bazaar_voice.review_filter_settings_form:
   title: 'Review filter settings'
   base_route_name: bazaar_voice.review_filter_settings_form
