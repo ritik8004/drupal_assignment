@@ -116,17 +116,21 @@
     &.product-small {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 16.25rem;
-
-          &:hover {
-            max-height: 16.25 !important;
-          }
+          height: 16.25rem;
         }
 
         .alshaya_search_mainimage {
           @include breakpoint($only-mobile) {
             height: 12.375rem !important;
           }
+        }
+      }
+    }
+
+    &.product-large {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: 26.875rem;
         }
       }
     }
@@ -137,11 +141,19 @@
       &.product-small {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 16.25rem !important;
+            height: 16.25rem;
+          }
+        }
+      }
 
-            &:hover {
-              max-height: 16.25 !important;
-            }
+      &.product-large {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 18.75rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            height: 21.875rem;
           }
         }
       }

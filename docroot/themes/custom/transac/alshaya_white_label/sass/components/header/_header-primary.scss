@@ -127,17 +127,17 @@ header {
     @include breakpoint($desktop) {
       .block-system-branding-block {
         .site-brand-home {
-          min-width: 328px;
+          min-width: 20.5rem;
         }
       }
 
       .block-views-exposed-filter-blocksearch-page {
         form {
-          margin-top: -4px;
+          margin-top: -0.25rem;
         }
 
         .form-text {
-          width: 272px;
+          width: 17rem;
           font-size: 0.75rem;
           box-sizing: border-box;
           outline: transparent;
@@ -217,10 +217,10 @@ header {
 
     .form-text {
       font-family: $alshaya-thin;
-      padding: 7px;
+      padding: 0.4375rem;
       vertical-align: bottom;
       text-transform: lowercase;
-      max-width: 280px;
+      max-width: 17.5rem;
       border: 1px solid $primary_search_border;
       background-image: none;
 
@@ -246,7 +246,7 @@ header {
       display: inline-block;
 
       @include breakpoint($only-tablet) {
-        margin-#{$left}: -5px;
+        margin-#{$left}: -0.3125rem;
       }
     }
 
@@ -258,126 +258,129 @@ header {
       @include u-visibility(none);
     }
   }
+}
 
-  .block-alshaya-react-mini-cart {
-    html[lang=ar] & {
-      .price {
-        direction: ltr;
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  html[lang=ar] & {
+    .price {
+      direction: ltr;
 
-        > span {
-          display: inline-block;
-        }
+      > span {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  font-size: 0.875rem;
+  text-align: $right;
+  color: $primary_minicart_text;
+
+  .total {
+    display: inline-block;
+    margin-#{$right}: 1.25rem;
+
+    span {
+      &:first-child {
+        margin-#{$right}: 0.4375rem;
+      }
+    }
+
+    .prefix {
+      font-weight: normal;
+      display: inline-block;
+      vertical-align: bottom;
+    }
+  }
+
+  .cart-link {
+    background: url('../imgs/icons/basket.svg') no-repeat;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    position: relative;
+    margin-bottom: -0.125rem;
+
+    @include breakpoint($only-mobile) {
+      background-size: 1.375rem;
+      width: 1.4375rem;
+      height: 1.25rem;
+
+      html[lang=ar] & {
+        margin-top: -0.5rem;
       }
     }
   }
 
-  .block-cart-mini-block,
-  .block-alshaya-react-mini-cart {
-    font-size: 0.875rem;
-    text-align: $right;
+  .cart-link-total {
     color: $primary_minicart_text;
+    float: $left;
+    margin-top: 0.375rem;
+    margin-#{$right}: 0.125rem;
+    padding-#{$right}: 1rem;
 
-    .total {
-      display: inline-block;
-      margin-#{$right}: 20px;
-
-      span {
-        &:first-child {
-          margin-#{$right}: 0.4375rem;
-        }
-      }
-
-      .prefix {
-        font-weight: normal;
-        display: inline-block;
-        vertical-align: bottom;
-      }
+    .price-amount {
+      padding: 0 0.25rem;
+      margin: 0;
     }
 
-    .cart-link {
-      background: url('../imgs/icons/basket.svg') no-repeat;
-      display: inline-block;
-      width: 2rem;
-      height: 2rem;
-      position: relative;
-      margin-bottom: -2px;
-
-      @include breakpoint($only-mobile) {
-        background-size: 1.375rem;
-        width: 1.4375rem;
-        height: 1.25rem;
-
-        html[lang=ar] & {
-          margin-top: -0.5rem;
-        }
-      }
+    @include breakpoint($only-mobile) {
+      display: none;
     }
 
-    .cart-link-total {
-      color: $primary_minicart_text;
-      float: $left;
-      margin-top: 6px;
-      margin-right: 2px;
-      padding-#{$right}: 1rem;
-
-      .price-amount {
-        padding: 0 0.25rem;
-        margin: 0;
-      }
-
-      @include breakpoint($only-mobile) {
-        display: none;
-      }
-
-      .price-currency.prefix {
-        padding-right: 0.45em;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      .acq-mini-cart {
-        float: $right;
-      }
-    }
-
-    .quantity {
-      font-size: 0.625rem;
-      position: absolute;
-      background: $primary_minicart_quantity_bg;
-      color: $primary_minicart_quantity_text;
-      text-align: center;
-      bottom: -0.75rem;
-      #{$left}: -0.375rem;
-      border-radius: 50%;
-      padding: 0;
-      width: 1.25rem;
-      height: 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1 !important;
+    .price-currency.prefix {
+      padding-right: 0.45em;
     }
   }
 
   @include breakpoint($desktop) {
-    #mini-cart-wrapper {
-      min-width: 10.44rem;
+    .acq-mini-cart {
+      float: $right;
     }
   }
 
-  @include breakpoint($only-tablet) {
-    #mini-cart-wrapper {
-      float: $right;
-      margin-top: -7px;
+  .quantity {
+    font-size: 0.625rem;
+    position: absolute;
+    background: $primary_minicart_quantity_bg;
+    color: $primary_minicart_quantity_text;
+    text-align: center;
+    bottom: -0.75rem;
+    #{$left}: -0.375rem;
+    border-radius: 50%;
+    padding: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1 !important;
+  }
+}
 
-      .cart-link-total {
-        margin-right: -4px;
-        margin-top: 0.8125rem;
-        font-size: 0.75rem;
+@include breakpoint($desktop) {
+  #mini-cart-wrapper {
+    min-width: 10.44rem;
+  }
+}
 
-        .prefix {
-          margin-right: 0.5625rem;
-        }
+@include breakpoint($only-tablet) {
+  #mini-cart-wrapper,
+  .static-minicart-wrapper {
+    float: $right;
+    margin-top: -0.4375rem;
+
+    .cart-link-total {
+      margin-#{$right}: -0.25rem;
+      margin-top: 0.8125rem;
+      font-size: 0.75rem;
+
+      .prefix {
+        margin-#{$right}: 0.5625rem;
       }
     }
   }
@@ -1022,6 +1025,12 @@ header {
       transition: opacity var(--menuTiming) ease-in 0.3s;
     }
 
+    &:not(.overlay-main-menu) {
+      &::before {
+        z-index: 12;
+      }
+    }
+
     &.overlay {
       &::before {
         opacity: 1;
@@ -1148,7 +1157,6 @@ header {
       content: '';
       position: fixed;
       width: 100%;
-      height: 100%;
       top: 0;
       #{$left}: 0;
       bottom: -6rem;
@@ -1166,6 +1174,7 @@ header {
       }
 
       &::before {
+        height: 100%;
         opacity: 1;
         z-index: 10;
         transform: translate3d(0, 0, 0);

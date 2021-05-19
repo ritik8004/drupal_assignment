@@ -174,4 +174,12 @@
       }
     }
   }
+
+  .c-products-list.product-small {
+    .alshaya_search_gallery {
+      @include breakpoint($desktop) {
+        height: auto;
+      }
+    }
+  }
 }

@@ -103,15 +103,7 @@
       &.product-small {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 22.2rem;
-          }
-        }
-
-        article:hover {
-          .alshaya_search_gallery {
-            @include breakpoint($desktop) {
-              max-height: 22.2rem !important;
-            }
+            height: 22.2rem;
           }
         }
       }
@@ -119,15 +111,7 @@
       &.product-large {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 30rem;
-          }
-        }
-
-        article:hover {
-          .alshaya_search_gallery {
-            @include breakpoint($desktop) {
-              max-height: 30rem !important;
-            }
+            height: 30rem;
           }
         }
       }
@@ -149,7 +133,7 @@
     &.product-large {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 37.5rem;
+          height: 37.5rem;
         }
 
         .alshaya_search_mainimage {
@@ -159,33 +143,17 @@
           }
         }
       }
-
-      article:hover {
-        .alshaya_search_gallery {
-          @include breakpoint($desktop) {
-            max-height: 37.5rem !important;
-          }
-        }
-      }
     }
 
     &.product-small {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 27.6rem;
+          height: 27.6rem;
         }
 
         .alshaya_search_mainimage {
           @include breakpoint($upto-desktop) {
             height: auto !important;
-          }
-        }
-      }
-
-      article:hover {
-        .alshaya_search_gallery {
-          @include breakpoint($desktop) {
-            max-height: 27.6rem !important;
           }
         }
       }

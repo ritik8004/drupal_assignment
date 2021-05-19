@@ -32,6 +32,7 @@ import {
   getSuperCategoryOptionalFilter,
 } from '../../utils';
 import { isDesktop } from '../../utils/QueryStringUtils';
+import { createConfigurableDrawer } from '../../../../../js/utilities/addToBagHelper';
 
 /**
  * Render search results elements facets, filters and sorting etc.
@@ -65,6 +66,9 @@ const SearchResultsComponent = ({
   const showCategoryFacets = () => {
     parentRef.current.classList.toggle('category-facet-open');
   };
+
+  // Add the drawer markup for add to bag feature.
+  createConfigurableDrawer();
 
   return (
     <InstantSearch

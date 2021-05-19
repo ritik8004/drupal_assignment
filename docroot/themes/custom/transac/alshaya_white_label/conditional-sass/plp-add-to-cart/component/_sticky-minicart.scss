@@ -1,0 +1,26 @@
+#static-minicart-section {
+  display: none;
+  float: $right;
+  position: absolute;
+  #{$right}: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+
+  @include breakpoint($desktop) {
+    #{$right}: calc((100vw - 77.15rem) / 2);
+  }
+}
+
+.filter-fixed-top {
+  #static-minicart-section {
+    display: block;
+  }
+
+  .sticky-filter-wrapper {
+    .container-without-product {
+      @include breakpoint($desktop-wide) {
+        width: 46.35rem;
+      }
+    }
+  }
+}
