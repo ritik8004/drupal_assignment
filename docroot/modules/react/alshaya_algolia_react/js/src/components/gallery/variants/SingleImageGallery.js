@@ -1,6 +1,7 @@
 import React from 'react';
 import ImageElement from '../imageHelper/ImageElement';
-import Lozenges from '../../../../common/components/lozenges';
+import Lozenges
+  from '../../../../common/components/lozenges';
 
 const SingleImageGallery = (props) => {
   const {

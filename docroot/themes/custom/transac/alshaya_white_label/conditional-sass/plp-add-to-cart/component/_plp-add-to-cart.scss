@@ -1,0 +1,73 @@
+.addtobag-button {
+  position: relative;
+  font-family: $alshaya-bold;
+  font-size: 0.875rem;
+  background: $primary_btn_bg;
+  color: $primary_btn_text;
+  display: inline-block;
+  text-transform: uppercase;
+  height: 2.5rem;
+  width: 100%;
+  padding: 0.625rem 1.25rem;
+  border: 0;
+  border-radius: 0.125rem;
+
+  @include breakpoint($only-mobile) {
+    height: 2.1875rem;
+  }
+}
+
+.addtobag-button-container {
+  margin: 1.5rem 0.5rem 0;
+
+  @include breakpoint($tablet) {
+    margin-#{$left}: 1.25rem;
+    margin-#{$right}: 1.25rem;
+  }
+}
+
+.add-to-basket-loader {
+  position: relative;
+
+  button {
+    font-size: 0 !important;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &.qty-sel-container {
+    .qty-text-wrapper {
+      font-size: 0;
+    }
+
+    .qty-sel-btn {
+      opacity: 0.7;
+    }
+  }
+}
+
+.is-not-buyable {
+  font-family: $alshaya-bold;
+  font-size: 0.875rem;
+  color: $magv2-pdp-title;
+  width: calc(100% - 2.5rem);
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $spc-checkout-delivery-method-bg;
+  cursor: pointer;
+  border: 1px solid $spc-checkout-delivery-info-txt;
+  z-index: 1;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 0.5rem 1.25rem;
+  margin: 1.5rem 1.25rem 0;
+
+  @include breakpoint($only-mobile) {
+    width: calc(100% - 1rem);
+    height: 2.1875rem;
+    margin-#{$left}: 0.5rem;
+    margin-#{$right}: 0.5rem;
+  }
+}
