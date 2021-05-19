@@ -65,6 +65,8 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     // Get avalable sorting options from config.
     $sorting_options = $alshayaBazaarVoice->getSortingOptions();
+    // Get avalable BazaarVoice error messages from config.
+    $bv_error_messages = $alshayaBazaarVoice->getBazaarVoiceErrorMessages();
     // Get the filter options to be rendered on review summary.
     $filter_options = \Drupal::config('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
     $filter_options = Yaml::parse($filter_options);
@@ -112,6 +114,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
         'comment_box_min_length' => $config->get('comment_box_min_length'),
         'comment_box_max_length' => $config->get('comment_box_max_length'),
         'country_code' => $country_code,
+        'error_messages' => $bv_error_messages,
       ],
       'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
       'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
