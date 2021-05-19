@@ -16,4 +16,55 @@
       }
     }
   }
+
+  .c-products-list {
+    .alshaya_search_mainimage {
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  &.l-two--sf {
+    .c-products-list {
+      &.product-small {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 18.75rem;
+          }
+        }
+      }
+
+      &.product-large {
+        .alshaya_search_gallery {
+          @include breakpoint($desktop) {
+            height: 21.875rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+#hits,
+#plp-hits {
+  .c-products__item {
+    .alshaya_search_mainimage {
+      img {
+        max-height: 234px;
+      }
+    }
+
+    .alshaya_search_gallery {
+      .alshaya_search_slider {
+        .slick-slide {
+          img {
+            max-width: 100%;
+            width: auto;
+          }
+        }
+      }
+    }
+  }
 }

@@ -8,6 +8,43 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
+  Drupal.customGlobal = Drupal.customGlobal || {};
+
+  /**
+   * Helper function to remove overlay classes from body when dialog is closed.
+   *
+   */
+  Drupal.customGlobal.modalCloseBtnEvent = function () {
+    jQuery('.ui-dialog-titlebar-close').once().on('click', function () {
+      // Remove the classes added for overlay having suffix '-overlay' except 'tray-overlay'.
+      // 'tray-overlay' get added on body when we open size guide on mobile for HM (Magazine layout).
+      var bodyClasses = jQuery('body').attr('class').split(' ');
+      for (var i = bodyClasses.length - 1; i >= 0; i--) {
+        if (bodyClasses[i].indexOf('-overlay') > -1 && bodyClasses[i].indexOf('tray-overlay') < 0) {
+          jQuery('body').removeClass(bodyClasses[i]);
+        }
+      }
+    });
+  };
+
+  /**
+   * Helper function to add classes to body when ajax dailog is opened.
+   *
+   * @param {*} ajaxString
+   * The string fragment from AJAX URL which can help us
+   * identify the AJAX request.
+   * @param {*} className
+   * The className to be added on body tag.
+   */
+  Drupal.customGlobal.modalClasses = function (ajaxString, className) {
+    jQuery(document).ajaxComplete(function (event, xhr, settings) {
+      if (settings.url.indexOf(ajaxString) !== -1) {
+        jQuery('body').addClass(className);
+      }
+      Drupal.customGlobal.modalCloseBtnEvent();
+    });
+  };
+
   $(window).on('pageshow', function (event) {
     if (event.originalEvent.persisted) {
       window.location.reload();
@@ -112,41 +149,6 @@
         $('.nodetype--acq_product #drupal-modal input.hidden-context, .path--cart #drupal-modal input.hidden-context').val('modal');
       }
 
-      /**
-       * Helper function to remove overlay classes from body when dialog is closed.
-       *
-       */
-      function modalCloseBtnEvent() {
-        $('.ui-dialog-titlebar-close').once().on('click', function () {
-          // Remove the classes added for overlay having suffix '-overlay' except 'tray-overlay'.
-          // 'tray-overlay' get added on body when we open size guide on mobile for HM (Magazine layout).
-          var bodyClasses = $('body').attr('class').split(' ');
-          for (var i = bodyClasses.length - 1; i >= 0; i--) {
-            if (bodyClasses[i].indexOf('-overlay') > -1 && bodyClasses[i].indexOf('tray-overlay') < 0) {
-              $('body').removeClass(bodyClasses[i]);
-            }
-          }
-        });
-      }
-
-      /**
-       * Helper function to add classes to body when ajax dailog is opened.
-       *
-       * @param {*} ajaxString
-       * The string fragment from AJAX URL which can help us
-       * identify the AJAX request.
-       * @param {*} className
-       * The className to be added on body tag.
-       */
-      function modalClasses(ajaxString, className) {
-        $(document).ajaxComplete(function (event, xhr, settings) {
-          if (settings.url.indexOf(ajaxString) !== -1) {
-            $('body').addClass(className);
-          }
-          modalCloseBtnEvent();
-        });
-      }
-
       // On dialog close.
       $(window).on('dialog:afterclose', function (e, dialog, $element) {
         // If body has overlay class, remove it.
@@ -170,11 +172,11 @@
       });
 
       $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').on('click', function () {
-        modalClasses('product-quick-view', 'pdp-modal-overlay');
+        Drupal.customGlobal.modalClasses('product-quick-view', 'pdp-modal-overlay');
       });
 
       $('.size-guide-link').on('click', function () {
-        modalClasses('size-guide', 'sizeguide-modal-overlay');
+        Drupal.customGlobal.modalClasses('size-guide', 'sizeguide-modal-overlay');
         setTimeout(function () {
           // Dispatch event to render fit calculator react component.
           var event = new CustomEvent('fitCalculator', {bubbles: true, detail: {}});
@@ -191,7 +193,7 @@
           dialogType: $(this).data('dialog-type'),
           dialog: $(this).data('dialog-options')
         }).execute();
-        modalClasses('size-guide', 'sizeguide-modal-overlay');
+        Drupal.customGlobal.modalClasses('size-guide', 'sizeguide-modal-overlay');
         e.preventDefault();
       });
 

@@ -1,0 +1,8 @@
+#cart_notification,
+#static_minicart_notification {
+  &.error-notification {
+    &.has--notification::before {
+      border-color: $error-red;
+    }
+  }
+}

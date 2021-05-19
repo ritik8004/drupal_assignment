@@ -69,8 +69,6 @@
       $(this).addClass('active');
       $('body').removeClass('large-grid')
       $('.c-products-list', context).removeClass('product-large').addClass('product-small');
-      // Adjust height of PLP tiles.
-      Drupal.plpListingProductTileHeight('full_page', null);
     });
 
     $('.large-col-grid', context).once('algolia-plp').on('click', function () {
@@ -78,8 +76,6 @@
       $(this).addClass('active');
       $('body').addClass('large-grid');
       $('.c-products-list', context).removeClass('product-small').addClass('product-large');
-      // Adjust height of PLP tiles.
-      Drupal.plpListingProductTileHeight('full_page', null);
     });
 
     // Add dropdown effect for facets filters.
