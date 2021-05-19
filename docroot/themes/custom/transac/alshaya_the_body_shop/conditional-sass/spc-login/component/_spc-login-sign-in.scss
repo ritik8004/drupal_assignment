@@ -62,4 +62,12 @@
       text-transform: capitalize;
     }
   }
+
+  .c-footer {
+    border-top: 0.0625rem solid $checkout_footer_border;
+  }
+
+  .c-post-content {
+    border-top: none;
+  }
 }
