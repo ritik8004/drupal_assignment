@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import Cookies from 'js-cookie';
 import {
   cartAvailableInStorage,
   redirectToCart,
@@ -24,7 +23,7 @@ export const fetchClicknCollectStores = (args) => {
 };
 
 export const fetchCartData = () => {
-  if (Drupal.alshayaSpc.isAnonmyousWithoutCart()) {
+  if (Drupal.alshayaSpc.isAnonymousUserWithoutCart()) {
     removeCartFromStorage();
     return null;
   }
@@ -37,7 +36,7 @@ export const fetchCartData = () => {
   }
 
   if (!cart) {
-    return Drupal.alshayaSpc.getCart().then((response) => {
+    return Drupal.alshayaSpc.restoreCart().then((response) => {
       if (typeof response !== 'object') {
         redirectToCart();
         return null;
@@ -121,12 +120,12 @@ export const fetchCartDataForCheckout = () => {
   removeCartFromStorage();
 
   // If session cookie not exists, no need to process/check.
-  if (Drupal.alshayaSpc.isAnonmyousWithoutCart()) {
+  if (Drupal.alshayaSpc.isAnonymousUserWithoutCart()) {
     return null;
   }
 
   // Prepare api url.
-  return Drupal.alshayaSpc.getCheckoutCart()
+  return Drupal.alshayaSpc.getCartForCheckout()
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.

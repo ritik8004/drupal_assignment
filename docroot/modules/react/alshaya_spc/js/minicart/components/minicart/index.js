@@ -23,7 +23,7 @@ export default class MiniCart extends React.Component {
   componentDidMount() {
     try {
       const cartData = fetchCartData();
-      if (cartData instanceof Promise) {
+      if (typeof cartData === 'object') {
         cartData.then((result) => {
           if (result === 'Request aborted') {
             return;

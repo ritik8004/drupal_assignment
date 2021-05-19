@@ -221,7 +221,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $checkout_settings = Settings::get('alshaya_checkout_settings');
   $store_settings = Settings::get('magento_lang_prefix');
   $timeout_settings = Settings::get('alshaya_backend_calls_options');
-  $cart_version = \Drupal::config('alshaya_acm.cart_config')->get('version') ?? 1;
+  $cart_config = \Drupal::config('alshaya_acm.cart_config');
+  $cart_version = $cart_config->get('version') ?? 1;
   $lang = \Drupal::request()->query->get('lang') ?? 'en';
 
   $page['#attached']['drupalSettings']['cart']['version'] = $cart_version;
@@ -232,5 +233,5 @@ function alshaya_spc_page_attachments_alter(&$page) {
     return $key['timeout'];
   }, $timeout_settings['middleware']);
 
-  $page['#attached']['library'][] = 'alshaya_spc/add_to_cart_api_v' . $cart_version;
+  $page['#attached']['library'][] = 'alshaya_spc/cart_utilities.v' . $cart_version;
 }
