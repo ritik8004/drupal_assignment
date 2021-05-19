@@ -33,6 +33,14 @@
       }
     }
   }
+
+  &__main {
+    .gallery-wrapper {
+      @include breakpoint($desktop) {
+        margin-#{$right}: 1.875rem;
+      }
+    }
+  }
 }
 
 .basic-details-wrapper {
@@ -74,9 +82,11 @@
 
       .select2-container {
         width: 5.5625rem !important;
+        border: 0.0625rem solid $pdp_qty_select_border;
 
         .select2-selection {
           height: 3.125rem;
+          border: none;
 
           &__rendered {
             font-size: 1.125rem;
@@ -92,6 +102,7 @@
               height: 3.125rem;
               padding-#{$right}: 2.8125rem;
               font-size: 2.75rem;
+              border: none;
             }
           }
         }
@@ -274,6 +285,29 @@
           color: $pdp_color_option_selected_text;
           border-color: $pdp_color_option_border;
         }
+      }
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .content__title_wrapper {
+    h1 {
+      @include breakpoint($desktop) {
+        margin-top: 0;
+        line-height: 1.1;
+      }
+    }
+  }
+}
+
+.select2-dropdown {
+  ul.select2-results__options {
+    li.select2-results__option {
+      padding-#{$left}: 1.25rem;
+
+      &:first-child {
+        border-top: none;
       }
     }
   }
