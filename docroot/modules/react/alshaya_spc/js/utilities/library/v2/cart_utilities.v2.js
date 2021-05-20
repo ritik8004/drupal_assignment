@@ -1,3 +1,4 @@
+/* eslint-env jquery */
 import Axios from 'axios';
 
 drupalSettings = window.drupalSettings;
@@ -12,9 +13,9 @@ window.commerceBackend = {};
 const i18nMagentoUrl = (path) => {
   const cartUrl = drupalSettings.cart.url;
   const cartStore = drupalSettings.cart.store;
-  let url = cartUrl + '/' + cartStore + path;
-  //@todo remove this when CORS is enabled on Magento API
-  url = '/proxy.php?url=' + encodeURI(url);
+  let url = `${cartUrl}/${cartStore}${path}`;
+  // @todo remove this when CORS is enabled on Magento API
+  url = `/proxy.php?url=${url}`;
   return url;
 };
 
@@ -47,7 +48,7 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => {
 const callMagentoApi = (url, method, data) => {
   const params = {
     url: i18nMagentoUrl(url),
-    method: method,
+    method,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -64,17 +65,15 @@ const callMagentoApi = (url, method, data) => {
  * Calls the cart get API.
  */
 window.commerceBackend.getCart = () => {
-  let def = $.Deferred();
+  const def = $.Deferred();
   window.commerceBackend.getCartId()
     .then((cartId) => {
-      callMagentoApi('/rest/V1/guest-carts/' + cartId + '/getCart', 'GET', {})
-        .then(
-          function (response) {
-            if (typeof response.data !== 'undefined') {
-              def.resolve(response.data);
-            }
+      callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {})
+        .then((response) => {
+          if (typeof response.data !== 'undefined') {
+            def.resolve(response.data);
           }
-        );
+        });
     });
 
   return def.promise();
@@ -86,18 +85,16 @@ window.commerceBackend.getCart = () => {
  * @param {object} data
  *   The object to send for POST request.
  */
-window.commerceBackend.addToCart = function (data) {
-  let def = $.Deferred();
+window.commerceBackend.addToCart = (data) => {
+  const def = $.Deferred();
   window.commerceBackend.getCartId()
     .then((cartId) => {
-      callMagentoApi('/rest/V1/guest-carts/' + cartId + '/items', 'POST', data)
-        .then(
-          function (response) {
-            if (typeof response.data !== 'undefined') {
-              def.resolve(response.data);
-            }
+      callMagentoApi(`/rest/V1/guest-carts/${cartId}/items`, 'POST', data)
+        .then((response) => {
+          if (typeof response.data !== 'undefined') {
+            def.resolve(response.data);
           }
-        );
+        });
     });
 
   return def.promise();
@@ -108,7 +105,6 @@ window.commerceBackend.addToCart = function (data) {
  */
 window.commerceBackend.getCartForCheckout = () => {
   // @todo Implement getCartForCheckout().
-  console.log('Implement getCartForCheckout');
 };
 
 /**
@@ -116,7 +112,6 @@ window.commerceBackend.getCartForCheckout = () => {
  */
 window.commerceBackend.restoreCart = () => {
   // @todo Implement restoreCart().
-  console.log('Implement restoreCart');
 };
 
 /**
@@ -126,7 +121,7 @@ window.commerceBackend.restoreCart = () => {
  *   The data object to send in the API call.
  */
 window.commerceBackend.updateCart = (data) => {
-  let def = $.Deferred();
+  const def = $.Deferred();
   window.commerceBackend.getCartId()
     .then((cartId) => {
       const itemData = {
@@ -139,13 +134,13 @@ window.commerceBackend.updateCart = (data) => {
 
       return window.commerceBackend.addToCart(itemData);
     })
-    .then(() => {
-      return window.commerceBackend.getCart();
-    })
+    .then(
+      () => window.commerceBackend.getCart(),
+    )
     .then((cartData) => {
       if (typeof cartData !== 'undefined') {
-        cartData = window.commerceBackend.processCartData(cartData);
-        def.resolve(cartData);
+        const processedData = window.commerceBackend.processCartData(cartData);
+        def.resolve(processedData);
       }
     });
 
@@ -158,26 +153,21 @@ window.commerceBackend.updateCart = (data) => {
  * Stores cart Id in the local storage.
  */
 window.commerceBackend.getCartId = () => {
-  let def = $.Deferred();
+  const def = $.Deferred();
   let cartData = window.Drupal.alshayaSpc.getCartData();
-  console.log(cartData);
-
   if (cartData && typeof cartData.cart_id !== 'undefined') {
     def.resolve(cartData.cart_id);
   } else {
     callMagentoApi('/rest/V1/guest-carts', 'POST', {})
-      .then(
-        function (response) {
-          if (typeof response.data === 'string' || typeof response.data === 'number') {
-            cartData = {
-              cart_id: response.data,
-            };
-            console.log(cartData);
-            localStorage.setItem('cart_data', JSON.stringify({ cart: cartData }));
-            def.resolve(cartData.cart_id);
-          }
+      .then((response) => {
+        if (typeof response.data === 'string' || typeof response.data === 'number') {
+          cartData = {
+            cart_id: response.data,
+          };
+          localStorage.setItem('cart_data', JSON.stringify({ cart: cartData }));
+          def.resolve(cartData.cart_id);
         }
-      );
+      });
   }
   return def.promise();
 };
@@ -194,20 +184,20 @@ window.commerceBackend.processCartData = (cartData) => {
   }
 
   const data = {
-    cart_id: window.commerceBackend.getCartId(), //@todo check why this is not the same as cartData.cart.id
+    cart_id: window.commerceBackend.getCartId(),
     uid: (drupalSettings.user.uid) ? drupalSettings.user.uid : 0,
     langcode: $('html').attr('lang'),
     customer: cartData.cart.customer,
-    coupon_code: '', //@todo where to find this? cart.totals.coupon_code
+    coupon_code: '', // @todo where to find this? cart.totals.coupon_code
     appliedRules: cartData.cart.applied_rule_ids,
     items_qty: cartData.cart.items_qty,
     cart_total: cartData.totals.base_grand_total,
-    minicart_total: cartData.totals.base_grand_total, //@todo confirm this
+    minicart_total: cartData.totals.base_grand_total, // @todo confirm this
     surcharge: cartData.cart.extension_attributes.surcharge,
     response_message: null,
     in_stock: true,
     is_error: false,
-    stale_cart: false, //@todo confirm this?
+    stale_cart: false, // @todo confirm this?
     totals: {
       subtotal_incl_tax: cartData.totals.subtotal_incl_tax,
       shipping_incl_tax: null,
@@ -233,7 +223,7 @@ window.commerceBackend.processCartData = (cartData) => {
     data.minicart_total -= data.totals.surcharge;
   }
 
-  //@todo confirm this
+  // @todo confirm this
   if (typeof cartData.response_message[1] !== 'undefined') {
     data.response_message = {
       status: cartData.response_message[1],
@@ -242,8 +232,9 @@ window.commerceBackend.processCartData = (cartData) => {
   }
 
   if (typeof cartData.cart.items !== 'undefined') {
-    cartData.cart.items.forEach(function (item) {
-      //todo check why item id is different from v1 and v2 for https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
+    cartData.cart.items.forEach((item) => {
+      // @todo check why item id is different from v1 and v2 for
+      // https://local.alshaya-bpae.com/en/buy-21st-century-c-1000mg-prolonged-release-110-tablets-red.html
       data.items[item.sku] = {
         id: item.item_id,
         title: item.name,
@@ -252,8 +243,8 @@ window.commerceBackend.processCartData = (cartData) => {
         sku: item.sku,
         freeItem: false,
         finalPrice: item.price,
-        in_stock: true, //@todo get stock information
-        stock: 99999, //@todo get stock information
+        in_stock: true, // @todo get stock information
+        stock: 99999, // @todo get stock information
       };
 
       if (typeof item.extension_attributes !== 'undefined' && typeof item.extension_attributes.error_message !== 'undefined') {
@@ -262,7 +253,7 @@ window.commerceBackend.processCartData = (cartData) => {
       }
 
       // This is to determine whether item to be shown free or not in cart.
-      cartData.totals.items.forEach(function (totalItem) {
+      cartData.totals.items.forEach((totalItem) => {
         // If total price of item matches discount, we mark as free.
         if (item.item_id === totalItem.item_id) {
           // Final price to use.
@@ -275,18 +266,18 @@ window.commerceBackend.processCartData = (cartData) => {
 
           // Free Item is only for free gift products which are having
           // price 0, rest all are free but still via different rules.
-          if (totalItem.base_price === 0 &&
-            typeof totalItem.extension_attributes !== 'undefined' &&
-            typeof totalItem.amasty_promo !== 'undefined') {
+          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.amasty_promo !== 'undefined') {
             data.items[item.sku].freeItem = true;
           }
         }
       });
 
-      //@todo Get stock data.
-
+      // @todo Get stock data.
     });
-  };
+  }
 
-  return { data: data };
+  const processedData = { data };
+
+  // eslint-disable-next-line consistent-return
+  return processedData;
 };
