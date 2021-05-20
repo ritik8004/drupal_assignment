@@ -7,6 +7,8 @@ var config = {
     minicart: './js/minicart',
     checkout: './js/checkout',
     checkout_confirmation: './js/checkout-confirmation',
+    library_v1: './js/utilities/library/v1/cart_utilities.v1.js',
+    library_v2: './js/utilities/library/v2/cart_utilities.v2.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
