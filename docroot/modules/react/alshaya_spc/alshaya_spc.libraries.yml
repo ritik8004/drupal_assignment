@@ -83,4 +83,4 @@ googlemapapi:
 
 cart_utilities.v1:
   js:
-    assets/js/cart_utilities.v1.js: {}
+    dist/library_v1.bundle.js: {}

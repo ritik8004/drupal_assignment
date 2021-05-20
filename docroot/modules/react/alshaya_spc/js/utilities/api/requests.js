@@ -23,7 +23,7 @@ export const fetchClicknCollectStores = (args) => {
 };
 
 export const fetchCartData = () => {
-  if (Drupal.alshayaSpc.isAnonymousUserWithoutCart()) {
+  if (window.commerceBackend.isAnonymousUserWithoutCart()) {
     removeCartFromStorage();
     return null;
   }
@@ -36,7 +36,7 @@ export const fetchCartData = () => {
   }
 
   if (!cart) {
-    return Drupal.alshayaSpc.restoreCart().then((response) => {
+    return window.commerceBackend.restoreCart().then((response) => {
       if (typeof response !== 'object') {
         redirectToCart();
         return null;
@@ -107,7 +107,7 @@ export const fetchCartData = () => {
     return Promise.resolve(cart);
   }
 
-  return Drupal.alshayaSpc.getCart()
+  return window.commerceBackend.getCart()
     .then((response) => response)
     .catch((error) => {
       // Processing of error here.
@@ -120,12 +120,12 @@ export const fetchCartDataForCheckout = () => {
   removeCartFromStorage();
 
   // If session cookie not exists, no need to process/check.
-  if (Drupal.alshayaSpc.isAnonymousUserWithoutCart()) {
+  if (window.commerceBackend.isAnonymousUserWithoutCart()) {
     return null;
   }
 
   // Prepare api url.
-  return Drupal.alshayaSpc.getCartForCheckout()
+  return window.commerceBackend.getCartForCheckout()
     .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
