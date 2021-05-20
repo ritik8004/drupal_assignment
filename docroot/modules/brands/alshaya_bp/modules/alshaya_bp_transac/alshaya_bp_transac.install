@@ -49,21 +49,42 @@ function alshaya_bp_transac_update_8014() {
     'brandcategory',
     'promobrandcategory',
     'plpbrandcategory',
+    'productlistbrandcategory'
   ];
-
+  $weight = 100;
   foreach ($blocks as $block_id) {
-    $new_block = Block::load($block_id);
-    if ($new_block instanceof BlockInterface) {
-      // Keep the blocks disabled.
-      $new_block->setWeight(abs($new_block->getWeight()));
-      $new_block->disable();
-      $new_block->save();
+    switch ($block_id) {
+      case 'brandcategory':
+      case 'promobrandcategory':
+        $new_block = Block::load($block_id);
+        if ($new_block instanceof BlockInterface) {
+          // Weight set to 150 to display in All Filters.
+          // Keep the blocks disabled.
+          $new_block->setWeight($weight + 50);
+          $new_block->disable();
+          $new_block->save();
+        }
+        break;
+
+      case 'plpbrandcategory':
+        $new_block = Block::load($block_id);
+        if ($new_block instanceof BlockInterface) {
+          // Weight set to 200 to display in All Filters.
+          // Keep the block disabled.
+          $new_block->setWeight($weight + $weight);
+          $new_block->disable();
+          $new_block->save();
+        }
+        break;
+      
+      case 'productlistbrandcategory':
+        $brand_block = Block::load($block_id);
+        if ($brand_block instanceof BlockInterface) {
+          // Block weight sett to 100.
+          $brand_block->setWeight($weight)->save();
+        }
+        break;
     }
-  }
-  // Set weight of new block same as old block.
-  $brand_block = Block::load('productlistbrandcategory');
-  if ($brand_block instanceof BlockInterface) {
-    $brand_block->setWeight(abs($brand_block->getWeight()))->save();
   }
 }
 
