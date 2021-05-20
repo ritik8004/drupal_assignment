@@ -18,6 +18,7 @@ use Drupal\Core\Queue\QueueInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -426,7 +427,7 @@ class AcqPromotionsManager {
       $attached = array_diff($promotion_skus, $promotion_skus_existing);
       $detached = array_diff($promotion_skus_existing, $promotion_skus);
 
-      $lock_key = 'fetchPromotion' . $promotion['rule_id'];
+      $lock_key = 'processPromotion' . $promotion['rule_id'];
 
       // Acquire lock to ensure parallel processes are executed
       // sequentially.
@@ -446,7 +447,7 @@ class AcqPromotionsManager {
       $promotion_node = $this->getPromotionByRuleId($promotion['rule_id'], $promotion['promotion_type']);
 
       // Release the lock if the promotion_node already present.
-      if (!is_null($promotion_node)) {
+      if ($promotion_node instanceof NodeInterface) {
         $this->lock->release($lock_key);
         unset($lock_key);
       }
