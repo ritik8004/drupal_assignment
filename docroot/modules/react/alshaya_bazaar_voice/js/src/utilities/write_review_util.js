@@ -1,6 +1,9 @@
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 import { getStorageInfo } from './storage';
+import smoothScrollTo from './smoothScroll';
+
+const bazaarVoiceSettings = getbazaarVoiceSettings();
 
 /**
  * Email address validation.
@@ -23,12 +26,10 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const prepareRequest = (elements, fieldsConfig, productId) => {
+export const prepareRequest = (elements, fieldsConfig) => {
   let params = '';
-  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
   const userId = bazaarVoiceSettings.reviews.user.id;
   const userStorage = getStorageInfo(`bvuser_${userId}`);
-
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
@@ -79,7 +80,7 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (bazaarVoiceSettings.reviews.user.id !== 0 && userStorage.uasToken !== undefined) {
+    if (bazaarVoiceSettings.reviews.user.user_id !== 0 && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
     } else if (userId === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;
@@ -109,7 +110,7 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const validateRequest = (elements, fieldsConfig) => {
+export const validateRequest = (elements, fieldsConfig, e) => {
   let isError = false;
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
@@ -135,10 +136,12 @@ export const validateRequest = (elements, fieldsConfig) => {
               break;
             case 'ratings':
               document.getElementById(`${id}-error`).classList.add('rating-error');
+              document.getElementById(`${id}-error`).classList.add('error');
               isError = true;
               break;
             default:
               document.getElementById(`${id}-error`).classList.add('radio-error');
+              document.getElementById(`${id}-error`).classList.add('error');
               isError = true;
           }
         } else if (id === 'reviewtext'
@@ -164,8 +167,12 @@ export const validateRequest = (elements, fieldsConfig) => {
           document.getElementById(`${id}-error`).classList.remove('radio-error');
           document.getElementById(`${id}-error`).classList.remove('rating-error');
         }
+        // Scroll to error message.
+        if (isError) {
+          smoothScrollTo(e, '.error');
+        }
       }
-    } catch (e) { return null; }
+    } catch (exception) { return null; }
 
     return field;
   });
