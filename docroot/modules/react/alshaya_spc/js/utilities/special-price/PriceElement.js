@@ -13,7 +13,7 @@ const PriceElement = ({ amount: priceAmount, format }) => {
     return (`${priceParts.currency} ${priceParts.amount}`);
   }
 
-  priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{ parseFloat(priceParts.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: currencyConfig.decimal_points }) }</span>);
+  priceParts.amount = (<span key="amount" style={{ display: 'inline-block' }} className="price-amount">{ parseFloat(priceParts.amount).toLocaleString(undefined, { minimumFractionDigits: currencyConfig.decimal_points, maximumFractionDigits: currencyConfig.decimal_points }) }</span>);
   priceParts.currency = (<span key="currency" style={{ display: 'inline-block' }} className="price-currency suffix">{priceParts.currency}</span>);
 
   return (
