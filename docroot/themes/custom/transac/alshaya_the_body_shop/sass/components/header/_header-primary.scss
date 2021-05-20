@@ -27,7 +27,7 @@ header {
 
     .cart-link-total {
       font-size: 1rem;
-      font-family: $alshaya-medium;
+      font-family: $tbs-medium;
       padding-right: 0;
     }
 
@@ -38,7 +38,7 @@ header {
       top: -0.5rem;
       #{$right}: -1.125rem;
       #{$left}: unset;
-      font-family: $alshaya-medium;
+      font-family: $tbs-medium;
 
       @include breakpoint($only-mobile) {
         #{$left}: 1rem;
@@ -138,7 +138,7 @@ header {
     }
 
     a {
-      font-family: $alshaya-medium;
+      font-family: $tbs-medium;
       text-transform: capitalize;
     }
   }
@@ -178,7 +178,7 @@ header {
 @include breakpoint($upto-desktop) {
   .main--menu .menu__link,
   .back--link {
-    font-family: $alshaya-medium;
+    font-family: $tbs-medium;
     font-size: 0.875rem;
     text-transform: capitalize;
   }
@@ -230,7 +230,7 @@ header {
 
   .menu__list-item {
     margin: 0;
-    font-family: $alshaya-medium;
+    font-family: $tbs-medium;
   }
 
   .menu__in {
@@ -385,7 +385,7 @@ html[lang='ar'] {
 
       .menu--one__link {
         font-size: 1rem;
-        font-family: $alshaya-medium;
+        font-family: $tbs-medium;
         border-color: $menu-border-desktop;
         text-transform: uppercase;
         padding: 0;
@@ -419,7 +419,7 @@ html[lang='ar'] {
       .menu__link-wrapper {
         .menu-two__link {
           font-size: 1.125rem;
-          font-family: $alshaya-semibold;
+          font-family: $tbs-recoleta-semibold;
         }
       }
 

@@ -5,7 +5,7 @@
 
     .field--name-name {
       padding: 0;
-      font-family: $alshaya-medium;
+      font-family: $tbs-medium;
       font-size: 1rem;
       text-transform: capitalize;
     }
@@ -103,6 +103,44 @@
       h1 {
         @include breakpoint($only-mobile) {
           font-size: 1.5rem;
+        }
+      }
+    }
+
+    .block-facets-summary-blockfilter-bar,
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar-productlist {
+      ul {
+        li {
+          a {
+            span {
+              &.facet-item__value {
+                height: 1.625rem;
+                border-top-#{$left}-radius: 1rem;
+                border-bottom-#{$left}-radius: 1rem;
+              }
+
+              &.js-facet-deactivate {
+                height: 1.625rem;
+                border-top-#{$right}-radius: 1rem;
+                border-bottom-#{$right}-radius: 1rem;
+
+                &::after {
+                  font-size: 1.75rem;
+                }
+              }
+            }
+          }
+
+          &:hover {
+            span {
+              &.facet-item__value,
+              &.js-facet-deactivate {
+                background: $plp_selected_filter_hover;
+              }
+            }
+          }
         }
       }
     }
