@@ -233,5 +233,15 @@ function alshaya_spc_page_attachments_alter(&$page) {
     return $key['timeout'];
   }, $timeout_settings['middleware']);
 
-  $page['#attached']['library'][] = 'alshaya_spc/cart_utilities.v' . $cart_version;
+  $current_path = \Drupal::request()->getPathInfo();
+  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  // Remove current language from url.
+  $current_path = preg_replace('/\/' . $current_language . '/', '', $current_path, 1);
+  // Remove last `/` from url.
+  $current_path = rtrim($current_path, '/');
+
+  // Attach specific library for checkout/cart pages.
+  $page['#attached']['library'][] = $current_path === '/checkout'
+    ? 'alshaya_spc/commerce_backend.checkout.v' . $cart_version
+    : 'alshaya_spc/commerce_backend.cart.v' . $cart_version;
 }
