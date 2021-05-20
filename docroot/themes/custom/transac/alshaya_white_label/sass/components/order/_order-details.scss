@@ -163,6 +163,12 @@
   .dark {
     color: $order_detail_td_dark_content;
     font-weight: 700;
+
+    &.reference-no {
+      @include breakpoint($tablet) {
+        margin-bottom: 3.125rem;
+      }
+    }
   }
 
   .font-small {
