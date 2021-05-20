@@ -53,8 +53,8 @@ class PdpPromotionLabel extends React.Component {
 
     return (promotions) ? (
       <>
-        {Object.keys(promotions).map((key, index) => (
-          <p key={`promo-${index + 1}`}><a href={promotions[key].promo_web_url}>{promotions[key].text}</a></p>
+        {Object.keys(promotions).map((key) => (
+          <p><a href={promotions[key].promo_web_url}>{promotions[key].text}</a></p>
         ))}
         <div id="dynamic-promo-labels">
           <PdpDynamicPromotions skuMainCode={skuMainCode} cartDataValue={cartDataValue} />
