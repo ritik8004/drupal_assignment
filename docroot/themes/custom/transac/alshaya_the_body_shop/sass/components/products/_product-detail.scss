@@ -3,7 +3,7 @@
   &__title_wrapper {
     h1,
     h1 span {
-      font-family: $alshaya-semibold;
+      font-family: $tbs-recoleta-semibold;
       font-size: 2rem;
       font-weight: 700;
     }
@@ -300,12 +300,26 @@
 
 .nodetype--acq_product {
   .content__title_wrapper {
+    @include breakpoint($tablet) {
+      border-bottom: none;
+    }
+
     h1 {
+      width: 100%;
+
       @include breakpoint($desktop) {
         margin-top: 0;
         line-height: 1.1;
       }
     }
+  }
+}
+
+.nodetype--acq_product,
+.path--cart {
+  span.out-of-stock {
+    font-family: $tbs-medium;
+    color: $oos_btn_text;
   }
 }
 

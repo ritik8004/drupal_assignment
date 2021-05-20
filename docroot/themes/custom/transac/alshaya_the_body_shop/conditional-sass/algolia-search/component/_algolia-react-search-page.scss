@@ -24,18 +24,18 @@
     .c-accordion__title {
       &.c-collapse__title {
         font-size: 1.125rem;
-        font-family: $alshaya-semibold;
+        font-family: $tbs-recoleta-semibold;
 
         @include breakpoint($upto-desktop) {
           font-size: 0.875rem;
-          font-family: $alshaya-medium;
+          font-family: $tbs-medium;
         }
       }
     }
   }
 
   .c-page-title {
-    font-family: $alshaya-semibold;
+    font-family: $tbs-recoleta-semibold;
     font-size: 1.875rem;
   }
 
