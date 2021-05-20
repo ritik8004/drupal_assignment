@@ -97,23 +97,9 @@
             }
 
             // Post to ajax for cart update/create.
-            jQuery.ajax({
-              url: settings.alshaya_spc.cart_update_endpoint + '?lang=' + drupalSettings.path.currentLanguage,
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              data: JSON.stringify(post_data),
-              error: function (error) {
-                var cartNotification = new CustomEvent('product-add-to-cart-error', {
-                  bubbles: true,
-                  detail: {
-                    postData: post_data,
-                  },
-                });
-                form[0].dispatchEvent(cartNotification);
-              },
-              success: function (response) {
+            window.commerceBackend.addToCart(post_data)
+              .then (function (responseData) {
+                const response = responseData.data;
                 // If there any error we throw from middleware.
                 if (response.error === true) {
                   if (response.error_code === '400') {
@@ -268,8 +254,16 @@
                     );
                   }
                 }
-              }
-            });
+              })
+              .catch (function() {
+                var cartNotification = new CustomEvent('product-add-to-cart-error', {
+                  bubbles: true,
+                  detail: {
+                    postData: post_data,
+                  },
+                });
+                form[0].dispatchEvent(cartNotification);
+              });
           }
         }, 20);
       });
