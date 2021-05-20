@@ -108,7 +108,7 @@ export const fetchCartData = () => {
   }
 
   return window.commerceBackend.getCart()
-    .then((response) => response)
+    .then((response) => response.data)
     .catch((error) => {
       // Processing of error here.
       Drupal.logJavascriptError('Failed to get cart.', error, GTM_CONSTANTS.CART_ERRORS);
