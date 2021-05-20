@@ -9,7 +9,7 @@ alshaya_secondary_main_menu.settings:
       label: 'secondary_main menu display on desktop'
     max_nb_col:
       type: integer
-      label: 'Maxinum number of columns to show'
+      label: 'Maximum number of columns to show'
     ideal_max_col_length:
       type: integer
       label: 'Ideal length of the column'

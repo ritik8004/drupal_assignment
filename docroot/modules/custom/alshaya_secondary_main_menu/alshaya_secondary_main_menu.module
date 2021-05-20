@@ -88,7 +88,6 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
       }
       if (!empty($record['below'])) {
         _alshaya_secondary_main_menu_process_tag_attributes($record['below']);
-
       }
     }
   }
