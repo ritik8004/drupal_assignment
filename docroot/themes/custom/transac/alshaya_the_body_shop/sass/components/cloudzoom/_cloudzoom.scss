@@ -4,6 +4,21 @@
       width: calc(100% - 7.75rem);
     }
   }
+
+  #cloud-zoom-wrap {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .cloudzoom__image {
+    .img-wrap {
+      height: auto;
+    }
+  }
 }
 
 #lightSlider {
