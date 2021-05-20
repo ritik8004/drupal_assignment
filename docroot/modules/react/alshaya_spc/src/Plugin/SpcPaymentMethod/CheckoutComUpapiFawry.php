@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_spc\Plugin\SpcPaymentMethod;
 
 use Drupal\alshaya_spc\AlshayaSpcPaymentMethodPluginBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -15,7 +14,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   hasForm = false
  * )
  */
-class CheckoutComUpapiFawry extends AlshayaSpcPaymentMethodPluginBase implements ContainerFactoryPluginInterface {
+class CheckoutComUpapiFawry extends AlshayaSpcPaymentMethodPluginBase {
 
   use StringTranslationTrait;
 
