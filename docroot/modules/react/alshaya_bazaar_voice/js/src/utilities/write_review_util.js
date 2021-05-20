@@ -80,7 +80,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (bazaarVoiceSettings.reviews.user.user_id !== 0 && userStorage.uasToken !== undefined) {
+    if (bazaarVoiceSettings.reviews.user.id !== 0 && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
     } else if (userId === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;
