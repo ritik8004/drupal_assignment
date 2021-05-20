@@ -1,0 +1,6 @@
+$tbs-medium: if-ltr($tbs-medium, $tbs-arabic-medium);
+$tbs-arabic-medium: if-ltr($tbs-arabic-medium, $tbs-medium);
+$tbs-semibold: if-ltr($tbs-semibold, $tbs-arabic-semibold);
+$tbs-arabic-semibold: if-ltr($tbs-arabic-semibold, $tbs-semibold);
+$tbs-recoleta-semibold: if-ltr($tbs-recoleta-semibold, $tbs-recoleta-arabic-medium);
+$tbs-arabic-recoleta-semibold: if-ltr($tbs-recoleta-arabic-medium, $tbs-recoleta-semibold);
