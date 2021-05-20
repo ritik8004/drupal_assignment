@@ -1,4 +1,8 @@
-import { callMiddlewareApi, isAnonymousUserWithoutCart } from './common';
+import {
+  callMiddlewareApi,
+  isAnonymousUserWithoutCart,
+  updateCart,
+} from './common';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -16,3 +20,14 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  *   A promise object.
  */
 window.commerceBackend.getCartForCheckout = () => callMiddlewareApi('cart/checkout', 'GET');
+
+/**
+ * Adds payment method in the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addPaymentMethod = (data) => updateCart(data);

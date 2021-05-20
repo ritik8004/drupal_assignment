@@ -59,7 +59,19 @@ const callMiddlewareApi = (url, method, data) => {
   return Axios(ajaxCallParams);
 };
 
+/**
+ * Calls the update cart middleware API.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
+
 export {
   callMiddlewareApi,
   isAnonymousUserWithoutCart,
+  updateCart,
 };

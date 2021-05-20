@@ -1,18 +1,11 @@
-import { callMiddlewareApi, isAnonymousUserWithoutCart } from './common';
+import {
+  callMiddlewareApi,
+  isAnonymousUserWithoutCart,
+  updateCart,
+} from './common';
 
 drupalSettings = window.drupalSettings;
 window.commerceBackend = window.commerceBackend || {};
-
-/**
- * Calls the update cart middleware API.
- *
- * @param {object} data
- *   The data object to send in the API call.
- *
- * @returns {Promise}
- *   A promise object.
- */
-const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
 
 /**
  * Check if user is anonymous and without cart.
@@ -47,3 +40,25 @@ window.commerceBackend.restoreCart = () => callMiddlewareApi('cart/restore', 'GE
  *   A promise object.
  */
 window.commerceBackend.addToCart = (data) => updateCart(data);
+
+/**
+ * Applies/Removes promo code to the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.applyRemovePromo = (data) => updateCart(data);
+
+/**
+ * Adds/Removes/Changes quantity of items in the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.updateCartItemData = (data) => updateCart(data);
