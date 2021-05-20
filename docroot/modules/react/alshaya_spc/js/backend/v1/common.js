@@ -2,7 +2,19 @@ import Axios from 'axios';
 import Cookies from 'js-cookie';
 
 drupalSettings = window.drupalSettings;
-window.commerceBackend = {};
+
+/**
+ * Check if user is anonymous and without cart.
+ *
+ * @returns bool
+ */
+const isAnonymousUserWithoutCart = () => (
+  // @TODO: Remove Cookies.get('Drupal.visitor.acq_cart_id') check when we
+  // uninstall alshaya_acm module.
+  drupalSettings.user.uid === 0
+    && !Cookies.get('PHPSESSID')
+    && !Cookies.get('Drupal.visitor.acq_cart_id')
+);
 
 /**
  * Get the complete path for the middleware API.
@@ -14,17 +26,6 @@ const i18nMiddleWareUrl = (path) => {
   const langcode = window.drupalSettings.path.currentLanguage;
   return `${window.drupalSettings.alshaya_spc.middleware_url}/${path}?lang=${langcode}`;
 };
-
-/**
- * Check if user is anonymous and without cart.
- *
- * @returns bool
- */
-window.commerceBackend.isAnonymousUserWithoutCart = () => (
-  drupalSettings.user.uid === 0
-    && !Cookies.get('PHPSESSID')
-    && !Cookies.get('Drupal.visitor.acq_cart_id')
-);
 
 /**
  * Make an AJAX call to middleware.
@@ -55,25 +56,7 @@ const callMiddlewareApi = (url, method, data) => {
   return Axios(ajaxCallParams);
 };
 
-/**
- * Calls the cart get API.
- */
-window.commerceBackend.getCart = () => callMiddlewareApi('cart/get', 'GET');
-
-/**
- * Get cart data for checkout.
- */
-window.commerceBackend.getCartForCheckout = () => callMiddlewareApi('cart/checkout', 'GET');
-
-/**
- * Calls the cart restore API.
- */
-window.commerceBackend.restoreCart = () => callMiddlewareApi('cart/restore', 'GET');
-
-/**
- * Calls the cart update API.
- *
- * @param {object} data
- *   The data object to send in the API call.
- */
-window.commerceBackend.updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
+export {
+  callMiddlewareApi,
+  isAnonymousUserWithoutCart,
+};

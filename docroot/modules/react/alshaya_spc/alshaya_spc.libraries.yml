@@ -81,6 +81,18 @@ googlemapapi:
   js:
     js/google-maps-api.js: {}
 
-cart_utilities.v1:
+commerce_backend.cart.v1:
   js:
-    dist/library_v1.bundle.js: {}
+    dist/backend_cart_v1.bundle.js: {}
+
+commerce_backend.checkout.v1:
+  js:
+    dist/backend_checkout_v1.bundle.js: {}
+
+commerce_backend.cart.v2:
+  js:
+    dist/backend_cart_v2.bundle.js: {}
+
+commerce_backend.checkout.v2:
+  js:
+    dist/backend_checkout_v2.bundle.js: {}
