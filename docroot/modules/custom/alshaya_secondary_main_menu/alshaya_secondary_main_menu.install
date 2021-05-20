@@ -5,10 +5,3 @@
  * Install, update and uninstall functions for the alshaya_secondary_main_menu module.
  */
 
-use Drupal\alshaya_config\AlshayaConfigManager;
-
-/**
- * Implements hook_update_N().
- *
- * Add new setting in alshaya_secondary_main_menu - desktop_secondary_main_menu_layout.
- */

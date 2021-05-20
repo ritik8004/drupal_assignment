@@ -60,7 +60,7 @@ class AlshayaSecondaryMainMenuConfigForm extends ConfigFormBase {
 
     $form['max_nb_col'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Maxinum number of columns to show'),
+      '#title' => $this->t('Maximum number of columns to show'),
       '#description' => $this->t('Set the maximum number of columns to show.'),
       '#default_value' => (!empty($config->get('max_nb_col'))) ? $config->get('max_nb_col') : 6,
     ];

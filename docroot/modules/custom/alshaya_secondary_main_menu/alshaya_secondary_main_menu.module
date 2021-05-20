@@ -55,7 +55,7 @@ function template_preprocess_alshaya_secondary_main_menu_level1(array &$variable
  }
 
  /**
- * Prepares href for anchor tag for given term data.
+ * Prepares href for anchor tag for given menu item.
  */
 function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
   foreach ($data as &$record) {
@@ -63,8 +63,10 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
     if (isset($record['l1_object'])) {
       $record['l1_object']['tag'] = 'div';
       $record['l1_object']['tag_attr'] = '';
+      if (!empty($record['l1_object']['url']->toString())) {
         $record['l1_object']['tag'] = 'a';
         $record['l1_object']['tag_attr'] = "href={$record['l1_object']['url']->toString()}";
+      }
 
       if (!empty($record['columns'])) {
 
@@ -72,9 +74,10 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
           foreach ($value as $key1 => $l2) {
             $record['columns'][$key][$key1]['tag'] = 'div';
             $record['columns'][$key][$key1]['tag_attr'] = '';
+            if (!empty($l2['url']->toString())) {
               $record['columns'][$key][$key1]['tag'] = 'a';
-
               $record['columns'][$key][$key1]['tag_attr'] = "href={$l2['url']->toString()}";
+            }
 
             if (!empty($l2['below'])) {
               _alshaya_secondary_main_menu_process_tag_attributes_columns($record['columns'][$key][$key1]['below']);
@@ -84,11 +87,12 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
       }
     }
     else {
-
       $record['tag'] = 'div';
       $record['tag_attr'] = '';
+      if (!empty($record['url']->toString())) {
         $record['tag'] = 'a';
         $record['tag_attr'] = "href={$record['url']}";
+      }
       if (!empty($record['below'])) {
         _alshaya_secondary_main_menu_process_tag_attributes($record['below']);
 
@@ -98,15 +102,17 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
 }
 
 /**
- * Prepares href for anchor tag for given term data in columns.
+ * Prepares href for anchor tag for given menu item in columns.
  */
 function _alshaya_secondary_main_menu_process_tag_attributes_columns(array &$data) {
   foreach ($data as $key => $value) {
+
     $data[$key]['tag'] = 'div';
     $data[$key]['tag_attr'] = '';
+    if (!empty($value['url']->toString())) {
       $data[$key]['tag'] = 'a';
       $data[$key]['tag_attr'] = "href={$value['url']->toString()}";
-
+    }
     if (isset($value['below'])) {
       _alshaya_secondary_main_menu_process_tag_attributes_columns($value['below']);
     }
