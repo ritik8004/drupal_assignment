@@ -6,7 +6,7 @@ drupalSettings = window.drupalSettings;
 /**
  * Check if user is anonymous and without cart.
  *
- * @returns bool
+ * @returns {bool}
  */
 const isAnonymousUserWithoutCart = () => (
   // @TODO: Remove Cookies.get('Drupal.visitor.acq_cart_id') check when we
@@ -21,6 +21,9 @@ const isAnonymousUserWithoutCart = () => (
  *
  * @param {string} path
  *  The API path.
+ *
+ * @returns {string}
+ *   The complete middware API url.
  */
 const i18nMiddleWareUrl = (path) => {
   const langcode = window.drupalSettings.path.currentLanguage;

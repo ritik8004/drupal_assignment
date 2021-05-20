@@ -11,5 +11,8 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 
 /**
  * Get cart data for checkout.
+ *
+ * @returns {Promise}
+ *   A promise object.
  */
 window.commerceBackend.getCartForCheckout = () => callMiddlewareApi('cart/checkout', 'GET');

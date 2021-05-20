@@ -12,11 +12,17 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 
 /**
  * Calls the cart get API.
+ *
+ * @returns {Promise}
+ *   A promise object.
  */
 window.commerceBackend.getCart = () => callMiddlewareApi('cart/get', 'GET');
 
 /**
  * Calls the cart restore API.
+ *
+ * @returns {Promise}
+ *   A promise object.
  */
 window.commerceBackend.restoreCart = () => callMiddlewareApi('cart/restore', 'GET');
 
@@ -25,5 +31,8 @@ window.commerceBackend.restoreCart = () => callMiddlewareApi('cart/restore', 'GE
  *
  * @param {object} data
  *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
  */
 window.commerceBackend.updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
