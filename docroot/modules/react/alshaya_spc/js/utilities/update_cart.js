@@ -12,13 +12,6 @@ import validateCartResponse from './validation_util';
 export const updateCartApiUrl = () => i18nMiddleWareUrl('cart/update');
 
 /**
- * Get the middleware update cart endpoint.
- *
- * @returns {string}
- */
-export const restoreCartApiUrl = () => i18nMiddleWareUrl('cart/restore');
-
-/**
  * Apply/Remove the promo code.
  *
  * @param action
