@@ -156,6 +156,10 @@
     width: 100%;
     max-width: 8.75rem;
   }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $newsletter_submit_btn;
+  }
 }
 
 #alshaya-newsletter-subscribe {

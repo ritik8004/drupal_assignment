@@ -3,9 +3,14 @@
     li {
       a.order-detail-page {
         transform: rotate(-90deg);
+        padding-#{$right}: 0.125rem;
 
         @include icon('dropdown-expand', after) {
           font-size: 2rem;
+        }
+
+        html[lang=ar] & {
+          transform: rotate(90deg);
         }
       }
     }
