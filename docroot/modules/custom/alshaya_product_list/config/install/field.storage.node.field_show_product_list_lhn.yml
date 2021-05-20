@@ -4,15 +4,12 @@ dependencies:
   module:
     - node
     - options
-id: node.field_show_in_lhn_options_list
-field_name: field_show_in_lhn_options_list
+id: node.field_show_product_list_lhn
+field_name: field_show_product_list_lhn
 entity_type: node
 type: list_string
 settings:
   allowed_values:
-    -
-      value: 'Same as LHN'
-      label: 'Same as LHN'
     -
       value: 'Yes'
       label: 'Yes'
