@@ -46,45 +46,25 @@ function alshaya_bp_transac_update_8014() {
 
   // Disable Block Facets for brand_category
   $blocks = [
-    'brandcategory',
-    'promobrandcategory',
-    'plpbrandcategory',
-    'productlistbrandcategory'
+    'brandcategory' => 'alshaya_search_facets_block_all',
+    'promobrandcategory' => 'alshaya_promo_facets_block_all',
+    'plpbrandcategory' => 'alshaya_plp_facets_block_all',
+    'productlistbrandcategory' => 'alshaya_productlist_facets_block_all',
   ];
-  $weight = 100;
-  foreach ($blocks as $block_id) {
-    switch ($block_id) {
-      case 'brandcategory':
-      case 'promobrandcategory':
-        $new_block = Block::load($block_id);
-        if ($new_block instanceof BlockInterface) {
-          // Weight set to 150 to display in All Filters.
-          // Keep the blocks disabled.
-          $new_block->setWeight($weight + 50);
-          $new_block->disable();
-          $new_block->save();
-        }
-        break;
-
-      case 'plpbrandcategory':
-        $new_block = Block::load($block_id);
-        if ($new_block instanceof BlockInterface) {
-          // Weight set to 200 to display in All Filters.
-          // Keep the block disabled.
-          $new_block->setWeight($weight + $weight);
-          $new_block->disable();
-          $new_block->save();
-        }
-        break;
-      
-      case 'productlistbrandcategory':
-        $brand_block = Block::load($block_id);
-        if ($brand_block instanceof BlockInterface) {
-          // Block weight sett to 100.
-          $brand_block->setWeight($weight)->save();
-        }
-        break;
+  foreach ($blocks as $facet_block_id => $all_filter_block_id) {
+    $facet_block = Block::load($facet_block_id);
+    $all_filter_block = Block::load($all_filter_block_id);
+    if (($facet_block instanceof BlockInterface) && ($all_filter_block instanceof BlockInterface)) {
+      $facet_block->setWeight(($all_filter_block->getWeight()) - 1);
+      $facet_block->disable();
+      $facet_block->save();
     }
+  }
+
+  // Enable productlistbrandcategory block.
+  $product_list_facet_block = Block::load('productlistbrandcategory');
+  if ($product_list_facet_block instanceof BlockInterface) {
+    $product_list_facet_block->enable()->save();
   }
 }
 
