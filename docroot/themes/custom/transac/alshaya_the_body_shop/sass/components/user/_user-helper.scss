@@ -3,7 +3,7 @@
     @include breakpoint($only-mobile) {
       aside.c-sidebar-first {
         .my-account-mobile-title1 {
-          font-family: $alshaya-semibold;
+          font-family: $tbs-recoleta-semibold;
           text-transform: capitalize;
         }
 
@@ -25,6 +25,10 @@
           @include icon('dropdown-expand', after) {
             font-size: 2rem;
             transform: translateY(-50%) rotate(-90deg);
+
+            html[lang=ar] & {
+              transform: translateY(-50%) rotate(90deg);
+            }
           }
         }
       }
