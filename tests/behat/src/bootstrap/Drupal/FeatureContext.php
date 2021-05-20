@@ -1879,8 +1879,6 @@ class FeatureContext extends CustomMinkContext
    * Example: Then url should contain "/" page
    * Example: And I should be on "/bats" page
    * Example: And I should be on "http://google.com" page
-   *
-   *
    * @Then /^(?:|I )should be on "(?P<page>[^"]+)" page$/
    */
   public function assertPageLocate($path)
