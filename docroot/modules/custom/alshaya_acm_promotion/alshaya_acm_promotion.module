@@ -494,14 +494,3 @@ function alshaya_acm_promotion_entity_delete(EntityInterface $entity) {
     \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
   }
 }
-/**
- * Implements hook_entity_bundle_field_info_alter().
- */
-function alshaya_acm_promotion_entity_bundle_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type, $bundle) {
-  if ($entity_type->id() === 'node' && $bundle === 'acq_promotion') {
-    if (isset($fields['field_acq_promotion_rule_id'])) {
-      // Use the ID as defined in the annotation of the constraint definition
-      $fields['field_acq_promotion_rule_id']->addConstraint('UniqueField', []);
-     }
-  }
-}

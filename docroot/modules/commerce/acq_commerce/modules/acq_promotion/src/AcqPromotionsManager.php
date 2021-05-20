@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
@@ -97,6 +98,13 @@ class AcqPromotionsManager {
   protected $dispatcher;
 
   /**
+   * Database lock service.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  private $lock;
+
+  /**
    * Constructs a new AcqPromotionsManager object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -119,6 +127,8 @@ class AcqPromotionsManager {
    *   I18nHelper object.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   Event Dispatcher.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   Database lock service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               APIWrapper $api_wrapper,
@@ -129,7 +139,8 @@ class AcqPromotionsManager {
                               ConfigFactory $configFactory,
                               Connection $connection,
                               I18nHelper $i18n_helper,
-                              EventDispatcherInterface $dispatcher) {
+                              EventDispatcherInterface $dispatcher,
+                              LockBackendInterface $lock) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->apiWrapper = $api_wrapper;
@@ -141,6 +152,7 @@ class AcqPromotionsManager {
     $this->connection = $connection;
     $this->i18nHelper = $i18n_helper;
     $this->dispatcher = $dispatcher;
+    $this->lock = $lock;
   }
 
   /**
@@ -428,10 +440,37 @@ class AcqPromotionsManager {
       $attached = array_diff($promotion_skus, $promotion_skus_existing);
       $detached = array_diff($promotion_skus_existing, $promotion_skus);
 
+      $lock_key = 'fetchPromotion' . $promotion['rule_id'];
+
+      // Acquire lock to ensure parallel processes are executed
+      // sequentially.
+      // @todo These 8 lines might be duplicated in multiple places. We
+      // may want to create a utility service in alshaya_performance.
+      do {
+        $lock_acquired = $this->lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        // @todo Move this 0.5s to a config variable.
+        if (!$lock_acquired) {
+          usleep(500000);
+        }
+      } while (!$lock_acquired);
       // Check if this promotion exists in Drupal.
       // Assuming rule_id is unique across a promotion type.
       $promotion_node = $this->getPromotionByRuleId($promotion['rule_id'], $promotion['promotion_type']);
+
+      // Release the lock if the promotion_node already present.
+      if (!is_null($promotion_node)) {
+        $this->lock->release($lock_key);
+        unset($lock_key);
+      }
+
       $promotion_node = $this->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
+      // Release the lock if the promotion_node is created and lock is not
+      // released.
+      if (isset($lock_key)) {
+        $this->lock->release($lock_key);
+      }
 
       // Attach promotions to skus.
       if ($promotion_node) {
