@@ -34,6 +34,11 @@ function alshaya_tbs_transac_install() {
     ])
     ->save(TRUE);
 
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'The Body Shop Kuwait')
+    ->save();
+
   // Save arabic site logo.
   \Drupal::languageManager()
     ->getLanguageConfigOverride('ar', $current_theme . '.settings')
