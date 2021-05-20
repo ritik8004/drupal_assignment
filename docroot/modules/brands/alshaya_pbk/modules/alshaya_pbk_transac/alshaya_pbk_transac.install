@@ -15,7 +15,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Enable the module alshaya_secondary_main_menu.
  */
 function alshaya_pbk_transac_update_8002() {
-  if (!(\Drupal::moduleHandler()->moduleExists('alshaya_secondary_main_menu'))) {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_secondary_main_menu')) {
     \Drupal::service('module_installer')->install(['alshaya_secondary_main_menu']);
     /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
     $manager = \Drupal::service('alshaya_config.manager');
