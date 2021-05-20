@@ -102,7 +102,7 @@ class AcqPromotionsManager {
    *
    * @var \Drupal\Core\Lock\LockBackendInterface
    */
-  private $lock;
+  protected $lock;
 
   /**
    * Constructs a new AcqPromotionsManager object.
@@ -368,20 +368,6 @@ class AcqPromotionsManager {
     if (isset($promotion_label_languages[$site_default_langcode])) {
       $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
     }
-    if ($violations = $promotion_node->validate()) {
-      foreach ($violations->getByFields(['field_acq_promotion_rule_id']) as $violation) {
-        $errors[] = (string) $violation->getMessage();
-      }
-      if (!empty($errors)) {
-        $this->logger->critical('There are some validation errors for the rule_id @rule_id. Errors: @errors',
-          [
-            '@rule_id' => $promotion['rule_id'],
-            '@errors' => implode('.', $errors),
-          ]
-        );
-        return NULL;
-      }
-    }
     $status = $promotion_node->save();
     // Create promotion translations based on the language codes available in
     // promotion labels.
@@ -466,8 +452,7 @@ class AcqPromotionsManager {
       }
 
       $promotion_node = $this->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
-      // Release the lock if the promotion_node is created and lock is not
-      // released.
+      // Release the lock if not released.
       if (isset($lock_key)) {
         $this->lock->release($lock_key);
       }
