@@ -51,10 +51,10 @@ class AlshayaSecondaryMainMenuConfigForm extends ConfigFormBase {
       '#options' => [
         self::SECONDARY_MAIN_MENU_DEFAULT_LAYOUT => $this->t('Default menu display'),
         self::SECONDARY_MAIN_MENU_INLINE_LAYOUT => $this->t('Inline menu display'),
-        self::SECONDARY_MAIN_MENU_DYNAMIC_LAYOUT => $this->t('Dynamic Width Mega Menu'),
+        self::SECONDARY_MAIN_MENU_DYNAMIC_LAYOUT => $this->t('Dynamic width Mega Menu'),
       ],
       '#default_value' => $config->get('desktop_secondary_main_menu_layout'),
-      '#title' => $this->t('secondary_main menu display on desktop'),
+      '#title' => $this->t('secondary main menu display on desktop'),
       '#description' => $this->t('Select inline menu display option to display the l3 option inline to l2 otherwise it will follow the core.'),
     ];
 

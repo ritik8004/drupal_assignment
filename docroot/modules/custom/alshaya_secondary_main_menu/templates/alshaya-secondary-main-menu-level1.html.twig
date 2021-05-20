@@ -1,5 +1,4 @@
 <div class="secondary--main--menu" >
-
   <ul class="menu__list menu--one__list">
     <div class="menu-backdrop"></div>
     {% if (menu_type == 'default') %}
@@ -7,11 +6,9 @@
         {% set level1 = level1menu.l1_object %}
       {{ _self.getlevel1items(level1,level1menu) }}
       {% endfor %}
-
     {% endif %}
   </ul>
 </div>
-
 
 {% macro getlevel1items(level1,level1menu) %}
   {% set promopanel_class = 'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}
@@ -25,7 +22,7 @@
       <div class="menu__link-wrapper menu-two__link-wrapper">
         {% set style = '' %}
           {% if level1.tag is not empty %}
-          <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.title }}" {{ level1.tag_attr }}>{{ level1.title }}</{{ level1.tag }}>
+            <{{ level1.tag }} class="menu__link menu--one__link {{ level_class }}" style="{{style}}" title="{{ level1.title }}" {{ level1.tag_attr }}>{{ level1.title }}</{{ level1.tag }}>
           {% endif %}
       </div>
       {% if level1.below is not empty %}

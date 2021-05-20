@@ -2,13 +2,11 @@
   <div class="menu__links__wrapper">
     {% if (menu_type == 'default') or (menu_type == 'menu_dynamic_display') %}
       <span class="back--link"><span class="menu__back"></span> <span>{{ data.l1_object.title }}</span></span>
-      
       {% for key, columns in data.columns %}
         <div class="column {{ key }}">
           {% for key1, level2 in columns %}
-          
             <li class="menu__list-item menu--two__list-item {{ level2.class|join(' ') }} {{ level2.move_to_right ? 'move-to-right' : '' }}">
-              <div class="menu__link-wrapper menu-two__link-wrapper">                 
+              <div class="menu__link-wrapper menu-two__link-wrapper">
                   <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class|join(' ') }} {{level2.sub_nav_class}}" {{ level2.tag_attr }}>{{ level2.title }}</{{ level2.tag }}>
               </div>
               {% if level2.below is not empty %}
@@ -18,8 +16,6 @@
            {% endfor %}
          </div>
       {% endfor %}
-
     {% endif %}
   </div>
-
 </ul>

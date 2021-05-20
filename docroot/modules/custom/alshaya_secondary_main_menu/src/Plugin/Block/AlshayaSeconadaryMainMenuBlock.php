@@ -18,8 +18,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
  * )
  */
 class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-
   /**
    * Stores the configuration factory.
    *
@@ -71,12 +69,10 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * {@inheritdoc}
    */
   public function build() {
-
     $desktop_secondary_main_menu_layout = $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
     $menu_tree = \Drupal::menuTree();
     $menu_name = 'secondary-main-menu';
     $subtree = $this->getSubTree($menu_name);
-
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
@@ -84,7 +80,6 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
     $tree = $menu_tree->transform($subtree, $manipulators);
     $menu = $menu_tree->build($tree);
     $columns_tree = $this->getColumnDataMenuAlgo($menu);
-
     return [
       '#theme' => 'alshaya_secondary_main_menu_level1',
       '#items' => $menu,
@@ -122,17 +117,14 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
       $ideal_max_col_length = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('ideal_max_col_length');
       $max_nb_col = $max_nb_col > 0 ? $max_nb_col : 6;
       $ideal_max_col_length = $ideal_max_col_length > 0 ? $ideal_max_col_length : 10;
-
       do {
         $columns = [];
         $col = 0;
         $col_total = 0;
         $reprocess = FALSE;
-
         foreach ($l2s['below'] as $l3s) {
           // 2 below means L2 item + one blank line for spacing).
           $l2_cost = 2 + count($l3s['below']);
-
           // If we are detecting a longer column than the expected size
           // we iterate with new max.
           if ($l2_cost > $ideal_max_col_length) {
@@ -140,31 +132,24 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
             $reprocess = TRUE;
             break;
           }
-
           if ($col_total + $l2_cost > $ideal_max_col_length) {
             $col++;
             $col_total = 0;
           }
-
           // If we have too many columns we try with more items per column.
           if ($col >= $max_nb_col) {
             $ideal_max_col_length++;
             break;
           }
-
           $columns[$col][] = $l3s;
-
           $col_total += $l2_cost;
-
         }
       } while ($reprocess || $col >= $max_nb_col);
       $columns_tree[$l2s['title']] = [
         'l1_object' => $l2s,
         'columns' => $columns,
       ];
-
     }
-
     return $columns_tree;
   }
 
