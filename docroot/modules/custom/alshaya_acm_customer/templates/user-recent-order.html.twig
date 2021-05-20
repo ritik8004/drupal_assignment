@@ -144,5 +144,11 @@
       <div class="light">{{ 'Total' | t }}</div>
       <span class="currency-code dark prefix">{{ item.total_price }}</span>
     </td>
+
+    {% if item.bazaarvoice_link %}
+      <td class="above-mobile user-review">
+        <div class="myaccount-write-review" data-sku={{ item.sku }}></div>
+      </td>
+    {% endif %}
   </tr>
 {% endmacro %}

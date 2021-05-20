@@ -28,10 +28,10 @@ export const isOpenWriteReviewForm = () => {
   const query = new URLSearchParams(document.referrer);
   const openPopup = query.get('openPopup');
   if (bazaarVoiceSettings.reviews !== undefined
-    && bazaarVoiceSettings.reviews.user.user_id > 0
+    && bazaarVoiceSettings.reviews.user.id > 0
     && getStorageInfo('openPopup')
     && openPopup !== null
-    && !bazaarVoiceSettings.reviews.user.is_reviewed) {
+    && bazaarVoiceSettings.reviews.user.review === null) {
     return true;
   }
   return false;

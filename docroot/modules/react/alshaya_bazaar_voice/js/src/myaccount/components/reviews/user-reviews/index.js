@@ -1,17 +1,17 @@
 import React from 'react';
 import { removeFullScreenLoader, showFullScreenLoader }
-  from '../../../../../../js/utilities/showRemoveFullScreenLoader';
-import getStringMessage from '../../../../../../js/utilities/strings';
-import DisplayStar from '../../../rating/components/stars';
-import { fetchAPIData } from '../../../utilities/api/apiData';
-import IndividualReviewSlider from '../../../reviews/components/individual-review-slider';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
-import ConditionalView from '../../../common/components/conditional-view';
-import EmptyMessage from '../../../utilities/empty-message';
+  from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../../../../../js/utilities/strings';
+import DisplayStar from '../../../../rating/components/stars';
+import { fetchAPIData } from '../../../../utilities/api/apiData';
+import IndividualReviewSlider from '../../../../reviews/components/individual-review-slider';
+import { getUserBazaarVoiceSettings } from '../../../../utilities/api/request';
+import ConditionalView from '../../../../common/components/conditional-view';
+import EmptyMessage from '../../../../utilities/empty-message';
 import UserReviewsProducts from '../user-reviews-products';
 import UserReviewsDescription from '../user-reviews-desc';
 
-const bazaarVoiceSettings = getbazaarVoiceSettings('user');
+const bazaarVoiceSettings = getUserBazaarVoiceSettings();
 export default class UserReviews extends React.Component {
   constructor(props) {
     super(props);
@@ -37,7 +37,7 @@ export default class UserReviews extends React.Component {
     showFullScreenLoader();
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/authors.json';
-    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.user_id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit_Review=${initialLimit}`;
+    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit_Review=${initialLimit}`;
     const apiData = fetchAPIData(apiUri, params, 'user');
     if (apiData instanceof Promise) {
       apiData.then((result) => {

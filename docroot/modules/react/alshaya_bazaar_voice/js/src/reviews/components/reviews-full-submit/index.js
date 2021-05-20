@@ -38,6 +38,7 @@ export default class WriteReviewButton extends React.Component {
   closeModal = (e) => {
     e.preventDefault();
     document.body.classList.remove('open-form-modal');
+    const { context } = this.props;
 
     this.setState({
       isModelOpen: false,
@@ -45,7 +46,7 @@ export default class WriteReviewButton extends React.Component {
     // Disable write review popup onload.
     setStorageInfo(false, 'openPopup');
 
-    if (e.detail.HasErrors !== undefined && !e.detail.HasErrors) {
+    if (e.detail.HasErrors !== undefined && !e.detail.HasErrors && context !== 'myaccount') {
       smoothScrollTo(e, '#post-review-message');
     }
   };
@@ -54,9 +55,9 @@ export default class WriteReviewButton extends React.Component {
     const {
       isModelOpen,
     } = this.state;
-    const { reviewedByCurrentUser } = this.props;
-    const bazaarVoiceSettings = getbazaarVoiceSettings();
-    if (bazaarVoiceSettings.reviews.user.user_id === 0
+    const { reviewedByCurrentUser, productId, context } = this.props;
+    const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+    if (bazaarVoiceSettings.reviews.user.id === 0
       && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission) {
       return (
         <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />
@@ -78,6 +79,8 @@ export default class WriteReviewButton extends React.Component {
             >
               <WriteReviewForm
                 closeModal={(e) => this.closeModal(e)}
+                productId={productId}
+                context={context}
               />
             </Popup>
           </div>

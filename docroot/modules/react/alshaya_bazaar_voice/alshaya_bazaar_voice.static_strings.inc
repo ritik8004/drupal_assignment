@@ -266,5 +266,9 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'user_age',
       'value' => t('years'),
     ],
+    [
+      'key' => 'view_review',
+      'value' => t('View Review'),
+    ],
   ];
 }

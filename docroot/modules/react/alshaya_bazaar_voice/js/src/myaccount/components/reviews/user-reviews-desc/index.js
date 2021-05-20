@@ -1,9 +1,9 @@
 import React from 'react';
-import { getDate } from '../../../../../../js/utilities/dateUtility';
-import ConditionalView from '../../../common/components/conditional-view';
-import ReviewPhotos from '../../../reviews/components/review-photo';
-import IndividualReviewSlider from '../../../reviews/components/individual-review-slider';
-import { getLanguageCode } from '../../../utilities/api/request';
+import { getDate } from '../../../../../../../js/utilities/dateUtility';
+import ConditionalView from '../../../../common/components/conditional-view';
+import ReviewPhotos from '../../../../reviews/components/review-photo';
+import IndividualReviewSlider from '../../../../reviews/components/individual-review-slider';
+import { getLanguageCode } from '../../../../utilities/api/request';
 
 const UserReviewsDescription = ({
   reviewsIndividualSummary,

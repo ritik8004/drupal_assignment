@@ -2,9 +2,9 @@ import React from 'react';
 import { getLanguageCode, getbazaarVoiceSettings } from '../../../../../../utilities/api/request';
 
 const FormLinks = ({
-  tnc, reviewGuide,
+  tnc, reviewGuide, productId,
 }) => {
-  const bazaarVoiceSettings = getbazaarVoiceSettings();
+  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
   const tncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.write_review_tnc}`;
   const guidlinesUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.write_review_guidlines}`;
   return (

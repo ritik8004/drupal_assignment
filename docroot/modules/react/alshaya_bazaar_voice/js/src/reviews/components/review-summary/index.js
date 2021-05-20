@@ -45,7 +45,6 @@ export default class ReviewSummary extends React.Component {
       nextButtonDisabled: false,
       loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
       paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
-      reviewedByCurrentUser: false,
     };
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
@@ -61,7 +60,7 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    const userId = bazaarVoiceSettings.reviews.user.user_id;
+    const userId = bazaarVoiceSettings.reviews.user.id;
     const userStorage = getStorageInfo(`bvuser_${userId}`);
     // Set uas token if user not found in storage.
     if (userStorage === null) {
@@ -78,7 +77,7 @@ export default class ReviewSummary extends React.Component {
             currentUserObj = {
               id: userId,
               uasToken: uasTokenValue,
-              email: bazaarVoiceSettings.reviews.user.user_email,
+              email: bazaarVoiceSettings.reviews.user.email,
             };
             setStorageInfo(currentUserObj, `bvuser_${userId}`);
           }
@@ -107,13 +106,6 @@ export default class ReviewSummary extends React.Component {
 
   getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
-
-    // Check if current logged in user has already posted review on current PDP.
-    if (bazaarVoiceSettings.reviews.user.is_reviewed) {
-      this.setState({
-        reviewedByCurrentUser: true,
-      });
-    }
 
     let sortParams = '';
     let filterParams = '';
@@ -367,7 +359,6 @@ export default class ReviewSummary extends React.Component {
       currentPage,
       numberOfPages,
       loadMoreLimit,
-      reviewedByCurrentUser,
     } = this.state;
     const {
       isNewPdpLayout,
@@ -389,7 +380,7 @@ export default class ReviewSummary extends React.Component {
                   <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
                 </div>
                 <WriteReviewButton
-                  reviewedByCurrentUser={reviewedByCurrentUser}
+                  reviewedByCurrentUser={bazaarVoiceSettings.reviews.user.review !== null}
                 />
               </div>
             </div>
@@ -408,7 +399,7 @@ export default class ReviewSummary extends React.Component {
             <ReviewHistogram
               overallSummary={reviewsProduct}
               isNewPdpLayout={isNewPdpLayout}
-              reviewedByCurrentUser={reviewedByCurrentUser}
+              reviewedByCurrentUser={bazaarVoiceSettings.reviews.user.review !== null}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>

@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { getbazaarVoiceSettings } from './request';
+import { getbazaarVoiceSettings, getUserBazaarVoiceSettings } from './request';
 
 function getBvUrl(bazaarVoiceSettings) {
   return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
@@ -17,8 +17,13 @@ function getLocale(bazaarVoiceSettings) {
   return `&locale=${bazaarVoiceSettings.reviews.bazaar_voice.locale}`;
 }
 
-export function fetchAPIData(apiUri, params, $context = 'pdp') {
-  const bazaarVoiceSettings = getbazaarVoiceSettings($context);
+export function fetchAPIData(apiUri, params, context = '') {
+  let bazaarVoiceSettings = null;
+  if (context === 'user') {
+    bazaarVoiceSettings = getUserBazaarVoiceSettings();
+  } else {
+    bazaarVoiceSettings = getbazaarVoiceSettings();
+  }
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
   return Axios.get(url)
@@ -44,8 +49,8 @@ export function fetchAPIData(apiUri, params, $context = 'pdp') {
     });
 }
 
-export function postAPIData(apiUri, params, $context = 'pdp') {
-  const bazaarVoiceSettings = getbazaarVoiceSettings($context);
+export function postAPIData(apiUri, params, productId = undefined) {
+  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
   return Axios.post(url)
