@@ -94,10 +94,7 @@
    *   The data object to send in the API call.
    */
   Drupal.alshayaSpc.updateCart = function(data) {
-    return callMiddlewareApi('cart/update', 'POST', JSON.stringify(data))
-      .then(function(response) {
-        return response.data;
-      });
+    return callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
   }
 
 })(jQuery, Drupal, drupalSettings);

@@ -98,7 +98,8 @@
 
             // Post to ajax for cart update/create.
             Drupal.alshayaSpc.updateCart(post_data)
-              .then (function (response) {
+              .then (function (responseData) {
+                const response = responseData.data;
                 // If there any error we throw from middleware.
                 if (response.error === true) {
                   if (response.error_code === '400') {
