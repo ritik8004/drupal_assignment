@@ -97,7 +97,7 @@
             }
 
             // Post to ajax for cart update/create.
-            window.commerceBackend.updateCart(post_data)
+            window.commerceBackend.addToCart(post_data)
               .then (function (responseData) {
                 const response = responseData.data;
                 // If there any error we throw from middleware.

@@ -4,6 +4,17 @@ drupalSettings = window.drupalSettings;
 window.commerceBackend = window.commerceBackend || {};
 
 /**
+ * Calls the update cart middleware API.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
+
+/**
  * Check if user is anonymous and without cart.
  *
  * @returns bool
@@ -27,7 +38,7 @@ window.commerceBackend.getCart = () => callMiddlewareApi('cart/get', 'GET');
 window.commerceBackend.restoreCart = () => callMiddlewareApi('cart/restore', 'GET');
 
 /**
- * Calls the cart update API.
+ * Adds item to the cart and returns the cart.
  *
  * @param {object} data
  *   The data object to send in the API call.
@@ -35,4 +46,4 @@ window.commerceBackend.restoreCart = () => callMiddlewareApi('cart/restore', 'GE
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
+window.commerceBackend.addToCart = (data) => updateCart(data);
