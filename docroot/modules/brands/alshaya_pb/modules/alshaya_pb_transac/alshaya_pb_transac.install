@@ -16,12 +16,12 @@ use Drupal\Core\Site\Settings;
  * Enable the module alshaya_secondary_main_menu.
  */
 function alshaya_pb_transac_update_8017() {
+  \Drupal::service('module_installer')->install(['alshaya_secondary_main_menu']);
   if (\Drupal::moduleHandler()->moduleExists('alshaya_secondary_main_menu')) {
-    \Drupal::service('module_installer')->install(['alshaya_secondary_main_menu']);
     /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
     $manager = \Drupal::service('alshaya_config.manager');
     $manager->updateConfigs(
-      ['block.block.alshayasecondarymainmenu.yml'],
+      ['block.block.alshayasecondarymainmenu'],
       'alshaya_secondary_main_menu',
       'install',
       AlshayaConfigManager::MODE_RESAVE

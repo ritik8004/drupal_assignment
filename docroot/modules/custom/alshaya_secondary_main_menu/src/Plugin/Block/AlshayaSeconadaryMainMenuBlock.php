@@ -8,6 +8,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Menu\MenuLinkTreeInterface;
 
 /**
  * Provides alshaya secondary main menu block.
@@ -33,6 +34,13 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
   protected $moduleHandler;
 
   /**
+   * The menu link tree service.
+   *
+   * @var \Drupal\Core\Menu\MenuLinkTreeInterface
+   */
+  protected $menuTree;
+
+  /**
    * AlshayaSecondaryMenuBlock constructor.
    *
    * @param array $configuration
@@ -46,9 +54,10 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
+    $this->menuTree = $menu_tree;
     $this->moduleHandler = $module_handler;
   }
 
@@ -61,6 +70,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
+      $container->get('menu.link_tree'),
       $container->get('module_handler')
     );
   }
@@ -70,15 +80,18 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    */
   public function build() {
     $desktop_secondary_main_menu_layout = $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
-    $menu_tree = \Drupal::menuTree();
     $menu_name = 'secondary-main-menu';
     $subtree = $this->getSubTree($menu_name);
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
     ];
-    $tree = $menu_tree->transform($subtree, $manipulators);
-    $menu = $menu_tree->build($tree);
+    $tree = $this->menuTree->transform($subtree, $manipulators);
+    $menu = $this->menuTree->build($tree);
+    // If no data, no need to render the block.
+    if (empty($menu['#items'])) {
+      return [];
+    }
     $columns_tree = $this->getColumnDataMenuAlgo($menu);
     return [
       '#theme' => 'alshaya_secondary_main_menu_level1',
@@ -93,8 +106,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * Logic to get menu tree.
    */
   public function getSubTree($menu_name) {
-    $menu_tree = \Drupal::menuTree();
-    $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
+    $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($menu_name);
     $parameters->expandedParents = [];
     $active_trail = array_keys($parameters->activeTrail);
     $parent_link_id = isset($active_trail[1]) ? $active_trail[1] : $active_trail[0];
@@ -103,7 +115,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
     $parameters->setRoot($parent_link_id);
     $parameters->setMinDepth(1);
     $parameters->excludeRoot();
-    $tree = $menu_tree->load($menu_name, $parameters);
+    $tree = $this->menuTree->load($menu_name, $parameters);
     return($tree);
   }
 
