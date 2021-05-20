@@ -1,7 +1,7 @@
 variables:
   url_base_uri: 'https://mckw4-uat.factory.alshaya.com/en'
   collection_filter: ''
-  sort_filter: 'sort by'
+  sort_filter: 'Sort by'
   price_filter: 'Price'
   brand_filter: 'Brand'
   color_filter: 'Colour'

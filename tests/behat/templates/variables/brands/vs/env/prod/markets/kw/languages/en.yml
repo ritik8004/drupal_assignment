@@ -27,6 +27,7 @@ variables:
   language_add_to_cart_link: 'أضيفي إلى حقيبة التسوق'
   add_to_cart_link: 'add to bag'
   create_account: 'create an account'
+  spc_search_keyword: 'body'
   sign_in: 'Sign in'
   find_store: 'Find Store'
   language_link: 'العربية'
