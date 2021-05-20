@@ -8,6 +8,23 @@
 /**
  * Implements hook_update_N().
  *
+ * Update decimal_points for uae sites.
+ */
+function alshaya_ae_update_8008() {
+  $modulehandler = \Drupal::service('module_handler');
+  if ($modulehandler->moduleExists('acq_commerce')) {
+    $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
+    if ($config) {
+      if ($config->get('decimal_points') != 2) {
+        $config->set('decimal_points', 2)->save();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install config for spc click n collect.
  */
 function alshaya_ae_update_8007() {
