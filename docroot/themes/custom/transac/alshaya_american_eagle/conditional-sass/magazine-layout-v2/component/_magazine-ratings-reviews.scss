@@ -1,0 +1,20 @@
+.magazine-layout-v2 {
+  .aggregate-rating {
+    padding: 0;
+    margin-top: 1rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1.5rem;
+    }
+  }
+
+  .bv-select {
+    .bvSelect__control {
+      > div:nth-child(2) {
+        .bvSelect__indicator {
+          height: auto;
+        }
+      }
+    }
+  }
+}
