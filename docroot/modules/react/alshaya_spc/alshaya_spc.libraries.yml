@@ -35,22 +35,14 @@ checkout:
     - alshaya_react/react
     - alshaya_spc/cart_utilities
 
-add_to_cart_api_v1:
+add_to_cart:
   version: 1.x
   footer: true
   js:
-    assets/js/add_to_cart_v1.js: { }
+    assets/js/add_to_cart.js: { }
   dependencies:
     - alshaya_spc/cart_utilities
-
-add_to_cart_api_v2:
-  version: 1.x
-  footer: true
-  js:
-    assets/js/add_to_cart_v2.js: { }
-    assets/js/cart_utilities_v2.js: { }
-  dependencies:
-    - alshaya_spc/cart_utilities
+    - core/drupalSettings
 
 checkout-confirmation:
   version: 1.x
@@ -92,3 +84,7 @@ googlemapapi:
 cart_utilities.v1:
   js:
     assets/js/cart_utilities.v1.js: {}
+
+cart_utilities.v2:
+  js:
+    assets/js/cart_utilities.v2.js: {}
