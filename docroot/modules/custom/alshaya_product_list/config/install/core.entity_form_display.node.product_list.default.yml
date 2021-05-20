@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.node.product_list.field_attribute_name
     - field.field.node.product_list.field_attribute_value
-    - field.field.node.product_list.field_show_product_list_lhn
+    - field.field.node.product_list.field_show_in_lhn_options_list
     - node.type.product_list
   module:
     - content_moderation
@@ -36,7 +36,7 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
-  field_show_product_list_lhn:
+  field_show_in_lhn_options_list:
     weight: 123
     settings: {  }
     third_party_settings: {  }
