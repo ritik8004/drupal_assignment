@@ -185,17 +185,17 @@ class AlshayaSuperCategoryManager {
   }
 
   /**
-   * Returns the default category ID.
+   * Helper function to get the default_category_tid.
+   *
+   * @return mixed
+   *   return term id if enabled or NULL.
    */
-  public function getDefaultCategoryId(int $term_id) {
+  public function getDefaultCategoryId() {
     $status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
     if ($status) {
       $default_category_tid = alshaya_super_category_get_default_term();
-      if ($default_category_tid === $term_id) {
-        return TRUE;
-      }
+      return $default_category_tid;
     }
-    return FALSE;
   }
 
 }
