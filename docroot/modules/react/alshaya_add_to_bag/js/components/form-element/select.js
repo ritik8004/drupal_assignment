@@ -24,7 +24,8 @@ const SelectList = (props) => {
   let selectedOption = null;
   const listOptions = options.map((option) => {
     const optionClone = { ...option };
-    if (!allowedValues.includes(option.value)) {
+    if (!allowedValues.includes(option.value)
+      && !allowedValues.includes(parseInt(option.value, 10))) {
       optionClone.isDisabled = true;
     }
     /* eslint-disable eqeqeq */
