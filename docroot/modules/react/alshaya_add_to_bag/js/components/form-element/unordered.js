@@ -22,7 +22,8 @@ const UnorderedList = (props) => {
   const listItems = options.map((option) => {
     let element = null;
     const classes = [];
-    if (!allowedValues.includes(option.value)) {
+    if (!allowedValues.includes(option.value)
+      && !allowedValues.includes(parseInt(option.value, 10))) {
       classes.push(disabledClass);
     }
 
