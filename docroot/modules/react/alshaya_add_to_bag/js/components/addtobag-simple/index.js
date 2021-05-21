@@ -279,7 +279,7 @@ export default class AddToBagSimple extends React.Component {
               type="button"
               onClick={this.onClickHandler}
             >
-              {Drupal.t('Add')}
+              {getStringMessage('add')}
             </button>
           </div>
         </ConditionalView>
