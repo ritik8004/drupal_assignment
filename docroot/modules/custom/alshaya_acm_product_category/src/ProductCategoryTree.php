@@ -258,12 +258,12 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
     foreach ($terms as $term) {
       switch ($cache_name) {
-        case 'category_tree':
-          $lhn = is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value;
-          break;
-
         case 'product_list':
           $lhn = is_null($term->field_show_in_product_list_lhn_value) ? (int) $term->field_show_in_lhn_value : (int) $term->field_show_in_product_list_lhn_value;
+          break;
+
+        default:
+          $lhn = is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value;
           break;
       }
       $path = Url::fromRoute(
