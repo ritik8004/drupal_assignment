@@ -51,6 +51,26 @@ class CheckoutComUpapiFawry extends AlshayaSpcPaymentMethodPluginBase {
         'key' => 'fawry_checkout_confirmation_message',
         'value' => t('Amount due - @amount. Please complete your payment at the nearest Fawry cash point using your reference #@reference_no by @date_and_time.​'),
       ],
+      [
+        'key' => 'fawry_amount_due',
+        'value' => t('Amount Due'),
+      ],
+      [
+        'key' => 'fawry_complete_payment_by',
+        'value' => t('Complete payment by'),
+      ],
+      [
+        'key' => 'fawry_reference_number',
+        'value' => t('Reference number'),
+      ],
+      [
+        'key' => 'fawry_email_label',
+        'value' => t('Email'),
+      ],
+      [
+        'key' => 'fawry_mobile_number',
+        'value' => t('Mobile Number'),
+      ],
     ];
   }
 
