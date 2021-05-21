@@ -239,6 +239,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $data = [];
 
     $exclude_not_in_menu = $this->getExcludeNotInMenu();
+    $cache_name = $this->getCacheName();
 
     // Get all child terms for the given parent.
     $terms = $this->allChildTerms($langcode, $parent_tid, $exclude_not_in_menu);
@@ -255,8 +256,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     // Initialize the image and image text font/bg color.
     $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
-
     foreach ($terms as $term) {
+      switch ($cache_name) {
+        case 'category_tree':
+          $lhn = is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value;
+          break;
+
+        case 'product_list':
+          $lhn = is_null($term->field_show_in_product_list_lhn_value) ? (int) $term->field_show_in_lhn_value : (int) $term->field_show_in_product_list_lhn_value;
+          break;
+      }
       $path = Url::fromRoute(
         'entity.taxonomy_term.canonical',
         ['taxonomy_term' => $term->tid],
@@ -281,7 +290,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         //
         // @see alshaya_main_menu_alshaya_main_menu_links_alter().
         'depth' => (int) $term->depth_level,
-        'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
+        'lhn' => $lhn,
         'move_to_right' => !is_null($term->field_move_to_right_value) ? (bool) $term->field_move_to_right_value : FALSE,
         'app_navigation_link' => !is_null($term->field_show_in_app_navigation_value) ? (bool) $term->field_show_in_app_navigation_value : FALSE,
       ];
@@ -841,19 +850,21 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   (Optional) Language code.
    * @param mixed $parent_id
    *   (Optional) Parent id.
+   * @param string $cache_name
+   *   (Optional) Cache name.
    *
    * @return array
    *   Term tree.
    */
-  public function getCategoryTreeWithIncludeInMenu($langcode = NULL, $parent_id = 0) {
+  public function getCategoryTreeWithIncludeInMenu($langcode = NULL, $parent_id = 0, $cache_name = NULL) {
     // This to not consider `include_in_menu` check.
     $this->setExcludeNotInMenu(FALSE);
     if (!$langcode) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
-
+    $this->setCacheName($cache_name);
     // This will be like - `category_tree_0_en`.
-    $cid = 'category_tree_' . $parent_id . '_' . $langcode;
+    $cid = $cache_name . '_' . $parent_id . '_' . $langcode;
 
     // If exists in cache.
     if ($cache = $this->cache->get($cid)) {
@@ -1088,6 +1099,30 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $l1Terms = $this->termStorage->loadTree('acq_product_category', $parent, 1);
 
     return $l1Terms ? $l1Terms : [];
+  }
+
+  /**
+   * Sets the cache name to be used for cid.
+   *
+   * @param string $cache_name
+   *   Cache name.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setCacheName($cache_name) {
+    $this->cacheName = $cache_name;
+    return $this;
+  }
+
+  /**
+   * Get the cache name to be used for cidt.
+   *
+   * @return string
+   *   Cache namet.
+   */
+  public function getCacheName() {
+    return $this->cacheName;
   }
 
 }
