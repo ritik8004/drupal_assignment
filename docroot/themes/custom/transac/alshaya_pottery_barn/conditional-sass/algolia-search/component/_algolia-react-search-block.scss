@@ -5,6 +5,10 @@
     padding: 0 !important;
   }
 
+  @include breakpoint($only-tablet) {
+    bottom: -3.1875rem;
+  }
+
   .algolia-search-cleartext-icon {
     @include breakpoint($tablet) {
       #{$right}: 2.3rem;

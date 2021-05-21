@@ -1,0 +1,12 @@
+.c-accordion__title,
+.c-collapse__title {
+  @include icon(dropdown-expand, after) {
+    font-size: 2.75rem;
+  }
+
+  &.ui-state-active {
+    @include icon(dropdown-expand, after) {
+      font-size: 2.75rem;
+    }
+  }
+}

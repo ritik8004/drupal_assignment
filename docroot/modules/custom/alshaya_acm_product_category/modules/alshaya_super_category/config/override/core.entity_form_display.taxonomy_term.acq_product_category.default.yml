@@ -1,0 +1,65 @@
+dependencies:
+  config:
+    - field.field.taxonomy_term.acq_product_category.field_logo_active_image
+    - field.field.taxonomy_term.acq_product_category.field_logo_header_image
+    - field.field.taxonomy_term.acq_product_category.field_logo_inactive_image
+third_party_settings:
+  field_group:
+    group_taxonomy_fields:
+      children:
+        - group_configuration
+        - group_mega_menu_content
+        - group_link_configuration_on_inte
+        - group_plp_content
+        - group_super_category_logos
+      parent_name: ''
+      weight: 0
+      format_type: tabs
+      format_settings:
+        label: 'Taxonomy Tabs'
+        direction: horizontal
+        id: ''
+        classes: ''
+      label: 'Taxonomy Tabs'
+      region: content
+    group_super_category_logos:
+      children:
+        - field_logo_inactive_image
+        - field_logo_active_image
+        - field_logo_header_image
+      parent_name: group_taxonomy_fields
+      weight: 5
+      format_type: tab
+      format_settings:
+        id: ''
+        classes: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+      label: 'Super Category Logos'
+      region: content
+content:
+  field_logo_active_image:
+    type: image_image
+    weight: 37
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_logo_header_image:
+    type: image_image
+    weight: 38
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
+  field_logo_inactive_image:
+    type: image_image
+    weight: 36
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }

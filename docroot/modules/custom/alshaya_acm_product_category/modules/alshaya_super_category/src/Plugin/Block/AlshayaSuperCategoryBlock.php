@@ -16,6 +16,10 @@ use Drupal\Core\Utility\Token;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Theme\ThemeManager;
+use Drupal\Core\Entity\EntityRepository;
+use Drupal\Component\Utility\Unicode;
 
 /**
  * Provides alshaya super category menu block.
@@ -77,6 +81,27 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
   protected $entityTypeManager;
 
   /**
+   * Entity type manager.
+   *
+   * @var Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $request;
+
+  /**
+   * Theme manager.
+   *
+   * @var Drupal\Core\Theme\ThemeManager
+   */
+  protected $themeManager;
+
+  /**
+   * Entity repository.
+   *
+   * @var Drupal\Core\Entity\EntityRepository
+   */
+  protected $entityRepository;
+
+  /**
    * AlshayaSuperCategoryBlock constructor.
    *
    * @param array $configuration
@@ -97,8 +122,14 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    *   Token manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param Symfony\Component\HttpFoundation\RequestStack $request
+   *   Entity type manager.
+   * @param Drupal\Core\Theme\ThemeManager $themeManager
+   *   Theme manager.
+   * @param Drupal\Core\Entity\EntityRepository $entityRepository
+   *   Entity repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager, RequestStack $request, ThemeManager $themeManager, EntityRepository $entityRepository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
@@ -106,6 +137,9 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     $this->metaTagManager = $metatag_manager;
     $this->tokenManager = $token_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->request = $request;
+    $this->themeManager = $themeManager;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -121,7 +155,10 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $container->get('config.factory'),
       $container->get('metatag.manager'),
       $container->get('token'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('request_stack'),
+      $container->get('theme.manager'),
+      $container->get('entity.repository'),
     );
   }
 
@@ -144,6 +181,9 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     }
 
     $current_language = $this->languageManager->getCurrentLanguage()->getId();
+
+    // Get current term from route.
+    $current_term = $this->productCategoryTree->getCategoryTermRequired();
 
     // Get all the terms data in English for preparing label.
     $term_data_en = ($current_language !== 'en')
@@ -171,6 +211,28 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
 
       $term_info_en = $term_data_en[$term_id];
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(mb_strtolower($term_info_en['label']));
+      if ($term_id == $current_term['id']) {
+        $term_info['class'] .= ' active';
+      }
+
+      if (!empty($term_object->get('field_logo_active_image')->getValue()) && !empty($term_object->get('field_logo_inactive_image')->getValue())) {
+        $activeFile = $this->entityTypeManager->getStorage('file')->load($term_object->get('field_logo_active_image')->getValue()[0]['target_id']);
+        $inactiveFile = $this->entityTypeManager->getStorage('file')->load($term_object->get('field_logo_inactive_image')->getValue()[0]['target_id']);
+        $active_path = file_create_url($activeFile->getFileUri());
+        $inactive_path = file_create_url($inactiveFile->getFileUri());
+        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ? $active_path : $inactive_path;
+        $term_info['inactive_path'] = $active_path;
+      }
+      else {
+        $theme = $this->themeManager->getActiveTheme();
+        $term_info_en = $term_data_en[$term_id];
+        $base_uri = $this->request->getCurrentRequest()->getSchemeAndHttpHost();
+        $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
+        $inactive_path = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '.svg';
+        $active_path = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '-active.svg';
+        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ? $active_path : $inactive_path;
+        $term_info['inactive_path'] = $active_path;
+      }
     }
 
     // Set the default parent from settings.
@@ -180,12 +242,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     // Default category is set to active, while we are on home page.
     if (isset($term_data[$parent_id])) {
       $term_data[$parent_id]['path'] = Url::fromRoute('<front>')->toString();
-    }
-
-    // Get current term from route.
-    $term = $this->productCategoryTree->getCategoryTermRequired();
-    if (!empty($term) && isset($term_data[$term['id']])) {
-      $term_data[$term['id']]['class'] .= ' active';
     }
 
     return [

@@ -13,6 +13,44 @@ function alshaya_tbs_transac_install() {
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_the_body_shop');
 
+  // Reset theme logo.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  $current_theme = $active_theme->getName();
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  \Drupal::configFactory()
+    ->getEditable($current_theme . '.settings')
+    ->set('logo', [
+      'path' => $site_logo . '.svg',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'The Body Shop Kuwait')
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
+      ],
+    ])
+    ->save();
+
   // Translate store finder block's link title.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
     ->set('settings', ['link_title' => 'البحث عن محلاتنا'])

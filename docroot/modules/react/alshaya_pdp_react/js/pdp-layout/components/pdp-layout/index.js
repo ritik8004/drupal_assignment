@@ -18,10 +18,11 @@ import magv2Sticky from '../../../utilities/magv2StickySidebar';
 import magv2StickyHeader from '../../../utilities/magv2StickyHeader';
 import Lozenges
   from '../../../../../alshaya_algolia_react/js/common/components/lozenges';
+import PpdRatingsReviews from '../pdp-ratings-reviews';
 
 const PdpLayout = () => {
   const [variant, setVariant] = useState(null);
-  const [panelContent, setPanelContent] = useState([]);
+  const [panelContent, setPanelContent] = useState(null);
   const { productInfo } = drupalSettings;
   let skuItemCode = '';
 
@@ -148,15 +149,11 @@ const PdpLayout = () => {
   []);
 
   const getPanelData = useCallback((data) => {
-    setPanelContent([...panelContent, data]);
+    setPanelContent(data);
   }, [panelContent]);
 
   const removePanelData = useCallback(() => {
-    if (panelContent !== undefined) {
-      const panelData = [...panelContent];
-      panelData.splice(-1, 1);
-      setPanelContent(panelData);
-    }
+    setPanelContent(null);
   }, [panelContent]);
 
   return (skuItemCode) ? (
@@ -220,6 +217,10 @@ const PdpLayout = () => {
               freeGiftPromoType={freeGiftPromoType}
             />
           ) : null}
+          <PpdRatingsReviews
+            getPanelData={getPanelData}
+            removePanelData={removePanelData}
+          />
           <div className="addtobag-button-wrapper" ref={addToBagContainer}>
             {stockStatus ? (
               <PdpCart
@@ -270,7 +271,7 @@ const PdpLayout = () => {
           ))}
         </div>
       ) : null}
-      <PpdPanel panelContent={panelContent} skuItemCode={skuItemCode} />
+      <PpdPanel panelContent={panelContent} />
     </>
   ) : emptyRes;
 };

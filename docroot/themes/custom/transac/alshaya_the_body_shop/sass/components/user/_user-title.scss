@@ -2,7 +2,7 @@
 .c-user-register,
 .c-user-login {
   h1 {
-    font-family: $alshaya-semibold;
+    font-family: $tbs-recoleta-semibold;
     text-transform: capitalize;
   }
 }
@@ -18,7 +18,11 @@
   .back-link {
     @include breakpoint($only-mobile) {
       @include icon(arrowup, before) {
-        top: 0.1875rem;
+        top: 0.5rem;
+
+        html[lang=ar] & {
+          top: 0.3125rem;
+        }
       }
     }
   }

@@ -8,7 +8,6 @@ import {
   placeOrder,
   removeFullScreenLoader,
   setUpapiApplePayCofig,
-  showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
 import PaymentMethodCybersource from '../payment-method-cybersource';
@@ -63,20 +62,6 @@ export default class PaymentMethod extends React.Component {
       return this.paymentMethodCybersource.current.validateBeforePlaceOrder();
     }
 
-    if (method.code === 'knet') {
-      showFullScreenLoader();
-
-      const paymentData = {
-        payment: {
-          method: 'knet',
-          additional_data: {},
-        },
-      };
-
-      this.finalisePayment(paymentData);
-      return false;
-    }
-
     return true;
   };
 
@@ -114,6 +99,11 @@ export default class PaymentMethod extends React.Component {
 
             Drupal.logJavascriptError('finalise payment', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
           }
+
+          // Enable the 'place order' CTA.
+          dispatchCustomEvent('updatePlaceOrderCTA', {
+            status: true,
+          });
         }
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.

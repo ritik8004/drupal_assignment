@@ -1,0 +1,64 @@
+.cloudzoom {
+  .cloudzoom__herocontainer {
+    @include breakpoint($desktop) {
+      width: calc(100% - 7.75rem);
+    }
+  }
+
+  #cloud-zoom-wrap {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .cloudzoom__image {
+    .img-wrap {
+      height: auto;
+    }
+  }
+}
+
+#lightSlider {
+  .slick-slide {
+    width: 5.125rem !important;
+    height: 7.3125rem !important;
+    padding: 0;
+
+    &:first-child {
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      margin: 0 0.0625rem;
+      padding: 0.125rem;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    height: 53rem;
+
+    .slick-prev,
+    .slick-next {
+      @include icon(ic-arrow-left) {
+        font-size: 1rem;
+      }
+    }
+
+    .slick-prev {
+      &::before {
+        transform: rotate(90deg);
+      }
+    }
+
+    .slick-next {
+      &::before {
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}

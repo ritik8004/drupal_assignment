@@ -1,5 +1,5 @@
 variables:
-  url_base_uri: 'https://hmkw2-test.factory.alshaya.com/en'
+  url_base_uri: 'https://hmkw5-test.factory.alshaya.com/en'
   collection_filter: ''
   sort_filter: 'sort by'
   price_filter: 'Price'
@@ -39,7 +39,7 @@ variables:
   language_sign_in: 'تسجيل الدخول'
   language_find_store: 'البحث عن محلاتنا'
   second_language_link: 'English'
-  language_add_to_cart_link: 'أضف إلى سلة التسوق'
+  language_add_to_cart_link: 'أضف إلى حقيبة التسوق'
   language_subtotal: 'المبلغ'
   language_order_total: 'المبلغ الإجمالي للطلبية'
   language_order_summary: 'ملخص الطلبية'
@@ -49,8 +49,11 @@ variables:
   language_checkout_link: 'إتمام الشراء بأمان'
   continue_shopping: 'go shopping'
   language_continue_shopping: "اذهب للتسوق"
+  language_area_option: 'أبرق خيطان'
   mobile_language_class: 'ar'
   language_short: 'ar'
+  city_option: 'Al Zour'
+  language_city_option: 'أبو حليفة'
   street: 'Street A'
   building: 'Building B'
   locality: 'Block E'
@@ -64,4 +67,4 @@ variables:
   language_order_detail: 'تفاصيل الطلبية'
   language_delivery_type_text: 'التوصيل متوقع خلال:'
   language_payment_type_text: 'طريقة الدفع:'
-  governorate: 'Kuwait City'
+  governorate: 'Ahmadi'

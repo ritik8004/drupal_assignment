@@ -191,7 +191,7 @@
 
 .basic-details-wrapper {
   @include breakpoint($only-mobile) {
-    margin-bottom: 2rem;
+    margin-bottom: 0;
   }
 
   .field--name-field-skus {
@@ -1245,12 +1245,14 @@ html[lang=ar] {
 
   .delivery-in-only-city,
   .same-day-delivery {
-    border: 1px solid rgba(147, 205, 255, 0.9);
+    background: $pdp_product_same_day_btn_bg;
+    border: 1px solid $pdp_product_same_day_btn_border;
     padding: 0.625rem;
     font-size: 0.8125rem;
 
     @include breakpoint($only-mobile) {
       width: 100%;
+      margin-bottom: 0;
     }
   }
 

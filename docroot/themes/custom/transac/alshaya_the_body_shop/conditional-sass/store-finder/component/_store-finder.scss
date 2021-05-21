@@ -1,7 +1,7 @@
 .path--store-finder {
   .view-display-id-page_2 {
     .view-header {
-      font-family: $alshaya-semibold;
+      font-family: $tbs-recoleta-semibold;
     }
   }
 
@@ -10,6 +10,24 @@
       a {
         color: $store-finder-glossary;
       }
+    }
+  }
+}
+
+.path--store-finder,
+.nodetype--store {
+  .list-view-locator {
+    .views-field-field-store-open-hours {
+      .hours--wrapper .open--hours,
+      .hours--wrapper .hours--label {
+        border-bottom: 1px solid $store_finder_individual_hour_border;
+      }
+    }
+  }
+
+  .c-side-1 {
+    @include breakpoint($only-mobile) {
+      border-top: 1px solid $store_finder_search_results_border;
     }
   }
 }

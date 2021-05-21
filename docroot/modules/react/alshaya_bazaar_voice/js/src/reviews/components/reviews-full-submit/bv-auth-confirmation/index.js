@@ -1,9 +1,10 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
-import { postAPIData } from '../../../../utilities/api/apiData';
+import { postAPIData, fetchAPIData } from '../../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../../common/components/bazaarvoice-messages';
-import { setSessionCookie } from '../../../../utilities/user_util';
 import AuthConfirmationMessage from '../auth-confirmation-message';
+import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
+import { setStorageInfo, getStorageInfo } from '../../../../utilities/storage';
 
 export default class BvAuthConfirmation extends React.Component {
   constructor(props) {
@@ -26,10 +27,11 @@ export default class BvAuthConfirmation extends React.Component {
       apiData.then((result) => {
         if (result.error === undefined && result.data !== undefined) {
           if (!result.data.HasErrors) {
-            const userId = result.data.Authentication.User;
-            setSessionCookie('BvUserId', userId);
+            const bvUserId = result.data.Authentication.User;
             this.setState({
               isUserVerified: true,
+            }, () => {
+              this.setAnonymousUserStorage(bvUserId);
             });
           }
         } else {
@@ -43,6 +45,35 @@ export default class BvAuthConfirmation extends React.Component {
     this.setState({
       isModelOpen: false,
     });
+  };
+
+  setAnonymousUserStorage = (bvUserId) => {
+    const bazaarVoiceSettings = getbazaarVoiceSettings();
+    const userId = bazaarVoiceSettings.reviews.user.user_id;
+    const userStorage = getStorageInfo(`bvuser_${userId}`);
+    // Store user information in bv cookies.
+    if (userStorage !== null && userId === 0) {
+      const params = `&productid=${bazaarVoiceSettings.productid}&User=${bvUserId}&Action=`;
+      const apiData = fetchAPIData('/data/submitreview.json', params);
+      if (apiData instanceof Promise) {
+        apiData.then((result) => {
+          if (result.error === undefined
+            && result.data !== undefined
+            && result.data.error === undefined) {
+            if (result.data.Data.Fields !== undefined
+              && result.data.Data.Fields.usernickname.Value !== null
+              && result.data.Data.Fields.useremail.Value !== null) {
+              userStorage.bvUserId = bvUserId;
+              userStorage.nickname = result.data.Data.Fields.usernickname.Value;
+              userStorage.email = result.data.Data.Fields.useremail.Value;
+              setStorageInfo(userStorage, `bvuser_${userId}`);
+            }
+          } else {
+            Drupal.logJavascriptError('review-summary', result.error);
+          }
+        });
+      }
+    }
   };
 
   render() {

@@ -20,19 +20,23 @@ const ReviewTooltip = ({
     }
     return (
       <div className="user-review-info">
-        <div className="user-info">
-          <div className="user-nickname">{reviewTooltipData.UserNickname}</div>
-          <div className="user-location">{reviewTooltipData.UserLocation}</div>
-        </div>
+        {
+          (age !== '' && gender !== '')
+            ? (
+              <div className="user-info">
+                <UserPersonalDetails
+                  userNickname={reviewTooltipData.UserNickname}
+                  userAge={age}
+                  userGender={gender}
+                />
+              </div>
+            )
+            : null
+         }
         <div className="user-review-wrapper">
           <UserReviewsDetails
             totalReviewCount={reviewRelatedCount.TotalReviewCount}
             helpfulVoteCount={reviewRelatedCount.HelpfulVoteCount}
-          />
-          <UserPersonalDetails
-            userNickname={reviewTooltipData.UserNickname}
-            userAge={age}
-            userGender={gender}
           />
         </div>
       </div>

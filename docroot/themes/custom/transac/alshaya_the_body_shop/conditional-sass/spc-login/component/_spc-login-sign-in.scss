@@ -4,11 +4,19 @@
 
     @include breakpoint($only-mobile) {
       align-items: initial;
+
+      a {
+        #{$left}: calc(50% - 1.156rem);
+      }
     }
 
     a {
       img {
         margin-#{$left}: 0;
+
+        @include breakpoint($only-tablet) {
+          max-width: 3.3125rem;
+        }
       }
     }
 
@@ -27,7 +35,7 @@
   .multistep-login {
     fieldset {
       .fieldset-legend {
-        font-family: $alshaya-semibold;
+        font-family: $tbs-recoleta-semibold;
         text-transform: capitalize;
       }
     }
@@ -36,16 +44,30 @@
       .form-actions {
         button {
           font-size: 1rem;
-          font-family: $alshaya-medium;
+          font-family: $tbs-medium;
           text-transform: capitalize;
         }
       }
     }
 
+    .form-item {
+      .js-form-required {
+        text-transform: capitalize;
+      }
+    }
+
     .edit-checkout-as-guest {
       font-size: 1rem;
-      font-family: $alshaya-medium;
+      font-family: $tbs-medium;
       text-transform: capitalize;
     }
+  }
+
+  .c-footer {
+    border-top: 0.0625rem solid $checkout_footer_border;
+  }
+
+  .c-post-content {
+    border-top: none;
   }
 }

@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Service\Drupal\Drupal;
 use App\Service\Magento\CartActions;
 use Psr\Log\LoggerInterface;
+use App\Service\Magento\MagentoCustomer;
 
 /**
  * Class CheckoutDefaults.
@@ -51,6 +52,13 @@ class CheckoutDefaults {
   protected $logger;
 
   /**
+   * Magento Customer service.
+   *
+   * @var \App\Service\Magento\MagentoCustomer
+   */
+  protected $magentoCustomer;
+
+  /**
    * Orders constructor.
    *
    * @param \App\Service\Cart $cart
@@ -63,17 +71,21 @@ class CheckoutDefaults {
    *   Utility Service.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger service.
+   * @param \App\Service\Magento\MagentoCustomer $magento_customer
+   *   Magento Customer service.
    */
   public function __construct(Cart $cart,
                               Drupal $drupal,
                               Orders $orders,
                               Utility $utility,
-                              LoggerInterface $logger) {
+                              LoggerInterface $logger,
+                              MagentoCustomer $magento_customer) {
     $this->cart = $cart;
     $this->drupal = $drupal;
     $this->orders = $orders;
     $this->utility = $utility;
     $this->logger = $logger;
+    $this->magentoCustomer = $magento_customer;
   }
 
   /**
@@ -178,6 +190,14 @@ class CheckoutDefaults {
     }
 
     if (empty($address['customer_address_id'])) {
+      return FALSE;
+    }
+
+    $customer_address_ids = $this->getCustomerAddressIdsByCustomerId($order['customer_id']);
+
+    // Return false if address id from last order doesn't
+    // exist in customer's address id list.
+    if (!in_array($address['customer_address_id'], $customer_address_ids)) {
       return FALSE;
     }
 
@@ -423,6 +443,14 @@ class CheckoutDefaults {
       return FALSE;
     }
 
+    $customer_address_ids = $this->getCustomerAddressIdsByCustomerId($billing['customer_id']);
+
+    // Return if address id from last order doesn't
+    // exist in customer's address id list.
+    if (!in_array($billing['customer_address_id'], $customer_address_ids)) {
+      return $updated;
+    }
+
     $updated = $this->cart->updateBilling($billing);
 
     // If billing update has error.
@@ -431,6 +459,26 @@ class CheckoutDefaults {
     }
 
     return $updated;
+  }
+
+  /**
+   * Get customer's address ids by customer id.
+   *
+   * @param string $customer_id
+   *   Customer Id.
+   *
+   * @return array
+   *   Address ids of customer or empty array.
+   */
+  private function getCustomerAddressIdsByCustomerId($customer_id) {
+    // Get customer address ids.
+    $customer = $this->magentoCustomer->getCustomerById($customer_id);
+
+    if (!empty($customer['error']) || !isset($customer['addresses'])) {
+      return [];
+    }
+
+    return array_column($customer['addresses'], 'id');
   }
 
 }

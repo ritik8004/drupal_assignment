@@ -703,16 +703,27 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
 
       }
-      elseif ($view_mode == 'matchback') {
+      elseif ($view_mode == 'matchback' || $view_mode == 'matchback_mobile') {
         $context = 'matchback';
 
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
         $build['item_code']['#markup'] = $sku;
+
+        if ($view_mode == 'matchback_mobile') {
+          // Get the image.
+          $build['image'] = [];
+
+          $sku_media = $skuImagesManager->getFirstImage($sku_entity);
+
+          if (!empty($sku_media['drupal_uri'])) {
+            $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
+          }
+        }
       }
 
       // Process price block and gallery for modal,
       // matchback and full view mode.
-      if (in_array($view_mode, ['modal', 'full', 'matchback'])) {
+      if (in_array($view_mode, ['modal', 'full', 'matchback', 'matchback_mobile'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
         $quantity_limit_enabled = \Drupal::config('alshaya_acm.settings')->get('quantity_limit_enabled');
 
@@ -792,7 +803,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $productInfo['is_non_refundable'] = $is_non_refundable;
-        $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
+        $settingsKey = ($view_mode === 'matchback' || $view_mode === 'matchback_mobile')
+          ? $view_mode
+          : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()] = $productInfo;
       }
 
@@ -1956,4 +1969,28 @@ function alshaya_acm_product_alshaya_acm_product_remove_disabled_products_alter(
   if ($skuManager->isSkuFreeGift($sku)) {
     $data['skipSkuDelete'] = TRUE;
   }
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ *
+ * Prepare image for matchback mobile display.
+ */
+function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  // Process only if matchback is enabled and ajax request device argument value is mobile.
+  if (!\Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback')
+    || \Drupal::routeMatch()->getRawParameter('device') !== 'mobile') {
+    return;
+  }
+
+  // Get variant image for matchback mobile display.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+  $image = alshaya_acm_get_product_display_image($child, 'product_teaser');
+
+  // Prepare image style url.
+  if (!empty($image['#uri'])) {
+    $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+  }
+
+  $variant['matchback_teaser_image'] = is_string($image) ? $image : '';
 }

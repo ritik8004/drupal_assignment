@@ -15,7 +15,8 @@ export const processFormDetails = (e) => {
       return;
     }
     if (!element.value.length) {
-      document.getElementById(`${element.id}-error`).innerHTML = getStringMessage('empty_field_default_error');
+      const title = getStringMessage(element.id) !== '' ? getStringMessage(element.id) : getStringMessage('screen_name');
+      document.getElementById(`${element.id}-error`).innerHTML = getStringMessage('empty_field_default_error', { '%fieldTitle': title });
       document.getElementById(`${element.id}-error`).classList.add('error');
       document.getElementById(`${element.id}`).classList.add('error');
       isError = true;
@@ -38,7 +39,7 @@ export const processFormDetails = (e) => {
 
   const targetElementCommentbox = e.target.elements.commentbox;
   const bazaarVoiceSettings = getbazaarVoiceSettings();
-  const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_form_box_length;
+  const commentMinLength = bazaarVoiceSettings.reviews.bazaar_voice.comment_box_min_length;
   if (targetElementCommentbox !== undefined
     && targetElementCommentbox.value.toString().length < commentMinLength) {
     const label = getStringMessage('comment');

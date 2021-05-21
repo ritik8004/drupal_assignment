@@ -109,5 +109,20 @@ function _alshaya_bazaar_voice_translations() {
     'I would recommend this product.' => [
       'ar' => 'سوف أوصي بهذا المنتج',
     ],
+    'You have already reviewed the product.' => [
+      'ar' => 'لقدم قمت بعرض المنتج من قبل.',
+    ],
+    'years' => [
+      'ar' => 'سنوات',
+    ],
+    'Review' => [
+      'ar' => 'المراجعة',
+    ],
+    'Vote' => [
+      'ar' => 'تصويت',
+    ],
+    'Load more' => [
+      'ar' => 'تحميل المزيد من',
+    ],
   ];
 }
