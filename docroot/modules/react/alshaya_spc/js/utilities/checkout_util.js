@@ -3,7 +3,6 @@ import {
   getStorageInfo,
   getInfoFromStorage,
 } from './storage';
-import { updateCartApiUrl } from './update_cart';
 import getStringMessage from './strings';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
@@ -93,9 +92,6 @@ export const removeFullScreenLoader = () => {
  * @returns {boolean}
  */
 export const placeOrder = (paymentMethod) => {
-  const { middleware_url: middlewareUrl } = window.drupalSettings.alshaya_spc;
-  const langcode = drupalSettings.path.currentLanguage;
-
   showFullScreenLoader();
   controlPlaceOrderCTA('disable');
 
@@ -104,10 +100,7 @@ export const placeOrder = (paymentMethod) => {
       method: paymentMethod,
     },
   };
-  return axios
-    .post(`${middlewareUrl}/cart/place-order?lang=${langcode}`, {
-      data,
-    })
+  window.commerceBackend.placeOrder({ data })
     .then(
       (response) => {
         if (response.data.error === undefined) {
@@ -203,43 +196,39 @@ export const setBillingFlagInStorage = (cart) => {
   }
 };
 
-export const addShippingInCart = (action, data) => {
-  const apiUrl = updateCartApiUrl();
-  return axios
-    .post(apiUrl, {
-      action,
-      shipping_info: data,
-      update_billing: isBillingSameAsShippingInStorage(),
-    })
-    .then(
-      (response) => {
-        if (typeof response.data !== 'object') {
-          removeFullScreenLoader();
-          return null;
-        }
+export const addShippingInCart = (action, data) => window.commerceBackend.addShippingMethod({
+  action,
+  shipping_info: data,
+  update_billing: isBillingSameAsShippingInStorage(),
+})
+  .then(
+    (response) => {
+      if (typeof response.data !== 'object') {
+        removeFullScreenLoader();
+        return null;
+      }
 
-        if (!validateCartResponse(response.data)) {
-          return null;
-        }
-        // If there is no error on shipping update.
-        if (response.data.error === undefined) {
-          setBillingFlagInStorage(response.data);
-          // Trigger event on shipping update, so that
-          // other components take necessary action if required.
-          dispatchCustomEvent('onShippingAddressUpdate', response.data);
-        }
+      if (!validateCartResponse(response.data)) {
+        return null;
+      }
+      // If there is no error on shipping update.
+      if (response.data.error === undefined) {
+        setBillingFlagInStorage(response.data);
+        // Trigger event on shipping update, so that
+        // other components take necessary action if required.
+        dispatchCustomEvent('onShippingAddressUpdate', response.data);
+      }
 
-        return response.data;
-      },
-      () => ({
-        error: true,
-        error_message: getStringMessage('global_error'),
-      }),
-    )
-    .catch((error) => {
-      Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
-    });
-};
+      return response.data;
+    },
+    () => ({
+      error: true,
+      error_message: getStringMessage('global_error'),
+    }),
+  )
+  .catch((error) => {
+    Drupal.logJavascriptError('add-shipping-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+  });
 
 /**
  * Adds billing in the cart.
@@ -247,29 +236,25 @@ export const addShippingInCart = (action, data) => {
  * @param {*} action
  * @param {*} data
  */
-export const addBillingInCart = (action, data) => {
-  const apiUrl = updateCartApiUrl();
-  return axios
-    .post(apiUrl, {
-      action,
-      billing_info: data,
-    })
-    .then(
-      (response) => {
-        if (!validateCartResponse(response.data)) {
-          return null;
-        }
-        return response.data;
-      },
-      () => ({
-        error: true,
-        error_message: getStringMessage('global_error'),
-      }),
-    )
-    .catch((error) => {
-      Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
-    });
-};
+export const addBillingInCart = (action, data) => window.commerceBackend.addBillingMethod({
+  action,
+  billing_info: data,
+})
+  .then(
+    (response) => {
+      if (!validateCartResponse(response.data)) {
+        return null;
+      }
+      return response.data;
+    },
+    () => ({
+      error: true,
+      error_message: getStringMessage('global_error'),
+    }),
+  )
+  .catch((error) => {
+    Drupal.logJavascriptError('add-billing-in-cart', error, GTM_CONSTANTS.CHECKOUT_ERRORS);
+  });
 
 /**
  * Refresh cart from MDC.
@@ -303,13 +288,11 @@ export const validateCartData = () => {
     postData.coupon = cartData.cart.coupon_code;
   }
 
-  const apiUrl = updateCartApiUrl();
-  return axios
-    .post(apiUrl, {
-      action: 'refresh',
-      cart_id: cartData.cart.cart_id,
-      postData,
-    })
+  return window.commerceBackend.refreshCart({
+    action: 'refresh',
+    cart_id: cartData.cart.cart_id,
+    postData,
+  })
     .then(
       (response) => response.data,
       () => ({

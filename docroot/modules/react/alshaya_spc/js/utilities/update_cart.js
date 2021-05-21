@@ -1,15 +1,7 @@
 import { cartAvailableInStorage } from './get_cart';
-import i18nMiddleWareUrl from './i18n_url';
 import { getInfoFromStorage } from './storage';
 import dispatchCustomEvent from './events';
 import validateCartResponse from './validation_util';
-
-/**
- * Get the middleware update cart endpoint.
- *
- * @returns {string}
- */
-export const updateCartApiUrl = () => i18nMiddleWareUrl('cart/update');
 
 /**
  * Apply/Remove the promo code.
