@@ -305,8 +305,10 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
       }
     }
 
-    // Adding hook alter for bazaarvoice strings integration.
-    $this->moduleHandler->alter('alshaya_acm_customer_recent_order_build', $build);
+    // Adding bazaarvoice strings to show reviews and ratings.
+    if ($this->moduleHandler->moduleExists('alshaya_bazaar_voice')) {
+      $build['bazaar_voice_strings'] = alshaya_bazaar_voice_get_bazaarvoice_strings();
+    }
     return $build;
   }
 

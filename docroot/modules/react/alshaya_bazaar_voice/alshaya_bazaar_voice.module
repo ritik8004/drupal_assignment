@@ -52,11 +52,11 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
  */
 function alshaya_bazaar_voice_theme($existing, $type, $theme, $path) {
   return [
-    'alshaya_bazaar_voice_reviews' => [
+    'alshaya_bazaar_voice_strings' => [
       'variables' => [
         'strings' => [],
       ],
-      'template' => 'alshaya-bazaar-voice-reviews',
+      'template' => 'alshaya-bazaar-voice-strings',
     ],
   ];
 }
@@ -150,19 +150,6 @@ function alshaya_bazaar_voice_alshaya_my_account_links_alter(array &$links) {
  */
 function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['sort_options']['#options']['attr_bv_average_overall_rating'] = t('Top Rated');
-}
-
-/**
- * Implements hook_alshaya_acm_customer_recent_order_build_alter().
- * Adding key/value pair for all strings used in current page.
- *
- * @param array $build
- *   Reference to the build array of recent order.
- */
-function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(array &$build) {
-  \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
-  $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
-  $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
 }
 
 /**
@@ -324,10 +311,16 @@ function _alshaya_bazaar_voice_get_product_bazaarvoice_data(SKUInterface $sku, $
 function alshaya_bazaar_voice_preprocess_node(&$variables) {
   // Add bazaavoice related strings.
   if ($variables['node']->bundle() === 'acq_product') {
-    \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
-    $variables['bazaar_voice_strings'] = [
-      '#theme' => 'alshaya_bazaar_voice_reviews',
-      '#strings' => _alshaya_bazaar_voice_static_strings(),
-    ];
+    $variables['bazaar_voice_strings'] = alshaya_bazaar_voice_get_bazaarvoice_strings();
   }
+}
+
+
+function alshaya_bazaar_voice_get_bazaarvoice_strings() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+  $bazaar_voice_strings = [
+    '#theme' => 'alshaya_bazaar_voice_strings',
+    '#strings' => _alshaya_bazaar_voice_static_strings(),
+  ];
+  return $bazaar_voice_strings;
 }

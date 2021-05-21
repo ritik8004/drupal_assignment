@@ -68,6 +68,7 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
       'download_link' => NULL,
       'vat_text' => NULL,
       'cancelled_products' => NULL,
+      'bazaar_voice_strings' => NULL,
     ],
   ];
 
