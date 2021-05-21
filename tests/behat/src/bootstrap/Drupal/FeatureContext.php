@@ -1879,7 +1879,6 @@ class FeatureContext extends CustomMinkContext
    * Example: Then url should contain "/" page
    * Example: And I should be on "/bats" page
    * Example: And I should be on "http://google.com" page
-   *
    * @Then /^(?:|I )should be on "(?P<page>[^"]+)" page$/
    */
   public function assertPageLocate($path)
@@ -2511,7 +2510,6 @@ JS;
     }
   }
 
-
   /**
    * @Given /^the product quantity should be "([^"]*)"$/
    */
@@ -2524,7 +2522,13 @@ JS;
       $this->iWaitSeconds('20');
       $qty_after_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
       if ($qty_after_click != $qty_before_click + 1) {
-        throw new \Exception(sprintf('Quantity doesn\'t match'));
+        $script = <<<JS
+            return jQuery('#cart_notification .notification.error-notification').text();
+JS;
+        $error_msg = $this->getSession()->evaluateScript($script);
+        if ($error_msg != 'The product that was requested doesn\'t exist. Verify the product and try again.') {
+          throw new \Exception(sprintf('Quantity doesn\'t match'));
+        }
       }
     }
     else {
@@ -2638,10 +2642,18 @@ JS;
       $this->iWaitSeconds('20');
       $qty_after_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
       if ($qty_after_click != $qty_before_click + 1) {
-        throw new \Exception(sprintf('Quantity doesn\'t match'));
+        $this->iWaitSeconds('10');
+        $script = <<<JS
+            return jQuery('#cart_notification .notification.error-notification').text();
+JS;
+        $error_msg = $this->getSession()->evaluateScript($script);
+        if ($error_msg != 'The product that was requested doesn\'t exist. Verify the product and try again.') {
+          throw new \Exception(sprintf('Quantity doesn\'t match'));
+        }
       }
     }
     else {
+
       $this->getSession()->executeScript("jQuery('.qty-sel-btn--down').click()");
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
