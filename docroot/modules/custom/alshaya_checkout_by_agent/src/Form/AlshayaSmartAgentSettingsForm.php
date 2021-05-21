@@ -20,9 +20,7 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
   }
 
   /**
-   * Get Config name.
-   *
-   * @inheritDoc
+   * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
     return ['alshaya_checkout_by_agent.settings'];
