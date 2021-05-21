@@ -23,7 +23,7 @@ index 69972b1cce..6a847086af 100644
      }
  
 diff --git a/core/lib/Drupal/Core/EventSubscriber/ExceptionDetectNeedsInstallSubscriber.php b/core/lib/Drupal/Core/EventSubscriber/ExceptionDetectNeedsInstallSubscriber.php
-index 9b974f28e3..7695059032 100644
+index 9b974f28e3..e0ec156a70 100644
 --- a/core/lib/Drupal/Core/EventSubscriber/ExceptionDetectNeedsInstallSubscriber.php
 +++ b/core/lib/Drupal/Core/EventSubscriber/ExceptionDetectNeedsInstallSubscriber.php
 @@ -4,6 +4,7 @@
@@ -38,7 +38,7 @@ index 9b974f28e3..7695059032 100644
        $request = $event->getRequest();
        $format = $request->query->get(MainContentViewSubscriber::WRAPPER_FORMAT, $request->getRequestFormat());
        if ($format == 'html') {
-+        if (Settings::get('alshaya_installer_redirection_log', TRUE)) {
++        if (Settings::get('alshaya_installer_redirection_log', FALSE)) {
 +          error_log(sprintf('The user is redirected to "core/install.php". Error: %s Requested from %s', $exception->getMessage(), json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10))));
 +        }
          $event->setResponse(new RedirectResponse($request->getBasePath() . '/core/install.php', 302, ['Cache-Control' => 'no-cache']));
