@@ -1,6 +1,5 @@
 /* eslint-env jquery */
 import Axios from 'axios';
-import {callMiddlewareApi} from "../v1/common";
 
 /**
  * Check if user is anonymous and without cart.

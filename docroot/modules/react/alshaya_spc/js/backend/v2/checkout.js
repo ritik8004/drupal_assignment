@@ -1,5 +1,4 @@
 import {
-  callMiddlewareApi,
   isAnonymousUserWithoutCart,
   updateCart,
 } from './common';

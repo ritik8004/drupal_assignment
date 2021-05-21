@@ -87,16 +87,15 @@ window.commerceBackend.updateCartItemData = (data) => updateCart(data);
  */
 window.commerceBackend.getCartId = () => {
   const def = $.Deferred();
-  let cartId = localStorage.getItem('cart_id');
+  const cartId = localStorage.getItem('cart_id');
   if (typeof cartId === 'string' || typeof cartId === 'number') {
     def.resolve(cartId);
   } else {
     callMagentoApi('/rest/V1/guest-carts', 'POST', {})
       .then((response) => {
-        const cartId = response.data;
-        if (typeof cartId === 'string' || typeof cartId === 'number') {
-          localStorage.setItem('cart_id', cartId);
-          def.resolve(cartId);
+        if (typeof response.data === 'string' || typeof response.data === 'number') {
+          localStorage.setItem('cart_id', response.data);
+          def.resolve(response.data);
         }
       });
   }
@@ -214,5 +213,6 @@ window.commerceBackend.processCartData = (cartData) => {
       def.resolve({ data });
     });
 
+  // eslint-disable-next-line consistent-return
   return def.promise();
 };
