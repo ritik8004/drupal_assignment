@@ -492,6 +492,12 @@ function alshaya_acm_customer_build_order_detail(array $order) {
         $product['total'] = '';
       }
 
+      // Add links for view or write review for the product.
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_bazaar_voice')) {
+        $bazaarvoice_settings[$item['sku']] = _alshaya_bazaar_voice_get_product_settings($item['sku']);
+        $product['bazaarvoice_link'] = TRUE;
+      }
+
       $products[] = $product;
     }
 
@@ -519,6 +525,10 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   }
   else {
     $build['#delivery_detail_notice'] = t('Your order will be delivered at the following address');
+  }
+
+  if (isset($bazaarvoice_settings)) {
+    $build['settings'] = $bazaarvoice_settings;
   }
 
   return $build;

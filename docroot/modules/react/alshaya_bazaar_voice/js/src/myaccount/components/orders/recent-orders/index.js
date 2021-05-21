@@ -3,6 +3,7 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import { getbazaarVoiceSettings } from '../../../../utilities/api/request';
 import WriteReviewButton from '../../../../reviews/components/reviews-full-submit';
 import ViewReviewButton from '../view-review-button';
+import { createUserStorage } from '../../../../utilities/user_util';
 
 export default class RecentOrders extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class RecentOrders extends React.Component {
   componentDidMount() {
     const { productId } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+    createUserStorage(bazaarVoiceSettings.reviews.user.id, bazaarVoiceSettings.reviews.user.email);
     if (bazaarVoiceSettings.reviews.user.review !== null) {
       this.setState({
         rating: bazaarVoiceSettings.reviews.user.review.rating,

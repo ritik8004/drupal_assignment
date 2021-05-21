@@ -304,7 +304,7 @@ class CustomerController extends ControllerBase {
       $build['#vat_text'] = $vat_text;
     }
     $build['#theme'] = 'user_order_detail';
-
+    $build['#attached'] = $this->moduleHandler()->moduleExists('alshaya_bazaar_voice') ? _alshaya_bazaar_voice_get_recentorder_attachment($build['settings']) : NULL;
     $cache_time_limit = $this->config('alshaya_acm_customer.orders_config')->get('cache_time_limit');
     $build['#cache'] = ['max-age' => $cache_time_limit];
     // Refund text depends on alshaya_acm_checkout.settings.

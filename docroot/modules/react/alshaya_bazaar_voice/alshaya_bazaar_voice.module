@@ -268,7 +268,6 @@ function _alshaya_bazaar_voice_get_product_bazaarvoice_data(SKUInterface $sku, $
   $filter_options = \Drupal::config('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
   $filter_options = Yaml::parse($filter_options);
 
-  \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
   // Get country code.
   $country_code = _alshaya_custom_get_site_level_country_code();
 
