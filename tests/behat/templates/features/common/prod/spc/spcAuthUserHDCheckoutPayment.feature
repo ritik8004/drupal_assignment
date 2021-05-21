@@ -32,9 +32,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I wait for AJAX to finish
-    And I select the home delivery address
-    And I wait for the page to load
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -69,7 +67,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I select the home delivery address
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -102,7 +100,7 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards) for Aut
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I select the home delivery address
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish

@@ -156,6 +156,10 @@
     width: 100%;
     max-width: 8.75rem;
   }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $newsletter_submit_btn;
+  }
 }
 
 #alshaya-newsletter-subscribe {
@@ -192,7 +196,7 @@
   h3 {
     font-size: 1rem;
     color: $social_link_title;
-    font-family: $alshaya-semibold;
+    font-family: $tbs-recoleta-semibold;
 
     @include breakpoint($only-mobile) {
       text-align: center;

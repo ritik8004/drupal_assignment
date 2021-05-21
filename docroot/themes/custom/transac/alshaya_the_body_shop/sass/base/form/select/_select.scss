@@ -1,4 +1,8 @@
 @mixin select-wrapper($wrapper-width) {
+  width: $wrapper-width;
+  margin-bottom: 0.75rem;
+  position: relative;
+
   @include icon('dropdown-expand', after);
 }
 

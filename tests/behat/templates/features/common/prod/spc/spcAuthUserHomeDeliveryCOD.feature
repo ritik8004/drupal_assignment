@@ -32,7 +32,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I select the home delivery address
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
@@ -62,7 +62,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I select the home delivery address
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
@@ -92,7 +92,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I select the home delivery address
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
@@ -119,7 +119,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I select the home delivery address
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds

@@ -48,7 +48,7 @@ class PaymentMethodCheckoutComUpapiFawry extends React.Component {
           disabled
           defaultValue={emailAddress !== '' ? emailAddress : ''}
           className={emailAddress !== '' && emailAddress !== '' ? 'focus' : ''}
-          label={Drupal.t('Email')}
+          label={getStringMessage('fawry_email_label')}
         />
         <TextField
           type="tel"
@@ -56,7 +56,7 @@ class PaymentMethodCheckoutComUpapiFawry extends React.Component {
           disabled
           defaultValue={mobileNumber !== '' ? cleanMobileNumber(mobileNumber) : ''}
           className={mobileNumber !== '' && mobileNumber !== '' ? 'focus' : ''}
-          label={Drupal.t('Mobile Number')}
+          label={getStringMessage('fawry_mobile_number')}
         />
         <div className="fawry-suffix-description">
           {parse(getStringMessage('fawry_payment_option_suffix_description'))}
