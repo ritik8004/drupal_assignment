@@ -284,7 +284,8 @@ export default class ConfigurableForm extends React.Component {
               ? allowedAttributeValues[attribute[0]]
               : [];
 
-            showSizeGuideCond = (productData.size_guide.attributes.indexOf(attribute[0]) !== -1
+            showSizeGuideCond = (typeof productData.size_guide.attributes !== 'undefined'
+              && productData.size_guide.attributes.indexOf(attribute[0]) !== -1
               && showSizeGuide);
             if (showSizeGuideCond && showSizeGuide) {
               // We want size guide link to show only once.
