@@ -184,4 +184,18 @@ class AlshayaSuperCategoryManager {
     return !empty($super_categories) ? array_values(array_unique($super_categories)) : $super_categories;
   }
 
+  /**
+   * Returns the default category ID.
+   */
+  public function getDefaultCategoryId(int $term_id) {
+    $status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+    if ($status) {
+      $default_category_tid = alshaya_super_category_get_default_term();
+      if ($default_category_tid === $term_id) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
 }
