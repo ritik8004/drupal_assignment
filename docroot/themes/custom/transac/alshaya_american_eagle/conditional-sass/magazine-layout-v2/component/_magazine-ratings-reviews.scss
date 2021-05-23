@@ -18,6 +18,16 @@
     }
   }
 
+  .review-detail-right {
+    .review-feedback {
+      .review-feedback-vote {
+        .feedback-positive button {
+          padding-#{$left}: 0;
+        }
+      }
+    }
+  }
+
   .non-groupped-attr {
     .select-attribute {
       @include breakpoint($desktop) {
