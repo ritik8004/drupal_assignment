@@ -11,8 +11,7 @@ const PpdRatingsReviews = (props) => {
   } = props;
 
   const closeModal = () => {
-    document.querySelector('body').classList.remove('ratings-reviews-overlay');
-    document.querySelector('body').classList.remove('open-form-modal');
+    document.querySelector('body').classList.remove('ratings-reviews-overlay', 'open-form-modal');
     setTimeout(() => {
       removePanelData();
     }, 400);
