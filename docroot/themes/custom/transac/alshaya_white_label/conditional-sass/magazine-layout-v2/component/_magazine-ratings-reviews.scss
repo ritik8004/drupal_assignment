@@ -175,6 +175,12 @@ body.ratings-reviews-overlay {
                 .review-feedback-vote {
                   flex-flow: row wrap;
                   width: 100%;
+
+                  .feedback-positive button {
+                    @include breakpoint($only-mobile) {
+                      padding-#{$left}: 0;
+                    }
+                  }
                 }
               }
             }
@@ -259,6 +265,10 @@ body.ratings-reviews-overlay {
           .feedback-label {
             margin-bottom: 0.1875rem;
             display: block;
+
+            @include breakpoint($only-mobile) {
+              width: 100%;
+            }
           }
 
           .user {
