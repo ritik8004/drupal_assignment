@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { makeFacetAliasApiRequest } from '../../utils/requests';
-import { facetFieldAlias } from '../../utils';
+import { facetFieldAlias, isMobile } from '../../utils';
+import { isAddToBagEnabled } from '../../../../../js/utilities/addToBagHelper';
+import ConditionalView from '../../../../../js/utilities/components/conditional-view';
+import StaticMinicart from '../../../../../js/utilities/components/static-minicart';
 
 /**
  * Sticky filters.
@@ -46,6 +49,11 @@ const StickyFilterWrapper = React.forwardRef(({ callback }, ref) => {
       <div className="container-without-product" ref={ref}>
         {callback(filtersCallBack)}
       </div>
+
+      { /* Add static minicart for the desktop view if addToBag feature enabled. */}
+      <ConditionalView condition={!isMobile() && isAddToBagEnabled()}>
+        <StaticMinicart />
+      </ConditionalView>
     </div>
   );
 });

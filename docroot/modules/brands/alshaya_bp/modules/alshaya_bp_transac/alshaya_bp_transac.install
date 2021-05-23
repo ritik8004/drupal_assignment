@@ -9,6 +9,64 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\block\Entity\Block;
 use Drupal\facets\Entity\Facet;
+use Drupal\block\BlockInterface;
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.2.0] Installing brand_category filter.
+ */
+function alshaya_bp_transac_update_8014() {
+
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Adding fields in search_api index
+  $manager->updateConfigs(
+    ['search_api.index.product'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+  $manager->updateConfigs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  
+  // Re-indexing all the products.
+  \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
+
+  // Disable Block Facets for brand_category
+  $blocks = [
+    'brandcategory' => 'alshaya_search_facets_block_all',
+    'promobrandcategory' => 'alshaya_promo_facets_block_all',
+    'plpbrandcategory' => 'alshaya_plp_facets_block_all',
+    'productlistbrandcategory' => 'alshaya_productlist_facets_block_all',
+  ];
+  foreach ($blocks as $facet_block_id => $all_filter_block_id) {
+    $facet_block = Block::load($facet_block_id);
+    $all_filter_block = Block::load($all_filter_block_id);
+    if (($facet_block instanceof BlockInterface) && ($all_filter_block instanceof BlockInterface)) {
+      $facet_block->setWeight(($all_filter_block->getWeight()) - 1);
+      $facet_block->disable();
+      $facet_block->save();
+    }
+  }
+
+  // Enable productlistbrandcategory block.
+  $product_list_facet_block = Block::load('productlistbrandcategory');
+  if ($product_list_facet_block instanceof BlockInterface) {
+    $product_list_facet_block->enable()->save();
+  }
+}
 
 /**
  * Implements hook_update_N().

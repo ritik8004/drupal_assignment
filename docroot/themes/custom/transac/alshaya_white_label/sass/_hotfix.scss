@@ -116,13 +116,6 @@ body.ucbrowser {
     }
   }
 
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
-  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
-    &::after {
-      height: 34px;
-    }
-  }
-
   @include breakpoint($only-mobile) {
     .c-menu-primary {
       .mobile--search,
@@ -293,68 +286,36 @@ html[lang=ar] {
       min-width: auto;
     }
   }
-}
 
-.ie .address .address--primary span::before,
-.ie .address .address--primary a::before {
-  margin-top: 30px !important;
-}
-
-html[lang="ar"] {
   .ie {
     &.path--user .profile-address-book-edit-form .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
     }
   }
-}
 
-html[lang="ar"] {
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
     }
-
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month {
-      label {
-        width: 103% !important;
-      }
-    }
   }
 
-  @include breakpoint($upto-desktop) {
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
-      label {
-        width: 103% !important;
-      }
-    }
-  }
-}
-
-html[lang="ar"] {
   .ucbrowser {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.55rem;
     }
-
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-month,
-    .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-exp-year {
-      // Fix for direction attribute support for UC browser.
-      // Select elements for size and quantity.
-      select {
-        padding-left: 40px !important;
-      }
-    }
   }
-}
 
-html[lang="en"] {
   .ie,
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.4rem;
     }
   }
+}
+
+.ie .address .address--primary span::before,
+.ie .address .address--primary a::before {
+  margin-top: 30px !important;
 }
 
 .ucbrowser {

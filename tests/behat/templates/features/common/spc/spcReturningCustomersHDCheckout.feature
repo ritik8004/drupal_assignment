@@ -8,7 +8,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
 
   @cc @hd @checkout_com
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -27,11 +27,14 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile                        | {mobile}      |
+    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
+    And I wait 10 seconds
+    And I wait for the page to load
+    When fill in billing address with following:
+      | mobile   | {mobile}        |
       | spc-area-select-selected-city | {city_option} |
       | spc-area-select-selected      | {area_option} |
       | address_line1                 | {street}      |
@@ -40,9 +43,9 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I wait 10 seconds
+    Then I click jQuery "#address-form-action #save-address" element on page
+    And I wait 50 seconds
     And I wait for the page to load
-    And I wait for AJAX to finish
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -93,7 +96,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -113,9 +116,11 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
+    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
+    And I wait for the page to load
     When I add in the billing address with following:
       | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
@@ -126,9 +131,9 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I wait 10 seconds
+    Then I click jQuery "#address-form-action #save-address" element on page
+    And I wait 30 seconds
     And I wait for the page to load
-    And I wait for AJAX to finish
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -165,7 +170,6 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I should see "{language_cc_payment_type}"
     Then I click jQuery "#spc-detail-open" element on page
     And I wait 2 seconds
-
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .spc-checkout-section-title" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block .product-item .spc-product-image img" should exist
@@ -182,13 +186,12 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I should see "{language_vat}"
     And I should see "{language_continue_shopping_text}"
 
-
   @cc @hd @language @mobile @checkout_com @test34
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -207,9 +210,11 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     And I wait for AJAX to finish
+    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
+    And I wait for the page to load
     When I add in the billing address with following:
       | mobile                        | {mobile}      |
       | spc-area-select-selected-city | {language_city_option} |
@@ -220,9 +225,9 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
       | address_line2                 | {floor}       |
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
-    And I wait 10 seconds
+    Then I click jQuery "#address-form-action #save-address" element on page
+    And I wait 30 seconds
     And I wait for the page to load
-    And I wait for AJAX to finish
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish

@@ -29,7 +29,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then the element ".delivery-information-preview" should exist
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
@@ -86,10 +86,10 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     When I follow "{language_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -100,7 +100,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then the element ".delivery-information-preview" should exist
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish
@@ -157,10 +157,10 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -171,7 +171,7 @@ Feature: SPC Checkout Click & Collect using CyberSource Payment Method for Authe
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then the element ".delivery-information-preview" should exist
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     And I click jQuery "#spc-checkout .spc-main .spc-content #spc-payment-methods #payment-method-cybersource" element on page
     And I wait for AJAX to finish

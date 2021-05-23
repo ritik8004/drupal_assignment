@@ -93,6 +93,30 @@
   }
 }
 
+.spc-order-summary-item.order-summary-banner-fawry {
+  > span {
+    &:first-child {
+      font-size: 0.75rem;
+      color: $fawry-banner;
+      line-height: 1.67;
+      max-width: 24.125rem;
+
+      > a {
+        color: $fawry-banner;
+        text-decoration: underline;
+      }
+
+      @include breakpoint($upto-desktop) {
+        max-width: 13.125rem;
+      }
+    }
+
+    &:last-child {
+      max-width: 4.625rem;
+    }
+  }
+}
+
 .spc-order-summary-order-detail {
   margin-top: 0.3125rem;
 

@@ -1879,7 +1879,6 @@ class FeatureContext extends CustomMinkContext
    * Example: Then url should contain "/" page
    * Example: And I should be on "/bats" page
    * Example: And I should be on "http://google.com" page
-   *
    * @Then /^(?:|I )should be on "(?P<page>[^"]+)" page$/
    */
   public function assertPageLocate($path)
@@ -2453,7 +2452,7 @@ JS;
     } else {
       $element = '#payment-method-checkout_com';
     }
-    $this->getSession()->executeScript("jQuery('$element').trigger('click');");
+    $this->getSession()->executeScript("jQuery('$element').siblings('label').trigger('click');");
     $this->iWaitSeconds(10);
     $checkbox = $page->findField($element);
 
@@ -2467,7 +2466,7 @@ JS;
   /**
    * @Then I fill checkout card details having class :class with :value
    */
-  public function iFillCheckoutCardDetailsWith($class, $value) {
+  public function iFillCheckoutCardDetailsHavingClassWith($class, $value) {
     $page = $this->getSession()->getPage();
     $newCheckout = $page->find('css', '#payment-method-checkout_com_upapi');
     if (!empty($newCheckout)) {
@@ -2510,4 +2509,160 @@ JS;
       $checkoutField->isChecked();
     }
   }
+
+  /**
+   * @Given /^the product quantity should be "([^"]*)"$/
+   */
+  public function theQuantityShouldBe($value) {
+    $page = $this->getSession()->getPage();
+    $qty_before_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
+    if ($value == 'increased') {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--up').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
+      if ($qty_after_click != $qty_before_click + 1) {
+        $script = <<<JS
+            return jQuery('#cart_notification .notification.error-notification').text();
+JS;
+        $error_msg = $this->getSession()->evaluateScript($script);
+        if ($error_msg != 'The product that was requested doesn\'t exist. Verify the product and try again.') {
+          throw new \Exception(sprintf('Quantity doesn\'t match'));
+        }
+      }
+    }
+    else {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--down').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '.c-products__item:first-child .qty-text-wrapper .qty')->getText();
+      if ($qty_after_click != $qty_before_click - 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+  }
+
+  /**
+   * Wait for AJAX to finish.
+   */
+  public function iWaitForAjaxToFinish() {
+    $this->getSession()->wait(80000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+  }
+
+  /**
+   * @Given /^I select the collection store$/
+   */
+  public function iSelectTheCollectionStore()
+  {
+    $page = $this->getSession()->getPage();
+    $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
+    if ($empty_delivery_info !== null) {
+      $empty_delivery_info->click();
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $this->theElementShouldExist('.spc-cnc-stores-list-map');
+      $this->iWaitSeconds('20');
+      $page->find('css', '#click-and-collect-list-view li.select-store:first-child .spc-store-name-wrapper')->click();
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $page->find('css', 'button.select-store')->click();
+      $script = <<<JS
+        jQuery("input#fullname").val("Test User");
+        var maxlength = jQuery("input[name=\"mobile\"]").attr('maxlength');
+        var value = "55667788";
+        if (maxlength == 9) {
+            value = value + "9";
+        }
+        jQuery("input[name=\"mobile\"]").val(value);
+JS;
+      $this->getSession()->executeScript($script);
+      if ($page->find('css', 'input[name="email"]')) {
+        $this->getSession()->executeScript('jQuery("input[name=\"email\"]").val("user@test.com")');
+      }
+      $page->find('css', 'button#save-address')->click();
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+    }
+    $this->theElementShouldExist('.delivery-information-preview');
+  }
+
+  /**
+   * @Given /^I select "([^"]*)" option from "([^"]*)"$/
+   */
+  public function iSelectOptionFrom($select, $field_name) {
+    if ($field_name) {
+      $val = $this->getSession()->evaluateScript("return document.querySelector('select[name=\"{$field_name}\"] option:nth-child(2)').value");
+      $this->selectOptionAddress($field_name, $val);
+    }
+  }
+
+  /**
+   * @Then /^I select the home delivery address$/
+   */
+  public function iSelectTheHomeDeliveryAddress()
+  {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    $empty_delivery_info = $page->find('css', '.spc-empty-delivery-information');
+    if ($empty_delivery_info !== null) {
+      $empty_delivery_info->click();
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $script = <<<JS
+        jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
+        jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
+        jQuery(".spc-address-form-guest-overlay input[name=\"mobile\"]").val("556677889");
+        jQuery(".spc-address-form-guest-overlay input#address_line1").val("Street A");
+        jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
+        jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
+JS;
+      $session->executeScript($script);
+      $page->find('css', '.spc-address-form-guest-overlay #spc-area-select-selected-city')->click();
+      $this->iWaitSeconds('5');
+      $page->find('css', '.spc-address-form-guest-overlay .spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+      $page->find('css', '.spc-address-form-guest-overlay #spc-area-select-selected')->click();
+      $this->iWaitSeconds('5');
+      $page->find('css', '.spc-address-form-guest-overlay .spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+      $page->find('css', 'button#save-address')->click();
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+    }
+    $this->theElementShouldExist('.delivery-information-preview');
+  }
+
+  /**
+   * @Given /^the cart quantity should be "([^"]*)"$/
+   */
+  public function theCartQuantityShouldBe($value){
+    $page = $this->getSession()->getPage();
+    $qty_before_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+    if ($value == 'increased') {
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--up').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+      if ($qty_after_click != $qty_before_click + 1) {
+        $this->iWaitSeconds('10');
+        $script = <<<JS
+            return jQuery('#cart_notification .notification.error-notification').text();
+JS;
+        $error_msg = $this->getSession()->evaluateScript($script);
+        if ($error_msg != 'The product that was requested doesn\'t exist. Verify the product and try again.') {
+          throw new \Exception(sprintf('Quantity doesn\'t match'));
+        }
+      }
+    }
+    else {
+
+      $this->getSession()->executeScript("jQuery('.qty-sel-btn--down').click()");
+      $this->iWaitForAjaxToFinish();
+      $this->iWaitSeconds('20');
+      $qty_after_click = $page->find('css', '#mini-cart-wrapper .cart-link .quantity')->getText();
+      if ($qty_after_click != $qty_before_click - 1) {
+        throw new \Exception(sprintf('Quantity doesn\'t match'));
+      }
+    }
+
+  }
+
 }

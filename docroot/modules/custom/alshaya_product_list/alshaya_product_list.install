@@ -5,6 +5,51 @@
  * Install file.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ * 
+ * Install alshaya_product_list.settings file.
+ */
+function alshaya_product_list_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_product_list.settings'],
+    'alshaya_product_list',
+  );
+}
+
+ /**
+ * Implements hook_update_N().
+ * 
+ * [6.2.0] Install field_show_in_lhn_options_list.
+ */
+function alshaya_product_list_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+  $alshayaConfigManager->updateConfigs(
+    [
+      'field.storage.node.field_show_in_lhn_options_list',
+      'field.field.node.product_list.field_show_in_lhn_options_list',
+      'core.entity_form_display.node.product_list.default',
+      'core.entity_view_display.node.product_list.default',
+    ],
+    'alshaya_product_list',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  // Create and enable the new product list lhn block.
+  $alshayaConfigManager->updateConfigs(
+    ['block.block.productlistlhnblock'],
+    'alshaya_product_list',
+    'install',
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

@@ -43,6 +43,33 @@
     .bvSelect__input input {
       color: $rr-review-summary-grey-text !important;
     }
+
+    .bvSelect__dropdown-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include icon('chevrondown') {
+        font-size: 1.75rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.125s ease-in-out;
+        color: $rr-select-arrow-icon;
+      }
+
+      svg {
+        visibility: hidden;
+      }
+    }
+
+    &--menu-is-open {
+      .bvSelect__dropdown-indicator {
+        &::before {
+          transform: translateY(-50%) rotate(180deg);
+        }
+      }
+    }
   }
 
   .bvSelect__menu {
@@ -72,35 +99,6 @@
         &:hover,
         &.bvSelect__option--is-selected {
           background: $rr-select-bg-hover;
-        }
-      }
-    }
-  }
-
-  .bvSelect__control {
-    .bvSelect__dropdown-indicator {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      @include icon('chevrondown') {
-        font-size: 1.75rem;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: transform 0.125s ease-in-out;
-        color: $rr-select-arrow-icon;
-      }
-
-      svg {
-        visibility: hidden;
-      }
-    }
-
-    &--menu-is-open {
-      .bvSelect__dropdown-indicator {
-        &::before {
-          transform: translateY(-50%) rotate(180deg);
         }
       }
     }

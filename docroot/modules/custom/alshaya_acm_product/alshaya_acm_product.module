@@ -1471,14 +1471,20 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
 /**
  * Helper function to get size guide info if enabled and available.
  *
+ * @param mixed $taxonomy_term
+ *   The term object.
+ * @param string langcode
+ *   (optional) The langcode.
+ *
  * @return array
  *   Array containing link html and attributes.
  */
-function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
+function _alshaya_acm_product_get_size_guide_info($taxonomy_term, $langcode = null) {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
     $size_guide_anchor = ($taxonomy_term instanceof TermInterface) ? alshaya_acm_product_get_size_guide_anchor($taxonomy_term) : [];
-    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide', array_reverse($size_guide_anchor));
+    $link_title = $langcode ? t('Size Guide', [], ['langcode' => $langcode]) : t('Size Guide');
+    $link_info = _alshaya_acm_product_get_modal_link($link_title, 'size-guide', array_reverse($size_guide_anchor), $langcode);
     $link_info['attributes'] = explode(',', $config->get('size_guide_attributes'));
     return $link_info;
   }
@@ -1574,12 +1580,14 @@ function alshaya_acm_product_alshaya_master_post_drupal_install() {
  * @param string $type
  *   Link type.
  * @param array $size_guide_anchor
- *   String contains the value to pass with modal link.
+ *   (optional) String contains the value to pass with modal link.
+ * @param string $langcode
+ *   (optional) The langcode.
  *
  * @return array
  *   Array of link.
  */
-function _alshaya_acm_product_get_modal_link($link_title, $type, array $size_guide_anchor = []) {
+function _alshaya_acm_product_get_modal_link($link_title, $type, array $size_guide_anchor = [], $langcode = NULL) {
   $info = [];
   $options = [
     'attributes' => [
@@ -1590,6 +1598,10 @@ function _alshaya_acm_product_get_modal_link($link_title, $type, array $size_gui
     ],
     'query' => $size_guide_anchor,
   ];
+
+  if ($langcode) {
+    $options['language'] = \Drupal::languageManager()->getLanguage($langcode);
+  }
 
   $url = Url::fromRoute('alshaya_acm_product.pdp_modal_links', [
     'type' => $type,

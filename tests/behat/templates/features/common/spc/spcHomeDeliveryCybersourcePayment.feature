@@ -8,7 +8,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
 
   @cc @hd @cybersource
   Scenario: As a Guest, I should be able to checkout using CC
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -24,11 +24,11 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
@@ -44,7 +44,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 20 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
@@ -95,10 +95,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I follow "{language_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -111,11 +111,11 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
@@ -131,7 +131,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 20 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
@@ -182,10 +182,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -198,11 +198,11 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
@@ -218,7 +218,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 20 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
@@ -235,7 +235,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
 
   @hd @billing @cybersource @cc
   Scenario: As a Guest, I should be able to checkout using COD with different billing and shipping address
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -251,11 +251,11 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
@@ -271,7 +271,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 20 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
@@ -344,10 +344,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I follow "{language_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -360,11 +360,11 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
@@ -380,7 +380,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 20 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page
@@ -448,10 +448,10 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    When I press "{add_to_cart_link}"
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -464,11 +464,11 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
@@ -484,7 +484,7 @@ Feature: SPC Checkout Home Delivery using CyberSource Payment Method
       | sorting_code                  | {landmark}    |
       | postal_code                   | {postal_code} |
     Then I click jQuery "#address-form-action #save-address" element on page
-    And I wait 20 seconds
+    And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     And I click jQuery "#block-content #spc-checkout #spc-payment-methods #payment-method-cybersource" element on page

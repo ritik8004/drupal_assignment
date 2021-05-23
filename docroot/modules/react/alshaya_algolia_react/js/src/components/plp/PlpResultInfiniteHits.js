@@ -17,7 +17,6 @@ const PlpResultInfiniteHits = connectInfiniteHits(({
         if (hits.length > 0) {
           Drupal.blazyRevalidate();
           Drupal.algoliaReactPLP.stickyfacetfilter();
-          Drupal.refreshGrids();
           // Trigger gtm event one time, only when search we have search results.
           Drupal.algoliaReactPLP.triggerResultsUpdatedEvent(hits);
 

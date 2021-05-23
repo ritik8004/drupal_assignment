@@ -38,36 +38,6 @@
         });
       });
 
-      // Bind this only once after every ajax call.
-      $('.cybersource-credit-card-input').once('validate-cc').each(function () {
-        $(this).validateCreditCard(function (result) {
-          // Reset error and card type active class.
-          $(this).parent().removeClass('cc-error');
-          $('.card-type').removeClass('active');
-
-          // Don't do anything if card_type is null.
-          if (result.card_type !== null) {
-            switch (result.card_type.name) {
-              case 'diners_club_carte_blanche':
-              case 'diners_club_international':
-                $('.card-type-diners-club').addClass('active');
-                break;
-
-              case 'visa':
-              case 'mastercard':
-              default:
-                $('.card-type-' + result.card_type.name).addClass('active');
-                break;
-            }
-
-            // Set error class on wrapper if invalid card number.
-            if (!result.valid || !result.length_valid || !result.luhn_valid) {
-              $(this).parent().addClass('cc-error');
-            }
-          }
-        });
-      });
-
       // Show/hide fields based on availability of shipping methods.
       $('#shipping_methods_wrapper').once('bind-events').each(function () {
         if ($('#shipping_methods_wrapper input:radio').length > 0) {
@@ -336,7 +306,7 @@
     if (form.valid()) {
       form.find('label.error').remove();
       form.find('.form-item--error-message, .messages--error').remove();
-      form.find('.checkoutcom-global-error, .cybersource-global-error').remove();
+      form.find('.checkoutcom-global-error').remove();
     }
 
     checkIfPaymentButtonShouldBeVisibleInterval = setInterval(checkIfPaymentButtonShouldBeVisible, 250);
@@ -361,7 +331,7 @@
     // Show loader only when there is no inline error.
     if (form.find('label.error').length > 0
       || form.find('.form-item--error-message, .messages--error').length > 0
-      || form.find('.checkoutcom-global-error, .cybersource-global-error').length > 0
+      || form.find('.checkoutcom-global-error').length > 0
       || !form.valid()) {
       $('.checkout-ajax-progress-throbber').remove();
       $('.checkout-payment .multistep-checkout [data-drupal-selector="edit-actions-next"]').removeClass('hidden-important');

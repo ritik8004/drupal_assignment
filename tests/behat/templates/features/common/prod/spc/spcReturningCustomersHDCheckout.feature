@@ -32,20 +32,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile                        | {mobile}      |
-      | spc-area-select-selected-city | {city_option} |
-      | spc-area-select-selected      | {area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I wait for AJAX to finish
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -86,20 +73,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile                        | {mobile}      |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I wait for AJAX to finish
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
@@ -139,20 +113,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
-    And I wait for AJAX to finish
-    When I add in the billing address with following:
-      | mobile                        | {mobile}      |
-      | spc-area-select-selected-city | {language_city_option} |
-      | spc-area-select-selected      | {language_area_option} |
-      | address_line1                 | {street}      |
-      | dependent_locality            | {building}    |
-      | locality                      | {locality}    |
-      | address_line2                 | {floor}       |
-      | sorting_code                  | {landmark}    |
-      | postal_code                   | {postal_code} |
-    And I wait 10 seconds
-    And I wait for the page to load
-    And I wait for AJAX to finish
+    Then the element ".delivery-information-preview" should exist
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish

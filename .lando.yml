@@ -1,6 +1,7 @@
 name: alshaya
 recipe: drupal8
 config:
+  composer_version: '1.10.22'
   webroot: docroot
 
 proxy:
@@ -76,6 +77,14 @@ tooling:
   blt:
     service: appserver
     cmd: /app/vendor/acquia/blt/bin/blt
+
+  blt-init:
+    service: appserver
+    description: Initialize BLT aliases, git hooks and settings.
+    cmd:
+      - appserver: composer blt-alias
+      - appserver: blt blt:init:git-hooks
+      - appserver: blt blt:init:settings
 
   frontend-setup:
     service: node

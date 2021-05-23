@@ -1,5 +1,6 @@
 // Adding throbber overlay for any ajax call on payment and checkout delivery page.
 .page-standard.c-pdp,
+.page-standard.c-plp,
 .page-standard.c-address-book,
 .page-standard.overlay__wrapper,
 .pdp-modal-overlay .page-standard,
@@ -9,17 +10,6 @@
 #drupal-modal .basic-details-wrapper {
   .ajax-progress-throbber {
     @include fullPageLoader();
-  }
-
-  .cybersource-ajax-progress-throbber {
-    #{$left}: 0;
-
-    .cybersource-throbber {
-      #{$left}: 0;
-      #{$right}: 0;
-      padding-#{$left}: 0.625rem;
-      padding-#{$right}: 0.625rem;
-    }
   }
 }
 

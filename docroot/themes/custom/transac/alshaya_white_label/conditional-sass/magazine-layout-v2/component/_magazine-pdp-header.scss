@@ -138,8 +138,12 @@
     }
 
     .magv2-compact-detail-wrapper {
+      display: none;
+
       @include breakpoint($only-mobile) {
         width: 100%;
+        display: block;
+        opacity: 0;
 
         .magv2-pdp-title {
           margin-bottom: 0;
@@ -234,15 +238,6 @@
             padding-#{$left}: 0;
           }
         }
-      }
-    }
-
-    .magv2-compact-detail-wrapper {
-      display: none;
-
-      @include breakpoint($only-mobile) {
-        display: block;
-        opacity: 0;
       }
     }
 

@@ -20,19 +20,11 @@
     a:hover {
       text-decoration: none;
     }
-  }
-}
 
-.order-detail .block-page-title-block,
-.c-change-password .block-page-title-block,
-.c-communication-preferences .block-page-title-block,
-.c-user-edit .block-page-title-block,
-.c-order-list .block-page-title-block,
-.c-user--node .block-page-title-block,
-.c-address-book .block-page-title-block {
-  .back-link {
-    @include breakpoint($only-mobile) {
-      @include icon(chevronup, before);
+    .back-link {
+      @include breakpoint($only-mobile) {
+        @include icon(chevronup, before);
+      }
     }
   }
 }

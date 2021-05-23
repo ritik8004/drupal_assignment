@@ -314,21 +314,6 @@
     }
   }
 
-  .review-tooltip {
-    &:hover {
-      .user-review-info {
-        @include tooltip-display();
-
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        min-width: 16.75rem;
-        word-break: break-word;
-        font-size: 0.875rem;
-      }
-    }
-  }
-
   .feedback-label {
     padding-#{$right}: 0.1875rem;
     margin-#{$right}: 0.625rem;

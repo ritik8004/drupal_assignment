@@ -73,6 +73,14 @@
   .view-product-slider {
     margin-bottom: 0;
 
+    @include breakpoint($only-tablet) {
+      .owl-carousel {
+        .views-row {
+          width: 22.2%;
+        }
+      }
+    }
+
     @include breakpoint($tablet) {
       padding: 0 2.25rem;
       margin-bottom: 1.25rem;
@@ -92,6 +100,10 @@
           margin: 0 1rem;
         }
       }
+    }
+
+    .views-row {
+      position: relative;
     }
   }
 }
@@ -179,22 +191,6 @@
           height: auto !important;
         }
       }
-    }
-  }
-}
-
-.paragraph--type--product-carousel-category {
-  .view-product-slider {
-    @include breakpoint($only-tablet) {
-      .owl-carousel {
-        .views-row {
-          width: 22.2%;
-        }
-      }
-    }
-
-    .views-row {
-      position: relative;
     }
   }
 }

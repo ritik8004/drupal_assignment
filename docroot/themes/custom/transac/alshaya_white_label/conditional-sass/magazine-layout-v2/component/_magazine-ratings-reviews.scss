@@ -57,6 +57,14 @@ body.ratings-reviews-overlay {
                       position: static;
                       font-size: 1rem;
                     }
+
+                    .histogram-data {
+                      .histogram-title {
+                        &::before {
+                          top: 0;
+                        }
+                      }
+                    }
                   }
 
                   &-data {
@@ -72,7 +80,7 @@ body.ratings-reviews-overlay {
                   width: 100%;
 
                   .overall-product-rating {
-                    padding: 2rem 1rem 0;
+                    padding: 2rem 0 0;
 
                     .secondary-star-container {
                       flex-wrap: wrap;
@@ -120,6 +128,7 @@ body.ratings-reviews-overlay {
                 .write-review-button {
                   min-width: 100%;
                   height: 2.8125rem;
+                  line-height: normal;
                 }
               }
             }
@@ -132,6 +141,10 @@ body.ratings-reviews-overlay {
               .sort-item {
                 width: 100%;
                 margin-#{$right}: 0;
+              }
+
+              .sorting-filter-title-block {
+                margin: 1rem 0 0.5rem;
               }
 
               .filter-items {
@@ -175,6 +188,12 @@ body.ratings-reviews-overlay {
                 .review-feedback-vote {
                   flex-flow: row wrap;
                   width: 100%;
+
+                  .feedback-positive button {
+                    @include breakpoint($only-mobile) {
+                      padding-#{$left}: 0;
+                    }
+                  }
                 }
               }
             }
@@ -259,6 +278,7 @@ body.ratings-reviews-overlay {
           .feedback-label {
             margin-bottom: 0.1875rem;
             display: block;
+            width: 100%;
           }
 
           .user {
@@ -538,10 +558,11 @@ body.ratings-reviews-overlay {
 
 .magazine-layout-v2 {
   .aggregate-rating {
-    padding: 0 0 1.75rem;
+    padding: 0 0 0.875rem;
+    justify-content: $left;
 
     @include breakpoint($only-mobile) {
-      padding: 0 0.5rem 1.75rem;
+      padding: 0 0.5rem 0.875rem;
     }
 
     .empty-stars {
