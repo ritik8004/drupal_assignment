@@ -13,6 +13,13 @@
     }
   }
 
+  .comment-moderation-block {
+    .comment-moderation-text {
+      font-size: 0.9375rem;
+      color: $rr-review-summary-txt;
+    }
+  }
+
   .review {
     &-summary {
       padding: 1.75rem 0.5rem 2.25rem;
