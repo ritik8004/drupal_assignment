@@ -278,10 +278,7 @@ body.ratings-reviews-overlay {
           .feedback-label {
             margin-bottom: 0.1875rem;
             display: block;
-
-            @include breakpoint($only-mobile) {
-              width: 100%;
-            }
+            width: 100%;
           }
 
           .user {
