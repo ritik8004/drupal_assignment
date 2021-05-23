@@ -46,24 +46,25 @@ function alshaya_bp_transac_update_8014() {
 
   // Disable Block Facets for brand_category
   $blocks = [
-    'brandcategory',
-    'promobrandcategory',
-    'plpbrandcategory',
+    'brandcategory' => 'alshaya_search_facets_block_all',
+    'promobrandcategory' => 'alshaya_promo_facets_block_all',
+    'plpbrandcategory' => 'alshaya_plp_facets_block_all',
+    'productlistbrandcategory' => 'alshaya_productlist_facets_block_all',
   ];
-
-  foreach ($blocks as $block_id) {
-    $new_block = Block::load($block_id);
-    if ($new_block instanceof BlockInterface) {
-      // Keep the blocks disabled.
-      $new_block->setWeight(abs($new_block->getWeight()));
-      $new_block->disable();
-      $new_block->save();
+  foreach ($blocks as $facet_block_id => $all_filter_block_id) {
+    $facet_block = Block::load($facet_block_id);
+    $all_filter_block = Block::load($all_filter_block_id);
+    if (($facet_block instanceof BlockInterface) && ($all_filter_block instanceof BlockInterface)) {
+      $facet_block->setWeight(($all_filter_block->getWeight()) - 1);
+      $facet_block->disable();
+      $facet_block->save();
     }
   }
-  // Set weight of new block same as old block.
-  $brand_block = Block::load('productlistbrandcategory');
-  if ($brand_block instanceof BlockInterface) {
-    $brand_block->setWeight(abs($brand_block->getWeight()))->save();
+
+  // Enable productlistbrandcategory block.
+  $product_list_facet_block = Block::load('productlistbrandcategory');
+  if ($product_list_facet_block instanceof BlockInterface) {
+    $product_list_facet_block->enable()->save();
   }
 }
 
