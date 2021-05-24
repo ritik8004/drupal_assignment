@@ -6,7 +6,7 @@
           {% for thumbs in thumbnails %}
               <li class="views-row">
                 <div data-zoom-src="{{ thumbs.fullurl }}" class="imagezoom-wrap">
-                  <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+                  <img class="b-lazy" src="{{ lazy_load_placeholder }}" data-src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
                 </div>
               </li>
           {% endfor %}
