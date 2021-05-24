@@ -4,3 +4,4 @@ permissions:
   - 'restful get stock'
   - 'restful get stock_v2'
   - 'restful get product_v2'
+  - 'restful get product_status'

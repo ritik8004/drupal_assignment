@@ -1,9 +1,0 @@
-.search-lightSlider {
-  height: 6.6875rem !important;
-}
-
-#alshaya-algolia-plp {
-	.search-lightSlider {
-    height: auto !important;
-  }
-}

@@ -8,10 +8,10 @@ Feature: SPC Checkout Click and Collect using KNET payment method
 
   @cc @cnc @desktop @knet
   Scenario: As a Guest, I should be able to checkout using click and collect with knet
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -27,23 +27,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 30 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay #click-and-collect-list-view li:nth-child(1) .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 5 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
     And I wait for AJAX to finish
@@ -84,10 +68,10 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -103,23 +87,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 30 seconds
-    When I select the first autocomplete option for "{language_store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay #click-and-collect-list-view li:nth-child(1) .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 5 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
     And I wait for AJAX to finish
@@ -159,10 +127,10 @@ Feature: SPC Checkout Click and Collect using KNET payment method
 
   @cc @cnc @mobile @knet
   Scenario: As a Guest, I should be able to checkout using click and collect with knet
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -178,23 +146,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     And I wait for the page to load
     And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:nth-child(3)" element on page
     And I wait for AJAX to finish
-    Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 30 seconds
-    When I select the first autocomplete option for "{store_area}" on the "edit-store-location" field
-    When I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay #click-and-collect-list-view li:nth-child(1) .spc-store-name-wrapper" element on page
-    And I wait 5 seconds
-    And I wait for AJAX to finish
-    When I click jQuery ".popup-overlay  .spc-address-form .spc-cnc-address-form-sidebar .spc-cnc-store-actions button" element on page
-    And I wait 5 seconds
-    And I fill in the following:
-      | fullname | {anon_username} |
-      | email    | {anon_email}    |
-      | mobile   | {mobile}        |
-    Then I click jQuery ".popup-overlay #click-and-collect-selected-store .spc-cnc-contact-form #save-address" element on page
-    And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I select the collection store
     And I scroll to the "#spc-payment-methods" element
     And I select the Knet payment method
     And I wait for AJAX to finish

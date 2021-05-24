@@ -201,10 +201,71 @@
   }
 
   .item-list {
+    width: 100%;
+
     .slick-track {
       display: flex;
       flex-flow: row wrap;
       margin-#{$left}: 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 3.8875rem;
+
+      @include breakpoint($only-mobile) {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 1.875rem;
+        margin-top: 0;
+        justify-content: space-around;
+        overflow-y: scroll;
+        padding-bottom: 4.5rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+      }
+    }
+
+    li {
+      @include breakpoint($only-mobile) {
+        flex-basis: calc(50% - 10px);
+        margin-bottom: 2rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        display: inline-block;
+        white-space: normal;
+        vertical-align: top;
+        position: relative;
+      }
+
+      @include breakpoint($tablet) {
+        flex: 1;
+        height: auto;
+        float: none;
+      }
+    }
+
+    .ajax-progress-throbber {
+      .throbber {
+        @include throbberLoader();
+      }
+    }
+
+    .free-gift-title {
+      margin-top: 0.625rem;
+      color: $free-gifts-title-text;
+      font-size: 0.875rem;
+      text-align: center;
+      padding: 0 1.5rem;
+
+      html[lang=ar] & {
+        line-height: normal;
+      }
     }
   }
 
@@ -278,69 +339,6 @@
       }
     }
   }
-
-  .item-list {
-    width: 100%;
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 3.8875rem;
-
-      @include breakpoint($only-mobile) {
-        display: flex;
-        flex-wrap: wrap;
-        margin-bottom: 1.875rem;
-        margin-top: 0;
-        justify-content: space-around;
-        overflow-y: scroll;
-        padding-bottom: 4.5rem;
-      }
-
-      @include breakpoint($upto-desktop) {
-        -webkit-overflow-scrolling: touch;
-        white-space: nowrap;
-      }
-    }
-
-    li {
-      @include breakpoint($only-mobile) {
-        flex-basis: calc(50% - 10px);
-        margin-bottom: 2rem;
-      }
-
-      @include breakpoint($upto-desktop) {
-        display: inline-block;
-        white-space: normal;
-        vertical-align: top;
-        position: relative;
-      }
-
-      @include breakpoint($tablet) {
-        flex: 1;
-        height: auto;
-        float: none;
-      }
-    }
-
-    .ajax-progress-throbber {
-      .throbber {
-        @include throbberLoader();
-      }
-    }
-
-    .free-gift-title {
-      margin-top: 0.625rem;
-      color: $free-gifts-title-text;
-      font-size: 0.875rem;
-      text-align: center;
-      padding: 0 1.5rem;
-
-      html[lang=ar] & {
-        line-height: normal;
-      }
-    }
-  }
 }
 
 .path--cart {
@@ -404,6 +402,24 @@
             }
           }
         }
+
+        .free-gift-promo-list {
+          a {
+            font-size: 0.75rem;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          position: relative;
+
+          .free-gift-label {
+            + .sku-promotions {
+              position: absolute;
+              bottom: 0;
+              width: 33%;
+            }
+          }
+        }
       }
     }
   }
@@ -451,30 +467,6 @@
 
     .ajax-progress-throbber {
       display: block !important;
-    }
-  }
-
-  #table-cart-items {
-    tr {
-      td {
-        .free-gift-promo-list {
-          a {
-            font-size: 0.75rem;
-          }
-        }
-
-        @include breakpoint($only-mobile) {
-          position: relative;
-
-          .free-gift-label {
-            + .sku-promotions {
-              position: absolute;
-              bottom: 0;
-              width: 33%;
-            }
-          }
-        }
-      }
     }
   }
 }
@@ -872,12 +864,20 @@ body:not(.ie) {
   }
 }
 
+// for all browsers, for promo list. Required for MC
 body {
   &.free-gift-detail-modal {
     .ui-dialog {
       #drupal-modal {
         overflow-x: auto;
       }
+    }
+  }
+
+  &.free-gift-promo-list-overlay:not(.free-gift-detail-modal),
+  &.free-gifts-modal-overlay:not(.free-gift-detail-modal) {
+    .ui-dialog #drupal-modal {
+      height: auto !important;
     }
   }
 }
@@ -902,16 +902,6 @@ body {
       html[lang=ar] & {
         transform: rotate(180deg);
       }
-    }
-  }
-}
-
-// for all browsers, for promo list. Required for MC
-body {
-  &.free-gift-promo-list-overlay:not(.free-gift-detail-modal),
-  &.free-gifts-modal-overlay:not(.free-gift-detail-modal) {
-    .ui-dialog #drupal-modal {
-      height: auto !important;
     }
   }
 }

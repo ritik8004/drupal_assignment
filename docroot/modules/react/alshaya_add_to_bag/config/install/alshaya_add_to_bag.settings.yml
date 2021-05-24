@@ -1,0 +1,3 @@
+display_addtobag: true
+# Config for local storage expiration time, default 10 min.
+productinfo_local_storage_expiration: 10

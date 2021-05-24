@@ -1,4 +1,5 @@
-#cart_notification {
+#cart_notification,
+#static_minicart_notification {
   z-index: 999;
   position: absolute;
   top: 3.4rem;
@@ -113,20 +114,23 @@
   display: none;
 }
 
-html[lang=ar] #cart_notification {
-  @include breakpoint($tablet) {
-    top: 4.2rem;
-    #{$right}: 0.1125rem;
-  }
-
-  .notification,
-  .error {
-    &::before {
-      top: -2.9rem;
+html[lang=ar] {
+  #cart_notification,
+  #static_minicart_notification {
+    @include breakpoint($tablet) {
+      top: 4.2rem;
+      #{$right}: 0.1125rem;
     }
 
-    .col-2 {
-      font-size: 0.675rem;
+    .notification,
+    .error {
+      &::before {
+        top: -2.9rem;
+      }
+
+      .col-2 {
+        font-size: 0.675rem;
+      }
     }
   }
 }

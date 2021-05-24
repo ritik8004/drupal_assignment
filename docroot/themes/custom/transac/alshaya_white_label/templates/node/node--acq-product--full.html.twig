@@ -13,7 +13,13 @@ set classes = [
         {% if content.gallery is not empty %}
           {{ content.gallery }}
         {% else %}
-          <div id="product-zoom-container"></div>
+          <div class="gallery-wrapper empty-gallery">
+            <div id="product-zoom-container">
+              <div class="cloudzoom"></div>
+              <div class="mobilegallery"></div>
+              <div id="product-full-screen-gallery-container" style="display: none;"></div>
+            </div>
+          </div>
         {% endif %}
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>

@@ -155,13 +155,6 @@
     }
   }
 
-  .form-type-email {
-    .description {
-      padding-top: 0.5rem;
-      font-size: 0.75rem;
-    }
-  }
-
   .form-item {
     position: relative;
   }
@@ -172,7 +165,7 @@
   }
 
   .form-item-first-name {
-    margin-right: 1.5rem;
+    margin-#{$right}: 1.5rem;
   }
 
   .form-item-first-name,
@@ -263,10 +256,7 @@
       opacity: 1 !important;
       font-size: 0.75rem !important;
     }
-  }
 
-  .form-item-order-number,
-  .form-item-missing-items {
     input[type=text] ~ label.error {
       font-size: 0.75rem !important;
       color: $red-error !important;

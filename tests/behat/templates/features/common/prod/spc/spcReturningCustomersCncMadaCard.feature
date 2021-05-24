@@ -57,7 +57,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
-    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
+    Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I scroll to the ".spc-section-billing-address" element
@@ -125,7 +125,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
-    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
+    Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I wait for the page to load
@@ -192,7 +192,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     And I wait 5 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
-    Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
+    Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
     And I wait 10 seconds

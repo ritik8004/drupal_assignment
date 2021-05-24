@@ -1,0 +1,35 @@
+.add-to-bag-loader {
+  font-size: 0;
+  justify-content: center;
+  display: flex;
+
+  &::after {
+    content: '';
+    background: url('#{$base_theme_img_directory_path}/icons/new-pdp-loader-icon.svg') center center no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.25rem;
+    height: 1.25rem;
+    position: inherit;
+    transform: none;
+    opacity: initial;
+    transition: none;
+    animation: rotation 1s infinite linear;
+  }
+
+  &.tick {
+    background: $plp-quick-view-product-success;
+    display: flex;
+    justify-content: center;
+
+    &::after {
+      animation: none;
+      background: url('#{$base_theme_img_directory_path}/icons/new-pdp-tick-icon.svg') center center no-repeat;
+      margin: 0 0.625rem;
+    }
+
+    span {
+      font-size: 1.125rem;
+    }
+  }
+}

@@ -5,3 +5,9 @@
     }
   }
 }
+
+@media print {
+  .spc-order-confirmation-wrapper {
+    background: $white-five;
+  }
+}

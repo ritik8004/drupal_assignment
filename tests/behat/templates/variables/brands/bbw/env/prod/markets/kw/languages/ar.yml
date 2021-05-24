@@ -31,8 +31,8 @@ variables:
   excluding_delivery: 'قبل التوصيل'
   language_vat: ''
   language_checkout_link: 'إتمام الشراء بأمان'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهب للتسوق"
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: "إليك منتجاتنا المفضلة"
   mobile_language_class: 'en'
   language_short: 'en'
   ar_collection_filter: ''
@@ -52,6 +52,8 @@ variables:
   language_order_summary: 'order summary'
   language_promo_code: 'have a promo code?'
   language_excluding_delivery: 'excluding delivery'
+  empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
+  language_empty_bag: 'Your shopping bag is empty'
   city_option: ''
   area_option: 'Andalus'
   street: 'Street A'
@@ -67,3 +69,5 @@ variables:
   order_detail: 'تفاصيل الطلبية'
   delivery_type_text: 'التوصيل متوقع خلال:'
   payment_type_text: 'طريقة الدفع:'
+  language_payment_type: 'Cash on Delivery'
+  payment_type: 'نقداً عند التسليم'

@@ -32,6 +32,12 @@
         padding-right: 0.5rem !important;
         max-height: 2.5rem;
       }
+
+      @include breakpoint($desktop) {
+        width: 20%;
+        padding-top: 0.2rem;
+        padding-bottom: 0.5rem;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -40,14 +46,6 @@
       padding-right: 0.875rem;
       width: 10.7%;
       text-align: center;
-    }
-
-    html[lang="ar"] & {
-      @include breakpoint($desktop) {
-        width: 20%;
-        padding-top: 0.2rem;
-        padding-bottom: 0.5rem;
-      }
     }
 
     @include breakpoint($only-mobile) {
@@ -126,6 +124,10 @@
 
   .list-view-link,
   .map-view-link {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    text-transform: uppercase;
+
     @include breakpoint($tablet) {
       height: 2.5rem;
       padding: 0.6rem 0.25rem;
@@ -133,6 +135,32 @@
 
     @include breakpoint($only-tablet) {
       font-size: 0.875rem;
+    }
+
+    &:hover,
+    &.active {
+      border: 0;
+      border-bottom: 2px solid $store_finder_border_hover;
+    }
+
+    &.active {
+      font-family: $vs-bold;
+    }
+
+    @include breakpoint($tablet) {
+      width: 20.25%;
+
+      html[lang="ar"] & {
+        width: 19.25%;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 11%;
+
+      html[lang="ar"] & {
+        width: 14.25%;
+      }
     }
   }
 
@@ -214,39 +242,6 @@
       }
 
       height: 2.5rem;
-    }
-  }
-
-  .list-view-link,
-  .map-view-link {
-    border: 0;
-    border-bottom: 2px solid transparent;
-    text-transform: uppercase;
-
-    &:hover,
-    &.active {
-      border: 0;
-      border-bottom: 2px solid $store_finder_border_hover;
-    }
-
-    &.active {
-      font-family: $vs-bold;
-    }
-
-    @include breakpoint($tablet) {
-      width: 20.25%;
-
-      html[lang="ar"] & {
-        width: 19.25%;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      width: 11%;
-
-      html[lang="ar"] & {
-        width: 14.25%;
-      }
     }
   }
 
