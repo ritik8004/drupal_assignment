@@ -15,6 +15,7 @@ use Drupal\search_api\Query\QueryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Database\Query\AlterableInterface;
 
 /**
  * Implements hook_search_api_db_query_alter().
@@ -250,4 +251,13 @@ function alshaya_product_list_node_presave(NodeInterface $node) {
   }
   // Invalidate option page cache.
   Cache::invalidateTags([AlshayaOptionsListHelper::OPTIONS_PAGE_CACHETAG]);
+}
+
+/**
+ * Implements hook_query_TAG_NAME_alter().
+ */
+function alshaya_product_list_query_product_category_child_terms_alter(AlterableInterface $query) {
+  // Add show_in_product_list_lhn field.
+  $query->leftJoin('taxonomy_term__field_show_in_product_list_lhn', 'tplhn', 'tplhn.entity_id=tfd.tid');
+  $query->addField('tplhn', 'field_show_in_product_list_lhn_value', 'field_show_in_product_list_lhn_value');
 }
