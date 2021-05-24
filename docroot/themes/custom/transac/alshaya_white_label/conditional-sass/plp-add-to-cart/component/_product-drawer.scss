@@ -83,8 +83,9 @@
         padding: 0;
         font-size: 0.6875rem;
         #{$right}: 0;
+        top: 0;
 
-        @include breakpoint($tablet) {
+        @include breakpoint($desktop) {
           top: 0.25rem;
         }
       }
