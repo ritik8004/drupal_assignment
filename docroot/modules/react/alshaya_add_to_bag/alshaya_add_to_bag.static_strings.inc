@@ -42,6 +42,10 @@ function _alshaya_add_to_bag_strings() {
       'key' => 'add',
       'value' => t('Add'),
     ],
+    [
+      'key' => 'add_to_cart',
+      'value' => t('add to cart'),
+    ],
   ];
 }
 
