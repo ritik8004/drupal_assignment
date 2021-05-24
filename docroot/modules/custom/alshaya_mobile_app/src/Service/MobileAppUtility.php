@@ -626,7 +626,7 @@ class MobileAppUtility {
 
     $terms = $this->productCategoryTree->allChildTerms($langcode, $parent, FALSE, $mobile_only);
     $default_category_id = $this->superCategoryManager->getDefaultCategoryId();
-    $homepage_node = $this->getHomepageNode($default_category_id);
+    $homepage_node = $default_category_id > 0 ? $this->getHomepageNode() : NULL;
     foreach ($terms as $term) {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
@@ -980,13 +980,11 @@ class MobileAppUtility {
   /**
    * Helper function to get homepage node only once by adding static cache.
    */
-  protected function getHomepageNode($default_category_id) {
+  protected function getHomepageNode() {
     $homepage_node = &drupal_static(__FUNCTION__);
     if (!isset($homepage_node)) {
-      if ($default_category_id > 0) {
-        $homepage_nid = $this->configFactory->get('alshaya_master.home')->get('entity')['id'];
-        $homepage_node = $this->entityTypeManager->getStorage('node')->load($homepage_nid);
-      }
+      $homepage_nid = $this->configFactory->get('alshaya_master.home')->get('entity')['id'];
+      $homepage_node = $this->entityTypeManager->getStorage('node')->load($homepage_nid);
     }
     return !empty($homepage_node) ? $homepage_node : [];
   }
