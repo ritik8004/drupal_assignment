@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import {
   cartAvailableInStorage,
   redirectToCart,
@@ -6,7 +5,6 @@ import {
 import {
   removeCartFromStorage,
 } from '../storage';
-import i18nMiddleWareUrl from '../i18n_url';
 import dispatchCustomEvent from '../events';
 import validateCartResponse from '../validation_util';
 
@@ -16,10 +14,7 @@ export const fetchClicknCollectStores = (args) => {
     return new Promise((resolve) => resolve(null));
   }
 
-  const GET_STORE_URL = i18nMiddleWareUrl(
-    `cart/stores/${coords.lat}/${coords.lng}`,
-  );
-  return Axios.get(GET_STORE_URL);
+  return window.commerceBackend.fetchClickNCollectStores(coords);
 };
 
 export const fetchCartData = () => {

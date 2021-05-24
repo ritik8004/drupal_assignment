@@ -1,20 +1,15 @@
-import Axios from 'axios';
 import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './storage';
-import i18nMiddleWareUrl from './i18n_url';
 
-const associateCart = () => {
-  const url = i18nMiddleWareUrl('cart/associate');
-  return Axios.get(url)
-    .then((response) => {
-      if (response.data) {
-        addInfoInStorage({ cart: response.data });
-      }
-    })
-    .catch((error) => {
-      // Processing of error here.
-      Drupal.logJavascriptError('cart/associate', error, GTM_CONSTANTS.CART_ERRORS);
-    });
-};
+const associateCart = () => window.commerceBackend.associateCart()
+  .then((response) => {
+    if (response.data) {
+      addInfoInStorage({ cart: response.data });
+    }
+  })
+  .catch((error) => {
+    // Processing of error here.
+    Drupal.logJavascriptError('cart/associate', error, GTM_CONSTANTS.CART_ERRORS);
+  });
 
 /**
  * Empty cart.
