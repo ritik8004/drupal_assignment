@@ -46,11 +46,14 @@
       color: $marine-blue-two;
       padding: 0 1.25rem;
       border-bottom: none;
+      font-size: 1rem;
     }
   }
 
   .c-pre-content__region {
-    height: 2.8125rem;
+    height: 2.8125rem !important;
+    border-top: 1px solid transparent !important;
+    border-bottom: 1px solid transparent !important;
   }
 
   .megamenu-inline-layout.block-alshaya-main-menu li.menu--one__list-item ul.menu--two__list {
