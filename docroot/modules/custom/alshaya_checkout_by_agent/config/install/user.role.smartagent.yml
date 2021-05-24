@@ -1,8 +1,5 @@
 langcode: en
 status: true
-dependencies:
-  module:
-    - lightning_core
 third_party_settings:
   lightning_core:
     description: 'Role used by in-store devices.'

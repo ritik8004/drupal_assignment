@@ -37,15 +37,14 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
     $form['smart_user_agents'] = [
       '#type' => 'textarea',
       '#title' => $this->t('User Agents'),
-      '#description' => $this->t('Separate user agents with a newline.'),
+      '#description' => $this->t('Separate user agents in a newline. Eg.: <br/> iPad <br/> iPhone'),
       '#default_value' => implode(PHP_EOL, $user_agents),
     ];
-    $agent_ips = $config->get('smart_agent_ips') ?? [];
     $form['smart_agent_ips'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Agent IPs'),
-      '#description' => $this->t('Separate IPs with a newline.'),
-      '#default_value' => implode(PHP_EOL, $agent_ips),
+      '#description' => $this->t('Enter IP Address Ranges in CIDR Notation seperated with semi-colons, <b><u>with no trailing semi-colon</u></b>.<br /> Eg. 10.20.30.0/24;192.168.199.1/32;1.0.0.0/8<br />For more information on CIDR notation click <a href="http://www.brassy.net/2007/mar/cidr_basic_subnetting">here</a>.'),
+      '#default_value' => $config->get('smart_agent_ips'),
     ];
 
     return $form;
@@ -61,11 +60,7 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
       $smart_user_agents = preg_split('/\n|\r\n?/', $form_state->getValue('smart_user_agents'));
     }
     $config->set('smart_user_agents', $smart_user_agents);
-    $smart_agent_ips = [];
-    if (!empty($form_state->getValue('smart_agent_ips'))) {
-      $smart_agent_ips = preg_split('/\n|\r\n?/', $form_state->getValue('smart_agent_ips'));
-    }
-    $config->set('smart_agent_ips', $smart_agent_ips);
+    $config->set('smart_agent_ips', $form_state->getValue('smart_agent_ips'));
     $config->save();
     parent::submitForm($form, $form_state);
   }

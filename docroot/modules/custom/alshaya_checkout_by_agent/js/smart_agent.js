@@ -2,7 +2,7 @@
   Drupal.behaviors.smartAgent = {
     attach: function (context, settings) {
       // Add agent login message as soon as smartAgent cookie is set.
-      var smartAgentCookie = $.cookie('smartAgent');
+      var smartAgentCookie = $.cookie('smart_agent_cookie');
 
       if (smartAgentCookie !== undefined) {
         var cookieArray = JSON.parse(atob(smartAgentCookie));
@@ -18,7 +18,7 @@
 
       // On click on smart agent logout, remove cookie and logged-in message.
       $('.smart-agent-header-wrapper .agent-logout').once('smart-agent-logout').on('click', function () {
-        $.removeCookie('smartAgent', {path: '/'});
+        $.removeCookie('smart_agent_cookie', {path: '/'});
         $('.smart-agent-header-wrapper').remove();
       });
     }
