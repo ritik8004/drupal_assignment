@@ -347,7 +347,7 @@ export default class ConfigurableForm extends React.Component {
               type="button"
               onClick={this.handleAddToBagClick}
             >
-              {Drupal.t('add to cart')}
+              {getStringMessage('add_to_cart')}
             </button>
           </div>
         </form>
