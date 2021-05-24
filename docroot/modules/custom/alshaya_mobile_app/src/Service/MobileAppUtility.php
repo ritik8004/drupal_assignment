@@ -626,12 +626,17 @@ class MobileAppUtility {
 
     $terms = $this->productCategoryTree->allChildTerms($langcode, $parent, FALSE, $mobile_only);
     $default_category_id = $this->superCategoryManager->getDefaultCategoryId();
+    if ($default_category_id > 0) {
+      $homepage_nid = $this->configFactory->get('alshaya_master.home')->get('entity')['id'];
+    }
     foreach ($terms as $term) {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
 
       $path = $term_url->getGeneratedUrl();
-      $deeplink = ($default_category_id === (int) $term->tid) ? $this->getDeepLink($this->entityTypeManager->getStorage('node')->load($this->configFactory->get('alshaya_master.home')->get('entity')['id'])) : $this->getDeepLink($term);
+      $deeplink = ($default_category_id === (int) $term->tid)
+        ? $this->getDeepLink($this->entityTypeManager->getStorage('node')->load($homepage_nid))
+        : $this->getDeepLink($term);
 
       // Check if any redirection is set up for the term path.
       // We provide the technical taxonomy term path here and not the alias

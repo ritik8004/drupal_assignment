@@ -196,6 +196,7 @@ class AlshayaSuperCategoryManager {
       $default_category_tid = alshaya_super_category_get_default_term();
       return $default_category_tid;
     }
+    return NULL;
   }
 
 }
