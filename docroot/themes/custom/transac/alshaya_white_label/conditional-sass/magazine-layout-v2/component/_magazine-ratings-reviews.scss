@@ -6,6 +6,20 @@ body.ratings-reviews-overlay {
   }
 }
 
+.magv2-main,
+.magv2-popup-panel {
+  .star-ratings-wrapper {
+    .inline-star {
+      .icon-ic_ratingfull,
+      .icon-ic_rating {
+        &::before {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
 #reviews-section {
   .magv2 {
     &-ratings-reviews {
@@ -441,6 +455,14 @@ body.ratings-reviews-overlay {
               .exception-field-error-list {
                 height: 100vh;
                 overflow: auto;
+              }
+            }
+
+            .exception-error {
+              margin-top: 2.8125rem;
+
+              .exception-field-error-list {
+                padding-#{$left}: 0.875rem;
               }
             }
 
