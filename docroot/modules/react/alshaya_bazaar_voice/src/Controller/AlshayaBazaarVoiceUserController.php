@@ -74,7 +74,6 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
   public function getUserReviews() {
     $build = [];
     $config = $this->configFactory->get('bazaar_voice.settings');
-    $this->moduleHandler->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
     // Build bazaarvoice settings required for user reviews.
     $settings = [
       'bazaar_voice' => [
@@ -94,8 +93,7 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
     $build['myaccount']['#markup'] = '<div id="myaccount-reviews"></div>';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/myaccount';
     $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
-    $build['bazaar_voice_strings']['#theme'] = 'alshaya_bazaar_voice_reviews';
-    $build['bazaar_voice_strings']['#strings'] = _alshaya_bazaar_voice_static_strings();
+    $build['bazaar_voice_strings'] = alshaya_bazaar_voice_get_bazaarvoice_strings();
 
     return $build;
   }

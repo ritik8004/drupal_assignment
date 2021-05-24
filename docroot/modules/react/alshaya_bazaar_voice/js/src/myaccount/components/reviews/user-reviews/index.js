@@ -37,7 +37,7 @@ export default class UserReviews extends React.Component {
     showFullScreenLoader();
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/authors.json';
-    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit_Review=${initialLimit}`;
+    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.user_id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit_Review=${initialLimit}`;
     const apiData = fetchAPIData(apiUri, params, 'user');
     if (apiData instanceof Promise) {
       apiData.then((result) => {
