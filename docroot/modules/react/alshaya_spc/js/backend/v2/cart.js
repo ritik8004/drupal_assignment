@@ -22,7 +22,7 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 window.commerceBackend.getCart = async () => {
   const cartId = window.commerceBackend.getCartId();
   if (cartId === null) {
-    return;
+    return new Promise((resolve) => resolve(cartId));
   }
 
   const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
@@ -95,10 +95,8 @@ window.commerceBackend.getCartId = () => {
  */
 window.commerceBackend.createCart = async () => {
   const response = await callMagentoApi('/rest/V1/guest-carts', 'POST', {});
-  if (typeof response.data === 'string' || typeof response.data === 'number') {
-    localStorage.setItem('cart_id', response.data);
-    return response.data;
-  };
+  localStorage.setItem('cart_id', response.data);
+  return response.data;
 };
 
 /**
@@ -112,10 +110,10 @@ window.commerceBackend.processCartData = async (cartData) => {
     return null;
   }
 
-  let data = {
+  const data = {
     cart_id: window.commerceBackend.getCartId(),
-    uid: (drupalSettings.user.uid) ? drupalSettings.user.uid : 0,
-    langcode: $('html').attr('lang'),
+    uid: (window.drupalSettings.user.uid) ? window.user.uid : 0,
+    langcode: window.drupalSettings.cart.langcode,
     customer: cartData.cart.customer,
     coupon_code: '', // @todo where to find this? cart.totals.coupon_code
     appliedRules: cartData.cart.applied_rule_ids,
@@ -139,8 +137,8 @@ window.commerceBackend.processCartData = async (cartData) => {
   };
 
   if (typeof cartData.totals.base_grand_total !== 'undefined') {
-    cartData.cart_total = cartData.totals.base_grand_total;
-    cartData.minicart_total = cartData.totals.base_grand_total;
+    data.cart_total = cartData.totals.base_grand_total;
+    data.minicart_total = cartData.totals.base_grand_total;
   }
 
   if (typeof cartData.shipping !== 'undefined') {

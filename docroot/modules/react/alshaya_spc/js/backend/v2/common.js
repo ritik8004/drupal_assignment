@@ -1,3 +1,5 @@
+/* eslint no-return-await: "error" */
+
 import Axios from 'axios';
 
 /**
@@ -72,7 +74,7 @@ const updateCart = async (data) => {
     cartId = await window.commerceBackend.createCart();
   }
   if (cartId === null) {
-    return;
+    return new Promise((resolve) => resolve(cartId));
   }
 
   const itemData = {
@@ -88,14 +90,14 @@ const updateCart = async (data) => {
     if (typeof response.data.error_message === 'undefined') {
       response.data.error_message = 'Error adding item to the cart.';
     }
-    let error = {
+    const error = {
       data: response.data,
     };
-    return new Promise(resolve => resolve(error));
+    return new Promise((resolve) => resolve(error));
   }
 
   return window.commerceBackend.getCart()
-    .then((cartData) => new Promise(resolve => resolve(cartData)));
+    .then((cartData) => new Promise((resolve) => resolve(cartData)));
 };
 
 export {

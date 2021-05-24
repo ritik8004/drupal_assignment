@@ -229,6 +229,7 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
   $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
   $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$lang];
+  $page['#attached']['drupalSettings']['cart']['langcode'] = $lang;
   $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
     return $key['timeout'];
   }, $timeout_settings['middleware']);
