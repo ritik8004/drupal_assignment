@@ -856,7 +856,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @return array
    *   Term tree.
    */
-  public function getCategoryTreeWithIncludeInMenu($langcode = NULL, $parent_id = 0, $cache_name = NULL) {
+  public function getCategoryTreeWithIncludeInMenu($langcode = NULL, $parent_id = 0, $cache_name = 'category_tree') {
     // This to not consider `include_in_menu` check.
     $this->setExcludeNotInMenu(FALSE);
     if (!$langcode) {
