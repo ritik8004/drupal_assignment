@@ -519,9 +519,9 @@ export const getProductInfo = (sku) => {
 
 export const isMaxSaleQtyReached = (selectedVariant, productData) => {
   // Early return if max sale quantity check is disabled.
-  // if (!isMaxSaleQtyEnabled()) {
-  //   return false;
-  // }
+  if (!isMaxSaleQtyEnabled()) {
+    return false;
+  }
 
   // Fetch the cart data present in local storage.
   const cartData = Drupal.alshayaSpc.getCartData();
