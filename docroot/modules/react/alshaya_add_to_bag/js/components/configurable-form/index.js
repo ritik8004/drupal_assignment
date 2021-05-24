@@ -11,6 +11,8 @@ import {
   pushSeoGtmData,
   getSelectedOptionsForCart,
   getSelectedOptionsForGtm,
+  isMaxSaleQtyReached,
+  isHideMaxSaleMsg,
 } from '../../utilities/addtobag';
 import QuantitySelector from '../quantity-selector';
 import SizeGuide from '../size-guide';
@@ -21,7 +23,7 @@ import getStringMessage from '../../../../alshaya_spc/js/utilities/strings';
 export default class ConfigurableForm extends React.Component {
   constructor(props) {
     super(props);
-    const { productData } = props;
+    const { selectedVariant, productData } = props;
 
     // Set the default attributes.
     const firstChild = productData.variants[0].sku;
@@ -33,11 +35,17 @@ export default class ConfigurableForm extends React.Component {
     // Add debounce for the form Add button handler.
     this.onAddClicked = debounce(this.onAddClicked, 300);
 
+    // Check max sale quantity limit for the display Sku.
+    const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productData)
+      && !isHideMaxSaleMsg())
+      ? Drupal.t('Purchase limit has been reached')
+      : null;
+
     // Set the default values.
     this.state = {
       formAttributeValues: firstChildAttributes,
       quantity: 1,
-      errorMessage: null,
+      errorMessage: qtyLimitMessage,
     };
   }
 
@@ -111,9 +119,15 @@ export default class ConfigurableForm extends React.Component {
     // Get the selected variant based on the attributes combination.
     const selectedVariant = this.getSelectedVariant(formAttributeValues);
 
+    // Check max sale quantity limit for the selected Sku.
+    const qtyLimitMessage = (isMaxSaleQtyReached(selectedVariant, productData)
+      && !isHideMaxSaleMsg())
+      ? Drupal.t('Purchase limit has been reached')
+      : null;
+
     // Update the state with the new attribute combination and update the
     // selected sku variant on the parent.
-    this.setState({ formAttributeValues, errorMessage: null }, () => {
+    this.setState({ formAttributeValues, errorMessage: qtyLimitMessage }, () => {
       setSelectedVariant(selectedVariant);
     });
   }
@@ -246,7 +260,7 @@ export default class ConfigurableForm extends React.Component {
   }
 
   render() {
-    const { sku, productData } = this.props;
+    const { sku, selectedVariant, productData } = this.props;
     const configurableAttributes = productData.configurable_attributes;
     const { formAttributeValues, quantity, errorMessage } = this.state;
     const hiddenAttributes = getHiddenFormAttributes();
@@ -346,6 +360,8 @@ export default class ConfigurableForm extends React.Component {
               id={`config-form-addtobag-button-${sku}`}
               type="button"
               onClick={this.handleAddToBagClick}
+              // Disable add to bag button if max sale limit has reached.
+              disabled={isMaxSaleQtyReached(selectedVariant, productData)}
             >
               {Drupal.t('add to cart')}
             </button>
