@@ -187,10 +187,9 @@ function _alshaya_bazaar_voice_get_product_settings($sku_id) {
   if ($productNode instanceof NodeInterface) {   
     // Load SKU entity.
     $langcode = $productNode->language()->getId();
-    $sku_string = $skuManager->getSkuForNode($productNode);
-    $sku = SKU::loadFromSku($sku_string, $langcode);
+    $sku = SKU::loadFromSku($sku_id, $langcode);
     // Get sanitized sku.
-    $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
+    $sanitized_sku = $skuManager->getSanitizedSku($sku_id);
     $productArray['alshaya_bazaar_voice'] = _alshaya_bazaar_voice_get_product_bazaarvoice_data($sku, $productNode, $sanitized_sku);
     return $productArray;
   }
