@@ -10,14 +10,14 @@ id: node.product_list.field_show_in_lhn_options_list
 field_name: field_show_in_lhn_options_list
 entity_type: node
 bundle: product_list
-label: 'Show LHN Options List'
-description: '`None` value is treated as `Same as LHN`.'
+label: 'Show Product List LHN'
+description: '''None'' value will display the LHN.'
 required: false
 translatable: false
 skip_translation_check: 0
 default_value:
   -
-    value: 'Same as LHN'
+    value: 'Yes'
 default_value_callback: ''
 settings: {  }
 field_type: list_string

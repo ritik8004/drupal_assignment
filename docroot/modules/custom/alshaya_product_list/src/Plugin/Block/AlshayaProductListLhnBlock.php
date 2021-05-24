@@ -142,6 +142,14 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function build() {
+    static $build = NULL;
+
+    // Adding static cache as this block is invoked in
+    // alshaya_white_label_preprocess_page().
+    if (isset($build)) {
+      return $build;
+    }
+
     $build = [];
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $current_route_name = $this->routeMatch->getRouteName();
@@ -152,7 +160,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
         if ($node->get('field_show_in_lhn_options_list')) {
           $product_list_lhn_options_list_value = $node->get('field_show_in_lhn_options_list')[0];
           if ($product_list_lhn_options_list_value === NULL) {
-            $product_list_lhn_value = 'Same as LHN';
+            $product_list_lhn_value = 'Yes';
           }
           else {
             $product_list_lhn_value = $node->get('field_show_in_lhn_options_list')->getValue()[0]['value'];
@@ -166,21 +174,9 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
             return [];
           }
           switch ($product_list_lhn_value) {
-            case "Same as LHN":
-              foreach ($vocab_list as $term) {
-                if ($term->get('field_show_in_lhn')) {
-                  $term_show_lhn_value = $term->get('field_show_in_lhn')->getValue()[0]['value'];
-                  if ($term_show_lhn_value === '1') {
-                    $build = $this->productCategoryHelper->productCategoryBuild($this->getBaseId(), $term, $langcode);
-                  }
-                }
-              }
-              break;
-
             case "Yes":
-              foreach ($vocab_list as $term) {
-                $build = $this->productCategoryHelper->productCategoryBuild($this->getBaseId(), $term, $langcode);
-              }
+              $term = reset($vocab_list);
+              $build = $this->productCategoryHelper->productCategoryBuild($this->getBaseId(), $term, $langcode, 'product_list');
               break;
           }
         }
