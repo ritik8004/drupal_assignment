@@ -1,6 +1,6 @@
 import React from 'react';
 import getStringMessage from '../../../../../../js/utilities/strings';
-import { getRoundVal } from '../../../utilities/validate';
+import { getPercentVal } from '../../../utilities/validate';
 
 const RatingSummary = ({
   histogramData,
@@ -17,7 +17,7 @@ const RatingSummary = ({
             {getStringMessage('star')}
           </span>
           <div className="histogram-full-bar">
-            <div style={{ width: `${getRoundVal(value.Count, totalReviewCount)}%` }} className="histogram-dynamic-bar" />
+            <div style={{ width: `${getPercentVal(value.Count, totalReviewCount)}%` }} className="histogram-dynamic-bar" />
           </div>
           <span className={`histogram-star-count ${index}`}>{value.Count}</span>
         </div>

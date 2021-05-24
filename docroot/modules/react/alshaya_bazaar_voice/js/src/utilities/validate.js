@@ -52,9 +52,9 @@ export const processFormDetails = (e) => {
 };
 
 /**
- * To Get around value.
+ * To Get average percentage value.
  */
-export const getRoundVal = (count, totalCount) => {
+export const getPercentVal = (count, totalCount) => {
   const average = count / totalCount;
 
   return average * 100;
@@ -62,5 +62,5 @@ export const getRoundVal = (count, totalCount) => {
 
 export default {
   processFormDetails,
-  getRoundVal,
+  getPercentVal,
 };

@@ -5,7 +5,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
-import { getRoundVal } from '../../../utilities/validate';
+import { getPercentVal } from '../../../utilities/validate';
 
 const ReviewHistogram = ({
   overallSummary, isNewPdpLayout, reviewedByCurrentUser,
@@ -47,7 +47,7 @@ const ReviewHistogram = ({
                       Drupal.t('@customerCount% of Customers Recommended the Product', {
                         '@customerCount': (
                           Math.round(
-                            getRoundVal(
+                            getPercentVal(
                               overallSummary[item].FilteredReviewStatistics.RecommendedCount,
                               overallSummary[item].FilteredReviewStatistics.TotalReviewCount,
                             ),
