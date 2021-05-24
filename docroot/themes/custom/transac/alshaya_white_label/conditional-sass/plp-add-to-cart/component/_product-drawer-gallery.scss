@@ -8,10 +8,10 @@
       }
 
       .slick-arrow {
-        top: auto;
-        bottom: 0.8rem;
         width: 2.125rem;
         height: 2.125rem;
+        bottom: -0.875rem;
+        top: auto !important;
 
         &::before {
           background: transparent;
