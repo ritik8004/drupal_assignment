@@ -1,5 +1,6 @@
 import React from 'react';
 import isRTL from '../../../utilities/rtl';
+import { getRoundVal } from '../../../utilities/validate';
 
 const DynamicDot = ({
   sliderValue,
@@ -11,13 +12,13 @@ const DynamicDot = ({
       ? (
         <div
           className={`dynamic-dot slide-range-${sliderValueRange} ${(sliderValue > 0) ? `dot-${sliderValue}` : ''}`}
-          style={{ right: `${(sliderAverageRating > 0) ? (sliderAverageRating / sliderValueRange).toFixed(1) * 100 : null}%` }}
+          style={{ right: `${(sliderAverageRating > 0) ? getRoundVal(sliderAverageRating, sliderValueRange) : null}%` }}
         />
       )
       : (
         <div
           className={`dynamic-dot slide-range-${sliderValueRange} ${(sliderValue > 0) ? `dot-${sliderValue}` : ''}`}
-          style={{ left: `${(sliderAverageRating > 0) ? (sliderAverageRating / sliderValueRange).toFixed(1) * 100 : null}%` }}
+          style={{ left: `${(sliderAverageRating > 0) ? getRoundVal(sliderAverageRating, sliderValueRange) : null}%` }}
         />
       )}
   </>

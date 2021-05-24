@@ -51,6 +51,16 @@ export const processFormDetails = (e) => {
   return isError;
 };
 
+/**
+ * To Get around value.
+ */
+export const getRoundVal = (count, totalCount) => {
+  const average = count / totalCount;
+
+  return average * 100;
+};
+
 export default {
   processFormDetails,
+  getRoundVal,
 };
