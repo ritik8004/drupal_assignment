@@ -73,8 +73,10 @@ class ProductCategoryHelper {
    *   Taxonomy term.
    * @param string $langcode
    *   Language code.
+   * @param string $cache_id
+   *   (Optional)Cache name.
    */
-  public function productCategoryBuild($baseID, TermInterface $term, $langcode) {
+  public function productCategoryBuild($baseID, TermInterface $term, $langcode, $cache_id = 'category_tree') {
     $parent_id = 0;
 
     $context = [
@@ -86,7 +88,7 @@ class ProductCategoryHelper {
     $this->moduleHandler->alter('product_category_parent', $parent_id, $context);
 
     // Get the term tree.
-    $term_data = $this->productCategoryTree->getCategoryTreeWithIncludeInMenu($langcode, $parent_id);
+    $term_data = $this->productCategoryTree->getCategoryTreeWithIncludeInMenu($langcode, $parent_id, $cache_id);
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
