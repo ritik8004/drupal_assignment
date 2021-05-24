@@ -1,19 +1,4 @@
-import i18nMiddleWareUrl from './i18n_url';
 import { getInfoFromStorage } from './storage';
-
-/**
- * Get the middleware get cart endpoint.
- *
- * @returns {string}
- */
-export const getCartApiUrl = () => i18nMiddleWareUrl('cart/get');
-
-/**
- * Get the middleware get cart for checkout endpoint.
- *
- * @returns {string}
- */
-export const getCartForCheckoutApiUrl = () => i18nMiddleWareUrl('cart/checkout');
 
 export const cartAvailableInStorage = () => {
   // Get data from local storage.

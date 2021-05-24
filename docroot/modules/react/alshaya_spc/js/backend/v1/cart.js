@@ -62,3 +62,25 @@ window.commerceBackend.applyRemovePromo = (data) => updateCart(data);
  *   A promise object.
  */
 window.commerceBackend.updateCartItemData = (data) => updateCart(data);
+
+/**
+ * Refreshes cart data and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.refreshCart = (data) => updateCart(data);
+
+/**
+ * Associates cart to the user.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.associateCart = () => callMiddlewareApi('cart/associate', 'GET');

@@ -31,15 +31,6 @@ function alshaya_acm_promotion_views_data_alter(array &$data) {
 function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
   $items = [];
 
-  $items['cart_top_promotions'] = [
-    'variables' => [
-      'promotions' => NULL,
-      'free_shipping' => NULL,
-      'inactive_promotions' => NULL,
-      'active_promotions' => NULL,
-    ],
-  ];
-
   $items['free_gift_promotions'] = [
     'variables' => [
       'free_sku_entity_id' => NULL,

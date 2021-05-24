@@ -11,9 +11,6 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: 'Same as LHN'
-      label: 'Same as LHN'
-    -
       value: 'Yes'
       label: 'Yes'
     -
