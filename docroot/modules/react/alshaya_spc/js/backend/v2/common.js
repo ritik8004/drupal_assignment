@@ -1,4 +1,3 @@
-/* eslint-env jquery */
 import Axios from 'axios';
 
 /**
@@ -8,10 +7,12 @@ import Axios from 'axios';
  */
 const isAnonymousUserWithoutCart = () => {
   const cartData = window.Drupal.alshayaSpc.getCartData();
-  if (typeof cartData === 'undefined' || typeof cartData.cart_id === 'undefined') {
-    return true;
+  if (cartData === null || typeof cartData === 'undefined' || typeof cartData.cart_id === 'undefined') {
+    if (drupalSettings.user.uid === 0) {
+      return true;
+    }
   }
-  return drupalSettings.user.uid === 0;
+  return false;
 };
 
 /**
@@ -52,6 +53,7 @@ const callMagentoApi = (url, method, data) => {
     params.data = data;
   }
 
+  // @todo error handling as found in MagentoApiWrapper::doRequest()
   return Axios(params);
 };
 
@@ -64,29 +66,36 @@ const callMagentoApi = (url, method, data) => {
  * @returns {Promise}
  *   A promise object.
  */
-const updateCart = (data) => {
-  const def = $.Deferred();
-  window.commerceBackend.getCartId()
-    .then((cartId) => {
-      const itemData = {
-        cartItem: {
-          sku: data.variant_sku,
-          qty: data.quantity,
-          quote_id: cartId,
-        },
-      };
-      return callMagentoApi(`/rest/V1/guest-carts/${cartId}/items`, 'POST', itemData);
-    })
-    .then(
-      () => window.commerceBackend.getCart(),
-    )
-    .then((cartData) => {
-      if (typeof cartData !== 'undefined') {
-        def.resolve(cartData);
-      }
-    });
+const updateCart = async (data) => {
+  let cartId = window.commerceBackend.getCartId();
+  if (cartId === null) {
+    cartId = await window.commerceBackend.createCart();
+  }
+  if (cartId === null) {
+    return;
+  }
 
-  return def.promise();
+  const itemData = {
+    cartItem: {
+      sku: data.variant_sku,
+      qty: data.quantity,
+      quote_id: cartId,
+    },
+  };
+
+  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/items`, 'POST', itemData);
+  if (response.data.error === true) {
+    if (typeof response.data.error_message === 'undefined') {
+      response.data.error_message = 'Error adding item to the cart.';
+    }
+    let error = {
+      data: response.data,
+    };
+    return new Promise(resolve => resolve(error));
+  }
+
+  return window.commerceBackend.getCart()
+    .then((cartData) => new Promise(resolve => resolve(cartData)));
 };
 
 export {
