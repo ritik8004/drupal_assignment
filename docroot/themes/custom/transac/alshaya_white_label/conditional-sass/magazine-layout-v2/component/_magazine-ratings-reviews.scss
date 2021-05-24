@@ -29,7 +29,7 @@ body.ratings-reviews-overlay {
           }
 
           .histogram-data-section {
-            padding: 2.875rem 0.625rem;
+            padding: 2.875rem 1.875rem;
             #{$right}: auto;
             #{$left}: auto;
             width: 100%;
@@ -62,15 +62,32 @@ body.ratings-reviews-overlay {
                       .histogram-title {
                         &::before {
                           top: 0;
+                          font-size: 1.5rem;
+                          width: 1.5rem;
+                          height: 1.5rem;
+
+                          html[lang=ar] & {
+                            top: -0.375rem;
+                          }
                         }
                       }
-                    }
-                  }
 
-                  &-data {
-                    .histogram-row {
-                      .star-label {
-                        width: 15%;
+                      .histogram-row {
+                        .histogram-full-bar {
+                          width: 81%;
+
+                          html[lang=ar] & {
+                            width: 79%;
+                          }
+                        }
+
+                        .star-label {
+                          width: 11%;
+
+                          html[lang=ar] & {
+                            width: 13%;
+                          }
+                        }
                       }
                     }
                   }
@@ -158,10 +175,18 @@ body.ratings-reviews-overlay {
             }
           }
 
+          .star-ratings-wrapper {
+            margin-bottom: 0.5rem;
+          }
+
+          .review-detail-mobile {
+            margin-bottom: 0;
+          }
+
           .review {
             &-summary {
               display: block;
-              padding: 1.75rem 0.5rem 2.25rem;
+              padding: 1.75rem 1.875rem 2.25rem;
               background: $magv2-rr-histogram-block-bg;
               margin-top: 1.25rem;
               border-bottom: none;
@@ -232,7 +257,7 @@ body.ratings-reviews-overlay {
             }
 
             &-text {
-              margin-bottom: 1.5rem;
+              margin: 0;
             }
 
             &-pagination {
@@ -345,7 +370,7 @@ body.ratings-reviews-overlay {
           }
 
           .write-review-form-add {
-            padding: 1.5rem 0;
+            padding: 1.5rem 1.875rem;
 
             // Type = Text.
             .write-review-type-textfield {
@@ -384,7 +409,7 @@ body.ratings-reviews-overlay {
                 margin-bottom: 0.5rem;
 
                 .form-type-radio {
-                  margin-#{$right}: 2.5%;
+                  margin-#{$right}: 1.25%;
                 }
               }
             }
@@ -455,7 +480,7 @@ body.ratings-reviews-overlay {
 
             .product-block {
               width: 100%;
-              padding-#{$right}: 0;
+              padding: 0 1.875rem;
             }
 
             &-sidebar {
@@ -497,7 +522,7 @@ body.ratings-reviews-overlay {
           .load-more-wrapper {
             .load-more {
               width: 100%;
-              margin: 0 0.5rem;
+              margin: 0 1.875rem 2rem;
             }
           }
 
@@ -543,6 +568,11 @@ body.ratings-reviews-overlay {
               width: 60%;
             }
           }
+        }
+
+        .load-more-wrapper {
+          padding: 0 1.875rem;
+          margin-bottom: 1.25rem;
         }
       }
     }
