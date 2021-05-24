@@ -46,9 +46,13 @@ export function fetchAPIData(apiUri, params, $context = 'pdp') {
 
 export function postAPIData(apiUri, params, $context = 'pdp') {
   const bazaarVoiceSettings = getbazaarVoiceSettings($context);
-  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}`;
 
-  return Axios.post(url)
+  return Axios.post(url, params, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  })
     .then((response) => {
       const event = new CustomEvent('showMessage', {
         bubbles: true,

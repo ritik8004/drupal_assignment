@@ -31,7 +31,6 @@ export const prepareRequest = (elements, fieldsConfig) => {
   const userId = bazaarVoiceSettings.reviews.user.user_id;
   const userStorage = getStorageInfo(`bvuser_${userId}`);
 
-
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
     // Add input data from field types.
