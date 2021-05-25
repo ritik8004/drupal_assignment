@@ -217,6 +217,12 @@
       &.add-to-bag-loader {
         font-size: 0;
       }
+
+      &-wrapper {
+        button[disabled] {
+          background: $primary_button_disabled;
+        }
+      }
     }
   }
 }
