@@ -103,12 +103,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function processSwatch(ProductInfoRequestedEvent $event): void {
-    // The attribute_code for HnM brand.
-    // EventSubscriber is being triggered to get the swatch data.
-    if ($event->getContext() == 'article_castor_id') {
-      return;
-    }
-
     $sku = $event->getSku();
     // Fetch image data.
     $image = $this->skuImagesManager->getPdpSwatchImageUrl($sku);
