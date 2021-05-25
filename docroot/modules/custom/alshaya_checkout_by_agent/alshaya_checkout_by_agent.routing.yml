@@ -1,0 +1,7 @@
+alshaya_checkout_by_agent.smart_agent_settings:
+  path: '/admin/config/alshaya/smart-agent-settings'
+  defaults:
+    _form: '\Drupal\alshaya_checkout_by_agent\Form\AlshayaSmartAgentSettingsForm'
+    _title: 'Alshaya Smart Agent Settings'
+  requirements:
+    _permission: 'administer alshaya config'
