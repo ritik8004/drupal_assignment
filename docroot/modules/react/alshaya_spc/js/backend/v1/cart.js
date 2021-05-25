@@ -84,3 +84,14 @@ window.commerceBackend.refreshCart = (data) => updateCart(data);
  *   A promise object.
  */
 window.commerceBackend.associateCart = () => callMiddlewareApi('cart/associate', 'GET');
+
+/**
+ * Adds free gift to the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addFreeGift = (data) => callMiddlewareApi('select-free-gift', 'POST', JSON.stringify(data));
