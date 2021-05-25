@@ -88,6 +88,19 @@ function alshaya_tbs_transac_install() {
     ->set('map_marker.active', '/modules/brands/alshaya_tbs/images/tbs-pin-active.svg')
     ->set('map_marker.in_active', '/modules/brands/alshaya_tbs/images/tbs-pin-inactive.svg')
     ->save();
+
+  // Check if the sharethis module exists, then remove this from
+  // the Product CT as set in alshaya_transac.install by default.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    // Get the sharethis configuration.
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    if ($configFactory->get('node_types.acq_product')) {
+      // Disable share this for Product CT.
+      $configFactory->clear('node_types.acq_product');
+    }
+    // Save the changes.
+    $configFactory->save();
+  }
 }
 
 /**
