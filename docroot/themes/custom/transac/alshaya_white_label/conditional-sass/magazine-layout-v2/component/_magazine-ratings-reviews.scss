@@ -492,7 +492,12 @@ body.ratings-reviews-overlay {
                 z-index: 3;
                 background: none;
                 top: 0.5rem;
-                right: 0.625rem;
+                #{$right}: 0.625rem;
+
+                html[lang=ar] & {
+                  top: 0.3125rem;
+                  left: 0.8125rem;
+                }
 
                 &::before {
                   color: $magv2-panel-close-icon;
@@ -621,10 +626,6 @@ body.ratings-reviews-overlay {
   .aggregate-rating {
     padding: 0 0 0.875rem;
     justify-content: $left;
-
-    @include breakpoint($only-mobile) {
-      padding: 0 0.5rem 0.875rem;
-    }
 
     .empty-stars {
       &:hover {
