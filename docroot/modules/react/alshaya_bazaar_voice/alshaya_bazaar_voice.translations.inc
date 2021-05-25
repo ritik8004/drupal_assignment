@@ -83,7 +83,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'يرجى إدخال بيانات إلى %fieldTitle.',
     ],
     'Please select value for %fieldTitle.' => [
-      'ar' => 'يرجى اختيار قيمة إلى %fieldTitle.',
+      'ar' => 'يرجى اختيار بيانات %fieldTitle.',
     ],
     'Show us how it looks! Upload up to 5 pics' => [
       'ar' => 'أرنا كيف يبدو المنتج! حمّل لغاية 5 صور',
