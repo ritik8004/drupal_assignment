@@ -7,3 +7,4 @@ dependencies:
   - bazaar_voice:bazaar_voice
   - alshaya_react:alshaya_react
   - alshaya_spc:alshaya_spc
+  - alshaya_mobile_app:alshaya_mobile_app
