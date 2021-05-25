@@ -4,14 +4,7 @@ import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../../alsh
 /**
  * Ajax call for updating the cart.
  */
-export const updateCart = (postData) => axios({
-  url: `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`,
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  data: JSON.stringify(postData),
-});
+export const updateCart = (postData) => window.commerceBackend.addUpdateRemoveCartItem(postData);
 
 /**
  * Handle the response once the cart is updated.
