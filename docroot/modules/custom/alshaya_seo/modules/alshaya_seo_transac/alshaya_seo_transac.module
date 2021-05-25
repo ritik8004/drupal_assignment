@@ -696,3 +696,10 @@ function _alshaya_seo_transac_datalayer_user_id($uid) {
 
   return $user_customer_id[$uid];
 }
+
+/**
+ * Implements hook_alshaya_mobile_app_skus_product_list_data_alter().
+ */
+function alshaya_seo_transac_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
+  alshaya_seo_transac_alshaya_acm_product_light_product_data_alter($sku, $data, 'full');
+}
