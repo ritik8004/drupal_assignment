@@ -7,14 +7,7 @@ import ReactDOM from 'react-dom';
  *
  * @param {*} selector
  */
-export const updateCart = (url, postData) => axios({
-  url,
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  data: JSON.stringify(postData),
-});
+export const updateCart = (postData) => window.commerceBackend.addToCart(postData);
 
 /**
  * Get post data on add to cart.
@@ -401,9 +394,8 @@ export const addToCartConfigurable = (
     ? productInfo[skuCode].variants[variantSelected].cart_title
     : productInfo[skuCode].variants[variantSelected].title;
   productData.image = productInfo[skuCode].variants[variantSelected].cart_image;
-  const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
 
-  updateCart(cartEndpoint, postData).then(
+  updateCart(postData).then(
     (response) => {
       triggerAddToCart(
         response,
@@ -452,9 +444,7 @@ export const addToCartSimple = (
   productData.product_name = (context === 'main') ? productInfo[skuCode].cart_title : productInfo[skuCode].title;
   productData.image = productInfo[skuCode].cart_image;
 
-  const cartEndpoint = `${drupalSettings.cart_update_endpoint}?lang=${drupalSettings.path.currentLanguage}`;
-
-  updateCart(cartEndpoint, postData).then(
+  updateCart(postData).then(
     (response) => {
       triggerAddToCart(
         response,
