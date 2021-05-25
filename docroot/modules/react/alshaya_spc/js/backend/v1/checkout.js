@@ -75,3 +75,14 @@ window.commerceBackend.addShippingMethod = (data) => updateCart(data);
  *   A promise object.
  */
 window.commerceBackend.addBillingMethod = (data) => updateCart(data);
+
+/**
+ * Places an order.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.saveApplePayPayment = (data) => callMiddlewareApi('payment/checkout-com-apple-pay/save', 'POST', JSON.stringify(data));
