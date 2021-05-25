@@ -8,7 +8,6 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -23,35 +22,18 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
   $productNode = $skuManager->getDisplayNode($sku->getSku());
 
   if ($productNode instanceof NodeInterface) {
-    $config = \Drupal::config('bazaar_voice.settings');
+    /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
+    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
     // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked in bazaarVoice Settings Form.
-    if ($config->get('pdp_rating_reviews')) {
+    if ($basic_configs['pdp_rating_reviews']) {
       return;
     }
     // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked for any categories or its Parent Categories.
-    $showRatingReviews = TRUE;
-    $hide_fields_write_review = [];
-    $category = $productNode->get('field_category')->getValue();
-    foreach ($category as $term) {
-      $term_parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term['target_id']);
-      foreach ($term_parents as $term_obj) {
-        // Enable R&R feature based on category.
-        if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
-          $showRatingReviews = FALSE;
-        }
-        // Get fields from category not be displayed in write a review form.
-        if (!empty($term_obj->get('field_write_review_form_fields')->getValue())) {
-          $field_ids = [];
-          foreach ($term_obj->get('field_write_review_form_fields')->getValue() as $value) {
-            $field_ids[] = $value['value'];
-          }
-          $hide_fields_write_review = $field_ids;
-        }
-      }
-    }
-    if (!$showRatingReviews) {
+    $category_based_config = $alshayaBazaarVoice->getCategoryBasedConfig($productNode);
+    if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
       return;
     }
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
@@ -62,14 +44,12 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
       $image_url = file_create_url($media['drupal_uri']);
     }
 
-    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     // Get avalable sorting options from config.
     $sorting_options = $alshayaBazaarVoice->getSortingOptions();
     // Get avalable BazaarVoice error messages from config.
     $bv_error_messages = $alshayaBazaarVoice->getBazaarVoiceErrorMessages();
     // Get the filter options to be rendered on review summary.
-    $filter_options = \Drupal::config('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
-    $filter_options = Yaml::parse($filter_options);
+    $filter_options = $alshayaBazaarVoice->getPdpFilterOptions();
 
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
@@ -92,34 +72,17 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
         'image_url' => $image_url,
       ],
       'bazaar_voice' => [
-        'endpoint' => $config->get('api_base_url'),
-        'api_version' => $config->get('api_version'),
-        'passkey' => $config->get('conversations_apikey'),
-        'locale' => $config->get('locale'),
-        'content_locale' => $config->get('content_locale'),
-        'max_age' => $config->get('max_age'),
         'stats' => 'Reviews',
-        'Include' => $config->get('bv_content_types'),
         'sorting_options' => $sorting_options,
         'filter_options' => $filter_options,
-        'reviews_pagination_type' => $config->get('reviews_pagination_type'),
-        'reviews_initial_load' => $config->get('reviews_initial_load'),
-        'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
-        'reviews_per_page' => $config->get('reviews_per_page'),
-        'write_review_submission' => $config->get('write_review_submission'),
-        'write_review_tnc' => $config->get('write_review_tnc'),
-        'write_review_guidlines' => $config->get('write_review_guidlines'),
-        'comment_submission' => $config->get('comment_submission'),
-        'comment_form_tnc' => $config->get('comment_form_tnc'),
-        'comment_box_min_length' => $config->get('comment_box_min_length'),
-        'comment_box_max_length' => $config->get('comment_box_max_length'),
         'country_code' => $country_code,
         'error_messages' => $bv_error_messages,
       ],
       'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
       'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
-      'hide_fields_write_review' => $hide_fields_write_review,
+      'hide_fields_write_review' => $category_based_config['hide_fields_write_review'],
     ];
+    $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
 
     // Get the current pdp layout.
     $config = \Drupal::config('alshaya_acm_product.settings');
