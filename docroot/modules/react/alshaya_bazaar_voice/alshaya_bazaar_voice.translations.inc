@@ -80,7 +80,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'أختر...',
     ],
     'Please enter value for %fieldTitle.' => [
-      'ar' => 'يرجى ادخال قيمة إلى %fieldTitle.',
+      'ar' => 'يرجى إدخال بيانات إلى %fieldTitle.',
     ],
     'Please select value for %fieldTitle.' => [
       'ar' => 'يرجى اختيار قيمة إلى %fieldTitle.',
