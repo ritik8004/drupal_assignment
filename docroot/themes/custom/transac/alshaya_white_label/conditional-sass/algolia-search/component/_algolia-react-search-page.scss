@@ -264,6 +264,16 @@
       align-items: center;
     }
   }
+
+  .c-products-list {
+    &.view-algolia-plp,
+    &.view-search {
+      .view-content {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+  }
 }
 
 @include breakpoint($only-mobile) {
