@@ -217,10 +217,14 @@
 }
 
 .short-description-wrapper {
+  padding-bottom: 2.1875rem;
+  border-bottom: 1px solid $pdp_skus_border;
+
   .field {
     &__label {
       font-size: 0.875rem;
       font-family: $alshaya-bold;
+      margin: 1rem 0;
     }
   }
 
@@ -243,16 +247,30 @@
   .field__label {
     font-size: 0.875rem;
     font-family: $alshaya-bold;
+    margin: 1rem 0;
   }
 
   .c-accordion__title {
     border-color: $pdp_product_delivery-border;
     font-size: 0.875rem;
     font-family: $tbs-semibold;
+    padding: 0.5rem 0 0.4375rem;
 
     .subtitle {
       font-size: 0.75rem;
     }
+  }
+}
+
+.description-wrapper {
+  .field__label {
+    font-family: $alshaya-bold;
+    font-size: 0.875rem;
+  }
+
+  .desc-label {
+    font-size: 1.125rem;
+    font-family: $tbs-recoleta-semibold;
   }
 }
 
