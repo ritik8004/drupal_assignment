@@ -95,7 +95,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'نعم',
     ],
     'No' => [
-      'ar' => 'ل',
+      'ar' => 'لا',
     ],
     'The email address %mail is not valid. Please enter a valid email address.' => [
       'ar' => 'البريد الإلكتروني %mail غير صالح. يرجى إدخال بريد إلكتروني صالح.',
@@ -117,6 +117,9 @@ function _alshaya_bazaar_voice_translations() {
     ],
     'Review' => [
       'ar' => 'المراجعة',
+    ],
+    'reviews' => [
+      'ar' => 'مراجعة',
     ],
     'Vote' => [
       'ar' => 'تصويت',

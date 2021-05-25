@@ -13,7 +13,7 @@ const RatingSummary = ({
           <span className="star-label">
             {value.RatingValue}
             {' '}
-            {getStringMessage('star')}
+            {getStringMessage('stars')}
           </span>
           <div className="histogram-full-bar">
             <div style={{ width: `${((value.Count / totalReviewCount).toFixed(1)) * 100}%` }} className="histogram-dynamic-bar" />
