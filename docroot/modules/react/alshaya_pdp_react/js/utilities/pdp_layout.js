@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
  *
  * @param {*} selector
  */
-export const updateCart = (postData) => window.commerceBackend.addToCart(postData);
+export const updateCart = (postData) => window.commerceBackend.addUpdateRemoveCartItem(postData);
 
 /**
  * Get post data on add to cart.

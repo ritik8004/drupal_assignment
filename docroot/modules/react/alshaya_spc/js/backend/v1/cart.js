@@ -39,7 +39,7 @@ window.commerceBackend.restoreCart = () => callMiddlewareApi('cart/restore', 'GE
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.addToCart = (data) => updateCart(data);
+window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
 
 /**
  * Applies/Removes promo code to the cart and returns the cart.
