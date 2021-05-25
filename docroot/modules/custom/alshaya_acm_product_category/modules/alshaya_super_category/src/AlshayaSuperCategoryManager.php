@@ -184,4 +184,21 @@ class AlshayaSuperCategoryManager {
     return !empty($super_categories) ? array_values(array_unique($super_categories)) : $super_categories;
   }
 
+  /**
+   * Helper function to get the default_category_tid.
+   *
+   * @return mixed
+   *   return term id if enabled or NULL.
+   */
+  public function getDefaultCategoryId() {
+    $default_category_tid = &drupal_static(__FUNCTION__);
+    if (!isset($default_category_tid)) {
+      $status = $this->configFactory->get('alshaya_super_category.settings')->get('status');
+      if ($status) {
+        $default_category_tid = alshaya_super_category_get_default_term();
+      }
+    }
+    return !empty($default_category_tid) ? $default_category_tid : NULL;
+  }
+
 }
