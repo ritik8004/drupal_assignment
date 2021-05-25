@@ -1,0 +1,3 @@
+permissions:
+  - 'restful get bazaar_voice_configs'
+  - 'restful get write_review_config'
