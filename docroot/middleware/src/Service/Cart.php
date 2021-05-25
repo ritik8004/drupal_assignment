@@ -1226,15 +1226,15 @@ class Cart {
     // JIRA Ticket No.: CORE-29691
     // Add smart agent details in extension attribute to track
     // orders by in-store devices.
-    $cookies = $this->request->cookies->get('smart_agent_cookie');
+    $smart_agent_cookie = $this->request->cookies->get('smart_agent_cookie');
 
-    if (!empty($cookies)) {
+    if (!empty($smart_agent_cookie)) {
       if (isset($data['extension'])) {
         $data['extension'] = !is_array($data['extension'])
           ? (array) $data['extension']
           : $data['extension'];
       }
-      $decoded_cookies = base64_decode($cookies);
+      $decoded_cookies = base64_decode($smart_agent_cookie);
       $data['extension']['smart_agent_email'] = json_decode($decoded_cookies, TRUE)['email'] ?? '';
 
       // Logging data sent to updateCart API call.

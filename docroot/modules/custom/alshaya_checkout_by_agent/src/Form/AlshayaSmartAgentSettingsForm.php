@@ -37,7 +37,7 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
     $form['smart_user_agents'] = [
       '#type' => 'textarea',
       '#title' => $this->t('User Agents'),
-      '#description' => $this->t('Separate user agents in a newline. Eg.: <br/> iPad <br/> iPhone'),
+      '#description' => $this->t('Separate user agents in a newline. Eg.: <br/> AlshayaSmartAgentDevice <br/> iPad'),
       '#default_value' => implode(PHP_EOL, $user_agents),
     ];
     $form['smart_agent_ips'] = [
