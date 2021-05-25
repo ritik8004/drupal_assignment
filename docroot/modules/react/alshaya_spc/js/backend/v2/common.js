@@ -23,11 +23,7 @@ const isAnonymousUserWithoutCart = () => {
  * @param {string} path
  *  The API path.
  */
-const i18nMagentoUrl = (path) => {
-  let url = `${window.drupalSettings.cart.url}/${window.drupalSettings.cart.store}${path}`;
-  url = `/proxy.php?url=${url}`; // @todo remove this when CORS is enabled on Magento API
-  return url;
-};
+const i18nMagentoUrl = (path) => `${window.drupalSettings.cart.url}/${window.drupalSettings.cart.store}${path}`;
 
 /**
  * Make an AJAX call to Magento API.
