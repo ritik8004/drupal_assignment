@@ -18,6 +18,7 @@ services:
       - '@redirect.repository'
       - '@alshaya_acm_product.sku_info'
       - '@database'
+      - '@alshaya_super_category.super_category_feature_manager'
   alshaya_mobile_app.utility.paragraphs:
     class: Drupal\alshaya_mobile_app\Service\MobileAppUtilityParagraphs
     decorates: alshaya_mobile_app.utility
@@ -44,6 +45,7 @@ services:
       - '@alshaya_acm_product.sku_info'
       - '@plugin.manager.block'
       - '@database'
+      - '@alshaya_super_category.super_category_feature_manager'
   alshaya_mobile_app.alshaya_search_api_query_execute:
     class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
     arguments:
