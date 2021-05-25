@@ -69,7 +69,7 @@ const ApplePay = {
   },
 
   onPaymentAuthorized: (event) => {
-    window.commerceBackend.setApplePayPayment(event.payment.token).then((response) => {
+    window.commerceBackend.saveApplePayPayment(event.payment.token).then((response) => {
       if (response.data.success !== undefined && response.data.success === true) {
         // Update apple pay popup.
         applePaySessionObject.completePayment(window.ApplePaySession.STATUS_SUCCESS);
