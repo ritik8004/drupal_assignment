@@ -1,0 +1,10 @@
+alshaya_checkout_by_agent.settings:
+  type: config_object
+  label: 'Alshaya Smart Agent Settings'
+  mapping:
+    smart_user_agents:
+      type: sequence
+      label: 'User agents of the smart agents of in-store devices.'
+    smart_agent_ips:
+      type: string
+      label: 'IP addresses of the smart agents of in-store devices.'
