@@ -40,6 +40,7 @@ $success-green: #39b54a;
 $alizarin: #e51b23;
 $grey-four: #ddd;
 $green-two: #357a74;
+$frangipani: #ffd1a1;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -290,7 +291,22 @@ $pdp_form_item_arrow: $cyprus;
 $basket_available_code: $cyprus;
 
 // Basket top promotions
-$basket_fixed_percentage_inactive_header_promo_bg: $cyprus;
+$basket_free_delivery_active_header_promo_bg: $stem-green;
+$basket_free_delivery_active_header_promo_txt: $black;
+$basket_free_delivery_active_header_promo_border: $stem-green;
+$basket_free_delivery_inactive_header_promo_bg: $white;
+$basket_free_delivery_inactive_header_promo_txt: $black;
+$basket_free_delivery_inactive_header_promo_border: $stem-green;
+$basket_active_promotion_icon: $black;
+$basket_fixed_percentage_active_header_promo_bg: $frangipani;
+$basket_fixed_percentage_active_header_promo_txt: $black;
+$basket_fixed_percentage_active_header_promo_border: $frangipani;
+$basket_fixed_percentage_threshold_reached_bg: $white;
+$basket_fixed_percentage_inactive_header_promo_border: $frangipani;
+$basket_fixed_percentage_inactive_header_promo_bg: $white;
+$basket_fixed_percentage_inactive_header_promo_txt: $black;
+$basket_fixed_percentage_inactive_header_promo_border_color: $frangipani;
+$basket_fixed_percentage_inactive_header_promo_color: $black;
 
 // Pace progress color
 $progress_loader: $stem-green;
