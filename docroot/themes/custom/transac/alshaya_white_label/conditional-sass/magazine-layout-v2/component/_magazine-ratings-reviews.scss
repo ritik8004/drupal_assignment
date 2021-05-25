@@ -484,6 +484,10 @@ body.ratings-reviews-overlay {
               margin-#{$left}: -0.3125rem;
               z-index: 5;
 
+              @include breakpoint($only-mobile) {
+                width: 100%;
+              }
+
               .close-modal {
                 z-index: 3;
                 background: none;
