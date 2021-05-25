@@ -153,14 +153,14 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Write a review T&C url'),
       '#default_value' => $config->get('write_review_tnc'),
-      '#description' => $this->t('URL of Write Review Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
+      '#description' => $this->t('URL of Write Review Terms and Conditions. URL format should be an alias e.g write-review-terms-conditions.'),
     ];
 
     $form['basic_settings']['write_review_guidlines'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Write a review guidelines url'),
       '#default_value' => $config->get('write_review_guidlines'),
-      '#description' => $this->t('URL of Write Review Guidelines. URL format should be /url-name e.g /review-guidelines'),
+      '#description' => $this->t('URL of Write Review Guidelines. URL format should be an alias e.g write-review-guidelines.'),
     ];
 
     $form['basic_settings']['comment_submission'] = [
@@ -178,7 +178,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Comments T&C url'),
       '#default_value' => $config->get('comment_form_tnc'),
-      '#description' => $this->t('URL of Comment Form Terms and Conditions. URL format should be /url-name e.g /terms-conditions'),
+      '#description' => $this->t('URL of Comment Form Terms and Conditions. URL format should be an alias e.g comments-terms-conditions.'),
       '#states' => [
         'visible' => [
           'input[name="comment_submission"]' => [

@@ -27,7 +27,7 @@ class ReviewCommentForm extends React.Component {
 
   showCommentForm = () => {
     const { commentbox, nickname, email } = this.state;
-    const commentTncUri = `/${getLanguageCode()}${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
+    const commentTncUri = `/${getLanguageCode()}/${bazaarVoiceSettings.reviews.bazaar_voice.comment_form_tnc}`;
     return (
       <div className="review-comment-form">
         <form id="comment-form" onSubmit={this.handleSubmit} noValidate>
