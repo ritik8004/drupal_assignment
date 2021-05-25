@@ -129,7 +129,7 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
     $skuDelete = FALSE;
     $node = [];
     if (!($entity instanceof SKU)) {
-      $this->getLogger('PostProcessProduct')->notice('SKU flagged for delete from dy product feed: @sku as not able to load SKU', [
+      $this->getLogger('PostProcessProduct')->notice('SKU flagged for OOS on dy product feed: @sku as not able to load SKU', [
         '@sku' => $sku,
       ]);
 
@@ -140,6 +140,12 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
     }
 
     if (!($node instanceof NodeInterface) || $skuDelete) {
+      // If Sku entity is not found then directly mark SKU OOS in delta feed.
+      if ($skuDelete) {
+        $this->markProductOutOfStock($feeds, $sku);
+        return;
+      }
+
       // Get children of the SKU.
       $children = $this->skuManager->getChildSkus($sku);
 
