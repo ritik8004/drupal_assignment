@@ -226,7 +226,6 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
   if ($cart_version == 2) {
-    $page['#attached']['drupalSettings']['cart']['version'] = $cart_version;
     $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
     $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
     $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$current_language];
