@@ -2,7 +2,7 @@
 
 nb_to_keep=5
 
-repos="alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@svn-25.enterprise-g1.hosting.acquia.com:alshaya2.git alshaya3bis@svn-25.enterprise-g1.hosting.acquia.com:alshaya3bis.git alshaya4@svn-25.enterprise-g1.hosting.acquia.com:alshaya4.git alshaya5@svn-25.enterprise-g1.hosting.acquia.com:alshaya5.git"
+repos="alshaya@svn-5975.enterprise-g1.hosting.acquia.com:alshaya.git alshaya2@svn-5975.enterprise-g1.hosting.acquia.com:alshaya2.git alshaya3bis@svn-5975.enterprise-g1.hosting.acquia.com:alshaya3bis.git alshaya4@svn-5975.enterprise-g1.hosting.acquia.com:alshaya4.git alshaya5@svn-5975.enterprise-g1.hosting.acquia.com:alshaya5.git"
 for repo in $repos ; do
   i=0
   to_delete=""
@@ -19,7 +19,7 @@ for repo in $repos ; do
         to_delete="$tag"
       else
         to_delete+=" $tag"
-      fi    
+      fi
     fi
   done
   echo
