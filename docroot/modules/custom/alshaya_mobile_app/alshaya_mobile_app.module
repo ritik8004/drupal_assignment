@@ -10,7 +10,6 @@ use Drupal\node\NodeInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\taxonomy\TermInterface;
-use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_alshaya_click_and_collect_config_alter().
