@@ -516,3 +516,67 @@ export const getProductInfo = (sku) => {
     return error;
   });
 };
+
+export const isMaxSaleQtyReached = (selectedVariant, productData) => {
+  // Early return if max sale quantity check is disabled.
+  if (!isMaxSaleQtyEnabled()) {
+    return false;
+  }
+
+  // Fetch the cart data present in local storage.
+  const cartData = Drupal.alshayaSpc.getCartData();
+
+  // Return if cart is empty.
+  if (!cartData) {
+    return false;
+  }
+
+  // Define the default cart and max sale quantity 0.
+  let cartQtyForVariant = 0;
+  let maxSaleQtyOfSelectedVariant = 0;
+
+  // We will check for the sku specific max sale limit first.
+  // Get the product quantity from cart items for the selected variant only.
+  if (typeof cartData.items[selectedVariant] !== 'undefined') {
+    cartQtyForVariant = cartData.items[selectedVariant].qty;
+  }
+
+  // Get the product max sale quantity for the selected variant only.
+  for (let index = 0; index < productData.variants.length; index++) {
+    if (productData.variants[index].sku === selectedVariant) {
+      maxSaleQtyOfSelectedVariant = productData.variants[index].max_sale_qty;
+      break;
+    }
+  }
+
+  // Check if max sale quantity limit has been reached.
+  if (cartQtyForVariant >= maxSaleQtyOfSelectedVariant
+    && maxSaleQtyOfSelectedVariant > 0) {
+    return true;
+  }
+
+  // If the sku specific max sale limit is not reached,
+  // If the max sale quantity is enable for the parent sku,
+  // then we will sum all the child sku's quantity in cart.
+  if (productData.max_sale_qty_parent_enable) {
+    // Get the max sale quantity limit from the parent.
+    maxSaleQtyOfSelectedVariant = productData.max_sale_qty_parent;
+
+    // If max sale for parent sku enable, we will sum all the child variants
+    // quantity in cart and consider the global qty limit.
+    for (let index = 0; index < productData.variants.length; index++) {
+      const childSku = productData.variants[index].sku;
+      if (typeof cartData.items[childSku] !== 'undefined') {
+        cartQtyForVariant += cartData.items[childSku].qty;
+      }
+    }
+
+    // Check if max sale quantity limit has been reached.
+    if (cartQtyForVariant >= maxSaleQtyOfSelectedVariant
+      && maxSaleQtyOfSelectedVariant > 0) {
+      return true;
+    }
+  }
+
+  return false;
+};

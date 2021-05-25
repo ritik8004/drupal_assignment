@@ -196,6 +196,17 @@ class ProductInfoResource extends ResourceBase {
           }
         }
 
+        // Set max_sale_qty_parent_enable FALSE by default.
+        $data['max_sale_qty_parent_enable'] = FALSE;
+
+        // If parent sku has a max sale quantity limit, enable the parent
+        // max sale quantity check and pass the quantity for conditional checks.
+        $parent_stock_info = $this->skuInfoHelper->stockInfo($sku);
+        if (!empty($parent_stock_info['max_sale_qty'])) {
+          $data['max_sale_qty_parent_enable'] = TRUE;
+          $data['max_sale_qty_parent'] = $parent_stock_info['max_sale_qty'];
+        }
+
         // Store a hierarchy of related attributes and values.
         $attribute_hierarchy = [];
 
@@ -250,12 +261,6 @@ class ProductInfoResource extends ResourceBase {
           // disabled will be passed in drupalSettings.
           $stock_info = $this->skuInfoHelper->stockInfo($child);
           $child_data['max_sale_qty'] = $stock_info['max_sale_qty'];
-
-          // We check parent's for value and override child's value.
-          $parent_stock_info = $this->skuInfoHelper->stockInfo($sku);
-          if (!empty($parent_stock_info['max_sale_qty'])) {
-            $child_data['max_sale_qty'] = $parent_stock_info['max_sale_qty'];
-          }
 
           $data['variants'][] = $child_data;
 
