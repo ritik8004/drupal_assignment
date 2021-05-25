@@ -184,6 +184,8 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       : file_create_url($assets[0]['drupal_uri']);
 
     $event->setValue($swatch);
+
+    $event->stopPropagation();
   }
 
 }
