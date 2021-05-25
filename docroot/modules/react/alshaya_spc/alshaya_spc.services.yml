@@ -72,3 +72,8 @@ services:
       - ['setPurger', ['@?purge.purgers']]
       - ['setPurgeProcessor', ['@?purge.processors']]
       - ['setPurgeInvalidationFactory', ['@?purge.invalidation.factory']]
+
+  alshaya_spc.helper:
+    class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+    arguments:
+      - '@config.factory'
