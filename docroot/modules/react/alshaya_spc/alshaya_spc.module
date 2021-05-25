@@ -241,14 +241,3 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $current_path = rtrim($current_path, '/');
 
 }
-
-/**
- * Implements hook_library_info_alter().
- */
-function alshaya_spc_library_info_alter(&$libraries, $extension) {
-  if ($extension === 'alshaya_spc') {
-    $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
-    $libraries['mini_cart']['dependencies'][] = 'alshaya_spc/commerce_backend.cart.v' . $backend_version;
-    $libraries['checkout']['dependencies'][] = 'alshaya_spc/commerce_backend.checkout.v' . $backend_version;
-  }
-}
