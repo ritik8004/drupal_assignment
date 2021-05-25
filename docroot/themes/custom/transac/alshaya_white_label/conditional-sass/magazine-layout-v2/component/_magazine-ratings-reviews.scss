@@ -215,6 +215,7 @@ body.ratings-reviews-overlay {
 
               .thumbnail-img-block {
                 overflow-y: auto;
+                margin-top: 1.5rem;
 
                 .popup-content {
                   #{$left}: 0 !important;
@@ -510,6 +511,10 @@ body.ratings-reviews-overlay {
             .product-block {
               width: 100%;
               padding: 0 1.875rem;
+
+              .product-image-block {
+                padding-top: 4rem;
+              }
             }
 
             &-sidebar {
