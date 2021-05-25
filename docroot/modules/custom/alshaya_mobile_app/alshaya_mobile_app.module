@@ -149,23 +149,3 @@ function alshaya_mobile_app_acq_sku_commerce_category_alter(TermInterface $term,
     }
   }
 }
-
-/**
- * Implements hook_alshaya_mobile_app_skus_product_list_data_alter().
- */
-function alshaya_mobile_app_alshaya_mobile_app_skus_product_list_data_alter(array &$data, SKUInterface $sku) {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  $productNode = $skuManager->getDisplayNode($sku->getSku());
-  if ($productNode instanceof NodeInterface) {
-    /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtmManager */
-    $gtmManager = \Drupal::service('alshaya_seo_transac.gtm_manager');
-    $attributes = $gtmManager->fetchProductGtmAttributes($productNode, 'full', !empty($data['parent_sku']) ? $sku : NULL);
-    $data['gtm_attributes'] = $gtmManager->convertHtmlAttributesToDatalayer($attributes);
-
-    if ($sku->bundle() === 'simple') {
-      $data['gtm_attributes']['variant'] = $sku->getSku();
-    }
-  }
-}
