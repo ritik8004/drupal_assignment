@@ -276,10 +276,12 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
                 $order['cancelled_items'][] = $cancelled_item;
               }
             }
+
             $order['status'] = alshaya_acm_customer_get_order_status($order);
             $order['refund_text'] = $this->ordersManager->getRefundText($order['payment']['method']);
             $order['total_quantity'] = alshaya_acm_customer_get_order_total_quantity($order);
           }
+
           $build['recent_order'][] = [
             '#theme' => 'user_recent_order',
             '#order' => $order,
@@ -300,6 +302,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
         ];
       }
     }
+
     return $build;
   }
 

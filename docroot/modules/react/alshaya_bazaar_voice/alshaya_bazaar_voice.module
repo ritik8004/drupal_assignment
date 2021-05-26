@@ -33,15 +33,19 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     // Get the current pdp layout.
     $config = \Drupal::config('alshaya_acm_product.settings');
     $product_pdp_layout = $config->get('pdp_layout');
+
     if (!empty($productNode->get('field_select_pdp_layout')->getValue()[0]['value'])) {
       $product_pdp_layout = $productNode->get('field_select_pdp_layout')->getValue()[0]['value'];
     }
+
     $build['reviews_rating']['#markup'] = '<div id="reviews-rating"></div>';
     $build['reviews_section']['#markup'] = '<div id="reviews-section"></div>';
+
     if ($product_pdp_layout !== 'magazine_v2') {
       $build['#attached']['library'][] = 'alshaya_bazaar_voice/rating';
       $build['#attached']['library'][] = 'alshaya_bazaar_voice/reviews';
     }
+
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
     $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
     $build['#attached']['drupalSettings']['productInfo'][$sanitized_sku]['alshaya_bazaar_voice'] = $settings;
