@@ -49,3 +49,9 @@ fields:
     cardinality: -1
     facet: 1
     index: 1
+  color:
+    display_configurable_for: 'color_swatch_code'
+  color_swatch_code:
+    label: 'Color swatch code'
+    type: 'string'
+    translatable: 0

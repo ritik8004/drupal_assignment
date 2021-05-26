@@ -221,74 +221,6 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-  $tree = [];
-  if ($tree_sku = $form_state->get('tree_sku')) {
-    $sku = SKU::loadFromSku($tree_sku);
-    $tree = Configurable::deriveProductTree($sku);
-  }
-
-  // Check if the product is configurable.
-  if (!empty($tree['parent'])) {
-    $parent_sku = $tree['parent'];
-    /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_asset_manager */
-    $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $swatch_type = $sku_asset_manager->getSkuSwatchType($parent_sku);
-
-    // If the form has color config attribute available.
-    if (isset($form['ajax']['configurables']['article_castor_id'])) {
-      $options = &$form['ajax']['configurables']['article_castor_id']['#options'];
-      $form['ajax']['configurables']['article_castor_id']['#title'] = t('Color');
-      $form['ajax']['configurables']['article_castor_id']['#attributes']['data-default-title'] = t('Color');
-
-      // Translate color attribute option values to the rgb color values &
-      // expose the same in Drupal settings to javascript.
-      foreach ($options as $key => $option) {
-        if (isset($tree['combinations']['attribute_sku']['article_castor_id'][$key])) {
-          foreach ($tree['combinations']['attribute_sku']['article_castor_id'][$key] as $variant_sku_code) {
-            $variant_sku = SKU::loadFromSku($variant_sku_code);
-
-            if (!($variant_sku instanceof SKU)) {
-              continue;
-            }
-
-            $assets = [];
-            if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-              $assets = $sku_asset_manager->getSkuAssets($variant_sku, 'swatch');
-            }
-
-            $options[$key] = $variant_sku->get('attr_color_label')->getString();
-
-            // If swatch type is not miniature_image or assets were missing from
-            // sku, use rgb color code instead.
-            $sku_configurable_options_color[$key] = [
-              'display_label' => $options[$key],
-              'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
-            ];
-
-            if (empty($assets)) {
-              $sku_configurable_options_color[$key]['display_value'] = $variant_sku->get('attr_rgb_color')->getString();
-            }
-            else {
-              $url = ImageStyle::load('pdp_gallery_thumbnail')->buildUrl($assets[0]['drupal_uri']);
-              $sku_configurable_options_color[$key]['display_value'] = '<img src="' . file_url_transform_relative($url) . '">';
-            }
-
-            break;
-          }
-        }
-      }
-
-      if (!empty($sku_configurable_options_color)) {
-        $form['ajax']['configurables']['article_castor_id']['#attached']['drupalSettings']['sku_configurable_options_color'] = $sku_configurable_options_color;
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_acq_sku_base_field_additions_alter().
  */
 function alshaya_hm_images_acq_sku_base_field_additions_alter(array &$fields = []) {
@@ -364,5 +296,24 @@ function alshaya_hm_images_alshaya_acm_switch_magento_configs_alter(array &$conf
 function alshaya_hm_images_block_view_alter(array &$build, BlockPluginInterface $block) {
   if ($build['#configuration']['id'] == 'alshaya_algolia_react_autocomplete') {
     $build['#attached']['library'][] = 'alshaya_hm_images/hm_images';
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_pdp_swath_type_alter();
+ */
+function alshaya_hm_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
+  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_asset_manager */
+  $sku_asset_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  $swatch_type = $sku_asset_manager->getSkuSwatchType($sku);
+
+  $assets = [];
+  if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
+    $assets = $sku_asset_manager->getSkuAssets($variant_sku, 'swatch');
+  }
+
+  if (!empty($assets)) {
+    $url = ImageStyle::load('pdp_gallery_thumbnail')->buildUrl($assets[0]['drupal_uri']);
+    $color_options_list[key($color_options_list)]['display_value'] = '<img src="' . file_url_transform_relative($url) . '">';
   }
 }

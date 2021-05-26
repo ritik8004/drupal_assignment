@@ -239,6 +239,7 @@ Drupal.alshaya_color_images_generate_swatch_markup = function (currentOption, se
   'use strict';
 
   if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id') ||
+    (select.attr('data-drupal-selector') === 'edit-configurables-color') ||
     (select.attr('data-drupal-selector') === 'edit-variants-in-group') &&
     (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
     (drupalSettings.sku_configurable_options_color.hasOwnProperty(option_id))) {
