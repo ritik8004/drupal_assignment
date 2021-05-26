@@ -554,11 +554,11 @@ class AlshayaBazaarVoice {
    */
   public function getBazaarvoiceStrings() {
     \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
-    $bazaar_voice_strings = [
-      '#theme' => 'alshaya_bazaar_voice_strings',
+    $strings = [
+      '#theme' => 'alshaya_strings',
       '#strings' => _alshaya_bazaar_voice_static_strings(),
     ];
-    return $bazaar_voice_strings;
+    return $strings;
   }
 
   /**

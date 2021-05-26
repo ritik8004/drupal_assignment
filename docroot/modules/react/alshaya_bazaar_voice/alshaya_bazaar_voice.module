@@ -57,7 +57,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
  */
 function alshaya_bazaar_voice_theme($existing, $type, $theme, $path) {
   return [
-    'alshaya_bazaar_voice_strings' => [
+    'alshaya_strings' => [
       'variables' => [
         'strings' => [],
       ],
@@ -181,8 +181,8 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }
-  if (!isset($build['bazaar_voice_strings'])) {
-    $build['bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
+  if (!isset($build['strings'])) {
+    $build['strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   }
 }
 
@@ -201,5 +201,5 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
       $build['#products'][$key]['bazaarvoice_link'] = TRUE;
     }
   }
-  $build['#bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
+  $build['#strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
 }

@@ -106,7 +106,7 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
     $build['myaccount']['#markup'] = '<div id="myaccount-reviews"></div>';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/myaccount';
     $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
-    $build['bazaar_voice_strings'] = $this->alshayaBazaarVoice->getBazaarvoiceStrings();
+    $build['strings'] = $this->alshayaBazaarVoice->getBazaarvoiceStrings();
 
     return $build;
   }
