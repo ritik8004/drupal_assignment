@@ -1,0 +1,12 @@
+.swatch-list {
+  .li-swatch-image,
+  .li-swatch-color {
+    a {
+      &.active {
+        &::after {
+          border-color: $plp-quick-view-product-color-swatch-border;
+        }
+      }
+    }
+  }
+}
