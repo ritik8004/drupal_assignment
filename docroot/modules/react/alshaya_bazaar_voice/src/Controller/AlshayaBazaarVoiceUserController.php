@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
 
 /**
  * This controller contains methods for user account reviews.
@@ -37,6 +38,13 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * Alshaya bazaar voice service object.
+   *
+   * @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice
+   */
+  protected $alshayaBazaarVoice;
+
+  /**
    * AlshayaBazaarVoiceUserController constructor.
    *
    * @param \Drupal\Core\Session\AccountProxyInterface $current_account
@@ -45,13 +53,17 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
    *   Config Factory.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice
+   *   Alshaya bazaar voice service.
    */
   public function __construct(AccountProxyInterface $current_account,
                               ConfigFactoryInterface $config_factory,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              AlshayaBazaarVoice $alshayaBazaarVoice) {
     $this->currentUser = $current_account;
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
+    $this->alshayaBazaarVoice = $alshayaBazaarVoice;
   }
 
   /**
@@ -61,7 +73,8 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
     return new static(
       $container->get('current_user'),
       $container->get('config.factory'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_bazaar_voice.service')
     );
   }
 
@@ -93,7 +106,7 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
     $build['myaccount']['#markup'] = '<div id="myaccount-reviews"></div>';
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/myaccount';
     $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
-    $build['bazaar_voice_strings'] = alshaya_bazaar_voice_get_bazaarvoice_strings();
+    $build['bazaar_voice_strings'] = $this->alshayaBazaarVoice->getBazaarvoiceStrings();
 
     return $build;
   }

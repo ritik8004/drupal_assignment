@@ -53,7 +53,11 @@ export function postAPIData(apiUri, params, productId = undefined) {
   const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
   const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
-  return Axios.post(url)
+  return Axios.post(url, params, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  })
     .then((response) => {
       const event = new CustomEvent('showMessage', {
         bubbles: true,

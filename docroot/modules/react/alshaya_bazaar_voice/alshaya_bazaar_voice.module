@@ -27,7 +27,8 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     // Get sanitized sku.
     $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
 
-    $settings = _alshaya_bazaar_voice_get_product_bazaarvoice_data($sku, $productNode, $sanitized_sku);
+    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    $settings = $alshayaBazaarVoice->getProductBazaarVoiceDetails($sku, $productNode, $sanitized_sku);
 
     // Get the current pdp layout.
     $config = \Drupal::config('alshaya_acm_product.settings');
@@ -153,173 +154,48 @@ function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, 
 }
 
 /**
- * Get attached libary and settings for bazaarvoice myaccount.
- *
- * @param array $build
- *   Reference to the build array of recent order.
- */
-function _alshaya_bazaar_voice_get_recentorder_attachment($settings) {
-  $attached = [
-    'library' => [
-      'alshaya_bazaar_voice/myorders',
-      'alshaya_bazaar_voice/iovation',
-    ],
-    'drupalSettings' => [
-      'productInfo' => $settings,
-    ]
-  ];
-  return $attached;
-}
-
-/**
- * Fetch product details for my account page.
- *
- * @param string $sku
- *   Sku id of the product.
- * 
- * @return array
- *   Details for all the products.
- */
-function _alshaya_bazaar_voice_get_product_settings($sku_id) {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $productNode = $skuManager->getDisplayNode($sku_id);
-  if ($productNode instanceof NodeInterface) {   
-    // Load SKU entity.
-    $langcode = $productNode->language()->getId();
-    $sku = SKU::loadFromSku($sku_id, $langcode);
-    // Get sanitized sku.
-    $sanitized_sku = $skuManager->getSanitizedSku($sku_id);
-    $productArray['alshaya_bazaar_voice'] = _alshaya_bazaar_voice_get_product_bazaarvoice_data($sku, $productNode, $sanitized_sku);
-    return $productArray;
-  }
-  return NULL;
-}
-
-/**
- * Fetch drupal settings for individual product.
- *
- * @param string $sku
- *   Sku id of the product.
- * 
- * @return array
- *   Drupal settings with product details.
- */
-function _alshaya_bazaar_voice_get_product_bazaarvoice_data(SKUInterface $sku, $productNode, $sanitized_sku) {
-  $config = \Drupal::config('bazaar_voice.settings');
-  // Disable BazaarVoice Rating and Review in PDP
-  // if checkbox is checked in bazaarVoice Settings Form.
-  if ($config->get('pdp_rating_reviews')) {
-    return;
-  }
-  // Disable BazaarVoice Rating and Review in PDP
-  // if checkbox is checked for any categories or its Parent Categories.
-  $showRatingReviews = TRUE;
-  $hide_fields_write_review = [];
-  $category = $productNode->get('field_category')->getValue();
-  foreach ($category as $term) {
-    $term_parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term['target_id']);
-    foreach ($term_parents as $term_obj) {
-      // Enable R&R feature based on category.
-      if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
-        $showRatingReviews = FALSE;
-      }
-      // Get fields from category not be displayed in write a review form.
-      if (!empty($term_obj->get('field_write_review_form_fields')->getValue())) {
-        $field_ids = [];
-        foreach ($term_obj->get('field_write_review_form_fields')->getValue() as $value) {
-          $field_ids[] = $value['value'];
-        }
-        $hide_fields_write_review = $field_ids;
-      }
-    }
-  }
-  if (!$showRatingReviews) {
-    return;
-  }
-  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-  $media = $skuImagesManager->getFirstImage($sku, 'pdp');
-  $image_url = '';
-  if (!empty($media)) {
-    $image_url = file_create_url($media['drupal_uri']);
-  }
-
-  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
-  // Get avalable sorting options from config.
-  $sorting_options = $alshayaBazaarVoice->getSortingOptions();
-  // Get avalable BazaarVoice error messages from config.
-  $bv_error_messages = $alshayaBazaarVoice->getBazaarVoiceErrorMessages();
-  // Get the filter options to be rendered on review summary.
-  $filter_options = \Drupal::config('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
-  $filter_options = Yaml::parse($filter_options);
-
-  // Get country code.
-  $country_code = _alshaya_custom_get_site_level_country_code();
-
-  // Check if logged in user has already reviewed the product.
-  $productReviewData = $alshayaBazaarVoice->getProductInfoForCurrentUser($sanitized_sku);
-
-  $settings = [
-    'user' => [
-      'email' => \Drupal::currentUser()->getEmail(),
-      'id' => \Drupal::currentUser()->id(),
-      'name' => \Drupal::currentUser()->getUsername(),
-      'review' => $productReviewData !== null ? $productReviewData : null,
-    ],
-    'product' => [
-      'url' => $productNode->toUrl()->toString(),
-      'title' => $productNode->label(),
-      'image_url' => $image_url,
-    ],
-    'bazaar_voice' => [
-      'endpoint' => $config->get('api_base_url'),
-      'api_version' => $config->get('api_version'),
-      'passkey' => $config->get('conversations_apikey'),
-      'locale' => $config->get('locale'),
-      'content_locale' => $config->get('content_locale'),
-      'max_age' => $config->get('max_age'),
-      'stats' => 'Reviews',
-      'Include' => $config->get('bv_content_types'),
-      'sorting_options' => $sorting_options,
-      'filter_options' => $filter_options,
-      'reviews_pagination_type' => $config->get('reviews_pagination_type'),
-      'reviews_initial_load' => $config->get('reviews_initial_load'),
-      'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
-      'reviews_per_page' => $config->get('reviews_per_page'),
-      'write_review_submission' => $config->get('write_review_submission'),
-      'write_review_tnc' => $config->get('write_review_tnc'),
-      'write_review_guidlines' => $config->get('write_review_guidlines'),
-      'comment_form_tnc' => $config->get('comment_form_tnc'),
-      'comment_box_min_length' => $config->get('comment_box_min_length'),
-      'comment_box_max_length' => $config->get('comment_box_max_length'),
-      'country_code' => $country_code,
-      'error_messages' => $bv_error_messages,
-    ],
-    'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
-    'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
-    'hide_fields_write_review' => $hide_fields_write_review,
-  ];
-
-  return $settings;
-}
-
-/**
  * Implements hook_preprocess_node().
  */
 function alshaya_bazaar_voice_preprocess_node(&$variables) {
   // Add bazaavoice related strings.
   if ($variables['node']->bundle() === 'acq_product') {
-    $variables['bazaar_voice_strings'] = alshaya_bazaar_voice_get_bazaarvoice_strings();
+    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    $variables['bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   }
 }
 
+/**
+ * Implements hook_alshaya_acm_customer_build_product_details_alter().
+ */
+function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  $bazaarvoiceSettings = [];
+  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+  foreach (array_keys($build['recent_order']) as $key) {
+    foreach ($build['recent_order'][$key]['#order']['items'] as $item_key => $item) {
+      $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
+      $bazaarvoiceSettings[$item['sku']] = $alshayaBazaarVoice->getMyAccountProductSettings($item['sku']);
+    }
+    $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
+  }
+  if (!isset($build['bazaar_voice_strings'])) {
+    $build['bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
+  }
+}
 
-function alshaya_bazaar_voice_get_bazaarvoice_strings() {
-  \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
-  $bazaar_voice_strings = [
-    '#theme' => 'alshaya_bazaar_voice_strings',
-    '#strings' => _alshaya_bazaar_voice_static_strings(),
-  ];
-  return $bazaar_voice_strings;
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  $bazaarvoiceSettings = [];
+  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+  foreach ($order['items'] as $key => $item) {
+    $bazaarvoiceSettings[$item['sku']] = $alshayaBazaarVoice->getMyAccountProductSettings($item['sku']);
+  }
+  if (!empty($bazaarvoiceSettings)) {
+    $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings); 
+    foreach(array_keys($build['#products']) as $key) {
+      $build['#products'][$key]['bazaarvoice_link'] = TRUE;
+    }
+  }
+  $build['#bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
 }

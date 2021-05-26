@@ -133,16 +133,24 @@
 
 .alshaya-newsletter-subscribe {
   margin-top: 1.25rem;
-  max-width: 100%;
 
   @include breakpoint($only-mobile) {
     margin: 2.625rem 1.25rem 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 100%;
   }
 
   .newsletter-block-label {
     color: $newsletter_desc_text;
     text-transform: none;
     line-height: normal;
+
+    @include breakpoint($tablet) {
+      font-family: $tbs-medium;
+      font-size: 0.875rem;
+    }
   }
 
   .subscription-status {
@@ -155,6 +163,11 @@
     text-transform: capitalize;
     width: 100%;
     max-width: 8.75rem;
+    #{$right}: 0;
+  }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $newsletter_submit_btn;
   }
 }
 
@@ -192,7 +205,7 @@
   h3 {
     font-size: 1rem;
     color: $social_link_title;
-    font-family: $alshaya-semibold;
+    font-family: $tbs-recoleta-semibold;
 
     @include breakpoint($only-mobile) {
       text-align: center;

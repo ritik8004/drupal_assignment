@@ -311,11 +311,8 @@ class CustomerController extends ControllerBase {
     $build['#cache']['tags'] = Cache::mergeTags($user->getCacheTags(), ['config:alshaya_acm_checkout.settings']);
     $build['#cache']['contexts'] = $user->getCacheContexts();
 
-    if ($this->moduleHandler()->moduleExists('alshaya_bazaar_voice')) {
-      $build['#bazaar_voice_strings'] = alshaya_bazaar_voice_get_bazaarvoice_strings();
-      $build['#attached'] = _alshaya_bazaar_voice_get_recentorder_attachment($build['settings']);
-    }
-
+    // Allow other modules to update order details build.
+    $this->moduleHandler()->alter('alshaya_acm_customer_orders_details_build', $order, $build);
     return $build;
   }
 

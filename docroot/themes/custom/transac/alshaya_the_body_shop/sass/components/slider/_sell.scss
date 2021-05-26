@@ -7,7 +7,7 @@
 
 .subtitle.crossell-title {
   font-size: 1.125rem;
-  font-family: $alshaya-semibold;
+  font-family: $tbs-recoleta-semibold;
 
   @include breakpoint($tablet) {
     font-size: 1.5rem;
@@ -17,7 +17,7 @@
 .view-product-slider {
   .c-products__item__label {
     font-size: 1rem;
-    font-family: $alshaya-medium;
+    font-family: $tbs-medium;
   }
 
   .price {

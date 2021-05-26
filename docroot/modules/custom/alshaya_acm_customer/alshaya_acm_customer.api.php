@@ -33,5 +33,27 @@ function hook_alshaya_acm_customer_order_details_alter(array &$order) {
 }
 
 /**
+ * Alter order build after processing order details.
+ *
+ * @param array $order
+ *   Order received from API.
+ * @param array $build
+ *   Build array.
+ */
+function hook_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+
+}
+
+/**
+ * Alter order build before showing in recent orders page.
+ *
+ * @param array $build
+ *   Build array.
+ */
+function hook_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

@@ -268,7 +268,7 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'view_review',
-      'value' => t('View Review'),
+      'value' => t('View review'),
     ],
   ];
 }

@@ -165,7 +165,11 @@
   }
 
   .form-item-first-name {
-    margin-right: 1.5rem;
+    margin-#{$right}: 1.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 0;
+    }
   }
 
   .form-item-first-name,

@@ -34,6 +34,18 @@ function _alshaya_add_to_bag_strings() {
       'key' => 'view_options',
       'value' => t('view options'),
     ],
+    [
+      'key' => 'quick_view',
+      'value' => t('Quick View'),
+    ],
+    [
+      'key' => 'add',
+      'value' => t('Add'),
+    ],
+    [
+      'key' => 'add_to_cart',
+      'value' => t('add to cart'),
+    ],
   ];
 }
 
@@ -45,6 +57,9 @@ function _alshaya_add_to_bag_translations() {
     'v1' => [
       'view options' => [
         'ar' => 'عرض الخيارات',
+      ],
+      'Quick View' => [
+        'ar' => 'نظرة سريعة',
       ],
     ],
   ];

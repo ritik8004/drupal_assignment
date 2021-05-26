@@ -4,6 +4,7 @@ import OrderSummaryItem from '../OrderSummaryItem';
 import ConditionalView from '../../../common/components/conditional-view';
 import OrderSummaryFawryBanner from './order-summary-fawry-banner';
 import PriceElement from '../../../utilities/special-price/PriceElement';
+import getStringMessage from '../../../utilities/strings';
 
 const OrderSummary = () => {
   const customEmail = drupalSettings.order_details.customer_email;
@@ -112,14 +113,20 @@ const OrderSummary = () => {
   } = drupalSettings.order_details;
   const priceTotal = <PriceElement amount={baseGrandTotal} />;
 
+  // Set language for datetime translation.
+  const { currentLanguage } = drupalSettings.path;
+  if (currentLanguage !== undefined) {
+    moment.locale(currentLanguage);
+  }
+
   return (
     <div className="spc-order-summary">
       <div className="spc-order-summary-order-preview">
         <ConditionalView condition={methodCode !== undefined && methodCode === 'checkout_com_upapi_fawry'}>
           <OrderSummaryFawryBanner animationDelay="0.5s" />
-          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Amount Due')} value={priceTotal} />
-          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Reference number')} value={referenceNumber} />
-          <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('Complete payment by')} value={moment(paymentExpiryTime).format('DD MMMM YYYY, HH:mm a')} />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_amount_due')} value={priceTotal} />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_reference_number')} value={referenceNumber} />
+          <OrderSummaryItem animationDelay="0.5s" label={getStringMessage('fawry_complete_payment_by')} value={moment(paymentExpiryTime).format('DD MMMM YYYY, HH:mm a')} />
         </ConditionalView>
         <OrderSummaryItem animationDelay="0.5s" label={Drupal.t('confirmation email sent to')} value={customEmail} />
         <OrderSummaryItem animationDelay="0.6s" label={Drupal.t('order number')} value={orderNumber} />

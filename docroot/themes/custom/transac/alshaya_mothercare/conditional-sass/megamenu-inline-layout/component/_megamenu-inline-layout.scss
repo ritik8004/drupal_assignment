@@ -37,4 +37,26 @@
     text-decoration: underline;
     color: $mm_l3_link_hover;
   }
+
+  .megamenu-inline-layout.block-alshaya-main-menu ul.menu--one__list {
+    display: inline-block !important;
+
+    .menu__link.menu--one__link {
+      font-family: $alshaya-bold;
+      color: $marine-blue-two;
+      padding: 0 1.25rem;
+      border-bottom: none;
+      font-size: 1rem;
+    }
+  }
+
+  .c-pre-content__region {
+    height: 2.8125rem !important;
+    border-top: 1px solid transparent !important;
+    border-bottom: 1px solid transparent !important;
+  }
+
+  .megamenu-inline-layout.block-alshaya-main-menu li.menu--one__list-item ul.menu--two__list {
+    top: 92%;
+  }
 }

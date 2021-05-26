@@ -1,7 +1,7 @@
 .webform-submission-alshaya-contact-form {
   .form-submit {
     font-size: 1rem;
-    font-family: $alshaya-medium;
+    font-family: $tbs-medium;
   }
 }
 
@@ -10,8 +10,10 @@
     .contact-us-feedback {
       width: 100%;
 
-      &::after {
-        display: none;
+      @include breakpoint($desktop) {
+        &::after {
+          display: none;
+        }
       }
 
       .select2-container {
@@ -22,6 +24,34 @@
           }
         }
       }
+    }
+
+    .contact-us-feedback,
+    .contact-us-type,
+    .contact-us-reason {
+      &::after {
+        @include breakpoint($upto-desktop) {
+          position: absolute;
+          top: 0;
+          #{$right}: 0;
+          z-index: 3;
+          line-height: 2.1875rem;
+          font-size: 1.75rem;
+          width: 2.1875rem;
+          height: 2.1875rem;
+        }
+
+        @include breakpoint($desktop) {
+          content: '';
+        }
+      }
+    }
+  }
+
+  .l-column--two-1050 {
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.5rem;
+      padding-#{$right}: 1.5rem;
     }
   }
 }
