@@ -16,14 +16,14 @@ use Drupal\user\Entity\Role;
  *
  * [6.2.0] Add the config value for the color attribute display.
  */
-function alshaya_acm_product_update_8070() {
+function alshaya_acm_product_update_8071() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
     $manager = \Drupal::service('alshaya_config.manager');
     $manager->updateConfigs([
       'alshaya_acm_product.display_settings',
     ],
       'alshaya_acm_product',
-      'install'
+      'install',
       AlshayaConfigManager::MODE_ADD_MISSING,
     );
 }
