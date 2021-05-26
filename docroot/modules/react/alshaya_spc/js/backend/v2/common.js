@@ -23,7 +23,7 @@ const isAnonymousUserWithoutCart = () => {
  * @param {string} path
  *  The API path.
  */
-const i18nMagentoUrl = (path) => `${window.drupalSettings.cart.url}/${window.drupalSettings.cart.store}${path}`;
+const i18nMagentoUrl = (path) => `${getCartSettings('url')}/${getCartSettings('store')}${path}`;
 
 /**
  * Make an AJAX call to Magento API.
@@ -100,4 +100,16 @@ export {
   isAnonymousUserWithoutCart,
   callMagentoApi,
   updateCart,
+};
+
+/**
+ * Wrapper to get cart settings.
+ *
+ * @param {string} key
+ *   The key for the configuration.
+ * @returns {(number|string!Object!Array)}
+ *   Returns the configuration.
+ */
+const getCartSettings = (key) => {
+  return window.drupalSettings[key];
 };

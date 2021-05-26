@@ -232,16 +232,8 @@ function alshaya_spc_page_attachments_alter(&$page) {
     $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
     $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
     $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$current_language];
-    $page['#attached']['drupalSettings']['cart']['langcode'] = $current_language;
     $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
       return $key['timeout'];
     }, $timeout_settings['middleware']);
   }
-
-  $current_path = \Drupal::request()->getPathInfo();
-  // Remove current language from url.
-  $current_path = preg_replace('/\/' . $current_language . '/', '', $current_path, 1);
-  // Remove last `/` from url.
-  $current_path = rtrim($current_path, '/');
-
 }

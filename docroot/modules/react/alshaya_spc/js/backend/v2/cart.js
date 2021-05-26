@@ -112,8 +112,8 @@ window.commerceBackend.processCartData = async (cartData) => {
 
   const data = {
     cart_id: window.commerceBackend.getCartId(),
-    uid: (window.drupalSettings.user.uid) ? window.user.uid : 0,
-    langcode: window.drupalSettings.cart.langcode,
+    uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
+    langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.cart.customer,
     coupon_code: '', // @todo where to find this? cart.totals.coupon_code
     appliedRules: cartData.cart.applied_rule_ids,
