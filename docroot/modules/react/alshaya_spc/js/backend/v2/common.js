@@ -18,6 +18,16 @@ const isAnonymousUserWithoutCart = () => {
 };
 
 /**
+ * Wrapper to get cart settings.
+ *
+ * @param {string} key
+ *   The key for the configuration.
+ * @returns {(number|string!Object!Array)}
+ *   Returns the configuration.
+ */
+const getCartSettings = (key) => window.drupalSettings.cart[key];
+
+/**
  * Get the complete path for the Magento API.
  *
  * @param {string} path
@@ -100,16 +110,4 @@ export {
   isAnonymousUserWithoutCart,
   callMagentoApi,
   updateCart,
-};
-
-/**
- * Wrapper to get cart settings.
- *
- * @param {string} key
- *   The key for the configuration.
- * @returns {(number|string!Object!Array)}
- *   Returns the configuration.
- */
-const getCartSettings = (key) => {
-  return window.drupalSettings[key];
 };
