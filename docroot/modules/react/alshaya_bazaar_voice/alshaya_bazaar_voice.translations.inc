@@ -80,10 +80,10 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'أختر...',
     ],
     'Please enter value for %fieldTitle.' => [
-      'ar' => 'يرجى ادخال قيمة إلى %fieldTitle.',
+      'ar' => 'يرجى إدخال بيانات إلى %fieldTitle.',
     ],
     'Please select value for %fieldTitle.' => [
-      'ar' => 'يرجى اختيار قيمة إلى %fieldTitle.',
+      'ar' => 'يرجى اختيار بيانات %fieldTitle.',
     ],
     'Show us how it looks! Upload up to 5 pics' => [
       'ar' => 'أرنا كيف يبدو المنتج! حمّل لغاية 5 صور',
@@ -95,7 +95,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'نعم',
     ],
     'No' => [
-      'ar' => 'ل',
+      'ar' => 'لا',
     ],
     'The email address %mail is not valid. Please enter a valid email address.' => [
       'ar' => 'البريد الإلكتروني %mail غير صالح. يرجى إدخال بريد إلكتروني صالح.',
@@ -104,7 +104,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'الرجاء إدخال %minLength حرف كحد أدنى لـ %fieldTitle.',
     ],
     'Thanks for submitting your review! It is currently being moderated and will be visible shortly.' => [
-      'ar' => 'شكراً على إبداء رأيك! سوف يتم التصيف كي تتم مشاهدته في أقرب وقت.',
+      'ar' => 'شكراً على إبداء رأيك! سوف نقوم بمراجعته لكي يتم نشره في أقرب وقت.',
     ],
     'I would recommend this product.' => [
       'ar' => 'سوف أوصي بهذا المنتج',
@@ -117,6 +117,9 @@ function _alshaya_bazaar_voice_translations() {
     ],
     'Review' => [
       'ar' => 'المراجعة',
+    ],
+    'reviews' => [
+      'ar' => 'مراجعة',
     ],
     'Vote' => [
       'ar' => 'تصويت',

@@ -3,6 +3,24 @@ body.ratings-reviews-overlay {
     transition: transform 400ms cubic-bezier(0, 0, 0.2, 1), opacity 0ms cubic-bezier(0, 0, 0.2, 1);
     transform: translateX(0) !important;
     opacity: 1;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+}
+
+.magv2-main,
+.magv2-popup-panel {
+  .star-ratings-wrapper {
+    .inline-star {
+      .icon-ic_ratingfull,
+      .icon-ic_rating {
+        &::before {
+          font-size: 1.5rem;
+        }
+      }
+    }
   }
 }
 
@@ -216,11 +234,18 @@ body.ratings-reviews-overlay {
               .thumbnail-img-block {
                 overflow-y: auto;
                 margin-top: 1.5rem;
+                position: static;
 
                 .popup-content {
                   #{$left}: 0 !important;
                   width: 100% !important;
                   top: 6.25rem !important;
+
+                  .large-image {
+                    img {
+                      object-fit: contain;
+                    }
+                  }
                 }
               }
 
@@ -484,11 +509,20 @@ body.ratings-reviews-overlay {
               margin-#{$left}: -0.3125rem;
               z-index: 5;
 
+              @include breakpoint($only-mobile) {
+                width: 100%;
+              }
+
               .close-modal {
                 z-index: 3;
                 background: none;
                 top: 0.5rem;
-                right: 0.625rem;
+                #{$right}: 0.625rem;
+
+                html[lang=ar] & {
+                  top: 0.3125rem;
+                  left: 0.8125rem;
+                }
 
                 &::before {
                   color: $magv2-panel-close-icon;
@@ -617,10 +651,6 @@ body.ratings-reviews-overlay {
   .aggregate-rating {
     padding: 0 0 0.875rem;
     justify-content: $left;
-
-    @include breakpoint($only-mobile) {
-      padding: 0 0.5rem 0.875rem;
-    }
 
     .empty-stars {
       &:hover {

@@ -8,10 +8,10 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\node\NodeInterface;
 use Symfony\Component\Yaml\Yaml;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -337,6 +337,42 @@ class AlshayaBazaarVoice {
   }
 
   /**
+   * Get basic cofigurations defined for BazaarVoice.
+   *
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   BazaarVoice basic configurations.
+   */
+  public function getBasicConfigurations($context = 'web') {
+    $basic_configs = [];
+    $config = $this->configFactory->get('bazaar_voice.settings');
+    if ($context === 'web') {
+      $basic_configs['endpoint'] = $config->get('api_base_url');
+      $basic_configs['passkey'] = $config->get('conversations_apikey');
+      $basic_configs['max_age'] = $config->get('max_age');
+    }
+    $basic_configs['api_version'] = $config->get('api_version');
+    $basic_configs['locale'] = $config->get('locale');
+    $basic_configs['content_locale'] = $config->get('content_locale');
+    $basic_configs['Include'] = $config->get('bv_content_types');
+    $basic_configs['reviews_pagination_type'] = $config->get('reviews_pagination_type');
+    $basic_configs['reviews_initial_load'] = $config->get('reviews_initial_load');
+    $basic_configs['reviews_on_loadmore'] = $config->get('reviews_on_loadmore');
+    $basic_configs['reviews_per_page'] = $config->get('reviews_per_page');
+    $basic_configs['write_review_submission'] = $config->get('write_review_submission');
+    $basic_configs['write_review_tnc'] = $config->get('write_review_tnc');
+    $basic_configs['write_review_guidlines'] = $config->get('write_review_guidlines');
+    $basic_configs['comment_form_tnc'] = $config->get('comment_form_tnc');
+    $basic_configs['comment_box_min_length'] = $config->get('comment_box_min_length');
+    $basic_configs['comment_box_max_length'] = $config->get('comment_box_max_length');
+    $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
+
+    return $basic_configs;
+  }
+
+  /**
    * Helper function to get the sorting options from configs.
    *
    * @return array
@@ -365,6 +401,21 @@ class AlshayaBazaarVoice {
   }
 
   /**
+   * Get the Filter options from configs.
+   *
+   * @return array
+   *   Filter options.
+   */
+  public function getPdpFilterOptions() {
+    $filter_options = $this->configFactory->get('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
+    if (!empty($filter_options)) {
+      return Yaml::parse($filter_options);
+    }
+
+    return NULL;
+  }
+
+  /**
    * Get the BazaarVoice error messages from configs.
    *
    * @return array
@@ -383,6 +434,48 @@ class AlshayaBazaarVoice {
     }
 
     return $available_error_messages;
+  }
+
+  /**
+   * Get category based conifgurations will be applied in write review form.
+   *
+   * @param \Drupal\node\NodeInterface $productNode
+   *   Product node.
+   *
+   * @return array|null
+   *   Write a review fields configs.
+   */
+  public function getCategoryBasedConfig(NodeInterface $productNode) {
+    $config = $this->configFactory->get('bazaar_voice.settings');
+    if ($config->get('pdp_rating_reviews')) {
+      return NULL;
+    }
+
+    $showRatingReviews = TRUE;
+    $hide_fields_write_review = [];
+    $category = $productNode->get('field_category')->getValue();
+    foreach ($category as $term) {
+      $term_parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term['target_id']);
+      foreach ($term_parents as $term_obj) {
+        // Enable R&R feature based on category.
+        if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
+          $showRatingReviews = FALSE;
+        }
+        // Get fields from category not be displayed in write a review form.
+        if (!empty($term_obj->get('field_write_review_form_fields')->getValue())) {
+          $field_ids = [];
+          foreach ($term_obj->get('field_write_review_form_fields')->getValue() as $value) {
+            $field_ids[] = $value['value'];
+          }
+          $hide_fields_write_review = $field_ids;
+        }
+      }
+    }
+
+    return [
+      'show_rating_reviews' => $showRatingReviews,
+      'hide_fields_write_review' => $hide_fields_write_review,
+    ];
   }
 
   /**
@@ -526,38 +619,21 @@ class AlshayaBazaarVoice {
   public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, $sanitized_sku) {
     $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
 
-    $config = $this->configFactory->get('bazaar_voice.settings');
+    $basic_configs = $this->getBasicConfigurations();
     // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked in bazaarVoice Settings Form.
-    if ($config->get('pdp_rating_reviews')) {
+    if ($basic_configs['pdp_rating_reviews']) {
       return;
     }
     // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked for any categories or its Parent Categories.
-    $showRatingReviews = TRUE;
-    $hide_fields_write_review = [];
-    $category = $productNode->get('field_category')->getValue();
-    foreach ($category as $term) {
-      $term_parents = $this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($term['target_id']);
-      foreach ($term_parents as $term_obj) {
-        // Enable R&R feature based on category.
-        if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
-          $showRatingReviews = FALSE;
-        }
-        // Get fields from category not be displayed in write a review form.
-        if (!empty($term_obj->get('field_write_review_form_fields')->getValue())) {
-          $field_ids = [];
-          foreach ($term_obj->get('field_write_review_form_fields')->getValue() as $value) {
-            $field_ids[] = $value['value'];
-          }
-          $hide_fields_write_review = $field_ids;
-        }
-      }
-    }
-    if (!$showRatingReviews) {
+    $category_based_config = $this->getCategoryBasedConfig($productNode);
+    if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
       return;
     }
-    $media = $this->skuImagesManager->getFirstImage($sku, 'pdp');
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+    $media = $skuImagesManager->getFirstImage($sku, 'pdp');
     $image_url = '';
     if (!empty($media)) {
       $image_url = file_create_url($media['drupal_uri']);
@@ -568,8 +644,7 @@ class AlshayaBazaarVoice {
     // Get avalable BazaarVoice error messages from config.
     $bv_error_messages = $this->getBazaarVoiceErrorMessages();
     // Get the filter options to be rendered on review summary.
-    $filter_options = $this->configFactory->get('bazaar_voice_filter_review.settings')->get('pdp_filter_options');
-    $filter_options = Yaml::parse($filter_options);
+    $filter_options = $this->getPdpFilterOptions();
 
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
@@ -590,33 +665,17 @@ class AlshayaBazaarVoice {
         'image_url' => $image_url,
       ],
       'bazaar_voice' => [
-        'endpoint' => $config->get('api_base_url'),
-        'api_version' => $config->get('api_version'),
-        'passkey' => $config->get('conversations_apikey'),
-        'locale' => $config->get('locale'),
-        'content_locale' => $config->get('content_locale'),
-        'max_age' => $config->get('max_age'),
         'stats' => 'Reviews',
-        'Include' => $config->get('bv_content_types'),
         'sorting_options' => $sorting_options,
         'filter_options' => $filter_options,
-        'reviews_pagination_type' => $config->get('reviews_pagination_type'),
-        'reviews_initial_load' => $config->get('reviews_initial_load'),
-        'reviews_on_loadmore' => $config->get('reviews_on_loadmore'),
-        'reviews_per_page' => $config->get('reviews_per_page'),
-        'write_review_submission' => $config->get('write_review_submission'),
-        'write_review_tnc' => $config->get('write_review_tnc'),
-        'write_review_guidlines' => $config->get('write_review_guidlines'),
-        'comment_form_tnc' => $config->get('comment_form_tnc'),
-        'comment_box_min_length' => $config->get('comment_box_min_length'),
-        'comment_box_max_length' => $config->get('comment_box_max_length'),
         'country_code' => $country_code,
         'error_messages' => $bv_error_messages,
       ],
-      'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
-      'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),
-      'hide_fields_write_review' => $hide_fields_write_review,
+      'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
+      'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
+      'hide_fields_write_review' => $category_based_config['hide_fields_write_review'],
     ];
+    $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
 
     return $settings;
   }
