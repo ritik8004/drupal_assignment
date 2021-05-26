@@ -14,11 +14,6 @@ class ReviewFeedback extends React.Component {
 
   componentDidMount() {
     document.addEventListener('handleFeedbackState', this.handleFeedbackState);
-    const { contentId, contentType } = this.props;
-    const retrievedContentVote = getFeedbackInfo(contentType, contentId, 'positiveCount');
-    if (retrievedContentVote !== null) {
-      this.setState({ votedContentId: contentId });
-    }
   }
 
   handleFeedbackState = (event) => {
@@ -36,7 +31,8 @@ class ReviewFeedback extends React.Component {
     const { votedContentId } = this.state;
     let contentTypeDisplayValue = null;
     let btnStatus = 'active';
-    if (votedContentId === contentId) {
+    const retrievedContentVote = getFeedbackInfo(contentType, contentId, 'positiveCount');
+    if (votedContentId === contentId || retrievedContentVote !== null) {
       btnStatus = 'disabled';
     }
     if (contentType === 'review_comment') {

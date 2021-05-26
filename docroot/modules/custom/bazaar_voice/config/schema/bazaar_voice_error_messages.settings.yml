@@ -1,0 +1,17 @@
+bazaar_voice_error_messages.settings:
+  type: config_object
+  label: 'Error messages settings'
+  mapping:
+    error_messages:
+      type: sequence
+      label: 'Error messages values'
+      sequence:
+        type: mapping
+        label: 'Error message value with label'
+        mapping:
+          value:
+            type: string
+            label: 'Value'
+          label:
+            type: label
+            label: 'Message'
