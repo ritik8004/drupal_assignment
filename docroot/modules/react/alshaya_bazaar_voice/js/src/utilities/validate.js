@@ -51,6 +51,16 @@ export const processFormDetails = (e) => {
   return isError;
 };
 
+/**
+ * To Get average percentage value.
+ */
+export const getPercentVal = (count, totalCount) => {
+  const average = count / totalCount;
+
+  return average * 100;
+};
+
 export default {
   processFormDetails,
+  getPercentVal,
 };
