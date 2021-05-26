@@ -7,7 +7,7 @@ const IndividualReviewSlider = ({
   sliderData,
   secondaryRatingsOrder,
 }) => {
-  if (sliderData === null) {
+  if (sliderData === null || Object.keys(sliderData).length === 0) {
     return null;
   }
   return (

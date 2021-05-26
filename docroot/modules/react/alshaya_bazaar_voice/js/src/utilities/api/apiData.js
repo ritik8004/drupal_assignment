@@ -51,7 +51,7 @@ export function fetchAPIData(apiUri, params, context = '') {
 
 export function postAPIData(apiUri, params, productId = undefined) {
   const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}`;
+  const url = `${getBvUrl(bazaarVoiceSettings) + apiUri}?${getApiVersion(bazaarVoiceSettings)}${getPassKey(bazaarVoiceSettings)}${getLocale(bazaarVoiceSettings)}${params}`;
 
   return Axios.post(url, params, {
     headers: {
