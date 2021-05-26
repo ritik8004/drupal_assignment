@@ -61,7 +61,6 @@ function alshaya_spc_block_access(Block $block, $operation, AccountInterface $ac
 function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
   unset($form['add_to_cart']['#ajax']);
   $form['#attached']['library'][] = 'alshaya_spc/add_to_cart';
-  $form['#attached']['drupalSettings']['alshaya_spc']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
 
   $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
   $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v' . $backend_version;
@@ -207,13 +206,6 @@ function alshaya_spc_user_logout(AccountInterface $account) {
  */
 function _alshaya_spc_global_error_message() {
   return t('Sorry, something went wrong and we are unable to process your request right now. Please try again later.')->render();
-}
-
-/**
- * Implements hook_preprocess_page().
- */
-function alshaya_spc_preprocess_page(&$variables) {
-  $variables['#attached']['drupalSettings']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
 }
 
 /**
