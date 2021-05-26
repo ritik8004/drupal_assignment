@@ -1,0 +1,23 @@
+.attribute-wrapper {
+  ul.attribute-options-list {
+    li {
+      background: $plp-quick-view-product-size-bg;
+
+      &.disabled {
+        border-color: $plp-quick-view-product-size-border-disabled;
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  #configurable-drawer {
+    .attribute-wrapper_size {
+      width: 100%;
+    }
+
+    .swatch-list {
+      margin-#{$left}: 0.3125rem;
+    }
+  }
+}
