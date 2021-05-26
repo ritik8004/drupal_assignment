@@ -104,7 +104,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'الرجاء إدخال %minLength حرف كحد أدنى لـ %fieldTitle.',
     ],
     'Thanks for submitting your review! It is currently being moderated and will be visible shortly.' => [
-      'ar' => 'شكراً على إبداء رأيك! سوف يتم التصيف كي تتم مشاهدته في أقرب وقت.',
+      'ar' => 'شكراً على إبداء رأيك! سوف نقوم بمراجعته لكي يتم نشره في أقرب وقت.',
     ],
     'I would recommend this product.' => [
       'ar' => 'سوف أوصي بهذا المنتج',
