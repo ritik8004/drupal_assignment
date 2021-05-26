@@ -22,7 +22,10 @@ function alshaya_checkout_by_agent_user_login(UserInterface $account) {
   $current_client_ip = $request->getClientIP();
   $smart_agent_config = \Drupal::config('alshaya_checkout_by_agent.settings');
   $smart_user_agents = $smart_agent_config->get('smart_user_agents');
-  $smart_agent_ips = explode(";", $smart_agent_config->get('smart_agent_ips'));
+  $smart_agent_ips_config_value = $smart_agent_config->get('smart_agent_ips');
+  $smart_agent_ips =  !empty($smart_agent_ips_config_value)
+    ? explode(";", $smart_agent_ips_config_value)
+    : '';
   $is_smart_user_agent = !empty($smart_user_agents) ? FALSE : TRUE;
 
   // Check if current user agent is in the list of smart user agents.
