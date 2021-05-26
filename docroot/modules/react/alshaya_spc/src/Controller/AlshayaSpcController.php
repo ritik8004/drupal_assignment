@@ -18,6 +18,7 @@ use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_addressbook\AddressBookAreasTermsHelper;
+use Drupal\alshaya_spc\Helper\AlshayaSpcHelper;
 use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -93,6 +94,13 @@ class AlshayaSpcController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * SPC helper.
+   *
+   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcHelper
+   */
+  protected $spcHelper;
+
+  /**
    * AlshayaSpcController constructor.
    *
    * @param \Drupal\alshaya_spc\AlshayaSpcPaymentMethodManager $payment_method_manager
@@ -113,6 +121,8 @@ class AlshayaSpcController extends ControllerBase {
    *   Language manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
+   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper
+   *   Spc helper service.
    */
   public function __construct(AlshayaSpcPaymentMethodManager $payment_method_manager,
                               CheckoutOptionsManager $checkout_options_manager,
@@ -122,7 +132,8 @@ class AlshayaSpcController extends ControllerBase {
                               AddressBookAreasTermsHelper $areas_term_helper,
                               AlshayaSpcOrderHelper $order_helper,
                               LanguageManagerInterface $language_manager,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              AlshayaSpcHelper $spc_helper) {
     $this->checkoutOptionManager = $checkout_options_manager;
     $this->paymentMethodManager = $payment_method_manager;
     $this->mobileUtil = $mobile_util;
@@ -132,6 +143,7 @@ class AlshayaSpcController extends ControllerBase {
     $this->orderHelper = $order_helper;
     $this->languageManager = $language_manager;
     $this->moduleHandler = $module_handler;
+    $this->spcHelper = $spc_helper;
   }
 
   /**
@@ -147,7 +159,8 @@ class AlshayaSpcController extends ControllerBase {
       $container->get('alshaya_addressbook.area_terms_helper'),
       $container->get('alshaya_spc.order_helper'),
       $container->get('language_manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_spc.helper')
     );
   }
 
@@ -500,6 +513,7 @@ class AlshayaSpcController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_spc/googlemapapi',
+          'alshaya_spc/commerce_backend.checkout.v' . $this->spcHelper->getCommerceBackendVersion(),
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
         ],

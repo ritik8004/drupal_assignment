@@ -11,13 +11,13 @@
   <final_price>{{ product.final_price }}</final_price>
   <price_range>{{ product.price_range }}</price_range>
   <currency>{{ product.currency }}</currency>
-  <keywords>{{ product.keywords|raw }}</keywords>
+  <keywords>{{ product.keywords }}</keywords>
   <promotion_label>{{ product.promotion_label }}</promotion_label>
   <categories>
     {% for category in product.categoryCollection %}
     <category>
-      <name><![CDATA[{{ category.name|raw }}]]></name>
-      <category_hierarchy><![CDATA[{{ category.category_hierarchy|raw }}]]></category_hierarchy>
+      <name><![CDATA[{{ category.name }}]]></name>
+      <category_hierarchy><![CDATA[{{ category.category_hierarchy }}]]></category_hierarchy>
       <google_product_category>{{ category.google_product_category }}</google_product_category>
       <id>{{ category.id }}</id>
       <url>{{ category.url }}</url>
@@ -26,18 +26,18 @@
   </categories>
   <short_description>
     {% if product.short_description is not empty %}
-      {{ product.short_description | spaceless | striptags | raw }}
+      {{ product.short_description | spaceless | striptags }}
     {% endif %}
   </short_description>
   <description>
     {% if product.description is not empty %}
-      {{ product.description | spaceless | striptags | raw }}
+      {{ product.description | spaceless | striptags }}
     {% endif %}
   </description>
   <custom_attributes>
     {% if product.attributes|length > 0 %}
       {% for product_attribute in product.attributes %}
-        <{{ product_attribute.key }}>{{ product_attribute.value|raw }}</{{ product_attribute.key }}>
+        <{{ product_attribute.key }}>{{ product_attribute.value }}</{{ product_attribute.key }}>
       {% endfor %}
     {% endif %}
   </custom_attributes>

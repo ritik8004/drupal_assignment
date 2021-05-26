@@ -170,6 +170,7 @@ class AlshayaProductDeltaFeedHelper {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function prepareProductFeedData(int $nid): array {
+    $product = [];
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
     if (!$node instanceof NodeInterface) {
       return [];

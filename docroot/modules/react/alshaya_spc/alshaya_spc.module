@@ -62,6 +62,9 @@ function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   unset($form['add_to_cart']['#ajax']);
   $form['#attached']['library'][] = 'alshaya_spc/add_to_cart';
   $form['#attached']['drupalSettings']['alshaya_spc']['cart_update_endpoint'] = _alshaya_spc_get_middleware_url() . '/cart/update';
+
+  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v' . $backend_version;
 }
 
 /**
@@ -241,8 +244,4 @@ function alshaya_spc_page_attachments_alter(&$page) {
   // Remove last `/` from url.
   $current_path = rtrim($current_path, '/');
 
-  // Attach specific library for checkout/cart pages.
-  $page['#attached']['library'][] = $current_path === '/checkout'
-    ? 'alshaya_spc/commerce_backend.checkout.v' . $cart_version
-    : 'alshaya_spc/commerce_backend.cart.v' . $cart_version;
 }

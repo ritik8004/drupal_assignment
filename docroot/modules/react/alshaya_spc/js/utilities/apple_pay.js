@@ -2,7 +2,6 @@ import Axios from 'axios';
 import { placeOrder, removeFullScreenLoader } from './checkout_util';
 import dispatchCustomEvent from './events';
 import getStringMessage from './strings';
-import i18nMiddleWareUrl from './i18n_url';
 
 let applePaySessionObject;
 
@@ -70,8 +69,7 @@ const ApplePay = {
   },
 
   onPaymentAuthorized: (event) => {
-    const url = i18nMiddleWareUrl('payment/checkout-com-apple-pay/save');
-    Axios.post(url, event.payment.token).then((response) => {
+    window.commerceBackend.saveApplePayPayment(event.payment.token).then((response) => {
       if (response.data.success !== undefined && response.data.success === true) {
         // Update apple pay popup.
         applePaySessionObject.completePayment(window.ApplePaySession.STATUS_SUCCESS);
