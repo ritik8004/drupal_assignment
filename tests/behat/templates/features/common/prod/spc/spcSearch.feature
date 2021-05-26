@@ -1,4 +1,4 @@
-@javascript @account @smoke @auth @flsaprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
+@javascript @account @smoke @auth @search @flsaprod @vsaeprod @vssaprod @pbsaprod @mcsaprod @pbkwprod @bbwsaprod @pbaeprod @mcaeprod @hmaeprod @bbwkwprod @mckwprod @hmkwprod @hmsaprod @flkwprod @flaeprod @bbwaeprod
 Feature: Test search functionality
 
   Scenario: Verify user should be able to search with valid keyword and see relevant results
@@ -6,9 +6,8 @@ Feature: Test search functionality
     And I should see an "#alshaya-algolia-autocomplete" element
     When I fill in "search" with "{spc_search_keyword}"
     And I wait for AJAX to finish
-    And I wait 10 seconds
+    And I wait 2 seconds
     And I should see "Search results"
-    And I wait 10 seconds
     Then I should see an ".c-products-list" element
     And I should see "{spc_search_keyword}" in the "#hits" element
     And the element ".alshaya_search_gallery" should exist
@@ -17,7 +16,7 @@ Feature: Test search functionality
     And I click jQuery ".js-pager__items .button" element on page
     And I wait for AJAX to finish
     And I click on "#react-algolia-searchbar-clear-button" element
-    And I wait 10 seconds
+    And I wait 5 seconds
     Then I should be on homepage
 
   Scenario: Verify Search Results Message for No Results
