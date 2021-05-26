@@ -96,6 +96,16 @@
         }
       }
     }
+
+    @include breakpoint($desktop) {
+      .site-brand-home {
+        a {
+          img {
+            max-width: 2.5rem;
+          }
+        }
+      }
+    }
   }
 }
 

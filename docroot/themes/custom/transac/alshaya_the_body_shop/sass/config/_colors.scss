@@ -41,6 +41,7 @@ $alizarin: #e51b23;
 $grey-four: #ddd;
 $green-two: #357a74;
 $frangipani: #ffd1a1;
+$error-red: $alizarin;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -497,3 +498,20 @@ $search_facet_active_title_bg_sticky: $cyprus;
 $plp_selected_filter_label_text: $cyprus;
 $plp_facet_mobile: $white;
 $plp_selected_filter_hover: $cyprus;
+
+// PLP add to cart
+$plp-disabled-qty-bg: $silver;
+$plp-disabled-qty-icon-color: $metal;
+$plp-quick-view-product-size-active-bg: $white-four;
+$plp-quick-view-product-size-text-active: $black;
+$plp-quick-view-product-size-border-hover: $cyprus;
+$plp-quick-view-product-size-text-disabled: $black;
+$plp-quick-view-product-size-border-disabled: $warm-grey-two;
+$plp-quick-view-product-size-border: $warm-grey-two;
+$plp-quick-view-product-size-bg: $white;
+$plp-quick-view-product-size-text: $black;
+$plp-quick-view-product-color-swatch-border: $cyprus;
+$plp-quick-view-product-qty-arrow: $cyprus;
+
+// Magazine V2 layout
+$magv2-slider-icon-bg: $cyprus;

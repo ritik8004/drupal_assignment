@@ -453,3 +453,16 @@ html[lang='ar'] {
     }
   }
 }
+
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .quantity {
+    #{$left}: 2rem;
+    top: -0.625rem;
+
+    @include breakpoint($only-tablet) {
+      top: -0.3125rem;
+    }
+  }
+}
