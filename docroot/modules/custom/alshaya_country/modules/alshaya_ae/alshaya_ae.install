@@ -5,6 +5,8 @@
  * Install file for alshaya_uae.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
  * Implements hook_update_N().
  *
@@ -13,12 +15,12 @@
 function alshaya_ae_update_8008() {
   $modulehandler = \Drupal::service('module_handler');
   if ($modulehandler->moduleExists('acq_commerce')) {
-    $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
-    if ($config) {
-      if ($config->get('decimal_points') != 2) {
-        $config->set('decimal_points', 2)->save();
-      }
-    }
+    /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+    $manager = \Drupal::service('alshaya_config.manager');
+    $manager->updateConfigs(
+      ['acq_commerce.currency'],
+      'acq_commerce'
+    );
   }
 }
 

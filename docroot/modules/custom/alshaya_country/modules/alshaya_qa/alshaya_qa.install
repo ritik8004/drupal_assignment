@@ -5,6 +5,25 @@
  * Install file for alshaya_qa.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update decimal_points for QA sites.
+ */
+function alshaya_qa_update_8002() {
+  $modulehandler = \Drupal::service('module_handler');
+  if ($modulehandler->moduleExists('acq_commerce')) {
+    /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+    $manager = \Drupal::service('alshaya_config.manager');
+    $manager->updateConfigs(
+      ['acq_commerce.currency'],
+      'acq_commerce'
+    );
+  }
+}
+
 /**
  * Implements hook_update_N().
  *

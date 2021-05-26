@@ -5,6 +5,25 @@
  * Install file for alshaya_eg.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update decimal_points for EG sites.
+ */
+function alshaya_eg_update_8003() {
+  $modulehandler = \Drupal::service('module_handler');
+  if ($modulehandler->moduleExists('acq_commerce')) {
+    /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+    $manager = \Drupal::service('alshaya_config.manager');
+    $manager->updateConfigs(
+      ['acq_commerce.currency'],
+      'acq_commerce'
+    );
+  }
+}
+
 /**
  * Implements hook_update_N().
  *
