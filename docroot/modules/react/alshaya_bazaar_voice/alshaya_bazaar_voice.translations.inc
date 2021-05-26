@@ -134,7 +134,7 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'أخبر الآخرين عن رأيك. كن أول من يراجع هذا المنتج.',
     ],
     'View review' => [
-      'ar' => 'كتابة مراجعة',
+      'ar' => 'عرض المراجعة',
     ],
   ];
 }
