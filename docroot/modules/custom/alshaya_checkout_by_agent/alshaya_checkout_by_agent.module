@@ -49,7 +49,7 @@ function alshaya_checkout_by_agent_user_login(UserInterface $account) {
   }
 
   $user_details = [
-    'name' => $account->getDisplayName(),
+    'name' => $account->get('field_first_name')->getString() . ' ' . $account->get('field_last_name')->getString() ,
     'email' => $account->getEmail(),
     'userAgent' => $current_user_agent,
     'clientIP' => $current_client_ip,
