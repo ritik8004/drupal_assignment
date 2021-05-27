@@ -1446,7 +1446,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       // Attribute key which will be used for label.
       $config_color_label_attribute = $multiple_attributes_for_color['configurable_color_label_attribute'];
       // Attribute ket which will be used for the swatch code.
-      $color_code_attribute = $multiple_attributes_for_color['configurable_color_code_attribute'];;
+      $color_code_attribute = $multiple_attributes_for_color['configurable_color_code_attribute'];
       // If the form has color config attribute available.
       if (isset($form['ajax']['configurables'][$config_color_attribute])) {
         $options = &$form['ajax']['configurables'][$config_color_attribute]['#options'];
