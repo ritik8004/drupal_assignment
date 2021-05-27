@@ -1,7 +1,8 @@
 /* eslint no-return-await: "error" */
 
 import Axios from 'axios';
-import { logger, cartErrorCodes, getDefaultErrorMessage } from './utility';
+import { logger } from './utility';
+import { cartErrorCodes, getDefaultErrorMessage } from './error';
 
 /**
  * Check if user is anonymous and without cart.
