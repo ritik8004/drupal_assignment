@@ -43,6 +43,8 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   $productinfo_local_storage_expiration = \Drupal::service('alshaya_add_to_bag.helper')->getProductInfoLocalStorageExpiration();
   $page['#attached']['drupalSettings']['add_to_bag']['productinfo_local_storage_expiration'] = $productinfo_local_storage_expiration ? $productinfo_local_storage_expiration : 0;
 
+  $page['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v' . \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+
   // Attach the theming library.
   $page['#attached']['library'][] = 'alshaya_white_label/plp-add-to-cart';
 
