@@ -1,7 +1,8 @@
 /**
  * Logs messages in the backend.
- * @todo This is a placeholder.
- * We can start using this once we define how to send data to the backend.
+ *
+ * @todo This is a placeholder for logger.
+ * eslint no-unused-vars: "error"
  *
  * @param {string} level
  *   The error level [, error, warning, notice, info, debug].
@@ -12,11 +13,7 @@
  */
 const logger = {
   send: (level, message, context) => {
-    let contextValue = 'logger';
-    if (typeof context !== 'undefined' && context.length > 0) {
-      contextValue = context;
-    }
-    Drupal.logJavascriptError(contextValue, message, level);
+
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),

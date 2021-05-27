@@ -146,6 +146,7 @@ const callMagentoApi = (url, method, data) => {
  *   A promise object.
  */
 const updateCart = async (data) => {
+  let response = null;
   let cartId = window.commerceBackend.getCartId();
   if (cartId === null) {
     cartId = await window.commerceBackend.createCart();
@@ -162,10 +163,12 @@ const updateCart = async (data) => {
     },
   };
 
-  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/items`, 'POST', itemData);
+  response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/items`, 'POST', itemData);
   if (response.data.error === true) {
-    if (response.data.code === 404 || (typeof response.data.message !== 'undefined' && response.data.message.indexOf('No such entity with cartId'))) {
-      response.data.error_message = 'Error adding item to the cart.';
+    if (response.data.error_code === 404) {
+      const postString = JSON.stringify(itemData);
+      logger.error(`Error updating cart. Post string ${postString}`);
+      response.data.error_message = getDefaultErrorMessage();
     }
     const error = {
       data: response.data,
@@ -173,8 +176,23 @@ const updateCart = async (data) => {
     return new Promise((resolve) => resolve(error));
   }
 
-  return window.commerceBackend.getCart()
-    .then((cartData) => new Promise((resolve) => resolve(cartData)));
+  response = await window.commerceBackend.getCart();
+  if (response.data.error === true) {
+    if (response.data.error_code === 404 || (typeof response.data.error_message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
+      // Remove the cart from storage.
+      localStorage.removeItem('cart_id');
+      localStorage.removeItem('cart_data');
+      logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+      // Get new cart.
+      window.commerceBackend.getCartId();
+      response.data.error_message = getDefaultErrorMessage();
+    }
+    const error = {
+      data: response.data,
+    };
+    return new Promise((resolve) => resolve(error));
+  }
+  return new Promise((resolve) => resolve(response));
 };
 
 export {
