@@ -230,7 +230,7 @@ function _alshaya_bazaar_voice_plp_rating_reviews($form, FormStateInterface $for
     // Disable top rated option.
     $slp_settings->set('sort_options.attr_bv_average_overall_rating', '');
     $plp_settings->set('sort_options.attr_bv_average_overall_rating', '');
-    //Disable rating filter block.
+    // Disable rating filter block.
     $facet_block->disable();
   } else {
     // Enable top rated option.
