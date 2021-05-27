@@ -255,7 +255,7 @@
                   }
                 }
               })
-              .catch (function(error) {
+              .catch (function() {
                 var cartNotification = new CustomEvent('product-add-to-cart-error', {
                   bubbles: true,
                   detail: {
