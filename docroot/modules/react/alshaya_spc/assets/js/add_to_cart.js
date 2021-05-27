@@ -256,7 +256,6 @@
                 }
               })
               .catch (function(error) {
-                // Send notification.
                 var cartNotification = new CustomEvent('product-add-to-cart-error', {
                   bubbles: true,
                   detail: {
