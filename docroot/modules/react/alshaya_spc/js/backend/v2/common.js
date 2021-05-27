@@ -65,7 +65,6 @@ const handleResponse = (response) => {
     response.data.error_code = 600;
     response.data.error_message = 'Back-end system is down';
   } else if (response.status === 404 || (typeof response.data.message !== 'undefined')) {
-    //  && response.data.message.indexOf('No such entity with cartId')
     response.data.error = true;
     response.data.error_code = 404;
     response.data.error_message = response.data.message;
