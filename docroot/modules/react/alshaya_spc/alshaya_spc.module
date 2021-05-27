@@ -216,20 +216,16 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $checkout_settings = Settings::get('alshaya_checkout_settings');
   $store_settings = Settings::get('magento_lang_prefix');
   $timeout_settings = Settings::get('alshaya_backend_calls_options');
-  $lang = \Drupal::request()->query->get('lang') ?? 'en';
-
-  $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
-  $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
-  $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$lang];
-  $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
-    return $key['timeout'];
-  }, $timeout_settings['middleware']);
-
-  $current_path = \Drupal::request()->getPathInfo();
+  $cart_config = \Drupal::config('alshaya_acm.cart_config');
+  $cart_version = $cart_config->get('version') ?? 1;
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  // Remove current language from url.
-  $current_path = preg_replace('/\/' . $current_language . '/', '', $current_path, 1);
-  // Remove last `/` from url.
-  $current_path = rtrim($current_path, '/');
 
+  if ($cart_version == 2) {
+    $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
+    $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
+    $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$current_language];
+    $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
+      return $key['timeout'];
+    }, $timeout_settings['middleware']);
+  }
 }
