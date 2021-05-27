@@ -8,4 +8,4 @@
  */
 
 // Set google map api key.
-$settings['geolocation.settings']['google_map_api_key'] = 'AIzaSyB7aeOgTLzW0zyn3kYWLfWsBB6t2AOvBWE';
+$settings['geolocation.settings']['google_map_api_key'] = 'AIzaSyCfNUqK2pIA8TTJusCyLGiypSbnxBe8fJ8';

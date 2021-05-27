@@ -1,6 +1,11 @@
 // Title wrapper
 .content {
   &__title_wrapper {
+    @include breakpoint($only-mobile) {
+      padding: 0 1rem;
+      border-bottom: none;
+    }
+
     h1,
     h1 span {
       font-family: $tbs-recoleta-semibold;
@@ -32,12 +37,28 @@
         font-family: $alshaya-bold;
       }
     }
+
+    .promotions {
+      a {
+        font-size: 1rem;
+        color: $oos_btn_bg;
+        text-decoration: none;
+      }
+    }
   }
 
   &__main {
     .gallery-wrapper {
       @include breakpoint($desktop) {
         margin-#{$right}: 1.875rem;
+      }
+    }
+  }
+
+  &__sidebar {
+    .mobile-content-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: 0 1rem;
       }
     }
   }
@@ -118,6 +139,10 @@
     }
 
     .form-item.form-type-select.form-item-quantity {
+      @include breakpoint($only-mobile) {
+        float: none;
+      }
+
       @include breakpoint($only-tablet) {
         float: #{$left};
       }
@@ -125,7 +150,7 @@
 
     .sku-base-form {
       button[type="submit"] {
-        height: 3.125rem;
+        height: 3.1875rem;
         font-family: $tbs-semibold;
 
         @include breakpoint($only-tablet) {
@@ -151,6 +176,8 @@
       }
 
       @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+
         &::after {
           top: 1.875rem;
           position: absolute;
@@ -206,7 +233,7 @@
     .js-form-wrapper {
       @include breakpoint($only-mobile) {
         margin-#{$right}: 0;
-        width: 68%;
+        width: 100%;
       }
 
       @include breakpoint($tablet) {
