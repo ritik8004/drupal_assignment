@@ -13,6 +13,7 @@ const Teaser = ({
   hit, gtmContainer = null, pageType,
 }) => {
   const { showSwatches } = drupalSettings.reactTeaserView.swatches;
+  const { showReviewsRating } = drupalSettings.algoliaSearch;
   const collectionLabel = [];
   const [initSlider, setInitiateSlider] = useState(false);
   const [slider, setSlider] = useState(false);
@@ -101,6 +102,8 @@ const Teaser = ({
             <ConditionalView condition={
                 hit.attr_bv_total_review_count !== undefined
                 && hit.attr_bv_total_review_count > 0
+                && showReviewsRating !== undefined
+                && showReviewsRating === 1
               }
             >
               <div className="listing-inline-star">

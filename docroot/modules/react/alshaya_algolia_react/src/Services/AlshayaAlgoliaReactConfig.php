@@ -16,6 +16,7 @@ use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class AlshayaAlogoliaReactConfig.
@@ -78,6 +79,13 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected $alshayaOptionsService;
 
   /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -98,6 +106,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   Alshaya Promo Context Manager.
    * @param \Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya Options List service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -108,7 +118,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     AlshayaPlpSortLabelsService $plp_sort_labels,
     AlshayaPlpSortOptionsService $plp_sort_options,
     AlshayaPromoContextManager $alshayaPromoContextManager,
-    AlshayaOptionsListHelper $alshaya_options_service
+    AlshayaOptionsListHelper $alshaya_options_service,
+    ModuleHandlerInterface $module_handler
   ) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
@@ -119,6 +130,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $this->plpSortOptions = $plp_sort_options;
     $this->promoContextManager = $alshayaPromoContextManager;
     $this->alshayaOptionsService = $alshaya_options_service;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -130,7 +142,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       $container->get('language_manager'),
       $container->get('facets.manager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -222,6 +235,9 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         'swatchPlpLimit' => $display_settings->get('swatch_plp_limit'),
       ],
     ];
+    // Allow other modules to alter or add extra configs
+    // in agolia react common configurations.
+    $this->moduleHandler->alter('algolia_react_common_configs', $response);
 
     return $response;
   }

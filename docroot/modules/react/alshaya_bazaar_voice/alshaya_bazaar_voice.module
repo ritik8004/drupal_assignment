@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 
@@ -209,6 +210,52 @@ function alshaya_bazaar_voice_alshaya_my_account_links_alter(array &$links) {
  */
 function alshaya_bazaar_voice_form_alshaya_srp_sort_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['sort_options']['#options']['attr_bv_average_overall_rating'] = t('Top Rated');
+}
+
+/**
+ * Implements hook_bazaar_voice_settings_form_alter().
+ */
+function alshaya_bazaar_voice_form_bazaar_voice_settings_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#submit'][] = '_alshaya_bazaar_voice_plp_rating_reviews';
+}
+
+/**
+ * Update configs for rating filter and top rated in plp/slp.
+ */
+function _alshaya_bazaar_voice_plp_rating_reviews($form, FormStateInterface $form_state) {
+  $slp_settings = Drupal::configFactory()->getEditable('alshaya_search.settings');
+  $plp_settings = Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
+  $facet_block = Block::load('bvrating');
+  if ($form_state->getValue('plp_rating_reviews')) {
+    // Disable top rated option.
+    $slp_settings->set('sort_options.attr_bv_average_overall_rating', '');
+    $plp_settings->set('sort_options.attr_bv_average_overall_rating', '');
+    // Disable rating filter block.
+    $facet_block->disable();
+  } else {
+    // Enable top rated option.
+    $slp_settings->set('sort_options.attr_bv_average_overall_rating', 'attr_bv_average_overall_rating');
+    $plp_settings->set('sort_options.attr_bv_average_overall_rating', 'attr_bv_average_overall_rating');
+    // Enable rating filter block.
+    $facet_block->enable();
+  }
+  // Save the settings.
+  $slp_settings->save();
+  $plp_settings->save();
+  $facet_block->save();
+}
+
+/**
+ * Implements hook_algolia_react_common_configs_alter().
+ */
+function alshaya_bazaar_voice_algolia_react_common_configs_alter(&$response) {
+  /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
+  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+  $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+  $response['commonAlgoliaSearch']['showReviewsRating'] = 1;
+  if ($basic_configs['plp_rating_reviews']) {
+    $response['commonAlgoliaSearch']['showReviewsRating'] = 0;
+  }
 }
 
 /**
