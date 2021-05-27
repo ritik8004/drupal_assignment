@@ -62,7 +62,7 @@ class ReviewCommentForm extends React.Component {
                   type="text"
                   id="nickname"
                   name="nickname"
-                  minLength={4}
+                  minLength={bazaarVoiceSettings.reviews.bazaar_voice.screen_name_min_length}
                   onChange={this.handleNicknameChange}
                   className="form-input"
                   defaultValue={nickname}
