@@ -2,7 +2,6 @@
  * Logs messages in the backend.
  *
  * @todo This is a placeholder for logger.
- * eslint no-unused-vars: "error"
  *
  * @param {string} level
  *   The error level [, error, warning, notice, info, debug].
@@ -11,6 +10,7 @@
  * @param {string} context
  *   The context.
  */
+/* eslint-disable no-unused-vars */
 const logger = {
   send: (level, message, context) => {
 
@@ -24,6 +24,7 @@ const logger = {
   info: (message, context) => logger.send('info', message, context),
   debug: (message, context) => logger.send('debug', message, context),
 };
+/* eslint-enable no-unused-vars */
 
 /**
  * Contains cart error codes.
