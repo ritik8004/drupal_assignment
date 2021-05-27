@@ -3,6 +3,8 @@ import {
   isAnonymousUserWithoutCart,
   updateCart,
 } from './common';
+import { logger } from './utility';
+import { getDefaultErrorMessage } from './error';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -26,7 +28,29 @@ window.commerceBackend.getCart = async () => {
   }
 
   const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
-  return window.commerceBackend.processCartData(response.data);
+
+  if (typeof response.data.error !== 'undefined' && response.data.error === true) {
+    if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
+      // Remove the cart from storage.
+      localStorage.removeItem('cart_id');
+      logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+      // Get new cart.
+      window.commerceBackend.getCartId();
+    }
+
+    const error = {
+      data: {
+        error: response.data.error,
+        error_code: response.data.error_code,
+        error_message: getDefaultErrorMessage(),
+      },
+    };
+    return new Promise((resolve) => resolve(error));
+  }
+
+  // Process data.
+  response.data = window.commerceBackend.processCartData(response.data);
+  return new Promise((resolve) => resolve(response));
 };
 
 /**
@@ -116,7 +140,7 @@ window.commerceBackend.createCart = async () => {
  * @param {object} cartData
  *   The cart data object.
  */
-window.commerceBackend.processCartData = async (cartData) => {
+window.commerceBackend.processCartData = (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
     return null;
   }
@@ -220,7 +244,5 @@ window.commerceBackend.processCartData = async (cartData) => {
       // @todo Get stock data.
     });
   }
-  const response = { ...cartData };
-  response.data = data;
-  return response;
+  return data;
 };

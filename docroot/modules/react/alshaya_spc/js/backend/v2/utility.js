@@ -4,7 +4,7 @@
  * @todo This is a placeholder for logger.
  *
  * @param {string} level
- *   The error level [, error, warning, notice, info, debug].
+ *   The error level.
  * @param {string} message
  *   The message.
  * @param {string} context
@@ -13,7 +13,7 @@
 /* eslint-disable no-unused-vars */
 const logger = {
   send: (level, message, context) => {
-
+    // console.log('Error ' + message);
   },
   emergency: (message, context) => logger.send('emergency', message, context),
   alert: (message, context) => logger.send('alert', message, context),
