@@ -239,8 +239,7 @@ Drupal.alshaya_color_images_generate_swatch_markup = function (currentOption, se
   'use strict';
 
   var configurable_color_attribute = 'article_castor_id';
-  if (drupalSettings.sku_configurable_color_attribute !== undefined
-    && drupalSettings.sku_configurable_color_attribute !== null
+  if (drupalSettings.hasOwnProperty('sku_configurable_color_attribute')
     && drupalSettings.sku_configurable_color_attribute.length !== 0) {
     configurable_color_attribute = drupalSettings.sku_configurable_color_attribute;
   }
@@ -248,7 +247,6 @@ Drupal.alshaya_color_images_generate_swatch_markup = function (currentOption, se
   // Replace '_' with '-'.
   configurable_color_attribute = configurable_color_attribute.split('_').join('-').toLowerCase();
   configurable_color_attribute = 'edit-configurables-' + configurable_color_attribute;
-  console.log(configurable_color_attribute);
   if ((select.attr('data-drupal-selector') === configurable_color_attribute) ||
     (select.attr('data-drupal-selector') === 'edit-variants-in-group') &&
     (drupalSettings.hasOwnProperty('sku_configurable_options_color')) &&
