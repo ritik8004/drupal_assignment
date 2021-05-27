@@ -20,12 +20,7 @@ use Symfony\Component\Yaml\Yaml;
  * Update decimal_points for currency config.
  */
 function alshaya_acm_update_8019() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['acq_commerce.currency'],
-    'acq_commerce'
-  );
+  \Drupal::configFactory()->getEditable('acq_commerce.currency')->save();
 }
 
 /**
