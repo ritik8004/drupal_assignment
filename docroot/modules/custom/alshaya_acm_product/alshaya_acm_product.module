@@ -1489,6 +1489,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
         if (!empty($sku_configurable_options_color)) {
           $form['ajax']['configurables'][$config_color_attribute]['#attached']['drupalSettings']['sku_configurable_options_color'] = $sku_configurable_options_color;
+          $form['ajax']['configurables'][$config_color_attribute]['#attached']['drupalSettings']['sku_configurable_color_attribute'] = $config_color_attribute;
         }
       }
     }
