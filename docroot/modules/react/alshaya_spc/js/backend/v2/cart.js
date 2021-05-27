@@ -30,6 +30,17 @@ window.commerceBackend.getCart = async () => {
 };
 
 /**
+ * Adds item to the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
+
+/**
  * Calls the cart restore API.
  * @todo Implement restoreCart()
  *
