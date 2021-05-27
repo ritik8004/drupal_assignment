@@ -255,7 +255,12 @@
                   }
                 }
               })
-              .catch (function() {
+              .catch (function(error) {
+                // Show error.
+                var closestForm = $(that).closest('form.sku-base-form');
+                $(closestForm).find('.errors-container').html('<div class="error">' + error.message + '</div>');
+
+                // Send notification.
                 var cartNotification = new CustomEvent('product-add-to-cart-error', {
                   bubbles: true,
                   detail: {

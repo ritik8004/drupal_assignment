@@ -118,7 +118,12 @@
         Drupal.cartNotification.triggerNotification(productData);
       });
 
-      $('.sku-base-form').once('cart-notification-failed').on('product-add-to-cart-failed, product-add-to-cart-error', function () {
+      $('.sku-base-form').once('cart-notification-error').on('product-add-to-cart-error', function () {
+        Drupal.cartNotification.spinner_stop();
+        scrollToErrorPDP();
+      });
+
+      $('.sku-base-form').once('cart-notification-failed').on('product-add-to-cart-failed', function () {
         Drupal.cartNotification.spinner_stop();
         scrollToErrorPDP();
       });
@@ -246,11 +251,13 @@
             // Sticky header.
             var stickyHeaderHeight = stickyHeaderHight();
             // Scroll position.
-            var height_to_scroll = first_error_label.offset().top - stickyHeaderHeight - 25;
-            // Scroll to the error.
-            $('html, body').animate({
-              scrollTop: height_to_scroll
-            });
+            if (typeof first_error_label.offset() !== 'undefined') {
+              var height_to_scroll = first_error_label.offset().top - stickyHeaderHeight - 25;
+              // Scroll to the error.
+              $('html, body').animate({
+                scrollTop: height_to_scroll
+              });
+            }
           }, 500)
         }
       };
@@ -274,6 +281,9 @@
 
       // Check if error element is visible.
       var isInViewPort = function (element) {
+        if (typeof element.offset() === 'undefined') {
+          return false;
+        }
         var stickyHeader = stickyHeaderHight();
         var elementTop = element.offset().top;
         var elementBottom = elementTop + element.outerHeight();
