@@ -17,6 +17,23 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Update decimal_points for currency config.
+ */
+function alshaya_acm_update_8019() {
+  $modulehandler = \Drupal::service('module_handler');
+  if ($modulehandler->moduleExists('acq_commerce')) {
+    /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+    $manager = \Drupal::service('alshaya_config.manager');
+    $manager->updateConfigs(
+      ['acq_commerce.currency'],
+      'acq_commerce'
+    );
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set hide_max_qty_limit_message => false.
  */
 function alshaya_acm_update_8018() {

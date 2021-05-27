@@ -5,25 +5,6 @@
  * Install file for alshaya_jo.
  */
 
-use Drupal\alshaya_config\AlshayaConfigManager;
-
-/**
- * Implements hook_update_N().
- *
- * Update decimal_points for JO sites.
- */
-function alshaya_jo_update_8001() {
-  $modulehandler = \Drupal::service('module_handler');
-  if ($modulehandler->moduleExists('acq_commerce')) {
-    /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-    $manager = \Drupal::service('alshaya_config.manager');
-    $manager->updateConfigs(
-      ['acq_commerce.currency'],
-      'acq_commerce'
-    );
-  }
-}
-
 /**
  * Implements hook_install().
  */
