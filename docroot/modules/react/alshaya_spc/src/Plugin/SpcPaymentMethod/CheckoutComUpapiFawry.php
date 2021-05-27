@@ -44,6 +44,12 @@ class CheckoutComUpapiFawry extends AlshayaSpcPaymentMethodPluginBase {
         ),
       ],
       [
+        'key' => 'fawry_payment_option_confirmation_description',
+        'value' => t("Please complete your payment at the nearest <a href='@fawry_link' target='_blank'>Fawry Cash Point</a> using your reference number.",
+          ['@fawry_link' => 'https://fawry.com/storelocator']
+        ),
+      ],
+      [
         'key' => 'fawry_checkout_confirmation_message_prefix',
         'value' => t('Cash payment with Fawry'),
       ],
