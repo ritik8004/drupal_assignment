@@ -658,7 +658,7 @@
           $('.all-filters').insertAfter('#block-page-title');
         }
       }
-      $('.block-facet--swatch-list').parent('.container-without-product').addClass('plp-facet-product-filter');
+      $('.container-without-product').addClass('plp-facet-product-filter');
     }
   }
 
