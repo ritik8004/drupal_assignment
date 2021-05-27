@@ -160,8 +160,8 @@
     var context = $('#alshaya-algolia-plp');
     var subCategoryBlock = $('.block-alshaya-sub-category-block');
     var filter = $('#alshaya-algolia-plp');
-
     if ($('.show-all-filters-algolia', context).length > 0) {
+      filter.find('.container-without-product').addClass('plp-facet-product-filter');
       if ($(window).width() > 1023) {
         algoliaReactFilterPosition = $('.container-without-product', context).offset().top;
       } else if ($(window).width() > 767 && $(window).width() < 1024) {
