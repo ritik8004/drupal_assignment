@@ -26,8 +26,7 @@ export default class ConfigurableForm extends React.Component {
     const { selectedVariant, productData } = props;
 
     // Set the default attributes.
-    const firstChild = productData.variants[0].sku;
-    const firstChildAttributes = productData.configurable_combinations.by_sku[firstChild];
+    const firstChildAttributes = productData.configurable_combinations.by_sku[selectedVariant];
 
     // Store reference to the config form.
     this.formRef = React.createRef();
