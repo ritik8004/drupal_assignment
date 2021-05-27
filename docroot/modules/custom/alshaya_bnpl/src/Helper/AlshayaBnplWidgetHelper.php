@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_bnpl\Helper;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Routing\CurrentRouteMatch;
@@ -126,6 +127,17 @@ class AlshayaBnplWidgetHelper {
    *   Type of the page ('pdp', 'cart', 'checkout').
    */
   public function getBnplBuild(array &$build, $page_type = 'pdp') {
+    // No need to integrate the widget if postpay payment method is excluded
+    // from the Checkout page.
+    $config = $this->configFactory->get('alshaya_acm_checkout.settings');
+    $excludedPaymemtMethods = $config->get('exclude_payment_methods');
+    CacheableMetadata::createFromRenderArray($build)
+      ->addCacheableDependency($config)
+      ->applyTo($build);
+    if (in_array('postpay', array_filter($excludedPaymemtMethods))) {
+      return;
+    }
+
     $bnplApiconfig = $this->alshayaBnplAPIHelper->getBnplApiConfig();
     // No need to integrate the widget if the API does not have merchant id.
     if (!isset($bnplApiconfig['merchant_id']) || empty($bnplApiconfig['merchant_id'])) {

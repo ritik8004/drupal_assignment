@@ -83,9 +83,15 @@
 }
 
 .alshaya-select-wrapper {
+  @include breakpoint($tablet) {
+    width: 5rem;
+  }
+
   .alshayaSelect {
     &__value-container {
-      justify-content: center;
+      @include breakpoint($tablet) {
+        justify-content: center;
+      }
     }
 
     &__menu {
