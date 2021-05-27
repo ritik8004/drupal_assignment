@@ -50,26 +50,26 @@
   }
 
   &_size {
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($only-mobile) {
       display: inline-block;
       float: $left;
       margin: 0;
-    }
-
-    @include breakpoint($only-mobile) {
       width: 13.125rem;
-    }
-
-    @include breakpoint($only-tablet) {
-      width: 14.375rem;
     }
 
     + .alshaya-select-wrapper {
       width: 5rem;
 
-      @include breakpoint($upto-desktop) {
+      @include breakpoint($only-mobile) {
         float: $right;
         margin-#{$left}: 1rem;
+      }
+
+      + .error-message {
+        @include breakpoint($only-mobile) {
+          float: $left;
+          margin-bottom: 0.75rem;
+        }
       }
     }
   }
