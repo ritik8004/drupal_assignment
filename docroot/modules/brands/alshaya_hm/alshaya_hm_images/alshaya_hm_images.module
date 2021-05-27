@@ -315,5 +315,6 @@ function alshaya_hm_images_alshaya_acm_product_pdp_swath_type_alter(SKUInterface
   if (!empty($assets)) {
     $url = ImageStyle::load('pdp_gallery_thumbnail')->buildUrl($assets[0]['drupal_uri']);
     $color_options_list[key($color_options_list)]['display_value'] = '<img src="' . file_url_transform_relative($url) . '">';
+    $color_options_list[key($color_options_list)]['swatch_type'] = $swatch_type;
   }
 }

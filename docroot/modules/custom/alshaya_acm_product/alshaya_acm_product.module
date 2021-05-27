@@ -1465,6 +1465,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               }
 
               $options[$key] = $variant_sku->get($config_color_label_attribute)->getString();
+              $color_options_list = [
+                $key => [
+                  'display_label' => $options[$key],
+                  'swatch_type' => 'RGB',
+                  'display_value' => $variant_sku->get($color_code_attribute)->getString(),
+                ],
+              ];
               $color_options_list[$key] = [
                 'display_label' => $options[$key],
                 'swatch_type' => 'RGB',
@@ -1474,7 +1481,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               // Allow other modules to change the swatch data.
               \Drupal::moduleHandler()->alter('alshaya_acm_product_pdp_swath_type', $sku, $color_options_list, $variant_sku);
 
-              $sku_configurable_options_color = $color_options_list;
+              $sku_configurable_options_color[$key] = $color_options_list[$key];
               break;
             }
           }
