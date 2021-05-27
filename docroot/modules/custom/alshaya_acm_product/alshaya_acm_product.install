@@ -14,6 +14,23 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * [6.2.0] Add the config value for the color attribute display.
+ */
+function alshaya_acm_product_update_8071() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+    $manager = \Drupal::service('alshaya_config.manager');
+    $manager->updateConfigs([
+      'alshaya_acm_product.display_settings',
+    ],
+      'alshaya_acm_product',
+      'install',
+      AlshayaConfigManager::MODE_RESAVE,
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.2.0] Delete the configs for /skus/list API.
  */
 function alshaya_acm_product_update_8070() {
