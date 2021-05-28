@@ -1,0 +1,107 @@
+.secondary-main-menu-wrapper {
+  .site-brand-home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a.logo {
+      height: auto;
+    }
+  }
+
+  .block-alshaya-secondary-main-menu {
+    z-index: 4;
+    margin: 0.9375rem 0 1.125rem;
+  }
+
+  @include breakpoint($desktop) {
+    .secondary--main--menu {
+      ul.menu--one {
+        display: none;
+
+        &__list {
+          display: flex !important;
+          justify-content: center;
+        }
+      }
+
+      li.menu--one {
+        &__list-item {
+          height: 1.25rem;
+
+          .menu__link {
+            text-transform: capitalize;
+          }
+
+          .menu--one__link {
+            height: auto;
+            padding: 0 0 0.125rem;
+            margin: 0 0.9375rem;
+            border-bottom: 0;
+            color: $hfd-menu-link-color;
+            font-family: $open-sans;
+            font-size: 0.8125rem;
+            line-height: 1.38;
+          }
+
+          .menu--two__list {
+            padding: 0;
+            margin-top: 0.625rem;
+            box-shadow: 0 0.125rem 0.375rem 0 rgba(0, 0, 0, 0.24);
+
+            .menu__links__wrapper {
+              padding: 1.875rem;
+
+              .menu__link {
+                margin-bottom: 0.9375rem;
+                font-size: 1rem;
+                line-height: 1.125rem;
+              }
+            }
+
+            &-item {
+              padding: 0;
+
+              > .menu__link-wrapper {
+                margin-bottom: 0.9375rem;
+              }
+            }
+          }
+
+          ul.menu--three__list {
+            display: block;
+
+            .level-three__wrapper {
+              li.menu__list-item {
+                padding: 0;
+              }
+
+              .menu__link-wrapper {
+                a.menu__link {
+                  color: $hfd-menu-link-color !important;
+                  line-height: 2 !important;
+
+                  &:hover {
+                    cursor: pointer;
+                    color: $hfd-menu-link-color-hover !important;
+                  }
+                }
+              }
+            }
+          }
+
+          &:hover {
+            .menu--one__link {
+              padding-top: 0.125rem;
+              padding-bottom: 1px;
+              border-top: 0;
+              border-bottom: 1px solid $hfd-menu-link-color-hover;
+              cursor: pointer;
+              color: $hfd-menu-link-color-hover;
+            }
+          }
+        }
+      }
+    }
+  }
+}
