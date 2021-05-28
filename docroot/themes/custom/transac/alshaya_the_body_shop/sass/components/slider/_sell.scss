@@ -18,6 +18,12 @@
   .c-products__item__label {
     font-size: 1rem;
     font-family: $tbs-medium;
+    text-align: $left;
+    margin-#{$left}: 0;
+  }
+
+  .price-block {
+    text-align: $left;
   }
 
   .price {
