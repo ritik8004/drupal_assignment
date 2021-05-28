@@ -395,3 +395,42 @@
     }
   }
 }
+
+.form-item-configurables-color {
+  .select2Option {
+    .select-buttons {
+      li {
+        a[data-swatch-type=RGB],
+        span[data-swatch-type=RGB] {
+          width: 2.375rem;
+          height: 2.375rem;
+          border: none;
+          border-radius: 100%;
+          position: relative;
+          margin-#{$right}: 0.9375rem;
+          margin-top: 0.9375rem;
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: 0.625rem;
+          }
+
+          &.picked,
+          &:hover {
+            &::after {
+              content: '';
+              position: absolute;
+              top: -0.1875rem;
+              left: -0.1875rem;
+              right: -0.1875rem;
+              bottom: -0.1875rem;
+              height: auto;
+              width: auto;
+              border: 0.0625rem solid $pdp-color-swatch-border;
+              border-radius: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
