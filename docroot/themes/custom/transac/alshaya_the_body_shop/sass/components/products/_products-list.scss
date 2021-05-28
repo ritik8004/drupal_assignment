@@ -156,3 +156,12 @@
     }
   }
 }
+
+.c-department {
+  .c-page-title__description {
+    a {
+      text-decoration: underline;
+      font-family: $alshaya-bold;
+    }
+  }
+}
