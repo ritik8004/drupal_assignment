@@ -81,7 +81,7 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
           if (!empty($record['columns'][$l2]['url']->toString())) {
             $record['columns'][$l2]['tag'] = 'a';
             $record['columns'][$l2]['tag_attr'] = "href={$record['columns'][$l2]['url']->toString()}";
-        }
+          }
           if (!empty($record['columns'][$l2]['below'])) {
             _alshaya_secondary_main_menu_process_tag_attributes_columns($record['columns'][$l2]['below']);
           }

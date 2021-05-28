@@ -136,7 +136,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
         $col = 0;
         $col_total = 0;
         $reprocess = FALSE;
-        // 2 below means L2 item + one blank line for spacing).
+        // 2 below means L2 item + one blank line for spacing.
         $l2_cost = 2 + count($l2s['below']);
         // If we are detecting a longer column than the expected size
         // we iterate with new max.
