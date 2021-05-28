@@ -50,6 +50,7 @@ fields:
     facet: 1
     index: 1
   color:
+    configurable: 1
     index: 0
     facet: 0
     display_configurable_for: 'color_swatch_code'
