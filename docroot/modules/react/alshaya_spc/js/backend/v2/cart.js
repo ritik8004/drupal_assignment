@@ -1,6 +1,9 @@
 import {
   callMagentoApi,
+  getCart,
+  getCartData,
   isAnonymousUserWithoutCart,
+  saveCartData,
   updateCart,
 } from './common';
 
@@ -19,15 +22,7 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.getCart = async () => {
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null) {
-    return new Promise((resolve) => resolve(cartId));
-  }
-
-  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
-  return window.commerceBackend.processCartData(response.data);
-};
+window.commerceBackend.getCart = () => getCart();
 
 /**
  * Calls the cart restore API.
@@ -36,9 +31,7 @@ window.commerceBackend.getCart = async () => {
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.restoreCart = () => {
-  throw new Error('restoreCart Not implemented!');
-};
+window.commerceBackend.restoreCart = () => getCart().then((response) => response);
 
 /**
  * Adds item to the cart and returns the cart.
@@ -105,7 +98,7 @@ window.commerceBackend.createCart = async () => {
  * @param {object} cartData
  *   The cart data object.
  */
-window.commerceBackend.processCartData = async (cartData) => {
+window.commerceBackend.processCartData = (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
     return null;
   }
@@ -213,3 +206,19 @@ window.commerceBackend.processCartData = async (cartData) => {
   response.data = data;
   return response;
 };
+
+/**
+ * Gets the cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartData = () => getCartData();
+
+/**
+ * Sets the cart data.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartData = (data) => saveCartData(data);

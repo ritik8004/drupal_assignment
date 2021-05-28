@@ -20,12 +20,7 @@ export const getStorageInfo = (storageKey = 'cart_data') => {
   }
 };
 
-export const addInfoInStorage = (cart) => {
-  const cartInfo = { ...cart };
-  // Adding current time to storage to know the last time cart updated.
-  cartInfo.last_update = new Date().getTime();
-  setStorageInfo(cartInfo);
-};
+export const addInfoInStorage = (cart) => window.commerceBackend.setCartData(cart);
 
 export const removeCartFromStorage = () => {
   removeStorageInfo('cart_data');
@@ -36,7 +31,4 @@ export const removeCartFromStorage = () => {
   removeStorageInfo('last_selected_payment');
 };
 
-export const getInfoFromStorage = () => {
-  const cartData = getStorageInfo('cart_data');
-  return cartData;
-};
+export const getInfoFromStorage = () => window.commerceBackend.getCartData();

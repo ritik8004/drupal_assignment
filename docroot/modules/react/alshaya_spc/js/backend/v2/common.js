@@ -8,8 +8,8 @@ import Axios from 'axios';
  * @returns bool
  */
 const isAnonymousUserWithoutCart = () => {
-  const cartData = window.Drupal.alshayaSpc.getCartData();
-  if (cartData === null || typeof cartData === 'undefined' || typeof cartData.cart_id === 'undefined') {
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null || typeof cartId === 'undefined') {
     if (drupalSettings.user.uid === 0) {
       return true;
     }
@@ -66,6 +66,28 @@ const callMagentoApi = (url, method, data) => {
 };
 
 /**
+ * Object to serve as static cache for cart data over the course of a request.
+ */
+let cartData = null;
+
+/**
+ * Gets the stored cart data.
+ */
+const getCartData = () => cartData;
+
+/**
+ * Saves the cart data to static memory.
+ *
+ * @param {object} data
+ *   The cart object to save.
+ */
+const saveCartData = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  cartData = cartInfo;
+};
+
+/**
  * Calls the update cart API.
  *
  * @param {object} data
@@ -103,11 +125,37 @@ const updateCart = async (data) => {
   }
 
   return window.commerceBackend.getCart()
-    .then((cartData) => new Promise((resolve) => resolve(cartData)));
+    .then((res) => new Promise((resolve) => resolve(res)));
+};
+
+/**
+ * Calls the get cart API.
+ *
+ * @returns {promise}
+ *   A promise object which resolves to a cart object or null.
+ */
+const getCart = () => {
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null) {
+    return new Promise((resolve) => resolve(cartId));
+  }
+
+  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {})
+    .then((response) => {
+      // Process the cart data to the requrired format.
+      const processedData = window.commerceBackend.processCartData(response.data);
+      // Set the updated cart data in storage.
+      saveCartData({ cart: response.data });
+      return processedData;
+    });
+  // @todo: Handle error.
 };
 
 export {
   isAnonymousUserWithoutCart,
   callMagentoApi,
   updateCart,
+  getCart,
+  getCartData,
+  saveCartData,
 };
