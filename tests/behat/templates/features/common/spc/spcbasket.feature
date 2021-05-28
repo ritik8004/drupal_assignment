@@ -32,7 +32,7 @@ Feature: Test basket page
     Then I should see "{language_link}"
     Then I should see an ".acq-mini-cart" element
     Then I should see an "#alshaya-algolia-autocomplete" element
-    Then I should see "{sort_filter}"
+    Then I should see an ".plp-facet-product-filter" element
 
   @mobile
   Scenario: As a Guest, I should be able to see the header and the footer (mobile)
@@ -173,7 +173,7 @@ Feature: Test basket page
     Then I should see "{second_language_link}"
     Then I should see an ".acq-mini-cart" element
     Then I should see an "#alshaya-algolia-autocomplete" element
-    Then I should see "{language_sort_filter}"
+    Then I should see an ".plp-facet-product-filter" element
 
   @mobile @language
   Scenario: As a Guest, I should be able to see the header and the footer in second language (mobile)
