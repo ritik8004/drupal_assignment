@@ -10,6 +10,22 @@ use Drupal\block\Entity\Block;
 /**
  * Implements hook_update_N().
  *
+ * Set image_thumb_gallery => false to use single image gallery on listing pages.
+ */
+function alshaya_aeo_transac_update_8005() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_mobile_app module.
  */
 function alshaya_aeo_transac_update_8004() {
