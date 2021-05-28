@@ -61,3 +61,12 @@ fields:
     label: 'Top three attributes 3'
     type: 'text_long'
     description: 'Top three attributes 3'
+  color:
+    configurable: 1
+    index: 0
+    facet: 0
+    display_configurable_for: 'color_swatch_code'
+  color_swatch_code:
+    label: 'Color swatch code'
+    type: 'string'
+    translatable: 0
