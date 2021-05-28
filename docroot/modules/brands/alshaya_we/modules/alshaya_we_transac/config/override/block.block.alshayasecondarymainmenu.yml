@@ -8,7 +8,7 @@ dependencies:
 id: alshayasecondarymainmenu
 theme: alshaya_westelm
 region: header
-weight: -59
+weight: -46
 provider: null
 plugin: alshaya_secondary_main_menu
 settings:

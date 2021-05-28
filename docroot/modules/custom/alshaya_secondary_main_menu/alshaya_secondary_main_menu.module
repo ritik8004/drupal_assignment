@@ -1,6 +1,10 @@
 <?php
 
 use Drupal\Core\Link;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * @file
@@ -71,30 +75,30 @@ function _alshaya_secondary_main_menu_process_tag_attributes(array &$data) {
         $record['l1_object']['tag_attr'] = "href={$record['l1_object']['url']->toString()}";
       }
       if (!empty($record['columns'])) {
-        foreach ($record['columns'] as $key => $value) {
-          foreach ($value as $key1 => $l2) {
-            $record['columns'][$key][$key1]['tag'] = 'div';
-            $record['columns'][$key][$key1]['tag_attr'] = '';
-            if (!empty($l2['url']->toString())) {
-              $record['columns'][$key][$key1]['tag'] = 'a';
-              $record['columns'][$key][$key1]['tag_attr'] = "href={$l2['url']->toString()}";
-            }
-            if (!empty($l2['below'])) {
-              _alshaya_secondary_main_menu_process_tag_attributes_columns($record['columns'][$key][$key1]['below']);
-            }
+        foreach($record['columns'] as $l2 => $value) {
+          $record['columns'][$l2]['tag']= 'div';
+          $record['columns'][$l2]['tag_attr']= 'div';
+          if (!empty($record['columns'][$l2]['url']->toString())) {
+            $record['columns'][$l2]['tag'] = 'a';
+            $record['columns'][$l2]['tag_attr'] = "href={$record['columns'][$l2]['url']->toString()}";
+        }
+          if (!empty($record['columns'][$l2]['below'])) {
+            _alshaya_secondary_main_menu_process_tag_attributes_columns($record['columns'][$l2]['below']);
           }
         }
       }
     }
-    else {
-      $record['tag'] = 'div';
-      $record['tag_attr'] = '';
-      if (!empty($record['url']->toString())) {
-        $record['tag'] = 'a';
-        $record['tag_attr'] = "href={$record['url']}";
-      }
-      if (!empty($record['below'])) {
-        _alshaya_secondary_main_menu_process_tag_attributes($record['below']);
+    else{
+      foreach($record['columns'] as $rec) {
+        $record['columns']['tag'] = 'div';
+        $record['columns']['tag_attr'] = '';
+        if (!empty(($rec['url']->toString()))) {
+          $record['columns']['tag'] = 'a';
+          $record['columns']['tag_attr'] = "href={$rec['url']->toString()}";
+        }
+        if (!empty($rec['below'])) {
+          _alshaya_secondary_main_menu_process_tag_attributes($rec['below']);
+        }
       }
     }
   }
@@ -107,12 +111,12 @@ function _alshaya_secondary_main_menu_process_tag_attributes_columns(array &$dat
   foreach ($data as $key => $value) {
     $data[$key]['tag'] = 'div';
     $data[$key]['tag_attr'] = '';
-    if (!empty($value['url']->toString())) {
+    if (!empty($data[$key]['url']->toString())) {
       $data[$key]['tag'] = 'a';
-      $data[$key]['tag_attr'] = "href={$value['url']->toString()}";
+      $data[$key]['tag_attr'] = "href={$data[$key]['url']->toString()}";
     }
-    if (isset($value['below'])) {
-      _alshaya_secondary_main_menu_process_tag_attributes_columns($value['below']);
+    if (isset($data[$key]['below'])) {
+      _alshaya_secondary_main_menu_process_tag_attributes_columns($data[$key]['below']);
     }
   }
 }

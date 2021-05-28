@@ -8,7 +8,7 @@ dependencies:
 id: alshayasecondarymainmenu
 theme: alshaya_pottery_barn
 region: header
-weight: -58
+weight: -30
 provider: null
 plugin: alshaya_secondary_main_menu
 settings:

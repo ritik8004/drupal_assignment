@@ -6,7 +6,12 @@
  */
 
 /**
- * Implements hook_update_N().
+ * Implements hook_uninstall().
  *
- * Add new setting in alshaya_secondary_main_menu.
+ * Reset config. We need to ensure all the configuration added in the module
+ * is deleted to allow the ON/OFF code to work.
  */
+function alshaya_secondary_main_menu_uninstall() {
+  Drupal::configFactory()->getEditable('block.block.alshayasecondarymainmenu')->delete();
+  \Drupal::configFactory()->getEditable('system.menu.secondary-main-menu')->delete();
+}
