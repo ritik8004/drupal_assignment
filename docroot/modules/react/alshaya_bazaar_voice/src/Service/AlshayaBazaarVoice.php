@@ -337,6 +337,27 @@ class AlshayaBazaarVoice {
   }
 
   /**
+   * Get the BazaarVoice error messages from configs.
+   *
+   * @return array
+   *   Error messages.
+   */
+  public function getBazaarVoiceErrorMessages() {
+    $available_error_messages = [];
+
+    $config = $this->configFactory->get('bazaar_voice_error_messages.settings');
+    $error_messages = $config->get('error_messages');
+
+    if (!empty($error_messages)) {
+      foreach ($error_messages as $error) {
+        $available_error_messages[$error['value']] = $error['label'];
+      }
+    }
+
+    return $available_error_messages;
+  }
+
+  /**
    * Process option values getting from BazaarVoice.
    *
    * @return array

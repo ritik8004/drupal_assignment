@@ -3,6 +3,24 @@ body.ratings-reviews-overlay {
     transition: transform 400ms cubic-bezier(0, 0, 0.2, 1), opacity 0ms cubic-bezier(0, 0, 0.2, 1);
     transform: translateX(0) !important;
     opacity: 1;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+}
+
+.magv2-main,
+.magv2-popup-panel {
+  .star-ratings-wrapper {
+    .inline-star {
+      .icon-ic_ratingfull,
+      .icon-ic_rating {
+        &::before {
+          font-size: 1.5rem;
+        }
+      }
+    }
   }
 }
 
@@ -29,7 +47,7 @@ body.ratings-reviews-overlay {
           }
 
           .histogram-data-section {
-            padding: 2.875rem 0.625rem;
+            padding: 2.875rem 1.875rem;
             #{$right}: auto;
             #{$left}: auto;
             width: 100%;
@@ -57,12 +75,37 @@ body.ratings-reviews-overlay {
                       position: static;
                       font-size: 1rem;
                     }
-                  }
 
-                  &-data {
-                    .histogram-row {
-                      .star-label {
-                        width: 15%;
+                    .histogram-data {
+                      .histogram-title {
+                        &::before {
+                          top: 0;
+                          font-size: 1.5rem;
+                          width: 1.5rem;
+                          height: 1.5rem;
+
+                          html[lang=ar] & {
+                            top: -0.375rem;
+                          }
+                        }
+                      }
+
+                      .histogram-row {
+                        .histogram-full-bar {
+                          width: 81%;
+
+                          html[lang=ar] & {
+                            width: 79%;
+                          }
+                        }
+
+                        .star-label {
+                          width: 11%;
+
+                          html[lang=ar] & {
+                            width: 13%;
+                          }
+                        }
                       }
                     }
                   }
@@ -72,7 +115,7 @@ body.ratings-reviews-overlay {
                   width: 100%;
 
                   .overall-product-rating {
-                    padding: 2rem 1rem 0;
+                    padding: 2rem 0 0;
 
                     .secondary-star-container {
                       flex-wrap: wrap;
@@ -120,6 +163,7 @@ body.ratings-reviews-overlay {
                 .write-review-button {
                   min-width: 100%;
                   height: 2.8125rem;
+                  line-height: normal;
                 }
               }
             }
@@ -134,6 +178,10 @@ body.ratings-reviews-overlay {
                 margin-#{$right}: 0;
               }
 
+              .sorting-filter-title-block {
+                margin: 1rem 0 0.5rem;
+              }
+
               .filter-items {
                 width: 32%;
                 margin-#{$right}: 1.8%;
@@ -145,10 +193,18 @@ body.ratings-reviews-overlay {
             }
           }
 
+          .star-ratings-wrapper {
+            margin-bottom: 0.5rem;
+          }
+
+          .review-detail-mobile {
+            margin-bottom: 0;
+          }
+
           .review {
             &-summary {
               display: block;
-              padding: 1.75rem 0.5rem 2.25rem;
+              padding: 1.75rem 1.875rem 2.25rem;
               background: $magv2-rr-histogram-block-bg;
               margin-top: 1.25rem;
               border-bottom: none;
@@ -163,11 +219,19 @@ body.ratings-reviews-overlay {
 
               .thumbnail-img-block {
                 overflow-y: auto;
+                margin-top: 1.5rem;
+                position: static;
 
                 .popup-content {
                   #{$left}: 0 !important;
                   width: 100% !important;
                   top: 6.25rem !important;
+
+                  .large-image {
+                    img {
+                      object-fit: contain;
+                    }
+                  }
                 }
               }
 
@@ -175,6 +239,12 @@ body.ratings-reviews-overlay {
                 .review-feedback-vote {
                   flex-flow: row wrap;
                   width: 100%;
+
+                  .feedback-positive button {
+                    @include breakpoint($only-mobile) {
+                      padding-#{$left}: 0;
+                    }
+                  }
                 }
               }
             }
@@ -219,7 +289,7 @@ body.ratings-reviews-overlay {
             }
 
             &-text {
-              margin-bottom: 1.5rem;
+              margin: 0;
             }
 
             &-pagination {
@@ -259,6 +329,7 @@ body.ratings-reviews-overlay {
           .feedback-label {
             margin-bottom: 0.1875rem;
             display: block;
+            width: 100%;
           }
 
           .user {
@@ -332,7 +403,7 @@ body.ratings-reviews-overlay {
           }
 
           .write-review-form-add {
-            padding: 1.5rem 0;
+            padding: 1.5rem 1.875rem;
 
             // Type = Text.
             .write-review-type-textfield {
@@ -371,7 +442,7 @@ body.ratings-reviews-overlay {
                 margin-bottom: 0.5rem;
 
                 .form-type-radio {
-                  margin-#{$right}: 2.5%;
+                  margin-#{$right}: 1.25%;
                 }
               }
             }
@@ -406,6 +477,14 @@ body.ratings-reviews-overlay {
               }
             }
 
+            .exception-error {
+              margin-top: 2.8125rem;
+
+              .exception-field-error-list {
+                padding-#{$left}: 0.875rem;
+              }
+            }
+
             .title-block {
               position: fixed;
               top: 0;
@@ -416,11 +495,20 @@ body.ratings-reviews-overlay {
               margin-#{$left}: -0.3125rem;
               z-index: 5;
 
+              @include breakpoint($only-mobile) {
+                width: 100%;
+              }
+
               .close-modal {
                 z-index: 3;
                 background: none;
                 top: 0.5rem;
-                right: 0.625rem;
+                #{$right}: 0.625rem;
+
+                html[lang=ar] & {
+                  top: 0.3125rem;
+                  left: 0.8125rem;
+                }
 
                 &::before {
                   color: $magv2-panel-close-icon;
@@ -442,7 +530,11 @@ body.ratings-reviews-overlay {
 
             .product-block {
               width: 100%;
-              padding-#{$right}: 0;
+              padding: 0 1.875rem;
+
+              .product-image-block {
+                padding-top: 4rem;
+              }
             }
 
             &-sidebar {
@@ -484,7 +576,7 @@ body.ratings-reviews-overlay {
           .load-more-wrapper {
             .load-more {
               width: 100%;
-              margin: 0 0.5rem;
+              margin: 0 1.875rem 2rem;
             }
           }
 
@@ -531,6 +623,11 @@ body.ratings-reviews-overlay {
             }
           }
         }
+
+        .load-more-wrapper {
+          padding: 0 1.875rem;
+          margin-bottom: 1.25rem;
+        }
       }
     }
   }
@@ -538,11 +635,8 @@ body.ratings-reviews-overlay {
 
 .magazine-layout-v2 {
   .aggregate-rating {
-    padding: 0 0 1.75rem;
-
-    @include breakpoint($only-mobile) {
-      padding: 0 0.5rem 1.75rem;
-    }
+    padding: 0 0 0.875rem;
+    justify-content: $left;
 
     .empty-stars {
       &:hover {
