@@ -5,7 +5,9 @@
  * Install, uninstall, update function for alshaya_aeo_transac.
  */
 
-  /**
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
  * Implements hook_update_N().
  *
  * Set image_thumb_gallery => false to use single image gallery on listing pages.
