@@ -62,13 +62,13 @@ const handleResponse = (response) => {
   }
 
   // Treat each status code.
-  if (response.status > 500) {
+  if (response.status >= 500) {
     // Server error responses.
     response.data.error = true;
     response.data.error_code = 600;
     response.data.error_message = 'Back-end system is down';
     //
-  } else if (response.status === 404 || (typeof response.data.message !== 'undefined')) {
+  } else if (response.status === 404) {
     // Client error responses.
     response.data.error = true;
     response.data.error_code = 404;
@@ -78,8 +78,8 @@ const handleResponse = (response) => {
     // All other responses.
     response.data.error = true;
     if (typeof response.data.message !== 'undefined') {
+      response.data.error_message = response.data.message;
       const errorCode = (typeof response.data.error_code !== 'undefined') ? response.data.error_code : '-';
-
       logger.error(`Error while doing MDC api call. Error message: ${response.data.message}, Code: ${errorCode}, Response code: ${response.status}.`);
 
       if (response.status === 400 && typeof response.data.error_code !== 'undefined' && response.data.error_code === cartErrorCodes.cartCheckoutQuantityMismatch) {
@@ -91,11 +91,12 @@ const handleResponse = (response) => {
   } else if (typeof response.data.messages !== 'undefined' && typeof response.data.messages.error !== 'undefined') {
     const error = response.data.messages.error.shift();
     //
+    delete (response.data.messages);
     response.data.error = true;
     response.data.error_code = error.code;
     response.data.error_message = error.message;
     //
-    logger.error(`Error while doing MDC api call. Error message no empty. Error message: ${error.message}`);
+    logger.error(`Error while doing MDC api call. Error message: ${error.message}`);
   }
 
   return response;
