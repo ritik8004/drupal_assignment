@@ -42,7 +42,7 @@ window.commerceBackend.restoreCart = () => getCart();
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
+window.commerceBackend.addToCart = (data) => updateCart(data);
 
 /**
  * Applies/Removes promo code to the cart and returns the cart.
