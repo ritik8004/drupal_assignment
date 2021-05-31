@@ -53,6 +53,9 @@ bazaar_voice.settings:
     comment_form_tnc:
       type: string
       label: 'URL of BazaarVoice Comment Form Terms and Condition.'
+    screen_name_min_length:
+      type: integer
+      label: 'Minimum character length for screen name text in comment form.'
     comment_box_min_length:
       type: integer
       label: 'Minimum character length for comment box text in comment form.'

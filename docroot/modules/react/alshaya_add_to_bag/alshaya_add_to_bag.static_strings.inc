@@ -46,6 +46,10 @@ function _alshaya_add_to_bag_strings() {
       'key' => 'add_to_cart',
       'value' => t('add to cart'),
     ],
+    [
+      'key' => 'item_added',
+      'value' => t('Item added'),
+    ],
   ];
 }
 
@@ -60,6 +64,9 @@ function _alshaya_add_to_bag_translations() {
       ],
       'Quick View' => [
         'ar' => 'نظرة سريعة',
+      ],
+      'Item added' => [
+        'ar' => 'تمت إضافة العنصر',
       ],
     ],
   ];

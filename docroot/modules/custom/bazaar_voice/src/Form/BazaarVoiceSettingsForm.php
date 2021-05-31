@@ -209,6 +209,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ],
     ];
 
+    $form['basic_settings']['screen_name_min_length'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Screen name minimum character length'),
+      '#default_value' => $config->get('screen_name_min_length'),
+      '#description' => $this->t('Enter minimum character length for screen name text in comment form.'),
+    ];
+
     $form['basic_settings']['comment_box_max_length'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Comment maximum character length'),
@@ -310,6 +317,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('write_review_guidlines', $values['write_review_guidlines'])
       ->set('comment_form_tnc', $values['comment_form_tnc'])
       ->set('bv_content_types', $values['bv_content_types'])
+      ->set('screen_name_min_length', $values['screen_name_min_length'])
       ->set('comment_box_min_length', $values['comment_box_min_length'])
       ->set('comment_box_max_length', $values['comment_box_max_length'])
       ->set('bv_routes_list', $values['bv_routes_list'])

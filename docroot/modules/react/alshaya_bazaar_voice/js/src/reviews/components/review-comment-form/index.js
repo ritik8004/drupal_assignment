@@ -62,6 +62,7 @@ class ReviewCommentForm extends React.Component {
                   type="text"
                   id="nickname"
                   name="nickname"
+                  minLength={bazaarVoiceSettings.reviews.bazaar_voice.screen_name_min_length}
                   onChange={this.handleNicknameChange}
                   className="form-input"
                   defaultValue={nickname}
@@ -206,6 +207,14 @@ class ReviewCommentForm extends React.Component {
   }
 
   handleNicknameChange = (e) => {
+    if (e.target.value.length > 0) {
+      const label = getStringMessage('screen_name');
+      document.getElementById(`${e.target.id}-error`).innerHTML = e.target.value.length < e.target.minLength
+        ? getStringMessage('text_min_chars_limit_error', { '%minLength': e.target.minLength, '%fieldTitle': label })
+        : '';
+    } else {
+      document.getElementById(`${e.target.id}-error`).innerHTML = '';
+    }
     this.setState({ nickname: e.target.value });
   }
 
