@@ -20,8 +20,6 @@ export const getStorageInfo = (storageKey = 'cart_data') => {
   }
 };
 
-export const addInfoInStorage = (cart) => window.commerceBackend.setCartData(cart);
-
 export const removeCartFromStorage = () => {
   removeStorageInfo('cart_data');
 

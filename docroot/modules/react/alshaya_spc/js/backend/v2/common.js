@@ -140,15 +140,9 @@ const getCart = () => {
     return new Promise((resolve) => resolve(cartId));
   }
 
-  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {})
-    .then((response) => {
-      // Process the cart data to the requrired format.
-      const processedData = window.commerceBackend.processCartData(response.data);
-      // Set the updated cart data in storage.
-      saveCartData({ cart: response.data });
-      return processedData;
-    });
   // @todo: Handle error.
+  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {})
+    .then((response) => window.commerceBackend.processCartData(response.data));
 };
 
 export {

@@ -1,9 +1,9 @@
-import { addInfoInStorage, removeCartFromStorage } from './storage';
+import { removeCartFromStorage } from './storage';
 
 const associateCart = () => window.commerceBackend.associateCart()
   .then((response) => {
     if (response.data) {
-      addInfoInStorage({ cart: response.data });
+      window.commerceBackend.setCartData({ cart: response.data });
     }
   })
   .catch((error) => {
@@ -48,7 +48,7 @@ export async function checkCartCustomer(cartData = null) {
     if (!cartDataVal.uid) {
       cartDataVal.uid = window.drupalSettings.user.uid;
       if (window.drupalSettings.user.uid === 0) {
-        addInfoInStorage({ cart: cartDataVal });
+        window.commerceBackend.setCartData({ cart: cartDataVal });
         return false;
       }
 
