@@ -8,7 +8,8 @@
     "watch": "webpack --watch --mode=development",
     "build:gulp": "gulp",
     "lint": "eslint",
-    "lint-fix": "eslint --fix"
+    "lint-fix": "eslint --fix",
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -38,6 +39,7 @@
     "gulp-sourcemaps": "2.1.x",
     "gulp-uglify": "2.0.0",
     "gulp-watch": "4.3.10",
+    "jest": "^27.0.1",
     "qs": "^6.9.0",
     "webpack": "^4.39.3",
     "webpack-chunk-rename-plugin": "^1.0.3",

@@ -5,6 +5,17 @@
   "scripts": {
     "build:dev": "../node_modules/.bin/webpack --mode=development",
     "build": "../node_modules/.bin/webpack",
-    "watch": "../node_modules/.bin/webpack --watch"
+    "watch": "../node_modules/.bin/webpack --watch",
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": true,
+    "testRegex": "(/tests/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|lottie-react-native)"
+    ],
+    "globals": {
+      "window": {}
+    }
   }
 }
