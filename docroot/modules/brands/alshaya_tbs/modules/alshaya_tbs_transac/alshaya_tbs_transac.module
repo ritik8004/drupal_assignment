@@ -186,12 +186,9 @@ function alshaya_tbs_transac_alshaya_acm_product_build_alter(&$build, SKUInterfa
 function _alshaya_tbs_transac_get_product_title(SKU $sku, $context) {
   /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
   $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-  // Include the utility file to get product image.
-  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
   $currentTitle = $productInfoHelper->getTitle($sku, $context);
 
   // Prepare Top three attributes variable.
-  $top_three_attributes = '';
   $top_three_attribute_fields = [];
   if ($top_attribute1 = $sku->get('attr_top_three_attributes_1')->getString()) {
     $top_three_attribute_fields[] = $top_attribute1;
@@ -203,6 +200,7 @@ function _alshaya_tbs_transac_get_product_title(SKU $sku, $context) {
     $top_three_attribute_fields[] = $top_attribute3;
   }
 
+  $top_three_attributes = '';
   if (!empty($top_three_attribute_fields)) {
     // We need to show them comma-separated on FE.
     $top_three_attribute_fields = implode(', ', $top_three_attribute_fields);
