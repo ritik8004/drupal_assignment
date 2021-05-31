@@ -251,7 +251,7 @@ export default class ConfigurableForm extends React.Component {
       // Drupal.cartNotification.triggerNotification().
       // Send success status to parent component.
       addToCartBtn.classList.toggle('tick');
-      addToCartBtn.innerHTML = `<span> ${Drupal.t('Item added')} </span>`;
+      addToCartBtn.innerHTML = `<span> ${getStringMessage('item_added')} </span>`;
       setTimeout(() => {
         onItemAddedToCart(true);
       }, 500);
