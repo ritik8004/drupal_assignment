@@ -1,0 +1,8 @@
+{% extends "@alshaya_white_label/node/node--acq-product--full.html.twig" %}
+{% block afterDescription %}
+  {% if content.ingredients %}
+    <div class="content--ingredient">
+      {{ content.ingredients }}
+    </div>
+  {% endif %}
+{% endblock %}
