@@ -24,6 +24,10 @@
       }
     }
 
+    .price-block {
+      padding-top: 0.625rem;
+    }
+
     .price--discount {
       font-size: 0.75rem;
     }
@@ -44,6 +48,14 @@
         color: $oos_btn_bg;
         text-decoration: none;
       }
+    }
+
+    .content--top-three-attributes {
+      font-size: 0.875rem;
+      display: block;
+      font-family: $tbs-semibold;
+      margin-top: 0.75rem;
+      text-transform: uppercase;
     }
   }
 
@@ -367,6 +379,7 @@
 
     h1 {
       width: 100%;
+      margin-bottom: 0;
 
       @include breakpoint($desktop) {
         margin-top: 0;
