@@ -90,6 +90,10 @@ header {
 }
 
 .c-menu-primary {
+  @include breakpoint($only-tablet) {
+    height: 0;
+  }
+
   .mobile--menu {
     &::before {
       @include breakpoint($upto-desktop) {
