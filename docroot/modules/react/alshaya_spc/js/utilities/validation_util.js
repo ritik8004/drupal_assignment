@@ -1,5 +1,4 @@
 import { redirectToCart } from './get_cart';
-import { removeCartFromStorage } from './storage';
 import dispatchCustomEvent from './events';
 
 /**
@@ -26,7 +25,7 @@ const validateCartResponse = (response) => {
 
   // If there was validation issue or cart no longer available.
   if (errorCode === 400 || errorCode === 404) {
-    removeCartFromStorage();
+    window.commerceBackend.removeCartData();
     window.location.href = Drupal.url('cart');
     return false;
   }

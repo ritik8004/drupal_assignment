@@ -88,6 +88,13 @@ const saveCartData = (data) => {
 };
 
 /**
+ * Unsets the cart data in static memory.
+ */
+const removeCartData = () => {
+  cartData = null;
+};
+
+/**
  * Calls the update cart API.
  *
  * @param {object} data
@@ -152,4 +159,5 @@ export {
   getCart,
   getCartData,
   saveCartData,
+  removeCartData,
 };

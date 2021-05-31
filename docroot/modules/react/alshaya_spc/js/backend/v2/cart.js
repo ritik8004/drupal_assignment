@@ -4,6 +4,7 @@ import {
   getCartData,
   isAnonymousUserWithoutCart,
   saveCartData,
+  removeCartData,
   updateCart,
 } from './common';
 
@@ -41,7 +42,7 @@ window.commerceBackend.restoreCart = () => getCart();
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.addToCart = (data) => updateCart(data);
+window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
 
 /**
  * Applies/Removes promo code to the cart and returns the cart.
@@ -221,3 +222,8 @@ window.commerceBackend.getCartData = () => getCartData();
  *   The cart data.
  */
 window.commerceBackend.setCartData = (data) => saveCartData(data);
+
+/**
+ * Unsets the saved cart data.
+ */
+window.commerceBackend.removeCartData = () => removeCartData();

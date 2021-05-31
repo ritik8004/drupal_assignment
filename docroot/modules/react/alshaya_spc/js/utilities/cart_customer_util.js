@@ -1,5 +1,3 @@
-import { removeCartFromStorage } from './storage';
-
 const associateCart = () => window.commerceBackend.associateCart()
   .then((response) => {
     if (response.data) {
@@ -15,7 +13,7 @@ const associateCart = () => window.commerceBackend.associateCart()
  * Empty cart.
  */
 const emptyCustomerCart = () => {
-  removeCartFromStorage();
+  window.commerceBackend.removeCartData();
 
   const emptyCart = {
     cart_id: null,

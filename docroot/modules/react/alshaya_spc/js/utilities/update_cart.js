@@ -35,7 +35,7 @@ export const applyRemovePromo = (action, promoCode) => {
     cart_id: cart,
   })
     .then((response) => {
-      validateCartResponse(response.data);
+      window.commerceBackend.removeCartData(response.data);
       return response.data;
     }, (error) => {
       // Processing of error here.

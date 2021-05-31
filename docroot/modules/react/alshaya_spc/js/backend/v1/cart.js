@@ -1,4 +1,4 @@
-import { getStorageInfo, setStorageInfo } from '../../utilities/storage';
+import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import {
   callMiddlewareApi,
   isAnonymousUserWithoutCart,
@@ -115,4 +115,16 @@ window.commerceBackend.setCartData = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
   setStorageInfo(cartInfo);
+};
+
+/**
+ * Removes the cart data from storage.
+ */
+window.commerceBackend.removeCartData = () => {
+  removeStorageInfo('cart_data');
+
+  // Remove last selected payment on page load.
+  // We use this to ensure we trigger events for payment method
+  // selection at-least once and not more than once.
+  removeStorageInfo('last_selected_payment');
 };
