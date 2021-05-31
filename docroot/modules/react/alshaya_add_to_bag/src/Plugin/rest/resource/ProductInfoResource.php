@@ -320,6 +320,11 @@ class ProductInfoResource extends ResourceBase {
         $data['configurable_combinations']['by_attribute'] = $cart_combinations['by_attribute'];
         $data['configurable_combinations']['by_sku'] = $cart_combinations['by_sku'];
         $data['configurable_combinations']['attribute_hierarchy_with_values'] = $attribute_hierarchy;
+
+        // Get the first child from attribute_sku which has values sorted
+        // same as add to cart form.
+        $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
+        $data['configurable_combinations']['firstChild'] = reset($sorted_variants);
       }
 
       $response = new ResourceResponse($data);
