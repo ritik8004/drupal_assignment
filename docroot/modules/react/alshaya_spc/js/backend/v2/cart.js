@@ -25,13 +25,12 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 window.commerceBackend.getCart = () => getCart();
 
 /**
- * Calls the cart restore API.
- * @todo Implement restoreCart()
+ * Fetches the cart data.
  *
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.restoreCart = () => getCart().then((response) => response);
+window.commerceBackend.restoreCart = () => getCart();
 
 /**
  * Adds item to the cart and returns the cart.
