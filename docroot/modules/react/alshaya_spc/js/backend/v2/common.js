@@ -76,12 +76,12 @@ let cartData = null;
 const getCartData = () => cartData;
 
 /**
- * Saves the cart data to static memory.
+ * Sets the cart data to static memory.
  *
  * @param {object} data
- *   The cart object to save.
+ *   The cart object to set.
  */
-const saveCartData = (data) => {
+const setCartData = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
   cartData = cartInfo;
@@ -158,6 +158,6 @@ export {
   updateCart,
   getCart,
   getCartData,
-  saveCartData,
+  setCartData,
   removeCartData,
 };

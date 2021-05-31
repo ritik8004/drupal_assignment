@@ -3,8 +3,8 @@ import {
   getCart,
   getCartData,
   isAnonymousUserWithoutCart,
-  saveCartData,
   removeCartData,
+  setCartData,
   updateCart,
 } from './common';
 
@@ -221,9 +221,9 @@ window.commerceBackend.getCartData = () => getCartData();
  * @param data
  *   The cart data.
  */
-window.commerceBackend.setCartData = (data) => saveCartData(data);
+window.commerceBackend.setCartData = (data) => setCartData(data);
 
 /**
- * Unsets the saved cart data.
+ * Unsets the stored cart data.
  */
 window.commerceBackend.removeCartData = () => removeCartData();
