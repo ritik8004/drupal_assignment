@@ -30,4 +30,10 @@
       border-top: 1px solid $store_finder_search_results_border;
     }
   }
+
+  .label--location {
+    &::before {
+      background: url('../../../imgs/icons/store-search.svg') no-repeat;
+    }
+  }
 }
