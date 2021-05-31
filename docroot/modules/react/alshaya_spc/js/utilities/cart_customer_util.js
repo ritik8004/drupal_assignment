@@ -1,4 +1,4 @@
-import { getInfoFromStorage, addInfoInStorage, removeCartFromStorage } from './storage';
+import { addInfoInStorage, removeCartFromStorage } from './storage';
 
 const associateCart = () => window.commerceBackend.associateCart()
   .then((response) => {
@@ -35,7 +35,7 @@ const emptyCustomerCart = () => {
 export async function checkCartCustomer(cartData = null) {
   let cartDataVal = cartData;
   if (!(cartDataVal) || cartDataVal.cart_id === undefined) {
-    const cartJson = getInfoFromStorage();
+    const cartJson = window.commerceBackend.getCartData();
     cartDataVal = cartJson.cart;
   }
 

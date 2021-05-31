@@ -30,5 +30,3 @@ export const removeCartFromStorage = () => {
   // selection at-least once and not more than once.
   removeStorageInfo('last_selected_payment');
 };
-
-export const getInfoFromStorage = () => window.commerceBackend.getCartData();
