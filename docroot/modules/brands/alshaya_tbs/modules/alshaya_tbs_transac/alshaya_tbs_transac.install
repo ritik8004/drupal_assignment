@@ -71,6 +71,10 @@ function alshaya_tbs_transac_install() {
       'en' => 'The Body Shop',
       'ar' => 'The Body Shop',
     ],
+    'Product Description' => [
+      'en' => 'What does it do for you?',
+      'ar' => 'ما الذي تفعله من اجلك؟',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);

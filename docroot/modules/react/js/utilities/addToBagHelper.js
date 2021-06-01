@@ -5,7 +5,9 @@ const isAddToBagEnabled = () => {
   // Get global add to cart status.
   const { checkoutFeatureStatus } = drupalSettings;
 
-  if (typeof drupalSettings.add_to_bag !== 'undefined' && checkoutFeatureStatus === 'enabled') {
+  if (typeof drupalSettings.add_to_bag !== 'undefined'
+    && typeof drupalSettings.add_to_bag.display_addtobag !== 'undefined'
+    && checkoutFeatureStatus === 'enabled') {
     return drupalSettings.add_to_bag.display_addtobag;
   }
 

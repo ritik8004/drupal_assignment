@@ -274,7 +274,6 @@
 
   .current-location,
   .cc-near-me,
-  .list-view-link,
   .map-view-link,
   .label--location {
     &::before {
@@ -384,6 +383,7 @@
     @include breakpoint($tablet) {
       height: 2.9375rem;
       border: 1px solid transparent;
+      width: 17.5%;
     }
 
     @include breakpoint($desktop) {
@@ -811,11 +811,6 @@
     .cc-near-me {
       padding: 0 1.5rem;
       width: 20%;
-    }
-
-    .list-view-link,
-    .map-view-link {
-      width: 17.5%;
     }
 
     .view-display-id-page_1 {

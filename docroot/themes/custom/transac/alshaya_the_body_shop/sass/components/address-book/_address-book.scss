@@ -36,7 +36,14 @@
 .address-book-address {
   .form-type-select {
     &::after {
-      display: none;
+      @include breakpoint($upto-desktop) {
+        border: 1px solid $primary_dropdown_arrow_border;
+        border-#{$left}: 0;
+      }
+
+      @include breakpoint($desktop) {
+        display: none;
+      }
     }
 
     .select2-selection {
@@ -58,7 +65,14 @@
 .alshaya-acm-customer-order-list-search {
   .form-type-select {
     &::after {
-      display: none;
+      @include breakpoint($upto-desktop) {
+        border: 1px solid $primary_dropdown_arrow_border;
+        border-#{$left}: 0;
+      }
+
+      @include breakpoint($desktop) {
+        display: none;
+      }
     }
   }
 }

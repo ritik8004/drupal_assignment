@@ -17,9 +17,16 @@ import getStringMessage from '../../../../js/utilities/strings';
 class ConfigurableProductDrawer extends React.Component {
   constructor(props) {
     super(props);
+    const { productData } = props;
+
+    // Check for the firstChild is set for the default variant otherwise
+    // set the first variant in the list as the default variant.
+    const firstChild = (productData.configurable_combinations.firstChild !== 'undefined')
+      ? productData.configurable_combinations.firstChild
+      : productData.variants[0].sku;
+
     this.state = {
-      // Set the first variant in the list as the default variant.
-      selectedVariant: props.productData.variants[0].sku,
+      selectedVariant: firstChild,
     };
   }
 
