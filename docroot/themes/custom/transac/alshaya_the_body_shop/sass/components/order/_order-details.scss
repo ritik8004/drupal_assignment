@@ -39,4 +39,14 @@
       color: $order_detail_order_label;
     }
   }
+
+  .order-item-row {
+    img {
+      width: 100%;
+    }
+
+    .dark {
+      margin-bottom: 0.625rem;
+    }
+  }
 }
