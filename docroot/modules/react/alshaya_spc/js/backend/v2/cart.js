@@ -1,4 +1,5 @@
 import {
+  addUpdateRemoveCartItem,
   callMagentoApi,
   getCart,
   getCartData,
@@ -42,7 +43,7 @@ window.commerceBackend.restoreCart = () => getCart();
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.addToCart = (data) => updateCart(data);
+window.commerceBackend.addToCart = (data) => addUpdateRemoveCartItem(data);
 
 /**
  * Applies/Removes promo code to the cart and returns the cart.
@@ -64,7 +65,7 @@ window.commerceBackend.applyRemovePromo = (data) => updateCart(data);
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.updateCartItemData = (data) => updateCart(data);
+window.commerceBackend.updateCartItemData = (data) => addUpdateRemoveCartItem(data);
 
 /**
  * Gets the cart ID for existing cart.
@@ -88,6 +89,7 @@ window.commerceBackend.getCartId = () => {
  */
 window.commerceBackend.createCart = async () => {
   const response = await callMagentoApi('/rest/V1/guest-carts', 'POST', {});
+  // @todo: Check for error in response.
   localStorage.setItem('cart_id', response.data);
   return response.data;
 };
@@ -156,7 +158,7 @@ window.commerceBackend.processCartData = (cartData) => {
     };
   }
 
-  if (typeof cartData.cart.items !== 'undefined') {
+  if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
     cartData.cart.items.forEach((item) => {
       // @todo check why item id is different from v1 and v2 for
@@ -201,7 +203,10 @@ window.commerceBackend.processCartData = (cartData) => {
 
       // @todo Get stock data.
     });
+  } else {
+    data.items = [];
   }
+
   const response = { ...cartData };
   response.data = data;
   return response;
