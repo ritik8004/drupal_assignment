@@ -38,6 +38,10 @@
     }
   }
 
+  .algolia-search-cleartext-icon {
+    #{$right}: 2rem;
+  }
+
   .react-autosuggest__input {
     border: none;
     border-radius: 0;
@@ -70,7 +74,7 @@
   @include breakpoint($only-mobile) {
     &.clear-icon.show-algolia-search-bar {
       .algolia-search-cleartext-icon {
-        top: 50%;
+        top: 45%;
         margin-top: 0.25rem;
         transform: translateY(-50%);
         #{$right}: 0;
@@ -116,8 +120,20 @@
           }
 
           .algolia-search-back-icon {
-            top: 50%;
-            transform: translateY(-50%);
+            top: 1.15625rem;
+            #{$left}: 0.75rem;
+            width: 1.25rem;
+            height: 1.25rem;
+          }
+
+          .react-autosuggest__container--open {
+            background: $algolia-search-trending-search-bg;
+          }
+
+          .react-autosuggest__suggestions-container--open {
+            .highlighted {
+              color: $algolia-search-trending-search-highlighted-text;
+            }
           }
         }
       }
