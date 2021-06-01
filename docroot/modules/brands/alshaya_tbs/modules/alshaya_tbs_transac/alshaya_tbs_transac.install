@@ -105,10 +105,6 @@ function alshaya_tbs_transac_install() {
     // Save the changes.
     $configFactory->save();
   }
-
-  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
-  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
-  \Drupal::service('acq_sku.fields_manager')->addFields();
 }
 
 /**

@@ -46,33 +46,7 @@ function alshaya_tbs_transac_node_view(array &$build, EntityInterface $entity, E
       $product_description['short_desc']['value']['#markup'] = $short_desc['html'];
       $build['short_desc'] = $product_description['short_desc'];
       $build['description'] = $product_description['description'];
-
-      $label = '<h4 class="ingredients_label">';
-      $description_div = '<div class="ingredients_description">';
-      $ingredients_content = ($sku_entity->get('attr_mainkeyingredients_name')->getValue() ?
-        $label . $sku_entity->get('attr_mainkeyingredients_name')->getValue()[0]['value'] . '</h4>': '') .
-        ( $sku_entity->get('attr_mainkeyingredients_description')->getValue() ? $description_div .
-          $sku_entity->get('attr_mainkeyingredients_description')->getValue()[0]['value'] . '</div>' : '') .
-        ( $sku_entity->get('attr_keyingredients_name2')->getValue() ? $label .
-          $sku_entity->get('attr_keyingredients_name2')->getValue()[0]['value'] . '</h4>' : '') .
-        ( $sku_entity->get('attr_keyingredients_description2')->getValue() ? $description_div .
-          $sku_entity->get('attr_keyingredients_description2')->getValue()[0]['value'] . '</div>'  : '') .
-        ( $sku_entity->get('attr_keyingredients_name3')->getValue() ? $label .
-          $sku_entity->get('attr_keyingredients_name3')->getValue()[0]['value'] . '</h4>' : '') .
-        ( $sku_entity->get('attr_keyingredients_description3')->getValue() ? $description_div .
-          $sku_entity->get('attr_keyingredients_description3')->getValue()[0]['value'] . '</div>'  : '') .
-        ( $sku_entity->get('attr_technical_ingredients_description')->getValue() ?
-        '<div class="ingredients_description tecchnical_ingredients_description">' .
-        $sku_entity->get('attr_keyingredients_description3')->getValue()[0]['value'] . '</div>'  : '');
-
-      $build['ingredients'] = [
-        '#theme' => 'pdp_description_accordion',
-        '#title' => t('Ingredients'),
-        '#class' => 'ingredients',
-        '#text' => [
-          '#markup' => $ingredients_content,
-        ],
-      ];
+      _alshaya_tbs_transac_get_product_ingredients($sku_entity, $build);
     }
   }
 }
@@ -235,4 +209,44 @@ function _alshaya_tbs_transac_get_product_title(SKU $sku, $context) {
   }
 
   return $currentTitle . $top_three_attributes;
+}
+
+/**
+ * A helper function to get the product ingredients.
+ *
+ * @param Drupal\acq_sku\Entity\SKU $sku
+ *   A object contains values for attributes.
+ * @param array $build
+ *   A build array.
+ *
+ * @return string
+ *   Ingredients content.
+ */
+function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
+  $label = '<h4 class="ingredients_label">';
+  $description_div = '<div class="ingredients_description">';
+  $ingredients_content = ($sku->get('attr_mainkeyingredients_name')->getValue() ?
+      $label . $sku->get('attr_mainkeyingredients_name')->getValue()[0]['value'] . '</h4>': '') .
+    ( $sku->get('attr_mainkeyingredients_description')->getValue() ? $description_div .
+      $sku->get('attr_mainkeyingredients_description')->getValue()[0]['value'] . '</div>' : '') .
+    ( $sku->get('attr_keyingredients_name2')->getValue() ? $label .
+      $sku->get('attr_keyingredients_name2')->getValue()[0]['value'] . '</h4>' : '') .
+    ( $sku->get('attr_keyingredients_description2')->getValue() ? $description_div .
+      $sku->get('attr_keyingredients_description2')->getValue()[0]['value'] . '</div>'  : '') .
+    ( $sku->get('attr_keyingredients_name3')->getValue() ? $label .
+      $sku->get('attr_keyingredients_name3')->getValue()[0]['value'] . '</h4>' : '') .
+    ( $sku->get('attr_keyingredients_description3')->getValue() ? $description_div .
+      $sku->get('attr_keyingredients_description3')->getValue()[0]['value'] . '</div>'  : '') .
+    ( $sku->get('attr_technical_ingredients_description')->getValue() ?
+      '<div class="ingredients_description tecchnical_ingredients_description">' .
+      $sku->get('attr_keyingredients_description3')->getValue()[0]['value'] . '</div>'  : '');
+
+  $build['ingredients'] = [
+    '#theme' => 'pdp_description_accordion',
+    '#title' => t('Ingredients'),
+    '#class' => 'ingredients',
+    '#text' => [
+      '#markup' => $ingredients_content,
+    ],
+  ];
 }
