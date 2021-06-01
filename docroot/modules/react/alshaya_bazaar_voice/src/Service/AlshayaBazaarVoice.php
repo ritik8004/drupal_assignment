@@ -595,7 +595,7 @@ class AlshayaBazaarVoice {
    * @return array
    *   Details for all the products.
    */
-  public function getMyAccountProductSettings($sku_id, $basic_configs) {
+  public function getMyAccountProductSettings($sku_id, array $basic_configs) {
     $productNode = $this->skuManager->getDisplayNode($sku_id);
     $productArray = [];
     if ($productNode instanceof NodeInterface) {
@@ -621,8 +621,9 @@ class AlshayaBazaarVoice {
    * @return array|null
    *   Drupal settings with product details.
    */
-  public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, $sanitized_sku, $basic_configs) {
+  public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, $sanitized_sku, array $basic_configs) {
     $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
+    // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked for any categories or its Parent Categories.
     $category_based_config = $this->getCategoryBasedConfig($productNode);
     if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
