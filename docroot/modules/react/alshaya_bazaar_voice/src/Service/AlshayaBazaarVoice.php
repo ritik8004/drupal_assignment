@@ -81,7 +81,7 @@ class AlshayaBazaarVoice {
   /**
    * Request stock service object.
    *
-   * @var null|\Symfony\Component\HttpFoundation\Request
+   * @var \Symfony\Component\HttpFoundation\Request
    */
   protected $currentRequest;
 
@@ -368,6 +368,7 @@ class AlshayaBazaarVoice {
     $basic_configs['comment_box_min_length'] = $config->get('comment_box_min_length');
     $basic_configs['comment_box_max_length'] = $config->get('comment_box_max_length');
     $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
+    $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
 
     return $basic_configs;
   }
@@ -588,17 +589,19 @@ class AlshayaBazaarVoice {
    *
    * @param string $sku_id
    *   Sku id of the product.
+   * @param array $basic_configs
+   *   Basic configurations of bazaarvoice.
    *
    * @return array
    *   Details for all the products.
    */
-  public function getMyAccountProductSettings($sku_id) {
+  public function getMyAccountProductSettings($sku_id, $basic_configs) {
     $productNode = $this->skuManager->getDisplayNode($sku_id);
     $productArray = [];
     if ($productNode instanceof NodeInterface) {
       // Get sanitized sku.
       $sanitized_sku = $this->skuManager->getSanitizedSku($sku_id);
-      $productArray['alshaya_bazaar_voice'] = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $sanitized_sku);
+      $productArray['alshaya_bazaar_voice'] = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $sanitized_sku, $basic_configs);
     }
     return $productArray;
   }
@@ -612,20 +615,14 @@ class AlshayaBazaarVoice {
    *   Product node.
    * @param string $sanitized_sku
    *   Sanitized sku id.
+   * @param array $basic_configs
+   *   Basic configurations of bazaarvoice.
    *
    * @return array|null
    *   Drupal settings with product details.
    */
-  public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, $sanitized_sku) {
+  public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, $sanitized_sku, $basic_configs) {
     $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
-
-    $basic_configs = $this->getBasicConfigurations();
-    // Disable BazaarVoice Rating and Review in PDP
-    // if checkbox is checked in bazaarVoice Settings Form.
-    if ($basic_configs['pdp_rating_reviews']) {
-      return;
-    }
-    // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked for any categories or its Parent Categories.
     $category_based_config = $this->getCategoryBasedConfig($productNode);
     if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
