@@ -27,6 +27,16 @@
           }
           $(this).parents('.short-description-wrapper').siblings('.description-wrapper').toggleClass('desc-open');
         });
+
+        // Toggle for Product ingredients.
+        $('.read-more-ingredients-link').once('readmore-ingredients').on('click', function () {
+          // Close click and collect all stores wrapper if open.
+          if ($('.click-collect-all-stores').hasClass('desc-open')) {
+            $('.click-collect-all-stores').toggleClass('desc-open');
+          }
+          $(this).siblings('.technical_ingredients_description').toggleClass('desc-open');
+        });
+
         var mobileStickyHeaderHeight = $('.branding__menu').height();
 
         $(document).on('click', '.read-more-description-link-mobile', function () {
@@ -51,8 +61,22 @@
           }
         });
 
+        // Show technical ingredients on PDP on click of Read more.
+        $('.read-more-ingredients-link-mobile').once('readmore-ingredients-mobile').on('click', function () {
+          $(this).siblings('.technical_ingredients_description').slideToggle('slow');
+          $(this).siblings('.technical_ingredients_description').append('<span class="show-less-ingredient-link">' + Drupal.t('show less') + '</span>');
+          $(this).hide();
+        });
+
+        // Hide technical ingredients on PDP on click of show less.
+        $(document).on('click', '.show-less-ingredient-link', function () {
+          $(this).parent().slideToggle('slow');
+          $(this).parent().siblings('.read-more-ingredients-link-mobile').show();
+          $(this).remove();
+        });
+
         $('.close').once('readmore').on('click', function () {
-          $(this).parents('.description-wrapper').toggleClass('desc-open');
+          $(this).parents('.description-wrapper, .technical_ingredients_description').toggleClass('desc-open');
         });
 
         $(document).on('click', function (e) {
@@ -87,6 +111,11 @@
 
         // Accordion for dimensions and care section on PDP.
         $('.content--dimensions-and-care').find('.dimensions-and-care').each(function () {
+          Drupal.convertIntoAccordion($(this));
+        });
+
+        // Accordion for ingredients section on PDP.
+        $('.content--ingredient').find('.pdp-description-accordion').each(function () {
           Drupal.convertIntoAccordion($(this));
         });
       }

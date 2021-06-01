@@ -111,7 +111,7 @@
         });
       });
 
-      $('.read-more-description-link', context).once('toselectsize').each(function () {
+      $('.read-more-description-link, .read-more-ingredients-link', context).once('toselectsize').each(function () {
         $(this).click(function () {
           stopScrollEvents('html, body');
 
