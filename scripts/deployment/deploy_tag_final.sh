@@ -40,6 +40,8 @@ repo="$stack@svn-5975.enterprise-g1.hosting.acquia.com:$stack.git"
 server_root="/var/www/html/$AH_SITE_NAME"
 docroot="${server_root}/docroot"
 slack_file="${server_root}/scripts/deployment/post_to_slack.sh"
+clear_caches_post_command="${server_root}/scripts/cloudflare/clear_caches_post_command.sh"
+clear_caches_post_command_site="${server_root}/scripts/cloudflare/clear_caches_post_command_site.sh"
 log_file=/var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-deployments.log
 deployment_identifier=$(cat "$server_root/deployment_identifier")
 
@@ -155,7 +157,7 @@ fi
 if [ "$mode" = "updb" ]
 then
   log_message_and_details "Turning maintenance on"
-  drush --root=$docroot sfmlc alshaya-enable-maintenance &>> ${log_file}
+  $clear_caches_post_command alshaya-enable-maintenance 0 &>> ${log_file}
   if [ $? -ne 0 ]
   then
     log_message_and_details "Failed to enable maintenance mode, aborting"
@@ -187,18 +189,18 @@ sleep 5
 if [ "$mode" = "updb" ]
 then
   log_message_and_details "Running updates"
-  for site in `drush --root=$docroot acsf-tools-list | grep -v " "`
+  for site in `drush --root=$docroot acsf-tools-list | grep "1: " | tr "1: " " " | tr -d " "`
   do
     log_message_and_details "Running updates on $site"
-    drush --root=$docroot -l "${site}${base_uri}" updb -y &>> ${log_file}
+    drush --root=$docroot -l "${site}" updb -y &>> ${log_file}
     if [ $? -ne 0 ]
     then
       log_message_and_details "$site: UPDB FAILED, site kept offline still, please check logs"
     else
-      drush --root=$docroot -l "${site}${base_uri}" alshaya-disable-maintenance &>> ${log_file}
+      drush --root=$docroot -l "${site}" alshaya-disable-maintenance &>> ${log_file}
       log_message_and_details "$site: UPDB done and site put back online"
 
-      drush --root=$docroot -l "${site}${base_uri}" cr -y &>> ${log_file}
+      $clear_caches_post_command_site $site cr 5 &>> ${log_file}
       log_message_and_details "$site: CR done"
 
       sh $slack_file "$site: UPDB done and site put back online"
@@ -211,7 +213,7 @@ fi
 if [ "$mode" = "hotfix_crf" ]
 then
   log_message_and_details "Doing CRF now as requested"
-  drush --root=$docroot sfml crf --delay=20 &>> ${log_file}
+  $clear_caches_post_command crf 20 &>> ${log_file}
 fi
 
 log_message_and_details "Release completed"
