@@ -137,6 +137,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $debug_dir = $config->get('debug_dir');
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
+      $this->logger->notice('Loading category data from commerce backend for @language.', [
+        '@language' => $langcode,
+      ]);
+
       if ($store_id) {
         // Load Conductor Category data.
         $categories = [$this->loadCategoryData($langcode)];
@@ -323,6 +327,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
         // Sleep for half a second before trying again.
         if (!$lock_acquired) {
+          $this->logger->notice('Failed to acquire lock for @lock_key, waiting.', [
+            '@lock_key' => $lock_key,
+          ]);
+
           usleep(500000);
         }
       } while (!$lock_acquired);
