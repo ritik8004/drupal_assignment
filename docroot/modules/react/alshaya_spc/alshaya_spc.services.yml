@@ -73,6 +73,11 @@ services:
       - ['setPurgeProcessor', ['@?purge.processors']]
       - ['setPurgeInvalidationFactory', ['@?purge.invalidation.factory']]
 
+  alshaya_spc.user_login_event_subscriber:
+    class: Drupal\alshaya_spc\EventSubscriber\UserLoginSubscriber
+    tags:
+      - { name: event_subscriber }
+
   alshaya_spc.helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper
     arguments:

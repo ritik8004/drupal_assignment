@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_spc\Event\UserLoginEvent;
 
 /**
  * Implements hook_theme().
@@ -228,4 +229,14 @@ function alshaya_spc_page_attachments_alter(&$page) {
       return $key['timeout'];
     }, $timeout_settings['middleware']);
   }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function alshaya_spc_user_login(AccountInterface $account) {
+  $event = new UserLoginEvent($account);
+  // Get the event_dispatcher service and dispatch the event.
+  $event_dispatcher = \Drupal::service('event_dispatcher');
+  $event_dispatcher->dispatch(UserLoginEvent::EVENT_NAME, $event);
 }
