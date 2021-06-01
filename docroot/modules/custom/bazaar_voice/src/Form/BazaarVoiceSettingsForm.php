@@ -149,6 +149,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This option should be checked to disable the ratings and reviews in My Account.'),
     ];
 
+    $form['basic_settings']['plp_rating_reviews'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable ratings and reviews in listing page.'),
+      '#default_value' => $config->get('plp_rating_reviews'),
+      '#description' => $this->t('This option should be checked to disable the ratings and reviews in plp/slp.'),
+    ];
+
     $form['basic_settings']['write_review_submission'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Closed submission for unauthorized user.'),
@@ -207,6 +214,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
           ],
         ],
       ],
+    ];
+
+    $form['basic_settings']['screen_name_min_length'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Screen name minimum character length'),
+      '#default_value' => $config->get('screen_name_min_length'),
+      '#description' => $this->t('Enter minimum character length for screen name text in comment form.'),
     ];
 
     $form['basic_settings']['comment_box_max_length'] = [
@@ -305,11 +319,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('environment', $values['environment'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
       ->set('myaccount_rating_reviews', $values['myaccount_rating_reviews'])
+      ->set('plp_rating_reviews', $values['plp_rating_reviews'])
       ->set('write_review_submission', $values['write_review_submission'])
       ->set('write_review_tnc', $values['write_review_tnc'])
       ->set('write_review_guidlines', $values['write_review_guidlines'])
       ->set('comment_form_tnc', $values['comment_form_tnc'])
       ->set('bv_content_types', $values['bv_content_types'])
+      ->set('screen_name_min_length', $values['screen_name_min_length'])
       ->set('comment_box_min_length', $values['comment_box_min_length'])
       ->set('comment_box_max_length', $values['comment_box_max_length'])
       ->set('bv_routes_list', $values['bv_routes_list'])

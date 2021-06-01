@@ -113,6 +113,10 @@
                   padding: 0;
                 }
               }
+
+              .selected-facets {
+                margin-#{$right}: 1.5rem;
+              }
             }
           }
         }

@@ -658,6 +658,7 @@
           $('.all-filters').insertAfter('#block-page-title');
         }
       }
+      $('.container-without-product').addClass('plp-facet-product-filter');
     }
   }
 

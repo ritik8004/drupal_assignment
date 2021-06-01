@@ -17,6 +17,7 @@ write_review_guidlines: '/writing-guidelines'
 comment_submission: true
 comment_form_tnc: '/terms-and-conditions'
 bv_content_types: 'Products,Comments,Authors'
+screen_name_min_length: 4
 comment_box_min_length: 100
 comment_box_max_length: 2000
 bv_routes_list: ''

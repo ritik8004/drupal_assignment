@@ -70,7 +70,7 @@
     }
 
     .product-details-wrapper {
-      padding: 1.25rem;
+      padding: 2.5rem 1.25rem 1.25rem;
       background-color: $grey-light-three;
       padding-bottom: 1.5rem;
 
@@ -93,19 +93,23 @@
 
     .product-title {
       display: inline-block;
-      font-size: 1rem;
+      font-size: 1.125rem;
       line-height: normal;
       color: $primary-text;
       padding-bottom: 0.625rem;
     }
 
     .price-block {
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
     }
 
     .price {
-      font-size: 1.375rem;
+      font-size: 1.25rem;
       color: $pdp_product_price;
+    }
+
+    .price-amount {
+      padding-left: 0.1875rem;
     }
 
     .content--item-code {
@@ -128,12 +132,27 @@
     .error-message {
       position: relative;
       text-align: $left;
+      float: $left;
+    }
+
+    .special--price {
+      font-family: $alshaya-bold;
+    }
+
+    .special--price,
+    .price--discount {
+      padding-#{$left}: 0.45rem;
+
+      @include breakpoint($tablet) {
+        padding-#{$left}: 0.5rem;
+      }
     }
 
     .has--special--price,
     .special--price,
     .price--discount {
       display: inline-block;
+      vertical-align: middle;
     }
 
     .special--price .price {
@@ -142,6 +161,7 @@
 
     .price--discount {
       font-size: 0.9375rem;
+      margin: 0.5rem 0;
     }
 
     .alshayaSelect {

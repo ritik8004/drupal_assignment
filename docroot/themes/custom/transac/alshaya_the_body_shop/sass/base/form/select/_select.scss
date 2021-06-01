@@ -3,7 +3,23 @@
   margin-bottom: 0.75rem;
   position: relative;
 
-  @include icon('dropdown-expand', after);
+  @include icon(dropdown-expand, after) {
+    position: absolute;
+    line-height: 2.1875rem;
+    font-size: 1.75rem;
+    top: 0;
+    #{$left}: auto;
+    width: 2.1875rem;
+    height: 2.1875rem;
+    #{$right}: 0;
+    text-align: center;
+    display: inline-block;
+    background: $primary_dropdown_arrow_bg;
+    color: $primary_dropdown_text;
+    text-indent: -3px;
+    pointer-events: none;
+    box-sizing: border-box;
+  }
 }
 
 .select2-dropdown {

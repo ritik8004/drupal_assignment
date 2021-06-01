@@ -1,6 +1,11 @@
 // Title wrapper
 .content {
   &__title_wrapper {
+    @include breakpoint($only-mobile) {
+      padding: 0 1rem;
+      border-bottom: none;
+    }
+
     h1,
     h1 span {
       font-family: $tbs-recoleta-semibold;
@@ -19,6 +24,10 @@
       }
     }
 
+    .price-block {
+      padding-top: 0.625rem;
+    }
+
     .price--discount {
       font-size: 0.75rem;
     }
@@ -32,12 +41,36 @@
         font-family: $alshaya-bold;
       }
     }
+
+    .promotions {
+      a {
+        font-size: 1rem;
+        color: $oos_btn_bg;
+        text-decoration: none;
+      }
+    }
+
+    .content--top-three-attributes {
+      font-size: 0.875rem;
+      display: block;
+      font-family: $tbs-semibold;
+      margin-top: 0.75rem;
+      text-transform: uppercase;
+    }
   }
 
   &__main {
     .gallery-wrapper {
       @include breakpoint($desktop) {
         margin-#{$right}: 1.875rem;
+      }
+    }
+  }
+
+  &__sidebar {
+    .mobile-content-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: 0 1rem;
       }
     }
   }
@@ -118,6 +151,10 @@
     }
 
     .form-item.form-type-select.form-item-quantity {
+      @include breakpoint($only-mobile) {
+        float: none;
+      }
+
       @include breakpoint($only-tablet) {
         float: #{$left};
       }
@@ -125,7 +162,7 @@
 
     .sku-base-form {
       button[type="submit"] {
-        height: 3.125rem;
+        height: 3.1875rem;
         font-family: $tbs-semibold;
 
         @include breakpoint($only-tablet) {
@@ -151,6 +188,8 @@
       }
 
       @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+
         &::after {
           top: 1.875rem;
           position: absolute;
@@ -206,7 +245,7 @@
     .js-form-wrapper {
       @include breakpoint($only-mobile) {
         margin-#{$right}: 0;
-        width: 68%;
+        width: 100%;
       }
 
       @include breakpoint($tablet) {
@@ -258,6 +297,22 @@
 
     .subtitle {
       font-size: 0.75rem;
+    }
+  }
+
+  .home-delivery {
+    .ui-accordion-header-active {
+      padding-bottom: 0;
+    }
+
+    .ui-accordion-header-active + .c-accordion_content {
+      padding-bottom: 0.4375rem;
+    }
+
+    .c-accordion_content {
+      .delivery-option-title {
+        padding-top: 0;
+      }
     }
   }
 }
@@ -324,6 +379,7 @@
 
     h1 {
       width: 100%;
+      margin-bottom: 0;
 
       @include breakpoint($desktop) {
         margin-top: 0;
@@ -348,6 +404,45 @@
 
       &:first-child {
         border-top: none;
+      }
+    }
+  }
+}
+
+.form-item-configurables-color {
+  .select2Option {
+    .select-buttons {
+      li {
+        a[data-swatch-type=RGB],
+        span[data-swatch-type=RGB] {
+          width: 2.375rem;
+          height: 2.375rem;
+          border: none;
+          border-radius: 100%;
+          position: relative;
+          margin-#{$right}: 0.9375rem;
+          margin-top: 0.9375rem;
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: 0.625rem;
+          }
+
+          &.picked,
+          &:hover {
+            &::after {
+              content: '';
+              position: absolute;
+              top: -0.1875rem;
+              left: -0.1875rem;
+              right: -0.1875rem;
+              bottom: -0.1875rem;
+              height: auto;
+              width: auto;
+              border: 0.0625rem solid $pdp-color-swatch-border;
+              border-radius: 100%;
+            }
+          }
+        }
       }
     }
   }

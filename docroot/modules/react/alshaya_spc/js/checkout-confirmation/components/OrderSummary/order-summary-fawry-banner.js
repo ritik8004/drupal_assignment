@@ -8,7 +8,7 @@ const OrderSummaryFawryBanner = (props) => {
     animationDelay: animationDelayValue,
   } = props;
 
-  const value = parse(getStringMessage('fawry_payment_option_suffix_description'));
+  const value = parse(getStringMessage('fawry_payment_option_confirmation_description'));
 
   return (
     <div className="spc-order-summary-item order-summary-banner-fawry fadeInUp" style={{ animationDelay: animationDelayValue }}>
