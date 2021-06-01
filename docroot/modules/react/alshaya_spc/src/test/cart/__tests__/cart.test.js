@@ -19,7 +19,7 @@ describe('Cart', () => {
     });
 
     it('Test empty response data', async () => {
-      axios.mockResolvedValue({ });
+      axios.mockResolvedValue({ status: 200 });
       const result = await callMagentoApi('/cart', 'POST', {});
       expect(result).toEqual({
         data: {
