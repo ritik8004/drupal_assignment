@@ -3,6 +3,7 @@
 import Axios from 'axios';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
+import { removeStorageInfo } from '../../utilities/storage';
 
 /**
  * Check if user is anonymous and without cart.
@@ -97,7 +98,6 @@ const handleResponse = (response) => {
     //
     logger.error(`Error while doing MDC api call. Error message no empty. Error message: ${error.message}`);
   }
-
   return response;
 };
 
@@ -179,7 +179,7 @@ const updateCart = async (data) => {
       const postString = JSON.stringify(itemData);
       logger.error(`Error updating cart. Cart Id ${cartId}. Post string ${postString}`);
       // Remove the cart from storage.
-      localStorage.removeItem('cart_id');
+      removeStorageInfo('cart_id');
       // Create a new cart.
       await window.commerceBackend.createCart();
     }
