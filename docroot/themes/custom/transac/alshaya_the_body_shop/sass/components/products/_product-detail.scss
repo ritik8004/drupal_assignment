@@ -24,6 +24,10 @@
       }
     }
 
+    .price-block {
+      padding-top: 0.625rem;
+    }
+
     .price--discount {
       font-size: 0.75rem;
     }
@@ -44,6 +48,14 @@
         color: $oos_btn_bg;
         text-decoration: none;
       }
+    }
+
+    .content--top-three-attributes {
+      font-size: 0.875rem;
+      display: block;
+      font-family: $tbs-semibold;
+      margin-top: 0.75rem;
+      text-transform: uppercase;
     }
   }
 
@@ -287,6 +299,22 @@
       font-size: 0.75rem;
     }
   }
+
+  .home-delivery {
+    .ui-accordion-header-active {
+      padding-bottom: 0;
+    }
+
+    .ui-accordion-header-active + .c-accordion_content {
+      padding-bottom: 0.4375rem;
+    }
+
+    .c-accordion_content {
+      .delivery-option-title {
+        padding-top: 0;
+      }
+    }
+  }
 }
 
 .description-wrapper {
@@ -351,6 +379,7 @@
 
     h1 {
       width: 100%;
+      margin-bottom: 0;
 
       @include breakpoint($desktop) {
         margin-top: 0;
@@ -375,6 +404,45 @@
 
       &:first-child {
         border-top: none;
+      }
+    }
+  }
+}
+
+.form-item-configurables-color {
+  .select2Option {
+    .select-buttons {
+      li {
+        a[data-swatch-type=RGB],
+        span[data-swatch-type=RGB] {
+          width: 2.375rem;
+          height: 2.375rem;
+          border: none;
+          border-radius: 100%;
+          position: relative;
+          margin-#{$right}: 0.9375rem;
+          margin-top: 0.9375rem;
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: 0.625rem;
+          }
+
+          &.picked,
+          &:hover {
+            &::after {
+              content: '';
+              position: absolute;
+              top: -0.1875rem;
+              left: -0.1875rem;
+              right: -0.1875rem;
+              bottom: -0.1875rem;
+              height: auto;
+              width: auto;
+              border: 0.0625rem solid $pdp-color-swatch-border;
+              border-radius: 100%;
+            }
+          }
+        }
       }
     }
   }
