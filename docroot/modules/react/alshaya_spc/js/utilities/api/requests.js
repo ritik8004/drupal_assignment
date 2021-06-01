@@ -16,7 +16,7 @@ export const fetchClicknCollectStores = (args) => {
 
 export const fetchCartData = () => {
   if (window.commerceBackend.isAnonymousUserWithoutCart()) {
-    window.commerceBackend.removeCartData();
+    window.commerceBackend.removeCartDataFromStorage();
     return null;
   }
 
@@ -109,7 +109,7 @@ export const fetchCartData = () => {
 
 export const fetchCartDataForCheckout = () => {
   // Remove cart data from storage every-time we land on checkout page.
-  window.commerceBackend.removeCartData();
+  window.commerceBackend.removeCartDataFromStorage();
 
   // If session cookie not exists, no need to process/check.
   if (window.commerceBackend.isAnonymousUserWithoutCart()) {

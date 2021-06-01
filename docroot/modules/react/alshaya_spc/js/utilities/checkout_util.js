@@ -264,7 +264,7 @@ export const addBillingInCart = (action, data) => window.commerceBackend.addBill
  * Refresh cart from MDC.
  */
 export const validateCartData = () => {
-  const cartData = window.commerceBackend.getCartData();
+  const cartData = window.commerceBackend.getCartDataFromStorage();
   // If cart not available at all.
   if (!cartData
     || !cartData.cart

@@ -213,7 +213,7 @@ window.commerceBackend.processCartData = (cartData) => {
  * @returns {object|null}
  *   Processed cart data else null.
  */
-window.commerceBackend.getCartData = () => getCartData();
+window.commerceBackend.getCartDataFromStorage = () => getCartData();
 
 /**
  * Sets the cart data.
@@ -226,4 +226,4 @@ window.commerceBackend.setCartData = (data) => setCartData(data);
 /**
  * Unsets the stored cart data.
  */
-window.commerceBackend.removeCartData = () => removeCartData();
+window.commerceBackend.removeCartDataFromStorage = () => removeCartData();

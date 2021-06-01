@@ -13,7 +13,7 @@ const associateCart = () => window.commerceBackend.associateCart()
  * Empty cart.
  */
 const emptyCustomerCart = () => {
-  window.commerceBackend.removeCartData();
+  window.commerceBackend.removeCartDataFromStorage();
 
   const emptyCart = {
     cart_id: null,
@@ -33,7 +33,7 @@ const emptyCustomerCart = () => {
 export async function checkCartCustomer(cartData = null) {
   let cartDataVal = cartData;
   if (!(cartDataVal) || cartDataVal.cart_id === undefined) {
-    const cartJson = window.commerceBackend.getCartData();
+    const cartJson = window.commerceBackend.getCartDataFromStorage();
     cartDataVal = cartJson.cart;
   }
 

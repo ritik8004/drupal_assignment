@@ -25,7 +25,7 @@ const validateCartResponse = (response) => {
 
   // If there was validation issue or cart no longer available.
   if (errorCode === 400 || errorCode === 404) {
-    window.commerceBackend.removeCartData();
+    window.commerceBackend.removeCartDataFromStorage();
     window.location.href = Drupal.url('cart');
     return false;
   }
