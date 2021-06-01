@@ -1,3 +1,4 @@
+// Apply Select Wrapper mixin for all resolutions.
 @mixin select-wrapper($wrapper-width) {
   width: $wrapper-width;
   margin-bottom: 0.75rem;
