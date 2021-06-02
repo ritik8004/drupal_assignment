@@ -87,9 +87,9 @@ class AlshayaSpcHelper {
     if ($this->getCommerceBackendVersion() == 2) {
       // Login with Magento.
       $response = $this->spcCustomerHelper->authenticateCustomerBySocialDetail($email);
-      if (is_string($response)) {
+      if ($token = json_decode($response)) {
         // Store bearer token on secure cookie.
-        $this->session->set('alshaya_spc_token', json_decode($response));
+        $this->session->set('alshaya_spc_token', $token);
       }
     }
   }

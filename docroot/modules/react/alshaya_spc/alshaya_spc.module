@@ -215,7 +215,7 @@ function _alshaya_spc_global_error_message() {
 function alshaya_spc_page_attachments_alter(&$page) {
   $cart_config = \Drupal::config('alshaya_acm.cart_config');
   $cart_version = $cart_config->get('version') ?? 1;
-  if ($cart_version !== 2) {
+  if ($cart_version != 2) {
     return;
   }
 
