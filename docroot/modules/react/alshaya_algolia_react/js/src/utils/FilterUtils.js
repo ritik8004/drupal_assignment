@@ -1,3 +1,5 @@
+import { productListIndexStatus } from './indexUtils';
+
 const _ = require('lodash');
 
 /**
@@ -137,13 +139,19 @@ function hasSuperCategoryFilter() {
  * @param {*} returnType
  *   Return type value to return. ("alias" or "key")
  */
-function facetFieldAlias(key, returnType) {
+function facetFieldAlias(key, returnType, pageType = null) {
   const { filters_alias: filtersAlias } = drupalSettings.algoliaSearch;
-  const { filters } = drupalSettings.algoliaSearch.search;
-
+  let allFilters = '';
+  if (pageType === 'plp' && productListIndexStatus()) {
+    const { filters } = drupalSettings.algoliaSearch.listing;
+    allFilters = filters;
+  } else {
+    const { filters } = drupalSettings.algoliaSearch.search;
+    allFilters = filters;
+  }
   const facetField = key.split('.')[0];
   if (returnType === 'alias') {
-    return filters[facetField].alias;
+    return allFilters[facetField].alias;
   }
   return filtersAlias[key];
 }

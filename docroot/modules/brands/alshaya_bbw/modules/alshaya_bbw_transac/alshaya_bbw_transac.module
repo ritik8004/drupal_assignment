@@ -10,6 +10,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\search_api\IndexInterface;
+use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -172,25 +173,56 @@ function alshaya_bbw_transac_alshaya_acm_product_light_product_data_alter(SKU $s
  * Implements hook_search_api_algolia_objects_alter().
  */
 function alshaya_bbw_transac_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
-  if ($index->id() !== 'alshaya_algolia_index') {
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
+  $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
+  $index_name = $algolia_index->getAlgoliaIndexNames();
+  if (!in_array($index->id(), $index_name)) {
     return;
   }
-
   foreach ($objects as $id => &$object) {
     if (empty($object['sku'])) {
       continue;
     }
-
-    $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
-    if (!($sku instanceof SKUInterface)) {
-      continue;
-    }
     $node = $items[$id]->getOriginalObject()->getValue();
-    if ($sku->language()->getId() != $node->language()->getId()) {
-      continue;
+    // Process index object for product list index.
+    if ($index->id() == AlshayaAlgoliaIndexHelper::PRODUCT_LIST_INDEX) {
+      $nodeLanguages = $node->getTranslationLanguages();
+      foreach ($nodeLanguages as $lan_key => $lan_value) {
+        $node_object = $node->getTranslation($lan_key);
+        $raw_title = _alshaya_bbw_transac_get_language_specific_data($lan_key, $object['sku'], $node_object);
+        if ($raw_title){
+          $object['raw_title'][$lan_key] = $raw_title;
+        }
+      }
     }
-    $fragrance_name = $sku->get('attr_fragrance_name')->getString();
-    $descriptive_name = $sku->get('attr_descriptive_name')->getString();
-    $object['raw_title'] = (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
+    else {
+      $raw_title = _alshaya_bbw_transac_get_language_specific_data($object['search_api_language'], $object['sku'], $node);
+      if($raw_title){
+        $object['raw_title'] = $raw_title;
+      }
+    }
   }
+}
+
+/**
+ * Implements hook_alshaya_product_list_exclude_attribute_alter().
+ */
+function alshaya_bbw_transac_alshaya_product_list_exclude_attribute_alter(array &$excludedAttributes) {
+  $excludedAttributes[] = 'raw_title';
+}
+
+/**
+ * Get Language specific SKU and Node.
+ */
+function _alshaya_bbw_transac_get_language_specific_data($lang, $sku_data, $node){
+  $sku = SKU::loadFromSku($sku_data, $lang);
+  if (!($sku instanceof SKUInterface)) {
+    return FALSE;
+  }
+  if ($sku->language()->getId() != $node->language()->getId()) {
+    return FALSE;
+  }
+  $fragrance_name = $sku->get('attr_fragrance_name')->getString();
+  $descriptive_name = $sku->get('attr_descriptive_name')->getString();
+  return (!empty($fragrance_name)) ? $fragrance_name : $descriptive_name;
 }
