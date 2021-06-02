@@ -1,3 +1,4 @@
+import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import {
   callMiddlewareApi,
   isAnonymousUserWithoutCart,
@@ -95,3 +96,35 @@ window.commerceBackend.associateCart = () => callMiddlewareApi('cart/associate',
  *   A promise object.
  */
 window.commerceBackend.addFreeGift = (data) => callMiddlewareApi('select-free-gift', 'POST', JSON.stringify(data));
+
+/**
+ * Gets the cached cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartDataFromStorage = () => getStorageInfo('cart_data');
+
+/**
+ * Sets the cart data.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartDataInStorage = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  setStorageInfo(cartInfo);
+};
+
+/**
+ * Removes the cart data from storage.
+ */
+window.commerceBackend.removeCartDataFromStorage = () => {
+  removeStorageInfo('cart_data');
+
+  // Remove last selected payment on page load.
+  // We use this to ensure we trigger events for payment method
+  // selection at-least once and not more than once.
+  removeStorageInfo('last_selected_payment');
+};

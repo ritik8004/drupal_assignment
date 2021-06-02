@@ -10,6 +10,38 @@ import { removeStorageInfo } from '../../utilities/storage';
 window.commerceBackend = window.commerceBackend || {};
 
 /**
+ * Object to serve as static cache for cart data over the course of a request.
+ */
+let staticCartData = null;
+
+/**
+ * Gets the cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+
+/**
+ * Sets the cart data to storage.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartDataInStorage = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  staticCartData = cartInfo;
+};
+
+/**
+ * Unsets the stored cart data.
+ */
+window.commerceBackend.removeCartDataFromStorage = () => {
+  staticCartData = null;
+};
+
+/**
  * Check if user is anonymous and without cart.
  *
  * @returns bool
@@ -72,9 +104,7 @@ window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.restoreCart = () => {
-  throw new Error('restoreCart Not implemented!');
-};
+window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
 
 /**
  * Adds item to the cart and returns the cart.

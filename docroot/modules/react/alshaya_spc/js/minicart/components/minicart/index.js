@@ -2,7 +2,6 @@ import React from 'react';
 
 import 'promise-polyfill/src/polyfill';
 import { fetchCartData } from '../../../utilities/api/requests';
-import { addInfoInStorage } from '../../../utilities/storage';
 import EmptyMiniCartContent from '../empty-mini-cart-content';
 import MiniCartContent from '../mini-cart-content';
 import { checkCartCustomer } from '../../../utilities/cart_customer_util';
@@ -54,7 +53,7 @@ export default class MiniCart extends React.Component {
           const dataToStore = {
             cart: resultVal,
           };
-          addInfoInStorage(dataToStore);
+          window.commerceBackend.setCartDataInStorage(dataToStore);
 
           // Trigger event so that data can be passed to other components.
           this.dispatchRefereshCart(resultVal);
@@ -89,7 +88,7 @@ export default class MiniCart extends React.Component {
           const dataToStore = {
             cart: data,
           };
-          addInfoInStorage(dataToStore);
+          window.commerceBackend.setCartDataInStorage(dataToStore);
 
           if (data.items.length === 0) {
             this.setState({

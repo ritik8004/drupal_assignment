@@ -2,9 +2,6 @@ import {
   cartAvailableInStorage,
   redirectToCart,
 } from '../get_cart';
-import {
-  removeCartFromStorage,
-} from '../storage';
 import dispatchCustomEvent from '../events';
 import validateCartResponse from '../validation_util';
 
@@ -19,7 +16,7 @@ export const fetchClicknCollectStores = (args) => {
 
 export const fetchCartData = () => {
   if (window.commerceBackend.isAnonymousUserWithoutCart()) {
-    removeCartFromStorage();
+    window.commerceBackend.removeCartDataFromStorage();
     return null;
   }
 
@@ -112,7 +109,7 @@ export const fetchCartData = () => {
 
 export const fetchCartDataForCheckout = () => {
   // Remove cart data from storage every-time we land on checkout page.
-  removeCartFromStorage();
+  window.commerceBackend.removeCartDataFromStorage();
 
   // If session cookie not exists, no need to process/check.
   if (window.commerceBackend.isAnonymousUserWithoutCart()) {

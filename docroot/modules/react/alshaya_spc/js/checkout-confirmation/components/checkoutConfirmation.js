@@ -4,7 +4,7 @@ import ReactToPrint from 'react-to-print';
 import OrderSummaryBlock from '../../utilities/order-summary-block';
 import OrderSummary from './OrderSummary';
 import { stickySidebar } from '../../utilities/stickyElements/stickyElements';
-import { removeCartFromStorage, removeStorageInfo } from '../../utilities/storage';
+import { removeStorageInfo } from '../../utilities/storage';
 import VatFooterText from '../../utilities/vat-footer';
 import ConditionalView from '../../common/components/conditional-view';
 import CheckoutConfirmationPrint from './checkoutConfirmationPrint';
@@ -33,7 +33,7 @@ class CheckoutConfirmation extends React.Component {
       // has been placed.
       removeStorageInfo('shippingaddress-formdata');
       if (Cookies.get('middleware_order_placed')) {
-        removeCartFromStorage();
+        window.commerceBackend.removeCartDataFromStorage();
         Cookies.remove('middleware_order_placed');
       }
     } catch (e) {

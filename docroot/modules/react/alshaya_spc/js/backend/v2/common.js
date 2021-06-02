@@ -11,8 +11,8 @@ import { removeStorageInfo } from '../../utilities/storage';
  * @returns bool
  */
 const isAnonymousUserWithoutCart = () => {
-  const cartData = window.Drupal.alshayaSpc.getCartData();
-  if (cartData === null || typeof cartData === 'undefined' || typeof cartData.cart_id === 'undefined') {
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null || typeof cartId === 'undefined') {
     if (window.drupalSettings.user.uid === 0) {
       return true;
     }
