@@ -1017,7 +1017,7 @@ class AlshayaApiWrapper {
    * @return array
    *   The array customer data OR empty array.
    */
-  public function authenticateCustomerOnMagentoBySocialDetail(string $mail) {
+  public function getCustomerTokenBySocialDetail(string $mail) {
     $endpoint = 'integration/customer/token/bySocialDetail';
 
     $request_options = [

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_spc\Helper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\alshaya_api\AlshayaApiWrapper;
 
 /**
  * Class containing general helper methods for SPC.
@@ -33,11 +34,11 @@ class AlshayaSpcHelper {
   protected $currentUser;
 
   /**
-   * SPC customer helper.
+   * The api wrapper.
    *
-   * @var \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper
+   * @var \Drupal\alshaya_api\AlshayaApiWrapper
    */
-  protected $spcCustomerHelper;
+  protected $apiWrapper;
 
   /**
    * Constructor for AlshayaSpcHelper.
@@ -48,19 +49,19 @@ class AlshayaSpcHelper {
    *   The session.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
-   * @param \Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $spc_customer_helper
-   *   SPC Helper.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   The api wrapper.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     SessionInterface $session,
     AccountInterface $current_user,
-    AlshayaSpcCustomerHelper $spc_customer_helper
+    AlshayaApiWrapper $api_wrapper
   ) {
     $this->configFactory = $config_factory;
     $this->session = $session;
     $this->currentUser = $current_user;
-    $this->spcCustomerHelper = $spc_customer_helper;
+    $this->apiWrapper = $api_wrapper;
   }
 
   /**
@@ -74,18 +75,18 @@ class AlshayaSpcHelper {
   }
 
   /**
-   * Authenticate on Magento using email and stores in the session.
+   * Helper function to get a token from Magento using Social Details.
    *
-   * @param string $email
+   * @param string $mail
    *   The email address.
    */
-  public function authenticateCustomerBySocialDetail($email) {
+  public function getCustomerTokenBySocialDetail($mail) {
     if (!$this->currentUser->isAuthenticated()) {
       return;
     }
 
     if ($this->getCommerceBackendVersion() == 2) {
-      $response = $this->spcCustomerHelper->authenticateCustomerBySocialDetail($email);
+      $response = $this->apiWrapper->getCustomerTokenBySocialDetail($mail);
       if ($token = json_decode($response)) {
         $this->session->set('magento_customer_token', $token);
       }
@@ -107,7 +108,7 @@ class AlshayaSpcHelper {
     }
     else {
       $email = $this->currentUser->getEmail();
-      return $this->authenticateCustomerBySocialDetail($email);
+      return $this->getCustomerTokenBySocialDetail($email);
     }
   }
 

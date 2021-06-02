@@ -362,24 +362,4 @@ class AlshayaSpcCustomerHelper {
     return NULL;
   }
 
-  /**
-   * Helper function to authenticate user on Magento using Social Details.
-   *
-   * @param string $mail
-   *   User email.
-   *
-   * @return string
-   *   A Bearer token.
-   *
-   * @throws \Exception
-   */
-  public function authenticateCustomerBySocialDetail($mail) {
-    try {
-      return $this->apiWrapper->authenticateCustomerOnMagentoBySocialDetail($mail);
-    }
-    catch (\Exception $e) {
-      throw $e;
-    }
-  }
-
 }

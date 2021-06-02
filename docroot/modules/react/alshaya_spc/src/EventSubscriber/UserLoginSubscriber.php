@@ -44,12 +44,14 @@ class UserLoginSubscriber implements EventSubscriberInterface {
   /**
    * Subscribe to the user login event dispatched.
    *
+   * Gets a social token by Social Detail.
+   *
    * @param \Drupal\alshaya_spc\Event\UserLoginEvent $event
    *   The event.
    */
   public function onUserLogin(UserLoginEvent $event) {
     $email = $event->account->getEmail();
-    $this->alshayaSpcHelper->authenticateCustomerBySocialDetail($email);
+    $this->alshayaSpcHelper->getCustomerTokenBySocialDetail($email);
   }
 
 }
