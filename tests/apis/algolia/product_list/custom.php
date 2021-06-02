@@ -95,16 +95,21 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   global $sorts, $facets, $query_facets, $query_generate;
   global $searchable_attributes, $ranking;
   global $migrate_index;
+  global $product_list_suffix;
+  global $languages;
+  global $attributes_skip_lang_suffix;
 
   $clientSource = SearchClient::create($source_app_id, $source_app_secret_admin);
   $client = SearchClient::create($app_id, $app_secret_admin);
 
-  $indexSource = $clientSource->initIndex($source_index . '_' . $language);
+  // We always use en source index.
+  $indexSource = $clientSource->initIndex($source_index . '_en');
+
   $settingsSource = $indexSource->getSettings();
   $ranking = $settingsSource['ranking'];
-  $searchable_attributes = $settingsSource['searchableAttributes'];
 
-  $name = $prefix . '_' . $language;
+  // We create product list index.
+  $name = $prefix . '_' . $product_list_suffix;
 
   // Just need a dummy index to create our index as there is no API to create
   // new index directly.
@@ -112,38 +117,68 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
   $index = $client->initIndex($name);
 
   $settings = $settingsSource;
-  if ($migrate_index) {
-    $settings['attributesForFaceting'] = $settingsSource['attributesForFaceting'];
-  }
-  else {
-    $settings['attributesForFaceting'] = $facets;
-  }
 
-  $settings['searchableAttributes'] = $searchable_attributes;
   $settings['ranking'] = $ranking;
   unset($settings['replicas']);
 
+  if ($migrate_index) {
+    // Add language suffix to searchable attributes.
+    foreach ($settingsSource['searchableAttributes'] as $searchableAttribute) {
+      // Check If attribute does not require language suffix.
+      // Get attribute between round parenthesis.
+      preg_match('#\((.*?)\)#', $searchableAttribute, $match);
+      if (in_array($match[1], $attributes_skip_lang_suffix)) {
+        $searchableAttributes[] = $searchableAttribute;
+        continue;
+      }
+      foreach ($languages as $lang_code) {
+        if (strstr($searchableAttribute, '.')) {
+          $searchableAttributes[] = str_replace('.', '.' . $lang_code . '.', $searchableAttribute);
+        }
+        else {
+          $searchableAttributes[] = str_replace(')', '.' . $lang_code . ')', $searchableAttribute);
+        }
+      }
+    }
+    $settings['searchableAttributes'] = $searchableAttributes;
+
+    foreach ($settingsSource['attributesForFaceting'] as $facetAttribute) {
+      $facetAttributes[] = $facetAttribute;
+    }
+    $settings['attributesForFaceting'] = $facetAttributes;
+  }
+  else {
+    $settings['searchableAttributes'] = $searchable_attributes;
+    $settings['attributesForFaceting'] = $facets;
+  }
+
   $index->setSettings($settings, ['forwardToReplicas' => TRUE,]);
 
   foreach ($sorts as $sort) {
-    $replica = $name . '_' . implode('_', $sort);
-    $settings['replicas'][] = $replica;
-    $client->copyIndex($name, $replica);
+    foreach ($languages as $lang_code) {
+      $replica = $name . '_' . $lang_code . '_' . implode('_', $sort);
+      $settings['replicas'][] = $replica;
+      $client->copyIndex($name, $replica);
+    }
   }
-  sleep(3);
+  sleep(10);
 
   $index->setSettings($settings, ['forwardToReplicas' => TRUE,]);
+  sleep(10);
 
   foreach ($sorts as $sort) {
-    $replica = $name . '_' . implode('_', $sort);
-    $replica_index = $client->initIndex($replica);
-    $replica_settings = $replica_index->getSettings();
-    $replica_settings['ranking'] = [
-        'desc(stock)',
-        $sort['direction'] . '(' . $sort['field'] . ')',
-      ] + $ranking;
-    $replica_index->setSettings($replica_settings);
+    foreach ($languages as $lang_code) {
+      $replica = $name . '_' . $lang_code . '_' . implode('_', $sort);
+      $replica_index = $client->initIndex($replica);
+      $replica_settings = $replica_index->getSettings();
+      $replica_settings['ranking'] = [
+          'desc(stock)',
+          $sort['direction'] . '(' . $sort['field'] . '.' . $lang_code . ')',
+        ] + $ranking;
+      $replica_index->setSettings($replica_settings);
+    }
   }
+  sleep(10);
 
   $query_suggestion = $name . '_query';
   $query = [
@@ -168,8 +203,12 @@ function algolia_create_index($app_id, $app_secret_admin, $language, $prefix) {
 }
 
 function algolia_update_synonyms($app_id, $app_secret_admin, $language, $env, $brand) {
+  global $product_list_suffix;
   $brand_code = substr($brand, 0, -2);
-  $file = __DIR__ . '/../../../architecture/algolia/synonyms/' . $brand_code . '_' . $language . '.txt';
+
+  // Use brandcode_synonyms.txt example bbwae_synonyms.txt.
+  $file = __DIR__ . '/../../../architecture/algolia/synonyms/' . $brand_code . '_synonyms.txt';
+
   $synonyms = file_get_contents($file);
   if (empty($synonyms)) {
     print 'No synonyms found in ' . $file . PHP_EOL;
@@ -178,7 +217,10 @@ function algolia_update_synonyms($app_id, $app_secret_admin, $language, $env, $b
 
   $client = SearchClient::create($app_id, $app_secret_admin);
   $client->setConnectTimeout(3000, 3000);
-  $name = $env . '_' . $brand . '_' . $language;
+
+  // Updaate product list index.
+  $name = $env . '_' . $brand . '_' . $product_list_suffix;
+
   $index = $client->initIndex($name);
 
   $synonyms = explode(PHP_EOL, $synonyms);
