@@ -85,11 +85,9 @@ class AlshayaSpcHelper {
     }
 
     if ($this->getCommerceBackendVersion() == 2) {
-      // Login with Magento.
       $response = $this->spcCustomerHelper->authenticateCustomerBySocialDetail($email);
       if ($token = json_decode($response)) {
-        // Store bearer token on secure cookie.
-        $this->session->set('alshaya_spc_token', $token);
+        $this->session->set('magento_customer_token', $token);
       }
     }
   }
@@ -103,7 +101,7 @@ class AlshayaSpcHelper {
    *   Then bearer token if available, otherwise NULL.
    */
   public function getBearerToken() {
-    $token = $this->session->get('alshaya_spc_token');
+    $token = $this->session->get('magento_customer_token');
     if (is_string($token)) {
       return $token;
     }
