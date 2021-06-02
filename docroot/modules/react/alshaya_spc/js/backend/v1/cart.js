@@ -111,7 +111,7 @@ window.commerceBackend.getCartDataFromStorage = () => getStorageInfo('cart_data'
  * @param data
  *   The cart data.
  */
-window.commerceBackend.setCartData = (data) => {
+window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
   setStorageInfo(cartInfo);
