@@ -5,6 +5,7 @@ import {
 } from './common';
 import { logger } from './utility';
 import { getDefaultErrorMessage } from './error';
+import { removeStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -32,7 +33,7 @@ window.commerceBackend.getCart = async () => {
   if (typeof response.data.error !== 'undefined' && response.data.error === true) {
     if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
       // Remove the cart from storage.
-      localStorage.removeItem('cart_id');
+      removeStorageInfo('cart_id');
       logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
       // Get new cart.
       window.commerceBackend.getCartId();
