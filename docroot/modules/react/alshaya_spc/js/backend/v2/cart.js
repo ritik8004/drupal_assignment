@@ -1,6 +1,5 @@
 import {
   callMagentoApi,
-  getCart,
   getCartData,
   isAnonymousUserWithoutCart,
   removeCartData,
@@ -76,7 +75,7 @@ window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.restoreCart = () => getCart();
+window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
 
 /**
  * Adds item to the cart and returns the cart.

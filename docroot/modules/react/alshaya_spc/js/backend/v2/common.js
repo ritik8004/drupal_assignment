@@ -226,28 +226,10 @@ const updateCart = async (data) => {
   return window.commerceBackend.getCart();
 };
 
-/**
- * Calls the get cart API.
- *
- * @returns {promise}
- *   A promise object which resolves to a cart object or null.
- */
-const getCart = () => {
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null) {
-    return new Promise((resolve) => resolve(cartId));
-  }
-
-  // @todo: Handle error.
-  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {})
-    .then((response) => window.commerceBackend.processCartData(response.data));
-};
-
 export {
   isAnonymousUserWithoutCart,
   callMagentoApi,
   updateCart,
-  getCart,
   getCartData,
   setCartData,
   removeCartData,
