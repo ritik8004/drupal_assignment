@@ -8,6 +8,7 @@ import Swatches from '../swatch';
 import AddToBagContainer from '../../../../../js/utilities/components/addtobag-container';
 import ConditionalView from '../../../common/components/conditional-view';
 import DisplayStar from '../stars';
+import { productListIndexStatus } from '../../utils/indexUtils';
 
 const Teaser = ({
   hit, gtmContainer = null, pageType,
@@ -18,13 +19,18 @@ const Teaser = ({
   const [initSlider, setInitiateSlider] = useState(false);
   const [slider, setSlider] = useState(false);
   const isDesktop = window.innerWidth > 1024;
+  const { currentLanguage } = drupalSettings.path;
   if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
-      if (hit && hit.collection_labels && hit.collection_labels[plpAttributes[i]]) {
+      let collectionLabelValue = hit.collection_labels[plpAttributes[i]];
+      if (pageType === 'plp' && productListIndexStatus() && hit.collection_labels[currentLanguage]) {
+        collectionLabelValue = hit.collection_labels[currentLanguage][plpAttributes[i]];
+      }
+      if (hit && hit.collection_labels && collectionLabelValue) {
         collectionLabel.push({
           class: plpAttributes[i],
-          value: hit.collection_labels[plpAttributes[i]],
+          value: collectionLabelValue,
         });
         break;
       }
@@ -35,7 +41,25 @@ const Teaser = ({
   if (collectionLabel.length > 0) {
     labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
   }
+
   const overridenGtm = gtmContainer ? { ...hit.gtm, ...{ 'gtm-container': gtmContainer } } : hit.gtm;
+  const attribute = [];
+  Object.entries(hit).forEach(([key, value]) => {
+    if (pageType === 'plp'
+      && productListIndexStatus()
+      && value !== null) {
+      if (value[currentLanguage] !== undefined) {
+        attribute[key] = value[currentLanguage];
+      }
+    } else {
+      attribute[key] = value;
+    }
+  });
+  // Skip if there is no value for current language.
+  if (attribute.title === undefined) {
+    return null;
+  }
+
   return (
     <div className="c-products__item views-row">
       <article
@@ -68,14 +92,15 @@ const Teaser = ({
       >
         <div className="field field--name-field-skus field--type-sku field--label-hidden field__items">
           <a
-            href={`${hit.url}`}
-            data--original-url={`${hit.url}`}
+            href={`${attribute.url}`}
+            data--original-url={`${attribute.url}`}
             className="list-product-gallery product-selected-url"
           >
             <Gallery
-              media={hit.media}
-              title={hit.title}
-              labels={hit.product_labels}
+
+              media={attribute.media}
+              title={attribute.title}
+              labels={attribute.product_labels}
               sku={hit.sku}
               initSlider={initSlider}
               setSlider={setSlider}
@@ -91,10 +116,10 @@ const Teaser = ({
               </div>
               )}
             <h2 className="field--name-name">
-              <a href={`${hit.url}`} className="product-selected-url">
+              <a href={attribute.url} className="product-selected-url">
                 <div className="aa-suggestion">
                   <span className="suggested-text">
-                    {Parser(hit.title)}
+                    {attribute.title && Parser(attribute.title)}
                   </span>
                 </div>
               </a>
@@ -113,18 +138,18 @@ const Teaser = ({
                 )
               </div>
             </ConditionalView>
-            {hit.rendered_price
-              ? Parser(hit.rendered_price)
-              : <Price price={hit.original_price} final_price={hit.final_price} />}
-            <Promotions promotions={hit.promotions} />
-            {showSwatches ? <Swatches swatches={hit.swatches} url={hit.url} /> : null}
+            {attribute.rendered_price
+              ? Parser(attribute.rendered_price)
+              : <Price price={attribute.original_price} final_price={attribute.final_price} />}
+            <Promotions promotions={attribute.promotions} />
+            {showSwatches ? <Swatches swatches={attribute.swatches} url={attribute.url} /> : null}
           </div>
         </div>
         <AddToBagContainer
-          url={hit.url}
+          url={attribute.url}
           sku={hit.sku}
           stockQty={hit.stock_quantity}
-          productData={hit.atb_product_data}
+          productData={attribute.atb_product_data}
         />
       </article>
     </div>

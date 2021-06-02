@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_algolia_react\Services;
 
 use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
@@ -153,9 +154,16 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   public function getAlgoliaReactCommonConfig(string $page_type) {
     $lang = $this->languageManager->getCurrentLanguage()->getId();
 
-    // Get current index name.
     $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
+    // Set Algolia index name from Drupal index eg: 01live_bbwae_en.
     $index_name = $index['algolia_index_name'] . '_' . $lang;
+    // Get current index name based on page type.
+    if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $index = $this->configFactory->get('search_api.index.alshaya_algolia_product_list_index')->get('options');
+      // Set Algolia index name from Drupal index
+      // eg: 01live_bbwae_product_list.
+      $index_name = $index['algolia_index_name'];
+    }
 
     $listing = $this->configFactory->get('alshaya_search_api.listing_settings');
     $currency = $this->configFactory->get('acq_commerce.currency');
@@ -190,13 +198,13 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $response['commonAlgoliaSearch'] = [
       'application_id' => $alshaya_algolia_react_setting_values->get('application_id'),
       'api_key' => $alshaya_algolia_react_setting_values->get('search_api_key'),
-      'indexName' => $index_name,
       'filterOos' => $listing->get('filter_oos_product'),
       'itemsPerPage' => $alshaya_algolia_react_setting_values->get('items_per_page') ?? 36,
       'insightsJsUrl' => drupal_get_path('module', 'alshaya_algolia_react') . '/js/algolia/search-insights@1.3.0.min.js',
       'enable_lhn_tree_search' => $product_category_settings->get('enable_lhn_tree_search'),
       'category_facet_label' => $this->t('Category'),
       'sizeGroupSeparator' => SkuManager::SIZE_GROUP_SEPARATOR,
+      'productListIndexStatus' => AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index'),
     ];
 
     $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type);
@@ -238,6 +246,10 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     // Allow other modules to alter or add extra configs
     // in agolia react common configurations.
     $this->moduleHandler->alter('algolia_react_common_configs', $response);
+
+    // Add Index name eg: 01live_bbwae_en or 01live_bbwae_product_list
+    // for corresponding page-type search / listing.
+    $response[$page_type]['indexName'] = $index_name;
 
     return $response;
   }
@@ -300,6 +312,15 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       }
       elseif (in_array($sort_key, $enabled_sorts)) {
         $sort_index_key = $index_name . '_' . $index_sort_key . '_' . strtolower($sort_order);
+        // Get index name by page type.
+        if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+          // Get sort index name for listing
+          // eg: 01live_bbwae_product_list_en_title_asc.
+          $sort_index_key = $index_name . '_'
+            . $this->languageManager->getCurrentLanguage()->getId() . '_'
+            . $index_sort_key . '_'
+            . strtolower($sort_order);
+        }
       }
 
       if (!empty($sort_index_key)) {
@@ -361,18 +382,18 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         }
 
         if (!in_array($facet->getFieldIdentifier(), ['attr_selling_price'])) {
-          $identifier = $facet->getFieldIdentifier();
+          $identifier = $this->identifireSuffixUpdate($facet->getFieldIdentifier(), $page_type);
           $widget = $facet->getWidget();
 
           if ($facet->getFieldIdentifier() === 'field_category') {
             // For category we have index hierarchy in field_category
             // so, updating field_name and type for react.
-            $identifier = 'field_category';
+            $identifier = $this->identifireSuffixUpdate('field_category', $page_type);
             $widget['type'] = 'hierarchy';
           }
           elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
             $context = $this->promoContextManager->getPromotionContext();
-            $identifier = "field_acq_promotion_label.$context";
+            $identifier = $this->identifireSuffixUpdate("field_acq_promotion_label.$context", $page_type);
           }
 
           $facet_values = [];
@@ -450,6 +471,27 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     }
 
     return $facet_values[$attribute] ?? [];
+  }
+
+  /**
+   * Function to update idensitfier with language suffix.
+   *
+   * @param string $fieldIdentifier
+   *   Attribute to identify FieldIdentifier.
+   * @param string $page_type
+   *   Attribute to indentify page Type.
+   *
+   * @return string
+   *   Facet identifier.
+   */
+  protected function identifireSuffixUpdate($fieldIdentifier, $page_type) {
+    $identifier = $fieldIdentifier;
+    // Change Identifier based on Page Type.
+    if ($page_type === 'listing' && AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $identifier = $fieldIdentifier . '.'
+        . $this->languageManager->getCurrentLanguage()->getId();
+    }
+    return $identifier;
   }
 
 }
