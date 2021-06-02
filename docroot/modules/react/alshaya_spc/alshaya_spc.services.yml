@@ -78,11 +78,12 @@ services:
     tags:
       - { name: event_subscriber }
     arguments:
-      - '@alshaya_spc.customer_helper'
-      - '@config.factory'
-      - '@session'
+      - '@alshaya_spc.helper'
 
   alshaya_spc.helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper
     arguments:
       - '@config.factory'
+      - '@session'
+      - '@current_user'
+      - '@alshaya_spc.customer_helper'

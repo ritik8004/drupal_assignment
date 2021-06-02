@@ -220,10 +220,14 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $cart_config = \Drupal::config('alshaya_acm.cart_config');
   $cart_version = $cart_config->get('version') ?? 1;
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-  $session = \Drupal::service('session');
+
+  /** @var Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper */
+  $spc_helper = \Drupal::service('alshaya_spc.helper');
 
   if ($cart_version == 2) {
-    $page['#attached']['drupalSettings']['cart']['bearer_token'] = $session->get('alshaya_spc_token');
+    if ($token = $spc_helper->getBearerToken()) {
+      $page['#attached']['drupalSettings']['cart']['bearer_token'] = $token;
+    }
     $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
     $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
     $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$current_language];
