@@ -814,12 +814,17 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     // Get list of categories when category set to display as accordion else
     // Get list of products of configured category.
     if ($data['accordion']) {
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
+      $term = $this->skuInfoHelper->getEntityTranslation($term, $this->currentLanguage);
       if (empty($data['title'])) {
-        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
-        $term = $this->skuInfoHelper->getEntityTranslation($term, $this->currentLanguage);
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
+      $items = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
+      // Adding deeplink if there is no items.
+      if (empty($items)) {
+        $data['deeplink'] = $this->getDeepLink($term);
+      }
+      $data['items'] = $items;
     }
     else {
       // Invoke views display in executeInRenderContext to avoid cached
