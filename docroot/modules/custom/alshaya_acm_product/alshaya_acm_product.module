@@ -622,7 +622,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['home_delivery'] = [];
 
         // Display delivery options only if product is buyable.
-        if (alshaya_acm_product_is_buyable($sku_entity)) {
+        $is_product_buyable = alshaya_acm_product_is_buyable($sku_entity);
+        if ($is_product_buyable) {
           // Check if home delivery is available for this product.
           if (alshaya_acm_product_available_home_delivery($sku)) {
             $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
@@ -803,6 +804,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $productInfo['is_non_refundable'] = $is_non_refundable;
+        $productInfo['is_product_buyable'] = $is_product_buyable;
         $settingsKey = ($view_mode === 'matchback' || $view_mode === 'matchback_mobile')
           ? $view_mode
           : 'productInfo';

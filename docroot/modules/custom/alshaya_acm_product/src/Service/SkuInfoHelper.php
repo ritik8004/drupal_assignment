@@ -589,6 +589,9 @@ class SkuInfoHelper {
       $variant['parent_sku'] = $parent->getSku();
     }
 
+    // Add buyable flag to variants.
+    $variant['is_product_buyable'] = alshaya_acm_product_is_buyable($child);
+
     // Add language for all urls for language switcher block.
     $node = $this->skuManager->getDisplayNode($parent, FALSE);
     if ($node) {
