@@ -115,11 +115,7 @@
         $(this).click(function () {
           stopScrollEvents('html, body');
 
-          if ($(window).width() < 768) {
-            $('html,body').animate({scrollTop: $('.content__sidebar').offset().top - mobileStickyHeaderHeight}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
-            return false;
-          }
-          else {
+          if ($(window).width() > 767) {
             $('html,body').animate({scrollTop: 0}, 1200, 'easeOutQuart', unBindScrollEvents('html, body'));
             return false;
           }

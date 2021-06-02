@@ -268,9 +268,15 @@
   }
 
   .read-more-description-link,
-  .read-more-description-link-gift {
+  .read-more-description-link-gift,
+  .read-more-description-link-mobile,
+  .show-less-link {
     text-transform: capitalize;
     text-decoration: underline;
+  }
+
+  .desc-value {
+    color: $pdp_description;
   }
 }
 
@@ -327,6 +333,11 @@
   .desc-label {
     font-size: 1.125rem;
     font-family: $tbs-recoleta-semibold;
+  }
+
+  .desc-value,
+  .desc-wrapper {
+    color: $pdp_description;
   }
 }
 
@@ -473,8 +484,9 @@
     font-size: 0.875rem;
     line-height: 1.3125rem;
     padding-bottom: 1.25rem;
+    color: $pdp_description;
 
-    &:nth-last-child(4),
+    &:nth-last-child(3),
     &:last-child {
       padding-bottom: 0;
     }
@@ -487,25 +499,16 @@
   }
 
   .read-more-ingredients-link {
-    font-size: 0.875rem;
-    text-decoration: underline;
     line-height: 1.83;
     cursor: pointer;
-
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
   }
 
-  .read-more-ingredients-link-mobile {
-    @include breakpoint($tablet) {
-      display: none !important;
-    }
-  }
-
-  .read-more-ingredients-link-mobile,
-  .show-less-ingredient-link {
+  .show-less-ingredient-link,
+  .read-more-ingredients-link {
     font-size: 0.875rem;
+    text-decoration: underline;
+    color: $pdp_sidebar_link;
+    text-transform: capitalize;
   }
 
   .technical_ingredients_description {
@@ -524,7 +527,7 @@
       margin: 0 1rem;
       transition: $right 0.5s ease;
 
-      .close {
+      .ingredient-modal-close {
         @include icon(close);
 
         position: absolute;
