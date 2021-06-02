@@ -301,17 +301,18 @@
   }
 
   .home-delivery {
-    .ui-accordion-header-active {
-      padding-bottom: 0;
-    }
+    padding-bottom: 0.9375rem;
 
-    .ui-accordion-header-active + .c-accordion_content {
-      padding-bottom: 0.4375rem;
+    .ui-accordion-header-active,
+    .c-accordion__title,
+    .subtitle {
+      padding-bottom: 0;
     }
 
     .c-accordion_content {
       .delivery-option-title {
-        padding-top: 0;
+        padding-top: 0.625rem;
+        padding-bottom: 0;
       }
     }
   }
