@@ -77,6 +77,10 @@ services:
     class: Drupal\alshaya_spc\EventSubscriber\UserLoginSubscriber
     tags:
       - { name: event_subscriber }
+    arguments:
+      - '@alshaya_spc.customer_helper'
+      - '@config.factory'
+      - '@session'
 
   alshaya_spc.helper:
     class: Drupal\alshaya_spc\Helper\AlshayaSpcHelper

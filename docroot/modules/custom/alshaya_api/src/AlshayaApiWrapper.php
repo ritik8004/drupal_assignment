@@ -1009,6 +1009,41 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Authenticate customer through magento api using email.
+   *
+   * @param string $mail
+   *   The mail address.
+   *
+   * @return array
+   *   The array customer data OR empty array.
+   */
+  public function authenticateCustomerOnMagentoBySocialDetail(string $mail) {
+    $endpoint = 'integration/customer/token/bySocialDetail';
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('customer_authenticate'),
+    ];
+
+    try {
+      return $this->invokeApi(
+        $endpoint,
+        [
+          'customerEmail' => $mail,
+        ],
+        'JSON',
+        FALSE,
+        $request_options
+      );
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Exception while authenticating customer. Error: @response', [
+        '@response' => $e->getMessage(),
+      ]);
+      return [];
+    }
+  }
+
+  /**
    * Get customer by email, helpful for logged in user.
    *
    * @param string $email
