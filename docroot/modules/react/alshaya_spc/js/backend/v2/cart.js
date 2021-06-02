@@ -7,6 +7,9 @@ import {
   setCartData,
   updateCart,
 } from './common';
+import { logger } from './utility';
+import { getDefaultErrorMessage } from './error';
+import { removeStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -23,10 +26,52 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.getCart = () => getCart();
+window.commerceBackend.getCart = async () => {
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null) {
+    return new Promise((resolve) => resolve(cartId));
+  }
+
+  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
+
+  if (typeof response.data.error !== 'undefined' && response.data.error === true) {
+    if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
+      // Remove the cart from storage.
+      removeStorageInfo('cart_id');
+      logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+      // Get new cart.
+      window.commerceBackend.getCartId();
+    }
+
+    const error = {
+      data: {
+        error: response.data.error,
+        error_code: response.data.error_code,
+        error_message: getDefaultErrorMessage(),
+      },
+    };
+    return new Promise((resolve) => resolve(error));
+  }
+
+  // Process data.
+  response.data = window.commerceBackend.processCartData(response.data);
+  return new Promise((resolve) => resolve(response));
+};
 
 /**
- * Fetches the cart data.
+ * Adds item to the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
+
+/**
+ * Calls the cart restore API.
+ * @todo Implement restoreCart()
  *
  * @returns {Promise}
  *   A promise object.
@@ -202,9 +247,7 @@ window.commerceBackend.processCartData = (cartData) => {
       // @todo Get stock data.
     });
   }
-  const response = { ...cartData };
-  response.data = data;
-  return response;
+  return data;
 };
 
 /**

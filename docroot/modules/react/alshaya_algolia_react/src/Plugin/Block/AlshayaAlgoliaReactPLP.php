@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\FileInterface;
 use Drupal\alshaya_custom\Utility;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 
 /**
  * Provides a block to display 'plp' results.
@@ -146,6 +147,10 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     ];
 
     $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory($lang));
+    // Set default EN category filter in product list index for VM.
+    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory('en'));
+    }
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);

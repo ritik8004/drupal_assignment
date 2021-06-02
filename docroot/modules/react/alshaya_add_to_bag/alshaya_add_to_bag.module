@@ -10,6 +10,8 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\search_api\IndexInterface;
+use Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper;
+use Drupal\alshaya_add_to_bag\Services\AddToBagIndexHelper;
 
 /**
  * Implements hook_theme().
@@ -119,16 +121,47 @@ function alshaya_add_to_bag_search_api_algolia_objects_alter(array &$objects, In
     if (empty($object['sku'])) {
       continue;
     }
-
-    $sku = SKU::loadFromSku($object['sku'], $object['search_api_language']);
-    if (!($sku instanceof SKUInterface)) {
-      continue;
-    }
     $node = $items[$id]->getOriginalObject()->getValue();
-    if ($sku->language()->getId() != $node->language()->getId()) {
-      continue;
+    $atbAttributeName = AddToBagIndexHelper::ADD_TO_BAG_ATTRIBUTE;
+    // Process index object for product list index.
+    if ($index->id() == AlshayaAlgoliaIndexHelper::PRODUCT_LIST_INDEX) {
+      $nodeLanguages = $node->getTranslationLanguages();
+      foreach ($nodeLanguages as $lan_key => $lan_value) {
+        $node_object = $node->getTranslation($lan_key);
+        $atb_attribute = _alshaya_add_to_bag_get_language_specific_data($lan_key, $object['sku'], $node_object);
+        if ($atb_attribute){
+          $object[$atbAttributeName][$lan_key] = $atb_attribute;
+        }
+      }
     }
-
-    $object['atb_product_data'] = \Drupal::service('alshaya_add_to_bag.index_helper')->getItemsToIndex($node, $sku, $object['search_api_language']);
+    else {
+      $atb_attribute = _alshaya_add_to_bag_get_language_specific_data($object['search_api_language'], $object['sku'], $node);
+      if($atb_attribute){
+        $object[$atbAttributeName] = $atb_attribute;
+      }
+    }
   }
+}
+
+/**
+ * Implements hook_alshaya_product_list_exclude_attribute_alter().
+ */
+function alshaya_add_to_bag_alshaya_product_list_exclude_attribute_alter(array &$excludedAttributes) {
+  $atbAttributeName = AddToBagIndexHelper::ADD_TO_BAG_ATTRIBUTE;
+  $excludedAttributes[] = $atbAttributeName;
+}
+
+/**
+ * Get Language specific SKU and Node.
+ */
+function _alshaya_add_to_bag_get_language_specific_data($lang, $sku_data, $node){
+  $sku = SKU::loadFromSku($sku_data, $lang);
+  if (!($sku instanceof SKUInterface)) {
+    return FALSE;
+  }
+  if ($sku->language()->getId() != $node->language()->getId()) {
+    return FALSE;
+  }
+  $value = \Drupal::service('alshaya_add_to_bag.index_helper')->getItemsToIndex($node, $sku, $lang);
+  return $value;
 }
