@@ -4,7 +4,6 @@ namespace Drupal\alshaya_spc\Helper;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -75,7 +74,7 @@ class AlshayaSpcHelper {
   }
 
   /**
-   * Authenticate on Magento using email and stores in the session if successful.
+   * Authenticate on Magento using email and stores in the session.
    *
    * @param string $email
    *   The email address.
@@ -96,9 +95,11 @@ class AlshayaSpcHelper {
   }
 
   /**
-   * Gets the bearer token from session. If its not in the session, it retrieves from Magento.
+   * Gets the bearer token from session.
    *
-   * @return string|NULL $token
+   * If its not in the session, it retrieves from Magento.
+   *
+   * @return string|null
    *   Then bearer token if available, otherwise NULL.
    */
   public function getBearerToken() {
@@ -111,4 +112,5 @@ class AlshayaSpcHelper {
       return $this->authenticateCustomerBySocialDetail($email);
     }
   }
+
 }

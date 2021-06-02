@@ -27,7 +27,7 @@ class UserLoginSubscriber implements EventSubscriberInterface {
    *   SPC Helper.
    */
   public function __construct(
-    alshayaSpcHelper $alshaya_spc_helper
+    AlshayaSpcHelper $alshaya_spc_helper
   ) {
     $this->alshayaSpcHelper = $alshaya_spc_helper;
   }
