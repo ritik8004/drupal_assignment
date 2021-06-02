@@ -12,6 +12,11 @@ use Drupal\node\NodeInterface;
 class AddToBagIndexHelper {
 
   /**
+   * Add To bag attribute name for index on Algolia.
+   */
+  const ADD_TO_BAG_ATTRIBUTE = 'atb_product_data';
+
+  /**
    * SKU Info Helper service.
    *
    * @var \Drupal\alshaya_acm_product\Service\SkuInfoHelper
