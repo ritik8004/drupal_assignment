@@ -464,7 +464,10 @@ function alshaya_seo_transac_entity_delete(EntityInterface $entity) {
  * Implements hook_search_api_algolia_objects_alter().
  */
 function alshaya_seo_transac_search_api_algolia_objects_alter(array &$objects, IndexInterface $index, array $items) {
-  if ($index->id() !== 'alshaya_algolia_index') {
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $algolia_index */
+  $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
+  $index_name = $algolia_index->getAlgoliaIndexNames();
+  if (!in_array($index->id(), $index_name)) {
     return;
   }
 

@@ -46,7 +46,7 @@ const SearchResultsComponent = ({
   const parentRef = React.createRef();
   // Do not show out of stock products.
   const stockFilter = drupalSettings.algoliaSearch.filterOos === true ? 'stock > 0' : '';
-  const { indexName } = drupalSettings.algoliaSearch;
+  const { indexName } = drupalSettings.algoliaSearch.search;
 
   // Get default page to display for back to search,
   // and delete the stored info from local storage.
