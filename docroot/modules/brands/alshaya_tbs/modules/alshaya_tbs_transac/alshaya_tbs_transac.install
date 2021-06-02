@@ -13,6 +13,44 @@ function alshaya_tbs_transac_install() {
   // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_the_body_shop');
 
+  // Reset theme logo.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  $current_theme = $active_theme->getName();
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  \Drupal::configFactory()
+    ->getEditable($current_theme . '.settings')
+    ->set('logo', [
+      'path' => $site_logo . '.svg',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->set('favicon', [
+      'mimetype' => 'image/vnd.microsoft.icon',
+      'path' => $site_favicon . '.ico',
+      'url' => '',
+      'use_default' => FALSE,
+    ])
+    ->save(TRUE);
+
+  // Add the site name.
+  \Drupal::configFactory()->getEditable('system.site')
+    ->set('name', 'The Body Shop Kuwait')
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+        'url' => '',
+        'use_default' => FALSE,
+      ],
+    ])
+    ->save();
+
   // Translate store finder block's link title.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
     ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
@@ -33,6 +71,10 @@ function alshaya_tbs_transac_install() {
       'en' => 'The Body Shop',
       'ar' => 'The Body Shop',
     ],
+    'Product Description' => [
+      'en' => 'What does it do for you?',
+      'ar' => 'ما الذي تفعله من اجلك؟',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -50,6 +92,19 @@ function alshaya_tbs_transac_install() {
     ->set('map_marker.active', '/modules/brands/alshaya_tbs/images/tbs-pin-active.svg')
     ->set('map_marker.in_active', '/modules/brands/alshaya_tbs/images/tbs-pin-inactive.svg')
     ->save();
+
+  // Check if the sharethis module exists, then remove this from
+  // the Product CT as set in alshaya_transac.install by default.
+  if (\Drupal::moduleHandler()->moduleExists('sharethis')) {
+    // Get the sharethis configuration.
+    $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+    if ($configFactory->get('node_types.acq_product')) {
+      // Disable share this for Product CT.
+      $configFactory->clear('node_types.acq_product');
+    }
+    // Save the changes.
+    $configFactory->save();
+  }
 }
 
 /**

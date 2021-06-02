@@ -333,7 +333,7 @@
 
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 29.5rem;
+          height: 29.5rem;
         }
       }
     }
@@ -375,11 +375,7 @@
 
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 21.75rem;
-        }
-
-        @include breakpoint($upto-desktop) {
-          max-height: none;
+          height: 21.75rem;
         }
 
         .alshaya_search_mainimage {
@@ -401,25 +397,11 @@
         }
       }
     }
-  }
 
-  &.l-two--sf {
-    .c-products-list {
-      &.product-small {
-        .alshaya_search_gallery {
-          @include breakpoint($desktop) {
-            max-height: 17.75rem;
-          }
-        }
-      }
-
-      &.product-large {
-        .alshaya_search_gallery {
-          @include breakpoint($desktop) {
-            max-height: 24rem;
-          }
-        }
-      }
+    .views-infinite-scroll-content-wrapper {
+      display: flex;
+      align-items: stretch;
+      flex-wrap: wrap;
     }
   }
 
@@ -457,11 +439,25 @@
     .alshaya_search_gallery {
       overflow: hidden;
 
+      @include breakpoint($desktop) {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
       .alshaya_search_mainimage {
         z-index: 1;
-        height: auto;
+        height: 100%;
         position: relative;
+        line-height: 0;
       }
+    }
+
+    article {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .alshaya_search_slider {
@@ -472,8 +468,6 @@
 
       @include breakpoint($desktop) {
         display: block;
-        transform: translateY(-110%);
-        transition: opacity 0.3s, visibility 0s;
       }
     }
 
@@ -524,7 +518,6 @@
       article:hover {
         z-index: 2;
         position: relative;
-        height: auto !important;
 
         article .content {
           position: absolute;
@@ -537,6 +530,10 @@
           z-index: 2;
           transform: translateY(0);
           visibility: visible;
+        }
+
+        .alshaya_search_slider {
+          height: auto !important;
         }
 
         &::after {
@@ -557,11 +554,6 @@
             color: $plp_tile_product_title_hover;
             text-decoration: underline;
           }
-        }
-
-        .alshaya_search_gallery {
-          // We dont want any height to restrict the transform on hover.
-          max-height: none !important;
         }
       }
     }
@@ -632,6 +624,8 @@
 
 body {
   &.filter-open-no-scroll {
+    cursor: pointer;
+
     @include breakpoint($only-mobile) {
       overflow: hidden;
       position: fixed;
@@ -749,6 +743,7 @@ html[lang=ar] {
   }
 }
 
+// Fix for products misalignment on PLP/Promo Pages & Search.
 .c-products-list {
   position: relative;
   padding-bottom: 1rem;
@@ -782,10 +777,7 @@ html[lang=ar] {
       margin-#{$left}: 0;
     }
   }
-}
 
-// Fix for products misalignment on PLP/Promo Pages & Search.
-.c-products-list {
   .view-alshaya-product-list,
   &.view-search,
   &.block-views-blockalshaya-product-list-block-1,
@@ -793,33 +785,13 @@ html[lang=ar] {
     width: 100%;
     clear: both;
   }
-}
 
-.c-products-list {
   &.view-search,
   &.view-algolia-plp {
     @include breakpoint($only-mobile) {
       padding-#{$left}: 1.25rem;
       padding-#{$right}: 1.25rem;
     }
-  }
-}
-
-@include breakpoint($only-tablet) {
-  .c-plp {
-    .c-products-list {
-      .views-infinite-scroll-content-wrapper {
-        display: flex;
-        align-items: stretch;
-        flex-wrap: wrap;
-      }
-    }
-  }
-}
-
-body {
-  &.filter-open-no-scroll {
-    cursor: pointer;
   }
 }
 

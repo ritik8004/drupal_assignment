@@ -12,11 +12,22 @@
     border-bottom: 0.0625rem solid $checkout_footer_border;
   }
 
+  @include breakpoint($desktop) {
+    padding-top: 0.875rem;
+    padding-bottom: 1.875rem;
+  }
+
   p {
     font-family: $alshaya-thin;
 
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
+    }
+  }
+
+  p:last-child {
+    .light {
+      font-family: $alshaya-thin;
     }
   }
 }

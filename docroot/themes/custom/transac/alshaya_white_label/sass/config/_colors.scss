@@ -152,6 +152,8 @@ $_corn_silk: #fffade;
 $_cancelled: #f77;
 $_gray_222: #222;
 $_postpay_blue: #8abbd5;
+$blueberri_boy: #0078ff;
+$_plp-add-to-cart-disabled-qty: #aeaeb2;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1082,9 +1084,6 @@ $cart-free-gifts-label: $white-five;
 $cart-free-gifts-label-background: $marine-blue;
 $cart-free-gifts-button-color: $white-five;
 
-// Pace progress color
-$progress_loader: $marine-blue;
-
 // Social Auth
 $social-network-text: $grey-ash;
 $social-auth-bg: $white-five;
@@ -1542,6 +1541,7 @@ $magv2-free-gift-modal-item-code: $brownish-grey;
 $magv2-breadcrumb-bg: $white-five;
 $magv2-panel-close-icon: $mothercare-black;
 $magv2-pinterest-share-icon-hover: $pinterest-red;
+$magv2-rr-histogram-block-bg: $white-five;
 
 // Sub brand logo.
 $sub_brand_logo_separator: $_ancestral-water;
@@ -1672,7 +1672,7 @@ $rr-review-success-msg-txt: $black-two;
 $rr-range-slider-bg: $white-smoke-light;
 $rr-form-label-txt: $greyish;
 $rr-selected-slider-value: $grey-light;
-$rr-stars-color: $mothercare-black;
+$rr-stars-color: $marine-blue-two;
 $rr-select-border-separator: $warm-grey-two;
 $rr-star-rating-error: $error-red;
 $rr-form-error-border: $error-red;
@@ -1684,3 +1684,27 @@ $rr-form-body-txt: $black-two;
 $rr-review-pagination: $black-two;
 $rr-sort-filter-txt: $brownish-grey;
 $rr-write-review-link-txt: $brownish-grey;
+$rr-form-head-row-border: $marine-blue-two;
+$rr-thumbnail-img-bg: $white-smoke-light;
+$rr-write-review-disabled-btn: $light-greyish;
+$rr-write-review-disabled-border: $light-greyish;
+
+// Fawry colors.
+$fawry-desc-prefix: $_gray_222;
+$fawry-desc-suffix: $grey-light;
+$fawry-banner: $blueberri_boy;
+
+// PLP add to cart.
+$plp-disabled-qty-bg: $_plp-add-to-cart-disabled-qty;
+$plp-hover-slider-dot-color: $_gray;
+$plp-hover-slider-dot-container-bg-color: $white-five;
+
+// PLP Quick view drawer.
+$plp-quick-view-background: $white-five;
+$plp-quick-view-product-size-text: $marine-blue;
+$plp-quick-view-product-size-text-active: $white-five;
+$plp-quick-view-product-size-border: $marine-blue;
+$plp-quick-view-product-size-border-hover: $marine-blue;
+$plp-quick-view-product-size-active-bg: $marine-blue;
+$plp-quick-view-product-size-text-disabled: $marine-blue;
+$plp-quick-view-product-success: $_spc-radio-filled;

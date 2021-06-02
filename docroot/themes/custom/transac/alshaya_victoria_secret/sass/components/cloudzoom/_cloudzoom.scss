@@ -34,6 +34,12 @@
       border: 1px solid $gallery_arrows_border;
     }
   }
+
+  .slick-next {
+    @include breakpoint($desktop) {
+      bottom: auto;
+    }
+  }
 }
 
 .cloudzoom {
@@ -48,6 +54,8 @@
           height: auto;
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 37.5rem;
+          // Adding some height for loader icon
+          min-height: 20rem;
 
           .acq-content-product-modal & {
             img {
@@ -62,6 +70,7 @@
           // Adding some buffer and restricting height in case of very tall aspect ratio.
           max-height: 25rem;
           margin: auto;
+          min-height: 10rem;
 
           img {
             height: auto !important;
@@ -139,6 +148,16 @@
       }
     }
   }
+
+  .cloudzoom {
+    .cloudzoom__herocontainer {
+      .cloudzoom__image {
+        .hover-text {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
 @include breakpoint($only-tablet) {
@@ -174,26 +193,6 @@
       .slick-next,
       .slick-prev {
         top: 0 !important;
-      }
-    }
-  }
-}
-
-#lightSlider {
-  .slick-next {
-    @include breakpoint($desktop) {
-      bottom: auto;
-    }
-  }
-}
-
-.pdp-modal-overlay {
-  .cloudzoom {
-    .cloudzoom__herocontainer {
-      .cloudzoom__image {
-        .hover-text {
-          display: none;
-        }
       }
     }
   }

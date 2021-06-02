@@ -94,3 +94,20 @@ services:
       - '@alshaya_acm_product_category.page'
       - '@language_manager'
       - '@database'
+
+  alshaya_acm_product_category.category_sync_manager:
+    class: \Drupal\alshaya_acm_product_category\Service\ProductCategorySyncManager
+    arguments:
+      - '@entity_type.manager'
+      - '@language_manager'
+      - '@module_handler'
+      - '@alshaya_api.api'
+      - '@logger.factory'
+
+  alshaya_acm_product_category.helper:
+    class: Drupal\alshaya_acm_product_category\ProductCategoryHelper
+    arguments:
+      - '@alshaya_acm_product_category.product_category_tree'
+      - '@language_manager'
+      - '@current_route_match'
+      - '@module_handler'

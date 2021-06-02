@@ -168,10 +168,6 @@ jquery_mobile_touch_swipe:
   js:
     vendor/js/jquery.touchSwipe.min.js: {}
 
-pace:
-  js:
-    /libraries/pace/pace.min.js: {}
-
 magazine_attribute:
   js:
     js/magazine_attribute.js: {}
@@ -465,6 +461,13 @@ advanced-page:
   css:
     theme:
       css/conditional-sass/advanced-page/advanced-page.ltr.css: {}
+
+plp-add-to-cart:
+  css:
+      theme:
+        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: {}
+  dependencies:
+    - alshaya_white_label/alshaya-react-animate
 
 style-review-stars:
   css:

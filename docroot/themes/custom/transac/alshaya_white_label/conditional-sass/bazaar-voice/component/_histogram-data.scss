@@ -84,8 +84,6 @@
             .histogram-row {
               .star-label {
                 width: 9%;
-                text-decoration: underline;
-                cursor: pointer;
 
                 @include breakpoint($upto-desktop) {
                   width: 15%;
@@ -174,10 +172,26 @@
           line-height: 1;
           font-family: $alshaya-bold;
 
+          &.disabled {
+            background: $rr-write-review-disabled-btn;
+            border: 0.0625rem solid $rr-write-review-disabled-border;
+            cursor: default;
+          }
+
           @include breakpoint($only-mobile) {
             min-width: 100%;
             height: 2.8125rem;
           }
+        }
+      }
+
+      .already-reviewed-text {
+        text-align: $right;
+        margin-top: 0.625rem;
+
+        @include breakpoint($only-mobile) {
+          text-align: center;
+          margin-bottom: 1.25rem;
         }
       }
     }

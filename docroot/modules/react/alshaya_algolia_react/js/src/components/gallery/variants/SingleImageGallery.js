@@ -1,6 +1,7 @@
 import React from 'react';
-import Labels from '../../labels';
 import ImageElement from '../imageHelper/ImageElement';
+import Lozenges
+  from '../../../../common/components/lozenges';
 
 const SingleImageGallery = (props) => {
   const {
@@ -23,7 +24,7 @@ const SingleImageGallery = (props) => {
           title={title}
           className="b-lazy"
         />
-        <Labels labels={labels} sku={sku} />
+        <Lozenges labels={labels} sku={sku} />
       </div>
     </div>
   );

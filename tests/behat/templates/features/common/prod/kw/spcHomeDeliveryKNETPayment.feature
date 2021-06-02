@@ -30,7 +30,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
@@ -55,7 +55,7 @@ Feature: SPC Checkout Home Delivery CC
     And the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @desktop @Knet
-  Scenario: As a Guest, I should be able to checkout using COD in second language
+  Scenario: As a Guest, I should be able to checkout using CC in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
@@ -81,7 +81,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |
@@ -105,7 +105,7 @@ Feature: SPC Checkout Home Delivery CC
     And the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
 
   @cc @hd @language @mobile @Knet
-  Scenario: As a Guest, I should be able to checkout using COD in second language
+  Scenario: As a Guest, I should be able to checkout using CC in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
@@ -129,7 +129,7 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for AJAX to finish
     Then the "delivery-method-home_delivery" checkbox should be checked
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
-    And I wait 10 seconds
+    And I wait 30 seconds
     And I wait for the page to load
     And I fill in the following:
       | fullname | {anon_username} |

@@ -1,0 +1,72 @@
+fields:
+  target_area:
+    label: 'Target Area'
+    cardinality: -1
+    facet: 1
+    index: 1
+  concern:
+    label: 'Concern'
+    cardinality: -1
+    facet: 1
+    index: 1
+  range:
+    label: 'Range'
+    cardinality: -1
+    facet: 1
+    index: 1
+  product_type_hb:
+    label: 'Product Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  category_type:
+    label: 'Category Type'
+    cardinality: -1
+    facet: 1
+    index: 1
+  vegan:
+    label: 'Vegan'
+    cardinality: -1
+    facet: 1
+    index: 1
+  free_form:
+    label: 'Free Form'
+    cardinality: -1
+    facet: 1
+    index: 1
+  finish:
+    label: 'Finish'
+    cardinality: -1
+    facet: 1
+    index: 1
+  scent:
+    label: 'Scent'
+    cardinality: -1
+    facet: 1
+    index: 1
+  coverage:
+    label: 'Coverage'
+    cardinality: -1
+    facet: 1
+    index: 1
+  top_three_attributes_1:
+    label: 'Top three attributes 1'
+    type: 'text_long'
+    description: 'Top three attributes 1'
+  top_three_attributes_2:
+    label: 'Top three attributes 2'
+    type: 'text_long'
+    description: 'Top three attributes 2'
+  top_three_attributes_3:
+    label: 'Top three attributes 3'
+    type: 'text_long'
+    description: 'Top three attributes 3'
+  color:
+    configurable: 1
+    index: 0
+    facet: 0
+    display_configurable_for: 'color_swatch_code'
+  color_swatch_code:
+    label: 'Color swatch code'
+    type: 'string'
+    translatable: 0

@@ -20,28 +20,6 @@ use Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm;
 use Drupal\file\Entity\File;
 
 /**
- * Implements hook_css_alter().
- */
-function alshaya_white_label_css_alter(&$css, $assets) {
-  $language_manager = \Drupal::service('language_manager');
-  $language = $language_manager->getCurrentLanguage();
-  $direction = $language->getDirection();
-
-  // We don't do anything for ltr languages.
-  if ($direction == 'ltr') {
-    return;
-  }
-
-  foreach ($css as $name => $data) {
-    if (strpos($name, '.ltr.') && isset($data['data'])) {
-      $data['data'] = str_replace('.ltr.', '.rtl.', $data['data']);
-      $css[str_replace('.ltr.', '.rtl.', $name)] = $data;
-      unset($css[$name]);
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_html().
  */
 function alshaya_white_label_preprocess_html(&$variables) {
@@ -156,12 +134,6 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
 
   $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
-
-  // If loader is enabled for the site, attach PACE library.
-  $progressConfig = \Drupal::config('alshaya_master.loader_settings');
-  if ($progressConfig->get('alshaya_page_progress_loader') == 1) {
-    $variables['#attached']['library'][] = 'alshaya_white_label/pace';
-  }
 
   // Add class for sites with super menu.
   if (isset($variables['page']['menu_secondary']['supermenu'])) {
@@ -333,6 +305,17 @@ function alshaya_white_label_preprocess_page(&$variables) {
     $variables['sub_brand_logo_title'] = $sub_brand_logo['sub_brand_logo_title'];
     $variables['sub_brand_logo_alt'] = $sub_brand_logo['sub_brand_logo_alt'];
     $variables['#attached']['library'][] = 'alshaya_white_label/sub-brand-logo';
+  }
+
+  // Product List LHN Block
+  if($node_bundle === 'product_list') {
+    $lhn_block = \Drupal::entityTypeManager()->getStorage('block')->load('productlistlhnblock');
+    if (empty($lhn_block->getPlugin()->build())) {
+      $variables['enable_lhn_tree'] = 0;
+    }
+    else {
+      $variables['enable_lhn_tree'] = 1;
+    }
   }
 }
 
@@ -1100,9 +1083,9 @@ function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array 
 }
 
 /**
- * Implements hook_preprocess_mimemail_messages().
+ * Implements hook_preprocess_mimemail_message().
  */
-function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
+function alshaya_white_label_preprocess_mimemail_message(&$variables) {
   // Currently we have alshaya_white_label theme enabled for non-transac sites
   // too. We don't need to modify anything around mails for non-transac sites
   // so we simply skip execution if installed profile is not transac.

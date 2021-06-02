@@ -337,6 +337,27 @@ class AlshayaBazaarVoice {
   }
 
   /**
+   * Get the BazaarVoice error messages from configs.
+   *
+   * @return array
+   *   Error messages.
+   */
+  public function getBazaarVoiceErrorMessages() {
+    $available_error_messages = [];
+
+    $config = $this->configFactory->get('bazaar_voice_error_messages.settings');
+    $error_messages = $config->get('error_messages');
+
+    if (!empty($error_messages)) {
+      foreach ($error_messages as $error) {
+        $available_error_messages[$error['value']] = $error['label'];
+      }
+    }
+
+    return $available_error_messages;
+  }
+
+  /**
    * Process option values getting from BazaarVoice.
    *
    * @return array
@@ -402,6 +423,40 @@ class AlshayaBazaarVoice {
     $uas = $signature . bin2hex($userStr);
 
     return $uas;
+  }
+
+  /**
+   * Check if product has been reviewed by current user.
+   *
+   * @param string $productId
+   *   product Id.
+   *
+   * @return bool
+   *   true if product has been reviewed by current user.
+   */
+  public function isReviewedByCurrentUser($productId) {
+    $userId = $this->currentUser->id();
+    $extra_params = [
+      'filter' => 'id:' . $userId,
+      'Include' => 'Reviews',
+    ];
+    $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/authors.json', $extra_params);
+    if (isset($request['url']) && isset($request['query'])) {
+      $url = $request['url'];
+      $request_options['query'] = $request['query'];
+      $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
+      if (!$result['HasErrors'] && isset($result['Includes'])) {
+        if (isset($result['Includes']['Reviews'])) {
+          foreach ($result['Includes']['Reviews'] as $review) {
+            if ($review['ProductId'] === $productId) {
+              return TRUE;
+            }
+          }
+        }
+      }
+    }
+
+    return FALSE;
   }
 
 }

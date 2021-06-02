@@ -72,8 +72,8 @@ class SimpleProductForm extends React.Component {
             <div id="add-to-cart-error" className="error" />
             <div className="magv2-add-to-basket-container" ref={this.button}>
               <button
-                className="magv2-button"
-                id="add-to-cart-main"
+                className="magv2-button add-to-cart-button"
+                id={id}
                 type="submit"
                 onClick={(e) => addToCartSimple(
                   e,

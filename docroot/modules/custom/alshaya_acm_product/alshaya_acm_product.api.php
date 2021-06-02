@@ -145,5 +145,38 @@ function hook_alshaya_acm_product_remove_disabled_products_alter(array &$data, S
 }
 
 /**
+ * Allow other modules to add/alter attributes value.
+ *
+ * @param array $attributes
+ *   Product attributes data.
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU Entity.
+ * @param string $field_name
+ *   Product attribute field name.
+ */
+function hook_sku_product_attribute_alter(array &$attributes, SKUInterface $sku, string $field_name) {
+
+}
+
+/**
+ * Allow other modules to add/alter the swatch type.
+ *
+ * On PDP page, we render color attribute. It is possible to render
+ * the color attribute attribute as combination of multiple attributes.
+ * Thus also the render type like swatch text etc. This allows other
+ * moduls to alter the swatch type.
+ *
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU Entity.
+ * @param array $color_options_list
+ *   Color attribute option list.
+ * @param \Drupal\acq_commerce\SKUInterface $variant_sku
+ *   Variant SKU Entity.
+ */
+function hook_alshaya_acm_product_pdp_swath_type_alter(SKUInterface $sku, array &$color_options_list, SKUInterface $variant_sku) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

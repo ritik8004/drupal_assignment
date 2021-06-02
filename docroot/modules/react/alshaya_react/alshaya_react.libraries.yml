@@ -2,8 +2,8 @@ react:
   version: 1.x
   header: true
   js:
-    js/react.production.min.js: { }
-    js/react-dom.production.min.js: { }
+    js/react.production.min.js: {preprocess: false}
+    js/react-dom.production.min.js: {preprocess: false}
   dependencies:
     - core/drupal
     - alshaya_react/react_pollyfill

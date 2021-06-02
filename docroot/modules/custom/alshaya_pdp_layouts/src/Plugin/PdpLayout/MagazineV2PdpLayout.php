@@ -117,6 +117,7 @@ class MagazineV2PdpLayout extends PdpLayoutBase implements ContainerFactoryPlugi
     $vars['#attached']['library'][] = 'alshaya_white_label/magazine-layout-v2';
     $vars['#attached']['library'][] = 'alshaya_spc/googlemapapi';
     $vars['#attached']['library'][] = 'alshaya_seo_transac/gtm_pdp_magazine_v2';
+    $vars['#cache']['contexts'][] = 'user';
 
     $entity = $vars['node'];
     $sku = $this->skuManager->getSkuForNode($entity);

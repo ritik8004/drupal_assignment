@@ -1,0 +1,32 @@
+.maintenance-page {
+  border-top: 0;
+
+  .maintenance__logo--wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $maintenance_body_bg;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .maintenance__logo {
+    margin-bottom: 0.875rem;
+
+    @include breakpoint($upto-desktop) {
+      margin-top: 1.25rem;
+    }
+  }
+}
+
+.not-found {
+  .not-found__body:only-child {
+    @include breakpoint($desktop) {
+      right: 0;
+      left: 0;
+      margin: 0 auto;
+      margin-top: 2%;
+      bottom: auto;
+    }
+  }
+}

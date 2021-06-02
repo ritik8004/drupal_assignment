@@ -76,6 +76,7 @@ $_tooltip_blue: #007aff;
 $black: $hnm-black-three;
 $tropical_green: #007b5f;
 $mariner: #283d5a;
+$sky_blue: #93cdff;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -646,9 +647,6 @@ $department_category_accordion_title: $hnm-black-three;
 $department_category_content_link: $hnm-black-three;
 $department_category_content_link_active: $venetian_red;
 
-// Pace progress color
-$progress_loader: $hnm-black-three;
-
 // PLP campaign-plp-style-1.
 $plp-machino-modal-content: $hnm-black-three;
 
@@ -763,3 +761,10 @@ $rr-form-body-txt: $hnm-black-three;
 $rr-review-pagination: $hnm-black-three;
 $rr-filter-selected-item-bg: $hnm-black-three;
 $rr-write-review-link-txt: $hnm-black-three;
+$rr-stars-color: $hnm-black-three;
+$rr-form-head-row-border: $hnm-black-three;
+
+// same day delivery
+$pdp_product_same_day: $hnm-black-three;
+$pdp_product_same_day_btn_border: $sky_blue;
+$pdp_product_same_day_btn_bg: $white-five;

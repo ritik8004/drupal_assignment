@@ -1,0 +1,126 @@
+%all-filter-arrow {
+  font-size: 1rem;
+  padding-#{$left}: 1.5rem;
+  color: $plp_all-filter-arrow;
+  transform: rotate(180deg);
+  height: 0.5625rem;
+}
+
+.c-plp {
+  .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-productlist,
+  .block-facets-summary-blockfilter-bar {
+    ul {
+      li.clear-all {
+        a {
+          font-size: 0.75rem !important;
+        }
+      }
+
+      li {
+        a {
+          font-size: 1rem !important;
+        }
+      }
+    }
+  }
+
+  .c-content__region {
+    .all-filters,
+    .all-filters-algolia {
+      .filter__foot {
+        .facet-all-clear,
+        .facet-clear-all {
+          border-color: transparent;
+          background: $plp_clear_all_btn_disabled_bg;
+          font-weight: normal;
+
+          .block-facets-summary-blockfilter-bar-plp,
+          .block-facets-summary-blockfilter-bar-promotions,
+          .block-facets-summary-blockfilter-bar-productlist,
+          .block-facets-summary-blockfilter-bar {
+            ul {
+              li.clear-all {
+                a {
+                  font-size: 1rem !important;
+                  font-weight: normal;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .filter__head {
+        .facet-all-back,
+        .back-facet-list {
+          @include icon(ic-arrow-left, before) {
+            font-size: 1.25rem;
+            height: 2rem;
+            padding: 0.3125rem 0.625rem;
+          }
+
+          html[lang=ar] & {
+            &::before {
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
+    }
+
+    .all-filters .filter,
+    .all-filters-algolia .filter {
+      &__inner {
+        .block-views-exposed-filter-blockalshaya-product-list-block-1,
+        .block-views-exposed-filter-blockalshaya-product-list-block-2,
+        .block-views-exposed-filter-blockalshaya-product-list-block-3,
+        .block-views-exposed-filter-blocksearch-page {
+          fieldset.form-wrapper {
+            .fieldset-legend {
+              @include icon(ic-arrow-left, after) {
+                @extend %all-filter-arrow;
+              }
+
+              html[lang=ar] & {
+                &::after {
+                  transform: rotate(0deg);
+                  top: 1.25rem;
+                  padding: 0;
+                }
+              }
+            }
+          }
+        }
+
+        .views-exposed-form,
+        .c-facet {
+          &.c-accordion,
+          &.c-collapse-item {
+            margin-bottom: 0;
+
+            .c-accordion__title,
+            .c-collapse__title {
+              @include icon(ic-arrow-left, after) {
+                @extend %all-filter-arrow;
+              }
+
+              html[lang=ar] & {
+                &::after {
+                  transform: rotate(0deg);
+                  top: 1.25rem;
+                  padding: 0;
+                }
+              }
+
+              .selected-facets {
+                margin-#{$right}: 1.5rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -4,3 +4,30 @@
     display: block;
   }
 }
+
+.subtitle.crossell-title {
+  font-size: 1.125rem;
+  font-family: $tbs-recoleta-semibold;
+
+  @include breakpoint($tablet) {
+    font-size: 1.5rem;
+  }
+}
+
+.view-product-slider {
+  .c-products__item__label {
+    font-size: 1rem;
+    font-family: $tbs-medium;
+    text-align: $left;
+    margin-#{$left}: 0;
+  }
+
+  .price-block {
+    text-align: $left;
+  }
+
+  .price {
+    font-size: 1.5rem;
+    font-family: $alshaya-bold;
+  }
+}

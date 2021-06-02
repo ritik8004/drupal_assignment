@@ -37,7 +37,7 @@ export default class UserReviews extends React.Component {
     showFullScreenLoader();
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/authors.json';
-    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.user_id}&Limit_Review=${initialLimit}`;
+    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.user_id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit_Review=${initialLimit}`;
     const apiData = fetchAPIData(apiUri, params, 'user');
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -100,7 +100,10 @@ export default class UserReviews extends React.Component {
                   <ConditionalView condition={window.innerWidth > 767}>
                     <div className="user-secondary-rating">
                       <IndividualReviewSlider
-                        sliderData={reviewsSummary[item].SecondaryRatings}
+                        sliderData={reviewsProduct[reviewsSummary[item]
+                          .ProductId].ReviewStatistics.SecondaryRatingsAverages}
+                        secondaryRatingsOrder={reviewsProduct[reviewsSummary[item]
+                          .ProductId].ReviewStatistics.SecondaryRatingsAveragesOrder}
                       />
                     </div>
                   </ConditionalView>
@@ -110,7 +113,9 @@ export default class UserReviews extends React.Component {
           </div>
         </ConditionalView>
         <ConditionalView condition={initialLimit < currentTotal}>
-          <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+          <div className="load-more-wrapper">
+            <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+          </div>
         </ConditionalView>
         <ConditionalView condition={noResultmessage !== null}>
           <EmptyMessage emptyMessage={noResultmessage} />

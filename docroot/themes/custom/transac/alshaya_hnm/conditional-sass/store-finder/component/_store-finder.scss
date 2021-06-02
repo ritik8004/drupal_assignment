@@ -71,6 +71,11 @@
 
   .label--location {
     color: $title !important;
+    line-height: 1.2;
+
+    @include breakpoint($desktop) {
+      width: 35.653%;
+    }
   }
 
   button {
@@ -96,19 +101,16 @@
 
   .current-location,
   .cc-near-me {
-    @include breakpoint($only-tablet) {
-      &::before {
-        #{$left}: 1.5rem;
-      }
-    }
-  }
-
-  .current-location,
-  .cc-near-me {
     &::before {
       background: url('../../../imgs/icons/ic-mylocation.svg') no-repeat;
       width: 1.625rem;
       height: 1.625rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      &::before {
+        #{$left}: 1.5rem;
+      }
     }
   }
 
@@ -159,23 +161,25 @@
     }
   }
 
-  .label--location {
-    line-height: 1.2;
-
-    @include breakpoint($desktop) {
-      width: 35.653%;
-    }
-  }
-
   .list-view-link,
   .map-view-link {
     text-transform: uppercase;
+    line-height: 1.4;
+    color: $content_link_color;
 
     &:hover,
     &.active {
       border: 1px solid $secondary_border;
       color: $store_finder_view_link_hover;
       background-color: $primary_dark_color;
+    }
+
+    @include breakpoint($tablet) {
+      margin-#{$left}: 1px;
+    }
+
+    @include breakpoint($desktop) {
+      width: 15.049%;
     }
   }
 
@@ -409,16 +413,6 @@
     }
   }
 
-  .list-view-link,
-  .map-view-link {
-    line-height: 1.4;
-    color: $content_link_color;
-
-    @include breakpoint($tablet) {
-      margin-#{$left}: 1px;
-    }
-  }
-
   .icon-list {
     @include breakpoint($only-tablet) {
       margin-#{$left}: -1.625rem;
@@ -456,42 +450,7 @@
   .get--directions {
     font-size: 0.8125rem;
   }
-}
 
-.node--type-store {
-  .content > .store--wrapper {
-    font-size: 0.875rem;
-
-    .hours--label {
-      &::after {
-        width: 1.0625rem;
-        height: 0.4375rem;
-        top: 0.3125rem;
-        #{$right}: 3.4375rem;
-      }
-    }
-  }
-}
-
-//Individual store theming
-.individual--store {
-  .list-view-locator {
-    background-color: $white-five;
-  }
-
-  .hours--wrapper {
-    .hours--label.open {
-      border-bottom: none !important;
-
-      @include icon(chevronup, after) {
-        color: $primary_dark_color;
-      }
-    }
-  }
-}
-
-.path--store-finder,
-.nodetype--store {
   .hours--wrapper {
     .hours--label.open {
       @include icon(dropdown-collapse, after) {
@@ -515,13 +474,6 @@
 
       color: $content_link_color;
       letter-spacing: 0.5px;
-    }
-  }
-
-  .list-view-link,
-  .map-view-link {
-    @include breakpoint($desktop) {
-      width: 15.049%;
     }
   }
 
@@ -580,6 +532,42 @@
     background-image: url(#{$base_theme_loader_img_directory_path});
     background-size: 4.5rem;
   }
+
+  .active {
+    color: $content_link_color;
+  }
+}
+
+.node--type-store {
+  .content > .store--wrapper {
+    font-size: 0.875rem;
+
+    .hours--label {
+      &::after {
+        width: 1.0625rem;
+        height: 0.4375rem;
+        top: 0.3125rem;
+        #{$right}: 3.4375rem;
+      }
+    }
+  }
+}
+
+//Individual store theming
+.individual--store {
+  .list-view-locator {
+    background-color: $white-five;
+  }
+
+  .hours--wrapper {
+    .hours--label.open {
+      border-bottom: none !important;
+
+      @include icon(chevronup, after) {
+        color: $primary_dark_color;
+      }
+    }
+  }
 }
 
 .geolocation-common-map-container {
@@ -627,17 +615,7 @@
   .get--directions div::after {
     top: 0.25rem;
   }
-}
 
-.scroll-fix {
-  font-family: $hnm-regular;
-
-  .location-content {
-    margin-left: 0.3125rem;
-  }
-}
-
-.geolocation-common-map-container {
   .hours--wrapper {
     .hours--label {
       border-top: 1px solid $individual_store_hours_label_border;
@@ -655,9 +633,10 @@
   }
 }
 
-.path--store-finder,
-.nodetype--store {
-  .active {
-    color: $content_link_color;
+.scroll-fix {
+  font-family: $hnm-regular;
+
+  .location-content {
+    margin-left: 0.3125rem;
   }
 }

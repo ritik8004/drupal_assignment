@@ -1,5 +1,6 @@
 variables:
   url_product_page: 'buy-slub-jersey-henley-shirt-green-grey-marl-0.html'
-  product_listing_page_url: "/shop-women/shop-product/dresses/"
-  spc_product_listing_page: '/shop-women/shop-product/dresses/'
-  spc_basket_page: '/shop-women/shop-product/dresses/'
+  product_listing_page_url: "/shop-divided/shop-product/beauty/"
+  spc_product_listing_page: '/shop-divided/shop-product/beauty/'
+  spc_basket_page: '/shop-divided/shop-product/beauty/'
+  spc_promotion_listing_page: '/buy-7-pack-cotton-briefs-pink-days-week.html/'

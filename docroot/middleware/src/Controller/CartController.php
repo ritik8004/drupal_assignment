@@ -334,8 +334,10 @@ class CartController {
 
     if (empty($data['payment']['methods']) && !empty($data['shipping']['method'])) {
       $methods = $this->cart->getPaymentMethods();
-      $data['payment']['methods'] = $methods ?? [];
-      $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
+      if (!empty($methods)) {
+        $data['payment']['methods'] = $methods;
+        $data['payment']['method'] = $this->cart->getPaymentMethodSetOnCart();
+      }
     }
 
     // Re-use the processing done for cart page.
@@ -763,9 +765,10 @@ class CartController {
           $extension['attempted_payment'] = 1;
         }
 
-        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method', [
+        $this->logger->notice('Calling update payment for payment_update. Cart id: @cart_id Method: @method Data: @data', [
           '@cart_id' => $this->cart->getCartId(),
           '@method' => $request_content['payment_info']['payment']['method'],
+          '@data' => json_encode($request_content['payment_info']['payment']),
         ]);
         $cart = $this->cart->updatePayment($request_content['payment_info']['payment'], $extension);
         break;

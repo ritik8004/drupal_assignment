@@ -27,15 +27,11 @@
     padding: 0.5rem;
   }
 
-  .write-review-type {
-    &-textfield {
-      position: relative;
-      margin-bottom: 1.5rem;
-    }
-  }
-
   // Type = Text.
   .write-review-type-textfield {
+    position: relative;
+    margin-bottom: 1.5rem;
+
     input[type=text],
     input[type=email] {
       height: 1.5rem;
@@ -55,7 +51,8 @@
       @include bv-placeholder-active;
     }
 
-    &.user-basic-info {
+    &.user-nickname,
+    &.user-email {
       float: $left;
       width: 48%;
       margin-bottom: 3.5rem;
@@ -71,19 +68,19 @@
       }
     }
 
-    &.user-basic-info {
-      &:nth-child(2n-1) {
-        margin-#{$right}: 2.625rem;
+    &.user-nickname {
+      margin-#{$right}: 2.625rem;
 
-        @include breakpoint($only-mobile) {
-          margin-#{$right}: 0;
-        }
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0;
       }
     }
   }
 
   // Type = TextArea.
   .write-review-type-textarea {
+    margin-bottom: 1.5rem;
+
     label {
       display: inline-block;
       margin-bottom: 0.5rem;
@@ -190,7 +187,9 @@
         margin-#{$right}: 7.5%;
 
         @include breakpoint($only-mobile) {
-          margin-#{$right}: 2.5%;
+          margin-#{$right}: 1.5%;
+          flex-basis: 9%;
+          text-align: center;
         }
 
         @include breakpoint($only-tablet) {
@@ -203,6 +202,7 @@
               width: 1.5rem;
               height: 1.5rem;
               margin-#{$right}: 0;
+              cursor: pointer;
             }
 
             p {
@@ -241,6 +241,12 @@
     display: inline-flex;
     margin-#{$right}: 0.625rem;
     margin-bottom: 1rem;
+
+    &-question {
+      margin-top: 1rem;
+      margin-bottom: 1.25rem;
+      color: $rr-form-label-txt;
+    }
 
     &.radio-error {
       input[type=checkbox] {

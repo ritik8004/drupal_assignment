@@ -9,6 +9,87 @@ use Symfony\Component\Lock\Store\PdoStore;
 use Drupal\Core\Database\Database;
 use Doctrine\DBAL\DBALException;
 use Drupal\Core\Utility\UpdateException;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds Fawry payment method and other related data.
+ */
+function alshaya_spc_update_8011() {
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $checkoutcom_upapi_fawry = $checkout_options_manager->loadPaymentMethod('checkout_com_upapi_fawry', 'FAWRY');
+  $checkoutcom_upapi_fawry = $checkoutcom_upapi_fawry->hasTranslation('ar')
+    ? $checkoutcom_upapi_fawry->getTranslation('ar')
+    : $checkoutcom_upapi_fawry->addTranslation('ar', []);
+  $checkoutcom_upapi_fawry->setName('فوري');
+  $checkoutcom_upapi_fawry->save();
+
+  // Disable new fawry method by default
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $data = $config->get('exclude_payment_methods');
+  $data['checkout_com_upapi_fawry'] = 'checkout_com_upapi_fawry';
+  $config->set('exclude_payment_methods', $data);
+  $config->set('refund_exclude_payment_methods', $data);
+  $config->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  $translations = _alshaya_spc_get_translations('v3');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new Checkout Settings resource.
+ */
+function alshaya_spc_update_8010() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'rest.resource.checkout_settings',
+  ],
+    'alshaya_spc',
+    'install'
+  );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+
+  // Rebuild router.
+  \Drupal::service('router.builder')->rebuild();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * [6.1.0] Remove old KNET payment method.
+ */
+function alshaya_spc_update_8009() {
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+
+  // Remove from excluded payment methods.
+  $data = $config->get('exclude_payment_methods');
+  unset($data['knet']);
+  $config->set('exclude_payment_methods', $data);
+
+  // Remove from partial fullfilment excluded payment methods.
+  $data = $config->get('refund_exclude_payment_methods');
+  unset($data['knet']);
+  $config->set('refund_exclude_payment_methods', $data);
+
+  $config->save(TRUE);
+
+  // Delete the KNET payment method taxonomy term.
+  $payment_method_term = \Drupal::service('alshaya_acm_checkout.options_manager')->loadPaymentMethod('knet');
+  if ($payment_method_term instanceof Term) {
+    $payment_method_term->delete();
+  }
+}
 
 /**
  * Implements hook_update_N().

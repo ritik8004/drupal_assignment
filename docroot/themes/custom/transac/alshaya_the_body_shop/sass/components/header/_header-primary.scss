@@ -17,6 +17,7 @@ header {
         margin-top: 0.875rem;
         margin-bottom: 0;
         background-size: cover;
+        margin-#{$right}: 0.75rem;
 
         html[lang=ar] & {
           margin-top: 1.125rem;
@@ -26,7 +27,7 @@ header {
 
     .cart-link-total {
       font-size: 1rem;
-      font-family: $alshaya-medium;
+      font-family: $tbs-medium;
       padding-right: 0;
     }
 
@@ -37,7 +38,7 @@ header {
       top: -0.5rem;
       #{$right}: -1.125rem;
       #{$left}: unset;
-      font-family: $alshaya-medium;
+      font-family: $tbs-medium;
 
       @include breakpoint($only-mobile) {
         #{$left}: 1rem;
@@ -53,12 +54,24 @@ header {
         display: none;
       }
     }
+
+    #block-alshaya-white-label-search,
+    .block-views-exposed-filter-blocksearch-page {
+      top: 0;
+      background: transparent;
+    }
   }
 
   .region__header {
     .block-system-branding-block {
       @include breakpoint($only-mobile) {
         width: 100%;
+      }
+
+      .site-brand-home {
+        @include breakpoint($desktop) {
+          min-width: 20.5rem;
+        }
       }
     }
   }
@@ -68,10 +81,19 @@ header {
       margin-top: 1.125rem;
       padding-bottom: 1.125rem;
     }
+
+    @include breakpoint($desktop) {
+      padding-top: 1.25rem;
+      padding-bottom: 1.625rem;
+    }
   }
 }
 
 .c-menu-primary {
+  @include breakpoint($only-tablet) {
+    height: 0;
+  }
+
   .mobile--menu {
     &::before {
       @include breakpoint($upto-desktop) {
@@ -99,6 +121,10 @@ header {
           top: 0;
           #{$left}: -0.625rem;
           font-size: 1.75rem;
+
+          html[lang=ar] & {
+            top: 0.125rem;
+          }
         }
       }
     }
@@ -116,7 +142,7 @@ header {
     }
 
     a {
-      font-family: $alshaya-medium;
+      font-family: $tbs-medium;
       text-transform: capitalize;
     }
   }
@@ -156,7 +182,7 @@ header {
 @include breakpoint($upto-desktop) {
   .main--menu .menu__link,
   .back--link {
-    font-family: $alshaya-medium;
+    font-family: $tbs-medium;
     font-size: 0.875rem;
     text-transform: capitalize;
   }
@@ -208,25 +234,44 @@ header {
 
   .menu__list-item {
     margin: 0;
-    font-family: $alshaya-medium;
+    font-family: $tbs-medium;
   }
 
   .menu__in {
     margin-#{$right}: 1rem;
+    background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
+
+    html[lang=ar] & {
+      background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
+      top: 0.125rem;
+      margin-left: 1.5rem;
+    }
+
+    &::after {
+      content: '';
+    }
   }
 
   .menu__back {
     margin-#{$left}: 1.25rem;
     margin-#{$right}: 0.625rem;
+    background: url('../imgs/icons/ic-arrow-left.svg?1234') no-repeat;
+    width: 0.75rem;
+    height: 1.0625rem;
 
     html[lang=ar] & {
-      transform: rotate(180deg);
+      background: url('../imgs/icons/ic-arrow-right.svg') no-repeat;
+    }
+
+    &::after {
+      content: '';
     }
   }
 
   .menu--two__list-item {
     .menu__in {
       margin-#{$right}: 1rem;
+      margin-top: -2rem;
     }
   }
 }
@@ -235,15 +280,19 @@ header {
   a {
     text-align: center;
 
+    @include breakpoint($desktop) {
+      max-width: 8.5625rem;
+    }
+
     @include breakpoint($only-mobile) {
-      width: 2.1875rem;
-      height: 2.3125rem;
+      width: 2.3125rem;
+      height: 2.1875rem;
       margin: 0 auto;
       padding: 0.625rem 0;
-
-      img {
-        margin-#{$left}: 0.625rem;
-      }
+      position: absolute;
+      #{$left}: 0;
+      #{$right}: 0;
+      top: 0;
     }
 
     @include breakpoint($only-tablet) {
@@ -330,12 +379,20 @@ html[lang='ar'] {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    ul.menu--one__list {
+      display: flex !important;
+      justify-content: center;
+    }
+
     li.menu--one__list-item {
+      padding: 0 1.625rem;
+
       .menu--one__link {
         font-size: 1rem;
-        font-family: $alshaya-medium;
+        font-family: $tbs-medium;
         border-color: $menu-border-desktop;
         text-transform: uppercase;
+        padding: 0;
       }
     }
 
@@ -366,7 +423,7 @@ html[lang='ar'] {
       .menu__link-wrapper {
         .menu-two__link {
           font-size: 1.125rem;
-          font-family: $alshaya-semibold;
+          font-family: $tbs-recoleta-semibold;
         }
       }
 
@@ -391,6 +448,25 @@ html[lang='ar'] {
           }
         }
       }
+    }
+  }
+
+  .c-header {
+    .block-views-exposed-filter-blocksearch-page {
+      #{$left}: 0;
+    }
+  }
+}
+
+.block-cart-mini-block,
+.block-alshaya-react-mini-cart,
+.static-minicart-wrapper {
+  .quantity {
+    #{$left}: 2rem;
+    top: -0.625rem;
+
+    @include breakpoint($only-tablet) {
+      top: -0.3125rem;
     }
   }
 }

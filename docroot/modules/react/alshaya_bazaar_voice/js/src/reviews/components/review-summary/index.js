@@ -17,8 +17,11 @@ import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
+import { getUasToken } from '../../../utilities/user_util';
+import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
+
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
 
@@ -28,6 +31,7 @@ export default class ReviewSummary extends React.Component {
       reviewsSummary: '',
       reviewsProduct: '',
       reviewsComment: '',
+      reviewsAuthors: '',
       currentSortOption: '',
       currentFilterOptions: [],
       noResultmessage: null,
@@ -41,6 +45,7 @@ export default class ReviewSummary extends React.Component {
       nextButtonDisabled: false,
       loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
       paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
+      reviewedByCurrentUser: false,
     };
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
@@ -56,7 +61,30 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-
+    const userId = bazaarVoiceSettings.reviews.user.user_id;
+    const userStorage = getStorageInfo(`bvuser_${userId}`);
+    // Set uas token if user not found in storage.
+    if (userStorage === null) {
+      let currentUserObj = null;
+      // Initliaze user object for anonmymous user.
+      if (userId === 0) {
+        currentUserObj = {
+          id: userId,
+        };
+        setStorageInfo(currentUserObj, `bvuser_${userId}`);
+      } else {
+        getUasToken().then((uasTokenValue) => {
+          if (uasTokenValue !== null) {
+            currentUserObj = {
+              id: userId,
+              uasToken: uasTokenValue,
+              email: bazaarVoiceSettings.reviews.user.user_email,
+            };
+            setStorageInfo(currentUserObj, `bvuser_${userId}`);
+          }
+        });
+      }
+    }
     this.getReviews();
   }
 
@@ -79,6 +107,14 @@ export default class ReviewSummary extends React.Component {
 
   getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
+
+    // Check if current logged in user has already posted review on current PDP.
+    if (bazaarVoiceSettings.reviews.user.is_reviewed) {
+      this.setState({
+        reviewedByCurrentUser: true,
+      });
+    }
+
     let sortParams = '';
     let filterParams = '';
     if (extraParams !== undefined) {
@@ -98,7 +134,7 @@ export default class ReviewSummary extends React.Component {
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/reviews.json';
     const reviewLimit = this.getReviewLimit();
-    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
+    const params = `&filter=productid:${bazaarVoiceSettings.productid}&filter=contentlocale:${bazaarVoiceSettings.reviews.bazaar_voice.content_locale}&Include=${bazaarVoiceSettings.reviews.bazaar_voice.Include}&Stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&FilteredStats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${reviewLimit}&Offset=${offset}${sortParams}${filterParams}`;
     const apiData = fetchAPIData(apiUri, params);
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -110,18 +146,19 @@ export default class ReviewSummary extends React.Component {
                 totalReviews: result.data.TotalResults,
                 reviewsProduct: result.data.Includes.Products,
                 reviewsComment: result.data.Includes.Comments,
+                reviewsAuthors: result.data.Includes.Authors,
                 numberOfPages: Math.ceil(result.data.TotalResults / reviewLimit),
               }, () => {
                 const { currentPage, numberOfPages } = this.state;
                 this.changePaginationButtonStatus(currentPage, numberOfPages);
               });
             }
-
             this.setState({
               currentTotal: result.data.TotalResults,
               reviewsSummary: result.data.Results,
               reviewsProduct: result.data.Includes.Products,
               reviewsComment: result.data.Includes.Comments,
+              reviewsAuthors: result.data.Includes.Authors,
               noResultmessage: null,
               numberOfPages: Math.ceil(result.data.TotalResults / reviewLimit),
             }, () => {
@@ -318,6 +355,7 @@ export default class ReviewSummary extends React.Component {
       reviewsSummary,
       reviewsProduct,
       reviewsComment,
+      reviewsAuthors,
       currentSortOption,
       currentFilterOptions,
       noResultmessage,
@@ -329,13 +367,32 @@ export default class ReviewSummary extends React.Component {
       currentPage,
       numberOfPages,
       loadMoreLimit,
+      reviewedByCurrentUser,
     } = this.state;
+    const {
+      isNewPdpLayout,
+    } = this.props;
+
+    let newPdp = isNewPdpLayout;
+    newPdp = (newPdp === undefined) ? false : newPdp;
+
     const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type;
     if (totalReviews === '') {
       return (
         <>
-          <div className="empty-review-summary">
-            <WriteReviewButton />
+          <div className="histogram-data-section">
+            <div className="rating-wrapper">
+              <div className="overall-summary-title">{getStringMessage('ratings_reviews')}</div>
+              <div className="empty-review-summary">
+                <div className="no-review-section">
+                  <p className="no-review-title">{getStringMessage('no_reviews_yet')}</p>
+                  <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
+                </div>
+                <WriteReviewButton
+                  reviewedByCurrentUser={reviewedByCurrentUser}
+                />
+              </div>
+            </div>
           </div>
           <ConditionalView condition={postReviewData !== ''}>
             <PostReviewMessage postReviewData={postReviewData} />
@@ -348,7 +405,11 @@ export default class ReviewSummary extends React.Component {
       <div className="reviews-wrapper">
         <div className="histogram-data-section">
           <div className="rating-wrapper">
-            <ReviewHistogram overallSummary={reviewsProduct} />
+            <ReviewHistogram
+              overallSummary={reviewsProduct}
+              isNewPdpLayout={isNewPdpLayout}
+              reviewedByCurrentUser={reviewedByCurrentUser}
+            />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>
               <ReviewSorting
@@ -382,7 +443,7 @@ export default class ReviewSummary extends React.Component {
             </ConditionalView>
             {Object.keys(reviewsSummary).map((item) => (
               <div className="review-summary" key={reviewsSummary[item].Id}>
-                <ConditionalView condition={window.innerWidth < 768}>
+                <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
                   <DisplayStar
                     starPercentage={reviewsSummary[item].Rating}
                   />
@@ -390,12 +451,14 @@ export default class ReviewSummary extends React.Component {
                 </ConditionalView>
                 <ReviewInformation
                   reviewInformationData={reviewsSummary[item]}
-                  reviewTooltipInfo={reviewsProduct[reviewsSummary[item]
-                    .ProductId].ReviewStatistics}
+                  reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
+                    .AuthorId].ReviewStatistics}
+                  isNewPdpLayout={isNewPdpLayout}
                 />
                 <ReviewDescription
                   reviewDescriptionData={reviewsSummary[item]}
                   reviewsComment={reviewsComment}
+                  isNewPdpLayout={isNewPdpLayout}
                 />
               </div>
             ))}
@@ -409,7 +472,9 @@ export default class ReviewSummary extends React.Component {
             />
           </ConditionalView>
           <ConditionalView condition={reviewSettings === 'load_more' && loadMoreLimit < currentTotal}>
-            <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+            <div className="load-more-wrapper">
+              <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
+            </div>
           </ConditionalView>
         </ConditionalView>
         <ConditionalView condition={noResultmessage !== null}>

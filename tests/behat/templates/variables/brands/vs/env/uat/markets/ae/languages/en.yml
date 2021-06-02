@@ -40,8 +40,6 @@ variables:
   language_excluding_delivery: 'قبل التوصيل'
   language_vat: 'تتضمن ضريبة القيمة المضافة'
   language_checkout_link: 'إتمام الشراء بأمان'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهبي للتسوق"
   mobile_language_class: 'ar'
   language_short: 'ar'
   area_option: 'Al Barsha'
@@ -97,5 +95,9 @@ variables:
   filter_1: 'attr_actual_color_label_code'
   filter_2: 'attr_size'
   filter_3: 'final_price'
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: 'إليك منتجاتنا المفضلة'
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
 
 

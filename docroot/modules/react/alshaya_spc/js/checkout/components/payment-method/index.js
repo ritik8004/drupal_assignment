@@ -8,7 +8,6 @@ import {
   placeOrder,
   removeFullScreenLoader,
   setUpapiApplePayCofig,
-  showFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import CheckoutComContextProvider from '../../../context/CheckoutCom';
 import PaymentMethodCybersource from '../payment-method-cybersource';
@@ -23,6 +22,8 @@ import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi'
 import PaymentMethodCheckoutComUpapiApplePay from '../payment-method-checkout-com-upapi-apple-pay';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
+import PaymentMethodCheckoutComUpapiFawry
+  from '../payment-method-checkout-com-upapi-fawry';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -63,20 +64,6 @@ export default class PaymentMethod extends React.Component {
       return this.paymentMethodCybersource.current.validateBeforePlaceOrder();
     }
 
-    if (method.code === 'knet') {
-      showFullScreenLoader();
-
-      const paymentData = {
-        payment: {
-          method: 'knet',
-          additional_data: {},
-        },
-      };
-
-      this.finalisePayment(paymentData);
-      return false;
-    }
-
     return true;
   };
 
@@ -114,6 +101,11 @@ export default class PaymentMethod extends React.Component {
 
             Drupal.logJavascriptError('finalise payment', errorMessage, GTM_CONSTANTS.GENUINE_PAYMENT_ERRORS);
           }
+
+          // Enable the 'place order' CTA.
+          dispatchCustomEvent('updatePlaceOrderCTA', {
+            status: true,
+          });
         }
       } else if (result.cart_id !== undefined && result.cart_id) {
         // 2D flow success.
@@ -261,6 +253,14 @@ export default class PaymentMethod extends React.Component {
               cart={cart}
               finalisePayment={this.finalisePayment}
             />
+          </ConditionalView>
+
+          <ConditionalView condition={isSelected && method.code === 'checkout_com_upapi_fawry'}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodCheckoutComUpapiFawry
+                cart={cart}
+              />
+            </div>
           </ConditionalView>
         </div>
       </>

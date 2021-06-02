@@ -1213,6 +1213,37 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Function to get all the categories from Commerce system.
+   *
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return mixed
+   *   Stores array.
+   */
+  public function getCategories($langcode) {
+    $this->updateStoreContext($langcode);
+
+    $request_options = [
+      'timeout' => $this->mdcHelper->getPhpTimeout('get_categories'),
+    ];
+    $response = $this->invokeApi(
+      'categories/extended',
+      [],
+      'GET',
+      FALSE,
+      $request_options
+    );
+
+    $categories = NULL;
+    if ($response && is_string($response)) {
+      $categories = json_decode($response, TRUE);
+    }
+
+    return $categories;
+  }
+
+  /**
    * Returns the magento API helper service.
    *
    * @return \Drupal\alshaya_api\Helper\MagentoApiHelper

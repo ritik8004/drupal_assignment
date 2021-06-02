@@ -55,8 +55,7 @@
     line-height: normal;
 
     @include breakpoint($only-mobile) {
-      padding-#{$left}: 1.375rem;
-      padding-#{$right}: 1.375rem;
+      padding: 0.5625rem 1.375rem;
     }
   }
 
@@ -120,6 +119,12 @@
   }
 }
 
+.c-footer-is-accordion {
+  .accordion--body {
+    border-top: none;
+  }
+}
+
 .c-footer-menu--help {
   @include breakpoint($only-mobile) {
     border-bottom: 1px solid $primary_border;
@@ -128,16 +133,24 @@
 
 .alshaya-newsletter-subscribe {
   margin-top: 1.25rem;
-  max-width: 100%;
 
   @include breakpoint($only-mobile) {
-    margin: 1rem 1.25rem 2.9rem;
+    margin: 2.625rem 1.25rem 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 100%;
   }
 
   .newsletter-block-label {
     color: $newsletter_desc_text;
     text-transform: none;
     line-height: normal;
+
+    @include breakpoint($tablet) {
+      font-family: $tbs-medium;
+      font-size: 0.875rem;
+    }
   }
 
   .subscription-status {
@@ -150,19 +163,37 @@
     text-transform: capitalize;
     width: 100%;
     max-width: 8.75rem;
+    #{$right}: 0;
+  }
+
+  .edit-newsletter[data-style=zoom-in][data-loading] {
+    background: $newsletter_submit_btn;
   }
 }
 
 #alshaya-newsletter-subscribe {
   .form-email {
     background: $newsletter_input_field;
+    color: $newsletter_submit_input_text;
     padding-#{$left}: 0.4375rem;
     height: 2.5rem;
     border: 0;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 2.1875rem;
+    }
   }
 
   .form-submit {
+    font-family: $tbs-semibold;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
     height: 2.5rem;
+    color: $newsletter_submit_btn_text;
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 0;
+    }
   }
 }
 
@@ -174,11 +205,14 @@
   h3 {
     font-size: 1rem;
     color: $social_link_title;
-    font-family: $alshaya-semibold;
-    margin-bottom: 0.1875rem;
+    font-family: $tbs-recoleta-semibold;
 
     @include breakpoint($only-mobile) {
       text-align: center;
+    }
+
+    @include breakpoint($desktop) {
+      margin-bottom: 0.1875rem;
     }
   }
 
@@ -190,6 +224,23 @@
 
     a {
       padding: 0;
+    }
+  }
+}
+
+.language--switcher.mobile-only-block {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 1rem;
+  }
+}
+
+.c-footer-primary .language-switcher-language-url,
+.only-first-time .language-switcher-language-url {
+  ul {
+    li {
+      a {
+        text-transform: capitalize;
+      }
     }
   }
 }

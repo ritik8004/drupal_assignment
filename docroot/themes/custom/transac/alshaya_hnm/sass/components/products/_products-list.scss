@@ -103,15 +103,7 @@
       &.product-small {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 22.2rem;
-          }
-        }
-
-        article:hover {
-          .alshaya_search_gallery {
-            @include breakpoint($desktop) {
-              max-height: 22.2rem !important;
-            }
+            height: 22.2rem;
           }
         }
       }
@@ -119,15 +111,7 @@
       &.product-large {
         .alshaya_search_gallery {
           @include breakpoint($desktop) {
-            max-height: 30rem;
-          }
-        }
-
-        article:hover {
-          .alshaya_search_gallery {
-            @include breakpoint($desktop) {
-              max-height: 30rem !important;
-            }
+            height: 30rem;
           }
         }
       }
@@ -149,7 +133,7 @@
     &.product-large {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 37.5rem;
+          height: 37.5rem;
         }
 
         .alshaya_search_mainimage {
@@ -159,33 +143,17 @@
           }
         }
       }
-
-      article:hover {
-        .alshaya_search_gallery {
-          @include breakpoint($desktop) {
-            max-height: 37.5rem !important;
-          }
-        }
-      }
     }
 
     &.product-small {
       .alshaya_search_gallery {
         @include breakpoint($desktop) {
-          max-height: 27.6rem;
+          height: 27.6rem;
         }
 
         .alshaya_search_mainimage {
           @include breakpoint($upto-desktop) {
             height: auto !important;
-          }
-        }
-      }
-
-      article:hover {
-        .alshaya_search_gallery {
-          @include breakpoint($desktop) {
-            max-height: 27.6rem !important;
           }
         }
       }
@@ -220,6 +188,8 @@
     .alshaya_search_gallery {
       overflow: visible;
       max-height: none;
+      line-height: 0;
+      position: relative;
 
       .alshaya_search_mainimage {
         height: auto;
@@ -354,27 +324,7 @@
       }
     }
   }
-}
 
-.c-content__highlighted {
-  .promo-banner {
-    img {
-      @include breakpoint($only-mobile) {
-        margin-bottom: 0.75rem;
-      }
-    }
-  }
-}
-
-.region__sidebar-first {
-  > .block-facets-summary-blockfilter-bar-plp {
-    @include breakpoint($only-mobile) {
-      width: 100%;
-    }
-  }
-}
-
-.c-plp {
   .facet-item {
     input[type=checkbox] ~ label {
       &::before {
@@ -398,13 +348,30 @@
   }
 }
 
+.c-content__highlighted {
+  .promo-banner {
+    img {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.75rem;
+      }
+    }
+  }
+}
+
+.region__sidebar-first {
+  > .block-facets-summary-blockfilter-bar-plp {
+    @include breakpoint($only-mobile) {
+      width: 100%;
+    }
+  }
+}
+
 .alshaya_search_hoverimage {
   position: absolute;
   top: 0;
   opacity: 0;
   transition: opacity 0.2s ease-out;
   width: 100%;
-  z-index: 1;
 }
 
 .block-views-blockproduct-category-level-3-block-2 {

@@ -1073,9 +1073,6 @@ $cart-free-gifts-title: $nero;
 $cart-free-gifts-label: $vanilla;
 $cart-free-gifts-label-background: $brilliant-rose;
 
-// Pace progress color
-$progress_loader: $brilliant-rose;
-
 // Bra size filters
 $bra_size_filter_box_bg: $white-five;
 $bra_size_filter_box_border: $_grey_three;
@@ -1140,3 +1137,11 @@ $fit-calc-size-guide-btn-bg: $brilliant-rose;
 $fit-calc-empty-input: $brilliant-rose;
 $fit-calc-result: $vivid-raspberry;
 $fit-calc-selected-radio: $vivid-raspberry;
+
+// Quick view size filter.
+$plp-quick-view-product-size-text: $black;
+$plp-quick-view-product-size-text-active: $black;
+$plp-quick-view-product-size-border: $_grey-51-6;
+$plp-quick-view-product-size-border-hover: $black;
+$plp-quick-view-product-size-active-bg: $_grey-51-6;
+$plp-quick-view-product-size-text-disabled: $white;

@@ -10,6 +10,10 @@
     }
   }
 
+  @include breakpoint($only-tablet) {
+    bottom: -3.5rem;
+  }
+
   .algolia-search-cleartext-icon {
     #{$right}: 2.5rem;
 

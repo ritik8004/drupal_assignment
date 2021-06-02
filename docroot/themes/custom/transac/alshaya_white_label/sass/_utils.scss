@@ -383,3 +383,33 @@ body {
   visibility: visible;
   opacity: 1;
 }
+
+// RR thumbnail image container style
+@mixin bv-photo-upload-container () {
+  border: 0;
+  background: $rr-thumbnail-img-bg;
+  box-sizing: border-box;
+  vertical-align: top;
+  margin: 0;
+  margin-bottom: 1%;
+  margin-#{$right}: 1%;
+  height: 8.75rem;
+  width: 8.75rem;
+  overflow: hidden;
+  zoom: 1;
+  flex-shrink: 0;
+  padding: 0;
+
+  @content;
+}
+
+// RR thumbnail image style for my reviews, PDP and write a review form.
+@mixin bv-photo-upload-image () {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  object-position: center;
+  zoom: 1;
+
+  @content;
+}

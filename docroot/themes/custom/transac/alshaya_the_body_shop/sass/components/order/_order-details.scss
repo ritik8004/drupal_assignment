@@ -1,0 +1,52 @@
+.user__order--detail {
+  .price-currency {
+    font-family: $tbs-semibold;
+    color: $primary_text;
+  }
+
+  .delivery-details-row {
+    .blend {
+      background: $order_detail_delivery_details_row_bg;
+    }
+  }
+
+  .price-amount {
+    color: $order_detail_order_price_amount;
+  }
+
+  .label {
+    font-family: $alshaya-bold;
+    color: $order_detail_order_label;
+  }
+
+  .total-row {
+    .dark {
+      color: $order_detail_order_label;
+    }
+
+    .price,
+    .price-amount {
+      color: $order_detail_td_dark_content;
+    }
+  }
+
+  .sub-total-row,
+  .delivery-charge-row,
+  .total-row,
+  .surcharge-row,
+  .order-item-row {
+    td.right--align {
+      color: $order_detail_order_label;
+    }
+  }
+
+  .order-item-row {
+    img {
+      width: 100%;
+    }
+
+    .dark {
+      margin-bottom: 0.625rem;
+    }
+  }
+}

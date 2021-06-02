@@ -760,8 +760,18 @@
         }
 
         .fourth {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+
           @include breakpoint($only-tablet) {
             width: 28%;
+            text-align: left;
+          }
+
+          @include breakpoint($desktop) {
+            width: 225px;
+            padding-#{$left}: 78px;
           }
         }
 
@@ -803,21 +813,6 @@
 
         .third {
           width: 6.5625rem;
-        }
-
-        .fourth {
-          @include breakpoint($only-mobile) {
-            display: none;
-          }
-
-          @include breakpoint($only-tablet) {
-            text-align: left;
-          }
-
-          @include breakpoint($desktop) {
-            width: 225px;
-            padding-#{$left}: 78px;
-          }
         }
 
         .light {
@@ -1072,6 +1067,18 @@
     color: $user_order_help_text;
     overflow: hidden;
     font-size: 0;
+    background: $user_order_help_bg;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.25rem 1rem;
+
+    @include breakpoint($tablet) {
+      padding: 1.8rem 1.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 1.45rem;
+    }
 
     p,
     ul {
@@ -1111,12 +1118,28 @@
     }
 
     p {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      line-height: 1.56rem;
+
       @include breakpoint($tablet) {
         width: 43%;
       }
 
       @include breakpoint($only-tablet) {
         float: $left;
+      }
+
+      @include breakpoint($desktop) {
+        font-size: 0.9375rem;
+        width: 27.5%;
+        text-indent: -2.45rem;
+        padding-#{$left}: 2.4rem;
+        word-spacing: 1px;
+
+        html[lang=ar] & {
+          margin-left: 1.25rem;
+        }
       }
     }
 
@@ -1162,24 +1185,6 @@
       }
     }
 
-    p {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      line-height: 1.56rem;
-
-      @include breakpoint($desktop) {
-        font-size: 0.9375rem;
-        width: 27.5%;
-        text-indent: -2.45rem;
-        padding-#{$left}: 2.4rem;
-        word-spacing: 1px;
-
-        html[lang=ar] & {
-          margin-left: 1.25rem;
-        }
-      }
-    }
-
     @include icon(infomation, before) {
       font-size: 1.8rem;
       margin-#{$right}: 0.8rem;
@@ -1195,21 +1200,6 @@
       @include breakpoint($desktop) {
         margin-#{$right}: 0.675rem;
       }
-    }
-  }
-
-  .c-order-help .field--name-body {
-    background: $user_order_help_bg;
-    margin-top: 1.5rem;
-    margin-bottom: 2rem;
-    padding: 1.25rem 1rem;
-
-    @include breakpoint($tablet) {
-      padding: 1.8rem 1.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding: 1.45rem;
     }
   }
 }

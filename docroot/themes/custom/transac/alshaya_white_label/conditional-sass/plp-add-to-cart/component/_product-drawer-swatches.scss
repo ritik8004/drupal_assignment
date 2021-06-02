@@ -1,0 +1,49 @@
+.swatch-list {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 0 0 0.313rem;
+  padding: 0;
+
+  .swatch-label {
+    display: none;
+  }
+
+  .li-swatch-image,
+  .li-swatch-color {
+    height: 2.375rem;
+    width: 2.375rem;
+    margin-top: 0.4375rem;
+    margin-bottom: 0.4375rem;
+    margin-right: 0.625rem;
+    list-style: none;
+
+    a {
+      display: inline-block;
+      position: relative;
+      height: 2.75rem;
+      width: 2.75rem;
+
+      &.active {
+        &::after {
+          content: '';
+          position: absolute;
+          display: inline-block;
+          z-index: 1;
+          border: 1px solid $black;
+          pointer-events: none;
+          height: 2.75rem;
+          width: 2.75rem;
+          top: -0.1875rem;
+          #{$left}: -0.1875rem;
+        }
+      }
+    }
+  }
+
+  .li-swatch-image {
+    img {
+      height: 2.375rem;
+      width: 2.375rem;
+    }
+  }
+}

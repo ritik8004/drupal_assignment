@@ -371,6 +371,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'mainImage' => '',
       'hoverImage' => '',
+      'losanges' => '',
     ],
   ];
 
@@ -539,16 +540,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->getCacheTags());
 
-      if ($view_mode == 'search_result') {
-        $build['labels'] = [
-          '#theme' => 'product_labels',
-          '#labels' => $skuManager->getLabels($sku_entity, 'plp'),
-          '#sku' => $sku_identifier,
-          '#mainsku' => $sku_identifier,
-          '#type' => 'plp',
-        ];
-      }
-      elseif ($view_mode == 'full') {
+      if ($view_mode == 'full') {
         $sku = $skuManager->getSkuForNode($entity, TRUE);
         if (empty($sku)) {
           throw new NotFoundHttpException();
@@ -615,14 +607,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           ];
         }
 
-        // Same day delivery.
-        if (isset($flags_status['same_day_delivery']) && $flags_status['same_day_delivery']['status']) {
+         // Same day delivery.
+         if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['same_day_delivery']['text'])) {
           $build['same_day_delivery_text']['#markup'] = $flags_config['same_day_delivery']['text'];
           $build['same_day_delivery_sub_text']['#markup'] = $flags_config['same_day_delivery']['sub_text'];
         }
 
         // Delivery in only city.
-        if (isset($flags_config['delivery_in_only_city']) && !empty($flags_config['delivery_in_only_city']['text'])) {
+        if ($flags_status['same_day_delivery']['status'] && !empty($flags_config['delivery_in_only_city']['text'])) {
           $build['delivery_in_only_city_text']['#markup'] = $flags_config['delivery_in_only_city']['text'];
         }
 
@@ -711,16 +703,27 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
 
       }
-      elseif ($view_mode == 'matchback') {
+      elseif ($view_mode == 'matchback' || $view_mode == 'matchback_mobile') {
         $context = 'matchback';
 
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
         $build['item_code']['#markup'] = $sku;
+
+        if ($view_mode == 'matchback_mobile') {
+          // Get the image.
+          $build['image'] = [];
+
+          $sku_media = $skuImagesManager->getFirstImage($sku_entity);
+
+          if (!empty($sku_media['drupal_uri'])) {
+            $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
+          }
+        }
       }
 
       // Process price block and gallery for modal,
       // matchback and full view mode.
-      if (in_array($view_mode, ['modal', 'full', 'matchback'])) {
+      if (in_array($view_mode, ['modal', 'full', 'matchback', 'matchback_mobile'])) {
         $pdp_layout = $skuManager->getPdpLayout($entity, $context ?? 'pdp');
         $quantity_limit_enabled = \Drupal::config('alshaya_acm.settings')->get('quantity_limit_enabled');
 
@@ -800,7 +803,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         $productInfo['is_non_refundable'] = $is_non_refundable;
-        $settingsKey = ($view_mode === 'matchback') ? 'matchback' : 'productInfo';
+        $settingsKey = ($view_mode === 'matchback' || $view_mode === 'matchback_mobile')
+          ? $view_mode
+          : 'productInfo';
         $build['#attached']['drupalSettings'][$settingsKey][$sku_entity->getSku()] = $productInfo;
       }
 
@@ -1427,6 +1432,67 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         }
       }
     }
+
+    $multiple_attributes_for_color = \Drupal::config('alshaya_acm_product.display_settings')->get('color_attribute_config');
+    // If site uses multiple attributes for color.
+    $is_multiple_color_attribute_used = FALSE;
+    if ($multiple_attributes_for_color && $multiple_attributes_for_color['support_multiple_attributes']) {
+      $is_multiple_color_attribute_used = TRUE;
+    }
+    // Check if the product is configurable.
+    if ($is_multiple_color_attribute_used && !empty($product_tree['parent'])) {
+      // Configurable color attribute key.
+      $config_color_attribute = $multiple_attributes_for_color['configurable_color_attribute'];
+      // Attribute key which will be used for label.
+      $config_color_label_attribute = $multiple_attributes_for_color['configurable_color_label_attribute'];
+      // Attribute ket which will be used for the swatch code.
+      $color_code_attribute = $multiple_attributes_for_color['configurable_color_code_attribute'];
+      // If the form has color config attribute available.
+      if (isset($form['ajax']['configurables'][$config_color_attribute])) {
+        $options = &$form['ajax']['configurables'][$config_color_attribute]['#options'];
+        $form['ajax']['configurables'][$config_color_attribute]['#title'] = t('Color');
+        $form['ajax']['configurables'][$config_color_attribute]['#attributes']['data-default-title'] = t('Color');
+
+        // Translate color attribute option values to the rgb color values &
+        // expose the same in Drupal settings to javascript.
+        foreach ($options as $key => $option) {
+          if (isset($product_tree['combinations']['attribute_sku'][$config_color_attribute][$key])) {
+            foreach ($product_tree['combinations']['attribute_sku'][$config_color_attribute][$key] as $variant_sku_code) {
+              $variant_sku = SKU::loadFromSku($variant_sku_code);
+
+              if (!($variant_sku instanceof SKU)) {
+                continue;
+              }
+
+              $options[$key] = $variant_sku->get($config_color_label_attribute)->getString();
+              $color_options_list = [
+                $key => [
+                  'display_label' => $options[$key],
+                  'swatch_type' => 'RGB',
+                  'display_value' => $variant_sku->get($color_code_attribute)->getString(),
+                ],
+              ];
+              $color_options_list[$key] = [
+                'display_label' => $options[$key],
+                'swatch_type' => 'RGB',
+                'display_value' => $variant_sku->get($color_code_attribute)->getString(),
+              ];
+
+              // Allow other modules to change the swatch data.
+              \Drupal::moduleHandler()->alter('alshaya_acm_product_pdp_swath_type', $sku, $color_options_list, $variant_sku);
+
+              $sku_configurable_options_color[$key] = $color_options_list[$key];
+              break;
+            }
+          }
+        }
+
+        if (!empty($sku_configurable_options_color)) {
+          $form['ajax']['configurables'][$config_color_attribute]['#attached']['drupalSettings']['sku_configurable_options_color'] = $sku_configurable_options_color;
+          $form['ajax']['configurables'][$config_color_attribute]['#attached']['drupalSettings']['sku_configurable_color_attribute'] = $config_color_attribute;
+        }
+      }
+    }
   }
 
   // Stock check for quantity for all other products.
@@ -1466,14 +1532,20 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
 /**
  * Helper function to get size guide info if enabled and available.
  *
+ * @param mixed $taxonomy_term
+ *   The term object.
+ * @param string langcode
+ *   (optional) The langcode.
+ *
  * @return array
  *   Array containing link html and attributes.
  */
-function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
+function _alshaya_acm_product_get_size_guide_info($taxonomy_term, $langcode = null) {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
     $size_guide_anchor = ($taxonomy_term instanceof TermInterface) ? alshaya_acm_product_get_size_guide_anchor($taxonomy_term) : [];
-    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide', array_reverse($size_guide_anchor));
+    $link_title = $langcode ? t('Size Guide', [], ['langcode' => $langcode]) : t('Size Guide');
+    $link_info = _alshaya_acm_product_get_modal_link($link_title, 'size-guide', array_reverse($size_guide_anchor), $langcode);
     $link_info['attributes'] = explode(',', $config->get('size_guide_attributes'));
     return $link_info;
   }
@@ -1569,12 +1641,14 @@ function alshaya_acm_product_alshaya_master_post_drupal_install() {
  * @param string $type
  *   Link type.
  * @param array $size_guide_anchor
- *   String contains the value to pass with modal link.
+ *   (optional) String contains the value to pass with modal link.
+ * @param string $langcode
+ *   (optional) The langcode.
  *
  * @return array
  *   Array of link.
  */
-function _alshaya_acm_product_get_modal_link($link_title, $type, array $size_guide_anchor = []) {
+function _alshaya_acm_product_get_modal_link($link_title, $type, array $size_guide_anchor = [], $langcode = NULL) {
   $info = [];
   $options = [
     'attributes' => [
@@ -1585,6 +1659,10 @@ function _alshaya_acm_product_get_modal_link($link_title, $type, array $size_gui
     ],
     'query' => $size_guide_anchor,
   ];
+
+  if ($langcode) {
+    $options['language'] = \Drupal::languageManager()->getLanguage($langcode);
+  }
 
   $url = Url::fromRoute('alshaya_acm_product.pdp_modal_links', [
     'type' => $type,
@@ -1964,4 +2042,28 @@ function alshaya_acm_product_alshaya_acm_product_remove_disabled_products_alter(
   if ($skuManager->isSkuFreeGift($sku)) {
     $data['skipSkuDelete'] = TRUE;
   }
+}
+
+/**
+ * Implements hook_sku_variant_info_alter().
+ *
+ * Prepare image for matchback mobile display.
+ */
+function alshaya_acm_product_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
+  // Process only if matchback is enabled and ajax request device argument value is mobile.
+  if (!\Drupal::config('alshaya_acm.settings')->get('show_crosssell_as_matchback')
+    || \Drupal::routeMatch()->getRawParameter('device') !== 'mobile') {
+    return;
+  }
+
+  // Get variant image for matchback mobile display.
+  \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+  $image = alshaya_acm_get_product_display_image($child, 'product_teaser');
+
+  // Prepare image style url.
+  if (!empty($image['#uri'])) {
+    $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+  }
+
+  $variant['matchback_teaser_image'] = is_string($image) ? $image : '';
 }

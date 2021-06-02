@@ -17,6 +17,10 @@
 
       &-fields {
         margin: 1.25rem 0;
+
+        textarea {
+          resize: none;
+        }
       }
     }
 
@@ -113,6 +117,11 @@
     }
   }
 
+  // Brand response block.
+  .brand-response-block {
+    width: 100%;
+  }
+
   .comment {
     &-submission {
       &-details {
@@ -139,6 +148,10 @@
       &-nickname {
         &:not(:only-child)::after {
           content: ',';
+        }
+
+        &.admin {
+          font-family: $alshaya-bold;
         }
       }
 

@@ -275,6 +275,31 @@ function _alshaya_spc_translations() {
     ],
   ];
 
+  // Strings related to Fawry payment method.
+  $strings['v3'] = [
+    'Once the product is successfully requested, we will send you Fawry Ref. No. to the below contact details' => [
+      'ar' => 'سوف يصلك الرقم المرجعي لخدمة فوري على تفاصيل الاتصال أدناه، بمجرد إتمام الطلبية.',
+    ],
+    "Pay for your order through any of <a href='@fawry_link' target='_blank'>Fawry's cash points</a> at your convenient time and location across Egypt." => [
+      'ar' => "قم بدفع مبلغ الطلبية عن طريق خدمة فوري من أي <a href='@fawry_link'target='_blank'>نقطة دفع نقدي،</a> وفي أي وقت ومكان في جميع أرجاء مصر.",
+    ],
+    "Please complete your payment at the nearest <a href='@fawry_link' target='_blank'>Fawry Cash Point</a> using your reference number." => [
+      'ar' => "يرجى استكمال الدفع عن طريق أقرب <a href='@fawry_link'target='_blank'>نقطة دفع لفوري</a> عن طريق استخدام رقم المرجع",
+    ],
+    'Complete payment by' => [
+      'ar' => 'إتمام الدفع من خلال',
+    ],
+    'Amount Due' => [
+      'ar' => 'المبلغ المستحق',
+    ],
+    'Reference number' => [
+      'ar' => 'رقم المرجع',
+    ],
+    'Reference No' => [
+      'ar' => 'رقم المرجع',
+    ],
+  ];
+
   return $strings;
 }
 

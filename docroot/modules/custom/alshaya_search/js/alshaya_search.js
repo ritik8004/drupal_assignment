@@ -138,13 +138,15 @@
 
   Drupal.initiateThumbnailGallerySlider = function (ocObject) {
     var slickOptions = {
-      slidesToShow: drupalSettings.plp_slider.item,
+      dots: true,
+      infinite: true,
+      slidesToShow: 1,
       slidesToScroll: 1,
-      vertical: false,
-      arrows: true,
-      focusOnSelect: false,
-      infinite: false,
-      touchThreshold: 1000
+      arrows: false,
+      touchThreshold: 1750,
+      autoplaySpeed: 1750,
+      autoplay: true,
+      pauseOnHover: false,
     };
 
     if (isRTL() && $(window).width() > 1024) {
@@ -184,30 +186,6 @@
 
               return false;
             });
-
-            // Change the image on Mouse hover.
-            // Adding a delay here to avoid flicker during scroll in between two slides.
-            // This also helps in smoothing the mouseout behaviour.
-            $('.slick-slide', $(this)).hover(
-              function () {
-                // Clear timer when we enter a new thumbnail.
-                clearTimeout(setTimeoutConst);
-                $(this)
-                  .closest('.alshaya_search_gallery')
-                  .find('.alshaya_search_mainimage img')
-                  .attr('src', $(this).find('img').attr('rel'));
-              },
-              function () {
-                // Store this as after delay the mouse is not on element, so this changes.
-                var el = $(this);
-                // Delay the resetting of main image post hover out.
-                setTimeoutConst = setTimeout(function () {
-                  el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
-                    el.parent().find('li:first-child').find('img').attr('rel')
-                  );
-                }, 500);
-              }
-            );
           });
         });
       }

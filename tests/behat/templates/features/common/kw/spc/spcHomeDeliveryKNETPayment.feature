@@ -1,5 +1,5 @@
-@javascript @KNetPayment @guest @homeDelivery @bbwkwuat @flkwuat
-Feature: SPC Checkout Home Delivery CC
+@javascript @KNetPayment @guest @homeDelivery @bbwkwuat @flkwuat @hmkwqa
+Feature: SPC Checkout Home Delivery Knet Payment for Guest User
 
   Background:
     Given I am on "{spc_basket_page}"
@@ -7,11 +7,11 @@ Feature: SPC Checkout Home Delivery CC
     And I wait for the page to load
 
   @cc @hd @Knet
-  Scenario: As a Guest, I should be able to checkout using CC
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+  Scenario: As a Guest, I should be able to checkout using KNET payment method
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -100,14 +100,14 @@ Feature: SPC Checkout Home Delivery CC
     And I should see "{continue_shopping_text}"
 
   @cc @hd @language @desktop @Knet
-  Scenario: As a Guest, I should be able to checkout using COD in second language
+  Scenario: As a Guest, I should be able to checkout using KNET payment in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -164,14 +164,14 @@ Feature: SPC Checkout Home Delivery CC
     Then I should be on "/{language_short}/checkout/confirmation" page
 
   @cc @hd @language @mobile @Knet
-  Scenario: As a Guest, I should be able to checkout using COD in second language
+  Scenario: As a Guest, I should be able to checkout using KNET payment in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element

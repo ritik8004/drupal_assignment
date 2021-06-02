@@ -72,9 +72,11 @@ class SearchApp extends React.PureComponent {
       : '';
     const optionalFilter = getSuperCategoryOptionalFilter();
 
+    const { indexName } = drupalSettings.algoliaSearch.search;
+
     return (
       <div>
-        <InstantSearch indexName={`${drupalSettings.algoliaSearch.indexName}_query`} searchClient={algoliaSearchClient}>
+        <InstantSearch indexName={`${indexName}_query`} searchClient={algoliaSearchClient}>
           <Configure hitsPerPage={drupalSettings.autocomplete.hits} />
           <AutoComplete
             onSuggestionSelected={this.onSuggestionSelected}
@@ -89,7 +91,7 @@ class SearchApp extends React.PureComponent {
           <Portal id="top-results" conditional query={query}>
             <span className="top-suggestions-title">{Drupal.t('top suggestions')}</span>
             <InstantSearch
-              indexName={drupalSettings.algoliaSearch.indexName}
+              indexName={indexName}
               searchClient={algoliaSearchClient}
             >
               {optionalFilter ? <Configure optionalFilters={optionalFilter} /> : null}

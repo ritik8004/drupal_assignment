@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_jo.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_jo_install() {
+  // Add iso_currency_code for jo sites.
+  \Drupal::configFactory()
+    ->getEditable('acq_commerce.currency')
+    ->set('iso_currency_code', 'JOD')
+    ->save();
+
+  // Country code and timezone for Jordan.
+  alshaya_country_set_default_regional_info('JO');
+
+  // Store finder search placeholder for Jordan.
+  alshaya_country_set_default_store_search_placeholder('e.g. Amman', 'عَمَّان');
+
+  $strings = [
+    'seo_country' => [
+      'en' => 'Jordan',
+      'ar' => 'الأردن',
+    ],
+    'seo_city1' => [
+      'en' => 'Amman',
+      'ar' => 'عَمَّان',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+  alshaya_jo_default_spc_config();
+}
+
+/**
+ * Install config for spc click n collect.
+ *
+ * Set default lat and long for click n collect api requests.
+ */
+function alshaya_jo_default_spc_config() {
+  alshaya_country_set_default_spc_config(31.95522, 35.94503);
+}
