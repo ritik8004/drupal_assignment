@@ -146,35 +146,6 @@ const callMagentoApi = (url, method, data) => {
 };
 
 /**
- * Object to serve as static cache for cart data over the course of a request.
- */
-let cartData = null;
-
-/**
- * Gets the stored cart data.
- */
-const getCartData = () => cartData;
-
-/**
- * Sets the cart data to static memory.
- *
- * @param {object} data
- *   The cart object to set.
- */
-const setCartData = (data) => {
-  const cartInfo = { ...data };
-  cartInfo.last_update = new Date().getTime();
-  cartData = cartInfo;
-};
-
-/**
- * Unsets the cart data in static memory.
- */
-const removeCartData = () => {
-  cartData = null;
-};
-
-/**
  * Calls the update cart API.
  *
  * @param {object} data
@@ -230,7 +201,4 @@ export {
   isAnonymousUserWithoutCart,
   callMagentoApi,
   updateCart,
-  getCartData,
-  setCartData,
-  removeCartData,
 };

@@ -1,9 +1,6 @@
 import {
   callMagentoApi,
-  getCartData,
   isAnonymousUserWithoutCart,
-  removeCartData,
-  setCartData,
   updateCart,
 } from './common';
 import { logger } from './utility';
@@ -11,6 +8,38 @@ import { getDefaultErrorMessage } from './error';
 import { removeStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
+
+/**
+ * Object to serve as static cache for cart data over the course of a request.
+ */
+let staticCartData = null;
+
+/**
+ * Gets the cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+
+/**
+ * Sets the cart data to storage.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartData = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  staticCartData = cartInfo;
+};
+
+/**
+ * Unsets the stored cart data.
+ */
+window.commerceBackend.removeCartDataFromStorage = () => {
+  staticCartData = null;
+};
 
 /**
  * Check if user is anonymous and without cart.
@@ -248,24 +277,3 @@ window.commerceBackend.processCartData = (cartData) => {
   }
   return data;
 };
-
-/**
- * Gets the cart data.
- *
- * @returns {object|null}
- *   Processed cart data else null.
- */
-window.commerceBackend.getCartDataFromStorage = () => getCartData();
-
-/**
- * Sets the cart data.
- *
- * @param data
- *   The cart data.
- */
-window.commerceBackend.setCartData = (data) => setCartData(data);
-
-/**
- * Unsets the stored cart data.
- */
-window.commerceBackend.removeCartDataFromStorage = () => removeCartData();
