@@ -62,6 +62,11 @@ export default class Rating extends React.Component {
     }
     const { childClickHandler } = this.props;
 
+    // Reviews data is emtpy.
+    if (reviewsData === '') {
+      return null;
+    }
+
     if (reviewsData !== undefined
       && reviewsData !== ''
       && reviewsData.TotalReviewCount > 0) {

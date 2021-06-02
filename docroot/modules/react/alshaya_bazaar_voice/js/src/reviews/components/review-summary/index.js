@@ -135,6 +135,7 @@ export default class ReviewSummary extends React.Component {
             });
           } else {
             this.setState({
+              totalReviews: result.data.TotalResults,
               currentTotal: result.data.TotalResults,
               noResultmessage: getStringMessage('no_review_found'),
             });
@@ -344,7 +345,12 @@ export default class ReviewSummary extends React.Component {
     newPdp = (newPdp === undefined) ? false : newPdp;
 
     const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type;
+    // Totalreviews count is emtpy.
     if (totalReviews === '') {
+      return null;
+    }
+    // Totalreviews count is 0.
+    if (totalReviews === 0) {
       return (
         <>
           <div className="histogram-data-section">
@@ -367,7 +373,7 @@ export default class ReviewSummary extends React.Component {
         </>
       );
     }
-
+    // Totalreviews count is more than 0.
     return (
       <div className="reviews-wrapper">
         <div className="histogram-data-section">
