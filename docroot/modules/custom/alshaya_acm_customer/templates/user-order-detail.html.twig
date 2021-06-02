@@ -22,6 +22,9 @@
 <div>
   <a href="{{ print_link }}" target="_blank" class="button-wide print--button">{{ "print"|t }}</a>
 </div>
+{% if strings %}
+  {{ strings }}
+{% endif %}
 <div{{ attributes }}>
 
   <table class="user__order--detail">
@@ -415,7 +418,10 @@
         {% endif %}
       {% endif %}
     </td>
-
-    <td class="above-mobile empty--cell">&nbsp;</td>
+    {% if product.bazaarvoice_link %}
+      <td class="above-mobile user-review">
+        <div class="myaccount-write-review" data-sku={{ product.sku }}></div>
+      </td>
+    {% endif %}
   </tr>
 {% endmacro %}

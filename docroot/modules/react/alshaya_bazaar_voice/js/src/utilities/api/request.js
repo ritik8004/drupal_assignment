@@ -4,18 +4,25 @@ export function getLanguageCode() {
   return drupalSettings.path.currentLanguage;
 }
 
-export function getbazaarVoiceSettings($context = 'pdp') {
+export function getbazaarVoiceSettings(productId = undefined) {
   const settings = [];
-  if ($context === 'pdp') {
+  if (productId !== undefined) {
+    settings.productid = productId;
+    settings.reviews = drupalSettings.productInfo[productId].alshaya_bazaar_voice;
+  } else {
     Object.entries(drupalSettings.productInfo).forEach(([key]) => {
       settings.productid = key;
       settings.reviews = drupalSettings.productInfo[key].alshaya_bazaar_voice;
     });
   }
-  if ($context === 'user') {
+  return settings;
+}
+
+export function getUserBazaarVoiceSettings() {
+  const settings = [];
+  if (drupalSettings.userInfo) {
     settings.reviews = drupalSettings.userInfo;
   }
-
   return settings;
 }
 

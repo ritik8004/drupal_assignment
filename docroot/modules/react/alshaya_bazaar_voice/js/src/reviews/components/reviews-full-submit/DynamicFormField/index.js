@@ -16,7 +16,7 @@ const DynamicFormField = (props) => {
   const fieldProperty = [];
   let readonly = false;
 
-  const { field: defField } = props;
+  const { field: defField, productId } = props;
   if (defField.length !== 0
     && defField.length !== 'undefined') {
     Object.entries(defField).forEach(
@@ -29,12 +29,12 @@ const DynamicFormField = (props) => {
 
   // Set default value for user nickname and email.
   // For anonymous user, default value is from user cookies.
-  const bazaarVoiceSettings = getbazaarVoiceSettings();
-  const userStorage = getStorageInfo(`bvuser_${bazaarVoiceSettings.reviews.user.user_id}`);
+  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+  const userStorage = getStorageInfo(`bvuser_${bazaarVoiceSettings.reviews.user.id}`);
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
-      if (bazaarVoiceSettings.reviews.user.user_email !== null) {
-        fieldProperty.defaultVal = bazaarVoiceSettings.reviews.user.user_email;
+      if (bazaarVoiceSettings.reviews.user.email !== null) {
+        fieldProperty.defaultVal = bazaarVoiceSettings.reviews.user.email;
         readonly = true;
       } else if (userStorage !== null) {
         if (userStorage.email !== undefined) {

@@ -9,6 +9,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
+use Drupal\acq_sku\Entity\SKU;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -17,73 +18,23 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
   if ($context !== 'pdp') {
     return;
   }
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+  $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+  // Disable BazaarVoice Rating and Review in PDP
+  // if checkbox is checked in bazaarVoice Settings Form.
+  if ($basic_configs['pdp_rating_reviews']) {
+    return;
+  }
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $productNode = $skuManager->getDisplayNode($sku->getSku());
 
   if ($productNode instanceof NodeInterface) {
-    /** @var \Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice $alshayaBazaarVoice */
-    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
-    $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
-    // Disable BazaarVoice Rating and Review in PDP
-    // if checkbox is checked in bazaarVoice Settings Form.
-    if ($basic_configs['pdp_rating_reviews']) {
-      return;
-    }
-    // Disable BazaarVoice Rating and Review in PDP
-    // if checkbox is checked for any categories or its Parent Categories.
-    $category_based_config = $alshayaBazaarVoice->getCategoryBasedConfig($productNode);
-    if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
-      return;
-    }
-    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    $media = $skuImagesManager->getFirstImage($sku, 'pdp');
-    $image_url = '';
-    if (!empty($media)) {
-      $image_url = file_create_url($media['drupal_uri']);
-    }
-
-    // Get avalable sorting options from config.
-    $sorting_options = $alshayaBazaarVoice->getSortingOptions();
-    // Get avalable BazaarVoice error messages from config.
-    $bv_error_messages = $alshayaBazaarVoice->getBazaarVoiceErrorMessages();
-    // Get the filter options to be rendered on review summary.
-    $filter_options = $alshayaBazaarVoice->getPdpFilterOptions();
-
-    // Get country code.
-    $country_code = _alshaya_custom_get_site_level_country_code();
     // Get sanitized sku.
     $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
-
-    // Check if logged in user has already reviewed the product.
-    $is_reviewed = $alshayaBazaarVoice->isReviewedByCurrentUser($sanitized_sku);
-
-    $settings = [
-      'user' => [
-        'user_email' => \Drupal::currentUser()->getEmail(),
-        'user_id' => \Drupal::currentUser()->id(),
-        'user_name' => \Drupal::currentUser()->getUsername(),
-        'is_reviewed' => $is_reviewed,
-      ],
-      'product' => [
-        'url' => $productNode->toUrl()->toString(),
-        'title' => $productNode->label(),
-        'image_url' => $image_url,
-      ],
-      'bazaar_voice' => [
-        'stats' => 'Reviews',
-        'sorting_options' => $sorting_options,
-        'filter_options' => $filter_options,
-        'country_code' => $country_code,
-        'error_messages' => $bv_error_messages,
-      ],
-      'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
-      'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
-      'hide_fields_write_review' => $category_based_config['hide_fields_write_review'],
-    ];
-    $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
+    $settings = $alshayaBazaarVoice->getProductBazaarVoiceDetails($sku, $productNode, $sanitized_sku, $basic_configs);
 
     // Get the current pdp layout.
     $config = \Drupal::config('alshaya_acm_product.settings');
@@ -112,11 +63,11 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
  */
 function alshaya_bazaar_voice_theme($existing, $type, $theme, $path) {
   return [
-    'alshaya_bazaar_voice_reviews' => [
+    'alshaya_strings' => [
       'variables' => [
         'strings' => [],
       ],
-      'template' => 'alshaya-bazaar-voice-reviews',
+      'template' => 'alshaya-bazaar-voice-strings',
     ],
   ];
 }
@@ -264,10 +215,57 @@ function alshaya_bazaar_voice_algolia_react_common_configs_alter(&$response) {
 function alshaya_bazaar_voice_preprocess_node(&$variables) {
   // Add bazaavoice related strings.
   if ($variables['node']->bundle() === 'acq_product') {
-    \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
-    $variables['bazaar_voice_strings'] = [
-      '#theme' => 'alshaya_bazaar_voice_reviews',
-      '#strings' => _alshaya_bazaar_voice_static_strings(),
-    ];
+    /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    $variables['bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_build_product_details_alter().
+ */
+function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(array &$build) {
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+  $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+
+  // Return if bazaarvoice disabled in my account.
+  if ($basic_configs['myaccount_rating_reviews']) {
+    return;
+  }
+  $bazaarvoiceSettings = [];
+  foreach (array_keys($build['recent_order']) as $key) {
+    foreach ($build['recent_order'][$key]['#order']['items'] as $item_key => $item) {
+      $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
+      $bazaarvoiceSettings[$item['sku']] = $alshayaBazaarVoice->getMyAccountProductSettings($item['sku'], $basic_configs);
+    }
+    $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
+  }
+  if (!isset($build['strings'])) {
+    $build['strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_orders_details_build_alter().
+ */
+function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(array &$order, array &$build) {
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+  $basic_configs = $alshayaBazaarVoice->getBasicConfigurations();
+  // Return if bazaarvoice disabled in my account.
+  if ($basic_configs['myaccount_rating_reviews']) {
+    return;
+  }
+  $bazaarvoiceSettings = [];
+  foreach ($order['items'] as $key => $item) {
+    $bazaarvoiceSettings[$item['sku']] = $alshayaBazaarVoice->getMyAccountProductSettings($item['sku'], $basic_configs);
+  }
+  if (!empty($bazaarvoiceSettings)) {
+    $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings); 
+    foreach(array_keys($build['#products']) as $key) {
+      $build['#products'][$key]['bazaarvoice_link'] = TRUE;
+    }
+  }
+  $build['#strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
 }

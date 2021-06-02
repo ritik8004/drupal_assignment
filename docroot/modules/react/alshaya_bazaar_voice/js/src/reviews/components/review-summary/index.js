@@ -17,8 +17,7 @@ import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
-import { getUasToken } from '../../../utilities/user_util';
-import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
+import { createUserStorage } from '../../../utilities/user_util';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -45,7 +44,6 @@ export default class ReviewSummary extends React.Component {
       nextButtonDisabled: false,
       loadMoreLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
       paginationLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_per_page,
-      reviewedByCurrentUser: false,
     };
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
@@ -61,30 +59,7 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    const userId = bazaarVoiceSettings.reviews.user.user_id;
-    const userStorage = getStorageInfo(`bvuser_${userId}`);
-    // Set uas token if user not found in storage.
-    if (userStorage === null) {
-      let currentUserObj = null;
-      // Initliaze user object for anonmymous user.
-      if (userId === 0) {
-        currentUserObj = {
-          id: userId,
-        };
-        setStorageInfo(currentUserObj, `bvuser_${userId}`);
-      } else {
-        getUasToken().then((uasTokenValue) => {
-          if (uasTokenValue !== null) {
-            currentUserObj = {
-              id: userId,
-              uasToken: uasTokenValue,
-              email: bazaarVoiceSettings.reviews.user.user_email,
-            };
-            setStorageInfo(currentUserObj, `bvuser_${userId}`);
-          }
-        });
-      }
-    }
+    createUserStorage(bazaarVoiceSettings.reviews.user.id, bazaarVoiceSettings.reviews.user.email);
     this.getReviews();
   }
 
@@ -107,13 +82,6 @@ export default class ReviewSummary extends React.Component {
 
   getReviews = (extraParams, explicitTrigger = false, offset = this.getOffsetValue()) => {
     showFullScreenLoader();
-
-    // Check if current logged in user has already posted review on current PDP.
-    if (bazaarVoiceSettings.reviews.user.is_reviewed) {
-      this.setState({
-        reviewedByCurrentUser: true,
-      });
-    }
 
     let sortParams = '';
     let filterParams = '';
@@ -367,7 +335,6 @@ export default class ReviewSummary extends React.Component {
       currentPage,
       numberOfPages,
       loadMoreLimit,
-      reviewedByCurrentUser,
     } = this.state;
     const {
       isNewPdpLayout,
@@ -389,7 +356,7 @@ export default class ReviewSummary extends React.Component {
                   <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
                 </div>
                 <WriteReviewButton
-                  reviewedByCurrentUser={reviewedByCurrentUser}
+                  reviewedByCurrentUser={bazaarVoiceSettings.reviews.user.review !== null}
                 />
               </div>
             </div>
@@ -408,7 +375,7 @@ export default class ReviewSummary extends React.Component {
             <ReviewHistogram
               overallSummary={reviewsProduct}
               isNewPdpLayout={isNewPdpLayout}
-              reviewedByCurrentUser={reviewedByCurrentUser}
+              reviewedByCurrentUser={bazaarVoiceSettings.reviews.user.review !== null}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>

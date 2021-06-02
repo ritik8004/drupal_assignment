@@ -28,7 +28,7 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  */
 export const prepareRequest = (elements, fieldsConfig) => {
   let params = '';
-  const userId = bazaarVoiceSettings.reviews.user.user_id;
+  const userId = bazaarVoiceSettings.reviews.user.id;
   const userStorage = getStorageInfo(`bvuser_${userId}`);
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
@@ -80,7 +80,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (bazaarVoiceSettings.reviews.user.user_id !== 0 && userStorage.uasToken !== undefined) {
+    if (bazaarVoiceSettings.reviews.user.id !== 0 && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
     } else if (userId === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;

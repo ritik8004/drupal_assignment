@@ -49,7 +49,7 @@ export default class BvAuthConfirmation extends React.Component {
 
   setAnonymousUserStorage = (bvUserId) => {
     const bazaarVoiceSettings = getbazaarVoiceSettings();
-    const userId = bazaarVoiceSettings.reviews.user.user_id;
+    const userId = bazaarVoiceSettings.reviews.user.id;
     const userStorage = getStorageInfo(`bvuser_${userId}`);
     // Store user information in bv cookies.
     if (userStorage !== null && userId === 0) {

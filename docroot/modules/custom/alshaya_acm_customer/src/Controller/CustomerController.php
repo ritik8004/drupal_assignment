@@ -311,6 +311,8 @@ class CustomerController extends ControllerBase {
     $build['#cache']['tags'] = Cache::mergeTags($user->getCacheTags(), ['config:alshaya_acm_checkout.settings']);
     $build['#cache']['contexts'] = $user->getCacheContexts();
 
+    // Allow other modules to update order details build.
+    $this->moduleHandler()->alter('alshaya_acm_customer_orders_details_build', $order, $build);
     return $build;
   }
 

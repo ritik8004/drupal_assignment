@@ -142,6 +142,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This option should be checked to disable the ratings and reviews in PDP.'),
     ];
 
+    $form['basic_settings']['myaccount_rating_reviews'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable ratings and reviews in My Account.'),
+      '#default_value' => $config->get('myaccount_rating_reviews'),
+      '#description' => $this->t('This option should be checked to disable the ratings and reviews in My Account.'),
+    ];
+
     $form['basic_settings']['plp_rating_reviews'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable ratings and reviews in listing page.'),
@@ -311,6 +318,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('site_id', $values['site_id'])
       ->set('environment', $values['environment'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
+      ->set('myaccount_rating_reviews', $values['myaccount_rating_reviews'])
       ->set('plp_rating_reviews', $values['plp_rating_reviews'])
       ->set('write_review_submission', $values['write_review_submission'])
       ->set('write_review_tnc', $values['write_review_tnc'])

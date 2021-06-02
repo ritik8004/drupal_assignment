@@ -15,3 +15,5 @@ services:
       - '@current_user'
       - '@entity.repository'
       - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@request_stack'

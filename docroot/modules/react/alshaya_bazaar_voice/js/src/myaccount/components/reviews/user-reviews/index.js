@@ -1,17 +1,17 @@
 import React from 'react';
 import { removeFullScreenLoader, showFullScreenLoader }
-  from '../../../../../../js/utilities/showRemoveFullScreenLoader';
-import getStringMessage from '../../../../../../js/utilities/strings';
-import DisplayStar from '../../../rating/components/stars';
-import { fetchAPIData } from '../../../utilities/api/apiData';
-import IndividualReviewSlider from '../../../reviews/components/individual-review-slider';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
-import ConditionalView from '../../../common/components/conditional-view';
-import EmptyMessage from '../../../utilities/empty-message';
+  from '../../../../../../../js/utilities/showRemoveFullScreenLoader';
+import getStringMessage from '../../../../../../../js/utilities/strings';
+import DisplayStar from '../../../../rating/components/stars';
+import { fetchAPIData } from '../../../../utilities/api/apiData';
+import IndividualReviewSlider from '../../../../reviews/components/individual-review-slider';
+import { getUserBazaarVoiceSettings } from '../../../../utilities/api/request';
+import ConditionalView from '../../../../common/components/conditional-view';
+import EmptyMessage from '../../../../utilities/empty-message';
 import UserReviewsProducts from '../user-reviews-products';
 import UserReviewsDescription from '../user-reviews-desc';
 
-const bazaarVoiceSettings = getbazaarVoiceSettings('user');
+const bazaarVoiceSettings = getUserBazaarVoiceSettings();
 export default class UserReviews extends React.Component {
   constructor(props) {
     super(props);
