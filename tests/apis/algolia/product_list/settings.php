@@ -54,18 +54,23 @@ $sorts = [
 ];
 
 $facets = [
-  'attr_color',
-  'attr_product_brand',
-  'attr_selling_price',
-  'attr_size',
-  'field_acq_promotion_label',
+  'field_category_name',
+  'lhn_category',
+  'promotion_nid',
+  'attr_collection_1',
+  'attr_fragrance_name',
+  'attr_fragrance_category',
   'field_category',
-  'final_price',
+  'attr_selling_price',
   'attr_product_collection',
-  'attr_concept',
+  'field_acq_promotion_label',
 ];
 
 $query_facets = [
+  [
+    'attribute' => 'field_category_name',
+    'amount' => 1,
+  ],
   [
     'attribute' => 'field_category_name',
     'amount' => 1,
@@ -74,13 +79,18 @@ $query_facets = [
 
 $query_generate = [
   ['field_category_name'],
+  ['field_category_name'],
 ];
 
 $searchable_attributes = [
-  'title',
-  'field_category_name.lvl0',
-  'field_category_name.lvl2',
-  'field_category_name.lvl1',
+  'title.en',
+  'title.ar',
+  'field_category_name.en.lvl0',
+  'field_category_name.ar.lvl0',
+  'field_category_name.en.lvl1',
+  'field_category_name.ar.lvl1',
+  'field_category_name.en.lvl2',
+  'field_category_name.ar.lvl2',
   'sku',
 ];
 
@@ -94,4 +104,18 @@ $ranking = [
   'proximity',
   'exact',
   'custom',
+];
+
+// Add Attributes whose facet does not require language suffix.
+$attributes_skip_lang_suffix = [
+  'stock',
+  'promotion_nid',
+  'sku',
+  'search_api_language',
+  'gtm',
+  'nid',
+  'search_api_datasource',
+  'search_api_id',
+  'stock_quantity',
+  'created',
 ];
