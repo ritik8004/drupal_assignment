@@ -231,19 +231,3 @@ function alshaya_spc_page_attachments_alter(&$page) {
     return $key['timeout'];
   }, $timeout_settings['middleware']);
 }
-
-/**
- * Implements hook_user_login().
- */
-function alshaya_spc_user_login(AccountInterface $account) {
-  if (!alshaya_acm_customer_is_customer($account)) {
-    return;
-  }
-
-  /** @var Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper */
-  $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
-
-  // Get customer token and store in the session;
-  $mail = $account->getEmail();
-  $customer_helper->getCustomerTokenBySocialDetail($mail);
-}

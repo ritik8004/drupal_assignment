@@ -378,6 +378,8 @@ class AlshayaSpcCustomerHelper {
 
       return $token;
     }
+
+    return NULL;
   }
 
 }
