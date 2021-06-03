@@ -1,4 +1,6 @@
 .block-alshaya-algolia-react-autocomplete {
+  width: 14.812rem;
+
   @include breakpoint($only-mobile) {
     visibility: hidden;
     top: 4rem;
