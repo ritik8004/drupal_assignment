@@ -12,7 +12,41 @@ use Drupal\user\Entity\Role;
  */
 function alshaya_checkout_by_agent_uninstall() {
   // Delete all the configs added by this module.
-  \Drupal::configFactory()->getEditable('alshaya_checkout_by_agent.settings')->delete();
+  \Drupal::configFactory()
+    ->getEditable('alshaya_checkout_by_agent.settings')
+    ->delete();
   \Drupal::configFactory()->getEditable('rest.resource.share_cart')->delete();
   Role::load('smartagent')->delete();
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_checkout_by_agent_install() {
+  // Update translations.
+  $strings = [
+    'Order assisted by Smart Agent' => [
+      'ar' => '',
+    ],
+    'End Transaction' => [
+      'ar' => '',
+    ],
+    'Smart Agent: @name' => [
+      'ar' => '',
+    ],
+    'Share basket with customer via' => [
+      'ar' => '',
+    ],
+    'WhatsApp' => [
+      'ar' => '',
+    ],
+    'SMS' => [
+      'ar' => '',
+    ],
+    'Dear Customer, Complete you order by visiting the link: @link Best Wishes, The @site_name Team' => [
+      'ar' => '',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
