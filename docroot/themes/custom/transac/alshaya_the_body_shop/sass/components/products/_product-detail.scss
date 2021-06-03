@@ -268,7 +268,9 @@
   }
 
   .read-more-description-link,
-  .read-more-description-link-gift {
+  .read-more-description-link-gift,
+  .read-more-description-link-mobile,
+  .show-less-link {
     text-transform: capitalize;
     text-decoration: underline;
   }
@@ -318,7 +320,8 @@
   }
 }
 
-.description-wrapper {
+.description-wrapper,
+.technical_ingredients_description {
   .field__label {
     font-family: $alshaya-bold;
     font-size: 0.875rem;
@@ -444,6 +447,125 @@
             }
           }
         }
+      }
+    }
+  }
+}
+
+.content--ingredient {
+  .c-accordion__title {
+    font-family: $alshaya-bold;
+    text-transform: capitalize;
+    border-bottom: 0.0625rem solid $pdp-ingredient-title-border;
+    border-top: none;
+
+    &.ui-state-active {
+      border-bottom: none;
+    }
+  }
+
+  .ingredients_label {
+    font-size: 1.125rem;
+    font-family: $tbs-recoleta-semibold;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 2.25rem;
+  }
+
+  .ingredients_description {
+    font-size: 0.875rem;
+    line-height: 1.3125rem;
+    padding-bottom: 1.25rem;
+
+    &:nth-last-child(3),
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  .c-accordion_content {
+    padding-bottom: 1.875rem;
+    border-bottom: 0.0625rem solid rgb(218, 218, 218);
+    margin-bottom: 1.875rem;
+  }
+
+  .read-more-ingredients-link {
+    line-height: 1.83;
+    cursor: pointer;
+  }
+
+  .show-less-ingredient-link,
+  .read-more-ingredients-link {
+    font-size: 0.875rem;
+    text-decoration: underline;
+    color: $pdp_sidebar_link;
+    text-transform: capitalize;
+  }
+
+  .technical_ingredients_description {
+    @include breakpoint($tablet) {
+      position: absolute;
+      top: 0;
+      #{$right}: -38%;
+      height: 33.75rem;
+      border: 0.0625rem solid $pdp-ingredient-modal-border;
+      padding: 1.25rem;
+      padding-bottom: 0;
+      background: $pdp-ingredient-modal-bg;
+      overflow: hidden;
+      width: 35%;
+      z-index: 4;
+      margin: 0 1rem;
+      transition: $right 0.5s ease;
+
+      .ingredient-modal-close {
+        @include icon(close);
+
+        position: absolute;
+        top: 0;
+        #{$right}: 0;
+        height: 2.188rem;
+        width: 2.188rem;
+        font-size: 1.875rem;
+        text-align: center;
+        color: $pdp-ingredient-modal-cross-icon;
+        background-color: $pdp-ingredient-modal-cross-icon-bg;
+        cursor: pointer;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 30%;
+      margin: 0;
+      #{$right}: -31%;
+    }
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+
+    &.desc-open {
+      #{$right}: 0;
+      transition: $right 0.5s ease;
+    }
+
+    .desc-wrapper {
+      border-top: 0.0625rem solid $pdp-ingredient-title-border;
+      padding: 0.75rem 0;
+      line-height: 1.5;
+      font-size: 0.875rem;
+
+      @include breakpoint($only-mobile) {
+        border-top: none;
+      }
+    }
+
+    .field__label {
+      margin-top: 0;
+      margin-bottom: 0;
+
+      @include breakpoint($only-mobile) {
+        display: none;
       }
     }
   }
