@@ -29,6 +29,8 @@ import { redirectToCart } from '../../../utilities/get_cart';
 import dispatchCustomEvent from '../../../utilities/events';
 import validateCartResponse from '../../../utilities/validation_util';
 import { getStorageInfo } from '../../../utilities/storage';
+import SASessionBanner from '../../../smart-agent-checkout/s-a-session-banner';
+import SAShareStrip from '../../../smart-agent-checkout/s-a-share-strip';
 
 window.fetchStore = 'idle';
 
@@ -243,9 +245,21 @@ export default class Checkout extends React.Component {
     const termConditions = <TermsConditions />;
     const billingComponent = this.getBillingComponent();
 
+    // Get Smart Agent Info if available.
+    const smartAgentInfo = typeof Drupal.smartAgent !== 'undefined'
+      ? Drupal.smartAgent.getInfo()
+      : false;
+
     return (
       <>
-        <div className="spc-pre-content" />
+        <div className="spc-pre-content">
+          <ConditionalView condition={smartAgentInfo !== false}>
+            <>
+              <SASessionBanner agentName={smartAgentInfo.name} />
+              <SAShareStrip />
+            </>
+          </ConditionalView>
+        </div>
         <div className="spc-main">
           <div className="spc-content">
             {errorSuccessMessage !== null

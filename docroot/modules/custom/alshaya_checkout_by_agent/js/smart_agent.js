@@ -1,26 +1,65 @@
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
+
+  Drupal.smartAgent = Drupal.smartAgent || {};
+
+  Drupal.smartAgent.getInfo = function () {
+    var smartAgentCookie = $.cookie('smart_agent_cookie');
+
+    if (smartAgentCookie !== undefined) {
+      return JSON.parse(atob(smartAgentCookie));
+    }
+
+    return false;
+  };
+
+  Drupal.smartAgent.logout = function () {
+    $.removeCookie('smart_agent_cookie', {path: '/'});
+    // Redirect to home page.
+    window.location.href = Drupal.url('');
+  };
+
+  Drupal.smartAgent.endTransaction = function () {
+    // Remove middleware cookies.
+    // Cart data in local storage will be removed by SPC code.
+    $.removeCookie('PHPSESSID-legacy', {path: '/'});
+    $.removeCookie('PHPSESSID', {path: '/'});
+
+    // Redirect to home page.
+    var redirectUrl = Drupal.url('');
+    if (drupalSettings.user.uid > 0) {
+      // If user is logged in, logout first.
+      redirectUrl = Drupal.url('user/logout?destination=/');
+    }
+
+    window.location.href = redirectUrl;
+  };
+
   Drupal.behaviors.smartAgent = {
     attach: function (context, settings) {
       // Add agent login message as soon as smartAgent cookie is set.
-      var smartAgentCookie = $.cookie('smart_agent_cookie');
+      var agentInfo = Drupal.smartAgent.getInfo();
 
-      if (smartAgentCookie !== undefined) {
-        var cookieArray = JSON.parse(atob(smartAgentCookie));
+      if (typeof agentInfo !== 'undefined') {
+        if ($('.smart-agent-header-wrapper').length < 1) {
+          var loggedInMessageMarkup = '<div class="smart-agent-header-wrapper">';
+          loggedInMessageMarkup += '<span class="agent-logged-in">';
+          loggedInMessageMarkup += Drupal.t('Smart Agent: @name', {'@name': agentInfo['name']}) + '</span>';
+          loggedInMessageMarkup += '<span class="agent-logout smart-agent-logout-link">' + Drupal.t('Sign out') + '</span>';
+          loggedInMessageMarkup += '</div>';
 
-        // @todo: Move style to css file.
-        var loggedInMessageMarkup = '<div class="smart-agent-header-wrapper" style="position: absolute;top: 9px;right: 10%;z-index: 99;font-size: 0.8125rem;line-height: 1.2;vertical-align: middle;letter-spacing: 0.8px;text-transform: capitalize;font-weight: bold;">';
-        loggedInMessageMarkup += '<span class="agent-logged-in">';
-        loggedInMessageMarkup += Drupal.t('Logged in as Agent') + ' : ' + cookieArray['name'] + '</span>';
-        loggedInMessageMarkup += '<span class="agent-logout" style="padding-left: 20px;">' + Drupal.t('Logout') + '</span>';
-        loggedInMessageMarkup += '</div>';
-        $('body').append(loggedInMessageMarkup);
+          $('nav.menu--account').addClass('smart-agent-login');
+          $('nav.menu--account').after(loggedInMessageMarkup);
+        }
+
+        // On click on smart agent logout, remove cookie and logged-in message.
+        $('.smart-agent-logout-link').once('smart-agent-logout').on('click', function () {
+          Drupal.smartAgent.logout();
+        });
+
+        $('body').once('smart-agent-end-transaction').on('click', '.smart-agent-end-transaction', function () {
+          Drupal.smartAgent.endTransaction();
+        });
       }
-
-      // On click on smart agent logout, remove cookie and logged-in message.
-      $('.smart-agent-header-wrapper .agent-logout').once('smart-agent-logout').on('click', function () {
-        $.removeCookie('smart_agent_cookie', {path: '/'});
-        $('.smart-agent-header-wrapper').remove();
-      });
     }
   };
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
