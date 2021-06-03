@@ -1235,12 +1235,9 @@ class Cart {
           : $data['extension'];
       }
       $decoded_cookies = base64_decode($smart_agent_cookie);
-
       $decoded_cookies_array = json_decode($decoded_cookies, TRUE);
-      $data['extension']['smart_agent_email'] = $decoded_cookies_array['email'] ?? '';
-      $data['extension']['smart_agent_user_agent'] = $decoded_cookies_array['userAgent'] ?? '';
-      $data['extension']['smart_agent_client_ip'] = $decoded_cookies_array['clientIP'] ?? '';
-      $data['extension']['smart_agent_email'] = json_decode($decoded_cookies, TRUE)['email'] ?? '';
+      $smart_agent_details = $this->formatSmartAgentDetails($decoded_cookies_array);
+      $data['extension'] = array_merge($data['extension'], $smart_agent_details);
 
       // Logging data sent to updateCart API call.
       $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Action: @action, Smart Agent Email: @smart_agent_email, Smart Agent User: @smart_agent_user_agent, Smart Agent Client IP: @smart_agent_client_ip.', [
@@ -2534,6 +2531,24 @@ class Cart {
     }
 
     return $info[$key] ?? NULL;
+  }
+
+  /**
+   * Format smart agent details.
+   *
+   * @param array $data
+   *   Smart agent details array.
+   *
+   * @return array
+   *   Formatted smart agent details array.
+   */
+  public function formatSmartAgentDetails(array $data) {
+    return [
+      'smart_agent_name' => $data['name'] ?? '',
+      'smart_agent_email' => $data['email'] ?? '',
+      'smart_agent_user_agent' => $data['userAgent'] ?? '',
+      'smart_agent_client_ip' => $data['clientIP'] ?? '',
+    ];
   }
 
 }
