@@ -112,11 +112,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
     $parameters->expandedParents = [];
     $active_trail = array_keys($parameters->activeTrail);
     $parent_link_id = isset($active_trail[1]) ? $active_trail[1] : $active_trail[0];
-    // Having the parent now we set it as starting point to build our custom
-    // tree.
-    $parameters->setRoot($parent_link_id);
     $parameters->setMinDepth(1);
-    $parameters->excludeRoot();
     $tree = $this->menuTree->load($menu_name, $parameters);
     return($tree);
   }
