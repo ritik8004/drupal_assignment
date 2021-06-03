@@ -470,17 +470,16 @@
     margin-top: 0;
     margin-bottom: 0;
     line-height: 2.25rem;
+    padding-top: 1.25rem;
+
+    &:first-child {
+      padding-top: 0;
+    }
   }
 
   .ingredients_description {
     font-size: 0.875rem;
     line-height: 1.3125rem;
-    padding-bottom: 1.25rem;
-
-    &:nth-last-child(3),
-    &:last-child {
-      padding-bottom: 0;
-    }
   }
 
   .c-accordion_content {
