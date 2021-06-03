@@ -126,12 +126,11 @@ class ReviewCommentForm extends React.Component {
     if (!isError) {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
-      const userId = userDetails.id;
-      const userStorage = getStorageInfo(`bvuser_${userId}`);
+      const userStorage = getStorageInfo(`bvuser_${userDetails.id}`);
       let storageUpdated = false;
       let authParams = '';
       // Set auth paramters for anonymous users.
-      if (userId === 0 && userStorage !== null) {
+      if (userDetails.id === 0 && userStorage !== null) {
         if (userStorage.bvUserId === undefined
           || (userStorage.email !== undefined && userStorage.email !== email)) {
           authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
@@ -139,12 +138,12 @@ class ReviewCommentForm extends React.Component {
       }
       // Set user authenticated string (UAS).
       if (userStorage !== null) {
-        if (userId !== 0 && userStorage.uasToken !== undefined) {
+        if (userDetails.id !== 0 && userStorage.uasToken !== undefined) {
           authParams += `&user=${userStorage.uasToken}&UserNickname=${nickname}`;
           // Update current user in storage.
           userStorage.nickname = nickname;
           storageUpdated = true;
-        } else if (userId === 0 && userStorage.email !== undefined
+        } else if (userDetails.id === 0 && userStorage.email !== undefined
           && userStorage.bvUserId !== undefined
           && userStorage.nickname !== undefined) {
           if (userStorage.nickname !== nickname) {
@@ -186,7 +185,7 @@ class ReviewCommentForm extends React.Component {
                 showCommentForm: false,
               });
               if (storageUpdated) {
-                setStorageInfo(userStorage, `bvuser_${userId}`);
+                setStorageInfo(userStorage, `bvuser_${userDetails.id}`);
               }
             }
           } else {

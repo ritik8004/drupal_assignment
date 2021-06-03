@@ -1,4 +1,4 @@
-import { doRequest, getbazaarVoiceSettings, getUserDetails } from './api/request';
+import { doRequest, getUserDetails } from './api/request';
 import { setStorageInfo, getStorageInfo } from './storage';
 
 export const getUasToken = () => {
@@ -23,11 +23,10 @@ export const getUasToken = () => {
  * @returns {boolean}
  */
 export const isOpenWriteReviewForm = (productId) => {
-  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
   const userDetails = getUserDetails(productId);
   const query = new URLSearchParams(document.referrer);
   const openPopup = query.get('openPopup');
-  if (bazaarVoiceSettings.reviews !== undefined
+  if (userDetails !== undefined
     && userDetails.id > 0
     && getStorageInfo('openPopup')
     && openPopup !== null
