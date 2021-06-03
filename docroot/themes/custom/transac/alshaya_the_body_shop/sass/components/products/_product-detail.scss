@@ -274,10 +274,6 @@
     text-transform: capitalize;
     text-decoration: underline;
   }
-
-  .desc-value {
-    color: $pdp_description;
-  }
 }
 
 .store-finder-form-wrapper {
@@ -333,11 +329,6 @@
   .desc-label {
     font-size: 1.125rem;
     font-family: $tbs-recoleta-semibold;
-  }
-
-  .desc-value,
-  .desc-wrapper {
-    color: $pdp_description;
   }
 }
 
@@ -484,7 +475,6 @@
     font-size: 0.875rem;
     line-height: 1.3125rem;
     padding-bottom: 1.25rem;
-    color: $pdp_description;
 
     &:nth-last-child(3),
     &:last-child {
