@@ -50,6 +50,10 @@ function _alshaya_add_to_bag_strings() {
       'key' => 'item_added',
       'value' => t('Item added'),
     ],
+    [
+      'key' => 'purchase_limit_error_msg',
+      'value' => t('Purchase limit has been reached'),
+    ],
   ];
 }
 
