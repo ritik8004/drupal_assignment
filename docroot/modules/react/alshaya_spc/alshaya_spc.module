@@ -225,15 +225,6 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $timeout_settings = Settings::get('alshaya_backend_calls_options');
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-  $account = \Drupal::service('current_user');
-  if (alshaya_acm_customer_is_customer($account)) {
-    /** @var Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper */
-    $spc_helper = \Drupal::service('alshaya_spc.helper');
-
-    if ($token = $spc_helper->getBearerToken()) {
-      $page['#attached']['drupalSettings']['cart']['bearer_token'] = $token;
-    }
-  }
   $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
   $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
   $page['#attached']['drupalSettings']['cart']['store'] = $store_settings[$current_language];
@@ -250,9 +241,10 @@ function alshaya_spc_user_login(AccountInterface $account) {
     return;
   }
 
-  /** @var Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper */
-  $spc_helper = \Drupal::service('alshaya_spc.helper');
+  /** @var Drupal\alshaya_spc\Helper\AlshayaSpcCustomerHelper $customer_helper */
+  $customer_helper = \Drupal::service('alshaya_spc.customer_helper');
 
-  // Get customer token and store in the session.
-  $spc_helper->getBearerToken();
+  // Get customer token and store in the session;
+  $mail = $account->getEmail();
+  $customer_helper->getCustomerTokenBySocialDetail($mail);
 }

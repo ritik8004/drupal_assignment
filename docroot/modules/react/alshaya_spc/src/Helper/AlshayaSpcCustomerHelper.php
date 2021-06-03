@@ -362,4 +362,22 @@ class AlshayaSpcCustomerHelper {
     return NULL;
   }
 
+  /**
+   * Helper function to get a token from Magento using Social Details.
+   *
+   * @param string $mail
+   *   The email address.
+   *
+   * @return string|null
+   *   The token or null.
+   */
+  public function getCustomerTokenBySocialDetail($mail) {
+    $response = $this->apiWrapper->getCustomerTokenBySocialDetail($mail);
+    if ($token = json_decode($response)) {
+      $this->session->set('magento_customer_token', $token);
+
+      return $token;
+    }
+  }
+
 }

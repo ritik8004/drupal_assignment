@@ -84,3 +84,11 @@ alshaya_spc.checkout.checkout_event:
   methods: [POST]
   requirements:
     _middleware_request_check: 'TRUE'
+
+alshaya_spc.customer.token:
+  path: '/spc/customer/token'
+  defaults:
+    _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getCustomerToken'
+  methods:  [GET]
+  requirements:
+    _role: 'authenticated'
