@@ -110,6 +110,7 @@
         $('.block-alshaya-super-category .main--menu ').removeClass('menu--active');
         $('html').addClass('html--overlay');
         $('body').addClass('mobile--overlay');
+        $('body').addClass('menu--open');
       });
 
       $('.c-menu-primary .mobile--search').once('mainMenu').on('click', function (e) {
@@ -144,6 +145,7 @@
         $('.account').removeClass('active');
         $('html').removeClass('html--overlay');
         $('body').removeClass('mobile--overlay');
+        $('body').removeClass('menu--open');
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
         $('.remove--toggle').removeClass('remove--toggle');

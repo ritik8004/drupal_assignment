@@ -168,6 +168,8 @@ class AlshayaSpcLoginController extends ControllerBase {
 
     $build['#attached']['drupalSettings']['alshaya_spc']['middleware_url'] = _alshaya_spc_get_middleware_url();
 
+    $this->moduleHandler()->alter('alshaya_spc_checkout_login_build', $build);
+
     return $build;
   }
 

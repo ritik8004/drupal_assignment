@@ -1,0 +1,52 @@
+nav.menu--account.smart-agent-login {
+  + .smart-agent-header-wrapper {
+    padding: 0 1rem;
+    display: inline-flex;
+    align-items: center;
+    height: 1.5rem;
+    background: $smart-agent-banner-bg;
+
+    > span {
+      font-size: 0.6875rem;
+      text-transform: none;
+      color: $smart-agent-banner-color;
+
+      &.agent-logout {
+        cursor: pointer;
+        padding-#{$left}: 1rem;
+        text-decoration: underline;
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      margin: 0 auto;
+      width: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 1.25rem 0;
+      height: auto;
+
+      > span {
+        font-size: 0.875rem;
+        padding: 0.5rem 0;
+
+        &.agent-logout {
+          padding-#{$left}: 0;
+        }
+      }
+    }
+  }
+}
+
+body.menu--open {
+  nav.menu--account.smart-agent-login {
+    + .smart-agent-header-wrapper {
+      @include breakpoint($upto-desktop) {
+        display: flex;
+      }
+    }
+  }
+}
+
