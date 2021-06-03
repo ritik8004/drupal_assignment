@@ -1226,28 +1226,7 @@ class Cart {
     // JIRA Ticket No.: CORE-29691
     // Add smart agent details in extension attribute to track
     // orders by in-store devices.
-    $smart_agent_cookie = $this->request->cookies->get('smart_agent_cookie');
-
-    if (!empty($smart_agent_cookie)) {
-      if (isset($data['extension'])) {
-        $data['extension'] = !is_array($data['extension'])
-          ? (array) $data['extension']
-          : $data['extension'];
-      }
-      $decoded_cookies = base64_decode($smart_agent_cookie);
-      $decoded_cookies_array = json_decode($decoded_cookies, TRUE);
-      $smart_agent_details = $this->formatSmartAgentDetails($decoded_cookies_array);
-      $data['extension'] = array_merge($data['extension'], $smart_agent_details);
-
-      // Logging data sent to updateCart API call.
-      $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Action: @action, Smart Agent Email: @smart_agent_email, Smart Agent User: @smart_agent_user_agent, Smart Agent Client IP: @smart_agent_client_ip.', [
-        '@cart_id' => $cart_id,
-        '@action' => $action,
-        '@smart_agent_email' => $data['extension']['smart_agent_email'],
-        '@smart_agent_user_agent' => $data['extension']['smart_agent_user_agent'],
-        '@smart_agent_client_ip' => $data['extension']['smart_agent_client_ip'],
-      ]);
-    }
+    $data['extension'] = $this->addSmartAgentDetails((array) $data['extension'] ?? [], $cart_id);
 
     $request_options = [
       'timeout' => $this->magentoInfo->getPhpTimeout('cart_update'),
@@ -2531,6 +2510,40 @@ class Cart {
     }
 
     return $info[$key] ?? NULL;
+  }
+
+  /**
+   * Add smart agent details in extension.
+   *
+   * @param array $data_extension
+   *   Data extension.
+   * @param string $cart_id
+   *   Cart ID.
+   *
+   * @return array
+   *   Data extension with smart agent details.
+   */
+  public function addSmartAgentDetails(array $data_extension, string $cart_id) {
+    $smart_agent_cookie = $this->request->cookies->get('smart_agent_cookie');
+
+    if (empty($smart_agent_cookie)) {
+      return $data_extension;
+    }
+
+    $decoded_cookies = base64_decode($smart_agent_cookie);
+    $decoded_cookies_array = json_decode($decoded_cookies, TRUE);
+    $data_extension = array_merge($data_extension, $this->formatSmartAgentDetails($decoded_cookies_array));
+
+    // Logging data sent to updateCart API call.
+    $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Action: @action, Smart Agent Email: @smart_agent_email, Smart Agent User: @smart_agent_user_agent, Smart Agent Client IP: @smart_agent_client_ip.', [
+      '@cart_id' => $cart_id,
+      '@action' => $data_extension['action'],
+      '@smart_agent_email' => $data_extension['smart_agent_email'],
+      '@smart_agent_user_agent' => $data_extension['smart_agent_user_agent'],
+      '@smart_agent_client_ip' => $data_extension['smart_agent_client_ip'],
+    ]);
+
+    return $data_extension;
   }
 
   /**
