@@ -53,9 +53,23 @@
   .nav-next {
     &::before {
       display: inline-block;
-      transform: rotate(180deg);
       width: auto;
       height: auto;
+
+      html[lang=en] & {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .nav-prev {
+    &::before {
+      html[lang=ar] & {
+        transform: rotate(180deg);
+        width: auto;
+        height: auto;
+        display: inline-block;
+      }
     }
   }
 }
