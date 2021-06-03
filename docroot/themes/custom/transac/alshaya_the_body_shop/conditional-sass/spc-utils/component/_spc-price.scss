@@ -8,3 +8,11 @@
     text-transform: capitalize;
   }
 }
+
+.spc-recommended-products {
+  .spc-product-price {
+    font-size: 1.5rem;
+    font-family: $alshaya-bold;
+    text-align: $left;
+  }
+}
