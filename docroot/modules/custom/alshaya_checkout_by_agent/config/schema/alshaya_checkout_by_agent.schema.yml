@@ -4,7 +4,13 @@ alshaya_checkout_by_agent.settings:
   mapping:
     smart_user_agents:
       type: sequence
-      label: 'User agents of the smart agents of in-store devices.'
+      label: 'Browser User agents of the smart agents of in-store devices.'
+      sequence:
+        type: string
+        label: 'Browser User Agent'
     smart_agent_ips:
       type: string
       label: 'IP addresses of the smart agents of in-store devices.'
+    whatsapp_template:
+      type: label
+      label: 'WhatsApp Template'

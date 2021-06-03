@@ -105,9 +105,9 @@ export default class AddToBagConfigurable extends React.Component {
 
     return (
       <>
-        <div className="addtobag-button-container">
+        <div className="addtobag-config-button-container">
           <button
-            className="addtobag-button"
+            className="addtobag-config-button"
             id={`addtobag-button-${sku}`}
             type="button"
             onClick={this.handleOnClick}

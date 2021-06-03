@@ -46,10 +46,11 @@
   }
 }
 
-.is-not-buyable {
+.is-not-buyable,
+.addtobag-config-button {
   font-family: $alshaya-bold;
   font-size: 0.875rem;
-  color: $magv2-pdp-title;
+  color: $primary_btn_bg;
   width: calc(100% - 2.5rem);
   height: 2.5rem;
   display: flex;
@@ -57,7 +58,7 @@
   justify-content: center;
   background: $spc-checkout-delivery-method-bg;
   cursor: pointer;
-  border: 1px solid $spc-checkout-delivery-info-txt;
+  border: 1px solid $primary_btn_bg;
   z-index: 1;
   text-align: center;
   text-transform: uppercase;
@@ -70,4 +71,8 @@
     margin-#{$left}: 0.5rem;
     margin-#{$right}: 0.5rem;
   }
+}
+
+.is-not-buyable:hover {
+  color: $primary_btn_bg;
 }

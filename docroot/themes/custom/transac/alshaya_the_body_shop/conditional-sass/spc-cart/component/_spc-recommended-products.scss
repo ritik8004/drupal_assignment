@@ -1,0 +1,75 @@
+.spc-recommended-products {
+  @include breakpoint($tablet) {
+    padding: 1.875rem;
+    padding-#{$right}: 0;
+  }
+
+  @include breakpoint($desktop) {
+    padding: 1.875rem 3rem;
+    padding-#{$right}: 0;
+  }
+
+  .block-content {
+    .spc-product-recommended-wrapper {
+      width: 13.125rem;
+      margin-bottom: 1.875rem;
+
+      .spc-product-recommended-image {
+        width: 13.125rem;
+        margin-bottom: 1.4375rem;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      .product-title {
+        font-size: 1rem;
+        font-family: $tbs-medium;
+        text-align: $left;
+        margin-bottom: 0.8125rem;
+      }
+
+      .spc-promotions {
+        text-align: $left;
+        padding-#{$left}: 0;
+        padding-top: 0.4375rem;
+
+        &:not(:empty) {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  .nav-prev,
+  .nav-next {
+    @include icon(ic-arrow-left, before) {
+      font-size: 1rem;
+    }
+  }
+
+  .nav-next {
+    &::before {
+      display: inline-block;
+      width: auto;
+      height: auto;
+
+      html[lang=en] & {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .nav-prev {
+    &::before {
+      html[lang=ar] & {
+        transform: rotate(180deg);
+        width: auto;
+        height: auto;
+        display: inline-block;
+      }
+    }
+  }
+}

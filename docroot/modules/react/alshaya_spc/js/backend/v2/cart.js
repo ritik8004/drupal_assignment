@@ -3,8 +3,43 @@ import {
   isAnonymousUserWithoutCart,
   updateCart,
 } from './common';
+import { logger } from './utility';
+import { getDefaultErrorMessage } from './error';
+import { removeStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
+
+/**
+ * Object to serve as static cache for cart data over the course of a request.
+ */
+let staticCartData = null;
+
+/**
+ * Gets the cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+
+/**
+ * Sets the cart data to storage.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartDataInStorage = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  staticCartData = cartInfo;
+};
+
+/**
+ * Unsets the stored cart data.
+ */
+window.commerceBackend.removeCartDataFromStorage = () => {
+  staticCartData = null;
+};
 
 /**
  * Check if user is anonymous and without cart.
@@ -26,8 +61,41 @@ window.commerceBackend.getCart = async () => {
   }
 
   const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
-  return window.commerceBackend.processCartData(response.data);
+
+  if (typeof response.data.error !== 'undefined' && response.data.error === true) {
+    if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
+      // Remove the cart from storage.
+      removeStorageInfo('cart_id');
+      logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+      // Get new cart.
+      window.commerceBackend.getCartId();
+    }
+
+    const error = {
+      data: {
+        error: response.data.error,
+        error_code: response.data.error_code,
+        error_message: getDefaultErrorMessage(),
+      },
+    };
+    return new Promise((resolve) => resolve(error));
+  }
+
+  // Process data.
+  response.data = window.commerceBackend.processCartData(response.data);
+  return new Promise((resolve) => resolve(response));
 };
+
+/**
+ * Adds item to the cart and returns the cart.
+ *
+ * @param {object} data
+ *   The data object to send in the API call.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
 
 /**
  * Calls the cart restore API.
@@ -36,9 +104,7 @@ window.commerceBackend.getCart = async () => {
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.restoreCart = () => {
-  throw new Error('restoreCart Not implemented!');
-};
+window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
 
 /**
  * Adds item to the cart and returns the cart.
@@ -105,7 +171,7 @@ window.commerceBackend.createCart = async () => {
  * @param {object} cartData
  *   The cart data object.
  */
-window.commerceBackend.processCartData = async (cartData) => {
+window.commerceBackend.processCartData = (cartData) => {
   if (typeof cartData === 'undefined' || typeof cartData.cart === 'undefined') {
     return null;
   }
@@ -209,7 +275,5 @@ window.commerceBackend.processCartData = async (cartData) => {
       // @todo Get stock data.
     });
   }
-  const response = { ...cartData };
-  response.data = data;
-  return response;
+  return data;
 };

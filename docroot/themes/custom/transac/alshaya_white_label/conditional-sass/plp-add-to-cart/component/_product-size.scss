@@ -13,7 +13,8 @@
     li {
       display: inline-flex;
       padding: 0.5rem;
-      margin: 0.313rem 0.625rem 0.313rem 0;
+      margin: 0.313rem 0;
+      margin-#{$right}: 0.625rem;
       border: 1px solid $plp-quick-view-product-size-border;
       color: $plp-quick-view-product-size-text;
       text-align: center;

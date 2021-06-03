@@ -68,12 +68,13 @@ class AlshayaFacetsPrettyAliases {
    */
   public function getAliasesForFacet(string $facet_alias, string $langcode = NULL) {
     $static = &drupal_static(self::ALIAS_TABLE, []);
-    if (isset($static[$facet_alias])) {
-      return $static[$facet_alias];
-    }
 
     if (empty($langcode)) {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    if (isset($static[$facet_alias][$langcode])) {
+      return $static[$facet_alias][$langcode];
     }
 
     $select = $this->connection->select(self::ALIAS_TABLE);
@@ -82,10 +83,11 @@ class AlshayaFacetsPrettyAliases {
     $result = $select->execute()->fetchAll();
 
     foreach ($result as $row) {
-      $static[$row->facet_alias][trim($row->value)] = trim($row->alias);
+      $value = trim($row->value);
+      $static[$row->facet_alias][$langcode][$value] = $value;
     }
 
-    return isset($static[$facet_alias]) ? $static[$facet_alias] : [];
+    return $static[$facet_alias][$langcode] ?? [];
   }
 
   /**

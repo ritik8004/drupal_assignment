@@ -7,6 +7,7 @@ import {
 
 import { searchClient } from '../config/SearchClient';
 
+import { productListIndexStatus } from '../utils/indexUtils';
 import { getSuperCategoryOptionalFilter, isMobile } from '../utils';
 import Filters from '../components/filters';
 import PlpResultInfiniteHits from '../components/plp/PlpResultInfiniteHits';
@@ -47,7 +48,6 @@ const PlpApp = ({
   const allFiltersRef = useRef();
 
   const {
-    indexName,
     itemsPerPage,
     filterOos,
     pageSubType,
@@ -61,6 +61,8 @@ const PlpApp = ({
     categoryFacetEnabled,
   } = drupalSettings.algoliaSearch;
 
+  const { indexName } = drupalSettings.algoliaSearch.listing;
+
   const filters = [];
   let finalFilter = '';
   let filterOperator = ' AND ';
@@ -72,17 +74,38 @@ const PlpApp = ({
   }
 
   if (pageSubType === 'plp') {
+    let { currentLanguage } = drupalSettings.path;
+    // Set default EN category filter in product list index for VM.
+    if (productListIndexStatus()) {
+      currentLanguage = 'en';
+    }
     if (typeof subCategories !== 'undefined' && Object.keys(subCategories).length > 0) {
       filterOperator = ' OR ';
       groupEnabled = true;
       // Set all the filters selected in sub category.
       Object.keys(subCategories).forEach((key) => {
-        const subCategoryField = subCategories[key].category.category_field;
+        let subCategoryField = subCategories[key].category.category_field;
         const defaultSubCategoryFilter = subCategories[key].category.hierarchy;
+        // Add language suffix to the filter attribute eg: field_category_name.en.lvl2.
+        if (productListIndexStatus()) {
+          if (subCategoryField !== undefined && subCategoryField.indexOf('.') > -1) {
+            subCategoryField.replace('.', `.${currentLanguage}.`);
+          } else {
+            subCategoryField = `${subCategoryField}.${currentLanguage}`;
+          }
+        }
         filters.push(`${subCategoryField}: "${defaultSubCategoryFilter}"`);
       });
+    } else if (productListIndexStatus()) {
+      // Add language suffix to the filter attribute eg: field_category_name_en.lvl2.
+      let categoryAttr = '';
+      if (categoryField !== undefined && categoryField.indexOf('.') > -1) {
+        categoryAttr = categoryField.replace('.', `.${currentLanguage}.`);
+      } else {
+        categoryAttr = `${categoryField}.${currentLanguage}`;
+      }
+      filters.push(`${categoryAttr}: "${defaultCategoryFilter}"`);
     } else {
-      // Filter for Category product listing page.
       filters.push(`${categoryField}: "${defaultCategoryFilter}"`);
     }
   } else if (pageSubType === 'product_option_list') {
@@ -130,7 +153,9 @@ const PlpApp = ({
         ruleContexts={ruleContext}
         optionalFilters={optionalFilter}
       />
-      <PlpStickyFilter>
+      <PlpStickyFilter
+        pageType={pageType}
+      >
         {(callback) => (
           <>
             <ConditionalView condition={(groupEnabled)}>
