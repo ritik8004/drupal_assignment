@@ -79,6 +79,7 @@ class TextField extends React.Component {
         type="text"
         id={id}
         name={id}
+        defaultValue={defaultValue}
         hidden
       />
     );

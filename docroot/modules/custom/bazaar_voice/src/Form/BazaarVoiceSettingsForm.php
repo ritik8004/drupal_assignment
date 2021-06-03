@@ -135,6 +135,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('The deployment environment of BazaarVoice where we implement BazaarVoice Pixel.'),
     ];
 
+    $form['basic_settings']['notify_comment_published'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable email notifications for comments.'),
+      '#default_value' => $config->get('notify_comment_published'),
+      '#description' => $this->t('This option should be checked to notify user whenever his/her comment is published.'),
+    ];
+
     $form['basic_settings']['pdp_rating_reviews'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable ratings and reviews in PDP.'),
@@ -317,6 +324,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('client_name', $values['client_name'])
       ->set('site_id', $values['site_id'])
       ->set('environment', $values['environment'])
+      ->set('notify_comment_published', $values['notify_comment_published'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
       ->set('myaccount_rating_reviews', $values['myaccount_rating_reviews'])
       ->set('plp_rating_reviews', $values['plp_rating_reviews'])

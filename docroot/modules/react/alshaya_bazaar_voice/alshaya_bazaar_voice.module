@@ -262,7 +262,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
     $bazaarvoiceSettings[$item['sku']] = $alshayaBazaarVoice->getMyAccountProductSettings($item['sku'], $basic_configs);
   }
   if (!empty($bazaarvoiceSettings)) {
-    $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings); 
+    $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
     foreach(array_keys($build['#products']) as $key) {
       $build['#products'][$key]['bazaarvoice_link'] = TRUE;
     }
