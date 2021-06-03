@@ -39,6 +39,20 @@
           $(this).parents('.technical_ingredients_description').toggleClass('desc-open');
         });
 
+        /**
+         * Function to create accordion.
+         *
+         * @param {object} element
+         *   The HTML element inside which we want to make accordion.
+         */
+        Drupal.convertIntoAccordion = function (element) {
+          element.once('accordion-init').accordion({
+            heightStyle: 'content',
+            collapsible: true,
+            active: false
+          });
+        };
+
         // Accordion for ingredients section on PDP.
         $('.content--ingredient').find('.pdp-description-accordion').each(function () {
           Drupal.convertIntoAccordion($(this));
