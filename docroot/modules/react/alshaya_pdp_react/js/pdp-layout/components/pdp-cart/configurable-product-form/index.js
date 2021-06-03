@@ -245,7 +245,7 @@ class ConfigurableProductForm extends React.Component {
             stockQty={stockQty}
           />
         </div>
-        {(isCartAvailable(productInfo[skuCode].variants[variantSelected].is_product_buyable)) ? (
+        {(isCartAvailable(productInfo[skuCode].is_product_buyable)) ? (
           <>
             <div className="magv2-add-to-basket-container" ref={this.button}>
               <button
