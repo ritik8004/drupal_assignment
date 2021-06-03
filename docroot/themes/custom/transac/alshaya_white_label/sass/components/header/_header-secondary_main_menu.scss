@@ -109,3 +109,76 @@
     }
   }
 }
+
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    .secondary--main--menu {
+      margin: 1.25rem 1.25rem 3.4375rem;
+      background: $hfd-menu-background;
+
+      .secondary-main-menu-header {
+        height: 3.4375rem;
+        border-radius: 0.25rem;
+        padding: 1.25rem;
+        color: $hfd-menu-link-color-hover;
+        line-height: 1.13;
+        position: relative;
+
+        &::after {
+          position: absolute;
+          content: '\25b2';
+          right: 1.4rem;
+        }
+
+        &.closed {
+          &::after {
+            content: '\25bc';
+          }
+        }
+      }
+
+      ul.menu--one__list {
+        display: none;
+        position: inherit;
+        padding: 0 1.25rem 1.25rem;
+        width: 100%;
+        background: $hfd-menu-background;
+
+        .menu__in {
+          right: -0.8rem;
+          margin-top: -2.25rem;
+        }
+
+        li.menu--one__list-item {
+          margin: 0.625rem 0;
+          background: $white-five;
+          padding-left: 1.25rem;
+          padding-right: 1.25rem;
+          border-radius: 0.1875rem;
+          border-bottom: none;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        .menu__link {
+          text-transform: capitalize;
+          font-size: 1rem;
+        }
+
+        .back--link {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    li.not-active {
+      & + .secondary--main--menu {
+        > .secondary-main-menu-header {
+          display: none;
+        }
+      }
+    }
+  }
+}
