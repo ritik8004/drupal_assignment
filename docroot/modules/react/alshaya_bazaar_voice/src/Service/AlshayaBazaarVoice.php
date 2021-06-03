@@ -600,9 +600,9 @@ class AlshayaBazaarVoice {
     $productNode = $this->skuManager->getDisplayNode($sku_id);
     $productArray = [];
     if ($productNode instanceof NodeInterface) {
-      // Get sanitized sku.
-      $sanitized_sku = $this->skuManager->getSanitizedSku($sku_id);
-      $productArray['alshaya_bazaar_voice'] = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $sanitized_sku, $basic_configs);
+      $productArray['alshaya_bazaar_voice'] = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $basic_configs);
+      // Add current user details.
+      $productArray['user_details'] = $this->getCurrentUserDetails($productNode);
     }
     return $productArray;
   }
@@ -614,15 +614,13 @@ class AlshayaBazaarVoice {
    *   SKU text or full entity object.
    * @param \Drupal\node\NodeInterface $productNode
    *   Product node.
-   * @param string $sanitized_sku
-   *   Sanitized sku id.
    * @param array $basic_configs
    *   Basic configurations of bazaarvoice.
    *
    * @return array|null
    *   Drupal settings with product details.
    */
-  public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, $sanitized_sku, array $basic_configs) {
+  public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, array $basic_configs) {
     $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
     // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked for any categories or its Parent Categories.
@@ -648,16 +646,7 @@ class AlshayaBazaarVoice {
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
-    // Check if logged in user has already reviewed the product.
-    $productReviewData = $this->getProductInfoForCurrentUser($sanitized_sku);
-
     $settings = [
-      'user' => [
-        'email' => $this->currentUser->getEmail(),
-        'id' => $this->currentUser->id(),
-        'name' => $this->currentUser->getUsername(),
-        'review' => $productReviewData !== NULL ? $productReviewData : NULL,
-      ],
       'product' => [
         'url' => $productNode->toUrl()->toString(),
         'title' => $productNode->label(),
@@ -677,6 +666,35 @@ class AlshayaBazaarVoice {
     $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
 
     return $settings;
+  }
+
+  /**
+   * Fetch drupal settings for user details.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Product node.
+   *
+   * @return array|null
+   *   Drupal settings with product details.
+   */
+  public function getCurrentUserDetails(NodeInterface $node) {
+    if (is_object($node) && $node instanceof NodeInterface) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $sku = $skuManager->getSkuForNode($node);
+      // Get sanitized sku.
+      $sanitized_sku = $skuManager->getSanitizedSku($sku);
+      $productReviewData = $this->getProductInfoForCurrentUser($sanitized_sku);
+      $settings = [
+        'user' => [
+          'email' => $this->currentUser->getEmail(),
+          'id' => $this->currentUser->id(),
+          'name' => $this->currentUser->getUsername(),
+          'review' => $productReviewData,
+        ],
+      ];
+      return $settings;
+    }
   }
 
   /**

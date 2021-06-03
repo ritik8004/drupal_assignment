@@ -3,7 +3,7 @@ import Popup from 'reactjs-popup';
 import WriteReviewForm from './WriteReviewForm';
 import smoothScrollTo from '../../../utilities/smoothScroll';
 import ClosedReviewSubmit from './closed-review-submit';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { isOpenWriteReviewForm } from '../../../utilities/user_util';
 import ConditionalView from '../../../common/components/conditional-view';
@@ -18,8 +18,9 @@ export default class WriteReviewButton extends React.Component {
   }
 
   componentDidMount() {
+    const { productId } = this.props;
     // To open write a review on page load.
-    if (isOpenWriteReviewForm()) {
+    if (isOpenWriteReviewForm(productId)) {
       this.setState({
         isModelOpen: true,
       });
@@ -57,7 +58,8 @@ export default class WriteReviewButton extends React.Component {
     } = this.state;
     const { reviewedByCurrentUser, productId, context } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    if (bazaarVoiceSettings.reviews.user.id === 0
+    const userDetails = getUserDetails(productId);
+    if (userDetails.id === 0
       && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission) {
       return (
         <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />

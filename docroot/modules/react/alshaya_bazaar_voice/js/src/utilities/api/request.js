@@ -26,6 +26,16 @@ export function getUserBazaarVoiceSettings() {
   return settings;
 }
 
+export function getUserDetails(productId = undefined) {
+  let userDetails = [];
+  if (productId !== undefined) {
+    userDetails = drupalSettings.productInfo[productId].user_details.user;
+  } else {
+    userDetails = drupalSettings.bazaar_voice.user;
+  }
+  return userDetails;
+}
+
 export function doRequest(url) {
   return Axios.get(url)
     .then((response) => {

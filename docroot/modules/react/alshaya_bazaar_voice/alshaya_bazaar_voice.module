@@ -10,6 +10,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -34,7 +35,7 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
   if ($productNode instanceof NodeInterface) {
     // Get sanitized sku.
     $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
-    $settings = $alshayaBazaarVoice->getProductBazaarVoiceDetails($sku, $productNode, $sanitized_sku, $basic_configs);
+    $settings = $alshayaBazaarVoice->getProductBazaarVoiceDetails($sku, $productNode, $basic_configs);
 
     // Get the current pdp layout.
     $config = \Drupal::config('alshaya_acm_product.settings');
@@ -213,11 +214,13 @@ function alshaya_bazaar_voice_algolia_react_common_configs_alter(&$response) {
  * Implements hook_preprocess_node().
  */
 function alshaya_bazaar_voice_preprocess_node(&$variables) {
-  // Add bazaavoice related strings.
   if ($variables['node']->bundle() === 'acq_product') {
     /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    // Add bazaavoice related strings.
     $variables['bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
+    // Add current user details.
+    $variables['#attached']['drupalSettings']['bazaar_voice'] = $alshayaBazaarVoice->getCurrentUserDetails($variables['node']);
   }
 }
 
@@ -239,6 +242,7 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
       $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
       $bazaarvoiceSettings[$item['sku']] = $alshayaBazaarVoice->getMyAccountProductSettings($item['sku'], $basic_configs);
     }
+    ksm($bazaarvoiceSettings);
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }
   if (!isset($build['strings'])) {

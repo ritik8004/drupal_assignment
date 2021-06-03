@@ -1,9 +1,7 @@
-import { getbazaarVoiceSettings } from './api/request';
+import { getbazaarVoiceSettings, getUserDetails } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 import { getStorageInfo } from './storage';
 import smoothScrollTo from './smoothScroll';
-
-const bazaarVoiceSettings = getbazaarVoiceSettings();
 
 /**
  * Email address validation.
@@ -26,10 +24,11 @@ export const getArraysIntersection = (currentOptions, options) => currentOptions
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const prepareRequest = (elements, fieldsConfig) => {
+export const prepareRequest = (elements, fieldsConfig, productId) => {
   let params = '';
-  const userId = bazaarVoiceSettings.reviews.user.id;
-  const userStorage = getStorageInfo(`bvuser_${userId}`);
+  const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
+  const userDetails = getUserDetails(productId);
+  const userStorage = getStorageInfo(`bvuser_${userDetails.id}`);
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
@@ -37,7 +36,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
     try {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
-          if (userId === 0 && userStorage !== null) {
+          if (userDetails.id === 0 && userStorage !== null) {
             // Add email value to anonymous user storage.
             if (userStorage.email === undefined
               || (userStorage.email !== undefined
@@ -80,9 +79,9 @@ export const prepareRequest = (elements, fieldsConfig) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (bazaarVoiceSettings.reviews.user.id !== 0 && userStorage.uasToken !== undefined) {
+    if (userDetails.id !== 0 && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
-    } else if (userId === 0 && userStorage.bvUserId !== undefined) {
+    } else if (userDetails.id === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;
     }
   }

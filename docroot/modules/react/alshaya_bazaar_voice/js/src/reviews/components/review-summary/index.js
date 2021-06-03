@@ -13,13 +13,14 @@ import EmptyMessage from '../../../utilities/empty-message';
 import ReviewRatingsFilter from '../review-ratings-filter';
 import PostReviewMessage from '../reviews-full-submit/post-review-message';
 import Pagination from '../review-pagination';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 import { createUserStorage } from '../../../utilities/user_util';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
+const userDetails = getUserDetails();
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
@@ -59,7 +60,7 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    createUserStorage(bazaarVoiceSettings.reviews.user.id, bazaarVoiceSettings.reviews.user.email);
+    createUserStorage(userDetails.id, userDetails.email);
     this.getReviews();
   }
 
@@ -362,7 +363,7 @@ export default class ReviewSummary extends React.Component {
                   <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
                 </div>
                 <WriteReviewButton
-                  reviewedByCurrentUser={bazaarVoiceSettings.reviews.user.review !== null}
+                  reviewedByCurrentUser={userDetails.review !== null}
                 />
               </div>
             </div>
@@ -381,7 +382,7 @@ export default class ReviewSummary extends React.Component {
             <ReviewHistogram
               overallSummary={reviewsProduct}
               isNewPdpLayout={isNewPdpLayout}
-              reviewedByCurrentUser={bazaarVoiceSettings.reviews.user.review !== null}
+              reviewedByCurrentUser={userDetails.review !== null}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>
