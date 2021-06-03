@@ -14,3 +14,11 @@ rtl_styles:
     theme:
       css/rtl.css: {}
       css/rtl-print.css: {media: print}
+
+pdp_ingredient_js:
+  js:
+    js/pdp-ingredient.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
