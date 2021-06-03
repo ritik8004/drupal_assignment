@@ -1,7 +1,8 @@
 import React, { createRef } from 'react';
-import { addToCartSimple, isCartAvailable } from '../../../../utilities/pdp_layout';
+import { addToCartSimple } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
+import { isProductBuyable } from '../../../../../../js/utilities/display';
 
 
 class SimpleProductForm extends React.Component {
@@ -66,7 +67,7 @@ class SimpleProductForm extends React.Component {
             stockQty={stockQty}
           />
         </div>
-        {(isCartAvailable(productInfo[skuCode].is_product_buyable)) ? (
+        {(isProductBuyable(productInfo[skuCode].is_product_buyable)) ? (
           <>
             <div id="add-to-cart-error" className="error" />
             <div className="magv2-add-to-basket-container" ref={this.button}>

@@ -530,19 +530,3 @@ export const closeModalHelper = (overlayClass, containerClass, closeModalfn) => 
     }
   });
 };
-
-/**
- *
- * @param {booleon} productBuyableStatus
- *  Sku's buyable status.
- * @returns {boolean}
- *  Return true if checkoutFeatureStatus is enabled, and
- *  product is buyable. False if anyone fails.
- */
-export const isCartAvailable = (productBuyableStatus) => {
-  // Get the global checkout feature status from drupal settings.
-  const { checkoutFeatureStatus } = drupalSettings;
-
-  // Check if checkout is enabled and product is buyable.
-  return checkoutFeatureStatus === 'enabled' && productBuyableStatus;
-};

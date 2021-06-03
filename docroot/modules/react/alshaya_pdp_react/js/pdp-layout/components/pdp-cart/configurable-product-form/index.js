@@ -1,10 +1,11 @@
 import React, { createRef } from 'react';
 import CartSelectOption from '../cart-select-option';
-import { addToCartConfigurable, isCartAvailable } from '../../../../utilities/pdp_layout';
+import { addToCartConfigurable } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
 import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoothScroll';
+import { isProductBuyable } from '../../../../../../js/utilities/display';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -245,7 +246,7 @@ class ConfigurableProductForm extends React.Component {
             stockQty={stockQty}
           />
         </div>
-        {(isCartAvailable(productInfo[skuCode].is_product_buyable)) ? (
+        {(isProductBuyable(productInfo[skuCode].is_product_buyable)) ? (
           <>
             <div className="magv2-add-to-basket-container" ref={this.button}>
               <button
