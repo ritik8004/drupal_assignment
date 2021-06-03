@@ -14,7 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\alshaya_spc\Event\UserLoginEvent;
 
 /**
  * Implements hook_theme().
