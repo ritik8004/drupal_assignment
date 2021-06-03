@@ -79,6 +79,9 @@ class AlshayaSpcHelper {
    *
    * @param string $mail
    *   The email address.
+   *
+   * @return string|null
+   *   The token or null.
    */
   public function getCustomerTokenBySocialDetail($mail) {
     if (!$this->currentUser->isAuthenticated()) {
@@ -89,6 +92,7 @@ class AlshayaSpcHelper {
       $response = $this->apiWrapper->getCustomerTokenBySocialDetail($mail);
       if ($token = json_decode($response)) {
         $this->session->set('magento_customer_token', $token);
+        return $token;
       }
     }
   }

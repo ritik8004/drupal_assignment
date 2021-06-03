@@ -225,10 +225,14 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $timeout_settings = Settings::get('alshaya_backend_calls_options');
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
 
-  /** @var Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper */
-  $spc_helper = \Drupal::service('alshaya_spc.helper');
-  if ($token = $spc_helper->getBearerToken()) {
-    $page['#attached']['drupalSettings']['cart']['bearer_token'] = $token;
+  $account = \Drupal::service('current_user');
+  if (alshaya_acm_customer_is_customer($account)) {
+    /** @var Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper */
+    $spc_helper = \Drupal::service('alshaya_spc.helper');
+
+    if ($token = $spc_helper->getBearerToken()) {
+      $page['#attached']['drupalSettings']['cart']['bearer_token'] = $token;
+    }
   }
   $page['#attached']['drupalSettings']['cart']['url'] = $api_settings['magento_host'];
   $page['#attached']['drupalSettings']['cart']['checkout_settings'] = $checkout_settings;
@@ -242,8 +246,13 @@ function alshaya_spc_page_attachments_alter(&$page) {
  * Implements hook_user_login().
  */
 function alshaya_spc_user_login(AccountInterface $account) {
-  $event = new UserLoginEvent($account);
-  // Get the event_dispatcher service and dispatch the event.
-  $event_dispatcher = \Drupal::service('event_dispatcher');
-  $event_dispatcher->dispatch(UserLoginEvent::EVENT_NAME, $event);
+  if (!alshaya_acm_customer_is_customer($account)) {
+    return;
+  }
+
+  /** @var Drupal\alshaya_spc\Helper\AlshayaSpcHelper $spc_helper */
+  $spc_helper = \Drupal::service('alshaya_spc.helper');
+
+  // Get customer token and store in the session.
+  $spc_helper->getBearerToken();
 }
