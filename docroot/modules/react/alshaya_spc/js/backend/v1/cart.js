@@ -54,17 +54,6 @@ window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
 window.commerceBackend.applyRemovePromo = (data) => updateCart(data);
 
 /**
- * Adds/Removes/Changes quantity of items in the cart and returns the cart.
- *
- * @param {object} data
- *   The data object to send in the API call.
- *
- * @returns {Promise}
- *   A promise object.
- */
-window.commerceBackend.updateCartItemData = (data) => updateCart(data);
-
-/**
  * Refreshes cart data and returns the cart.
  *
  * @param {object} data
