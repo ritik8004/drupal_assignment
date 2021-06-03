@@ -242,7 +242,7 @@ function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
       <div class="technical_ingredients_description">
       <div class="content--description"><span class="ingredient-modal-close"></span>
       <h2 class="field__label">Ingredients</h2><div class="field__content"><div class="desc-wrapper">' .
-      $sku->get('attr_keyingredients_description3')->getValue()[0]['value'] . '</div></div></div></div>'  : '');
+      $sku->get('attr_technical_ingredients_description')->getValue()[0]['value'] . '</div></div></div></div>'  : '');
 
   $build['ingredients'] = [
     '#theme' => 'pdp_description_accordion',
