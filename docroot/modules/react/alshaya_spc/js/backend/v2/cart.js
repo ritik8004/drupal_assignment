@@ -1,12 +1,11 @@
 import {
   callMagentoApi,
-  getCart,
-  getCartData,
   isAnonymousUserWithoutCart,
-  removeCartData,
-  setCartData,
   updateCart,
 } from './common';
+import { logger } from './utility';
+import { getDefaultErrorMessage } from './error';
+import { removeStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -20,7 +19,7 @@ window.commerceBackend = window.commerceBackend || {};
  *   Returns the cart item if found else returns null.
  */
 const getCartItem = (sku) => {
-  const cart = getCartData();
+  const cart = window.commerceBackend.getCartDataFromStorage();
   if (!cart || typeof cart.cart === 'undefined' || !cart.cart || typeof cart.cart.items === 'undefined' || cart.cart.items.length === 0) {
     return null;
   }
@@ -40,7 +39,7 @@ const getCartItem = (sku) => {
  *   The coupon code string or null.
  */
 const getCoupon = () => {
-  const cart = getCartData();
+  const cart = window.commerceBackend.getCartDataFromStorage();
   if (!cart || (typeof cart.totals !== 'undefined' && Object.keys(cart.totals).length !== 0)) {
     return typeof cart.totals.coupon_code !== 'undefined'
       ? cart.totals.coupon_code
@@ -48,6 +47,38 @@ const getCoupon = () => {
   }
 
   return null;
+};
+
+/**
+ * Object to serve as static cache for cart data over the course of a request.
+ */
+let staticCartData = null;
+
+/**
+ * Gets the cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+
+/**
+ * Sets the cart data to storage.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartDataInStorage = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  staticCartData = cartInfo;
+};
+
+/**
+ * Unsets the stored cart data.
+ */
+window.commerceBackend.removeCartDataFromStorage = () => {
+  staticCartData = null;
 };
 
 /**
@@ -63,15 +94,46 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.getCart = () => getCart();
+window.commerceBackend.getCart = async () => {
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null) {
+    return new Promise((resolve) => resolve(cartId));
+  }
+
+  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
+
+  if (typeof response.data.error !== 'undefined' && response.data.error === true) {
+    if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
+      // Remove the cart from storage.
+      removeStorageInfo('cart_id');
+      logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+      // Get new cart.
+      window.commerceBackend.getCartId();
+    }
+
+    const error = {
+      data: {
+        error: response.data.error,
+        error_code: response.data.error_code,
+        error_message: getDefaultErrorMessage(),
+      },
+    };
+    return new Promise((resolve) => resolve(error));
+  }
+
+  // Process data.
+  response.data = window.commerceBackend.processCartData(response.data);
+  return new Promise((resolve) => resolve(response));
+};
 
 /**
- * Fetches the cart data.
+ * Calls the cart restore API.
+ * @todo Implement restoreCart()
  *
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.restoreCart = () => getCart();
+window.commerceBackend.restoreCart = () => window.commerceBackend.getCart();
 
 /**
  * Adds/removes/updates quantity of product in cart.
@@ -99,7 +161,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     const cartItem = getCartItem(sku);
     // Do nothing if item no longer available.
     if (!cartItem) {
-      return getCart();
+      return window.commerceBackend.getCart();
     }
     // If it is free gift with coupon, remove coupon too.
     if (typeof cartItem.price !== 'undefined'
@@ -153,20 +215,30 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     const cartItem = getCartItem(sku);
     if (!cartItem) {
       // Do nothing if item no longer available.
-      return getCart();
+      return window.commerceBackend.getCart();
     }
     // Set the cart item id to ensure we set new quantity instead of adding it.
     itemData.cartItem.item_id = cartItem.id;
   }
 
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
-  // @todo: Handle all the different errors.
   if (response.data.error === true) {
-    if (typeof response.data.error_message === 'undefined') {
-      response.data.error_message = 'Error adding item to the cart.';
+    if (response.data.error_code === 404) {
+      // 400 errors happens when we try to post to invalid cart id.
+      const postString = JSON.stringify(itemData);
+      logger.error(`Error updating cart. Cart Id ${cartId}. Post string ${postString}`);
+      // Remove the cart from storage.
+      removeStorageInfo('cart_id');
+      // Create a new cart.
+      await window.commerceBackend.createCart();
     }
+
     const error = {
-      data: response.data,
+      data: {
+        error: response.data.error,
+        error_code: response.data.error_code,
+        error_message: getDefaultErrorMessage(),
+      },
     };
     return new Promise((resolve) => resolve(error));
   }
@@ -324,29 +396,5 @@ window.commerceBackend.processCartData = (cartData) => {
   } else {
     data.items = [];
   }
-
-  const response = { ...cartData };
-  response.data = data;
-  return response;
+  return data;
 };
-
-/**
- * Gets the cart data.
- *
- * @returns {object|null}
- *   Processed cart data else null.
- */
-window.commerceBackend.getCartData = () => getCartData();
-
-/**
- * Sets the cart data.
- *
- * @param data
- *   The cart data.
- */
-window.commerceBackend.setCartData = (data) => setCartData(data);
-
-/**
- * Unsets the stored cart data.
- */
-window.commerceBackend.removeCartData = () => removeCartData();

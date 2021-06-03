@@ -1,0 +1,9 @@
+.path--user {
+  .ui-dialog {
+    .ui-dialog-titlebar-close {
+      &::after {
+        color: $address_book_delete_cross_icon;
+      }
+    }
+  }
+}

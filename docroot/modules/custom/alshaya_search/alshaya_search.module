@@ -14,6 +14,7 @@ use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\views\ViewExecutable;
 use Solarium\Core\Query\QueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 
 /**
  * Implements hook_acsf_registry().
@@ -346,6 +347,9 @@ function _alshaya_search_translate_search_view_config() {
 function _alshaya_search_resave_indexes(array $indexes = []) {
   if (empty($indexes)) {
     $indexes = ['product', 'acquia_search_index', 'alshaya_algolia_index'];
+    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $indexes[] = 'alshaya_algolia_product_list_index';
+    }
   }
 
   foreach ($indexes as $index_name) {

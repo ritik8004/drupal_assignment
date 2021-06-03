@@ -1,6 +1,6 @@
 export const cartAvailableInStorage = () => {
   // Get data from local storage.
-  const cartData = window.commerceBackend.getCartData();
+  const cartData = window.commerceBackend.getCartDataFromStorage();
   // If data is not available in storage, we flag it to check/fetch from api.
   if (!cartData || !cartData.cart) {
     return null;

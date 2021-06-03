@@ -92,7 +92,7 @@ window.commerceBackend.addFreeGift = (data) => callMiddlewareApi('select-free-gi
  * @returns {object|null}
  *   Processed cart data else null.
  */
-window.commerceBackend.getCartData = () => getStorageInfo('cart_data');
+window.commerceBackend.getCartDataFromStorage = () => getStorageInfo('cart_data');
 
 /**
  * Sets the cart data.
@@ -100,7 +100,7 @@ window.commerceBackend.getCartData = () => getStorageInfo('cart_data');
  * @param data
  *   The cart data.
  */
-window.commerceBackend.setCartData = (data) => {
+window.commerceBackend.setCartDataInStorage = (data) => {
   const cartInfo = { ...data };
   cartInfo.last_update = new Date().getTime();
   setStorageInfo(cartInfo);
@@ -109,7 +109,7 @@ window.commerceBackend.setCartData = (data) => {
 /**
  * Removes the cart data from storage.
  */
-window.commerceBackend.removeCartData = () => {
+window.commerceBackend.removeCartDataFromStorage = () => {
   removeStorageInfo('cart_data');
 
   // Remove last selected payment on page load.

@@ -53,7 +53,7 @@ export default class MiniCart extends React.Component {
           const dataToStore = {
             cart: resultVal,
           };
-          window.commerceBackend.setCartData(dataToStore);
+          window.commerceBackend.setCartDataInStorage(dataToStore);
 
           // Trigger event so that data can be passed to other components.
           this.dispatchRefereshCart(resultVal);
@@ -88,7 +88,7 @@ export default class MiniCart extends React.Component {
           const dataToStore = {
             cart: data,
           };
-          window.commerceBackend.setCartData(dataToStore);
+          window.commerceBackend.setCartDataInStorage(dataToStore);
 
           if (data.items.length === 0) {
             this.setState({

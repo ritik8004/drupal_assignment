@@ -111,8 +111,27 @@
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar-productlist {
+      .filter-list-label {
+        height: 1.625rem;
+        width: 6.625rem;
+
+        html[lang=ar] & {
+          width: 5.875rem;
+        }
+      }
+
       ul {
+        @include breakpoint($tablet) {
+          width: calc(100% - 6.625rem) !important;
+
+          html[lang=ar] & {
+            width: calc(100% - 5.875rem) !important;
+          }
+        }
+
         li {
+          line-height: 0;
+
           a {
             span {
               &.facet-item__value {
@@ -153,6 +172,15 @@
       @include breakpoint($only-mobile) {
         padding: 0 1.25rem;
       }
+    }
+  }
+}
+
+.c-department {
+  .c-page-title__description {
+    a {
+      text-decoration: underline;
+      font-family: $alshaya-bold;
     }
   }
 }

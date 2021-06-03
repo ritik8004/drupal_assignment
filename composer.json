@@ -82,7 +82,7 @@
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
         "drupal/s3fs": "^3.0@alpha",
-        "drupal/search_api_algolia": "^1.0",
+        "drupal/search_api_algolia": "3.0.x-dev@dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
@@ -382,10 +382,7 @@
                 "Large number of entries for warning related to replicate ui task": "https://www.drupal.org/files/issues/2021-02-24/3174826-replicate_ui-3.patch"
             },
             "drupal/search_api_algolia": {
-                "Allow to override maxValuesPerFacet Algolia setting": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/1.patch?v=2",
-                "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch",
-                "Allow debugging data pushed to Algolia": "https://git.drupalcode.org/project/search_api_algolia/-/merge_requests/2.patch?v=2",
-                "Log response of delete requests": "patches/search_api_algolia/CORE-25535-log-delete-requests.patch"
+                "CORE-27152: Mimic facets behavior": "patches/search_api_algolia/CORE-27152-mimic-facets-behavior.patch"
             },
             "drupal/lightning_media": {
                 "Create alshaya_media dependent install config directory in lightning_media": "patches/lightning_media/lightning_media_config_changes.patch"

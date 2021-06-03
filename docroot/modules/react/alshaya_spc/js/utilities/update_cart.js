@@ -70,7 +70,7 @@ export const updateCartItemData = (action, sku, quantity) => {
         // We are doing this because on delete operation,
         // sku is removed from storage and thus we need
         // data before storage update.
-        const localCart = window.commerceBackend.getCartData();
+        const localCart = window.commerceBackend.getCartDataFromStorage();
         if (localCart.cart !== undefined
           && localCart.cart.items !== undefined
           && Object.prototype.hasOwnProperty.call(localCart.cart.items, sku)) {

@@ -8,9 +8,8 @@ import StaticMinicart from '../../../../../js/utilities/components/static-minica
 /**
  * Sticky filters.
  */
-const StickyFilterWrapper = React.forwardRef(({ callback }, ref) => {
+const StickyFilterWrapper = React.forwardRef(({ callback, pageType = null }, ref) => {
   const [filters, setFilters] = useState([]);
-
   const filtersCallBack = ({ activeFilters, limit }) => {
     // Make api call to get facet values alias to update facets  pretty paths,
     // on page load when we have all the active filters.
@@ -20,7 +19,7 @@ const StickyFilterWrapper = React.forwardRef(({ callback }, ref) => {
           return;
         }
 
-        const facetAlias = facetFieldAlias(activeFilter.id, 'alias');
+        const facetAlias = facetFieldAlias(activeFilter.id, 'alias', pageType);
         if (filters.indexOf(facetAlias) < 0) {
           filters.push(facetAlias);
           makeFacetAliasApiRequest(facetAlias);

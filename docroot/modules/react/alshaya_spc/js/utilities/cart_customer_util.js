@@ -1,7 +1,7 @@
 const associateCart = () => window.commerceBackend.associateCart()
   .then((response) => {
     if (response.data) {
-      window.commerceBackend.setCartData({ cart: response.data });
+      window.commerceBackend.setCartDataInStorage({ cart: response.data });
     }
   })
   .catch((error) => {
@@ -13,7 +13,7 @@ const associateCart = () => window.commerceBackend.associateCart()
  * Empty cart.
  */
 const emptyCustomerCart = () => {
-  window.commerceBackend.removeCartData();
+  window.commerceBackend.removeCartDataFromStorage();
 
   const emptyCart = {
     cart_id: null,
@@ -33,7 +33,7 @@ const emptyCustomerCart = () => {
 export async function checkCartCustomer(cartData = null) {
   let cartDataVal = cartData;
   if (!(cartDataVal) || cartDataVal.cart_id === undefined) {
-    const cartJson = window.commerceBackend.getCartData();
+    const cartJson = window.commerceBackend.getCartDataFromStorage();
     cartDataVal = cartJson.cart;
   }
 
@@ -46,7 +46,7 @@ export async function checkCartCustomer(cartData = null) {
     if (!cartDataVal.uid) {
       cartDataVal.uid = window.drupalSettings.user.uid;
       if (window.drupalSettings.user.uid === 0) {
-        window.commerceBackend.setCartData({ cart: cartDataVal });
+        window.commerceBackend.setCartDataInStorage({ cart: cartDataVal });
         return false;
       }
 

@@ -47,7 +47,7 @@ const SelectList = (props) => {
         value={selectedOption}
         defaultValue={selectedOption}
         onChange={onSelect}
-        options={options}
+        options={listOptions}
         isSearchable={false}
       >
         {listOptions}
