@@ -574,6 +574,9 @@ class AlshayaProductDeltaFeedHelper {
       return $fields;
     }
 
+    // Sort dy categories as level L1,L2,L3.
+    ksort($dy_categories);
+
     $size_of_dy_categories = count($dy_categories);
 
     // If dy_categories array size is less than required
