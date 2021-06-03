@@ -1,0 +1,7 @@
+kaleyra.settings:
+  path: '/admin/config/kaleyra'
+  defaults:
+    _title: 'Configure Kaleyra API credentials'
+    _form: '\Drupal\kaleyra\Form\KaleyraConfigForm'
+  requirements:
+    _permission: 'administer kaleyra config'

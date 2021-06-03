@@ -20,6 +20,12 @@ export const fetchCartData = () => {
     return null;
   }
 
+  // If reset_cart_storage cookie is set then remove cart from storage.
+  if (Cookies.get('reset_cart_storage')) {
+    removeCartFromStorage();
+    Cookies.remove('reset_cart_storage');
+  }
+
   // Check if cart available in storage.
   let cart = cartAvailableInStorage();
 

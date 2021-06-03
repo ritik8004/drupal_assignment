@@ -154,6 +154,7 @@ $_gray_222: #222;
 $_postpay_blue: #8abbd5;
 $blueberri_boy: #0078ff;
 $_plp-add-to-cart-disabled-qty: #aeaeb2;
+$_smart_agent_banner: rgb(12, 161, 77);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1708,3 +1709,7 @@ $plp-quick-view-product-size-border-hover: $marine-blue;
 $plp-quick-view-product-size-active-bg: $marine-blue;
 $plp-quick-view-product-size-text-disabled: $marine-blue;
 $plp-quick-view-product-success: $_spc-radio-filled;
+
+// Smart Agent colors.
+$smart-agent-banner-bg: $_smart_agent_banner;
+$smart-agent-banner-color: $white-five;

@@ -464,8 +464,8 @@ advanced-page:
 
 plp-add-to-cart:
   css:
-      theme:
-        css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: {}
+    theme:
+      css/conditional-sass/plp-add-to-cart/plp-add-to-cart.ltr.css: {}
   dependencies:
     - alshaya_white_label/alshaya-react-animate
 
@@ -478,3 +478,8 @@ myaccount-reviews:
   css:
     theme:
       css/conditional-sass/myaccount-reviews/myaccount-reviews.ltr.css: {}
+
+smart-agent:
+  css:
+    theme:
+      css/conditional-sass/smart-agent/smart-agent.ltr.css: {}
