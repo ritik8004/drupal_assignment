@@ -245,5 +245,44 @@
     }
   }
 
-})(jQuery, Drupal);
+  /**
+   * Fetches customer token and puts on local storage.
+   *
+   * @type {Drupal~behavior}
+   *
+   * @prop {Drupal~behaviorAttach} attach
+   *   Attaches the behavior for the block filtering.
+   */
+  Drupal.behaviors.getCustomerToken = {
+    attach: function (context, settings) {
+      if (settings.user.uid === 0) {
+        return;
+      }
 
+      $(context)
+        .once('get_customer_token')
+        .each(function () {
+          var token = localStorage.getItem('magento_customer_token');
+          if (token === null || typeof token === 'undefined') {
+
+            // Get customer token.
+            $.ajax({
+              url: '/spc/customer/token',
+              type: 'GET',
+              success: function (response) {
+                localStorage.setItem('magento_customer_token', response);
+              },
+              error: function (response) {
+                if (response.status === 404) {
+                  // If there were errors retrieving the token we
+                  // set it to false to avoid repeating the request on every page load.
+                  localStorage.setItem('magento_customer_token', false);
+                }
+              },
+            });
+          }
+        });
+    }
+  };
+
+})(jQuery, Drupal);
