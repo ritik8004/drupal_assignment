@@ -95,3 +95,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/advanced-page/advanced-page.ltr.css: css/conditional-sass/advanced-page/advanced-page.ltr.css
+
+  alshaya_white_label/smart-agent:
+    css:
+      theme:
+        css/conditional-sass/smart-agent/smart-agent.ltr.css: css/conditional-sass/smart-agent/smart-agent.ltr.css

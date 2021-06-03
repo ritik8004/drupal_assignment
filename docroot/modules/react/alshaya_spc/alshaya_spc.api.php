@@ -35,5 +35,25 @@ function hook_alshaya_spc_cart_build_alter(array &$build) {
 }
 
 /**
+ * Allow other modules to change the build array for checkout page.
+ *
+ * @param array $build
+ *   Reference to the build array of checkout cart.
+ */
+function hook_alshaya_spc_checkout_build_alter(array &$build) {
+  $build['#attached']['drupalSettings']['item_code_label'] = 'Item Code';
+}
+
+/**
+ * Allow other modules to change the build array for checkout login page.
+ *
+ * @param array $build
+ *   Reference to the build array of checkout login page.
+ */
+function hook_alshaya_spc_checkout_login_build_alter(array &$build) {
+  $build['#attached']['drupalSettings']['item_code_label'] = 'Item Code';
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

@@ -3,3 +3,6 @@ description: 'Contains code to support checkout by smart agents for in-store dev
 type: module
 core: 8.x
 package: Alshaya
+
+dependencies:
+  - kaleyra:kaleyra

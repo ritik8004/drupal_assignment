@@ -1,0 +1,4 @@
+alshaya_checkout_by_agent.smart_agent_settings_tab:
+  route_name: alshaya_checkout_by_agent.smart_agent_settings
+  title: 'Alshaya Smart Agent Settings'
+  base_route: alshaya_checkout_by_agent.smart_agent_settings
