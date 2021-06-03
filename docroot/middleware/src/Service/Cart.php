@@ -2543,9 +2543,11 @@ class Cart {
    *   Formatted smart agent details array.
    */
   public function formatSmartAgentDetails(array $data) {
+    $name = $data['name'] ?? '';
+    $email = $data['email'] ?? '';
+
     return [
-      'smart_agent_name' => $data['name'] ?? '',
-      'smart_agent_email' => $data['email'] ?? '',
+      'smart_agent_email' => $name . ';' . $email,
       'smart_agent_user_agent' => $data['userAgent'] ?? '',
       'smart_agent_client_ip' => $data['clientIP'] ?? '',
     ];
