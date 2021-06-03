@@ -83,4 +83,4 @@ alshaya_spc.checkout.checkout_event:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCheckoutEventController::checkoutEvent'
   methods: [POST]
   requirements:
-    _middleware_request_check: 'TRUE'
+    _permission: 'access content'
