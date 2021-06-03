@@ -1,1 +1,3 @@
 product_list_lhn_term: 'Shop by department'
+brand_list_specific_facets:
+  'productlist_brand_category': 'brand_category'

@@ -92,7 +92,10 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
   public function build() {
     // Get common configuration for Algolia pages.
     $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE);
-
+    $brand_list_facet_data = $this->alshayaProductListHelper->getBrandCateforyFacetData();
+    // Merge the $search_page_filter data to $common_config
+    // to return in $algoliaSearch.
+    $common_config[self::PAGE_TYPE]['filters'] = array_merge($common_config[self::PAGE_TYPE]['filters'], $brand_list_facet_data);
     // Get common config and merge with new array.
     $filters = $common_config[self::PAGE_TYPE]['filters'];
 
@@ -151,6 +154,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
   public function getCacheTags() {
     return Cache::mergeTags(parent::getCacheTags(), [
       'alshaya_acm_product_position.settings',
+      'alshaya_product_list.settings',
     ]);
   }
 

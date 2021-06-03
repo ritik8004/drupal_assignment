@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
+use Drupal\alshaya_product_list\Service\AlshayaProductListHelper;
 
 /**
  * Provides a block to display 'autocomplete block' for mobile.
@@ -35,6 +36,13 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
   protected $alshayaAlgoliaReactConfig;
 
   /**
+   * Alshaya product list helper service.
+   *
+   * @var \Drupal\alshaya_product_list\Service\AlshayaProductListHelper
+   */
+  protected $alshayaProductListHelper;
+
+  /**
    * AlshayaAlgoliaReactAutocomplete constructor.
    *
    * @param array $configuration
@@ -47,17 +55,21 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
    *   The config factory.
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
    *   Alshaya Algolia React Config.
+   * @param \Drupal\alshaya_product_list\Service\AlshayaProductListHelper $alshaya_product_list_helper
+   *   Alshaya product list helper service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     ConfigFactoryInterface $config_factory,
-    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config
+    AlshayaAlgoliaReactConfigInterface $alshaya_algolia_react_config,
+    AlshayaProductListHelper $alshaya_product_list_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->alshayaAlgoliaReactConfig = $alshaya_algolia_react_config;
+    $this->alshayaProductListHelper = $alshaya_product_list_helper;
   }
 
   /**
@@ -74,7 +86,8 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
-      $container->get('alshaya_algoila_react.alshaya_algolia_react_config')
+      $container->get('alshaya_algoila_react.alshaya_algolia_react_config'),
+      $container->get('alshaya_product_list.page_helper')
     );
   }
 
@@ -84,6 +97,12 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
   public function build() {
     // Get common configuration for Algolia pages.
     $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE);
+    // Add 'attr_brand_category' facet data in
+    // 'drupalSettings.algoliasearch.search.filter'.
+    $brand_list_facet_data = $this->alshayaProductListHelper->getBrandCateforyFacetData();
+    // Merge the $search_page_filter data to $common_config
+    // to return in $algoliaSearch.
+    $common_config[self::PAGE_TYPE]['filters'] = array_merge($common_config[self::PAGE_TYPE]['filters'], $brand_list_facet_data);
 
     // Get algola settings for lhn menu.
     $config = $this->configFactory->get('alshaya_search_algolia.settings');
