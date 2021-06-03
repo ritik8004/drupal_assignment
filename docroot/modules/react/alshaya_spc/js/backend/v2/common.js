@@ -1,8 +1,14 @@
 /* eslint no-return-await: "error" */
 
 import Axios from 'axios';
+import qs from 'qs';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
+
+/**
+ * Stores the langcode of the current page.
+ */
+const currentLangcode = window.drupalSettings.path.currentLanguage;
 
 /**
  * Check if user is anonymous and without cart.
@@ -145,6 +151,40 @@ const callMagentoApi = (url, method, data) => {
 };
 
 /**
+ * Make an AJAX call to Drupal API.
+ *
+ * @param {string} url
+ *   The url to send the request to.
+ * @param {string} method
+ *   The request method.
+ * @param {string} requestOptions
+ *   The request options.
+ *
+ * @returns {Promise}
+ *   Returns a promise object.
+ */
+const callDrupalApi = (url, method, requestOptions) => {
+  const headers = {};
+  const params = {
+    url: `/${currentLangcode}${url}`,
+    method,
+  };
+
+  if (typeof requestOptions !== 'undefined' && requestOptions && Object.keys(requestOptions).length > 0) {
+    Object.keys(requestOptions).forEach((optionName) => {
+      if (optionName === 'form_params') {
+        headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        params.data = qs.stringify(requestOptions[optionName]);
+        return;
+      }
+      params[optionName] = requestOptions[optionName];
+    });
+  }
+
+  return Axios(params);
+};
+
+/**
  * Calls the update cart API and returns the updated cart.
  * @todo Implement this function while working on the checkout page.
  *
@@ -155,6 +195,8 @@ const updateCart = async () => null;
 
 export {
   isAnonymousUserWithoutCart,
+  callDrupalApi,
   callMagentoApi,
   updateCart,
+  getCartSettings,
 };

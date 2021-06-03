@@ -1,11 +1,13 @@
 import {
+  callDrupalApi,
   callMagentoApi,
+  getCartSettings,
   isAnonymousUserWithoutCart,
   updateCart,
 } from './common';
 import { logger } from './utility';
-import { getDefaultErrorMessage } from './error';
-import { removeStorageInfo } from '../../utilities/storage';
+import { getDefaultErrorMessage, getExceptionMessageType } from './error';
+import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -48,6 +50,44 @@ const getCoupon = () => {
 
   return null;
 };
+
+/**
+ * Formats the error message as required for cart.
+ *
+ * @param {int} code
+ *   The response code.
+ * @param {string} message
+ *   The response message.
+ */
+const returnExistingCartWithError = (code, message) => ({
+  data: {
+    error: true,
+    error_code: code,
+    error_message: message,
+    response_message: [message, 'error'],
+  },
+});
+
+/**
+ * Triggers the stock refresh process for the provided skus.
+ *
+ * @param {object} data
+ *   Data containing sku and stock quantity information.
+ */
+const triggerStockRefresh = (data) => callDrupalApi(
+  '/spc/checkout-event',
+  'POST',
+  {
+    form_params: {
+      action: 'refresh stock',
+      skus_quantity: data,
+    },
+  },
+).catch((error) => {
+  logger.error(
+    `Error occurred while triggering checkout event refresh stock. Message: ${error.message}`,
+  );
+});
 
 /**
  * Object to serve as static cache for cart data over the course of a request.
@@ -184,8 +224,8 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     if (!cartId) {
       cartId = await window.commerceBackend.createCart();
     }
-    if (Array.isArray(cartId)) {
-      return new Promise((resolve) => resolve(cartId));
+    if (typeof cartId.error !== 'undefined') {
+      return cartId;
     }
     // @todo: Associate cart to the customer.
   }
@@ -221,26 +261,44 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     itemData.cartItem.item_id = cartItem.id;
   }
 
+  let apiCallAttempts = 1;
+
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
+
   if (response.data.error === true) {
+    const exceptionType = getExceptionMessageType(response.data.error_message);
     if (response.data.error_code === 404) {
       // 400 errors happens when we try to post to invalid cart id.
       const postString = JSON.stringify(itemData);
       logger.error(`Error updating cart. Cart Id ${cartId}. Post string ${postString}`);
       // Remove the cart from storage.
+      window.commerceBackend.removeCartDataFromStorage();
       removeStorageInfo('cart_id');
-      // Create a new cart.
-      await window.commerceBackend.createCart();
+
+      if (data.action === 'add item'
+        && parseInt(getCartSettings('max_native_update_attempts'), 10) > apiCallAttempts) {
+        apiCallAttempts += 1;
+        // Create a new cart.
+        cartId = await window.commerceBackend.createCart();
+        if (typeof cartId.error !== 'undefined') {
+          return cartId;
+        }
+        setStorageInfo('cart_id', cartId);
+        const cartData = await window.commerceBackend.getCart();
+        window.commerceBackend.setCartDataInStorage(cartData);
+        return window.commerceBackend.addUpdateRemoveCartItem(data);
+      }
+
+      return response;
     }
 
-    const error = {
-      data: {
-        error: response.data.error,
-        error_code: response.data.error_code,
-        error_message: getDefaultErrorMessage(),
-      },
-    };
-    return new Promise((resolve) => resolve(error));
+    if (exceptionType === 'OOS') {
+      await triggerStockRefresh({ sku: 0 });
+    } else if (exceptionType === 'not_enough') {
+      await triggerStockRefresh({ sku: quantity });
+    }
+
+    return returnExistingCartWithError(response.data.error_code, response.data.error_message);
   }
 
   return window.commerceBackend.getCart();
@@ -279,8 +337,10 @@ window.commerceBackend.getCartId = () => {
  */
 window.commerceBackend.createCart = async () => {
   const response = await callMagentoApi('/rest/V1/guest-carts', 'POST', {});
-  // @todo: Check for error in response.
-  localStorage.setItem('cart_id', response.data);
+  if (typeof response.data.error !== 'undefined') {
+    return response.data;
+  }
+  setStorageInfo(response.data, 'cart_id');
   return response.data;
 };
 
