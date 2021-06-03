@@ -54,7 +54,7 @@ export default class AddToBagSimple extends React.Component {
       : stockQty;
     const isEnabledIncreaseBtn = (cartQty < stockQtyLimit || stockQtyLimit === 0);
     qtyLimitMessage = (!isEnabledIncreaseBtn && !isHideMaxSaleMsg())
-      ? Drupal.t('Purchase limit has been reached')
+      ? getStringMessage('purchase_limit_error_msg')
       : qtyLimitMessage;
 
     this.setState({ qtyLimitMessage, stockQtyLimit });
@@ -248,10 +248,10 @@ export default class AddToBagSimple extends React.Component {
     } = this.props;
 
     const {
-      cartQty,
-      stockQtyLimit,
-      qtyLimitMessage,
+      cartQty, stockQtyLimit,
     } = this.state;
+
+    let { qtyLimitMessage } = this.state;
 
     // Early return if product is not buyable.
     if (!isProductBuyable(productData.is_buyable)) {
@@ -265,6 +265,11 @@ export default class AddToBagSimple extends React.Component {
     const wrapperClasses = (!btnCondition ? 'addtobag-button-qty-wrapper' : '');
     const isEnabledDecreaseBtn = (cartQty > 0);
     const isEnabledIncreaseBtn = (cartQty < stockQtyLimit || stockQtyLimit === 0);
+
+    // Check for the max sale limit reached.
+    qtyLimitMessage = (!isEnabledIncreaseBtn && !isHideMaxSaleMsg())
+      ? getStringMessage('purchase_limit_error_msg')
+      : qtyLimitMessage;
 
     return (
       <div
