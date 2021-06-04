@@ -268,7 +268,7 @@
             // Get customer token.
             $.ajax({
               url: '/spc/customer/token',
-              type: 'GET',
+              type: 'POST',
               success: function (response) {
                 localStorage.setItem('magento_customer_token', response);
               },

@@ -89,6 +89,6 @@ alshaya_spc.customer.token:
   path: '/spc/customer/token'
   defaults:
     _controller: '\Drupal\alshaya_spc\Controller\AlshayaSpcCustomerController::getCustomerToken'
-  methods:  [GET]
+  methods: [POST]
   requirements:
     _role: 'authenticated'
