@@ -210,7 +210,7 @@ class ShareCart extends ResourceBase {
 
     $data = [
       'cart_id' => $cartId,
-      'smart_agent' => json_encode($smart_agent_details_array),
+      'smart_agent' => $smart_agent_details_array,
       'langcode' => $langcode,
     ];
 

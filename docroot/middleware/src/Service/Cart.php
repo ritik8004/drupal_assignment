@@ -2559,13 +2559,21 @@ class Cart {
     $name = $data['name'] ?? '';
     $email = $data['email'] ?? '';
 
-    return [
+    $formated_details = [
       'smart_agent_email' => $name . ';' . $email,
       'smart_agent_user_agent' => $data['userAgent'] ?? '',
       'smart_agent_client_ip' => $data['clientIP'] ?? '',
-      'smart_agent_url_shared_via' => $data['shared_via'] ?? '',
-      'smart_agent_url_shared_on' => $data['shared_on'] ?? '',
     ];
+
+    if (!empty($data['shared_via'])) {
+      $formated_details['smart_agent_url_shared_via'] = $data['shared_via'];
+    }
+
+    if (!empty($data['shared_on'])) {
+      $formated_details['smart_agent_url_shared_on'] = $data['shared_on'];
+    }
+
+    return $formated_details;
   }
 
 }
