@@ -223,33 +223,47 @@ function _alshaya_tbs_transac_get_product_title(SKU $sku, $context) {
  *   Ingredients content.
  */
 function _alshaya_tbs_transac_get_product_ingredients(SKU $sku, array &$build) {
+
+  $ingredients_fields = [
+    'attr_mainkeyingredients_name',
+    'attr_mainkeyingredients_description',
+    'attr_keyingredients_name2',
+    'attr_keyingredients_description2',
+    'attr_keyingredients_name3',
+    'attr_keyingredients_description3',
+    'attr_technical_ingredients_description'
+  ];
+  $ingredients_content = '';
   $label = '<h4 class="ingredients_label">';
   $description_div = '<div class="ingredients_description">';
-  $ingredients_content = ($sku->get('attr_mainkeyingredients_name')->getValue() ?
-      $label . $sku->get('attr_mainkeyingredients_name')->getValue()[0]['value'] . '</h4>': '') .
-    ( $sku->get('attr_mainkeyingredients_description')->getValue() ? $description_div .
-      $sku->get('attr_mainkeyingredients_description')->getValue()[0]['value'] . '</div>' : '') .
-    ( $sku->get('attr_keyingredients_name2')->getValue() ? $label .
-      $sku->get('attr_keyingredients_name2')->getValue()[0]['value'] . '</h4>' : '') .
-    ( $sku->get('attr_keyingredients_description2')->getValue() ? $description_div .
-      $sku->get('attr_keyingredients_description2')->getValue()[0]['value'] . '</div>'  : '') .
-    ( $sku->get('attr_keyingredients_name3')->getValue() ? $label .
-      $sku->get('attr_keyingredients_name3')->getValue()[0]['value'] . '</h4>' : '') .
-    ( $sku->get('attr_keyingredients_description3')->getValue() ? $description_div .
-      $sku->get('attr_keyingredients_description3')->getValue()[0]['value'] . '</div>'  : '') .
-    ( $sku->get('attr_technical_ingredients_description')->getValue() ?
-      '<span class="read-more-ingredients-link">Read More</span>
-      <div class="technical_ingredients_description">
-      <div class="content--description"><span class="ingredient-modal-close"></span>
-      <h2 class="field__label">Ingredients</h2><div class="field__content"><div class="desc-wrapper">' .
-      $sku->get('attr_technical_ingredients_description')->getValue()[0]['value'] . '</div></div></div></div>'  : '');
+  foreach ($ingredients_fields as $ingredients_field) {
+    $value = $sku->get($ingredients_field)->getValue();
+    if (!empty($value[0]['value'])) {
+      if ($ingredients_field == 'attr_technical_ingredients_description') {
+        $ingredients_content .= '<span class="read-more-ingredients-link">Read More</span>
+          <div class="technical_ingredients_description">
+          <div class="content--description"><span class="ingredient-modal-close"></span>
+          <h2 class="field__label">Ingredients</h2><div class="field__content"><div class="desc-wrapper">' .
+          $value[0]['value'] . '</div></div></div></div>';
+        continue;
+      }
+      if (strpos($ingredients_field, '_name') !== false) {
+        $ingredients_content .= $label . $value[0]['value'] . '</h4>';
+      }
+      if (strpos($ingredients_field, '_description') !== false) {
+        $ingredients_content .= $description_div . $value[0]['value'] . '</div>';
+      }
+    }
+  }
 
-  $build['ingredients'] = [
-    '#theme' => 'pdp_description_accordion',
-    '#title' => t('Ingredients'),
-    '#class' => 'ingredients',
-    '#text' => [
-      '#markup' => $ingredients_content,
-    ],
-  ];
+  if (!empty($ingredients_content)) {
+    $build['ingredients'] = [
+      '#theme' => 'pdp_description_accordion',
+      '#title' => t('Ingredients'),
+      '#class' => 'ingredients',
+      '#text' => [
+        '#markup' => $ingredients_content,
+      ],
+    ];
+  }
 }
