@@ -45,6 +45,7 @@
           }
 
           .menu--two__list {
+            height: auto !important;
             padding: 0;
             margin-top: 0.625rem;
             box-shadow: 0 0.125rem 0.375rem 0 rgba(0, 0, 0, 0.24);
@@ -61,7 +62,7 @@
             }
 
             &-item {
-              padding: 0;
+              padding: 0 !important;
 
               > .menu__link-wrapper {
                 margin: 0;
@@ -71,10 +72,17 @@
 
           ul.menu--three__list {
             display: block;
+            padding-bottom: 0;
 
             .level-three__wrapper {
               li.menu__list-item {
                 padding: 0;
+
+                &:last-child {
+                  .menu__link {
+                    margin-bottom: 0;
+                  }
+                }
               }
 
               .menu__link-wrapper {
