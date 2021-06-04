@@ -129,12 +129,6 @@
       @include breakpoint($only-mobile) {
         transition: opacity 0.4s ease-out;
       }
-
-      > div {
-        &:last-child {
-          margin-#{$right}: 0;
-        }
-      }
     }
 
     .magv2-compact-detail-wrapper {
@@ -194,8 +188,6 @@
 
     .magv2-pdp-price {
       @include breakpoint($tablet) {
-        margin-#{$right}: 3.75rem;
-        max-width: 13.125rem;
         padding: 0.25rem 0;
 
         .has-special-price {
@@ -223,10 +215,6 @@
           color: $magv2-vat-text;
           font-family: $alshaya-thin;
         }
-      }
-
-      @include breakpoint($only-tablet) {
-        max-width: 12.125rem;
       }
 
       @include breakpoint($only-mobile) {
