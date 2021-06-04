@@ -50,20 +50,20 @@ function alshaya_checkout_by_agent_user_login(UserInterface $account) {
     return;
   }
 
-  // Return if user does not have store info.
-  $storeId = $account->get('field_store')->first();
-  if (empty($storeId)) {
-    return;
+  // Get smart agent store info.
+  $storeCode = '';
+  $storeField = $account->get('field_store')->first();
+  if (!empty($storeField)) {
+    $store = $storeField->get('entity')->getValue();
+    $storeCode = $store->get('field_store_locator_id')->getString();
   }
-
-  $store = $storeId->get('entity')->getValue();
 
   $user_details = [
     'name' => $account->get('field_first_name')->getString() . ' ' . $account->get('field_last_name')->getString() ,
     'email' => $account->getEmail(),
     'userAgent' => $current_user_agent,
     'clientIP' => $current_client_ip,
-    'storeCode' => $store->get('field_store_locator_id')->getString(),
+    'storeCode' => $storeCode,
   ];
 
   setcookie('smart_agent_cookie', base64_encode(json_encode($user_details)), ['path' => '/', 'secure' => TRUE]);
