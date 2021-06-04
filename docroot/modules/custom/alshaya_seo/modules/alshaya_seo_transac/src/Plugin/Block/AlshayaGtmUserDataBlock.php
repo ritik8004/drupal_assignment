@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides a block for GTM data.
@@ -49,6 +50,13 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
   protected $userStorage;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * AlshayaGtmUserDataBlock constructor.
    *
    * @param array $configuration
@@ -63,12 +71,15 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
    *   Current user.
    * @param \Drupal\alshaya_acm_customer\OrdersManager $orders_manager
    *   Orders manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user, OrdersManager $orders_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user, OrdersManager $orders_manager, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->userStorage = $entity_type_manager->getStorage('user');
     $this->currentUser = $current_user;
     $this->ordersManager = $orders_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -81,7 +92,8 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('current_user'),
-      $container->get('alshaya_acm_customer.orders_manager')
+      $container->get('alshaya_acm_customer.orders_manager'),
+      $container->get('module_handler')
     );
   }
 
@@ -119,6 +131,7 @@ class AlshayaGtmUserDataBlock extends BlockBase implements ContainerFactoryPlugi
         'privilegeCustomer' => $privilege_customer,
       ];
       $build['#attached']['drupalSettings']['userDetails'] = $user_details;
+      $this->moduleHandler->alter('alshaya_seo_transac_user_details_build', $build);
 
       return $build;
     }

@@ -59,7 +59,7 @@ export default class WriteReviewButton extends React.Component {
     const { reviewedByCurrentUser, productId, context } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const userDetails = getUserDetails(productId);
-    if (userDetails.id === 0
+    if (userDetails.user.userID === 0
       && bazaarVoiceSettings.reviews.bazaar_voice.write_review_submission) {
       return (
         <ClosedReviewSubmit destination={bazaarVoiceSettings.reviews.product.url} />

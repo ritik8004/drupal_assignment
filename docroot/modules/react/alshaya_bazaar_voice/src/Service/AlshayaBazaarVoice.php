@@ -602,7 +602,7 @@ class AlshayaBazaarVoice {
     if ($productNode instanceof NodeInterface) {
       $productArray['alshaya_bazaar_voice'] = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $basic_configs);
       // Add current user details.
-      $productArray['user_details'] = $this->getCurrentUserDetails($productNode);
+      $productArray['productReview'] = $this->getProductReviewForCurrentUser($productNode);
     }
     return $productArray;
   }
@@ -669,71 +669,48 @@ class AlshayaBazaarVoice {
   }
 
   /**
-   * Fetch drupal settings for user details.
+   * Get product info reviewed by current user.
    *
    * @param \Drupal\node\NodeInterface $node
    *   Product node.
    *
    * @return array|null
-   *   Drupal settings with product details.
+   *   returns product review status and rating.
    */
-  public function getCurrentUserDetails(NodeInterface $node) {
+  public function getProductReviewForCurrentUser(NodeInterface $node) {
     if (is_object($node) && $node instanceof NodeInterface) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $sku = $skuManager->getSkuForNode($node);
       // Get sanitized sku.
       $sanitized_sku = $skuManager->getSanitizedSku($sku);
-      $productReviewData = $this->getProductInfoForCurrentUser($sanitized_sku);
-      $settings = [
-        'user' => [
-          'email' => $this->currentUser->getEmail(),
-          'id' => $this->currentUser->id(),
-          'name' => $this->currentUser->getUsername(),
-          'review' => $productReviewData,
-        ],
+      $extra_params = [
+        'filter' => 'id:' . $this->currentUser->id(),
+        'Include' => 'Reviews,Products',
+        'stats' => 'Reviews',
       ];
-      return $settings;
-    }
-  }
-
-  /**
-   * Get product info reviewed by current user.
-   *
-   * @param string $productId
-   *   product Id.
-   *
-   * @return array|null
-   *   returns product review status and rating.
-   */
-  public function getProductInfoForCurrentUser($productId) {
-    $userId = $this->currentUser->id();
-    $extra_params = [
-      'filter' => 'id:' . $userId,
-      'Include' => 'Reviews,Products',
-      'stats' => 'Reviews',
-    ];
-    $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/authors.json', $extra_params);
-    if (isset($request['url']) && isset($request['query'])) {
-      $url = $request['url'];
-      $request_options['query'] = $request['query'];
-      $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
-      if (!$result['HasErrors'] && isset($result['Includes'])) {
-        if (isset($result['Includes']['Reviews'])) {
-          foreach ($result['Includes']['Reviews'] as $review) {
-            if ($review['ProductId'] === $productId) {
-              $data = [
-                'review_summary' => $review,
-                'product_summary' => $result['Includes']['Products'][$productId],
-                'user_rating' => $review['Rating'],
-              ];
-              return $data;
+      $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/authors.json', $extra_params);
+      if (isset($request['url']) && isset($request['query'])) {
+        $url = $request['url'];
+        $request_options['query'] = $request['query'];
+        $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
+        if (!$result['HasErrors'] && isset($result['Includes'])) {
+          if (isset($result['Includes']['Reviews'])) {
+            foreach ($result['Includes']['Reviews'] as $review) {
+              if ($review['ProductId'] === $sanitized_sku) {
+                $productReviewData = [
+                  'review_summary' => $review,
+                  'product_summary' => $result['Includes']['Products'][$sanitized_sku],
+                  'user_rating' => $review['Rating'],
+                ];
+                return $productReviewData;
+              }
             }
           }
         }
       }
+      return NULL;
     }
-    return NULL;
   }
 
 }

@@ -27,13 +27,12 @@ export function getUserBazaarVoiceSettings() {
 }
 
 export function getUserDetails(productId = undefined) {
-  let userDetails = [];
+  const settings = [];
+  settings.user = drupalSettings.userDetails;
   if (productId !== undefined) {
-    userDetails = drupalSettings.productInfo[productId].user_details.user;
-  } else {
-    userDetails = drupalSettings.bazaar_voice.user;
+    settings.productReview = drupalSettings.productInfo[productId].productReview;
   }
-  return userDetails;
+  return settings;
 }
 
 export function doRequest(url) {

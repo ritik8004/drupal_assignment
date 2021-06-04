@@ -84,7 +84,7 @@ class ReviewCommentForm extends React.Component {
                   onChange={this.handleEmailChange}
                   className="form-input"
                   defaultValue={email}
-                  readOnly={userDetails.email !== null ? 1 : 0}
+                  readOnly={userDetails.user.userEmailID !== null ? 1 : 0}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
@@ -126,11 +126,11 @@ class ReviewCommentForm extends React.Component {
     if (!isError) {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
-      const userStorage = getStorageInfo(`bvuser_${userDetails.id}`);
+      const userStorage = getStorageInfo(`bvuser_${userDetails.user.userID}`);
       let storageUpdated = false;
       let authParams = '';
       // Set auth paramters for anonymous users.
-      if (userDetails.id === 0 && userStorage !== null) {
+      if (userDetails.user.userID === 0 && userStorage !== null) {
         if (userStorage.bvUserId === undefined
           || (userStorage.email !== undefined && userStorage.email !== email)) {
           authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
@@ -138,12 +138,12 @@ class ReviewCommentForm extends React.Component {
       }
       // Set user authenticated string (UAS).
       if (userStorage !== null) {
-        if (userDetails.id !== 0 && userStorage.uasToken !== undefined) {
+        if (userDetails.user.userID !== 0 && userStorage.uasToken !== undefined) {
           authParams += `&user=${userStorage.uasToken}&UserNickname=${nickname}`;
           // Update current user in storage.
           userStorage.nickname = nickname;
           storageUpdated = true;
-        } else if (userDetails.id === 0 && userStorage.email !== undefined
+        } else if (userDetails.user.userID === 0 && userStorage.email !== undefined
           && userStorage.bvUserId !== undefined
           && userStorage.nickname !== undefined) {
           if (userStorage.nickname !== nickname) {
@@ -185,7 +185,7 @@ class ReviewCommentForm extends React.Component {
                 showCommentForm: false,
               });
               if (storageUpdated) {
-                setStorageInfo(userStorage, `bvuser_${userDetails.id}`);
+                setStorageInfo(userStorage, `bvuser_${userDetails.user.userID}`);
               }
             }
           } else {
@@ -233,12 +233,12 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
-    const userStorage = getStorageInfo(`bvuser_${userDetails.id}`);
+    const userStorage = getStorageInfo(`bvuser_${userDetails.user.userID}`);
     let emailValue = '';
     let nicknameValue = '';
     // Set default value for user email.
-    if (userDetails.email !== null) {
-      emailValue = userDetails.email;
+    if (userDetails.user.userEmailID !== null) {
+      emailValue = userDetails.user.userEmailID;
     } else if (userStorage !== null) {
       emailValue = userStorage.email !== undefined ? userStorage.email : '';
     }

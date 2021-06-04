@@ -60,7 +60,7 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    createUserStorage(userDetails.id, userDetails.email);
+    createUserStorage(userDetails.user.userID, userDetails.user.userEmailID);
     this.getReviews();
   }
 
@@ -363,7 +363,7 @@ export default class ReviewSummary extends React.Component {
                   <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
                 </div>
                 <WriteReviewButton
-                  reviewedByCurrentUser={userDetails.review !== null}
+                  reviewedByCurrentUser={userDetails.productReview !== null}
                 />
               </div>
             </div>
@@ -382,7 +382,7 @@ export default class ReviewSummary extends React.Component {
             <ReviewHistogram
               overallSummary={reviewsProduct}
               isNewPdpLayout={isNewPdpLayout}
-              reviewedByCurrentUser={userDetails.review !== null}
+              reviewedByCurrentUser={userDetails.productReview !== null}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>

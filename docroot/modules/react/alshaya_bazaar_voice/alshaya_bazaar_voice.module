@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -219,9 +220,47 @@ function alshaya_bazaar_voice_preprocess_node(&$variables) {
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     // Add bazaavoice related strings.
     $variables['bazaar_voice_strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
-    // Add current user details.
-    $variables['#attached']['drupalSettings']['bazaar_voice'] = $alshayaBazaarVoice->getCurrentUserDetails($variables['node']);
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_build_product_details_alter().
+ */
+function alshaya_bazaar_voice_alshaya_seo_transac_user_details_build_alter(&$build) {
+  $node = _alshaya_bazaar_voice_check_product_node();
+  if ($node) {
+    ksm("hello");
+    // Add user review of current product in user settings.
+    $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    $build['#attached']['drupalSettings']['userDetails']['productReview'] = $alshayaBazaarVoice->getProductReviewForCurrentUser($node);
+    $build['#cache'] = ['max-age' => 0];
+  }
+}
+
+/**
+* Checks and return the acq_product node or false.
+*
+* @return mixed
+*   Static html node object or false.
+*/
+function _alshaya_bazaar_voice_check_product_node() {
+  // Get current route object.
+  $current_route = \Drupal::routeMatch();
+
+  // If not node page.
+  if ($current_route->getRouteName() != 'entity.node.canonical') {
+    return FALSE;
+  }
+
+  /* @var \Drupal\node\Entity\Node $node*/
+  $node = $current_route->getParameter('node');
+
+  // If not static html node.
+  if ($node->bundle() != 'acq_product') {
+    return FALSE;
+  }
+
+  return $node;
 }
 
 /**
