@@ -2563,6 +2563,8 @@ class Cart {
       'smart_agent_email' => $name . ';' . $email,
       'smart_agent_user_agent' => $data['userAgent'] ?? '',
       'smart_agent_client_ip' => $data['clientIP'] ?? '',
+      'smart_agent_url_shared_via' => $data['shared_via'] ?? '',
+      'smart_agent_url_shared_on' => $data['shared_on'] ?? '',
     ];
   }
 
