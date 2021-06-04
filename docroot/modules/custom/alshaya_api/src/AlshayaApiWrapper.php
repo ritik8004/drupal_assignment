@@ -1036,8 +1036,9 @@ class AlshayaApiWrapper {
       );
     }
     catch (\Exception $e) {
-      $this->logger->error('Exception while authenticating customer. Error: @response', [
+      $this->logger->error('Exception while authenticating customer. Error: @response. E-mail: @email', [
         '@response' => $e->getMessage(),
+        '@email' => $mail,
       ]);
       return [];
     }
