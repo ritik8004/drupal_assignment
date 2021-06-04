@@ -125,4 +125,14 @@
       }
     }
   }
+
+  .cloudzoom {
+    .cloudzoom__thumbnails {
+      #lightSlider {
+        .slick-list {
+          height: 100% !important;
+        }
+      }
+    }
+  }
 }

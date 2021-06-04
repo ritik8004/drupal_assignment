@@ -11,12 +11,15 @@
 
   .block-content {
     .spc-product-recommended-wrapper {
-      width: 13.125rem;
+      width: 13.25rem;
       margin-bottom: 1.875rem;
 
       .spc-product-recommended-image {
-        width: 13.125rem;
+        width: 13.25rem;
         margin-bottom: 1.4375rem;
+        display: inline-flex;
+        align-items: center;
+        height: 18.8125rem;
 
         img {
           width: 100%;

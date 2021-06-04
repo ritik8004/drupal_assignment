@@ -255,6 +255,16 @@
   }
 }
 
+article[gtm-sku-type="simple"] {
+  .acq-content-product {
+    .sku-base-form {
+      button[type="submit"] {
+        height: 3.1875rem;
+      }
+    }
+  }
+}
+
 .short-description-wrapper {
   padding-bottom: 2.1875rem;
   border-bottom: 1px solid $pdp_skus_border;
@@ -384,9 +394,9 @@
     h1 {
       width: 100%;
       margin-bottom: 0;
+      margin-top: 0;
 
       @include breakpoint($desktop) {
-        margin-top: 0;
         line-height: 1.1;
       }
     }
