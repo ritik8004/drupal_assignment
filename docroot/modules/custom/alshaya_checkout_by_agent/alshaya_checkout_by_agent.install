@@ -26,25 +26,28 @@ function alshaya_checkout_by_agent_install() {
   // Update translations.
   $strings = [
     'Order assisted by Smart Agent' => [
-      'ar' => '',
+      'ar' => 'طلب بمساعدة وكيل',
     ],
     'End Transaction' => [
-      'ar' => '',
+      'ar' => 'إنهاء المعاملة',
     ],
     'Smart Agent: @name' => [
-      'ar' => '',
+      'ar' => '@name :الوكيل',
     ],
     'Share basket with customer via' => [
-      'ar' => '',
+      'ar' => 'شارك السلة مع العميل عبر',
     ],
     'WhatsApp' => [
       'ar' => '',
     ],
     'SMS' => [
-      'ar' => '',
+      'ar' => 'رسالة قصيرة',
     ],
     'Dear Customer, Complete you order by visiting the link: @link Best Wishes, The @site_name Team' => [
-      'ar' => '',
+      'ar' => '@site_name أطيب التمنيات ، الفريق @link :عزيزي العميل ، أكمل طلبك من خلال زيارة الرابط',
+    ],
+    'Complete your order at @site_name' => [
+      'ar' => 'عزيزي العميل @site_name'
     ],
   ];
 
