@@ -60,7 +60,7 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    createUserStorage(userDetails.user.userID, userDetails.user.userEmailID);
+    createUserStorage(userDetails.user.webUserID, userDetails.user.userEmailID);
     this.getReviews();
   }
 
@@ -344,7 +344,6 @@ export default class ReviewSummary extends React.Component {
 
     let newPdp = isNewPdpLayout;
     newPdp = (newPdp === undefined) ? false : newPdp;
-
     const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type;
     // Totalreviews count is emtpy.
     if (totalReviews === '') {
@@ -363,7 +362,7 @@ export default class ReviewSummary extends React.Component {
                   <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
                 </div>
                 <WriteReviewButton
-                  reviewedByCurrentUser={userDetails.productReview !== null}
+                  reviewedByCurrentUser={userDetails.user.productReview !== null}
                 />
               </div>
             </div>
@@ -382,7 +381,7 @@ export default class ReviewSummary extends React.Component {
             <ReviewHistogram
               overallSummary={reviewsProduct}
               isNewPdpLayout={isNewPdpLayout}
-              reviewedByCurrentUser={userDetails.productReview !== null}
+              reviewedByCurrentUser={userDetails.user.productReview !== null}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>

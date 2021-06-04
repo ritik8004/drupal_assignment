@@ -30,7 +30,7 @@ export function getUserDetails(productId = undefined) {
   const settings = [];
   settings.user = drupalSettings.userDetails;
   if (productId !== undefined) {
-    settings.productReview = drupalSettings.productInfo[productId].productReview;
+    settings.user.productReview = drupalSettings.productInfo[productId].productReview;
   }
   return settings;
 }

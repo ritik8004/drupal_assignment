@@ -50,9 +50,9 @@ export default class BvAuthConfirmation extends React.Component {
   setAnonymousUserStorage = (bvUserId) => {
     const bazaarVoiceSettings = getbazaarVoiceSettings();
     const userDetails = getUserDetails();
-    const userStorage = getStorageInfo(`bvuser_${userDetails.user.userID}`);
+    const userStorage = getStorageInfo(`bvuser_${userDetails.user.webUserID}`);
     // Store user information in bv cookies.
-    if (userStorage !== null && userDetails.user.userID === 0) {
+    if (userStorage !== null && userDetails.user.webUserID === 0) {
       const params = `&productid=${bazaarVoiceSettings.productid}&User=${bvUserId}&Action=`;
       const apiData = fetchAPIData('/data/submitreview.json', params);
       if (apiData instanceof Promise) {
@@ -66,7 +66,7 @@ export default class BvAuthConfirmation extends React.Component {
               userStorage.bvUserId = bvUserId;
               userStorage.nickname = result.data.Data.Fields.usernickname.Value;
               userStorage.email = result.data.Data.Fields.useremail.Value;
-              setStorageInfo(userStorage, `bvuser_${userDetails.user.userID}`);
+              setStorageInfo(userStorage, `bvuser_${userDetails.user.webUserID}`);
             }
           } else {
             Drupal.logJavascriptError('review-summary', result.error);

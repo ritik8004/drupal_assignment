@@ -28,7 +28,7 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
   let params = '';
   const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
   const userDetails = getUserDetails(productId);
-  const userStorage = getStorageInfo(`bvuser_${userDetails.user.userID}`);
+  const userStorage = getStorageInfo(`bvuser_${userDetails.user.webUserID}`);
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
     const id = fieldsConfig[key]['#id'];
@@ -36,7 +36,7 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
     try {
       if (elements[id].value !== null) {
         if (id === 'useremail') {
-          if (userDetails.user.userID === 0 && userStorage !== null) {
+          if (userDetails.user.webUserID === 0 && userStorage !== null) {
             // Add email value to anonymous user storage.
             if (userStorage.email === undefined
               || (userStorage.email !== undefined
@@ -79,9 +79,9 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
 
   // Set user authenticated string (UAS).
   if (userStorage !== null) {
-    if (userDetails.user.userID !== 0 && userStorage.uasToken !== undefined) {
+    if (userDetails.user.webUserID !== 0 && userStorage.uasToken !== undefined) {
       params += `&user=${userStorage.uasToken}`;
-    } else if (userDetails.user.userID === 0 && userStorage.bvUserId !== undefined) {
+    } else if (userDetails.user.webUserID === 0 && userStorage.bvUserId !== undefined) {
       params += `&User=${userStorage.bvUserId}`;
     }
   }

@@ -231,6 +231,7 @@ function alshaya_bazaar_voice_alshaya_seo_transac_user_details_build_alter(&$bui
   if ($node) {
     // Add user review of current product in user settings.
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+    $build['#attached']['drupalSettings']['userDetails']['webUserID'] = \Drupal::currentUser()->id();
     $build['#attached']['drupalSettings']['userDetails']['productReview'] = $alshayaBazaarVoice->getProductReviewForCurrentUser($node);
     $build['#cache'] = ['max-age' => 0];
   }

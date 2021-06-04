@@ -30,7 +30,7 @@ const DynamicFormField = (props) => {
   // Set default value for user nickname and email.
   // For anonymous user, default value is from user cookies.
   const userDetails = getUserDetails(productId);
-  const userStorage = getStorageInfo(`bvuser_${userDetails.user.userID}`);
+  const userStorage = getStorageInfo(`bvuser_${userDetails.user.webUserID}`);
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
       if (userDetails.user.userEmailID !== '') {

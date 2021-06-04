@@ -18,12 +18,12 @@ export default class RecentOrders extends React.Component {
   componentDidMount() {
     const { productId } = this.props;
     const userDetails = getUserDetails(productId);
-    createUserStorage(userDetails.user.userID, userDetails.user.userEmailID);
-    if (userDetails.productReview !== null) {
+    createUserStorage(userDetails.user.webUserID, userDetails.user.userEmailID);
+    if (userDetails.user.productReview !== null) {
       this.setState({
-        rating: userDetails.productReview.rating,
-        reviewSummary: userDetails.productReview.review_summary,
-        productSummary: userDetails.productReview.product_summary,
+        rating: userDetails.user.productReview.rating,
+        reviewSummary: userDetails.user.productReview.review_summary,
+        productSummary: userDetails.user.productReview.product_summary,
       });
     }
   }
