@@ -110,7 +110,6 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
   public function getSubTree($menu_name) {
     $parameters = $this->menuTree->getCurrentRouteMenuTreeParameters($menu_name);
     $parameters->expandedParents = [];
-    $active_trail = array_keys($parameters->activeTrail);
     $parameters->setMinDepth(1);
     $tree = $this->menuTree->load($menu_name, $parameters);
     return($tree);
