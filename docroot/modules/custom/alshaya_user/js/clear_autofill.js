@@ -7,7 +7,13 @@
   'use strict';
 
   Drupal.clearAutoFillData = function () {
+    // Do nothing if there is error.
     if ($('.form-item--error-message, label.error').length > 0) {
+      return;
+    }
+
+    // Do nothing for logged in users.
+    if ($('body').hasClass('user-logged-in')) {
       return;
     }
 

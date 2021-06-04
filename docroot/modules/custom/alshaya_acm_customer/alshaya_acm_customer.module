@@ -191,6 +191,8 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   }
 
   if ($form_id == 'user_register_form') {
+    array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name');
+
     // We allow Drupal admins to create only admin users and customers can be
     // created in Magento directly.
     if (\Drupal::currentUser()->isAnonymous()) {
@@ -203,7 +205,7 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
         unset($form['#validate'][$key]);
       }
 
-      array_unshift($form['#validate'], 'alshaya_acm_customer_first_last_name', 'alshaya_acm_customer_register_validate');
+      array_unshift($form['#validate'], 'alshaya_acm_customer_register_validate');
 
       // Final step in validate itself, register the user.
       $form['#validate'][] = 'alshaya_acm_customer_register_validate_final';
