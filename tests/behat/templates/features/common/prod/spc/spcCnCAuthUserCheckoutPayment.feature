@@ -50,7 +50,11 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 30 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
 
   @cc @cnc @mobile @checkout_com
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
@@ -87,7 +91,11 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 30 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
 
   @cc @cnc @language @desktop @checkout_com
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
@@ -129,7 +137,11 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 30 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
 
   @cc @cnc @language @mobile @checkout_com
   Scenario: As a authenticated user, I should be able to checkout using click and collect with credit card (checkout_com)
@@ -169,4 +181,8 @@ Feature: SPC Checkout using Click & Collect store for Authenticated user using C
     And I wait for AJAX to finish
     And I wait 10 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 30 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
