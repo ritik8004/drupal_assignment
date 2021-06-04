@@ -2,9 +2,6 @@
   .magv2-header-wrapper {
     .cart-link {
       @include breakpoint($only-mobile) {
-        height: 2.875rem;
-        width: 2.875rem;
-
         &::before {
           width: 1.4375rem;
           height: 1.25rem;
