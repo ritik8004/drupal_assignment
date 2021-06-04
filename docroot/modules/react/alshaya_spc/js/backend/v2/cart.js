@@ -265,7 +265,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (response.data.error === true) {
-    const exceptionType = getExceptionMessageType(response.data.error_message);
     if (response.data.error_code === 404) {
       // 400 errors happens when we try to post to invalid cart id.
       const postString = JSON.stringify(itemData);
@@ -296,10 +295,11 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       return response;
     }
 
+    const exceptionType = getExceptionMessageType(response.data.error_message);
     if (exceptionType === 'OOS') {
-      await triggerStockRefresh({ sku: 0 });
+      await triggerStockRefresh({ [sku]: 0 });
     } else if (exceptionType === 'not_enough') {
-      await triggerStockRefresh({ sku: quantity });
+      await triggerStockRefresh({ [sku]: quantity });
     }
 
     return returnExistingCartWithError(response.data.error_code, response.data.error_message);
