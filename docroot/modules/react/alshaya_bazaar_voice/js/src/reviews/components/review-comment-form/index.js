@@ -84,7 +84,7 @@ class ReviewCommentForm extends React.Component {
                   onChange={this.handleEmailChange}
                   className="form-input"
                   defaultValue={email}
-                  readOnly={userDetails.user.userEmailID !== null ? 1 : 0}
+                  readOnly={userDetails.user.userEmailID !== '' ? 1 : 0}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
@@ -234,19 +234,13 @@ class ReviewCommentForm extends React.Component {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
     const userStorage = getStorageInfo(`bvuser_${userDetails.user.userID}`);
-    let emailValue = '';
+    let emailValue = userDetails.user.userEmailID;
     let nicknameValue = '';
-    // Set default value for user email.
-    if (userDetails.user.userEmailID !== null) {
-      emailValue = userDetails.user.userEmailID;
-    } else if (userStorage !== null) {
-      emailValue = userStorage.email !== undefined ? userStorage.email : '';
-    }
-    // Set default value for user nickname.
+    // Set default value for user email and nickname.
     if (userStorage !== null) {
+      emailValue = userStorage.email !== undefined && emailValue !== '' ? userStorage.email : '';
       nicknameValue = userStorage.nickname !== undefined ? userStorage.nickname : '';
     }
-
     if (ReviewId !== undefined) {
       return (
         <>

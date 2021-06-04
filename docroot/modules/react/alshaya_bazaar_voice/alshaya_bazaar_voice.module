@@ -229,7 +229,6 @@ function alshaya_bazaar_voice_preprocess_node(&$variables) {
 function alshaya_bazaar_voice_alshaya_seo_transac_user_details_build_alter(&$build) {
   $node = _alshaya_bazaar_voice_check_product_node();
   if ($node) {
-    ksm("hello");
     // Add user review of current product in user settings.
     $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
     $build['#attached']['drupalSettings']['userDetails']['productReview'] = $alshayaBazaarVoice->getProductReviewForCurrentUser($node);
@@ -241,7 +240,7 @@ function alshaya_bazaar_voice_alshaya_seo_transac_user_details_build_alter(&$bui
 * Checks and return the acq_product node or false.
 *
 * @return mixed
-*   Static html node object or false.
+*   Acq Product node object or false.
 */
 function _alshaya_bazaar_voice_check_product_node() {
   // Get current route object.
@@ -255,7 +254,7 @@ function _alshaya_bazaar_voice_check_product_node() {
   /* @var \Drupal\node\Entity\Node $node*/
   $node = $current_route->getParameter('node');
 
-  // If not static html node.
+  // If not product node.
   if ($node->bundle() != 'acq_product') {
     return FALSE;
   }

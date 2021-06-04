@@ -33,7 +33,7 @@ const DynamicFormField = (props) => {
   const userStorage = getStorageInfo(`bvuser_${userDetails.user.userID}`);
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
-      if (userDetails.user.userEmailID !== null) {
+      if (userDetails.user.userEmailID !== '') {
         fieldProperty.defaultVal = userDetails.user.userEmailID;
         readonly = true;
       } else if (userStorage !== null) {
