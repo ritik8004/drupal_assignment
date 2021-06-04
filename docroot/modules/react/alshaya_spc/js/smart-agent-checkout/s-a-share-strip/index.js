@@ -56,7 +56,7 @@ class SAShareStrip extends React.Component {
         <span className="message">{`${Drupal.t('Share basket with customer via')}`}</span>
         <span className="share-option wa" onClick={() => this.openModal('wa')}>
           <SAIcons service="wa" />
-          <span className="label">{Drupal.t('Whatsapp')}</span>
+          <span className="label">{Drupal.t('WhatsApp')}</span>
         </span>
         <span className="share-option email" onClick={() => this.openModal('email')}>
           <SAIcons service="email" />

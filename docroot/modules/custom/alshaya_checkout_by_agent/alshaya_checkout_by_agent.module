@@ -100,29 +100,10 @@ function alshaya_checkout_by_agent_mail($key, &$message, $params) {
       $message['subject'] = t('Complete your order at @site_name', [
         '@site_name' => \Drupal::config('system.site')->get('name'),
       ]);
-      // @todo Replace mail body content from theme to config.
-      $body_data = [
-        '#theme' => 'share_cart',
-        '#cart_url' => $params['cart_url'],
-        '#site_name' => \Drupal::config('system.site')->get('name'),
-      ];
-      $message['body'][] = \Drupal::service('renderer')->render($body_data);
+      $body = \Drupal::config('alshaya_checkout_by_agent.settings')->get('email_template');
+      $body = str_replace('@cart_url', $params['cart_url'], $body);
+      $body = \Drupal::token()->replace($body);
+      $message['body'][] = $body;
       break;
   }
-}
-
-/**
- * Implements hook_theme().
- */
-function alshaya_checkout_by_agent_theme($existing, $type, $theme, $path) {
-  return [
-    'share_cart' => [
-      'template' => 'share-cart',
-      'variables' => [
-        'cart_url' => [],
-        'site_name' => [],
-        'site_url' => [],
-      ],
-    ],
-  ];
 }
