@@ -2559,11 +2559,14 @@ class Cart {
     $name = $data['name'] ?? '';
     $email = $data['email'] ?? '';
     $storeCode = $data['storeCode'] ?? '';
+    $clientIP = $data['clientIP'] ?? '';
+    $lat = $data['lat'] ?? '';
+    $lng = $data['lng'] ?? '';
 
     $formated_details = [
       'smart_agent_email' => $name . ';' . $email . ';' . $storeCode,
       'smart_agent_user_agent' => $data['userAgent'] ?? '',
-      'smart_agent_client_ip' => $data['clientIP'] ?? '',
+      'smart_agent_client_ip' => $clientIP . ';' . $lat . ';' . $lng,
     ];
 
     if (!empty($data['shared_via'])) {

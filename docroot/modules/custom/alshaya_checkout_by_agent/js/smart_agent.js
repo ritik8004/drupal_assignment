@@ -62,4 +62,29 @@
       }
     }
   };
+
+  Drupal.smartAgent.locationPushedInCookie = false;
+
+  Drupal.smartAgent.setLocationInCookie = function () {
+    if (Drupal.smartAgent.locationPushedInCookie === true) {
+      return;
+    }
+
+    var agentInfo = Drupal.smartAgent.getInfo();
+
+    if (agentInfo === false) {
+      return;
+    }
+
+    // Add agent location in cookie.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        agentInfo['lat'] = pos.coords.latitude;
+        agentInfo['lng'] = pos.coords.longitude;
+        $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
+        Drupal.smartAgent.locationPushedInCookie = true;
+      });
+    }
+
+  };
 })(jQuery, Drupal, drupalSettings);

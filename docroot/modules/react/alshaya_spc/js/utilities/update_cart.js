@@ -49,6 +49,11 @@ export const applyRemovePromo = (action, promoCode) => {
 
   const apiUrl = updateCartApiUrl();
 
+  // Add smart agent location coordinates in cookie.
+  if (typeof Drupal.smartAgent !== 'undefined') {
+    Drupal.smartAgent.setLocationInCookie();
+  }
+
   return axios.post(apiUrl, {
     action,
     promo: promoCode,
@@ -78,6 +83,11 @@ export const updateCartItemData = (action, sku, quantity) => {
   }
 
   const apiUrl = updateCartApiUrl();
+
+  // Add smart agent location coordinates in cookie.
+  if (typeof Drupal.smartAgent !== 'undefined') {
+    Drupal.smartAgent.setLocationInCookie();
+  }
 
   return axios.post(apiUrl, {
     action,
@@ -115,6 +125,10 @@ export const updateCartItemData = (action, sku, quantity) => {
 
 export const addPaymentMethodInCart = (action, data) => {
   const apiUrl = updateCartApiUrl();
+  // Add smart agent location coordinates in cookie.
+  if (typeof Drupal.smartAgent !== 'undefined') {
+    Drupal.smartAgent.setLocationInCookie();
+  }
   return axios.post(apiUrl, {
     action,
     payment_info: data,
