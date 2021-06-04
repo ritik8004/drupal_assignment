@@ -60,12 +60,12 @@ class WhatsAppApiAdapter {
    *   Phone number to send WhatsApp message.
    * @param string $template
    *   Template to use.
-   * @param array $params
-   *   Dynamic parameters.
-   * @param string $language
-   *   Language code.
+   * @param array $body_params
+   *   Dynamic body parameters.
+   * @param string $button_url
+   *   Dynamic part for button url.
    */
-  public function sendUsingTemplate(string $to, string $template, array $params, string $language) {
+  public function sendUsingTemplate(string $to, string $template, array $body_params, string $button_url = '') {
     $kaleyra_settings = $this->configFactory->get('kaleyra.settings');
 
     $sid = $kaleyra_settings->get('whatsapp_sid');
@@ -84,9 +84,12 @@ class WhatsAppApiAdapter {
       'from' => $kaleyra_settings->get('whatsapp_from'),
       'to' => $to,
       // @todo check if we need to support quotes here.
-      'params' => '"' . implode('", "', $params) . '"',
-      'lang_code' => $language,
+      'params' => '"' . implode('","', $body_params) . '"',
     ];
+
+    if ($button_url) {
+      $request_options['json']['param_url'] = $button_url;
+    }
 
     try {
       $response = $this->client->request('POST', $api_url, $request_options);

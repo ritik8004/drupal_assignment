@@ -151,7 +151,7 @@ class CartController {
       $this->magentoInfo->getMagentoSecretInfo()['consumer_secret']
     ), TRUE);
     $cart_id = $data['cart_id'];
-    $smart_agent_details = json_decode($data['smart_agent'], TRUE);
+    $smart_agent_details = $data['smart_agent'];
 
     // Get customer id from drupal.
     $customer_id = $this->cart->getDrupalInfo('customer_id');
@@ -170,24 +170,24 @@ class CartController {
     }
 
     // Update cart call to set smart agent details.
-    $smart_agent_data = [
-      'action' => 'refresh',
-      'smart_agent_email' => $smart_agent_details['email'],
-      'smart_agent_user_agent' => $smart_agent_details['userAgent'],
-      'smart_agent_client_ip' => $smart_agent_details['clientIP'],
-    ];
+    $formatted_smart_agent_details = $this->cart->formatSmartAgentDetails($smart_agent_details);
 
-    $this->cart->updateCart(['extension' => $smart_agent_data]);
+    $extension = array_merge(
+      ['action' => 'refresh'],
+      $formatted_smart_agent_details
+    );
+
+    $this->cart->updateCart(['extension' => $extension]);
 
     // Logging data sent to updateCart API call.
     $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Update cart request data: @data.', [
       '@cart_id' => $cart_id,
-      '@data' => json_encode($smart_agent_data),
+      '@data' => json_encode($formatted_smart_agent_details),
     ]);
 
     // Redirect to cart page and set cookie to convey
     // that we need to reset cart in storage.
-    $response = new RedirectResponse('/'  . $data['langcode'] .  '/cart', 302);
+    $response = new RedirectResponse('/' . $data['langcode'] . '/cart', 302);
     $response->headers->setCookie(CookieHelper::create(
       'reset_cart_storage',
       TRUE,
