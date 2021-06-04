@@ -478,4 +478,38 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     return $identifier;
   }
 
+  /**
+   * Return the brand list specific facet data.
+   */
+  public function getBrandListSpecificFacetData() {
+    $search_page_filter = [];
+    $brand_list_specific_facets = $this->configFactory->get('alshaya_product_list.settings')->get('brand_list_specific_facets');
+    if (!empty($brand_list_specific_facets)) {
+      foreach ($brand_list_specific_facets as $brand_list_facet_name => $search_page_facet_name) {
+        $brand_list_facet = $this->entityTypeManager->getStorage('facets_facet')->load($brand_list_facet_name);
+        if (!empty($brand_list_facet)) {
+          $brand_list_facet_block_id = str_replace('_', '', $brand_list_facet->id());
+          $brand_list_facet_block = $this->entityTypeManager->getStorage('block')->load($brand_list_facet_block_id);
+          if ($brand_list_facet_block->status() === TRUE) {
+            $search_page_facet = $this->entityTypeManager->getStorage('facets_facet')->load($search_page_facet_name);
+            $search_page_block_id = str_replace('_', '', $search_page_facet->id());
+            $search_page_block = $this->entityTypeManager->getStorage('block')->load($search_page_block_id);
+            $identifier = $search_page_facet->getFieldIdentifier();
+            $search_page_filter[$identifier] = [
+              'identifier' => $identifier,
+              'label' => $search_page_block->label(),
+              'name' => $search_page_facet->getName(),
+              'widget' => $search_page_facet->getWidget(),
+              'id' => $search_page_block_id,
+              'weight' => $search_page_block->getWeight(),
+              'alias' => $search_page_facet->getUrlAlias(),
+              'facet_values' => [],
+            ];
+          }
+        }
+      }
+    }
+    return $search_page_filter;
+  }
+
 }

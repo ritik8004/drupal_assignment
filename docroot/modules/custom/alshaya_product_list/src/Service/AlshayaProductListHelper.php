@@ -12,7 +12,6 @@ use Drupal\node\NodeInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Product list helper service.
@@ -76,13 +75,6 @@ class AlshayaProductListHelper {
   protected $algoliaReactHelper;
 
   /**
-   * Stores the configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
    * ProductCategoryTermId constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -101,8 +93,6 @@ class AlshayaProductListHelper {
    *   Logger Factory.
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper $algolia_react_helper
    *   Algolia react helper.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The factory for configuration objects.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_manager,
@@ -112,8 +102,7 @@ class AlshayaProductListHelper {
     LanguageManagerInterface $language_manager,
     DefaultFacetManager $facet_manager,
     LoggerChannelFactoryInterface $loggerChannelFactory,
-    AlshayaAlgoliaReactHelper $algolia_react_helper,
-    ConfigFactoryInterface $config_factory
+    AlshayaAlgoliaReactHelper $algolia_react_helper
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->pathValidator = $pathValidator;
@@ -123,7 +112,6 @@ class AlshayaProductListHelper {
     $this->facetManager = $facet_manager;
     $this->algoliaReactHelper = $algolia_react_helper;
     $this->logger = $loggerChannelFactory->get('alshaya_product_list');
-    $this->configFactory = $config_factory;
   }
 
   /**
@@ -249,38 +237,6 @@ class AlshayaProductListHelper {
       $product_list_block->setStatus($algolia_product_list_status);
       $product_list_block->save();
     }
-  }
-
-  /**
-   * Return the 'attr_brand_category' filter data.
-   */
-  public function getBrandCateforyFacetData() {
-    $search_page_filter = [];
-    $brand_list_specific_facets = $this->configFactory->get('alshaya_product_list.settings')->get('brand_list_specific_facets');
-    foreach ($brand_list_specific_facets as $brand_list_facet_name => $search_page_facet_name) {
-      $brand_list_facet = $this->entityTypeManager->getStorage('facets_facet')->load($brand_list_facet_name);
-      if (!empty($brand_list_facet)) {
-        $brand_list_facet_block_id = str_replace('_', '', $brand_list_facet->id());
-        $brand_list_facet_block = $this->entityTypeManager->getStorage('block')->load($brand_list_facet_block_id);
-        if ($brand_list_facet_block->status() === TRUE) {
-          $search_page_facet = $this->entityTypeManager->getStorage('facets_facet')->load($search_page_facet_name);
-          $search_page_block_id = str_replace('_', '', $search_page_facet->id());
-          $search_page_block = $this->entityTypeManager->getStorage('block')->load($search_page_block_id);
-          $identifier = $search_page_facet->getFieldIdentifier();
-          $search_page_filter[$identifier] = [
-            'identifier' => $identifier,
-            'label' => $search_page_block->label(),
-            'name' => $search_page_facet->getName(),
-            'widget' => $search_page_facet->getWidget(),
-            'id' => $search_page_block_id,
-            'weight' => $search_page_block->getWeight(),
-            'alias' => $search_page_facet->getUrlAlias(),
-            'facet_values' => [],
-          ];
-        }
-      }
-    }
-    return $search_page_filter;
   }
 
 }

@@ -92,7 +92,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
   public function build() {
     // Get common configuration for Algolia pages.
     $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE);
-    $brand_list_facet_data = $this->alshayaProductListHelper->getBrandCateforyFacetData();
+    $brand_list_facet_data = $this->alshayaAlgoliaReactConfig->getBrandListSpecificFacetData();
     // Merge the $search_page_filter data to $common_config
     // to return in $algoliaSearch.
     $common_config[self::PAGE_TYPE]['filters'] = array_merge($common_config[self::PAGE_TYPE]['filters'], $brand_list_facet_data);
