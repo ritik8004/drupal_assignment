@@ -207,9 +207,9 @@ class ShareCart extends ResourceBase {
       case 'wa':
         // @todo Validate mobile number.
         $to = $this->getFullMobileNumber($to);
-
         $template = $this->configFactory->get('alshaya_checkout_by_agent.settings')->get('whatsapp_template');
-        $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, [$cart_url], $langcode);
+
+        $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, [$cart_url]);
         break;
 
       case 'sms':
