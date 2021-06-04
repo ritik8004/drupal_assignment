@@ -4,8 +4,8 @@ dependencies:
   module:
     - node
     - user
-id: user.field_store
-field_name: field_store
+id: user.field_agent_store
+field_name: field_agent_store
 entity_type: user
 type: entity_reference
 settings:
