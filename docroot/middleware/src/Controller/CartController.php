@@ -151,7 +151,7 @@ class CartController {
       $this->magentoInfo->getMagentoSecretInfo()['consumer_secret']
     ), TRUE);
     $cart_id = $data['cart_id'];
-    $smart_agent_details = json_decode($data['smart_agent'], TRUE);
+    $smart_agent_details = $data['smart_agent'];
 
     // Get customer id from drupal.
     $customer_id = $this->cart->getDrupalInfo('customer_id');

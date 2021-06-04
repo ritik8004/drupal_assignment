@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Drupal\Component\Datetime\Time;
 
 /**
  * Provides a resource to cart URL with smart agent info.
@@ -83,6 +84,13 @@ class ShareCart extends ResourceBase {
   protected $configFactory;
 
   /**
+   * The DateTime Object.
+   *
+   * @var \Drupal\Component\Datetime\Time
+   */
+  protected $time;
+
+  /**
    * ShareCart constructor.
    *
    * @param array $configuration
@@ -109,6 +117,8 @@ class ShareCart extends ResourceBase {
    *   Mobile utility.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
+   * @param \Drupal\Component\Datetime\Time $time
+   *   Injecting time service.
    */
   public function __construct(
     array $configuration,
@@ -122,7 +132,8 @@ class ShareCart extends ResourceBase {
     MailManagerInterface $mail_manager,
     LanguageManagerInterface $language_manager,
     MobileNumberUtilInterface $mobile_util,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    Time $time
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->messageApiAdapter = $message_api_adapter;
@@ -132,6 +143,7 @@ class ShareCart extends ResourceBase {
     $this->languageManager = $language_manager;
     $this->mobileUtil = $mobile_util;
     $this->configFactory = $config_factory;
+    $this->time = $time;
   }
 
   /**
@@ -150,7 +162,8 @@ class ShareCart extends ResourceBase {
       $container->get('plugin.manager.mail'),
       $container->get('language_manager'),
       $container->get('mobile_number.util'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('datetime.time')
     );
   }
 
@@ -189,9 +202,15 @@ class ShareCart extends ResourceBase {
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
+    $smart_agent_details_array = json_decode(base64_decode($smart_agent), TRUE);
+
+    // Add sharing channel and time with agent details.
+    $smart_agent_details_array['shared_via'] = $context;
+    $smart_agent_details_array['shared_on'] = $this->time->getRequestTime();
+
     $data = [
       'cart_id' => $cartId,
-      'smart_agent' => base64_decode($smart_agent),
+      'smart_agent' => $smart_agent_details_array,
       'langcode' => $langcode,
     ];
 
