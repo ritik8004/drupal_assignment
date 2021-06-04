@@ -37,9 +37,6 @@ function alshaya_checkout_by_agent_install() {
     'Share basket with customer via' => [
       'ar' => 'شارك السلة مع العميل عبر',
     ],
-    'WhatsApp' => [
-      'ar' => '',
-    ],
     'SMS' => [
       'ar' => 'رسالة قصيرة',
     ],

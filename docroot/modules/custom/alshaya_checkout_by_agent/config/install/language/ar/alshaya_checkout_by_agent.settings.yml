@@ -1,2 +1,2 @@
 whatsapp_template: ''
-email_template: '<div style="text-align: right"><p>،عزيزي الزبون</p><p>.شكرا لكم لزيارة متجرنا</p><p>.يرجى إكمال عملية الشراء بالنقر فوق الزر أدناه للطلب الذي بدأته بمساعدة أحد وكلائنا</p><p><a href="@cart_url" target="_blank" class="button">سجل الطلبية</a><br/></p><p>،افضل الأمنيات<br/>[site:name] فريق<br/><a href="[site:url]">[site:url-brief]</a></p></div>'
+email_template: '<p>،عزيزي الزبون</p><p>.شكرا لكم لزيارة متجرنا</p><p>.يرجى إكمال عملية الشراء بالنقر فوق الزر أدناه للطلب الذي بدأته بمساعدة أحد وكلائنا</p><p><a href="@cart_url" target="_blank" class="button">سجل الطلبية</a><br/></p><p>،افضل الأمنيات<br/>[site:name] فريق<br/><a href="[site:url]">[site:url-brief]</a></p>'
