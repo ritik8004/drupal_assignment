@@ -5,6 +5,8 @@
  * Install file.
  */
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\Role;
 
 /**
@@ -17,6 +19,15 @@ function alshaya_checkout_by_agent_uninstall() {
     ->delete();
   \Drupal::configFactory()->getEditable('rest.resource.share_cart')->delete();
   Role::load('smartagent')->delete();
+
+  $field = FieldConfig::loadByName('user', 'user', 'field_agent_store');
+  if (!empty($field)) {
+    $field->delete();
+  }
+  $field_storage = FieldStorageConfig::loadByName('user', 'field_agent_store');
+  if (!empty($field_storage)) {
+    $field_storage->delete();
+  }
 }
 
 /**

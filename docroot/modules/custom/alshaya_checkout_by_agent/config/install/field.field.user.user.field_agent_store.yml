@@ -2,12 +2,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.user.field_store
+    - field.storage.user.field_agent_store
     - node.type.store
   module:
     - user
-id: user.user.field_store
-field_name: field_store
+id: user.user.field_agent_store
+field_name: field_agent_store
 entity_type: user
 bundle: user
 label: Store
