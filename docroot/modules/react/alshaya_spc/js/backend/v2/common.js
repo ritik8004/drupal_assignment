@@ -198,5 +198,4 @@ export {
   callDrupalApi,
   callMagentoApi,
   updateCart,
-  getCartSettings,
 };

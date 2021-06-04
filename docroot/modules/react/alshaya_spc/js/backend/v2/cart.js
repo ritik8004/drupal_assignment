@@ -1,7 +1,6 @@
 import {
   callDrupalApi,
   callMagentoApi,
-  getCartSettings,
   isAnonymousUserWithoutCart,
   updateCart,
 } from './common';
@@ -275,8 +274,13 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       window.commerceBackend.removeCartDataFromStorage();
       removeStorageInfo('cart_id');
 
-      if (data.action === 'add item'
-        && parseInt(getCartSettings('max_native_update_attempts'), 10) > apiCallAttempts) {
+      if (
+        data.action === 'add item'
+        && parseInt(
+          window.drupalSettings.cart.checkout_settings.max_native_update_attempts,
+          10,
+        ) > apiCallAttempts
+      ) {
         apiCallAttempts += 1;
         // Create a new cart.
         cartId = await window.commerceBackend.createCart();
