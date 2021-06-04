@@ -236,8 +236,9 @@ class ShareCart extends ResourceBase {
         $to = $this->getFullMobileNumber($to);
 
         // @todo replace message with actual message.
-        $message = $this->t('Dear Customer, Complete you order by visiting the link: @link', [
+        $message = $this->t('Dear Customer, Complete you order by visiting the link: @link Best Wishes, The @site_name Team', [
           '@link' => $cart_url,
+          '@site_name' => $this->configFactory->get('system.site')->get('name'),
         ]);
 
         $this->messageApiAdapter->send($to, $message->render());
