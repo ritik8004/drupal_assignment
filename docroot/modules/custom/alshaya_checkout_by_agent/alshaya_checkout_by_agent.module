@@ -52,7 +52,7 @@ function alshaya_checkout_by_agent_user_login(UserInterface $account) {
 
   // Get smart agent store info.
   $storeCode = '';
-  $storeField = $account->get('field_store')->first();
+  $storeField = $account->get('field_agent_store')->first();
   if (!empty($storeField)) {
     $store = $storeField->get('entity')->getValue();
     $storeCode = $store->get('field_store_locator_id')->getString();
