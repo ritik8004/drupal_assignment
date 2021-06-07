@@ -54,11 +54,8 @@ function alshaya_checkout_by_agent_install() {
     'SMS' => [
       'ar' => 'رسالة قصيرة',
     ],
-    'Dear Customer, Complete you order by visiting the link: @link Best Wishes, The @site_name Team' => [
-      'ar' => '@site_name أطيب التمنيات ، الفريق @link :عزيزي العميل ، أكمل طلبك من خلال زيارة الرابط',
-    ],
     'Complete your order at @site_name' => [
-      'ar' => 'عزيزي العميل @site_name'
+      'ar' => 'عزيزي العميل @site_name',
     ],
   ];
 
