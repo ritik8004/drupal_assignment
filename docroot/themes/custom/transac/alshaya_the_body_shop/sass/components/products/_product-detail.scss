@@ -16,6 +16,13 @@
     .price {
       font-size: 1.25rem;
       font-family: $alshaya-bold;
+      margin-bottom: 0;
+    }
+
+    .price-wrapper {
+      .price {
+        margin-bottom: 1rem;
+      }
     }
 
     .has--special--price {
