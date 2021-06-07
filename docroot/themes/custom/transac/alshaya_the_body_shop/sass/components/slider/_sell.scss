@@ -35,5 +35,28 @@
     .promotions {
       text-align: $left;
     }
+
+    .image-label-wrapper {
+      @include breakpoint($tablet) {
+        height: 13.875rem;
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      @include breakpoint($desktop) {
+        height: 17.25rem;
+      }
+    }
+  }
+}
+
+.mobile--only--sell {
+  .sell--image {
+    @include breakpoint($mobile) {
+      min-height: 12.21rem;
+      display: inline-flex;
+      align-items: center;
+    }
   }
 }
