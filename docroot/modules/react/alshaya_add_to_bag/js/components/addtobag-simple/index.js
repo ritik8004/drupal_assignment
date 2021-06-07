@@ -284,7 +284,7 @@ export default class AddToBagSimple extends React.Component {
               type="button"
               onClick={this.onClickHandler}
             >
-              {getStringMessage('add')}
+              {getStringMessage('add_to_bag')}
             </button>
           </div>
         </ConditionalView>
