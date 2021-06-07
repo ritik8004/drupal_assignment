@@ -30,7 +30,7 @@ export const isOpenWriteReviewForm = (productId) => {
     && userDetails.user.webUserID > 0
     && getStorageInfo('openPopup')
     && openPopup !== null
-    && userDetails.user.productReview === null) {
+    && userDetails.productReview === null) {
     return true;
   }
   return false;

@@ -362,7 +362,7 @@ export default class ReviewSummary extends React.Component {
                   <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
                 </div>
                 <WriteReviewButton
-                  reviewedByCurrentUser={userDetails.user.productReview !== null}
+                  reviewedByCurrentUser={userDetails.productReview !== null}
                 />
               </div>
             </div>
@@ -381,7 +381,7 @@ export default class ReviewSummary extends React.Component {
             <ReviewHistogram
               overallSummary={reviewsProduct}
               isNewPdpLayout={isNewPdpLayout}
-              reviewedByCurrentUser={userDetails.user.productReview !== null}
+              reviewedByCurrentUser={userDetails.productReview !== null}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>
