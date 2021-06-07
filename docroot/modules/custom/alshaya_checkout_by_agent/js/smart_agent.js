@@ -59,22 +59,17 @@
         $('body').once('smart-agent-end-transaction').on('click', '.smart-agent-end-transaction', function () {
           Drupal.smartAgent.endTransaction();
         });
+
+        // Add smart agent location in cookie.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((pos) => {
+            agentInfo['lat'] = pos.coords.latitude;
+            agentInfo['lng'] = pos.coords.longitude;
+            $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
+          });
+        }
       }
     }
   };
-
-  // Add smart agent location in cookie.
-  var agentInfo = Drupal.smartAgent.getInfo();
-
-  if (agentInfo !== false) {
-    // Add agent location in cookie.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        agentInfo['lat'] = pos.coords.latitude;
-        agentInfo['lng'] = pos.coords.longitude;
-        $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
-      });
-    }
-  }
 
 })(jQuery, Drupal, drupalSettings);
