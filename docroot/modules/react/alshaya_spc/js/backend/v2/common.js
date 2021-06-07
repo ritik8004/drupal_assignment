@@ -8,6 +8,7 @@ import { removeStorageInfo } from '../../utilities/storage';
  */
 
 // Magento method, to set for 2d vault (tokenized card) transaction.
+// @See CHECKOUT_COM_VAULT_METHOD in \App\Service\CheckoutCom\APIWrapper
 const checkoutComVaultMethod = () => 'checkout_com_cc_vault';
 
 // Magento method, to append for UAPAPI vault (tokenized card) transaction.
