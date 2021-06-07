@@ -5,4 +5,8 @@
   text-transform: uppercase;
 
   @include normal-arabic-letter-spacing;
+
+  &:hover {
+    background: $plp-primary-cta-hover-bg;
+  }
 }
