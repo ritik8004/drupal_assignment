@@ -21,6 +21,11 @@ function getAllFilters(pageType) {
 function getFilters(pageType) {
   const filters = getAllFilters(pageType);
   _.remove(filters, (filter) => (filter.identifier === 'field_category' || filter.identifier === 'super_category'));
+  // attr_brand_category is added search filters.
+  // we don't show the attr_brand_category filter on search page.
+  if (pageType === 'search') {
+    _.remove(filters, (filter) => (filter.identifier === 'attr_brand_category'));
+  }
   return filters;
 }
 
@@ -151,6 +156,14 @@ function facetFieldAlias(key, returnType, pageType = null) {
   }
   const facetField = key.split('.')[0];
   if (returnType === 'alias') {
+    // remove the attr_brand_category key from the object.
+    // for search page pageType is null.
+    if (facetField === 'attr_brand_category' && pageType === null) {
+      if (Object.keys(allFilters).includes(facetField)) {
+        delete allFilters.facetField;
+      }
+      return null;
+    }
     return allFilters[facetField].alias;
   }
   return filtersAlias[key];
