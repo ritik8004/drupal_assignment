@@ -260,6 +260,12 @@
         #{$right}: 0;
         top: 0.625rem;
         transform: translateY(-50%);
+        height: 2.875rem;
+        width: 2.875rem;
+
+        html[lang=ar] & {
+          margin-top: 0;
+        }
       }
     }
 
