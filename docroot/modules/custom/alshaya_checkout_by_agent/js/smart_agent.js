@@ -59,7 +59,18 @@
         $('body').once('smart-agent-end-transaction').on('click', '.smart-agent-end-transaction', function () {
           Drupal.smartAgent.endTransaction();
         });
+
+        // Add or update smart agent location in cookie.
+        // We do this on every page load to ensure we have the latest location data of the Agent every-time.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((pos) => {
+            agentInfo['lat'] = pos.coords.latitude;
+            agentInfo['lng'] = pos.coords.longitude;
+            $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
+          });
+        }
       }
     }
   };
+
 })(jQuery, Drupal, drupalSettings);
