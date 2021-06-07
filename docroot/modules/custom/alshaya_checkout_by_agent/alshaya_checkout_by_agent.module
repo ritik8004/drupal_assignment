@@ -14,8 +14,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * Implements hook_user_login().
  */
 function alshaya_checkout_by_agent_user_login(UserInterface $account) {
-  // Return if user doesn't have 'smartagent' role.
-  if (!in_array('smartagent', $account->getRoles())) {
+  // Return if feature is not enabled or user doesn't have 'smartagent' role.
+  if (\Drupal::config('alshaya_checkout_by_agent.settings')->get('checkout_by_agent_enabled') !== TRUE
+    || !in_array('smartagent', $account->getRoles())) {
     return;
   }
 
@@ -78,8 +79,9 @@ function alshaya_checkout_by_agent_user_login(UserInterface $account) {
  * Implements hook_page_attachments().
  */
 function alshaya_checkout_by_agent_page_attachments(array &$attachments) {
-  // Ignore admin paths.
-  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+  // Do not add library if feature is disabled or if its admin path.
+  if (\Drupal::config('alshaya_checkout_by_agent.settings')->get('checkout_by_agent_enabled') !== TRUE
+    || \Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
   $attachments['#attached']['library'][] = 'alshaya_checkout_by_agent/smart_agent';
@@ -89,6 +91,9 @@ function alshaya_checkout_by_agent_page_attachments(array &$attachments) {
  * Implements hook_alshaya_spc_cart_build_alter().
  */
 function alshaya_checkout_by_agent_alshaya_spc_cart_build_alter(array &$build) {
+  if (\Drupal::config('alshaya_checkout_by_agent.settings')->get('checkout_by_agent_enabled') !== TRUE) {
+    return;
+  }
   $build['#attached']['library'][] = 'alshaya_white_label/smart-agent';
 }
 
@@ -96,6 +101,9 @@ function alshaya_checkout_by_agent_alshaya_spc_cart_build_alter(array &$build) {
  * Implements hook_alshaya_spc_checkout_build_alter().
  */
 function alshaya_checkout_by_agent_alshaya_spc_checkout_build_alter(array &$build) {
+  if (\Drupal::config('alshaya_checkout_by_agent.settings')->get('checkout_by_agent_enabled') !== TRUE) {
+    return;
+  }
   $build['#attached']['library'][] = 'alshaya_white_label/smart-agent';
 }
 
@@ -103,6 +111,10 @@ function alshaya_checkout_by_agent_alshaya_spc_checkout_build_alter(array &$buil
  * Implements hook_mail().
  */
 function alshaya_checkout_by_agent_mail($key, &$message, $params) {
+  if (\Drupal::config('alshaya_checkout_by_agent.settings')->get('checkout_by_agent_enabled') !== TRUE) {
+    return;
+  }
+
   switch ($key) {
     case 'share_cart':
       $message['from'] = \Drupal::config('system.site')->get('mail');

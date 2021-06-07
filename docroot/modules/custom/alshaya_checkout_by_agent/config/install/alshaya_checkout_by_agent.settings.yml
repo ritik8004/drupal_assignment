@@ -1,3 +1,4 @@
+checkout_by_agent_enabled: true # Config to enable/disable checkout by smart agent.
 smart_user_agents: []
 smart_agent_ips: ''
 whatsapp_template: ''

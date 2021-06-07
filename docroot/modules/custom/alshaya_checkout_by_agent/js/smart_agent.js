@@ -40,7 +40,9 @@
       var agentInfo = Drupal.smartAgent.getInfo();
 
       if (typeof agentInfo !== 'undefined') {
-        if ($('.smart-agent-header-wrapper').length < 1) {
+        var locationShared = $.cookie('smart_agent_location_shared') || 1;
+
+        if (parseInt(locationShared) == true && $('.smart-agent-header-wrapper').length < 1) {
           var loggedInMessageMarkup = '<div class="smart-agent-header-wrapper">';
           loggedInMessageMarkup += '<span class="agent-logged-in">';
           loggedInMessageMarkup += Drupal.t('Smart Agent: @name', {'@name': agentInfo['name']}) + '</span>';
@@ -60,14 +62,41 @@
           Drupal.smartAgent.endTransaction();
         });
 
+        // Error callback for getCurrentPosition method.
+        var errorCallback = function (error) {
+          // Redirect to user login.
+          var redirectUrl = Drupal.url('user/login');
+          if (drupalSettings.user.uid > 0) {
+            // If user is logged in, logout first.
+            redirectUrl = Drupal.url('user/logout?destination=user/login');
+          }
+
+          $.cookie('smart_agent_location_shared', 0, {path: '/', secure: true});
+          window.location.href = redirectUrl;
+        };
+
+        // Success callback for getCurrentPosition method.
+        var successCallback = function (pos) {
+          agentInfo['lat'] = pos.coords.latitude;
+          agentInfo['lng'] = pos.coords.longitude;
+          $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
+        };
+
         // Add or update smart agent location in cookie.
         // We do this on every page load to ensure we have the latest location data of the Agent every-time.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((pos) => {
-            agentInfo['lat'] = pos.coords.latitude;
-            agentInfo['lng'] = pos.coords.longitude;
-            $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
-          });
+        if (parseInt(locationShared) == true && navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+        }
+
+        // If agent location is not shared, then show message and clear smart agent cookie.
+        // We use `smart_agent_location_shared` cookie to check location is shared or not.
+        if (parseInt(locationShared) == false) {
+          // Show a message to smart agent to share location and then log in.
+          $('#block-page-title').prepend('<div class="location-not-shared-message">' + Drupal.t('Smart agent, we have not been able to confirm your location. Please enable location services and allow location tracking then try log in again') + '</div>');
+
+          // Clear all smart agent cookies.
+          $.removeCookie('smart_agent_cookie', {path: '/'});
+          $.removeCookie('smart_agent_location_shared', {path: '/'});
         }
       }
     }
