@@ -1,0 +1,5 @@
+alshaya_checkout_by_agent.smart_agent_settings:
+  title: 'Alshaya Smart Agent Settings'
+  base_route_name: alshaya_checkout_by_agent.smart_agent_settings
+  names:
+    - alshaya_checkout_by_agent.settings

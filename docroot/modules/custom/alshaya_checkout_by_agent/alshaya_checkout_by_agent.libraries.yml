@@ -2,7 +2,7 @@ smart_agent:
   js:
     js/smart_agent.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.once
     - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
     - core/jquery.cookie
