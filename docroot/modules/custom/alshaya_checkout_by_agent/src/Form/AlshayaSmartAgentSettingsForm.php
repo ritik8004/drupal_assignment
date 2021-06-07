@@ -55,6 +55,24 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('whatsapp_template'),
     ];
 
+    $form['email_template'] = [
+      '#type' => 'text_format',
+      '#title' => $this->t('E-Mail Template'),
+      '#format' => 'mail_text',
+      '#allowed_formats' => ['mail_text'],
+      '#editor' => TRUE,
+      '#default_value' => $config->get('email_template') ?? '',
+    ];
+
+    $form['sms_template'] = [
+      '#type' => 'text_format',
+      '#title' => $this->t('SMS Template'),
+      '#format' => 'plain_text',
+      '#allowed_formats' => ['plain_text'],
+      '#editor' => FALSE,
+      '#default_value' => $config->get('sms_template') ?? '',
+    ];
+
     return $form;
   }
 
@@ -70,6 +88,8 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
     $config->set('smart_user_agents', $smart_user_agents);
     $config->set('smart_agent_ips', $form_state->getValue('smart_agent_ips'));
     $config->set('whatsapp_template', $form_state->getValue('whatsapp_template'));
+    $config->set('email_template', $form_state->getValue('email_template')['value']);
+    $config->set('sms_template', $form_state->getValue('sms_template')['value']);
     $config->save();
     parent::submitForm($form, $form_state);
   }

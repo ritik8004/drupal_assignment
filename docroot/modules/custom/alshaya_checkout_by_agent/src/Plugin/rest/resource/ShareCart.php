@@ -13,6 +13,7 @@ use Drupal\kaleyra\WhatsAppApiAdapter;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\token\TokenInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,6 +92,13 @@ class ShareCart extends ResourceBase {
   protected $time;
 
   /**
+   * Token service.
+   *
+   * @var \Drupal\token\TokenInterface
+   */
+  protected $token;
+
+  /**
    * ShareCart constructor.
    *
    * @param array $configuration
@@ -119,6 +127,8 @@ class ShareCart extends ResourceBase {
    *   Config Factory.
    * @param \Drupal\Component\Datetime\Time $time
    *   Injecting time service.
+   * @param \Drupal\token\TokenInterface $token
+   *   Token service.
    */
   public function __construct(
     array $configuration,
@@ -133,7 +143,8 @@ class ShareCart extends ResourceBase {
     LanguageManagerInterface $language_manager,
     MobileNumberUtilInterface $mobile_util,
     ConfigFactoryInterface $config_factory,
-    Time $time
+    Time $time,
+    TokenInterface $token
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->messageApiAdapter = $message_api_adapter;
@@ -144,6 +155,7 @@ class ShareCart extends ResourceBase {
     $this->mobileUtil = $mobile_util;
     $this->configFactory = $config_factory;
     $this->time = $time;
+    $this->token = $token;
   }
 
   /**
@@ -163,7 +175,8 @@ class ShareCart extends ResourceBase {
       $container->get('language_manager'),
       $container->get('mobile_number.util'),
       $container->get('config.factory'),
-      $container->get('datetime.time')
+      $container->get('datetime.time'),
+      $container->get('token')
     );
   }
 
@@ -191,6 +204,8 @@ class ShareCart extends ResourceBase {
       $response = new ResourceResponse($responseData);
       return $response;
     }
+
+    $settings = $this->configFactory->get('alshaya_checkout_by_agent.settings');
 
     $context = $data['type'];
 
@@ -226,7 +241,7 @@ class ShareCart extends ResourceBase {
       case 'wa':
         // @todo Validate mobile number.
         $to = $this->getFullMobileNumber($to);
-        $template = $this->configFactory->get('alshaya_checkout_by_agent.settings')->get('whatsapp_template');
+        $template = $settings->get('whatsapp_template');
 
         $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, [$cart_url]);
         break;
@@ -235,18 +250,13 @@ class ShareCart extends ResourceBase {
         // @todo Validate mobile number.
         $to = $this->getFullMobileNumber($to);
 
-        // @todo replace message with actual message.
-        $message = $this->t('Dear Customer, Complete you order by visiting the link: @link Best Wishes, The @site_name Team', [
-          '@link' => $cart_url,
-          '@site_name' => $this->configFactory->get('system.site')->get('name'),
-        ]);
-
-        $this->messageApiAdapter->send($to, $message->render());
+        $message = str_replace('@link', $cart_url, $settings->get('sms_template'));
+        $message = $this->token->replace($message);
+        $this->messageApiAdapter->send($to, htmlspecialchars_decode($message));
         break;
 
       case 'email':
         // @todo Validate email address.
-        // @todo replace message with actual message.
         $params['cart_url'] = $cart_url;
         $params['title'] = 'Smart Agent link';
 
