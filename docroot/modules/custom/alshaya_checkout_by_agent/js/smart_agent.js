@@ -73,7 +73,6 @@
         agentInfo['lat'] = pos.coords.latitude;
         agentInfo['lng'] = pos.coords.longitude;
         $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
-        Drupal.smartAgent.locationPushedInCookie = true;
       });
     }
   }
