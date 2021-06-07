@@ -1,9 +1,18 @@
-/* eslint no-return-await: "error" */
-
 import Axios from 'axios';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 import { removeStorageInfo } from '../../utilities/storage';
+
+/**
+ * Global constants.
+ */
+
+// Magento method, to set for 2d vault (tokenized card) transaction.
+const checkoutComVaultMethod = () => 'checkout_com_cc_vault';
+
+// Magento method, to append for UAPAPI vault (tokenized card) transaction.
+// @See CHECKOUT_COM_UPAPI_VAULT_METHOD in \App\Service\CheckoutCom\APIWrapper
+const checkoutComUpapiVaultMethod = () => 'checkout_com_upapi_vault';
 
 /**
  * Check if user is anonymous and without cart.
@@ -316,4 +325,6 @@ export {
   callMagentoApi,
   updateCart,
   getProcessedCartData,
+  checkoutComUpapiVaultMethod,
+  checkoutComVaultMethod,
 };
