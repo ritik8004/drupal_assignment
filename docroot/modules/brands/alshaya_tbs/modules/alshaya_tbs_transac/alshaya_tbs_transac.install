@@ -75,6 +75,10 @@ function alshaya_tbs_transac_install() {
       'en' => 'What does it do for you?',
       'ar' => 'ما الذي تفعله من اجلك؟',
     ],
+    'get email offers and the latest news from @site_name' => [
+      'en' => 'Get an exclusive offer when you sign up, plus insider access to even more offers, new arrivals, style tips and more.',
+      'ar' => 'قم بالتسجيل في الموقع للحصول على عروض حصرية، بالإضافة إلى الاطلاع على أحدث المنتجات ونصائح الموضة وأكثر.',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);

@@ -70,3 +70,31 @@ fields:
     label: 'Color swatch code'
     type: 'string'
     translatable: 0
+  mainkeyingredients_name:
+    label: 'Main key ingredients name'
+    type: 'string'
+    description: 'Main key ingredients name'
+  mainkeyingredients_description:
+    label: 'Main key ingredients description'
+    type: 'text_long'
+    description: 'Main key ingredients description'
+  keyingredients_name2:
+    label: 'Second Key Ingredient Name'
+    type: 'string'
+    description: 'Second Key Ingredient Name'
+  keyingredients_description2:
+    label: 'Second Key Ingredient description'
+    type: 'text_long'
+    description: 'Second Key Ingredient description'
+  keyingredients_name3:
+    label: 'Third Key Ingredient Name'
+    type: 'string'
+    description: 'Third Key Ingredient Name'
+  keyingredients_description3:
+    label: 'Third Key Ingredient description'
+    type: 'text_long'
+    description: 'Third Key Ingredient description'
+  technical_ingredients_description:
+    label: 'Technical Ingredients'
+    type: 'text_long'
+    description: 'Technical Ingredients'

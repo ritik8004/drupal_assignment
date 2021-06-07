@@ -53,7 +53,11 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
       | postal_code                   | {postal_code} |
     And I wait 50 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 50 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
 
   @cc @hd @language @desktop @checkout_com @visa @mada
   Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (VISA Card)
@@ -80,7 +84,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
@@ -99,7 +103,11 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
       | postal_code                   | {postal_code} |
     And I wait 50 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 50 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
 
   @cc @hd @language @mobile @checkout_com @visa @mada
   Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (VISA Card)
@@ -124,12 +132,11 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_visa_card}"
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
-    And I wait 10 seconds
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-section-billing-address" element
@@ -144,7 +151,11 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
       | postal_code                   | {postal_code} |
     And I wait 50 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 50 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
@@ -166,12 +177,12 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_master_card}"
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_master_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_master_card_cvv}"
-    And I wait 10 seconds
+    And I wait 20 seconds
     And I scroll to the ".spc-section-billing-address" element
     When I add CnC billing address with following:
       | spc-area-select-selected-city | {city_option} |
@@ -184,7 +195,11 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
       | postal_code                   | {postal_code} |
     And I wait 50 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 50 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
 
   @cc @hd @language @desktop @checkout_com @mastercard @mada
   Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (Mastercard Card)
@@ -213,7 +228,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I wait for the page to load
     Then I select the Checkout payment method
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_master_card}"
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_master_card_expiry}"
@@ -231,7 +246,11 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
       | postal_code                   | {postal_code} |
     And I wait 50 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 50 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element
 
   @cc @hd @language @mobile @checkout_com @mastercard @mada
   Scenario: As an Authenticated user, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (Mastercard Card)
@@ -256,7 +275,7 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
     And I scroll to the "#spc-payment-methods" element
     Then I select the Checkout payment method
     And I wait for AJAX to finish
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then the checkout payment checkbox should be checked
     Then I fill checkout card details having class ".spc-type-cc-number input" with "{spc_mada_master_card}"
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_master_card_expiry}"
@@ -275,4 +294,8 @@ Feature: SPC Checkout Click & Collect using Mada Payment Method for Authenticate
       | postal_code                   | {postal_code} |
     And I wait 50 seconds
     And I wait for the page to load
-    Then the element "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" should exist
+    And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
+    And I wait for AJAX to finish
+    And I wait 50 seconds
+    And I should see an ".spc-checkout-error-message-container" element
+    And I should see an ".spc-checkout-error-message" element

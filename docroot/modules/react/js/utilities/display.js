@@ -24,7 +24,8 @@ const isDisplayConfigurableBoxes = () => (
  * @see alshaya_acm_product_is_buyable().
  */
 const isProductBuyable = (productBuyable) => (
-  drupalSettings.is_all_products_buyable || productBuyable
+  drupalSettings.checkoutFeatureStatus === 'enabled'
+  && (drupalSettings.is_all_products_buyable || productBuyable)
 );
 
 export {

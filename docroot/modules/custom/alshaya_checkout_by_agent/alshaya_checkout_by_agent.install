@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_checkout_by_agent_uninstall() {
+  // Delete all the configs added by this module.
+  \Drupal::configFactory()
+    ->getEditable('alshaya_checkout_by_agent.settings')
+    ->delete();
+  \Drupal::configFactory()->getEditable('rest.resource.share_cart')->delete();
+  Role::load('smartagent')->delete();
+
+  $field = FieldConfig::loadByName('user', 'user', 'field_agent_store');
+  if (!empty($field)) {
+    $field->delete();
+  }
+  $field_storage = FieldStorageConfig::loadByName('user', 'field_agent_store');
+  if (!empty($field_storage)) {
+    $field_storage->delete();
+  }
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_checkout_by_agent_install() {
+  // Update translations.
+  $strings = [
+    'Order assisted by Smart Agent' => [
+      'ar' => 'طلب بمساعدة وكيل',
+    ],
+    'End Transaction' => [
+      'ar' => 'إنهاء المعاملة',
+    ],
+    'Smart Agent: @name' => [
+      'ar' => '@name :الوكيل',
+    ],
+    'Share basket with customer via' => [
+      'ar' => 'شارك السلة مع العميل عبر',
+    ],
+    'Share basket with customer' => [
+      'ar' => 'مشاركة السلة مع العميل',
+    ],
+    'SMS' => [
+      'ar' => 'رسالة قصيرة',
+    ],
+    'Complete your order at @site_name' => [
+      'ar' => 'عزيزي العميل @site_name',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

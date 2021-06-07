@@ -67,3 +67,8 @@ freegift.select_free_gift:
     path: /select-free-gift
     controller: App\Controller\FreeGiftController::selectFreeGift
     methods: POST
+
+cart.smart_agent_resume_cart:
+  path: /cart/smart-agent-cart-resume
+  controller: App\Controller\CartController::smartAgentResumeCart
+  methods: GET

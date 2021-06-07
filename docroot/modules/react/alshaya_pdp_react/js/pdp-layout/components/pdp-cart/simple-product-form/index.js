@@ -2,6 +2,7 @@ import React, { createRef } from 'react';
 import { addToCartSimple } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
+import { isProductBuyable } from '../../../../../../js/utilities/display';
 
 
 class SimpleProductForm extends React.Component {
@@ -52,7 +53,6 @@ class SimpleProductForm extends React.Component {
     const {
       skuCode, productInfo, pdpLabelRefresh, stockQty, context, closeModal,
     } = this.props;
-    const { checkoutFeatureStatus } = drupalSettings;
     const variantSelected = skuCode;
     const id = `add-to-cart-${context}`;
 
@@ -67,7 +67,7 @@ class SimpleProductForm extends React.Component {
             stockQty={stockQty}
           />
         </div>
-        {(checkoutFeatureStatus === 'enabled') ? (
+        {(isProductBuyable(productInfo[skuCode].is_product_buyable)) ? (
           <>
             <div id="add-to-cart-error" className="error" />
             <div className="magv2-add-to-basket-container" ref={this.button}>
