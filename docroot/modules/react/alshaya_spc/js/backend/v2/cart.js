@@ -20,7 +20,7 @@ window.commerceBackend = window.commerceBackend || {};
  *   Returns the cart item if found else returns null.
  */
 const getCartItem = (sku) => {
-  const cart = window.commerceBackend.getCartDataFromStorage();
+  const cart = window.commerceBackend.getRawCartDataFromStorage();
   if (!cart || typeof cart.cart === 'undefined' || !cart.cart || typeof cart.cart.items === 'undefined' || cart.cart.items.length === 0) {
     return null;
   }
@@ -40,7 +40,7 @@ const getCartItem = (sku) => {
  *   The coupon code string or null.
  */
 const getCoupon = () => {
-  const cart = window.commerceBackend.getCartDataFromStorage();
+  const cart = window.commerceBackend.getRawCartDataFromStorage();
   if (!cart || (typeof cart.totals !== 'undefined' && Object.keys(cart.totals).length !== 0)) {
     return typeof cart.totals.coupon_code !== 'undefined'
       ? cart.totals.coupon_code
@@ -89,7 +89,7 @@ const triggerStockRefresh = (data) => callDrupalApi(
 });
 
 /**
- * Object to serve as static cache for cart data over the course of a request.
+ * Object to serve as static cache for processed cart data over the course of a request.
  */
 let staticCartData = null;
 
@@ -160,6 +160,8 @@ window.commerceBackend.getCart = async () => {
     return new Promise((resolve) => resolve(error));
   }
 
+  // Store the response.
+  window.commerceBackend.setRawCartDataInStorage(response.data);
   // Process data.
   response.data = window.commerceBackend.processCartData(response.data);
   return new Promise((resolve) => resolve(response));
@@ -195,9 +197,10 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   const sku = typeof data.variant_sku !== 'undefined' && data.variant_sku
     ? data.variant_sku
     : data.sku;
+  let cartItem = null;
 
   if (data.action === 'remove item') {
-    const cartItem = getCartItem(sku);
+    cartItem = getCartItem(sku);
     // Do nothing if item no longer available.
     if (!cartItem) {
       return window.commerceBackend.getCart();
@@ -208,12 +211,11 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       && typeof cartItem.extension_attributes.promo_rule_id !== 'undefined') {
       const appliedCoupon = getCoupon();
       if (appliedCoupon) {
-        // @todo Implement this function.
-        // window.commerceBackend.applyRemovePromo({promo: appliedCoupon, action: 'remove coupon'});
+        await window.commerceBackend.applyRemovePromo({ promo: appliedCoupon, action: 'remove coupon' });
       }
     }
     requestMethod = 'DELETE';
-    requestUrl = `/rest/V1/guest-carts/${cartId}/items/${cartItem.id}`;
+    requestUrl = `/rest/V1/guest-carts/${cartId}/items/${cartItem.item_id}`;
   }
 
   if (data.action === 'add item') {
@@ -251,13 +253,21 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   }
 
   if (data.action === 'update item') {
-    const cartItem = getCartItem(sku);
+    cartItem = getCartItem(sku);
     if (!cartItem) {
       // Do nothing if item no longer available.
       return window.commerceBackend.getCart();
     }
     // Set the cart item id to ensure we set new quantity instead of adding it.
     itemData.cartItem.item_id = cartItem.id;
+  }
+
+  // Do a sanity check before proceeding since an item can be removed in above processes.
+  // Eg. in remove cart when promo code is removed.
+  cartItem = getCartItem(sku);
+  if ((data.action === 'update item' || data.action === 'remove item') && !cartItem) {
+    // Do nothing if item no longer available.
+    return window.commerceBackend.getCart();
   }
 
   let apiCallAttempts = 1;
@@ -317,7 +327,17 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.applyRemovePromo = (data) => updateCart(data);
+window.commerceBackend.applyRemovePromo = (data) => {
+  const params = {
+    extension: {
+      action: data.action,
+    },
+  };
+  if (typeof data.promo !== 'undefined' && data.promo) {
+    params.coupon = data.promo;
+  }
+  return updateCart(params);
+};
 
 /**
  * Gets the cart ID for existing cart.
@@ -364,7 +384,7 @@ window.commerceBackend.processCartData = (cartData) => {
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.cart.customer,
-    coupon_code: '', // @todo where to find this? cart.totals.coupon_code
+    coupon_code: typeof cartData.totals.coupon_code !== 'undefined' ? cartData.totals.coupon_code : '',
     appliedRules: cartData.cart.applied_rule_ids,
     items_qty: cartData.cart.items_qty,
     cart_total: 0,
@@ -404,11 +424,10 @@ window.commerceBackend.processCartData = (cartData) => {
     data.minicart_total -= data.totals.surcharge;
   }
 
-  // @todo confirm this
   if (typeof cartData.response_message[1] !== 'undefined') {
     data.response_message = {
       status: cartData.response_message[1],
-      msg: cartData.response_message[2],
+      msg: cartData.response_message[0],
     };
   }
 
@@ -430,9 +449,15 @@ window.commerceBackend.processCartData = (cartData) => {
         stock: 99999, // @todo get stock information
       };
 
-      if (typeof item.extension_attributes !== 'undefined' && typeof item.extension_attributes.error_message !== 'undefined') {
-        data.items[item.item_id].error_msg = item.extension_attributes.error_message;
-        data.is_error = true;
+      if (typeof item.extension_attributes !== 'undefined') {
+        if (typeof item.extension_attributes.error_message !== 'undefined') {
+          data.items[item.sku].error_msg = item.extension_attributes.error_message;
+          data.is_error = true;
+        }
+
+        if (typeof item.extension_attributes.promo_rule_id !== 'undefined') {
+          data.items[item.sku].promoRuleId = item.extension_attributes.promo_rule_id;
+        }
       }
 
       // This is to determine whether item to be shown free or not in cart.
@@ -449,7 +474,7 @@ window.commerceBackend.processCartData = (cartData) => {
 
           // Free Item is only for free gift products which are having
           // price 0, rest all are free but still via different rules.
-          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.amasty_promo !== 'undefined') {
+          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
             data.items[item.sku].freeItem = true;
           }
         }

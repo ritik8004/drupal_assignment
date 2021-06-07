@@ -5,10 +5,30 @@ import qs from 'qs';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 
+window.commerceBackend = window.commerceBackend || {};
+
 /**
  * Stores the langcode of the current page.
  */
 const currentLangcode = window.drupalSettings.path.currentLanguage;
+
+// Contains the raw unprocessed cart data.
+let rawCartData = null;
+
+/**
+ * Stores the raw cart data object into the storage.
+ *
+ * @param {object} data
+ *   The raw cart data object.
+ */
+window.commerceBackend.setRawCartDataInStorage = (data) => {
+  rawCartData = data;
+};
+
+/**
+ * Fetches the raw cart data object from the static storage.
+ */
+window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
 
 /**
  * Check if user is anonymous and without cart.
@@ -186,12 +206,27 @@ const callDrupalApi = (url, method, requestOptions) => {
 
 /**
  * Calls the update cart API and returns the updated cart.
- * @todo Implement this function while working on the checkout page.
+ * @todo Implement this function fully while working on the checkout page.
  *
  * @param {object} data
  *  The data to send.
  */
-const updateCart = async () => null;
+const updateCart = (data) => {
+  const cartId = window.commerceBackend.getCartId();
+
+  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/updateCart`, 'POST', JSON.stringify(data))
+    .then((response) => {
+      if (typeof response.data.error !== 'undefined' && response.data.error) {
+        return response;
+      }
+      // Update the cart data in storage.
+      window.commerceBackend.setRawCartDataInStorage(response.data);
+      // Process the cart data.
+      response.data = window.commerceBackend.processCartData(response.data);
+
+      return response;
+    });
+};
 
 export {
   isAnonymousUserWithoutCart,
