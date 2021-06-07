@@ -669,6 +669,23 @@ class AlshayaBazaarVoice {
   }
 
   /**
+   * Check if parent sku exists.
+   *
+   * @param string $sku_id
+   *   Sku id.
+   *
+   * @return string
+   *   return parent sku id.
+   */
+  public function checkParentSku($sku_id) {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $parent_sku = $skuManager->getParentSkuBySku($sku_id);
+    $parent_sku_id = $parent_sku !== NULL ? $parent_sku->getSku() : $sku_id;
+    return $parent_sku_id;
+  }
+
+  /**
    * Get product info reviewed by current user.
    *
    * @param \Drupal\node\NodeInterface $node

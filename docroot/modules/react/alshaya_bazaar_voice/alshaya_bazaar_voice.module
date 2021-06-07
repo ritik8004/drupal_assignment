@@ -279,7 +279,9 @@ function alshaya_bazaar_voice_alshaya_acm_customer_recent_order_build_alter(arra
   foreach (array_keys($build['recent_order']) as $key) {
     foreach ($build['recent_order'][$key]['#order']['items'] as $item_key => $item) {
       $build['recent_order'][$key]['#order']['items'][$item_key]['bazaarvoice_link'] = TRUE;
-      $bazaarvoiceSettings[$item['sku']] = $alshayaBazaarVoice->getMyAccountProductSettings($item['sku'], $basic_configs);
+      $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
+      $build['recent_order'][$key]['#order']['items'][$item_key]['parent_sku'] = $parent_sku_id;
+      $bazaarvoiceSettings[$parent_sku_id] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
     }
     $build['recent_order'][$key]['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings);
   }
@@ -301,12 +303,15 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   }
   $bazaarvoiceSettings = [];
   foreach ($order['items'] as $key => $item) {
-    $bazaarvoiceSettings[$item['sku']] = $alshayaBazaarVoice->getMyAccountProductSettings($item['sku'], $basic_configs);
+    $parent_sku_id = $alshayaBazaarVoice->checkParentSku($item['sku']);
+    $bazaarvoiceSettings[$parent_sku_id] = $alshayaBazaarVoice->getMyAccountProductSettings($parent_sku_id, $basic_configs);
   }
   if (!empty($bazaarvoiceSettings)) {
     $build['#attached'] = $alshayaBazaarVoice->getOrdersPageAttachment($bazaarvoiceSettings); 
     foreach(array_keys($build['#products']) as $key) {
+      $parent_sku_id = $alshayaBazaarVoice->checkParentSku($build['#products'][$key]['sku']);
       $build['#products'][$key]['bazaarvoice_link'] = TRUE;
+      $build['#products'][$key]['parent_sku'] = $parent_sku_id;
     }
   }
   $build['#strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
