@@ -34,6 +34,7 @@ window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(dat
 const getCncStatusForCart = (data) => {
   // @todo implement this
   logger.info(`${data}`);
+  return { data: 'test' };
 };
 
 /**

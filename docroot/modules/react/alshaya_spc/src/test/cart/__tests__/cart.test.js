@@ -192,7 +192,7 @@ describe('Cart', () => {
     });
 
     it('Test getCncStatusForCart()', async () => {
-      const getCncStatusForCart = utilsRewire.__get__('formatAddressForFrontend');
+      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
       const data = [
         {
           city: 'London',
