@@ -1,5 +1,4 @@
 jest.mock('axios');
-import each from 'jest-each'
 import axios from 'axios';
 import { callMagentoApi } from '../../../../js/backend/v2/common';
 import utilsRewire, { getProcessedCheckoutData } from "../../../../js/backend/v2/checkout";
@@ -177,42 +176,6 @@ describe('Cart', () => {
         status: 405,
       });
       expect(axios).toHaveBeenCalled();
-    });
-
-    const getMethodCodeForFrontend = utilsRewire.__get__('getMethodCodeForFrontend');
-    each`
-     input                           | expectedResult
-     ${'foo'}                        | ${'foo'}
-     ${'checkout_com_cc_vault'}      | ${'checkout_com'}
-     ${'checkout_com_upapi_vault'}   | ${'checkout_com_upapi'}
-   `.test('Test that getMethodCodeForFrontend($input) returns "$expectedResult"', ({ input, expectedResult }) => {
-      expect(getMethodCodeForFrontend(input)).toBe(expectedResult);
-    });
-
-    it('Test formatAddressForFrontend()', async () => {
-      const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
-      const data = [
-        {
-          city: 'London',
-        },
-      ];
-      const result = formatAddressForFrontend(data);
-      expect(result).toEqual({
-        data: 'test',
-      });
-    });
-
-    it('Test getCncStatusForCart()', async () => {
-      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-      const data = [
-        {
-          city: 'London',
-        },
-      ];
-      const result = getCncStatusForCart(data);
-      expect(result).toEqual({
-        data: 'test',
-      });
     });
   });
 });
