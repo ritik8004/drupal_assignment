@@ -6,7 +6,9 @@ const PriceFilter = (props) => {
   const { items, itemCount, refine } = props;
 
   if (typeof itemCount !== 'undefined') {
-    itemCount(props.attribute, items.length);
+    setTimeout(() => {
+      itemCount(props.attribute, items.length);
+    }, 1);
   }
 
   return (

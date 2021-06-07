@@ -19,7 +19,9 @@ const ColorFilter = ({
   }
 
   if (typeof itemCount !== 'undefined') {
-    itemCount(props.attribute, items.length);
+    setTimeout(() => {
+      itemCount(props.attribute, items.length);
+    }, 1);
   }
 
   const { facetValues } = props;

@@ -8,7 +8,9 @@ const SizeGroupFilter = (
   },
 ) => {
   if (typeof itemCount !== 'undefined') {
-    itemCount(attribute, items.length);
+    setTimeout(() => {
+      itemCount(attribute, items.length);
+    }, 1);
   }
 
   // Preparing sizes according to their groups.

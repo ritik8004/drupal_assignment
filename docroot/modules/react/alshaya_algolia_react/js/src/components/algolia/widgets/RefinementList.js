@@ -8,7 +8,13 @@ function CommonRefinement(props) {
   } = props;
 
   if (typeof itemCount !== 'undefined') {
-    itemCount(attribute, items.length);
+    // Initially the count was updated when the filter
+    // gets hide-facet-block class asynchronously.
+    // Now, the count for the filter is updated
+    // once markup is available.
+    setTimeout(() => {
+      itemCount(attribute, items.length);
+    }, 1);
   }
 
   return (

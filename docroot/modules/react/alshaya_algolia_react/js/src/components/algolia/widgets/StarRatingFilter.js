@@ -9,7 +9,9 @@ function StarRatingFilter(props) {
   } = props;
 
   if (typeof itemCount !== 'undefined') {
-    itemCount(attribute, items.length);
+    setTimeout(() => {
+      itemCount(attribute, items.length);
+    }, 1);
   }
   const ratingItems = [];
   Object.entries(items).forEach(([key, values]) => {
