@@ -1,0 +1,38 @@
+.block-alshaya-secondary-main-menu {
+  @include breakpoint($desktop) {
+    .secondary--main--menu {
+      ul.menu--one__list {
+        li.menu--one__list-item {
+          &.has-child {
+            a.menu--one__link {
+              position: relative;
+
+              &::after {
+                content: '';
+                width: 0;
+                height: 0;
+                border-left: 0.25rem solid transparent;
+                border-right: 0.25rem solid transparent;
+                border-top: 0.25rem solid;
+                margin-left: 0.5rem;
+                position: absolute;
+                right: -0.8rem;
+                top: 0.5rem;
+              }
+            }
+          }
+
+          &:hover {
+            a.menu--one__link {
+              &::after {
+                top: 0.55rem;
+                border-top: 0;
+                border-bottom: 0.25rem solid;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
