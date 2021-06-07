@@ -120,7 +120,8 @@ const getStoreInfo = (storeCode) => {
  */
 const formatAddressForFrontend = (address) => {
   // @todo implement this
-  logger.info(`${address}`);
+  logger.info(`Address ${address}`);
+  return { data: 'test' };
 };
 
 /**
@@ -155,7 +156,7 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  * @return {object}.
  *   The data.
  */
-window.commerceBackend.getProcessedCheckoutData = (cartData) => {
+const getProcessedCheckoutData = (cartData) => {
   let data = cartData;
   if (typeof data.error !== 'undefined' && data.error === true) {
     return data;
@@ -275,7 +276,7 @@ window.commerceBackend.getCartForCheckout = () => {
       }
 
       const processedData = {
-        data: window.commerceBackend.getProcessedCheckoutData(response),
+        data: getProcessedCheckoutData(response),
       };
       return new Promise((resolve) => resolve(processedData));
     })
@@ -293,3 +294,5 @@ window.commerceBackend.getCartForCheckout = () => {
     });
   return null;
 };
+
+export default getProcessedCheckoutData;

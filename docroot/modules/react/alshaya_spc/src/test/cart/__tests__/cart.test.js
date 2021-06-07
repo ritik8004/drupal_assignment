@@ -1,6 +1,7 @@
 jest.mock('axios');
 import axios from 'axios';
 import { callMagentoApi } from '../../../../js/backend/v2/common';
+import utilsRewire, { getProcessedCheckoutData } from "../../../../js/backend/v2/checkout";
 
 describe('Cart', () => {
   describe('Calls to Magento API', () => {
@@ -177,5 +178,30 @@ describe('Cart', () => {
       expect(axios).toHaveBeenCalled();
     });
 
+    it('Test formatAddressForFrontend()', async () => {
+      const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
+      const data = [
+        {
+          city: 'London',
+        },
+      ];
+      const result = formatAddressForFrontend(data);
+      expect(result).toEqual({
+        data: 'test',
+      });
+    });
+
+    it('Test getCncStatusForCart()', async () => {
+      const getCncStatusForCart = utilsRewire.__get__('formatAddressForFrontend');
+      const data = [
+        {
+          city: 'London',
+        },
+      ];
+      const result = getCncStatusForCart(data);
+      expect(result).toEqual({
+        data: 'test',
+      });
+    });
   });
 });
