@@ -17,3 +17,4 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
       - '@request_stack'
+      - '@module_handler'
