@@ -14,3 +14,7 @@ alshaya_checkout_by_agent.settings:
     whatsapp_template:
       type: label
       label: 'WhatsApp Template'
+    email_template:
+      type: text
+      label: Email template to share cart
+      translatable: true
