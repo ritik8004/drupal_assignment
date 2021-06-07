@@ -2,6 +2,8 @@ import {
   isAnonymousUserWithoutCart,
   updateCart,
   getProcessedCartData,
+  checkoutComUpapiVaultMethod,
+  checkoutComVaultMethod,
 } from './common';
 import { getDefaultErrorMessage } from './error';
 import { logger } from './utility';
@@ -128,14 +130,28 @@ const formatAddressForFrontend = (address) => {
 /**
  * Get Method Code.
  *
- * @param {array} method
+ * @param {array} code
  *   Payment Method code.
  * @return {string}.
  *   Payment Method code used.
  */
-const getMethodCodeForFrontend = (method) => {
-  // @todo implement this
-  logger.info(`${method}`);
+const getMethodCodeForFrontend = (code) => {
+  let method = code;
+  switch (method) {
+    case checkoutComUpapiVaultMethod():
+      method = 'checkout_com_upapi';
+      break;
+
+    case checkoutComVaultMethod():
+      method = 'checkout_com';
+      break;
+
+    default:
+      logger.info(`Invalid Method code: ${method}`);
+      break;
+  }
+
+  return method;
 };
 
 /**

@@ -41,6 +41,7 @@
     "gulp-uglify": "2.0.0",
     "gulp-watch": "4.3.10",
     "jest": "^27.0.1",
+    "jest-each": "^27.0.2",
     "qs": "^6.9.0",
     "webpack": "^4.39.3",
     "webpack-chunk-rename-plugin": "^1.0.3",

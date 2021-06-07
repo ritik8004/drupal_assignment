@@ -177,31 +177,5 @@ describe('Cart', () => {
       });
       expect(axios).toHaveBeenCalled();
     });
-
-    it('Test formatAddressForFrontend()', async () => {
-      const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
-      const data = [
-        {
-          city: 'London',
-        },
-      ];
-      const result = formatAddressForFrontend(data);
-      expect(result).toEqual({
-        data: 'test',
-      });
-    });
-
-    it('Test getCncStatusForCart()', async () => {
-      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-      const data = [
-        {
-          city: 'London',
-        },
-      ];
-      const result = getCncStatusForCart(data);
-      expect(result).toEqual({
-        data: 'test',
-      });
-    });
   });
 });
