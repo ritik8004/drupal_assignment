@@ -211,11 +211,6 @@ export const setBillingFlagInStorage = (cart) => {
 export const addShippingInCart = (action, data) => {
   const apiUrl = updateCartApiUrl();
 
-  // Add smart agent location coordinates in cookie.
-  if (typeof Drupal.smartAgent !== 'undefined') {
-    Drupal.smartAgent.setLocationInCookie();
-  }
-
   return axios
     .post(apiUrl, {
       action,
@@ -260,11 +255,6 @@ export const addShippingInCart = (action, data) => {
  */
 export const addBillingInCart = (action, data) => {
   const apiUrl = updateCartApiUrl();
-
-  // Add smart agent location coordinates in cookie.
-  if (typeof Drupal.smartAgent !== 'undefined') {
-    Drupal.smartAgent.setLocationInCookie();
-  }
 
   return axios
     .post(apiUrl, {
@@ -321,11 +311,6 @@ export const validateCartData = () => {
   }
 
   const apiUrl = updateCartApiUrl();
-
-  // Add smart agent location coordinates in cookie.
-  if (typeof Drupal.smartAgent !== 'undefined') {
-    Drupal.smartAgent.setLocationInCookie();
-  }
 
   return axios
     .post(apiUrl, {

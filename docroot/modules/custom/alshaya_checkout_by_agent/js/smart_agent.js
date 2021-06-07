@@ -63,19 +63,10 @@
     }
   };
 
-  Drupal.smartAgent.locationPushedInCookie = false;
+  // Add smart agent location in cookie.
+  var agentInfo = Drupal.smartAgent.getInfo();
 
-  Drupal.smartAgent.setLocationInCookie = function () {
-    if (Drupal.smartAgent.locationPushedInCookie === true) {
-      return;
-    }
-
-    var agentInfo = Drupal.smartAgent.getInfo();
-
-    if (agentInfo === false) {
-      return;
-    }
-
+  if (agentInfo !== false) {
     // Add agent location in cookie.
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
@@ -85,6 +76,6 @@
         Drupal.smartAgent.locationPushedInCookie = true;
       });
     }
+  }
 
-  };
 })(jQuery, Drupal, drupalSettings);
