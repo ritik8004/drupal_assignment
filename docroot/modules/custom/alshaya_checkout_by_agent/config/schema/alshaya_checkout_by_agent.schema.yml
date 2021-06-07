@@ -18,3 +18,7 @@ alshaya_checkout_by_agent.settings:
       type: text
       label: Email template to share cart
       translatable: true
+    sms_template:
+      type: text
+      label: SMS template to share cart
+      translatable: true
