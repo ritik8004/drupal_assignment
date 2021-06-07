@@ -210,7 +210,6 @@ export const setBillingFlagInStorage = (cart) => {
 
 export const addShippingInCart = (action, data) => {
   const apiUrl = updateCartApiUrl();
-
   return axios
     .post(apiUrl, {
       action,
@@ -255,7 +254,6 @@ export const addShippingInCart = (action, data) => {
  */
 export const addBillingInCart = (action, data) => {
   const apiUrl = updateCartApiUrl();
-
   return axios
     .post(apiUrl, {
       action,
@@ -311,7 +309,6 @@ export const validateCartData = () => {
   }
 
   const apiUrl = updateCartApiUrl();
-
   return axios
     .post(apiUrl, {
       action: 'refresh',

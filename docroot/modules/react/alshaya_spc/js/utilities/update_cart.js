@@ -115,7 +115,6 @@ export const updateCartItemData = (action, sku, quantity) => {
 
 export const addPaymentMethodInCart = (action, data) => {
   const apiUrl = updateCartApiUrl();
-
   return axios.post(apiUrl, {
     action,
     payment_info: data,
