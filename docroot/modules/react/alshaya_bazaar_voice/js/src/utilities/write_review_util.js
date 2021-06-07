@@ -1,7 +1,7 @@
 import { getbazaarVoiceSettings } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 import { getStorageInfo } from './storage';
-import smoothScrollTo from './smoothScroll';
+import { smoothScrollTo } from './smoothScroll';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 
@@ -110,7 +110,7 @@ export const prepareRequest = (elements, fieldsConfig) => {
  * @param {*} elements
  * @param {*} fieldsConfig
  */
-export const validateRequest = (elements, fieldsConfig, e) => {
+export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
   let isError = false;
 
   Object.entries(fieldsConfig).forEach(([key, field]) => {
@@ -157,6 +157,9 @@ export const validateRequest = (elements, fieldsConfig, e) => {
             document.getElementById(`${id}-error`).classList.add('error');
             isError = true;
           }
+          if (!isError) {
+            document.getElementById(`${id}-error`).classList.remove('error');
+          }
         } else {
           if (groupType === 'textfield'
            || groupType === 'textarea'
@@ -168,8 +171,10 @@ export const validateRequest = (elements, fieldsConfig, e) => {
           document.getElementById(`${id}-error`).classList.remove('rating-error');
         }
         // Scroll to error message.
-        if (isError) {
-          smoothScrollTo(e, '.error');
+        if (isError && newPdp) {
+          smoothScrollTo(e, '#reviews-section .error', newPdp, 'write_review');
+        } else if (isError) {
+          smoothScrollTo(e, '.error', '', 'write_review');
         }
       }
     } catch (exception) { return null; }

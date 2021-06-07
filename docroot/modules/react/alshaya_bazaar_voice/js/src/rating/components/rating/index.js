@@ -3,7 +3,7 @@ import { fetchAPIData } from '../../../utilities/api/apiData';
 import InlineRating from '../widgets/InlineRating';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/bv-auth-confirmation';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';

@@ -1,5 +1,5 @@
 import React from 'react';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import getStringMessage from '../../../../../../js/utilities/strings';
 
 export default class Pagination extends React.Component {
