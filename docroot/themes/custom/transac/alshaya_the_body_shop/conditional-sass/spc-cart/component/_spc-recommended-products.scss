@@ -4,11 +4,6 @@
     padding-#{$right}: 0;
   }
 
-  @include breakpoint($desktop) {
-    padding: 1.875rem 3rem;
-    padding-#{$right}: 0;
-  }
-
   .block-content {
     .spc-product-recommended-wrapper {
       width: 13.125rem;
