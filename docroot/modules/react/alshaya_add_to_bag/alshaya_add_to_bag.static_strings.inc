@@ -39,12 +39,8 @@ function _alshaya_add_to_bag_strings() {
       'value' => t('Quick View'),
     ],
     [
-      'key' => 'add',
-      'value' => t('Add'),
-    ],
-    [
-      'key' => 'add_to_bag',
-      'value' => t('add to bag'),
+      'key' => 'add_to_cart',
+      'value' => t('add to cart'),
     ],
     [
       'key' => 'item_added',
@@ -72,7 +68,7 @@ function _alshaya_add_to_bag_translations() {
       'Item added' => [
         'ar' => 'تمت إضافة العنصر',
       ],
-      'add to bag' => [
+      'add to cart' => [
         'ar' => 'أضيفي إلى الحقيب',
       ],
     ],
