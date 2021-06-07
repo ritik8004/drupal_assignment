@@ -563,6 +563,7 @@ article[gtm-sku-type="simple"] {
     &.desc-open {
       #{$right}: 0;
       transition: $right 0.5s ease;
+      overflow-y: auto;
     }
 
     .desc-wrapper {
