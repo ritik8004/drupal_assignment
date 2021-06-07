@@ -166,6 +166,9 @@ class AlshayaSpcController extends ControllerBase {
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
+    // Get country code.
+    $country_code = _alshaya_custom_get_site_level_country_code();
+
     $build = [
       '#type' => 'markup',
       '#markup' => '<div id="spc-cart"></div>',
@@ -180,6 +183,8 @@ class AlshayaSpcController extends ControllerBase {
         'drupalSettings' => [
           'item_code_label' => $this->t('Item code'),
           'quantity_limit_enabled' => $acm_config->get('quantity_limit_enabled'),
+          'country_mobile_code' => $this->mobileUtil->getCountryCode($country_code),
+          'mobile_maxlength' => $this->config('alshaya_master.mobile_number_settings')->get('maxlength'),
           'hide_max_qty_limit_message' => $acm_config->get('hide_max_qty_limit_message'),
           'global_error_message' => _alshaya_spc_global_error_message(),
           'alshaya_spc' => [
@@ -573,7 +578,10 @@ class AlshayaSpcController extends ControllerBase {
     array_multisort(array_column($payment_methods, 'weight'), SORT_ASC, $payment_methods);
     $build['#attached']['drupalSettings']['payment_methods'] = $payment_methods;
 
-    return $this->addCheckoutConfigSettings($build);
+    $build = $this->addCheckoutConfigSettings($build);
+
+    $this->moduleHandler->alter('alshaya_spc_checkout_build', $build);
+    return $build;
   }
 
   /**
