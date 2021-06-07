@@ -208,7 +208,7 @@
         }
         // Above Mobile res / default PDP / new PDP.
         else {
-          if (scroll) {
+          if (scroll || ($('.header-sticky-filter').length < 1 && $(window).width() > 767)) {
             $('html, body').animate({
               scrollTop: 0
             }, 'slow');
