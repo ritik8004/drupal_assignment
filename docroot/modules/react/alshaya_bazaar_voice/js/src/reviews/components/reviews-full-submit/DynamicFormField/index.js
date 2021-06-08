@@ -34,16 +34,16 @@ const DynamicFormField = (props) => {
   if (fieldProperty.group_type === 'textfield') {
     if (fieldProperty.id === 'useremail') {
       if (bazaarVoiceSettings.reviews.user.email !== null) {
-        fieldProperty.defaultVal = bazaarVoiceSettings.reviews.user.email;
+        fieldProperty.default_value = bazaarVoiceSettings.reviews.user.email;
         readonly = true;
       } else if (userStorage !== null) {
         if (userStorage.email !== undefined) {
-          fieldProperty.defaultVal = userStorage.email;
+          fieldProperty.default_value = userStorage.email;
         }
       }
     } else if (fieldProperty.id === 'usernickname' && userStorage !== null) {
       if (userStorage.nickname !== undefined) {
-        fieldProperty.defaultVal = userStorage.nickname;
+        fieldProperty.default_value = userStorage.nickname;
       }
     }
   }
@@ -55,7 +55,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -68,7 +68,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
         placeholder={fieldProperty.placeholder}
       />
@@ -83,7 +83,7 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         options={fieldProperty.options}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -95,7 +95,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -108,7 +108,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         options={fieldProperty.options}
         visible={fieldProperty.visible}
         text={fieldProperty.text}
@@ -123,7 +123,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         maxLength={fieldProperty.maxlength}
         minLength={fieldProperty.minlength}
         text={fieldProperty.text}
@@ -148,7 +148,7 @@ const DynamicFormField = (props) => {
         required={fieldProperty.required}
         id={fieldProperty.id}
         label={fieldProperty.title}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -162,7 +162,7 @@ const DynamicFormField = (props) => {
         id={fieldProperty.id}
         label={fieldProperty.title}
         maxLength={fieldProperty.maxlength}
-        defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+        defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
         text={fieldProperty.text}
       />
     );
@@ -173,7 +173,7 @@ const DynamicFormField = (props) => {
       required={fieldProperty.required}
       id={fieldProperty.id}
       label={fieldProperty.title}
-      defaultValue={fieldProperty.defaultVal !== null ? fieldProperty.defaultVal : null}
+      defaultValue={fieldProperty.default_value !== null ? fieldProperty.default_value : null}
       maxLength={fieldProperty.maxlength}
       minLength={fieldProperty.minlength}
       visible={fieldProperty.visible}
