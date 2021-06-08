@@ -78,7 +78,7 @@
             },
             function () {
               // Trigger an event when failed to capture agent location.
-              $(window).trigger('location-not-shared');
+              $(window).trigger('alshaya-agent-location-fetch-failed');
             }
           );
         }
