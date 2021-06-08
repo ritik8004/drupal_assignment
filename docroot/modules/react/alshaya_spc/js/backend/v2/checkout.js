@@ -36,7 +36,7 @@ window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(dat
 const getCncStatusForCart = (data) => {
   // @todo implement this
   logger.info(`${data}`);
-  return { data: 'test' };
+  return data;
 };
 
 /**
@@ -55,16 +55,62 @@ const applyDefaults = (data, uid) => {
 };
 
 /**
+ * Format address structure for shipping estimates api.
+ *
+ * @param {object} $address
+ *   Address object.
+ * @return {object}.
+ *   Formatted address object.
+ */
+const formatShippingEstimatesAddress = (address) => {
+  const data = {};
+  data.firstname = (typeof address.firstname !== 'undefined') ? address.firstname : '';
+  data.lastname = (typeof address.lastname !== 'undefined') ? address.lastname : '';
+  data.email = (typeof address.email !== 'undefined') ? address.email : '';
+  data.country_id = (typeof address.country_id !== 'undefined') ? address.country_id : '';
+  data.city = (typeof address.city !== 'undefined') ? address.city : '';
+  data.telephone = (typeof address.telephone !== 'undefined') ? address.telephone : '';
+
+  data.custom_attributes = [];
+  if (typeof address.custom_attributes !== 'undefined' && address.custom_attributes.length > 0) {
+    data.custom_attributes = address.custom_attributes.map((item) => {
+      if (typeof item.value !== 'undefined' && item.value !== '') {
+        return {
+          attribute_code: item.attribute_code,
+          value: item.value,
+        };
+      }
+      return null;
+    }).filter((item) => (item !== null));
+  }
+
+  // If custom attributes not available, we check for extension attributes.
+  if (data.custom_attributes.length === 0 && typeof address.extension_attributes !== 'undefined' && Object.keys(address.extension_attributes).length > 0) {
+    Object.keys(address.extension_attributes).forEach((key) => {
+      data.custom_attributes.push(
+        {
+          attribute_code: key,
+          value: address.extension_attributes[key],
+        },
+      );
+    });
+  }
+  return data;
+};
+
+/**
  * Gets shipping methods.
  *
- * @param {object} cartData
- *   The cart data object.
+ * @param {object} shipping
+ *   The shipping data.
  * @return {object}.
  *   The data.
  */
-const getHomeDeliveryShippingMethods = (data) => {
+const getHomeDeliveryShippingMethods = (shipping) => {
   // @todo implement this
-  logger.info(`${data}`);
+  // Call formatShippingEstimatesAddress() to be able to perform unit tests.
+  // This function will be continued on ticket #30724.
+  formatShippingEstimatesAddress(shipping.address);
 };
 
 /**
@@ -124,7 +170,7 @@ const getStoreInfo = (storeCode) => {
 const formatAddressForFrontend = (address) => {
   // @todo implement this
   logger.info(`Address ${address}`);
-  return { data: 'test' };
+  return address;
 };
 
 /**

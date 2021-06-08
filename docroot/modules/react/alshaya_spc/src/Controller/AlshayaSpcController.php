@@ -518,6 +518,7 @@ class AlshayaSpcController extends ControllerBase {
       '#attached' => [
         'library' => [
           'alshaya_spc/googlemapapi',
+          'alshaya_spc/commerce_backend.cart.v' . $this->spcHelper->getCommerceBackendVersion(),
           'alshaya_spc/commerce_backend.checkout.v' . $this->spcHelper->getCommerceBackendVersion(),
           'alshaya_spc/checkout',
           'alshaya_white_label/spc-checkout',
