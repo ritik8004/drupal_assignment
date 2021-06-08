@@ -34,7 +34,7 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   $add_to_bag_settings = \Drupal::config('alshaya_add_to_bag.settings');
 
   $page['#attached']['drupalSettings']['add_to_bag']['display_addtobag'] = $add_to_bag_feature_status;
-  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'], $add_to_bag_settings->getCacheTags());
+  $page['#cache']['tags'] = Cache::mergeTags($page['#cache']['tags'] ?? [], $add_to_bag_settings->getCacheTags());
 
   if (!$add_to_bag_feature_status) {
     return;
@@ -45,7 +45,7 @@ function alshaya_add_to_bag_page_attachments_alter(array &$page) {
   $productinfo_local_storage_expiration = \Drupal::service('alshaya_add_to_bag.helper')->getProductInfoLocalStorageExpiration();
   $page['#attached']['drupalSettings']['add_to_bag']['productinfo_local_storage_expiration'] = $productinfo_local_storage_expiration ? $productinfo_local_storage_expiration : 0;
 
-  $page['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v' . \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  $page['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.' . \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
 
   // Attach the theming library.
   $page['#attached']['library'][] = 'alshaya_white_label/plp-add-to-cart';

@@ -63,7 +63,7 @@ function alshaya_spc_form_sku_base_form_alter(&$form, FormStateInterface $form_s
   $form['#attached']['library'][] = 'alshaya_spc/add_to_cart';
 
   $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
-  $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.v' . $backend_version;
+  $form['#attached']['library'][] = 'alshaya_spc/commerce_backend.cart.' . $backend_version;
 }
 
 /**
