@@ -212,8 +212,7 @@ function _alshaya_spc_global_error_message() {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_spc_page_attachments_alter(&$page) {
-  $cart_config = \Drupal::config('alshaya_acm.cart_config');
-  $cart_version = $cart_config->get('version') ?? 1;
+  $cart_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
   if ($cart_version != 2) {
     return;
   }
