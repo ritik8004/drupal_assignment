@@ -2,9 +2,14 @@
   background: $smart-agent-banner-bg;
   color: $smart-agent-banner-color;
 
-  @include icon('user') {
-    font-size: 1.75rem;
-    margin-#{$left}: 1rem;
+  .spc-checkout-smart-agent-share-message {
+    margin-#{$left}: 0;
+
+    > svg {
+      width: 2.5rem;
+      margin-#{$right}: 1rem;
+      margin-#{$left}: 1rem;
+    }
   }
 
   @include breakpoint($only-mobile) {
@@ -12,11 +17,8 @@
       flex-wrap: wrap;
 
       .message {
-        width: 100%;
-        padding-bottom: 0.5rem;
-
-        + .share-option {
-          padding-#{$left}: 0;
+        + .share-options {
+          margin: 1rem auto 0;
         }
       }
     }
@@ -101,10 +103,16 @@
 
 span.share-option {
   cursor: pointer;
-  padding-#{$left}: 1rem;
+  padding: 0 1rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-#{$right}: 1px solid $smart-agent-banner-color;
+
+  &:last-child {
+    padding-#{$right}: 0;
+    border-#{$right}: none;
+  }
 
   svg {
     width: 1.25rem;
