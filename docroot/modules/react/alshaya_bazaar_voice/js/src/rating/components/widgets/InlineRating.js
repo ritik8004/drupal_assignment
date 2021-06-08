@@ -1,7 +1,7 @@
 import React from 'react';
 import RatingSummary from './RatingSummary';
 import ConditionalView from '../../../common/components/conditional-view';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../stars';
 
