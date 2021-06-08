@@ -57,6 +57,9 @@ function alshaya_checkout_by_agent_install() {
     'Complete your order at @site_name' => [
       'ar' => 'عزيزي العميل @site_name',
     ],
+    'Share' => [
+      'ar' => 'إرسال',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
