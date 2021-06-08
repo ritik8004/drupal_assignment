@@ -6,7 +6,6 @@ smart_agent:
     - core/drupalSettings
     - core/jquery.once
     - core/jquery.cookie
-    - alshaya_checkout_by_agent/smart_agent
 
 restrict_agent_login:
   js:
@@ -15,3 +14,5 @@ restrict_agent_login:
     - core/drupal
     - core/jquery.once
     - core/jquery.cookie
+    - alshaya_checkout_by_agent/smart_agent
+
