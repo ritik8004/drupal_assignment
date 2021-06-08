@@ -104,7 +104,8 @@
     // We do not need a scroll if the noScroll option is set like when we add
     // to cart from listing pages.
     if (((typeof data.noScroll !== 'undefined') && data.noScroll === true)) {
-      $.fn.cartNotificationScroll(false);
+      var scroll = ($('.header-sticky-filter').length < 1 && $(window).width() > 767) ? true : false;
+      $.fn.cartNotificationScroll(scroll);
       return;
     }
 

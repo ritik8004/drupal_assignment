@@ -217,6 +217,7 @@ export default class ConfigurableForm extends React.Component {
       productCartTitle: cartTitle,
       cartId,
       notify: true,
+      skuType: 'config',
     }).then((response) => {
       if (response.error) {
         // Stop the full screen loader.
