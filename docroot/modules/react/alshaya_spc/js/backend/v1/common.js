@@ -68,7 +68,22 @@ const callMiddlewareApi = (url, method, data) => {
  * @returns {Promise}
  *   A promise object.
  */
-const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data));
+const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data)).catch(
+  (error) => {
+    // Check if we have tried to call middleware when the commerce backend is
+    // set to V2.
+    if (
+      error.response.status === 403
+        && error.response.data === 'Trying to acccess V1 when version is V2.'
+        && !sessionStorage.getItem('reloadOnBackendSwitch')
+    ) {
+      // Reload the page only once. The caches are expected to be cleared till
+      // then.
+      sessionStorage.setItem('reloadOnBackendSwitch', 1);
+      window.location.reload();
+    }
+  },
+);
 
 export {
   callMiddlewareApi,
