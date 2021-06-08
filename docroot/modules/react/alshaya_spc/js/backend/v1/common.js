@@ -60,6 +60,23 @@ const callMiddlewareApi = (url, method, data) => {
 };
 
 /**
+ * Formats the error message as required for cart.
+ *
+ * @param {int} code
+ *   The response code.
+ * @param {string} message
+ *   The response message.
+ */
+const returnExistingCartWithError = (code, message) => ({
+  data: {
+    error: true,
+    error_code: code,
+    error_message: message,
+    response_message: [message, 'error'],
+  },
+});
+
+/**
  * Calls the update cart middleware API.
  *
  * @param {object} data
@@ -82,6 +99,8 @@ const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.strin
       sessionStorage.setItem('reloadOnBackendSwitch', 1);
       window.location.reload();
     }
+
+    return returnExistingCartWithError(error.response.status, error.response.data);
   },
 );
 
