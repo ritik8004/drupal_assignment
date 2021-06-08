@@ -9,6 +9,20 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldStorageConfig;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add bazaarvoice user block config.
+ */
+function alshaya_bazaar_voice_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['block.block.bazaarvoiceuserdatablock'],
+    'alshaya_bazaar_voice',
+    'install'
+  );
+}
+
+/**
  * Implements hook_install().
  *
  * Update default configurations for the fields created for ratings & reviews.
@@ -50,6 +64,13 @@ function alshaya_bazaar_voice_install() {
   }
   // Provide sorting option Top rated in srp/plp.
   _add_sort_option_in_plp_srp_config_form();
+
+  // Add bazaarvoice user block config.
+  $manager->updateConfigs(
+    ['block.block.bazaarvoiceuserdatablock'],
+    'alshaya_bazaar_voice',
+    'install'
+  );
 }
 
 /**

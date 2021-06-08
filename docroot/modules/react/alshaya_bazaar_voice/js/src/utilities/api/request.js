@@ -28,11 +28,11 @@ export function getUserBazaarVoiceSettings() {
 
 export function getUserDetails(productId = undefined) {
   const settings = [];
-  settings.user = drupalSettings.userDetails;
+  settings.user = drupalSettings.bazaarvoiceUserDetails;
   if (productId !== undefined) {
     settings.productReview = drupalSettings.productInfo[productId].productReview;
   } else {
-    settings.productReview = drupalSettings.userDetails.productReview;
+    settings.productReview = drupalSettings.bazaarvoiceUserDetails.productReview;
   }
   return settings;
 }
