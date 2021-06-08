@@ -2,6 +2,10 @@
   border: 2px dashed $smart-agent-banner-bg;
   color: $smart-agent-banner-bg;
 
+  @include breakpoint($only-mobile) {
+    align-items: flex-start;
+  }
+
   @include icon('infomation') {
     font-size: 1.75rem;
     margin-#{$left}: 1rem;
