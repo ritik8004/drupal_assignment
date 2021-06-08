@@ -48,7 +48,7 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
   protected $alshayaBazaarVoice;
 
   /**
-   * AlshayaGtmUserDataBlock constructor.
+   * AlshayaBazaarVoiceUserDataBlock constructor.
    *
    * @param array $configuration
    *   The configuration.
