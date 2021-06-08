@@ -1,4 +1,6 @@
 .secondary-main-menu-wrapper {
+  width: 100% !important;
+
   .site-brand-home {
     display: flex;
     justify-content: center;
@@ -135,7 +137,7 @@
         &::after {
           position: absolute;
           content: '\25b2';
-          right: 1.4rem;
+          #{$right}: 1.4rem;
         }
 
         &.closed {

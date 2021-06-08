@@ -1,6 +1,4 @@
 .block-alshaya-algolia-react-autocomplete {
-  width: 14.812rem;
-
   @include breakpoint($only-mobile) {
     visibility: hidden;
     top: 3.375rem;
@@ -64,12 +62,12 @@
       width: 13.25rem;
 
       html[lang=ar] & {
-        margin-bottom: 1.5625rem;
+        margin-bottom: 0.5625rem;
       }
     }
 
     @include breakpoint($desktop) {
-      width: 17rem;
+      width: 14.813rem;
     }
 
     .react-autosuggest__input {
@@ -88,7 +86,9 @@
 
       @include breakpoint($tablet) {
         border: 0.0625rem solid $algolia-auto-complete-border;
-        height: 2.1875rem;
+        height: 2.8125rem;
+        padding-#{$left}: 3.125rem;
+        border-bottom: 1px solid $black;
       }
 
       border-radius: 0;
@@ -125,13 +125,13 @@
 
         @include breakpoint($tablet) {
           display: block;
-          background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 0.625rem 0.4375rem no-repeat;
+          background: transparent url('../../../imgs/assets/search.svg') no-repeat;
           background-position: center;
           border: none;
           text-indent: -9999px;
           top: 50%;
           transform: translateY(-50%);
-          #{$right}: 0;
+          #{$left}: 0;
           height: 2.1875rem;
           width: 2.625rem;
 
@@ -141,11 +141,6 @@
         }
 
         @include breakpoint($desktop) {
-          background: $primary_search_btn_icon url('../../../imgs/assets/search.svg') 0.625rem 0.4375rem no-repeat;
-          #{$right}: 0;
-          height: 2.1875rem;
-          width: 2.625rem;
-
           html[lang=ar] & {
             transform: translateY(-50%);
           }
