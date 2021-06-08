@@ -19,7 +19,7 @@
 
       if (parseInt(locationShared) == false) {
         // Show a message to smart agent to share location and then log in.
-        $('#block-page-title').prepend('<div class="location-not-shared-message">' + Drupal.t('Smart agent, we have not been able to confirm your location. Please enable location services and allow location tracking then try to log in again.') + '</div>');
+        $('.region__hero-content').append('<div class="location-not-shared-message messages messages--error">' + Drupal.t('Smart agent, we have not been able to confirm your location. Please enable location services and allow location tracking then try to log in again.') + '</div>');
 
         // Clear smart agent location cookie.
         $.removeCookie('smart_agent_location_shared', {path: '/'});
