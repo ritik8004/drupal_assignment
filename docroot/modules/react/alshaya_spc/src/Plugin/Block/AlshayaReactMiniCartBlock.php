@@ -96,7 +96,7 @@ class AlshayaReactMiniCartBlock extends BlockBase implements ContainerFactoryPlu
       '#markup' => '<div id="mini-cart-wrapper"></div><div id="cart_notification"></div>',
       '#attached' => [
         'library' => [
-          'alshaya_spc/commerce_backend.cart.' . $this->spcHelper->getCommerceBackendVersion(),
+          'alshaya_spc/commerce_backend.cart.v' . $this->spcHelper->getCommerceBackendVersion(),
           'alshaya_spc/mini_cart',
         ],
         'drupalSettings' => $settings,

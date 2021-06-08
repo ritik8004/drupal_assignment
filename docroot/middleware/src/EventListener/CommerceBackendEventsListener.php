@@ -40,7 +40,7 @@ class CommerceBackendEventsListener {
     $version = $this->systemSettings->getSettings('commerce_backend')['version'];
     // If we set the backend as Magento and we are trying to access middleware,
     // then we do not allow that.
-    if ($version === 'v2') {
+    if ($version === '2') {
       $response = new Response('Trying to acccess V1 when version is V2.', Response::HTTP_FORBIDDEN);
       $event->setResponse($response);
     }
