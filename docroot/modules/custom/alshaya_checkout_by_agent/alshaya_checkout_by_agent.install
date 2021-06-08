@@ -60,8 +60,8 @@ function alshaya_checkout_by_agent_install() {
     'Share' => [
       'ar' => 'إرسال',
     ],
-    'Smart agent, we have not been able to confirm your location. Please enable location services and allow location tracking then try log in again' => [
-      'ar' => 'أيها الوكيل ، لم نتمكن من تأكيد موقعك. يرجى تمكين خدمات الموقع والسماح بتتبع الموقع ثم حاول تسجيل الدخول مرة أخرى'
+    'Smart agent, we have not been able to confirm your location. Please enable location services and allow location tracking then try to log in again.' => [
+      'ar' => 'أيها الوكيل ، لم نتمكن من تأكيد موقعك. يرجى تمكين خدمات الموقع والسماح بتتبع الموقع ثم حاول تسجيل الدخول مرة أخرى.'
     ],
   ];
 

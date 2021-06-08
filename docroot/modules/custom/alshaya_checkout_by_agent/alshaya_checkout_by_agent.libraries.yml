@@ -6,3 +6,11 @@ smart_agent:
     - core/drupalSettings
     - core/jquery.once
     - core/jquery.cookie
+
+restrict_agent_login:
+  js:
+    js/restrict_agent_login.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery.once
+    - core/jquery.cookie
