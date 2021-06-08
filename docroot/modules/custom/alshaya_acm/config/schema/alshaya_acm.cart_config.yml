@@ -1,0 +1,22 @@
+alshaya_acm.cart_config:
+  type: config_object
+  label: 'Alshaya Cart config'
+  mapping:
+    max_cart_qty:
+      type: string
+      label: 'Cart quantity'
+    checkout_feature:
+      type: string
+      label: 'Checkout enabled'
+    checkout_disabled_page:
+      type: string
+      label: 'Checkout disabled page'
+    cart_storage_expiration:
+      type: integer
+      label: 'Cart storage expiration'
+    display_cart_crosssell:
+      type: boolean
+      label: 'Display cart crosssell'
+    version:
+      type: string
+      label: 'Cart version'
