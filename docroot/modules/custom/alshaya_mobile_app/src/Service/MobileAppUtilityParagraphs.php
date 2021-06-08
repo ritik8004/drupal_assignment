@@ -28,6 +28,7 @@ use Drupal\file\Entity\File;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Database\Connection;
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -133,6 +134,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Block plugin manager.
    * @param \Drupal\Core\Database\Connection $database
    *   Database service.
+   * @param Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_manager
+   *   Super Category Manager.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -154,9 +157,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     RedirectRepository $redirect_repository,
     SkuInfoHelper $sku_info_helper,
     BlockManagerInterface $block_plugin_manager,
-    Connection $database
+    Connection $database,
+    AlshayaSuperCategoryManager $super_category_manager
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer, $redirect_repository, $sku_info_helper, $database, $super_category_manager);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;

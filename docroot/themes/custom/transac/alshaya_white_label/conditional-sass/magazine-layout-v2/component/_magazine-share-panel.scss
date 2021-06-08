@@ -166,4 +166,14 @@
       color: $magv2-share-btn-txt;
     }
   }
+
+  .sharethis-wrapper.out-of-stock {
+    background: none;
+    opacity: 0.5;
+    pointer-events: none;
+
+    &::before {
+      display: none;
+    }
+  }
 }

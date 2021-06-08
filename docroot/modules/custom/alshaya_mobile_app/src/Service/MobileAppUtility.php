@@ -32,6 +32,7 @@ use Drupal\rest\ResourceResponse;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\redirect\RedirectRepository;
 use Drupal\Core\Database\Connection;
+use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 
 /**
  * Mobile App Utility Class.
@@ -131,11 +132,11 @@ class MobileAppUtility {
   protected $fileStorage;
 
   /**
-   * The acq_commerce.currency config object.
+   * The config object.
    *
    * @var \Drupal\Core\Config\Config
    */
-  protected $currencyConfig;
+  protected $configFactory;
 
   /**
    * API Wrapper object.
@@ -189,6 +190,13 @@ class MobileAppUtility {
   protected $database;
 
   /**
+   * The super category manager service.
+   *
+   * @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager
+   */
+  protected $superCategoryManager;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -223,6 +231,8 @@ class MobileAppUtility {
    *   Sku info helper object.
    * @param \Drupal\Core\Database\Connection $database
    *   Database service.
+   * @param \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_manager
+   *   The super category manager service.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -239,7 +249,8 @@ class MobileAppUtility {
                               RendererInterface $renderer,
                               RedirectRepository $redirect_repsitory,
                               SkuInfoHelper $sku_info_helper,
-                              Connection $database) {
+                              Connection $database,
+                              AlshayaSuperCategoryManager $super_category_manager) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -252,12 +263,13 @@ class MobileAppUtility {
     $this->productCategoryTree = $product_category_tree;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
-    $this->currencyConfig = $config_factory->get('acq_commerce.currency');
+    $this->configFactory = $config_factory;
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
     $this->redirectRepository = $redirect_repsitory;
     $this->skuInfoHelper = $sku_info_helper;
     $this->database = $database;
+    $this->superCategoryManager = $super_category_manager;
   }
 
   /**
@@ -613,12 +625,16 @@ class MobileAppUtility {
     }
 
     $terms = $this->productCategoryTree->allChildTerms($langcode, $parent, FALSE, $mobile_only);
+    $default_category_id = $this->superCategoryManager->getDefaultCategoryId();
+    $homepage_node = $default_category_id > 0 ? $this->getHomepageNode() : NULL;
     foreach ($terms as $term) {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
 
       $path = $term_url->getGeneratedUrl();
-      $deeplink = $this->getDeepLink($term);
+      $deeplink = ($default_category_id === (int) $term->tid)
+        ? $this->getDeepLink($homepage_node)
+        : $this->getDeepLink($term);
 
       // Check if any redirection is set up for the term path.
       // We provide the technical taxonomy term path here and not the alias
@@ -959,6 +975,18 @@ class MobileAppUtility {
 
     // For consistency, we send this.
     return NULL;
+  }
+
+  /**
+   * Helper function to get homepage node only once by adding static cache.
+   */
+  protected function getHomepageNode() {
+    $homepage_node = &drupal_static(__FUNCTION__);
+    if (!isset($homepage_node)) {
+      $homepage_nid = $this->configFactory->get('alshaya_master.home')->get('entity')['id'];
+      $homepage_node = $this->entityTypeManager->getStorage('node')->load($homepage_nid);
+    }
+    return !empty($homepage_node) ? $homepage_node : [];
   }
 
 }
