@@ -22,6 +22,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
 
   const PAGE_TYPE = 'listing';
+  const PAGE_SUB_TYPE = 'promotion';
 
   /**
    * Entity type manager service.
@@ -115,7 +116,7 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
     }
 
     // Get common configuration for Algolia pages.
-    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE);
+    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE, self::PAGE_SUB_TYPE);
 
     // Get common config and merge with new array.
     $promotion_filters = $common_config[self::PAGE_TYPE]['filters'];
@@ -128,7 +129,7 @@ class AlshayaAlgoliaReactPromotion extends AlshayaAlgoliaReactBlockBase {
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
-    $algoliaSearch['pageSubType'] = 'promotion';
+    $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
 
     return [
       '#type' => 'markup',
