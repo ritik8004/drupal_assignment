@@ -132,4 +132,29 @@ class AlshayaSpcCustomerController extends ControllerBase {
     return new JsonResponse($response);
   }
 
+  /**
+   * Gets the bearer token from session.
+   *
+   * If its not in the session, it retrieves from Magento.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   Json response.
+   */
+  public function getCustomerToken() {
+    $token = '';
+    if ($this->currentUser()->isAuthenticated()) {
+      $token = $this->session->get('magento_customer_token');
+      if (empty($token) || !is_string($token)) {
+        $mail = $this->currentUser()->getEmail();
+        $token = $this->spcCustomerHelper->getCustomerTokenBySocialDetail($mail);
+      }
+    }
+
+    if (empty($token)) {
+      return new JsonResponse($token, 404);
+    }
+
+    return new JsonResponse($token);
+  }
+
 }

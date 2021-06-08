@@ -212,16 +212,14 @@ class AdvancedPageResource extends ResourceBase {
       );
 
       $current_blocks = array_filter($current_blocks);
-      if (!empty($current_blocks['type'])) {
+      if (isset($current_blocks['type']) && !empty($current_blocks['type'])) {
         $blocks[] = $current_blocks;
       }
       else {
         $blocks = array_merge($blocks, $current_blocks);
       }
     }
-
     $response_data['blocks'] = $blocks;
-
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
     foreach ($this->mobileAppUtility->getCacheableEntities() as $cacheable_entity) {

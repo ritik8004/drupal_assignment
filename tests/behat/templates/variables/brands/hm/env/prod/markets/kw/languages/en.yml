@@ -19,6 +19,7 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: 'التنزيلات'
   add_to_cart_link: 'add to basket'
+  language_spc_knet_option: 'عيديتي [KNET]'
   language_add_to_cart_link: 'أضف إلى حقيبة التسوق'
   ar_collection_filter: ''
   ar_sort_filter: 'رتب حسب'

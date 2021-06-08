@@ -14,7 +14,7 @@
     width: 2.375rem;
     margin-top: 0.4375rem;
     margin-bottom: 0.4375rem;
-    margin-right: 0.625rem;
+    margin-#{$right}: 0.625rem;
     list-style: none;
 
     a {

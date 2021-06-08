@@ -39,16 +39,16 @@ function _alshaya_add_to_bag_strings() {
       'value' => t('Quick View'),
     ],
     [
-      'key' => 'add',
-      'value' => t('Add'),
-    ],
-    [
       'key' => 'add_to_cart',
       'value' => t('add to cart'),
     ],
     [
       'key' => 'item_added',
       'value' => t('Item added'),
+    ],
+    [
+      'key' => 'purchase_limit_error_msg',
+      'value' => t('Purchase limit has been reached'),
     ],
   ];
 }
@@ -67,6 +67,9 @@ function _alshaya_add_to_bag_translations() {
       ],
       'Item added' => [
         'ar' => 'تمت إضافة العنصر',
+      ],
+      'add to cart' => [
+        'ar' => 'أضيفي إلى الحقيب',
       ],
     ],
   ];

@@ -8,7 +8,8 @@
     "watch": "webpack --watch --mode=development",
     "build:gulp": "gulp",
     "lint": "eslint",
-    "lint-fix": "eslint --fix"
+    "lint-fix": "eslint --fix",
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -20,6 +21,7 @@
     "@babel/runtime": "^7.8.4",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
+    "babel-plugin-rewire": "^1.2.0",
     "core-js": "^3.2.1",
     "eslint": "^6.8.0",
     "eslint-cli": "^1.1.1",
@@ -38,6 +40,8 @@
     "gulp-sourcemaps": "2.1.x",
     "gulp-uglify": "2.0.0",
     "gulp-watch": "4.3.10",
+    "jest": "^27.0.1",
+    "jest-each": "^27.0.2",
     "qs": "^6.9.0",
     "webpack": "^4.39.3",
     "webpack-chunk-rename-plugin": "^1.0.3",
@@ -80,5 +84,15 @@
     "slick-carousel": "^1.8.1",
     "smoothscroll-polyfill": "^0.4.4",
     "style-loader": "^1.2.1"
+  },
+  "jest": {
+    "verbose": true,
+    "testRegex": "(/tests/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|lottie-react-native)"
+    ],
+    "globals": {
+      "window": {}
+    }
   }
 }
