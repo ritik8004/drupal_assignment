@@ -36,7 +36,14 @@ export const handleUpdateCartRespose = (response, productData) => {
     if ((typeof productInfo.notify !== 'undefined') && productInfo.notify !== false) {
       // To disable scroll after minicart notification display.
       productInfo.noScroll = true;
-      Drupal.cartNotification.triggerNotification(productInfo);
+      if ((typeof productInfo.skuType !== 'undefined') && productInfo.skuType === 'config') {
+        // To show notification for config products once drawer is closed.
+        setTimeout(() => {
+          Drupal.cartNotification.triggerNotification(productInfo);
+        }, 600);
+      } else {
+        Drupal.cartNotification.triggerNotification(productInfo);
+      }
     }
   }
 
@@ -83,6 +90,7 @@ export const triggerUpdateCart = (requestData) => {
         image: requestData.productImage,
         product_name: requestData.productCartTitle,
         notify: requestData.notify,
+        skuType: requestData.skuType,
       };
 
       return handleUpdateCartRespose(
