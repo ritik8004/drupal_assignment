@@ -83,8 +83,7 @@ class AlshayaFacetsPrettyAliases {
     $result = $select->execute()->fetchAll();
 
     foreach ($result as $row) {
-      $value = trim($row->value);
-      $static[$row->facet_alias][$langcode][$value] = $value;
+      $static[$row->facet_alias][$langcode][trim($row->value)] = trim($row->alias);
     }
 
     return $static[$facet_alias][$langcode] ?? [];
