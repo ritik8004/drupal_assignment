@@ -1,0 +1,9 @@
+{% extends "@alshaya_white_label/node/node--acq-product--full.html.twig" %}
+{% block afterDescription %}
+  {% if content.ingredients %}
+    {{ attach_library('alshaya_the_body_shop/pdp_ingredient_js') }}
+    <div class="content--ingredient">
+      {{ content.ingredients }}
+    </div>
+  {% endif %}
+{% endblock %}

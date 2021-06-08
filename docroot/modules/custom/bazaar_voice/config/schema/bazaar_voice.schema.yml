@@ -35,6 +35,9 @@ bazaar_voice.settings:
     environment:
       type: string
       label: 'The deployment environment of BazaarVoice where we implement BV Pixel.'
+    notify_comment_published:
+      type: boolean
+      label: 'Enable/Disable email notifications whenever comment is published.'
     pdp_rating_reviews:
       type: boolean
       label: 'Enable/Disable Site wide BazaarVoice Ratings and Review Feature.'

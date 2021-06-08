@@ -379,6 +379,7 @@ class AlshayaBazaarVoice {
     $basic_configs['comment_form_tnc'] = $config->get('comment_form_tnc');
     $basic_configs['comment_box_min_length'] = $config->get('comment_box_min_length');
     $basic_configs['comment_box_max_length'] = $config->get('comment_box_max_length');
+    $basic_configs['notify_comment_published'] = $config->get('notify_comment_published');
     $basic_configs['pdp_rating_reviews'] = $config->get('pdp_rating_reviews');
     $basic_configs['myaccount_rating_reviews'] = $config->get('myaccount_rating_reviews');
     $basic_configs['plp_rating_reviews'] = $config->get('plp_rating_reviews');

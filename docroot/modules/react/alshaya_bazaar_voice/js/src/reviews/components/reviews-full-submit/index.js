@@ -1,7 +1,7 @@
 import React from 'react';
 import Popup from 'reactjs-popup';
 import WriteReviewForm from './WriteReviewForm';
-import smoothScrollTo from '../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import ClosedReviewSubmit from './closed-review-submit';
 import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import getStringMessage from '../../../../../../js/utilities/strings';
@@ -56,7 +56,9 @@ export default class WriteReviewButton extends React.Component {
     const {
       isModelOpen,
     } = this.state;
-    const { reviewedByCurrentUser, productId, context } = this.props;
+    const {
+      reviewedByCurrentUser, productId, context, newPdp,
+    } = this.props;
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
     const userDetails = getUserDetails(productId);
     if (userDetails.user.userId === 0
@@ -83,6 +85,7 @@ export default class WriteReviewButton extends React.Component {
                 closeModal={(e) => this.closeModal(e)}
                 productId={productId}
                 context={context}
+                newPdp={newPdp}
               />
             </Popup>
           </div>

@@ -67,7 +67,6 @@
       padding: 1.25rem;
       padding-#{$right}: 0;
       padding-#{$left}: 4.0625rem;
-      margin-top: 0.3125rem;
     }
   }
 
@@ -94,10 +93,15 @@
     &:not(.no-sticky-algolia-search-bar) {
       .block-alshaya-algolia-react-autocomplete {
         padding: 0;
+      }
+    }
 
+    &:not(.path--home) {
+      .block-alshaya-algolia-react-autocomplete {
         &.focused {
           .react-autosuggest__input {
-            margin-top: 0.3125rem;
+            height: 3.75rem;
+            margin-top: -0.25rem;
           }
         }
       }
@@ -120,7 +124,7 @@
           }
 
           .algolia-search-back-icon {
-            top: 1.15625rem;
+            top: 0.625rem;
             #{$left}: 0.75rem;
             width: 1.25rem;
             height: 1.25rem;
@@ -133,6 +137,38 @@
           .react-autosuggest__suggestions-container--open {
             .highlighted {
               color: $algolia-search-trending-search-highlighted-text;
+            }
+          }
+        }
+      }
+    }
+
+    &.path--home {
+      .block-alshaya-algolia-react-autocomplete {
+        .react-autosuggest__input {
+          margin-top: 0.3125rem;
+        }
+
+        &.focused {
+          #alshaya-algolia-autocomplete {
+            .algolia-search-back-icon {
+              top: 1rem;
+            }
+          }
+        }
+      }
+    }
+
+    &.Sticky-algolia-search {
+      .block-alshaya-algolia-react-autocomplete {
+        .react-autosuggest__input {
+          margin-top: 0;
+        }
+
+        &.focused {
+          #alshaya-algolia-autocomplete {
+            .algolia-search-back-icon {
+              top: 0.75rem;
             }
           }
         }

@@ -126,6 +126,7 @@ class ReviewCommentForm extends React.Component {
     if (!isError) {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
+      const notifications = bazaarVoiceSettings.reviews.bazaar_voice.notify_comment_published;
       const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       let storageUpdated = false;
       let authParams = '';
@@ -162,7 +163,7 @@ class ReviewCommentForm extends React.Component {
       if (e.target.elements.blackBox.value !== '') {
         authParams += `&fp=${encodeURIComponent(e.target.elements.blackBox.value)}`;
       }
-      const params = `&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
+      const params = `&sendemailalertwhenpublished=${notifications}&Action=submit&CommentText=${commentbox}&ReviewId=${ReviewId}${authParams}`;
       const apiData = postAPIData('/data/submitreviewcomment.json', params);
       if (apiData instanceof Promise) {
         apiData.then((result) => {

@@ -2,21 +2,25 @@
   @include breakpoint($tablet) {
     padding: 1.875rem;
     padding-#{$right}: 0;
-  }
 
-  @include breakpoint($desktop) {
-    padding: 1.875rem 3rem;
-    padding-#{$right}: 0;
+    .spc-product-price {
+      .special--price {
+        margin-#{$left}: 0;
+      }
+    }
   }
 
   .block-content {
     .spc-product-recommended-wrapper {
-      width: 13.125rem;
+      width: 13.25rem;
       margin-bottom: 1.875rem;
 
       .spc-product-recommended-image {
-        width: 13.125rem;
+        width: 13.25rem;
         margin-bottom: 1.4375rem;
+        display: inline-flex;
+        align-items: center;
+        height: 18.8125rem;
 
         img {
           width: 100%;
@@ -53,9 +57,23 @@
   .nav-next {
     &::before {
       display: inline-block;
-      transform: rotate(180deg);
       width: auto;
       height: auto;
+
+      html[lang=en] & {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .nav-prev {
+    &::before {
+      html[lang=ar] & {
+        transform: rotate(180deg);
+        width: auto;
+        height: auto;
+        display: inline-block;
+      }
     }
   }
 }

@@ -363,6 +363,7 @@ export default class ReviewSummary extends React.Component {
                 </div>
                 <WriteReviewButton
                   reviewedByCurrentUser={userDetails.productReview !== null}
+                  newPdp={newPdp}
                 />
               </div>
             </div>

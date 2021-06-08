@@ -10,7 +10,7 @@ import FormLinks from '../DynamicFormField/Fields/FormLinks';
 import { getLanguageCode, doRequest, getbazaarVoiceSettings } from '../../../../utilities/api/request';
 import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
-import smoothScrollTo from '../../../../utilities/smoothScroll';
+import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import { setStorageInfo } from '../../../../utilities/storage';
 import PostReviewMessage from '../post-review-message';
 
@@ -69,10 +69,10 @@ export default class WriteReviewForm extends React.Component {
 
   handleSubmit = (e) => {
     const { fieldsConfig } = this.state;
-    const { productId } = this.props;
+    const { productId, newPdp } = this.props;
     e.preventDefault();
 
-    const isError = validateRequest(e.target.elements, fieldsConfig, e);
+    const isError = validateRequest(e.target.elements, fieldsConfig, e, newPdp);
     if (isError) {
       return;
     }
@@ -87,7 +87,7 @@ export default class WriteReviewForm extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           removeFullScreenLoader();
           if (result.data.HasErrors && result.data.FormErrors !== null) {
-            smoothScrollTo(e, '.title-block', 'post_review');
+            smoothScrollTo(e, '.write-review-form', 'post_review');
           } else if (request.userStorage !== null) {
             setStorageInfo(request.userStorage, `bvuser_${request.userStorage.id}`);
           }
@@ -184,7 +184,7 @@ export default class WriteReviewForm extends React.Component {
             <a className="close-modal" onClick={(e) => closeModal(e)} />
           </div>
           <BazaarVoiceMessages />
-          <div className="product-block">
+          <div id="product-block" className="product-block">
             <div className="product-image-block">
               <img src={bazaarVoiceSettings.reviews.product.image_url} />
             </div>

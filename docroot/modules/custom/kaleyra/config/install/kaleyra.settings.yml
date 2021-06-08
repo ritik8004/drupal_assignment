@@ -1,0 +1,8 @@
+api_domain: 'https://api-global.kaleyra.com'
+api_key: ''
+api_version: 'v4'
+sender_identifier: ''
+unicode: 'auto'
+whatsapp_from: ''
+whatsapp_api_key: ''
+whatsapp_sid: ''

@@ -16,3 +16,19 @@
     text-align: $left;
   }
 }
+
+.path--cart {
+  header {
+    .region__header {
+      .price {
+        .price-currency {
+          padding-#{$right}: 0;
+        }
+
+        .price-amount {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
