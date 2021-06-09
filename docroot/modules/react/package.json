@@ -40,8 +40,8 @@
     "gulp-sourcemaps": "2.1.x",
     "gulp-uglify": "2.0.0",
     "gulp-watch": "4.3.10",
-    "jest": "^27.0.1",
-    "jest-each": "^27.0.2",
+    "jest": "^25.5.4",
+    "jest-each": "^25.5.0",
     "qs": "^6.9.0",
     "webpack": "^4.39.3",
     "webpack-chunk-rename-plugin": "^1.0.3",
@@ -84,15 +84,5 @@
     "slick-carousel": "^1.8.1",
     "smoothscroll-polyfill": "^0.4.4",
     "style-loader": "^1.2.1"
-  },
-  "jest": {
-    "verbose": true,
-    "testRegex": "(/tests/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|lottie-react-native)"
-    ],
-    "globals": {
-      "window": {}
-    }
   }
 }

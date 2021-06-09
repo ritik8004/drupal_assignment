@@ -32,12 +32,12 @@ modules.
 - `npm run build` (to check with production grade compiled files..) :speedboat:
 
 # Testing
-We have implemented some unit tests using Jest. To run all tests, use:
+We have implemented some unit tests using Jest. To run all tests (Inside VM), use:
 ```bash
-npm test
+cd /var/www/alshaya/tests/jest && sh run_tests.sh
 ```
 
-Alternatively you can cd into tests/jest and run:
+Alternatively you can run tests from the application directory, i.e.
 ```bash
-sh run_tests.sh
+cd /var/www/alshaya/docroot/modules/react && npm test
 ```
