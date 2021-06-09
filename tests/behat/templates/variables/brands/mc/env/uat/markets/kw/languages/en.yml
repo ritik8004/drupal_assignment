@@ -18,6 +18,7 @@ variables:
   language_promotional_filter: ''
   create_account: 'create an account'
   sign_in: 'Sign in'
+  spc_search_byname: ''
   find_store: 'Find Store'
   add_to_cart_link: 'add-to-cart-main'
   subtotal: 'subtotal'

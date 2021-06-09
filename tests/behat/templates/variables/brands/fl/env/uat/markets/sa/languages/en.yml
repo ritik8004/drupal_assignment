@@ -17,6 +17,8 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
   create_account: 'Create an Account'
+  spc_search_byname: 'Adidas'
+  spc_search_byID: 'FLSASSE'
   empty_bag: 'Your shopping bag is empty'
   language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
   sign_in: 'Sign In'
