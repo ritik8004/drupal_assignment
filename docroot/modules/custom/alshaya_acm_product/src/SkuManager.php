@@ -253,9 +253,9 @@ class SkuManager {
   /**
    * Alshaya Promotions Context Manager.
    *
-   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */
-  protected $promoContextManager;
+  protected $requestContextManager;
 
   /**
    * SkuManager constructor.
@@ -304,7 +304,7 @@ class SkuManager {
    *   Alshaya array utility service.
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
-   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
+   * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
    *   Alshaya Promo Context Manager.
    */
   public function __construct(Connection $connection,
@@ -329,7 +329,7 @@ class SkuManager {
                               ProductCacheManager $product_cache_manager,
                               AlshayaArrayUtils $alshayaArrayUtils,
                               ProductProcessedManager $product_processed_manager,
-                              AlshayaPromoContextManager $alshayaPromoContextManager) {
+                              AlshayaRequestContextManager $alshayaRequestContextManager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -355,7 +355,7 @@ class SkuManager {
     $this->productCacheManager = $product_cache_manager;
     $this->alshayaArrayUtils = $alshayaArrayUtils;
     $this->productProcessedManager = $product_processed_manager;
-    $this->promoContextManager = $alshayaPromoContextManager;
+    $this->requestContextManager = $alshayaRequestContextManager;
   }
 
   /**
@@ -1108,7 +1108,7 @@ class SkuManager {
                                          $context = '') {
     $promos = [];
     if (empty($context)) {
-      $context = $this->promoContextManager->getPromotionContext();
+      $context = $this->requestContextManager->getContext();
     }
     $promotion_nodes = $this->getSkuPromotions($sku, $types, $context);
     if (!empty($promotion_nodes)) {
@@ -2351,8 +2351,8 @@ class SkuManager {
 
       if ($sku->hasField($fieldKey)) {
         $value = $sku->get($fieldKey)->getString();
-
-        if ($remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
+        $context = $this->requestContextManager->getContext();
+        if ($context != 'app' && $remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
           continue;
         }
 

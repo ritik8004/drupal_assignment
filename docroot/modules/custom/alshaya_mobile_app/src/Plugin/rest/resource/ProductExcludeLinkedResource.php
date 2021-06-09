@@ -5,6 +5,7 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -386,6 +387,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ];
     }
 
+    AlshayaRequestContextManager::updateDefaultContext('app');
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
 
     if ($sku->bundle() === 'configurable') {
