@@ -8,12 +8,16 @@ import getStringMessage from '../../../../../../js/utilities/strings';
 import { isOpenWriteReviewForm } from '../../../utilities/user_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { setStorageInfo } from '../../../utilities/storage';
+import PostReviewMessage from './post-review-message';
+import SectionTitle from '../../../utilities/section-title';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isModelOpen: false,
+      myAccountReview: '',
+      buttonClass: 'write_review',
     };
   }
 
@@ -46,14 +50,24 @@ export default class WriteReviewButton extends React.Component {
     // Disable write review popup onload.
     setStorageInfo(false, 'openPopup');
 
-    if (e.detail.HasErrors !== undefined && !e.detail.HasErrors && context !== 'myaccount') {
-      smoothScrollTo(e, '#post-review-message');
+    if (e.detail.HasErrors !== undefined && !e.detail.HasErrors) {
+      if (context !== 'myaccount') {
+        smoothScrollTo(e, '#post-review-message');
+      } else {
+        this.setState({
+          isModelOpen: true,
+          myAccountReview: e.detail,
+          buttonClass: 'myaccount_review',
+        });
+      }
     }
   };
 
   render() {
     const {
       isModelOpen,
+      myAccountReview,
+      buttonClass,
     } = this.state;
     const {
       reviewedByCurrentUser, productId, context, newPdp,
@@ -75,16 +89,29 @@ export default class WriteReviewButton extends React.Component {
             </div>
             <Popup
               open={isModelOpen}
-              className="write_review"
+              className={buttonClass}
               closeOnDocumentClick={false}
               closeOnEscape={false}
             >
-              <WriteReviewForm
-                closeModal={(e) => this.closeModal(e)}
-                productId={productId}
-                context={context}
-                newPdp={newPdp}
-              />
+              <>
+                <ConditionalView condition={myAccountReview !== ''}>
+                  <div className="write-review-form">
+                    <div className="title-block">
+                      <SectionTitle>{getStringMessage('write_a_review')}</SectionTitle>
+                      <a className="close-modal" onClick={(e) => this.closeModal(e)} />
+                    </div>
+                    <PostReviewMessage postReviewData={myAccountReview} />
+                  </div>
+                </ConditionalView>
+                <ConditionalView condition={myAccountReview === ''}>
+                  <WriteReviewForm
+                    closeModal={(e) => this.closeModal(e)}
+                    productId={productId}
+                    context={context}
+                    newPdp={newPdp}
+                  />
+                </ConditionalView>
+              </>
             </Popup>
           </div>
         </ConditionalView>

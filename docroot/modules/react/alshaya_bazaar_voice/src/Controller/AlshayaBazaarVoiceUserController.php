@@ -129,6 +129,12 @@ class AlshayaBazaarVoiceUserController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
+    // Check if my account reviews config enabled.
+    $basic_configs = $this->alshayaBazaarVoice->getBasicConfigurations();
+    if ($basic_configs['myaccount_rating_reviews']) {
+      return AccessResult::forbidden();
+    }
+
     return AccessResult::allowed();
   }
 
