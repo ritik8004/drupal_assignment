@@ -103,7 +103,7 @@ class PromotionsResource extends ResourceBase {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
    * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
-   *   Alshaya Promo Context Manager.
+   *   Alshaya Request Context Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,

@@ -120,7 +120,7 @@ class AlshayaPromoLabelManager {
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
    * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
-   *   Alshaya Promo Context Manager.
+   *   Alshaya Request Context Manager.
    */
   public function __construct(SkuManager $sku_manager,
                               SkuImagesManager $images_manager,

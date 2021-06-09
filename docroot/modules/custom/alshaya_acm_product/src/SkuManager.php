@@ -305,7 +305,7 @@ class SkuManager {
    * @param \Drupal\alshaya_acm_product\Service\ProductProcessedManager $product_processed_manager
    *   Product Processed Manager.
    * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
-   *   Alshaya Promo Context Manager.
+   *   Alshaya Request Context Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -2427,7 +2427,21 @@ class SkuManager {
    *   TRUE if value matches options value to exclude.
    */
   public function isAttributeOptionToExclude($value) {
-    return in_array($value, $this->getConfig('alshaya_acm_product.settings')->get('excluded_attribute_options'));
+    return in_array($value, $this->attributeOptionToExclude());
+  }
+
+  /**
+   * Wrapper function to get options value to exclude.
+   *
+   * @return array
+   *   Array of values to exclude.
+   */
+  public function attributeOptionToExclude() {
+    $static = &drupal_static(__METHOD__, []);
+    if (!isset($static['excluded_attribute_options'])) {
+      $static['excluded_attribute_options'] = $this->getConfig('alshaya_acm_product.settings')->get('excluded_attribute_options');
+    }
+    return $static['excluded_attribute_options'];
   }
 
   /**

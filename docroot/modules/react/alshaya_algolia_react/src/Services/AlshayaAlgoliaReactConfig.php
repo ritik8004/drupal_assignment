@@ -96,7 +96,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService $plp_sort_options
    *   Service to get sort option labels for PLP.
    * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
-   *   Alshaya Promo Context Manager.
+   *   Alshaya Request Context Manager.
    * @param \Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya Options List service.
    */
@@ -391,7 +391,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'hierarchy';
           }
           elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
-            $context = $this->promoContextManager->getContext();
+            $context = $this->requestContextManager->getContext();
             $identifier = $this->identifireSuffixUpdate("field_acq_promotion_label.$context", $page_type);
           }
 
