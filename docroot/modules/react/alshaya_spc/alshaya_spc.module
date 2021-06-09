@@ -240,6 +240,10 @@ function alshaya_spc_page_attachments_alter(&$page) {
  * Implements hook_preprocess_page().
  */
 function alshaya_spc_preprocess_page(&$variables) {
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
   $strings = [
     '#theme' => 'translatable_strings',
     '#strings' => [
