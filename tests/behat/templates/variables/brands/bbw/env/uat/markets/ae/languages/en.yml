@@ -17,6 +17,8 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
   create_account: 'create an account'
+  spc_search_byname: 'Sweet'
+  spc_search_byID: 'BWAEHDE'
   sign_in: 'Sign in'
   find_store: 'Find Store'
   language_link: 'العربية'
