@@ -47,8 +47,9 @@
 .view-alshaya-product-list {
   .c-products__item {
     .alshaya_search_mainimage {
-      img {
-        width: auto;
+      & > img,
+      .img-wrapper img {
+        width: 100%;
       }
     }
 
