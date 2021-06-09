@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import Cookies from 'js-cookie';
+import getStringMessage from '../../utilities/strings';
 
 drupalSettings = window.drupalSettings;
 
@@ -91,22 +92,28 @@ const returnExistingCartWithError = (code, message) => {
  * @returns {Promise}
  *   A promise object.
  */
-const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data)).catch(
-  (error) => {
+const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.stringify(data)).then(
+  (response) => {
     // Check if we have tried to call middleware when the commerce backend is
     // set to V2.
     if (
-      error.response.status === 403
-        && error.response.data.indexOf('The version of the website that you are using is now obsolete.') !== -1
-        && !sessionStorage.getItem('reloadOnBackendSwitch')
+      typeof response.data.error !== 'undefined'
+      && response.data.error_code === 612
     ) {
-      // Reload the page only once. The caches are expected to be cleared till
-      // then.
-      sessionStorage.setItem('reloadOnBackendSwitch', 1);
-      window.location.reload();
+      if (!sessionStorage.getItem('reloadOnBackendSwitch')) {
+        // Reload the page only once. The caches are expected to be cleared till
+        // then.
+        sessionStorage.setItem('reloadOnBackendSwitch', 1);
+        window.location.reload();
+      } else {
+        return returnExistingCartWithError(
+          response.status,
+          getStringMessage('backend_obsolete_version'),
+        );
+      }
     }
 
-    return returnExistingCartWithError(error.response.status, error.response.data);
+    return response;
   },
 );
 

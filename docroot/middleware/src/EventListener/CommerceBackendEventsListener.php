@@ -3,7 +3,7 @@
 namespace App\EventListener;
 
 use App\Service\Config\SystemSettings;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
@@ -40,8 +40,11 @@ class CommerceBackendEventsListener {
     $version = $this->systemSettings->getSettings('commerce_backend')['version'];
     // If we set the backend as Magento and we are trying to access middleware,
     // then we do not allow that.
-    if ($version === '2') {
-      $response = new Response('The version of the website that you are using is now obsolete. Please refresh the page and try again.', Response::HTTP_FORBIDDEN);
+    if ($version == 2) {
+      $response = new JsonResponse([
+        'error' => TRUE,
+        'error_code' => 612,
+      ], 200);
       $event->setResponse($response);
     }
   }
