@@ -14,7 +14,7 @@ header {
 
     .cart-link {
       @include breakpoint($only-mobile) {
-        margin-top: 0.875rem;
+        margin-top: 1.128rem;
         margin-bottom: 0;
         background-size: cover;
         margin-#{$right}: 0.75rem;
@@ -77,6 +77,15 @@ header {
   }
 
   .c-header__region {
+    @include breakpoint($only-mobile) {
+      height: 3.5rem !important;
+      margin-top: 0;
+
+      html[lang=ar] & {
+        height: 3.5rem;
+      }
+    }
+
     @include breakpoint($only-tablet) {
       margin-top: 1.125rem;
       padding-bottom: 1.125rem;
@@ -103,7 +112,7 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      top: 0.125rem;
+      top: 0;
       padding: 1.125rem 1rem 1rem;
       padding-#{$right}: 1rem;
       padding-#{$left}: 1rem;
@@ -121,10 +130,6 @@ header {
           top: 0;
           #{$left}: -0.625rem;
           font-size: 1.75rem;
-
-          html[lang=ar] & {
-            top: 0.125rem;
-          }
         }
       }
     }
@@ -332,16 +337,6 @@ html[lang='ar'] {
         &::before {
           top: 0;
         }
-      }
-    }
-
-    @include breakpoint($only-mobile) {
-      .mobile--menu {
-        top: 0.3125rem;
-      }
-
-      .store {
-        top: 0.8125rem;
       }
     }
   }

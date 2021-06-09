@@ -44,6 +44,8 @@
         @include breakpoint($only-mobile) {
           font-size: 0.6875rem;
         }
+
+        @include arabic-letter-spacing;
       }
 
       .sub-category-image {
@@ -101,6 +103,8 @@
           font-size: 1.4375rem;
           letter-spacing: 0.45px;
         }
+
+        @include arabic-letter-spacing;
       }
 
       .term-desc {
@@ -111,6 +115,8 @@
           font-size: 0.875rem;
           letter-spacing: 0.59px;
         }
+
+        @include arabic-letter-spacing;
       }
 
       .term-image {

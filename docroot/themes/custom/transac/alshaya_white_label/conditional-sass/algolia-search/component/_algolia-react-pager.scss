@@ -50,6 +50,8 @@
       font-size: 0.75rem;
       letter-spacing: 1px;
       color: $algolia-react-progressbar-text;
+
+      @include arabic-letter-spacing;
     }
   }
 }
