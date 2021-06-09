@@ -12,7 +12,6 @@
 
 /**
  * Adds new page type in the block visibility condition plugin.
- *
  */
 function hook_alshaya_listing_page_types_add() {
 }

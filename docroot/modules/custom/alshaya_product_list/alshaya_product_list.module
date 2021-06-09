@@ -269,6 +269,7 @@ function alshaya_product_list_alshaya_listing_page_types_add() {
   $page_type['product_option_list'] = [
     'title' => t('Product Option Listing'),
     'type' => 'checkbox',
+    'default_value' => 1,
   ];
   return $page_type;
 }

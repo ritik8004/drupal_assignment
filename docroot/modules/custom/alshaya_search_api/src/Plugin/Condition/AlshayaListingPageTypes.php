@@ -86,7 +86,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
       $form['page_types'][$page_type] = [
         '#type' => $page_type_value['type'],
         '#title' => $page_type_value['title'],
-        '#default_value' => $this->configuration['page_types'][$page_type] ?: 1,
+        '#default_value' => $this->configuration['page_types'][$page_type] ?: $page_type_value['default_value'],
       ];
     }
     $form['show_on_selected_pages'] = [
@@ -95,7 +95,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
         1 => $this->t('Show in the selected page types'),
         0 => $this->t('Hide in the selected page types'),
       ],
-      '#default_value' => $this->configuration['show_on_selected_pages'] ?: 1,
+      '#default_value' => $this->configuration['show_on_selected_pages'],
     ];
     $form += parent::buildConfigurationForm($form, $form_state);
     unset($form['negate']);
@@ -116,6 +116,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
+    return ['show_on_selected_pages' => 1] + parent::defaultConfiguration();
   }
 
   /**
