@@ -21,7 +21,7 @@ window.commerceBackend = window.commerceBackend || {};
  *   Returns the cart item if found else returns null.
  */
 const getCartItem = (sku) => {
-  const cart = window.commerceBackend.getCartDataFromStorage();
+  const cart = window.commerceBackend.getRawCartDataFromStorage();
   if (!cart || typeof cart.cart === 'undefined' || !cart.cart || typeof cart.cart.items === 'undefined' || cart.cart.items.length === 0) {
     return null;
   }
@@ -41,7 +41,7 @@ const getCartItem = (sku) => {
  *   The coupon code string or null.
  */
 const getCoupon = () => {
-  const cart = window.commerceBackend.getCartDataFromStorage();
+  const cart = window.commerceBackend.getRawCartDataFromStorage();
   if (!cart || (typeof cart.totals !== 'undefined' && Object.keys(cart.totals).length !== 0)) {
     return typeof cart.totals.coupon_code !== 'undefined'
       ? cart.totals.coupon_code
@@ -90,7 +90,7 @@ const triggerStockRefresh = (data) => callDrupalApi(
 });
 
 /**
- * Object to serve as static cache for cart data over the course of a request.
+ * Object to serve as static cache for processed cart data over the course of a request.
  */
 let staticCartData = null;
 
@@ -169,6 +169,8 @@ window.commerceBackend.getCart = async () => {
     return new Promise((resolve) => resolve(error));
   }
 
+  // Store the response.
+  window.commerceBackend.setRawCartDataInStorage(response.data);
   // Process data.
   response.data = window.commerceBackend.getProcessedCartData(response.data);
   return new Promise((resolve) => resolve(response));
@@ -204,9 +206,10 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   const sku = typeof data.variant_sku !== 'undefined' && data.variant_sku
     ? data.variant_sku
     : data.sku;
+  let cartItem = null;
 
   if (data.action === 'remove item') {
-    const cartItem = getCartItem(sku);
+    cartItem = getCartItem(sku);
     // Do nothing if item no longer available.
     if (!cartItem) {
       return window.commerceBackend.getCart();
@@ -217,12 +220,11 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       && typeof cartItem.extension_attributes.promo_rule_id !== 'undefined') {
       const appliedCoupon = getCoupon();
       if (appliedCoupon) {
-        // @todo Implement this function.
-        // window.commerceBackend.applyRemovePromo({promo: appliedCoupon, action: 'remove coupon'});
+        await window.commerceBackend.applyRemovePromo({ promo: appliedCoupon, action: 'remove coupon' });
       }
     }
     requestMethod = 'DELETE';
-    requestUrl = `/rest/V1/guest-carts/${cartId}/items/${cartItem.id}`;
+    requestUrl = `/rest/V1/guest-carts/${cartId}/items/${cartItem.item_id}`;
   }
 
   if (data.action === 'add item') {
@@ -260,13 +262,21 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   }
 
   if (data.action === 'update item') {
-    const cartItem = getCartItem(sku);
+    cartItem = getCartItem(sku);
     if (!cartItem) {
       // Do nothing if item no longer available.
       return window.commerceBackend.getCart();
     }
     // Set the cart item id to ensure we set new quantity instead of adding it.
     itemData.cartItem.item_id = cartItem.id;
+  }
+
+  // Do a sanity check before proceeding since an item can be removed in above processes.
+  // Eg. in remove cart when promo code is removed.
+  cartItem = getCartItem(sku);
+  if ((data.action === 'update item' || data.action === 'remove item') && !cartItem) {
+    // Do nothing if item no longer available.
+    return window.commerceBackend.getCart();
   }
 
   let apiCallAttempts = 1;
@@ -326,7 +336,17 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.applyRemovePromo = (data) => updateCart(data);
+window.commerceBackend.applyRemovePromo = (data) => {
+  const params = {
+    extension: {
+      action: data.action,
+    },
+  };
+  if (typeof data.promo !== 'undefined' && data.promo) {
+    params.coupon = data.promo;
+  }
+  return updateCart(params);
+};
 
 /**
  * Gets the cart ID for existing cart.

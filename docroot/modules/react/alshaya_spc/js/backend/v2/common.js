@@ -3,10 +3,30 @@ import qs from 'qs';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 
+window.commerceBackend = window.commerceBackend || {};
+
 /**
  * Stores the langcode of the current page.
  */
 const currentLangcode = window.drupalSettings.path.currentLanguage;
+
+// Contains the raw unprocessed cart data.
+let rawCartData = null;
+
+/**
+ * Stores the raw cart data object into the storage.
+ *
+ * @param {object} data
+ *   The raw cart data object.
+ */
+window.commerceBackend.setRawCartDataInStorage = (data) => {
+  rawCartData = data;
+};
+
+/**
+ * Fetches the raw cart data object from the static storage.
+ */
+window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
 
 /**
  * Global constants.
@@ -211,7 +231,7 @@ const getProcessedCartData = (cartData) => {
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.cart.customer,
-    coupon_code: '', // @todo where to find this? cart.totals.coupon_code
+    coupon_code: typeof cartData.totals.coupon_code !== 'undefined' ? cartData.totals.coupon_code : '',
     appliedRules: cartData.cart.applied_rule_ids,
     items_qty: cartData.cart.items_qty,
     cart_total: 0,
@@ -251,11 +271,10 @@ const getProcessedCartData = (cartData) => {
     data.minicart_total -= data.totals.surcharge;
   }
 
-  // @todo confirm this
   if (typeof cartData.response_message[1] !== 'undefined') {
     data.response_message = {
       status: cartData.response_message[1],
-      msg: cartData.response_message[2],
+      msg: cartData.response_message[0],
     };
   }
 
@@ -277,9 +296,15 @@ const getProcessedCartData = (cartData) => {
         stock: 99999, // @todo get stock information
       };
 
-      if (typeof item.extension_attributes !== 'undefined' && typeof item.extension_attributes.error_message !== 'undefined') {
-        data.items[item.item_id].error_msg = item.extension_attributes.error_message;
-        data.is_error = true;
+      if (typeof item.extension_attributes !== 'undefined') {
+        if (typeof item.extension_attributes.error_message !== 'undefined') {
+          data.items[item.sku].error_msg = item.extension_attributes.error_message;
+          data.is_error = true;
+        }
+
+        if (typeof item.extension_attributes.promo_rule_id !== 'undefined') {
+          data.items[item.sku].promoRuleId = item.extension_attributes.promo_rule_id;
+        }
       }
 
       // This is to determine whether item to be shown free or not in cart.
@@ -296,7 +321,7 @@ const getProcessedCartData = (cartData) => {
 
           // Free Item is only for free gift products which are having
           // price 0, rest all are free but still via different rules.
-          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.amasty_promo !== 'undefined') {
+          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
             data.items[item.sku].freeItem = true;
           }
         }
@@ -313,12 +338,27 @@ const getProcessedCartData = (cartData) => {
 
 /**
  * Calls the update cart API and returns the updated cart.
- * @todo Implement this function while working on the checkout page.
+ * @todo Implement this function fully while working on the checkout page.
  *
  * @param {object} data
  *  The data to send.
  */
-const updateCart = async () => null;
+const updateCart = (data) => {
+  const cartId = window.commerceBackend.getCartId();
+
+  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/updateCart`, 'POST', JSON.stringify(data))
+    .then((response) => {
+      if (typeof response.data.error !== 'undefined' && response.data.error) {
+        return response;
+      }
+      // Update the cart data in storage.
+      window.commerceBackend.setRawCartDataInStorage(response.data);
+      // Process the cart data.
+      response.data = window.commerceBackend.getProcessedCartData(response.data);
+
+      return response;
+    });
+};
 
 export {
   isAnonymousUserWithoutCart,
