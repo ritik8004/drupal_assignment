@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_mobile_app
+    - alshaya_acm_product
+    - alshaya_bazaar_voice
+    - serialization
+    - simple_oauth
+id: bazaar_voice_configs
+plugin_id: bazaar_voice_configs
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

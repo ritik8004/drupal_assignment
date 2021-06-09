@@ -71,6 +71,9 @@ function alshaya_bazaar_voice_uninstall() {
   if (!is_null($webform)) {
     $webform->delete();
   }
+  // Remove bazaar_voice_configs, write_review_config rest resource.
+  \Drupal::configFactory()->getEditable('rest.resource.bazaar_voice_configs')->delete();
+  \Drupal::configFactory()->getEditable('rest.resource.write_review_config')->delete();
 }
 
 /**
