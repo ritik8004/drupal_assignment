@@ -12,10 +12,17 @@
     return false;
   };
 
-  Drupal.smartAgent.logout = function () {
+  Drupal.smartAgent.logout = function (url) {
     $.removeCookie('smart_agent_cookie', {path: '/'});
-    // Redirect to home page.
-    window.location.href = Drupal.url('');
+
+    var redirectUrl = url || '';
+
+    if (drupalSettings.user.uid > 0) {
+      // If user is logged in, logout first.
+      redirectUrl = 'user/logout?destination=' + redirectUrl;
+    }
+
+    window.location.href = Drupal.url(redirectUrl);
   };
 
   Drupal.smartAgent.endTransaction = function () {
@@ -39,7 +46,7 @@
       // Add agent login message as soon as smartAgent cookie is set.
       var agentInfo = Drupal.smartAgent.getInfo();
 
-      if (typeof agentInfo !== 'undefined') {
+      if (typeof agentInfo !== 'undefined' && agentInfo !== false) {
         if ($('.smart-agent-header-wrapper').length < 1) {
           var loggedInMessageMarkup = '<div class="smart-agent-header-wrapper">';
           loggedInMessageMarkup += '<span class="agent-logged-in">';
@@ -63,11 +70,17 @@
         // Add or update smart agent location in cookie.
         // We do this on every page load to ensure we have the latest location data of the Agent every-time.
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((pos) => {
-            agentInfo['lat'] = pos.coords.latitude;
-            agentInfo['lng'] = pos.coords.longitude;
-            $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
-          });
+          navigator.geolocation.getCurrentPosition(
+            function (pos) {
+              agentInfo['lat'] = pos.coords.latitude;
+              agentInfo['lng'] = pos.coords.longitude;
+              $.cookie('smart_agent_cookie', btoa(JSON.stringify(agentInfo)), {path: '/', secure: true});
+            },
+            function () {
+              // Trigger an event when failed to capture agent location.
+              $(window).trigger('alshaya-agent-location-fetch-failed');
+            }
+          );
         }
       }
     }
