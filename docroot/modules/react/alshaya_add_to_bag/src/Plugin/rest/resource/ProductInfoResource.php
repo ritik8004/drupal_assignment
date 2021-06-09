@@ -325,6 +325,14 @@ class ProductInfoResource extends ResourceBase {
         // same as add to cart form.
         $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
         $data['configurable_combinations']['firstChild'] = reset($sorted_variants);
+
+        // Get the first child from variants of selected parent.
+        foreach (Configurable::getChildSkus($product_tree['parent']) as $child_sku) {
+          if (isset($product_tree['products'][$child_sku])) {
+            $data['configurable_combinations']['firstChild'] = $child_sku;
+            break;
+          }
+        }
       }
 
       $response = new ResourceResponse($data);
