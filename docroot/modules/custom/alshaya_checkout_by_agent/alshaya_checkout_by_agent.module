@@ -83,6 +83,12 @@ function alshaya_checkout_by_agent_page_attachments(array &$attachments) {
     return;
   }
   $attachments['#attached']['library'][] = 'alshaya_checkout_by_agent/smart_agent';
+
+  $settings = \Drupal::config('alshaya_checkout_by_agent.settings');
+
+  if ($settings->get('restrict_agent_login') == TRUE) {
+    $attachments['#attached']['library'][] = 'alshaya_checkout_by_agent/restrict_agent_login';
+  }
 }
 
 /**
