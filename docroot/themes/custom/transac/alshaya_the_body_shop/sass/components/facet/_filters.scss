@@ -7,6 +7,8 @@
   @include breakpoint($upto-desktop) {
     font-size: 0.875rem;
   }
+
+  @include arabic-letter-spacing;
 }
 
 %filter-label-fixed {

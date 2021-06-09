@@ -230,6 +230,8 @@
     .view-header p {
       color: $store_finder_subheader;
       letter-spacing: 0.00625rem;
+
+      @include arabic-letter-spacing;
     }
   }
 
