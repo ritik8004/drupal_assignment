@@ -266,7 +266,5 @@ function alshaya_product_list_query_product_category_child_terms_alter(Alterable
  * Implements hook_alshaya_search_api_listing_page_types_alter().
  */
 function alshaya_product_list_alshaya_search_api_listing_page_types_alter(&$page_types) {
-  $page_types['product_option_list'] = [
-    'product_option_list' => t('Product Option Listing'),
-  ];
+  $page_types['product_option_list'] = t('Product Option Listing');
 }

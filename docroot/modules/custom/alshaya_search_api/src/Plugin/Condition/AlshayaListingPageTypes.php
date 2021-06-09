@@ -61,32 +61,15 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $page_types = $this->getPageTypes();
     $form['page_types'] = [
       '#title' => $this->t('Select the Page Types'),
       '#type' => 'fieldset',
     ];
-    $form['page_types']['search'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Search page'),
-      '#default_value' => $this->configuration['page_types']['search'],
-    ];
-    $form['page_types']['plp'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Category Listing'),
-      '#default_value' => $this->configuration['page_types']['plp'],
-    ];
-    $form['page_types']['promotion'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Promotion Listing'),
-      '#default_value' => $this->configuration['page_types']['promotion'],
-    ];
-    // Invoke hook to allow other modules to add new page types.
-    $page_types = [];
-    \Drupal::moduleHandler()->alter('alshaya_search_api_listing_page_types', $page_types);
     foreach ($page_types as $page_type => $page_type_value) {
       $form['page_types'][$page_type] = [
         '#type' => 'checkbox',
-        '#title' => $page_type_value[$page_type],
+        '#title' => $page_type_value,
         '#default_value' => $this->configuration['page_types'][$page_type],
       ];
     }
@@ -128,6 +111,21 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    *  Kept empty as it is a mandatory function to implement.
    */
   public function evaluate() {
+  }
+
+  /**
+   * Custom function to get the page types.
+   */
+  public static function getPageTypes() {
+    static $page_types = [];
+    if (empty($page_types)) {
+      $page_types['search'] = t('Search');
+      $page_types['plp'] = t('Category Listing');
+      $page_types['promotion'] = t('Promotion Listing');
+      // Invoke hook to allow other modules to add new page types.
+      \Drupal::moduleHandler()->alter('alshaya_search_api_listing_page_types', $page_types);
+    }
+    return $page_types;
   }
 
 }
