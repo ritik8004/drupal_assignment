@@ -92,8 +92,9 @@
     }
 
     .product-title {
-      display: inline-block;
+      font-family: $alshaya-thin;
       font-size: 1.125rem;
+      display: inline-block;
       line-height: normal;
       color: $primary-text;
       padding-bottom: 0.625rem;
