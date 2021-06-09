@@ -9,15 +9,14 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides condition for "super category" feature.
+ * Provides condition for "Brand LHN" feature.
  *
  * @Condition(
  *   id = "alshaya_listing_page_types",
- *   label = @Translation("Page Types"),
+ *   label = @Translation("Alshaya Page Types"),
  * )
  */
 class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFactoryPluginInterface {
-
 
   /**
    * Config factory.
@@ -27,7 +26,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
   protected $configFactory;
 
   /**
-   * Creates a new Webform instance.
+   * AlshayaListingPageTypes Constructor.
    *
    * @param array $configuration
    *   The plugin configuration, i.e. an array with configuration values keyed
@@ -63,7 +62,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form['page_types'] = [
-      '#title' => 'Select the Page Types',
+      '#title' => $this->t('Select the Page Types'),
       '#type' => 'fieldset',
     ];
     $form['page_types']['search'] = [
@@ -81,18 +80,22 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
       '#title' => $this->t('Promotion Listing'),
       '#default_value' => $this->configuration['page_types']['promotion'],
     ];
-    $form['page_types']['product_option_list'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Product Option Listing'),
-      '#default_value' => $this->configuration['page_types']['product_option_list'],
-    ];
+    // Invoke hook to allow other modules to add new page types.
+    $new_page_types = \Drupal::moduleHandler()->invokeAll('alshaya_listing_page_types_add');
+    foreach ($new_page_types as $page_type => $page_type_value) {
+      $form['page_types'][$page_type] = [
+        '#type' => $page_type_value['type'],
+        '#title' => $page_type_value['title'],
+        '#default_value' => $this->configuration['page_types'][$page_type] ?: 1,
+      ];
+    }
     $form['show_on_selected_pages'] = [
       '#type' => 'radios',
       '#options' => [
         1 => $this->t('Show in the selected page types'),
         0 => $this->t('Hide in the selected page types'),
       ],
-      '#default_value' => $this->configuration['show_on_selected_pages'],
+      '#default_value' => $this->configuration['show_on_selected_pages'] ?: 1,
     ];
     $form += parent::buildConfigurationForm($form, $form_state);
     unset($form['negate']);
@@ -104,10 +107,7 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $this->configuration['page_types']['search'] = $form_state->getValue('page_types')['search'];
-    $this->configuration['page_types']['plp'] = $form_state->getValue('page_types')['plp'];
-    $this->configuration['page_types']['promotion'] = $form_state->getValue('page_types')['promotion'];
-    $this->configuration['page_types']['product_option_list'] = $form_state->getValue('page_types')['product_option_list'];
+    $this->configuration['page_types'] = $form_state->getValue('page_types');
     $this->configuration['show_on_selected_pages'] = $form_state->getValue('show_on_selected_pages');
     parent::submitConfigurationForm($form, $form_state);
   }
@@ -116,25 +116,21 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [
-      'page_types' => [
-        'search' => 0,
-        'plp' => 0,
-        'promotion' => 0,
-        'product_option_list' => 1,
-      ],
-      'show_on_selected_pages' => 1,
-    ] + parent::defaultConfiguration();
   }
 
   /**
    * {@inheritdoc}
+   *
+   * Kept empty as it is a mandatory function to implement.
+   * Human readable summary is not required here.
    */
   public function summary() {
   }
 
   /**
    * {@inheritdoc}
+   *
+   *  Kept empty as it is a mandatory function to implement.
    */
   public function evaluate() {
   }

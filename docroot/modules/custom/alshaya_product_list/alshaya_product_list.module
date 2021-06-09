@@ -261,3 +261,14 @@ function alshaya_product_list_query_product_category_child_terms_alter(Alterable
   $query->leftJoin('taxonomy_term__field_show_in_product_list_lhn', 'tplhn', 'tplhn.entity_id=tfd.tid');
   $query->addField('tplhn', 'field_show_in_product_list_lhn_value', 'field_show_in_product_list_lhn_value');
 }
+
+/**
+ * Implements hook_alshaya_listing_page_types().
+*/
+function alshaya_product_list_alshaya_listing_page_types_add() {
+  $page_type['product_option_list'] = [
+    'title' => t('Product Option Listing'),
+    'type' => 'checkbox',
+  ];
+  return $page_type;
+}
