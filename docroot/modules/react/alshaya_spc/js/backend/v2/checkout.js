@@ -299,7 +299,7 @@ const getProcessedCheckoutData = async (cartData) => {
       response.payment.default = getMethodCodeForFrontend(response.payment.default);
     }
   }
-  return new Promise((resolve) => resolve(response));
+  return response;
 };
 
 /**
