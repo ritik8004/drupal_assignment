@@ -8,7 +8,7 @@ window.commerceBackend = window.commerceBackend || {};
 /**
  * Stores the langcode of the current page.
  */
-const currentLangcode = window.drupalSettings.path.currentLanguage;
+const currentLangcode = () => window.drupalSettings.path.currentLanguage;
 
 // Contains the raw unprocessed cart data.
 let rawCartData = null;
@@ -196,8 +196,9 @@ const callMagentoApi = (url, method, data) => {
  */
 const callDrupalApi = (url, method, requestOptions) => {
   const headers = {};
+  const langCode = currentLangcode();
   const params = {
-    url: `/${currentLangcode}${url}`,
+    url: `/${langCode}${url}`,
     method,
   };
 

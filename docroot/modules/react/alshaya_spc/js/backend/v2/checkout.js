@@ -4,6 +4,7 @@ import {
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
+  callDrupalApi,
 } from './common';
 import { getDefaultErrorMessage } from './error';
 import { logger } from './utility';
@@ -154,10 +155,7 @@ const getCustomerPublicData = (data) => {
  * @return {array}.
  *   Return store info.
  */
-const getStoreInfo = (storeCode) => {
-  // @todo implement this
-  logger.info(`${storeCode}`);
-};
+const getStoreInfo = (storeCode) => callDrupalApi(`/cnc/store/${storeCode}`, 'GET', {});
 
 /**
  * Get store info for given store code.
@@ -216,10 +214,10 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  *
  * @param {object} cartData
  *   The cart data object.
- * @return {object}.
- *   The data.
+ * @returns {Promise}
+ *   A promise object.
  */
-const getProcessedCheckoutData = (cartData) => {
+const getProcessedCheckoutData = async (cartData) => {
   let data = cartData;
   if (typeof data.error !== 'undefined' && data.error === true) {
     return data;
@@ -259,7 +257,7 @@ const getProcessedCheckoutData = (cartData) => {
     : [];
 
   if (typeof response.shipping.storeCode !== 'undefined') {
-    response.shipping.storeInfo = getStoreInfo(response.shipping.storeCode);
+    response.shipping.storeInfo = await getStoreInfo(response.shipping.storeCode);
     // Set the CnC type (rnc or sts) if not already set.
     if (typeof response.shipping.storeInfo.rnc_available === 'undefined' && typeof response.shipping.clickCollectType !== 'undefined') {
       response.shipping.storeInfo.rnc_available = (response.shipping.clickCollectType === 'reserve_and_collect');
@@ -301,7 +299,7 @@ const getProcessedCheckoutData = (cartData) => {
       response.payment.default = getMethodCodeForFrontend(response.payment.default);
     }
   }
-  return response;
+  return new Promise((resolve) => resolve(response));
 };
 
 /**
