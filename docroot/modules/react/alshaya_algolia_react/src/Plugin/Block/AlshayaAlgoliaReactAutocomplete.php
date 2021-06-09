@@ -83,7 +83,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
    */
   public function build() {
     // Get common configuration for Algolia pages.
-    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE, 'search');
+    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE, self::PAGE_TYPE);
 
     // Get algola settings for lhn menu.
     $config = $this->configFactory->get('alshaya_search_algolia.settings');
