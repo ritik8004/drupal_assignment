@@ -91,7 +91,7 @@ const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.strin
     // set to V2.
     if (
       error.response.status === 403
-        && error.response.data === 'Trying to acccess V1 when version is V2.'
+        && error.response.data.indexOf('The version of the website that you are using is now obsolete.') !== -1
         && !sessionStorage.getItem('reloadOnBackendSwitch')
     ) {
       // Reload the page only once. The caches are expected to be cleared till
