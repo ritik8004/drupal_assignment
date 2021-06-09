@@ -5,7 +5,7 @@
 
       if (agentInfo !== false) {
         // Logout agent if location sharing is not enabled.
-        $(window).on('alshaya-agent-location-fetch-failed', function () {
+        $(window).once('location-fetch-failed').on('alshaya-agent-location-fetch-failed', function () {
           // Set cookie to identify that agent location sharing is disabled.
           $.cookie('smart_agent_location_fetch_failed', 1, {path: '/', secure: true});
           // Logout agent and redirect to login.
