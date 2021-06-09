@@ -67,14 +67,20 @@ const callMiddlewareApi = (url, method, data) => {
  * @param {string} message
  *   The response message.
  */
-const returnExistingCartWithError = (code, message) => ({
-  data: {
+const returnExistingCartWithError = (code, message) => {
+  let cart = window.commerceBackend.getCartDataFromStorage();
+  const error = {
     error: true,
     error_code: code,
     error_message: message,
     response_message: [message, 'error'],
-  },
-});
+  };
+
+  cart = cart ? cart.cart : {};
+  cart = Object.assign(cart, error);
+
+  return { data: cart };
+};
 
 /**
  * Calls the update cart middleware API.
