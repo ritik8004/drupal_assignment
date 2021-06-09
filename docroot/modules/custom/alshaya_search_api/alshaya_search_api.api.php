@@ -23,5 +23,12 @@ function hook_alshaya_search_api_language_switcher_alter(array &$query_params, $
 }
 
 /**
+ * Adds new page type in the block visibility condition plugin.
+ */
+function hook_alshaya_search_api_listing_page_types_alter(array &$page_types) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

@@ -81,12 +81,13 @@ class AlshayaListingPageTypes extends ConditionPluginBase implements ContainerFa
       '#default_value' => $this->configuration['page_types']['promotion'],
     ];
     // Invoke hook to allow other modules to add new page types.
-    $new_page_types = \Drupal::moduleHandler()->invokeAll('alshaya_listing_page_types_add');
-    foreach ($new_page_types as $page_type => $page_type_value) {
+    $page_types = [];
+    \Drupal::moduleHandler()->alter('alshaya_search_api_listing_page_types', $page_types);
+    foreach ($page_types as $page_type => $page_type_value) {
       $form['page_types'][$page_type] = [
-        '#type' => $page_type_value['type'],
-        '#title' => $page_type_value['title'],
-        '#default_value' => $this->configuration['page_types'][$page_type] ?: $page_type_value['default_value'],
+        '#type' => 'checkbox',
+        '#title' => $page_type_value[$page_type],
+        '#default_value' => $this->configuration['page_types'][$page_type],
       ];
     }
     $form['show_on_selected_pages'] = [
