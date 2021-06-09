@@ -105,12 +105,11 @@ const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.strin
         // then.
         sessionStorage.setItem('reloadOnBackendSwitch', 1);
         window.location.reload();
-      } else {
-        return returnExistingCartWithError(
-          response.status,
-          getStringMessage('backend_obsolete_version'),
-        );
       }
+      return returnExistingCartWithError(
+        response.status,
+        getStringMessage('backend_obsolete_version'),
+      );
     }
 
     return response;
