@@ -1,0 +1,93 @@
+{
+  "name": "DUBAI FESTIVAL CITY MALL",
+  "code": "RE1-3763-BOO",
+  "address": "\n<div class=\"address--line2\">\n  Crescent Rd-Dubai Festival City-Dubai Dubai Abu Hail\n</div>\n",
+  "phone_number": "",
+  "open_hours": [
+    {
+      "value": "10:00am - 10:00pm",
+      "key": "Sunday",
+      "description": null
+    },
+    {
+      "value": "10:00am - 10:00pm",
+      "key": "Monday",
+      "description": null
+    },
+    {
+      "value": "10:00am - 10:00pm",
+      "key": "Tuesday",
+      "description": null
+    },
+    {
+      "value": "10:00am - 10:00pm",
+      "key": "Wednesday",
+      "description": null
+    },
+    {
+      "value": "10:00am - 10:00pm",
+      "key": "Thursday",
+      "description": null
+    },
+    {
+      "value": "10:00am - 10:00pm",
+      "key": "Friday",
+      "description": null
+    },
+    {
+      "value": "10:00am - 10:00pm",
+      "key": "Saturday",
+      "description": null
+    }
+  ],
+  "open_hours_group": {
+    "Sunday - Saturday": "10:00am - 10:00pm"
+  },
+  "delivery_time": "1-2 Days",
+  "nid": "119546",
+  "view_on_map_link": "/en/click-and-collect/store-map-view/119546",
+  "lat": 25.222165,
+  "lng": 55.352826,
+  "gtm_cart_address": {
+    "country_code": "AE",
+    "given_name": null,
+    "family_name": null,
+    "mobile_number": {
+      "value": ""
+    },
+    "address_line1": "Crescent Rd-Dubai Festival City-Dubai",
+    "address_line2": "",
+    "dependent_locality": "",
+    "administrative_area": "68561",
+    "area_parent": "336",
+    "administrative_area_display": "Abu Hail",
+    "area_parent_display": "Dubai"
+  },
+  "cart_address_raw": {
+    "country_code": "AE",
+    "given_name": null,
+    "family_name": null,
+    "mobile_number": {
+      "value": ""
+    },
+    "address_line1": "Crescent Rd-Dubai Festival City-Dubai",
+    "address_line2": "",
+    "dependent_locality": "",
+    "administrative_area": "68561",
+    "area_parent": "336",
+    "administrative_area_display": "Abu Hail",
+    "area_parent_display": "Dubai"
+  },
+  "cart_address": {
+    "city": "Abu Hail",
+    "country_id": "AE",
+    "telephone": "",
+    "street": "Crescent Rd-Dubai Festival City-Dubai",
+    "extension": {
+      "address_apartment_segment": "",
+      "address_building_segment": "",
+      "area": "9",
+      "address_city_segment": "1"
+    }
+  }
+}

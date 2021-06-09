@@ -5,11 +5,6 @@ import { cartErrorCodes, getDefaultErrorMessage } from './error';
 
 window.commerceBackend = window.commerceBackend || {};
 
-/**
- * Stores the langcode of the current page.
- */
-const currentLangcode = window.drupalSettings.path.currentLanguage;
-
 // Contains the raw unprocessed cart data.
 let rawCartData = null;
 
@@ -197,7 +192,7 @@ const callMagentoApi = (url, method, data) => {
 const callDrupalApi = (url, method, requestOptions) => {
   const headers = {};
   const params = {
-    url: `/${currentLangcode}${url}`,
+    url: `/${window.drupalSettings.path.currentLanguage}${url}`,
     method,
   };
 

@@ -1,18 +1,13 @@
 jest.mock('axios');
 import axios from 'axios';
 import { callMagentoApi } from '../../../../js/backend/v2/common';
-import utilsRewire, { getProcessedCheckoutData } from "../../../../js/backend/v2/checkout";
+import { drupalSettings } from '../globals';
 
 describe('Cart', () => {
   describe('Calls to Magento API', () => {
 
     beforeEach(() => {
-      window.drupalSettings = {
-        cart: {
-          url: 'v1',
-          store: 'en_gb',
-        },
-      };
+      window.drupalSettings = drupalSettings;
     });
 
     afterEach(() => {

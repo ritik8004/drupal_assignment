@@ -1,9 +1,22 @@
+jest.mock('axios');
+import axios from 'axios';
 import each from 'jest-each'
 import utilsRewire, { getProcessedCheckoutData } from "../../../../js/backend/v2/checkout";
+import { drupalSettings } from '../globals';
 import * as cartData from '../data/cart.json';
+import * as storeData from '../data/store.json';
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
+
+    beforeEach(() => {
+      window.drupalSettings = drupalSettings;
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
     const getMethodCodeForFrontend = utilsRewire.__get__('getMethodCodeForFrontend');
     each`
      input                           | expectedResult
@@ -91,6 +104,14 @@ describe('Checkout', () => {
       expect(result).toEqual([{
         foo: 'bar',
       }]);
+    });
+
+    it('Test getStoreInfo()', async () => {
+      axios.mockResolvedValue({ data: storeData, status: 200 });
+      const getStoreInfo = utilsRewire.__get__('getStoreInfo');
+      const result = await getStoreInfo('RE1-3763-BOO');
+      expect(result.data).toEqual(storeData);
+      expect(axios).toHaveBeenCalled();
     });
   });
 });
