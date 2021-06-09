@@ -11,6 +11,7 @@ services:
       - '@facets.manager'
       - '@module_handler'
       - '@cache.data'
+      - '@path.validator'
 
   alshaya_options_list.breadcrumb:
     class: Drupal\alshaya_options_list\Breadcrumb\AlshayaOptionsBreadcrumbBuilder
