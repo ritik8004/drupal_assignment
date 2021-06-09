@@ -312,6 +312,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
   private function getSkuData(SKUInterface $sku, string $link = '', bool $with_parent_details = FALSE): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
+    AlshayaRequestContextManager::updateDefaultContext('app');
 
     $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $sku->getCacheTags());
     $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $sku->getCacheContexts());
@@ -387,7 +388,6 @@ class ProductExcludeLinkedResource extends ResourceBase {
       ];
     }
 
-    AlshayaRequestContextManager::updateDefaultContext('app');
     $data['configurable_values'] = $this->skuManager->getConfigurableValuesForApi($sku);
 
     if ($sku->bundle() === 'configurable') {

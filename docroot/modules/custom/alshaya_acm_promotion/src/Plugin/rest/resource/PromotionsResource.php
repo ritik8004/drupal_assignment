@@ -73,7 +73,7 @@ class PromotionsResource extends ResourceBase {
   protected $moduleHandler;
 
   /**
-   * Alshaya Promotions Context Manager.
+   * Alshaya Request Context Manager.
    *
    * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */

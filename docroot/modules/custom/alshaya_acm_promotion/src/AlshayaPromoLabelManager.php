@@ -94,7 +94,7 @@ class AlshayaPromoLabelManager {
   protected $languageManager;
 
   /**
-   * Alshaya Promotions Context Manager.
+   * Alshaya Request Context Manager.
    *
    * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */
