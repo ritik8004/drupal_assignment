@@ -14,23 +14,10 @@ use Drupal\block\BlockInterface;
  * Implements hook_update_N().
  *
  * Disable bv blocks if algolia plp is enabled.
- * Enable BV configs APIs for Mobile app.
  */
 function alshaya_bazaar_voice_update_8001() {
   // Disable bv blocks if algolia plp is enabled.
   _disable_bv_rating_blocks_in_algolia_plp();
-  // Enable BV configs APIs for Mobile app.
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    [
-      'rest.resource.bazaar_voice_configs',
-      'rest.resource.write_review_config',
-    ],
-    'alshaya_bazaar_voice'
-    );
-  // Re-save config to import override config with updated permissions.
-  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
-  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
 }
 
 /**
@@ -104,7 +91,7 @@ function alshaya_bazaar_voice_uninstall() {
 }
 
 /**
- * Disable bv blocks if algolia plp is enabled.
+ * Add sorting option (Top rated) in srp/plp configuration form.
  */
 function _add_sort_option_in_plp_srp_config_form() {
   // Update srp sorting configurations.
@@ -138,7 +125,7 @@ function _add_sort_option_in_plp_srp_config_form() {
 }
 
 /**
- * Add sorting option (Top rated) in srp/plp configuration form.
+ * Disable bv blocks if algolia plp is enabled.
  */
 function _disable_bv_rating_blocks_in_algolia_plp() {
   if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
