@@ -8,6 +8,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\kaleyra\MessageApiAdapter;
 use Drupal\kaleyra\WhatsAppApiAdapter;
 use Drupal\mobile_number\MobileNumberUtilInterface;
@@ -243,7 +244,15 @@ class ShareCart extends ResourceBase {
         $to = $this->getFullMobileNumber($to);
         $template = $settings->get('whatsapp_template');
 
-        $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, [$cart_url]);
+        $params = [
+          $this->configFactory->get('system.site')->get('name'),
+          Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString(TRUE)->getGeneratedUrl(),
+        ];
+
+        // For WhatsApp we have to send relative URL.
+        $cart_url = str_replace($this->currentRequest->getSchemeAndHttpHost() . '/', '', $cart_url);
+
+        $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, $params, $cart_url);
         break;
 
       case 'sms':
