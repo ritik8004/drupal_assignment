@@ -12,7 +12,6 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import { setStorageInfo } from '../../../../utilities/storage';
-import PostReviewMessage from '../post-review-message';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -21,7 +20,6 @@ export default class WriteReviewForm extends React.Component {
     super(props);
     this.state = {
       fieldsConfig: '',
-      myaccountReview: '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -107,17 +105,8 @@ export default class WriteReviewForm extends React.Component {
     if (!this.isComponentMounted) {
       return;
     }
-
-    const { context } = this.props;
-
     if (!e.detail.HasErrors) {
-      if (context === 'myaccount') {
-        this.setState({
-          myaccountReview: e.detail,
-        });
-      } else {
-        closeModal(e);
-      }
+      closeModal(e);
     }
   };
 
@@ -147,7 +136,7 @@ export default class WriteReviewForm extends React.Component {
     } = this.props;
 
     const {
-      fieldsConfig, myaccountReview,
+      fieldsConfig,
     } = this.state;
 
     Object.entries(fieldsConfig).forEach(
@@ -163,19 +152,6 @@ export default class WriteReviewForm extends React.Component {
       },
     );
     const bazaarVoiceSettings = getbazaarVoiceSettings(productId);
-    if (myaccountReview !== '') {
-      return (
-        <>
-          <div className="write-review-form">
-            <div className="title-block">
-              <SectionTitle>{getStringMessage('write_a_review')}</SectionTitle>
-              <a className="close-modal" onClick={(e) => closeModal(e)} />
-            </div>
-            <PostReviewMessage postReviewData={myaccountReview} />
-          </div>
-        </>
-      );
-    }
     return (
       <>
         <div className="write-review-form">
