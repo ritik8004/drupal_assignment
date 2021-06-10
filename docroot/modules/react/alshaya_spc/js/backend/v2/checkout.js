@@ -54,9 +54,6 @@ const getCncStatusForCart = async () => {
   }
 
   for (let i = 0; i < cart.cart.items.length; i++) {
-    // We disable the eslint condition so that multiple parallel calls do not
-    // happen unnecessarily.
-    // eslint-disable-next-line no-await-in-loop
     const item = cart.cart.items[i];
     // We should ideally have ony one call to an endpoint and pass
     // The list of items. This look could happen in the backend.
