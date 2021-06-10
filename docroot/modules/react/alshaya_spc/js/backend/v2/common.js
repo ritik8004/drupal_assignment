@@ -24,6 +24,38 @@ window.commerceBackend.setRawCartDataInStorage = (data) => {
 window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
 
 /**
+ * Object to serve as static cache for processed cart data over the course of a request.
+ */
+let staticCartData = null;
+
+/**
+ * Gets the cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+
+/**
+ * Sets the cart data to storage.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartDataInStorage = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  staticCartData = cartInfo;
+};
+
+/**
+ * Unsets the stored cart data.
+ */
+window.commerceBackend.removeCartDataFromStorage = () => {
+  staticCartData = null;
+};
+
+/**
  * Global constants.
  */
 
@@ -141,11 +173,13 @@ const handleResponse = (response) => {
  *   The request method.
  * @param {object} data
  *   The object to send for POST request.
+ * @param {object} requestOptions
+ *   The object containing the request options.
  *
  * @returns {Promise}
  *   Returns a promise object.
  */
-const callMagentoApi = (url, method, data) => {
+const callMagentoApi = (url, method, data, requestOptions) => {
   const params = {
     url: i18nMagentoUrl(url),
     method,
@@ -157,6 +191,15 @@ const callMagentoApi = (url, method, data) => {
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
     params.data = data;
+  }
+
+  if (typeof requestOptions !== 'undefined' && requestOptions && Object.keys(requestOptions).length > 0) {
+    Object.keys(requestOptions).forEach((optionName) => {
+      if (optionName === 'query') {
+        const queryString = qs.stringify(requestOptions[optionName]);
+        params.url = `${params.url}?${queryString}`;
+      }
+    });
   }
 
   return Axios(params)
@@ -203,6 +246,12 @@ const callDrupalApi = (url, method, requestOptions) => {
         params.data = qs.stringify(requestOptions[optionName]);
         return;
       }
+      if (optionName === 'query') {
+        const queryString = qs.stringify(requestOptions[optionName]);
+        params.url = `${params.url}?${queryString}`;
+        return;
+      }
+
       params[optionName] = requestOptions[optionName];
     });
   }
