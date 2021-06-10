@@ -416,24 +416,32 @@ export default class ReviewSummary extends React.Component {
               <PostReviewMessage postReviewData={postReviewData} />
             </ConditionalView>
             {Object.keys(reviewsSummary).map((item) => (
-              <div className="review-summary" key={reviewsSummary[item].Id}>
-                <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
-                  <DisplayStar
-                    starPercentage={reviewsSummary[item].Rating}
-                  />
-                  <div className="review-title">{reviewsSummary[item].Title}</div>
-                </ConditionalView>
-                <ReviewInformation
-                  reviewInformationData={reviewsSummary[item]}
-                  reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
-                    .AuthorId].ReviewStatistics}
-                  isNewPdpLayout={isNewPdpLayout}
-                />
-                <ReviewDescription
-                  reviewDescriptionData={reviewsSummary[item]}
-                  reviewsComment={reviewsComment}
-                  isNewPdpLayout={isNewPdpLayout}
-                />
+              <div key={reviewsSummary[item].Id}>
+                {reviewsSummary[item].ModerationStatus === 'APPROVED'
+                  && reviewsSummary[item].AuthorId in reviewsAuthors
+                  && reviewsAuthors[reviewsSummary[item]
+                    .AuthorId].ModerationStatus === 'APPROVED'
+                  && (
+                  <div className="review-summary" key={reviewsSummary[item].Id}>
+                    <ConditionalView condition={(window.innerWidth < 768) || newPdp}>
+                      <DisplayStar
+                        starPercentage={reviewsSummary[item].Rating}
+                      />
+                      <div className="review-title">{reviewsSummary[item].Title}</div>
+                    </ConditionalView>
+                    <ReviewInformation
+                      reviewInformationData={reviewsSummary[item]}
+                      reviewTooltipInfo={reviewsAuthors[reviewsSummary[item]
+                        .AuthorId].ReviewStatistics}
+                      isNewPdpLayout={isNewPdpLayout}
+                    />
+                    <ReviewDescription
+                      reviewDescriptionData={reviewsSummary[item]}
+                      reviewsComment={reviewsComment}
+                      isNewPdpLayout={isNewPdpLayout}
+                    />
+                  </div>
+                  )}
               </div>
             ))}
           </div>
