@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm_promotion\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\CartData;
-use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableJsonResponse;
@@ -121,7 +121,7 @@ class PromotionsDynamicLabelsResource extends ResourceBase {
     // We use app as default here as we have updated web code and APP
     // code will be updated later to pass the value all the time.
     // So if someone invokes this without the context, we use app as default.
-    AlshayaPromoContextManager::updateDefaultContext('app');
+    AlshayaRequestContextManager::updateDefaultContext('app');
     $label = $this->promoLabelManager->getSkuPromoDynamicLabel($sku);
     $response = new CacheableJsonResponse(['label' => $label]);
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray(['#cache' => $cache_array]));

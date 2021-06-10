@@ -1,6 +1,7 @@
 import {
   callDrupalApi,
   callMagentoApi,
+  getCartSettings,
   isAnonymousUserWithoutCart,
   updateCart,
   getProcessedCartData,
@@ -325,7 +326,20 @@ window.commerceBackend.applyRemovePromo = (data) => {
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.refreshCart = (data) => updateCart(data);
+window.commerceBackend.refreshCart = (data) => {
+  const checkoutSettings = getCartSettings('checkout_settings');
+  let postData = {
+    extension: {
+      action: 'refresh',
+    },
+  };
+
+  if (checkoutSettings.cart_refresh_mode === 'full') {
+    postData = data.postData;
+  }
+
+  return updateCart(postData);
+};
 
 /**
  * Gets the cart ID for existing cart.
