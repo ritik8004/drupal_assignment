@@ -65,12 +65,6 @@ function alshaya_bazaar_voice_install() {
   // Provide sorting option Top rated in srp/plp.
   _add_sort_option_in_plp_srp_config_form();
 
-  // Add bazaarvoice user block config.
-  $manager->updateConfigs(
-    ['block.block.bazaarvoiceuserdatablock'],
-    'alshaya_bazaar_voice',
-    'install'
-  );
 }
 
 /**

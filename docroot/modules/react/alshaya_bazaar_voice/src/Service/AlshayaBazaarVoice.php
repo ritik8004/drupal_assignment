@@ -690,8 +690,10 @@ class AlshayaBazaarVoice {
    */
   public function checkParentSku($sku_id) {
     $parent_sku = $this->skuManager->getParentSkuBySku($sku_id);
-    $parent_sku_id = $parent_sku !== NULL ? $parent_sku->getSku() : $sku_id;
-    return $parent_sku_id;
+    if ($parent_sku !== NULL && $parent_sku instanceof SKUInterface) {
+      return $parent_sku->getSku();
+    }
+    return $sku_id;
   }
 
   /**
@@ -704,7 +706,7 @@ class AlshayaBazaarVoice {
    *   returns product review status and rating.
    */
   public function getProductReviewForCurrentUser(NodeInterface $node) {
-    if (is_object($node) && $node instanceof NodeInterface) {
+    if ($node instanceof NodeInterface) {
       $sku = $this->skuManager->getSkuForNode($node);
       // Get sanitized sku.
       $sanitized_sku = $this->skuManager->getSanitizedSku($sku);

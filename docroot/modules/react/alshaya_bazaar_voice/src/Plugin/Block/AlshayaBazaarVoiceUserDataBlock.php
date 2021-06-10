@@ -9,6 +9,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
+use Drupal\node\NodeInterface;
 
 /**
  * Provides a block for bazaarvoice user data.
@@ -20,7 +21,7 @@ use Drupal\alshaya_bazaar_voice\Service\AlshayaBazaarVoice;
  */
 class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
-   * Array of terms for cache bubbling up.
+   * Array of cache tags.
    *
    * @var array
    */
@@ -94,7 +95,7 @@ class AlshayaBazaarVoiceUserDataBlock extends BlockBase implements ContainerFact
     ];
     if ($this->routeMatch->getRouteName() === 'entity.node.canonical') {
       $node = $this->routeMatch->getParameter('node');
-      if ($node->bundle() === 'acq_product') {
+      if ($node instanceof NodeInterface && $node->bundle() === 'acq_product') {
         // Add user review of current product in user settings.
         $user_details['productReview'] = $this->alshayaBazaarVoice->getProductReviewForCurrentUser($node);
       }
