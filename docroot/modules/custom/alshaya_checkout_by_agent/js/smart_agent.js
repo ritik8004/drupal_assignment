@@ -43,7 +43,7 @@
         if ($('.smart-agent-header-wrapper').length < 1) {
           var loggedInMessageMarkup = '<div class="smart-agent-header-wrapper">';
           loggedInMessageMarkup += '<span class="agent-logged-in">';
-          loggedInMessageMarkup += Drupal.t('Smart Agent: @name', {'@name': agentInfo['name']}) + '</span>';
+          loggedInMessageMarkup += Drupal.t('ALX InStorE: @name', {'@name': agentInfo['name']}) + '</span>';
           loggedInMessageMarkup += '<span class="agent-logout smart-agent-logout-link">' + Drupal.t('Sign out') + '</span>';
           loggedInMessageMarkup += '</div>';
 
