@@ -79,7 +79,7 @@ class WhatsAppApiAdapter {
     $request_options['json'] = [
       'method' => 'wa',
       'channel' => 'WhatsApp',
-      'type' => 'template',
+      'type' => 'mediatemplate',
       'template_name' => $template,
       'from' => $kaleyra_settings->get('whatsapp_from'),
       'to' => $to,
