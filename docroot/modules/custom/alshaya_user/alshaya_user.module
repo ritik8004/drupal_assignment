@@ -117,6 +117,9 @@ function alshaya_user_form_user_register_form_alter(&$form, FormStateInterface $
     // First name and last name will not accept some special characters.
     $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
     $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+
+    // Hide store field for anonymous users.
+    $form['field_agent_store']['#access'] = FALSE;
   }
 
   $form['#attached']['library'][] = 'alshaya_user/clear_autofill';

@@ -28,6 +28,9 @@ else
 
     echo -en "travis_fold:end:Setup\r"
 
+    # Unit tests.
+    cd ${BUILD_DIR}/tests/jest && sh run_tests.sh
+
 # Disabling tests completely, for now we want to test only the fresh install part.
 # @see https://alshayagroup.atlassian.net/browse/CORE-27213
 #    if [[ $TRAVIS_EVENT_TYPE == "cron" ]]

@@ -4,6 +4,7 @@ import {
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
+  callDrupalApi,
 } from './common';
 import { getDefaultErrorMessage } from './error';
 import { logger } from './utility';
@@ -36,7 +37,7 @@ window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(dat
 const getCncStatusForCart = (data) => {
   // @todo implement this
   logger.info(`${data}`);
-  return { data: 'test' };
+  return data;
 };
 
 /**
@@ -55,16 +56,62 @@ const applyDefaults = (data, uid) => {
 };
 
 /**
+ * Format address structure for shipping estimates api.
+ *
+ * @param {object} $address
+ *   Address object.
+ * @return {object}.
+ *   Formatted address object.
+ */
+const formatShippingEstimatesAddress = (address) => {
+  const data = {};
+  data.firstname = (typeof address.firstname !== 'undefined') ? address.firstname : '';
+  data.lastname = (typeof address.lastname !== 'undefined') ? address.lastname : '';
+  data.email = (typeof address.email !== 'undefined') ? address.email : '';
+  data.country_id = (typeof address.country_id !== 'undefined') ? address.country_id : '';
+  data.city = (typeof address.city !== 'undefined') ? address.city : '';
+  data.telephone = (typeof address.telephone !== 'undefined') ? address.telephone : '';
+
+  data.custom_attributes = [];
+  if (typeof address.custom_attributes !== 'undefined' && address.custom_attributes.length > 0) {
+    data.custom_attributes = address.custom_attributes.map((item) => {
+      if (typeof item.value !== 'undefined' && item.value !== '') {
+        return {
+          attribute_code: item.attribute_code,
+          value: item.value,
+        };
+      }
+      return null;
+    }).filter((item) => (item !== null));
+  }
+
+  // If custom attributes not available, we check for extension attributes.
+  if (data.custom_attributes.length === 0 && typeof address.extension_attributes !== 'undefined' && Object.keys(address.extension_attributes).length > 0) {
+    Object.keys(address.extension_attributes).forEach((key) => {
+      data.custom_attributes.push(
+        {
+          attribute_code: key,
+          value: address.extension_attributes[key],
+        },
+      );
+    });
+  }
+  return data;
+};
+
+/**
  * Gets shipping methods.
  *
- * @param {object} cartData
- *   The cart data object.
+ * @param {object} shipping
+ *   The shipping data.
  * @return {object}.
  *   The data.
  */
-const getHomeDeliveryShippingMethods = (data) => {
+const getHomeDeliveryShippingMethods = (shipping) => {
   // @todo implement this
-  logger.info(`${data}`);
+  // Call formatShippingEstimatesAddress() to be able to perform unit tests.
+  // This function will be continued on ticket #30724.
+  formatShippingEstimatesAddress(shipping.address);
 };
 
 /**
@@ -108,10 +155,7 @@ const getCustomerPublicData = (data) => {
  * @return {array}.
  *   Return store info.
  */
-const getStoreInfo = (storeCode) => {
-  // @todo implement this
-  logger.info(`${storeCode}`);
-};
+const getStoreInfo = (storeCode) => callDrupalApi(`/cnc/store/${storeCode}`, 'GET', {});
 
 /**
  * Get store info for given store code.
@@ -124,7 +168,7 @@ const getStoreInfo = (storeCode) => {
 const formatAddressForFrontend = (address) => {
   // @todo implement this
   logger.info(`Address ${address}`);
-  return { data: 'test' };
+  return address;
 };
 
 /**
@@ -170,10 +214,10 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  *
  * @param {object} cartData
  *   The cart data object.
- * @return {object}.
- *   The data.
+ * @returns {Promise}
+ *   A promise object.
  */
-const getProcessedCheckoutData = (cartData) => {
+const getProcessedCheckoutData = async (cartData) => {
   let data = cartData;
   if (typeof data.error !== 'undefined' && data.error === true) {
     return data;
@@ -213,7 +257,7 @@ const getProcessedCheckoutData = (cartData) => {
     : [];
 
   if (typeof response.shipping.storeCode !== 'undefined') {
-    response.shipping.storeInfo = getStoreInfo(response.shipping.storeCode);
+    response.shipping.storeInfo = await getStoreInfo(response.shipping.storeCode);
     // Set the CnC type (rnc or sts) if not already set.
     if (typeof response.shipping.storeInfo.rnc_available === 'undefined' && typeof response.shipping.clickCollectType !== 'undefined') {
       response.shipping.storeInfo.rnc_available = (response.shipping.clickCollectType === 'reserve_and_collect');

@@ -90,6 +90,10 @@
         min-height: 26.31rem;
       }
     }
+
+    .cloudzoom__thumbnails {
+      margin-bottom: 1.5rem;
+    }
   }
 
   #product-zoom-container {
@@ -103,21 +107,6 @@
       .slick-slide {
         border: 0.0625rem solid transparent;
         padding: 0.25rem;
-
-        a {
-          width: 100%;
-          height: 100%;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        img {
-          width: auto;
-          max-width: 100%;
-          height: auto;
-          max-height: 100%;
-        }
 
         &.slick-current {
           border-color: $cyprus;

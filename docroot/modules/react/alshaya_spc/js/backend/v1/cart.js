@@ -1,4 +1,3 @@
-import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 import {
   callMiddlewareApi,
   isAnonymousUserWithoutCart,
@@ -54,17 +53,6 @@ window.commerceBackend.addUpdateRemoveCartItem = (data) => updateCart(data);
 window.commerceBackend.applyRemovePromo = (data) => updateCart(data);
 
 /**
- * Adds/Removes/Changes quantity of items in the cart and returns the cart.
- *
- * @param {object} data
- *   The data object to send in the API call.
- *
- * @returns {Promise}
- *   A promise object.
- */
-window.commerceBackend.updateCartItemData = (data) => updateCart(data);
-
-/**
  * Refreshes cart data and returns the cart.
  *
  * @param {object} data
@@ -96,35 +84,3 @@ window.commerceBackend.associateCart = () => callMiddlewareApi('cart/associate',
  *   A promise object.
  */
 window.commerceBackend.addFreeGift = (data) => callMiddlewareApi('select-free-gift', 'POST', JSON.stringify(data));
-
-/**
- * Gets the cached cart data.
- *
- * @returns {object|null}
- *   Processed cart data else null.
- */
-window.commerceBackend.getCartDataFromStorage = () => getStorageInfo('cart_data');
-
-/**
- * Sets the cart data.
- *
- * @param data
- *   The cart data.
- */
-window.commerceBackend.setCartDataInStorage = (data) => {
-  const cartInfo = { ...data };
-  cartInfo.last_update = new Date().getTime();
-  setStorageInfo(cartInfo);
-};
-
-/**
- * Removes the cart data from storage.
- */
-window.commerceBackend.removeCartDataFromStorage = () => {
-  removeStorageInfo('cart_data');
-
-  // Remove last selected payment on page load.
-  // We use this to ensure we trigger events for payment method
-  // selection at-least once and not more than once.
-  removeStorageInfo('last_selected_payment');
-};

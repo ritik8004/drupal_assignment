@@ -75,6 +75,8 @@
       color: $magazine-article-primary-color;
       text-align: center;
       text-transform: uppercase;
+
+      @include arabic-letter-spacing;
     }
 
     h3 {

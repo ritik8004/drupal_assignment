@@ -20,6 +20,7 @@ use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
 
   const PAGE_TYPE = 'listing';
+  const PAGE_SUB_TYPE = 'product_option_list';
 
   /**
    * Entity type manager service.
@@ -91,8 +92,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
    */
   public function build() {
     // Get common configuration for Algolia pages.
-    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE);
-
+    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE, self::PAGE_SUB_TYPE);
     // Get common config and merge with new array.
     $filters = $common_config[self::PAGE_TYPE]['filters'];
 
@@ -130,7 +130,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
-    $algoliaSearch['pageSubType'] = 'product_option_list';
+    $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
 
     return [
       '#type' => 'markup',
@@ -151,6 +151,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
   public function getCacheTags() {
     return Cache::mergeTags(parent::getCacheTags(), [
       'alshaya_acm_product_position.settings',
+      'alshaya_product_list.settings',
     ]);
   }
 

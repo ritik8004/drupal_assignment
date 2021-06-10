@@ -92,8 +92,9 @@
     }
 
     .product-title {
-      display: inline-block;
+      font-family: $alshaya-thin;
       font-size: 1.125rem;
+      display: inline-block;
       line-height: normal;
       color: $primary-text;
       padding-bottom: 0.625rem;
@@ -236,6 +237,7 @@
 
       &.add-to-bag-loader {
         font-size: 0;
+        pointer-events: none;
       }
 
       &-wrapper {

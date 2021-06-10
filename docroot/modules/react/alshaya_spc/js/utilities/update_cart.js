@@ -57,7 +57,7 @@ export const updateCartItemData = (action, sku, quantity) => {
     cart = cart.cart_id;
   }
 
-  return window.commerceBackend.updateCartItemData({
+  return window.commerceBackend.addUpdateRemoveCartItem({
     action,
     sku,
     cart_id: cart,

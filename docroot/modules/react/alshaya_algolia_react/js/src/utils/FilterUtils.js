@@ -1,5 +1,3 @@
-import { productListIndexStatus } from './indexUtils';
-
 const _ = require('lodash');
 
 /**
@@ -142,7 +140,7 @@ function hasSuperCategoryFilter() {
 function facetFieldAlias(key, returnType, pageType = null) {
   const { filters_alias: filtersAlias } = drupalSettings.algoliaSearch;
   let allFilters = '';
-  if (pageType === 'plp' && productListIndexStatus()) {
+  if (pageType === 'plp') {
     const { filters } = drupalSettings.algoliaSearch.listing;
     allFilters = filters;
   } else {

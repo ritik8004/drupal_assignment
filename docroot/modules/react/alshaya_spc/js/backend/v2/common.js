@@ -1,7 +1,27 @@
 import Axios from 'axios';
+import qs from 'qs';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
-import { removeStorageInfo } from '../../utilities/storage';
+
+window.commerceBackend = window.commerceBackend || {};
+
+// Contains the raw unprocessed cart data.
+let rawCartData = null;
+
+/**
+ * Stores the raw cart data object into the storage.
+ *
+ * @param {object} data
+ *   The raw cart data object.
+ */
+window.commerceBackend.setRawCartDataInStorage = (data) => {
+  rawCartData = data;
+};
+
+/**
+ * Fetches the raw cart data object from the static storage.
+ */
+window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
 
 /**
  * Global constants.
@@ -135,7 +155,7 @@ const callMagentoApi = (url, method, data) => {
     },
   };
 
-  if (typeof data !== 'undefined' && Object.keys(data).length > 0) {
+  if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
     params.data = data;
   }
 
@@ -157,55 +177,37 @@ const callMagentoApi = (url, method, data) => {
 };
 
 /**
- * Calls the update cart API.
+ * Make an AJAX call to Drupal API.
  *
- * @param {object} data
- *   The data object to send in the API call.
+ * @param {string} url
+ *   The url to send the request to.
+ * @param {string} method
+ *   The request method.
+ * @param {string} requestOptions
+ *   The request options.
  *
  * @returns {Promise}
- *   A promise object.
+ *   Returns a promise object.
  */
-const updateCart = async (data) => {
-  let response = null;
-  let cartId = window.commerceBackend.getCartId();
-  if (cartId === null) {
-    cartId = await window.commerceBackend.createCart();
-  }
-  if (cartId === null) {
-    return new Promise((resolve) => resolve(cartId));
-  }
-
-  const itemData = {
-    cartItem: {
-      sku: data.variant_sku,
-      qty: data.quantity,
-      quote_id: cartId,
-    },
+const callDrupalApi = (url, method, requestOptions) => {
+  const headers = {};
+  const params = {
+    url: `/${window.drupalSettings.path.currentLanguage}${url}`,
+    method,
   };
 
-  response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/items`, 'POST', itemData);
-  if (response.data.error === true) {
-    if (response.data.error_code === 404) {
-      // 400 errors happens when we try to post to invalid cart id.
-      const postString = JSON.stringify(itemData);
-      logger.error(`Error updating cart. Cart Id ${cartId}. Post string ${postString}`);
-      // Remove the cart from storage.
-      removeStorageInfo('cart_id');
-      // Create a new cart.
-      await window.commerceBackend.createCart();
-    }
-
-    const error = {
-      data: {
-        error: response.data.error,
-        error_code: response.data.error_code,
-        error_message: getDefaultErrorMessage(),
-      },
-    };
-    return new Promise((resolve) => resolve(error));
+  if (typeof requestOptions !== 'undefined' && requestOptions && Object.keys(requestOptions).length > 0) {
+    Object.keys(requestOptions).forEach((optionName) => {
+      if (optionName === 'form_params') {
+        headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        params.data = qs.stringify(requestOptions[optionName]);
+        return;
+      }
+      params[optionName] = requestOptions[optionName];
+    });
   }
 
-  return window.commerceBackend.getCart();
+  return Axios(params);
 };
 
 /**
@@ -224,7 +226,7 @@ const getProcessedCartData = (cartData) => {
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
     customer: cartData.cart.customer,
-    coupon_code: '', // @todo where to find this? cart.totals.coupon_code
+    coupon_code: typeof cartData.totals.coupon_code !== 'undefined' ? cartData.totals.coupon_code : '',
     appliedRules: cartData.cart.applied_rule_ids,
     items_qty: cartData.cart.items_qty,
     cart_total: 0,
@@ -264,15 +266,14 @@ const getProcessedCartData = (cartData) => {
     data.minicart_total -= data.totals.surcharge;
   }
 
-  // @todo confirm this
   if (typeof cartData.response_message[1] !== 'undefined') {
     data.response_message = {
       status: cartData.response_message[1],
-      msg: cartData.response_message[2],
+      msg: cartData.response_message[0],
     };
   }
 
-  if (typeof cartData.cart.items !== 'undefined') {
+  if (typeof cartData.cart.items !== 'undefined' && cartData.cart.items.length > 0) {
     data.items = {};
     cartData.cart.items.forEach((item) => {
       // @todo check why item id is different from v1 and v2 for
@@ -290,9 +291,15 @@ const getProcessedCartData = (cartData) => {
         stock: 99999, // @todo get stock information
       };
 
-      if (typeof item.extension_attributes !== 'undefined' && typeof item.extension_attributes.error_message !== 'undefined') {
-        data.items[item.item_id].error_msg = item.extension_attributes.error_message;
-        data.is_error = true;
+      if (typeof item.extension_attributes !== 'undefined') {
+        if (typeof item.extension_attributes.error_message !== 'undefined') {
+          data.items[item.sku].error_msg = item.extension_attributes.error_message;
+          data.is_error = true;
+        }
+
+        if (typeof item.extension_attributes.promo_rule_id !== 'undefined') {
+          data.items[item.sku].promoRuleId = item.extension_attributes.promo_rule_id;
+        }
       }
 
       // This is to determine whether item to be shown free or not in cart.
@@ -309,7 +316,7 @@ const getProcessedCartData = (cartData) => {
 
           // Free Item is only for free gift products which are having
           // price 0, rest all are free but still via different rules.
-          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.amasty_promo !== 'undefined') {
+          if (totalItem.base_price === 0 && typeof totalItem.extension_attributes !== 'undefined' && typeof totalItem.extension_attributes.amasty_promo !== 'undefined') {
             data.items[item.sku].freeItem = true;
           }
         }
@@ -317,15 +324,44 @@ const getProcessedCartData = (cartData) => {
 
       // @todo Get stock data.
     });
+  } else {
+    data.items = [];
   }
+
   return data;
+};
+
+/**
+ * Calls the update cart API and returns the updated cart.
+ * @todo Implement this function fully while working on the checkout page.
+ *
+ * @param {object} data
+ *  The data to send.
+ */
+const updateCart = (data) => {
+  const cartId = window.commerceBackend.getCartId();
+
+  return callMagentoApi(`/rest/V1/guest-carts/${cartId}/updateCart`, 'POST', JSON.stringify(data))
+    .then((response) => {
+      if (typeof response.data.error !== 'undefined' && response.data.error) {
+        return response;
+      }
+      // Update the cart data in storage.
+      window.commerceBackend.setRawCartDataInStorage(response.data);
+      // Process the cart data.
+      response.data = window.commerceBackend.getProcessedCartData(response.data);
+
+      return response;
+    });
 };
 
 export {
   isAnonymousUserWithoutCart,
+  callDrupalApi,
   callMagentoApi,
   updateCart,
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
+  getCartSettings,
 };

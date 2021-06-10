@@ -1,8 +1,10 @@
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import getStringMessage from '../../utilities/strings';
+import { getStorageInfo, removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 drupalSettings = window.drupalSettings;
+window.commerceBackend = window.commerceBackend || {};
 
 /**
  * Check if user is anonymous and without cart.
@@ -115,6 +117,38 @@ const updateCart = (data) => callMiddlewareApi('cart/update', 'POST', JSON.strin
     return response;
   },
 );
+
+/**
+ * Gets the cached cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartDataFromStorage = () => getStorageInfo('cart_data');
+
+/**
+ * Sets the cart data.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartDataInStorage = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  setStorageInfo(cartInfo);
+};
+
+/**
+ * Removes the cart data from storage.
+ */
+window.commerceBackend.removeCartDataFromStorage = () => {
+  removeStorageInfo('cart_data');
+
+  // Remove last selected payment on page load.
+  // We use this to ensure we trigger events for payment method
+  // selection at-least once and not more than once.
+  removeStorageInfo('last_selected_payment');
+};
 
 export {
   callMiddlewareApi,
