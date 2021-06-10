@@ -16,7 +16,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\search_api\Entity\Index;
-use Drupal\Core\Path\PathValidatorInterface;
 
 /**
  * Helper functions for alshaya_options_list.
@@ -92,13 +91,6 @@ class AlshayaOptionsListHelper {
   protected $cache;
 
   /**
-   * The Path Validator service.
-   *
-   * @var \Drupal\Core\Path\PathValidatorInterface
-   */
-  protected $pathValidator;
-
-  /**
    * AlshayaOptionsListHelper constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -119,8 +111,6 @@ class AlshayaOptionsListHelper {
    *   The module handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
-   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
-   *   Path Validator service object.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -133,8 +123,7 @@ class AlshayaOptionsListHelper {
                               ParseModePluginManager $parse_mode_manager,
                               DefaultFacetManager $facet_manager,
                               ModuleHandlerInterface $module_handler,
-                              CacheBackendInterface $cache,
-                              PathValidatorInterface $path_validator) {
+                              CacheBackendInterface $cache) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->fileStorage = $entity_type_manager->getStorage('file');
@@ -144,7 +133,6 @@ class AlshayaOptionsListHelper {
     $this->facetManager = $facet_manager;
     $this->moduleHandler = $module_handler;
     $this->cache = $cache;
-    $this->pathValidator = $path_validator;
   }
 
   /**
@@ -190,10 +178,7 @@ class AlshayaOptionsListHelper {
       if (!empty($option->name)) {
         $list_array = [];
         $list_array['title'] = $option->name;
-        $url = $this->getAttributeUrl($attributeCode, $option->name);
-        $list_array['url'] = $url;
-        $list_array['lhn_status'] = $this->getLhnStatus($url, $langcode);
-
+        $list_array['url'] = $this->getAttributeUrl($attributeCode, $option->name);
         if ($showImages) {
           if (!empty($option->image)) {
             $file = $this->fileStorage->load($option->image);
@@ -225,35 +210,6 @@ class AlshayaOptionsListHelper {
       $return_array[$char][] = $option;
     }
     return $return_array;
-  }
-
-  /**
-   * Lhn status for node.
-   *
-   * @param string $url
-   *   List of all options.
-   * @param string $langcode
-   *   List of all options.
-   *
-   * @return bool
-   *   Status of LHN.
-   */
-  public function getLhnStatus($url, $langcode) {
-    $url_object = $this->pathValidator->getUrlIfValid($url);
-    $route_parameters = $url_object->getrouteParameters();
-
-    $query = $this->connection->select('node__field_show_in_lhn_options_list', 'n');
-    $query->addField('n', 'field_show_in_lhn_options_list_value');
-    $query->condition('n.bundle', 'product_list');
-    $query->condition('n.entity_id', $route_parameters['node']);
-    $query->condition('n.langcode', $langcode);
-    $result = $query->execute()->fetchField();
-    if ($result === 'No') {
-      // IF No status will be TRUE.
-      return FALSE;
-    }
-    // IF Empty or Yes status will be TRUE.
-    return TRUE;
   }
 
   /**

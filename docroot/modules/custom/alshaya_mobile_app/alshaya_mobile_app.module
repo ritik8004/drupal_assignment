@@ -100,21 +100,38 @@ function alshaya_mobile_app_path_update($path) {
 function alshaya_mobile_app_options_list_resource_response_alter(&$data) {
   $options = array_keys($data['options_list']);
   $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
+  $product_category_helper = \Drupal::service('alshaya_acm_product_category.helper');
+  $lancode = '';
   foreach ($options as $option_name) {
     foreach ($data['options_list'][$option_name] ?? [] as $option_name_key => $brands_list) {
       foreach ($brands_list['options_markup']['#option']['terms'] ?? [] as $term_list_key => $term_list) {
         if ($brands_list['group'] ?? NULL) {
           foreach ($term_list ?? [] as $term_key => $term) {
             $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['deep_link'] = $mobile_app_utility->getDeepLinkForProductListProductOption($term['url']);
+            $lancode = explode("/", $term['url'])[1];
+            $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key][$term_key]['lhn_status'] = $mobile_app_utility->getLhnStatus($term['url'],$lancode);
           }
         }
         else {
           // Here $term_list is actually a single term since there is no grouping.
           $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key]['deep_link'] = $mobile_app_utility->getDeepLinkForProductListProductOption($term_list['url']);
+          $lancode = explode("/", $term_list['url'])[1];
+          $data['options_list'][$option_name][$option_name_key]['options_markup']['#option']['terms'][$term_list_key]['lhn_status'] = $mobile_app_utility->getLhnStatus($term_list['url'],$lancode);
+
         }
       }
     }
   }
+  $vocab_list = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+    'vid' => 'acq_product_category',
+    'name' => \Drupal::configFactory()->get('alshaya_product_list.settings')->get('product_list_lhn_term'),
+    'depth_level' => 1,
+  ]);
+  if (empty($vocab_list)) {
+    return [];
+  }
+  $terms = reset($vocab_list);
+  $data['lhn_tree'] = $product_category_helper->productCategoryBuild('alshaya_product_list_lhn_block', $terms, $lancode,'product_list');
 }
 
 /**
