@@ -92,36 +92,38 @@ describe('Checkout', () => {
       }]);
     });
 
-    it('Test getCncStatusForCart() without cart data', async () => {
-      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-      const result = await getCncStatusForCart();
-      expect(result).toEqual(null);
-    });
-
-    it('Test getCncStatusForCart() with CNC Enabled', async () => {
-      axios.mockResolvedValue({
-        cnc_enabled: true,
-        in_stock: true,
-        max_sale_qty: 0,
-        stock: 978,
+    describe('Tests getCncStatusForCart()', () => {
+      it('Without cart data', async () => {
+        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+        const result = await getCncStatusForCart();
+        expect(result).toEqual(null);
       });
-      window.commerceBackend.setCartDataInStorage(cartData);
-      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-      const result = await getCncStatusForCart();
-      expect(result).toEqual(true);
-    });
 
-    it('Test getCncStatusForCart() with CNC Disabled', async () => {
-      axios.mockResolvedValue({
-        cnc_enabled: false,
-        in_stock: true,
-        max_sale_qty: 0,
-        stock: 978,
+      it('With CNC Enabled', async () => {
+        axios.mockResolvedValue({
+          cnc_enabled: true,
+          in_stock: true,
+          max_sale_qty: 0,
+          stock: 978,
+        });
+        window.commerceBackend.setCartDataInStorage(cartData);
+        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+        const result = await getCncStatusForCart();
+        expect(result).toEqual(true);
       });
-      window.commerceBackend.setCartDataInStorage(cartData);
-      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-      const result = await getCncStatusForCart();
-      expect(result).toEqual(false);
+
+      it('With CNC Disabled', async () => {
+        axios.mockResolvedValue({
+          cnc_enabled: false,
+          in_stock: true,
+          max_sale_qty: 0,
+          stock: 978,
+        });
+        window.commerceBackend.setCartDataInStorage(cartData);
+        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+        const result = await getCncStatusForCart();
+        expect(result).toEqual(false);
+      });
     });
 
     it('Test getStoreInfo()', async () => {
