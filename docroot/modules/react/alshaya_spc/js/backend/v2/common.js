@@ -363,4 +363,5 @@ export {
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
+  getCartSettings,
 };
