@@ -18,25 +18,7 @@ use Drupal\block\BlockInterface;
  */
 function alshaya_bazaar_voice_update_8001() {
   // Disable bv blocks if algolia plp is enabled.
-  if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
-    $block_storage = \Drupal::entityTypeManager()->getStorage('block');
-    $algolia_plp = $block_storage->load('alshaya_algolia_react_plp');
-    if ($algolia_plp instanceof BlockInterface && $algolia_plp->status()) {
-      $bv_blocks = [
-        'plpbvrating',
-        'promobvrating',
-        'productlistbvrating',
-      ];
-
-      foreach ($bv_blocks as $bv_block) {
-        $block = $block_storage->load($bv_block);
-        if ($block instanceof BlockInterface) {
-          $block->setStatus(0);
-          $block->save();
-        }
-      }
-    }
-  }
+  _disable_bv_rating_blocks_in_algolia_plp();
   // Enable BV configs APIs for Mobile app.
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -92,25 +74,7 @@ function alshaya_bazaar_voice_install() {
       ->save();
   }
   // Disable bv blocks if algolia plp is enabled.
-  if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
-    $block_storage = \Drupal::entityTypeManager()->getStorage('block');
-    $algolia_plp = $block_storage->load('alshaya_algolia_react_plp');
-    if ($algolia_plp instanceof BlockInterface && $algolia_plp->status()) {
-      $bv_blocks = [
-        'plpbvrating',
-        'promobvrating',
-        'productlistbvrating',
-      ];
-
-      foreach ($bv_blocks as $bv_block) {
-        $block = $block_storage->load($bv_block);
-        if ($block instanceof BlockInterface) {
-          $block->setStatus(0);
-          $block->save();
-        }
-      }
-    }
-  }
+  _disable_bv_rating_blocks_in_algolia_plp();
   // Provide sorting option Top rated in srp/plp.
   _add_sort_option_in_plp_srp_config_form();
 }
@@ -171,4 +135,29 @@ function _add_sort_option_in_plp_srp_config_form() {
   $labels = array_merge($labels, $new_labels);
   $config->set('sort_options_labels', $labels);
   $config->save();
+}
+
+/**
+ * Add sorting option (Top rated) in srp/plp configuration form.
+ */
+function _disable_bv_rating_blocks_in_algolia_plp() {
+  if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_index')) {
+    $block_storage = \Drupal::entityTypeManager()->getStorage('block');
+    $algolia_plp = $block_storage->load('alshaya_algolia_react_plp');
+    if ($algolia_plp instanceof BlockInterface && $algolia_plp->status()) {
+      $bv_blocks = [
+        'plpbvrating',
+        'promobvrating',
+        'productlistbvrating',
+      ];
+
+      foreach ($bv_blocks as $bv_block) {
+        $block = $block_storage->load($bv_block);
+        if ($block instanceof BlockInterface) {
+          $block->setStatus(0);
+          $block->save();
+        }
+      }
+    }
+  }
 }
