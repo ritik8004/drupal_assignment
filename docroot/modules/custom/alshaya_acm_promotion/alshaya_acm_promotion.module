@@ -430,9 +430,9 @@ function alshaya_acm_promotion_acq_sku_view(array &$build,
  * Implements hook_sku_variant_info_alter().
  */
 function alshaya_acm_promotion_sku_variant_info_alter(array &$variant, SKUInterface $child, ?SKUInterface $parent) {
-  /** @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager $promoContextManager */
-  $promoContextManager = \Drupal::service('alshaya_acm_product.context_manager');
-  $context = $promoContextManager->getPromotionContext();
+  /** @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager $requestContextManager */
+  $requestContextManager = \Drupal::service('alshaya_acm_product.context_manager');
+  $context = $requestContextManager->getContext();
   /** @var \Drupal\alshaya_acm_promotion\AlshayaPromoLabelManager $promoLabelManager */
   $promoLabelManager = \Drupal::service('alshaya_acm_promotion.label_manager');
   $variant['promotionsRaw'] = $promoLabelManager->getPromotionLabelForProductDetail($child, 'api', $context);
