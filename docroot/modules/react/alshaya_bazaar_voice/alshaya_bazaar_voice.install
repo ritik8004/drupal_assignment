@@ -104,7 +104,7 @@ function alshaya_bazaar_voice_uninstall() {
 }
 
 /**
- * Add sorting option (Top rated) in srp/plp configuration form.
+ * Disable bv blocks if algolia plp is enabled.
  */
 function _add_sort_option_in_plp_srp_config_form() {
   // Update srp sorting configurations.
