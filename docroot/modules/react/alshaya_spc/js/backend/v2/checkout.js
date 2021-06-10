@@ -27,17 +27,46 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
 window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(data);
 
 /**
- * Checks whether cnc enabled or not on cart.
+ * Get data related to product status.
  *
- * @param {object} cartData
- *   The cart data object.
- * @return {bool}.
- *   CnC enabled or not for cart.
+ * @param {string} sku
+ *  The sku for which the status is required.
  */
-const getCncStatusForCart = (data) => {
-  // @todo implement this
-  logger.info(`${data}`);
-  return data;
+const getProductStatus = (sku) => {
+  if (typeof sku === 'undefined' || !sku) {
+    return new Promise((resolve) => resolve(null));
+  }
+
+  // Bypass CloudFlare to get fresh stock data.
+  // Rules are added in CF to disable caching for urls having the following
+  // query string.
+  // The query string is added since same APIs are used by MAPP also.
+  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', null, { query: { _cf_cache_bypass: '1' } }).then((response) => response.data);
+};
+
+/**
+ * Get CnC status for cart based on skus in cart.
+ */
+const getCncStatusForCart = async () => {
+  const cart = window.commerceBackend.getCartDataFromStorage();
+  if (!cart || typeof cart === 'undefined') {
+    return null;
+  }
+
+  let cartItemSkus = [];
+  cartItemSkus = Object.keys(cart.cart.items);
+
+  for (let i = 0; i < cartItemSkus.length; i++) {
+    // We disable the eslint condition so that multiple parallel calls do not
+    // happen unnecessariy.
+    // eslint-disable-next-line no-await-in-loop
+    const productStatus = await getProductStatus(cartItemSkus[i]);
+    if (typeof productStatus.cnc_enabled !== 'undefined' && !productStatus.cnc_enabled) {
+      return false;
+    }
+  }
+
+  return true;
 };
 
 /**
