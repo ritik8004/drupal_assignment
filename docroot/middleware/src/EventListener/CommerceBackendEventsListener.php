@@ -38,9 +38,10 @@ class CommerceBackendEventsListener {
    */
   public function onKernelRequest(RequestEvent $event) {
     $version = $this->systemSettings->getSettings('commerce_backend')['version'];
+    $is_block_middleware = $this->systemSettings->getSettings('commerce_backend')['block_middleware'];
     // If we set the backend as Magento and we are trying to access middleware,
     // then we do not allow that.
-    if ($version == 2) {
+    if ($version == 2 && $is_block_middleware) {
       $response = new JsonResponse([
         'error' => TRUE,
         'error_code' => 612,
