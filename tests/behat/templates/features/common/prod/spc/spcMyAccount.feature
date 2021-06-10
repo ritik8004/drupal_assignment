@@ -3,11 +3,9 @@ Feature: Test the My Account functionality
 
   Background:
     Given I am on "user/login"
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait 10 seconds
+    And I wait 5 seconds
+    And I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
+    And I wait 5 seconds
     Then I should be on "/user" page
 
   Scenario: Authenticated user should be able to login into the system
@@ -69,7 +67,7 @@ Feature: Test the My Account functionality
       | field_address[0][address][address_line2]             | {floor}       |
     And I press "op"
     When I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 10 seconds
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 
   @cancel
@@ -108,7 +106,7 @@ Feature: Test the My Account functionality
     And I wait 10 seconds
     Then I click on "form.profile-address-book-delete-form.profile-confirm-form div.form-actions button" element
     When I wait for AJAX to finish
-    And I wait for the page to load
+    And I wait 10 seconds
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
 
   @change-password
