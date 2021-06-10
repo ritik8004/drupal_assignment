@@ -52,7 +52,6 @@ describe('Checkout', () => {
       });
     });
 
-
     it('Test formatShippingEstimatesAddress() with extension attributes', () => {
       const formatShippingEstimatesAddress = utilsRewire.__get__('formatShippingEstimatesAddress');
       const shipping_assignments = cartData.cart.extension_attributes.shipping_assignments;
@@ -93,17 +92,36 @@ describe('Checkout', () => {
       }]);
     });
 
-    it('Test getCncStatusForCart()', async () => {
+    it('Test getCncStatusForCart() without cart data', async () => {
       const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-      const data = [
-        {
-          foo: 'bar',
-        },
-      ];
-      const result = getCncStatusForCart(data);
-      expect(result).toEqual([{
-        foo: 'bar',
-      }]);
+      const result = await getCncStatusForCart();
+      expect(result).toEqual(null);
+    });
+
+    it('Test getCncStatusForCart() with CNC Enabled', async () => {
+      axios.mockResolvedValue({
+        cnc_enabled: true,
+        in_stock: true,
+        max_sale_qty: 0,
+        stock: 978,
+      });
+      window.commerceBackend.setCartDataInStorage(cartData);
+      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+      const result = await getCncStatusForCart();
+      expect(result).toEqual(true);
+    });
+
+    it('Test getCncStatusForCart() with CNC Disabled', async () => {
+      axios.mockResolvedValue({
+        cnc_enabled: false,
+        in_stock: true,
+        max_sale_qty: 0,
+        stock: 978,
+      });
+      window.commerceBackend.setCartDataInStorage(cartData);
+      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+      const result = await getCncStatusForCart();
+      expect(result).toEqual(false);
     });
 
     it('Test getStoreInfo()', async () => {

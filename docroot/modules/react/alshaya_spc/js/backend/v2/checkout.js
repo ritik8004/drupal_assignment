@@ -32,7 +32,7 @@ window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(dat
  * @param {string} sku
  *  The sku for which the status is required.
  */
-const getProductStatus = (sku) => {
+const getProductStatus = async (sku) => {
   if (typeof sku === 'undefined' || !sku) {
     return new Promise((resolve) => resolve(null));
   }
@@ -41,7 +41,7 @@ const getProductStatus = (sku) => {
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
-  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', null, { query: { _cf_cache_bypass: '1' } }).then((response) => response.data);
+  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', null, { query: { _cf_cache_bypass: '1' } });
 };
 
 /**
@@ -53,19 +53,20 @@ const getCncStatusForCart = async () => {
     return null;
   }
 
-  let cartItemSkus = [];
-  cartItemSkus = Object.keys(cart.cart.items);
-
-  for (let i = 0; i < cartItemSkus.length; i++) {
+  for (let i = 0; i < cart.cart.items.length; i++) {
     // We disable the eslint condition so that multiple parallel calls do not
-    // happen unnecessariy.
+    // happen unnecessarily.
     // eslint-disable-next-line no-await-in-loop
-    const productStatus = await getProductStatus(cartItemSkus[i]);
+    const item = cart.cart.items[i];
+    // We should ideally have ony one call to an endpoint and pass
+    // The list of items. This look could happen in the backend.
+    // Suppressing the lint error for now.
+    // eslint-disable-next-line no-await-in-loop
+    const productStatus = await getProductStatus(item.sku);
     if (typeof productStatus.cnc_enabled !== 'undefined' && !productStatus.cnc_enabled) {
       return false;
     }
   }
-
   return true;
 };
 
@@ -253,7 +254,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   // Check whether CnC enabled or not.
-  const cncStatus = getCncStatusForCart();
+  const cncStatus = await getCncStatusForCart();
 
   // Here we will do the processing of cart to make it in required format.
   const updated = applyDefaults(data, window.drupalSettings.user.uid);
