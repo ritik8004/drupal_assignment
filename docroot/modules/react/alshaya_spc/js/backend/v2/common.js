@@ -173,13 +173,11 @@ const handleResponse = (response) => {
  *   The request method.
  * @param {object} data
  *   The object to send for POST request.
- * @param {object} requestOptions
- *   The object containing the request options.
  *
  * @returns {Promise}
  *   Returns a promise object.
  */
-const callMagentoApi = (url, method, data, requestOptions) => {
+const callMagentoApi = (url, method, data) => {
   const params = {
     url: i18nMagentoUrl(url),
     method,
@@ -191,15 +189,6 @@ const callMagentoApi = (url, method, data, requestOptions) => {
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
     params.data = data;
-  }
-
-  if (typeof requestOptions !== 'undefined' && requestOptions && Object.keys(requestOptions).length > 0) {
-    Object.keys(requestOptions).forEach((optionName) => {
-      if (optionName === 'query') {
-        const queryString = qs.stringify(requestOptions[optionName]);
-        params.url = `${params.url}?${queryString}`;
-      }
-    });
   }
 
   return Axios(params)
