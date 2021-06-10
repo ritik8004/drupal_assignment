@@ -5,6 +5,7 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -311,6 +312,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
   private function getSkuData(SKUInterface $sku, string $link = '', bool $with_parent_details = FALSE): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
+    AlshayaRequestContextManager::updateDefaultContext('app');
 
     $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $sku->getCacheTags());
     $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $sku->getCacheContexts());

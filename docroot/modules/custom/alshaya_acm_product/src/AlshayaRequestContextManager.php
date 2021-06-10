@@ -5,11 +5,11 @@ namespace Drupal\alshaya_acm_product;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class Alshaya Promo Context Manager.
+ * Class Alshaya Request Context Manager.
  *
  * @package Drupal\alshaya_acm_product
  */
-class AlshayaPromoContextManager {
+class AlshayaRequestContextManager {
 
   /**
    * Default Context.
@@ -19,7 +19,7 @@ class AlshayaPromoContextManager {
   protected static $context = 'web';
 
   /**
-   * AlshayaPromoLabelManager constructor.
+   * AlshayaRequestContextManager constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
@@ -39,12 +39,12 @@ class AlshayaPromoContextManager {
   }
 
   /**
-   * Validates & fetches promotion context from the request.
+   * Validates & fetches request context from the request.
    *
    * @return string
    *   Context - web/app.
    */
-  public function getPromotionContext() {
+  public function getContext() {
     $context = $this->currentRequest->query->get('context');
     if ($context == 'mapp' || $context == 'app') {
       return 'app';

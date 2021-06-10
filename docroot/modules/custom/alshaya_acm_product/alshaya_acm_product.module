@@ -40,6 +40,22 @@ use Drupal\search_api\Query\ConditionInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 
 /**
+ * Implements hook_alshaya_acm_product_light_product_data_alter().
+ */
+function alshaya_acm_product_alshaya_acm_product_light_product_data_alter(SKU $sku, array &$data, $type) {
+  if ($type != 'full') {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  if ($skuManager->isNotRequiredOptionsToBeRemoved()) {
+    // Adding this data to help Mapp team to remove it from Add to cart form.
+    $data['excluded_attribute_options'] = $skuManager->attributeOptionToExclude();
+  }
+}
+
+/**
  * Implements hook_module_implements_alter().
  */
 function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
