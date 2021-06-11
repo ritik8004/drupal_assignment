@@ -9,7 +9,6 @@ use Laminas\Diactoros\ServerRequestFactory;
 use Proxy\Proxy;
 use Proxy\Adapter\Guzzle\GuzzleAdapter;
 use Proxy\Filter\RemoveEncodingFilter;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -63,7 +62,7 @@ class ProxyController extends ControllerBase {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request object.
    *
-   * @return ResponseInterface
+   * @return \Psr\Http\Message\ResponseInterface
    *   The response.
    */
   public function proxy(Request $request) {
@@ -89,7 +88,7 @@ class ProxyController extends ControllerBase {
   }
 
   /**
-   * Get API url;
+   * Get API url.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request object.
@@ -100,4 +99,5 @@ class ProxyController extends ControllerBase {
   private function getUrl(Request $request) {
     return $request->get('url');
   }
+
 }
