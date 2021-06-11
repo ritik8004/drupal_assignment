@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_secondary_main_menu\Plugin\Block;
 
+use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -9,6 +10,8 @@ use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 
 /**
  * Provides alshaya secondary main menu block.
@@ -25,20 +28,24 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
-
   /**
    * Module Handler service object.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
-
   /**
    * The menu link tree service.
    *
    * @var \Drupal\Core\Menu\MenuLinkTreeInterface
    */
   protected $menuTree;
+  /**
+   * Entity repository.
+   *
+   * @var Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
 
   /**
    * AlshayaSecondaryMenuBlock constructor.
@@ -55,12 +62,15 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    *   The menu tree service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
+   *   Entity repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory, MenuLinkTreeInterface $menu_tree, ModuleHandlerInterface $module_handler, EntityRepositoryInterface $entityRepository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->menuTree = $menu_tree;
     $this->moduleHandler = $module_handler;
+    $this->entityRepository = $entityRepository;
   }
 
   /**
@@ -73,7 +83,8 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
       $plugin_definition,
       $container->get('config.factory'),
       $container->get('menu.link_tree'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity.repository')
     );
   }
 
@@ -82,6 +93,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    */
   public function build() {
     $desktop_secondary_main_menu_layout = $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
+    $desktop_secondary_main_menu_highlight_timing = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_highlight_timing');
     $menu_name = 'secondary-main-menu';
     $subtree = $this->getSubTree($menu_name);
     $manipulators = [
@@ -97,11 +109,13 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
     $columns_tree = $this->getColumnDataMenuAlgo($menu);
     return [
       '#theme' => 'alshaya_secondary_main_menu_level1',
+      '#settings' => [
+        'desktop_secondary_main_menu_highlight_timing' => $desktop_secondary_main_menu_highlight_timing,
+      ],
       '#items' => $menu,
       '#column_tree' => $columns_tree,
       '#menu_type' => $desktop_secondary_main_menu_layout,
     ];
-
   }
 
   /**
@@ -121,6 +135,23 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
   public function getColumnDataMenuAlgo($menu) {
     $columns_tree = [];
     foreach ($menu['#items'] as $l2s) {
+      if ($l2s['original_link'] instanceof MenuLinkContent) {
+        $uuid = $l2s['original_link']->getDerivativeId();
+        $entity = $this->entityRepository->loadEntityByUuid('menu_link_content', $uuid);
+        $l2s['highlight_paragraph'] = $entity->get('field_secondary_menu_highlight')->getValue();
+        foreach ($l2s['highlight_paragraph'] as $tr) {
+          $paragraph = Paragraph::load($tr['target_id']);
+          $l2s['highlight_paragraph']['paragraph_type'] = $paragraph->getParagraphType()->id();
+          $l2s['highlight_paragraph']['img'] = $paragraph->field_highlight_image->getValue();
+          $l2s['highlight_paragraph']['imageUrl'] = $paragraph->get('field_highlight_image')->entity->uri->value;
+          $l2s['highlight_paragraph']['image_link'] = $paragraph->field_highlight_link->getValue();
+          foreach ($l2s['highlight_paragraph']['image_link'] as $himg_link) {
+            $l2s['highlight_paragraph']['image_link'] = $himg_link['uri'];
+          }
+          $l2s['highlight_paragraph']['title'] = $paragraph->field_highlight_title->getValue();
+          $l2s['highlight_paragraph']['subtitle'] = $paragraph->field_highlight_subtitle->getValue();
+        }
+      }
       $max_nb_col = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('max_nb_col');
       $ideal_max_col_length = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('ideal_max_col_length');
       $max_nb_col = $max_nb_col > 0 ? $max_nb_col : 6;

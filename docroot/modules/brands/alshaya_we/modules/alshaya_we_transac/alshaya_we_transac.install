@@ -12,6 +12,22 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Implements hook_update_N().
  *
  * Add settings for Secondary Menu block.
+ */
+function alshaya_we_transac_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['block.block.alshayasecondarymainmenu'],
+    'alshaya_secondary_main_menu',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add settings for Secondary Menu block.
  * Enable the module alshaya_secondary_main_menu.
  */
 function alshaya_we_transac_update_8003() {

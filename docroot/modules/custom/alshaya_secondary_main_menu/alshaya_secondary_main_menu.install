@@ -15,3 +15,26 @@ function alshaya_secondary_main_menu_uninstall() {
   Drupal::configFactory()->getEditable('block.block.alshayasecondarymainmenu')->delete();
   \Drupal::configFactory()->getEditable('system.menu.secondary-main-menu')->delete();
 }
+
+/**
+ * Implements hook_update_N().
+ *
+ */
+function alshaya_secondary_main_menu_update_8002() {
+  \Drupal::service('module_installer')->install(['menu_item_extras']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding 'field_secondary_menu_highlight'.
+ */
+function alshaya_secondary_main_menu_update_8003() {
+  $configs = [
+    'field.storage.menu_link_content.field_secondary_menu_highlight',
+    'field.field.menu_link_content.secondary-main-menu.field_secondary_menu_highlight',
+    'core.entity_form_display.menu_link_content.secondary-main-menu.default',
+    'core.entity_view_display.menu_link_content.secondary-main-menu.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_secondary_main_menu');
+}
