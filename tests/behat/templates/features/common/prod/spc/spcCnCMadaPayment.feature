@@ -5,12 +5,10 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     Given I am on "{spc_basket_page}"
     And I wait 5 seconds
     And I wait for the page to load
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
 
   @cc @hd @checkout_com @visa @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (VISA Card)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -60,6 +58,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
+    And I scroll to the ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -67,10 +66,8 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (VISA Card)
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
     And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -118,6 +115,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I scroll to the ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -126,7 +124,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -175,12 +173,13 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I scroll to the ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -227,6 +226,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I scroll to the ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -234,10 +234,8 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (Mastercard Card)
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
     And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -286,6 +284,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I scroll to the ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -294,7 +293,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -342,5 +341,6 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I scroll to the ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
