@@ -8,6 +8,7 @@ import { addPaymentMethodInCart } from '../../../utilities/update_cart';
 import {
   isDeliveryTypeSameAsInCart,
   showFullScreenLoader,
+  removeFullScreenLoader,
 } from '../../../utilities/checkout_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import dispatchCustomEvent from '../../../utilities/events';
@@ -258,6 +259,8 @@ export default class PaymentMethods extends React.Component {
     if (cartUpdate instanceof Promise) {
       cartUpdate.then((result) => {
         if (!result) {
+          // Close popup in case of error.
+          removeFullScreenLoader();
           return;
         }
         const paymentDiv = document.getElementById(`payment-method-${method}`);
