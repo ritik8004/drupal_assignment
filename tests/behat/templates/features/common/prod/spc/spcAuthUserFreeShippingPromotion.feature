@@ -2,11 +2,8 @@
 Feature: SPC to add Free shipping promotion on cart for Authenticated user
 
   Background:
-    Given I am on "user/login"
+    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
     And I wait for the page to load
     Then I should be on "/user" page
 

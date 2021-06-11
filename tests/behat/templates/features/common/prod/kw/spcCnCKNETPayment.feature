@@ -1,4 +1,4 @@
-@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @bbwkwprod @flkwprod @hmkwprod
+@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @bbwkwprod @flkwprod @hmkwprod @pbkwprod
 Feature: SPC Checkout Click and Collect using KNET payment method
 
   Background:
@@ -8,7 +8,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
 
   @cc @cnc @desktop @knet
   Scenario: As a Guest, I should be able to checkout using click and collect with knet
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -65,7 +65,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -116,7 +116,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
 
   @cc @cnc @mobile @knet
   Scenario: As a Guest, I should be able to checkout using click and collect with knet
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"

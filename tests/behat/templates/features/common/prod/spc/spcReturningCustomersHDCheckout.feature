@@ -3,14 +3,12 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
 
   Background:
     Given I am on "{spc_product_listing_page}"
-    And I wait 10 seconds
+    And I wait 5 seconds
     And I wait for the page to load
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
 
   @cc @hd @checkout_com
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -53,9 +51,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -93,13 +89,12 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Checkout (2
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
-
   @cc @hd @language @mobile @checkout_com
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
