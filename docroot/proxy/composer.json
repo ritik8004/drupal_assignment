@@ -14,8 +14,6 @@
         "symfony/expression-language": "5.3.*",
         "symfony/framework-bundle": "5.3.*",
         "symfony/intl": "5.3.*",
-        "symfony/mailer": "5.3.*",
-        "symfony/mime": "5.3.*",
         "symfony/monolog-bundle": "^3.1",
         "symfony/runtime": "5.3.*",
         "symfony/security-bundle": "5.3.*",

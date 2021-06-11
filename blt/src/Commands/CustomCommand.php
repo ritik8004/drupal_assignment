@@ -138,6 +138,7 @@ class CustomCommand extends BltTasks {
         $taskFilesystemStack->run();
       }
     }
+
   }
 
   /**
