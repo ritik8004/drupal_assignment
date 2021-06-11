@@ -23,16 +23,9 @@ function alshaya_search_algolia_update_8007() {
     'install'
   );
   // Update acquia_search_index index with algolia_index_apply_suffix.
-  $config = \Drupal::configFactory()->getEditable('search_api.index.acquia_search_index');
-  $config->set('options.algolia_index_apply_suffix', '1');
-  $config->set('options.algolia_index_list', '');
-  $config->save();
+  \Drupal::configFactory()->getEditable('search_api.index.acquia_search_index')->save();
   // Update alshaya_algolia_index index with algolia_index_apply_suffix.
-  $config = \Drupal::configFactory()->getEditable('search_api.index.alshaya_algolia_index');
-  $config->set('options.algolia_index_apply_suffix', '1');
-  $config->set('options.algolia_index_list', '');
-  $config->save();
-
+  \Drupal::configFactory()->getEditable('search_api.index.alshaya_algolia_index')->save();
 }
 
 /**
