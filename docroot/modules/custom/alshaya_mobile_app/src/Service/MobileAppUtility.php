@@ -330,7 +330,6 @@ class MobileAppUtility {
       }
       else {
         $return = 'category/' . $object->tid . '/product-list';
-
       }
     }
     elseif ($object instanceof NodeInterface) {
@@ -364,6 +363,7 @@ class MobileAppUtility {
     elseif ($object instanceof SKUInterface) {
       $return = 'product-exclude-linked/' . $object->getSku();
     }
+
     return self::ENDPOINT_PREFIX . $return;
   }
 
