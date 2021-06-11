@@ -18,8 +18,9 @@ export default class UserReviews extends React.Component {
     this.state = {
       reviewsSummary: '',
       reviewsProduct: '',
+      reviewsOrder: '',
       noResultmessage: '',
-      currentTotal: '',
+      totalReviewCount: '',
       initialLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
     };
     this.loadMore = this.loadMore.bind(this);
@@ -37,7 +38,7 @@ export default class UserReviews extends React.Component {
     showFullScreenLoader();
     // Get review data from BazaarVoice based on available parameters.
     const apiUri = '/data/authors.json';
-    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.user_id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit_Review=${initialLimit}`;
+    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.user_id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit_Reviews=${initialLimit}`;
     const apiData = fetchAPIData(apiUri, params, 'user');
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -47,7 +48,8 @@ export default class UserReviews extends React.Component {
             this.setState({
               reviewsProduct: result.data.Includes.Products,
               reviewsSummary: result.data.Includes.Reviews,
-              currentTotal: Object.keys(result.data.Includes.Reviews).length,
+              reviewsOrder: result.data.Includes.ReviewsOrder,
+              totalReviewCount: result.data.Results[0].TotalReviewCount,
               noResultmessage: null,
             });
           } else {
@@ -76,13 +78,14 @@ export default class UserReviews extends React.Component {
       reviewsProduct,
       noResultmessage,
       initialLimit,
-      currentTotal,
+      totalReviewCount,
+      reviewsOrder,
     } = this.state;
     return (
       <div id="user-reviews_wrapper">
         <ConditionalView condition={noResultmessage === null}>
           <div id="review-summary-wrapper">
-            {Object.keys(reviewsSummary).slice(0, initialLimit).map((item) => (
+            {Object.values(reviewsOrder).map((item) => (
               <div className="review-summary" key={reviewsSummary[item].Id}>
                 <UserReviewsProducts
                   reviewsIndividualSummary={reviewsSummary[item]}
@@ -112,7 +115,7 @@ export default class UserReviews extends React.Component {
             ))}
           </div>
         </ConditionalView>
-        <ConditionalView condition={initialLimit < currentTotal}>
+        <ConditionalView condition={initialLimit < totalReviewCount}>
           <div className="load-more-wrapper">
             <button onClick={this.loadMore} type="button" className="load-more">{getStringMessage('load_more')}</button>
           </div>
