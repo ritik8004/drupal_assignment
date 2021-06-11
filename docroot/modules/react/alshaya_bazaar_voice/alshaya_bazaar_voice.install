@@ -13,25 +13,25 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
- * Disable bv blocks if algolia plp is enabled.
- */
-function alshaya_bazaar_voice_update_8001() {
-  // Disable bv blocks if algolia plp is enabled.
-  _disable_bv_rating_blocks_in_algolia_plp();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add bazaarvoice user block config.
  */
-function alshaya_bazaar_voice_update_8001() {
+function alshaya_bazaar_voice_update_8002() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['block.block.bazaarvoiceuserdatablock'],
     'alshaya_bazaar_voice',
     'install'
   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable bv blocks if algolia plp is enabled.
+ */
+function alshaya_bazaar_voice_update_8001() {
+  // Disable bv blocks if algolia plp is enabled.
+  _disable_bv_rating_blocks_in_algolia_plp();
 }
 
 /**
