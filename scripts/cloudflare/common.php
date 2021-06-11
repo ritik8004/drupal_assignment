@@ -13,7 +13,7 @@ function get_zone_for_domain(string $domain) {
   // Remove the first level.
   $domain_to_check = explode('.', $domain);
 
-  while (count($domain_to_check) > 2 && $domain_to_check[1] !== 'com') {
+  while (count($domain_to_check) > 2 && $domain_to_check[1] !== 'alshaya' && $domain_to_check[1] !== 'com') {
     array_shift($domain_to_check);
   }
 
