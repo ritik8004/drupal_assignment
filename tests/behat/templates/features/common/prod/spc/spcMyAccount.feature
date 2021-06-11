@@ -16,7 +16,7 @@ Feature: Test the My Account functionality
     And the element "#block-userrecentorders .subtitle" should exist
 
   Scenario: As an authenticated user, I should be able to see all the sections after logging in
-    Then I should see the link "my account" in "#block-alshayamyaccountlinks .my-account-nav" section
+    Then I should see an "#block-alshayamyaccountlinks .my-account" element
     And I should see the link "orders" in "#block-alshayamyaccountlinks .my-account-nav" section
     Then I should see the link "contact details" in "#block-alshayamyaccountlinks .my-account-nav" section
     And I should see the link "address book" in "#block-alshayamyaccountlinks .my-account-nav" section
@@ -32,6 +32,22 @@ Feature: Test the My Account functionality
     And I wait for the page to load
     Then I should see "Contact details changes have been saved."
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
+
+  Scenario: As an authenticated user, I should be able to view the Need help section and access the links under Need help
+    Then the element "#block-myaccountneedhelp" should exist
+    Then the element "#block-userrecentorders .no--orders" should exist
+    And I should see an "div.field--type-text-with-summary ul a" element
+
+  @language
+  Scenario: As an authenticated user, I should be able to view the Need help section and access the links under Need
+  help in another language
+    When I follow "{language_link}"
+    And I wait 10 seconds
+    And I wait for the page to load
+    Then the element "#block-myaccountneedhelp" should exist
+    And the element "#block-myaccountneedhelp .field--type-text-with-summary" should exist
+    And I should see the link "خدمة الزبائن"
+    And I should see the link "معلومات التوصيل"
 
   @address
   Scenario: As an authenticated user, I should be able to edit address to my address book
@@ -55,3 +71,56 @@ Feature: Test the My Account functionality
     When I wait for AJAX to finish
     And I wait for the page to load
     Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
+
+  @cancel
+  Scenario: As an authenticated user, I should be able to perform Cancel action on add/edit address pages
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
+    And I wait 10 seconds
+    And I wait for the page to load
+    Then I click on "#block-content a" element
+    And I wait 10 seconds
+    And I wait for the page to load
+    And I scroll to the "a.button.cancel-button" element
+    Then I click on "a.button.cancel-button" element
+    And I wait 10 seconds
+    Then the element "div.view-id-address_book .user__address--column div.address.default" should exist
+    Then the element "div.view-id-address_book .user__address--column div.address.default .address--delete" should not exist
+    Then the element "div.view-id-address_book .user__address--column div.address.default .address--edit" should exist
+    Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address" should exist
+    Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" should exist
+    Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--edit" should exist
+    Then I click on "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" element
+    And I wait 10 seconds
+    Then I click on "form.profile-address-book-delete-form.profile-confirm-form div.form-actions a.button.dialog-cancel" element
+    Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" should exist
+
+  @delete
+  Scenario: As an authenticated user, I should not be able to delete my primary address but should be able to delete any
+  other address
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-address-book"
+    And I wait 10 seconds
+    And I wait for the page to load
+    Then the element "div.view-id-address_book .user__address--column div.address.default" should exist
+    Then the element "div.view-id-address_book .user__address--column div.address.default .address--delete" should not exist
+    Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address" should exist
+    Then the element "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" should exist
+    Then I click on "div.view-id-address_book .user__address--column:nth-child(2) div.address .address--delete" element
+    And I wait 10 seconds
+    Then I click on "form.profile-address-book-delete-form.profile-confirm-form div.form-actions button" element
+    When I wait for AJAX to finish
+    And I wait for the page to load
+    Then the element "div.c-hero-content div.messages__wrapper div.messages--status" should exist
+
+  @change-password
+  Scenario: As an authenticated user, I should see the options to change my password
+    When I click the label for "#block-alshayamyaccountlinks > div > ul > li > a.my-account-change-password"
+    And I wait 10 seconds
+    And I wait for the page to load
+    And I should see an "#block-page-title" element
+    And I should see an "#edit-current-pass" element
+    And I should see an "#edit-pass" element
+    And I fill in an element having class "#edit-current-pass" with "Admin@123"
+    And I fill in an element having class "#edit-pass" with "Admin@123"
+    Then I press "edit-submit"
+    And I wait for the page to load
+    Then the element ".form-item--error-message" should exist

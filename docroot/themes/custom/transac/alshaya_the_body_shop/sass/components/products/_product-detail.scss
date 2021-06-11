@@ -548,6 +548,11 @@ article[gtm-sku-type="simple"] {
         background-color: $pdp-ingredient-modal-cross-icon-bg;
         cursor: pointer;
       }
+
+      .field__content {
+        overflow-y: auto;
+        height: 30.125rem;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -563,7 +568,6 @@ article[gtm-sku-type="simple"] {
     &.desc-open {
       #{$right}: 0;
       transition: $right 0.5s ease;
-      overflow-y: auto;
     }
 
     .desc-wrapper {

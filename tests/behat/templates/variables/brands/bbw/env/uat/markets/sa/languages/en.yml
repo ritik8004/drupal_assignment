@@ -21,6 +21,8 @@ variables:
   language_size_filter: 'اسم العطر'
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
+  spc_search_byname: 'Mad About'
+  spc_search_byID: 'BWSASSE'
   ar_collection_filter: ''
   ar_sort_filter: 'رتب حسب'
   ar_price_filter: 'السعر'

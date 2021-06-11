@@ -833,6 +833,8 @@
           @include breakpoint($upto-desktop) {
             font-size: 0.75rem;
           }
+
+          @include arabic-letter-spacing;
         }
 
         .date {

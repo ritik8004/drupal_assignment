@@ -2,28 +2,10 @@
   .slick-slide {
     @include breakpoint($desktop) {
       height: 8.1875rem !important;
-
-      .cloudzoom__thumbnails__image {
-        display: flex;
-        height: 100%;
-        align-items: center;
-
-        img {
-          height: auto;
-          width: 100%;
-        }
-      }
     }
 
     @include breakpoint($only-tablet) {
       height: auto !important;
-    }
-
-    img {
-      @include breakpoint($only-tablet) {
-        width: auto;
-        height: auto;
-      }
     }
   }
 }
@@ -31,15 +13,6 @@
 @include breakpoint($only-tablet) {
   #lightSlider {
     height: auto;
-
-    .slick-slide {
-      width: auto;
-
-      a {
-        display: flex;
-        align-items: center;
-      }
-    }
 
     .slick {
       &-arrow {

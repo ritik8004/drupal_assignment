@@ -251,6 +251,8 @@ body {
       font-size: 12px;
       letter-spacing: 0.1875rem;
       right: 0.9em;
+
+      @include arabic-letter-spacing;
     }
   }
 }

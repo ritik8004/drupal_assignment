@@ -20,7 +20,7 @@
   #lightSlider {
     @include breakpoint($desktop) {
       height: auto;
-      min-height: 50rem;
+      min-height: 30rem;
     }
   }
 }

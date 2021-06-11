@@ -22,3 +22,6 @@ alshaya_checkout_by_agent.settings:
       type: text
       label: SMS template to share cart
       translatable: true
+    restrict_agent_login:
+      type: boolean
+      label: 'Config to enable/disable retricting agent login when location is not shared.'
