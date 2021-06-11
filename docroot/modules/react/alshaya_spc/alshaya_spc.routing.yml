@@ -92,11 +92,3 @@ alshaya_spc.customer.token:
   methods: [POST]
   requirements:
     _role: 'authenticated'
-
-alshaya_spc.proxy:
-  path: '/spc/proxy'
-  defaults:
-    _controller: '\Drupal\alshaya_spc\Proxy\ProxyController::proxy'
-  requirements:
-    _proxy_request_check: 'TRUE'
-

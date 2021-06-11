@@ -1,12 +1,11 @@
 <?php
 
-namespace Drupal\alshaya_spc\Proxy;
+namespace App\Controller;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Proxy\Filter\FilterInterface;
 use Laminas\Diactoros\Uri;
-use Drupal\Component\Utility\UrlHelper;
 
 /**
  * Updates the request Url.
@@ -43,14 +42,9 @@ class ProxyFilter implements FilterInterface {
     // Build uri with query string arguments.
     $uri = $this->url . '?' . http_build_query($query);
 
-    if (UrlHelper::isValid($uri)) {
-      // Do the request.
-      $request = $request->withUri(new Uri($uri));
-      $response = $next($request, $response);
-    }
-    else {
-      throw new \Exception('The Url is invalid and may contain malicious content.');
-    }
+    // Do the request.
+    $request = $request->withUri(new Uri($uri));
+    $response = $next($request, $response);
 
     return $response;
   }

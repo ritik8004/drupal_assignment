@@ -123,8 +123,7 @@
         "drupal/core-dev": "^8.8.11",
         "drupal/devel": "^2.0.0",
         "geerlingguy/drupal-vm": "^5.2.0",
-        "jakoch/phantomjs-installer": "^2.1.1-p07",
-        "jenssegers/proxy": "3.0.2"
+        "jakoch/phantomjs-installer": "^2.1.1-p07"
     },
     "repositories": {
         "drupal": {
