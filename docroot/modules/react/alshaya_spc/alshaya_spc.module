@@ -254,12 +254,5 @@ function alshaya_spc_preprocess_page(&$variables) {
     ],
   ];
 
-  // For 404 page, page.content is not rendered so we add it to pre_content.
-  $status = \Drupal::requestStack()->getCurrentRequest()->attributes->get('exception');
-  if ($status && $status->getStatusCode() == 404){
-    $variables['page']['pre_content']['commerce_backend'] = $strings;
-  }
-  else {
-    $variables['page']['content']['commerce_backend'] = $strings;
-  }
+  $variables['page']['pre_content']['commerce_backend'] = $strings;
 }
