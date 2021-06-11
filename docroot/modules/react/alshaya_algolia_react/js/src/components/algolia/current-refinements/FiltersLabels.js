@@ -1,6 +1,5 @@
 import React from 'react';
 import { getPriceRangeLabel } from '../../../utils';
-import { productListIndexStatus } from '../../../utils/indexUtils';
 
 /**
  * Format selected values to make it presentable for selected filters.
@@ -60,7 +59,7 @@ export default function FiltersLabels({ attribute, value, pageType = null }) {
   const [attributeName] = attribute.split('.');
   const name = (attributeName === 'lhn_category') ? 'field_category' : attributeName;
   let settings = drupalSettings.algoliaSearch.search.filters[name];
-  if (pageType === 'plp' && productListIndexStatus()) {
+  if (pageType === 'plp') {
     settings = drupalSettings.algoliaSearch.listing.filters[name];
   }
   const label = selectedFiltersLables(
