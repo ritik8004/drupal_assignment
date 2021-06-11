@@ -24,6 +24,7 @@ set classes = [
         {% if quantity_limit_enabled == true %}
           <div class="order-quantity-limit-message mobile-only"></div>
         {% endif %}
+
         {% if show_crosssell_as_matchback == false %}
           {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
         {% endif %}
@@ -210,6 +211,9 @@ set classes = [
 
           </div>
 
+          {% block contentHowToUseMobile %}
+          {% endblock %}
+
           {% include directory ~ '/../alshaya_white_label/templates/partial/mobile-product-related.html.twig' %}
 
         </div>
@@ -224,6 +228,13 @@ set classes = [
     {% endif %}
 
   </div>
+
+  {% block contentHowToUseDesktop %}
+  {% endblock %}
+
+  {% block fullCS %}
+  {% endblock %}
+
 </article>
 <div id="dy-recommendation"></div>
 

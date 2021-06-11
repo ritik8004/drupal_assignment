@@ -1,4 +1,23 @@
 {% extends "@alshaya_white_label/node/node--acq-product--full.html.twig" %}
+{% block mainContent %}
+  <div class="content__main {{ image_slider_position_pdp }}">
+    {% if content.gallery is not empty %}
+      {{ content.gallery }}
+    {% else %}
+      <div class="gallery-wrapper empty-gallery">
+        <div id="product-zoom-container">
+          <div class="cloudzoom"></div>
+          <div class="mobilegallery"></div>
+          <div id="product-full-screen-gallery-container" style="display: none;"></div>
+        </div>
+      </div>
+    {% endif %}
+    {% if quantity_limit_enabled == true %}
+      <div class="order-quantity-limit-message mobile-only"></div>
+    {% endif %}
+  </div>
+{% endblock %}
+
 {% block afterDescription %}
   {% if content.ingredients %}
     {{ attach_library('alshaya_the_body_shop/pdp_ingredient_js') }}
@@ -6,4 +25,38 @@
       {{ content.ingredients }}
     </div>
   {% endif %}
+{% endblock %}
+
+{% block contentHowToUseMobile %}
+  {% if content.howtouse_name %}
+    <div class="how-to-use mobile">
+      <div class="how-to-use-title">
+        {{ content.howtouse_name }}
+      </div>
+      {% if content.howtouse_description %}
+        <div class="how-to-use-desc">
+          {{ content.howtouse_description }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block contentHowToUseDesktop %}
+  {% if content.howtouse_name %}
+    <div class="how-to-use desktop">
+      <div class="how-to-use-title">
+        {{ content.howtouse_name }}
+      </div>
+      {% if content.howtouse_description %}
+        <div class="how-to-use-desc">
+          {{ content.howtouse_description }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block fullCS %}
+  {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
 {% endblock %}
