@@ -17,6 +17,3 @@ alshaya_acm.cart_config:
     display_cart_crosssell:
       type: boolean
       label: 'Display cart crosssell'
-    version:
-      type: string
-      label: 'Cart version'
