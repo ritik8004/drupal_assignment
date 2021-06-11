@@ -17,6 +17,7 @@ use Drupal\rest\ResourceResponse;
 use Drupal\token\TokenInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Component\Datetime\Time;
@@ -288,7 +289,7 @@ class ShareCart extends ResourceBase {
       '@smart_agent' => json_encode($data),
     ]);
 
-    return (new ResourceResponse($responseData));
+    return (new JsonResponse($responseData));
   }
 
   /**
