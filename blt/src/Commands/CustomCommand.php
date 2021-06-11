@@ -42,6 +42,29 @@ class CustomCommand extends BltTasks {
   }
 
   /**
+   * Creates settings overrides to use Proxy on local development.
+   */
+  public function createProxySettingsFiles() {
+    $this->say('Creating settings overrides for Proxy');
+    $this->taskWriteToFile(__DIR__ . '/../../../factory-hooks/post-settings-php/zzz_proxy.php')
+      ->lines([
+        <<<'EOF'
+<?php
+// Use proxy.
+if (isset($settings['alshaya_api.settings']['magento_host'])) {
+  $settings['alshaya_api.settings']['magento_host'] = '/spc/proxy?url=' . $settings['alshaya_api.settings']['magento_host'];
+}
+
+// Configure allowed hosts.
+$settings['spc_proxy_host_patterns'] = array(
+  '^local.*\.com',
+);
+EOF
+      ])
+      ->run();
+  }
+
+  /**
    * Create default settings files.
    */
   public function createDefaultSettingsFiles() {
@@ -138,6 +161,9 @@ class CustomCommand extends BltTasks {
         $taskFilesystemStack->run();
       }
     }
+
+    // Create proxy settings overrides.
+    $this->createProxySettingsFiles();
 
   }
 

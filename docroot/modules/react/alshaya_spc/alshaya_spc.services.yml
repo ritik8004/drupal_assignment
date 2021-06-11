@@ -62,6 +62,16 @@ services:
         needs_incoming_request: TRUE
         applies_to: _middleware_request_check
 
+  alshaya_spc.proxy_access_check:
+    class: Drupal\alshaya_spc\Proxy\ProxyAccessCheck
+    tags:
+      -
+        name: access_check
+        needs_incoming_request: TRUE
+        applies_to: _proxy_request_check
+    arguments:
+      - '@settings'
+
   alshaya_spc.stock_event_subscriber:
     class: Drupal\alshaya_spc\EventSubscriber\StockEventSubscriber
     tags:
