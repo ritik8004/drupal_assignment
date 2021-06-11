@@ -3,13 +3,14 @@ import TextareaAutosize from 'react-autosize-textarea';
 import { postAPIData } from '../../../utilities/api/apiData';
 import BazaarVoiceMessages from '../../../common/components/bazaarvoice-messages';
 import ReviewCommentSubmission from '../review-comment-submission';
-import { getLanguageCode, getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getLanguageCode, getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import { processFormDetails } from '../../../utilities/validate';
 import { validEmailRegex } from '../../../utilities/write_review_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { setStorageInfo, getStorageInfo } from '../../../utilities/storage';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
+const userDetails = getUserDetails();
 
 class ReviewCommentForm extends React.Component {
   constructor(props) {
@@ -83,7 +84,7 @@ class ReviewCommentForm extends React.Component {
                   onChange={this.handleEmailChange}
                   className="form-input"
                   defaultValue={email}
-                  readOnly={bazaarVoiceSettings.reviews.user.email !== null ? 1 : 0}
+                  readOnly={userDetails.user.emailId !== null ? 1 : 0}
                 />
                 <div className="c-input__bar" />
                 <label className={`form-label ${email ? 'active-label' : ''}`}>
@@ -125,13 +126,12 @@ class ReviewCommentForm extends React.Component {
     if (!isError) {
       const { ReviewId } = this.props;
       const { commentbox, nickname, email } = this.state;
-      const userId = bazaarVoiceSettings.reviews.user.id;
       const notifications = bazaarVoiceSettings.reviews.bazaar_voice.notify_comment_published;
-      const userStorage = getStorageInfo(`bvuser_${userId}`);
+      const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
       let storageUpdated = false;
       let authParams = '';
       // Set auth paramters for anonymous users.
-      if (userId === 0 && userStorage !== null) {
+      if (userDetails.user.userId === 0 && userStorage !== null) {
         if (userStorage.bvUserId === undefined
           || (userStorage.email !== undefined && userStorage.email !== email)) {
           authParams += `&HostedAuthentication_AuthenticationEmail=${email}&HostedAuthentication_CallbackURL=${bazaarVoiceSettings.reviews.base_url}${bazaarVoiceSettings.reviews.product.url}`;
@@ -139,12 +139,12 @@ class ReviewCommentForm extends React.Component {
       }
       // Set user authenticated string (UAS).
       if (userStorage !== null) {
-        if (userId !== 0 && userStorage.uasToken !== undefined) {
+        if (userDetails.user.userId !== 0 && userStorage.uasToken !== undefined) {
           authParams += `&user=${userStorage.uasToken}&UserNickname=${nickname}`;
           // Update current user in storage.
           userStorage.nickname = nickname;
           storageUpdated = true;
-        } else if (userId === 0 && userStorage.email !== undefined
+        } else if (userDetails.user.userId === 0 && userStorage.email !== undefined
           && userStorage.bvUserId !== undefined
           && userStorage.nickname !== undefined) {
           if (userStorage.nickname !== nickname) {
@@ -186,7 +186,7 @@ class ReviewCommentForm extends React.Component {
                 showCommentForm: false,
               });
               if (storageUpdated) {
-                setStorageInfo(userStorage, `bvuser_${userId}`);
+                setStorageInfo(userStorage, `bvuser_${userDetails.user.userId}`);
               }
             }
           } else {
@@ -234,20 +234,14 @@ class ReviewCommentForm extends React.Component {
   render() {
     const { ReviewId } = this.props;
     const { showCommentForm, showCommentSubmission } = this.state;
-    const userStorage = getStorageInfo(`bvuser_${bazaarVoiceSettings.reviews.user.id}`);
-    let emailValue = '';
+    const userStorage = getStorageInfo(`bvuser_${userDetails.user.userId}`);
+    let emailValue = userDetails.user.emailId;
     let nicknameValue = '';
-    // Set default value for user email.
-    if (bazaarVoiceSettings.reviews.user.email !== null) {
-      emailValue = bazaarVoiceSettings.reviews.user.email;
-    } else if (userStorage !== null) {
-      emailValue = userStorage.email !== undefined ? userStorage.email : '';
-    }
-    // Set default value for user nickname.
+    // Set default value for user email and nickname.
     if (userStorage !== null) {
+      emailValue = userStorage.email !== undefined && emailValue !== '' ? userStorage.email : '';
       nicknameValue = userStorage.nickname !== undefined ? userStorage.nickname : '';
     }
-
     if (ReviewId !== undefined) {
       return (
         <>

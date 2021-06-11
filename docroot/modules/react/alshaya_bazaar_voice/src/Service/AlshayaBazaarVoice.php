@@ -14,6 +14,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides integration with BazaarVoice.
@@ -86,6 +87,13 @@ class AlshayaBazaarVoice {
   protected $currentRequest;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * BazaarVoiceApiWrapper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -106,6 +114,8 @@ class AlshayaBazaarVoice {
    *   SKU images manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   Module Handler service object.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
@@ -115,7 +125,8 @@ class AlshayaBazaarVoice {
                               EntityRepositoryInterface $entityRepository,
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager,
-                              RequestStack $request_stack) {
+                              RequestStack $request_stack,
+                              ModuleHandlerInterface $moduleHandler) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->connection = $connection;
@@ -125,6 +136,7 @@ class AlshayaBazaarVoice {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
     $this->currentRequest = $request_stack->getCurrentRequest();
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -458,7 +470,7 @@ class AlshayaBazaarVoice {
     $hide_fields_write_review = [];
     $category = $productNode->get('field_category')->getValue();
     foreach ($category as $term) {
-      $term_parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($term['target_id']);
+      $term_parents = $this->entityTypeManager->getStorage('taxonomy_term')->loadAllParents($term['target_id']);
       foreach ($term_parents as $term_obj) {
         // Enable R&R feature based on category.
         if (!empty($term_obj->get('field_rating_review')->getValue()[0]['value'])) {
@@ -556,7 +568,7 @@ class AlshayaBazaarVoice {
    *   returns all strings related to bazaarvoice feature.
    */
   public function getBazaarvoiceStrings() {
-    \Drupal::moduleHandler()->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
+    $this->moduleHandler->loadInclude('alshaya_bazaar_voice', 'inc', 'alshaya_bazaar_voice.static_strings');
     $strings = [
       '#theme' => 'alshaya_strings',
       '#strings' => _alshaya_bazaar_voice_static_strings(),
@@ -601,9 +613,9 @@ class AlshayaBazaarVoice {
     $productNode = $this->skuManager->getDisplayNode($sku_id);
     $productArray = [];
     if ($productNode instanceof NodeInterface) {
-      // Get sanitized sku.
-      $sanitized_sku = $this->skuManager->getSanitizedSku($sku_id);
-      $productArray['alshaya_bazaar_voice'] = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $sanitized_sku, $basic_configs);
+      $productArray['alshaya_bazaar_voice'] = $this->getProductBazaarVoiceDetails($sku_id, $productNode, $basic_configs);
+      // Add current user details.
+      $productArray['productReview'] = $this->getProductReviewForCurrentUser($productNode);
     }
     return $productArray;
   }
@@ -615,15 +627,13 @@ class AlshayaBazaarVoice {
    *   SKU text or full entity object.
    * @param \Drupal\node\NodeInterface $productNode
    *   Product node.
-   * @param string $sanitized_sku
-   *   Sanitized sku id.
    * @param array $basic_configs
    *   Basic configurations of bazaarvoice.
    *
    * @return array|null
    *   Drupal settings with product details.
    */
-  public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, $sanitized_sku, array $basic_configs) {
+  public function getProductBazaarVoiceDetails($sku, NodeInterface $productNode, array $basic_configs) {
     $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
     // Disable BazaarVoice Rating and Review in PDP
     // if checkbox is checked for any categories or its Parent Categories.
@@ -631,9 +641,7 @@ class AlshayaBazaarVoice {
     if (empty($category_based_config) || !$category_based_config['show_rating_reviews']) {
       return;
     }
-    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    $media = $skuImagesManager->getFirstImage($sku, 'pdp');
+    $media = $this->skuImagesManager->getFirstImage($sku, 'pdp');
     $image_url = '';
     if (!empty($media)) {
       $image_url = file_create_url($media['drupal_uri']);
@@ -649,16 +657,7 @@ class AlshayaBazaarVoice {
     // Get country code.
     $country_code = _alshaya_custom_get_site_level_country_code();
 
-    // Check if logged in user has already reviewed the product.
-    $productReviewData = $this->getProductInfoForCurrentUser($sanitized_sku);
-
     $settings = [
-      'user' => [
-        'email' => $this->currentUser->getEmail(),
-        'id' => $this->currentUser->id(),
-        'name' => $this->currentUser->getUsername(),
-        'review' => $productReviewData !== NULL ? $productReviewData : NULL,
-      ],
       'product' => [
         'url' => $productNode->toUrl()->toString(),
         'title' => $productNode->label(),
@@ -671,8 +670,8 @@ class AlshayaBazaarVoice {
         'country_code' => $country_code,
         'error_messages' => $bv_error_messages,
       ],
-      'base_url' => \Drupal::request()->getSchemeAndHttpHost(),
-      'bv_auth_token' => \Drupal::request()->get('bv_authtoken'),
+      'base_url' => $this->currentRequest->getSchemeAndHttpHost(),
+      'bv_auth_token' => $this->currentRequest->get('bv_authtoken'),
       'hide_fields_write_review' => $category_based_config['hide_fields_write_review'],
     ];
     $settings['bazaar_voice'] = array_merge($settings['bazaar_voice'], $basic_configs);
@@ -681,42 +680,63 @@ class AlshayaBazaarVoice {
   }
 
   /**
+   * Check if parent sku exists.
+   *
+   * @param string $sku_id
+   *   Sku id.
+   *
+   * @return string
+   *   return parent sku id.
+   */
+  public function checkParentSku($sku_id) {
+    $parent_sku = $this->skuManager->getParentSkuBySku($sku_id);
+    if ($parent_sku !== NULL && $parent_sku instanceof SKUInterface) {
+      return $parent_sku->getSku();
+    }
+    return $sku_id;
+  }
+
+  /**
    * Get product info reviewed by current user.
    *
-   * @param string $productId
-   *   product Id.
+   * @param \Drupal\node\NodeInterface $node
+   *   Product node.
    *
    * @return array|null
    *   returns product review status and rating.
    */
-  public function getProductInfoForCurrentUser($productId) {
-    $userId = $this->currentUser->id();
-    $extra_params = [
-      'filter' => 'id:' . $userId,
-      'Include' => 'Reviews,Products',
-      'stats' => 'Reviews',
-    ];
-    $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/authors.json', $extra_params);
-    if (isset($request['url']) && isset($request['query'])) {
-      $url = $request['url'];
-      $request_options['query'] = $request['query'];
-      $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
-      if (!$result['HasErrors'] && isset($result['Includes'])) {
-        if (isset($result['Includes']['Reviews'])) {
-          foreach ($result['Includes']['Reviews'] as $review) {
-            if ($review['ProductId'] === $productId) {
-              $data = [
-                'review_summary' => $review,
-                'product_summary' => $result['Includes']['Products'][$productId],
-                'user_rating' => $review['Rating'],
-              ];
-              return $data;
+  public function getProductReviewForCurrentUser(NodeInterface $node) {
+    if ($node instanceof NodeInterface) {
+      $sku = $this->skuManager->getSkuForNode($node);
+      // Get sanitized sku.
+      $sanitized_sku = $this->skuManager->getSanitizedSku($sku);
+      $extra_params = [
+        'filter' => 'id:' . $this->currentUser->id(),
+        'Include' => 'Reviews,Products',
+        'stats' => 'Reviews',
+      ];
+      $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/authors.json', $extra_params);
+      if (isset($request['url']) && isset($request['query'])) {
+        $url = $request['url'];
+        $request_options['query'] = $request['query'];
+        $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
+        if (!$result['HasErrors'] && isset($result['Includes'])) {
+          if (isset($result['Includes']['Reviews'])) {
+            foreach ($result['Includes']['Reviews'] as $review) {
+              if ($review['ProductId'] === $sanitized_sku) {
+                $productReviewData = [
+                  'review_summary' => $review,
+                  'product_summary' => $result['Includes']['Products'][$sanitized_sku],
+                  'user_rating' => $review['Rating'],
+                ];
+                return $productReviewData;
+              }
             }
           }
         }
       }
+      return NULL;
     }
-    return NULL;
   }
 
 }

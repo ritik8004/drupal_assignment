@@ -13,13 +13,14 @@ import EmptyMessage from '../../../utilities/empty-message';
 import ReviewRatingsFilter from '../review-ratings-filter';
 import PostReviewMessage from '../reviews-full-submit/post-review-message';
 import Pagination from '../review-pagination';
-import { getbazaarVoiceSettings } from '../../../utilities/api/request';
+import { getbazaarVoiceSettings, getUserDetails } from '../../../utilities/api/request';
 import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 import { createUserStorage } from '../../../utilities/user_util';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
+const userDetails = getUserDetails();
 
 export default class ReviewSummary extends React.Component {
   isComponentMounted = true;
@@ -59,7 +60,7 @@ export default class ReviewSummary extends React.Component {
     // Listen to the review post event.
     document.addEventListener('reviewPosted', this.eventListener, false);
     document.addEventListener('handlePagination', this.handlePagination);
-    createUserStorage(bazaarVoiceSettings.reviews.user.id, bazaarVoiceSettings.reviews.user.email);
+    createUserStorage(userDetails.user.userId, userDetails.user.emailId);
     this.getReviews();
   }
 
@@ -343,7 +344,6 @@ export default class ReviewSummary extends React.Component {
 
     let newPdp = isNewPdpLayout;
     newPdp = (newPdp === undefined) ? false : newPdp;
-
     const reviewSettings = bazaarVoiceSettings.reviews.bazaar_voice.reviews_pagination_type;
     // Totalreviews count is emtpy.
     if (totalReviews === '') {
@@ -362,7 +362,7 @@ export default class ReviewSummary extends React.Component {
                   <p className="no-review-msg">{getStringMessage('first_to_review')}</p>
                 </div>
                 <WriteReviewButton
-                  reviewedByCurrentUser={bazaarVoiceSettings.reviews.user.review !== null}
+                  reviewedByCurrentUser={userDetails.productReview !== null}
                   newPdp={newPdp}
                 />
               </div>
@@ -382,7 +382,7 @@ export default class ReviewSummary extends React.Component {
             <ReviewHistogram
               overallSummary={reviewsProduct}
               isNewPdpLayout={isNewPdpLayout}
-              reviewedByCurrentUser={bazaarVoiceSettings.reviews.user.review !== null}
+              reviewedByCurrentUser={userDetails.productReview !== null}
             />
             <div className="sorting-filter-wrapper">
               <div className="sorting-filter-title-block">{getStringMessage('filter_sort')}</div>

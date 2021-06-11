@@ -1,7 +1,5 @@
-import { doRequest, getbazaarVoiceSettings } from './api/request';
+import { doRequest, getUserDetails } from './api/request';
 import { setStorageInfo, getStorageInfo } from './storage';
-
-const bazaarVoiceSettings = getbazaarVoiceSettings();
 
 export const getUasToken = () => {
   const requestUrl = '/get-uas-token';
@@ -24,14 +22,15 @@ export const getUasToken = () => {
  *
  * @returns {boolean}
  */
-export const isOpenWriteReviewForm = () => {
+export const isOpenWriteReviewForm = (productId) => {
+  const userDetails = getUserDetails(productId);
   const query = new URLSearchParams(document.referrer);
   const openPopup = query.get('openPopup');
-  if (bazaarVoiceSettings.reviews !== undefined
-    && bazaarVoiceSettings.reviews.user.id > 0
+  if (userDetails !== undefined
+    && userDetails.user.userId > 0
     && getStorageInfo('openPopup')
     && openPopup !== null
-    && bazaarVoiceSettings.reviews.user.review === null) {
+    && userDetails.productReview === null) {
     return true;
   }
   return false;

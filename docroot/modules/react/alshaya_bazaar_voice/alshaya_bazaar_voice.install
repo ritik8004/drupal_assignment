@@ -13,6 +13,20 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * Add bazaarvoice user block config.
+ */
+function alshaya_bazaar_voice_update_8002() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['block.block.bazaarvoiceuserdatablock'],
+    'alshaya_bazaar_voice',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Disable bv blocks if algolia plp is enabled.
  */
 function alshaya_bazaar_voice_update_8001() {
@@ -64,6 +78,7 @@ function alshaya_bazaar_voice_install() {
   _disable_bv_rating_blocks_in_algolia_plp();
   // Provide sorting option Top rated in srp/plp.
   _add_sort_option_in_plp_srp_config_form();
+
 }
 
 /**
