@@ -5,6 +5,20 @@ import { cartErrorCodes, getDefaultErrorMessage } from './error';
 
 window.commerceBackend = window.commerceBackend || {};
 
+/**
+ * Gets the cart ID for existing cart.
+ *
+ * @returns {string}
+ *   The cart id.
+ */
+window.commerceBackend.getCartId = () => {
+  const cartId = localStorage.getItem('cart_id');
+  if (typeof cartId === 'string' || typeof cartId === 'number') {
+    return cartId;
+  }
+  return null;
+};
+
 // Contains the raw unprocessed cart data.
 let rawCartData = null;
 
@@ -355,6 +369,21 @@ const updateCart = (data) => {
     });
 };
 
+/**
+ * Formats the error message as required for cart.
+ *
+ * @param {int} code
+ *   The response code.
+ * @param {string} message
+ *   The response message.
+ */
+const getFormattedError = (code, message) => ({
+  error: true,
+  error_code: code,
+  error_message: message,
+  response_message: [message, 'error'],
+});
+
 export {
   isAnonymousUserWithoutCart,
   callDrupalApi,
@@ -364,4 +393,5 @@ export {
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
   getCartSettings,
+  getFormattedError,
 };

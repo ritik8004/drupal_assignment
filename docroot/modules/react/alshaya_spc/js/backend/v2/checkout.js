@@ -1,10 +1,12 @@
 import {
   isAnonymousUserWithoutCart,
   updateCart,
+  getFormattedError,
   getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
   callDrupalApi,
+  callMagentoApi,
 } from './common';
 import { getDefaultErrorMessage } from './error';
 import { logger } from './utility';
@@ -148,14 +150,116 @@ const getCustomerPublicData = (data) => {
 };
 
 /**
- * Get store info for given store code.
+ * Gets the data for a particular store.
  *
- * @param {string} storeCode
- *   The store code.
- * @return {array}.
- *   Return store info.
+ * @param {string} store
+ *   The store ID.
+ *
+ * @returns {Promise}
+ *   Returns a promise which resolves to an array of data for the given store or
+ * an empty array in case of any issue.
  */
-const getStoreInfo = (storeCode) => callDrupalApi(`/cnc/store/${storeCode}`, 'GET', {});
+const getStoreInfo = async (storeData) => {
+  let store = { ...storeData };
+
+  if (typeof store.code === 'undefined' || !store.code) {
+    return null;
+  }
+
+  // Fetch store info from Drupal.
+  let storeInfo = await callDrupalApi(`/cnc/store/${store.code}`, 'GET', {});
+  storeInfo = storeInfo.data;
+
+  if (!storeInfo || (!Array.isArray(storeInfo) && storeInfo.length === 0)) {
+    return null;
+  }
+  store = Object.assign(store, storeInfo);
+  store.formatted_distance = store.distance
+    .toLocaleString('us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    .replaceAll(',', '');
+  store.delivery_time = store.sts_delivery_time_label;
+  if (typeof store.rnc_available !== 'undefined'
+    && store.rnc_available
+    && typeof store.rnc_config !== 'undefined') {
+    store.delivery_time = store.rnc_config;
+  }
+  if (typeof store.rnc_config !== 'undefined') {
+    delete store.rnc_config;
+  }
+  return store;
+};
+
+/**
+ * Get the list of stores for the cart.
+ *
+ * @param {string} lat
+ *   The latitude value.
+ * @param {string} lon
+ *   The longitude value.
+ */
+const getCartStores = async (lat, lon) => {
+  const cartId = window.commerceBackend.getCartId();
+  if (!cartId) {
+    return null;
+  }
+
+  let stores = [];
+
+  stores = await callMagentoApi(`/rest/V1/click-and-collect/stores/guest-cart/${cartId}/lat/${lat}/lon/${lon}`);
+
+  if (typeof stores.data.error !== 'undefined' && stores.data.error) {
+    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${stores.data.error_message}`);
+    return stores;
+  }
+
+  stores = stores.data;
+
+  if (!stores || (Array.isArray(stores) && stores.length === 0)) {
+    return [];
+  }
+
+  const storeInfoPromises = [];
+  stores.forEach((store) => {
+    storeInfoPromises.push(getStoreInfo(store));
+  });
+
+  try {
+    stores = await Promise.all(storeInfoPromises);
+    // Sort the stores first by distance and then by name.
+    stores = stores
+      .sort((store1, store2) => store2.rnc_available - store1.rnc_available)
+      .sort((store1, store2) => store1.distance - store2.distance);
+
+    return stores;
+  } catch (error) {
+    logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${error.message}`);
+  }
+
+  return [];
+};
+
+/**
+ *  Get the CnC stores for the cart.
+ *
+ * @param {string} lat
+ *   The latitude value.
+ * @param {string} lon
+ *   The longiture value.
+ */
+const getCncStores = async (lat, lon) => {
+  const cartId = window.commerceBackend.getCartId();
+  if (!cartId) {
+    logger.error('Error while fetching click and collect stores. No cart available in session');
+    return getFormattedError(404, 'No cart in session');
+  }
+
+  const stores = await getCartStores(lat, lon);
+  if (!stores || typeof stores.error !== 'undefined') {
+    logger.error(`Error while fetching store for cart ${cartId} of ${lat}, ${lon}. Error message: ${stores.message}`);
+  }
+
+  return stores;
+};
 
 /**
  * Get store info for given store code.
@@ -356,4 +460,7 @@ window.commerceBackend.getCartForCheckout = () => {
   return null;
 };
 
-export default getProcessedCheckoutData;
+export {
+  getProcessedCheckoutData,
+  getCncStores,
+};
