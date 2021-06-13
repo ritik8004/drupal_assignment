@@ -6,6 +6,7 @@ import IndividualReviewSlider from '../individual-review-slider';
 import IndividualReviewStar from '../individual-review-star';
 import { getDate } from '../../../../../../js/utilities/dateUtility';
 import { getLanguageCode } from '../../../utilities/api/request';
+import getStringMessage from '../../../../../../js/utilities/strings';
 
 const ReviewInformation = ({
   reviewInformationData,
@@ -51,6 +52,22 @@ const ReviewInformation = ({
           <div className="horizontal-border" />
         </ConditionalView>
 
+        <ConditionalView condition={reviewInformationData.Badges}>
+          {Object.keys(reviewInformationData.Badges).map((key) => (
+            <div className="badges-container">
+              <ConditionalView condition={key.includes('top')}>
+                <div className={`${key.replace(/[0-9]/g, '')}-contributor`}>
+                  <span>{`${getStringMessage('top')}${key.replace('top', ' ')}${' '}${getStringMessage('contributor')}`}</span>
+                </div>
+              </ConditionalView>
+              <ConditionalView condition={!key.includes('top')}>
+                <div className={key.replace(' ', '-')}>
+                  <span>{getStringMessage(key)}</span>
+                </div>
+              </ConditionalView>
+            </div>
+          ))}
+        </ConditionalView>
         <ReviewAttributes
           contextDataValues={reviewInformationData.ContextDataValues}
           contextDataValuesOrder={reviewInformationData.ContextDataValuesOrder}

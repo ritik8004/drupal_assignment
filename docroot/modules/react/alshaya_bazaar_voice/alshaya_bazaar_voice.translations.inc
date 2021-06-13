@@ -136,5 +136,23 @@ function _alshaya_bazaar_voice_translations() {
     'View review' => [
       'ar' => 'عرض المراجعة',
     ],
+    'Featured' => [
+      'ar' => 'عمميز',
+    ],
+    'Top' => [
+      'ar' => 'أفضل',
+    ],
+    'Contributor' => [
+      'ar' => 'مساهمين',
+    ],
+    'Verified Purchaser' => [
+      'ar' => 'مشتري معتمد',
+    ],
+    'Expert' => [
+      'ar' => 'خبير',
+    ],
+    'Staff' => [
+      'ar' => 'الموظفون',
+    ],
   ];
 }
