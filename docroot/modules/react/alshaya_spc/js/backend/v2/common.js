@@ -24,6 +24,38 @@ window.commerceBackend.setRawCartDataInStorage = (data) => {
 window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
 
 /**
+ * Object to serve as static cache for processed cart data over the course of a request.
+ */
+let staticCartData = null;
+
+/**
+ * Gets the cart data.
+ *
+ * @returns {object|null}
+ *   Processed cart data else null.
+ */
+window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+
+/**
+ * Sets the cart data to storage.
+ *
+ * @param data
+ *   The cart data.
+ */
+window.commerceBackend.setCartDataInStorage = (data) => {
+  const cartInfo = { ...data };
+  cartInfo.last_update = new Date().getTime();
+  staticCartData = cartInfo;
+};
+
+/**
+ * Unsets the stored cart data.
+ */
+window.commerceBackend.removeCartDataFromStorage = () => {
+  staticCartData = null;
+};
+
+/**
  * Global constants.
  */
 
