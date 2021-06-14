@@ -26,7 +26,7 @@ class ReviewFeedback extends React.Component {
 
   render() {
     const {
-      contentId, isSyndicatedReview, positiveCount, negativeCount, contentType,
+      contentId, positiveCount, negativeCount, contentType,
     } = this.props;
     const { votedContentId } = this.state;
     let contentTypeDisplayValue = null;
@@ -42,7 +42,7 @@ class ReviewFeedback extends React.Component {
       contentTypeDisplayValue = 'review';
     }
     if (contentId !== undefined && positiveCount !== undefined && negativeCount
-      !== undefined && isSyndicatedReview === false) {
+      !== undefined) {
       return (
         <div className="review-feedback-vote">
           <span className="feedback-label">{Drupal.t('Was this @contentTypeDisplayValue helpful?', { '@contentTypeDisplayValue': contentTypeDisplayValue })}</span>
