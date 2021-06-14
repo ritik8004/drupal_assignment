@@ -80,17 +80,28 @@ describe('Checkout', () => {
       ]);
     });
 
-    it('Test formatAddressForFrontend()', async () => {
-      const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
-      const data = [
-        {
-          foo: 'bar',
-        },
-      ];
-      const result = formatAddressForFrontend(data);
-      expect(result).toEqual([{
-        foo: 'bar',
-      }]);
+    describe('Test formatAddressForFrontend()', () => {
+      it('With empty object', () => {
+        const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
+        const result = formatAddressForFrontend({});
+        expect(result).toEqual(null);
+      });
+      it('With empty country Id', () => {
+        const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
+        const result = formatAddressForFrontend({ country_id: '' });
+        expect(result).toEqual(null);
+      });
+      it('With Address data', () => {
+        const address = cartData.cart.billing_address;
+        const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
+        const result = formatAddressForFrontend(address);
+        expect(result.address_city_segment).toEqual('1');
+        expect(result.address_apartment_segment).toEqual('1');
+        expect(result.address_building_segment).toEqual('foo');
+        expect(result.area).toEqual('13');
+        expect(result.country_id).toEqual('AE');
+        expect(result.custom_attributes).toEqual(undefined);
+      });
     });
 
     describe('Tests getCncStatusForCart()', () => {

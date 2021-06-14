@@ -185,17 +185,34 @@ const getCustomerPublicData = (data) => {
 const getStoreInfo = (storeCode) => callDrupalApi(`/cnc/store/${storeCode}`, 'GET', {});
 
 /**
- * Get store info for given store code.
+ * Helper function to format address as required by frontend.
  *
- * @param {array} address
+ * @param {object} address
  *   Address array.
- * @return {array|null}.
+ * @return {object|null}.
  *   Formatted address if available.
  */
 const formatAddressForFrontend = (address) => {
-  // @todo implement this
-  logger.info(`Address ${address}`);
-  return address;
+  // Do not consider addresses without custom attributes as they are required
+  // for Delivery Matrix.
+  if (Object.keys(address).length === 0 || typeof address.country_id === 'undefined') {
+    return null;
+  }
+  if (address.country_id === '') {
+    return null;
+  }
+
+  if (typeof address.custom_attributes !== 'undefined' && Object.keys(address.custom_attributes).length > 0) {
+    const result = { ...address };
+    Object.keys(address.custom_attributes).forEach((item) => {
+      const key = address.custom_attributes[item].attribute_code;
+      const val = address.custom_attributes[item].value;
+      result[key] = val;
+    });
+    delete result.custom_attributes;
+    return result;
+  }
+  return null;
 };
 
 /**
