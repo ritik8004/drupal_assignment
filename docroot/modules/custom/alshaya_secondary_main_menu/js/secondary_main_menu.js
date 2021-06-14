@@ -12,11 +12,11 @@
             .wrapAll('<div class="secondary-main-menu-wrapper"></div>');
           $('.secondary--main--menu .column').each(function (index) {
             let menuItemsCount = $(this).find("li.menu--three__list-item").length
-            if (menuItemsCount > 18) {
+            if (menuItemsCount > 16) {
               let newColumn = '<div class="column new--column new--column_' + index + '"></div>';
               $(newColumn).insertAfter($(this));
               $(this).find("li.menu--three__list-item")
-                .slice(18).appendTo('.new--column_' + index);
+                .slice(16).appendTo('.new--column_' + index);
             }
           })
           $('.secondary--main--menu').show();
