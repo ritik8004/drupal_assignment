@@ -6,3 +6,10 @@ services:
       - '@alshaya_feed.generate'
     tags:
       - { name: drush.command }
+
+  alshaya_feed.manage_queue:
+    class: Drupal\alshaya_feed\Commands\AlshayaManageQueue
+    arguments:
+      - '@queue'
+    tags:
+      - { name: drush.command }

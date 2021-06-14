@@ -12,6 +12,7 @@ use Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\alshaya_feed\AlshayaProductDeltaFeedHelper;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Queue\QueueFactory;
 
 /**
  * Processes product after any updates.
@@ -59,6 +60,13 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
   protected $skuManager;
 
   /**
+   * Queue factory service.
+   *
+   * @var \Drupal\Core\Queue\QueueFactory
+   */
+  protected $queueFactory;
+
+  /**
    * PostProcessProduct constructor.
    *
    * @param array $configuration
@@ -75,6 +83,8 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
    *   Product Feed Helper.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku Manager service.
+   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   *   Queue factory service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -82,12 +92,14 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
                               ProductDeltaFeedApiWrapper $product_feed_api_wrapper,
                               ConfigFactoryInterface $config_factory,
                               AlshayaProductDeltaFeedHelper $product_delta_feed_helper,
-                              SkuManager $skuManager) {
+                              SkuManager $skuManager,
+                              QueueFactory $queue_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->dyProductDeltaFeedApiWrapper = $product_feed_api_wrapper;
     $this->dyConfig = $config_factory->get('dynamic_yield.settings');
     $this->productDeltaFeedHelper = $product_delta_feed_helper;
     $this->skuManager = $skuManager;
+    $this->queueFactory = $queue_factory;
   }
 
   /**
@@ -212,14 +224,7 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
    *   SKU.
    */
   private function markProductOutOfStock(array $feeds, string $sku) {
-    foreach ($feeds as $feed) {
-      $data['data'] = $this->productDeltaFeedHelper->prepareFeedDataforSkuOos($sku);
-      $this->dyProductDeltaFeedApiWrapper->productFeedPartialUpdate($feed['api_key'], $feed['id'], $sku, $data);
-    }
-
-    $this->getLogger('PostProcessProduct')->notice('DY partial update API invoked. Processed product with sku: @sku.', [
-      '@sku' => $sku,
-    ]);
+    $this->queueFactory->get(ProcessOOSProduct::QUEUE_NAME)->createItem($sku);
   }
 
   /**
@@ -245,7 +250,8 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
       $container->get('dynamic_yield.product_feed_api_wrapper'),
       $container->get('config.factory'),
       $container->get('alshaya_feed.product_delta_feed'),
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('queue')
     );
   }
 
