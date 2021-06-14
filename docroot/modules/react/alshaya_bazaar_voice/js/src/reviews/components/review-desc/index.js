@@ -15,11 +15,9 @@ const ReviewDescription = ({
   reviewDescriptionData,
   reviewsComment,
   isNewPdpLayout,
-  isSyndicated,
 }) => {
   let newPdp = isNewPdpLayout;
   newPdp = (newPdp === undefined) ? false : newPdp;
-
   if (reviewDescriptionData !== undefined) {
     const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
     return (
@@ -46,7 +44,7 @@ const ReviewDescription = ({
             <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
           </ConditionalView>
           <ConditionalView condition={reviewDescriptionData.IsRecommended
-            || !reviewDescriptionData.isSyndicated}
+            || !reviewDescriptionData.IsSyndicated}
           >
             <div className="review-inline-feedback">
               <div>
@@ -59,7 +57,7 @@ const ReviewDescription = ({
                     <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
                   </div>
                 </ConditionalView>
-                <ConditionalView condition={!isSyndicated}>
+                <ConditionalView condition={!reviewDescriptionData.IsSyndicated}>
                   <div className="review-feedback">
                     <ReviewFeedback
                       negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
@@ -70,11 +68,12 @@ const ReviewDescription = ({
                   </div>
                 </ConditionalView>
               </div>
-              <ConditionalView condition={!reviewDescriptionData.isSyndicated}>
+              {!reviewDescriptionData.IsSyndicated
+                && (
                 <ReviewCommentForm
                   ReviewId={reviewDescriptionData.Id}
                 />
-              </ConditionalView>
+                )}
               <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
                 <ReviewResponseDisplay
                   reviewId={reviewDescriptionData.Id}
@@ -89,7 +88,8 @@ const ReviewDescription = ({
               </div>
             </div>
           </ConditionalView>
-          <ConditionalView condition={reviewDescriptionData.isSyndicated}>
+          {reviewDescriptionData.IsSyndicated
+            && (
             <div className="review-syndicated">
               <div className="review-syndicated-image">
                 <span><img src={reviewDescriptionData.SyndicationSource.LogoImageUrl} /></span>
@@ -99,7 +99,7 @@ const ReviewDescription = ({
                 <span>{reviewDescriptionData.SyndicationSource.Name}</span>
               </div>
             </div>
-          </ConditionalView>
+            )}
         </div>
       </div>
     );
