@@ -41,7 +41,7 @@ const getProductStatus = async (sku) => {
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
-  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', null, { query: { _cf_cache_bypass: '1' } });
+  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
 };
 
 /**

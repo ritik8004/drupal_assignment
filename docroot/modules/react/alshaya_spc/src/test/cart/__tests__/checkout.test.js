@@ -5,6 +5,7 @@ import utilsRewire, { getProcessedCheckoutData } from "../../../../js/backend/v2
 import { drupalSettings } from '../globals';
 import * as cartData from '../data/cart.json';
 import * as storeData from '../data/store.json';
+import * as productStatus from '../data/product_status.json';
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -100,12 +101,7 @@ describe('Checkout', () => {
       });
 
       it('With CNC Enabled', async () => {
-        axios.mockResolvedValue({
-          cnc_enabled: true,
-          in_stock: true,
-          max_sale_qty: 0,
-          stock: 978,
-        });
+        axios.mockResolvedValue(productStatus);
         window.commerceBackend.setCartDataInStorage(cartData);
         const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
         const result = await getCncStatusForCart();
@@ -123,6 +119,22 @@ describe('Checkout', () => {
         const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
         const result = await getCncStatusForCart();
         expect(result).toEqual(false);
+      });
+    });
+
+    describe('Tests getProductStatus()', () => {
+      it('Without SKU', async () => {
+        const getProductStatus = utilsRewire.__get__('getProductStatus');
+        const result = await getProductStatus();
+        expect(result).toEqual(null);
+        expect(axios).not.toHaveBeenCalled();
+      });
+      it('With SKU', async () => {
+        axios.mockResolvedValue(productStatus);
+        const getProductStatus = utilsRewire.__get__('getProductStatus');
+        const result = await getProductStatus('WZBOWZ107');
+        expect(result).toEqual(productStatus);
+        expect(axios).toHaveBeenCalled();
       });
     });
 

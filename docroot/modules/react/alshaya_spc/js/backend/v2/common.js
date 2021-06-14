@@ -235,12 +235,6 @@ const callDrupalApi = (url, method, requestOptions) => {
         params.data = qs.stringify(requestOptions[optionName]);
         return;
       }
-      if (optionName === 'query') {
-        const queryString = qs.stringify(requestOptions[optionName]);
-        params.url = `${params.url}?${queryString}`;
-        return;
-      }
-
       params[optionName] = requestOptions[optionName];
     });
   }
