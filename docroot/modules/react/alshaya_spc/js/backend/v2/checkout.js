@@ -176,7 +176,9 @@ const getStoreInfo = async (storeData) => {
   store = Object.assign(store, storeInfo);
   store.formatted_distance = store.distance
     .toLocaleString('us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-    .replaceAll(',', '');
+    .replace(/,/g, '');
+  store.formatted_distance = parseFloat(store.formatted_distance);
+
   store.delivery_time = store.sts_delivery_time_label;
   if (typeof store.rnc_available !== 'undefined'
     && store.rnc_available
@@ -200,7 +202,13 @@ const getStoreInfo = async (storeData) => {
 const getCartStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
   if (!cartId) {
-    return null;
+    logger.notice('Error occurred while fetching stores for cart. Cart ID is not provided.');
+    return 'Error occurred while fetching stores for cart. Cart ID is not provided.';
+  }
+
+  if (!lat || !lon) {
+    logger.notice(`Error occurred while fetching stores for cart. lat/lon is not provided for ${cartId}.`);
+    return 'Error occurred while fetching stores for cart. lat/lon is not provided.';
   }
 
   let stores = [];
@@ -209,7 +217,7 @@ const getCartStores = async (lat, lon) => {
 
   if (typeof stores.data.error !== 'undefined' && stores.data.error) {
     logger.notice(`Error occurred while fetching stores for cart id ${cartId}, API Response: ${stores.data.error_message}`);
-    return stores;
+    return [];
   }
 
   stores = stores.data;
@@ -254,8 +262,11 @@ const getCncStores = async (lat, lon) => {
   }
 
   const stores = await getCartStores(lat, lon);
-  if (!stores || typeof stores.error !== 'undefined') {
-    logger.error(`Error while fetching store for cart ${cartId} of ${lat}, ${lon}. Error message: ${stores.message}`);
+  if (stores && typeof stores === 'string') {
+    logger.error(`Error while fetching CnC store for cart ${cartId} of ${lat}, ${lon}. Error message: ${stores.message}`);
+  }
+  if (stores && typeof stores.error !== 'undefined') {
+    logger.error(`Error while fetching CnC store for cart ${cartId} of ${lat}, ${lon}. Error message: ${stores}`);
   }
 
   return stores;
