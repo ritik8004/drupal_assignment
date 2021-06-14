@@ -44,6 +44,12 @@ function alshaya_secondary_main_menu_theme($existing, $type, $theme, $path) {
         'data' => NULL,
       ],
     ],
+    'alshaya_secondary_main_menu_highlights' => [
+      'template' => 'alshaya-secondary-main-menu-highlights',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -124,6 +130,25 @@ function _alshaya_secondary_main_menu_process_tag_attributes_columns(array &$dat
 /**
  * Implements hook_preprocess_HOOK().
  */
-function alshaya_secondary_main_menu_preprocess_alshaya_secondary_main_menu_level2(&$variables) {
-  $variables['menu_type'] = \Drupal::config('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
+ function alshaya_secondary_main_menu_preprocess_alshaya_secondary_main_menu_level2(&$variables) {
+   $variables['menu_type'] = \Drupal::config('alshaya_secondary_main_menu.settings')->get('desktop_secondary_main_menu_layout');
+   if ($variables['menu_type'] == 'default') {
+     $highlight_paragraph = $variables['data']['l1_object']['highlight_paragraph'];
+   }
+ }
+
+/**
+  * Implements hook_preprocess_HOOK().
+  */
+ function alshaya_secondary_main_menu_preprocess_alshaya_secondary_main_menu_highlights(&$variables) {
+   $variables['title_class'] = '';
+ }
+
+/**
+ * Implements hook_form_alter();
+ */
+function alshaya_secondary_main_menu_form_alter(&$form, FormStateInterface $form_state) {
+  if(($form['#form_id'] == 'menu_link_content_secondary-main-menu_form') && ($form['menu_parent']['#default_value'] != "secondary-main-menu:")) {
+    $form['field_secondary_menu_highlight']['#access'] = FALSE;
+  }
 }

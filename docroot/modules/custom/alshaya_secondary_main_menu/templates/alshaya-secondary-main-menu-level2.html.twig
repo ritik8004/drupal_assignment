@@ -20,4 +20,11 @@
       {% endfor %}
     {% endif %}
   </div>
+    {% if (menu_type == 'default') %}
+    <div class="term-image__wrapper">
+      {#Highlight image starts#}
+      {{ alshaya_secondary_main_menu('alshaya_secondary_main_menu_highlights', data.l1_object) }}
+      {#Highlight image end#}
+    {% endif %}
+    </div>
 </ul>

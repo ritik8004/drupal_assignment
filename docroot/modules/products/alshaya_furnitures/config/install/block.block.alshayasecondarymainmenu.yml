@@ -4,14 +4,15 @@ dependencies:
   module:
     - alshaya_secondary_main_menu
   theme:
-    - alshaya_pottery_barn
+    - alshaya_white_label
 id: alshayasecondarymainmenu
-theme: alshaya_pottery_barn
+theme: alshaya_white_label
 region: header
-weight: -30
+weight: -50
 provider: null
 plugin: alshaya_secondary_main_menu
 settings:
   id: alshaya_secondary_main_menu
   label: 'Alshaya secondary main menu'
+  label_display: '0'
 visibility: {  }
