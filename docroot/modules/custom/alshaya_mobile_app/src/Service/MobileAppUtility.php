@@ -1027,6 +1027,9 @@ class MobileAppUtility {
   public function getLhnStatus($url, $langcode) {
     $url_object = $this->pathValidator->getUrlIfValid($url);
     $route_parameters = $url_object->getrouteParameters();
+    if (!$route_parameters['node']) {
+      return FALSE;
+    }
     $node = $this->entityTypeManager->getStorage('node')->load($route_parameters['node']);
     if (!$node instanceof NodeInterface) {
       return FALSE;
