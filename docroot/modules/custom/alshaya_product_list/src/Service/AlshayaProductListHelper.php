@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class AlshayaProductListHelper {
 
+  const VOCAB_ID = 'acq_product_category';
   /**
    * Entity type manager.
    *
@@ -237,6 +238,21 @@ class AlshayaProductListHelper {
       $product_list_block->setStatus($algolia_product_list_status);
       $product_list_block->save();
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getVocabListLhnBlock() {
+    $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
+      'vid' => self::VOCAB_ID,
+      'name' => \Drupal::configFactory()->get('alshaya_product_list.settings')->get('product_list_lhn_term'),
+      'depth_level' => 1,
+    ]);
+    if (empty($vocab_list)) {
+      return [];
+    }
+    return $vocab_list;
   }
 
 }

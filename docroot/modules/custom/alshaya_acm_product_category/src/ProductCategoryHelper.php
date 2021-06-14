@@ -145,48 +145,4 @@ class ProductCategoryHelper {
     return $build;
   }
 
-  /**
-   * Get the term tree for 'product_category' vocabulary from cache or fresh.
-   *
-   * @param \Drupal\taxonomy\TermInterface $terms
-   *   Taxonomy term.
-   * @param string $langcode
-   *   Language code.
-   *
-   * @return array
-   *   Processed term data from cache if available or fresh.
-   */
-  public function productCategoryBuildMobile(TermInterface $terms, $langcode) {
-    $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
-    $used_keys = ['label', 'id', 'path', 'clickable', 'child'];
-    $term_data = $this->productCategoryBuild('alshaya_product_list_lhn_block', $terms, $lancode, 'product_list');
-    foreach ($term_data['#lhn_cat_tree'] as $term_id => $term_value) {
-      foreach ($term_value as $key => $value) {
-        if (!in_array($key, $used_keys)) {
-          unset($term_data['#lhn_cat_tree'][$term_id][$key]);
-        }
-        $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
-        $taxonomy_term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($term, $langcode);
-
-        $term_data['#lhn_cat_tree'][$term_id]['deep_link'] = $mobile_app_utility->getDeepLink($taxonomy_term_trans);
-        if ($key == 'child' && !empty($value)) {
-          foreach ($value as $child_term_id => $child_term_value) {
-            foreach ($child_term_value as $child_key => $child_value) {
-              // Unset not used keys in mobile.
-              if (!in_array($child_key, $used_keys)) {
-                unset($term_data['#lhn_cat_tree'][$term_id][$key][$child_term_id][$child_key]);
-              }
-              $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($child_term_id);
-              $taxonomy_term_trans = \Drupal::service('entity.repository')->getTranslationFromContext($term, $langcode);
-              $term_data['#lhn_cat_tree'][$term_id][$key][$child_term_id]['deep_link'] = $mobile_app_utility->getDeepLink($taxonomy_term_trans);
-              // We dont show third level child terms data in website.
-              unset($term_data['#lhn_cat_tree'][$term_id][$key][$child_term_id]['child']);
-            }
-          }
-        }
-      }
-    }
-    return $term_data['#lhn_cat_tree'];
-  }
-
 }

@@ -13,6 +13,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryHelper;
+use Drupal\alshaya_product_list\Service\AlshayaProductListHelper;
 
 /**
  * Provides Product List LHN block.
@@ -25,7 +26,6 @@ use Drupal\alshaya_acm_product_category\ProductCategoryHelper;
 class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   const CONTENT_TYPE = 'product_list';
-  const VOCAB_ID = 'acq_product_category';
 
   /**
    * Stores the configuration factory.
@@ -77,6 +77,13 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
   protected $productCategoryHelper;
 
   /**
+   * Alshaya product list helper.
+   *
+   * @var \Drupal\alshaya_product_list\Service\AlshayaProductListHelper
+   */
+  protected $alshayaProductListHelper;
+
+  /**
    * AlshayaCategoryLhnBlock constructor.
    *
    * @param array $configuration
@@ -99,6 +106,8 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
    *   Entity type manager.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryHelper $productCategoryHelper
    *   Product category Helper.
+   * @param \Drupal\alshaya_product_list\Service\AlshayaProductListHelper $alshaya_product_list_helper
+   *   Product Processed Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -109,7 +118,8 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
                               RouteMatchInterface $route_match,
                               ModuleHandlerInterface $module_handler,
                               EntityTypeManagerInterface $entity_type_manager,
-                              ProductCategoryHelper $productCategoryHelper) {
+                              ProductCategoryHelper $productCategoryHelper,
+                              AlshayaProductListHelper $alshaya_product_list_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
@@ -118,6 +128,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
     $this->moduleHandler = $module_handler;
     $this->entityTypeManager = $entity_type_manager;
     $this->productCategoryHelper = $productCategoryHelper;
+    $this->alshayaProductListHelper = $alshaya_product_list_helper;
   }
 
   /**
@@ -135,6 +146,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
       $container->get('module_handler'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_acm_product_category.helper'),
+      $container->get('alshaya_product_list.page_helper'),
     );
   }
 
@@ -165,14 +177,7 @@ class AlshayaProductListLhnBlock extends BlockBase implements ContainerFactoryPl
           else {
             $product_list_lhn_value = $node->get('field_show_in_lhn_options_list')->getValue()[0]['value'];
           }
-          $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
-            'vid' => self::VOCAB_ID,
-            'name' => $this->configFactory->get('alshaya_product_list.settings')->get('product_list_lhn_term'),
-            'depth_level' => 1,
-          ]);
-          if (empty($vocab_list)) {
-            return [];
-          }
+          $vocab_list = $this->alshayaProductListHelper->getVocabListLhnBlock();
           switch ($product_list_lhn_value) {
             case "Yes":
               $term = reset($vocab_list);

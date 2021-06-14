@@ -34,6 +34,7 @@ use Drupal\redirect\RedirectRepository;
 use Drupal\Core\Database\Connection;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
 use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryHelper;
 
 /**
  * Mobile App Utility Class.
@@ -205,6 +206,13 @@ class MobileAppUtility {
   protected $pathValidator;
 
   /**
+   * Product Category Helper.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryHelper
+   */
+  protected $productCategoryHelper;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -243,6 +251,8 @@ class MobileAppUtility {
    *   The super category manager service.
    * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
    *   Path Validator service object.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryHelper $productCategoryHelper
+   *   Product category Helper.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -261,7 +271,8 @@ class MobileAppUtility {
                               SkuInfoHelper $sku_info_helper,
                               Connection $database,
                               AlshayaSuperCategoryManager $super_category_manager,
-                              PathValidatorInterface $path_validator) {
+                              PathValidatorInterface $path_validator,
+                              ProductCategoryHelper $productCategoryHelper) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -282,6 +293,7 @@ class MobileAppUtility {
     $this->database = $database;
     $this->superCategoryManager = $super_category_manager;
     $this->pathValidator = $path_validator;
+    $this->productCategoryHelper = $productCategoryHelper;
   }
 
   /**
@@ -1036,6 +1048,48 @@ class MobileAppUtility {
     }
     // IF Empty or Yes status will be TRUE.
     return TRUE;
+  }
+
+  /**
+   * Get the term tree for 'product_category'.
+   *
+   * @param \Drupal\taxonomy\TermInterface $terms
+   *   Taxonomy term.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return array
+   *   Processed term data from cache if available or fresh.
+   */
+  public function productCategoryBuildMobile(TermInterface $terms, $langcode) {
+    $term_data = $this->productCategoryHelper->productCategoryBuild('alshaya_product_list_lhn_block', $terms, $langcode, 'product_list');
+    $data[] = $this->recursiveUnsetUnusedKey($term_data['#lhn_cat_tree']);
+    return $data;
+  }
+
+  /**
+   * Get the category tree exluding unused keys in mobile.
+   *
+   * @param array $term_data
+   *   Data code.
+   *
+   * @return array
+   *   Processed term data from lhn category tree.
+   */
+  public function recursiveUnsetUnusedKey(array &$term_data) {
+    $used_keys = ['label', 'id', 'path', 'clickable', 'child', 'deep_link'];
+    foreach ($term_data as $parent_id => $parent_value) {
+      $term_data[$parent_id] = $parent_value;
+      foreach ($parent_value as $key => $value) {
+        if (!in_array($key, $used_keys)) {
+          unset($term_data[$parent_id][$key]);
+        }
+        if ($key == 'child' && !empty($value)) {
+          $this->recursiveUnsetUnusedKey($term_data[$parent_id][$key]);
+        }
+      }
+    }
+    return $term_data;
   }
 
 }

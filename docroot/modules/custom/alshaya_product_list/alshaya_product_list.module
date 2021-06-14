@@ -275,8 +275,6 @@ function alshaya_product_list_alshaya_search_api_listing_page_types_alter(&$page
 function alshaya_product_list_options_list_resource_response_alter(&$data) {
   $options = array_keys($data['options_list']);
   $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
-  $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-  $product_category_helper = \Drupal::service('alshaya_acm_product_category.helper');
   $lancode = '';
   foreach ($options as $option_name) {
     foreach ($data['options_list'][$option_name] ?? [] as $option_name_key => $brands_list) {
@@ -295,14 +293,8 @@ function alshaya_product_list_options_list_resource_response_alter(&$data) {
       }
     }
   }
-  $vocab_list = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
-    'vid' => 'acq_product_category',
-    'name' => \Drupal::configFactory()->get('alshaya_product_list.settings')->get('product_list_lhn_term'),
-    'depth_level' => 1,
-  ]);
-  if (empty($vocab_list)) {
-    return [];
-  }
+  $alshaya_product_list_helper = \Drupal::service('alshaya_product_list.page_helper');
+  $vocab_list = $alshaya_product_list_helper->getVocabListLhnBlock();
   $terms = reset($vocab_list);
-  $data['lhn_tree']= $product_category_helper->productCategoryBuildMobile($terms, $lancode);
+  $data['lhn_tree']= $mobile_app_utility->productCategoryBuildMobile($terms, $lancode);
 }

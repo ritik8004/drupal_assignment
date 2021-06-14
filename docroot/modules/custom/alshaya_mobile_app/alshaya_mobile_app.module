@@ -116,6 +116,16 @@ function alshaya_mobile_app_options_list_resource_response_alter(&$data) {
     }
   }
 }
+/**
+ * Implememts hook_lhn_category_tree_alter().
+ * Add deep_link to lhn category tree.
+ */
+function alshaya_mobile_app_lhn_category_tree_alter(&$data, &$term) {
+  $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
+  $data[$term->tid]['deep_link'] = $mobile_app_utility->getDeepLink($term);
+}
+
+
 
 /**
  * Implements hook_query_TAG_NAME_alter().
