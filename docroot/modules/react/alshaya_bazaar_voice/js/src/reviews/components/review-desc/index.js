@@ -95,7 +95,7 @@ const ReviewDescription = ({
                 <span><img src={reviewDescriptionData.SyndicationSource.LogoImageUrl} /></span>
               </div>
               <div className="review-syndicated-source">
-                <span>{getStringMessage('review_syndicated_text') }</span>
+                <span>{`${getStringMessage('review_syndicated_text')} `}</span>
                 <span>{reviewDescriptionData.SyndicationSource.Name}</span>
               </div>
             </div>
