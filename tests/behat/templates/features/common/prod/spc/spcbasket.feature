@@ -9,7 +9,7 @@ Feature: Test basket page
 
   @desktop
   Scenario: As a Guest, I should be able to add more quantity
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     When I press "{add_to_cart_link}"
     And I wait 5 seconds
@@ -51,7 +51,7 @@ Feature: Test basket page
 
   @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -80,7 +80,7 @@ Feature: Test basket page
 
   @mobile
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer (mobile)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -99,7 +99,7 @@ Feature: Test basket page
     Then I should see an ".delivery-vat" element
 
   Scenario: As a Guest, I should be able to remove products from the basket
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -124,7 +124,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -145,7 +145,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 5 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -198,7 +198,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait 5 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -218,7 +218,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 5 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -240,7 +240,7 @@ Feature: Test basket page
     When I follow "{language_link}"
     And I wait 5 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -265,7 +265,7 @@ Feature: Test basket page
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 5 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     When I press "{language_add_to_cart_link}"
     And I wait 15 seconds

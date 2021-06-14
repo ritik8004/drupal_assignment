@@ -3,14 +3,12 @@ Feature: SPC Checkout using Click & Collect store for returning customer
 
   Background:
     Given I am on "{spc_product_listing_page}"
-    And I wait 10 seconds
+    And I wait 5 seconds
     And I wait for the page to load
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
 
   @cc @hd @checkout_com @visa @mada
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) with MADA Cards (VISA Card)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -67,10 +65,8 @@ Feature: SPC Checkout using Click & Collect store for returning customer
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (VISA Card)
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
     And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -126,7 +122,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -180,7 +176,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
 
   @cc @hd @checkout_com @mastercard @mada
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) with MADA Cards (Mastercard Card)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -234,10 +230,8 @@ Feature: SPC Checkout using Click & Collect store for returning customer
   Scenario: As a returning customer, I should be able to checkout using CC (checkout.com) in second language with MADA Cards (Mastercard Card)
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
     And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -294,7 +288,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"

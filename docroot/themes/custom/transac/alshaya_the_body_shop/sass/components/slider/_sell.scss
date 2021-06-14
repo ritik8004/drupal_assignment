@@ -38,14 +38,15 @@
 
     .image-label-wrapper {
       @include breakpoint($tablet) {
-        height: 13.875rem;
+        height: 24.0625rem;
         width: 100%;
-        display: inline-flex;
+        display: flex;
         align-items: center;
+        overflow: hidden;
       }
 
       @include breakpoint($desktop) {
-        height: 17.25rem;
+        height: 19.375rem;
       }
     }
   }

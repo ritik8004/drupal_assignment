@@ -91,17 +91,11 @@ const triggerStockRefresh = (data) => callDrupalApi(
 });
 
 /**
- * Object to serve as static cache for processed cart data over the course of a request.
- */
-let staticCartData = null;
-
-/**
- * Gets the cart data.
+ * Check if user is anonymous and without cart.
  *
- * @returns {object|null}
- *   Processed cart data else null.
+ * @returns bool
  */
-window.commerceBackend.getCartDataFromStorage = () => staticCartData;
+window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
  * Gets the cart data.
@@ -110,32 +104,6 @@ window.commerceBackend.getCartDataFromStorage = () => staticCartData;
  *   Processed cart data else null.
  */
 window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(data);
-
-/**
- * Sets the cart data to storage.
- *
- * @param data
- *   The cart data.
- */
-window.commerceBackend.setCartDataInStorage = (data) => {
-  const cartInfo = { ...data };
-  cartInfo.last_update = new Date().getTime();
-  staticCartData = cartInfo;
-};
-
-/**
- * Unsets the stored cart data.
- */
-window.commerceBackend.removeCartDataFromStorage = () => {
-  staticCartData = null;
-};
-
-/**
- * Check if user is anonymous and without cart.
- *
- * @returns bool
- */
-window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
  * Calls the cart get API.
