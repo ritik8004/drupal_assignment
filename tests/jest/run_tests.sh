@@ -1,2 +1,10 @@
 #!/usr/bin/env bash
-cd ../../docroot/modules/react; [ -d "node_modules/jest" ] && npm test
+
+cd ../../docroot/modules/react
+
+if [ -d "node_modules/jest" ];
+then
+    npm test
+else
+    exit 0
+fi
