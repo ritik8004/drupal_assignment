@@ -224,6 +224,7 @@ class ShareCart extends ResourceBase {
     // Add sharing channel and time with agent details.
     $smart_agent_details_array['shared_via'] = $context;
     $smart_agent_details_array['shared_on'] = date('Y-m-d H:i:s', $this->time->getRequestTime());
+    $smart_agent_details_array['shared_to'] = $to;
 
     $data = [
       'cart_id' => $cartId,
