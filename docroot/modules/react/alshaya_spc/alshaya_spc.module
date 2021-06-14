@@ -31,6 +31,11 @@ function alshaya_spc_theme($existing, $type, $theme, $path) {
         'strings' => [],
       ],
     ],
+    'translatable_strings' => [
+      'variables' => [
+        'strings' => [],
+      ],
+    ],
   ];
 }
 
@@ -212,8 +217,7 @@ function _alshaya_spc_global_error_message() {
  * Implements hook_page_attachments_alter().
  */
 function alshaya_spc_page_attachments_alter(&$page) {
-  $cart_config = \Drupal::config('alshaya_acm.cart_config');
-  $cart_version = $cart_config->get('version') ?? 1;
+  $cart_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
   if ($cart_version != 2) {
     return;
   }
@@ -230,4 +234,25 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
     return $key['timeout'];
   }, $timeout_settings['middleware']);
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function alshaya_spc_preprocess_page(&$variables) {
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  $strings = [
+    '#theme' => 'translatable_strings',
+    '#strings' => [
+      [
+        'key' => 'backend_obsolete_version',
+        'value' => t('The version of the website that you are using is now obsolete. Please refresh the page and try again.'),
+      ],
+    ],
+  ];
+
+  $variables['page']['pre_content']['commerce_backend'] = $strings;
 }

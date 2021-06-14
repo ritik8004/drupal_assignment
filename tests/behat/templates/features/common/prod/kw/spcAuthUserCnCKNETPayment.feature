@@ -1,13 +1,9 @@
-@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @bbwkwprod @flkwprod @hmkwprod
+@javascript @KNET @KNetPayment @clickCollect @bbwkwpprod @mckwpprod @flkwpprod @mckwprod @bbwkwprod @flkwprod @hmkwprod @pbkwprod
 Feature: SPC Checkout Click and Collect using KNET payment method for authenticated user
 
   Background:
-    Given I am on "user/login"
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
-    And I wait 10 seconds
+    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
+    And I wait 5 seconds
     Then I should be on "/user" page
     When I am on "{spc_basket_page}"
     And I wait 10 seconds
@@ -15,7 +11,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
 
   @cc @cnc @desktop @knet
   Scenario: As an Authenticated user, I should be able to checkout using click and collect with knet
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -52,7 +48,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -75,8 +71,8 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
     And I wait 10 seconds
     And I select "{language_spc_knet_option}" from dropdown ".paymentselect"
     And I wait 2 seconds
-#    And I press "إرسال"
-#    And I wait 2 seconds
+    And I press "إرسال"
+    And I wait 2 seconds
     And I press "الغاء"
     And I wait for AJAX to finish
     And I wait 30 seconds
@@ -85,7 +81,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method for authentica
 
   @cc @cnc @mobile @knet
   Scenario: As an Authenticated user, I should be able to checkout using click and collect with knet
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"

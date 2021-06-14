@@ -168,11 +168,11 @@ class FeatureContext extends CustomMinkContext
   public function iAmLoggedInAsAnAuthenticatedUserWithPassword($arg1, $arg2)
   {
     $this->visitPath('/user/login');
-    $this->iWaitSeconds('5');
+    $this->iWaitSeconds('10');
     $this->getSession()->getPage()->fillField('edit-name', $arg1);
     $this->getSession()->getPage()->fillField('edit-pass', $arg2);
     $this->iWaitSeconds('5');
-    $this->getSession()->getPage()->pressButton('sign in');
+    $this->getSession()->getPage()->pressButton('edit-submit');
   }
 
   /**
