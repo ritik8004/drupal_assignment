@@ -273,6 +273,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
 
     // Allow other modules to alter product data.
+    // For simple sku this hook is called where
+    // process_swatch_for_grouping_attributes is checked
+    // to process the grouped_variants.
     $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity, $with_parent_details);
     if (isset($data['grouping_attribute_with_swatch'])) {
       $data['grouped_variants'] = $this->getGroupedVariants($data, $with_parent_details);

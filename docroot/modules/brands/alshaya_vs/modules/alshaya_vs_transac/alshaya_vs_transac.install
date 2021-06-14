@@ -12,6 +12,19 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Enable grouping_attribute for api response.
+ */
+function alshaya_vs_transac_update_8015() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_color_split.settings'],
+    'alshaya_color_split'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_mobile_app module.
  */
 function alshaya_vs_transac_update_8014() {
