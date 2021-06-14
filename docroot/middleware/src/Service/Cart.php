@@ -240,7 +240,7 @@ class Cart {
    * Wrapper function to get cart amount.
    *
    * @return int|string
-   *   Cart amount (grand_total from totals).
+   *   Cart amount (base_grand_total from totals).
    */
   public function getCartAmount() {
     $cart = $this->getCart();
@@ -249,7 +249,7 @@ class Cart {
       return '';
     }
 
-    return $cart['totals']['grand_total'] ?? 0;
+    return $cart['totals']['base_grand_total'] ?? 0;
   }
 
   /**
