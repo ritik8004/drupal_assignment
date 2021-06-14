@@ -137,22 +137,25 @@ function _alshaya_bazaar_voice_translations() {
       'ar' => 'عرض المراجعة',
     ],
     'Featured' => [
-      'ar' => 'عمميز',
+      'ar' => 'أهم المراجعات',
     ],
     'Top' => [
       'ar' => 'أفضل',
     ],
     'Contributor' => [
-      'ar' => 'مساهمين',
+      'ar' => 'المراجعين',
     ],
     'Verified Purchaser' => [
-      'ar' => 'مشتري معتمد',
+      'ar' => 'مشترٍ معتمد',
     ],
     'Expert' => [
       'ar' => 'خبير',
     ],
     'Staff' => [
-      'ar' => 'الموظفون',
+      'ar' => 'موظف',
+    ],
+    'Original posted on' => [
+      'ar' => 'تم نشرها في الأصل على',
     ],
   ];
 }
