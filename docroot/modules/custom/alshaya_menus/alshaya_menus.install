@@ -10,7 +10,9 @@ use Drupal\Core\Field\BaseFieldDefinition;
 /**
  * Implements hook_update_N().
  *
- * Defines fields for the social id for the menu.
+ * Update type of Social ID to string_textfield.
+ *
+ * Fix for Menu Item Extra module.
  */
 function alshaya_menus_update_8003() {
   $base_definition = \Drupal::entityDefinitionUpdateManager()->getFieldStorageDefinition('social_id', 'menu_link_content');

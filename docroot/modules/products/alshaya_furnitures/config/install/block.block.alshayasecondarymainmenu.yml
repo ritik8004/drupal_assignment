@@ -4,9 +4,9 @@ dependencies:
   module:
     - alshaya_secondary_main_menu
   theme:
-    - alshaya_pottery_barn_kids
+    - alshaya_white_label
 id: alshayasecondarymainmenu
-theme: alshaya_pottery_barn_kids
+theme: alshaya_white_label
 region: header
 weight: -50
 provider: null

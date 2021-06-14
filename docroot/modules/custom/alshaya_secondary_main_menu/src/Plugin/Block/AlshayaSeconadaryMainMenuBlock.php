@@ -133,6 +133,7 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
    * Column data after menu algo is applied.
    */
   public function getColumnDataMenuAlgo($menu) {
+
     $columns_tree = [];
     foreach ($menu['#items'] as $l2s) {
       if ($l2s['original_link'] instanceof MenuLinkContent) {
