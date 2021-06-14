@@ -18,7 +18,9 @@ function alshaya_vs_transac_update_8015() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_color_split.settings'],
-    'alshaya_color_split'
+    'alshaya_color_split',
+    'install',
+    $manager::MODE_RESAVE,
   );
 }
 
