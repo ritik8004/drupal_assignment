@@ -198,16 +198,16 @@ $base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_the_body_shop/
 // English fonts.
 // Adding Arabic fonts as fallback for arabic text to be shown correctly in English site.
 $tbs-regular: 'WorkSans-Regular', 'Mada-Regular', 'Arial';
-$tbs-light: 'WorkSans-Light', 'Arial';
+$tbs-light: 'WorkSans-Light', 'Mada-Regular', 'Arial';
 $tbs-medium: 'WorkSans-Medium', 'Mada-Medium', 'Arial';
 $tbs-semibold: 'WorkSans-SemiBold', 'Mada-SemiBold', 'Arial';
 $tbs-bold: 'WorkSans-Bold', 'Mada-Bold', 'Arial';
 $tbs-recoleta-medium: 'Recoleta-Medium', 'MizanAR-Medium', 'Arial';
-$tbs-recoleta-semibold: 'Recoleta-SemiBold', 'Arial';
+$tbs-recoleta-semibold: 'Recoleta-SemiBold', 'MizanAR-Medium', 'Arial';
 $tbs-dw-bold: 'DrukWide-Bold-Cy-Web', '29LT-Bukra-Wide-Bold', 'Arial';
-$tbs-dw-super: 'DrukWide-Super-Web', 'Arial';
+$tbs-dw-super: 'DrukWide-Super-Web', '29LT-Bukra-Wide-Bold', 'Arial';
 $tbs-dc-super: 'DrukCond-Super-Cy-Web', '29LT-Bukra-Condensed-Bold', 'Arial';
-$tbs-druk-bold: 'Druk-Bold-Web', 'Arial';
+$tbs-druk-bold: 'Druk-Bold-Web', '29LT-Bukra-Condensed-Bold', 'Arial';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
