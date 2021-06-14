@@ -58,6 +58,8 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -114,6 +116,8 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -150,7 +154,6 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     Then I fill checkout card details having class ".spc-type-expiry input" with "{spc_mada_visa_card_expiry}"
     Then I fill checkout card details having class ".spc-type-cvv input" with "{spc_mada_visa_card_cvv}"
     And I wait 10 seconds
-    And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-section-billing-address" element
     Then I click on "#spc-checkout .spc-main .spc-content .spc-section-billing-address.cnc-flow .spc-billing-cc-panel" element
@@ -171,6 +174,8 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -223,6 +228,8 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -280,6 +287,8 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -336,5 +345,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 50 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element

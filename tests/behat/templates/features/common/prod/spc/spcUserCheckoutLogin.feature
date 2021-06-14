@@ -34,8 +34,9 @@ Feature: Test the Checkout Login functionality
     And the element "#block-content .spc-main .spc-content .spc-cart-item .spc-product-tile-actions .qty" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-promo-code-block" should exist
     And the element "#block-content .spc-main .spc-sidebar .spc-order-summary-block" should exist
-    And I should see "{subtotal}"
-    Then I should see "{order_total}"
+    And I should see an ".totals" element
+    And I should see an ".grand-total" element
+    And I should see an ".value .price .price-currency" element
+    And I should see an ".value .price .price-amount" element
     Then I should see "{order_summary}"
-    Then I should see "{promo_code}"
-    And I should see "{vat}"
+    Then I should see an ".delivery-vat" element

@@ -59,6 +59,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -118,6 +120,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -177,6 +181,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -233,6 +239,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -292,6 +300,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -351,5 +361,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
