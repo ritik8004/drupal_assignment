@@ -27,7 +27,7 @@
   {% endif %}
 {% endblock %}
 
-{% block contentHowToUseMobile %}
+{% block productPostContentMobile %}
   {% if content.howtouse_name %}
     <div class="how-to-use mobile">
       <div class="how-to-use-title">
@@ -42,7 +42,7 @@
   {% endif %}
 {% endblock %}
 
-{% block contentHowToUseDesktop %}
+{% block productPostContent %}
   {% if content.howtouse_name %}
     <div class="how-to-use desktop">
       <div class="how-to-use-title">
@@ -55,8 +55,6 @@
       {% endif %}
     </div>
   {% endif %}
-{% endblock %}
 
-{% block fullCS %}
   {% include directory ~ '/../alshaya_white_label/templates/partial/product-related.html.twig' %}
 {% endblock %}
