@@ -1029,7 +1029,7 @@ class MobileAppUtility {
     $route_parameters = $url_object->getrouteParameters();
     $node = $this->entityTypeManager->getStorage('node')->load($route_parameters['node']);
     if (!$node instanceof NodeInterface) {
-      return [];
+      return FALSE;
     }
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
