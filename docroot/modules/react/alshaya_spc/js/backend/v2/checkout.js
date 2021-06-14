@@ -173,6 +173,9 @@ const getStoreInfo = async (storeData) => {
   if (!storeInfo || (!Array.isArray(storeInfo) && storeInfo.length === 0)) {
     return null;
   }
+
+  // Get the complete data about the store by combining the received data from
+  // Magento with the processed store data stored in Drupal.
   store = Object.assign(store, storeInfo);
   store.formatted_distance = store.distance
     .toLocaleString('us', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
