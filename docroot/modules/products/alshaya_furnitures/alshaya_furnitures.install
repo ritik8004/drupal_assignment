@@ -9,22 +9,21 @@
  use Drupal\block\BlockInterface;
 
  /**
-  * Implements hook_update_N()..
-  */
- function alshaya_furnitures_update_8007() {
- $branding_block = Block::load('branding');
-   if ($branding_block instanceof BlockInterface) {
-     Block::load('alshayasecondarymainmenu')->setWeight(($branding_block->getWeight())+8)->save();
-   }
- }
-
- /**
   * Implements hook_update_N().
+  *
+  * Add settings for Secondary Menu block.
+  * Enable the module alshaya_secondary_main_menu.
   */
- function alshaya_furnitures_update_8006() {
+ function alshaya_furnitures_update_8005() {
+   \Drupal::service('module_installer')->install(['alshaya_secondary_main_menu']);
+   // Get current default theme.
+   $current_theme = \Drupal::config('system.theme')->get('default');
+   // Move blocks to current default theme.
+   if (!empty($current_theme)) {
+     alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+   }
    $current_theme = \Drupal::config('system.theme')->get('default');
    $algolia_block = Block::load('alshayaalgoliareactautocomplete');
-   // Move blocks to current default theme.
    if (($current_theme == 'alshaya_pottery_barn') || ($current_theme == 'alshaya_westelm')) {
      if ($algolia_block instanceof BlockInterface) {
        Block::load('branding')->setWeight(($algolia_block->getWeight())+3)->save();
@@ -35,31 +34,9 @@
        Block::load('branding')->setWeight(($algolia_block->getWeight())+20)->save();
      }
    }
- }
-
- /**
-  * Implements hook_update_N().
-  *
-  * Add settings for Secondary Menu block.
-  * Enable the module alshaya_secondary_main_menu.
-  */
- function alshaya_furnitures_update_8005() {
-   \Drupal::service('module_installer')->install(['alshaya_secondary_main_menu']);
-   if (\Drupal::moduleHandler()->moduleExists('alshaya_secondary_main_menu')) {
-   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-   $manager = \Drupal::service('alshaya_config.manager');
-   $manager->updateConfigs(
-     [
-       'block.block.alshayasecondarymainmenu',
-     ],
-       'alshaya_furnitures'
-     );
-     // Get current default theme.
-     $current_theme = \Drupal::config('system.theme')->get('default');
-     // Move blocks to current default theme.
-     if (!empty($current_theme)) {
-       alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
-     }
+   $branding_block = Block::load('branding');
+   if ($branding_block instanceof BlockInterface) {
+     Block::load('alshayasecondarymainmenu')->setWeight(($branding_block->getWeight())+8)->save();
    }
  }
 
