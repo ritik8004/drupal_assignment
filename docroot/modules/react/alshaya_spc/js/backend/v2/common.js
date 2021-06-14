@@ -85,13 +85,15 @@ const i18nMagentoUrl = (path) => `${getCartSettings('url')}/${getCartSettings('s
 /**
  * Handle errors and messages.
  *
- * @param {Promise} response
+ * @param {Promise} apiResponse
  *   The response from the API.
  *
  * @returns {Promise}
  *   Returns a promise object.
  */
-const handleResponse = (response) => {
+const handleResponse = (apiResponse) => {
+  // Deep clone the response object.
+  const response = JSON.parse(JSON.stringify(apiResponse));
   // In case we don't receive any response data.
   if (typeof response.data === 'undefined' || response.data.length === 0) {
     logger.error(`Error while doing MDC api. Response result is empty. Status code: ${response.status}`);
