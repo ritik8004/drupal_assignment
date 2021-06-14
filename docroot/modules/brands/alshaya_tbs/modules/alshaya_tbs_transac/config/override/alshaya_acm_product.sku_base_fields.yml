@@ -98,3 +98,11 @@ fields:
     label: 'Technical Ingredients'
     type: 'text_long'
     description: 'Technical Ingredients'
+  howtouse_name:
+    label: 'How to use Name'
+    type: 'string'
+    description: 'How to use Name'
+  howtouse_description:
+    label: 'How to use Description'
+    type: 'text_long'
+    description: 'How to use Description'
