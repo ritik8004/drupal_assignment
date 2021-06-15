@@ -1,4 +1,4 @@
-@javascript @dynamic-promo @discount @smoke @auth @bbwsaprod
+@javascript @dynamic-promo @discount @smoke @auth
 Feature: SPC to add dynamic promotions (Add 2 more to get x% discount) for Authenticated user
 
   Background:

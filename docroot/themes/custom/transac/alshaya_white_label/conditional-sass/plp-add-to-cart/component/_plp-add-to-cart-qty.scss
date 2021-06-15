@@ -86,7 +86,10 @@
   @include breakpoint($tablet) {
     width: 5rem;
   }
+}
 
+.form-select-wrapper,
+.alshaya-select-wrapper {
   .alshayaSelect {
     &__value-container {
       @include breakpoint($tablet) {
