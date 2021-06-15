@@ -1,0 +1,14 @@
+.product-drawer {
+  &-content-wrapper {
+    .config-form-addtobag-button {
+      &.add-to-bag-loader.tick span {
+        font-size: 0.8125rem;
+      }
+    }
+
+    .price,
+    .price--discount {
+      font-size: 1rem;
+    }
+  }
+}

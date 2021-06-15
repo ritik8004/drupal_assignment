@@ -1,3 +1,10 @@
 .addtobag-button {
   background: $plp-add-to-cart-btn-bg;
 }
+
+.addtobag-simple-button-container,
+.is-not-buyable,
+.addtobag-config-button {
+  font-family: $alshaya-thin;
+  text-transform: uppercase;
+}
