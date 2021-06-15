@@ -10,8 +10,7 @@ export default class RecentOrders extends React.Component {
     super(props);
     this.state = {
       rating: '',
-      reviewSummary: '',
-      productSummary: '',
+      reviewData: '',
     };
   }
 
@@ -22,8 +21,7 @@ export default class RecentOrders extends React.Component {
     if (userDetails.productReview !== null) {
       this.setState({
         rating: userDetails.productReview.rating,
-        reviewSummary: userDetails.productReview.review_summary,
-        productSummary: userDetails.productReview.product_summary,
+        reviewData: userDetails.productReview.review_data,
       });
     }
   }
@@ -31,11 +29,11 @@ export default class RecentOrders extends React.Component {
   render() {
     const { productId } = this.props;
     const {
-      rating, reviewSummary, productSummary,
+      rating, reviewData,
     } = this.state;
     return (
       <>
-        <ConditionalView condition={reviewSummary === ''}>
+        <ConditionalView condition={reviewData === ''}>
           <div className="button-wrapper">
             <WriteReviewButton
               reviewedByCurrentUser={false}
@@ -44,12 +42,11 @@ export default class RecentOrders extends React.Component {
             />
           </div>
         </ConditionalView>
-        <ConditionalView condition={reviewSummary !== ''}>
+        <ConditionalView condition={reviewData !== ''}>
           <div className="button-wrapper">
             <ViewReviewButton
               rating={rating}
-              reviewSummary={reviewSummary}
-              productSummary={productSummary}
+              reviewData={reviewData}
             />
           </div>
         </ConditionalView>

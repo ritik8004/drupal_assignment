@@ -103,10 +103,8 @@ export default class UserReviews extends React.Component {
                   <ConditionalView condition={window.innerWidth > 767}>
                     <div className="user-secondary-rating">
                       <IndividualReviewSlider
-                        sliderData={reviewsProduct[reviewsSummary[item]
-                          .ProductId].ReviewStatistics.SecondaryRatingsAverages}
-                        secondaryRatingsOrder={reviewsProduct[reviewsSummary[item]
-                          .ProductId].ReviewStatistics.SecondaryRatingsAveragesOrder}
+                        sliderData={reviewsSummary[item].SecondaryRatings}
+                        secondaryRatingsOrder={reviewsSummary[item].SecondaryRatingsOrder}
                       />
                     </div>
                   </ConditionalView>
