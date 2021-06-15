@@ -250,14 +250,6 @@
 }
 
 body {
-  &.header-sticky-filter {
-    @include breakpoint($desktop) {
-      &::before {
-        top: -2.5rem;
-      }
-    }
-  }
-
   &.overlay-product-modal {
     overflow: hidden !important;
 
@@ -268,23 +260,7 @@ body {
       transform: translate3d(0, 0, 0);
       height: 100%;
       pointer-events: unset;
-
-      @include breakpoint($upto-tablet) {
-        z-index: 10;
-        top: 0;
-      }
-    }
-
-    &.header-sticky-filter {
-      &::before {
-        @include breakpoint($desktop) {
-          height: calc(100% + 2.5rem);
-        }
-
-        @include breakpoint($only-tablet) {
-          z-index: 11;
-        }
-      }
+      top: 0;
     }
 
     .product-drawer-container {

@@ -408,8 +408,7 @@
       }
     }
 
-    &.mobile--overlay,
-    &.overlay-product-modal {
+    &.mobile--overlay {
       .block-alshaya-algolia-react-autocomplete {
         border-color: $header_mobile_menu_overlay;
 
