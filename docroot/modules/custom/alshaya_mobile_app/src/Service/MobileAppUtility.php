@@ -1024,7 +1024,7 @@ class MobileAppUtility {
    * @return bool
    *   Status of LHN.
    */
-  public function getLhnStatus($url, $langcode) {
+  public function getProductListLhnStatus($url, $langcode) {
     $url_object = $this->pathValidator->getUrlIfValid($url);
     $route_parameters = $url_object->getrouteParameters();
     if (!$route_parameters['node']) {
@@ -1065,8 +1065,9 @@ class MobileAppUtility {
    *   Processed term data from cache if available or fresh.
    */
   public function productCategoryBuildMobile(TermInterface $terms, $langcode) {
+    $data = [];
     $term_data = $this->productCategoryHelper->productCategoryBuild('alshaya_product_list_lhn_block', $terms, $langcode, 'product_list');
-    $data[] = $this->recursiveUnsetUnusedKey($term_data['#lhn_cat_tree']);
+    $data = $this->excludeUnusedKeysMobile($term_data['#lhn_cat_tree']);
     return $data;
   }
 
@@ -1079,7 +1080,7 @@ class MobileAppUtility {
    * @return array
    *   Processed term data from lhn category tree.
    */
-  public function recursiveUnsetUnusedKey(array &$term_data) {
+  public function excludeUnusedKeysMobile(array &$term_data) {
     $used_keys = ['label', 'id', 'path', 'clickable', 'child', 'deep_link'];
     foreach ($term_data as $parent_id => $parent_value) {
       $term_data[$parent_id] = $parent_value;
@@ -1088,7 +1089,7 @@ class MobileAppUtility {
           unset($term_data[$parent_id][$key]);
         }
         if ($key == 'child' && !empty($value)) {
-          $this->recursiveUnsetUnusedKey($term_data[$parent_id][$key]);
+          $this->excludeUnusedKeysMobile($term_data[$parent_id][$key]);
         }
       }
     }

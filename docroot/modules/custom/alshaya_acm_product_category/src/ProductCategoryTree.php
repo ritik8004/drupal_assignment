@@ -357,7 +357,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $data[$term->tid]['term_image'] = $this->termsImagesAndColors[$term->tid];
       }
       // Alter to update data.
-      $this->moduleHandler->alter('lhn_category_tree', $data, $term);
+      $this->moduleHandler->alter('alshaya_acm_product_category_tree_data', $data, $term);
     }
 
     return $data;

@@ -241,7 +241,10 @@ class AlshayaProductListHelper {
   }
 
   /**
-   * {@inheritdoc}
+   * Return the term list in vocab 'acq_product_category'.
+   *
+   * @return array
+   *   Return term list or null.
    */
   public function getVocabListLhnBlock() {
     $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([

@@ -117,12 +117,19 @@ function alshaya_mobile_app_options_list_resource_response_alter(&$data) {
   }
 }
 /**
- * Implememts hook_lhn_category_tree_alter().
+ * Implememts hook_alshaya_acm_product_category_tree_data_alter().
  * Add deep_link to lhn category tree.
  */
-function alshaya_mobile_app_lhn_category_tree_alter(&$data, &$term) {
-  $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
-  $data[$term->tid]['deep_link'] = $mobile_app_utility->getDeepLink($term);
+function alshaya_mobile_app_alshaya_acm_product_category_tree_data_alter(&$data, &$term) {
+  try {
+    $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
+    $data[$term->tid]['deep_link'] = $mobile_app_utility->getDeepLink($term);
+  }
+   catch (\Exception $e) {
+    \Drupal::logger('alshaya_mobile_app')->error('Error occured while alter product category tree data alter : @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
 }
 
 

@@ -37,17 +37,5 @@ function hook_options_list_resource_response_alter(array &$data) {
 }
 
 /**
- * Alter the output of "LHN Category tree" resource.
- *
- * @param array $data
- *   The data output.
- * @param \Drupal\taxonomy\TermInterface $term
- *   The taxonomy term.
- */
-function hook_lhn_category_tree_alter(array &$data, TermInterface $term) {
-
-}
-
-/**
  * @} End of "addtogroup hooks".
  */
