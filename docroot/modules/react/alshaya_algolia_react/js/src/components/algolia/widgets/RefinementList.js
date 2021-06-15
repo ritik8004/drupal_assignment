@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import connectRefinementList from '../connectors/connectRefinementList';
 
 // RefinementList used commonly for most of filters.
-function CommonRefinement(props) {
+const CommonRefinement = (props) => {
   const {
     items, attribute, refine, itemCount,
   } = props;
@@ -21,6 +21,12 @@ function CommonRefinement(props) {
     }, 1);
   }
 
+  useEffect(() => {
+    // Refreshing any DOM changes dependant on presence of data.
+    const eventAlgoliaRefinementListUpdated = new CustomEvent('algoliaRefinementListUpdated', { bubbles: true, detail: { attribute, items } });
+    document.dispatchEvent(eventAlgoliaRefinementListUpdated);
+  });
+
   return (
     <ul>
       {items.map((item) => (
@@ -33,8 +39,8 @@ function CommonRefinement(props) {
           }}
         >
           {/* <label for={`${attribute}-${item.label}`}> */}
-          <span className="facet-item__value">
-            {item.label}
+          <span className="facet-item__value" data-drupal-facet-item-value={item.label}>
+            <span className="facet-item__label">{item.label}</span>
             <span className="facet-item__count">
               (
               {item.count}
@@ -45,6 +51,6 @@ function CommonRefinement(props) {
       ))}
     </ul>
   );
-}
+};
 
 export default connectRefinementList(CommonRefinement);
