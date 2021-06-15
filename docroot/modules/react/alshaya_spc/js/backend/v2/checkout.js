@@ -204,16 +204,6 @@ const getStoreInfo = async (storeData) => {
  */
 const getCartStores = async (lat, lon) => {
   const cartId = window.commerceBackend.getCartId();
-  if (!cartId) {
-    logger.notice('Error occurred while fetching stores for cart. Cart ID is not provided.');
-    return 'Error occurred while fetching stores for cart. Cart ID is not provided.';
-  }
-
-  if (!lat || !lon) {
-    logger.notice(`Error occurred while fetching stores for cart. lat/lon is not provided for ${cartId}.`);
-    return 'Error occurred while fetching stores for cart. lat/lon is not provided.';
-  }
-
   let stores = [];
 
   stores = await callMagentoApi(`/rest/V1/click-and-collect/stores/guest-cart/${cartId}/lat/${lat}/lon/${lon}`);
@@ -264,13 +254,12 @@ const getCncStores = async (lat, lon) => {
     return getFormattedError(404, 'No cart in session');
   }
 
+  if (!lat || !lon) {
+    logger.error(`Error while fetching CnC store for cart ${cartId}. One of lat/lon is not provided. Lat = ${lat}, Lon = ${lon}.`);
+    return [];
+  }
+
   const stores = await getCartStores(lat, lon);
-  if (stores && typeof stores === 'string') {
-    logger.error(`Error while fetching CnC store for cart ${cartId} of ${lat}, ${lon}. Error message: ${stores.message}`);
-  }
-  if (stores && typeof stores.error !== 'undefined') {
-    logger.error(`Error while fetching CnC store for cart ${cartId} of ${lat}, ${lon}. Error message: ${stores}`);
-  }
 
   return stores;
 };

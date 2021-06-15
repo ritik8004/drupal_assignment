@@ -169,42 +169,6 @@ describe('Checkout', () => {
         expect(result[1].formatted_distance).toEqual(25.77);
       });
 
-      it('When lat is not provided', async () => {
-        const getCartStores = utilsRewire.__get__('getCartStores');
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
-
-        let result = await getCartStores(null, 20);
-
-        expect(axios.mock.calls.length).toEqual(0);
-        expect(result).toEqual('Error occurred while fetching stores for cart. lat/lon is not provided.');
-      });
-
-      it('When lon is not provided', async () => {
-        const getCartStores = utilsRewire.__get__('getCartStores');
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '1234');
-
-        let result = await getCartStores(10, null);
-
-        expect(axios.mock.calls.length).toEqual(0);
-        expect(result).toEqual('Error occurred while fetching stores for cart. lat/lon is not provided.');
-      });
-
-      it('When cart ID is not provided', async () => {
-        const getCartStores = utilsRewire.__get__('getCartStores');
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => null);
-
-        let result = await getCartStores(10, 20);
-
-        expect(axios.mock.calls.length).toEqual(0);
-        expect(result).toEqual('Error occurred while fetching stores for cart. Cart ID is not provided.');
-      });
-
       it('When fetching 1 store info fails', async () => {
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
@@ -271,7 +235,7 @@ describe('Checkout', () => {
 
         let result = await getCncStores(null, 20);
 
-        expect(result).toEqual('Error occurred while fetching stores for cart. lat/lon is not provided.');
+        expect(result).toEqual([]);
       });
 
       it('When lon is not provided', async () => {
@@ -281,7 +245,7 @@ describe('Checkout', () => {
 
         let result = await getCncStores(10, null);
 
-        expect(result).toEqual('Error occurred while fetching stores for cart. lat/lon is not provided.');
+        expect(result).toEqual([]);
       });
 
       it('When cart ID is not provided', async () => {
