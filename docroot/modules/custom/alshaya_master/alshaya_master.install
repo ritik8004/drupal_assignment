@@ -11,39 +11,6 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * New pdp translations.
- */
-function alshaya_master_update_8048() {
-  $strings = [
-    'Add To Bag' => [
-      'ar' => 'أضف الى الحقيبة',
-    ],
-    'product details' => [
-      'ar' => 'تفاصيل المنتج',
-    ],
-    'Item Code:' => [
-      'ar' => 'رمز الصنف: ',
-    ],
-    'click & collect' => [
-      'ar' => 'انقر واستلم',
-    ],
-    'Share this page' => [
-      'ar' => 'شارك هذه الصفحة',
-    ],
-    'Copy page link' => [
-      'ar' => 'نسخ ارتباط الصفحة',
-    ],
-    'Check in-store availability:' => [
-      'ar' => 'تحقق من التوفر في المتجر: ',
-    ],
-  ];
-
-  alshaya_i18n_save_translations($strings);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update Lazyload placeholder image.
  */
 function alshaya_master_update_8047() {

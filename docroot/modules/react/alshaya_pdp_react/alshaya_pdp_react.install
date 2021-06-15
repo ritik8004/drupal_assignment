@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_pdp_react module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * New pdp translations.
+ */
+function alshaya_pdp_react_update_8001() {
+  // Add translations.
+  module_load_include('inc', 'alshaya_pdp_react', 'alshaya_pdp_react.translations');
+  if ($translations = _alshaya_pdp_react_translations()) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
