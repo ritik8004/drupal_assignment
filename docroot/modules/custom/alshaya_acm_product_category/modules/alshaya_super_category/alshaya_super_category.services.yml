@@ -17,6 +17,7 @@ services:
       - '@config.factory'
       - '@path.alias_manager'
       - '@alshaya_acm_product.category_helper'
+      - '@module_handler'
 
   alshaya_super_category.super_category_feature_manager:
     class: Drupal\alshaya_super_category\AlshayaSuperCategoryManager
