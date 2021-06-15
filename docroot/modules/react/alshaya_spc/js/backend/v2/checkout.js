@@ -68,21 +68,6 @@ const getCncStatusForCart = async () => {
 };
 
 /**
- * Apply defaults to cart for customer.
- *
- * @param {object} cartData
- *   The cart data object.
- * @param {integer} uid
- *   Drupal User ID.
- * @return {object}.
- *   The data.
- */
-const applyDefaults = (data, uid) => {
-  // @todo implement this
-  logger.info(`${data}${uid}`);
-};
-
-/**
  * Format address structure for shipping estimates api.
  *
  * @param {object} $address
@@ -128,6 +113,7 @@ const formatShippingEstimatesAddress = (address) => {
 
 /**
  * Gets shipping methods.
+ * @todo implement this
  *
  * @param {object} shipping
  *   The shipping data.
@@ -135,10 +121,156 @@ const formatShippingEstimatesAddress = (address) => {
  *   The data.
  */
 const getHomeDeliveryShippingMethods = (shipping) => {
-  // @todo implement this
-  // Call formatShippingEstimatesAddress() to be able to perform unit tests.
-  // This function will be continued on ticket #30724.
   formatShippingEstimatesAddress(shipping.address);
+};
+
+/**
+ * Get default address from customer addresses.
+ * @todo implement this
+ *
+ * @param {object} data
+ *   Cart data.
+ *
+ * @return {object|null}
+ *   Address if found.
+ */
+const getDefaultAddress = (data) => {
+  logger.info(`${data}`);
+};
+
+/**
+ * Format the address array.
+ *
+ * Format the address array so that it can be used to update billing or
+ * shipping address in the cart.
+ *
+ * @param {object} address
+ *   Address array.
+ * @return {object}.
+ *   Formatted address object.
+ */
+const formatAddressForShippingBilling = (address) => {
+  const data = { ...address };
+
+  const staticFields = {};
+  if (typeof data.static !== 'undefined') {
+    Object.keys(data.static).forEach((key) => {
+      staticFields[key] = data.static[key];
+    });
+    delete data.static;
+  }
+
+  if (typeof data.carrier_info !== 'undefined') {
+    delete data.carrier_info;
+  }
+
+  data.customAttributes = [];
+  Object.keys(data).forEach((key) => {
+    const value = (data[key] !== null) ? data[key] : '';
+    data.customAttributes.push(
+      {
+        attributeCode: key,
+        value,
+      },
+    );
+  });
+
+  if (typeof address.street === 'string') {
+    data.street = [address.street];
+  }
+
+  return {
+    ...staticFields,
+    ...data,
+  };
+};
+
+/**
+ * Adding shipping on the cart.
+ * @todo implement this
+ *
+ * @param {object} shippingData
+ *   Shipping address info.
+ * @param {string} action
+ *   Action to perform.
+ * @param {bool} updateBilling
+ *   Whether billing needs to be updated or not.
+ *
+ * @return {object}
+ *   Cart data.
+ */
+const addShippingInfo = (shippingData, action, updateBilling) => {
+  logger.info(`${shippingData}${action}${updateBilling}`);
+  formatAddressForShippingBilling({});
+};
+
+/**
+ * Update billing info on cart.
+ * @todo implement this
+ *
+ * @param {object} billingData
+ *   Billing data.
+ *
+ * @return {object}
+ *   Response data.
+ */
+const updateBilling = (billingData) => {
+  logger.info(`${billingData}`);
+};
+
+/**
+ * Validate area/city of address.
+ * @todo implement this
+ *
+ * @param {object} address
+ *   Address object.
+ *
+ * @return {object}
+ *   Address validation response.
+ */
+const validateAddressAreaCity = (address) => {
+  logger.info(`${address}`);
+};
+
+/**
+ * Select HD address and method from possible defaults.
+ * @todo implement this
+ *
+ * @param {object} address
+ *   Address object.
+ * @param {object} method
+ *   Payment method.
+ * @param {objecty} billing
+ *   Billing address.
+ * @param {object} shippingMethods
+ *   Shipping methods.
+ *
+ * @return {object|bool}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const selectHd = (address, method, billing, shippingMethods) => {
+  addShippingInfo({}, '', false);
+  updateBilling({});
+  validateAddressAreaCity({});
+  logger.info(`${address}${method}${billing}${shippingMethods}`);
+};
+
+/**
+ * Apply defaults to cart for customer.
+ * @todo implement this
+ *
+ * @param {object} cartData
+ *   The cart data object.
+ * @param {integer} uid
+ *   Drupal User ID.
+ * @return {object}.
+ *   The data.
+ */
+const applyDefaults = (data, uid) => {
+  logger.info(`${data}${uid}`);
+  getHomeDeliveryShippingMethods({});
+  getDefaultAddress({});
+  selectHd({}, {}, {}, {});
 };
 
 /**

@@ -1,0 +1,17 @@
+{
+  "static": {
+    "firstname": "John",
+    "lastname": "Smith",
+    "email": "js@example.com",
+    "city": "Al Foah",
+    "telephone": "+971555666777",
+    "country_id": "AE",
+    "customer_address_id": "73",
+    "customer_id": "482"
+  },
+  "address_city_segment": "8",
+  "area": "520",
+  "street": "17 North rd",
+  "address_building_segment": "2",
+  "address_apartment_segment": "1"
+}

@@ -6,6 +6,7 @@ import { drupalSettings } from '../globals';
 import * as cartData from '../data/cart.json';
 import * as storeData from '../data/store.json';
 import * as productStatus from '../data/product_status.json';
+import * as shippingAddress from '../data/shipping_address.json';
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -102,6 +103,20 @@ describe('Checkout', () => {
         expect(result.country_id).toEqual('AE');
         expect(result.custom_attributes).toEqual(undefined);
       });
+    });
+
+    it('Test formatAddressForShippingBilling()', () => {
+      const formatAddressForShippingBilling = utilsRewire.__get__('formatAddressForShippingBilling');
+      const result = formatAddressForShippingBilling(shippingAddress);
+      expect(result.firstname).toEqual('John');
+      expect(result.lastname).toEqual('Smith');
+      expect(result.customer_address_id).toEqual('73');
+      expect(result.customer_id).toEqual('482');
+      expect(result.street).toEqual(['17 North rd']);
+      expect(result.customAttributes[0].attributeCode).toEqual('address_city_segment');
+      expect(result.customAttributes[0].value).toEqual('8');
+      expect(result.customAttributes[4].attributeCode).toEqual('address_apartment_segment');
+      expect(result.customAttributes[4].value).toEqual('1');
     });
 
     describe('Tests getCncStatusForCart()', () => {
