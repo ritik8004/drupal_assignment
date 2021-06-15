@@ -408,6 +408,12 @@ article[gtm-sku-type="simple"] {
       }
     }
   }
+
+  .content__sidebar {
+    @include breakpoint($desktop) {
+      margin-bottom: 5rem;
+    }
+  }
 }
 
 .nodetype--acq_product,
