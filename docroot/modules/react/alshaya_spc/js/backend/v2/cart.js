@@ -342,20 +342,6 @@ window.commerceBackend.refreshCart = (data) => {
 };
 
 /**
- * Gets the cart ID for existing cart.
- *
- * @returns {string}
- *   The cart id.
- */
-window.commerceBackend.getCartId = () => {
-  const cartId = localStorage.getItem('cart_id');
-  if (typeof cartId === 'string' || typeof cartId === 'number') {
-    return cartId;
-  }
-  return null;
-};
-
-/**
  * Creates a new cart and stores cart Id in the local storage.
  *
  * @returns {Promise}
