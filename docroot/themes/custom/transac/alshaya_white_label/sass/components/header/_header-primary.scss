@@ -1025,12 +1025,6 @@ header {
       transition: opacity var(--menuTiming) ease-in 0.3s;
     }
 
-    &:not(.overlay-main-menu) {
-      &::before {
-        z-index: 12;
-      }
-    }
-
     &.overlay {
       &::before {
         opacity: 1;
