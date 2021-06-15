@@ -23,7 +23,30 @@ function alshaya_pdp_react_update_8001() {
       'ar' => 'شارك هذه الصفحة',
     ],
     'Copy page link' => [
-      'ar' => 'نسخ ارتباط الصفحة',
+      'ar' => 'نسخ رابط الصفحة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_pdp_react_install() {
+  // Add translations.
+  $strings =  [
+    'Add To Bag' => [
+      'ar' => 'أضف الى الحقيبة',
+    ],
+    'product details' => [
+      'ar' => 'تفاصيل المنتج',
+    ],
+    'Share this page' => [
+      'ar' => 'شارك هذه الصفحة',
+    ],
+    'Copy page link' => [
+      'ar' => 'نسخ رابط الصفحة',
     ],
   ];
 
