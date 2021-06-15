@@ -39,20 +39,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ProductExcludeLinkedResource extends ResourceBase {
 
   /**
-   * List of attributes with label for api.
-   */
-  const ATTRIBUTES_WITH_LABEL = [
-    'size',
-    'band_size',
-    'cup_size',
-    'size_shoe_eu',
-    'size_shoe_uk',
-    'size_shoe_us',
-    'fragrance',
-    'color',
-  ];
-
-  /**
    * SKU Manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
