@@ -7,9 +7,10 @@ services:
     tags:
       - { name: drush.command }
 
-  alshaya_feed.manage_queue:
-    class: Drupal\alshaya_feed\Commands\AlshayaManageQueue
+  alshaya_feed.product_delta_feed_commands:
+    class: Drupal\alshaya_feed\Commands\AlshayaProductDeltaFeedCommands
     arguments:
-      - '@queue'
+     - '@alshaya_feed.product_delta_feed'
     tags:
       - { name: drush.command }
+

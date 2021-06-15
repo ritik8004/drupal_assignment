@@ -41,6 +41,8 @@ services:
       - '@config.factory'
       - '@metatag.manager'
       - '@metatag.token'
+      - '@database'
+      - '@logger.channel.alshaya_feed'
 
   alshaya_feed.product_processed_event:
     class: Drupal\alshaya_feed\EventSubscriber\ProductProcessedEventSubscriber

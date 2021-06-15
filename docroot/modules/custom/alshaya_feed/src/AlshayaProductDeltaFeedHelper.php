@@ -18,6 +18,8 @@ use Drupal\metatag\MetatagToken;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Database\Driver\mysql\Connection;
+use Psr\Log\LoggerInterface;
 
 /**
  * Methods to prepare feed data.
@@ -25,6 +27,11 @@ use Drupal\image\Entity\ImageStyle;
  * @package Drupal\alshaya_feed
  */
 class AlshayaProductDeltaFeedHelper {
+
+  /**
+   * Custom table name to display OOS product SKUs.
+   */
+  const OOS_SKU_TABLE_NAME = 'oos_product_skus';
 
   /**
    * Entity Type Manager service object.
@@ -97,6 +104,20 @@ class AlshayaProductDeltaFeedHelper {
   protected $configFactory;
 
   /**
+   * Database connection service.
+   *
+   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   */
+  protected $connection;
+
+  /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * AlshayaProductDeltaFeedHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -117,6 +138,10 @@ class AlshayaProductDeltaFeedHelper {
    *   Matatag manager.
    * @param \Drupal\metatag\MetatagToken $token
    *   The MetatagToken object.
+   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   *   Database connection service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -127,7 +152,9 @@ class AlshayaProductDeltaFeedHelper {
     RendererInterface $renderer,
     ConfigFactoryInterface $config_factory,
     MetatagManager $metaTagManager,
-    MetatagToken $token
+    MetatagToken $token,
+    Connection $connection,
+    LoggerInterface $logger
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -138,6 +165,8 @@ class AlshayaProductDeltaFeedHelper {
     $this->metaTagManager = $metaTagManager;
     $this->tokenService = $token;
     $this->configFactory = $config_factory;
+    $this->connection = $connection;
+    $this->logger = $logger;
   }
 
   /**
@@ -592,6 +621,53 @@ class AlshayaProductDeltaFeedHelper {
     $fields['dy_categories'] = implode('|', $dy_categories);
 
     return $fields;
+  }
+
+  /**
+   * Insert SKU in table which stores OOS product SKUs.
+   *
+   * @param string $sku
+   *   The product sku string.
+   */
+  public function saveOosProductSku(string $sku) {
+    try {
+      $insert = $this->connection->insert(self::OOS_SKU_TABLE_NAME);
+      $insert->fields(['sku']);
+      $insert->values([
+        'sku' => $sku,
+      ]);
+      $insert->execute();
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while inserting sku @sku in table `oos_product_skus`, message: @message', [
+        '@sku' => $sku,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  /**
+   * Get list of OOS product SKUs.
+   *
+   * @return array
+   *   The list of skus.
+   */
+  public function getOosProductSkus() {
+    $query = $this->connection->select(self::OOS_SKU_TABLE_NAME);
+    $query->fields(self::OOS_SKU_TABLE_NAME, ['sku']);
+    return $query->execute()->fetchAllKeyed(0, 0);
+  }
+
+  /**
+   * Delete SKU from table which stores OOS product SKUs.
+   *
+   * @param string $sku
+   *   The product sku string to delete.
+   */
+  public function deleteOosProductSku(string $sku) {
+    $this->connection->delete(self::OOS_SKU_TABLE_NAME)
+      ->condition('sku', $sku)
+      ->execute();
   }
 
 }
