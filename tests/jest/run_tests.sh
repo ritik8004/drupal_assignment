@@ -2,7 +2,9 @@
 
 cd ../../docroot/modules/react
 
-if [ -d "node_modules/jest" ];
+diff=$(git diff .)
+
+if [ ! -z "${diff}" ];
 then
     npm test
 fi
