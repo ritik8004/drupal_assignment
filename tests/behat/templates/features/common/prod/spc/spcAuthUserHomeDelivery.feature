@@ -13,7 +13,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -39,7 +39,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -65,7 +65,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock #cart_notification div.matchback-cart-notification-close" element
@@ -90,7 +90,7 @@ Feature: SPC Checkout Home Delivery COD for Authenticated Users
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     Then I click on "#block-alshayareactcartminicartblock #cart_notification div.matchback-cart-notification-close" element

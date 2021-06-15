@@ -11,7 +11,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -68,7 +68,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -119,7 +119,7 @@ Feature: SPC Checkout Click and Collect using KNET payment method
     When I select a product in stock on ".c-products__item"
     And I wait 5 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 5 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element

@@ -14,7 +14,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -40,7 +40,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And I scroll to the ".spc-checkout-error-message-container" element
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -52,7 +53,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -78,7 +79,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And I scroll to the ".spc-checkout-error-message-container" element
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -90,7 +92,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -116,7 +118,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And I scroll to the ".spc-checkout-error-message-container" element
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -125,7 +128,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -151,7 +154,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And I scroll to the ".spc-checkout-error-message-container" element
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -163,7 +167,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -189,7 +193,8 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And I scroll to the ".spc-checkout-error-message-container" element
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -201,7 +206,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -227,6 +232,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
     And I wait 30 seconds
-    And I scroll to the ".spc-checkout-error-message-container" element
+    And I click jQuery "#authsubmit" element on page
+    And I wait 20 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element

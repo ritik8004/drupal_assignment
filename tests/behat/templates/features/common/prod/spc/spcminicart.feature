@@ -14,10 +14,10 @@ Feature: Test MiniCart page
 
   @desktop
   Scenario: As a Guest, I should be able add content in minicart
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
@@ -50,10 +50,10 @@ Feature: Test MiniCart page
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted " element
     And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
@@ -85,10 +85,10 @@ Feature: Test MiniCart page
     And I wait for the page to load
     And I wait for AJAX to finish
     Then I scroll to the ".region__highlighted" element
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification .qty" element
@@ -106,10 +106,10 @@ Feature: Test MiniCart page
 
   @mobile
   Scenario: As a Guest, I should be able add content in minicart
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification col-1 img" element
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification col-2 .qty" element
