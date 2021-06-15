@@ -4,8 +4,8 @@ import each from 'jest-each'
 import utilsRewire, { getProcessedCheckoutData } from "../../../../js/backend/v2/checkout";
 import { drupalSettings } from '../globals';
 import * as cartData from '../data/cart.json';
-import * as storeData1 from '../data/store1.json';
-import * as storeData2 from '../data/store2.json';
+import * as storeData_re1_4429_vif from '../data/store_RE1-4429-VIF.json';
+import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMCSP-740.json';
 import cncStoreList from '../data/cnc_stores_list.js';
 import { getCncStores } from '../../../../js/backend/v2/checkout'
 
@@ -111,7 +111,7 @@ describe('Checkout', () => {
 
     describe('Test getStoreInfo()', () => {
       it('When proper store data parameter is provided', async () => {
-        axios.mockResolvedValue({ data: storeData1, status: 200 });
+        axios.mockResolvedValue({ data: storeData_re1_4429_vif, status: 200 });
         const getStoreInfo = utilsRewire.__get__('getStoreInfo');
         const result = await getStoreInfo({
           code: 'RE1-4429-VIF',
@@ -124,14 +124,14 @@ describe('Checkout', () => {
         });
 
         expect(result.phone_number).toEqual('044190246 / 044190247');
-        expect(result.code).toEqual(storeData1.code);
+        expect(result.code).toEqual(storeData_re1_4429_vif.code);
         expect(result.delivery_time).toEqual('1-2 days');
         expect(result.formatted_distance).toEqual(25.77);
         expect(axios).toHaveBeenCalled();
       });
 
       it('When provided store code is empty', async () => {
-        axios.mockResolvedValue({ data: storeData1, status: 200 });
+        axios.mockResolvedValue({ data: storeData_re1_4429_vif, status: 200 });
         const getStoreInfo = utilsRewire.__get__('getStoreInfo');
         const result = await getStoreInfo({
           code: '',
@@ -150,8 +150,8 @@ describe('Checkout', () => {
       it('When proper store data parameter is provided', async () => {
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: storeData1, status: 200 })
-          .mockResolvedValueOnce({ data: storeData2, status: 200 })
+          .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
+          .mockResolvedValueOnce({ data: store_qatestsourcemap_mmcsp_740, status: 200 })
 
         const getCartStores = utilsRewire.__get__('getCartStores');
         jest
@@ -172,7 +172,7 @@ describe('Checkout', () => {
       it('When fetching 1 store info fails', async () => {
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: storeData1, status: 200 })
+          .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
           .mockResolvedValueOnce({ data: [], status: 200 })
 
         const getCartStores = utilsRewire.__get__('getCartStores');
@@ -210,8 +210,8 @@ describe('Checkout', () => {
       it('When proper lat lon parameters is provided', async () => {
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: storeData1, status: 200 })
-          .mockResolvedValueOnce({ data: storeData2, status: 200 })
+          .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
+          .mockResolvedValueOnce({ data: store_qatestsourcemap_mmcsp_740, status: 200 })
 
         jest
           .spyOn(window.commerceBackend, 'getCartId')
@@ -265,7 +265,7 @@ describe('Checkout', () => {
       it('When fetching 1 store info fails', async () => {
         axios
           .mockResolvedValueOnce({ data: cncStoreList, status: 200 })
-          .mockResolvedValueOnce({ data: storeData1, status: 200 })
+          .mockResolvedValueOnce({ data: storeData_re1_4429_vif, status: 200 })
           .mockResolvedValueOnce({ data: [], status: 200 })
 
         jest
