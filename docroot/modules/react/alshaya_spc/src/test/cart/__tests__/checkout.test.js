@@ -8,6 +8,7 @@ import * as storeData_re1_4429_vif from '../data/store_RE1-4429-VIF.json';
 import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMCSP-740.json';
 import cncStoreList from '../data/cnc_stores_list.js';
 import { getCncStores } from '../../../../js/backend/v2/checkout'
+import * as productStatus from '../data/product_status.json';
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -55,7 +56,6 @@ describe('Checkout', () => {
       });
     });
 
-
     it('Test formatShippingEstimatesAddress() with extension attributes', () => {
       const formatShippingEstimatesAddress = utilsRewire.__get__('formatShippingEstimatesAddress');
       const shipping_assignments = cartData.cart.extension_attributes.shipping_assignments;
@@ -96,17 +96,49 @@ describe('Checkout', () => {
       }]);
     });
 
-    it('Test getCncStatusForCart()', async () => {
-      const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
-      const data = [
-        {
-          foo: 'bar',
-        },
-      ];
-      const result = getCncStatusForCart(data);
-      expect(result).toEqual([{
-        foo: 'bar',
-      }]);
+    describe('Tests getCncStatusForCart()', () => {
+      it('Without cart data', async () => {
+        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+        const result = await getCncStatusForCart();
+        expect(result).toEqual(null);
+      });
+
+      it('With CNC Enabled', async () => {
+        axios.mockResolvedValue(productStatus);
+        window.commerceBackend.setCartDataInStorage(cartData);
+        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+        const result = await getCncStatusForCart();
+        expect(result).toEqual(true);
+      });
+
+      it('With CNC Disabled', async () => {
+        axios.mockResolvedValue({
+          cnc_enabled: false,
+          in_stock: true,
+          max_sale_qty: 0,
+          stock: 978,
+        });
+        window.commerceBackend.setCartDataInStorage(cartData);
+        const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+        const result = await getCncStatusForCart();
+        expect(result).toEqual(false);
+      });
+    });
+
+    describe('Tests getProductStatus()', () => {
+      it('Without SKU', async () => {
+        const getProductStatus = utilsRewire.__get__('getProductStatus');
+        const result = await getProductStatus();
+        expect(result).toEqual(null);
+        expect(axios).not.toHaveBeenCalled();
+      });
+      it('With SKU', async () => {
+        axios.mockResolvedValue(productStatus);
+        const getProductStatus = utilsRewire.__get__('getProductStatus');
+        const result = await getProductStatus('WZBOWZ107');
+        expect(result).toEqual(productStatus);
+        expect(axios).toHaveBeenCalled();
+      });
     });
 
     describe('Test getStoreInfo()', () => {

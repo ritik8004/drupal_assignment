@@ -171,8 +171,9 @@ class FeatureContext extends CustomMinkContext
     $this->iWaitSeconds('10');
     $this->getSession()->getPage()->fillField('edit-name', $arg1);
     $this->getSession()->getPage()->fillField('edit-pass', $arg2);
-    $this->iWaitSeconds('5');
+    $this->iWaitSeconds('10');
     $this->getSession()->getPage()->pressButton('edit-submit');
+    $this->iWaitSeconds('5');
   }
 
   /**
@@ -2662,7 +2663,24 @@ JS;
         throw new \Exception(sprintf('Quantity doesn\'t match'));
       }
     }
+  }
 
+  /**
+   * @Given /^I click on Add-to-cart button$/
+   */
+  public function iClickOnAddToCartButton() {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('css', '#add-to-cart-main');
+    $element2 = $page->find('css', "[id^='edit-add-to-cart-']");
+    if ($element !== NULL) {
+      $element->click();
+    }
+    elseif ($element2 !== NULL) {
+      $element2->click();
+    }
+    else {
+      throw new \Exception(sprintf('Add to cart button not found.'));
+    }
   }
 
 }
