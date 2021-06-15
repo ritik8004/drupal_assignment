@@ -7,9 +7,10 @@ import ConditionalView from '../../../../js/utilities/components/conditional-vie
  * @param {object} e
  *   The event object.
  */
-const onSwatchSelect = (e, attributeName, onClick) => {
+const onSwatchSelect = (e, attributeName, onClick, isColor) => {
   e.preventDefault();
-  onClick(attributeName, e.target.parentElement.dataset.value);
+  const swatchValue = isColor ? e.target.dataset.value : e.target.parentElement.dataset.value;
+  onClick(attributeName, swatchValue);
 };
 
 const Swatch = (props) => {
@@ -49,7 +50,7 @@ const Swatch = (props) => {
           className={classes}
           href="#"
           style={{ backgroundColor: data }}
-          onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
+          onClick={(e) => onSwatchSelect(e, attributeName, onClick, isColor)}
         />
       </ConditionalView>
       <ConditionalView condition={!isColor}>
@@ -58,7 +59,7 @@ const Swatch = (props) => {
           data-value={value}
           className={classes}
           href="#"
-          onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
+          onClick={(e) => onSwatchSelect(e, attributeName, onClick, isColor)}
         >
           <img src={data} />
         </a>
