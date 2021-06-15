@@ -19,3 +19,9 @@
     background: $plp-primary-cta-hover-bg;
   }
 }
+
+.is-not-buyable,
+.addtobag-config-button,
+.addtobag-simple-button-container {
+  text-transform: uppercase;
+}
