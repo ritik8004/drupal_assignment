@@ -12,12 +12,14 @@ use Drupal\node\NodeInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Product list helper service.
  */
 class AlshayaProductListHelper {
 
+  const VOCAB_ID = 'acq_product_category';
   /**
    * Entity type manager.
    *
@@ -75,6 +77,13 @@ class AlshayaProductListHelper {
   protected $algoliaReactHelper;
 
   /**
+   * The config object.
+   *
+   * @var \Drupal\Core\Config\Config
+   */
+  protected $configFactory;
+
+  /**
    * ProductCategoryTermId constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -93,6 +102,8 @@ class AlshayaProductListHelper {
    *   Logger Factory.
    * @param \Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactHelper $algolia_react_helper
    *   Algolia react helper.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_manager,
@@ -102,7 +113,8 @@ class AlshayaProductListHelper {
     LanguageManagerInterface $language_manager,
     DefaultFacetManager $facet_manager,
     LoggerChannelFactoryInterface $loggerChannelFactory,
-    AlshayaAlgoliaReactHelper $algolia_react_helper
+    AlshayaAlgoliaReactHelper $algolia_react_helper,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->pathValidator = $pathValidator;
@@ -112,6 +124,7 @@ class AlshayaProductListHelper {
     $this->facetManager = $facet_manager;
     $this->algoliaReactHelper = $algolia_react_helper;
     $this->logger = $loggerChannelFactory->get('alshaya_product_list');
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -237,6 +250,24 @@ class AlshayaProductListHelper {
       $product_list_block->setStatus($algolia_product_list_status);
       $product_list_block->save();
     }
+  }
+
+  /**
+   * Return the term list in vocab 'acq_product_category'.
+   *
+   * @return array
+   *   Return term list or null.
+   */
+  public function getVocabListLhnBlock() {
+    $vocab_list = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties([
+      'vid' => self::VOCAB_ID,
+      'name' => $this->configFactory->get('alshaya_product_list.settings')->get('product_list_lhn_term'),
+      'depth_level' => 1,
+    ]);
+    if (empty($vocab_list)) {
+      return [];
+    }
+    return $vocab_list;
   }
 
 }
