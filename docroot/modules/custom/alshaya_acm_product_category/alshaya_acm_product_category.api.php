@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hooks specific to the alshaya_mobile_app module.
+ * Hooks specific to the alshaya_acm_product_category module.
  */
 
 /**
