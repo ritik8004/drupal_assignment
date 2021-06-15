@@ -1018,7 +1018,7 @@ class AlshayaAlgoliaIndexHelper {
           $settings['replicas'][] = $replica;
         }
 
-        $replica_index->setSettings($replica_settings, [
+        $index->setSettings($settings, [
           'forwardToReplicas' => TRUE,
         ]);
         foreach ($sorts as $sort) {

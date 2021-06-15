@@ -1,11 +1,11 @@
-@javascript @smoke @desktop @newPdp @mcaeuat @aeoaeuat @flsauat
+@javascript @smoke @desktop @newPdp @mcaeuat @aeoaeuat @flsauat @flkwprod
 Feature: Testing new PDP page for desktop
 
   Background:
     Given I am on "{np_plp_page}"
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
 

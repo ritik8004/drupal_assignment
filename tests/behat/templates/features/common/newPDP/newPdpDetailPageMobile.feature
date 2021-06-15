@@ -1,4 +1,4 @@
-@javascript @smoke @newPdp @mobile @mcaeuat @flsauat @aeoaeuat
+@javascript @smoke @newPdp @mobile @mcaeuat @flsauat @aeoaeuat @flkwprod
 Feature: Testing new PDP page for Mobile
 
   Background:
@@ -7,13 +7,13 @@ Feature: Testing new PDP page for Mobile
     And I wait for the page to load
 
   Scenario: To verify, add to cart button is visible
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see a "#add-to-cart-main" element on page
 
   Scenario: To verify user is able to see product details
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see a ".magv2-pdp-description-wrapper" element on page
@@ -24,7 +24,7 @@ Feature: Testing new PDP page for Mobile
     And I should see "read more"
 
   Scenario: To verify user is able to see product details when clicking on read more link
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     Then I should see a ".magv2-pdp-description-wrapper" element on page
@@ -58,7 +58,7 @@ Feature: Testing new PDP page for Mobile
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -78,7 +78,7 @@ Feature: Testing new PDP page for Mobile
     Then I should be on "/{language_short}/cart" page
 
   Scenario: As a Guest, I should be able add content in minicart
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"

@@ -1,0 +1,38 @@
+.product-drawer {
+  &-header-wrapper {
+    .close-button {
+      &::before {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &-content-wrapper {
+    .pdp-link {
+      &::before {
+        font-size: 1.25rem;
+      }
+    }
+
+    .config-form-addtobag-button {
+      &.add-to-bag-loader.tick span {
+        font-size: 0.8125rem;
+      }
+    }
+
+    .product-details-wrapper {
+      .size-guide-link {
+        @include breakpoint($upto-tablet) {
+          margin-top: 0;
+        }
+      }
+    }
+
+    .price,
+    .special--price {
+      font-family: $hnm-demibold;
+      font-size: 0.9375rem;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-@javascript @dynamic-promotion @discount @smoke @auth @bbwsaprod
+@javascript @dynamic-promotion @discount @smoke @auth
 Feature: SPC to add dynamic promotions (Buy 3 Get 1 free) for Authenticated user
 
   Background:
