@@ -59,6 +59,22 @@ body.supermenu {
   @include breakpoint($only-tablet) {
     margin-top: 9.875rem;
   }
+
+  &.slug-banner-processed:not(.header--fixed) {
+    margin-top: 0;
+  }
+
+  .filter-fixed-top .sticky-filter-wrapper {
+    @include breakpoint($upto-desktop) {
+      top: $super-menu-height;
+    }
+  }
+
+  .filter-fixed-top .container-without-product {
+    @include breakpoint($upto-desktop) {
+      top: $super-menu-height;
+    }
+  }
 }
 
 body.supermenu.header-sticky-filter {
@@ -73,26 +89,6 @@ body.supermenu.header-sticky-filter {
   &.slug-banner-processed {
     @include breakpoint($tablet) {
       margin-top: 5.3125rem + $super-menu-height;
-    }
-  }
-}
-
-body.supermenu {
-  &.slug-banner-processed:not(.header--fixed) {
-    margin-top: 0;
-  }
-}
-
-body.supermenu {
-  .filter-fixed-top .sticky-filter-wrapper {
-    @include breakpoint($upto-desktop) {
-      top: $super-menu-height;
-    }
-  }
-
-  .filter-fixed-top .container-without-product {
-    @include breakpoint($upto-desktop) {
-      top: $super-menu-height;
     }
   }
 }

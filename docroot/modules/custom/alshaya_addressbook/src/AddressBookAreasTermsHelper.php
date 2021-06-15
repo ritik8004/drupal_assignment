@@ -82,8 +82,6 @@ class AddressBookAreasTermsHelper {
     $this->languageManager = $languageManager;
     $this->configFactory = $config_factory;
     $this->cache = $cache;
-    $this->dmVersion = $this->configFactory->get('alshaya_addressbook.settings')
-      ->get('dm_version');
   }
 
   /**
@@ -138,8 +136,7 @@ class AddressBookAreasTermsHelper {
    *   List or areas.
    */
   public function getAllAreasWithParent($parent = NULL, bool $location_key = FALSE) {
-    if (empty($parent) && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      // Parent is required in DM_VERSION_2, not throwing error though.
+    if (empty($parent)) {
       return [];
     }
 
@@ -168,16 +165,11 @@ class AddressBookAreasTermsHelper {
         /* \Drupal\taxonomy\Entity\Term $term */
         $term = $this->entityRepository->getTranslationFromContext($term);
 
-        if ($this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-          if ($location_key) {
-            $term_list[$term->get('field_location_id')->getString()] = $term->label();
-          }
-          else {
-            $term_list[$term->id()] = $term->label();
-          }
+        if ($location_key) {
+          $term_list[$term->get('field_location_id')->getString()] = $term->label();
         }
         else {
-          $term_list[$term->label()] = $term->label();
+          $term_list[$term->id()] = $term->label();
         }
       }
     }
@@ -301,7 +293,7 @@ class AddressBookAreasTermsHelper {
   }
 
   /**
-   * Get Shipping Area label for value based on DM Version.
+   * Get Shipping Area label for value.
    *
    * Used mainly for SEO / GTM, where we always want the English label.
    *
@@ -315,7 +307,7 @@ class AddressBookAreasTermsHelper {
    */
   public function getShippingAreaLabel($value, $langcode = 'en') {
     // For DM V2, we will have it id instead of string.
-    if ($value && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
+    if (!empty($value)) {
       $term = $this->getLocationTermFromLocationId($value);
 
       if (empty($term)) {

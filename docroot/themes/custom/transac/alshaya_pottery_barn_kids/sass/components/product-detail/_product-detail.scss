@@ -1,17 +1,7 @@
 .c-pdp {
   .acq-content-product {
     color: $primary_text;
-  }
 
-  .content__title_wrapper h1 span {
-    font-weight: normal;
-    font-size: 1rem;
-    color: $pdp_product_title;
-  }
-}
-
-.c-pdp {
-  .acq-content-product {
     .select2Option h4 {
       font-size: 0.875rem;
 
@@ -20,6 +10,12 @@
         font-weight: 700;
       }
     }
+  }
+
+  .content__title_wrapper h1 span {
+    font-weight: normal;
+    font-size: 1rem;
+    color: $pdp_product_title;
   }
 
   .field--name-field-skus .sku-base-form .form-item label {

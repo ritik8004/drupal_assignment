@@ -41,11 +41,14 @@ class CartOperationsNative {
     $endpoint = 'carts/{cartId}/items/{itemId}';
     $endpoint = str_replace('{cartId}', $cart_id, $endpoint);
     $endpoint = str_replace('{itemId}', $item_id, $endpoint);
+    $request_options = [
+      'timeout' => $this->magentoApiWrapper->getMagentoInfo()->getPhpTimeout('cart_remove'),
+    ];
 
     $response = $this->magentoApiWrapper->doRequest(
       'DELETE',
       $endpoint,
-      [],
+      $request_options,
       'native'
     );
 
@@ -71,6 +74,7 @@ class CartOperationsNative {
       'json' => [
         'cart_item' => $item,
       ],
+      'timeout' => $this->magentoApiWrapper->getMagentoInfo()->getPhpTimeout('cart_update'),
     ];
 
     $response = $this->magentoApiWrapper->doRequest(

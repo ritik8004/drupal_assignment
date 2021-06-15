@@ -5,7 +5,6 @@ namespace Drupal\alshaya_click_collect\Plugin\CheckoutPane;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutDeliveryMethodTrait;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
@@ -494,16 +493,11 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
     $store_utility = \Drupal::service('alshaya_stores_finder_transac.utility');
     $store_node = $store_utility->getTranslatedStoreFromCode($store_code);
 
-    // V1 - we update only area in address.
-    $address['extension']['address_area_segment'] = $store_node->get('field_store_area')->getString();
-
     // V2 - copy address from Store.
-    if ($address_book_manager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $store_address = $store_node->get('field_address')->getValue();
+    $store_address = $store_node->get('field_address')->getValue();
 
-      if ($store_address) {
-        $address = $address_book_manager->getMagentoAddressFromAddressArray(reset($store_address));
-      }
+    if ($store_address) {
+      $address = $address_book_manager->getMagentoAddressFromAddressArray(reset($store_address));
     }
 
     return $address;

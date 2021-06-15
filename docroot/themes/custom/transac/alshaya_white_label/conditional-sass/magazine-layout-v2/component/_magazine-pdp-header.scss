@@ -129,17 +129,15 @@
       @include breakpoint($only-mobile) {
         transition: opacity 0.4s ease-out;
       }
-
-      > div {
-        &:last-child {
-          margin-#{$right}: 0;
-        }
-      }
     }
 
     .magv2-compact-detail-wrapper {
+      display: none;
+
       @include breakpoint($only-mobile) {
         width: 100%;
+        display: block;
+        opacity: 0;
 
         .magv2-pdp-title {
           margin-bottom: 0;
@@ -190,8 +188,6 @@
 
     .magv2-pdp-price {
       @include breakpoint($tablet) {
-        margin-#{$right}: 3.75rem;
-        max-width: 13.125rem;
         padding: 0.25rem 0;
 
         .has-special-price {
@@ -221,10 +217,6 @@
         }
       }
 
-      @include breakpoint($only-tablet) {
-        max-width: 12.125rem;
-      }
-
       @include breakpoint($only-mobile) {
         .has-special-price {
           flex-direction: row;
@@ -234,15 +226,6 @@
             padding-#{$left}: 0;
           }
         }
-      }
-    }
-
-    .magv2-compact-detail-wrapper {
-      display: none;
-
-      @include breakpoint($only-mobile) {
-        display: block;
-        opacity: 0;
       }
     }
 
@@ -265,6 +248,12 @@
         #{$right}: 0;
         top: 0.625rem;
         transform: translateY(-50%);
+        height: 2.875rem;
+        width: 2.875rem;
+
+        html[lang=ar] & {
+          margin-top: 0;
+        }
       }
     }
 

@@ -80,9 +80,6 @@ const productRecommendationsSuffix = 'pr-';
 
         var product = Drupal.alshaya_seo_gtm_get_product_values(addedProduct);
 
-        // Remove product position: Not needed while adding to cart.
-        delete product.position;
-
         // Set product quantity to selected quatity.
         product.quantity = !isNaN(quantity) ? quantity : 1;
 
@@ -105,22 +102,8 @@ const productRecommendationsSuffix = 'pr-';
           product.variant = product.id;
         }
 
-        // Calculate metric 1 value.
-        product.metric2 = product.price * product.quantity;
-
-        var productData = {
-          event: 'addToCart',
-          ecommerce: {
-            currencyCode: drupalSettings.gtm.currency,
-            add: {
-              products: [
-                product
-              ]
-            }
-          }
-        };
-
-        dataLayer.push(productData);
+        // Push product addToCart event to GTM.
+        Drupal.alshayaSeoGtmPushAddToCart(product);
       });
 
       // Push GTM event on add to cart failure.
@@ -129,7 +112,7 @@ const productRecommendationsSuffix = 'pr-';
         // Set Event label.
         var label = 'Update cart failed for Product [' + sku + '] ';
         label = label + e.detail.productData.options.join(', ');
-        Drupal.logJavascriptError(label, e.detail.message, GTM_CONSTANTS.CART_ERRORS);
+        Drupal.alshayaSeoGtmPushAddToCartFailure(label, e.detail.message);
       });
 
       // Global variables & selectors.
@@ -416,7 +399,6 @@ const productRecommendationsSuffix = 'pr-';
           var diffQty = updatedCartQty - originalCartQty;
           var cartItem = $(this).closest('td.quantity').siblings('td.name').find('[gtm-type="gtm-remove-cart-wrapper"]');
           var product = Drupal.alshaya_seo_gtm_get_product_values(cartItem);
-          var event = '';
 
           // Set updated product quantity.
           product.quantity = Math.abs(diffQty);
@@ -426,49 +408,14 @@ const productRecommendationsSuffix = 'pr-';
             product.dimension6 = cartItem.attr('gtm-size');
           }
 
-          // Remove product position: Not needed while updating item in cart.
-          delete product.position;
-
-          product.metric2 = product.quantity * product.price;
-
           if (diffQty < 0) {
-            event = 'removeFromCart';
-            product.metric2 = -1 * product.metric2;
+            // Trigger removeFromCart.
+            Drupal.alshayaSeoGtmPushRemoveFromCart(product);
           }
           else {
-            event = 'addToCart';
+            // Trigger addToCart.
+            Drupal.alshayaSeoGtmPushAddToCart(product);
           }
-
-          var data = {
-            event: event,
-            ecommerce: {
-              currencyCode: currencyCode
-            }
-          };
-
-          if (event === 'removeFromCart') {
-            // Delete list from cookie.
-            var listValues = {};
-            if ($.cookie('product-list') !== undefined) {
-              listValues = JSON.parse($.cookie('product-list'));
-            }
-            delete listValues[product.id];
-            $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
-            data.ecommerce.remove = {
-              products: [
-                product
-              ]
-            };
-          }
-          else if (event === 'addToCart') {
-            data.ecommerce.add = {
-              products: [
-                product
-              ]
-            };
-          }
-
-          dataLayer.push(data);
         }
       });
 
@@ -491,24 +438,8 @@ const productRecommendationsSuffix = 'pr-';
             product.dimension6 = removeItem.attr('gtm-size');
           }
 
-          // Remove product position: Not needed while removing item from cart.
-          delete product.position;
-
-          product.metric2 = -1 * product.quantity * product.price;
-
-          var data = {
-            event: 'removeFromCart',
-            ecommerce: {
-              currencyCode: currencyCode,
-              remove: {
-                products: [
-                  product
-                ]
-              }
-            }
-          };
-
-          dataLayer.push(data);
+          // Trigger removeFromCart.
+          Drupal.alshayaSeoGtmPushRemoveFromCart(product);
         });
       });
 
@@ -753,6 +684,11 @@ const productRecommendationsSuffix = 'pr-';
    *   jQuery object which contains all gtm attributes.
    */
   Drupal.alshaya_seo_gtm_get_product_values = function (product) {
+    // Convert the product to a jQuery object, if not already.
+    if (!(product instanceof jQuery) && typeof product !== 'undefined') {
+      product = $(product);
+    }
+
     var mediaCount = 'image not available';
 
     if (product.attr('gtm-dimension4') && product.attr('gtm-dimension4') !== 'image not available') {
@@ -1276,6 +1212,77 @@ const productRecommendationsSuffix = 'pr-';
     };
 
     dataLayer.push(data);
+  }
+
+  /**
+   * Function to push product addToCart event to data layer.
+   *
+   * @param {object} product
+   *   The jQuery HTML object containing GTM attributes for the product.
+   */
+  Drupal.alshayaSeoGtmPushAddToCart = function (product) {
+    // Remove product position: Not needed while adding to cart.
+    delete product.position;
+
+    // Calculate metric 1 value.
+    product.metric2 = product.price * product.quantity;
+
+    var productData = {
+      event: 'addToCart',
+      ecommerce: {
+        currencyCode: drupalSettings.gtm.currency,
+        add: {
+          products: [
+            product
+          ]
+        }
+      }
+    };
+
+    dataLayer.push(productData);
+  }
+
+  /**
+   * Function to push product removeFromCart event to data layer.
+   *
+   * @param {object} product
+   *   The jQuery HTML object containing GTM attributes for the product.
+   */
+  Drupal.alshayaSeoGtmPushRemoveFromCart = function (product) {
+    // Remove product position: Not needed while removing from cart.
+    delete product.position;
+
+    // Calculate metric 1 value.
+    product.metric2 = -1 * product.quantity * product.price;
+
+    var productData = {
+      event: 'removeFromCart',
+      ecommerce: {
+        currencyCode: drupalSettings.gtm.currency,
+        remove: {
+          products: [
+            product
+          ]
+        }
+      }
+    };
+
+    // Delete list from cookie.
+    var listValues = {};
+    if ($.cookie('product-list') !== undefined) {
+      listValues = JSON.parse($.cookie('product-list'));
+    }
+    delete listValues[product.id];
+    $.cookie('product-list', JSON.stringify(listValues), { path: '/' });
+
+    dataLayer.push(productData);
+  }
+
+  /**
+   * Function to push GTM event to data layer on add to cart failure.
+   */
+  Drupal.alshayaSeoGtmPushAddToCartFailure = function (label, message) {
+    Drupal.logJavascriptError(label, message, GTM_CONSTANTS.CART_ERRORS);
   }
 
   // Ajax command to push deliveryAddress Event.

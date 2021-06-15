@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_add_to_bag
+    - serialization
+    - user
+id: product_info
+plugin_id: product_info
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - cookie

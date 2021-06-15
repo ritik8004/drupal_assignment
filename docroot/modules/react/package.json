@@ -40,6 +40,7 @@
     "gulp-watch": "4.3.10",
     "qs": "^6.9.0",
     "webpack": "^4.39.3",
+    "webpack-chunk-rename-plugin": "^1.0.3",
     "webpack-cli": "^3.3.7",
     "webpack-dev-server": "^3.8.0",
     "webpack-stream": "^5.2.1"

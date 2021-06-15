@@ -232,11 +232,11 @@ function _alshaya_bazaar_voice_static_strings() {
     ],
     [
       'key' => 'no_reviews_yet',
-      'value' => t('No reviews yet'),
+      'value' => t('No reviews yet.'),
     ],
     [
       'key' => 'first_to_review',
-      'value' => t('Tell others what you think. Be the first to review this product!'),
+      'value' => t('Tell others what you think. Be the first to review this product.'),
     ],
     [
       'key' => 'load_more',

@@ -27,15 +27,11 @@
     padding: 0.5rem;
   }
 
-  .write-review-type {
-    &-textfield {
-      position: relative;
-      margin-bottom: 1.5rem;
-    }
-  }
-
   // Type = Text.
   .write-review-type-textfield {
+    position: relative;
+    margin-bottom: 1.5rem;
+
     input[type=text],
     input[type=email] {
       height: 1.5rem;

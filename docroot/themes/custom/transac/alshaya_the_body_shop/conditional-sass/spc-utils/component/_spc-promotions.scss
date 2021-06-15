@@ -5,3 +5,13 @@
     }
   }
 }
+
+.spc-recommended-products {
+  .spc-promotions:not(:empty) {
+    span {
+      > a {
+        font-family: $alshaya-thin;
+      }
+    }
+  }
+}

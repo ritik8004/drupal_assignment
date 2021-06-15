@@ -134,6 +134,13 @@
           }
         }
 
+        .group-anchor-links {
+          @include breakpoint($only-mobile) {
+            width: 13rem;
+            flex-shrink: 0;
+          }
+        }
+
         .size-guide {
           position: relative;
           text-align: center;

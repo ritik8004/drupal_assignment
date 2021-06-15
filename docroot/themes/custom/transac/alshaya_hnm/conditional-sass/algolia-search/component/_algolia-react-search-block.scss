@@ -203,6 +203,12 @@
         &.show-algolia-search-bar {
           top: -0.625rem;
         }
+
+        .algolia-search-icon {
+          @include icon(arrow-#{$left}) {
+            #{$left}: -0.375rem;
+          }
+        }
       }
     }
 
@@ -229,16 +235,6 @@
 
         html[lang=ar] & {
           margin-top: 7.25rem !important;
-        }
-      }
-    }
-
-    &.no-sticky-algolia-search-bar {
-      .block-alshaya-algolia-react-autocomplete {
-        .algolia-search-icon {
-          @include icon(arrow-#{$left}) {
-            #{$left}: -0.375rem;
-          }
         }
       }
     }

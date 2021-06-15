@@ -17,6 +17,14 @@ body.ucbrowser {
   .mob-imagegallery__thumbnails__image {
     height: 27.5rem;
   }
+
+  &.sizeguide-modal-overlay {
+    .ui-dialog {
+      @include breakpoint($only-tablet) {
+        padding: 10rem 8.125rem !important;
+      }
+    }
+  }
 }
 
 /**
@@ -76,18 +84,6 @@ body.nodetype--acq_product.ucbrowser .dialog-product-image-gallery-container-mob
 
 .ucbrowser .user__address--column {
   width: 90%;
-}
-
-body {
-  &.ucbrowser {
-    &.sizeguide-modal-overlay {
-      .ui-dialog {
-        @include breakpoint($only-tablet) {
-          padding: 10rem 8.125rem !important;
-        }
-      }
-    }
-  }
 }
 
 .ie .address .address--primary span::before,

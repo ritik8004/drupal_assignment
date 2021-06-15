@@ -8,7 +8,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
 
   @cc @hd @cybersource
   Scenario: As a returning customer, I should be able to checkout using CC
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{add_to_cart_link}"
@@ -27,7 +27,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
@@ -62,7 +62,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -81,7 +81,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish
@@ -116,7 +116,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
     When I press "{language_add_to_cart_link}"
@@ -135,7 +135,7 @@ Feature: SPC Checkout Home Delivery CC for Returning Customers using Cybersource
     Then I press "edit-submit"
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait 10 seconds
     Then the "delivery-method-home_delivery" checkbox should be checked
     And I wait for AJAX to finish

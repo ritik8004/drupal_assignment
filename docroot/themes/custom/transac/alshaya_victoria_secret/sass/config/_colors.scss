@@ -96,6 +96,7 @@ $alabaster: #fcfcfc;
 $smoky-white: #1f1f1f;
 $light-white: #fdf1f5;
 $dark-pink: #fc45b2;
+$pink-hover:  #d84e82;
 
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
@@ -519,6 +520,7 @@ $plp_facet_border: $gainsboro;
 $plp_item_label: $black;
 $plp_promotion_description: $ash-triplet;
 $plp_facet_filter_count_background: $brilliant-rose;
+$plp-primary-cta-hover-bg: $pink-hover;
 
 // PLP Filter bar.
 $plp_filterbar_filter_bg: $nero;
@@ -1137,3 +1139,11 @@ $fit-calc-size-guide-btn-bg: $brilliant-rose;
 $fit-calc-empty-input: $brilliant-rose;
 $fit-calc-result: $vivid-raspberry;
 $fit-calc-selected-radio: $vivid-raspberry;
+
+// Quick view size filter.
+$plp-quick-view-product-size-text: $black;
+$plp-quick-view-product-size-text-active: $black;
+$plp-quick-view-product-size-border: $_grey-51-6;
+$plp-quick-view-product-size-border-hover: $black;
+$plp-quick-view-product-size-active-bg: $_grey-51-6;
+$plp-quick-view-product-size-text-disabled: $white;

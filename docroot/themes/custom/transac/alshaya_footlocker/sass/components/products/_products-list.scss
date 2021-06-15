@@ -39,6 +39,10 @@
       }
     }
 
+    @include breakpoint($desktop) {
+      min-height: auto;
+    }
+
     .field--name-name {
       font-family: $alshaya-bold;
       line-height: 1.29;
@@ -171,6 +175,24 @@
         width: 13.125rem;
         padding-#{$left}: 2.5rem;
         padding-#{$right}: 2.5rem;
+      }
+    }
+  }
+
+  .c-products-list {
+    &.product-small {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: 18.75rem;
+        }
+      }
+    }
+
+    &.product-large {
+      .alshaya_search_gallery {
+        @include breakpoint($desktop) {
+          height: 20rem;
+        }
       }
     }
   }

@@ -66,7 +66,7 @@ To prepare your local env:
   * `vagrant plugin install vagrant-vbguest`
   * `vagrant plugin install vagrant-hostsupdater`
 * Install Yarn `npm i -g yarn`.
-* Install Ansible: `brew install ansible`
+* Install Ansible: `pip3 install ansible-base ansible`
 * Run:
   * From outside VM:
     * `composer clear-cache`

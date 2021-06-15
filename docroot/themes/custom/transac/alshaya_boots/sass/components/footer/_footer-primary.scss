@@ -33,6 +33,10 @@
       width: 28%;
       flex-grow: 1;
     }
+
+    @include breakpoint($desktop) {
+      width: 27%;
+    }
   }
 
   .footer__categories {
@@ -64,12 +68,6 @@
   .footer__about {
     @include breakpoint($desktop) {
       width: 26%;
-    }
-  }
-
-  .footer_primary-right-block {
-    @include breakpoint($desktop) {
-      width: 27%;
     }
   }
 
@@ -266,6 +264,14 @@
         text-decoration: none;
         text-transform: lowercase;
       }
+
+      &.en.is-active a {
+        font-family: $alshaya-bold-nodir;
+      }
+
+      &.ar.is-active a {
+        font-family: $alshaya-arabic-bold-nodir;
+      }
     }
   }
 }
@@ -308,21 +314,6 @@
         margin-bottom: 1.25rem;
         text-align: center;
         padding-#{$left}: 0;
-      }
-    }
-  }
-}
-
-.c-footer-primary .language-switcher-language-url,
-.only-first-time .language-switcher-language-url {
-  ul {
-    li {
-      &.en.is-active a {
-        font-family: $alshaya-bold-nodir;
-      }
-
-      &.ar.is-active a {
-        font-family: $alshaya-arabic-bold-nodir;
       }
     }
   }

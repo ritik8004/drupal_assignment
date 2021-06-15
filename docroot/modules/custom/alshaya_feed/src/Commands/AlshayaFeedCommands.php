@@ -79,14 +79,6 @@ class AlshayaFeedCommands extends DrushCommands {
    *   Generate products feed with batch of 200.
    */
   public function generateFeed(array $options = ['batch-size' => NULL]) {
-    $mode = $this->dynamicYieldConfig->get('mode');
-
-    // Do not generate xml feed if mode is set to `api` in dynamic yield config.
-    if (!empty($mode) && $mode === 'api') {
-      $this->drupalLogger->notice('Skipping XML feed generation as mode is set to `api` in dynamic_yield.settings.');
-      return;
-    }
-
     $batch_size = $options['batch-size'] ?? $this->configFactory->get('batch_size');
     $batch = [
       'finished' => [__CLASS__, 'batchFinish'],

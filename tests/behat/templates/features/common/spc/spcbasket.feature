@@ -6,6 +6,7 @@ Feature: Test basket page
     And I wait 10 seconds
     And I wait for the page to load
 
+  @desktop
   Scenario: As a Guest, I should be able to add more quantity
     When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
     And I wait 10 seconds
@@ -50,8 +51,6 @@ Feature: Test basket page
     Then I should see a "#block-account-menu .sign-in-mobile" element on page
     Then I should see a "#block-account-menu .register-link" element on page
     Then I click on "#block-alshayamainmenu .mobile--close" element
-    And I wait 5 seconds
-    Then I should see a "#block-alshaya-plp-facets-block-all" element on page
 
   @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer
@@ -122,7 +121,7 @@ Feature: Test basket page
     And I should not see "{excluding_delivery}" on page
     And I should not see "{vat}" on page
     Then I should see "{empty_bag}"
-    And I should see the link "{continue_shopping}"
+    And I should see "{continue_shopping}"
 
   @language @desktop
   Scenario: As a Guest, I should be able to add more quantity in second language
@@ -197,8 +196,6 @@ Feature: Test basket page
     Then I should see a "#block-account-menu .sign-in-mobile" element on page
     Then I should see a "#block-account-menu .register-link" element on page
     Then I click on "#block-alshayamainmenu .mobile--close" element
-    And I wait 5 seconds
-    Then I should see a "#block-alshaya-plp-facets-block-all" element on page
 
   @language @desktop
   Scenario: As a Guest, I should be able to see the products added to basket and the header and footer in second language
@@ -269,7 +266,7 @@ Feature: Test basket page
     And I should not see "{language_excluding_delivery}" on page
     And I should not see "{language_vat}" on page
     Then I should see "{language_empty_bag}"
-    And I should see the link "{language_continue_shopping}"
+    And I should see "{language_continue_shopping}"
 
   @language @mobile
   Scenario: As a Guest, I should be able to remove products from the basket in second language (mobile)
@@ -295,4 +292,4 @@ Feature: Test basket page
     And I should not see "{language_excluding_delivery}" on page
     And I should not see "{language_vat}" on page
     Then I should see "{language_empty_bag}"
-    And I should see the link "{language_continue_shopping}"
+    And I should see "{language_continue_shopping}"

@@ -8,10 +8,10 @@ Feature: SPC Checkout Home Delivery COD
 
   @cod @hd
   Scenario: As a Guest, I should be able to checkout using COD
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -24,7 +24,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -46,7 +46,7 @@ Feature: SPC Checkout Home Delivery COD
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
@@ -86,15 +86,15 @@ Feature: SPC Checkout Home Delivery COD
     And I should see "{vat}"
     And I should see "{continue_shopping_text}"
 
-  @cod @hd @language @desktop @test12
+  @cod @hd @language @desktop
   Scenario: As a Guest, I should be able to checkout using COD in second language
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -108,7 +108,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -130,7 +130,7 @@ Feature: SPC Checkout Home Delivery COD
     And I wait 50 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element
@@ -180,10 +180,10 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on "[id^='edit-add-to-cart-']" element
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -196,7 +196,7 @@ Feature: SPC Checkout Home Delivery COD
     When I click the anchor link ".edit-checkout-as-guest" on page
     And I wait 10 seconds
     And I wait for the page to load
-    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .delivery-method:first" element on page
+    And I click jQuery "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-methods .home-delivery" element on page
     And I wait for AJAX to finish
     Then I click on "#spc-checkout .spc-main .spc-content .spc-checkout-delivery-information .spc-checkout-empty-delivery-text" element
     And I wait 10 seconds
@@ -218,7 +218,7 @@ Feature: SPC Checkout Home Delivery COD
     And I wait 10 seconds
     And I wait for the page to load
     And I scroll to the ".spc-delivery-shipping-methods .shipping-method" element
-    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery #payment-method-cashondelivery" element on page
+    And I click jQuery "#block-content #spc-checkout #spc-payment-methods .payment-method-cashondelivery" element on page
     And I wait 10 seconds
     Then the "payment-method-cashondelivery" checkbox should be checked
     And I scroll to the "#spc-payment-methods" element

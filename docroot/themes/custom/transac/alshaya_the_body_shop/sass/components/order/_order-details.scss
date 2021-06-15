@@ -1,4 +1,6 @@
 .user__order--detail {
+  line-height: normal;
+
   .price-currency {
     font-family: $tbs-semibold;
     color: $primary_text;
@@ -14,7 +16,8 @@
     color: $order_detail_order_price_amount;
   }
 
-  .label {
+  .label,
+  .address--contact {
     font-family: $alshaya-bold;
     color: $order_detail_order_label;
   }
@@ -38,5 +41,21 @@
     td.right--align {
       color: $order_detail_order_label;
     }
+  }
+
+  .order-item-row {
+    img {
+      width: 100%;
+    }
+
+    .dark {
+      margin-bottom: 0.625rem;
+    }
+  }
+
+  .dark,
+  .address--content,
+  .address--contact .no-direction {
+    font-family: $tbs-medium;
   }
 }

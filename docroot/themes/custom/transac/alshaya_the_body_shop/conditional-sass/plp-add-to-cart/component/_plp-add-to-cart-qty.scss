@@ -1,0 +1,11 @@
+.qty-text-wrapper {
+  text-align: center;
+}
+
+.qty-sel-container {
+  button[disabled] {
+    &::before {
+      color: $plp-disabled-qty-icon-color;
+    }
+  }
+}

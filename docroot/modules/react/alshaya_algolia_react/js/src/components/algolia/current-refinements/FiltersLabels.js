@@ -55,13 +55,17 @@ function selectedFiltersLables(attribute, value, filter) {
   return selctionText;
 }
 
-export default function FiltersLabels({ attribute, value }) {
+export default function FiltersLabels({ attribute, value, pageType = null }) {
   const [attributeName] = attribute.split('.');
   const name = (attributeName === 'lhn_category') ? 'field_category' : attributeName;
+  let settings = drupalSettings.algoliaSearch.search.filters[name];
+  if (pageType === 'plp') {
+    settings = drupalSettings.algoliaSearch.listing.filters[name];
+  }
   const label = selectedFiltersLables(
     attribute,
     value,
-    drupalSettings.algoliaSearch.search.filters[name],
+    settings,
   );
 
   return (

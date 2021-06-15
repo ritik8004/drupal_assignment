@@ -20,6 +20,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Drupal\Core\TypedData\TranslatableInterface;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Class Sku Info Helper.
@@ -692,6 +693,40 @@ class SkuInfoHelper {
     $type = 'light';
     $this->moduleHandler->alter('alshaya_acm_product_light_product_data', $sku, $data, $type);
     return $data;
+  }
+
+  /**
+   * Gets the cart image for the SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The SKU entity.
+   *
+   * @return string
+   *   The image url or empty in case the image is not found.
+   */
+  public function getCartImage(SKUInterface $sku) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $image = alshaya_acm_get_product_display_image($sku, 'pdp_gallery_thumbnail', 'cart');
+    // Prepare image style url.
+    if (!empty($image['#uri'])) {
+      $image = file_url_transform_relative(ImageStyle::load($image['#style_name'])->buildUrl($image['#uri']));
+    }
+
+    return is_string($image) ? $image : '';
+  }
+
+  /**
+   * Gets the cart title for the SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   The SKU entity.
+   *
+   * @return string
+   *   The product title for cart.
+   */
+  public function getCartTitle(SKUInterface $sku) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    return $this->productInfoHelper->getTitle($sku, 'basket');
   }
 
 }

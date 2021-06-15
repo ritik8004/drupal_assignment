@@ -46,6 +46,23 @@
         }
       }
     }
+
+    @include breakpoint($desktop) {
+      li:first-child a,
+      li:nth-child(2) a {
+        @include icon(user);
+      }
+
+      li:last-child a {
+        @include icon(login);
+
+        @at-root {
+          .logged-in & {
+            @include icon(logout);
+          }
+        }
+      }
+    }
   }
 
   li {
@@ -132,25 +149,6 @@
   .block-language-blocklanguage-interface {
     @include breakpoint($upto-desktop) {
       display: none;
-    }
-  }
-
-  .menu--account {
-    @include breakpoint($desktop) {
-      li:first-child a,
-      li:nth-child(2) a {
-        @include icon(user);
-      }
-
-      li:last-child a {
-        @include icon(login);
-
-        @at-root {
-          .logged-in & {
-            @include icon(logout);
-          }
-        }
-      }
     }
   }
 
@@ -288,6 +286,21 @@
   z-index: 11;
   background-color: $header_bg;
 
+  &::before {
+    @include breakpoint($upto-desktop) {
+      content: '';
+      background-color: transparent;
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
+  }
+
   @include breakpoint($desktop) {
     z-index: 6;
   }
@@ -304,29 +317,15 @@
   }
 }
 
-.branding__menu {
-  &::before {
-    @include breakpoint($upto-desktop) {
-      content: '';
-      background-color: transparent;
+.mobile--overlay,
+.overlay-product-modal {
+  .branding__menu {
+    &::before {
+      background: $header_mobile_menu_overlay;
       position: absolute;
-      left: 0;
-      right: 0;
-      z-index: -1;
-      top: 0;
-      bottom: 0;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+      z-index: 9;
+      opacity: 1;
     }
-  }
-}
-
-.mobile--overlay .branding__menu {
-  &::before {
-    background: $header_mobile_menu_overlay;
-    position: absolute;
-    z-index: 9;
-    opacity: 1;
   }
 }
 

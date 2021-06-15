@@ -5,6 +5,24 @@
  * Install, uninstall, update function for alshaya_aeo_transac.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set image_thumb_gallery => false to use single image gallery on listing pages.
+ */
+function alshaya_mu_transac_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

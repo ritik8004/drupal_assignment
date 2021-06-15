@@ -16,6 +16,7 @@
 
       &:hover {
         cursor: pointer;
+        color: $plp_sub_cat_block_cat_title_hover;
       }
 
       @include breakpoint($only-tablet) {
@@ -26,10 +27,6 @@
       @include breakpoint($only-mobile) {
         margin-#{$right}: 0.25rem;
         min-width: 5.625rem;
-      }
-
-      &:hover {
-        color: $plp_sub_cat_block_cat_title_hover;
       }
 
       .sub-category-title {
@@ -47,6 +44,8 @@
         @include breakpoint($only-mobile) {
           font-size: 0.6875rem;
         }
+
+        @include arabic-letter-spacing;
       }
 
       .sub-category-image {
@@ -104,6 +103,8 @@
           font-size: 1.4375rem;
           letter-spacing: 0.45px;
         }
+
+        @include arabic-letter-spacing;
       }
 
       .term-desc {
@@ -114,6 +115,8 @@
           font-size: 0.875rem;
           letter-spacing: 0.59px;
         }
+
+        @include arabic-letter-spacing;
       }
 
       .term-image {

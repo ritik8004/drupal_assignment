@@ -34,6 +34,8 @@ elseif (substr($algolia_env, -2) == 'up') {
 // Ensure we never connect to Index of another ENV.
 $config['search_api.index.alshaya_algolia_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
 $config['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name;
+// Algolia Index name will be like 01live_bbwae_product_list
+$config['search_api.index.alshaya_algolia_product_list_index']['options']['algolia_index_name'] = $algolia_env . '_' . $_acsf_site_name . '_product_list';
 
 // This will need to be overridden in brand specific settings files on each
 // env using prod app for each brand.

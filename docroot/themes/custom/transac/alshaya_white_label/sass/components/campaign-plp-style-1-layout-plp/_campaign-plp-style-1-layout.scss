@@ -92,6 +92,8 @@
       }
 
       > .field--name-field-plp-menu {
+        position: relative;
+
         &.active-menu {
           .field--name-field-heading-link {
             a {
@@ -99,6 +101,34 @@
                 color: $plp-sub-menu-heading-link-active;
               }
             }
+          }
+        }
+
+        @include breakpoint($desktop) {
+          float: $left;
+          clear: both;
+        }
+
+        .mos-menu-heading {
+          transform: translateX(-24rem) scale(1.9);
+          transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+          transform-origin: $right center;
+
+          html[lang=ar] & {
+            transform: translateX(24rem) scale(1.9);
+          }
+        }
+
+        > .mos-menu-item {
+          @include breakpoint($desktop) {
+            position: relative;
+            display: inline-block;
+            padding-#{$right}: 7.8125rem;
+            margin: 0;
+          }
+
+          @include breakpoint($upto-desktop) {
+            margin: 0;
           }
         }
       }
@@ -236,38 +266,6 @@
           border-radius: 50%;
           color: $plp-sub-menu-cls-btn-txt;
           padding: 0.3125rem;
-        }
-      }
-
-      > .field--name-field-plp-menu {
-        position: relative;
-
-        @include breakpoint($desktop) {
-          float: $left;
-          clear: both;
-        }
-
-        .mos-menu-heading {
-          transform: translateX(-24rem) scale(1.9);
-          transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-          transform-origin: $right center;
-
-          html[lang=ar] & {
-            transform: translateX(24rem) scale(1.9);
-          }
-        }
-
-        > .mos-menu-item {
-          @include breakpoint($desktop) {
-            position: relative;
-            display: inline-block;
-            padding-#{$right}: 7.8125rem;
-            margin: 0;
-          }
-
-          @include breakpoint($upto-desktop) {
-            margin: 0;
-          }
         }
       }
 

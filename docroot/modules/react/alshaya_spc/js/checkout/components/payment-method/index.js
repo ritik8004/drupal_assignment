@@ -22,6 +22,8 @@ import PaymentMethodCheckoutComUpapi from '../payment-method-checkout-com-upapi'
 import PaymentMethodCheckoutComUpapiApplePay from '../payment-method-checkout-com-upapi-apple-pay';
 import CheckoutComUpapiApplePay
   from '../../../utilities/checkout_com_upapi_apple_pay';
+import PaymentMethodCheckoutComUpapiFawry
+  from '../payment-method-checkout-com-upapi-fawry';
 
 export default class PaymentMethod extends React.Component {
   constructor(props) {
@@ -68,6 +70,8 @@ export default class PaymentMethod extends React.Component {
   finalisePayment = (paymentData) => {
     addPaymentMethodInCart('finalise payment', paymentData).then((result) => {
       if (!result) {
+        // If validation fails, addPaymentMethodInCart(), returns null.
+        removeFullScreenLoader();
         return;
       }
       if (result.error !== undefined && result.error) {
@@ -251,6 +255,14 @@ export default class PaymentMethod extends React.Component {
               cart={cart}
               finalisePayment={this.finalisePayment}
             />
+          </ConditionalView>
+
+          <ConditionalView condition={isSelected && method.code === 'checkout_com_upapi_fawry'}>
+            <div className={`payment-method-bottom-panel payment-method-form ${method.code}`}>
+              <PaymentMethodCheckoutComUpapiFawry
+                cart={cart}
+              />
+            </div>
           </ConditionalView>
         </div>
       </>

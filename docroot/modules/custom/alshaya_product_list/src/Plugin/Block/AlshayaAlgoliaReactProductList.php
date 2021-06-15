@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_algolia_react\Services\AlshayaAlgoliaReactConfigInterface;
 use Drupal\alshaya_product_list\Service\AlshayaProductListHelper;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 
 /**
  * Provides a block to display 'products list' results.
@@ -19,6 +20,7 @@ use Drupal\alshaya_product_list\Service\AlshayaProductListHelper;
 class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
 
   const PAGE_TYPE = 'listing';
+  const PAGE_SUB_TYPE = 'product_option_list';
 
   /**
    * Entity type manager service.
@@ -90,22 +92,36 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
    */
   public function build() {
     // Get common configuration for Algolia pages.
-    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE);
-
+    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE, self::PAGE_SUB_TYPE);
     // Get common config and merge with new array.
     $filters = $common_config[self::PAGE_TYPE]['filters'];
 
     $lang = $common_config['otherRequiredValues']['lang'];
+    // Set default EN Brand/Frangrance filter in product list index for VM.
+    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $lang = 'en';
+    }
     $options_data = $this->alshayaProductListHelper->getCurrentSelectedProductOption($lang);
 
     // Rule context will be like - 'brand_list__{brand_name_in_english}'.
     $ruleContext = $options_data['ruleContext'];
 
+    $attribute_field = $options_data['option_key'];
+    // Set language suffix for the attribute field.
+    // If Product List Index is enabled append language suffix.
+    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $attribute_field = $options_data['option_key'] . '.' . $lang;
+      // IF there is level 2 append language suffix.
+      // after attribute name as field_category_name.en.lvl2.
+      if (strstr($options_data['option_key'], '.')) {
+        $attribute_field = str_replace('.', '.' . $lang . '.', $options_data['option_key']);
+      }
+    }
     $algoliaSearchValues = [
       'local_storage_expire' => $common_config['otherRequiredValues']['local_storage_expire'],
       'filters_alias' => array_column($filters, 'identifier', 'alias'),
       'option_page' => [
-        'option_key' => $options_data['option_key'],
+        'option_key' => $attribute_field,
         'option_val' => $options_data['option_val'],
       ],
       'ruleContext' => $ruleContext,
@@ -114,7 +130,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
-    $algoliaSearch['pageSubType'] = 'product_option_list';
+    $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
 
     return [
       '#type' => 'markup',
@@ -135,6 +151,7 @@ class AlshayaAlgoliaReactProductList extends AlshayaAlgoliaReactBlockBase {
   public function getCacheTags() {
     return Cache::mergeTags(parent::getCacheTags(), [
       'alshaya_acm_product_position.settings',
+      'alshaya_product_list.settings',
     ]);
   }
 

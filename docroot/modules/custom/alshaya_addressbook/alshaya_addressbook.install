@@ -12,6 +12,19 @@ use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_update_N().
+ * 
+ * [6.2.0] Removing dm_version from alshaya_addressbook.settings.
+ */
+function alshaya_addressbook_update_8309() {
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['alshaya_addressbook.settings'],
+    'alshaya_addressbook',
+    'install',
+  );
+}
+
+/**
+ * Implements hook_update_N().
  *
  * Add max_length alshaya_addressbook.settings.
  */
@@ -161,11 +174,6 @@ function alshaya_addressbook_update_8001() {
  * Implements hook_install().
  */
 function alshaya_addressbook_install() {
-  // For all the new sites we want to use DM Version 2.
-  \Drupal::configFactory()->getEditable('alshaya_addressbook.settings')
-    ->set('dm_version', AlshayaAddressBookManagerInterface::DM_VERSION_2)
-    ->save();
-
   // Save permission of address_book for authenticated user.
   $role = Role::load(RoleInterface::AUTHENTICATED_ID);
   $role->grantPermission('create address_book profile');

@@ -36,9 +36,9 @@ if (isset($argv, $argv[5])) {
   $source_app_secret_admin = $app_secret_admin;
 }
 
-use AlgoliaSearch\Client;
-$clientSource = new Client($source_app_id, $source_app_secret_admin);
-$client = new Client($app_id, $app_secret_admin);
+use Algolia\AlgoliaSearch\SearchClient;
+$clientSource = SearchClient::create($source_app_id, $source_app_secret_admin);
+$client = SearchClient::create($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $name = $prefix . '_' . $language;

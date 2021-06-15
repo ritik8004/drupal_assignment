@@ -170,6 +170,7 @@ class AlshayaProductDeltaFeedHelper {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function prepareProductFeedData(int $nid): array {
+    $product = [];
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
     if (!$node instanceof NodeInterface) {
       return [];
@@ -269,6 +270,7 @@ class AlshayaProductDeltaFeedHelper {
     );
     // Get all category fields.
     $this->getFormattedProductCategories($fields, $node, $lang);
+    $this->getDyCategories($fields, $node, $lang);
     $description = $this->skuManager->getDescription($sku, 'full');
     $longText = $this->renderer->renderPlain($description)->__toString();
     $fields['description'] = !empty($longText) ? $this->getTruncatedDescription($longText, 1000, '') : '';
@@ -404,7 +406,7 @@ class AlshayaProductDeltaFeedHelper {
         case 'short_description':
           $short_desc = $this->skuManager->getShortDescription($sku, 'full');
           $brand_fields['short_description'] = !empty($short_desc['value']) ? $this->renderer->renderPlain($short_desc['value'])->__toString() : '';
-          $brand_fields[$key_prefix . 'short_description'] = $fields['short_description'];
+          $brand_fields[$key_prefix . 'short_description'] = $brand_fields['short_description'];
           break;
 
         default:
@@ -515,6 +517,79 @@ class AlshayaProductDeltaFeedHelper {
       $fields[$locale_key_prefix . 'in_stock'] = FALSE;
       $fields[$locale_key_prefix . 'quantity'] = 0;
     }
+
+    return $fields;
+  }
+
+  /**
+   * Wrapper function get DY categories.
+   *
+   * @param array $fields
+   *   Fields list.
+   * @param \Drupal\node\NodeInterface $node
+   *   The node object.
+   * @param string|null $lang
+   *   The lang code.
+   */
+  private function getDyCategories(array &$fields, NodeInterface $node, $lang = NULL) {
+    $number_of_dy_categories = 3;
+    $categories = $node->get('field_category')->referencedEntities();
+
+    // Return if no categories attached to product.
+    if (empty($categories)) {
+      $fields['dy_categories'] = '';
+      return $fields;
+    }
+
+    $dy_categories = [];
+    $extra_dy_categories = [];
+
+    foreach ($categories as $term) {
+      $term = $this->skuInfoHelper->getEntityTranslation($term, $lang);
+
+      // Skip if category is not enabled.
+      if (!$term->get('field_commerce_status')->getString()) {
+        continue;
+      }
+
+      $dy_category_level = $term->get('field_dy_category')->getString();
+
+      // Skip if dy_category field is empty or NONE.
+      if (empty($dy_category_level) || $dy_category_level === 'NONE') {
+        continue;
+      }
+
+      // Pick one category for each level and the rest as extra.
+      if (empty($dy_categories[$dy_category_level])) {
+        $dy_categories[$dy_category_level] = $term->label();
+      }
+      else {
+        $extra_dy_categories[] = $term->label();
+      }
+    }
+
+    // Return if no dy_categories attached to product.
+    if (empty($dy_categories)) {
+      $fields['dy_categories'] = '';
+      return $fields;
+    }
+
+    // Sort dy categories as level L1,L2,L3.
+    ksort($dy_categories);
+
+    $size_of_dy_categories = count($dy_categories);
+
+    // If dy_categories array size is less than required
+    // number_of_dy_categories then add the remaining categories
+    // from extra_dy_categories array if present.
+    if ($size_of_dy_categories < $number_of_dy_categories && !empty($extra_dy_categories)) {
+      $dy_categories = array_merge(
+        $dy_categories,
+        array_slice($extra_dy_categories, 0, $number_of_dy_categories - $size_of_dy_categories)
+      );
+    }
+
+    $fields['dy_categories'] = implode('|', $dy_categories);
 
     return $fields;
   }

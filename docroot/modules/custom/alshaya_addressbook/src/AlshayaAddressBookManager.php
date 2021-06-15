@@ -470,37 +470,74 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   public function getAddressArrayFromMagentoAddress(array $magento_address, $default_lang = FALSE) {
     $address = [];
 
-    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $mapping = $this->getMagentoFieldMappings();
+    $mapping = $this->getMagentoFieldMappings();
 
-      // Flip the mapping to make it easy below.
-      $mapping = array_flip($mapping);
+    // Flip the mapping to make it easy below.
+    $mapping = array_flip($mapping);
 
-      $magento_form = $this->getMagentoFormFields();
+    $magento_form = $this->getMagentoFormFields();
 
-      // Initialise with NULL for all fields to avoid notices.
-      foreach ($mapping as $field_code) {
-        $address[$field_code] = NULL;
+    // Initialise with NULL for all fields to avoid notices.
+    foreach ($mapping as $field_code) {
+      $address[$field_code] = NULL;
+    }
+
+    foreach ($magento_address as $attribute_code => $value) {
+      if (is_array($value) && $attribute_code !== 'street') {
+        continue;
       }
 
-      foreach ($magento_address as $attribute_code => $value) {
-        if (is_array($value) && $attribute_code !== 'street') {
-          continue;
-        }
+      if (!isset($mapping[$attribute_code]) || !isset($magento_form[$attribute_code])) {
+        continue;
+      }
 
+      switch ($mapping[$attribute_code]) {
+        case 'mobile_number':
+          $address[$mapping[$attribute_code]] = ['value' => $value];
+          break;
+
+        case 'address_line1':
+          $address[$mapping[$attribute_code]] = is_array($value)
+              ? reset($value)
+              : $value;
+          break;
+
+        default:
+          if (isset($mapping[$attribute_code])) {
+            $address[$mapping[$attribute_code]] = $value;
+          }
+          break;
+      }
+    }
+
+    if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
+      foreach ($magento_address['extension'] as $attribute_code => $value) {
         if (!isset($mapping[$attribute_code]) || !isset($magento_form[$attribute_code])) {
           continue;
         }
 
         switch ($mapping[$attribute_code]) {
-          case 'mobile_number':
-            $address[$mapping[$attribute_code]] = ['value' => $value];
-            break;
+          case 'administrative_area':
+          case 'area_parent':
+            $term = $this->areasTermsHelper->getLocationTermFromLocationId($value);
 
-          case 'address_line1':
-            $address[$mapping[$attribute_code]] = is_array($value)
-                ? reset($value)
-                : $value;
+            if ($term) {
+              if (!$default_lang) {
+                $term = $this->entityRepository->getTranslationFromContext($term);
+              }
+              $address[$mapping[$attribute_code]] = $term->id();
+              $address[$mapping[$attribute_code] . '_display'] = $term->label();
+            }
+            else {
+              // Add a trace when trying to fetch areas for which terms not
+              // exists in system.
+              $this->logger->error('Trying to fetch the area term for attribute: @attribute locationId: @location_id but could not find and thus using value as is and this may cause issue.', [
+                '@attribute' => $attribute_code,
+                '@location_id' => $value,
+              ]);
+              $address[$mapping[$attribute_code]] = $value;
+            }
+
             break;
 
           default:
@@ -509,97 +546,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
             }
             break;
         }
-      }
-
-      if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
-        foreach ($magento_address['extension'] as $attribute_code => $value) {
-          if (!isset($mapping[$attribute_code]) || !isset($magento_form[$attribute_code])) {
-            continue;
-          }
-
-          switch ($mapping[$attribute_code]) {
-            case 'administrative_area':
-            case 'area_parent':
-              $term = $this->areasTermsHelper->getLocationTermFromLocationId($value);
-
-              if ($term) {
-                if (!$default_lang) {
-                  $term = $this->entityRepository->getTranslationFromContext($term);
-                }
-                $address[$mapping[$attribute_code]] = $term->id();
-                $address[$mapping[$attribute_code] . '_display'] = $term->label();
-              }
-              else {
-                // Add a trace when trying to fetch areas for which terms not
-                // exists in system.
-                $this->logger->error('Trying to fetch the area term for attribute: @attribute locationId: @location_id but could not find and thus using value as is and this may cause issue.', [
-                  '@attribute' => $attribute_code,
-                  '@location_id' => $value,
-                ]);
-                $address[$mapping[$attribute_code]] = $value;
-              }
-
-              break;
-
-            default:
-              if (isset($mapping[$attribute_code])) {
-                $address[$mapping[$attribute_code]] = $value;
-              }
-              break;
-          }
-        }
-      }
-    }
-    else {
-      $address['given_name'] = $magento_address['firstname'];
-      $address['family_name'] = $magento_address['lastname'];
-      $address['mobile_number'] = [
-        'value' => $magento_address['telephone'],
-      ];
-      $address['address_line1'] = $magento_address['street'];
-
-      $address['address_line2'] = '';
-      $address['administrative_area'] = '';
-      $address['locality'] = '';
-      $address['dependent_locality'] = '';
-      $address['sorting_code'] = '';
-      $address['additional_name'] = '';
-      $address['postal_code'] = '';
-
-      if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
-        if (isset($magento_address['extension']['address_apartment_segment'])) {
-          $address['address_line2'] = $magento_address['extension']['address_apartment_segment'];
-        }
-
-        if (isset($magento_address['extension']['address_area_segment'])) {
-          $address['administrative_area'] = $magento_address['extension']['address_area_segment'];
-        }
-
-        if (isset($magento_address['extension']['address_block_segment'])) {
-          $address['locality'] = $magento_address['extension']['address_block_segment'];
-        }
-
-        if (isset($magento_address['extension']['address_building_segment'])) {
-          $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
-        }
-
-        if (isset($magento_address['extension']['landmark'])) {
-          $address['sorting_code'] = $magento_address['extension']['landmark'];
-        }
-
-        if (isset($magento_address['extension']['apartment'])) {
-          $address['additional_name'] = $magento_address['extension']['apartment'];
-        }
-
-        if (isset($magento_address['extension']['postcode'])) {
-          $address['postal_code'] = $magento_address['extension']['postcode'];
-        }
-      }
-
-      $address['country_code'] = $magento_address['country_id'];
-
-      if (isset($magento_address['region'])) {
-        $address['region'] = $magento_address['region'];
       }
     }
 
@@ -652,81 +598,64 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     // City is core attribute in Magento and hard to remove validation.
     $magento_address['city'] = self::INVISIBLE_CHARACTER;
 
-    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $mapping = $this->getMagentoFieldMappings();
-      $custom_fields = $this->getMagentoCustomFields();
+    $mapping = $this->getMagentoFieldMappings();
+    $custom_fields = $this->getMagentoCustomFields();
 
-      foreach ($mapping as $field_code => $attribute_code) {
-        switch ($field_code) {
-          case 'mobile_number':
-            $magento_address[$attribute_code] = isset($address[$field_code])
-              ? _alshaya_acm_checkout_clean_address_phone($address[$field_code])
+    foreach ($mapping as $field_code => $attribute_code) {
+      switch ($field_code) {
+        case 'mobile_number':
+          $magento_address[$attribute_code] = isset($address[$field_code])
+            ? _alshaya_acm_checkout_clean_address_phone($address[$field_code])
+            : '';
+          break;
+
+        case 'area_parent':
+          if (empty($address['area_parent']) && !empty($address['administrative_area'])) {
+            $parent = $this->getLocationParentTerm($address['administrative_area']);
+            $address[$field_code] = $parent ? $parent->id() : NULL;
+          }
+        case 'administrative_area':
+          $term = !is_null($address[$field_code])
+            ? $this->termStorage->load($address[$field_code])
+            : NULL;
+
+          if (empty($term)) {
+            $magento_address['extension'][$attribute_code] = $address[$field_code];
+          }
+          else {
+            $magento_address['extension'][$attribute_code] = $term->get('field_location_id')->getString();
+          }
+          break;
+
+        default:
+          if (isset($custom_fields[$attribute_code])) {
+            $magento_address['extension'][$attribute_code] = isset($address[$field_code])
+              ? $address[$field_code]
               : '';
-            break;
-
-          case 'area_parent':
-            if (empty($address['area_parent']) && !empty($address['administrative_area'])) {
-              $parent = $this->getLocationParentTerm($address['administrative_area']);
-              $address[$field_code] = $parent ? $parent->id() : NULL;
-            }
-          case 'administrative_area':
-            $term = !is_null($address[$field_code])
-              ? $this->termStorage->load($address[$field_code])
-              : NULL;
-
-            if (empty($term)) {
-              $magento_address['extension'][$attribute_code] = $address[$field_code];
-            }
-            else {
-              $magento_address['extension'][$attribute_code] = $term->get('field_location_id')->getString();
-            }
-            break;
-
-          default:
-            if (isset($custom_fields[$attribute_code])) {
-              $magento_address['extension'][$attribute_code] = isset($address[$field_code])
-                ? $address[$field_code]
-                : '';
-            }
-            elseif (isset($address[$field_code])) {
-              $magento_address[$attribute_code] = $address[$field_code];
-            }
-        }
+          }
+          elseif (isset($address[$field_code])) {
+            $magento_address[$attribute_code] = $address[$field_code];
+          }
       }
-
-      // Add parent id for area if blank and we are using DMV2.
-      // This is exceptional case for Kuwait where we do not show the
-      // governate but Magento needs it.
-      if (isset($mapping, $mapping['area_parent'])
-        && (empty($address['area_parent']) || $address['area_parent'] === self::INVISIBLE_CHARACTER)) {
-        $parent = $this->getLocationParentTerm($address['administrative_area']);
-        if ($parent) {
-          $magento_address['extension'][$mapping['area_parent']] = $parent->get('field_location_id')->getString();
-        }
-      }
-
-      // @todo CORE-2332 - Fix this properly, possibly in Magento.
-      // City is Magento core field but we don't use it at all.
-      // But this is required by Cybersource so we need proper value.
-      // For now, we copy value of Area to City.
-      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-      $magento_address['city'] = $this->getAddressShippingAreaValue($magento_address);
-    }
-    else {
-      $magento_address['firstname'] = (string) $address['given_name'];
-      $magento_address['lastname'] = (string) $address['family_name'];
-      $magento_address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['mobile_number']);
-      $magento_address['street'] = (string) $address['address_line1'];
-      $magento_address['extension']['address_apartment_segment'] = (string) $address['address_line2'];
-      $magento_address['extension']['address_area_segment'] = (string) $address['administrative_area'];
-      $magento_address['extension']['address_building_segment'] = (string) $address['dependent_locality'];
-      $magento_address['extension']['landmark'] = (string) $address['sorting_code'];
-      $magento_address['extension']['apartment'] = (string) $address['additional_name'];
-      $magento_address['extension']['postcode'] = (string) $address['postal_code'];
-      $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
-      $magento_address['country_id'] = $address['country_code'];
     }
 
+    // Add parent id for area if blank and we are using DMV2.
+    // This is exceptional case for Kuwait where we do not show the
+    // governate but Magento needs it.
+    if (isset($mapping, $mapping['area_parent'])
+      && (empty($address['area_parent']) || $address['area_parent'] === self::INVISIBLE_CHARACTER)) {
+      $parent = $this->getLocationParentTerm($address['administrative_area']);
+      if ($parent) {
+        $magento_address['extension'][$mapping['area_parent']] = $parent->get('field_location_id')->getString();
+      }
+    }
+
+    // @todo CORE-2332 - Fix this properly, possibly in Magento.
+    // City is Magento core field but we don't use it at all.
+    // But this is required by Cybersource so we need proper value.
+    // For now, we copy value of Area to City.
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $magento_address['city'] = $this->getAddressShippingAreaValue($magento_address);
     return $magento_address;
   }
 
@@ -1220,10 +1149,8 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
     $field = 'address_area_segment';
 
-    if ($this->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $mappings = $this->getMagentoFieldMappings();
-      $field = $mappings['administrative_area'];
-    }
+    $mappings = $this->getMagentoFieldMappings();
+    $field = $mappings['administrative_area'];
 
     $value = isset($magento_address['extension'], $magento_address['extension'][$field])
       ? $magento_address['extension'][$field]
@@ -1248,10 +1175,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   String value for the area or NULL.
    */
   public function getAddressShippingAreaParentValue(array $address, array $magento_address, $langcode = 'en') {
-    if ($this->getDmVersion() != AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      return $address['locality'];
-    }
-
     $mappings = $this->getMagentoFieldMappings();
     $field = $mappings['area_parent'];
 
@@ -1260,22 +1183,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       : '';
 
     return $this->areasTermsHelper->getShippingAreaLabel($value, $langcode);
-  }
-
-  /**
-   * Wrapper function to get current DM Version from config.
-   *
-   * @return mixed
-   *   Current DM Version.
-   */
-  public function getDmVersion() {
-    static $dm_version;
-
-    if (!isset($dm_version)) {
-      $dm_version = $this->configFactory->get('alshaya_addressbook.settings')->get('dm_version');
-    }
-
-    return $dm_version;
   }
 
   /**

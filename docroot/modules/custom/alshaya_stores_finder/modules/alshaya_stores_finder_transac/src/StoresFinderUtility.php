@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_stores_finder_transac;
 
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
-use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -415,34 +414,21 @@ class StoresFinderUtility {
 
     $open_hours = [];
 
-    if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      if (isset($store['address']) && !empty($store['address'])) {
-        $address = $this->addressBookManager->getAddressArrayFromRawMagentoAddress($store['address']);
+    if (isset($store['address']) && !empty($store['address'])) {
+      $address = $this->addressBookManager->getAddressArrayFromRawMagentoAddress($store['address']);
 
-        // @todo Check if this can be removed from magento.
-        unset($address['family_name']);
-        unset($address['given_name']);
+      // @todo Check if this can be removed from magento.
+      unset($address['family_name']);
+      unset($address['given_name']);
 
-        $node->get('field_address')->setValue($address);
-      }
-
-      foreach ($store['store_hours'] as $store_hour) {
-        $open_hours[] = [
-          'key' => $store_hour['label'],
-          'value' => $store_hour['value'],
-        ];
-      }
+      $node->get('field_address')->setValue($address);
     }
-    elseif (isset($store['address'])) {
-      $node->get('field_store_address')->setValue($store['address']);
-      $node->get('field_store_area')->setValue($store['area']);
 
-      foreach ($store['store_hours'] as $store_hour) {
-        $open_hours[] = [
-          'key' => $store_hour['day'],
-          'value' => $store_hour['hours'],
-        ];
-      }
+    foreach ($store['store_hours'] as $store_hour) {
+      $open_hours[] = [
+        'key' => $store_hour['label'],
+        'value' => $store_hour['value'],
+      ];
     }
 
     $node->get('field_store_open_hours')->setValue($open_hours);
@@ -537,23 +523,16 @@ class StoresFinderUtility {
   public function getStoreAddress(NodeInterface $store, $plain_text = FALSE, $default_lang = FALSE) {
     $address = [];
 
-    if ($this->addressBookManager->getDmVersion() == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
-      $store_address = $store->get('field_address')->getValue();
+    $store_address = $store->get('field_address')->getValue();
 
-      if ($store_address) {
-        // This conversions are required to ensure we populate term names
-        // and process it properly before using in template.
-        $store_address = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
-        $store_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($store_address, $default_lang);
-        $address = [
-          '#theme' => 'store_address',
-          '#address' => $store_address,
-        ];
-      }
-    }
-    else {
+    if ($store_address) {
+      // This conversions are required to ensure we populate term names
+      // and process it properly before using in template.
+      $store_address = $this->addressBookManager->getMagentoAddressFromAddressArray(reset($store_address));
+      $store_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($store_address, $default_lang);
       $address = [
-        '#markup' => $store->get('field_store_address')->getString(),
+        '#theme' => 'store_address',
+        '#address' => $store_address,
       ];
     }
     if ($plain_text == FALSE) {

@@ -13,6 +13,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\file\FileInterface;
 use Drupal\alshaya_custom\Utility;
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 
 /**
  * Provides a block to display 'plp' results.
@@ -25,6 +26,7 @@ use Drupal\alshaya_custom\Utility;
 class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
 
   const PAGE_TYPE = 'listing';
+  const PAGE_SUB_TYPE = 'plp';
 
   /**
    * Entity type manager service.
@@ -133,7 +135,7 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
    */
   public function build() {
     // Get common configuration for Algolia pages.
-    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE);
+    $common_config = $this->alshayaAlgoliaReactConfig->getAlgoliaReactCommonConfig(self::PAGE_TYPE, self::PAGE_SUB_TYPE);
 
     // Get common config and merge with new array.
     $filters = $common_config[self::PAGE_TYPE]['filters'];
@@ -146,11 +148,15 @@ class AlshayaAlgoliaReactPLP extends AlshayaAlgoliaReactBlockBase {
     ];
 
     $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory($lang));
+    // Set default EN category filter in product list index for VM.
+    if (AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index')) {
+      $algoliaSearchValues = array_merge($algoliaSearchValues, $this->productCategoryPage->getCurrentSelectedCategory('en'));
+    }
     $reactTeaserView = $common_config['commonReactTeaserView'];
     $commonAlgoliaSearchValues = $common_config['commonAlgoliaSearch'];
     $algoliaSearch = array_merge($commonAlgoliaSearchValues, $algoliaSearchValues);
     $algoliaSearch[self::PAGE_TYPE] = $common_config[self::PAGE_TYPE];
-    $algoliaSearch['pageSubType'] = 'plp';
+    $algoliaSearch['pageSubType'] = self::PAGE_SUB_TYPE;
 
     // Get sub categories information.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();

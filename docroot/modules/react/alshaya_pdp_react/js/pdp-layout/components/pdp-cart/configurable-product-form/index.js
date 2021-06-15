@@ -5,6 +5,7 @@ import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
 import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoothScroll';
+import { isProductBuyable } from '../../../../../../js/utilities/display';
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -184,7 +185,6 @@ class ConfigurableProductForm extends React.Component {
       context,
       closeModal,
     } = this.props;
-    const { checkoutFeatureStatus } = drupalSettings;
 
     const { configurables } = configurableCombinations[skuCode];
     const { byAttribute } = configurableCombinations[skuCode];
@@ -246,11 +246,11 @@ class ConfigurableProductForm extends React.Component {
             stockQty={stockQty}
           />
         </div>
-        {(checkoutFeatureStatus === 'enabled') ? (
+        {(isProductBuyable(productInfo[skuCode].is_product_buyable)) ? (
           <>
             <div className="magv2-add-to-basket-container" ref={this.button}>
               <button
-                className="magv2-button"
+                className="magv2-button add-to-cart-button"
                 id={`add-to-cart-${context}`}
                 type="submit"
                 onClick={(e) => addToCartConfigurable(

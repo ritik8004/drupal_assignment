@@ -126,10 +126,15 @@
       font-size: 0.875rem;
       font-family: $tbs-medium;
     }
+  }
+}
 
-    h3,
-    li {
-      border-color: $header-my-acc-heading-border;
-    }
+body {
+  @include breakpoint($only-mobile) {
+    margin-top: 3.6875rem !important;
+  }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 4.5rem !important;
   }
 }

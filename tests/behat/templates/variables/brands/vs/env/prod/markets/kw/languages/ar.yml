@@ -47,8 +47,6 @@ variables:
   excluding_delivery: 'قبل التوصيل'
   vat: ''
   checkout_link: 'إتمام الشراء بأمان'
-  language_continue_shopping: 'go shopping'
-  continue_shopping: "اذهب للتسوق"
   language_mobile_language_class: 'ar'
   short: 'ar'
   language_street: 'Street A'
@@ -77,3 +75,7 @@ variables:
   postal_code: '23456'
   mobile: '55667788'
   store_area: 'Salmiya'
+  continue_shopping: 'إليك منتجاتنا المفضلة'
+  language_continue_shopping: 'Here are some of our favorites'
+  empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
+  language_empty_bag: 'Your shopping bag is empty'

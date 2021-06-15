@@ -139,6 +139,22 @@ body.path--confirmation.alias--confirmation-print {
       margin-#{$right}: 0.4375rem;
     }
   }
+
+  .total-row {
+    .warm--white {
+      @include breakpoint($only-mobile) {
+        position: static;
+      }
+    }
+
+    &.vat-container {
+      .warm--white {
+        @include breakpoint($only-mobile) {
+          position: absolute;
+        }
+      }
+    }
+  }
 }
 
 .user__order--detail .total-row:not(.price-row) {
@@ -162,24 +178,6 @@ body.path--confirmation.alias--confirmation-print {
       font-family: $hnm-regular;
       color: $user_order_detail_dark;
       font-weight: normal;
-    }
-  }
-}
-
-.user__order--detail {
-  .total-row {
-    .warm--white {
-      @include breakpoint($only-mobile) {
-        position: static;
-      }
-    }
-
-    &.vat-container {
-      .warm--white {
-        @include breakpoint($only-mobile) {
-          position: absolute;
-        }
-      }
     }
   }
 }

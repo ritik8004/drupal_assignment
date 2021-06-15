@@ -293,22 +293,13 @@ html[lang=ar] {
       min-width: auto;
     }
   }
-}
 
-.ie .address .address--primary span::before,
-.ie .address .address--primary a::before {
-  margin-top: 30px !important;
-}
-
-html[lang="ar"] {
   .ie {
     &.path--user .profile-address-book-edit-form .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
     }
   }
-}
 
-html[lang="ar"] {
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.65rem;
@@ -329,9 +320,7 @@ html[lang="ar"] {
       }
     }
   }
-}
 
-html[lang="ar"] {
   .ucbrowser {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.55rem;
@@ -346,15 +335,18 @@ html[lang="ar"] {
       }
     }
   }
-}
 
-html[lang="en"] {
   .ie,
   .safari {
     &.path--user .address-book-address .country-code-prefix {
       margin-top: 1.4rem;
     }
   }
+}
+
+.ie .address .address--primary span::before,
+.ie .address .address--primary a::before {
+  margin-top: 30px !important;
 }
 
 .ucbrowser {

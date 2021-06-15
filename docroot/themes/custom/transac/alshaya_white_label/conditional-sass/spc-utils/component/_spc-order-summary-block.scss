@@ -43,14 +43,11 @@
 
     .discount-total {
       color: $spc-order-summary-discount-text;
+      position: relative;
 
       + .value {
         color: $spc-order-summary-discount-text;
       }
-    }
-
-    .discount-total {
-      position: relative;
 
       .tooltip-anchor {
         position: absolute;

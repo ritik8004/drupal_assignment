@@ -18,5 +18,9 @@
 
   .total-line-item {
     text-transform: capitalize;
+
+    @include breakpoint($only-tablet) {
+      font-size: 0.875rem;
+    }
   }
 }

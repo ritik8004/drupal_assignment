@@ -48,8 +48,8 @@ variables:
   vat: ''
   language_vat: ''
   language_checkout_link: 'إتمام الشراء بأمان'
-  continue_shopping: 'go shopping'
-  language_continue_shopping: "اذهب للتسوق"
+  continue_shopping: 'Here are some of our favorites'
+  language_continue_shopping: 'إليك منتجاتنا المفضلة'
   mobile_language_class: 'ar'
   language_short: 'ar'
   street: 'Street A'
@@ -98,4 +98,6 @@ variables:
   filter_1: 'attr_size'
   filter_2: 'final_price'
   filter_3: 'field_acq_promotion_label.web'
+  empty_bag: 'Your shopping bag is empty'
+  language_empty_bag: 'حقيبة التسوق الخاصة بك فارغة'
 

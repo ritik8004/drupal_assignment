@@ -73,8 +73,8 @@ class AlgoliaController extends ControllerBase {
     $settings = [];
     $settings['application_id'] = $config['commonAlgoliaSearch']['application_id'];
     $settings['api_key'] = $config['commonAlgoliaSearch']['api_key'];
-    $settings['indexName'] = $config['commonAlgoliaSearch']['indexName'];
-    $settings['filters'] = $config['search']['filters'];
+    $settings['indexName'] = $config[AlshayaAlgoliaReactAutocomplete::PAGE_TYPE]['indexName'];
+    $settings['filters'] = $config[AlshayaAlgoliaReactAutocomplete::PAGE_TYPE]['filters'];
     $settings['gallery']['showHoverImage'] = $config['commonReactTeaserView']['gallery']['showHoverImage'];
     $settings['gallery']['showThumbnails'] = $config['commonReactTeaserView']['gallery']['showThumbnails'];
     $settings['swatches'] = $config['commonReactTeaserView']['swatches'];

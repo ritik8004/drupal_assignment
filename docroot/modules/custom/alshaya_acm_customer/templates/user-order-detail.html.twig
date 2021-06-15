@@ -138,6 +138,13 @@
             <div class="dark">{{ order_details.payment_method }}</div>
           </div>
 
+          {% if order_details.payment.referenceNumber %}
+            <div class="mobile-only payment--details">
+              <div class="label font-small">{{ "Reference No"|t }}</div>
+              <div class="dark">{{ order_details.payment.referenceNumber }}</div>
+            </div>
+          {% endif %}
+
           {% if order_details.payment.banktransfer_payment_details %}
             <div class="mobile-only banktransfer">
               {{ order_details.payment.banktransfer_payment_details }}
@@ -204,6 +211,11 @@
         <td class="above-mobile blend">
           <div class="label payment-method font-small">{{ "Payment method"|t }}</div>
           <div class="dark">{{ order_details.payment_method }}</div>
+
+          {% if order_details.payment.referenceNumber %}
+            <div class="label delivery-method font-small">{{ "Reference No"|t }}</div>
+            <div class="dark reference-no">{{ order_details.payment.referenceNumber }}</div>
+          {% endif %}
 
           {% if order_details.payment.banktransfer_payment_details %}
             {{ order_details.payment.banktransfer_payment_details }}

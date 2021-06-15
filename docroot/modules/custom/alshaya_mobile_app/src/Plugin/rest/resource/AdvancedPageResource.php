@@ -132,13 +132,15 @@ class AdvancedPageResource extends ResourceBase {
   public function get() {
     // Path alias of advanced page.
     $alias = $this->requestStack->query->get('url');
-    if (!$alias) {
-      $page = $this->requestStack->query->get('page');
+    $page = $this->requestStack->query->get('page');
+    if (!$alias && $page !== 'front') {
       $alias = $this->configFactory->get('alshaya_mobile_app.settings')->get('static_page_mappings.' . $page);
     }
 
     try {
-      $node = $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
+      $node = ($page === 'front')
+        ? $this->entityTypeManager->getStorage('node')->load($this->configFactory->get('alshaya_master.home')->get('entity')['id'])
+        : $this->mobileAppUtility->getNodeFromAlias($alias, self::NODE_TYPE);
     }
     catch (\Exception $e) {
       // Redirect to 404.
@@ -210,16 +212,14 @@ class AdvancedPageResource extends ResourceBase {
       );
 
       $current_blocks = array_filter($current_blocks);
-      if (!empty($current_blocks['type'])) {
+      if (isset($current_blocks['type']) && !empty($current_blocks['type'])) {
         $blocks[] = $current_blocks;
       }
       else {
         $blocks = array_merge($blocks, $current_blocks);
       }
     }
-
     $response_data['blocks'] = $blocks;
-
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
     foreach ($this->mobileAppUtility->getCacheableEntities() as $cacheable_entity) {

@@ -1,0 +1,5 @@
+kaleyra_config.settings:
+  title: 'Configure Kaleyra Settings'
+  description: 'Configure API credentials for Kaleyra SMS gateway.'
+  route_name: kaleyra.settings
+  parent: system.admin_config_system

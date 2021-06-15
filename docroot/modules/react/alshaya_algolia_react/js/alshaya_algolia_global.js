@@ -7,10 +7,6 @@
 
   Drupal.behaviors.alshayaAlgoliaReactGlobal = {
     attach: function (context, settings) {
-      $(window).on('blazySuccess', function(event, element) {
-        Drupal.plpListingProductTileHeight('row', element);
-      });
-
       // Close the facets on click anywherer outside.
       $(window).on('click', function(event) {
         var facet_block = $('.container-without-product .c-collapse-item');
@@ -20,10 +16,6 @@
         }
       });
     }
-  };
-
-  Drupal.refreshGrids = function() {
-    Drupal.plpListingProductTileHeight('full_page', null);
   };
 
   Drupal.algolia = {};

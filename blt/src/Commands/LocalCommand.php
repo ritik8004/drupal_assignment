@@ -115,12 +115,12 @@ class LocalCommand extends BltTasks {
 
     $this->say('Disable cloud modules');
     $this->taskDrush()
-      ->drush('pmu purge acquia_search acquia_connector shield')
+      ->drush('pmu purge acquia_search acquia_connector shield dblog')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
 
-    $modules_to_enable = 'dblog field_ui views_ui restui stage_file_proxy';
+    $modules_to_enable = 'syslog field_ui views_ui restui stage_file_proxy';
 
     $this->say('Enable local only modules');
     $this->taskDrush()
@@ -151,7 +151,7 @@ class LocalCommand extends BltTasks {
     // Now the last thing, dev script, I love it :).
     $dev_script_path = __DIR__ . '/../../../scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
-      $this->_exec('sh ' . $dev_script_path . ' ' . preg_replace('/\d/', '', $site));
+      $this->_exec('sh ' . $dev_script_path . ' ' . $info['local']['url']);
     }
 
   }

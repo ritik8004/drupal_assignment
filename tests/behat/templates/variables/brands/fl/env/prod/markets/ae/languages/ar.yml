@@ -46,8 +46,10 @@ variables:
   excluding_delivery: 'قبل التوصيل'
   vat: 'تتضمن ضريبة القيمة المضافة'
   checkout_link: 'إتمام الشراء بأمان'
-  language_continue_shopping: 'go shopping'
-  continue_shopping: "اذهب للتسوق"
+  continue_shopping: 'إليك منتجاتنا المفضلة'
+  language_continue_shopping: 'Here are some of our favorites'
+  empty_bag: 'حقيبة التسوق الخاصة بك فارغة.'
+  language_empty_bag: 'Your shopping bag is empty'
   mobile_language_class: 'en'
   language_short: 'en'
   area_option: 'Al Badaa'

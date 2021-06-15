@@ -1,0 +1,16 @@
+.promotions {
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+
+  &:empty {
+    display: none;
+  }
+
+  a {
+    font-size: 0.75rem;
+    color: $pdp_product_discount_text;
+    text-decoration: underline;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+}

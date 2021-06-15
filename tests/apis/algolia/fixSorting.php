@@ -8,10 +8,10 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'prod_keys.php';
 
-use AlgoliaSearch\Client;
+use Algolia\AlgoliaSearch\SearchClient;
 
-$client = new Client($app_id, $app_secret_admin);
-$indexes = $client->listIndexes();
+$client = SearchClient::create($app_id, $app_secret_admin);
+$indexes = $client->listIndices();
 $indexes = array_column($indexes['items'] ?? [], 'name');
 
 $markets = [

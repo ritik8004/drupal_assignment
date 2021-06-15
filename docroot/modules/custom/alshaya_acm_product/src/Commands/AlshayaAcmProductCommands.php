@@ -18,6 +18,8 @@ use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\acq_commerce\I18nHelper;
+use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 
 /**
  * Class Alshaya Address Product Commands.
@@ -81,6 +83,20 @@ class AlshayaAcmProductCommands extends DrushCommands {
   private $moduleHandler;
 
   /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
+   * Conductor Ingest API Helper.
+   *
+   * @var \Drupal\acq_commerce\Conductor\IngestAPIWrapper
+   */
+  private $ingestApi;
+
+  /**
    * AlshayaAcmProductCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
@@ -97,6 +113,10 @@ class AlshayaAcmProductCommands extends DrushCommands {
    *   Entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The Module Handler service.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
+   * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $ingest_api
+   *   IngestAPI manager interface.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_channel_factory,
                               ConfigFactoryInterface $config_factory,
@@ -104,7 +124,9 @@ class AlshayaAcmProductCommands extends DrushCommands {
                               EventDispatcherInterface $event_dispatcher,
                               Connection $connection,
                               EntityTypeManagerInterface $entity_type_manager,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              I18nHelper $i18n_helper,
+                              IngestAPIWrapper $ingest_api) {
     $this->drupalLogger = $logger_channel_factory->get('alshaya_acm_product');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
@@ -112,6 +134,8 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
+    $this->i18nHelper = $i18n_helper;
+    $this->ingestApi = $ingest_api;
   }
 
   /**
@@ -960,6 +984,60 @@ class AlshayaAcmProductCommands extends DrushCommands {
         }
       }
     }
+  }
+
+  /**
+   * Sync products having only one translation.
+   *
+   * @command alshaya_acm_product:sync-single-trnaslation-products
+   *
+   * @aliases sync-single-translation-products
+   * @usage sync-single-translation-products 6
+   */
+  public function syncSingleTranslationProduct($page_size = 3) {
+    $query = $this->connection->select('node_field_data', 'nf');
+    $query->join('node__field_skus', 'ns', 'ns.entity_id = nf.nid');
+    $query->addExpression('GROUP_CONCAT(ns.field_skus_value)', 'field_skus_value');
+    $query->addExpression('GROUP_CONCAT(nf.langcode)', 'langcode');
+    $query->condition('nf.type', 'acq_product');
+    $query->groupBy('nf.nid');
+    $query->having('count(nf.nid) = 1');
+    $result = $query->execute()->fetchAllKeyed(0, 1);
+
+    if (empty($result)) {
+      $this->drupalLogger->info('All the products have 2 translations.');
+      return;
+    }
+
+    $count = count($result);
+    $this->drupalLogger->info('The number of the products having only one translation are @count.', ['@count' => $count]);
+
+    $default_count = Settings::get('single_translation_product_process_limit', 100);
+    if ($count > $default_count) {
+      if (!$this->io()->confirm(dt('The number of the products having only one translation are more than @count, Do you want to sync them?', ['@count' => $default_count]))) {
+        throw new UserAbortException();
+      }
+    }
+
+    $lang_store_mapping = $this->i18nHelper->getStoreLanguageMapping();
+    $skus_grouped_by_store = [];
+    foreach ($result as $sku => $langcode) {
+      $store_id = ($langcode == 'ar') ? $lang_store_mapping['en'] : $lang_store_mapping['ar'];
+      $skus_grouped_by_store[$store_id][] = $sku;
+    }
+
+    foreach ($lang_store_mapping as $langcode => $store_id) {
+      if (!empty($skus_grouped_by_store[$store_id])) {
+        foreach (array_chunk($skus_grouped_by_store[$store_id], $page_size) as $chunk) {
+          $this->ingestApi->productFullSync($store_id, $langcode, implode(',', $chunk), '', $page_size);
+        }
+        $this->drupalLogger->info('All products having single translation for language @langcode have been re-synced. SKUs: @skus', [
+          '@langcode' => $langcode,
+          '@skus' => implode(',', $skus_grouped_by_store[$store_id]),
+        ]);
+      }
+    }
+    $this->drupalLogger->info('All products having single translation have been re-synced.');
   }
 
 }

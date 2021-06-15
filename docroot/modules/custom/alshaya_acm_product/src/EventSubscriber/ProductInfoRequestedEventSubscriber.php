@@ -104,16 +104,13 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    */
   public function processSwatch(ProductInfoRequestedEvent $event): void {
     $sku = $event->getSku();
-
+    // Fetch image data.
     $image = $this->skuImagesManager->getPdpSwatchImageUrl($sku);
-    if (empty($image)) {
-      return;
-    }
 
     $swatch = [
-      'image_url' => $image,
+      'image_url' => $image ?? NULL,
       'display_label' => $sku->get('attr_' . $event->getContext())->getString(),
-      'swatch_type' => 'image',
+      'swatch_type' => !empty($image) ? 'image' : 'text',
     ];
 
     $event->setValue($swatch);
