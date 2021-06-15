@@ -46,6 +46,7 @@ const Swatch = (props) => {
         <a
           id={`value${value}`}
           data-value={value}
+          className={classes}
           href="#"
           style={{ backgroundColor: data }}
           onClick={(e) => onSwatchSelect(e, attributeName, onClick)}
