@@ -145,15 +145,8 @@ describe('Checkout', () => {
       it('When proper store data parameter is provided', async () => {
         axios.mockResolvedValue({ data: storeData_re1_4429_vif, status: 200 });
         const getStoreInfo = utilsRewire.__get__('getStoreInfo');
-        const result = await getStoreInfo({
-          code: 'RE1-4429-VIF',
-          distance: 25.766128033681,
-          rnc_available: false,
-          sts_available: true,
-          sts_delivery_time_label: "1-2 days",
-          low_stock: false,
-          lead_time: null
-        });
+        const store = cncStoreList[0];
+        const result = await getStoreInfo(store);
 
         expect(result.phone_number).toEqual('044190246 / 044190247');
         expect(result.code).toEqual(storeData_re1_4429_vif.code);
@@ -165,15 +158,12 @@ describe('Checkout', () => {
       it('When provided store code is empty', async () => {
         axios.mockResolvedValue({ data: storeData_re1_4429_vif, status: 200 });
         const getStoreInfo = utilsRewire.__get__('getStoreInfo');
-        const result = await getStoreInfo({
-          code: '',
-          distance: 25.766128033681,
-          rnc_available: false,
-          sts_available: true,
-          sts_delivery_time_label: "1-2 days",
-          low_stock: false,
-          lead_time: null
-        });
+        // Create a deep copy so as to not modify the original variable.
+        const storeList = JSON.parse(JSON.stringify(cncStoreList));
+        const store = storeList[0];
+        store.code = '';
+        const result = await getStoreInfo(store);
+
         expect(result).toEqual(null);
       });
     });
