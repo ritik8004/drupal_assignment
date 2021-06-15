@@ -64,6 +64,7 @@ function alshaya_bp_transac_update_8014() {
   // in block.block.brandcategory
   \Drupal::configFactory()->getEditable('block.block.brandcategory')
   ->set('visibility.alshaya_listing_page_types.page_types.product_option_list', 1)
+  ->set('visibility.alshaya_listing_page_types.show_on_selected_pages', '1')
   ->save();
 }
 
