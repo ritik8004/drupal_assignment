@@ -2,9 +2,7 @@
 Feature: Test the My Account functionality
 
   Background:
-    Given I am on "user/login"
-    And I wait 5 seconds
-    And I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
+    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait 5 seconds
     Then I should be on "/user" page
 
