@@ -725,8 +725,7 @@ class AlshayaBazaarVoice {
             foreach ($result['Includes']['Reviews'] as $review) {
               if ($review['ProductId'] === $sanitized_sku) {
                 $productReviewData = [
-                  'review_summary' => $review,
-                  'product_summary' => $result['Includes']['Products'][$sanitized_sku],
+                  'review_data' => $review,
                   'user_rating' => $review['Rating'],
                 ];
                 return $productReviewData;

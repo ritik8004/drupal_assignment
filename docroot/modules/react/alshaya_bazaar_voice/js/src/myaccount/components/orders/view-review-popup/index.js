@@ -5,26 +5,31 @@ import IndividualReviewSlider from '../../../../reviews/components/individual-re
 import DisplayStar from '../../../../rating/components/stars';
 
 const ViewReviewPopup = ({
-  reviewData, productData,
-}) => (
-  <div className="user-reviews">
-    <div className="user-desc">
-      <DisplayStar
-        starPercentage={reviewData.Rating}
-      />
-      <UserReviewsDescription
-        reviewsIndividualSummary={reviewData}
-      />
-    </div>
-    <ConditionalView condition={window.innerWidth > 767 && productData !== null}>
-      <div className="user-secondary-rating">
-        <IndividualReviewSlider
-          sliderData={productData.ReviewStatistics.SecondaryRatingsAverages}
-          secondaryRatingsOrder={productData.ReviewStatistics.SecondaryRatingsAveragesOrder}
+  reviewData,
+}) => {
+  if (reviewData === null) {
+    return null;
+  }
+  return (
+    <div className="user-reviews">
+      <div className="user-desc">
+        <DisplayStar
+          starPercentage={reviewData.Rating}
+        />
+        <UserReviewsDescription
+          reviewsIndividualSummary={reviewData}
         />
       </div>
-    </ConditionalView>
-  </div>
-);
+      <ConditionalView condition={window.innerWidth > 767}>
+        <div className="user-secondary-rating">
+          <IndividualReviewSlider
+            sliderData={reviewData.SecondaryRatings}
+            secondaryRatingsOrder={reviewData.SecondaryRatingsOrder}
+          />
+        </div>
+      </ConditionalView>
+    </div>
+  );
+};
 
 export default ViewReviewPopup;

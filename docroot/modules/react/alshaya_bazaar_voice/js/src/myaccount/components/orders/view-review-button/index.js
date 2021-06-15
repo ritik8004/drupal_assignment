@@ -34,7 +34,7 @@ export default class ViewReviewButton extends React.Component {
   render() {
     const { isModelOpen } = this.state;
     const {
-      rating, reviewSummary, productSummary,
+      rating, reviewData,
     } = this.props;
     return (
       <>
@@ -56,8 +56,7 @@ export default class ViewReviewButton extends React.Component {
               <a className="close-modal" onClick={(e) => this.closeModal(e)} />
             </div>
             <ViewReviewPopup
-              reviewData={reviewSummary}
-              productData={productSummary}
+              reviewData={reviewData}
             />
           </div>
         </Popup>
