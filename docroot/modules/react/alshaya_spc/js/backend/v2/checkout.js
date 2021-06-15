@@ -188,6 +188,9 @@ const getStoreInfo = async (storeData) => {
     && typeof store.rnc_config !== 'undefined') {
     store.delivery_time = store.rnc_config;
   }
+  // If rnc is available the the value of rnc_config is already fetched above.
+  // Or rnc is not available at all. So in both cases, we do not need the value
+  // of rnc_config anymore and so we remove it.
   if (typeof store.rnc_config !== 'undefined') {
     delete store.rnc_config;
   }
