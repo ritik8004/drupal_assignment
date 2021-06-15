@@ -19,6 +19,12 @@
                 .slice(16).appendTo('.new--column_' + index);
             }
           })
+          $('.secondary--main--menu ul > li.menu--one__list-item').each(function () {
+            let menuTextLength = $(this).find('> .menu__link-wrapper > .menu__link').text().length;
+            if(menuTextLength > 23) {
+              $(this).addClass('wrap-link-text')
+            }
+          })
           $('.secondary--main--menu').show();
         } else {
           $('#block-alshayamainmenu ul.menu--one__list').append($('#block-alshayasecondarymainmenu .secondary--main--menu'));

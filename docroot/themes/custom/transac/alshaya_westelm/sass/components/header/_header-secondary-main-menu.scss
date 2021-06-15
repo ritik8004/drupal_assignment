@@ -4,6 +4,8 @@
       ul.menu--one__list {
         li.menu--one__list-item {
           &.has-child {
+            margin-right: 0.9375rem;
+
             a.menu--one__link {
               position: relative;
 
