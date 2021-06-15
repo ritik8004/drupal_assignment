@@ -276,6 +276,7 @@ function alshaya_product_list_options_list_resource_response_alter(&$data) {
   try {
     $options = array_keys($data['options_list']);
     $mobile_app_utility = \Drupal::service('alshaya_mobile_app.utility');
+    $productCategoryHelper = \Drupal::service('alshaya_acm_product_category.helper');
     $lancode = '';
     foreach ($options as $option_name) {
       foreach ($data['options_list'][$option_name] ?? [] as $option_name_key => $brands_list) {
@@ -296,7 +297,10 @@ function alshaya_product_list_options_list_resource_response_alter(&$data) {
     $alshaya_product_list_helper = \Drupal::service('alshaya_product_list.page_helper');
     $vocab_list = $alshaya_product_list_helper->getVocabListLhnBlock();
     $terms = reset($vocab_list);
-    $data['lhn_tree'] = $mobile_app_utility->productCategoryBuildMobile($terms, $lancode);
+    if($terms && $lancode){
+      $category_tree = $productCategoryHelper->productCategoryBuild('alshaya_product_list_lhn_block', $terms, $lancode, 'product_list');
+      $data['lhn_tree'] = $mobile_app_utility->excludeUnusedKeysMobile($category_tree['#lhn_cat_tree']);
+    }
   }
   catch (\Exception $e) {
     \Drupal::logger('alshaya_product_list')->error('Error occured while alter product list options list resource response alter : @message', [
