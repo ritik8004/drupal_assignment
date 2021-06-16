@@ -309,17 +309,16 @@ const formatAddressForFrontend = (address) => {
     return null;
   }
 
+  const result = { ...address };
   if (typeof address.custom_attributes !== 'undefined' && Object.keys(address.custom_attributes).length > 0) {
-    const result = { ...address };
     Object.keys(address.custom_attributes).forEach((item) => {
       const key = address.custom_attributes[item].attribute_code;
       const val = address.custom_attributes[item].value;
       result[key] = val;
     });
-    delete result.custom_attributes;
-    return result;
   }
-  return null;
+  delete result.custom_attributes;
+  return result;
 };
 
 /**
