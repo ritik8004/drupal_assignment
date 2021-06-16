@@ -305,10 +305,7 @@ const getCncStores = async (lat, lon) => {
 const formatAddressForFrontend = (address) => {
   // Do not consider addresses without custom attributes as they are required
   // for Delivery Matrix.
-  if (Object.keys(address).length === 0 || typeof address.country_id === 'undefined') {
-    return null;
-  }
-  if (address.country_id === '') {
+  if (Object.keys(address).length === 0 || typeof address.country_id === 'undefined' || address.country_id === '') {
     return null;
   }
 
