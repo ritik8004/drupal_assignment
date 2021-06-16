@@ -8,6 +8,7 @@ AH_SITE_NAME=`drush @$stack ssh 'echo $AH_SITE_NAME'`
 echo $AH_SITE_NAME;
 
 sites=`drush @$stack sfl | grep "1: " | grep -E "(www|hm.com|boots.com)" | tr "1: " " "`
+echo $sites;
 
 for site in $sites
 do
