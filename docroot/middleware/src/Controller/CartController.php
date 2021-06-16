@@ -177,13 +177,15 @@ class CartController {
       $formatted_smart_agent_details
     );
 
-    $this->cart->updateCart(['extension' => $extension]);
+    $updated = $this->cart->updateCart(['extension' => $extension]);
 
-    // Logging data sent to updateCart API call.
-    $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Update cart request data: @data.', [
-      '@cart_id' => $cart_id,
-      '@data' => json_encode($formatted_smart_agent_details),
-    ]);
+    if (empty($updated['error'])) {
+      // Logging data sent to updateCart API call.
+      $this->logger->info('Smart agent details added in updateCart API call. Cart ID: @cart_id, Update cart request data: @data.', [
+        '@cart_id' => $cart_id,
+        '@data' => json_encode($formatted_smart_agent_details),
+      ]);
+    }
 
     // Redirect to cart page and set cookie to convey
     // that we need to reset cart in storage.
