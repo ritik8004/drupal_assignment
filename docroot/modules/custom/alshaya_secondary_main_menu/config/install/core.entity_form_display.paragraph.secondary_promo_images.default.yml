@@ -10,8 +10,6 @@ dependencies:
   module:
     - link
     - svg_image
-_core:
-  default_config_hash: w-eyLwRadPjqm8unoOLyloAjNSgMD0R9iNPHphQgdl8
 id: paragraph.secondary_promo_images.default
 targetEntityType: paragraph
 bundle: secondary_promo_images
