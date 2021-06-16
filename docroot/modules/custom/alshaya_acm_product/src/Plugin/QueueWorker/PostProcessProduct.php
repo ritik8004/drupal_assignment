@@ -186,24 +186,6 @@ class PostProcessProduct extends QueueWorkerBase implements ContainerFactoryPlug
   }
 
   /**
-   * Delete SKU from feeds.
-   *
-   * @param array $feeds
-   *   Feeds array.
-   * @param string $sku
-   *   SKU.
-   */
-  public function deleteFromFeed(array $feeds, string $sku) {
-    foreach ($feeds as $feed) {
-      $this->dyProductDeltaFeedApiWrapper->productFeedDelete($feed['api_key'], $feed['id'], $sku);
-    }
-
-    $this->getLogger('PostProcessProduct')->notice('DY delete API invoked. Processed product with sku: @sku.', [
-      '@sku' => $sku,
-    ]);
-  }
-
-  /**
    * Update Sku stock info on delta feed.
    *
    * @param array $feeds

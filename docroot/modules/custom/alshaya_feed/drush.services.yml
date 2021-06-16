@@ -11,6 +11,6 @@ services:
     class: Drupal\alshaya_feed\Commands\AlshayaProductDeltaFeedCommands
     arguments:
      - '@alshaya_feed.product_delta_feed'
+     - '@config.factory'
     tags:
       - { name: drush.command }
-

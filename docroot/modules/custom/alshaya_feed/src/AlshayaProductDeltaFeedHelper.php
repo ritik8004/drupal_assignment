@@ -20,6 +20,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Psr\Log\LoggerInterface;
+use Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper;
 
 /**
  * Methods to prepare feed data.
@@ -118,6 +119,13 @@ class AlshayaProductDeltaFeedHelper {
   protected $logger;
 
   /**
+   * DY Product Delta Feed API Wrapper.
+   *
+   * @var \Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper
+   */
+  protected $dyProductDeltaFeedApiWrapper;
+
+  /**
    * AlshayaProductDeltaFeedHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -142,6 +150,8 @@ class AlshayaProductDeltaFeedHelper {
    *   Database connection service.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
+   * @param \Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper $product_feed_api_wrapper
+   *   DY Product Delta Feed API Wrapper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -154,7 +164,8 @@ class AlshayaProductDeltaFeedHelper {
     MetatagManager $metaTagManager,
     MetatagToken $token,
     Connection $connection,
-    LoggerInterface $logger
+    LoggerInterface $logger,
+    ProductDeltaFeedApiWrapper $product_feed_api_wrapper
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -167,6 +178,7 @@ class AlshayaProductDeltaFeedHelper {
     $this->configFactory = $config_factory;
     $this->connection = $connection;
     $this->logger = $logger;
+    $this->dyProductDeltaFeedApiWrapper = $product_feed_api_wrapper;
   }
 
   /**
@@ -668,6 +680,29 @@ class AlshayaProductDeltaFeedHelper {
     $this->connection->delete(self::OOS_SKU_TABLE_NAME)
       ->condition('sku', $sku)
       ->execute();
+  }
+
+  /**
+   * Delete SKU from feeds.
+   *
+   * @param string $sku
+   *   SKU.
+   */
+  public function deleteFromFeed(string $sku) {
+    $feeds = $this->configFactory->get('dynamic_yield.settings')->get('feeds');
+
+    if (empty($feeds)) {
+      $this->logger->notice('DY Feeds config is empty - dynamic_yield.settings:feeds.');
+      return;
+    }
+
+    foreach ($feeds as $feed) {
+      $this->dyProductDeltaFeedApiWrapper->productFeedDelete($feed['api_key'], $feed['id'], $sku);
+    }
+
+    $this->logger->notice('DY delete API invoked. Processed product with sku: @sku.', [
+      '@sku' => $sku,
+    ]);
   }
 
 }

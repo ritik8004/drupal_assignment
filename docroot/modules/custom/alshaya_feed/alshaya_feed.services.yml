@@ -43,6 +43,7 @@ services:
       - '@metatag.token'
       - '@database'
       - '@logger.channel.alshaya_feed'
+      - '@dynamic_yield.product_feed_api_wrapper'
 
   alshaya_feed.product_processed_event:
     class: Drupal\alshaya_feed\EventSubscriber\ProductProcessedEventSubscriber
