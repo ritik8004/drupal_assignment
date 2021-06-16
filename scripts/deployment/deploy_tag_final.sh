@@ -196,6 +196,7 @@ then
     if [ $? -ne 0 ]
     then
       log_message_and_details "$site: UPDB FAILED, site kept offline still, please check logs"
+      sh $slack_file "$site: UPDB FAILED, site kept offline still, please check logs"
     else
       drush --root=$docroot -l "${site}" alshaya-disable-maintenance &>> ${log_file}
       log_message_and_details "$site: UPDB done and site put back online"
