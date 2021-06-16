@@ -101,7 +101,7 @@
     }
 
     .price-block {
-      margin-top: 0.25rem;
+      margin: 0.25rem 0;
     }
 
     .price {
@@ -116,7 +116,6 @@
     .content--item-code {
       font-size: 0.625rem;
       color: $pdp_product_itemcode;
-      margin-bottom: 0.75rem;
     }
 
     .content--item-code,
