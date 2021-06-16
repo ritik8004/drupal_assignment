@@ -162,13 +162,16 @@ const formatAddressForShippingBilling = (address) => {
     delete data.static;
   }
 
-  if (typeof data.carrier_info !== 'undefined') {
+  if (typeof data.carrier_info !== 'undefined' && data.carrier_info.length > 0) {
     delete data.carrier_info;
   }
 
   data.customAttributes = [];
   Object.keys(data).forEach((key) => {
-    const value = (data[key] !== null) ? data[key] : '';
+    let value = data[key];
+    if (!Array.isArray(value) && value === null) {
+      value = '';
+    }
     data.customAttributes.push(
       {
         attributeCode: key,
@@ -177,8 +180,8 @@ const formatAddressForShippingBilling = (address) => {
     );
   });
 
-  if (typeof address.street === 'string') {
-    data.street = [address.street];
+  if (typeof data.street === 'string') {
+    data.street = [data.street];
   }
 
   return {
@@ -437,24 +440,20 @@ const getCncStores = async (lat, lon) => {
 const formatAddressForFrontend = (address) => {
   // Do not consider addresses without custom attributes as they are required
   // for Delivery Matrix.
-  if (Object.keys(address).length === 0 || typeof address.country_id === 'undefined') {
-    return null;
-  }
-  if (address.country_id === '') {
+  if (Object.keys(address).length === 0 || typeof address.country_id === 'undefined' || address.country_id === '') {
     return null;
   }
 
+  const result = { ...address };
   if (typeof address.custom_attributes !== 'undefined' && Object.keys(address.custom_attributes).length > 0) {
-    const result = { ...address };
     Object.keys(address.custom_attributes).forEach((item) => {
       const key = address.custom_attributes[item].attribute_code;
       const val = address.custom_attributes[item].value;
       result[key] = val;
     });
-    delete result.custom_attributes;
-    return result;
   }
-  return null;
+  delete result.custom_attributes;
+  return result;
 };
 
 /**
