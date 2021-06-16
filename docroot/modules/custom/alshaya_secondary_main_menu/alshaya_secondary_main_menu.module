@@ -50,6 +50,12 @@ function alshaya_secondary_main_menu_theme($existing, $type, $theme, $path) {
         'data' => NULL,
       ],
     ],
+    'alshaya_secondary_promo_image' => [
+      'template' => 'alshaya_secondary_promo_image',
+      'variables' => [
+        'promo' => NULL,
+      ],
+    ],
   ];
 }
 

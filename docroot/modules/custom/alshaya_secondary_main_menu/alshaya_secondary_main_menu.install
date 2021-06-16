@@ -15,3 +15,4 @@ function alshaya_secondary_main_menu_uninstall() {
   Drupal::configFactory()->getEditable('block.block.alshayasecondarymainmenu')->delete();
   \Drupal::configFactory()->getEditable('system.menu.secondary-main-menu')->delete();
 }
+

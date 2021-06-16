@@ -7,7 +7,32 @@
 
  use Drupal\block\Entity\Block;
  use Drupal\block\BlockInterface;
-
+  /**
+  * Implements hook_update_N().
+  *
+  * Add settings for Promo Menu block.
+  */
+ function alshaya_furnitures_update_8006() {
+   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+   $manager = \Drupal::service('alshaya_config.manager');
+   $manager->updateConfigs(
+     [
+       'block.block.promomenuimages',
+       'system.menu.super-menu',
+     ],
+     'alshaya_furnitures'
+   );
+   // Get current default theme.
+   $current_theme = \Drupal::config('system.theme')->get('default');
+   // Move blocks to current default theme.
+   if (!empty($current_theme)) {
+     alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+   }
+   $main_block = Block::load('alshayamainmenu');
+   if ($main_block instanceof BlockInterface) {
+     Block::load('promomenuimages')->setWeight(($main_block->getWeight())+5)->save();
+   }
+ }
  /**
   * Implements hook_update_N().
   *
