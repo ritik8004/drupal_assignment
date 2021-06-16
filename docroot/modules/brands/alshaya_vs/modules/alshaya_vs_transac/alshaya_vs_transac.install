@@ -12,6 +12,19 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Change block region for Size Facet Block for VS Bra PLPs.
+ */
+function alshaya_vs_transac_update_8016() {
+  $block = \Drupal::entityTypeManager()->getStorage('block')
+    ->load('sizefacetblock');
+  $block->setRegion('content');
+  $block->setWeight('-50');
+  $block->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable grouping_attribute for api response.
  */
 function alshaya_vs_transac_update_8015() {

@@ -39,20 +39,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ProductExcludeLinkedResource extends ResourceBase {
 
   /**
-   * List of attributes with label for api.
-   */
-  const ATTRIBUTES_WITH_LABEL = [
-    'size',
-    'band_size',
-    'cup_size',
-    'size_shoe_eu',
-    'size_shoe_uk',
-    'size_shoe_us',
-    'fragrance',
-    'color',
-  ];
-
-  /**
    * SKU Manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
@@ -559,19 +545,12 @@ class ProductExcludeLinkedResource extends ResourceBase {
           'value' => $value,
           'skus' => $skus,
         ];
-        // Checking for attribute codes for size and other attributes.
-        if (in_array($attribute_code, self::ATTRIBUTES_WITH_LABEL)) {
-          if (!empty($size_labels[$value])) {
-            $attr_value['label'] = $size_labels[$value];
-          }
-          elseif (
-            ($term = $this->productOptionsManager->loadProductOptionByOptionId(
-              $attribute_code,
-              $value,
-              $this->mobileAppUtility->currentLanguage())
-            )
-            && $term instanceof TermInterface
-          ) {
+
+        // Labels for all attribute codes.
+        $attr_value['label'] = $size_labels[$value] ?? '';
+        if (empty($attr_value['label'])) {
+          $term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $value, $this->mobileAppUtility->currentLanguage());
+          if ($term instanceof TermInterface) {
             $attr_value['label'] = $term->label();
           }
         }
