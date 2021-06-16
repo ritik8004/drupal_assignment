@@ -5,6 +5,20 @@ import { cartErrorCodes, getDefaultErrorMessage } from './error';
 
 window.commerceBackend = window.commerceBackend || {};
 
+/**
+ * Gets the cart ID for existing cart.
+ *
+ * @returns {string}
+ *   The cart id.
+ */
+window.commerceBackend.getCartId = () => {
+  const cartId = localStorage.getItem('cart_id');
+  if (typeof cartId === 'string' || typeof cartId === 'number') {
+    return cartId;
+  }
+  return null;
+};
+
 // Contains the raw unprocessed cart data.
 let rawCartData = null;
 
@@ -103,13 +117,15 @@ const i18nMagentoUrl = (path) => `${getCartSettings('url')}/${getCartSettings('s
 /**
  * Handle errors and messages.
  *
- * @param {Promise} response
+ * @param {Promise} apiResponse
  *   The response from the API.
  *
  * @returns {Promise}
  *   Returns a promise object.
  */
-const handleResponse = (response) => {
+const handleResponse = (apiResponse) => {
+  // Deep clone the response object.
+  const response = JSON.parse(JSON.stringify(apiResponse));
   // In case we don't receive any response data.
   if (typeof response.data === 'undefined' || response.data.length === 0) {
     logger.error(`Error while doing MDC api. Response result is empty. Status code: ${response.status}`);
@@ -387,6 +403,21 @@ const updateCart = (data) => {
     });
 };
 
+/**
+ * Formats the error message as required for cart.
+ *
+ * @param {int} code
+ *   The response code.
+ * @param {string} message
+ *   The response message.
+ */
+const getFormattedError = (code, message) => ({
+  error: true,
+  error_code: code,
+  error_message: message,
+  response_message: [message, 'error'],
+});
+
 export {
   isAnonymousUserWithoutCart,
   callDrupalApi,
@@ -396,4 +427,5 @@ export {
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
   getCartSettings,
+  getFormattedError,
 };

@@ -17,6 +17,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class Product Category Tree.
@@ -141,6 +142,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $productCategoryHelper;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -161,6 +169,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Database connection.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   Product Category Helper service object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               EntityRepositoryInterface $entity_repository,
@@ -170,7 +180,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
                               RequestStack $request_stack,
                               CurrentPathStack $current_path,
                               Connection $connection,
-                              ProductCategoryHelper $product_category_helper) {
+                              ProductCategoryHelper $product_category_helper,
+                              ModuleHandlerInterface $module_handler) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->entityRepository = $entity_repository;
     $this->languageManager = $language_manager;
@@ -181,6 +192,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->connection = $connection;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->productCategoryHelper = $product_category_helper;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -344,7 +356,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       if (!empty($this->termsImagesAndColors[$term->tid])) {
         $data[$term->tid]['term_image'] = $this->termsImagesAndColors[$term->tid];
       }
-
+      // Alter to update data.
+      $this->moduleHandler->alter('alshaya_acm_product_category_tree_data', $data, $term);
     }
 
     return $data;

@@ -33,6 +33,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\redirect\RedirectRepository;
 use Drupal\Core\Database\Connection;
 use Drupal\alshaya_super_category\AlshayaSuperCategoryManager;
+use Drupal\Core\Path\PathValidatorInterface;
 
 /**
  * Mobile App Utility Class.
@@ -197,6 +198,13 @@ class MobileAppUtility {
   protected $superCategoryManager;
 
   /**
+   * The Path Validator service.
+   *
+   * @var \Drupal\Core\Path\PathValidatorInterface
+   */
+  protected $pathValidator;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -233,6 +241,8 @@ class MobileAppUtility {
    *   Database service.
    * @param \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_manager
    *   The super category manager service.
+   * @param \Drupal\Core\Path\PathValidatorInterface $path_validator
+   *   Path Validator service object.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -250,7 +260,8 @@ class MobileAppUtility {
                               RedirectRepository $redirect_repsitory,
                               SkuInfoHelper $sku_info_helper,
                               Connection $database,
-                              AlshayaSuperCategoryManager $super_category_manager) {
+                              AlshayaSuperCategoryManager $super_category_manager,
+                              PathValidatorInterface $path_validator) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -270,6 +281,7 @@ class MobileAppUtility {
     $this->skuInfoHelper = $sku_info_helper;
     $this->database = $database;
     $this->superCategoryManager = $super_category_manager;
+    $this->pathValidator = $path_validator;
   }
 
   /**
@@ -640,52 +652,14 @@ class MobileAppUtility {
         ? $this->getDeepLink($homepage_node)
         : $this->getDeepLink($term);
 
-      // Check if any redirection is set up for the term path.
-      // We provide the technical taxonomy term path here and not the alias
-      // as alias redirection for taxonomy terms doesn't seem to work on Drupal
-      // front end.
-      $term_technical_path = '/taxonomy/term/' . $term->tid;
-      $redirected_path = $this->getRedirectUrl("/{$this->currentLanguage}" . $term_technical_path);
-
-      // If no redirect, then we get the same path we passed for getRedirectUrl
-      // without the langcode and hence we do not process them further.
-      if (trim($redirected_path, '/') != trim($term_technical_path, '/')) {
-        // Process path and deeplink again if a redirection has been set up.
-        // Get the path of the target term.
-        $internal_path = $this->aliasManager->getPathByAlias(
-          rtrim(str_replace("/{$this->currentLanguage}", '', $redirected_path), '/'),
-          $this->currentLanguage
-        );
-
-        try {
-          // Get the taxonomy term ID of the target term.
-          $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();
-          ;
-          if (!empty($params) && !empty($params['taxonomy_term'])) {
-            $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
-
-            // Get path and deeplink of target term.
-            if ($redirected_term instanceof TermInterface
-              && $redirected_term->bundle() == 'acq_product_category') {
-              $path = $redirected_path;
-              $deeplink = $this->getDeepLink($redirected_term);
-            }
-          }
-        }
-        catch (\Exception $e) {
-          $this->getLogger('MobileAppUtility')->warning('Internal path looks invalid, please check @internal_path for term id @id', [
-            '@id' => $term->tid,
-            '@internal_path' => $internal_path,
-          ]);
-        }
-      }
+      $redirected_term_deeplink = $this->getRedirectedTermDeeplink($term->tid);
 
       $record = [
         'id' => (int) $term->tid,
         'name' => $term->name,
         'description'  => !empty($term->description__value) ? $term->description__value : '',
         'path' => $path,
-        'deeplink' => $deeplink,
+        'deeplink' => !empty($redirected_term_deeplink) ? $redirected_term_deeplink : $deeplink,
         'include_in_menu' => (bool) $term->include_in_menu,
         'show_on_dpt' => isset($term->show_on_dept) ? (int) $term->show_on_dept : NULL,
         'cta' => $term->cta ?? NULL ,
@@ -991,6 +965,119 @@ class MobileAppUtility {
       $homepage_node = $this->entityTypeManager->getStorage('node')->load($homepage_nid);
     }
     return !empty($homepage_node) ? $homepage_node : [];
+  }
+
+  /**
+   * Lhn status for node.
+   *
+   * @param string $url
+   *   List of all options.
+   * @param string $langcode
+   *   List of all options.
+   *
+   * @return bool
+   *   Status of LHN.
+   */
+  public function getProductListLhnStatus($url, $langcode) {
+    $url_object = $this->pathValidator->getUrlIfValid($url);
+    $route_parameters = $url_object->getrouteParameters();
+    if (!$route_parameters['node']) {
+      return FALSE;
+    }
+    $node = $this->entityTypeManager->getStorage('node')->load($route_parameters['node']);
+    if (!$node instanceof NodeInterface) {
+      return FALSE;
+    }
+    // Get translated node.
+    $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+    if ($node->bundle() === 'product_list' && $node->get('field_show_in_lhn_options_list')) {
+      $product_list_lhn_options_list_value = $node->get('field_show_in_lhn_options_list')[0];
+      if ($product_list_lhn_options_list_value === NULL) {
+        $product_list_lhn_value = 'Yes';
+      }
+      else {
+        $product_list_lhn_value = $node->get('field_show_in_lhn_options_list')->getValue()[0]['value'];
+      }
+    }
+    if ($product_list_lhn_value === 'No') {
+      // IF No status will be TRUE.
+      return FALSE;
+    }
+    // IF Empty or Yes status will be TRUE.
+    return TRUE;
+  }
+
+  /**
+   * Get the category tree exluding unused keys in mobile.
+   *
+   * @param array $term_data
+   *   Data code.
+   *
+   * @return array
+   *   Processed term data from lhn category tree.
+   */
+  public function excludeUnusedKeysMobile(array &$term_data) {
+    $used_keys = ['label', 'id', 'path', 'clickable', 'child', 'deep_link'];
+    foreach ($term_data as $parent_id => $parent_value) {
+      $term_data[$parent_id] = $parent_value;
+      foreach ($parent_value as $key => $value) {
+        if (!in_array($key, $used_keys)) {
+          unset($term_data[$parent_id][$key]);
+        }
+        if ($key == 'child' && !empty($value)) {
+          $this->excludeUnusedKeysMobile($term_data[$parent_id][$key]);
+        }
+      }
+    }
+    return $term_data;
+  }
+
+  /**
+   * Function to get deeplink for term if it has a redirected path.
+   *
+   * @param string $tid
+   *   Term ID.
+   */
+  public function getRedirectedTermDeeplink($tid) {
+    $deeplink = NULL;
+    // Check if any redirection is set up for the term path.
+    // We provide the technical taxonomy term path here and not the alias
+    // as alias redirection for taxonomy terms doesn't seem to work on Drupal
+    // front end.
+    $term_technical_path = '/taxonomy/term/' . $tid;
+    $redirected_path = $this->getRedirectUrl("/{$this->currentLanguage}" . $term_technical_path);
+
+    // If no redirect, then we get the same path we passed for getRedirectUrl
+    // without the langcode and hence we do not process them further.
+    if (trim($redirected_path, '/') != trim($term_technical_path, '/')) {
+      // Process path and deeplink again if a redirection has been set up.
+      // Get the path of the target term.
+      $internal_path = $this->aliasManager->getPathByAlias(
+        rtrim(str_replace("/{$this->currentLanguage}", '', $redirected_path), '/'),
+        $this->currentLanguage
+      );
+
+      try {
+        // Get the taxonomy term ID of the target term.
+        $params = Url::fromUri('internal:' . $internal_path)->getRouteParameters();
+        if (!empty($params) && !empty($params['taxonomy_term'])) {
+          $redirected_term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
+
+          // Get path and deeplink of target term.
+          if ($redirected_term instanceof TermInterface
+            && $redirected_term->bundle() == 'acq_product_category') {
+            $deeplink = $this->getDeepLink($redirected_term);
+          }
+        }
+      }
+      catch (\Exception $e) {
+        $this->getLogger('MobileAppUtility')->warning('Internal path looks invalid, please check @internal_path for term id @id', [
+          '@id' => $tid,
+          '@internal_path' => $internal_path,
+        ]);
+      }
+    }
+    return $deeplink;
   }
 
 }
