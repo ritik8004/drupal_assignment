@@ -545,19 +545,16 @@ class ProductExcludeLinkedResource extends ResourceBase {
           'value' => $value,
           'skus' => $skus,
         ];
+
         // Labels for all attribute codes.
-        if (!empty($size_labels[$value])) {
-          $attr_value['label'] = $size_labels[$value];
-        }
-        elseif (
-          ($term = $this->productOptionsManager->loadProductOptionByOptionId(
-            $attribute_code,
-            $value,
-            $this->mobileAppUtility->currentLanguage())
-          )
-          && $term instanceof TermInterface
-        ) {
-          $attr_value['label'] = $term->label();
+        $attr_value['label'] = $size_labels[$value] ?? '';
+        if (empty($attr_value['label'])) {
+          $term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $value, $this->mobileAppUtility->currentLanguage());
+
+          if ($term instanceof TermInterface) {
+            $attr_value['label'] = $term->label();
+          }
+
         }
 
         $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
