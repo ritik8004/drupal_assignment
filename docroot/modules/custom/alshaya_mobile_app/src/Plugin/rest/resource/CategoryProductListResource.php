@@ -276,10 +276,12 @@ class CategoryProductListResource extends ResourceBase {
     foreach ($subcategory_list_view->result as $subcategory_list_view_value) {
       $sub_category_entity_list = $subcategory_list_view_value->_entity;
       $sub_category_entity = $this->entityRepository->getTranslationFromContext($sub_category_entity_list);
+      $deeplink = $this->mobileAppUtility->getDeepLink($sub_category_entity);
+      $redirect_term_deeplink = $this->mobileAppUtility->getRedirectedTermDeeplink($sub_category_entity->id());
       $data[] = [
         'id' => $sub_category_entity->get('tid')->getValue()[0]['value'],
         'label' => $sub_category_entity->get('name')->getValue()[0]['value'],
-        'deeplink' => $this->mobileAppUtility->getDeepLink($sub_category_entity),
+        'deeplink' => !empty($redirect_term_deeplink) ? $redirect_term_deeplink : $deeplink,
       ];
     }
     return $data;

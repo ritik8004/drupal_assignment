@@ -40,6 +40,33 @@ nav.menu--account.smart-agent-login {
   }
 }
 
+.block-alshaya-my-account-links > .smart-agent-header-wrapper {
+  @include breakpoint($upto-desktop) {
+    margin: 0 auto;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1.25rem 0;
+    height: auto;
+    display: flex;
+    background: $smart-agent-banner-bg;
+
+    > span {
+      font-size: 0.875rem;
+      padding: 0.5rem 0;
+      text-transform: none;
+      color: $smart-agent-banner-color;
+
+      &.agent-logout {
+        padding-#{$left}: 0;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
 body.menu--open {
   nav.menu--account.smart-agent-login {
     + .smart-agent-header-wrapper {
