@@ -34,21 +34,17 @@ export default class RecentOrders extends React.Component {
     return (
       <>
         <ConditionalView condition={reviewData === ''}>
-          <div className="button-wrapper">
-            <WriteReviewButton
-              reviewedByCurrentUser={false}
-              productId={productId}
-              context="myaccount"
-            />
-          </div>
+          <WriteReviewButton
+            reviewedByCurrentUser={false}
+            productId={productId}
+            context="myaccount"
+          />
         </ConditionalView>
         <ConditionalView condition={reviewData !== ''}>
-          <div className="button-wrapper">
-            <ViewReviewButton
-              rating={rating}
-              reviewData={reviewData}
-            />
-          </div>
+          <ViewReviewButton
+            rating={rating}
+            reviewData={reviewData}
+          />
         </ConditionalView>
       </>
     );

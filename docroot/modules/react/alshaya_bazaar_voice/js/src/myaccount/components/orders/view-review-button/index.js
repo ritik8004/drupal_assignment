@@ -3,7 +3,6 @@ import Popup from 'reactjs-popup';
 import DisplayStar from '../../../../rating/components/stars';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import ViewReviewPopup from '../view-review-popup';
-import SectionTitle from '../../../../utilities/section-title';
 
 export default class ViewReviewButton extends React.Component {
   constructor(props) {
@@ -52,7 +51,6 @@ export default class ViewReviewButton extends React.Component {
         >
           <div className="write-review-form">
             <div className="title-block">
-              <SectionTitle>{getStringMessage('view_review')}</SectionTitle>
               <a className="close-modal" onClick={(e) => this.closeModal(e)} />
             </div>
             <ViewReviewPopup

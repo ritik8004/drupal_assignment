@@ -400,6 +400,9 @@
             <div class="dark">{{ product.total }}</div>
           {% endif %}
         {% endif %}
+        {% if product.bazaarvoice_link %}
+          <div class="myaccount-write-review" data-sku={{ product.parent_sku }}></div>
+        {% endif %}
       </div>
     </td>
 
@@ -419,7 +422,7 @@
       {% endif %}
     </td>
     {% if product.bazaarvoice_link %}
-      <td class="above-mobile user-review">
+      <td class="above-mobile user-review bazaarvoice-enable">
         <div class="myaccount-write-review" data-sku={{ product.parent_sku }}></div>
       </td>
     {% endif %}
