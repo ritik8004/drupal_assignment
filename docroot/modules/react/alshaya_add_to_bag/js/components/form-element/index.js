@@ -16,6 +16,7 @@ const FormElement = (props) => {
     onChange,
     isHidden,
     allowedValues,
+    groupData,
   } = props;
 
   let element = null;
@@ -37,6 +38,7 @@ const FormElement = (props) => {
           onClick={onChange}
           isHidden={isHidden}
           allowedValues={allowedValues}
+          groupData={groupData}
         />
       );
       break;
@@ -53,6 +55,7 @@ const FormElement = (props) => {
           onChange={onChange}
           isHidden={isHidden}
           allowedValues={allowedValues}
+          groupData={groupData}
         />
       );
       break;
