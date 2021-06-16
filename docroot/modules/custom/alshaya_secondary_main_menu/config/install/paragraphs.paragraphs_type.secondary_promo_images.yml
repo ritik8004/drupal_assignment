@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: secondary_promo_images
-label: 'Secondary PROMO IMAGES'
+label: 'promotion image'
 icon_uuid: null
 description: ''
 behavior_plugins: {  }
