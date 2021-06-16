@@ -1,4 +1,6 @@
 <?php
+ use Drupal\block\Entity\Block;
+ use Drupal\block\BlockInterface;
 
 /**
  * @file
@@ -14,5 +16,36 @@
 function alshaya_secondary_main_menu_uninstall() {
   Drupal::configFactory()->getEditable('block.block.alshayasecondarymainmenu')->delete();
   \Drupal::configFactory()->getEditable('system.menu.secondary-main-menu')->delete();
+}
+
+/**
+ * Implements hook_install().
+ * Adusting block weight to match design.
+ */
+function alshaya_secondary_main_menu_install() {
+  $current_theme = \Drupal::config('system.theme')->get('default');
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+  $algolia_block = Block::load('alshayaalgoliareactautocomplete');
+  if (($current_theme == 'alshaya_pottery_barn') || ($current_theme == 'alshaya_westelm')) {
+    if ($algolia_block instanceof BlockInterface) {
+      Block::load('branding')->setWeight(($algolia_block->getWeight())+3)->save();
+    }
+  }
+  elseif ($current_theme == 'alshaya_pottery_barn_kids') {
+    if ($algolia_block instanceof BlockInterface) {
+      Block::load('branding')->setWeight(($algolia_block->getWeight())+20)->save();
+    }
+  }
+  $branding_block = Block::load('branding');
+  if ($branding_block instanceof BlockInterface) {
+    Block::load('alshayasecondarymainmenu')->setWeight(($branding_block->getWeight())+8)->save();
+  }
+  $main_block = Block::load('alshayamainmenu');
+  if ($main_block instanceof BlockInterface) {
+    Block::load('promomenuimages')->setWeight(($main_block->getWeight())+5)->save();
+  }
 }
 
