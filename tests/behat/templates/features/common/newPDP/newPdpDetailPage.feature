@@ -1,4 +1,4 @@
-@javascript @smoke @desktop @newPdp @mcaeuat @aeoaeuat @flsauat @flkwprod
+@javascript @smoke @desktop @newPdp @flsauat @flkwprod
 Feature: Testing new PDP page for desktop
 
   Background:
@@ -43,6 +43,24 @@ Feature: Testing new PDP page for desktop
     And I wait 5 seconds
     Then the element ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" should not exist
     Then the element ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper" should not exist
+
+  Scenario: To verify user is able to see the standard delivery methods
+    Then I should see a ".magv2-pdp-standard-delivery-wrapper" element on page
+    Then I should see a ".magv2-pdp-standard-delivery-wrapper .magv2-pdp-section-title" element on page
+    And I click the element ".magv2-pdp-standard-delivery-wrapper .magv2-pdp-section-title" on page
+    Then I should see a ".standard-delivery-detail" element on page
+
+  Scenario: To verify that user is able to share the PDP page
+    Then I should see a ".magv2-pdp-share-wrapper" element on page
+    Then I should see a ".magv2-share-title-wrapper" element on page
+    Then I should see a ".sharethis-wrapper" element on page
+    Then I should see the link for ".sharethis-wrapper .st_facebook_custom"
+    Then I should see the link for ".sharethis-wrapper .st_twitter_custom"
+    Then I should see the link for ".sharethis-wrapper .st_instagram_custom"
+    And I click on ".copy-button" element
+    And I navigate to the copied URL
+    And I wait for the page to load
+    Then I should see a ".magv2-pdp-description-wrapper" element on page
 
   Scenario: To verify, add to cart button is visible and is sticky
     Then I should see a "#add-to-cart-main" element on page
@@ -93,3 +111,26 @@ Feature: Testing new PDP page for desktop
     Then the element ".magv2-desc-popup-container .magv2-desc-popup-wrapper .magv2-desc-popup-header-wrapper a.close" should not exist
     Then the element ".magv2-popup-panel .magv2-pdp-popup-content .magv2-desc-popup-container .magv2-desc-popup-wrapper" should not exist
 
+  @language
+  Scenario: To verify user is able to see the standard delivery methods
+    When I follow "{language_link}"
+    And I wait for the page to load
+    Then I should see a ".magv2-pdp-standard-delivery-wrapper" element on page
+    Then I should see a ".magv2-pdp-standard-delivery-wrapper .magv2-pdp-section-title" element on page
+    And I click the element ".magv2-pdp-standard-delivery-wrapper .magv2-pdp-section-title" on page
+    Then I should see a ".standard-delivery-detail" element on page
+
+  @language
+  Scenario: To verify that user is able to share the PDP page
+    When I follow "{language_link}"
+    And I wait for the page to load
+    Then I should see a ".magv2-pdp-share-wrapper" element on page
+    Then I should see a ".magv2-share-title-wrapper" element on page
+    Then I should see a ".sharethis-wrapper" element on page
+    Then I should see the link for ".sharethis-wrapper .st_facebook_custom"
+    Then I should see the link for ".sharethis-wrapper .st_twitter_custom"
+    Then I should see the link for ".sharethis-wrapper .st_instagram_custom"
+    And I click on ".copy-button" element
+    And I navigate to the copied URL
+    And I wait for the page to load
+    Then I should see a ".magv2-pdp-description-wrapper" element on page

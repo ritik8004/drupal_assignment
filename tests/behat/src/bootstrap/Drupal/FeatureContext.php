@@ -40,6 +40,12 @@ class FeatureContext extends CustomMinkContext
 
   private $parameters;
 
+  /**
+   * Storing URL of page.
+   * @var
+   */
+  public $pageurl;
+
   public function __construct(array $parameters = [])
   {
     $this->parameters = $parameters;
@@ -172,7 +178,7 @@ class FeatureContext extends CustomMinkContext
     $this->getSession()->getPage()->fillField('edit-name', $arg1);
     $this->getSession()->getPage()->fillField('edit-pass', $arg2);
     $this->iWaitSeconds('10');
-    $this->getSession()->getPage()->pressButton('edit-submit');
+    $this->getSession()->executeScript('jQuery("#edit-submit").click()');
     $this->iWaitSeconds('5');
   }
 
@@ -2681,6 +2687,13 @@ JS;
     else {
       throw new \Exception(sprintf('Add to cart button not found.'));
     }
+  }
+
+  /**
+   * @Given /^I navigate to the copied URL$/
+   */
+  public function iNavigateUrl() {
+    $this->pageurl = $this->getSession()->getCurrentUrl();
   }
 
 }
