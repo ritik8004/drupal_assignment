@@ -161,7 +161,7 @@ export default class ReviewSummary extends React.Component {
    */
   handlePagination = (event) => {
     event.preventDefault();
-    const { buttonValue } = event.detail;
+    const buttonValue = event.detail;
     if (buttonValue === 'prev') {
       this.previousPage();
     }
