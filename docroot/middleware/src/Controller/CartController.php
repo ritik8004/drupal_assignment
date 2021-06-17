@@ -168,6 +168,9 @@ class CartController {
     $cart = $this->cart->getCart();
 
     if (!empty($cart['error'])) {
+      $this->logger->info('Failed to get cart to resume order assisted by smart agent. Cart ID: @cart_id is invalid or no longer available.', [
+        '@cart_id' => $cart_id,
+      ]);
       return new RedirectResponse('/' . $data['langcode'] . '/cart', 302);
     }
 
