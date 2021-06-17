@@ -13,36 +13,14 @@
 
 $dir = dirname(DRUPAL_ROOT);
 
-// Web requests.
-if (!empty($_SERVER['HTTP_HOST'])) {
-  $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
-}
-// Drush requests.
-else {
-  foreach ($_SERVER['argv'] as $arg) {
-    if (strpos($arg, '--uri') > -1) {
-      $url = str_replace('--uri=', '', $arg);
-      $url = str_replace('https://', '', $url);
-      $url = str_replace('http://', '', $url);
-
-      $hostname_parts = explode('.', $url);
-      break;
-    }
-  }
-}
-
-// Support LANDO and Vagrant both.
-$host_site_code = getenv('LANDO')
-  ? $hostname_parts[0]
-  : str_replace('alshaya-', '', $hostname_parts[1]);
+global $host_site_code;
 
 // We set "drupal" as a default database if no domain found. This assures it won't throw errors on empty --uri parameter
-$drupal_database = ( $host_site_code == 'default_local' ? 'drupal' : 'drupal_alshaya_' . str_replace('-', '_', $host_site_code) );
-$host = 'localhost';
+$drupal_database = $host_site_code == 'default_local'
+  ? 'drupal'
+  : 'drupal_alshaya_' . str_replace('-', '_', $host_site_code);
 
-if (getenv('LANDO')) {
-  $host = 'database';
-}
+$host = getenv('LANDO') ? 'database' : 'localhost';
 
 $databases = array(
   'default' =>
@@ -145,6 +123,8 @@ $settings['extension_discovery_scan_tests'] = FALSE;
 $settings['file_scan_ignore_directories'] = [
   'node_modules',
   'bower_components',
+  'middleware',
+  'appointment',
 ];
 
 /**

@@ -97,6 +97,9 @@ tooling:
     service: appserver
     cmd: cd /app/behat_rework && ./bin/behat -vvv -c behat-lando.yml --format pretty
 
+excludes:
+  - vendor
+
 events:
   post-start:
     - appserver: /app/.lando/scripts/provision/database.sh
