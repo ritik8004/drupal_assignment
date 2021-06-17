@@ -618,6 +618,13 @@ class Cart {
       return $this->getCart(TRUE);
     }
 
+    // Return if cart is empty.
+    $cart = $this->getCart();
+
+    if (empty($cart)) {
+      return $cart;
+    }
+
     $data['items'][] = [
       'sku' => $sku,
       'qty' => $quantity,
