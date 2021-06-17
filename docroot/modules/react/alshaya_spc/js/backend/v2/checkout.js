@@ -1,13 +1,12 @@
 import {
   isAnonymousUserWithoutCart,
-  updateCart,
   getFormattedError,
-  getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
   callDrupalApi,
   callMagentoApi,
 } from './common';
+import { getCart, updateCart, getProcessedCartData } from './cart';
 import { getDefaultErrorMessage } from './error';
 import { logger } from './utility';
 
@@ -19,14 +18,6 @@ window.commerceBackend = window.commerceBackend || {};
  * @returns bool
  */
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
-
-/**
- * Transforms cart data to match the data structure from middleware.
- *
- * @param {object} cartData
- *   The cart data object.
- */
-window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(data);
 
 /**
  * Get data related to product status.
@@ -162,7 +153,7 @@ const formatAddressForShippingBilling = (address) => {
     delete data.static;
   }
 
-  if (typeof data.carrier_info !== 'undefined' && data.carrier_info.length > 0) {
+  if (typeof data.carrier_info !== 'undefined') {
     delete data.carrier_info;
   }
 
@@ -534,7 +525,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   // Re-use the processing done for cart page.
-  const response = window.commerceBackend.getProcessedCartData(data);
+  const response = getProcessedCartData(data);
   response.cnc_enabled = cncStatus;
   response.customer = getCustomerPublicData(data.customer);
   response.shipping = (typeof data.shipping !== 'undefined')
@@ -599,7 +590,7 @@ window.commerceBackend.getCartForCheckout = () => {
     return new Promise((resolve) => resolve({ error: true }));
   }
 
-  window.commerceBackend.getCart()
+  getCart()
     .then((response) => {
       if (typeof response.data === 'undefined' || response.data.length === 0) {
         if (typeof response.data.error_message !== 'undefined') {
@@ -621,9 +612,8 @@ window.commerceBackend.getCartForCheckout = () => {
         return new Promise((resolve) => resolve(error));
       }
 
-      const processedData = {
-        data: getProcessedCheckoutData(response),
-      };
+      const processedData = getProcessedCheckoutData(response);
+
       return new Promise((resolve) => resolve(processedData));
     })
     .catch((response) => {

@@ -7,9 +7,9 @@ import * as cartData from '../data/cart.json';
 import * as storeData_re1_4429_vif from '../data/store_RE1-4429-VIF.json';
 import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMCSP-740.json';
 import cncStoreList from '../data/cnc_stores_list.js';
-import { getCncStores } from '../../../../js/backend/v2/checkout'
+import { getCncStores } from '../../../../js/backend/v2/checkout';
+import { getCart } from '../../../../js/backend/v2/cart';
 import * as productStatus from '../data/product_status.json';
-import * as shippingAddress from '../data/shipping_address.json';
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -32,10 +32,14 @@ describe('Checkout', () => {
       expect(getMethodCodeForFrontend(input)).toBe(expectedResult);
     });
 
-    it('Test formatShippingEstimatesAddress()', () => {
+    it('Test formatShippingEstimatesAddress()', async () => {
+      axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+      jest
+        .spyOn(window.commerceBackend, 'getCartId')
+        .mockImplementation(() => '1234');
+      const data = await getCart();
+      const address = data.shipping.address;
       const formatShippingEstimatesAddress = utilsRewire.__get__('formatShippingEstimatesAddress');
-      const shipping_assignments = cartData.cart.extension_attributes.shipping_assignments;
-      const address = [...shipping_assignments].shift().shipping.address;
       const result = formatShippingEstimatesAddress(address);
       expect(result).toEqual({
         email: 'osmarwado@gmail.com',
@@ -57,20 +61,23 @@ describe('Checkout', () => {
       });
     });
 
-    it('Test formatShippingEstimatesAddress() with extension attributes', () => {
-      const formatShippingEstimatesAddress = utilsRewire.__get__('formatShippingEstimatesAddress');
-      const shipping_assignments = cartData.cart.extension_attributes.shipping_assignments;
-      const address = [...shipping_assignments].shift().shipping.address;
+    it('Test formatShippingEstimatesAddress() with extension attributes', async () => {
+      axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+      jest
+        .spyOn(window.commerceBackend, 'getCartId')
+        .mockImplementation(() => '1234');
 
+      const data = await getCart();
+      const address = data.shipping.address;
       // Add extension_attributes
       address.extension_attributes = {
         "attr1": "1",
         "attr2": "2",
       };
-
       // Remove custom_attributes
       delete (address.custom_attributes);
 
+      const formatShippingEstimatesAddress = utilsRewire.__get__('formatShippingEstimatesAddress');
       const result = formatShippingEstimatesAddress(address);
       expect(result.custom_attributes).toEqual([
         {
@@ -95,8 +102,13 @@ describe('Checkout', () => {
         const result = formatAddressForFrontend({ country_id: '' });
         expect(result).toEqual(null);
       });
-      it('With Address data', () => {
-        const address = cartData.cart.billing_address;
+      it('With Address data', async () => {
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+        const data = await getCart();
+        const address = data.cart.billing_address;
         const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
         const result = formatAddressForFrontend(address);
         expect(result.address_city_segment).toEqual('1');
@@ -108,18 +120,26 @@ describe('Checkout', () => {
       });
     });
 
-    it('Test formatAddressForShippingBilling()', () => {
+    it('Test formatAddressForShippingBilling()', async () => {
+      const address = {
+        "static": {
+          "firstname": "John",
+          "lastname": "Smith",
+        },
+        "address_region_segment": "1025",
+        "street": "1 London Rd",
+        "carrier_info": {"code": "alshayadelivery", "method": "qd2_qd002"}
+      };
       const formatAddressForShippingBilling = utilsRewire.__get__('formatAddressForShippingBilling');
-      const result = formatAddressForShippingBilling(shippingAddress);
+      const result = formatAddressForShippingBilling(address);
       expect(result.firstname).toEqual('John');
       expect(result.lastname).toEqual('Smith');
-      expect(result.customer_address_id).toEqual('73');
-      expect(result.customer_id).toEqual('482');
-      expect(result.street).toEqual(['17 North rd']);
-      expect(result.customAttributes[0].attributeCode).toEqual('address_city_segment');
-      expect(result.customAttributes[0].value).toEqual('8');
-      expect(result.customAttributes[4].attributeCode).toEqual('address_apartment_segment');
-      expect(result.customAttributes[4].value).toEqual('1');
+      expect(result.carrier_info).toEqual(undefined);
+      expect(result.street).toEqual(['1 London Rd']);
+      expect(result.customAttributes[0].attributeCode).toEqual('address_region_segment');
+      expect(result.customAttributes[0].value).toEqual('1025');
+      expect(result.customAttributes[1].attributeCode).toEqual('street');
+      expect(result.customAttributes[1].value).toEqual('1 London Rd');
     });
 
     describe('Tests getCncStatusForCart()', () => {
