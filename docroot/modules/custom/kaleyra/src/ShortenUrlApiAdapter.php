@@ -8,9 +8,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
 /**
- * SMS Message Api Adapter.
+ * Provides function to get short url using TXTLY service.
  */
-class MessageApiAdapter {
+class ShortenUrlApiAdapter {
 
   /**
    * Guzzle Http Client.
@@ -34,7 +34,7 @@ class MessageApiAdapter {
   protected $logger;
 
   /**
-   * MessageApiAdapter constructor.
+   * ShortenUrlApiAdapter constructor.
    *
    * @param \GuzzleHttp\Client $client
    *   Guzzle Http Client.
@@ -48,48 +48,51 @@ class MessageApiAdapter {
                               LoggerChannelFactoryInterface $logger_channel_factory) {
     $this->client = $client;
     $this->configFactory = $config_factory;
-    $this->logger = $logger_channel_factory->get('kaleyra.MessageApiAdapter');
+    $this->logger = $logger_channel_factory->get('kaleyra.ShortenUrlApiAdapter');
   }
 
   /**
    * Helper function to send SMS using Kaleyra.
    *
-   * @param string $to
-   *   Phone number to end SMS.
-   * @param string $message
-   *   SMS text.
+   * @param string $long_url
+   *   Long URL to shorten.
+   *
+   * @return string
+   *   Short URL (returns long url as is in case of exception).
    */
-  public function send($to, $message) {
+  public function getShortUrl(string $long_url): string {
+    $short_url = $long_url;
     $kaleyra_settings = $this->configFactory->get('kaleyra.settings');
     $api_base_url = $kaleyra_settings->get('api_domain');
     $api_version = $kaleyra_settings->get('api_version');
     $query = [
-      'method' => 'sms',
-      'sender' => $kaleyra_settings->get('sender_identifier'),
-      'to' => $to,
-      'message' => urlencode($message),
+      'method' => 'txtly.create',
+      'url' => urlencode($long_url),
       'api_key' => $kaleyra_settings->get('api_key'),
-      'unicode' => $kaleyra_settings->get('unicode'),
     ];
 
     try {
       $response = $this->client->request('GET', $api_base_url . '/' . $api_version, ['query' => $query]);
+      $response_content = $response->getBody()->getContents();
 
-      $this->logger->notice('Response from Kaleyra when sending message to @to: response: @response', [
-        '@to' => $to,
-        '@response' => $response->getBody()->getContents(),
+      $this->logger->notice('Response from Kaleyra when trying to get short url for link !link: response: @response', [
+        '!link' => $long_url,
+        '@response' => $response_content,
       ]);
 
-      return TRUE;
+      $result = json_decode($response_content, TRUE);
+      if ($result['status']) {
+        return $result['txtly'];
+      }
     }
     catch (GuzzleException $e) {
-      $this->logger->error('Failed sending message to !to with the following error !message.', [
-        '!to' => $to,
+      $this->logger->error('Failed to get short url for !link with the following error !message.', [
+        '!link' => $long_url,
         '!message' => $e->getMessage(),
       ]);
     }
 
-    return FALSE;
+    return $short_url;
   }
 
 }
