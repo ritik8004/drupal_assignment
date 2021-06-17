@@ -75,15 +75,16 @@ class ShortenUrlApiAdapter {
       $response = $this->client->request('GET', $api_base_url . '/' . $api_version, ['query' => $query]);
       $response_content = $response->getBody()->getContents();
 
-      $this->logger->notice('Response from Kaleyra when trying to get short url for link !link: response: @response', [
-        '!link' => $long_url,
-        '@response' => $response_content,
-      ]);
-
       $result = json_decode($response_content, TRUE);
       if ($result['status']) {
         return $result['txtly'];
       }
+
+      // Log the error and we will keep using original url as is.
+      $this->logger->error('Response from Kaleyra when trying to get short url for link !link: response: @response', [
+        '!link' => $long_url,
+        '@response' => $response_content,
+      ]);
     }
     catch (GuzzleException $e) {
       $this->logger->error('Failed to get short url for !link with the following error !message.', [
