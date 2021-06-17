@@ -104,30 +104,37 @@ window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithout
  * @return {object}
  *   Formatted / processed cart.
  */
+/**
+ * Format the cart data to have better structured array.
+ *
+ * @param {object} cartData
+ *   Cart response from Magento.
+ *
+ * @return {object}
+ *   Formatted / processed cart.
+ */
 const formatCart = (cartData) => {
   const data = { ...cartData };
-
   // Move customer data to root level.
   data.customer = cartData.cart.customer;
   delete data.cart.customer;
-
   // Format addresses.
-  data.customer.addresses = data.customer.addresses.map((address) => {
-    const item = { ...address };
-    delete item.id;
-    item.region = address.region_id;
-    item.customer_address_id = address.id;
-    return item;
-  });
-
+  if (typeof data.customer.addresses !== 'undefined' && data.customer.addresses.length > 0) {
+    data.customer.addresses = data.customer.addresses.map((address) => {
+      const item = { ...address };
+      delete item.id;
+      item.region = address.region_id;
+      item.customer_address_id = address.id;
+      return item;
+    });
+  }
   // Format shipping info.
   if (typeof cartData.cart.extension_attributes.shipping_assignments[0] !== 'undefined') {
     data.shipping = cartData.cart.extension_attributes.shipping_assignments[0].shipping;
     delete data.cart.extension_attributes.shipping_assignments;
   }
-
   let shippingMethod = '';
-  if (typeof data.shipping.method !== 'undefined') {
+  if (typeof data.shipping.method !== 'undefined' && data.shipping.method !== null) {
     shippingMethod = data.shipping.method;
   }
   if (shippingMethod.indexOf('click_and_collect') >= 0) {
@@ -136,13 +143,15 @@ const formatCart = (cartData) => {
     data.shipping.type = 'home_delivery';
   }
 
-  if (typeof data.shipping.extension_attributes.click_and_collect_type !== 'undefined') {
-    data.shipping.clickCollectType = data.shipping.extension_attributes.click_and_collect_type;
+  if (typeof cartData.cart.shipping !== 'undefined') {
+    if (typeof cartData.cart.shipping.extension_attributes.click_and_collect_type !== 'undefined') {
+      const attributes = cartData.cart.shipping.extension_attributes;
+      data.shipping.clickCollectType = attributes.click_and_collect_type;
+    }
+    if (typeof cartData.cart.shipping.extension_attributes.store_code !== 'undefined') {
+      data.shipping.storeCode = cartData.cart.shipping.store_code.click_and_collect_type;
+    }
   }
-  if (typeof data.shipping.extension_attributes.store_code !== 'undefined') {
-    data.shipping.storeCode = data.shipping.store_code.click_and_collect_type;
-  }
-  delete data.shipping.extension_attributes;
 
   // When shipping method is empty, Set shipping and billing info to empty,
   // so that we can show empty shipping and billing component in react
@@ -310,8 +319,10 @@ const getCart = async () => {
 
   // Store the response.
   window.commerceBackend.setRawCartDataInStorage(response.data);
+  // Format data.
+  response.data = formatCart(response.data);
   // Return formatted cart.
-  return formatCart(response.data);
+  return new Promise((resolve) => resolve(response));
 };
 
 /**
@@ -345,9 +356,9 @@ const updateCart = (data) => {
  *   Processed cart data else null.
  */
 window.commerceBackend.getCart = async () => {
-  let cartData = await getCart();
-  cartData = getProcessedCartData(cartData);
-  return new Promise((resolve) => resolve(cartData));
+  const response = await getCart();
+  response.data = getProcessedCartData(response.data);
+  return new Promise((resolve) => resolve(response));
 };
 
 /**

@@ -37,8 +37,8 @@ describe('Checkout', () => {
       jest
         .spyOn(window.commerceBackend, 'getCartId')
         .mockImplementation(() => '1234');
-      const data = await getCart();
-      const address = data.shipping.address;
+      const response = await getCart();
+      const address = response.data.shipping.address;
       const formatShippingEstimatesAddress = utilsRewire.__get__('formatShippingEstimatesAddress');
       const result = formatShippingEstimatesAddress(address);
       expect(result).toEqual({
@@ -67,8 +67,8 @@ describe('Checkout', () => {
         .spyOn(window.commerceBackend, 'getCartId')
         .mockImplementation(() => '1234');
 
-      const data = await getCart();
-      const address = data.shipping.address;
+      const response = await getCart();
+      const address = response.data.shipping.address;
       // Add extension_attributes
       address.extension_attributes = {
         "attr1": "1",
@@ -107,8 +107,8 @@ describe('Checkout', () => {
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
-        const data = await getCart();
-        const address = data.cart.billing_address;
+        const response = await getCart();
+        const address = response.data.cart.billing_address;
         const formatAddressForFrontend = utilsRewire.__get__('formatAddressForFrontend');
         const result = formatAddressForFrontend(address);
         expect(result.address_city_segment).toEqual('1');
