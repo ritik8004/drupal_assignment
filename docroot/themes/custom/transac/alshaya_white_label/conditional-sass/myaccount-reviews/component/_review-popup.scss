@@ -184,30 +184,31 @@
     }
 
     .user-secondary-rating {
-      flex-basis: 31%;
-      padding-#{$left}: 99px;
+      width: 31%;
+      padding-#{$left}: 6.1875rem;
 
       @include breakpoint($only-mobile) {
-        flex-basis: 100%;
+        width: 100%;
         padding-#{$left}: 0;
       }
 
       @include breakpoint($only-tablet) {
-        flex-basis: 45%;
-        padding-#{$left}: 60px;
+        width: 45%;
+        padding-#{$left}: 3.75rem;
+        margin-top: 1.25rem;
       }
     }
 
     .user-desc {
-      flex-basis: 73%;
+      width: 73%;
 
       @include breakpoint($only-mobile) {
-        flex-basis: 100%;
+        width: 100%;
       }
 
       @include breakpoint($only-tablet) {
-        flex-basis: 50%;
-        margin-top: 11px;
+        width: 50%;
+        margin-top: 0.6875rem;
       }
 
       .star-ratings-wrapper {
