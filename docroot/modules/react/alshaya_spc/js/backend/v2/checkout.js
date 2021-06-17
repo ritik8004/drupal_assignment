@@ -276,8 +276,23 @@ const applyDefaults = (data, uid) => {
  * @return {array}.
  *   The method list.
  */
-const getPaymentMethods = () => {
-  // @todo implement this
+const getPaymentMethods = async () => {
+  const paymentMethods = [];
+  const cartData = window.commerceBackend.getCartDataFromStorage();
+  const cart = window.commerceBackend.getProcessedCartData(cartData);
+  const { method: type } = cart.shipping;
+  if (typeof type === 'undefined') {
+    logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cart.cartId}`);
+    return null;
+  }
+
+  // Set payment method type.
+  const key = `payment_methods_${type}`;
+
+  const url = `/rest/V1/guest-carts/${window.commerceBackend.getCartId()}/payment-methods`;
+  paymentMethods[key] = await callMagentoApi(url);
+
+  return paymentMethods[key];
 };
 
 /**
