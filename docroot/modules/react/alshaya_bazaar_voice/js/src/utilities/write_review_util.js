@@ -55,11 +55,11 @@ export const prepareRequest = (elements, fieldsConfig, productId) => {
             if (userStorage.nickname === undefined
               || (userStorage.nickname !== undefined
               && userStorage.nickname !== elements[id].value)) {
-              userStorage.nickname = elements[id].value;
+              userStorage.nickname = encodeURIComponent(elements[id].value);
             }
           }
         }
-        params += `&${id}=${elements[id].value}`;
+        params += `&${id}=${encodeURIComponent(elements[id].value)}`;
       }
     } catch (e) { return null; }
 
