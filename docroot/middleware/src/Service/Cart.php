@@ -1211,50 +1211,45 @@ class Cart {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   public function updateCart(array $data) {
+    $cart_id = $this->getCartId();
+    $url = sprintf('carts/%d/updateCart', $cart_id);
+
+    $cart = NULL;
+
+    $action = isset($data['extension']) && is_array($data['extension'])
+      ? $data['extension']['action'] ?? ''
+      : $data['extension']->action ?? '';
+
+    // Log the shipping / billing address we pass to magento.
+    if (in_array($action, [
+      CartActions::CART_BILLING_UPDATE,
+      CartActions::CART_SHIPPING_UPDATE,
+    ])) {
+      $this->logger->notice('Billing / Shipping address data: @address_data. CartId: @cart_id', [
+        '@address_data' => json_encode($data),
+        '@cart_id' => $cart_id,
+      ]);
+    }
+
+    // We do not want to send the variant sku values to magento unnecessarily.
+    // So we store it separately and remove it from $data.
+    $skus = [];
+    foreach ($data['items'] ?? [] as $key => $item) {
+      $skus[] = $item['variant_sku'] ?? $item['sku'];
+      unset($data['items'][$key]['variant_sku']);
+    }
+
+    // JIRA Ticket No.: CORE-29691
+    // Add smart agent details in extension attribute to track
+    // orders by in-store devices.
+    $data['extension'] = $this->addSmartAgentDetails((array) $data['extension'] ?? [], $cart_id);
+
+    $request_options = [
+      'timeout' => $this->magentoInfo->getPhpTimeout('cart_update'),
+      'json' => (object) $data,
+    ];
+
     try {
-      $action = isset($data['extension']) && is_array($data['extension'])
-        ? $data['extension']['action'] ?? ''
-        : $data['extension']->action ?? '';
-
-      $cart_id = $this->getCartId();
-
-      if (empty($cart_id)) {
-        throw new \Exception('No such entity with cartId');
-      }
-
-      $url = sprintf('carts/%d/updateCart', $cart_id);
-
-      $cart = NULL;
-
-      // Log the shipping / billing address we pass to magento.
-      if (in_array($action, [
-        CartActions::CART_BILLING_UPDATE,
-        CartActions::CART_SHIPPING_UPDATE,
-      ])) {
-        $this->logger->notice('Billing / Shipping address data: @address_data. CartId: @cart_id', [
-          '@address_data' => json_encode($data),
-          '@cart_id' => $cart_id,
-        ]);
-      }
-
-      // We do not want to send the variant sku values to magento unnecessarily.
-      // So we store it separately and remove it from $data.
-      $skus = [];
-      foreach ($data['items'] ?? [] as $key => $item) {
-        $skus[] = $item['variant_sku'] ?? $item['sku'];
-        unset($data['items'][$key]['variant_sku']);
-      }
-
-      // JIRA Ticket No.: CORE-29691
-      // Add smart agent details in extension attribute to track
-      // orders by in-store devices.
-      $data['extension'] = $this->addSmartAgentDetails((array) $data['extension'] ?? [], $cart_id);
-
-      $request_options = [
-        'timeout' => $this->magentoInfo->getPhpTimeout('cart_update'),
-        'json' => (object) $data,
-      ];
-
       $cart_updated = $this->magentoApiWrapper->doRequest('POST', $url, $request_options, $action);
       static::$cart = $this->formatCart($cart_updated);
       $cart = static::$cart;

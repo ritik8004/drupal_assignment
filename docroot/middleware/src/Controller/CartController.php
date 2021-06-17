@@ -164,6 +164,13 @@ class CartController {
     // Update cart id in session.
     $this->cart->setCartId($cart_id);
 
+    // Verify if cart exists else redirect to cart page.
+    $cart = $this->cart->getCart();
+
+    if (!empty($cart['error'])) {
+      return new RedirectResponse('/' . $data['langcode'] . '/cart', 302);
+    }
+
     // Associate cart to customer.
     if (!empty($customer_id)) {
       $this->cart->associateCartToCustomer($customer_id);
