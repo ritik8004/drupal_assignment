@@ -189,7 +189,7 @@ const handleResponse = (apiResponse) => {
  * @param {string} method
  *   The request method.
  * @param {object} data
- *   The object to send for POST request.
+ *   The data to send with the request.
  *
  * @returns {Promise}
  *   Returns a promise object.
@@ -232,27 +232,26 @@ const callMagentoApi = (url, method, data) => {
  *   The url to send the request to.
  * @param {string} method
  *   The request method.
- * @param {string} requestOptions
- *   The request options.
+ * @param {string} data
+ *   The data to send with the request.
  *
  * @returns {Promise}
  *   Returns a promise object.
  */
-const callDrupalApi = (url, method, requestOptions) => {
+const callDrupalApi = (url, method, data) => {
   const headers = {};
   const params = {
     url: `/${window.drupalSettings.path.currentLanguage}${url}`,
     method,
+    data,
   };
 
-  if (typeof requestOptions !== 'undefined' && requestOptions && Object.keys(requestOptions).length > 0) {
-    Object.keys(requestOptions).forEach((optionName) => {
+  if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
+    Object.keys(data).forEach((optionName) => {
       if (optionName === 'form_params') {
         headers['Content-Type'] = 'application/x-www-form-urlencoded';
-        params.data = qs.stringify(requestOptions[optionName]);
-        return;
+        params.data = qs.stringify(data[optionName]);
       }
-      params[optionName] = requestOptions[optionName];
     });
   }
 

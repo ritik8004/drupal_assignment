@@ -7,6 +7,7 @@ import {
 import { logger } from './utility';
 import { getDefaultErrorMessage, getExceptionMessageType } from './error';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
+import { cartActions } from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -393,7 +394,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     : data.sku;
   let cartItem = null;
 
-  if (data.action === 'remove item') {
+  if (data.action === cartActions.cartRemoveItem) {
     cartItem = getCartItem(sku);
     // Do nothing if item no longer available.
     if (!cartItem) {
@@ -412,7 +413,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     requestUrl = `/rest/V1/guest-carts/${cartId}/items/${cartItem.item_id}`;
   }
 
-  if (data.action === 'add item') {
+  if (data.action === cartActions.cartAddItem) {
     // If we try to add item while we don't have anything or corrupt
     // session, we create the cart object.
     cartId = window.commerceBackend.getCartId();
@@ -425,7 +426,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     // @todo: Associate cart to the customer.
   }
 
-  if (data.action === 'add item' || data.action === 'update item') {
+  if (data.action === cartActions.cartAddItem || data.action === cartActions.cartUpdateItem) {
     requestMethod = 'POST';
     requestUrl = `/rest/V1/guest-carts/${cartId}/items`;
     // Executed for Add and Update case.
@@ -446,7 +447,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
     };
   }
 
-  if (data.action === 'update item') {
+  if (data.action === cartActions.cartUpdateItem) {
     cartItem = getCartItem(sku);
     if (!cartItem) {
       // Do nothing if item no longer available.
@@ -459,9 +460,11 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   // Do a sanity check before proceeding since an item can be removed in above processes.
   // Eg. in remove cart when promo code is removed.
   cartItem = getCartItem(sku);
-  if ((data.action === 'update item' || data.action === 'remove item') && !cartItem) {
-    // Do nothing if item no longer available.
-    return window.commerceBackend.getCart();
+  if (data.action === cartActions.cartUpdateItem || data.action === cartActions.cartRemoveItem) {
+    if (!cartItem) {
+      // Do nothing if item no longer available.
+      return window.commerceBackend.getCart();
+    }
   }
 
   let apiCallAttempts = 1;
@@ -478,7 +481,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       removeStorageInfo('cart_id');
 
       if (
-        data.action === 'add item'
+        data.action === cartActions.cartAddItem
         && parseInt(
           window.drupalSettings.cart.checkout_settings.max_native_update_attempts,
           10,

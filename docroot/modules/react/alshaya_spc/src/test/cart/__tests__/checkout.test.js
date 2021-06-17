@@ -142,6 +142,13 @@ describe('Checkout', () => {
       expect(result.customAttributes[1].value).toEqual('1 London Rd');
     });
 
+    it('Test selectCnc()', () => {
+      axios.mockResolvedValue(productStatus);
+      const selectCnc = utilsRewire.__get__('selectCnc');
+      const result = selectCnc(shippingAddress);
+      expect(result).toEqual({ status: true, adress: true });
+    });
+
     describe('Tests getCncStatusForCart()', () => {
       it('Without cart data', async () => {
         const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');

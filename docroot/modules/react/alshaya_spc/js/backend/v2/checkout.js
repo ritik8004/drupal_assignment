@@ -9,6 +9,7 @@ import {
 import { getCart, updateCart, getProcessedCartData } from './cart';
 import { getDefaultErrorMessage } from './error';
 import { logger } from './utility';
+import { cartActions } from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -34,7 +35,7 @@ const getProductStatus = async (sku) => {
   // Rules are added in CF to disable caching for urls having the following
   // query string.
   // The query string is added since same APIs are used by MAPP also.
-  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}/`, 'GET', { params: { _cf_cache_bypass: '1' } });
+  return callDrupalApi(`/rest/v1/product-status/${btoa(sku)}`, 'GET', { _cf_cache_bypass: '1' });
 };
 
 /**
@@ -216,17 +217,14 @@ const updateBilling = (billingData) => {
 
 /**
  * Validate area/city of address.
- * @todo implement this
  *
  * @param {object} address
  *   Address object.
  *
- * @return {object}
+ * @return {promise}
  *   Address validation response.
  */
-const validateAddressAreaCity = (address) => {
-  logger.info(`${address}`);
-};
+const validateAddressAreaCity = async (address) => callDrupalApi('/spc/validate-info', 'POST', address);
 
 /**
  * Select HD address and method from possible defaults.
@@ -252,20 +250,144 @@ const selectHd = (address, method, billing, shippingMethods) => {
 };
 
 /**
- * Apply defaults to cart for customer.
+ * Get customer's address ids by customer id.
  * @todo implement this
  *
- * @param {object} cartData
- *   The cart data object.
- * @param {integer} uid
- *   Drupal User ID.
- * @return {object}.
- *   The data.
+ * @param {string} customerId
+ *   Customer Id.
+ *
+ * @return {array}
+ *   Address ids of customer or empty array.
  */
+const getCustomerAddressIdsByCustomerId = (customerId) => {
+  logger.info(`${customerId}`);
+  // Get customer address ids.
+  // $customer = $this->magentoCustomer->getCustomerById($customer_id);
+  //
+  // if (!empty($customer['error']) || !isset($customer['addresses'])) {
+  //   return [];
+  // }
+  //
+  // return array_column($customer['addresses'], 'id');
+};
+
+/**
+ * Select Click and Collect store and method from possible defaults.
+ *
+ * @param {object} store
+ *   Store info.
+ * @param {object} address
+ *   Shipping address from last order.
+ * @param {object} billing
+ *   Billing address.
+ *
+ * @return {promise}
+ *   Updated cart.
+ */
+const selectCnc = async (store, address, billing) => {
+  const data = {
+    extension: {
+      action: cartActions.cartShippingUpdate,
+    },
+    shipping: {
+      shipping_address: address,
+      shipping_carrier_code: 'click_and_collect',
+      shipping_method_code: 'click_and_collect',
+      custom_attributes: [],
+      extension_attributes: {
+        click_and_collect_type: (typeof store.rnc_available !== 'undefined') ? 'reserve_and_collect' : 'ship_to_store',
+        store_code: store.code,
+      },
+    },
+  };
+
+  const extensionAttributes = data.shipping.shipping_address.extension_attributes;
+  Object.keys(extensionAttributes).forEach((key) => {
+    data.shipping.shipping_address.custom_attributes.push(
+      {
+        attributeCode: key,
+        value: extensionAttributes[key],
+      },
+    );
+  });
+
+  // Validate address.
+  const valid = await validateAddressAreaCity(billing);
+  if (!valid || valid.address === false) {
+    return new Promise((resolve) => resolve(false));
+  }
+
+  const logData = JSON.stringify(data);
+  const logAddress = JSON.stringify(address);
+  const logStore = JSON.stringify(store);
+  const logCartId = window.commerceBackend.getCartId();
+  logger.notice(`Shipping update default for CNC. Data: ${logData} Address: ${logAddress} Store: ${logStore} Cart: ${logCartId}`);
+
+  // If shipping address not contains proper data (extension info).
+  if (typeof data.shipping.shipping_address.extension_attributes === 'undefined') {
+    return new Promise((resolve) => resolve(false));
+  }
+
+  const updated = window.commerceBackend.updateCart(data);
+  if (typeof updated.error !== 'undefined' && updated.error) {
+    return false;
+  }
+
+  // Not use/assign default billing address if customer_address_id
+  // is not available.
+  if (typeof billing.customer_address_id === 'undefined') {
+    return updated;
+  }
+
+  // Add log for billing data we pass to magento update cart.
+  const logBilling = JSON.stringify(billing);
+  logger.notice(`Billing update default for CNC. Address: ${logBilling} Cart: ${logCartId}`);
+
+  // If billing address not contains proper data (extension info).
+  if (typeof billing.extension_attributes === 'undefined') {
+    return false;
+  }
+
+  const customerAddressIds = getCustomerAddressIdsByCustomerId(billing.customer_id);
+
+  // Return if address id from last order doesn't
+  // exist in customer's address id list.
+  // @todo finish this
+  logger.log(`${customerAddressIds}`);
+  return null;
+};
+
+/**
+ * Apply shipping from last order.
+ * @todo implement this
+ *
+ * @param {object} order
+ *   Last Order details.
+ *
+ * @return {object|bool}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const applyDefaultShipping = (order) => {
+  logger.info(`${order}`);
+  selectCnc({}, {}, {});
+};
+
 const applyDefaults = (data, uid) => {
+  /**
+   * Apply defaults to cart for customer.
+   * @todo implement this
+   *
+   * @param {object} cartData
+   *   The cart data object.
+   * @param {integer} uid
+   *   Drupal User ID.
+   * @return {object}.
+   *   The data.
+   */
   logger.info(`${data}${uid}`);
   getHomeDeliveryShippingMethods({});
   getDefaultAddress({});
+  applyDefaultShipping({});
   selectHd({}, {}, {}, {});
 };
 
