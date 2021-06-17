@@ -358,7 +358,7 @@ const updateCart = (data) => {
 window.commerceBackend.getCart = async () => {
   const response = await getCart();
   response.data = getProcessedCartData(response.data);
-  return new Promise((resolve) => resolve(response));
+  return response;
 };
 
 /**
