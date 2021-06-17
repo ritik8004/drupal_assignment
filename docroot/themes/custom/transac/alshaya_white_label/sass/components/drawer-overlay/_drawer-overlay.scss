@@ -13,7 +13,12 @@ html {
   }
 
   &.all-filters-overlay,
-  &.overlay-product-modal {
+  &.overlay-product-modal,
+  &.desc-overlay,
+  &.overlay-select,
+  &.overlay-crossel,
+  &.overlay-related-select,
+  &.ratings-reviews-overlay {
     overflow: hidden;
 
     &::before {
