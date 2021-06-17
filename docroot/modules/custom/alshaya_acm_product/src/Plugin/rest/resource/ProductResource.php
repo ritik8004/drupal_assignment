@@ -269,17 +269,15 @@ class ProductResource extends ResourceBase {
     // Allow other modules to alter product data.
     $this->moduleHandler->alter('sku_product_info', $data, $skuEntity);
 
-    // If current url has query parameters then add query_args cache context.
-    if (!empty($this->requestStack->getCurrentRequest()->query->all())) {
-      $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], ['url.query_args']);
-    }
-
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
     if (!empty($this->cache['contexts'])) {
       $cacheableMetadata->addCacheContexts($this->cache['contexts']);
     }
+
+    // Add query_args cache context.
+    $cacheableMetadata->addCacheContexts(['url.query_args']);
 
     if (!empty($this->cache['tags'])) {
       $cacheableMetadata->addCacheTags($this->cache['tags']);
