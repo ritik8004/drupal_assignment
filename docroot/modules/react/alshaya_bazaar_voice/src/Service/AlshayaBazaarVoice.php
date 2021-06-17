@@ -727,7 +727,6 @@ class AlshayaBazaarVoice {
                 $productReviewData = [
                   'review_data' => $review,
                   'user_rating' => $review['Rating'],
-                  'product_data' => $result['Includes']['Products'][$sanitized_sku],
                 ];
                 return $productReviewData;
               }
