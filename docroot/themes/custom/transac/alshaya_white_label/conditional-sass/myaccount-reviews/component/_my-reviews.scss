@@ -98,6 +98,10 @@
   .user-reviews {
     display: flex;
 
+    @include breakpoint($only-mobile) {
+      flex-flow: row wrap;
+    }
+
     .user-desc {
       width: 66%;
 

@@ -9,7 +9,6 @@ import { isOpenWriteReviewForm } from '../../../utilities/user_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { setStorageInfo } from '../../../utilities/storage';
 import PostReviewMessage from './post-review-message';
-import SectionTitle from '../../../utilities/section-title';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
@@ -99,7 +98,6 @@ export default class WriteReviewButton extends React.Component {
                 <ConditionalView condition={myAccountReview !== ''}>
                   <div className="write-review-form">
                     <div className="title-block">
-                      <SectionTitle>{getStringMessage('write_a_review')}</SectionTitle>
                       <a className="close-modal" onClick={(e) => this.closeModal(e)} />
                     </div>
                     <PostReviewMessage postReviewData={myAccountReview} />
