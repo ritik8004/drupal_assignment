@@ -1003,7 +1003,7 @@ class AlshayaAlgoliaIndexHelper {
     try {
       $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
       $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
-      $client = new Client($backend_config['application_id'], $backend_config['api_key']);
+      $client = SearchClient::create($backend_config['application_id'], $backend_config['api_key']);
       $index_name = $client_config['algolia_index_name'];
 
       foreach ($this->languageManager->getLanguages() as $language) {
@@ -1018,8 +1018,9 @@ class AlshayaAlgoliaIndexHelper {
           $settings['replicas'][] = $replica;
         }
 
-        $index->setSettings($settings, TRUE);
-
+        $index->setSettings($settings, [
+          'forwardToReplicas' => TRUE,
+        ]);
         foreach ($sorts as $sort) {
           $replica = $name . '_' . implode('_', $sort);
           $replica_index = $client->initIndex($replica);
@@ -1028,7 +1029,9 @@ class AlshayaAlgoliaIndexHelper {
             'desc(stock)',
             $sort['direction'] . '(' . $sort['field'] . ')',
           ] + $ranking;
-          $replica_index->setSettings($replica_settings);
+          $replica_index->setSettings($replica_settings, [
+            'forwardToReplicas' => TRUE,
+          ]);
         }
       }
       sleep(3);

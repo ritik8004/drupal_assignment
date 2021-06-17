@@ -138,7 +138,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAlgoliaReactCommonConfig(string $page_type) {
+  public function getAlgoliaReactCommonConfig(string $page_type, string $sub_page = '') {
     $lang = $this->languageManager->getCurrentLanguage()->getId();
 
     $index = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
@@ -194,7 +194,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
       'productListIndexStatus' => AlshayaSearchApiHelper::isIndexEnabled('alshaya_algolia_product_list_index'),
     ];
 
-    $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type);
+    $response[$page_type]['filters'] = $this->getFilters($index_name, $page_type, $sub_page);
 
     $response['autocomplete'] = [
       'hits' => $alshaya_algolia_react_setting_values->get('hits') ?? 4,
@@ -330,6 +330,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   The current algolia index.
    * @param string $page_type
    *   Page Type.
+   * @param string $sub_page_type
+   *   Sub Page Type.
    *
    * @return array
    *   Return array of filters.
@@ -337,7 +339,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    * @todo this is temporary way to get filters, work on it to make something
    * solid on which we can rely.
    */
-  protected function getFilters($index_name, $page_type) {
+  protected function getFilters($index_name, $page_type, $sub_page_type) {
     $filter_facets = [
       'sort_by' => [
         'identifier' => 'sort_by',
@@ -364,7 +366,20 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
         if (isset($visibility['request_path']['pages']) && stripos($visibility['request_path']['pages'], '/search') === FALSE) {
           continue;
         }
-
+        // Checks for alshaya_listing_page_types in the config.
+        // Checks if $sub_page_type has value.
+        if (isset($visibility['alshaya_listing_page_types']) && !empty($sub_page_type)) {
+          // Returns to the beginning if
+          // show_on_selected_pages is null or not set to 1.
+          // sub_page_type is not available.
+          // the sub_page_type is not selected.
+          $show_on_pages = $visibility['alshaya_listing_page_types']['show_on_selected_pages'];
+          $sub_page_type_selected = $visibility['alshaya_listing_page_types']['page_types'][$sub_page_type];
+          if (($show_on_pages === '1' && $sub_page_type_selected !== 1)
+            || ($show_on_pages !== '1' && $sub_page_type_selected === 1)) {
+            continue;
+          }
+        }
         if (!in_array($facet->getFieldIdentifier(), ['attr_selling_price'])) {
           $identifier = $this->identifireSuffixUpdate($facet->getFieldIdentifier(), $page_type);
           $widget = $facet->getWidget();

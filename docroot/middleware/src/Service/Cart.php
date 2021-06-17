@@ -237,6 +237,22 @@ class Cart {
   }
 
   /**
+   * Wrapper function to get cart amount.
+   *
+   * @return int|string
+   *   Cart amount (base_grand_total from totals).
+   */
+  public function getCartAmount() {
+    $cart = $this->getCart();
+
+    if (empty($cart) || empty($cart['totals'])) {
+      return '';
+    }
+
+    return $cart['totals']['base_grand_total'] ?? 0;
+  }
+
+  /**
    * Wrapper function to set cart id in session.
    *
    * @param int $cart_id
@@ -2563,21 +2579,37 @@ class Cart {
     $lat = $data['lat'] ?? '';
     $lng = $data['lng'] ?? '';
 
-    $formated_details = [
+    // @todo remove all the concatenated one's after individual fields are
+    // created in Magento.
+    $formatted_details = [
       'smart_agent_email' => $name . ';' . $email . ';' . $storeCode,
+      'smart_agent_mail' => $email,
+      'smart_agent_name' => $name,
+      'smart_agent_store' => $storeCode,
       'smart_agent_user_agent' => $data['userAgent'] ?? '',
       'smart_agent_client_ip' => $clientIP . ';' . $lat . ';' . $lng,
+      'smart_agent_ip' => $clientIP,
+      'smart_agent_location' => $lat . ';' . $lng,
     ];
 
     if (!empty($data['shared_via'])) {
-      $formated_details['smart_agent_url_shared_via'] = $data['shared_via'];
+      $formatted_details['smart_agent_shared_channel'] = $data['shared_via'];
+      $formatted_details['smart_agent_url_shared_via'] = $data['shared_via'];
+
+      $formatted_details['smart_agent_shared_amount'] = $this->getCartAmount();
+      $formatted_details['smart_agent_url_shared_via'] .= ';' . $formatted_details['smart_agent_shared_amount'];
+
+      if (!empty($data['shared_to'])) {
+        $formatted_details['smart_agent_shared_to'] = $data['shared_to'];
+        $formatted_details['smart_agent_url_shared_via'] .= ';' . $data['shared_to'];
+      }
     }
 
     if (!empty($data['shared_on'])) {
-      $formated_details['smart_agent_url_shared_on'] = $data['shared_on'];
+      $formatted_details['smart_agent_url_shared_on'] = $data['shared_on'];
     }
 
-    return $formated_details;
+    return $formatted_details;
   }
 
 }

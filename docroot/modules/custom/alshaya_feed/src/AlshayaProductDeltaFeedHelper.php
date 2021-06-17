@@ -406,7 +406,7 @@ class AlshayaProductDeltaFeedHelper {
         case 'short_description':
           $short_desc = $this->skuManager->getShortDescription($sku, 'full');
           $brand_fields['short_description'] = !empty($short_desc['value']) ? $this->renderer->renderPlain($short_desc['value'])->__toString() : '';
-          $brand_fields[$key_prefix . 'short_description'] = $fields['short_description'];
+          $brand_fields[$key_prefix . 'short_description'] = $brand_fields['short_description'];
           break;
 
         default:
