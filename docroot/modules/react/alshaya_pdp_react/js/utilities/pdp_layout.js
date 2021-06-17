@@ -468,15 +468,18 @@ export const addToCartSimple = (
  * Close side modals when clicked anywhere on screen.
  */
 export const closeModalHelper = (overlayClass, containerClass, closeModalfn) => {
-  document.querySelector('body').addEventListener('click', (e) => {
+  document.querySelector('html').addEventListener('click', (e) => {
     let checkIfModalIsNotOpen;
+    const selector = window.innerWidth > 1023 ? 'html' : 'body';
+    const nodeSelector = window.innerWidth > 1023 ? 'HTML' : 'BODY';
 
     // Skip if modal is not open.
     if (Array.isArray(overlayClass)) {
       checkIfModalIsNotOpen = [...overlayClass]
-        .reduce((cond, ent) => cond && !document.querySelector('body').classList.contains(ent), true);
+        .reduce((cond, ent) => cond
+        && !document.querySelector(selector).classList.contains(ent), true);
     } else {
-      checkIfModalIsNotOpen = !document.querySelector('body').classList.contains(overlayClass);
+      checkIfModalIsNotOpen = !document.querySelector(selector).classList.contains(overlayClass);
     }
 
     // Return if not open as logic should only affect open modal state.
@@ -490,7 +493,7 @@ export const closeModalHelper = (overlayClass, containerClass, closeModalfn) => 
     const containerClassReducer = (cond, ent) => cond || currEl.classList.contains(ent);
 
     // Check if the clicked element is inside container class/es.
-    while (!currEl.nodeName === 'BODY') {
+    while (!currEl.nodeName === nodeSelector) {
       let ifClickedInsideContainerClasses;
 
       if (Array.isArray(containerClass)) {
@@ -509,14 +512,36 @@ export const closeModalHelper = (overlayClass, containerClass, closeModalfn) => 
     }
 
     // If bubbling reaches top of DOM tree (body), trigger logic for closing modal/s.
-    if (currEl.nodeName === 'BODY') {
+    if (currEl.nodeName === nodeSelector) {
       if (Array.isArray(overlayClass)) {
         overlayClass.forEach((el) => {
-          document.querySelector('body').classList.remove(el);
+          document.querySelector(selector).classList.remove(el);
         });
       } else {
         closeModalfn(e);
       }
     }
   });
+};
+
+/**
+ * Add overlay on drawer open.
+ */
+export const addOverlayClass = (overlayClass) => {
+  if (window.innerWidth > 1023) {
+    document.querySelector('html').classList.add(overlayClass);
+  } else {
+    document.querySelector('body').classList.add(overlayClass);
+  }
+};
+
+/**
+ * Remove overlay on drawer close.
+ */
+export const removeOverlayClass = (overlayClass) => {
+  if (window.innerWidth > 1023) {
+    document.querySelector('html').classList.remove(overlayClass);
+  } else {
+    document.querySelector('body').classList.remove(overlayClass);
+  }
 };
