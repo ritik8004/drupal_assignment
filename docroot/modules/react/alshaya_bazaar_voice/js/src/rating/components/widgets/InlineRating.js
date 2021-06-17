@@ -4,6 +4,7 @@ import ConditionalView from '../../../common/components/conditional-view';
 import { smoothScrollTo } from '../../../utilities/smoothScroll';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../stars';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 function clickHandler(e, callbackFn) {
   if (callbackFn === undefined) {
@@ -12,6 +13,8 @@ function clickHandler(e, callbackFn) {
     e.preventDefault();
     callbackFn(e);
   }
+  const analyticsData = { detail1: 'review_count', detail2: 'PrimaryRatingSummary' };
+  dispatchCustomEvent('bvReviewCountClick', analyticsData);
 }
 const InlineRating = ({
   reviewsData,

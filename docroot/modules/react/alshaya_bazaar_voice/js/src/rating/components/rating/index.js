@@ -1,5 +1,4 @@
 import React from 'react';
-import { fetchAPIData } from '../../../utilities/api/apiData';
 import InlineRating from '../widgets/InlineRating';
 import { removeFullScreenLoader, showFullScreenLoader }
   from '../../../../../../js/utilities/showRemoveFullScreenLoader';
@@ -8,6 +7,7 @@ import BvAuthConfirmation from '../../../reviews/components/reviews-full-submit/
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
 import ConditionalView from '../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import { getProductReviewStats } from '../../../utilities/user_util';
 
 export default class Rating extends React.Component {
   constructor(props) {
@@ -26,22 +26,14 @@ export default class Rating extends React.Component {
     const { bazaarVoiceSettings } = this.state;
     // Check reviews setting exist.
     if (bazaarVoiceSettings.reviews !== undefined) {
-      const apiUri = '/data/products.json';
-      const params = `&filter=id:${bazaarVoiceSettings.productid}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}`;
-      const apiData = fetchAPIData(apiUri, params);
-      if (apiData instanceof Promise) {
-        apiData.then((result) => {
-          if (result.error === undefined && result.data !== undefined) {
-            removeFullScreenLoader();
-            this.setState({
-              reviewsData: result.data.Results[0],
-            });
-          } else {
-            removeFullScreenLoader();
-            Drupal.logJavascriptError('review-statistics', result.error);
-          }
-        });
-      }
+      getProductReviewStats(bazaarVoiceSettings.productid).then((reviewData) => {
+        if (reviewData !== null) {
+          removeFullScreenLoader();
+          this.setState({
+            reviewsData: reviewData,
+          });
+        }
+      });
     }
   }
 

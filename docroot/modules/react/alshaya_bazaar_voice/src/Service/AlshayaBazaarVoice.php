@@ -727,6 +727,7 @@ class AlshayaBazaarVoice {
                 $productReviewData = [
                   'review_data' => $review,
                   'user_rating' => $review['Rating'],
+                  'product_data' => $result['Includes']['Products'][$sanitized_sku],
                 ];
                 return $productReviewData;
               }
@@ -736,6 +737,38 @@ class AlshayaBazaarVoice {
       }
       return NULL;
     }
+  }
+
+  /**
+   * Get review statistics of a product.
+   *
+   * @param string $product_id
+   *   Product id or sanitized sku id.
+   *
+   * @return array|null
+   *   returns product review statistics and rating.
+   */
+  public function getProductReviewStatistics(string $product_id) {
+    static $response = [];
+    if (isset($response[$product_id]) && !empty($response[$product_id])) {
+      return $static[$product_id];
+    }
+    $extra_params = [
+      'filter' => 'id:' . $product_id,
+      'stats' => 'reviews',
+    ];
+    $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/products.json', $extra_params);
+    $url = $request['url'];
+    $request_options['query'] = $request['query'];
+
+    $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
+    if (!$result['HasErrors'] && isset($result['Results'])) {
+      foreach ($result['Results'] as $result) {
+        $response[$product_id] = $result;
+        return $response;
+      }
+    }
+    return NULL;
   }
 
 }

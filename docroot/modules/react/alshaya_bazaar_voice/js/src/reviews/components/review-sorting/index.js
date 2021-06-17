@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 export default class ReviewSorting extends React.Component {
   handleSelect = (selectedOption) => {
@@ -12,6 +13,8 @@ export default class ReviewSorting extends React.Component {
       && currentOption !== selectedOption.value) {
       // Callback to process sort option.
       processingCallback(selectedOption);
+      // Dispatching click event to record analytics.
+      dispatchCustomEvent('bvSortOptionsClick', selectedOption);
     }
   }
 

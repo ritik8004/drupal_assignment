@@ -18,6 +18,7 @@ import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 import { createUserStorage } from '../../../utilities/user_util';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 const userDetails = getUserDetails();
@@ -134,6 +135,8 @@ export default class ReviewSummary extends React.Component {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
             });
+            // Dispatch reviews tracking event.
+            dispatchCustomEvent('bvReviewsTracking', result.data);
           } else {
             this.setState({
               totalReviews: result.data.TotalResults,

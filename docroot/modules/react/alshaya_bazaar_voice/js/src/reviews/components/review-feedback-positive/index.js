@@ -1,6 +1,7 @@
 import React from 'react';
 import { handleFeedbackSubmit, getFeedbackInfo } from '../../../utilities/feedback_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 class ReviewFeedbackPositive extends React.Component {
   constructor(props) {
@@ -23,6 +24,10 @@ class ReviewFeedbackPositive extends React.Component {
     });
     document.dispatchEvent(event);
     this.setState({ positiveCount: positiveCount + 1 });
+
+    // Dispatching click event to record analytics.
+    const analyticsData = { detail1: 'positive', detail2: contentType };
+    dispatchCustomEvent('bvPositiveHelpfulnessClick', analyticsData);
   }
 
   render() {

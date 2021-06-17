@@ -17,6 +17,22 @@ export const getUasToken = () => {
   return null;
 };
 
+export const getProductReviewStats = (productId) => {
+  const requestUrl = `/get-product-review-stats/${productId}`;
+  const request = doRequest(requestUrl);
+  if (request instanceof Promise) {
+    return request
+      .then((result) => {
+        if (result.status === 200) {
+          return result.data;
+        }
+        return null;
+      })
+      .catch((error) => error);
+  }
+  return null;
+};
+
 /**
  * Validate to open writa a review form on page load.
  *
@@ -66,4 +82,5 @@ export default {
   getUasToken,
   isOpenWriteReviewForm,
   createUserStorage,
+  getProductReviewStats,
 };

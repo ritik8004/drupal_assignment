@@ -12,6 +12,7 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import { setStorageInfo } from '../../../../utilities/storage';
+import dispatchCustomEvent from '../../../../../../../js/utilities/events';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -92,6 +93,9 @@ export default class WriteReviewForm extends React.Component {
           // Dispatch event after review submit.
           const event = new CustomEvent('reviewPosted', { detail: result.data });
           document.dispatchEvent(event);
+          // Dispatching click event to record analytics.
+          const analyticsData = { detail1: 'review', detail2: 'pdp' };
+          dispatchCustomEvent('bvReviewSubmissionClick', analyticsData);
         } else {
           removeFullScreenLoader();
           Drupal.logJavascriptError('review-write-review-form', result.error);

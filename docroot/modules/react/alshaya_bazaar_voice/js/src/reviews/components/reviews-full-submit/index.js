@@ -9,6 +9,7 @@ import { isOpenWriteReviewForm } from '../../../utilities/user_util';
 import ConditionalView from '../../../common/components/conditional-view';
 import { setStorageInfo } from '../../../utilities/storage';
 import PostReviewMessage from './post-review-message';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
 
 export default class WriteReviewButton extends React.Component {
   constructor(props) {
@@ -37,6 +38,9 @@ export default class WriteReviewButton extends React.Component {
     this.setState({
       isModelOpen: true,
     });
+    // Dispatching click event to record analytics.
+    const analyticsData = { detail1: 'review', detail2: 'PrimaryRatingSummary' };
+    dispatchCustomEvent('bvWriteReviewClick', analyticsData);
   };
 
   closeModal = (e) => {
