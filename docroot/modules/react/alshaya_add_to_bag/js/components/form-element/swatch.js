@@ -48,7 +48,15 @@ const SwatchList = (props) => {
   return (
     <div className={classes}>
       <label>
-        {`${label} : ${selectedSwatchLabel}`}
+        <span>
+          {label}
+          {' '}
+          :
+          {' '}
+        </span>
+        <span className="selected-text">
+          {selectedSwatchLabel}
+        </span>
       </label>
       <ul className={`swatch-list ${attributeName}`} name={attributeName}>
         {swatchItems}

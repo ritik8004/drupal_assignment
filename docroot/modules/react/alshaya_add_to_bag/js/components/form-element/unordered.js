@@ -64,7 +64,15 @@ const UnorderedList = (props) => {
   return (
     <div className={classes}>
       <label>
-        {`${label} : ${selectedValueLabel}`}
+        <span>
+          {label}
+          {' '}
+          :
+          {' '}
+        </span>
+        <span className="selected-text">
+          {selectedValueLabel}
+        </span>
       </label>
       <ul className={`attribute-options-list ${attributeName}`} name={attributeName}>{listItems}</ul>
     </div>
