@@ -273,8 +273,8 @@ const applyDefaults = (data, uid) => {
 /**
  * Gets payment methods.
  *
- * @return {array}.
- *   The method list.
+ * @return {array|null}.
+ *   The method list if available.
  */
 const getPaymentMethods = async () => {
   const paymentMethods = [];
@@ -289,6 +289,7 @@ const getPaymentMethods = async () => {
   // Set payment method type.
   const key = `payment_methods_${type}`;
 
+  // Get  payment methods from MDC.
   const url = `/rest/V1/guest-carts/${window.commerceBackend.getCartId()}/payment-methods`;
   paymentMethods[key] = await callMagentoApi(url);
 
