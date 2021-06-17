@@ -59,6 +59,21 @@ function alshaya_bp_transac_update_8014() {
       $facet_block->save();
     }
   }
+  // Set page_types to product_option_list
+  // in block.block.brandcategory
+  \Drupal::configFactory()->getEditable('block.block.brandcategory')
+    ->merge([
+      'visibility' => [
+        'alshaya_listing_page_types' => [
+          'id' => 'alshaya_listing_page_types',
+          'page_types' => [
+            'product_option_list' => 1,
+          ],
+          'show_on_selected_pages' => '1',
+        ],
+      ],
+    ])
+    ->save();
 }
 
 /**
