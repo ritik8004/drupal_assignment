@@ -65,8 +65,7 @@ The following ports are exposed on localhost
 
  - 80/443 : varnish
  - 33061 : mysql
- - 11211 : memcache1
- - 11212 : memcache2
+ - 11211 : memcache
 
 Having mysql exposed on localhost is useful for connecting to mysql from clients running on the host OS, such as
 "Sequel Pro".

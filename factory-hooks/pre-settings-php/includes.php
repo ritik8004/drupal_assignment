@@ -49,7 +49,7 @@ if ($settings['env'] === 'local') {
 
   // Set private files directory for local, it is not set in
   // '/../vendor/acquia/blt/settings/filesystem.settings.php' file.
-  $settings['file_private_path'] = '/var/www/alshaya/files-private/' . $host_site_code;
+  $settings['file_private_path'] = DRUPAL_ROOT . '/../files-private/' . $host_site_code;
 
   // Set config of stage file proxy to ignore invalid ssl errors.
   $config['stage_file_proxy.settings']['verify'] = FALSE;

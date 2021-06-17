@@ -98,8 +98,7 @@ class LocalCommand extends BltTasks {
       // If we're running Lando, our best option is to flush our memcache
       // services.
       $this->say('Flushing memcache servers.');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache1 11211');
-      $this->_exec('echo "flush_all" | nc -q 2 memcache2 11211');
+      $this->_exec('echo "flush_all" | nc -q 2 memcache 11211');
     }
     else {
       $this->say('Restarting memcache service');
@@ -147,7 +146,9 @@ class LocalCommand extends BltTasks {
       ->run();
 
     // Now the last thing, dev script, I love it :).
-    $dev_script_path = __DIR__ . '/../../../scripts/install-site-dev.sh';
+    $dev_script_path = getenv('LANDO')
+      ? '/app/scripts/install-site-dev.sh'
+      : '/var/www/alshaya/scripts/install-site-dev.sh';
     if (file_exists($dev_script_path)) {
       $this->_exec('sh ' . $dev_script_path . ' ' . $info['local']['url']);
     }
