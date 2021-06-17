@@ -33,5 +33,15 @@ function hook_alshaya_search_api_listing_page_types_alter(array &$page_types) {
 }
 
 /**
+ * Adds new block id to create facet.
+ *
+ * @param array $block_data
+ *   Block Data.
+ */
+function hook_alshaya_search_api_facet_block_data_alter(array &$block_data) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
