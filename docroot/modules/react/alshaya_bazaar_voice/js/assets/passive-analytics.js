@@ -6,7 +6,7 @@
 (function ($, Drupal) {
     'use strict';
 
-    Drupal.alshayaBazaarvoiceAnalytics = Drupal.alshayaBazaarvoiceAnalytics || {};
+    Drupal.alshayaBVPassiveAnalytics = Drupal.alshayaBVPassiveAnalytics || {};
 
     /**
      * Helper function to push complete page view to analytics.
@@ -14,7 +14,7 @@
      * @param reviewData
      * @param productId
      */
-    Drupal.alshayaBazaarvoiceAnalytics.trackPageView = function (productStats) {
+    Drupal.alshayaBVPassiveAnalytics.trackPageView = function (productStats) {
         var pageViewData = {
             bvProduct: 'RatingsAndReviews',
             productId: productStats.Id,
@@ -34,7 +34,7 @@
      * @param reviewData
      * @param productId
      */
-    Drupal.alshayaBazaarvoiceAnalytics.trackImpression = function (reviewData, productStats) {
+    Drupal.alshayaBVPassiveAnalytics.trackImpression = function (reviewData, productStats) {
         Object.values(reviewData.Results).forEach((content) => {
             pushContentToBVAnalytics(content, 'review', productStats);
         });
@@ -49,7 +49,7 @@
      * @param inViewData
      * @param containerId
      */
-    Drupal.alshayaBazaarvoiceAnalytics.trackInView = function (inViewData, containerId) {
+    Drupal.alshayaBVPassiveAnalytics.trackInView = function (inViewData, containerId) {
         BV.pixel.trackInView(inViewData, {
             minPixels: 250,
             containerId: containerId
@@ -62,7 +62,7 @@
      * @param inViewData
      * @param containerId
      */
-    Drupal.alshayaBazaarvoiceAnalytics.trackViewedCGC = function (inViewData, containerId) {
+    Drupal.alshayaBVPassiveAnalytics.trackViewedCGC = function (inViewData, containerId) {
         BV.pixel.trackViewedCGC(inViewData, {
             minPixels: 250,
             minTime: 2500,
@@ -95,11 +95,11 @@
         var containerId = 'reviews-section';
 
         // This method communicates data specific to the product page
-        Drupal.alshayaBazaarvoiceAnalytics.trackPageView(productStats);
+        Drupal.alshayaBVPassiveAnalytics.trackPageView(productStats);
 
         // This method communicates the various pieces of consumer 
         // generated content on a given page back to Bazaarvoice.
-        Drupal.alshayaBazaarvoiceAnalytics.trackImpression(e.detail, productStats);
+        Drupal.alshayaBVPassiveAnalytics.trackImpression(e.detail, productStats);
         
         // Prepare in view data for track view and CGC events.
         var inViewData = {
@@ -110,11 +110,11 @@
 
         // This method is triggered when consumer-generated content 
         // is first made visible in the browsers viewport.
-        Drupal.alshayaBazaarvoiceAnalytics.trackInView(inViewData, containerId);
+        Drupal.alshayaBVPassiveAnalytics.trackInView(inViewData, containerId);
 
         // This method is is triggered when consumer-generated content
         // is made visible for a set amount of time.
-        Drupal.alshayaBazaarvoiceAnalytics.trackViewedCGC(inViewData, containerId);
+        Drupal.alshayaBVPassiveAnalytics.trackViewedCGC(inViewData, containerId);
 
     });
     
