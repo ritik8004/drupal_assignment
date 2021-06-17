@@ -26,10 +26,17 @@ services:
       - apt-get install nodejs -y
       - apt-get install netcat -y
       - apt-get install vim -y
+      # We want to remove drupal.log so it doesn't get too big,
+      # but we want to allow rsyslog to create it so it has correct permissions.
+      - rm -f /var/logs/drupal.log
+      - apt-get install rsyslog -y
+      - cat /app/.lando/config/rsyslog.conf > /etc/rsyslog.d/50-default.conf
     run_as_root:
       # By default disable XDEBUG, we need it enabled to ensure all configurations are loaded.
       # Post this to enable disable lando xdebug-on and lando xdebug-off can be used.
       - rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && service apache2 reload
+      - systemctl enable rsyslog
+      - service rsyslog start
     overrides:
       environment:
         DEVEL_ENV: lando
@@ -97,6 +104,12 @@ tooling:
     description: runs behat tests
     service: appserver
     cmd: cd /app/behat_rework && ./bin/behat -vvv -c behat-lando.yml --format pretty
+  logs-drupal:
+    service: appserver
+    description: Displays and tails Drupal logs using syslog module (because drush wd-show no longer supports tail)
+    cmd:
+      - /app/.lando/scripts/logs-drupal.sh
+    user: root
 
 excludes:
   - vendor

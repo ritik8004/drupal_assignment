@@ -84,6 +84,7 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
 
     // Use memcache as the default bin.
     $settings['cache']['default'] = 'cache.backend.memcache';
+    $settings['cache']['bins']['config_overrides'] = 'cache.backend.memcache';
 
     $settings['cache']['bins']['product_options'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['alshaya_product_configurations'] = 'cache.backend.permanent_memcache';
