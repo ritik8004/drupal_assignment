@@ -1,7 +1,7 @@
 #!/bin/bash
 
 stack="$1"
-site="$1"
+site="$2"
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
