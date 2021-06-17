@@ -10,6 +10,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\kaleyra\MessageApiAdapter;
+use Drupal\kaleyra\ShortenUrlApiAdapter;
 use Drupal\kaleyra\WhatsAppApiAdapter;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\rest\Plugin\ResourceBase;
@@ -50,6 +51,13 @@ class ShareCart extends ResourceBase {
    * @var \Drupal\kaleyra\WhatsAppApiAdapter
    */
   protected $whatsAppApiAdapter;
+
+  /**
+   * Shorten URL API Adapter.
+   *
+   * @var \Drupal\kaleyra\ShortenUrlApiAdapter
+   */
+  protected $shortenUrlApiAdapter;
 
   /**
    * Current Request stack.
@@ -117,6 +125,8 @@ class ShareCart extends ResourceBase {
    *   Message API Adapter.
    * @param \Drupal\kaleyra\WhatsAppApiAdapter $whatsapp_api_adapter
    *   WhatsApp API Adapter.
+   * @param \Drupal\kaleyra\ShortenUrlApiAdapter $shorten_url_api_adapter
+   *   Shorten Url API Adapter.
    * @param Symfony\Component\HttpFoundation\Request $current_request
    *   The current request.
    * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
@@ -140,6 +150,7 @@ class ShareCart extends ResourceBase {
     LoggerInterface $logger,
     MessageApiAdapter $message_api_adapter,
     WhatsAppApiAdapter $whatsapp_api_adapter,
+    ShortenUrlApiAdapter $shorten_url_api_adapter,
     Request $current_request,
     MailManagerInterface $mail_manager,
     LanguageManagerInterface $language_manager,
@@ -151,6 +162,7 @@ class ShareCart extends ResourceBase {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->messageApiAdapter = $message_api_adapter;
     $this->whatsAppApiAdapter = $whatsapp_api_adapter;
+    $this->shortenUrlApiAdapter = $shorten_url_api_adapter;
     $this->currentRequest = $current_request;
     $this->mailManager = $mail_manager;
     $this->languageManager = $language_manager;
@@ -172,6 +184,7 @@ class ShareCart extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_checkout_by_agent'),
       $container->get('kaleyra.sms_api_adapter'),
       $container->get('kaleyra.whatsapp_api_adapter'),
+      $container->get('kaleyra.shorten_url_api_adapter'),
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('plugin.manager.mail'),
       $container->get('language_manager'),
@@ -261,8 +274,13 @@ class ShareCart extends ResourceBase {
         // @todo Validate mobile number.
         $to = $this->getFullMobileNumber($to);
 
-        $message = str_replace('@link', $cart_url, $settings->get('sms_template'));
+        // Shorten and replace the cart url in template.
+        $short_url = $this->shortenUrlApiAdapter->getShortUrl($cart_url);
+        $message = str_replace('@link', $short_url, $settings->get('sms_template'));
+
+        // Replace dynamic tokens in template.
         $message = $this->token->replace($message);
+
         $this->messageApiAdapter->send($to, htmlspecialchars_decode($message));
         break;
 
