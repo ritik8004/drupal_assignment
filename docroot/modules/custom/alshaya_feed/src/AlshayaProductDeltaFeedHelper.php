@@ -650,6 +650,9 @@ class AlshayaProductDeltaFeedHelper {
       ]);
       $insert->execute();
     }
+    catch (IntegrityConstraintViolationException $e) {
+      // Do nothing, SKU already present in the table.
+    }
     catch (\Exception $e) {
       $this->logger->error('Error occurred while inserting sku @sku in table `oos_product_skus`, message: @message', [
         '@sku' => $sku,
