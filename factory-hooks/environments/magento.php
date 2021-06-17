@@ -973,6 +973,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 32, 'ar' => 29],
     ],
+    'jo' => [
+      'store_id' => ['en' => 36, 'ar' => 33],
+    ],
   ],
   'aeo_pprod' => [
     'url' => 'https://aeo-pprod.store.alshaya.com',
@@ -1021,6 +1024,9 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 34, 'ar' => 31],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 39, 'ar' => 36],
     ],
   ],
   'mu_qa' => [
