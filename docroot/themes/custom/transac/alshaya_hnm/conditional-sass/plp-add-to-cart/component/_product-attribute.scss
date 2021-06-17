@@ -28,6 +28,18 @@
       margin-bottom: 0;
     }
   }
+
+  &.attribute-wrapper_article_castor_id {
+    label span:first-child {
+      display: none;
+    }
+
+    .selected-text {
+      font-family: $hnm-demibold;
+      font-size: 0.8125rem;
+      color: $hnm-black-three;
+    }
+  }
 }
 
 .form-list-wrapper,
@@ -41,5 +53,15 @@
         }
       }
     }
+  }
+
+  label {
+    font-size: 0.6875rem;
+  }
+
+  .selected-text {
+    font-weight: bold;
+    display: inline-block;
+    color: $pdp_size_selected_text;
   }
 }
