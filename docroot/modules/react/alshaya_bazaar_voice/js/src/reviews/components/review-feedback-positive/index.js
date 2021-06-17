@@ -16,13 +16,7 @@ class ReviewFeedbackPositive extends React.Component {
     e.preventDefault();
     const { positiveCount, negativeCount } = this.state;
     handleFeedbackSubmit(contentId, voteText, contentType, positiveCount, negativeCount);
-    const event = new CustomEvent('handleFeedbackState', {
-      bubbles: true,
-      detail: {
-        contentId,
-      },
-    });
-    document.dispatchEvent(event);
+    dispatchCustomEvent('handleFeedbackState', contentId);
     this.setState({ positiveCount: positiveCount + 1 });
 
     // Dispatching click event to record analytics.

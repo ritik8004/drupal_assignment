@@ -150,8 +150,7 @@ export default class ReviewSummary extends React.Component {
         }
 
         if (explicitTrigger) {
-          const handlePaginationCompleteEvent = new CustomEvent('handlePaginationComplete', {});
-          document.dispatchEvent(handlePaginationCompleteEvent);
+          dispatchCustomEvent('handlePaginationComplete', {});
         }
       });
     }

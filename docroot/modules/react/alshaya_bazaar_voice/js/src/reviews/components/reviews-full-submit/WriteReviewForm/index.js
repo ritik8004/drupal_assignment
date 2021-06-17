@@ -91,8 +91,7 @@ export default class WriteReviewForm extends React.Component {
             setStorageInfo(request.userStorage, `bvuser_${request.userStorage.id}`);
           }
           // Dispatch event after review submit.
-          const event = new CustomEvent('reviewPosted', { detail: result.data });
-          document.dispatchEvent(event);
+          dispatchCustomEvent('reviewPosted', result.data);
           // Dispatching click event to record analytics.
           const analyticsData = { detail1: 'review', detail2: 'pdp' };
           dispatchCustomEvent('bvReviewSubmissionClick', analyticsData);

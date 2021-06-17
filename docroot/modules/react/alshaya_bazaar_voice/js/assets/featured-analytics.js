@@ -7,11 +7,11 @@
     'use strict';
 
     Drupal.alshayaBazaarvoiceAnalytics = Drupal.alshayaBazaarvoiceAnalytics || {};
+    var productId = drupalSettings.productReviewStats.productId;
+    var productStats = drupalSettings.productReviewStats.statistics[productId];
 
     // Process write review click data as user clicks on button.
     document.addEventListener('bvWriteReviewClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'write',
@@ -26,8 +26,6 @@
 
     // Process positive feedback click data as user clicks on yes.
     document.addEventListener('bvPositiveHelpfulnessClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'helpfulness',
@@ -42,8 +40,6 @@
 
     // Process negative feedback click data as user clicks on no.
     document.addEventListener('bvNegativeHelpfulnessClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'helpfulness',
@@ -58,8 +54,6 @@
 
     // Process report feedback click data as user clicks on report.
     document.addEventListener('bvReportFeedbackClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'report',
@@ -74,9 +68,6 @@
 
     // Process rating details click data as user clicks on filter option.
     document.addEventListener('bvRatingFilterClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
-        console.log(e);
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'filter',
@@ -91,8 +82,6 @@
 
     // Process filter details click data as user clicks on filter option.
     document.addEventListener('bvReviewFilterClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'filter',
@@ -107,8 +96,6 @@
 
     // Process review count click as user clicks on count link.
     document.addEventListener('bvReviewCountClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'link',
@@ -123,8 +110,6 @@
 
     // Process sort click data as user clicks on sort option.
     document.addEventListener('bvSortOptionsClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'sort',
@@ -139,8 +124,6 @@
     
     // Process review submit click data as user submits a review.
     document.addEventListener('bvReviewSubmissionClick', function (e) {
-        var productId = drupalSettings.productReviewStats.productId;
-        var productStats = drupalSettings.productReviewStats.statistics[productId];
         BV.pixel.trackEvent('Feature', {
             type: 'Used',
             name: 'submit',
