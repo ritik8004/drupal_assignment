@@ -8,7 +8,7 @@ import * as storeData_re1_4429_vif from '../data/store_RE1-4429-VIF.json';
 import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMCSP-740.json';
 import cncStoreList from '../data/cnc_stores_list.js';
 import { getCncStores } from '../../../../js/backend/v2/checkout';
-import { getCart } from '../../../../js/backend/v2/cart';
+import { getCart } from '../../../../js/backend/v2/common';
 import * as productStatus from '../data/product_status.json';
 
 describe('Checkout', () => {
