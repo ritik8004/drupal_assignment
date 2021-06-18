@@ -9,7 +9,7 @@ import getStringMessage from '../../../../js/utilities/strings';
  */
 const NotBuyableButton = ({ url }) => (
   <a href={url} className="is-not-buyable">
-    {`${getStringMessage('view_options')}`}
+    {`${getStringMessage('view_more')}`}
   </a>
 );
 
