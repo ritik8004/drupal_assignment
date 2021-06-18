@@ -26,11 +26,11 @@ export default class Rating extends React.Component {
     const { bazaarVoiceSettings } = this.state;
     // Check reviews setting exist.
     if (bazaarVoiceSettings.reviews !== undefined) {
-      getProductReviewStats(bazaarVoiceSettings.productid).then((reviewData) => {
-        if (reviewData !== null) {
-          removeFullScreenLoader();
+      getProductReviewStats(bazaarVoiceSettings.productid).then((result) => {
+        removeFullScreenLoader();
+        if (result !== null) {
           this.setState({
-            reviewsData: reviewData,
+            reviewsData: result.productData,
           });
         }
       });

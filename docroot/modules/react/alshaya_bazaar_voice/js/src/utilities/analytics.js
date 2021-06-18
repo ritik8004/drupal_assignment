@@ -2,8 +2,8 @@
  * @file
  * Contains analytics and datalayer events for bazaarvoice.
  */
-const { productId } = drupalSettings.productReviewStats;
-const productStats = drupalSettings.productReviewStats.statistics[productId];
+const { productId } = drupalSettings.productReviewStats.productId;
+const { productData } = drupalSettings.productReviewStats.productData;
 
 /**
  * Helper function to push content data to datalayer.
@@ -28,11 +28,11 @@ function pushContentToDataLayer(eventName, contentData) {
 function pushContentToBVAnalytics(content, contentType) {
   const inViewData = {
     contentId: content.Id,
-    productId: productStats.Id,
-    categoryId: productStats.CategoryId,
+    productId: productData.Id,
+    categoryId: productData.CategoryId,
     contentType,
     bvProduct: 'RatingsAndReviews',
-    brand: productStats.Brand.Name,
+    brand: productData.Brand.Name,
   };
   // eslint-disable-next-line
   BV.pixel.trackImpression(inViewData);
@@ -41,19 +41,19 @@ function pushContentToBVAnalytics(content, contentType) {
 /**
  * Helper function to push complete page view to analytics.
  *
- * @param productStats
+ * @param productData
  */
 function trackPageView() {
   const pageViewData = {
     bvProduct: 'RatingsAndReviews',
-    productId: productStats.Id,
-    brand: productStats.Brand.Name,
+    productId: productData.Id,
+    brand: productData.Brand.Name,
     type: 'Product',
-    categoryId: productStats.CategoryId,
-    numReviews: productStats.ReviewStatistics.TotalReviewCount,
-    avgRating: productStats.ReviewStatistics.AverageOverallRating,
-    percentRecommended: (productStats.ReviewStatistics.RecommendedCount
-        / productStats.ReviewStatistics.TotalReviewCount) * 100,
+    categoryId: productData.CategoryId,
+    numReviews: productData.ReviewStatistics.TotalReviewCount,
+    avgRating: productData.ReviewStatistics.AverageOverallRating,
+    percentRecommended: (productData.ReviewStatistics.RecommendedCount
+        / productData.ReviewStatistics.TotalReviewCount) * 100,
   };
   // eslint-disable-next-line
   BV.pixel.trackPageView(pageViewData);
@@ -128,7 +128,7 @@ export const trackPassiveAnalytics = (reviewData) => {
   const inViewData = {
     productId,
     bvProduct: 'RatingsAndReviews',
-    brand: productStats.Brand.Name,
+    brand: productData.Brand.Name,
   };
 
   // This method is triggered when consumer-generated content
@@ -143,16 +143,16 @@ export const trackPassiveAnalytics = (reviewData) => {
 /**
  * Function to track all the featured analytics of BV.
  *
- * @param productStats
+ * @param productData
  */
 export const trackFeaturedAnalytics = (analyticsData) => {
   const eventData = {
     type: analyticsData.type,
     name: analyticsData.name,
-    brand: productStats.Brand.Name,
+    brand: productData.Brand.Name,
     productId,
     bvProduct: 'RatingsAndReviews',
-    categoryId: productStats.CategoryId,
+    categoryId: productData.CategoryId,
     detail1: analyticsData.detail1,
     detail2: analyticsData.detail2,
   };

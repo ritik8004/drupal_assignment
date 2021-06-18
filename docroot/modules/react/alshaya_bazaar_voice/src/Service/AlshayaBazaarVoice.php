@@ -755,6 +755,9 @@ class AlshayaBazaarVoice {
     $extra_params = [
       'filter' => 'id:' . $product_id,
       'stats' => 'reviews',
+      'include' => 'Reviews',
+      'sort_reviews' => 'submissiontime:desc',
+      'Limit_Reviews' => '5',
     ];
     $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/products.json', $extra_params);
     $url = $request['url'];
@@ -762,10 +765,11 @@ class AlshayaBazaarVoice {
 
     $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
     if (!$result['HasErrors'] && isset($result['Results'])) {
-      foreach ($result['Results'] as $result) {
-        $response[$product_id] = $result;
-        return $response;
+      $response[$product_id]['productData'] = $result['Results'][0];
+      foreach ($result['Includes']['Reviews'] as $review) {
+        $response[$product_id]['reviews'][] = $review;
       }
+      return $response;
     }
     return NULL;
   }
