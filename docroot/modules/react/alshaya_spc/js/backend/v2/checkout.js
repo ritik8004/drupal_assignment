@@ -250,27 +250,21 @@ const selectHd = (address, method, billing, shippingMethods) => {
 };
 
 /**
- * Get customer's address ids by customer id.
- * @todo implement this
- *
- * @param {string} customerId
- *   Customer Id.
+ * Get customer's addresses.
  *
  * @return {array}
  *   Address ids of customer or empty array.
  */
-const getCustomerAddressIdsByCustomerId = (customerId) => {
-  logger.info(`${customerId}`);
-  // Get customer address ids.
-  // $customer = $this->magentoCustomer->getCustomerById($customer_id);
-  //
-  // if (!empty($customer['error']) || !isset($customer['addresses'])) {
-  //   return [];
-  // }
-  //
-  // return array_column($customer['addresses'], 'id');
+const getCustomerAddressIds = async () => {
+  // see https://www.rakeshjesadiya.com/get-customer-data-rest-api-customers-me-magento/
+  const headers = {
+    Bearer: localStorage.getItem('magento_customer_token'),
+  };
+  const address = await callMagentoApi('/rest/V1/customers/me', 'GET', {}, headers);
+  return new Promise((resolve) => resolve(address));
 };
 
+window.commerceBackend.test = () => getCustomerAddressIds();
 /**
  * Select Click and Collect store and method from possible defaults.
  *
@@ -328,7 +322,7 @@ const selectCnc = async (store, address, billing) => {
     return new Promise((resolve) => resolve(false));
   }
 
-  const updated = window.commerceBackend.updateCart(data);
+  const updated = updateCart(data);
   if (typeof updated.error !== 'undefined' && updated.error) {
     return false;
   }
@@ -348,7 +342,7 @@ const selectCnc = async (store, address, billing) => {
     return false;
   }
 
-  const customerAddressIds = getCustomerAddressIdsByCustomerId(billing.customer_id);
+  const customerAddressIds = getCustomerAddressIds(billing.customer_id);
 
   // Return if address id from last order doesn't
   // exist in customer's address id list.

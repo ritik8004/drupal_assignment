@@ -190,11 +190,13 @@ const handleResponse = (apiResponse) => {
  *   The request method.
  * @param {object} data
  *   The data to send with the request.
+ * @param {object} headers
+ *   Extra headers to be sent.
  *
  * @returns {Promise}
  *   Returns a promise object.
  */
-const callMagentoApi = (url, method, data) => {
+const callMagentoApi = (url, method, data, headers) => {
   const params = {
     url: i18nMagentoUrl(url),
     method,
@@ -203,6 +205,10 @@ const callMagentoApi = (url, method, data) => {
       'Alshaya-Channel': 'web',
     },
   };
+
+  if (typeof headers !== 'undefined' && headers && Object.keys(headers).length > 0) {
+    params.headers = { ...params.headers, ...headers };
+  }
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
     params.data = data;
