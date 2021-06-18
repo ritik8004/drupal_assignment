@@ -234,12 +234,28 @@
       padding-bottom: 1rem;
     }
   }
-}
 
-.language--switcher {
   &.only-first-time {
     ul {
-      height: 2.188rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      li {
+        &:first-child {
+          &::after {
+            html[lang=en] & {
+              top: 0.25rem;
+            }
+          }
+        }
+      }
+    }
+
+    .language-switcher-close {
+      &::after {
+        top: 0.1875rem;
+      }
     }
   }
 }

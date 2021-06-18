@@ -1,3 +1,6 @@
-.addtobag-button {
-  background: $plp-add-to-cart-btn-bg;
+.addtobag-button,
+.is-not-buyable,
+.addtobag-config-button,
+.config-form-addtobag-button {
+  text-transform: uppercase;
 }

@@ -50,7 +50,7 @@ class WhatsAppApiAdapter {
                               LoggerChannelFactoryInterface $logger_channel_factory) {
     $this->client = $client;
     $this->configFactory = $config_factory;
-    $this->logger = $logger_channel_factory->get('kaleyra');
+    $this->logger = $logger_channel_factory->get('kaleyra.WhatsAppApiAdapter');
   }
 
   /**

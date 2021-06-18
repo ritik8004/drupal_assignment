@@ -48,7 +48,7 @@ class MessageApiAdapter {
                               LoggerChannelFactoryInterface $logger_channel_factory) {
     $this->client = $client;
     $this->configFactory = $config_factory;
-    $this->logger = $logger_channel_factory->get('kaleyra');
+    $this->logger = $logger_channel_factory->get('kaleyra.MessageApiAdapter');
   }
 
   /**
@@ -67,7 +67,7 @@ class MessageApiAdapter {
       'method' => 'sms',
       'sender' => $kaleyra_settings->get('sender_identifier'),
       'to' => $to,
-      'message' => urlencode($message),
+      'message' => $message,
       'api_key' => $kaleyra_settings->get('api_key'),
       'unicode' => $kaleyra_settings->get('unicode'),
     ];
