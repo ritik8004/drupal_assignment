@@ -1,12 +1,14 @@
 import {
   isAnonymousUserWithoutCart,
+  getCart,
+  updateCart,
   getFormattedError,
+  getProcessedCartData,
   checkoutComUpapiVaultMethod,
   checkoutComVaultMethod,
   callDrupalApi,
   callMagentoApi,
 } from './common';
-import { getCart, updateCart, getProcessedCartData } from './cart';
 import { getDefaultErrorMessage } from './error';
 import { logger } from './utility';
 
