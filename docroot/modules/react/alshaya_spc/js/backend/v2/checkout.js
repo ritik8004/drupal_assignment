@@ -160,18 +160,20 @@ const formatAddressForShippingBilling = (address) => {
   }
 
   data.customAttributes = [];
-  Object.keys(data).forEach((key) => {
-    let value = data[key];
-    if (!Array.isArray(value) && value === null) {
-      value = '';
-    }
-    data.customAttributes.push(
-      {
-        attributeCode: key,
-        value,
-      },
-    );
-  });
+  if (Object.keys(data).length > 0) {
+    Object.keys(data).forEach((key) => {
+      let value = data[key];
+      if (!Array.isArray(value) && value === null) {
+        value = '';
+      }
+      data.customAttributes.push(
+        {
+          attributeCode: key,
+          value,
+        },
+      );
+    });
+  }
 
   if (typeof data.street === 'string') {
     data.street = [data.street];
