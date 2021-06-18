@@ -55,6 +55,17 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('whatsapp_template'),
     ];
 
+    $form['whatsapp_mode'] = [
+      '#type' => 'select',
+      '#options' => [
+        'text' => $this->t('Text'),
+        'button' => $this->t('Button'),
+      ],
+      '#title' => $this->t('WhatsApp Mode'),
+      '#description' => $this->t('Select the mode to use for WhatsApp.'),
+      '#default_value' => $config->get('whatsapp_mode'),
+    ];
+
     $form['email_template'] = [
       '#type' => 'text_format',
       '#title' => $this->t('E-Mail Template'),
@@ -87,7 +98,7 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
     }
     $config->set('smart_user_agents', $smart_user_agents);
     $config->set('smart_agent_ips', $form_state->getValue('smart_agent_ips'));
-    $config->set('whatsapp_template', $form_state->getValue('whatsapp_template'));
+    $config->set('whatsapp_mode', $form_state->getValue('whatsapp_mode'));
     $config->set('email_template', $form_state->getValue('email_template')['value']);
     $config->set('sms_template', $form_state->getValue('sms_template')['value']);
     $config->save();
