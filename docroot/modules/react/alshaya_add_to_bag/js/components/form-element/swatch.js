@@ -49,10 +49,7 @@ const SwatchList = (props) => {
     <div className={classes}>
       <label>
         <span>
-          {label}
-          {' '}
-          :
-          {' '}
+          {`${label} : `}
         </span>
         <span className="selected-text">
           {selectedSwatchLabel}
