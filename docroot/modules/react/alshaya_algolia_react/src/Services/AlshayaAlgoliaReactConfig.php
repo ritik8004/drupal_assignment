@@ -2,8 +2,8 @@
 
 namespace Drupal\alshaya_algolia_react\Services;
 
-use Drupal\alshaya_acm_product\AlshayaPromoContextManager;
 use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
@@ -65,11 +65,11 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
   protected $entityTypeManager;
 
   /**
-   * Alshaya Promotions Context Manager.
+   * Alshaya Request Context Manager.
    *
-   * @var \Drupal\alshaya_acm_product\AlshayaPromoContextManager
+   * @var \Drupal\alshaya_acm_product\AlshayaRequestContextManager
    */
-  protected $promoContextManager;
+  protected $requestContextManager;
 
   /**
    * Alshaya Options List Service.
@@ -95,8 +95,8 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
    *   Service to get sort options for PLP.
    * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService $plp_sort_options
    *   Service to get sort option labels for PLP.
-   * @param \Drupal\alshaya_acm_product\AlshayaPromoContextManager $alshayaPromoContextManager
-   *   Alshaya Promo Context Manager.
+   * @param \Drupal\alshaya_acm_product\AlshayaRequestContextManager $alshayaRequestContextManager
+   *   Alshaya Request Context Manager.
    * @param \Drupal\alshaya_options_list\AlshayaOptionsListHelper $alshaya_options_service
    *   Alshaya Options List service.
    */
@@ -108,7 +108,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     EntityTypeManagerInterface $entity_type_manager,
     AlshayaPlpSortLabelsService $plp_sort_labels,
     AlshayaPlpSortOptionsService $plp_sort_options,
-    AlshayaPromoContextManager $alshayaPromoContextManager,
+    AlshayaRequestContextManager $alshayaRequestContextManager,
     AlshayaOptionsListHelper $alshaya_options_service
   ) {
     $this->configFactory = $config_factory;
@@ -118,7 +118,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
     $this->entityTypeManager = $entity_type_manager;
     $this->plpSortLabels = $plp_sort_labels;
     $this->plpSortOptions = $plp_sort_options;
-    $this->promoContextManager = $alshayaPromoContextManager;
+    $this->requestContextManager = $alshayaRequestContextManager;
     $this->alshayaOptionsService = $alshaya_options_service;
   }
 
@@ -391,7 +391,7 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $widget['type'] = 'hierarchy';
           }
           elseif ($facet->getFieldIdentifier() === 'field_acq_promotion_label') {
-            $context = $this->promoContextManager->getPromotionContext();
+            $context = $this->requestContextManager->getContext();
             $identifier = $this->identifireSuffixUpdate("field_acq_promotion_label.$context", $page_type);
           }
 

@@ -4,15 +4,22 @@ body {
   &.overlay-crossel,
   &.overlay-related-select,
   &.ratings-reviews-overlay {
-    overflow: hidden;
+    @include breakpoint($upto-desktop) {
+      &::before {
+        opacity: 1;
+        z-index: 10;
+        transform: translate3d(0, 0, 0);
+        background-color: $header_mobile_menu_overlay;
+      }
 
-    &::before {
-      background-color: rgba(0, 0, 0, 0.48);
-      opacity: 1;
-      z-index: 12;
-      transform: translate3d(0, 0, 0);
-      height: 100%;
-      pointer-events: unset;
+      .branding__menu {
+        &::before {
+          background: $header_mobile_menu_overlay;
+          position: absolute;
+          z-index: 9;
+          opacity: 1;
+        }
+      }
     }
   }
 }

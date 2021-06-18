@@ -276,6 +276,9 @@ class ProductResource extends ResourceBase {
       $cacheableMetadata->addCacheContexts($this->cache['contexts']);
     }
 
+    // Add query_args cache context.
+    $cacheableMetadata->addCacheContexts(['url.query_args']);
+
     if (!empty($this->cache['tags'])) {
       $cacheableMetadata->addCacheTags($this->cache['tags']);
     }

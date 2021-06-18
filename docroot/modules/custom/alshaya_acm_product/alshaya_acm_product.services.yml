@@ -188,6 +188,6 @@ services:
     tags:
       - { name: normalizer, priority: 20 }
   alshaya_acm_product.context_manager:
-    class: Drupal\alshaya_acm_product\AlshayaPromoContextManager
+    class: Drupal\alshaya_acm_product\AlshayaRequestContextManager
     arguments:
       - '@request_stack'

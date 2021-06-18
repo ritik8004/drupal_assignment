@@ -5,6 +5,7 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product\AlshayaRequestContextManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\Service\SkuInfoHelper;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -36,20 +37,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * )
  */
 class ProductExcludeLinkedResource extends ResourceBase {
-
-  /**
-   * List of attributes with label for api.
-   */
-  const ATTRIBUTES_WITH_LABEL = [
-    'size',
-    'band_size',
-    'cup_size',
-    'size_shoe_eu',
-    'size_shoe_uk',
-    'size_shoe_us',
-    'fragrance',
-    'color',
-  ];
 
   /**
    * SKU Manager.
@@ -273,6 +260,9 @@ class ProductExcludeLinkedResource extends ResourceBase {
     $data['configurable_attributes'] = $this->skuManager->getConfigurableAttributeNames($skuEntity);
 
     // Allow other modules to alter product data.
+    // For simple sku this hook is called where
+    // process_swatch_for_grouping_attributes is checked
+    // to process the grouped_variants.
     $this->moduleHandler->alter('alshaya_mobile_app_product_exclude_linked_data', $data, $skuEntity, $with_parent_details);
     if (isset($data['grouping_attribute_with_swatch'])) {
       $data['grouped_variants'] = $this->getGroupedVariants($data, $with_parent_details);
@@ -311,6 +301,7 @@ class ProductExcludeLinkedResource extends ResourceBase {
   private function getSkuData(SKUInterface $sku, string $link = '', bool $with_parent_details = FALSE): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
+    AlshayaRequestContextManager::updateDefaultContext('app');
 
     $this->cache['tags'] = Cache::mergeTags($this->cache['tags'], $sku->getCacheTags());
     $this->cache['contexts'] = Cache::mergeTags($this->cache['contexts'], $sku->getCacheContexts());
@@ -554,19 +545,12 @@ class ProductExcludeLinkedResource extends ResourceBase {
           'value' => $value,
           'skus' => $skus,
         ];
-        // Checking for attribute codes for size and other attributes.
-        if (in_array($attribute_code, self::ATTRIBUTES_WITH_LABEL)) {
-          if (!empty($size_labels[$value])) {
-            $attr_value['label'] = $size_labels[$value];
-          }
-          elseif (
-            ($term = $this->productOptionsManager->loadProductOptionByOptionId(
-              $attribute_code,
-              $value,
-              $this->mobileAppUtility->currentLanguage())
-            )
-            && $term instanceof TermInterface
-          ) {
+
+        // Labels for all attribute codes.
+        $attr_value['label'] = $size_labels[$value] ?? '';
+        if (empty($attr_value['label'])) {
+          $term = $this->productOptionsManager->loadProductOptionByOptionId($attribute_code, $value, $this->mobileAppUtility->currentLanguage());
+          if ($term instanceof TermInterface) {
             $attr_value['label'] = $term->label();
           }
         }

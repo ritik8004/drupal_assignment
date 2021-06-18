@@ -1,11 +1,12 @@
 import React, { createRef } from 'react';
 import CartSelectOption from '../cart-select-option';
-import { addToCartConfigurable } from '../../../../utilities/pdp_layout';
+import { addToCartConfigurable, addOverlayClass } from '../../../../utilities/pdp_layout';
 import CartUnavailability from '../cart-unavailability';
 import QuantityDropdown from '../quantity-dropdown';
 import SelectSizeButton from '../select-size-button';
 import { smoothScrollToActiveSwatch } from '../../../../../../js/utilities/smoothScroll';
 import { isProductBuyable } from '../../../../../../js/utilities/display';
+
 
 class ConfigurableProductForm extends React.Component {
   constructor(props) {
@@ -147,9 +148,9 @@ class ConfigurableProductForm extends React.Component {
   openModal = () => {
     const { context } = this.props;
     if (context === 'main') {
-      document.querySelector('body').classList.add('overlay-select');
+      addOverlayClass('overlay-select');
     } else {
-      document.querySelector('body').classList.add('overlay-related-select');
+      addOverlayClass('overlay-related-select');
     }
   };
 

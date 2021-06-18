@@ -3,7 +3,8 @@ import Slider from 'react-slick';
 import { crossellUpsellSliderSettings } from '../../../common/components/utilities/slider_settings';
 import PdpCrossellUpsellImage from '../pdp-crossell-upsell-images';
 import CrossellPopupContent from '../pdp-crossel-popup';
-import { closeModalHelper } from '../../../utilities/pdp_layout';
+import { closeModalHelper, removeOverlayClass } from '../../../utilities/pdp_layout';
+
 
 export default class PdpCrossellUpsell extends React.PureComponent {
   constructor(props) {
@@ -74,7 +75,7 @@ export default class PdpCrossellUpsell extends React.PureComponent {
 
   closeModal = () => {
     const { removePanelData } = this.props;
-    document.querySelector('body').classList.remove('overlay-crossel');
+    removeOverlayClass('overlay-crossel');
     setTimeout(() => {
       removePanelData();
     }, 400);
