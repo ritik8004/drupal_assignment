@@ -33,7 +33,7 @@
           height: 1.25rem;
           min-width: 0;
 
-          .menu__link-wrapper {
+          > .menu__link-wrapper {
             margin: 0 0.9375rem;
           }
 
@@ -54,6 +54,7 @@
 
           .menu--two__list {
             height: auto !important;
+            width: auto !important;
             padding: 0;
             margin-top: 0.625rem;
             box-shadow: 0 0.125rem 0.375rem 0 rgba(0, 0, 0, 0.24);
@@ -172,14 +173,21 @@
         position: relative;
 
         &::after {
+          content: '';
+          width: 0;
+          height: 0;
+          border-left: 0.4rem solid transparent;
+          border-right: 0.4rem solid transparent;
+          border-top: 0.4rem solid;
           position: absolute;
-          content: '\25b2';
-          #{$right}: 1.4rem;
+          right: 23px;
+          margin-top: 5px;
+          transform: rotate(180deg);
         }
 
         &.closed {
           &::after {
-            content: '\25bc';
+            transform: rotate(0deg);
           }
         }
       }
@@ -221,7 +229,11 @@
     }
 
     li.not-active {
-      & + .secondary--main--menu {
+      & ~ .promo--button-wrapper {
+        display: none;
+      }
+
+      & ~ .secondary--main--menu {
         > .secondary-main-menu-header {
           display: none;
         }

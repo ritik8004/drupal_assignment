@@ -1,13 +1,15 @@
-{% for promo_button in promo %}
-<div class="promo_images">
-  <div class="img_area">
-    <img class="promo_img" src="{{ file_url(promo_button.imgurl) }}">
-  </div>
-  <div class="txt_area">
-    <div class ="img_title">{{ promo_button.img_title }}</div>
-    <a href="{{ promo_button.link }}">
-      <div class ="link_title">{{ promo_button.link_title }}</div>
+<div class="promo-wrapper">
+  {% for promo_button in promo %}
+    <a class="promo--button-wrapper" href="{{ promo_button.link }}">
+      <div class="promo--button">
+        <div>
+          <img class="promo--button-image"
+               src="{{ file_url(promo_button.imgurl) }}">
+        </div>
+        <div class="promo--button-body">
+          <span class="promo--button-title">{{ promo_button.img_title }}</span>
+          <span class="promo--button-link">{{ promo_button.link_title }}</span></div>
+      </div>
     </a>
-  </div>
+  {% endfor %}
 </div>
-{% endfor %}
