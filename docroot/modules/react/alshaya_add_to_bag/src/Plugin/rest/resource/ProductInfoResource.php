@@ -81,7 +81,7 @@ class ProductInfoResource extends ResourceBase {
    *
    * @var \Drupal\alshaya_product_options\ProductOptionsHelper
    */
-  private $optionsHelper;
+  protected $optionsHelper;
 
   /**
    * Cart Form Helper service.
@@ -462,7 +462,7 @@ class ProductInfoResource extends ResourceBase {
    * @return array
    *   The alternative array.
    */
-  public function getAlternativeValues($alternates, $child) {
+  private function getAlternativeValues($alternates, $child) {
     $group_data = [];
     // Get all alternate labels from child sku.
     foreach ($alternates as $alternate => $alternate_label) {
