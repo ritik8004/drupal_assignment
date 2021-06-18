@@ -73,3 +73,12 @@
     }
   }
 }
+
+.form-list-wrapper,
+.attribute-wrapper {
+  .selected-text {
+    font-weight: bold;
+    display: inline-block;
+    color: $pdp_size_selected_text;
+  }
+}
