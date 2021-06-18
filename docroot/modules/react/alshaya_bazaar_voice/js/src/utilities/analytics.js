@@ -23,7 +23,6 @@ function pushContentToDataLayer(eventName, contentData) {
  *
  * @param content
  * @param contentType
- * @param productId
  */
 function pushContentToBVAnalytics(content, contentType) {
   const inViewData = {
@@ -40,8 +39,6 @@ function pushContentToBVAnalytics(content, contentType) {
 
 /**
  * Helper function to push complete page view to analytics.
- *
- * @param productData
  */
 function trackPageView() {
   const pageViewData = {
@@ -143,7 +140,7 @@ export const trackPassiveAnalytics = (reviewData) => {
 /**
  * Function to track all the featured analytics of BV.
  *
- * @param productData
+ * @param analyticsData
  */
 export const trackFeaturedAnalytics = (analyticsData) => {
   const eventData = {
