@@ -29,4 +29,3 @@ bvpixel_tracking:
 iovation:
   js:
     js/assets/iovation-loader.js: {}
-
