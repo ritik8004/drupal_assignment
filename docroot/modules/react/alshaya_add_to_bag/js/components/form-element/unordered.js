@@ -72,7 +72,12 @@ const UnorderedList = (props) => {
   return (
     <div className={classes}>
       <label>
-        {`${label} : ${selectedValueLabel}`}
+        <span>
+          {`${label} : `}
+        </span>
+        <span className="selected-text">
+          {selectedValueLabel}
+        </span>
       </label>
       { isGroup && (
         <div className="group-anchor-wrapper">
