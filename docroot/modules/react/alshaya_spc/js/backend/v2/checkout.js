@@ -273,27 +273,28 @@ const applyDefaults = (data, uid) => {
 /**
  * Gets payment methods.
  *
- * @return {array|null}.
+ * @return {Promise|null}.
  *   The method list if available.
  */
 const getPaymentMethods = async () => {
-  const paymentMethods = [];
-  const cartData = window.commerceBackend.getCartDataFromStorage();
-  const cart = window.commerceBackend.getProcessedCartData(cartData);
-  const { method: type } = cart.shipping;
-  if (typeof type === 'undefined') {
-    logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cart.cartId}`);
+  const response = await getCart();
+  const cartData = response.data;
+
+  if (typeof cartData.shipping !== 'undefined') {
+    const { method: type } = cartData.shipping;
+    if (typeof type === 'undefined') {
+      logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartData.cartId}`);
+      return null;
+    }
+  } else {
+    logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartData.cartId}`);
     return null;
   }
 
-  // Set payment method type.
-  const key = `payment_methods_${type}`;
-
   // Get  payment methods from MDC.
-  const url = `/rest/V1/guest-carts/${window.commerceBackend.getCartId()}/payment-methods`;
-  paymentMethods[key] = await callMagentoApi(url);
+  const result = await callMagentoApi(`/rest/V1/guest-carts/${window.commerceBackend.getCartId()}/payment-methods`);
 
-  return paymentMethods[key];
+  return new Promise((resolve) => resolve(result.data));
 };
 
 /**
