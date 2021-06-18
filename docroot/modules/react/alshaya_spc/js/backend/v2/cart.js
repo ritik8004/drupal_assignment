@@ -98,7 +98,7 @@ const triggerStockRefresh = (data) => callDrupalApi(
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
- * Applies transformations to the struycture of cart data.
+ * Applies transformations to the structure of cart data.
  *
  * @returns {Promise}
  *   A promise object.

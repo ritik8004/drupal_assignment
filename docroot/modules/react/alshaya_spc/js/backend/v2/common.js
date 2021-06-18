@@ -260,16 +260,6 @@ const callDrupalApi = (url, method, requestOptions) => {
   return Axios(params);
 };
 
-
-/**
- * Format the cart data to have better structured array.
- *
- * @param {object} cartData
- *   Cart response from Magento.
- *
- * @return {object}
- *   Formatted / processed cart.
- */
 /**
  * Format the cart data to have better structured array.
  *
@@ -281,9 +271,13 @@ const callDrupalApi = (url, method, requestOptions) => {
  */
 const formatCart = (cartData) => {
   const data = { ...cartData };
+
   // Move customer data to root level.
-  data.customer = cartData.cart.customer;
-  delete data.cart.customer;
+  if (typeof cartData.cart.customer !== 'undefined') {
+    data.customer = cartData.cart.customer;
+    delete data.cart.customer;
+  }
+
   // Format addresses.
   if (typeof data.customer.addresses !== 'undefined' && data.customer.addresses.length > 0) {
     data.customer.addresses = data.customer.addresses.map((address) => {
@@ -294,11 +288,15 @@ const formatCart = (cartData) => {
       return item;
     });
   }
+
   // Format shipping info.
   if (typeof cartData.cart.extension_attributes.shipping_assignments[0] !== 'undefined') {
-    data.shipping = cartData.cart.extension_attributes.shipping_assignments[0].shipping;
-    delete data.cart.extension_attributes.shipping_assignments;
+    if (typeof cartData.cart.extension_attributes.shipping_assignments[0].shipping !== 'undefined') {
+      data.shipping = cartData.cart.extension_attributes.shipping_assignments[0].shipping;
+      delete data.cart.extension_attributes.shipping_assignments;
+    }
   }
+
   let shippingMethod = '';
   if (typeof data.shipping.method !== 'undefined' && data.shipping.method !== null) {
     shippingMethod = data.shipping.method;
@@ -309,15 +307,19 @@ const formatCart = (cartData) => {
     data.shipping.type = 'home_delivery';
   }
 
-  if (typeof cartData.cart.shipping !== 'undefined') {
-    if (typeof cartData.cart.shipping.extension_attributes.click_and_collect_type !== 'undefined') {
-      const attributes = cartData.cart.shipping.extension_attributes;
-      data.shipping.clickCollectType = attributes.click_and_collect_type;
+  if (typeof cartData.cart.shipping !== 'undefined' && typeof cartData.cartData.cart.shipping.extension_attributes !== 'undefined') {
+    const extensionAttributes = cartData.cart.shipping.extension_attributes;
+    if (typeof extensionAttributes.click_and_collect_type !== 'undefined') {
+      data.shipping.clickCollectType = extensionAttributes.click_and_collect_type;
     }
-    if (typeof cartData.cart.shipping.extension_attributes.store_code !== 'undefined') {
-      data.shipping.storeCode = cartData.cart.shipping.store_code.click_and_collect_type;
+    if (typeof extensionAttributes.store_code !== 'undefined') {
+      data.shipping.storeCode = extensionAttributes.store_code;
     }
   }
+  delete data.shipping.extension_attributes;
+
+  // Initialise payment data holder.
+  data.payment = {};
 
   // When shipping method is empty, Set shipping and billing info to empty,
   // so that we can show empty shipping and billing component in react
@@ -492,7 +494,7 @@ const getCart = async () => {
 };
 
 /**
- * Applies transformations to the struycture of cart data.
+ * Applies transformations to the structure of cart data.
  *
  * @returns {Promise}
  *   A promise object.

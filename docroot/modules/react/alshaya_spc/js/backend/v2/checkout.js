@@ -148,7 +148,7 @@ const formatAddressForShippingBilling = (address) => {
   const data = { ...address };
 
   const staticFields = {};
-  if (typeof data.static !== 'undefined') {
+  if (typeof data.static !== 'undefined' && Object.keys(data.static).length > 0) {
     Object.keys(data.static).forEach((key) => {
       staticFields[key] = data.static[key];
     });
