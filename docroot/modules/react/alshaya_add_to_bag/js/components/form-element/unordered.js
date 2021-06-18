@@ -17,11 +17,17 @@ const UnorderedList = (props) => {
     isHidden,
     allowedValues,
     onClick,
+    groupData,
   } = props;
   let selectedValueLabel = null;
+  const { isGroup } = groupData;
   const listItems = options.map((option) => {
     let element = null;
     const classes = [];
+    const optionLabel = isGroup
+      ? option.label[groupData.defaultGroup]
+      : option.label;
+
     if (!allowedValues.includes(option.value)
       && !allowedValues.includes(parseInt(option.value, 10))) {
       classes.push(disabledClass);
@@ -30,7 +36,9 @@ const UnorderedList = (props) => {
     /* eslint-disable eqeqeq */
     if (option.value == defaultValue) {
       classes.push(activeClass);
-      selectedValueLabel = option.label;
+      selectedValueLabel = isGroup
+        ? `${groupData.defaultGroup}, ${optionLabel}`
+        : optionLabel;
       element = (
         <li
           key={option.value}
@@ -39,7 +47,7 @@ const UnorderedList = (props) => {
           selected="selected"
           onClick={(e) => onClick(attributeName, e.target.value)}
         >
-          {option.label}
+          {optionLabel}
         </li>
       );
     } else {
@@ -50,7 +58,7 @@ const UnorderedList = (props) => {
           onClick={(e) => onClick(attributeName, e.target.value)}
           className={classes.join(' ')}
         >
-          {option.label}
+          {optionLabel}
         </li>
       );
     }
@@ -66,6 +74,23 @@ const UnorderedList = (props) => {
       <label>
         {`${label} : ${selectedValueLabel}`}
       </label>
+      { isGroup && (
+        <div className="group-anchor-wrapper">
+          <div className="group-anchor-links">
+            {Object.keys(groupData.groupAlternates).map((alternate) => (
+              <a
+                href="#"
+                key={alternate}
+                onClick={(e) => groupData.setGroupCode(e, alternate)}
+                className={((groupData.defaultGroup === groupData.groupAlternates[alternate]))
+                  ? 'active' : 'in-active'}
+              >
+                {groupData.groupAlternates[alternate]}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
       <ul className={`attribute-options-list ${attributeName}`} name={attributeName}>{listItems}</ul>
     </div>
   );
