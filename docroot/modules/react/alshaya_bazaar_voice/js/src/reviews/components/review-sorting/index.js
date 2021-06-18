@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 export default class ReviewSorting extends React.Component {
   handleSelect = (selectedOption) => {
@@ -13,8 +13,14 @@ export default class ReviewSorting extends React.Component {
       && currentOption !== selectedOption.value) {
       // Callback to process sort option.
       processingCallback(selectedOption);
-      // Dispatching click event to record analytics.
-      dispatchCustomEvent('bvSortOptionsClick', selectedOption);
+      // Process sort click data as user clicks on sort option.
+      const analyticsData = {
+        type: 'Used',
+        name: 'sort',
+        detail1: selectedOption.value.split(':')[0],
+        detail2: '',
+      };
+      trackFeaturedAnalytics(analyticsData);
     }
   }
 

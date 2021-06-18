@@ -2,6 +2,7 @@ import React from 'react';
 import { handleFeedbackSubmit, getFeedbackInfo } from '../../../utilities/feedback_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 class ReviewFeedbackPositive extends React.Component {
   constructor(props) {
@@ -19,9 +20,14 @@ class ReviewFeedbackPositive extends React.Component {
     dispatchCustomEvent('handleFeedbackState', contentId);
     this.setState({ positiveCount: positiveCount + 1 });
 
-    // Dispatching click event to record analytics.
-    const analyticsData = { detail1: 'positive', detail2: contentType };
-    dispatchCustomEvent('bvPositiveHelpfulnessClick', analyticsData);
+    // Process positive feedback click data as user clicks on yes.
+    const analyticsData = {
+      type: 'Used',
+      name: 'helpfulness',
+      detail1: 'positive',
+      detail2: contentType,
+    };
+    trackFeaturedAnalytics(analyticsData);
   }
 
   render() {

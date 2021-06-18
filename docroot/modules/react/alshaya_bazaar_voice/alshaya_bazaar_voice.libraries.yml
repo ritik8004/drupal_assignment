@@ -30,7 +30,3 @@ iovation:
   js:
     js/assets/iovation-loader.js: {}
 
-analytics:
-  js:
-    js/assets/featured-analytics.js: { scope: footer }
-    js/assets/passive-analytics.js: { scope: footer }

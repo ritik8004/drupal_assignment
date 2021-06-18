@@ -2,6 +2,7 @@ import React from 'react';
 import { getFeedbackInfo, handleFeedbackSubmit } from '../../../utilities/feedback_util';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 class ReviewFeedbackNegative extends React.Component {
   constructor(props) {
@@ -19,9 +20,14 @@ class ReviewFeedbackNegative extends React.Component {
     dispatchCustomEvent('handleFeedbackState', contentId);
     this.setState({ negativeCount: negativeCount + 1 });
 
-    // Dispatching click event to record analytics.
-    const analyticsData = { detail1: 'negative', detail2: contentType };
-    dispatchCustomEvent('bvNegativeHelpfulnessClick', analyticsData);
+    // Process negative feedback click data as user clicks on yes.
+    const analyticsData = {
+      type: 'Used',
+      name: 'helpfulness',
+      detail1: 'negative',
+      detail2: contentType,
+    };
+    trackFeaturedAnalytics(analyticsData);
   }
 
   render() {

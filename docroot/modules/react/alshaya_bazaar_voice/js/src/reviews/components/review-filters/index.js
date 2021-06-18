@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import { getArraysIntersection } from '../../../utilities/write_review_util';
 import { getbazaarVoiceSettings } from '../../../utilities/api/request';
-import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 export default class ReviewFilters extends React.Component {
   handleSelect = (selectedOption) => {
@@ -21,8 +21,14 @@ export default class ReviewFilters extends React.Component {
 
       if (isOptionNew) {
         processingCallback(selectedOption);
-        // Dispatching click event to record analytics.
-        dispatchCustomEvent('bvReviewFilterClick', selectedOption);
+        // Process filter details click data as user clicks on filter option.
+        const analyticsData = {
+          type: 'Used',
+          name: 'filter',
+          detail1: 'stars',
+          detail2: selectedOption.value,
+        };
+        trackFeaturedAnalytics(analyticsData);
       }
     }
   }

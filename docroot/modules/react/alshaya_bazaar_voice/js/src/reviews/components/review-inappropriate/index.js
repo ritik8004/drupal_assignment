@@ -5,7 +5,7 @@ import {
 } from '../../../utilities/storage';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import { getFeedbackInfo } from '../../../utilities/feedback_util';
-import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../utilities/analytics';
 
 class ReviewInappropriate extends React.Component {
   constructor(props) {
@@ -38,9 +38,14 @@ class ReviewInappropriate extends React.Component {
             reported: 1,
           };
           updateStorageInfo(contentType, reportVoteObj, contentId);
-          // Dispatching click event to record analytics.
-          const analyticsData = { detail1: 'reported', detail2: contentType };
-          dispatchCustomEvent('bvReportFeedbackClick', analyticsData);
+          // Process report feedback click data as user clicks on report.
+          const analyticsData = {
+            type: 'Used',
+            name: 'helpfulness',
+            detail1: 'reported',
+            detail2: contentType,
+          };
+          trackFeaturedAnalytics(analyticsData);
         } else {
           Drupal.logJavascriptError(`review-${contentType}-report-feedback`, result.error);
         }

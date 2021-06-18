@@ -37,7 +37,6 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     // Get sanitized sku.
     $sanitized_sku = $skuManager->getSanitizedSku($sku->getSku());
     $settings = $alshayaBazaarVoice->getProductBazaarVoiceDetails($sku, $productNode, $basic_configs);
-    $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics($sanitized_sku);
 
     // Get the current pdp layout.
     $config = \Drupal::config('alshaya_acm_product.settings');
@@ -56,11 +55,6 @@ function alshaya_bazaar_voice_alshaya_acm_product_build_alter(&$build, SKUInterf
     }
 
     $build['#attached']['library'][] = 'alshaya_bazaar_voice/iovation';
-    $build['#attached']['library'][] = 'alshaya_bazaar_voice/analytics';
-    $build['#attached']['drupalSettings']['productReviewStats'] = [
-      'productId' => $sanitized_sku,
-      'statistics' => $productReviewStats,
-    ];
     $build['#cache']['contexts'][] = 'url.query_args:bv_authtoken';
     $build['#attached']['drupalSettings']['productInfo'][$sanitized_sku]['alshaya_bazaar_voice'] = $settings;
   }
@@ -285,4 +279,33 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   }
   $build['#strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function alshaya_bazaar_voice_page_attachments_alter(array &$page) {
+  $route_match = \Drupal::routeMatch();
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+
+  if ($route_match->getRouteName() == 'entity.node.canonical') {
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $route_match->getParameter('node');
+    // If 'product' node.
+    if ($node && $node->getType() == 'acq_product') {
+      $sku = $skuManager->getSkuForNode($node);
+      // Get sanitized sku.
+      $sanitized_sku = $skuManager->getSanitizedSku($sku);
+      $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics($sanitized_sku);
+      $page['#attached']['drupalSettings']['productReviewStats'] = [
+        'productId' => $sanitized_sku,
+        'statistics' => $productReviewStats,
+      ];
+    }
+  }
 }
