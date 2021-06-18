@@ -2,7 +2,7 @@ import Axios from 'axios';
 import qs from 'qs';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
-import {removeStorageInfo} from "../../utilities/storage";
+import { removeStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
