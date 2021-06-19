@@ -15,7 +15,9 @@ Feature: Testing new PDP page for desktop
     Then I should see a ".magv2-size-btn-wrapper" element on page
     And I should see a ".magv2-qty-container .magv2-qty-btn--up" element on page
     And I click jQuery ".magv2-qty-container .magv2-qty-btn--up" element on page
-    And I wait 5 seconds
+    And I wait 10 seconds
+    And I click jQuery ".magv2-qty-container .magv2-qty-btn--down" element on page
+    And I wait 10 seconds
     And I click the element ".magv2-size-btn-wrapper" on page
     And I wait for AJAX to finish
     Then I should see a ".overlay-select" element on page
