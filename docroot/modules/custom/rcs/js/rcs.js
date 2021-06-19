@@ -54,8 +54,7 @@ window.rcs = window.rcs || {};
     });
 
     document.body.innerHTML = body;
-    replaceFormTokens(entity);
     // Drupal.attachBehaviors(document);
   }
 
-});
+})();
