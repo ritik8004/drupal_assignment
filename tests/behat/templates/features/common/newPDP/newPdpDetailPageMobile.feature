@@ -32,7 +32,7 @@ Feature: Testing new PDP page for Mobile
     And I wait for AJAX to finish
     Then I should see a ".magv2-qty-container" element on page
 
-  Scenario: To verify user is able to see product details with Read more
+  Scenario: To verify user is able to see product details
     Then I should see a ".magv2-pdp-description-wrapper" element on page
     Then I should see a ".magv2-pdp-description-wrapper .magv2-pdp-section-title" element on page
     And I should see "product details"
@@ -76,9 +76,6 @@ Feature: Testing new PDP page for Mobile
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait for the page to load
     And I wait for AJAX to finish
-#    When I select a product in stock on ".c-products__item"
-#    And I wait 10 seconds
-#    And I wait for the page to load
     When I press "{language_add_to_cart_link}"
     And I wait 10 seconds
     Then I should see an "#block-alshayareactcartminicartblock #cart_notification .notification img" element
