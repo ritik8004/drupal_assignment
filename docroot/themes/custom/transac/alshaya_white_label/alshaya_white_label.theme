@@ -894,6 +894,11 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       $pdp_layout_plugin_manager = \Drupal::service('plugin.manager.alshaya_pdp_layouts');
       $pdp_plugin = $pdp_layout_plugin_manager->getInstanceByLayout($pdp_layout);
       $pdp_plugin->getTemplateName($suggestions);
+      $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+      if ($backend_version == 2) {
+        $suggestion = array_pop($suggestions);
+        $suggestions[] = $suggestion . '__v2';
+      }
     }
   }
 }
@@ -1774,4 +1779,18 @@ function alshaya_white_label_preprocess_image_style(&$variables) {
 function alshaya_white_label_theme_registry_alter(array &$theme_registry) {
   $theme_registry['image']['variables']['skip_lazy_loading'] = NULL;
   $theme_registry['image_style']['variables']['skip_lazy_loading'] = NULL;
+}
+
+function alshaya_white_label_theme_suggestions_alshaya_magazine_alter (array &$suggestions, &$variables) {
+  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  if ($backend_version == 2) {
+    $suggestions[] = 'alshaya_magazine__v2';
+  }
+}
+
+function alshaya_white_label_theme_suggestions_product_price_block_alter (array &$suggestions, &$variables) {
+  $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
+  if ($backend_version == 2) {
+    $suggestions[] = 'product_price_block__v2';
+  }
 }
