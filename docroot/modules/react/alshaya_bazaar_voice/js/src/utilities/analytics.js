@@ -2,8 +2,6 @@
  * @file
  * Contains analytics and datalayer events for bazaarvoice.
  */
-const { productId } = drupalSettings.productReviewStats.productId;
-const { productData } = drupalSettings.productReviewStats.productData;
 
 /**
  * Helper function to push content data to datalayer.
@@ -24,7 +22,7 @@ function pushContentToDataLayer(eventName, contentData) {
  * @param content
  * @param contentType
  */
-function pushContentToBVAnalytics(content, contentType) {
+function pushContentToBVAnalytics(content, contentType, productData) {
   const inViewData = {
     contentId: content.Id,
     productId: productData.Id,
@@ -40,7 +38,7 @@ function pushContentToBVAnalytics(content, contentType) {
 /**
  * Helper function to push complete page view to analytics.
  */
-function trackPageView() {
+function trackPageView(productData) {
   const pageViewData = {
     bvProduct: 'RatingsAndReviews',
     productId: productData.Id,
@@ -62,15 +60,15 @@ function trackPageView() {
  *
  * @param reviewData
  */
-function trackImpression(reviewData) {
+function trackImpression(reviewData, productData) {
   if (reviewData.Results && Object.keys(reviewData.Results).length > 0) {
     Object.values(reviewData.Results).forEach((content) => {
-      pushContentToBVAnalytics(content, 'review');
+      pushContentToBVAnalytics(content, 'review', productData);
     });
   }
   if (reviewData.Includes.Comments && Object.keys(reviewData.Includes.Comments).length > 0) {
     Object.values(reviewData.Includes.Comments).forEach((content) => {
-      pushContentToBVAnalytics(content, 'comment');
+      pushContentToBVAnalytics(content, 'comment', productData);
     });
   }
 }
@@ -112,29 +110,32 @@ function trackViewedCGC(inViewData, containerId) {
  * @param reviewData
  */
 export const trackPassiveAnalytics = (reviewData) => {
-  const containerId = 'reviews-section';
+  if (drupalSettings.productReviewStats) {
+    const { productData } = drupalSettings.productReviewStats;
+    const containerId = 'reviews-section';
 
-  // This method communicates data specific to the product page
-  trackPageView();
+    // This method communicates data specific to the product page
+    trackPageView(productData);
 
-  // This method communicates the various pieces of consumer
-  // generated content on a given page back to Bazaarvoice.
-  trackImpression(reviewData);
+    // This method communicates the various pieces of consumer
+    // generated content on a given page back to Bazaarvoice.
+    trackImpression(reviewData, productData);
 
-  // Prepare in view data for track view and CGC events.
-  const inViewData = {
-    productId,
-    bvProduct: 'RatingsAndReviews',
-    brand: productData.Brand.Name,
-  };
+    // Prepare in view data for track view and CGC events.
+    const inViewData = {
+      productId: productData.Id,
+      bvProduct: 'RatingsAndReviews',
+      brand: productData.Brand.Name,
+    };
 
-  // This method is triggered when consumer-generated content
-  // is first made visible in the browsers viewport.
-  trackInView(inViewData, containerId);
+    // This method is triggered when consumer-generated content
+    // is first made visible in the browsers viewport.
+    trackInView(inViewData, containerId);
 
-  // This method is is triggered when consumer-generated content
-  // is made visible for a set amount of time.
-  trackViewedCGC(inViewData, containerId);
+    // This method is is triggered when consumer-generated content
+    // is made visible for a set amount of time.
+    trackViewedCGC(inViewData, containerId);
+  }
 };
 
 /**
@@ -143,19 +144,22 @@ export const trackPassiveAnalytics = (reviewData) => {
  * @param analyticsData
  */
 export const trackFeaturedAnalytics = (analyticsData) => {
-  const eventData = {
-    type: analyticsData.type,
-    name: analyticsData.name,
-    brand: productData.Brand.Name,
-    productId,
-    bvProduct: 'RatingsAndReviews',
-    categoryId: productData.CategoryId,
-    detail1: analyticsData.detail1,
-    detail2: analyticsData.detail2,
-  };
-  // eslint-disable-next-line
-  BV.pixel.trackEvent('Feature', eventData);
-  pushContentToDataLayer('bvReviewsFeature', eventData);
+  if (drupalSettings.productReviewStats) {
+    const { productData } = drupalSettings.productReviewStats;
+    const eventData = {
+      type: analyticsData.type,
+      name: analyticsData.name,
+      brand: productData.Brand.Name,
+      productId: productData.Id,
+      bvProduct: 'RatingsAndReviews',
+      categoryId: productData.CategoryId,
+      detail1: analyticsData.detail1,
+      detail2: analyticsData.detail2,
+    };
+    // eslint-disable-next-line
+    BV.pixel.trackEvent('Feature', eventData);
+    pushContentToDataLayer('bvReviewsFeature', eventData);
+  }
 };
 
 export default {
