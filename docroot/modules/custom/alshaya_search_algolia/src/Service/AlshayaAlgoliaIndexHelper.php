@@ -927,62 +927,14 @@ class AlshayaAlgoliaIndexHelper {
           $updated = FALSE;
           $index = $client->initIndex($index_name . '_' . $language->getId());
           $settings = $index->getSettings();
-
-          foreach ($attributes as $attribute_name) {
-            if (in_array($attribute_name, $settings['attributesForFaceting'])) {
-              $this->logger->error("The attribute $attribute_name is already added to the index.");
-              continue;
-            }
-
-            $settings['attributesForFaceting'][] = $attribute_name;
-            $updated = TRUE;
-          }
-
-          if ($updated) {
-            $index->setSettings($settings);
-
-            foreach ($settings['replicas'] as $replica) {
-              $replica_index = $client->initIndex($replica);
-              $replica_settings = $replica_index->getSettings();
-              $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
-              $replica_index->setSettings($replica_settings, [
-                'forwardToReplicas' => TRUE,
-              ]);
-            }
-          }
+          $this->updateAttributesForFaceting($updated, $attributes, $index, $settings, $client);
         }
       }
       else {
         $updated = FALSE;
         $index = $client->initIndex($index_name);
         $settings = $index->getSettings();
-        foreach ($attributes as $attribute_name) {
-          if (in_array($attribute_name, $settings['attributesForFaceting'])) {
-            $this->logger->error("The attribute $attribute_name is already added to the index.");
-            continue;
-          }
-          // Update Custom Facet attribute with langguage
-          // suffix for Product list index and its replicas.
-          foreach ($this->languageManager->getLanguages() as $lang) {
-            $attribute_name_lang = $attribute_name . '_' . $lang->getId();
-            $settings['attributesForFaceting'][] = $attribute_name_lang;
-            $updated = TRUE;
-          }
-        }
-
-        if ($updated) {
-          $index->setSettings($settings);
-
-          foreach ($settings['replicas'] as $replica) {
-            $replica_index = $client->initIndex($replica);
-            $replica_settings = $replica_index->getSettings();
-            $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
-            $replica_index->setSettings($replica_settings, [
-              'forwardToReplicas' => TRUE,
-            ]);
-          }
-        }
-
+        $this->updateAttributesForFaceting($updated, $attributes, $index, $settings, $client);
       }
 
       $this->logger->notice('Added attribute(s) for faceting: @attributes', [
@@ -1101,6 +1053,46 @@ class AlshayaAlgoliaIndexHelper {
     \Drupal::moduleHandler()->alter('alshaya_product_list_exclude_attribute', $excludedAttributes);
 
     return $excludedAttributes;
+  }
+
+  /**
+   * Helps to update attributes for faceting.
+   *
+   * @param bool $updated
+   *   The Updated status TRUE/FALSE.
+   * @param string|array $attributes
+   *   The list of attributes.
+   * @param string|array $index
+   *   The algolia index information.
+   * @param string|array $settings
+   *   The algolia settings information.
+   * @param string|array $client
+   *   The algolia client information.
+   */
+  private function updateAttributesForFaceting($updated, $attributes, $index, $settings, $client) {
+    foreach ($attributes as $attribute_name) {
+      if (in_array($attribute_name, $settings['attributesForFaceting'])) {
+        $this->logger->error("The attribute $attribute_name is already added to the index.");
+        continue;
+      }
+      // Update Custom Facet attribute with langguage
+      // suffix for Product list index and its replicas.
+      $settings['attributesForFaceting'][] = $attribute_name;
+      $updated = TRUE;
+    }
+
+    if ($updated) {
+      $index->setSettings($settings);
+
+      foreach ($settings['replicas'] as $replica) {
+        $replica_index = $client->initIndex($replica);
+        $replica_settings = $replica_index->getSettings();
+        $replica_settings['attributesForFaceting'] = $settings['attributesForFaceting'];
+        $replica_index->setSettings($replica_settings, [
+          'forwardToReplicas' => TRUE,
+        ]);
+      }
+    }
   }
 
 }

@@ -394,6 +394,10 @@ class AlshayaAlgoliaReactConfig implements AlshayaAlgoliaReactConfigInterface {
             $context = $this->requestContextManager->getContext();
             $identifier = $this->identifireSuffixUpdate("field_acq_promotion_label.$context", $page_type);
           }
+          // Exclude language suffix for attr_bv_rating filter.
+          elseif ($facet->getFieldIdentifier() === 'attr_bv_rating') {
+            $identifier = $facet->getFieldIdentifier();
+          }
 
           $facet_values = [];
           if ($widget['type'] === 'swatch_list') {
