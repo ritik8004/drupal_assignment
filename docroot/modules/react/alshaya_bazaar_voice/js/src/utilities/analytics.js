@@ -3,6 +3,9 @@
  * Contains analytics and datalayer events for bazaarvoice.
  */
 
+// eslint-disable-next-line
+const bvPixelUtility = BV.pixel;
+
 /**
  * Helper function to push content data to datalayer.
  *
@@ -31,8 +34,7 @@ function pushContentToBVAnalytics(content, contentType, productData) {
     bvProduct: 'RatingsAndReviews',
     brand: productData.Brand.Name,
   };
-  // eslint-disable-next-line
-  BV.pixel.trackImpression(inViewData);
+  bvPixelUtility.trackImpression(inViewData);
 }
 
 /**
@@ -50,8 +52,7 @@ function trackPageView(productData) {
     percentRecommended: (productData.ReviewStatistics.RecommendedCount
         / productData.ReviewStatistics.TotalReviewCount) * 100,
   };
-  // eslint-disable-next-line
-  BV.pixel.trackPageView(pageViewData);
+  bvPixelUtility.trackPageView(pageViewData);
   pushContentToDataLayer('trackPageView', pageViewData);
 }
 
@@ -80,8 +81,7 @@ function trackImpression(reviewData, productData) {
  * @param containerId
  */
 function trackInView(inViewData, containerId) {
-  // eslint-disable-next-line
-  BV.pixel.trackInView(inViewData, {
+  bvPixelUtility.trackInView(inViewData, {
     minPixels: 250,
     containerId,
   });
@@ -95,8 +95,7 @@ function trackInView(inViewData, containerId) {
  * @param containerId
  */
 function trackViewedCGC(inViewData, containerId) {
-  // eslint-disable-next-line
-  BV.pixel.trackViewedCGC(inViewData, {
+  bvPixelUtility.trackViewedCGC(inViewData, {
     minPixels: 250,
     minTime: 2500,
     containerId,
@@ -156,8 +155,7 @@ export const trackFeaturedAnalytics = (analyticsData) => {
       detail1: analyticsData.detail1,
       detail2: analyticsData.detail2,
     };
-    // eslint-disable-next-line
-    BV.pixel.trackEvent('Feature', eventData);
+    bvPixelUtility.trackEvent('Feature', eventData);
     pushContentToDataLayer('bvReviewsFeature', eventData);
   }
 };

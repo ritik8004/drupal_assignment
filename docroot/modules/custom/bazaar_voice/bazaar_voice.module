@@ -6,6 +6,19 @@
  */
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function bazaar_voice_module_implements_alter(&$implementations, $hook) {
+  // To call the page_attachments of bazaar_voice fist.
+  // We want to load bv javascript first for analytics js to work.
+  if ($hook == 'page_attachments' && isset($implementations['bazaar_voice'])) {
+    $group = $implementations['bazaar_voice'];
+    unset($implementations['bazaar_voice']);
+    $implementations = ['bazaar_voice' => $group] + $implementations;
+  }
+}
+
+/**
  * Implements hook_page_attachments().
  */
 function bazaar_voice_page_attachments(array &$page) {
@@ -14,18 +27,18 @@ function bazaar_voice_page_attachments(array &$page) {
 
   // Check if BV script to be loaded as per current route.
   if ($bazaar_voice->isCurrentRouteInBvList()) {
-	  // Add BV pixel script to header.
-	  $page['#attached']['html_head'][] = [
-			[
-				'#type' => 'html_tag',
-				'#tag' => 'script',
-				'#attributes' => [
-					'async' => TRUE,
-					'src' => $bazaar_voice->getBvDynamicScriptCode(),
-				],
-			],
-			'bvpath',
-		];
+    // Add BV pixel script to header.
+    $page['#attached']['html_head'][] = [
+    [
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#attributes' => [
+        'async' => TRUE,
+        'src' => $bazaar_voice->getBvDynamicScriptCode(),
+      ],
+    ],
+    'bvpath',
+    ];
   }
 }
 

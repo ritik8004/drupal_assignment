@@ -44,6 +44,9 @@ bazaar_voice.settings:
     myaccount_rating_reviews:
       type: boolean
       label: 'Enable/Disable My Account BazaarVoice Ratings and Review Feature.'
+    myaccount_reviews_limit:
+      type: integer
+      label: 'Enter limit for number of reviews to be shown under my account section.'
     write_review_submission:
       type: boolean
       label: 'Enable Closed submission for unauthorized user.'
@@ -86,3 +89,6 @@ bazaar_voice.settings:
     reviews_per_page:
       type: integer
       label: 'Number of reviews per page.'
+    pdp_reviews_seo_limit:
+      type: integer
+      label: 'Enter total number of reviews to be captured for SEO on PDP.'

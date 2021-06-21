@@ -12,6 +12,7 @@ environment: 'staging'
 notify_comment_published: true
 pdp_rating_reviews: false
 myaccount_rating_reviews: false
+myaccount_reviews_limit: 100
 write_review_submission: false
 write_review_tnc: '/terms-and-conditions'
 write_review_guidlines: '/writing-guidelines'
@@ -26,3 +27,4 @@ reviews_pagination_type: 'load_more'
 reviews_initial_load: 5
 reviews_on_loadmore: 10
 reviews_per_page: 5
+pdp_reviews_seo_limit: 5

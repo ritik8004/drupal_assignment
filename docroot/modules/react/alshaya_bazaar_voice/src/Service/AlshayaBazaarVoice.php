@@ -710,19 +710,22 @@ class AlshayaBazaarVoice {
       $sku = $this->skuManager->getSkuForNode($node);
       // Get sanitized sku.
       $sanitized_sku = $this->skuManager->getSanitizedSku($sku);
+      $config = $this->configFactory->get('bazaar_voice.settings');
+      $myaccount_reviews_limit = $config->get('myaccount_reviews_limit');
       $extra_params = [
-        'filter' => 'id:' . $this->currentUser->id(),
-        'Include' => 'Reviews,Products',
+        'filter' => 'AuthorId:' . $this->currentUser->id(),
+        'Include' => 'Authors,Products',
         'stats' => 'Reviews',
+        'Limit' => $myaccount_reviews_limit,
       ];
-      $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/authors.json', $extra_params);
+      $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/reviews.json', $extra_params);
       if (isset($request['url']) && isset($request['query'])) {
         $url = $request['url'];
         $request_options['query'] = $request['query'];
         $result = $this->alshayaBazaarVoiceApiHelper->doRequest('GET', $url, $request_options);
         if (!$result['HasErrors'] && isset($result['Includes'])) {
-          if (isset($result['Includes']['Reviews'])) {
-            foreach ($result['Includes']['Reviews'] as $review) {
+          if (isset($result['Results'])) {
+            foreach ($result['Results'] as $review) {
               if ($review['ProductId'] === $sanitized_sku) {
                 $productReviewData = [
                   'review_data' => $review,
@@ -749,6 +752,8 @@ class AlshayaBazaarVoice {
    */
   public function getProductReviewStatistics(string $product_id) {
     static $response = [];
+    $config = $this->configFactory->get('bazaar_voice.settings');
+    $pdp_reviews_seo_limit = $config->get('pdp_reviews_seo_limit');
     if (isset($response[$product_id]) && !empty($response[$product_id])) {
       return $static[$product_id];
     }
@@ -757,7 +762,7 @@ class AlshayaBazaarVoice {
       'stats' => 'reviews',
       'include' => 'Reviews',
       'sort_reviews' => 'submissiontime:desc',
-      'Limit_Reviews' => '5',
+      'Limit_Reviews' => $pdp_reviews_seo_limit,
     ];
     $request = $this->alshayaBazaarVoiceApiHelper->getBvUrl('data/products.json', $extra_params);
     $url = $request['url'];

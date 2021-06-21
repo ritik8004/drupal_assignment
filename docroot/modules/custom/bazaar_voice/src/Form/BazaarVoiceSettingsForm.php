@@ -156,6 +156,13 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This option should be checked to disable the ratings and reviews in My Account.'),
     ];
 
+    $form['basic_settings']['myaccount_reviews_limit'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Total number of reviews in my reviews page.'),
+      '#default_value' => $config->get('myaccount_reviews_limit'),
+      '#description' => $this->t('Enter limit for number of reviews to be shown under my account section.'),
+    ];
+
     $form['basic_settings']['plp_rating_reviews'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable ratings and reviews in listing page.'),
@@ -304,6 +311,12 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
         ],
       ],
     ];
+    $form['basic_settings']['pdp_reviews_seo_limit'] = [
+      '#type' => 'text',
+      '#title' => $this->t('Number of reviews on PDP for SEO.'),
+      '#default_value' => $config->get('pdp_reviews_seo_limit'),
+      '#description' => $this->t('Enter total number of reviews to be captured for SEO on PDP.'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -327,6 +340,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('notify_comment_published', $values['notify_comment_published'])
       ->set('pdp_rating_reviews', $values['pdp_rating_reviews'])
       ->set('myaccount_rating_reviews', $values['myaccount_rating_reviews'])
+      ->set('myaccount_reviews_limit', $values['myaccount_reviews_limit'])
       ->set('plp_rating_reviews', $values['plp_rating_reviews'])
       ->set('write_review_submission', $values['write_review_submission'])
       ->set('write_review_tnc', $values['write_review_tnc'])
@@ -342,6 +356,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ->set('reviews_on_loadmore', $values['reviews_on_loadmore'])
       ->set('reviews_per_page', $values['reviews_per_page'])
       ->set('comment_submission', $values['comment_submission'])
+      ->set('pdp_reviews_seo_limit', $values['pdp_reviews_seo_limit'])
       ->save();
 
     parent::submitForm($form, $form_state);
