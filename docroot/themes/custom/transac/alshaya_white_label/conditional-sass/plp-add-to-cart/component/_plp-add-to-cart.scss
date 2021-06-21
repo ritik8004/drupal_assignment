@@ -76,3 +76,10 @@
 .is-not-buyable:hover {
   color: $primary_btn_bg;
 }
+
+.addtobag-button,
+.product-drawer-content-wrapper .config-form-addtobag-button {
+  &:hover {
+    background: $plp-primary-cta-hover-bg;
+  }
+}
