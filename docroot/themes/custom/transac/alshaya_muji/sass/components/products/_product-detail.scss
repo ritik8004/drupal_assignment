@@ -195,6 +195,10 @@
           font-family: $muji-bold;
           font-weight: 600;
 
+          @include breakpoint($only-mobile) {
+            width: calc(100% - 4.375rem - 0.5rem);
+          }
+
           &.fix-button {
             @include breakpoint($only-mobile) {
               position: fixed !important;
