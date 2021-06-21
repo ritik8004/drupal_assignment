@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
-import { logger } from './utility';
+import { isUserAuthenticated, logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 import { removeStorageInfo } from '../../utilities/storage';
 import { cartActions } from './cart_actions';
@@ -206,6 +206,10 @@ const callMagentoApi = (url, method, data) => {
       'Alshaya-Channel': 'web',
     },
   };
+
+  if (isUserAuthenticated()) {
+    params.headers.Authorization = `Bearer ${localStorage.getItem('magento_customer_token')}`;
+  }
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
     params.data = data;

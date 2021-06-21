@@ -26,7 +26,50 @@ const logger = {
 };
 /* eslint-enable no-unused-vars */
 
+/**
+ * Get user role authenticated or anonymous.
+ *
+ * @returns {boolean}
+ *   True if user is authenticated.
+ */
+const isUserAuthenticated = () => {
+  const { isCustomer, uid } = drupalSettings.user;
+  return !!(isCustomer && uid !== 0);
+};
+
+/**
+ * Gets magento api endpoint by user role.
+ *
+ * @param {string} callName
+ *   Callname for the API.
+ * @param {string} cartId
+ *   The Cart id.
+ *
+ * @returns {*}
+ *   The api endpoint.
+ */
+const getApiEndpoint = (callName, cartId = '') => {
+  const type = isUserAuthenticated() ? 'authenticated' : 'anonymous';
+  const apis = {
+    createCart: {
+      authenticated: '/rest/V1/carts/mine',
+      anonymous: '/rest/V1/guest-carts',
+    },
+    getCart: {
+      authenticated: '/rest/V1/carts/mine',
+      anonymous: `/rest/V1/guest-carts/${cartId}/getCart`,
+    },
+    addUpdateItems: {
+      authenticated: '/rest/V1/carts/mine/items',
+      anonymous: `/rest/V1/guest-carts/${cartId}/items`,
+    },
+  };
+  return apis[callName][type];
+};
+
 /* eslint-disable import/prefer-default-export */
 export {
   logger,
+  getApiEndpoint,
+  isUserAuthenticated,
 };

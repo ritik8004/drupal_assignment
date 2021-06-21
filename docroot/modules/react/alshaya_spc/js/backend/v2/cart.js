@@ -9,7 +9,7 @@ import {
   getProcessedCartData,
   getCartWithProcessedData,
 } from './common';
-import { logger } from './utility';
+import { getApiEndpoint, logger } from './utility';
 import { getExceptionMessageType } from './error';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
@@ -174,7 +174,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
 
   if (data.action === 'add item' || data.action === 'update item') {
     requestMethod = 'POST';
-    requestUrl = `/rest/V1/guest-carts/${cartId}/items`;
+    requestUrl = getApiEndpoint('addUpdateItems', cartId);
     // Executed for Add and Update case.
     if (typeof data.options !== 'undefined' && data.options.length > 0) {
       productOptions = {
@@ -329,7 +329,7 @@ window.commerceBackend.refreshCart = (data) => {
  *   A promise object.
  */
 window.commerceBackend.createCart = async () => {
-  const response = await callMagentoApi('/rest/V1/guest-carts', 'POST', {});
+  const response = await callMagentoApi(getApiEndpoint('createCart'), 'POST', {});
   if (typeof response.data.error !== 'undefined') {
     return response.data;
   }
