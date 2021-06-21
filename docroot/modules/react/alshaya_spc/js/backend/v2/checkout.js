@@ -614,14 +614,13 @@ window.commerceBackend.getCartForCheckout = () => {
   }
 
   getCart()
-    .then((response) => {
-      if (typeof response.data === 'undefined' || response.data.length === 0) {
-        if (typeof response.data.error_message !== 'undefined') {
-          logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
-        }
+    .then(async (response) => {
+      if (_.isEmpty(response.data) || !_.isEmpty(response.data.error_message)) {
+        logger.error(`Error while getting cart:${cartId} Error:${response.data.error_message}`);
+        return new Promise((resolve) => resolve(response.data));
       }
 
-      if (typeof response.data.items === 'undefined' || response.data.items.length === 0) {
+      if (_.isEmpty(response.data.cart) || _.isEmpty(response.data.cart.items)) {
         logger.error(`Checkout accessed without items in cart for id:${cartId}`);
 
         const error = {
@@ -635,8 +634,8 @@ window.commerceBackend.getCartForCheckout = () => {
         return new Promise((resolve) => resolve(error));
       }
 
-      const processedData = getProcessedCheckoutData(response);
-
+      const processedData = await getProcessedCheckoutData(response.data);
+      console.log(processedData);
       return new Promise((resolve) => resolve(processedData));
     })
     .catch((response) => {
