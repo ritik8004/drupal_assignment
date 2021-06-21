@@ -67,7 +67,7 @@ class ShortenUrlApiAdapter {
     $api_version = $kaleyra_settings->get('api_version');
     $query = [
       'method' => 'txtly.create',
-      'url' => urlencode($long_url),
+      'url' => $long_url,
       'api_key' => $kaleyra_settings->get('api_key'),
     ];
 
