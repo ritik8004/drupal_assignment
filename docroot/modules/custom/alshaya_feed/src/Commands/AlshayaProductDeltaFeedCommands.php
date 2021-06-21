@@ -94,8 +94,6 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
       }
 
       if ($action === 'delete' && in_array($sku, $skus_to_delete)) {
-        $this->io()->writeln('Deleting SKU ' . $sku . ' from table.');
-
         if (!$dry_run) {
           $this->productDeltaFeedHelper->deleteOosProductSku($sku);
         }
@@ -104,37 +102,35 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
   }
 
   /**
-   * Checks if given SKUs are OOS.
+   * Checks if given SKU is OOS.
    *
    * @param array $options
    *   (optional) An array of options.
    *
-   * @command alshaya_feed:verify_oos_skus
+   * @command alshaya_feed:verify_oos_sku
    *
-   * @aliases verify-oos-skus
+   * @aliases verify-oos-sku
    *
    * @option skus
-   *   The list of skus to verify.
+   *   The sku to verify.
    *
-   * @usage drush verify-oos-skus --skus=123,234
-   *   Verifies the given sku list is still OOS or.
+   * @usage drush verify-oos-sku --sku=123
+   *   Verifies the given sku is still OOS or not.
    */
-  public function verifyOosSkus(array $options = ['skus' => '']) {
-    $skus_to_verify = $options['skus'] ? explode(',', $options['skus']) : '';
+  public function verifyOosSku(array $options = ['sku' => '']) {
+    $sku_to_verify = $options['sku'];
 
-    // Return if skus is empty.
-    if (empty($skus_to_verify)) {
-      $this->io()->error('SKU list is empty.');
+    // Return if sku is empty.
+    if (empty($sku_to_verify)) {
+      $this->io()->error('SKU is empty.');
       return;
     }
 
-    // Try to load each sku to verify if it is OOS or not.
-    foreach ($skus_to_verify as $sku) {
-      $entity = SKU::loadFromSku($sku);
+    // Try to load sku to verify if it is OOS or not.
+    $entity = SKU::loadFromSku($sku_to_verify);
 
-      if (!($entity instanceof SKU)) {
-        $this->io()->writeln($sku);
-      }
+    if (!($entity instanceof SKU)) {
+      $this->io()->writeln($sku_to_verify);
     }
   }
 
@@ -176,31 +172,44 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
       return;
     }
 
-    // Verify the list of oos skus for each domain.
-    $command = 'drush -l %s verify-oos-skus --skus=' . implode(',', $oos_products_merged);
-    $verified_oos_products = $this->getOosProductSkus($domains, $command);
+    // Process OOS SKUs one at a time.
+    foreach ($oos_products_merged as $sku) {
+      $this->processOosProductSku($sku, $dry_run, $domains);
+    }
+  }
 
-    // Get list of oos skus common in all the markets of a brand.
-    $oos_products_common = call_user_func_array('array_intersect', $verified_oos_products);
+  /**
+   * Helper function to verify if SKU is OOS on every market and delete the SKU.
+   */
+  private function processOosProductSku($sku, $dry_run, $domains) {
+    foreach ($domains as $domain) {
+      $current_domain = $domain[1];
 
-    if (empty($oos_products_common)) {
-      $this->io()->writeln('No OOS products found across markets.');
-      return;
+      // Verify if SKU is still OOS or not.
+      $command = sprintf('drush -l %s verify-oos-sku --sku=%s', $current_domain, $sku);
+      $get_oos_products = $this->processManager()->process($command);
+      $get_oos_products->mustRun();
+      $is_sku_oos = $get_oos_products->getOutput();
+
+      // Skip the SKU if its not OOS even on one domain.
+      if (!$is_sku_oos) {
+        $this->io()->writeln('Skipping SKU ' . $sku . ' as it is available on ' . $current_domain);
+        break;
+      }
+
+      $this->io()->writeln('Verified that SKU ' . $sku . ' is OOS on ' . $current_domain);
     }
 
-    $this->io()->table([dt('List of OOS product SKUs')], array_map(function ($val) {
-      return [$val];
-    }, $oos_products_common));
-
-    // Delete common oos skus from product delta field.
-    foreach ($oos_products_common as $sku) {
+    // Delete the SKU from DY delta feed and
+    // from list of OOS SKUs on each domain.
+    if ($is_sku_oos) {
+      $this->io()->writeln('Deleting OOS SKU ' . $sku . ' from all domains.');
       if (!$dry_run) {
         $this->productDeltaFeedHelper->deleteFromFeed($sku);
       }
+      // Remove sku from oos sku list for each market/domain.
+      $this->removeOosProductSkus($domains, $dry_run, $sku);
     }
-
-    // Remove sku from oos sku list for each market/domain.
-    $this->removeOosProductSkus($domains, $dry_run, implode(',', $oos_products_common));
   }
 
   /**
@@ -229,10 +238,10 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
   /**
    * Helper function to remove OOS product skus from table.
    */
-  private function removeOosProductSkus($domains, $dry_run, $skus) {
+  private function removeOosProductSkus($domains, $dry_run, $sku) {
     foreach ($domains as $domain) {
       $current_domain = $domain[1];
-      $command = sprintf('drush -l %s manage-oos-product --action=%s --skus=%s', $current_domain, 'delete', $skus);
+      $command = sprintf('drush -l %s manage-oos-product --action=%s --skus=%s', $current_domain, 'delete', $sku);
 
       if ($dry_run) {
         $command .= ' --dry-run';
@@ -242,8 +251,8 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
       $delete_oos_products->mustRun();
       $message = $delete_oos_products->getOutput();
       $this->io()->writeln($message);
-      $this->io()->success('Cleaned up following OOS SKUs: ' . $skus . ' on ' . $current_domain);
     }
+    $this->io()->success('Cleaned up OOS SKU ' . $sku . ' on all domains.');
   }
 
   /**
