@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   isAnonymousUserWithoutCart,
   getFormattedError,
@@ -203,16 +204,23 @@ const addShippingInfo = (shippingData, action, updateBilling) => {
 
 /**
  * Update billing info on cart.
- * @todo implement this
  *
- * @param {object} billingData
+ * @param {object} billing
  *   Billing data.
  *
  * @return {object}
  *   Response data.
  */
-const updateBilling = (billingData) => {
-  logger.info(`${billingData}`);
+const updateBilling = (billing) => {
+  const data = {
+    extension: {
+      action: cartActions.cartBillingUpdate,
+    },
+    billing,
+  };
+  delete data.billing.id;
+
+  return updateCart(data);
 };
 
 /**
@@ -252,19 +260,11 @@ const selectHd = (address, method, billing, shippingMethods) => {
 /**
  * Get customer's addresses.
  *
- * @return {array}
+ * @return {promise}
  *   Address ids of customer or empty array.
  */
-const getCustomerAddressIds = async () => {
-  // see https://www.rakeshjesadiya.com/get-customer-data-rest-api-customers-me-magento/
-  const headers = {
-    Bearer: localStorage.getItem('magento_customer_token'),
-  };
-  const address = await callMagentoApi('/rest/V1/customers/me', 'GET', {}, headers);
-  return new Promise((resolve) => resolve(address));
-};
+const getCustomerAddressIds = () => callMagentoApi('/rest/V1/customers/me', 'GET', {});
 
-window.commerceBackend.test = () => getCustomerAddressIds();
 /**
  * Select Click and Collect store and method from possible defaults.
  *
@@ -289,7 +289,7 @@ const selectCnc = async (store, address, billing) => {
       shipping_method_code: 'click_and_collect',
       custom_attributes: [],
       extension_attributes: {
-        click_and_collect_type: (typeof store.rnc_available !== 'undefined') ? 'reserve_and_collect' : 'ship_to_store',
+        click_and_collect_type: (!_.isEmpty(store.rnc_available)) ? 'reserve_and_collect' : 'ship_to_store',
         store_code: store.code,
       },
     },
@@ -318,19 +318,19 @@ const selectCnc = async (store, address, billing) => {
   logger.notice(`Shipping update default for CNC. Data: ${logData} Address: ${logAddress} Store: ${logStore} Cart: ${logCartId}`);
 
   // If shipping address not contains proper data (extension info).
-  if (typeof data.shipping.shipping_address.extension_attributes === 'undefined') {
+  if (_.isEmpty(data.shipping.shipping_address.extension_attributes)) {
     return new Promise((resolve) => resolve(false));
   }
 
   const updated = updateCart(data);
-  if (typeof updated.error !== 'undefined' && updated.error) {
-    return false;
+  if (_.has(updated, 'error') && updated.error) {
+    return new Promise((resolve) => resolve(false));
   }
 
   // Not use/assign default billing address if customer_address_id
   // is not available.
-  if (typeof billing.customer_address_id === 'undefined') {
-    return updated;
+  if (_.isEmpty(billing.customer_address_id)) {
+    return new Promise((resolve) => resolve(updated));
   }
 
   // Add log for billing data we pass to magento update cart.
@@ -339,16 +339,24 @@ const selectCnc = async (store, address, billing) => {
 
   // If billing address not contains proper data (extension info).
   if (typeof billing.extension_attributes === 'undefined') {
-    return false;
+    return new Promise((resolve) => resolve(false));
   }
 
   const customerAddressIds = getCustomerAddressIds(billing.customer_id);
 
   // Return if address id from last order doesn't
   // exist in customer's address id list.
-  // @todo finish this
-  logger.log(`${customerAddressIds}`);
-  return null;
+  if (_.findIndex(customerAddressIds, { id: billing.customer_address_id }) !== -1) {
+    return new Promise((resolve) => resolve(updated));
+  }
+
+  const updatedBilling = updateBilling(billing);
+
+  // If billing update has error.
+  if (_.has(updated, 'error') && updated.error) {
+    return new Promise((resolve) => resolve(false));
+  }
+  return new Promise((resolve) => resolve(updatedBilling));
 };
 
 /**

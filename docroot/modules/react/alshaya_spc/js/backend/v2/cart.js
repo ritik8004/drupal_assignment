@@ -333,7 +333,7 @@ const getCart = async () => {
  * @param {object} data
  *  The data to send.
  */
-const updateCart = (data) => {
+const updateCart = async (data) => {
   const cartId = window.commerceBackend.getCartId();
 
   return callMagentoApi(`/rest/V1/guest-carts/${cartId}/updateCart`, 'POST', JSON.stringify(data))
