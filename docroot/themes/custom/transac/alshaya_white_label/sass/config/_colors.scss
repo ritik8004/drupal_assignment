@@ -155,6 +155,7 @@ $_postpay_blue: #8abbd5;
 $blueberri_boy: #0078ff;
 $_plp-add-to-cart-disabled-qty: #aeaeb2;
 $_smart_agent_banner: rgb(12, 161, 77);
+$_plp_cta_hover: #e85d17;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1699,6 +1700,7 @@ $fawry-banner: $blueberri_boy;
 $plp-disabled-qty-bg: $_plp-add-to-cart-disabled-qty;
 $plp-hover-slider-dot-color: $_gray;
 $plp-hover-slider-dot-container-bg-color: $white-five;
+$plp-primary-cta-hover-bg: $_plp_cta_hover;
 
 // PLP Quick view drawer.
 $plp-quick-view-background: $white-five;
