@@ -16,7 +16,10 @@ const SelectList = (props) => {
     isHidden,
     allowedValues,
     onChange,
+    groupData,
   } = props;
+
+  const { isGroup } = groupData;
 
   // Event handler for select list value change.
   const onSelect = ({ value }) => onChange(attributeName, value);
@@ -24,13 +27,17 @@ const SelectList = (props) => {
   let selectedOption = null;
   const listOptions = options.map((option) => {
     const optionClone = { ...option };
+    optionClone.label = isGroup
+      ? option.label[groupData.defaultGroup]
+      : option.label;
+
     if (!allowedValues.includes(option.value)
       && !allowedValues.includes(parseInt(option.value, 10))) {
       optionClone.isDisabled = true;
     }
     /* eslint-disable eqeqeq */
     if (option.value == defaultValue) {
-      selectedOption = option;
+      selectedOption = optionClone;
     }
     return optionClone;
   });
@@ -40,6 +47,21 @@ const SelectList = (props) => {
 
   return (
     <div className={classes}>
+      {isGroup && (
+        <div className="group-anchor-wrapper">
+          {Object.keys(groupData.groupAlternates).map((alternate) => (
+            <a
+              href="#"
+              key={alternate}
+              onClick={(e) => groupData.setGroupCode(e, alternate)}
+              className={((groupData.defaultGroup === groupData.groupAlternates[alternate]))
+                ? 'active' : 'in-active'}
+            >
+              {groupData.groupAlternates[alternate]}
+            </a>
+          ))}
+        </div>
+      )}
       <Select
         classNamePrefix="alshayaSelect"
         className="alshaya-select"

@@ -258,16 +258,31 @@ class ShareCart extends ResourceBase {
         // @todo Validate mobile number.
         $to = $this->getFullMobileNumber($to);
         $template = $settings->get('whatsapp_template');
+        $whatsapp_mode = $settings->get('whatsapp_mode') ?? 'text';
 
-        $params = [
-          $this->configFactory->get('system.site')->get('name'),
-          Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString(TRUE)->getGeneratedUrl(),
-        ];
+        switch ($whatsapp_mode) {
+          case 'text':
+            $params = [
+              $this->shortenUrlApiAdapter->getShortUrl($cart_url),
+              $this->configFactory->get('system.site')->get('name'),
+            ];
 
-        // For WhatsApp we have to send relative URL.
-        $cart_url = str_replace($this->currentRequest->getSchemeAndHttpHost() . '/', '', $cart_url);
+            $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, $params);
+            break;
 
-        $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, $params, $cart_url);
+          case 'button':
+            $params = [
+              $this->configFactory->get('system.site')->get('name'),
+              Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString(TRUE)->getGeneratedUrl(),
+            ];
+
+            // For WhatsApp Button we have to send relative URL.
+            $cart_url = str_replace($this->currentRequest->getSchemeAndHttpHost() . '/', '', $cart_url);
+
+            $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, $params, $cart_url);
+            break;
+        }
+
         break;
 
       case 'sms':

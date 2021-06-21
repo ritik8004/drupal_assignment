@@ -24,5 +24,15 @@
     .has--special--price .price {
       color: $magv2-vat-text;
     }
+
+    .product-details-wrapper {
+      .size-guide-link {
+        font-size: 0.875rem;
+
+        @include breakpoint($desktop) {
+          top: 0;
+        }
+      }
+    }
   }
 }
