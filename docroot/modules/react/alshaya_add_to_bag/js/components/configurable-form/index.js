@@ -45,6 +45,7 @@ export default class ConfigurableForm extends React.Component {
       formAttributeValues: firstChildAttributes,
       quantity: 1,
       errorMessage: qtyLimitMessage,
+      groupCode: null,
     };
   }
 
@@ -129,6 +130,17 @@ export default class ConfigurableForm extends React.Component {
     this.setState({ formAttributeValues, errorMessage: qtyLimitMessage }, () => {
       setSelectedVariant(selectedVariant);
     });
+  }
+
+  /**
+   * Set the selected groupCode in the state.
+   *
+   * @param {string} groupCode
+   *  The name of the group combination.
+   */
+  setGroupCode = (e, groupCode) => {
+    e.preventDefault();
+    this.setState({ groupCode });
   }
 
   /**
@@ -285,6 +297,9 @@ export default class ConfigurableForm extends React.Component {
     let showSizeGuideCond = null;
     const widget = isDisplayConfigurableBoxes() ? 'unordered' : 'select';
 
+    const groupData = {};
+    let { groupCode } = this.state;
+
     return (
       <>
         <form className="sku-form" data-sku={sku} key={sku} ref={this.formRef}>
@@ -304,6 +319,15 @@ export default class ConfigurableForm extends React.Component {
             if (showSizeGuideCond && showSizeGuide) {
               // We want size guide link to show only once.
               showSizeGuide = false;
+            }
+
+            // Prepare grouped filters data.
+            groupData.isGroup = attribute[1].is_group;
+            if (groupData.isGroup) {
+              groupCode = groupCode || attribute[0];
+              groupData.defaultGroup = attribute[1].alternates[groupCode];
+              groupData.setGroupCode = this.setGroupCode;
+              groupData.groupAlternates = attribute[1].alternates;
             }
 
             return (
@@ -341,6 +365,7 @@ export default class ConfigurableForm extends React.Component {
                     isHidden={isHidden}
                     setAttribute={this.setAttribute}
                     allowedValues={allowedValues}
+                    groupData={groupData}
                   />
                 </ConditionalView>
               </div>

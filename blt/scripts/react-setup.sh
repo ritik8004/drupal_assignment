@@ -81,6 +81,7 @@ then
 
   # Run Unit tests.
   npm test
+
 else
   echo -en "No need to setup REACT. There is no change in any modules/react."
 fi

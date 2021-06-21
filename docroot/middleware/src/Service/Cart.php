@@ -1242,7 +1242,9 @@ class Cart {
     // JIRA Ticket No.: CORE-29691
     // Add smart agent details in extension attribute to track
     // orders by in-store devices.
-    $data['extension'] = $this->addSmartAgentDetails((array) $data['extension'] ?? [], $cart_id);
+    if (!empty($cart_id)) {
+      $data['extension'] = $this->addSmartAgentDetails((array) $data['extension'] ?? [], $cart_id);
+    }
 
     $request_options = [
       'timeout' => $this->magentoInfo->getPhpTimeout('cart_update'),

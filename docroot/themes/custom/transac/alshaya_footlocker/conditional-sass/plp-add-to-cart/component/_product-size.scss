@@ -5,6 +5,15 @@
         cursor: text;
         opacity: 0.3;
       }
+
+      &:not(.active):hover {
+        background: $pdp_thumbimage_hover_bg;
+        color: $plp-quick-view-product-size-text;
+      }
     }
+  }
+
+  label {
+    font-size: 0.875rem;
   }
 }

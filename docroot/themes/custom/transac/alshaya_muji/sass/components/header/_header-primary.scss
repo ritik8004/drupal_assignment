@@ -838,13 +838,8 @@ header {
     font-family: $alshaya-thin;
     text-transform: capitalize;
     font-weight: normal;
-    display: block;
     font-size: 0.875rem;
     border-bottom: 1px solid $mm_l1_border;
-    padding-#{$left}: 1rem;
-    padding-#{$right}: 0.5rem;
-    margin-#{$left}: 0;
-    margin-#{$right}: 0;
   }
 
   .menu--two__list-item {
