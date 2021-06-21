@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import qs from 'qs';
+import _ from 'lodash';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 import { removeStorageInfo } from '../../utilities/storage';
@@ -270,16 +271,16 @@ const callDrupalApi = (url, method, requestOptions) => {
  *   Formatted / processed cart.
  */
 const formatCart = (cartData) => {
-  const data = { ...cartData };
+  const data = _.cloneDeep(cartData);
 
   // Move customer data to root level.
-  if (typeof cartData.cart.customer !== 'undefined') {
-    data.customer = cartData.cart.customer;
+  if (!_.isEmpty(data.cart.customer)) {
+    data.customer = data.cart.customer;
     delete data.cart.customer;
   }
 
   // Format addresses.
-  if (typeof data.customer.addresses !== 'undefined' && data.customer.addresses.length > 0) {
+  if (!_.isEmpty(data.customer) && !_.isEmpty(data.customer.addresses)) {
     data.customer.addresses = data.customer.addresses.map((address) => {
       const item = { ...address };
       delete item.id;
@@ -290,33 +291,39 @@ const formatCart = (cartData) => {
   }
 
   // Format shipping info.
-  if (typeof cartData.cart.extension_attributes.shipping_assignments[0] !== 'undefined') {
-    if (typeof cartData.cart.extension_attributes.shipping_assignments[0].shipping !== 'undefined') {
-      data.shipping = cartData.cart.extension_attributes.shipping_assignments[0].shipping;
-      delete data.cart.extension_attributes.shipping_assignments;
+  if (!_.isEmpty(data.cart.extension_attributes)) {
+    if (!_.isEmpty(data.cart.extension_attributes.shipping_assignments)) {
+      if (!_.isEmpty(data.cart.extension_attributes.shipping_assignments[0].shipping)) {
+        data.shipping = data.cart.extension_attributes.shipping_assignments[0].shipping;
+        delete data.cart.extension_attributes.shipping_assignments;
+      }
     }
+  } else {
+    data.shipping = {};
   }
 
   let shippingMethod = '';
-  if (typeof data.shipping.method !== 'undefined' && data.shipping.method !== null) {
-    shippingMethod = data.shipping.method;
-  }
-  if (shippingMethod.indexOf('click_and_collect') >= 0) {
-    data.shipping.type = 'click_and_collect';
-  } else {
-    data.shipping.type = 'home_delivery';
+  if (!_.isEmpty(data.shipping)) {
+    if (!_.isEmpty(data.shipping.method)) {
+      shippingMethod = data.shipping.method;
+    }
+    if (!_.isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
+      data.shipping.type = 'click_and_collect';
+    } else {
+      data.shipping.type = 'home_delivery';
+    }
   }
 
-  if (typeof cartData.cart.shipping !== 'undefined' && typeof cartData.cartData.cart.shipping.extension_attributes !== 'undefined') {
-    const extensionAttributes = cartData.cart.shipping.extension_attributes;
-    if (typeof extensionAttributes.click_and_collect_type !== 'undefined') {
+  if (!_.isEmpty(data.shipping) && !_.isEmpty(data.shipping.extension_attributes)) {
+    const extensionAttributes = data.shipping.extension_attributes;
+    if (!_.isUndefined(extensionAttributes.click_and_collect_type)) {
       data.shipping.clickCollectType = extensionAttributes.click_and_collect_type;
     }
-    if (typeof extensionAttributes.store_code !== 'undefined') {
+    if (!_.isUndefined(extensionAttributes.store_code)) {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
+    delete data.shipping.extension_attributes;
   }
-  delete data.shipping.extension_attributes;
 
   // Initialise payment data holder.
   data.payment = {};

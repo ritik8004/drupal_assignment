@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   isAnonymousUserWithoutCart,
   getCart,
@@ -148,34 +149,30 @@ const formatAddressForShippingBilling = (address) => {
   const data = { ...address };
 
   const staticFields = {};
-  if (typeof data.static !== 'undefined' && Object.keys(data.static).length > 0) {
+  if (!_.isEmpty(data.static)) {
     Object.keys(data.static).forEach((key) => {
       staticFields[key] = data.static[key];
     });
     delete data.static;
   }
 
-  if (typeof data.carrier_info !== 'undefined') {
+  if (!_.isUndefined(data.street)) {
     delete data.carrier_info;
   }
 
-  data.customAttributes = [];
-  if (Object.keys(data).length > 0) {
+  if (!_.isEmpty(data)) {
+    data.customAttributes = [];
     Object.keys(data).forEach((key) => {
-      let value = data[key];
-      if (!Array.isArray(value) && value === null) {
-        value = '';
-      }
       data.customAttributes.push(
         {
           attributeCode: key,
-          value,
+          value: (!Array.isArray(data[key]) && _.isNull(data[key])) ? '' : data[key],
         },
       );
     });
   }
 
-  if (typeof data.street === 'string') {
+  if (_.isString(data.street)) {
     data.street = [data.street];
   }
 
@@ -435,12 +432,12 @@ const getCncStores = async (lat, lon) => {
 const formatAddressForFrontend = (address) => {
   // Do not consider addresses without custom attributes as they are required
   // for Delivery Matrix.
-  if (Object.keys(address).length === 0 || typeof address.country_id === 'undefined' || address.country_id === '') {
+  if (_.isEmpty(address) || _.isEmpty(address.country_id)) {
     return null;
   }
 
   const result = { ...address };
-  if (typeof address.custom_attributes !== 'undefined' && Object.keys(address.custom_attributes).length > 0) {
+  if (!_.isEmpty(address.custom_attributes)) {
     Object.keys(address.custom_attributes).forEach((item) => {
       const key = address.custom_attributes[item].attribute_code;
       const val = address.custom_attributes[item].value;
