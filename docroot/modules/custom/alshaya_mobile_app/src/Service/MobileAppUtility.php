@@ -1017,7 +1017,15 @@ class MobileAppUtility {
    *   Processed term data from lhn category tree.
    */
   public function excludeUnusedKeysMobile(array &$term_data) {
-    $used_keys = ['label', 'id', 'path', 'clickable', 'child', 'deep_link'];
+    $used_keys = [
+      'label',
+      'id',
+      'path',
+      'clickable',
+      'child',
+      'deep_link',
+      'lhn',
+    ];
     foreach ($term_data as $parent_id => $parent_value) {
       $term_data[$parent_id] = $parent_value;
       foreach ($parent_value as $key => $value) {
