@@ -654,7 +654,6 @@ class MobileAppUtility {
       // front end.
       $term_technical_path = '/taxonomy/term/' . $term->tid;
       $redirected_path = $this->getRedirectUrl("/{$this->currentLanguage}" . $term_technical_path);
-
       // If no redirect, then we get the same path we passed for getRedirectUrl
       // without the langcode and hence we do not process them further.
       if (trim($redirected_path, '/') != trim($term_technical_path, '/')) {
@@ -700,9 +699,21 @@ class MobileAppUtility {
         'display_view_all' => isset($term->display_view_all) ? (int) $term->display_view_all : NULL,
       ];
 
+      // Supercategory images.
+      $brand_logo_fields = [
+        'field_logo_active_image',
+        'field_logo_inactive_image',
+        'field_logo_header_image',
+      ];
+      // Get all brand logo image data.
+      $brand_logos = $this->productCategoryTree->getBrandIcons($term->tid, $brand_logo_fields);
+
+      if (!empty($brand_logos)) {
+        $record['brand_logos'] = $brand_logos;
+      }
+
       if (is_object($file = $this->productCategoryTree->getMobileBanner($term->tid, $langcode))
-        && !empty($file->field_promotion_banner_mobile_target_id)
-      ) {
+        && !empty($file->field_promotion_banner_mobile_target_id)) {
         $image = $this->fileStorage->load($file->field_promotion_banner_mobile_target_id);
         $record['banner'] = [
           'url' => file_create_url($image->getFileUri()),
