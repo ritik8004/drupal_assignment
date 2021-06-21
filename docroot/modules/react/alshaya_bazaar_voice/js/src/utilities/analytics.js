@@ -4,7 +4,7 @@
  */
 
 // eslint-disable-next-line
-const bvPixelUtility = BV.pixel;
+const bvPixelUtility = (drupalSettings.productReviewStats !== undefined) ? BV.pixel : null;
 
 /**
  * Helper function to push content data to datalayer.
@@ -109,7 +109,7 @@ function trackViewedCGC(inViewData, containerId) {
  * @param reviewData
  */
 export const trackPassiveAnalytics = (reviewData) => {
-  if (drupalSettings.productReviewStats) {
+  if (drupalSettings.productReviewStats && bvPixelUtility !== null) {
     const { productData } = drupalSettings.productReviewStats;
     const containerId = 'reviews-section';
 
@@ -143,7 +143,7 @@ export const trackPassiveAnalytics = (reviewData) => {
  * @param analyticsData
  */
 export const trackFeaturedAnalytics = (analyticsData) => {
-  if (drupalSettings.productReviewStats) {
+  if (drupalSettings.productReviewStats && bvPixelUtility !== null) {
     const { productData } = drupalSettings.productReviewStats;
     const eventData = {
       type: analyticsData.type,
@@ -156,7 +156,7 @@ export const trackFeaturedAnalytics = (analyticsData) => {
       detail2: analyticsData.detail2,
     };
     bvPixelUtility.trackEvent('Feature', eventData);
-    pushContentToDataLayer('bvReviewsFeature', eventData);
+    pushContentToDataLayer(`bvFeature-${analyticsData.name}-click`, eventData);
   }
 };
 

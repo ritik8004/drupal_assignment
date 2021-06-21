@@ -312,7 +312,7 @@ class BazaarVoiceSettingsForm extends ConfigFormBase {
       ],
     ];
     $form['basic_settings']['pdp_reviews_seo_limit'] = [
-      '#type' => 'text',
+      '#type' => 'textfield',
       '#title' => $this->t('Number of reviews on PDP for SEO.'),
       '#default_value' => $config->get('pdp_reviews_seo_limit'),
       '#description' => $this->t('Enter total number of reviews to be captured for SEO on PDP.'),
