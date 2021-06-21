@@ -316,10 +316,10 @@ const formatCart = (cartData) => {
 
   if (!_.isEmpty(data.shipping) && !_.isEmpty(data.shipping.extension_attributes)) {
     const extensionAttributes = data.shipping.extension_attributes;
-    if (!_.isUndefined(extensionAttributes.click_and_collect_type)) {
+    if (!_.isEmpty(extensionAttributes.click_and_collect_type)) {
       data.shipping.clickCollectType = extensionAttributes.click_and_collect_type;
     }
-    if (!_.isUndefined(extensionAttributes.store_code)) {
+    if (!_.isEmpty(extensionAttributes.store_code)) {
       data.shipping.storeCode = extensionAttributes.store_code;
     }
     delete data.shipping.extension_attributes;

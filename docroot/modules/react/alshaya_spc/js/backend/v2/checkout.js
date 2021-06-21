@@ -156,7 +156,7 @@ const formatAddressForShippingBilling = (address) => {
     delete data.static;
   }
 
-  if (!_.isUndefined(data.street)) {
+  if (!_.isEmpty(data.street)) {
     delete data.carrier_info;
   }
 
