@@ -171,3 +171,4 @@ docroot/modules/.gitignore
 docroot/profiles/.gitignore
 /.editorconfig
 /.gitattributes
+.lando.local.yml

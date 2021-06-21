@@ -42,6 +42,7 @@ services:
         DEVEL_ENV: lando
         PHP_IDE_CONFIG: "serverName=alshaya"
   edge:
+    app_mount: disabled
     type: varnish:4.1
     backends:
       - appserver
@@ -49,13 +50,16 @@ services:
     config:
       vcl: .lando/config/varnish-4.vcl
   memcache:
+    app_mount: disabled
     type: memcached:1.5.11
     mem: 64
   pma:
+    app_mount: disabled
     type: phpmyadmin
     hosts:
       - database
   mailhog:
+    app_mount: disabled
     type: mailhog:v1.0.0
     portforward: false
     hogfrom:
