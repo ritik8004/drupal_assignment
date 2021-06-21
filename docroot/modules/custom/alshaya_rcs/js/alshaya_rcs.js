@@ -12,6 +12,7 @@
     switch (entityType) {
       case 'product':
         // @todo: Filter by the product URL.
+        // @todo: Make a config for this query and pass it from the backend.
         return JSON.stringify({
           query: `{products(filter: {sku: {eq: "E0110"}}) {
             total_count
