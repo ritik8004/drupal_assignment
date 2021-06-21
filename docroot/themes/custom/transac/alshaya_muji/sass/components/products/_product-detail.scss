@@ -212,6 +212,10 @@
             margin-top: 0;
             float: none;
           }
+
+          @include breakpoint($only-tablet) {
+            margin-top: 0.5rem;
+          }
         }
 
         span {
