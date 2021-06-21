@@ -6,6 +6,10 @@ use Drupal\Core\Site\Settings;
  * Implements hook_page_attachments_alter().
  */
 function rcs_magento_page_attachments_alter(array &$page) {
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
   $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $store_settings = Settings::get('magento_lang_prefix');
   $page['#attached']['drupalSettings']['rcs']['backend_url'] = Settings::get('alshaya_api.settings')['magento_host'] . '/' . $store_settings[$current_language];
