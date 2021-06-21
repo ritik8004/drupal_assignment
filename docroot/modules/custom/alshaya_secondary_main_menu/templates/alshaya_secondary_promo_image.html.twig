@@ -1,10 +1,9 @@
-<div class="promo-wrapper">
+<div class="promo-wrapper" style="display: none">
   {% for promo_button in promo %}
     <a class="promo--button-wrapper" href="{{ promo_button.link }}">
       <div class="promo--button">
-        <div>
-          <img class="promo--button-image"
-               src="{{ file_url(promo_button.imgurl) }}">
+        <div class="promo--button-image">
+          <img src="{{ file_url(promo_button.imgurl) }}">
         </div>
         <div class="promo--button-body">
           <span class="promo--button-title">{{ promo_button.img_title }}</span>

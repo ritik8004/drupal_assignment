@@ -19,18 +19,12 @@
     display: block;
   }
 
-  &-image {
-    min-width: 4.375rem;
-    width: 4.375rem;
-    height: 100%;
-    object-fit: cover;
-  }
-
   &-body {
     padding: 0.875rem;
     padding-right: 0.625rem;
     color: $black;
     text-transform: capitalize;
+    width: 100%;
 
     span {
       display: block;
@@ -55,6 +49,17 @@
       position: absolute;
       background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next.svg') center no-repeat;
       background-size: 0.4rem;
+    }
+  }
+
+  &-image {
+    font-size: 0;
+
+    img {
+      min-width: 4.375rem;
+      width: 4.375rem;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }
