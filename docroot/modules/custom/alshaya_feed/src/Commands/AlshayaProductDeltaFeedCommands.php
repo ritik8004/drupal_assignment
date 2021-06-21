@@ -189,7 +189,7 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
       $command = sprintf('drush -l %s verify-oos-sku --sku=%s', $current_domain, $sku);
       $get_oos_products = $this->processManager()->process($command);
       $get_oos_products->mustRun();
-      $is_sku_oos = $get_oos_products->getOutput();
+      $is_sku_oos = empty($get_oos_products->getOutput()) ? FALSE : TRUE;
 
       // Skip the SKU if its not OOS even on one domain.
       if (!$is_sku_oos) {
