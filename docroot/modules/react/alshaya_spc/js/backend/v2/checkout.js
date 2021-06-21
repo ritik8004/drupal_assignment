@@ -635,7 +635,6 @@ window.commerceBackend.getCartForCheckout = () => {
       }
 
       const processedData = await getProcessedCheckoutData(response.data);
-      console.log(processedData);
       return new Promise((resolve) => resolve(processedData));
     })
     .catch((response) => {
