@@ -68,6 +68,7 @@ const UnorderedList = (props) => {
 
   let classes = 'form-list-wrapper';
   classes = isHidden ? `${classes} form-element-hidden` : `${classes}`;
+  classes = isGroup ? `${classes} group-wrapper` : `${classes}`;
 
   return (
     <div className={classes}>
@@ -81,19 +82,17 @@ const UnorderedList = (props) => {
       </label>
       { isGroup && (
         <div className="group-anchor-wrapper">
-          <div className="group-anchor-links">
-            {Object.keys(groupData.groupAlternates).map((alternate) => (
-              <a
-                href="#"
-                key={alternate}
-                onClick={(e) => groupData.setGroupCode(e, alternate)}
-                className={((groupData.defaultGroup === groupData.groupAlternates[alternate]))
-                  ? 'active' : 'in-active'}
-              >
-                {groupData.groupAlternates[alternate]}
-              </a>
-            ))}
-          </div>
+          {Object.keys(groupData.groupAlternates).map((alternate) => (
+            <a
+              href="#"
+              key={alternate}
+              onClick={(e) => groupData.setGroupCode(e, alternate)}
+              className={((groupData.defaultGroup === groupData.groupAlternates[alternate]))
+                ? 'active' : 'in-active'}
+            >
+              {groupData.groupAlternates[alternate]}
+            </a>
+          ))}
         </div>
       )}
       <ul className={`attribute-options-list ${attributeName}`} name={attributeName}>{listItems}</ul>

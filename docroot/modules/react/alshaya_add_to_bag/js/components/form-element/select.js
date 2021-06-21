@@ -49,19 +49,17 @@ const SelectList = (props) => {
     <div className={classes}>
       {isGroup && (
         <div className="group-anchor-wrapper">
-          <div className="group-anchor-links">
-            {Object.keys(groupData.groupAlternates).map((alternate) => (
-              <a
-                href="#"
-                key={alternate}
-                onClick={(e) => groupData.setGroupCode(e, alternate)}
-                className={((groupData.defaultGroup === groupData.groupAlternates[alternate]))
-                  ? 'active' : 'in-active'}
-              >
-                {groupData.groupAlternates[alternate]}
-              </a>
-            ))}
-          </div>
+          {Object.keys(groupData.groupAlternates).map((alternate) => (
+            <a
+              href="#"
+              key={alternate}
+              onClick={(e) => groupData.setGroupCode(e, alternate)}
+              className={((groupData.defaultGroup === groupData.groupAlternates[alternate]))
+                ? 'active' : 'in-active'}
+            >
+              {groupData.groupAlternates[alternate]}
+            </a>
+          ))}
         </div>
       )}
       <Select
