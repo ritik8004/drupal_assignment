@@ -1051,15 +1051,29 @@ class MobileAppUtility {
    *   Processed term data from lhn category tree.
    */
   public function excludeUnusedKeysMobile(array &$term_data) {
-    $used_keys = ['label', 'id', 'path', 'clickable', 'child', 'deep_link'];
+    $used_keys = [
+      'label',
+      'id',
+      'path',
+      'clickable',
+      'child',
+      'deep_link',
+      'lhn',
+    ];
     foreach ($term_data as $parent_id => $parent_value) {
       $term_data[$parent_id] = $parent_value;
       foreach ($parent_value as $key => $value) {
-        if (!in_array($key, $used_keys)) {
-          unset($term_data[$parent_id][$key]);
+        // Show category and tree only when `lhn` is enabled.
+        if (empty($term_data[$parent_id]['lhn'])) {
+          unset($term_data[$parent_id]);
         }
-        if ($key == 'child' && !empty($value)) {
-          $this->excludeUnusedKeysMobile($term_data[$parent_id][$key]);
+        else {
+          if (!in_array($key, $used_keys)) {
+            unset($term_data[$parent_id][$key]);
+          }
+          if ($key == 'child' && !empty($value)) {
+            $this->excludeUnusedKeysMobile($term_data[$parent_id][$key]);
+          }
         }
       }
     }
