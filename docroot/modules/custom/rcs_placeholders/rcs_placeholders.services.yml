@@ -1,0 +1,5 @@
+services:
+  Drupal\rcs_placeholders\Service\RcsPhPathProcessor:
+    tags:
+      - { name: 'path_processor_inbound', priority: 80 }
+    arguments: ['@entity_type.manager']

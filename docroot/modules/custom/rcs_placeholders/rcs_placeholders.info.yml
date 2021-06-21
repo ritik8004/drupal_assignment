@@ -1,0 +1,14 @@
+name: RCS Placeholders
+description: Provides placeholders that will be dynamically replaced outside of Drupal.
+package: RCS
+type: module
+core_version_requirement: ^8 || ^9
+
+dependencies:
+  - drupal:taxonomy
+  - metatag:metatag
+  - redirect:redirect
+
+# @todo: views.view.taxonomy_term.yml has been removed because of conflicts
+# with the existing view in the site.
+# We need to add it back.
