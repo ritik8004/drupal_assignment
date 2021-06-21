@@ -98,6 +98,7 @@ class AlshayaSmartAgentSettingsForm extends ConfigFormBase {
     }
     $config->set('smart_user_agents', $smart_user_agents);
     $config->set('smart_agent_ips', $form_state->getValue('smart_agent_ips'));
+    $config->set('whatsapp_template', $form_state->getValue('whatsapp_template'));
     $config->set('whatsapp_mode', $form_state->getValue('whatsapp_mode'));
     $config->set('email_template', $form_state->getValue('email_template')['value']);
     $config->set('sms_template', $form_state->getValue('sms_template')['value']);
