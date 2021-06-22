@@ -32,7 +32,7 @@ class AlshayaProductDeltaFeedHelper {
   /**
    * Custom table name to display OOS product SKUs.
    */
-  const OOS_SKU_TABLE_NAME = 'oos_product_skus';
+  const OOS_SKU_TABLE_NAME = 'alshaya_feed_oos_product_skus';
 
   /**
    * Entity Type Manager service object.

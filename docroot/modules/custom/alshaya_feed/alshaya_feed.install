@@ -12,14 +12,14 @@
  */
 function alshaya_feed_update_8001() {
   $schema = alshaya_feed_schema();
-  \Drupal::database()->schema()->createTable('oos_product_skus', $schema['oos_product_skus']);
+  \Drupal::database()->schema()->createTable('alshaya_feed_oos_product_skus', $schema['alshaya_feed_oos_product_skus']);
 }
 
 /**
  * Implements hook_schema().
  */
 function alshaya_feed_schema() {
-  $schema['oos_product_skus'] = [
+  $schema['alshaya_feed_oos_product_skus'] = [
     'description' => 'Stores OOS product SKUs.',
     'fields' => [
       'sku' => [
