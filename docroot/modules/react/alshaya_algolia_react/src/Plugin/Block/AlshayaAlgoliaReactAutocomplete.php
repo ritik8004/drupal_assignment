@@ -136,9 +136,7 @@ class AlshayaAlgoliaReactAutocomplete extends AlshayaAlgoliaReactBlockBase {
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), [
-      'languages',
-    ]);
+    return ['languages'];
   }
 
   /**
