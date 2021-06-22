@@ -34,7 +34,7 @@ const logger = {
  */
 const isUserAuthenticated = () => {
   const { isCustomer, uid } = drupalSettings.user;
-  return !!(isCustomer && uid !== 0);
+  return (isCustomer && uid !== 0);
 };
 
 /**
