@@ -25,7 +25,7 @@ window.commerceBackend = window.commerceBackend || {};
  *   Returns the cart item if found else returns null.
  */
 const getCartItem = (sku) => {
-  const cart = window.commerceBackend.getRawCartDataFromStorage();
+  const cart = window.commerceBackend.getCartDataFromStorage();
   if (!cart || typeof cart.cart === 'undefined' || !cart.cart || typeof cart.cart.items === 'undefined' || cart.cart.items.length === 0) {
     return null;
   }
