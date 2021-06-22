@@ -1,4 +1,4 @@
-@javascript @guest @cnc @madaPayment @clickCollect @vssauat
+@javascript @guest @cnc @madaPayment @clickCollect @vssauat @flsauat
 Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest Users
 
   Background:
@@ -11,7 +11,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -101,7 +101,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -196,7 +196,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -254,7 +254,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -344,7 +344,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -440,7 +440,7 @@ Feature: SPC Checkout Click & Collect using Mada Card Payment Method for Guest U
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
