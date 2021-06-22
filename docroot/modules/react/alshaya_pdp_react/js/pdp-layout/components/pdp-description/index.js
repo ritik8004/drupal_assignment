@@ -4,8 +4,7 @@ import PdpSectionTitle from '../utilities/pdp-section-title';
 import PdpSectionText from '../utilities/pdp-section-text';
 import DescriptionContent from '../pdp-desc-popup-content';
 import ProductDetailSVG from '../../../svg-component/product-detail-svg';
-import { closeModalHelper, addOverlayClass, removeOverlayClass } from '../../../utilities/pdp_layout';
-
+import { closeModalHelper } from '../../../utilities/pdp_layout';
 
 const PpdDescription = (props) => {
   const {
@@ -14,7 +13,7 @@ const PpdDescription = (props) => {
   } = props;
 
   const closeModal = () => {
-    removeOverlayClass('desc-overlay');
+    document.querySelector('body').classList.remove('desc-overlay');
     setTimeout(() => {
       removePanelData();
     }, 400);
@@ -23,7 +22,7 @@ const PpdDescription = (props) => {
   const openModal = () => {
     // to make sure that markup is present in DOM.
     setTimeout(() => {
-      addOverlayClass('desc-overlay');
+      document.querySelector('body').classList.add('desc-overlay');
     }, 150);
     return (
       <DescriptionContent

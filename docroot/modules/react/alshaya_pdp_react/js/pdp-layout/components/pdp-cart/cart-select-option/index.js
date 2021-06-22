@@ -2,8 +2,7 @@ import React from 'react';
 import GroupSelectOption from '../group-select-option';
 import NonGroupSelectOption from '../non-group-select-option';
 import SwatchSelectOption from '../swatch-select-option';
-import { closeModalHelper, removeOverlayClass } from '../../../../utilities/pdp_layout';
-
+import { closeModalHelper } from '../../../../utilities/pdp_layout';
 
 class CartSelectOption extends React.Component {
   constructor(props) {
@@ -163,9 +162,9 @@ class CartSelectOption extends React.Component {
     e.preventDefault();
     const { context } = this.props;
     if (context === 'main') {
-      removeOverlayClass('overlay-select');
+      document.querySelector('body').classList.remove('overlay-select');
     } else {
-      removeOverlayClass('overlay-related-select');
+      document.querySelector('body').classList.remove('overlay-related-select');
     }
   };
 
