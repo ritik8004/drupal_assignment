@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 import { removeStorageInfo } from '../../utilities/storage';
+import { cartActions } from './cart_actions';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -273,6 +274,11 @@ const callDrupalApi = (url, method, requestOptions) => {
 const formatCart = (cartData) => {
   const data = _.cloneDeep(cartData);
 
+  // Check if there is no cart data.
+  if (_.isUndefined(data.cart) || !_.isObject(data.cart)) {
+    return data;
+  }
+
   // Move customer data to root level.
   if (!_.isEmpty(data.cart.customer)) {
     data.customer = data.cart.customer;
@@ -472,7 +478,6 @@ const getCart = async () => {
   }
 
   const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
-
   if (typeof response.data.error !== 'undefined' && response.data.error === true) {
     if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
       // Remove the cart from storage.
@@ -515,14 +520,125 @@ const getCartWithProcessedData = async () => {
 };
 
 /**
- * Calls the update cart API and returns the updated cart.
- * @todo Implement this function fully while working on the checkout page.
+ * Return customer id from current session.
  *
- * @param {object} data
- *  The data to send.
+ * @return {int|null}
+ *   Return customer id or null.
  */
-const updateCart = (data) => {
+const getCartCustomerId = async () => {
+  const response = await getCart();
+  const cart = response.data;
+  if (!_.isEmpty(cart) && !_.isEmpty(cart.customer) && !_.isUndefined(cart.customer.id)) {
+    return cart.customer.id;
+  }
+  return null;
+};
+
+/**
+ * Validate arguments and returns the respective error code.
+ *
+ * @param {object} request
+ *  The request data.
+ *
+ * @returns {int}
+ *   The error code.
+ */
+const validateRequestData = async (request) => {
+  // If action info or cart id not available.
+  if (_.isEmpty(request.action)) {
+    logger.error('Cart update operation not containing any action.');
+    return 400;
+  }
+
+  let actions = [
+    cartActions.cartAddItem,
+    cartActions.cartUpdateItem,
+    cartActions.cartRemoveItem,
+  ];
+  if (actions.includes(request.action) && _.isUndefined(request.sku)) {
+    const logData = JSON.stringify(request);
+    logger.error(`Cart update operation not containing any sku. Data: ${logData}`);
+    return 400;
+  }
+
+  // @todo test request data on the browser
+  actions = [
+    cartActions.cartAddItem,
+    cartActions.cartUpdateItem,
+  ];
+  if (actions.includes(request.action) && _.isUndefined(request.qty)) {
+    const logData = JSON.stringify(request);
+    logger.error(`Cart update operation not containing any quantity. Data: ${logData}`);
+    return 400;
+  }
+
+  // For new cart request, we don't need any further validations.
+  // Or if request has cart id but cart not exist in session,
+  // create new cart for the user.
+  if (request.action === cartActions.cartAddItem) {
+    if (_.isUndefined(request.cart_id) || window.commerceBackend.getCartId() === null) {
+      return 200;
+    }
+  }
+
+  // For any cart update operation, cart should be available in session.
+  if (window.commerceBackend.getCartId() === null) {
+    const logData = JSON.stringify(request);
+    logger.error(`Trying to do cart update operation while cart is not available in session. Data: ${logData}`);
+    return 404;
+  }
+
+  // Backend validation.
+  const cartCustomerId = await getCartCustomerId();
+  // console.log(cartCustomerId);
+  const uid = (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0;
+  if (uid > 0) {
+    if (_.isUndefined(cartCustomerId)) {
+      // @todo Check if we should associate cart and proceed.
+      // console.log('TODO');
+      return 400;
+    }
+  }
+
+  return 200;
+};
+
+/**
+ * Calls the update cart API and returns the updated cart.
+ *
+ * @param {object} request
+ *  The data to send.
+ *
+ * @returns {Promise}
+ *   A promise object with cart data.
+ */
+const updateCart = (request) => {
+  // @todo test that request is unchanged
+  const data = _.clone(request);
   const cartId = window.commerceBackend.getCartId();
+
+  const validationResponse = validateRequestData(request);
+  if (validationResponse !== 200) {
+    const error = {
+      data: {
+        error: true,
+        error_code: validationResponse,
+        error_message: getDefaultErrorMessage(),
+      },
+    };
+    return new Promise((resolve) => resolve(error));
+  }
+
+  let action = '';
+  if (!_.isEmpty(data.extension) && !_.isEmpty(data.extension.action)) {
+    action = data.extension.action;
+  }
+
+  // Log the shipping / billing address we pass to magento.
+  if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
+    const logData = JSON.stringify(request);
+    logger.notice(`Billing / Shipping address data: ${logData}. CartId: ${cartId}`);
+  }
 
   return callMagentoApi(`/rest/V1/guest-carts/${cartId}/updateCart`, 'POST', JSON.stringify(data))
     .then((response) => {
