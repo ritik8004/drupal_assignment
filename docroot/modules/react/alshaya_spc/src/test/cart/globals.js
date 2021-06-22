@@ -8,6 +8,7 @@ export const drupalSettings = {
   },
   user: {
     uid: 0,
+    isCustomer: true,
   },
   userDetails: {
     customerId: null,
