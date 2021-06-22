@@ -6,7 +6,6 @@ use Drupal\alshaya_config\AlshayaArrayUtils;
 use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -73,13 +72,6 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
   protected $logger;
 
   /**
-   * Cache Backend.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
-
-  /**
    * Constructs a new AlshayaConfigSubscriber object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -94,23 +86,19 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   User account object.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger factory.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend.
    */
   public function __construct(ModuleHandlerInterface $moduleHandler,
                               StorageInterface $configStorage,
                               ConfigFactoryInterface $configFactory,
                               AlshayaArrayUtils $alshaya_array_utils,
                               AccountProxyInterface $account,
-                              LoggerChannelFactoryInterface $logger_factory,
-                              CacheBackendInterface $cache) {
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->moduleHandler = $moduleHandler;
     $this->configStorage = $configStorage;
     $this->configFactory = $configFactory;
     $this->alshayaArrayUtils = $alshaya_array_utils;
     $this->account = $account;
     $this->logger = $logger_factory->get('alshaya_config');
-    $this->cache = $cache;
   }
 
   /**
@@ -250,35 +238,23 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   Array containing module paths as value and module name as key.
    */
   protected function getModulesWithOverride(string $override_type) {
-    $cid = 'alshaya_config_' . str_replace('/', '_', $override_type);
-    static $static;
-    if (isset($static[$override_type])) {
-      return $static[$override_type];
-    }
+    $modules = [];
 
-    $cache = $this->cache->get($cid);
-    $modules = $cache->data ?? [];
+    foreach ($this->moduleHandler->getModuleList() as $module) {
+      $override_path = DRUPAL_ROOT . '/' . $module->getPath() . '/config/' . $override_type;
 
-    if (empty($modules)) {
-      foreach ($this->moduleHandler->getModuleList() as $module) {
-        $override_path = DRUPAL_ROOT . '/' . $module->getPath() . '/config/' . $override_type;
+      $this->log('debug', 'Checking if @override_path exists.', [
+        '@override_path' => $override_path,
+      ]);
 
-        $this->log('debug', 'Checking if @override_path exists.', [
+      // If there is an override, we merge it with the initial config.
+      if (file_exists($override_path)) {
+        $this->log('info', 'Overrides are available at @override_path.', [
           '@override_path' => $override_path,
         ]);
 
-        // If there is an override, we merge it with the initial config.
-        if (file_exists($override_path)) {
-          $this->log('info', 'Overrides are available at @override_path.', [
-            '@override_path' => $override_path,
-          ]);
-
-          $modules[$module->getName()] = $override_path;
-        }
+        $modules[$module->getName()] = $override_path;
       }
-
-      $this->cache->set($cid, $modules);
-      $static[$override_type] = $modules;
     }
 
     return $modules;

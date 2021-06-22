@@ -8,7 +8,6 @@ services:
       - '@alshaya.alshaya_array_utils'
       - '@current_user'
       - '@logger.factory'
-      - '@cache.config_overrides'
     tags:
       - {name: event_subscriber}
 
@@ -25,10 +24,3 @@ services:
 
   alshaya.alshaya_array_utils:
     class: Drupal\alshaya_config\AlshayaArrayUtils
-
-  cache.config_overrides:
-    class: Drupal\Core\Cache\CacheBackendInterface
-    tags:
-      - { name: cache.bin }
-    factory: cache_factory:get
-    arguments: [config_overrides]
