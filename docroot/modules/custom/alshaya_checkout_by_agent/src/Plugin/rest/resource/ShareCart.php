@@ -8,7 +8,9 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\kaleyra\MessageApiAdapter;
+use Drupal\kaleyra\ShortenUrlApiAdapter;
 use Drupal\kaleyra\WhatsAppApiAdapter;
 use Drupal\mobile_number\MobileNumberUtilInterface;
 use Drupal\rest\Plugin\ResourceBase;
@@ -16,6 +18,7 @@ use Drupal\rest\ResourceResponse;
 use Drupal\token\TokenInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Drupal\Component\Datetime\Time;
@@ -48,6 +51,13 @@ class ShareCart extends ResourceBase {
    * @var \Drupal\kaleyra\WhatsAppApiAdapter
    */
   protected $whatsAppApiAdapter;
+
+  /**
+   * Shorten URL API Adapter.
+   *
+   * @var \Drupal\kaleyra\ShortenUrlApiAdapter
+   */
+  protected $shortenUrlApiAdapter;
 
   /**
    * Current Request stack.
@@ -115,6 +125,8 @@ class ShareCart extends ResourceBase {
    *   Message API Adapter.
    * @param \Drupal\kaleyra\WhatsAppApiAdapter $whatsapp_api_adapter
    *   WhatsApp API Adapter.
+   * @param \Drupal\kaleyra\ShortenUrlApiAdapter $shorten_url_api_adapter
+   *   Shorten Url API Adapter.
    * @param Symfony\Component\HttpFoundation\Request $current_request
    *   The current request.
    * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
@@ -138,6 +150,7 @@ class ShareCart extends ResourceBase {
     LoggerInterface $logger,
     MessageApiAdapter $message_api_adapter,
     WhatsAppApiAdapter $whatsapp_api_adapter,
+    ShortenUrlApiAdapter $shorten_url_api_adapter,
     Request $current_request,
     MailManagerInterface $mail_manager,
     LanguageManagerInterface $language_manager,
@@ -149,6 +162,7 @@ class ShareCart extends ResourceBase {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->messageApiAdapter = $message_api_adapter;
     $this->whatsAppApiAdapter = $whatsapp_api_adapter;
+    $this->shortenUrlApiAdapter = $shorten_url_api_adapter;
     $this->currentRequest = $current_request;
     $this->mailManager = $mail_manager;
     $this->languageManager = $language_manager;
@@ -170,6 +184,7 @@ class ShareCart extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_checkout_by_agent'),
       $container->get('kaleyra.sms_api_adapter'),
       $container->get('kaleyra.whatsapp_api_adapter'),
+      $container->get('kaleyra.shorten_url_api_adapter'),
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('plugin.manager.mail'),
       $container->get('language_manager'),
@@ -221,7 +236,8 @@ class ShareCart extends ResourceBase {
 
     // Add sharing channel and time with agent details.
     $smart_agent_details_array['shared_via'] = $context;
-    $smart_agent_details_array['shared_on'] = $this->time->getRequestTime();
+    $smart_agent_details_array['shared_on'] = date('Y-m-d H:i:s', $this->time->getRequestTime());
+    $smart_agent_details_array['shared_to'] = $to;
 
     $data = [
       'cart_id' => $cartId,
@@ -242,16 +258,44 @@ class ShareCart extends ResourceBase {
         // @todo Validate mobile number.
         $to = $this->getFullMobileNumber($to);
         $template = $settings->get('whatsapp_template');
+        $whatsapp_mode = $settings->get('whatsapp_mode') ?? 'text';
 
-        $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, [$cart_url]);
+        switch ($whatsapp_mode) {
+          case 'text':
+            $params = [
+              $this->shortenUrlApiAdapter->getShortUrl($cart_url),
+              $this->configFactory->get('system.site')->get('name'),
+            ];
+
+            $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, $params);
+            break;
+
+          case 'button':
+            $params = [
+              $this->configFactory->get('system.site')->get('name'),
+              Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString(TRUE)->getGeneratedUrl(),
+            ];
+
+            // For WhatsApp Button we have to send relative URL.
+            $cart_url = str_replace($this->currentRequest->getSchemeAndHttpHost() . '/', '', $cart_url);
+
+            $this->whatsAppApiAdapter->sendUsingTemplate($to, $template, $params, $cart_url);
+            break;
+        }
+
         break;
 
       case 'sms':
         // @todo Validate mobile number.
         $to = $this->getFullMobileNumber($to);
 
-        $message = str_replace('@link', $cart_url, $settings->get('sms_template'));
+        // Shorten and replace the cart url in template.
+        $short_url = $this->shortenUrlApiAdapter->getShortUrl($cart_url);
+        $message = str_replace('@link', $short_url, $settings->get('sms_template'));
+
+        // Replace dynamic tokens in template.
         $message = $this->token->replace($message);
+
         $this->messageApiAdapter->send($to, htmlspecialchars_decode($message));
         break;
 
@@ -279,7 +323,7 @@ class ShareCart extends ResourceBase {
       '@smart_agent' => json_encode($data),
     ]);
 
-    return (new ResourceResponse($responseData));
+    return (new JsonResponse($responseData));
   }
 
   /**

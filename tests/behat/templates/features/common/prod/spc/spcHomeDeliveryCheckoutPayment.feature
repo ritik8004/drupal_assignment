@@ -3,17 +3,15 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
 
   Background:
     Given I am on "{spc_basket_page}"
-    And I wait 10 seconds
+    And I wait 5 seconds
     And I wait for the page to load
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
 
   @cc @hd @checkout_com
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -68,13 +66,11 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
   Scenario: As a Guest, I should be able to checkout using CC (checkout.com) in second language
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
     And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -130,10 +126,10 @@ Feature: SPC Checkout Home Delivery using checkout_com method (2D cards)
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element

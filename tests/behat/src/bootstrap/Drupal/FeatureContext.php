@@ -40,6 +40,12 @@ class FeatureContext extends CustomMinkContext
 
   private $parameters;
 
+  /**
+   * Storing URL of page.
+   * @var
+   */
+  public $pageurl;
+
   public function __construct(array $parameters = [])
   {
     $this->parameters = $parameters;
@@ -168,11 +174,12 @@ class FeatureContext extends CustomMinkContext
   public function iAmLoggedInAsAnAuthenticatedUserWithPassword($arg1, $arg2)
   {
     $this->visitPath('/user/login');
-    $this->iWaitSeconds('5');
+    $this->iWaitSeconds('10');
     $this->getSession()->getPage()->fillField('edit-name', $arg1);
     $this->getSession()->getPage()->fillField('edit-pass', $arg2);
+    $this->iWaitSeconds('10');
+    $this->getSession()->executeScript('jQuery("#edit-submit").click()');
     $this->iWaitSeconds('5');
-    $this->getSession()->getPage()->pressButton('sign in');
   }
 
   /**
@@ -2662,7 +2669,31 @@ JS;
         throw new \Exception(sprintf('Quantity doesn\'t match'));
       }
     }
+  }
 
+  /**
+   * @Given /^I click on Add-to-cart button$/
+   */
+  public function iClickOnAddToCartButton() {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('css', '#add-to-cart-main');
+    $element2 = $page->find('css', "[id^='edit-add-to-cart-']");
+    if ($element !== NULL) {
+      $element->click();
+    }
+    elseif ($element2 !== NULL) {
+      $element2->click();
+    }
+    else {
+      throw new \Exception(sprintf('Add to cart button not found.'));
+    }
+  }
+
+  /**
+   * @Given /^I navigate to the copied URL$/
+   */
+  public function iNavigateUrl() {
+    $this->pageurl = $this->getSession()->getCurrentUrl();
   }
 
 }

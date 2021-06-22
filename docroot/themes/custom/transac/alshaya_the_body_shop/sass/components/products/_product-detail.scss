@@ -408,6 +408,12 @@ article[gtm-sku-type="simple"] {
       }
     }
   }
+
+  .content__sidebar {
+    @include breakpoint($desktop) {
+      margin-bottom: 5rem;
+    }
+  }
 }
 
 .nodetype--acq_product,
@@ -548,6 +554,11 @@ article[gtm-sku-type="simple"] {
         background-color: $pdp-ingredient-modal-cross-icon-bg;
         cursor: pointer;
       }
+
+      .field__content {
+        overflow-y: auto;
+        height: 30.125rem;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -563,7 +574,6 @@ article[gtm-sku-type="simple"] {
     &.desc-open {
       #{$right}: 0;
       transition: $right 0.5s ease;
-      overflow-y: auto;
     }
 
     .desc-wrapper {
@@ -585,5 +595,58 @@ article[gtm-sku-type="simple"] {
         display: none;
       }
     }
+  }
+}
+
+.how-to-use {
+  padding: 9.125rem 1.875rem;
+  padding-#{$left}: 3.75rem;
+  position: relative;
+  margin-bottom: 5rem;
+
+  &.mobile {
+    display: block;
+
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+
+  &.desktop {
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    padding: 3.125rem 1.875rem;
+    margin: 3.125rem 0;
+  }
+
+  &::before {
+    content: '';
+    background: $pdp_how_to_use_bg;
+    width: 100vw;
+    height: 100%;
+    display: revert;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    z-index: -1;
+    transform: translate(50%, -50%);
+  }
+
+  &-title {
+    font-size: 1.75rem;
+    font-family: $tbs-recoleta-semibold;
+    letter-spacing: 0.93px;
+    margin-bottom: 0.625rem;
+
+    @include arabic-letter-spacing;
+  }
+
+  &-desc {
+    font-size: 1rem;
+    line-height: 1.5;
   }
 }

@@ -17,6 +17,8 @@ variables:
   language_filters: 'جميع اختياراتك'
   language_promotional_filter: ''
   create_account: 'Create an Account'
+  spc_search_byname: 'Foot Locker'
+  spc_search_byID: 'FLAEHDA'
   sign_in: 'Sign in'
   find_store: 'Find a Store'
   language_link: 'العربية'

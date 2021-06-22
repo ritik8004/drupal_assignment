@@ -1,0 +1,38 @@
+.product-drawer {
+  &-content-wrapper {
+    .price {
+      font-family: $alshaya-bold;
+      font-size: 1.375rem;
+    }
+
+    .has--special--price .price {
+      font-family: $alshaya-thin;
+      font-size: 1.125rem;
+    }
+
+    .price--discount {
+      font-size: 0.875rem;
+    }
+
+    .vat-text,
+    .content--item-code {
+      font-size: 0.875rem;
+    }
+
+    .vat-text,
+    .content--item-code,
+    .has--special--price .price {
+      color: $magv2-vat-text;
+    }
+
+    .product-details-wrapper {
+      .size-guide-link {
+        font-size: 0.875rem;
+
+        @include breakpoint($desktop) {
+          top: 0;
+        }
+      }
+    }
+  }
+}

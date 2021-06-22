@@ -229,8 +229,34 @@
 }
 
 .language--switcher.mobile-only-block {
-  @include breakpoint($only-mobile) {
-    padding-bottom: 1rem;
+  &:not(.only-first-time) {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 1rem;
+    }
+  }
+
+  &.only-first-time {
+    ul {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      li {
+        &:first-child {
+          &::after {
+            html[lang=en] & {
+              top: 0.25rem;
+            }
+          }
+        }
+      }
+    }
+
+    .language-switcher-close {
+      &::after {
+        top: 0.1875rem;
+      }
+    }
   }
 }
 
@@ -240,6 +266,18 @@
     li {
       a {
         text-transform: capitalize;
+      }
+
+      &.en {
+        a {
+          font-family: $tbs-regular;
+        }
+      }
+
+      &.ar {
+        a {
+          font-family: $arial-nodir;
+        }
       }
     }
   }

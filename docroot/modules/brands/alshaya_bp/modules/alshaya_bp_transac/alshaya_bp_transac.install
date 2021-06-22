@@ -14,6 +14,29 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
+ * [6.2.3] Set page_types to product_option_list as default.
+ */
+function alshaya_bp_transac_update_8015() {
+  // Set page_types to product_option_list
+  // in block.block.brandcategory
+  \Drupal::configFactory()->getEditable('block.block.brandcategory')
+    ->merge([
+      'visibility' => [
+        'alshaya_listing_page_types' => [
+          'id' => 'alshaya_listing_page_types',
+          'page_types' => [
+            'product_option_list' => 1,
+          ],
+          'show_on_selected_pages' => '1',
+        ],
+      ],
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.2.0] Installing brand_category filter.
  */
 function alshaya_bp_transac_update_8014() {
@@ -44,7 +67,7 @@ function alshaya_bp_transac_update_8014() {
   // Re-indexing all the products.
   \Drupal::service('alshaya_acm_product.product_queue_utility')->queueAllProducts();
 
-  // Disable Block Facets for brand_category
+  // Adjust Block Facets weight for attr_brand_category
   $blocks = [
     'brandcategory' => 'alshaya_search_facets_block_all',
     'promobrandcategory' => 'alshaya_promo_facets_block_all',
@@ -56,15 +79,8 @@ function alshaya_bp_transac_update_8014() {
     $all_filter_block = Block::load($all_filter_block_id);
     if (($facet_block instanceof BlockInterface) && ($all_filter_block instanceof BlockInterface)) {
       $facet_block->setWeight(($all_filter_block->getWeight()) - 1);
-      $facet_block->disable();
       $facet_block->save();
     }
-  }
-
-  // Enable productlistbrandcategory block.
-  $product_list_facet_block = Block::load('productlistbrandcategory');
-  if ($product_list_facet_block instanceof BlockInterface) {
-    $product_list_facet_block->enable()->save();
   }
 }
 

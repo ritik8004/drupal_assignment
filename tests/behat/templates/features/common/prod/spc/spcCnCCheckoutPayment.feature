@@ -1,19 +1,17 @@
-@javascript @guest @checkoutPayment @clickCollect @vssapprod @vsaepprod @mckwprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwprod @vssaprod @vsaeprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod
+@javascript @guest @checkoutPayment @clickCollect @vssapprod @mcaeprod @vsaepprod @mckwprod @bbwsapprod @bbwaepprod @bbwkwpprod @hmsapprod @hmkwpprod @hmaepprod @flsapprod @flaepprod @flkwprod @vssaprod @vsaeprod @bbwsaprod @bbwaeprod @bbwkwprod @hmsaprod @hmkwprod @hmaeprod @flsaprod @flaeprod @flkwprod
 Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method for Guest User
 
   Background:
     Given I am on "{spc_basket_page}"
     And I wait 5 seconds
     And I wait for the page to load
-    Then I scroll to the ".region__highlighted " element
-    And I wait 10 seconds
 
   @cc @cnc @desktop @checkout_com
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -55,16 +53,16 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 30 seconds
+    And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
   @cc @cnc @mobile @checkout_com
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -106,7 +104,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 30 seconds
+    And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -114,13 +112,11 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
     When I follow "{language_link}"
     And I wait for the page to load
-    And I wait for AJAX to finish
-    Then I scroll to the ".region__highlighted " element
     And I wait 10 seconds
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -162,7 +158,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 30 seconds
+    And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -171,10 +167,10 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -216,6 +212,6 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     And I wait for the page to load
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 30 seconds
+    And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element

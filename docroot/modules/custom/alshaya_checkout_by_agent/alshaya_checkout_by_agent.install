@@ -36,13 +36,13 @@ function alshaya_checkout_by_agent_uninstall() {
 function alshaya_checkout_by_agent_install() {
   // Update translations.
   $strings = [
-    'Order assisted by Smart Agent' => [
+    'Order assisted by ALX InStorE' => [
       'ar' => 'طلب بمساعدة وكيل',
     ],
     'End Transaction' => [
       'ar' => 'إنهاء المعاملة',
     ],
-    'Smart Agent: @name' => [
+    'ALX InStorE: @name' => [
       'ar' => '@name :الوكيل',
     ],
     'Share basket with customer via' => [
@@ -59,6 +59,9 @@ function alshaya_checkout_by_agent_install() {
     ],
     'Share' => [
       'ar' => 'إرسال',
+    ],
+    'Smart agent, we have not been able to confirm your location. Please enable location services and allow location tracking then try to log in again.' => [
+      'ar' => 'أيها الوكيل ، لم نتمكن من تأكيد موقعك. يرجى تمكين خدمات الموقع والسماح بتتبع الموقع ثم حاول تسجيل الدخول مرة أخرى.'
     ],
   ];
 

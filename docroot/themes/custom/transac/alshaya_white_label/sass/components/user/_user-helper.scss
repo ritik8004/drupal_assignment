@@ -180,6 +180,8 @@
     .form-type-password .form-text {
       font-size: 1rem;
       letter-spacing: 0.1875rem;
+
+      @include arabic-letter-spacing;
     }
 
     .form-item:first-child {

@@ -17,6 +17,8 @@ variables:
   language_filters: ''
   language_promotional_filter: ''
   create_account: 'Create An Account'
+  spc_search_byname: 'Ultra Clean'
+  spc_search_byID: 'VSAESSE'
   sign_in: 'Sign In'
   find_store: 'Find a Store'
   language_link: 'العربية'

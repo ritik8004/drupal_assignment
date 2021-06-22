@@ -18,6 +18,8 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_product_options\ProductOptionsHelper;
+use Drupal\acq_sku\CartFormHelper;
 
 /**
  * Provides a resource to get product details for drawer.
@@ -75,6 +77,20 @@ class ProductInfoResource extends ResourceBase {
   protected $languageManager;
 
   /**
+   * Product Options Helper.
+   *
+   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
+   */
+  protected $optionsHelper;
+
+  /**
+   * Cart Form Helper service.
+   *
+   * @var \Drupal\acq_sku\CartFormHelper
+   */
+  protected $cartFormHelper;
+
+  /**
    * DrawerInfo constructor.
    *
    * @param array $configuration
@@ -99,6 +115,10 @@ class ProductInfoResource extends ResourceBase {
    *   Module handler service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language manager.
+   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $options_helper
+   *   Product Options Helper.
+   * @param \Drupal\acq_sku\CartFormHelper $cartform_helper
+   *   Cart Form Helper.
    */
   public function __construct(
     array $configuration,
@@ -111,7 +131,9 @@ class ProductInfoResource extends ResourceBase {
     SkuManager $sku_manager,
     ProductInfoHelper $product_info_helper,
     ModuleHandlerInterface $module_handler,
-    LanguageManagerInterface $language_manager
+    LanguageManagerInterface $language_manager,
+    ProductOptionsHelper $options_helper,
+    CartFormHelper $cartform_helper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuInfoHelper = $sku_info_helper;
@@ -120,6 +142,8 @@ class ProductInfoResource extends ResourceBase {
     $this->productInfoHelper = $product_info_helper;
     $this->moduleHandler = $module_handler;
     $this->languageManager = $language_manager;
+    $this->optionsHelper = $options_helper;
+    $this->cartFormHelper = $cartform_helper;
   }
 
   /**
@@ -137,7 +161,9 @@ class ProductInfoResource extends ResourceBase {
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('acq_sku.product_info_helper'),
       $container->get('module_handler'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('alshaya_product_options.helper'),
+      $container->get('acq_sku.cart_form_helper')
     );
   }
 
@@ -177,6 +203,10 @@ class ProductInfoResource extends ResourceBase {
 
         foreach ($configurables ?? [] as $attribute_data) {
           $attribute_code = $attribute_data['code'];
+
+          // Check for the grouped attributes (alternate options).
+          $alternates = $this->optionsHelper->getSizeGroup($attribute_code);
+
           $configurable_attributes[$attribute_code] = [
             'is_pseudo_attribute' => $isColorSplitEnabled
             && ((int) $attribute_data['attribute_id'] === (int) AlshayaColorSplitManager::PSEUDO_COLOR_ATTRIBUTE_CODE)
@@ -187,11 +217,34 @@ class ProductInfoResource extends ResourceBase {
             'position' => $attribute_data['position'],
             'id' => $attribute_data['attribute_id'],
             'values' => [],
+            'is_group' => ($alternates ? TRUE : FALSE),
+            'alternates' => $alternates,
           ];
-          foreach ($attribute_data['values'] as $value) {
+
+          $sorted_values = $attribute_data['values'];
+          if ($this->cartFormHelper->isAttributeSortable($attribute_code)) {
+            $sorted_values = Configurable::sortConfigOptions($attribute_data['values'], $attribute_code);
+          }
+
+          foreach ($sorted_values as $value) {
+            $value_id = $value['value_id'];
+
+            // Prepare labels for the grouped attributes (alternate options).
+            if ($alternates) {
+              foreach ($cart_combinations['attribute_sku'][$attribute_code][$value_id] ?? [] as $child_sku_code) {
+                $child_sku = SKU::loadFromSku($child_sku_code, $sku->language()->getId());
+
+                if (!($child_sku instanceof SKU)) {
+                  continue;
+                }
+
+                $group_labels = $this->getAlternativeValues($alternates, $child_sku);
+              }
+            }
+
             $configurable_attributes[$attribute_code]['values'][] = [
-              'value' => $value['value_id'],
-              'label' => $value['label'],
+              'value' => $value_id,
+              'label' => $group_labels ?? $value['label'],
             ];
           }
         }
@@ -325,6 +378,14 @@ class ProductInfoResource extends ResourceBase {
         // same as add to cart form.
         $sorted_variants = array_values(array_values($product_tree['combinations']['attribute_sku'])[0])[0];
         $data['configurable_combinations']['firstChild'] = reset($sorted_variants);
+
+        // Get the first child from variants of selected parent.
+        foreach (Configurable::getChildSkus($product_tree['parent']) as $child_sku) {
+          if (isset($product_tree['products'][$child_sku])) {
+            $data['configurable_combinations']['firstChild'] = $child_sku;
+            break;
+          }
+        }
       }
 
       $response = new ResourceResponse($data);
@@ -393,6 +454,22 @@ class ProductInfoResource extends ResourceBase {
     }
 
     return [];
+  }
+
+  /**
+   * Helper function to get alternative group values of the variant.
+   *
+   * @return array
+   *   The alternative array.
+   */
+  private function getAlternativeValues($alternates, $child) {
+    $group_data = [];
+    // Get all alternate labels from child sku.
+    foreach ($alternates as $alternate => $alternate_label) {
+      $attribute_code = 'attr_' . $alternate;
+      $group_data[$alternate_label] = $child->get($attribute_code)->getString();
+    }
+    return $group_data;
   }
 
 }

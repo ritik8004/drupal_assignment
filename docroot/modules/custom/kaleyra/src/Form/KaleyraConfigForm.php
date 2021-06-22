@@ -52,7 +52,7 @@ class KaleyraConfigForm extends ConfigFormBase {
       '#type' => 'select',
       '#title' => $this->t('API Version'),
       '#options' => [
-        0 => 'v4',
+        'v4' => 'v4',
       ],
       '#description' => $this->t('The API version which will be used while sending messages. Currently the module only supports V4. Hence, this field stays disabled.'),
       '#default_value' => $config->get('api_version'),
@@ -117,13 +117,18 @@ class KaleyraConfigForm extends ConfigFormBase {
     $config
       ->set('api_domain', $form_state->getValue('api_domain'))
       ->set('api_key', $form_state->getValue('api_key'))
-      ->set('api_version', $form_state->getValue('api_version'))
       ->set('sender_identifier', $form_state->getValue('sender_identifier'))
       ->set('unicode', $form_state->getValue('unicode'))
       ->set('whatsapp_from', $form_state->getValue('whatsapp_from'))
       ->set('whatsapp_api_key', $form_state->getValue('whatsapp_api_key'))
-      ->set('whatsapp_sid', $form_state->getValue('whatsapp_sid'))
-      ->save();
+      ->set('whatsapp_sid', $form_state->getValue('whatsapp_sid'));
+
+    // API version is disabled so let's not set empty value if not available.
+    if ($form_state->getValue('api_version')) {
+      $config->set('api_version', $form_state->getValue('api_version'));
+    }
+
+    $config->save();
 
     parent::submitForm($form, $form_state);
   }

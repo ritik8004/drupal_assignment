@@ -19,6 +19,7 @@ variables:
   create_account: 'create an account'
   sign_in: 'Sign in'
   find_store: 'Find Store'
+  spc_search_byname: ''
   add_to_cart_link: 'add to basket'
   subtotal: 'subtotal'
   order_total: 'order total'

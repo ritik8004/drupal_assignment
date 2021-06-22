@@ -5,7 +5,6 @@
   background: $primary_btn_bg;
   color: $primary_btn_text;
   display: inline-block;
-  text-transform: uppercase;
   height: 2.5rem;
   width: 100%;
   padding: 0.625rem 1.25rem;
@@ -14,6 +13,8 @@
 
   @include breakpoint($only-mobile) {
     height: 2.1875rem;
+    padding-#{$left}: 0.5rem;
+    padding-#{$right}: 0.5rem;
   }
 }
 
@@ -61,7 +62,6 @@
   border: 1px solid $primary_btn_bg;
   z-index: 1;
   text-align: center;
-  text-transform: uppercase;
   padding: 0.5rem 1.25rem;
   margin: 1.5rem 1.25rem 0;
 
@@ -75,4 +75,11 @@
 
 .is-not-buyable:hover {
   color: $primary_btn_bg;
+}
+
+.addtobag-button,
+.product-drawer-content-wrapper .config-form-addtobag-button {
+  &:hover {
+    background: $plp-primary-cta-hover-bg;
+  }
 }

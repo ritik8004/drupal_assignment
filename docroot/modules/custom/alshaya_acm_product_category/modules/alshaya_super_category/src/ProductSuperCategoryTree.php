@@ -19,6 +19,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product\ProductCategoryHelper;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Class Product Super Category Tree.
@@ -54,6 +55,13 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   protected $productCategoryHelper;
 
   /**
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
@@ -80,6 +88,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   The path alias manager.
    * @param \Drupal\alshaya_acm_product\ProductCategoryHelper $product_category_helper
    *   Product Category Helper service object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
   public function __construct(ProductCategoryTreeInterface $product_category_tree,
                               RequestStack $request_stack,
@@ -92,11 +102,12 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
                               Connection $connection,
                               ConfigFactoryInterface $config_factory,
                               AliasManagerInterface $alias_manager,
-                              ProductCategoryHelper $product_category_helper) {
+                              ProductCategoryHelper $product_category_helper,
+                              ModuleHandlerInterface $module_handler) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $request_stack, $current_path, $connection, $product_category_helper);
+    parent::__construct($entity_type_manager, $entity_repository, $language_manager, $cache, $route_match, $request_stack, $current_path, $connection, $product_category_helper, $module_handler);
   }
 
   /**

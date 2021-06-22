@@ -60,6 +60,10 @@
       color: $primary_btn_text;
       font-weight: 600;
     }
+
+    &:hover {
+      background: $plp-primary-cta-hover-bg;
+    }
   }
 }
 
@@ -86,7 +90,10 @@
   @include breakpoint($tablet) {
     width: 5rem;
   }
+}
 
+.form-select-wrapper,
+.alshaya-select-wrapper {
   .alshayaSelect {
     &__value-container {
       @include breakpoint($tablet) {

@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_pdp_react module.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * New pdp translations.
+ */
+function alshaya_pdp_react_update_8001() {
+  _alshaya_pdp_react_translations();
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_pdp_react_install() {
+  _alshaya_pdp_react_translations();
+}
+
+/**
+ * Method for new pdp translations.
+ *
+ * @return void
+ */
+function _alshaya_pdp_react_translations() {
+  // Add translations.
+  $strings = [
+    'Add To Bag' => [
+      'ar' => 'أضف الى الحقيبة',
+    ],
+    'product details' => [
+      'ar' => 'تفاصيل المنتج',
+    ],
+    'Share this page' => [
+      'ar' => 'شارك هذه الصفحة',
+    ],
+    'Copy page link' => [
+      'ar' => 'نسخ رابط الصفحة',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

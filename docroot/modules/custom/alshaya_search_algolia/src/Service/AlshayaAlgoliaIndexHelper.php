@@ -833,8 +833,10 @@ class AlshayaAlgoliaIndexHelper {
       $index_product_image_url = FALSE;
     }
 
+    $swatch_data = [];
     foreach ($swatches['swatches'] as $key => $swatch) {
-      if ($index_product_image_url && ($swatch['swatch_type'] == 'image')) {
+      // Check if color swatch is enabled and image url exist.
+      if ($index_product_image_url && !empty($swatch['image_url'])) {
         $child = SKU::loadFromSku($swatch['child_sku_code']);
         $swatch_product_image = $child->getThumbnail();
         // If we have image for the product.
@@ -842,12 +844,12 @@ class AlshayaAlgoliaIndexHelper {
           $url = file_create_url($swatch_product_image['file']->getFileUri());
           $swatch['product_image_url'] = $url;
         }
-      }
 
-      $swatches['swatches'][$key] = $swatch;
+        $swatch_data['swatches'][$key] = $swatch;
+      }
     }
 
-    return $swatches;
+    return $swatch_data;
   }
 
   /**
@@ -1001,7 +1003,7 @@ class AlshayaAlgoliaIndexHelper {
     try {
       $backend_config = $this->configFactory->get('search_api.server.algolia')->get('backend_config');
       $client_config = $this->configFactory->get('search_api.index.alshaya_algolia_index')->get('options');
-      $client = new Client($backend_config['application_id'], $backend_config['api_key']);
+      $client = SearchClient::create($backend_config['application_id'], $backend_config['api_key']);
       $index_name = $client_config['algolia_index_name'];
 
       foreach ($this->languageManager->getLanguages() as $language) {
@@ -1016,8 +1018,9 @@ class AlshayaAlgoliaIndexHelper {
           $settings['replicas'][] = $replica;
         }
 
-        $index->setSettings($settings, TRUE);
-
+        $index->setSettings($settings, [
+          'forwardToReplicas' => TRUE,
+        ]);
         foreach ($sorts as $sort) {
           $replica = $name . '_' . implode('_', $sort);
           $replica_index = $client->initIndex($replica);
@@ -1026,7 +1029,9 @@ class AlshayaAlgoliaIndexHelper {
             'desc(stock)',
             $sort['direction'] . '(' . $sort['field'] . ')',
           ] + $ranking;
-          $replica_index->setSettings($replica_settings);
+          $replica_index->setSettings($replica_settings, [
+            'forwardToReplicas' => TRUE,
+          ]);
         }
       }
       sleep(3);

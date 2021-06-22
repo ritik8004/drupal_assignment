@@ -417,8 +417,10 @@ function alshaya_advanced_page_node_update(EntityInterface $node) {
 function alshaya_advanced_page_node_delete(EntityInterface $node) {
   if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
     $term = $node->get('field_product_category')->entity;
-    Cache::invalidateTags(['term:' . $term->id()]);
-    \Drupal::cache('data')->delete('advanced_page:terms:nodes');
+    if ($term instanceof TermInterface) {
+      Cache::invalidateTags(['term:' . $term->id()]);
+      \Drupal::cache('data')->delete('advanced_page:terms:nodes');
+    }
   }
 }
 

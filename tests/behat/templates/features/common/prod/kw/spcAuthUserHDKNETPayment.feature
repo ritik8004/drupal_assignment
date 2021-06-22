@@ -2,11 +2,7 @@
 Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
 
   Background:
-    Given I am on "user/login"
-    And I wait 10 seconds
-    Then I fill in "edit-name" with "{spc_auth_user_email}"
-    And I fill in "edit-pass" with "{spc_auth_user_password}"
-    Then I press "edit-submit"
+    Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
     And I wait 10 seconds
     Then I should be on "/user" page
     When I am on "{spc_basket_page}"
@@ -15,10 +11,10 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
 
   @cc @hd @Knet
   Scenario: As an authenticated user, I should be able to checkout using KNET payment method
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -38,13 +34,12 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I wait 10 seconds
     And I select "Eidity [KNET]" from dropdown ".paymentselect"
     And I wait 5 seconds
-    And I press "Submit"
+    And I press "proceed"
     And I wait 5 seconds
-    And I press "Cancel"
+    And I press "cancel"
     And I wait for AJAX to finish
     And I wait 30 seconds
     Then I should be on "/checkout"
-    And print current URL
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -53,10 +48,10 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I follow "{language_link}"
     And I wait for the page to load
     And I wait for AJAX to finish
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -82,7 +77,6 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     And I press "الغاء"
     And I wait for AJAX to finish
     And I wait 50 seconds
-    And print current URL
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -91,10 +85,10 @@ Feature: SPC Checkout Home Delivery Knet Payment for Authenticated User
     When I click the anchor link ".dialog-off-canvas-main-canvas .language--switcher.mobile-only-block li.{mobile_language_class} a" on page
     And I wait 10 seconds
     And I wait for the page to load
-    When I select a product in stock on ".views-element-container.block.block-views.block-views-blockalshaya-product-list-block-1"
+    When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait 10 seconds
     And I wait for the page to load
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element

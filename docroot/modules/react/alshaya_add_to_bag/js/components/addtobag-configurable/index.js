@@ -78,7 +78,11 @@ export default class AddToBagConfigurable extends React.Component {
 
     // To make sure that markup is present in DOM.
     setTimeout(() => {
-      document.querySelector('body').classList.add('overlay-product-modal');
+      if (window.innerWidth > 1023) {
+        document.querySelector('html').classList.add('overlay-product-modal');
+      } else {
+        document.querySelector('body').classList.add('mobile--overlay');
+      }
     }, 150);
   };
 
@@ -86,7 +90,11 @@ export default class AddToBagConfigurable extends React.Component {
    * Callback function for drawer close action.
    */
   onDrawerClose = () => {
-    document.querySelector('body').classList.remove('overlay-product-modal');
+    if (window.innerWidth > 1023) {
+      document.querySelector('html').classList.remove('overlay-product-modal');
+    } else {
+      document.querySelector('body').classList.remove('mobile--overlay');
+    }
     setTimeout(() => {
       this.setState({ drawerStatus: 'closed' });
     }, 400);
