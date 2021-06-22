@@ -4,5 +4,5 @@ description: Alshaya implementation of RCS. Check RCS module.
 core: 8.x
 core_version_requirement: ^8 || ^9
 dependencies:
-  - rcs:rcs
+  - rcs_placeholders:rcs_placeholders
   - rcs_magento:rcs_magento
