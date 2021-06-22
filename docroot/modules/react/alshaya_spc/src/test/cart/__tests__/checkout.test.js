@@ -399,38 +399,63 @@ describe('Checkout', () => {
       });
     });
 
-    it('Test getPaymentMethods()', async () => {
-      const data = [
-        {code: "checkout_com_upapi_vault", title: "Saved Cards (Checkout.com UPAPI)"},
-        {code: "checkout_com_upapi", title: "Credit Card (Checkout.com)"},
-        {code: "cybersource", title: "Credit Card (Cybersource)"},
-        {code: "checkmo", title: "Check / Money order"},
-        {code: "checkout_com_upapi_fawry", title: "Fawry Payment"},
-        {code: "cashondelivery", title: "Cash On Delivery"},
-      ];
+    describe('Test getPaymentMethods()', () => {
+      it('With Shipping type', async () => {
+        const data = [
+          {code: "checkout_com_upapi_vault", title: "Saved Cards (Checkout.com UPAPI)"},
+          {code: "checkout_com_upapi", title: "Credit Card (Checkout.com)"},
+          {code: "cybersource", title: "Credit Card (Cybersource)"},
+          {code: "checkmo", title: "Check / Money order"},
+          {code: "checkout_com_upapi_fawry", title: "Fawry Payment"},
+          {code: "cashondelivery", title: "Cash On Delivery"},
+        ];
 
-      cartData.shipping = {
-        type: 'home_delivery',
-      };
+        cartData.shipping = {
+          method: {
+            type: 'home_delivery',
+          },
+        };
 
-      axios
-        .mockResolvedValueOnce({data: cartData, status: 200 })
-        .mockResolvedValueOnce({data, status: 200});
+        axios
+          .mockResolvedValueOnce({data: cartData, status: 200 })
+          .mockResolvedValueOnce({data, status: 200});
 
-      jest
-        .spyOn(window.commerceBackend, 'getCartId')
-        .mockImplementation(() => '1234');
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
 
-      const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
+        const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
 
-      let result = await getPaymentMethods();
+        let result = await getPaymentMethods();
 
-      expect(axios).toHaveBeenCalled();
-      expect(result.length).toEqual(6);
-      expect(result[0].code).toEqual('checkout_com_upapi_vault');
-      expect(result[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
-      expect(result[5].code).toEqual('cashondelivery');
-      expect(result[5].title).toEqual('Cash On Delivery');
+        expect(axios).toHaveBeenCalled();
+        expect(result.length).toEqual(6);
+        expect(result[0].code).toEqual('checkout_com_upapi_vault');
+        expect(result[0].title).toEqual('Saved Cards (Checkout.com UPAPI)');
+        expect(result[5].code).toEqual('cashondelivery');
+        expect(result[5].title).toEqual('Cash On Delivery');
+      });
+      it('With null value', async () => {
+        const data = {};
+
+        cartData.shipping = {
+          method: {
+            type: {},
+          },
+        };
+
+        axios
+          .mockResolvedValueOnce({data: cartData, status: 200 })
+          .mockResolvedValueOnce({data, status: 200});
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
+
+        let result = await getPaymentMethods();
+        expect(result).toEqual({});
+      });
     });
   });
 });
