@@ -492,7 +492,10 @@ const getCart = async () => {
     return new Promise((resolve) => resolve(error));
   }
 
-  // Store formatted data.
+  // Format data.
+  response.data = formatCart(response.data);
+
+  // Store the formatted data.
   window.commerceBackend.setRawCartDataInStorage(formatCart(response.data));
 
   // Return formatted cart.
