@@ -18,7 +18,6 @@ const ReviewDescription = ({
 }) => {
   let newPdp = isNewPdpLayout;
   newPdp = (newPdp === undefined) ? false : newPdp;
-
   if (reviewDescriptionData !== undefined) {
     const date = getDate(reviewDescriptionData.SubmissionTime, getLanguageCode());
     return (
@@ -44,43 +43,63 @@ const ReviewDescription = ({
           >
             <ReviewPhotos photoCollection={reviewDescriptionData.Photos} />
           </ConditionalView>
-          <div className="review-inline-feedback">
-            <div>
-              <ConditionalView condition={reviewDescriptionData.IsRecommended !== false
-                && reviewDescriptionData.IsRecommended !== null}
-              >
-                <div className="review-recommendation">
-                  <span className="review-recommendation-icon" />
-                  <span>{`${reviewDescriptionData.IsRecommended ? getStringMessage('yes') : getStringMessage('no')},`}</span>
-                  <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
-                </div>
+          <ConditionalView condition={reviewDescriptionData.IsRecommended
+            || !reviewDescriptionData.IsSyndicated}
+          >
+            <div className="review-inline-feedback">
+              <div>
+                <ConditionalView condition={reviewDescriptionData.IsRecommended !== false
+                  && reviewDescriptionData.IsRecommended !== null}
+                >
+                  <div className="review-recommendation">
+                    <span className="review-recommendation-icon" />
+                    <span>{`${reviewDescriptionData.IsRecommended ? getStringMessage('yes') : getStringMessage('no')},`}</span>
+                    <span className="review-recommendation-text">{getStringMessage('review_recommendation_text')}</span>
+                  </div>
+                </ConditionalView>
+                <ConditionalView condition={!reviewDescriptionData.IsSyndicated}>
+                  <div className="review-feedback">
+                    <ReviewFeedback
+                      negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
+                      positiveCount={reviewDescriptionData.TotalPositiveFeedbackCount}
+                      contentId={reviewDescriptionData.Id}
+                      contentType="review"
+                    />
+                  </div>
+                </ConditionalView>
+              </div>
+              {!reviewDescriptionData.IsSyndicated
+                && (
+                <ReviewCommentForm
+                  ReviewId={reviewDescriptionData.Id}
+                />
+                )}
+              <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
+                <ReviewResponseDisplay
+                  reviewId={reviewDescriptionData.Id}
+                  reviewResponses={reviewDescriptionData.ClientResponses}
+                />
               </ConditionalView>
-              <div className="review-feedback">
-                <ReviewFeedback
-                  negativeCount={reviewDescriptionData.TotalNegativeFeedbackCount}
-                  positiveCount={reviewDescriptionData.TotalPositiveFeedbackCount}
-                  isSyndicatedReview={reviewDescriptionData.IsSyndicated}
-                  contentId={reviewDescriptionData.Id}
-                  contentType="review"
+              <div className="review-comment-display">
+                <ReviewCommentDisplay
+                  reviewId={reviewDescriptionData.Id}
+                  reviewsComment={reviewsComment}
                 />
               </div>
             </div>
-            <ReviewCommentForm
-              ReviewId={reviewDescriptionData.Id}
-            />
-            <ConditionalView condition={reviewDescriptionData.TotalClientResponseCount > 0}>
-              <ReviewResponseDisplay
-                reviewId={reviewDescriptionData.Id}
-                reviewResponses={reviewDescriptionData.ClientResponses}
-              />
-            </ConditionalView>
-            <div className="review-comment-display">
-              <ReviewCommentDisplay
-                reviewId={reviewDescriptionData.Id}
-                reviewsComment={reviewsComment}
-              />
+          </ConditionalView>
+          {reviewDescriptionData.IsSyndicated
+            && (
+            <div className="review-syndicated">
+              <div className="review-syndicated-image">
+                <span><img src={reviewDescriptionData.SyndicationSource.LogoImageUrl} /></span>
+              </div>
+              <div className="review-syndicated-source">
+                <span>{`${getStringMessage('review_syndicated_text')} `}</span>
+                <span>{reviewDescriptionData.SyndicationSource.Name}</span>
+              </div>
             </div>
-          </div>
+            )}
         </div>
       </div>
     );
