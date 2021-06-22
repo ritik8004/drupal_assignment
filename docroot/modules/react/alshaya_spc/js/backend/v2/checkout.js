@@ -122,7 +122,6 @@ const getHomeDeliveryShippingMethods = (shipping) => {
 
 /**
  * Get default address from customer addresses.
- * @todo implement this
  *
  * @param {object} data
  *   Cart data.
@@ -131,7 +130,18 @@ const getHomeDeliveryShippingMethods = (shipping) => {
  *   Address if found.
  */
 const getDefaultAddress = (data) => {
-  logger.info(`${data}`);
+  if (_.isEmpty(data.customer) || _.isEmpty(data.customer.addresses)) {
+    return null;
+  }
+
+  // If address is set as default for shipping.
+  const key = _.findIndex(data.customer.addresses, (address) => address.default_shipping === '1');
+  if (key >= 0) {
+    return data.customer.addresses[key];
+  }
+
+  // Return first address.
+  return _.first(data.customer.addresses);
 };
 
 /**
@@ -266,7 +276,7 @@ const selectHd = (address, method, billing, shippingMethods) => {
 const applyDefaults = (data, uid) => {
   logger.info(`${data}${uid}`);
   getHomeDeliveryShippingMethods({});
-  getDefaultAddress({});
+  getDefaultAddress(data);
   selectHd({}, {}, {}, {});
 };
 
@@ -495,7 +505,7 @@ window.commerceBackend.addPaymentMethod = (data) => updateCart(data);
  *   A promise object.
  */
 const getProcessedCheckoutData = async (cartData) => {
-  let data = cartData;
+  let data = _.cloneDeep(cartData);
   if (typeof data.error !== 'undefined' && data.error === true) {
     return data;
   }
