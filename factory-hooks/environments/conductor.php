@@ -1086,6 +1086,11 @@ $conductors = [
     'hmac_secret' => 'MTY3MjFjN2EtY2UwOS00',
     'site_id' => 303,
   ],
+  'aeojo_uat' => [
+    'hmac_id' => '3f2842c61c4e464180340b8e3bdc277b',
+    'hmac_secret' => 'YjNjMjNhY2YtMGM3MC00',
+    'site_id' => 427,
+  ],
   'aeokw_prod' => [
     'site_id' => 205,
   ],
@@ -1103,6 +1108,9 @@ $conductors = [
   ],
   'aeoqa_prod' => [
     'site_id' => 294,
+  ],
+  'aeojo_prod' => [
+    'site_id' => 428,
   ],
   // Muji
   'muae_dev' => [
