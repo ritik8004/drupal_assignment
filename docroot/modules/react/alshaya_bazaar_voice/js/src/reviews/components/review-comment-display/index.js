@@ -26,7 +26,6 @@ class ReviewCommentDisplay extends React.Component {
                   <ReviewFeedback
                     negativeCount={comment.TotalNegativeFeedbackCount}
                     positiveCount={comment.TotalPositiveFeedbackCount}
-                    isSyndicatedReview={comment.IsSyndicated}
                     contentId={comment.Id}
                     contentType="review_comment"
                   />
