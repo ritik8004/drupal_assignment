@@ -14,6 +14,39 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Adds Benefit Pay payment method and other related data.
+ */
+function alshaya_spc_update_8013() {
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+  $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+  $benefitPay = $checkout_options_manager->loadPaymentMethod('benefitpay', 'Benefit Pay');
+  $benefitPay = $benefitPay->hasTranslation('ar')
+    ? $benefitPay->getTranslation('ar')
+    : $benefitPay->addTranslation('ar', []);
+  // @todo Add Arabic label for Benefit pay.
+  $benefitPay->setName('Benefit Pay Arabic');
+  $benefitPay->save();
+
+  // Disable new fawry method by default
+  $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
+  $data = $config->get('exclude_payment_methods');
+  $data['benefitpay'] = 'benefitpay';
+  $config->set('exclude_payment_methods', $data);
+  $config->set('refund_exclude_payment_methods', $data);
+  $config->save();
+
+  // Add translations.
+  module_load_include('inc', 'alshaya_spc', 'alshaya_spc.translations');
+  // @todo Update Benefit pay static strings and translations.
+  $translations = _alshaya_spc_get_translations('v4');
+  if ($translations) {
+    alshaya_i18n_save_translations($translations);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * [6.3.0] Remove old cybersource payment method.
  */
 function alshaya_spc_update_8012() {
