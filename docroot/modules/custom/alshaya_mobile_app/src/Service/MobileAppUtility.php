@@ -700,14 +700,11 @@ class MobileAppUtility {
         'display_view_all' => isset($term->display_view_all) ? (int) $term->display_view_all : NULL,
       ];
 
-      // Check for super category status.
-      if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
-        // Get all brand logo image data.
-        $brand_logos = $this->productCategoryTree->getBrandIcons($term->tid);
-        // Check for brand logos.
-        if (!empty($brand_logos)) {
-          $record['brand_logos'] = $brand_logos;
-        }
+      // Get all brand logo image data.
+      $brand_logos = $this->productCategoryTree->getBrandIcons($term->tid);
+      // Check for brand logos.
+      if (!empty($brand_logos)) {
+        $record['brand_logos'] = $brand_logos;
       }
 
       if (is_object($file = $this->productCategoryTree->getMobileBanner($term->tid, $langcode))

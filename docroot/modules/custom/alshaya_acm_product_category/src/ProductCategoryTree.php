@@ -1138,37 +1138,4 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     return $this->cacheName;
   }
 
-  /**
-   * Gets the brand logos.
-   *
-   * @param int $tid
-   *   Taxonomy term id.
-   *
-   * @return object
-   *   Object containing fields data.
-   */
-  public function getBrandIcons($tid) {
-    // Supercategory image fields.
-    $fields = [
-      'active_image' => 'field_logo_active_image',
-      'inactive_image' => 'field_logo_inactive_image',
-      'header_image' => 'field_logo_header_image',
-    ];
-    $brand_logos = $brand_logo_data = [];
-    foreach ($fields as $field_key => $field) {
-      $brand_logo_data[$field_key] = $this->getImageField($tid, $field);
-    }
-    foreach ($brand_logo_data as $key => $logo_data) {
-      $id = "field_logo_{$key}_target_id";
-      if (!empty($logo_data)) {
-        $image = $this->fileStorage->load($logo_data->$id);
-        $brand_logos[$key] = [
-          'url' => file_create_url($image->getFileUri()),
-        ];
-      }
-    }
-
-    return $brand_logos;
-  }
-
 }

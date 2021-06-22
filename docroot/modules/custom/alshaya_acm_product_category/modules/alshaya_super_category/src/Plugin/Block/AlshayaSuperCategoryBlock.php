@@ -19,7 +19,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Theme\ThemeManager;
 use Drupal\Core\Entity\EntityRepository;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Provides alshaya super category menu block.
@@ -214,25 +213,14 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       if ($term_id == $current_term['id']) {
         $term_info['class'] .= ' active';
       }
+
       // Get brand icons of supercategory.
-      // No need to check supercategory status.
-      // As it already checked in start.
       $brand_icons = $this->productCategoryTree->getBrandIcons($term_id);
       if ((isset($brand_icons['active_image']) && !empty($brand_icons['active_image']))
       && (isset($brand_icons['inactive_image']) && !empty($brand_icons['inactive_image']))) {
         $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ?
         $brand_icons['active_image']['url'] : $brand_icons['inactive_image']['url'];
         $term_info['inactive_path'] = $brand_icons['active_image']['url'];
-      }
-      else {
-        $theme = $this->themeManager->getActiveTheme();
-        $term_info_en = $term_data_en[$term_id];
-        $base_uri = $this->request->getCurrentRequest()->getSchemeAndHttpHost();
-        $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
-        $inactive_path = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '.svg';
-        $active_path = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '-active.svg';
-        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ? $active_path : $inactive_path;
-        $term_info['inactive_path'] = $active_path;
       }
     }
 
