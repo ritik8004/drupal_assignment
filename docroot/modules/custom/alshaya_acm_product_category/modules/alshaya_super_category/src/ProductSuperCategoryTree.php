@@ -371,6 +371,10 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Object containing fields data.
    */
   public function getBrandIcons($tid) {
+    // Check for super category status.
+    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      return [];
+    }
     // Supercategory image fields.
     $fields = [
       'active_image' => 'field_logo_active_image',
@@ -378,10 +382,6 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       'header_image' => 'field_logo_header_image',
     ];
     $brand_logos = $brand_logo_data = [];
-    // Check for super category status.
-    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
-      return [];
-    }
     $term_data = $this->getCategoryRootTerms();
     $current_language = $this->languageManager->getCurrentLanguage()->getId();
     // Get all the terms data in English for preparing label.
