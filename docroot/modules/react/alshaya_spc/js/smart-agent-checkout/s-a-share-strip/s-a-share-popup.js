@@ -7,6 +7,7 @@ import dispatchCustomEvent from '../../../../js/utilities/events';
 import {
   removeFullScreenLoader,
   showFullScreenLoader,
+  validateInfo,
 } from '../../utilities/checkout_util';
 
 const getInputField = (shareByContext) => {
@@ -30,64 +31,119 @@ const getInputField = (shareByContext) => {
   );
 };
 
-const validateFields = () => {
+const displayErrorMessage = (id, message) => {
+  document.getElementById(id).innerHTML = message;
+  document.getElementById(id).classList.add('error');
+};
+
+const removeErrorMessage = (id) => {
+  document.getElementById(id).innerHTML = '';
+  document.getElementById(id).classList.remove('error');
+};
+
+const validateNonEmptyInputs = () => {
   // Since we have only one input field.
   const element = document.querySelector('.smart-agent-share-modal-content-region input');
   const name = element.getAttribute('name');
-  if (element.value.length < 1) {
-    if (name === 'smart-agent-share-mobile') {
-      document.getElementById(`${name}-error`).innerHTML = Drupal.t('Enter Mobile Number');
-    } else {
-      document.getElementById(`${name}-error`).innerHTML = Drupal.t('Enter Email');
+
+  // Mobile number validation.
+  if (name === 'smart-agent-share-mobile') {
+    if (element.value.length < 1 || element.value.match(/^[0-9]+$/) === null) {
+      displayErrorMessage(`${name}-error`, Drupal.t('Please enter valid mobile number.'));
+      return true;
     }
-    document.getElementById(`${name}-error`).classList.add('error');
-    return true;
+  }
+  // Email validation.
+  if (name === 'smart-agent-share-email') {
+    if (element.value.length < 1) {
+      displayErrorMessage(`${name}-error`, Drupal.t('Please enter your email address.'));
+      return true;
+    }
   }
 
-  document.getElementById(`${name}-error`).innerHTML = '';
-  document.getElementById(`${name}-error`).classList.remove('error');
+  removeErrorMessage(`${name}-error`);
   return false;
+};
+
+const validateInputValues = () => {
+  // Since we have only one input field.
+  const element = document.querySelector('.smart-agent-share-modal-content-region input');
+  const name = element.getAttribute('name');
+  const inputFieldKey = (name === 'smart-agent-share-mobile') ? 'mobile' : 'email';
+  const data = { [inputFieldKey]: element.value };
+  let hasError = false;
+  const validationRequest = validateInfo(data);
+  showFullScreenLoader();
+
+  return validationRequest.then((result) => {
+    if (result.status === 200 && result.data.status) {
+      // If not valid mobile number.
+      if (result.data.mobile === false) {
+        displayErrorMessage('smart-agent-share-mobile-error', Drupal.t('Please enter valid mobile number.'));
+        hasError = true;
+      } else if (result.data.email === 'invalid') {
+        // If not valid email.
+        displayErrorMessage('smart-agent-share-email-error', Drupal.t('Please enter your email address.'));
+        hasError = true;
+      } else {
+        removeErrorMessage(`${name}-error`);
+      }
+    }
+    removeFullScreenLoader();
+    return hasError;
+  });
 };
 
 const handleSubmit = (e) => {
   e.preventDefault();
-  const error = validateFields();
+
+  // FE validation to check if input is non empty.
+  const error = validateNonEmptyInputs();
   if (error) {
     return false;
   }
+  const { elements } = e.target;
   showFullScreenLoader();
-  // Get the share method type.
-  const shareMethod = e.target.elements['agent-share-method'].value;
-  let shareVal = '';
-  if (shareMethod === 'sms') {
-    shareVal = e.target.elements['smart-agent-share-mobile'].value;
-  } else if (shareMethod === 'email') {
-    shareVal = e.target.elements['smart-agent-share-email'].value;
-  } else if (shareMethod === 'wa') {
-    shareVal = e.target.elements['smart-agent-share-mobile'].value;
+
+  const validationRequest = validateInputValues();
+  if (validationRequest instanceof Promise) {
+    validationRequest.then((hasError) => {
+      if (hasError === false) {
+        // Get the share method type.
+        const shareMethod = elements['agent-share-method'].value;
+        let shareVal = '';
+        if (shareMethod === 'sms') {
+          shareVal = elements['smart-agent-share-mobile'].value;
+        } else if (shareMethod === 'email') {
+          shareVal = elements['smart-agent-share-email'].value;
+        } else if (shareMethod === 'wa') {
+          shareVal = elements['smart-agent-share-mobile'].value;
+        }
+
+        const cartData = Drupal.alshayaSpc.getCartData();
+
+        const postData = {
+          cartId: cartData.cart_id,
+          type: shareMethod,
+          value: shareVal,
+        };
+
+        // Post data to drupal api.
+        axios.post('rest/v1/share-cart', postData).then(() => {
+          dispatchCustomEvent('smartAgentClosePopup', {
+            status: true,
+          });
+          removeFullScreenLoader();
+        }).catch(() => {
+          // Processing of error here.
+          dispatchCustomEvent('smartAgentClosePopup', {
+            status: true,
+          });
+          removeFullScreenLoader();
+        });
+      }
+    });
   }
-
-  const cartData = Drupal.alshayaSpc.getCartData();
-
-  const postData = {
-    cartId: cartData.cart_id,
-    type: shareMethod,
-    value: shareVal,
-  };
-
-  // Post data to drupal api.
-  axios.post('rest/v1/share-cart', postData).then(() => {
-    dispatchCustomEvent('smartAgentClosePopup', {
-      status: true,
-    });
-    removeFullScreenLoader();
-  }).catch(() => {
-    // Processing of error here.
-    dispatchCustomEvent('smartAgentClosePopup', {
-      status: true,
-    });
-    removeFullScreenLoader();
-  });
 
   return false;
 };
