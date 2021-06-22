@@ -14,10 +14,11 @@
   $(document).ready(function ready() {
     if (
       !drupalSettings.rcsProcessed &&
-      typeof globalThis.rcsPhCommerceBackend !== 'undefined' &&
-      typeof globalThis.rcsPhSearchBackend !== 'undefined' &&
-      typeof globalThis.rcsPhRenderingEngine !== 'undefined' &&
-      typeof globalThis.rcsPhSearchRenderingEngine !== 'undefined'
+      typeof globalThis.rcsPhCommerceBackend !== 'undefined'
+      // Currently we do not have the following configured.
+      // typeof globalThis.rcsPhSearchBackend !== 'undefined' &&
+      // typeof globalThis.rcsPhRenderingEngine !== 'undefined' &&
+      // typeof globalThis.rcsPhSearchRenderingEngine !== 'undefined'
     ) {
       globalThis.rcs_ph_context = 'browser';
 
