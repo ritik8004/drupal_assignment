@@ -1,5 +1,0 @@
-services:
-  alshaya_rcs.path_processor_pdp:
-    class: Drupal\alshaya_rcs\PathProcessor\AlshayaRcsPathProcessor
-    tags:
-      - { name: path_processor_inbound, priority: 300 }

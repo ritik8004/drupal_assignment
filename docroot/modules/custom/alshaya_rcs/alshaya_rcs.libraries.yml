@@ -1,8 +1,7 @@
 main:
   js:
-    js/alshaya_rcs.js: {}
+    js/alshaya_rcs-exports.es5.js: {}
   dependencies:
     - core/jquery
     - core/drupalSettings
-    - rcs/main
     - rcs_magento/main

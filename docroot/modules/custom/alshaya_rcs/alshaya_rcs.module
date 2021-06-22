@@ -7,6 +7,5 @@ function alshaya_rcs_page_attachments_alter(array &$attachments) {
   $backend_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
   if ($backend_version == 2) {
     $attachments['#attached']['library'][] = 'alshaya_rcs/main';
-    $attachments['#attached']['drupalSettings']['pageEntityType'] = \Drupal::request()->query->get('page_entity_type');
   }
 }
