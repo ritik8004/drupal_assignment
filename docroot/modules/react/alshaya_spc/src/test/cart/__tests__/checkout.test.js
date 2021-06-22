@@ -60,6 +60,79 @@ describe('Checkout', () => {
       });
     });
 
+
+    describe('Test getDefaultAddress()', () => {
+      const getDefaultAddress = utilsRewire.__get__('getDefaultAddress');
+      it('With cart data', async () => {
+        axios.mockResolvedValueOnce({ data: cartData, status: 200 });
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '1234');
+
+        const response = await getCart();
+        const result = getDefaultAddress(response.data);
+        expect(result.customer_address_id).toEqual('69');
+        expect(result.city).toEqual('Al Awir');
+        expect(result.default_shipping).toEqual('1');
+      });
+
+      it('Without cart data', () => {
+        const result = getDefaultAddress({});
+        expect(result).toEqual(null);
+      });
+
+      it('Without customer data', () => {
+        const result = getDefaultAddress({ customer: 'foo' });
+        expect(result).toEqual(null);
+      });
+
+      it('Last item is default shipping', () => {
+        const result = getDefaultAddress(
+          {
+            customer: {
+              addresses: [
+                {
+                  default_shipping: '0',
+                  customer_address_id: '1',
+                },
+                {
+                  customer_address_id: '2',
+                },
+                {
+                  default_shipping: '1',
+                  customer_address_id: '3',
+                },
+              ],
+            },
+          },
+        );
+        expect(result.customer_address_id).toEqual('3');
+      });
+
+      it('No default shipping', () => {
+        const result = getDefaultAddress(
+          {
+            customer: {
+              addresses: [
+                {
+                  default_shipping: '0',
+                  customer_address_id: '1',
+                },
+                {
+                  customer_address_id: '2',
+                },
+                {
+                  default_shipping: null,
+                  customer_address_id: '3',
+                },
+              ],
+            },
+          },
+        );
+        expect(result.customer_address_id).toEqual('1');
+      });
+    });
+
     it('Test formatShippingEstimatesAddress() with extension attributes', async () => {
       axios.mockResolvedValueOnce({ data: cartData, status: 200 });
       jest
