@@ -379,32 +379,31 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
     ];
     $brand_logos = $brand_logo_data = [];
     // Check for super category status.
-    if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
-      $term_data = $this->getCategoryRootTerms();
-      $current_language = $this->languageManager->getCurrentLanguage()->getId();
-      // Get all the terms data in English for preparing label.
-      $term_data_en = ($current_language !== 'en') ? $this->getCategoryRootTerms('en') : $term_data;
-      $term_info_en = isset($term_data_en[$tid]) ? $term_data_en[$tid] : "";
-      if (!empty($term_info_en)) {
-        $theme = $this->themeManager->getActiveTheme();
-        $base_uri = $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
-        $term_clean_name = Html::cleanCssIdentifier(mb_strtolower($term_info_en['label']));
-        $brand_logos['active_image']['url'] = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '-active.svg';
-        $brand_logos['inactive_image']['url'] = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '.svg';
-      }
-      // Get supercategory logo data.
-      foreach ($fields as $field_key => $field) {
-        $brand_logo_data[$field_key] = $this->getImageField($tid, $field);
-      }
-      // Prepare image url for supercategory logo.
-      foreach ($brand_logo_data as $key => $logo_data) {
-        $id = "field_logo_{$key}_target_id";
-        if (!empty($logo_data)) {
-          $image = $this->fileStorage->load($logo_data->$id);
-          $brand_logos[$key] = [
-            'url' => file_create_url($image->getFileUri()),
-          ];
-        }
+    if (!$this->configFactory->get('alshaya_super_category.settings')->get('status')) {
+      return [];
+    }
+    $term_data = $this->getCategoryRootTerms();
+    $current_language = $this->languageManager->getCurrentLanguage()->getId();
+    // Get all the terms data in English for preparing label.
+    $term_data_en = ($current_language !== 'en') ? $this->getCategoryRootTerms('en') : $term_data;
+    $term_info_en = isset($term_data_en[$tid]) ? $term_data_en[$tid] : "";
+    if (!empty($term_info_en)) {
+      $theme = $this->themeManager->getActiveTheme();
+      $base_uri = $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost();
+      $term_clean_name = Html::cleanCssIdentifier(mb_strtolower($term_info_en['label']));
+      $brand_logos['active_image'] = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '-active.svg';
+      $brand_logos['inactive_image'] = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '.svg';
+    }
+    // Get supercategory logo data.
+    foreach ($fields as $field_key => $field) {
+      $brand_logo_data[$field_key] = $this->getImageField($tid, $field);
+    }
+    // Prepare image url for supercategory logo.
+    foreach ($brand_logo_data as $key => $logo_data) {
+      $id = "field_logo_{$key}_target_id";
+      if (!empty($logo_data)) {
+        $image = $this->fileStorage->load($logo_data->$id);
+        $brand_logos[$key] = file_create_url($image->getFileUri());
       }
     }
 

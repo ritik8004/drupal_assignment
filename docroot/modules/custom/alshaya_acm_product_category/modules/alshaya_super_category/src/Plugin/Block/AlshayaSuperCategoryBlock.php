@@ -17,7 +17,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Theme\ThemeManager;
 use Drupal\Core\Entity\EntityRepository;
 
 /**
@@ -87,13 +86,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
   protected $request;
 
   /**
-   * Theme manager.
-   *
-   * @var Drupal\Core\Theme\ThemeManager
-   */
-  protected $themeManager;
-
-  /**
    * Entity repository.
    *
    * @var Drupal\Core\Entity\EntityRepository
@@ -123,12 +115,10 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    *   Entity type manager.
    * @param Symfony\Component\HttpFoundation\RequestStack $request
    *   Entity type manager.
-   * @param Drupal\Core\Theme\ThemeManager $themeManager
-   *   Theme manager.
    * @param Drupal\Core\Entity\EntityRepository $entityRepository
    *   Entity repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager, RequestStack $request, ThemeManager $themeManager, EntityRepository $entityRepository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager, RequestStack $request, EntityRepository $entityRepository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
@@ -137,7 +127,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     $this->tokenManager = $token_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->request = $request;
-    $this->themeManager = $themeManager;
     $this->entityRepository = $entityRepository;
   }
 
@@ -156,7 +145,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $container->get('token'),
       $container->get('entity_type.manager'),
       $container->get('request_stack'),
-      $container->get('theme.manager'),
       $container->get('entity.repository'),
     );
   }
@@ -218,9 +206,10 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $brand_icons = $this->productCategoryTree->getBrandIcons($term_id);
       if ((isset($brand_icons['active_image']) && !empty($brand_icons['active_image']))
       && (isset($brand_icons['inactive_image']) && !empty($brand_icons['inactive_image']))) {
-        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ?
-        $brand_icons['active_image']['url'] : $brand_icons['inactive_image']['url'];
-        $term_info['inactive_path'] = $brand_icons['active_image']['url'];
+        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE)
+        ? $brand_icons['active_image']
+        : $brand_icons['inactive_image'];
+        $term_info['inactive_path'] = $brand_icons['active_image'];
       }
     }
 
