@@ -400,6 +400,8 @@ describe('Checkout', () => {
     });
 
     describe('Test getPaymentMethods()', () => {
+      const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
+
       it('With Shipping type', async () => {
         const data = [
           {code: "checkout_com_upapi_vault", title: "Saved Cards (Checkout.com UPAPI)"},
@@ -424,8 +426,6 @@ describe('Checkout', () => {
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
 
-        const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
-
         let result = await getPaymentMethods();
 
         expect(axios).toHaveBeenCalled();
@@ -435,6 +435,7 @@ describe('Checkout', () => {
         expect(result[5].code).toEqual('cashondelivery');
         expect(result[5].title).toEqual('Cash On Delivery');
       });
+
       it('With null value', async () => {
         const data = {};
 
@@ -450,8 +451,6 @@ describe('Checkout', () => {
         jest
           .spyOn(window.commerceBackend, 'getCartId')
           .mockImplementation(() => '1234');
-
-        const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
 
         let result = await getPaymentMethods();
         expect(result).toEqual({});

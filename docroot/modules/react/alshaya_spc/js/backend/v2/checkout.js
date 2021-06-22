@@ -280,13 +280,7 @@ const getPaymentMethods = async () => {
   const response = await getCart();
   const cartData = response.data;
 
-  const {
-    shipping: {
-      method: { type },
-    },
-  } = cartData;
-
-  if (typeof type !== 'undefined') {
+  if (_.isEmpty(cartData.shipping) || _.isEmpty(cartData.shipping.method)) {
     logger.error(`Error while getting payment methods from MDC. Shipping method not available in cart with id: ${cartData.cartId}`);
     return null;
   }
