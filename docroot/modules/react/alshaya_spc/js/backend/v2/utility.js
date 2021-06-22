@@ -44,11 +44,13 @@ const isUserAuthenticated = () => {
  *   Callname for the API.
  * @param {string} cartId
  *   The Cart id.
+ * @param {string} itemId
+ *   The product item id.
  *
  * @returns {*}
  *   The api endpoint.
  */
-const getApiEndpoint = (callName, cartId = '') => {
+const getApiEndpoint = (callName, cartId = '', itemId = '') => {
   const type = isUserAuthenticated() ? 'authenticated' : 'anonymous';
   const apis = {
     createCart: {
@@ -56,12 +58,16 @@ const getApiEndpoint = (callName, cartId = '') => {
       anonymous: '/rest/V1/guest-carts',
     },
     getCart: {
-      authenticated: '/rest/V1/carts/mine',
+      authenticated: '/rest/V1/carts/mine/getCart',
       anonymous: `/rest/V1/guest-carts/${cartId}/getCart`,
     },
     addUpdateItems: {
       authenticated: '/rest/V1/carts/mine/items',
       anonymous: `/rest/V1/guest-carts/${cartId}/items`,
+    },
+    removeItems: {
+      authenticated: `/rest/V1/carts/mine/items/${itemId}`,
+      anonymous: `/rest/V1/guest-carts/${cartId}/items/${itemId}`,
     },
   };
   return apis[callName][type];

@@ -156,7 +156,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       }
     }
     requestMethod = 'DELETE';
-    requestUrl = `/rest/V1/guest-carts/${cartId}/items/${cartItem.item_id}`;
+    requestUrl = getApiEndpoint('removeItems', cartId, cartItem.item_id);
   }
 
   if (data.action === 'add item') {
@@ -212,7 +212,6 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
   }
 
   let apiCallAttempts = 1;
-
   const response = await callMagentoApi(requestUrl, requestMethod, itemData);
 
   if (response.data.error === true) {
