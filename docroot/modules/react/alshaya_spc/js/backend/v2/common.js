@@ -1,7 +1,9 @@
 import Axios from 'axios';
 import qs from 'qs';
+import _ from 'lodash';
 import { logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
+import { removeStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
 
@@ -38,7 +40,8 @@ window.commerceBackend.setRawCartDataInStorage = (data) => {
 window.commerceBackend.getRawCartDataFromStorage = () => rawCartData;
 
 /**
- * Object to serve as static cache for processed cart data over the course of a request.
+ * Object to serve as static cache for processed cart data over the course of a
+ * request.
  */
 let staticCartData = null;
 
@@ -259,6 +262,83 @@ const callDrupalApi = (url, method, requestOptions) => {
 };
 
 /**
+ * Format the cart data to have better structured array.
+ *
+ * @param {object} cartData
+ *   Cart response from Magento.
+ *
+ * @return {object}
+ *   Formatted / processed cart.
+ */
+const formatCart = (cartData) => {
+  const data = _.cloneDeep(cartData);
+
+  // Move customer data to root level.
+  if (!_.isEmpty(data.cart.customer)) {
+    data.customer = data.cart.customer;
+    delete data.cart.customer;
+  }
+
+  // Format addresses.
+  if (!_.isEmpty(data.customer) && !_.isEmpty(data.customer.addresses)) {
+    data.customer.addresses = data.customer.addresses.map((address) => {
+      const item = { ...address };
+      delete item.id;
+      item.region = address.region_id;
+      item.customer_address_id = address.id;
+      return item;
+    });
+  }
+
+  // Format shipping info.
+  if (!_.isEmpty(data.cart.extension_attributes)) {
+    if (!_.isEmpty(data.cart.extension_attributes.shipping_assignments)) {
+      if (!_.isEmpty(data.cart.extension_attributes.shipping_assignments[0].shipping)) {
+        data.shipping = data.cart.extension_attributes.shipping_assignments[0].shipping;
+        delete data.cart.extension_attributes.shipping_assignments;
+      }
+    }
+  } else {
+    data.shipping = {};
+  }
+
+  let shippingMethod = '';
+  if (!_.isEmpty(data.shipping)) {
+    if (!_.isEmpty(data.shipping.method)) {
+      shippingMethod = data.shipping.method;
+    }
+    if (!_.isEmpty(shippingMethod) && shippingMethod.indexOf('click_and_collect') >= 0) {
+      data.shipping.type = 'click_and_collect';
+    } else {
+      data.shipping.type = 'home_delivery';
+    }
+  }
+
+  if (!_.isEmpty(data.shipping) && !_.isEmpty(data.shipping.extension_attributes)) {
+    const extensionAttributes = data.shipping.extension_attributes;
+    if (!_.isEmpty(extensionAttributes.click_and_collect_type)) {
+      data.shipping.clickCollectType = extensionAttributes.click_and_collect_type;
+    }
+    if (!_.isEmpty(extensionAttributes.store_code)) {
+      data.shipping.storeCode = extensionAttributes.store_code;
+    }
+    delete data.shipping.extension_attributes;
+  }
+
+  // Initialise payment data holder.
+  data.payment = {};
+
+  // When shipping method is empty, Set shipping and billing info to empty,
+  // so that we can show empty shipping and billing component in react
+  // to allow users to fill addresses.
+  if (shippingMethod === '') {
+    data.shipping = {};
+    data.cart.billing_address = {};
+  }
+  return data;
+};
+
+/**
  * Transforms cart data to match the data structure from middleware.
  *
  * @param {object} cartData
@@ -273,7 +353,7 @@ const getProcessedCartData = (cartData) => {
     cart_id: window.commerceBackend.getCartId(),
     uid: (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0,
     langcode: window.drupalSettings.path.currentLanguage,
-    customer: cartData.cart.customer,
+    customer: cartData.customer,
     coupon_code: typeof cartData.totals.coupon_code !== 'undefined' ? cartData.totals.coupon_code : '',
     appliedRules: cartData.cart.applied_rule_ids,
     items_qty: cartData.cart.items_qty,
@@ -295,6 +375,7 @@ const getProcessedCartData = (cartData) => {
     items: [],
   };
 
+  // Totals.
   if (typeof cartData.totals.base_grand_total !== 'undefined') {
     data.cart_total = cartData.totals.base_grand_total;
     data.minicart_total = cartData.totals.base_grand_total;
@@ -375,8 +456,62 @@ const getProcessedCartData = (cartData) => {
   } else {
     data.items = [];
   }
-
   return data;
+};
+
+/**
+ * Calls the cart get API.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+const getCart = async () => {
+  const cartId = window.commerceBackend.getCartId();
+  if (cartId === null) {
+    return new Promise((resolve) => resolve(cartId));
+  }
+
+  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
+
+  if (typeof response.data.error !== 'undefined' && response.data.error === true) {
+    if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
+      // Remove the cart from storage.
+      removeStorageInfo('cart_id');
+      logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
+      // Get new cart.
+      window.commerceBackend.getCartId();
+    }
+
+    const error = {
+      data: {
+        error: response.data.error,
+        error_code: response.data.error_code,
+        error_message: getDefaultErrorMessage(),
+      },
+    };
+    return new Promise((resolve) => resolve(error));
+  }
+
+  // Format data.
+  response.data = formatCart(response.data);
+
+  // Store the formatted data.
+  window.commerceBackend.setRawCartDataInStorage(formatCart(response.data));
+
+  // Return formatted cart.
+  return new Promise((resolve) => resolve(response));
+};
+
+/**
+ * Format the cart data to have better structured array.
+ *
+ * @returns {Promise}
+ *   A promise object.
+ */
+const getCartWithProcessedData = async () => {
+  const response = await getCart();
+  response.data = getProcessedCartData(response.data);
+  return response;
 };
 
 /**
@@ -397,7 +532,7 @@ const updateCart = (data) => {
       // Update the cart data in storage.
       window.commerceBackend.setRawCartDataInStorage(response.data);
       // Process the cart data.
-      response.data = window.commerceBackend.getProcessedCartData(response.data);
+      response.data = getProcessedCartData(response.data);
 
       return response;
     });
@@ -422,6 +557,8 @@ export {
   isAnonymousUserWithoutCart,
   callDrupalApi,
   callMagentoApi,
+  getCart,
+  getCartWithProcessedData,
   updateCart,
   getProcessedCartData,
   checkoutComUpapiVaultMethod,

@@ -4,10 +4,10 @@ import {
   getCartSettings,
   isAnonymousUserWithoutCart,
   updateCart,
-  getProcessedCartData,
+  getCartWithProcessedData,
 } from './common';
 import { logger } from './utility';
-import { getDefaultErrorMessage, getExceptionMessageType } from './error';
+import { getExceptionMessageType } from './error';
 import { removeStorageInfo, setStorageInfo } from '../../utilities/storage';
 
 window.commerceBackend = window.commerceBackend || {};
@@ -98,52 +98,12 @@ const triggerStockRefresh = (data) => callDrupalApi(
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
 
 /**
- * Gets the cart data.
- *
- * @returns {object|null}
- *   Processed cart data else null.
- */
-window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(data);
-
-/**
- * Calls the cart get API.
+ * Applies transformations to the structure of cart data.
  *
  * @returns {Promise}
  *   A promise object.
  */
-window.commerceBackend.getCart = async () => {
-  const cartId = window.commerceBackend.getCartId();
-  if (cartId === null) {
-    return new Promise((resolve) => resolve(cartId));
-  }
-
-  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
-
-  if (typeof response.data.error !== 'undefined' && response.data.error === true) {
-    if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
-      // Remove the cart from storage.
-      removeStorageInfo('cart_id');
-      logger.critical(`getCart() returned error ${response.data.error_code}. Removed cart from local storage`);
-      // Get new cart.
-      window.commerceBackend.getCartId();
-    }
-
-    const error = {
-      data: {
-        error: response.data.error,
-        error_code: response.data.error_code,
-        error_message: getDefaultErrorMessage(),
-      },
-    };
-    return new Promise((resolve) => resolve(error));
-  }
-
-  // Store the response.
-  window.commerceBackend.setRawCartDataInStorage(response.data);
-  // Process data.
-  response.data = window.commerceBackend.getProcessedCartData(response.data);
-  return new Promise((resolve) => resolve(response));
-};
+window.commerceBackend.getCart = () => getCartWithProcessedData();
 
 /**
  * Calls the cart restore API.

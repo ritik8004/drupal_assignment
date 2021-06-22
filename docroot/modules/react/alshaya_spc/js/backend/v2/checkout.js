@@ -1,5 +1,7 @@
+import _ from 'lodash';
 import {
   isAnonymousUserWithoutCart,
+  getCart,
   updateCart,
   getFormattedError,
   getProcessedCartData,
@@ -19,14 +21,6 @@ window.commerceBackend = window.commerceBackend || {};
  * @returns bool
  */
 window.commerceBackend.isAnonymousUserWithoutCart = () => isAnonymousUserWithoutCart();
-
-/**
- * Transforms cart data to match the data structure from middleware.
- *
- * @param {object} cartData
- *   The cart data object.
- */
-window.commerceBackend.getProcessedCartData = (data) => getProcessedCartData(data);
 
 /**
  * Get data related to product status.
@@ -67,21 +61,6 @@ const getCncStatusForCart = async () => {
     }
   }
   return true;
-};
-
-/**
- * Apply defaults to cart for customer.
- *
- * @param {object} cartData
- *   The cart data object.
- * @param {integer} uid
- *   Drupal User ID.
- * @return {object}.
- *   The data.
- */
-const applyDefaults = (data, uid) => {
-  // @todo implement this
-  logger.info(`${data}${uid}`);
 };
 
 /**
@@ -130,6 +109,7 @@ const formatShippingEstimatesAddress = (address) => {
 
 /**
  * Gets shipping methods.
+ * @todo implement this
  *
  * @param {object} shipping
  *   The shipping data.
@@ -137,10 +117,157 @@ const formatShippingEstimatesAddress = (address) => {
  *   The data.
  */
 const getHomeDeliveryShippingMethods = (shipping) => {
-  // @todo implement this
-  // Call formatShippingEstimatesAddress() to be able to perform unit tests.
-  // This function will be continued on ticket #30724.
   formatShippingEstimatesAddress(shipping.address);
+};
+
+/**
+ * Get default address from customer addresses.
+ * @todo implement this
+ *
+ * @param {object} data
+ *   Cart data.
+ *
+ * @return {object|null}
+ *   Address if found.
+ */
+const getDefaultAddress = (data) => {
+  logger.info(`${data}`);
+};
+
+/**
+ * Format the address array.
+ *
+ * Format the address array so that it can be used to update billing or
+ * shipping address in the cart.
+ *
+ * @param {object} address
+ *   Address array.
+ * @return {object}.
+ *   Formatted address object.
+ */
+const formatAddressForShippingBilling = (address) => {
+  const data = { ...address };
+
+  const staticFields = {};
+  if (!_.isEmpty(data.static)) {
+    Object.keys(data.static).forEach((key) => {
+      staticFields[key] = data.static[key];
+    });
+    delete data.static;
+  }
+
+  if (!_.isEmpty(data.carrier_info)) {
+    delete data.carrier_info;
+  }
+
+  if (!_.isEmpty(data)) {
+    data.customAttributes = [];
+    Object.keys(data).forEach((key) => {
+      data.customAttributes.push(
+        {
+          attributeCode: key,
+          value: (!Array.isArray(data[key]) && _.isNull(data[key])) ? '' : data[key],
+        },
+      );
+    });
+  }
+
+  if (_.isString(data.street)) {
+    data.street = [data.street];
+  }
+
+  return {
+    ...staticFields,
+    ...data,
+  };
+};
+
+/**
+ * Adding shipping on the cart.
+ * @todo implement this
+ *
+ * @param {object} shippingData
+ *   Shipping address info.
+ * @param {string} action
+ *   Action to perform.
+ * @param {bool} updateBilling
+ *   Whether billing needs to be updated or not.
+ *
+ * @return {object}
+ *   Cart data.
+ */
+const addShippingInfo = (shippingData, action, updateBilling) => {
+  logger.info(`${shippingData}${action}${updateBilling}`);
+  formatAddressForShippingBilling({});
+};
+
+/**
+ * Update billing info on cart.
+ * @todo implement this
+ *
+ * @param {object} billingData
+ *   Billing data.
+ *
+ * @return {object}
+ *   Response data.
+ */
+const updateBilling = (billingData) => {
+  logger.info(`${billingData}`);
+};
+
+/**
+ * Validate area/city of address.
+ * @todo implement this
+ *
+ * @param {object} address
+ *   Address object.
+ *
+ * @return {object}
+ *   Address validation response.
+ */
+const validateAddressAreaCity = (address) => {
+  logger.info(`${address}`);
+};
+
+/**
+ * Select HD address and method from possible defaults.
+ * @todo implement this
+ *
+ * @param {object} address
+ *   Address object.
+ * @param {object} method
+ *   Payment method.
+ * @param {objecty} billing
+ *   Billing address.
+ * @param {object} shippingMethods
+ *   Shipping methods.
+ *
+ * @return {object|bool}
+ *   FALSE if something went wrong, updated cart data otherwise.
+ */
+const selectHd = (address, method, billing, shippingMethods) => {
+  addShippingInfo({}, '', false);
+  updateBilling({});
+  validateAddressAreaCity({});
+  logger.info(`${address}${method}${billing}${shippingMethods}`);
+};
+
+/**
+ * Apply defaults to cart for customer.
+ * @todo implement this
+ *
+ * @param {object} cartData
+ *   The cart data object.
+ * @param {integer} uid
+ *   Drupal User ID.
+ * @return {object}.
+ *   The data.
+ */
+const applyDefaults = (data, uid) => {
+  logger.info(`${data}${uid}`);
+  getHomeDeliveryShippingMethods({});
+  getDefaultAddress({});
+  selectHd({}, {}, {}, {});
 };
 
 /**
@@ -295,17 +422,30 @@ const getCncStores = async (lat, lon) => {
 };
 
 /**
- * Get store info for given store code.
+ * Helper function to format address as required by frontend.
  *
- * @param {array} address
+ * @param {object} address
  *   Address array.
- * @return {array|null}.
+ * @return {object|null}.
  *   Formatted address if available.
  */
 const formatAddressForFrontend = (address) => {
-  // @todo implement this
-  logger.info(`Address ${address}`);
-  return address;
+  // Do not consider addresses without custom attributes as they are required
+  // for Delivery Matrix.
+  if (_.isEmpty(address) || _.isEmpty(address.country_id)) {
+    return null;
+  }
+
+  const result = { ...address };
+  if (!_.isEmpty(address.custom_attributes)) {
+    Object.keys(address.custom_attributes).forEach((item) => {
+      const key = address.custom_attributes[item].attribute_code;
+      const val = address.custom_attributes[item].value;
+      result[key] = val;
+    });
+  }
+  delete result.custom_attributes;
+  return result;
 };
 
 /**
@@ -386,7 +526,7 @@ const getProcessedCheckoutData = async (cartData) => {
   }
 
   // Re-use the processing done for cart page.
-  const response = window.commerceBackend.getProcessedCartData(data);
+  const response = getProcessedCartData(data);
   response.cnc_enabled = cncStatus;
   response.customer = getCustomerPublicData(data.customer);
   response.shipping = (typeof data.shipping !== 'undefined')
@@ -451,7 +591,7 @@ window.commerceBackend.getCartForCheckout = () => {
     return new Promise((resolve) => resolve({ error: true }));
   }
 
-  window.commerceBackend.getCart()
+  getCart()
     .then((response) => {
       if (typeof response.data === 'undefined' || response.data.length === 0) {
         if (typeof response.data.error_message !== 'undefined') {
@@ -473,9 +613,8 @@ window.commerceBackend.getCartForCheckout = () => {
         return new Promise((resolve) => resolve(error));
       }
 
-      const processedData = {
-        data: getProcessedCheckoutData(response),
-      };
+      const processedData = getProcessedCheckoutData(response);
+
       return new Promise((resolve) => resolve(processedData));
     })
     .catch((response) => {

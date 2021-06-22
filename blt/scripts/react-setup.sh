@@ -49,7 +49,6 @@ then
 
   ignoredDirs=( "node_modules" "alshaya_react" "js" "dist" )
 
-
   # Validate utility files.
   npm run lint $docrootDir/modules/react/js/
 

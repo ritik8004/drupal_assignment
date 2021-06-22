@@ -218,7 +218,7 @@
                 }
               ]
             },
-            "method": "",
+            "method": "home_delivery",
             "extension_attributes": {
               "click_and_collect_type": "home_delivery"
             }
