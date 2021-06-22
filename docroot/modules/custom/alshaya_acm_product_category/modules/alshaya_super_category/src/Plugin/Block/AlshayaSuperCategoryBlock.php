@@ -214,14 +214,15 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       if ($term_id == $current_term['id']) {
         $term_info['class'] .= ' active';
       }
-
-      if (!empty($term_object->get('field_logo_active_image')->getValue()) && !empty($term_object->get('field_logo_inactive_image')->getValue())) {
-        $activeFile = $this->entityTypeManager->getStorage('file')->load($term_object->get('field_logo_active_image')->getValue()[0]['target_id']);
-        $inactiveFile = $this->entityTypeManager->getStorage('file')->load($term_object->get('field_logo_inactive_image')->getValue()[0]['target_id']);
-        $active_path = file_create_url($activeFile->getFileUri());
-        $inactive_path = file_create_url($inactiveFile->getFileUri());
-        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ? $active_path : $inactive_path;
-        $term_info['inactive_path'] = $active_path;
+      // Get brand icons of supercategory.
+      // No need to check supercategory status.
+      // As it already checked in start.
+      $brand_icons = $this->productCategoryTree->getBrandIcons($term_id);
+      if ((isset($brand_icons['active_image']) && !empty($brand_icons['active_image']))
+      && (isset($brand_icons['inactive_image']) && !empty($brand_icons['inactive_image']))) {
+        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ?
+        $brand_icons['active_image']['url'] : $brand_icons['inactive_image']['url'];
+        $term_info['inactive_path'] = $brand_icons['active_image']['url'];
       }
       else {
         $theme = $this->themeManager->getActiveTheme();
