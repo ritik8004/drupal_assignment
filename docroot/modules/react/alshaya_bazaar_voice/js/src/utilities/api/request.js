@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 export function getLanguageCode() {
   return drupalSettings.path.currentLanguage;
@@ -40,23 +41,11 @@ export function getUserDetails(productId = undefined) {
 export function doRequest(url) {
   return Axios.get(url)
     .then((response) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: response,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: response });
       return response;
     })
     .catch((error) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: error,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: error });
       return error;
     });
 }
@@ -64,23 +53,11 @@ export function doRequest(url) {
 export function postRequest(url, data) {
   return Axios.post(url, data)
     .then((response) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: response,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: response });
       return response;
     })
     .catch((error) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: error,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: error });
       return error;
     });
 }

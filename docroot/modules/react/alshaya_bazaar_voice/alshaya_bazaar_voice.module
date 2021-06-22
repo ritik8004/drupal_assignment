@@ -280,3 +280,53 @@ function alshaya_bazaar_voice_alshaya_acm_customer_orders_details_build_alter(ar
   $build['#strings'] = $alshayaBazaarVoice->getBazaarvoiceStrings();
   $build['#attached']['library'][] = 'alshaya_white_label/myaccount-reviews';
 }
+
+/**
+  * Implements hook_page_attachments_schema_data_alter().
+  */
+function alshaya_bazaar_voice_page_attachments_schema_data_alter(array &$attachments, array &$product_schema_data) {
+  $route_match = \Drupal::routeMatch();
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  /** @var \Drupal\bazaar_voice\BazaarVoiceApiHelper $alshayaBazaarVoice */
+  $alshayaBazaarVoice = \Drupal::service('alshaya_bazaar_voice.service');
+
+  if ($route_match->getRouteName() == 'entity.node.canonical') {
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $route_match->getParameter('node');
+    // If 'product' node.
+    if ($node && $node->getType() == 'acq_product') {
+      $sku = $skuManager->getSkuForNode($node);
+      // Get sanitized sku.
+      $sanitized_sku = $skuManager->getSanitizedSku($sku);
+      $productReviewStats = $alshayaBazaarVoice->getProductReviewStatistics($sanitized_sku);
+      $productData = $productReviewStats[$sanitized_sku]['productData'];
+      // Adding product data to drupal settings
+      $attachments['#attached']['drupalSettings']['productReviewStats'] = [
+        'productId' => $sanitized_sku,
+        'productData' => $productData,
+      ];
+      // Adding product and review data for SEO.
+      $product_schema_data['aggregateRating'] = [
+        '@type' => 'AggregateRating',
+        'ratingValue' => $productData['ReviewStatistics']['AverageOverallRating'],
+        'reviewCount' => $productData['ReviewStatistics']['TotalReviewCount'],
+      ];
+      foreach ($productReviewStats[$sanitized_sku]['reviews'] as $review) {
+        $product_schema_data['review'][] = [
+          '@type' => 'Review',
+          'author' =>  $review['UserNickname'],
+          'datePublished' => $review['SubmissionTime'],
+          'description' => $review['ReviewText'],
+          'name' => $review['Title'],
+          'reviewRating' => [
+            '@type' => 'Rating',
+            'ratingValue' => $review['Rating'],
+          ],
+        ];
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import { getbazaarVoiceSettings, getUserBazaarVoiceSettings } from './request';
+import dispatchCustomEvent from '../../../../../js/utilities/events';
 
 function getBvUrl(bazaarVoiceSettings) {
   return bazaarVoiceSettings.reviews.bazaar_voice.endpoint;
@@ -28,23 +29,11 @@ export function fetchAPIData(apiUri, params, context = '') {
 
   return Axios.get(url)
     .then((response) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: response,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: response });
       return response;
     })
     .catch((error) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: error,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: error });
       return error;
     });
 }
@@ -59,23 +48,11 @@ export function postAPIData(apiUri, params, productId = undefined) {
     },
   })
     .then((response) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: response,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: response });
       return response;
     })
     .catch((error) => {
-      const event = new CustomEvent('showMessage', {
-        bubbles: true,
-        detail: {
-          data: error,
-        },
-      });
-      document.dispatchEvent(event);
+      dispatchCustomEvent('showMessage', { data: error });
       return error;
     });
 }

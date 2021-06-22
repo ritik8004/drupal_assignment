@@ -54,7 +54,7 @@ const ReviewInformation = ({
 
         <ConditionalView condition={reviewInformationData.Badges}>
           {Object.keys(reviewInformationData.Badges).map((key) => (
-            <div className="badges-container">
+            <div className="badges-container" key={key}>
               <ConditionalView condition={key.includes('top')}>
                 <div className={`${key.replace(/[0-9]/g, '')}-contributor`}>
                   <span>{`${getStringMessage('top')}${key.replace('top', ' ')}${' '}${getStringMessage('contributor')}`}</span>

@@ -18,6 +18,8 @@ import WriteReviewButton from '../reviews-full-submit';
 import getStringMessage from '../../../../../../js/utilities/strings';
 import DisplayStar from '../../../rating/components/stars';
 import { createUserStorage } from '../../../utilities/user_util';
+import dispatchCustomEvent from '../../../../../../js/utilities/events';
+import { trackPassiveAnalytics } from '../../../utilities/analytics';
 
 const bazaarVoiceSettings = getbazaarVoiceSettings();
 const userDetails = getUserDetails();
@@ -134,6 +136,8 @@ export default class ReviewSummary extends React.Component {
               const { currentPage, numberOfPages } = this.state;
               this.changePaginationButtonStatus(currentPage, numberOfPages);
             });
+            // Track reviews into bazaarvoice analytics.
+            trackPassiveAnalytics(result.data);
           } else {
             this.setState({
               totalReviews: result.data.TotalResults,
@@ -147,8 +151,7 @@ export default class ReviewSummary extends React.Component {
         }
 
         if (explicitTrigger) {
-          const handlePaginationCompleteEvent = new CustomEvent('handlePaginationComplete', {});
-          document.dispatchEvent(handlePaginationCompleteEvent);
+          dispatchCustomEvent('handlePaginationComplete', {});
         }
       });
     }
@@ -159,7 +162,7 @@ export default class ReviewSummary extends React.Component {
    */
   handlePagination = (event) => {
     event.preventDefault();
-    const { buttonValue } = event.detail;
+    const buttonValue = event.detail;
     if (buttonValue === 'prev') {
       this.previousPage();
     }

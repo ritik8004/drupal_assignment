@@ -12,6 +12,8 @@ import ConditionalView from '../../../../common/components/conditional-view';
 import getStringMessage from '../../../../../../../js/utilities/strings';
 import { smoothScrollTo } from '../../../../utilities/smoothScroll';
 import { setStorageInfo } from '../../../../utilities/storage';
+import dispatchCustomEvent from '../../../../../../../js/utilities/events';
+import { trackFeaturedAnalytics } from '../../../../utilities/analytics';
 
 export default class WriteReviewForm extends React.Component {
   isComponentMounted = true;
@@ -90,8 +92,15 @@ export default class WriteReviewForm extends React.Component {
             setStorageInfo(request.userStorage, `bvuser_${request.userStorage.id}`);
           }
           // Dispatch event after review submit.
-          const event = new CustomEvent('reviewPosted', { detail: result.data });
-          document.dispatchEvent(event);
+          dispatchCustomEvent('reviewPosted', result.data);
+          // Process sort click data as user clicks on sort option.
+          const analyticsData = {
+            type: 'Used',
+            name: 'submit',
+            detail1: 'review',
+            detail2: 'pdp',
+          };
+          trackFeaturedAnalytics(analyticsData);
         } else {
           removeFullScreenLoader();
           Drupal.logJavascriptError('review-write-review-form', result.error);

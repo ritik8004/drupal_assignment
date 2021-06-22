@@ -18,7 +18,6 @@ export default class UserReviews extends React.Component {
     this.state = {
       reviewsSummary: '',
       reviewsProduct: '',
-      reviewsOrder: '',
       noResultmessage: '',
       totalReviewCount: '',
       initialLimit: bazaarVoiceSettings.reviews.bazaar_voice.reviews_initial_load,
@@ -35,10 +34,11 @@ export default class UserReviews extends React.Component {
 
   getUserReviews() {
     const { initialLimit } = this.state;
+    const myAccountReviewsLimit = bazaarVoiceSettings.reviews.bazaar_voice.myaccount_reviews_limit;
     showFullScreenLoader();
     // Get review data from BazaarVoice based on available parameters.
-    const apiUri = '/data/authors.json';
-    const params = `&include=reviews,products&filter=id:${bazaarVoiceSettings.reviews.bazaar_voice.user_id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit_Reviews=${initialLimit}`;
+    const apiUri = '/data/reviews.json';
+    const params = `&include=Authors,Products&filter=AuthorId:${bazaarVoiceSettings.reviews.bazaar_voice.user_id}&stats=${bazaarVoiceSettings.reviews.bazaar_voice.stats}&Limit=${initialLimit}`;
     const apiData = fetchAPIData(apiUri, params, 'user');
     if (apiData instanceof Promise) {
       apiData.then((result) => {
@@ -46,10 +46,10 @@ export default class UserReviews extends React.Component {
         if (result.error === undefined && result.data !== undefined) {
           if (result.data.Results.length > 0) {
             this.setState({
+              reviewsSummary: result.data.Results,
               reviewsProduct: result.data.Includes.Products,
-              reviewsSummary: result.data.Includes.Reviews,
-              reviewsOrder: result.data.Includes.ReviewsOrder,
-              totalReviewCount: result.data.Results[0].TotalReviewCount,
+              totalReviewCount: result.data.TotalResults <= myAccountReviewsLimit
+                ? result.data.TotalResults : myAccountReviewsLimit,
               noResultmessage: null,
             });
           } else {
@@ -79,13 +79,12 @@ export default class UserReviews extends React.Component {
       noResultmessage,
       initialLimit,
       totalReviewCount,
-      reviewsOrder,
     } = this.state;
     return (
       <div id="user-reviews_wrapper">
         <ConditionalView condition={noResultmessage === null}>
           <div id="review-summary-wrapper">
-            {Object.values(reviewsOrder).map((item) => (
+            {Object.keys(reviewsSummary).map((item) => (
               <div className="review-summary" key={reviewsSummary[item].Id}>
                 <UserReviewsProducts
                   reviewsIndividualSummary={reviewsSummary[item]}

@@ -2,6 +2,7 @@ import { getbazaarVoiceSettings, getUserDetails } from './api/request';
 import getStringMessage from '../../../../js/utilities/strings';
 import { getStorageInfo } from './storage';
 import { smoothScrollTo } from './smoothScroll';
+import dispatchCustomEvent from '../../../../js/utilities/events';
 
 /**
  * Email address validation.
@@ -189,11 +190,5 @@ export const validateRequest = (elements, fieldsConfig, e, newPdp) => {
  */
 export const onReviewPost = (e) => {
   // Dispatch event so that other can use this.
-  const event = new CustomEvent('reviewPosted', {
-    bubbles: true,
-    detail: {
-      formElement: () => e.target.elements,
-    },
-  });
-  document.dispatchEvent(event);
+  dispatchCustomEvent('reviewPosted', { formElement: () => e.target.elements });
 };
