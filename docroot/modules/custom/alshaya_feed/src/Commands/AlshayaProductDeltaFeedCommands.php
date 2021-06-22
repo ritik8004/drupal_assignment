@@ -61,42 +61,43 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
    *
    * @option action
    *   The action to perform - read or delete.
-   * @option skus
-   *   The list of skus to delete.
+   * @option sku
+   *   The sku to delete.
    *
    * @usage drush manage-oos-product --action=read
    *   Displays list of OOS product SKUs.
-   * @usage drush manage-oos-product --action=delete skus=123,234
+   * @usage drush manage-oos-product --action=delete sku=123
    *   Deletes the given sku from list of OOS product SKUs.
    */
   public function manageOosProduct(array $options = [
     'action' => 'read',
-    'skus' => '',
+    'sku' => '',
     'dry-run' => FALSE,
   ]) {
     $action = $options['action'];
-    $skus_to_delete = $options['skus'] ? explode(',', $options['skus']) : '';
 
-    // Return if action is delete and skus is empty.
-    if ($action === 'delete' && empty($skus_to_delete)) {
-      $this->io()->error('SKU list empty for action delete.');
+    // Based on action, display oos skus or delete.
+    if ($action === 'read') {
+      $oos_skus = $this->productDeltaFeedHelper->getOosProductSkus();
+
+      foreach ($oos_skus as $sku) {
+        $this->io()->writeln($sku);
+      }
       return;
     }
 
-    $dry_run = (bool) $options['dry-run'];
-    $oos_skus = $this->productDeltaFeedHelper->getOosProductSkus();
-
-    // Based on action, display oos skus or delete.
-    foreach ($oos_skus as $sku) {
-      if ($action === 'read') {
-        $this->io()->writeln($sku);
-        continue;
+    // For delete action.
+    if ($action === 'delete') {
+      // Return if given sku to delete is empty.
+      if (empty($options['sku'])) {
+        $this->io()->error('SKU is empty for action delete.');
+        return;
       }
 
-      if ($action === 'delete' && in_array($sku, $skus_to_delete)) {
-        if (!$dry_run) {
-          $this->productDeltaFeedHelper->deleteOosProductSku($sku);
-        }
+      $dry_run = (bool) $options['dry-run'];
+
+      if (!$dry_run) {
+        $this->productDeltaFeedHelper->deleteOosProductSku($options['sku']);
       }
     }
   }
@@ -241,7 +242,7 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
   private function removeOosProductSkus($domains, $dry_run, $sku) {
     foreach ($domains as $domain) {
       $current_domain = $domain[1];
-      $command = sprintf('drush -l %s manage-oos-product --action=%s --skus=%s', $current_domain, 'delete', $sku);
+      $command = sprintf('drush -l %s manage-oos-product --action=%s --sku=%s', $current_domain, 'delete', $sku);
 
       if ($dry_run) {
         $command .= ' --dry-run';
