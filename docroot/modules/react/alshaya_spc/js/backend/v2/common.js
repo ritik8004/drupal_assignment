@@ -501,7 +501,7 @@ const getCart = async () => {
 };
 
 /**
- * Applies transformations to the structure of cart data.
+ * Format the cart data to have better structured array.
  *
  * @returns {Promise}
  *   A promise object.
