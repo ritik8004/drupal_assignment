@@ -22,7 +22,7 @@ $conductors = [
     'hmac_secret' => 'NTA1NTcxM2UtMmY4Mi00',
     'site_id' => 4,
   ],
-  'mckw_dev3' => [
+  'mckw_qa2' => [
     'hmac_id' => '65769d9ba82c4ffd8c26ed830de1e6c2',
     'hmac_secret' => 'Y2MyMTVlYTQtMGQ0Yi00',
     'site_id' => 133,
@@ -1211,6 +1211,11 @@ $conductors = [
     'hmac_id' => 'ecd6332722a145c79aea9e4bbb465458',
     'hmac_secret' => 'ZTQxZWY1ZTItNzUzNC00',
     'site_id' => 211,
+  ],
+  'bpae_qa2' => [
+    'hmac_id' => '3a0a7949099b4370a5af0fb0ddc06398',
+    'hmac_secret' => 'ZTI2MzAwYWMtNDVjNi00',
+    'site_id' => 431,
   ],
   'bpeg_dev' => [
     'hmac_id' => 'be1cd47e81154f5ab61de7862fc8dcda',
