@@ -7,7 +7,7 @@ export const drupalSettings = {
     currentLanguage: 'en',
   },
   user: {
-    uid: 1,
+    uid: 0,
   },
 };
 

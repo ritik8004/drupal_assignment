@@ -561,7 +561,7 @@ const validateRequestData = async (request) => {
     return 400;
   }
 
-  // @todo test request data on the browser
+  // @todo test request data on the browser.
   actions = [
     cartActions.cartAddItem,
     cartActions.cartUpdateItem,
@@ -590,14 +590,17 @@ const validateRequestData = async (request) => {
 
   // Backend validation.
   const cartCustomerId = await getCartCustomerId();
-  // console.log(cartCustomerId);
   const uid = (window.drupalSettings.user.uid) ? window.drupalSettings.user.uid : 0;
   if (uid > 0) {
-    if (_.isUndefined(cartCustomerId)) {
-      // @todo Check if we should associate cart and proceed.
-      // console.log('TODO');
+    if (_.isNull(cartCustomerId)) {
       return 400;
     }
+
+    // This is serious.
+    if (cartCustomerId !== window.drupalSettings.user.customerId) {
+      logger.error(`Mismatch session customer id:${window.drupalSettings.user.customerId} and card customer id:${cartCustomerId}.`);
+    }
+    return 400;
   }
 
   return 200;
@@ -612,27 +615,63 @@ const validateRequestData = async (request) => {
  * @returns {Promise}
  *   A promise object with cart data.
  */
-const updateCart = (request) => {
-  // @todo test that request is unchanged
+const updateCart = async (request) => {
+  // @todo test that request data is unchanged
   const data = _.clone(request);
-  const cartId = window.commerceBackend.getCartId();
+  let cartId = window.commerceBackend.getCartId();
 
-  const validationResponse = validateRequestData(request);
+  const validationResponse = await validateRequestData(request);
   if (validationResponse !== 200) {
-    const error = {
+    return {
       data: {
         error: true,
         error_code: validationResponse,
         error_message: getDefaultErrorMessage(),
       },
     };
-    return new Promise((resolve) => resolve(error));
   }
 
   let action = '';
   if (!_.isEmpty(data.extension) && !_.isEmpty(data.extension.action)) {
     action = data.extension.action;
   }
+  switch (action) {
+    case cartActions.cartAddItem:
+    case cartActions.cartUpdateItem:
+    case cartActions.cartRemoveItem:
+      if (action === cartActions.cartAddItem) {
+        // If we try to add item while we don't have anything or corrupt
+        // session, we create cart object.
+        if (_.isNull(cartId) || _.isUndefined(cartId)) {
+          cartId = window.commerceBackend.createCart();
+        }
+        // Associate cart to customer.
+        // @todo associateCartToCustomer
+      }
+      break;
+
+    case cartActions.cartApplyCoupon:
+    case cartActions.cartRemoveCoupon:
+      break;
+
+    case cartActions.cartShippingUpdate:
+      break;
+
+    case cartActions.cartBillingUpdate:
+      break;
+
+    case cartActions.cartPaymentUpdate:
+      break;
+
+    case cartActions.cartPaymentFinalise:
+      break;
+
+    case cartActions.cartRefresh:
+    default:
+      break;
+  }
+
+  // ----
 
   // Log the shipping / billing address we pass to magento.
   if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {

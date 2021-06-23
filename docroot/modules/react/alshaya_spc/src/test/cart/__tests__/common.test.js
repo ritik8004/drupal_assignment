@@ -1,7 +1,7 @@
 jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
-import utilsRewire from '../../../../js/backend/v2/common';
+import utilsRewire, { updateCart } from '../../../../js/backend/v2/common';
 import { drupalSettings } from '../globals';
 import * as cartData from '../data/cart.json';
 import _ from 'lodash';
@@ -15,63 +15,6 @@ describe('Common', () => {
 
     afterEach(() => {
       jest.clearAllMocks();
-    });
-
-    describe('Test getCartCustomerId()', () => {
-      const getCartCustomerId = utilsRewire.__get__('getCartCustomerId');
-
-      beforeEach(async () => {
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => '100');
-      });
-
-      each`
-       input                                                    | expectedResult
-       ${''}                                                    | ${null}
-       ${{}}                                                    | ${null}
-       ${{ cart: 'foo' }}                                       | ${null}
-       ${{ cart: { customer: 'foo' }}}                          | ${null}
-       ${{ cart: { customer: { id: 'foo' }}}}                   | ${'foo'}
-       ${{ cart: { customer: { id: 1234 }}}}                    | ${1234}
-     `.test('Test that getCartCustomerId($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
-        axios.mockResolvedValue({ data: input, status: 200 });
-        const result = await getCartCustomerId();
-        expect(axios).toHaveBeenCalled();
-        expect(result).toEqual(expectedResult);
-      });
-    });
-
-    describe('Test validateRequestData()', () => {
-      const validateRequestData = utilsRewire.__get__('validateRequestData');
-      each`
-       input                                                    | expectedResult
-       ${{}}                                                    | ${400}
-       ${{ action: 'foo' }}                                     | ${404}
-       ${{ action: 'foo', cart_id: 1 }}                         | ${200}
-       ${{ action: 'add item' }}                                | ${400}
-       ${{ action: 'add item', sku: 1, qty: 1 }}                | ${200}
-       ${{ action: 'add item', sku: '1', qty: 1 }}              | ${200}
-       ${{ action: 'add item', sku: 1, qty: 1, cart_id: 1 }}    | ${200}
-       ${{ action: 'remove item' }}                             | ${400}
-       ${{ action: 'remove item', sku: '1' }}                   | ${200}
-       ${{ action: 'remove item', sku: 1 }}                     | ${200}
-     `.test('Test that validateRequestData($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
-         const mock = {
-           data: input,
-           status: 200,
-         };
-         mock.data.customer = { id: '987' };
-         axios.mockResolvedValue(mock);
-
-        // Set cart id.
-        if (!_.isUndefined(input.cart_id)) {
-          localStorage.setItem('cart_id', input.cart_id);
-        }
-
-        const result = await validateRequestData(input);
-        expect(result).toBe(expectedResult);
-      });
     });
 
     describe('Test formatCart()', () => {
@@ -152,6 +95,138 @@ describe('Common', () => {
         data.cart.extension_attributes.shipping_assignments[0].shipping.extension_attributes.store_code = '1234';
         const result = formatCart(data);
         expect(result.shipping.storeCode).toEqual('1234');
+      });
+    });
+
+    describe('Test getCartCustomerId()', () => {
+      const getCartCustomerId = utilsRewire.__get__('getCartCustomerId');
+
+      beforeEach(async () => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => '111');
+      });
+
+      each`
+       input                                                    | expectedResult
+       ${''}                                                    | ${null}
+       ${{}}                                                    | ${null}
+       ${{ cart: 'foo' }}                                       | ${null}
+       ${{ cart: { customer: 'foo' }}}                          | ${null}
+       ${{ cart: { customer: { id: 'foo' }}}}                   | ${'foo'}
+       ${{ cart: { customer: { id: 1234 }}}}                    | ${1234}
+     `.test('Test that getCartCustomerId($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
+        axios.mockResolvedValue({
+          data: input,
+          status: 200,
+        });
+
+        const result = await getCartCustomerId();
+        expect(axios).toHaveBeenCalled();
+        expect(result).toEqual(expectedResult);
+        // jest.clearAllMocks();
+      });
+    });
+
+    describe('Test validateRequestData()', () => {
+      const validateRequestData = utilsRewire.__get__('validateRequestData');
+
+      each`
+       input                                                      | expectedResult
+       ${{}}                                                      | ${400}
+       ${{ cart_id: 555, action: 'foo' }}                         | ${200}
+       ${{ cart_id: 555, action: 'add item' }}                    | ${400}
+       ${{ cart_id: 555, action: 'add item', sku: 1, qty: 1 }}    | ${200}
+       ${{ cart_id: 555, action: 'add item', sku: '1', qty: 1 }}  | ${200}
+       ${{ cart_id: null, action: 'add item', sku: 1, qty: 1 }}   | ${200}
+       ${{ cart_id: 555, action: 'remove item' }}                 | ${400}
+       ${{ cart_id: 555, action: 'remove item', sku: '1' }}       | ${200}
+       ${{ cart_id: 555, action: 'remove item', sku: 1 }}         | ${200}
+       ${{ cart_id: 555, action: 'remove item', sku: 1 }}         | ${200}
+     `.test('Test that validateRequestData($input) returns "$expectedResult"', async ({ input, expectedResult }) => {
+        axios.mockResolvedValue({
+          data: {
+            customer: {
+              id: 987,
+            },
+            status: 200,
+          },
+        });
+
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => input.cart_id);
+
+        const result = await validateRequestData(input);
+        expect(result).toBe(expectedResult);
+        // jest.clearAllMocks();
+      });
+
+      it('With authenticated user but without customer Id', async () => {
+        axios.mockResolvedValue({
+          data: {},
+          status: 200,
+        });
+
+        window.drupalSettings.user.uid = 1;
+
+        const data = {
+          cart_id: 555,
+          action: 'add item',
+          sku: 1,
+          qty: 1,
+        };
+
+        const result = await validateRequestData(data);
+        expect(result).toEqual(400);
+      });
+
+      it('With authenticated user and different customer Id', async () => {
+        axios.mockResolvedValue({
+          data: {
+            customer: {
+              id: 987,
+            },
+          },
+          status: 200,
+        });
+
+        window.drupalSettings.user.uid = 1;
+        window.drupalSettings.user.customerId = 789;
+
+        const data = {
+          cart_id: 555,
+          action: 'add item',
+          sku: 1,
+          qty: 1,
+        };
+
+        const result = await validateRequestData(data);
+        expect(result).toEqual(400);
+      });
+    });
+
+    describe('Test updateCart()', () => {
+      beforeEach(() => {
+        jest
+          .spyOn(window.commerceBackend, 'getCartId')
+          .mockImplementation(() => 1001);
+      });
+
+      it('With invalid request data', async () => {
+        axios.mockResolvedValue({
+          data: {
+            customer: {
+              id: 987,
+            },
+          },
+          status: 200,
+        });
+
+        const data = { cart_id: 555, action: 'add item' };
+        const result = await updateCart(data);
+        expect(result.data.error).toEqual(true);
+        expect(result.data.error_code).toEqual(400);
       });
     });
   });
