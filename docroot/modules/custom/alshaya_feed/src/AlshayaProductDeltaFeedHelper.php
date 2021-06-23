@@ -18,6 +18,9 @@ use Drupal\metatag\MetatagToken;
 use Drupal\metatag\MetatagManager;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Database\Driver\mysql\Connection;
+use Psr\Log\LoggerInterface;
+use Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper;
 
 /**
  * Methods to prepare feed data.
@@ -25,6 +28,11 @@ use Drupal\image\Entity\ImageStyle;
  * @package Drupal\alshaya_feed
  */
 class AlshayaProductDeltaFeedHelper {
+
+  /**
+   * Custom table name to display OOS product SKUs.
+   */
+  const OOS_SKU_TABLE_NAME = 'alshaya_feed_oos_product_skus';
 
   /**
    * Entity Type Manager service object.
@@ -97,6 +105,27 @@ class AlshayaProductDeltaFeedHelper {
   protected $configFactory;
 
   /**
+   * Database connection service.
+   *
+   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   */
+  protected $connection;
+
+  /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
+   * DY Product Delta Feed API Wrapper.
+   *
+   * @var \Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper
+   */
+  protected $dyProductDeltaFeedApiWrapper;
+
+  /**
    * AlshayaProductDeltaFeedHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -117,6 +146,12 @@ class AlshayaProductDeltaFeedHelper {
    *   Matatag manager.
    * @param \Drupal\metatag\MetatagToken $token
    *   The MetatagToken object.
+   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
+   *   Database connection service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
+   * @param \Drupal\dynamic_yield\Service\ProductDeltaFeedApiWrapper $product_feed_api_wrapper
+   *   DY Product Delta Feed API Wrapper.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -127,7 +162,10 @@ class AlshayaProductDeltaFeedHelper {
     RendererInterface $renderer,
     ConfigFactoryInterface $config_factory,
     MetatagManager $metaTagManager,
-    MetatagToken $token
+    MetatagToken $token,
+    Connection $connection,
+    LoggerInterface $logger,
+    ProductDeltaFeedApiWrapper $product_feed_api_wrapper
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->languageManager = $language_manager;
@@ -138,6 +176,9 @@ class AlshayaProductDeltaFeedHelper {
     $this->metaTagManager = $metaTagManager;
     $this->tokenService = $token;
     $this->configFactory = $config_factory;
+    $this->connection = $connection;
+    $this->logger = $logger;
+    $this->dyProductDeltaFeedApiWrapper = $product_feed_api_wrapper;
   }
 
   /**
@@ -592,6 +633,79 @@ class AlshayaProductDeltaFeedHelper {
     $fields['dy_categories'] = implode('|', $dy_categories);
 
     return $fields;
+  }
+
+  /**
+   * Insert SKU in table which stores OOS product SKUs.
+   *
+   * @param string $sku
+   *   The product sku string.
+   */
+  public function saveOosProductSku(string $sku) {
+    try {
+      $insert = $this->connection->insert(self::OOS_SKU_TABLE_NAME);
+      $insert->fields(['sku']);
+      $insert->values([
+        'sku' => $sku,
+      ]);
+      $insert->execute();
+    }
+    catch (IntegrityConstraintViolationException $e) {
+      // Do nothing, SKU already present in the table.
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error occurred while inserting sku @sku in table `oos_product_skus`, message: @message', [
+        '@sku' => $sku,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  /**
+   * Get list of OOS product SKUs.
+   *
+   * @return array
+   *   The list of skus.
+   */
+  public function getOosProductSkus() {
+    $query = $this->connection->select(self::OOS_SKU_TABLE_NAME);
+    $query->fields(self::OOS_SKU_TABLE_NAME, ['sku']);
+    return $query->execute()->fetchAllKeyed(0, 0);
+  }
+
+  /**
+   * Delete SKU from table which stores OOS product SKUs.
+   *
+   * @param string $sku
+   *   The product sku string to delete.
+   */
+  public function deleteOosProductSku(string $sku) {
+    $this->connection->delete(self::OOS_SKU_TABLE_NAME)
+      ->condition('sku', $sku)
+      ->execute();
+  }
+
+  /**
+   * Delete SKU from feeds.
+   *
+   * @param string $sku
+   *   SKU.
+   */
+  public function deleteFromFeed(string $sku) {
+    $feeds = $this->configFactory->get('dynamic_yield.settings')->get('feeds');
+
+    if (empty($feeds)) {
+      $this->logger->notice('DY Feeds config is empty - dynamic_yield.settings:feeds.');
+      return;
+    }
+
+    foreach ($feeds as $feed) {
+      $this->dyProductDeltaFeedApiWrapper->productFeedDelete($feed['api_key'], $feed['id'], $sku);
+    }
+
+    $this->logger->notice('DY delete API invoked. Processed product with sku: @sku.', [
+      '@sku' => $sku,
+    ]);
   }
 
 }
