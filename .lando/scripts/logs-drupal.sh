@@ -12,6 +12,8 @@ ORANGE="\033[33m"
 PINK="\033[35m"
 BLUE="\033[34m"
 
+service rsyslog restart
+
 echo
 echo -e "${YELLOW}Tailing logs...${NORMAL}"
 echo

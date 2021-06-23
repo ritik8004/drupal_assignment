@@ -36,8 +36,6 @@ services:
       # By default disable XDEBUG, we need it enabled to ensure all configurations are loaded.
       # Post this to enable disable lando xdebug-on and lando xdebug-off can be used.
       - rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && service apache2 reload
-      - systemctl enable rsyslog
-      - service rsyslog start
     overrides:
       environment:
         DEVEL_ENV: lando
