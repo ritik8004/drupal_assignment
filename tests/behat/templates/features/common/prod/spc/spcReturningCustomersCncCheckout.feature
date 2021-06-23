@@ -43,7 +43,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 5 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 30 seconds
+    And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
 
@@ -87,6 +87,6 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     And I wait 10 seconds
     And I click the anchor link "#spc-checkout .spc-main .spc-content div.checkout-link.submit a.checkout-link" on page
     And I wait for AJAX to finish
-    And I wait 30 seconds
+    And I wait 50 seconds
     And I should see an ".spc-checkout-error-message-container" element
     And I should see an ".spc-checkout-error-message" element
