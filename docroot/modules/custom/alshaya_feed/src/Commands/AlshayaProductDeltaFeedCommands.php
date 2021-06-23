@@ -9,6 +9,7 @@ use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\acq_sku\Entity\SKU;
 use Symfony\Component\Yaml\Yaml;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
  * Alshaya product delta feed command.
@@ -34,19 +35,30 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
   protected $configFactory;
 
   /**
+   * Logger Channel.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $drupalLogger;
+
+  /**
    * AlshayaProductDeltaFeedCommands constructor.
    *
    * @param \Drupal\alshaya_feed\AlshayaProductDeltaFeedHelper $product_delta_feed_helper
    *   Product Feed Helper.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config factory.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
+   *   Logger Channel Factory service.
    */
   public function __construct(
     AlshayaProductDeltaFeedHelper $product_delta_feed_helper,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    LoggerChannelFactoryInterface $loggerChannelFactory
   ) {
     $this->productDeltaFeedHelper = $product_delta_feed_helper;
     $this->configFactory = $config_factory;
+    $this->drupalLogger = $loggerChannelFactory->get('alshaya_feed');
   }
 
   /**
@@ -150,7 +162,7 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
    */
   public function deleteOosProductFromDyProductDeltaFeed(array $options = ['dry-run' => FALSE]) {
     if (!$this->configFactory->get('alshaya_brand.settings')->get('brand_main_site')) {
-      $this->io()->writeln('Skipping as not main site of the brand.');
+      $this->drupalLogger->notice('Skipping DY product delta feed cleanup as not main site of the brand.');
       return;
     }
 
@@ -158,7 +170,7 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
     $domains = $this->getBrandDomains();
 
     if (empty($domains)) {
-      $this->io()->error('Failed to fetch domains.');
+      $this->drupalLogger->error('Failed to fetch domains for DY product delta feed cleanup.');
       return;
     }
 
@@ -169,7 +181,7 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
     $oos_products_merged = array_unique(call_user_func_array('array_merge', $oos_products));
 
     if (empty($oos_products_merged)) {
-      $this->io()->writeln('No OOS products found across markets.');
+      $this->drupalLogger->notice('No OOS products found across markets.');
       return;
     }
 
@@ -195,7 +207,7 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
 
       // Skip the SKU if its not OOS even on one domain.
       if (!$is_sku_oos) {
-        $this->io()->writeln('Skipping SKU ' . $sku . ' as it is available on ' . $current_domain);
+        $this->drupalLogger->notice('Skipping SKU ' . $sku . ' as it is available on ' . $current_domain);
         break;
       }
 
@@ -205,7 +217,7 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
     // Delete the SKU from DY delta feed and
     // from list of OOS SKUs on each domain.
     if ($is_sku_oos) {
-      $this->io()->writeln('Deleting OOS SKU ' . $sku . ' from all domains.');
+      $this->drupalLogger->notice('Deleting OOS SKU ' . $sku . ' from all domains.');
       if (!$dry_run) {
         $this->productDeltaFeedHelper->deleteFromFeed($sku);
       }
@@ -251,10 +263,8 @@ class AlshayaProductDeltaFeedCommands extends DrushCommands implements SiteAlias
 
       $delete_oos_products = $this->processManager()->process($command);
       $delete_oos_products->mustRun();
-      $message = $delete_oos_products->getOutput();
-      $this->io()->writeln($message);
     }
-    $this->io()->success('Cleaned up OOS SKU ' . $sku . ' on all domains.');
+    $this->drupalLogger->notice('Cleaned up OOS SKU ' . $sku . ' on all domains.');
   }
 
   /**

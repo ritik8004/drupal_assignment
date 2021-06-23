@@ -12,5 +12,6 @@ services:
     arguments:
      - '@alshaya_feed.product_delta_feed'
      - '@config.factory'
+     - '@logger.factory'
     tags:
       - { name: drush.command }
