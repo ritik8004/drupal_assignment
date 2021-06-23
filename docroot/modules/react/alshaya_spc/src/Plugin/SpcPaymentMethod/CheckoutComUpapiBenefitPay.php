@@ -9,12 +9,11 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * BenefitPay payment method for SPC.
  *
  * @AlshayaSpcPaymentMethod(
- *   id = "benefitpay",
+ *   id = "checkout_com_upapi_benefitpay",
  *   label = @Translation("Benefit Pay"),
- *   hasForm = false
  * )
  */
-class BenefitPay extends AlshayaSpcPaymentMethodPluginBase {
+class CheckoutComUpapiBenefitPay extends AlshayaSpcPaymentMethodPluginBase {
 
   use StringTranslationTrait;
 
