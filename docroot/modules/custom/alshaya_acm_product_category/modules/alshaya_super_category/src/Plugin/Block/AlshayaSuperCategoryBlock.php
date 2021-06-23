@@ -17,9 +17,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\Core\Theme\ThemeManager;
 use Drupal\Core\Entity\EntityRepository;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Provides alshaya super category menu block.
@@ -88,13 +86,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
   protected $request;
 
   /**
-   * Theme manager.
-   *
-   * @var Drupal\Core\Theme\ThemeManager
-   */
-  protected $themeManager;
-
-  /**
    * Entity repository.
    *
    * @var Drupal\Core\Entity\EntityRepository
@@ -124,12 +115,10 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    *   Entity type manager.
    * @param Symfony\Component\HttpFoundation\RequestStack $request
    *   Entity type manager.
-   * @param Drupal\Core\Theme\ThemeManager $themeManager
-   *   Theme manager.
    * @param Drupal\Core\Entity\EntityRepository $entityRepository
    *   Entity repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager, RequestStack $request, ThemeManager $themeManager, EntityRepository $entityRepository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager, RequestStack $request, EntityRepository $entityRepository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
@@ -138,7 +127,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     $this->tokenManager = $token_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->request = $request;
-    $this->themeManager = $themeManager;
     $this->entityRepository = $entityRepository;
   }
 
@@ -157,7 +145,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $container->get('token'),
       $container->get('entity_type.manager'),
       $container->get('request_stack'),
-      $container->get('theme.manager'),
       $container->get('entity.repository'),
     );
   }
@@ -215,23 +202,14 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
         $term_info['class'] .= ' active';
       }
 
-      if (!empty($term_object->get('field_logo_active_image')->getValue()) && !empty($term_object->get('field_logo_inactive_image')->getValue())) {
-        $activeFile = $this->entityTypeManager->getStorage('file')->load($term_object->get('field_logo_active_image')->getValue()[0]['target_id']);
-        $inactiveFile = $this->entityTypeManager->getStorage('file')->load($term_object->get('field_logo_inactive_image')->getValue()[0]['target_id']);
-        $active_path = file_create_url($activeFile->getFileUri());
-        $inactive_path = file_create_url($inactiveFile->getFileUri());
-        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ? $active_path : $inactive_path;
-        $term_info['inactive_path'] = $active_path;
-      }
-      else {
-        $theme = $this->themeManager->getActiveTheme();
-        $term_info_en = $term_data_en[$term_id];
-        $base_uri = $this->request->getCurrentRequest()->getSchemeAndHttpHost();
-        $term_clean_name = Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
-        $inactive_path = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '.svg';
-        $active_path = $base_uri . '/' . $theme->getPath() . '/imgs/logos/super-category/' . $term_clean_name . '-active.svg';
-        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE) ? $active_path : $inactive_path;
-        $term_info['inactive_path'] = $active_path;
+      // Get brand icons of supercategory.
+      $brand_icons = $this->productCategoryTree->getBrandIcons($term_id);
+      if ((isset($brand_icons['active_image']) && !empty($brand_icons['active_image']))
+      && (isset($brand_icons['inactive_image']) && !empty($brand_icons['inactive_image']))) {
+        $term_info['imgPath'] = (strpos($term_info['class'], 'active') !== FALSE)
+        ? $brand_icons['active_image']
+        : $brand_icons['inactive_image'];
+        $term_info['inactive_path'] = $brand_icons['active_image'];
       }
     }
 
