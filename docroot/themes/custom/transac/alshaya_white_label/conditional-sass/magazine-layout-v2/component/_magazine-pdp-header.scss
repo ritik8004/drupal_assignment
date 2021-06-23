@@ -31,7 +31,7 @@
 
   &.magv2-pdp-sticky-header {
     opacity: 1;
-    z-index: 4;
+    pointer-events: unset;
 
     @include breakpoint($only-mobile) {
       background: $magv2-sticky-header-bg;
@@ -44,6 +44,7 @@
 
   &.magv2-pdp-non-sticky-header {
     opacity: 0;
+    pointer-events: none;
 
     @include breakpoint($only-mobile) {
       transform: translateY(-100%);
