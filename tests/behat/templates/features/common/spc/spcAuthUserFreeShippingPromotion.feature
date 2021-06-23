@@ -1,4 +1,4 @@
-@javascript @free-shipping @promotion @smoke @auth @hmsauat @bbwaeuat
+@javascript @free-shipping @promotion @smoke @auth
 Feature: SPC to add Free shipping promotion on cart for Authenticated user
 
   Background:
