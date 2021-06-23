@@ -431,7 +431,7 @@ describe('Checkout', () => {
         expect(result[5].title).toEqual('Cash On Delivery');
       });
 
-      it('With null value for getPaymentMethods', async () => {
+      it('With null value when shipping method is not provided', async () => {
         const data = {};
 
         cartData.shipping = {
