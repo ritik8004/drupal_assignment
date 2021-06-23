@@ -1044,18 +1044,15 @@ class AlshayaAlgoliaIndexHelper {
           $settings = $index->getSettings();
           $ranking = $settings['ranking'];
           unset($settings['replicas']);
-
           foreach ($sorts as $sort) {
             foreach ($this->languageManager->getLanguages() as $language) {
               $replica = $index_name . '_' . $language->getId() . '_' . implode('_', $sort);
               $settings['replicas'][] = $replica;
             }
           }
-
           $index->setSettings($settings, [
             'forwardToReplicas' => TRUE,
           ]);
-
           foreach ($sorts as $sort) {
             foreach ($this->languageManager->getLanguages() as $language) {
               $replica = $index_name . '_' . $language->getId() . '_' . implode('_', $sort);
