@@ -21,7 +21,7 @@ function alshaya_bp_transac_update_8016() {
   /** @var \Drupal\acq_sku\SKUFieldsManager $fields_manager */
   $fields_manager = \Drupal::service('acq_sku.fields_manager');
 
- /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $helper */
+  /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $helper */
   $helper = \Drupal::service('alshaya_search_algolia.index_helper');
 
   // Add new facets required for PLP (attr_brand_category).
