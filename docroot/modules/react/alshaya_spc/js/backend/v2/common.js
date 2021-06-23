@@ -185,6 +185,19 @@ const handleResponse = (apiResponse) => {
 };
 
 /**
+ * Get magento customer token.
+ *
+ * @returns {string}
+ */
+const getCustomerToken = () => {
+  const token = localStorage.getItem('magento_customer_token');
+  if (typeof token === 'undefined' || token === false || token === '') {
+    logger.error(`Magento customer token is not set for user ${drupalSettings.user.uid}`);
+  }
+  return token;
+};
+
+/**
  * Make an AJAX call to Magento API.
  *
  * @param {string} url
@@ -208,7 +221,7 @@ const callMagentoApi = (url, method, data) => {
   };
 
   if (isUserAuthenticated()) {
-    params.headers.Authorization = `Bearer ${localStorage.getItem('magento_customer_token')}`;
+    params.headers.Authorization = `Bearer ${getCustomerToken()}`;
   }
 
   if (typeof data !== 'undefined' && data && Object.keys(data).length > 0) {
