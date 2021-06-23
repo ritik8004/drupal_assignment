@@ -287,6 +287,8 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
             '#order' => $order,
           ];
         }
+        // Allow other modules to update recent order build.
+        $this->moduleHandler->alter('alshaya_acm_customer_recent_order_build', $build);
       }
     }
     catch (\Exception $e) {

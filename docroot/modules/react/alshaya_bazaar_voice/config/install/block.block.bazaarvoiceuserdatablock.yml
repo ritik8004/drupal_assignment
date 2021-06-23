@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_bazaar_voice
+  theme:
+    - alshaya_white_label
+id: bazaarvoiceuserdatablock
+theme: alshaya_white_label
+region: hero_content
+weight: 0
+provider: null
+plugin: alshaya_bazaarvoice_user_data_block
+settings:
+  id: alshaya_bazaarvoice_user_data_block
+  label: 'Bazaarvoice User data block'
+  provider: alshaya_bazaar_voice
+  label_display: '0'
+visibility: {}

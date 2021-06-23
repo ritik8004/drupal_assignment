@@ -28,7 +28,7 @@ class Checkbox extends React.Component {
     return (
       <>
         <ConditionalView condition={text !== undefined}>
-          <div className="head-row">{text}</div>
+          <div id={`${id}-head-row`} className="head-row">{text}</div>
         </ConditionalView>
         <div className="write-review-type-checkbox" id={`${id}-error`}>
           <input

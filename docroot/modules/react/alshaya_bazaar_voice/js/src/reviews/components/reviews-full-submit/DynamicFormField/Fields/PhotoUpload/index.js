@@ -14,7 +14,7 @@ const PhotoUpload = (props) => {
   };
 
   return (
-    <div className="write-review-type-photo-upload">
+    <div id="photo-upload" className="write-review-type-photo-upload">
       <ImageUploading
         multiple
         value={images}
