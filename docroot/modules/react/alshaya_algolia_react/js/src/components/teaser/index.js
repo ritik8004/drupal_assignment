@@ -20,6 +20,7 @@ const Teaser = ({
   const [slider, setSlider] = useState(false);
   const isDesktop = window.innerWidth > 1024;
   const { currentLanguage } = drupalSettings.path;
+
   if (drupalSettings.plp_attributes && drupalSettings.plp_attributes.length > 0) {
     const { plp_attributes: plpAttributes } = drupalSettings;
     for (let i = 0; i < plpAttributes.length; i++) {
@@ -36,7 +37,10 @@ const Teaser = ({
       }
     }
   }
-
+  let overallRating = (hit.attr_bv_average_overall_rating !== undefined) ? hit.attr_bv_average_overall_rating : '';
+  if (pageType === 'plp' && productListIndexStatus()) {
+    overallRating = overallRating[currentLanguage];
+  }
   let labelItems = '';
   if (collectionLabel.length > 0) {
     labelItems = collectionLabel.map((d) => <li className={d.class} key={d.value}>{d.value}</li>);
@@ -129,10 +133,11 @@ const Teaser = ({
                 && hit.attr_bv_total_review_count > 0
                 && showReviewsRating !== undefined
                 && showReviewsRating === 1
+                && overallRating !== ''
               }
             >
               <div className="listing-inline-star">
-                <DisplayStar starPercentage={hit.attr_bv_average_overall_rating} />
+                <DisplayStar starPercentage={overallRating} />
                 (
                 {hit.attr_bv_total_review_count}
                 )

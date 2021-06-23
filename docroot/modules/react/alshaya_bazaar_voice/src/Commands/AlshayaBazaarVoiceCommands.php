@@ -116,7 +116,6 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public static function batchProcess(array $nids, &$context) {
-    $context['results']['items'] = [];
     $context['results']['count'] += count($nids);
 
     $alshaya_bazaar_voice = \Drupal::service('alshaya_bazaar_voice.service');
@@ -137,12 +136,12 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
     // Get Multiple algolia Index names.
     $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
     $index_names = $algolia_index->getAlgoliaIndexNames();
+    $languages = \Drupal::languageManager()->getLanguages();
     foreach ($index_names as $indexName) {
       $search_api_index = 'search_api.index.' . $indexName;
       $index_name = \Drupal::configFactory()->get($search_api_index)->get('options.algolia_index_name');
       // Get value for algolia_index_apply_suffix in search Api backend.
       $algolia_index_apply_suffix = \Drupal::configFactory()->get($search_api_index)->get('options.algolia_index_apply_suffix');
-      $languages = \Drupal::languageManager()->getLanguages();
       if ($algolia_index_apply_suffix == 1) {
         // If algolia_index_apply_suffix enabled append language to index name.
         foreach ($languages as $language) {
@@ -169,9 +168,8 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
               $bv_objects['results'][] = $object;
             }
 
-            // Save and update objects with bBazaarVoicev attributes in algolia.
-            $result = $index->saveObjects($bv_objects['results']);
-            $context['results']['items'][] = $result;
+            // Save and update objects with BazaarVoice attributes in algolia.
+            $index->saveObjects($bv_objects['results']);
           }
           catch (\Exception $e) {
             continue;
@@ -180,29 +178,24 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
       }
       else {
         $bv_objects = [];
-        $name = $index_name;
-        $index = $client->initIndex($name);
-
-        // Create object ids from node id and language to fetch results from
-        // algolia.
-        $objectIDs = $skus;
-
+        $index = $client->initIndex($index_name);
+        // Skus will be the object ids in case of product list algolia index.
         try {
-          $objects = $index->getObjects($objectIDs);
-          foreach ($objects['results'] as $object) {
-            if (empty($data['ReviewStatistics'][$object['sku']])) {
+          foreach ($data['ReviewStatistics'] as $sku_id => $statistics) {
+            $object = $index->getObject($sku_id);
+            if (empty($object)) {
               continue;
             }
-            $object['attr_bv_average_overall_rating'] = $data['ReviewStatistics'][$object['sku']]['AverageOverallRating'];
-            $object['attr_bv_total_review_count'] = $data['ReviewStatistics'][$object['sku']]['TotalReviewCount'];
-            $object['attr_bv_rating_distribution'] = $data['ReviewStatistics'][$object['sku']]['RatingDistribution'];
-            $object['attr_bv_rating'] = $data['ReviewStatistics'][$object['sku']]['RatingStars'];
+            $object['attr_bv_total_review_count'] = $statistics['TotalReviewCount'];
+            $object['attr_bv_rating_distribution'] = $statistics['RatingDistribution'];
+            foreach ($languages as $language) {
+              $object['attr_bv_average_overall_rating'][$language->getId()] = $statistics['AverageOverallRating'];
+              $object['attr_bv_rating'][$language->getId()] = $statistics['RatingStars'];
+            }
             $bv_objects['results'][] = $object;
           }
-
-          // Save and update objects with bBazaarVoicev attributes in algolia.
-          $result = $index->saveObjects($bv_objects['results']);
-          $context['results']['items'][] = $result;
+          // Save and update objects with BazaarVoice attributes in algolia.
+          $index->saveObjects($bv_objects['results']);
         }
         catch (\Exception $e) {
           continue;
@@ -214,7 +207,6 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
       '@count' => $context['results']['count'],
       '@total' => $context['results']['total'],
     ]);
-    $context['message'] = json_encode($context['results']['items']);
   }
 
   /**
