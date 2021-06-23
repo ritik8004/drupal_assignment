@@ -16,7 +16,7 @@ use Drupal\block\BlockInterface;
  *
  * [6.3.0] add attr_brand_category to facets in algolia.
  */
-function alshaya_bp_transac_update_8028() {
+function alshaya_bp_transac_update_8016() {
 
   /** @var \Drupal\acq_sku\SKUFieldsManager $fields_manager */
   $fields_manager = \Drupal::service('acq_sku.fields_manager');
