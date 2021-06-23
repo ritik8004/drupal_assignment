@@ -11,7 +11,17 @@
         <div class="field field--name-field-highlight-image field--type-image field--label-hidden field__item">
           <img class="b-lazy b-loaded" src="{{ file_url(data.highlight_paragraph.imageUrl) }}">
         </div>
-      </a>           
+      </a>
+      {% if data.highlight_paragraph.subtitle is not empty %}
+        <div class="subtitle_highlight">
+          {{ data.highlight_paragraph.subtitle }}
+        </div>
+      {% endif %}
+      {% if data.highlight_paragraph.title is not empty %}
+        <div class="title_highlight">
+          {{ data.highlight_paragraph.title }}
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endif %}

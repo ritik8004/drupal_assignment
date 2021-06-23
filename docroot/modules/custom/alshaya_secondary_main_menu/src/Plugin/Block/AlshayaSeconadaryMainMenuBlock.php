@@ -12,6 +12,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides alshaya secondary main menu block.
@@ -147,10 +148,10 @@ class AlshayaSeconadaryMainMenuBlock extends BlockBase implements ContainerFacto
           $l2s['highlight_paragraph']['imageUrl'] = $paragraph->get('field_highlight_image')->entity->uri->value;
           $l2s['highlight_paragraph']['image_link'] = $paragraph->field_highlight_link->getValue();
           foreach ($l2s['highlight_paragraph']['image_link'] as $himg_link) {
-            $l2s['highlight_paragraph']['image_link'] = $himg_link['uri'];
+            $l2s['highlight_paragraph']['image_link'] = Url::fromUri($himg_link['uri']);
           }
-          $l2s['highlight_paragraph']['title'] = $paragraph->field_highlight_title->getValue();
-          $l2s['highlight_paragraph']['subtitle'] = $paragraph->field_highlight_subtitle->getValue();
+          $l2s['highlight_paragraph']['title'] = $paragraph->get('field_highlight_title')->value;
+          $l2s['highlight_paragraph']['subtitle'] = $paragraph->get('field_highlight_subtitle')->value;
         }
       }
       $max_nb_col = (int) $this->configFactory->get('alshaya_secondary_main_menu.settings')->get('max_nb_col');

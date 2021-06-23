@@ -27,9 +27,12 @@
           })
           $('.secondary--main--menu').show();
         } else {
-          $('#block-alshayamainmenu ul.menu--one__list').append($('#block-alshayasecondarymainmenu .secondary--main--menu'));
+          let megamenu = $('#block-alshayamainmenu ul.menu--one__list');
+          megamenu.append($('.promo-wrapper'));
+          megamenu.append($('#block-alshayasecondarymainmenu .secondary--main--menu'));
           $('.secondary--main--menu').prepend('<li class="secondary-main-menu-header closed">' + Drupal.t('More') + ' </li>')
           $('#block-alshayamainmenu .secondary--main--menu').show();
+          $('.main--menu .promo-wrapper').show();
           $('.secondary-main-menu-header').on('click', function () {
             $('.secondary--main--menu > ul').toggle();
             $('.secondary-main-menu-header').toggleClass('closed');

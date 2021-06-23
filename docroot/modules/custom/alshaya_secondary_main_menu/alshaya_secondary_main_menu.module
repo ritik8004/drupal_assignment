@@ -65,7 +65,7 @@ function alshaya_secondary_main_menu_theme($existing, $type, $theme, $path) {
  * @param array $variables
  *   An associative array containing menu items.
  */
-function template_preprocess_alshaya_secondary_main_menu_level1(array &$variables) {
+function alshaya_secondary_main_menu_preprocess_alshaya_secondary_main_menu_level1(array &$variables) {
    if ($variables['menu_type'] == 'default' ) {
      _alshaya_secondary_main_menu_process_tag_attributes($variables['column_tree']);
    }

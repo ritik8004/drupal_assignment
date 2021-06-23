@@ -33,7 +33,7 @@
           height: 1.25rem;
           min-width: 0;
 
-          .menu__link-wrapper {
+          > .menu__link-wrapper {
             margin: 0 0.9375rem;
           }
 
@@ -172,14 +172,21 @@
         position: relative;
 
         &::after {
+          content: '';
+          width: 0;
+          height: 0;
+          border-left: 0.4rem solid transparent;
+          border-right: 0.4rem solid transparent;
+          border-top: 0.4rem solid;
           position: absolute;
-          content: '\25b2';
-          #{$right}: 1.4rem;
+          right: 23px;
+          margin-top: 5px;
+          transform: rotate(180deg);
         }
 
         &.closed {
           &::after {
-            content: '\25bc';
+            transform: rotate(0deg);
           }
         }
       }
@@ -221,7 +228,11 @@
     }
 
     li.not-active {
-      & + .secondary--main--menu {
+      & ~ .promo--button-wrapper {
+        display: none;
+      }
+
+      & ~ .secondary--main--menu {
         > .secondary-main-menu-header {
           display: none;
         }
