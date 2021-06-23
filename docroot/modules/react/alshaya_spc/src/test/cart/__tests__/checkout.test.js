@@ -21,6 +21,7 @@ describe('Checkout', () => {
 
     afterEach(() => {
       jest.clearAllMocks();
+      jest.resetAllMocks();
     });
 
     const getMethodCodeForFrontend = utilsRewire.__get__('getMethodCodeForFrontend');
@@ -180,19 +181,21 @@ describe('Checkout', () => {
     describe('Tests getCncStatusForCart()', () => {
       it('Without cart data', async () => {
         const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
+        window.commerceBackend.setRawCartDataInStorage(null);
         const result = await getCncStatusForCart();
         expect(result).toEqual(null);
       });
 
       it('With CNC Enabled', async () => {
         axios.mockResolvedValue(productStatus);
-        window.commerceBackend.setCartDataInStorage(cartData);
+        window.commerceBackend.setRawCartDataInStorage(cartData);
         const getCncStatusForCart = utilsRewire.__get__('getCncStatusForCart');
         const result = await getCncStatusForCart();
         expect(result).toEqual(true);
       });
 
       it('With CNC Disabled', async () => {
+        window.commerceBackend.setRawCartDataInStorage(cartData);
         axios.mockResolvedValue({
           cnc_enabled: false,
           in_stock: true,
@@ -406,7 +409,7 @@ describe('Checkout', () => {
 
       it('With Shipping type for getPaymentMethods', async () => {
         const data = paymentMethods;
-
+        window.commerceBackend.setRawCartDataInStorage(null);
         cartData.shipping = {
           method: {
             type: 'home_delivery',
@@ -433,7 +436,7 @@ describe('Checkout', () => {
 
       it('With null value when shipping method is not provided', async () => {
         const data = {};
-
+        window.commerceBackend.setRawCartDataInStorage(null);
         cartData.shipping = {
           method: {
             type: {},

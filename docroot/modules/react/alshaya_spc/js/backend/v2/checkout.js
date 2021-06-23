@@ -44,7 +44,7 @@ const getProductStatus = async (sku) => {
  * Get CnC status for cart based on skus in cart.
  */
 const getCncStatusForCart = async () => {
-  const cart = window.commerceBackend.getCartDataFromStorage();
+  const cart = window.commerceBackend.getRawCartDataFromStorage();
   if (!cart || typeof cart === 'undefined') {
     return null;
   }
