@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
-import { isUserAuthenticated, logger } from './utility';
+import { getApiEndpoint, isUserAuthenticated, logger } from './utility';
 import { cartErrorCodes, getDefaultErrorMessage } from './error';
 import { removeStorageInfo } from '../../utilities/storage';
 import { cartActions } from './cart_actions';
@@ -501,7 +501,8 @@ const getCart = async (force = false) => {
     return new Promise((resolve) => resolve(cartId));
   }
 
-  const response = await callMagentoApi(`/rest/V1/guest-carts/${cartId}/getCart`, 'GET', {});
+  const response = await callMagentoApi(getApiEndpoint('getCart', cartId), 'GET', {});
+
   if (typeof response.data.error !== 'undefined' && response.data.error === true) {
     if (response.data.error_code === 404 || (typeof response.data.message !== 'undefined' && response.data.error_message.indexOf('No such entity with cartId') > -1)) {
       // Remove the cart from storage.

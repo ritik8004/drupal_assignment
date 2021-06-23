@@ -25,7 +25,7 @@ window.commerceBackend = window.commerceBackend || {};
  *   Returns the cart item if found else returns null.
  */
 const getCartItem = (sku) => {
-  const cart = window.commerceBackend.getCartDataFromStorage();
+  const cart = window.commerceBackend.getRawCartDataFromStorage();
   if (!cart || typeof cart.cart === 'undefined' || !cart.cart || typeof cart.cart.items === 'undefined' || cart.cart.items.length === 0) {
     return null;
   }
@@ -200,7 +200,7 @@ window.commerceBackend.addUpdateRemoveCartItem = async (data) => {
       return window.commerceBackend.getCart();
     }
     // Set the cart item id to ensure we set new quantity instead of adding it.
-    itemData.cartItem.item_id = cartItem.id;
+    itemData.cartItem.item_id = cartItem.item_id;
   }
 
   // Do a sanity check before proceeding since an item can be removed in above processes.
