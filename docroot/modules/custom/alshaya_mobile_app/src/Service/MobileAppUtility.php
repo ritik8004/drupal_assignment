@@ -700,9 +700,15 @@ class MobileAppUtility {
         'display_view_all' => isset($term->display_view_all) ? (int) $term->display_view_all : NULL,
       ];
 
+      // Get all brand logo image data.
+      $brand_logos = $this->productCategoryTree->getBrandIcons($term->tid);
+      // Check for brand logos.
+      if (!empty($brand_logos)) {
+        $record['brand_logos'] = $brand_logos;
+      }
+
       if (is_object($file = $this->productCategoryTree->getMobileBanner($term->tid, $langcode))
-        && !empty($file->field_promotion_banner_mobile_target_id)
-      ) {
+        && !empty($file->field_promotion_banner_mobile_target_id)) {
         $image = $this->fileStorage->load($file->field_promotion_banner_mobile_target_id);
         $record['banner'] = [
           'url' => file_create_url($image->getFileUri()),
