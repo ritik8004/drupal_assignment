@@ -1005,8 +1005,8 @@ class AlshayaAlgoliaIndexHelper {
       $client = SearchClient::create($backend_config['application_id'], $backend_config['api_key']);
       $index_names = $this->getAlgoliaIndexNames();
 
-      foreach ($index_names as $indexName) {
-        $search_api_index = 'search_api.index.' . $indexName;
+      foreach ($index_names as $index) {
+        $search_api_index = 'search_api.index.' . $index;
         $index_name = $this->configFactory->get($search_api_index)->get('options.algolia_index_name');
         // Get value for algolia_index_apply_suffix in search Api backend.
         $algolia_index_apply_suffix = $this->configFactory->get($search_api_index)->get('options.algolia_index_apply_suffix');

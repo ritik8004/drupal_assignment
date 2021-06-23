@@ -137,8 +137,8 @@ class AlshayaBazaarVoiceCommands extends DrushCommands {
     $algolia_index = \Drupal::service('alshaya_search_algolia.index_helper');
     $index_names = $algolia_index->getAlgoliaIndexNames();
     $languages = \Drupal::languageManager()->getLanguages();
-    foreach ($index_names as $indexName) {
-      $search_api_index = 'search_api.index.' . $indexName;
+    foreach ($index_names as $index) {
+      $search_api_index = 'search_api.index.' . $index;
       $index_name = \Drupal::configFactory()->get($search_api_index)->get('options.algolia_index_name');
       // Get value for algolia_index_apply_suffix in search Api backend.
       $algolia_index_apply_suffix = \Drupal::configFactory()->get($search_api_index)->get('options.algolia_index_apply_suffix');
