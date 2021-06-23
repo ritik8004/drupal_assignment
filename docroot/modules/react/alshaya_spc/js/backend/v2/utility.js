@@ -32,10 +32,7 @@ const logger = {
  * @returns {boolean}
  *   True if user is authenticated.
  */
-const isUserAuthenticated = () => {
-  const { uid } = drupalSettings.user;
-  return (uid !== 0);
-};
+const isUserAuthenticated = () => Boolean(drupalSettings.user.uid);
 
 /**
  * Gets magento api endpoint by user role.
