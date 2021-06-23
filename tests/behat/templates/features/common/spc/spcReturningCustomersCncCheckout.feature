@@ -4,14 +4,13 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
   Background:
     Given I am on "{spc_product_listing_page}"
     And I wait 10 seconds
-    And I wait for the page to load
 
   @cc @cnc @checkout_com
   Scenario: As a returning customer, I should be able to checkout using click and collect with credit card
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -84,7 +83,7 @@ Feature: SPC Checkout using Click & Collect store for returning customer using C
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element

@@ -1,4 +1,4 @@
-@javascript @plp-addtocart @smoke @auth @bpaeqa @mckwqa
+@javascript @plp-addtocart @smoke @auth @bpaeqa @mckwqa @mckwuat
 Feature: Testing new PLP-Add to cart functionality for Authenticated user on simple product
 
   Background:
