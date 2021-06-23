@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Asset\AttachedAssetsInterface;
 
 /**
  * Implements hook_theme().
@@ -220,6 +221,16 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $cart_version = \Drupal::service('alshaya_spc.helper')->getCommerceBackendVersion();
   if ($cart_version != 2) {
     return;
+  }
+
+  $current_user = \Drupal::currentUser();
+  if ($current_user->isAuthenticated()) {
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $user = $entity_type_manager
+      ->getStorage('user')
+      ->load($current_user = $current_user->id());
+    $customer_id = $user->get('acq_customer_id')->getString();
+    $page['#attached']['drupalSettings']['user']['customerId'] = $customer_id;
   }
 
   $api_settings = Settings::get('alshaya_api.settings');
