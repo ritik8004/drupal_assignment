@@ -19,7 +19,7 @@ use Drupal\taxonomy\Entity\Term;
 function alshaya_spc_update_8013() {
   /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
   $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-  $benefitPay = $checkout_options_manager->loadPaymentMethod('benefitpay', 'Benefit Pay');
+  $benefitPay = $checkout_options_manager->loadPaymentMethod('checkout_com_upapi_benefitpay', 'Benefit Pay');
   $benefitPay = $benefitPay->hasTranslation('ar')
     ? $benefitPay->getTranslation('ar')
     : $benefitPay->addTranslation('ar', []);
@@ -27,10 +27,10 @@ function alshaya_spc_update_8013() {
   $benefitPay->setName('Benefit Pay Arabic');
   $benefitPay->save();
 
-  // Disable new fawry method by default
+  // Disable new benefitpay method by default.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $data = $config->get('exclude_payment_methods');
-  $data['benefitpay'] = 'benefitpay';
+  $data['checkout_com_upapi_benefitpay'] = 'checkout_com_upapi_benefitpay';
   $config->set('exclude_payment_methods', $data);
   $config->set('refund_exclude_payment_methods', $data);
   $config->save();
