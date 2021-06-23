@@ -14,22 +14,13 @@ use Drupal\block\BlockInterface;
 /**
  * Implements hook_update_N().
  *
- * [6.3.0] add attr_brand_category to facets in algolia.
+ * [6.3.0] Add attr_brand_category to facets in algolia.
  */
 function alshaya_bp_transac_update_8016() {
-
-  /** @var \Drupal\acq_sku\SKUFieldsManager $fields_manager */
-  $fields_manager = \Drupal::service('acq_sku.fields_manager');
-
   /** @var \Drupal\alshaya_search_algolia\Service\AlshayaAlgoliaIndexHelper $helper */
   $helper = \Drupal::service('alshaya_search_algolia.index_helper');
-
   // Add new facets required for PLP (attr_brand_category).
-  $facets = [
-    'attr_brand_category',
-  ];
-
-  $helper->addCustomFacetToIndex($facets);
+  $helper->addCustomFacetToIndex(['attr_brand_category']);
 }
 
 /**
