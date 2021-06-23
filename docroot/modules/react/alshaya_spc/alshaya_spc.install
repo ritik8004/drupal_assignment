@@ -27,7 +27,7 @@ function alshaya_spc_update_8013() {
   $benefitPay->setName('Benefit Pay Arabic');
   $benefitPay->save();
 
-  // Disable new benefitpay method by default
+  // Disable new benefitpay method by default.
   $config = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $data = $config->get('exclude_payment_methods');
   $data['checkout_com_upapi_benefitpay'] = 'checkout_com_upapi_benefitpay';
