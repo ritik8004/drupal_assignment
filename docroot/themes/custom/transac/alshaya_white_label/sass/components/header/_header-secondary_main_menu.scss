@@ -58,6 +58,36 @@
             margin-top: 0.625rem;
             box-shadow: 0 0.125rem 0.375rem 0 rgba(0, 0, 0, 0.24);
 
+            .highlights {
+              margin-bottom: 1.875rem;
+              margin-#{$right}: 0;
+
+              img {
+                width: 15.812rem;
+                height: 15.812rem;
+              }
+
+              &_subtitle {
+                margin: 1rem 0 0.625rem;
+                font-size: 0.875rem;
+                color: $hfd-menu-link-color;
+              }
+
+              &_title {
+                font-size: 1rem;
+                font-weight: bold;
+                line-height: 1.13;
+                letter-spacing: 0.75px;
+                color: $hfd-menu-heighlight-title;
+              }
+
+              &:hover {
+                .highlights_title {
+                  text-decoration: underline;
+                }
+              }
+            }
+
             .menu__links__wrapper {
               padding: 1.875rem;
 
