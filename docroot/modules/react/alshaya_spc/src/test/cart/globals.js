@@ -9,6 +9,9 @@ export const drupalSettings = {
   user: {
     uid: 0,
   },
+  gtm: {
+    customerId: null,
+  },
 };
 
 export default {

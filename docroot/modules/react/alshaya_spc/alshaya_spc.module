@@ -238,19 +238,17 @@ function alshaya_spc_page_attachments_alter(&$page) {
 }
 
 /**
- * Implements hook_js_alter().
+ * Implements hook_js_settings_alter().
  */
-function alshaya_spc_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $assets) {
+  // Add Magento Customer Id to drupal settings.
   $current_user = \Drupal::currentUser();
   if ($current_user->isAuthenticated()) {
     $entity_type_manager = \Drupal::entityTypeManager();
     $user = $entity_type_manager
       ->getStorage('user')
       ->load($current_user = $current_user->id());
-    $customer_id = $user->get('acq_customer_id')->getString();
-    $settings = $assets->getSettings();
-    $settings['user']['customerId'] = $customer_id;
-    $assets->setSettings($settings);
+    $settings['gtm']['customerId'] = $user->get('acq_customer_id')->getString();;
   }
 }
 
