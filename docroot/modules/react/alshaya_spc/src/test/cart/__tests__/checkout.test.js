@@ -1,5 +1,3 @@
-import paymentMethods from "../data/paymentMethods";
-
 jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
@@ -11,6 +9,7 @@ import * as store_qatestsourcemap_mmcsp_740 from '../data/store_QATESTSOURCE_MMC
 import cncStoreList from '../data/cnc_stores_list.js';
 import { getCart } from '../../../../js/backend/v2/common';
 import * as productStatus from '../data/product_status.json';
+import paymentMethods from "../data/paymentMethods";
 
 describe('Checkout', () => {
   describe('Checkout functions', () => {
@@ -20,6 +19,7 @@ describe('Checkout', () => {
     });
 
     afterEach(() => {
+      // Clear and reset any mocks set by other tests.
       jest.clearAllMocks();
       jest.resetAllMocks();
     });
