@@ -33,7 +33,6 @@ function bazaar_voice_page_attachments(array &$page) {
 			'#type' => 'html_tag',
 			'#tag' => 'script',
 			'#attributes' => [
-				'async' => TRUE,
 				'src' => $bazaar_voice->getBvDynamicScriptCode(),
 			],
 		],
