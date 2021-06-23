@@ -1,9 +1,6 @@
 variables:
   url_login: '/user/login'
   url_register: '/user/register'
-  spc_cybersource_card: "4111111111111111"
-  spc_cybersource_expiry: "09/21"
-  spc_cybersource_cvv: "123"
   spc_checkout_card: "4242424242424242"
   spc_checkout_expiry: "03/22"
   spc_checkout_cvv: "100"
