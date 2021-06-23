@@ -3,7 +3,7 @@ Feature: SPC Checkout Home Delivery MADA Card Payment using CC for Authenticated
 
   Background:
     Given I am logged in as an authenticated user "{spc_auth_user_email}" with password "{spc_auth_user_password}"
-    And I wait 5 seconds
+    And I wait 10 seconds
     Then I should be on "/user" page
     When I am on "{spc_basket_page}"
     And I wait 5 seconds
