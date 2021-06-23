@@ -1,3 +1,5 @@
+import paymentMethods from "../data/paymentMethods";
+
 jest.mock('axios');
 import axios from 'axios';
 import each from 'jest-each'
@@ -402,15 +404,8 @@ describe('Checkout', () => {
     describe('Test getPaymentMethods()', () => {
       const getPaymentMethods = utilsRewire.__get__('getPaymentMethods');
 
-      it('With Shipping type', async () => {
-        const data = [
-          {code: "checkout_com_upapi_vault", title: "Saved Cards (Checkout.com UPAPI)"},
-          {code: "checkout_com_upapi", title: "Credit Card (Checkout.com)"},
-          {code: "cybersource", title: "Credit Card (Cybersource)"},
-          {code: "checkmo", title: "Check / Money order"},
-          {code: "checkout_com_upapi_fawry", title: "Fawry Payment"},
-          {code: "cashondelivery", title: "Cash On Delivery"},
-        ];
+      it('With Shipping type for getPaymentMethods', async () => {
+        const data = paymentMethods;
 
         cartData.shipping = {
           method: {
@@ -436,7 +431,7 @@ describe('Checkout', () => {
         expect(result[5].title).toEqual('Cash On Delivery');
       });
 
-      it('With null value', async () => {
+      it('With null value for getPaymentMethods', async () => {
         const data = {};
 
         cartData.shipping = {

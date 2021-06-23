@@ -273,7 +273,7 @@ const applyDefaults = (data, uid) => {
 /**
  * Gets payment methods.
  *
- * @return {Promise|null}.
+ * @return {Promise}.
  *   The method list if available.
  */
 const getPaymentMethods = async () => {
@@ -285,10 +285,11 @@ const getPaymentMethods = async () => {
     return null;
   }
 
-  // Get  payment methods from MDC.
+  // @todo Update endpoint for authenticated user.
+  // Get payment methods from MDC.
   const result = await callMagentoApi(`/rest/V1/guest-carts/${window.commerceBackend.getCartId()}/payment-methods`);
 
-  return new Promise((resolve) => resolve(result.data));
+  return result.data;
 };
 
 /**
