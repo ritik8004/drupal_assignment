@@ -116,12 +116,7 @@
             @include breakpoint($desktop) {
               &:hover {
                 opacity: 1;
-                background-color: $primary_btn_bg;
                 font-weight: normal;
-
-                a {
-                  color: $primary_btn_text;
-                }
               }
             }
           }
