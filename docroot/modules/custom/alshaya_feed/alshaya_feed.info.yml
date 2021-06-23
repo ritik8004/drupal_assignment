@@ -5,3 +5,4 @@ package: 'Alshaya'
 core: 8.x
 dependencies:
   - alshaya_acm_product:alshaya_acm_product
+  - dynamic_yield:dynamic_yield
