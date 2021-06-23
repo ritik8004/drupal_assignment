@@ -223,16 +223,6 @@ function alshaya_spc_page_attachments_alter(&$page) {
     return;
   }
 
-  $current_user = \Drupal::currentUser();
-  if ($current_user->isAuthenticated()) {
-    $entity_type_manager = \Drupal::entityTypeManager();
-    $user = $entity_type_manager
-      ->getStorage('user')
-      ->load($current_user = $current_user->id());
-    $customer_id = $user->get('acq_customer_id')->getString();
-    $page['#attached']['drupalSettings']['user']['customerId'] = $customer_id;
-  }
-
   $api_settings = Settings::get('alshaya_api.settings');
   $checkout_settings = Settings::get('alshaya_checkout_settings');
   $store_settings = Settings::get('magento_lang_prefix');
@@ -245,6 +235,23 @@ function alshaya_spc_page_attachments_alter(&$page) {
   $page['#attached']['drupalSettings']['cart']['timeouts'] = array_map(function ($key) {
     return $key['timeout'];
   }, $timeout_settings['middleware']);
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function alshaya_spc_js_alter(&$javascript, AttachedAssetsInterface $assets) {
+  $current_user = \Drupal::currentUser();
+  if ($current_user->isAuthenticated()) {
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $user = $entity_type_manager
+      ->getStorage('user')
+      ->load($current_user = $current_user->id());
+    $customer_id = $user->get('acq_customer_id')->getString();
+    $settings = $assets->getSettings();
+    $settings['user']['customerId'] = $customer_id;
+    $assets->setSettings($settings);
+  }
 }
 
 /**
