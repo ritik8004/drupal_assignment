@@ -5,13 +5,15 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     Given I am on "{spc_basket_page}"
     And I wait 5 seconds
     And I wait for the page to load
+    And I scroll to the ".plp-facet-product-filter" element
+    And I wait 5 seconds
 
   @cc @cnc @desktop @checkout_com
   Scenario: As a Guest, I should be able to checkout using click and collect with credit card (checkout_com)
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -95,7 +97,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -150,7 +152,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element
@@ -204,7 +206,7 @@ Feature: SPC Checkout Click & Collect using Checkout (2D) Card Payment Method fo
     When I select a product in stock on ".c-products__item"
     And I wait 10 seconds
     And I wait for the page to load
-    When I press "{language_add_to_cart_link}"
+    And I click on Add-to-cart button
     And I wait for AJAX to finish
     And I wait 10 seconds
     When I click on "#block-alshayareactcartminicartblock a.cart-link" element

@@ -1,4 +1,4 @@
-@javascript @dynamic-promotion @discount @smoke @flaeuat
+@javascript @dynamic-promotion @discount @smoke
 Feature: SPC to add dynamic promotions (Add 3 more to get x% discount) for Guest user
 
   @desktop @dynamic @add-3-more

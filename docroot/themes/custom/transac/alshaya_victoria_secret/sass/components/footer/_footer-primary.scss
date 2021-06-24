@@ -158,7 +158,7 @@
   text-transform: none;
 }
 
-.cols-6 .c-footer-menu:last-child {
+.cols-6 .c-footer-menu:last-child:not(:only-child) {
   @include breakpoint($desktop) {
     padding-#{$left}: 0;
   }
