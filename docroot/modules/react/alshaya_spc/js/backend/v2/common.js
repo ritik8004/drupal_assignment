@@ -509,11 +509,13 @@ const getCart = async () => {
 
 /**
  * Format the cart data to have better structured array.
+ * This is the equivalent to CartController:getCart().
  *
  * @returns {Promise}
  *   A promise object.
  */
 const getCartWithProcessedData = async () => {
+  // @todo implement missing logic, see CartController:getCart().
   const response = await getCart();
   response.data = getProcessedCartData(response.data);
   return response;
@@ -607,75 +609,46 @@ const validateRequestData = async (request) => {
 };
 
 /**
- * Calls the update cart API and returns the updated cart.
+ * Runs validations before updating cart.
  *
  * @param {object} request
+ *  The request data.
+ *
+ * @returns {int|object}
+ *   Returns true if the data is valid or an object containing the error.
+ */
+const preUpdateValidation = async (request) => {
+  const validationResponse = await validateRequestData(request);
+  if (validationResponse !== 200) {
+    return {
+      error: true,
+      error_code: validationResponse,
+      error_message: getDefaultErrorMessage(),
+    };
+  }
+  return true;
+};
+
+/**
+ * Calls the update cart API and returns the updated cart.
+ *
+ * @param {object} data
  *  The data to send.
  *
  * @returns {Promise}
  *   A promise object with cart data.
  */
-const updateCart = async (request) => {
-  // @todo test that request data is unchanged
-  const data = _.clone(request);
-  let cartId = window.commerceBackend.getCartId();
-
-  const validationResponse = await validateRequestData(request);
-  if (validationResponse !== 200) {
-    return {
-      data: {
-        error: true,
-        error_code: validationResponse,
-        error_message: getDefaultErrorMessage(),
-      },
-    };
-  }
+const updateCart = async (data) => {
+  const cartId = window.commerceBackend.getCartId();
 
   let action = '';
   if (!_.isEmpty(data.extension) && !_.isEmpty(data.extension.action)) {
     action = data.extension.action;
   }
-  switch (action) {
-    case cartActions.cartAddItem:
-    case cartActions.cartUpdateItem:
-    case cartActions.cartRemoveItem:
-      if (action === cartActions.cartAddItem) {
-        // If we try to add item while we don't have anything or corrupt
-        // session, we create cart object.
-        if (_.isNull(cartId) || _.isUndefined(cartId)) {
-          cartId = window.commerceBackend.createCart();
-        }
-        // Associate cart to customer.
-        // @todo associateCartToCustomer
-      }
-      break;
-
-    case cartActions.cartApplyCoupon:
-    case cartActions.cartRemoveCoupon:
-      break;
-
-    case cartActions.cartShippingUpdate:
-      break;
-
-    case cartActions.cartBillingUpdate:
-      break;
-
-    case cartActions.cartPaymentUpdate:
-      break;
-
-    case cartActions.cartPaymentFinalise:
-      break;
-
-    case cartActions.cartRefresh:
-    default:
-      break;
-  }
-
-  // ----
 
   // Log the shipping / billing address we pass to magento.
   if (action === cartActions.cartBillingUpdate || action === cartActions.cartShippingUpdate) {
-    const logData = JSON.stringify(request);
+    const logData = JSON.stringify(data);
     logger.notice(`Billing / Shipping address data: ${logData}. CartId: ${cartId}`);
   }
 
@@ -686,9 +659,13 @@ const updateCart = async (request) => {
       }
       // Update the cart data in storage.
       window.commerceBackend.setRawCartDataInStorage(response.data);
-      // Process the cart data.
-      response.data = getProcessedCartData(response.data);
-
+      return response;
+    })
+    .catch((response) => {
+      const errorCode = response.error.error_code;
+      const errorMessage = response.error.message;
+      logger.error(`Error while updating cart on MDC for action ${action}. Error message: ${errorMessage}, Code: ${errorCode}`);
+      // @todo add error handling, see try/catch block in Cart:updateCart().
       return response;
     });
 };
@@ -712,6 +689,7 @@ export {
   isAnonymousUserWithoutCart,
   callDrupalApi,
   callMagentoApi,
+  preUpdateValidation,
   getCart,
   getCartWithProcessedData,
   updateCart,

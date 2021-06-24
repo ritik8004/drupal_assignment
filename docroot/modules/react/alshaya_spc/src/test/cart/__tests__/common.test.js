@@ -205,29 +205,5 @@ describe('Common', () => {
         expect(result).toEqual(400);
       });
     });
-
-    describe('Test updateCart()', () => {
-      beforeEach(() => {
-        jest
-          .spyOn(window.commerceBackend, 'getCartId')
-          .mockImplementation(() => 1001);
-      });
-
-      it('With invalid request data', async () => {
-        axios.mockResolvedValue({
-          data: {
-            customer: {
-              id: 987,
-            },
-          },
-          status: 200,
-        });
-
-        const data = { cart_id: 555, action: 'add item' };
-        const result = await updateCart(data);
-        expect(result.data.error).toEqual(true);
-        expect(result.data.error_code).toEqual(400);
-      });
-    });
   });
 });
