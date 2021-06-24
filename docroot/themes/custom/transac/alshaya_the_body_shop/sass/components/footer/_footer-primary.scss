@@ -129,6 +129,10 @@
   @include breakpoint($only-mobile) {
     border-bottom: 1px solid $primary_border;
   }
+
+  @include breakpoint($only-tablet) {
+    margin-top: 0;
+  }
 }
 
 .alshaya-newsletter-subscribe {
@@ -277,6 +281,32 @@
       &.ar {
         a {
           font-family: $arial-nodir;
+        }
+      }
+    }
+  }
+}
+
+.c-footer-primary .language-switcher-language-url {
+  ul {
+    li {
+      &.en {
+        a {
+          @include breakpoint($only-tablet) {
+            html[lang=en] & {
+              margin-left: 0;
+            }
+          }
+        }
+      }
+
+      &.ar {
+        a {
+          @include breakpoint($only-tablet) {
+            html[lang=ar] & {
+              margin-right: 0;
+            }
+          }
         }
       }
     }
