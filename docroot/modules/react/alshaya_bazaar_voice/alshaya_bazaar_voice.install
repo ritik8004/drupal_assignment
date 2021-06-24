@@ -28,7 +28,7 @@ function alshaya_bazaar_voice_update_8001() {
   );
   // Update config for my account reviews limit.
   $manager->updateConfigs(
-    ['bazaarvoice.settings'],
+    ['bazaar_voice.settings'],
     'bazaar_voice',
     'install'
   );
