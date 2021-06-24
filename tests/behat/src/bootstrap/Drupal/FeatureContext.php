@@ -2615,7 +2615,14 @@ JS;
       $empty_delivery_info->click();
       $this->iWaitForAjaxToFinish();
       $this->iWaitSeconds('20');
-      $script = <<<JS
+      if ($page->find('css', 'header.spc-change-address') !== null) {
+        if ($page->find('css', 'div.spc-address-tile:first-child button')) {
+          $page->find('css', 'div.spc-address-tile:first-child button')->click();
+          $this->iWaitForAjaxToFinish();
+          $this->iWaitSeconds('20');
+        }
+      } else {
+        $script = <<<JS
         jQuery(".spc-address-form-guest-overlay input#fullname").val("Test User");
         jQuery(".spc-address-form-guest-overlay input[name=\"email\"]").val("user@test.com");
         jQuery(".spc-address-form-guest-overlay input[name=\"mobile\"]").val("556677889");
@@ -2623,16 +2630,22 @@ JS;
         jQuery(".spc-address-form-guest-overlay input#dependent_locality").val("Building B");
         jQuery(".spc-address-form-guest-overlay input#address_line2").val("Floor C");
 JS;
-      $session->executeScript($script);
-      $page->find('css', '.spc-address-form-guest-overlay #spc-area-select-selected-city')->click();
-      $this->iWaitSeconds('5');
-      $page->find('css', '.spc-address-form-guest-overlay .spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-      $page->find('css', '.spc-address-form-guest-overlay #spc-area-select-selected')->click();
-      $this->iWaitSeconds('5');
-      $page->find('css', '.spc-address-form-guest-overlay .spc-filter-area-panel-list-wrapper ul li:first-child')->click();
-      $page->find('css', 'button#save-address')->click();
-      $this->iWaitForAjaxToFinish();
-      $this->iWaitSeconds('20');
+        $session->executeScript($script);
+        $city = $page->find('css', '#spc-area-select-selected-city');
+        if ($city !== null) {
+          $city->click();
+          $this->iWaitSeconds('5');
+          $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+        }
+          else {
+            $page->find('css', '#spc-area-select-selected')->click();
+            $this->iWaitSeconds('5');
+            $page->find('css', '.spc-filter-area-panel-list-wrapper ul li:first-child')->click();
+          }
+        $page->find('css', 'button#save-address')->click();
+        $this->iWaitForAjaxToFinish();
+        $this->iWaitSeconds('20');
+      }
     }
     $this->theElementShouldExist('.delivery-information-preview');
   }
