@@ -14,10 +14,10 @@
   $(document).ready(function ready() {
     if (
       !drupalSettings.rcsProcessed &&
-      typeof globalThis.rcsPhCommerceBackend !== 'undefined'
+      typeof globalThis.rcsPhCommerceBackend !== 'undefined' &&
       // Currently we do not have the following configured.
       // typeof globalThis.rcsPhSearchBackend !== 'undefined' &&
-      // typeof globalThis.rcsPhRenderingEngine !== 'undefined' &&
+      typeof globalThis.rcsPhRenderingEngine !== 'undefined'
       // typeof globalThis.rcsPhSearchRenderingEngine !== 'undefined'
     ) {
       globalThis.rcs_ph_context = 'browser';
@@ -29,6 +29,7 @@
       globalThis.rcsPhCommerceBackend
         .getEntity(langcode)
         .then(entity => {
+          /*
           // Process the block placeholders. This is async process, the
           // rendering engine is responsible of the entire processing and
           // replacement.
@@ -88,6 +89,7 @@
                 rcsPhApplyDrupalJs($(this).parent());
               });
           });
+          */
 
           if (typeof drupalSettings.rcsPage !== 'undefined') {
             // Hard coded list of html attributes which we need to parse to

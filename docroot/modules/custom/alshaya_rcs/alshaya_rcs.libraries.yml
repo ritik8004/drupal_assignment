@@ -1,5 +1,6 @@
 main:
   js:
+    js/alshaya_rcs_renderer-exports.es5.js: {}
     js/alshaya_rcs-exports.es5.js: {}
   dependencies:
     - core/jquery
