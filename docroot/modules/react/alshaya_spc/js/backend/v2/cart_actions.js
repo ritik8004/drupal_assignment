@@ -15,7 +15,6 @@ const cartActions = {
   cartPaymentFinalise: 'finalise payment',
 };
 
-/* eslint-disable import/prefer-default-export */
 export {
   cartActions,
 };
