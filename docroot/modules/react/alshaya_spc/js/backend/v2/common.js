@@ -620,11 +620,14 @@ const validateRequestData = async (request) => {
 const preUpdateValidation = async (request) => {
   const validationResponse = await validateRequestData(request);
   if (validationResponse !== 200) {
-    return {
-      error: true,
-      error_code: validationResponse,
-      error_message: getDefaultErrorMessage(),
+    const error = {
+      data: {
+        error: true,
+        error_code: validationResponse,
+        error_message: getDefaultErrorMessage(),
+      },
     };
+    return new Promise((resolve) => resolve(error));
   }
   return true;
 };
