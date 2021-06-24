@@ -61,6 +61,16 @@
             .highlights {
               margin-bottom: 1.875rem;
               margin-#{$right}: 0;
+              max-width: 15.812rem;
+              font-family: $open-sans;
+
+              a {
+                &:hover {
+                  ~ .highlights_title {
+                    text-decoration: underline;
+                  }
+                }
+              }
 
               img {
                 width: 15.812rem;
@@ -71,25 +81,22 @@
                 margin: 1rem 0 0.625rem;
                 font-size: 0.875rem;
                 color: $hfd-menu-link-color;
+                font-family: $open-sans;
               }
 
               &_title {
+                font-family: $open-sans;
                 font-size: 1rem;
                 font-weight: bold;
                 line-height: 1.13;
                 letter-spacing: 0.75px;
                 color: $hfd-menu-heighlight-title;
               }
-
-              &:hover {
-                .highlights_title {
-                  text-decoration: underline;
-                }
-              }
             }
 
             .menu__links__wrapper {
               padding: 1.875rem;
+              height: 100%;
 
               .menu__link {
                 margin-bottom: 0.9375rem;

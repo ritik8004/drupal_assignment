@@ -31,7 +31,6 @@
           &:hover {
             a.menu--one__link {
               &::after {
-                top: 0.25rem;
                 border-top: 0;
                 border-bottom: 0.25rem solid;
               }
