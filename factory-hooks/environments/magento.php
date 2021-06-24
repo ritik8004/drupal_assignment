@@ -925,6 +925,9 @@ $magentos = [
     'qa' => [
       'store_id' => ['en' => 12, 'ar' => 11],
     ],
+    'jo' => [
+      'store_id' => ['en' => 14, 'ar' => 13],
+    ],
   ],
   'aeo_training' => [
     'url' => 'https://aeo-training.store.alshaya.com',
@@ -972,6 +975,9 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 32, 'ar' => 29],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 36, 'ar' => 33],
     ],
   ],
   'aeo_pprod' => [
@@ -1021,6 +1027,9 @@ $magentos = [
     ],
     'qa' => [
       'store_id' => ['en' => 34, 'ar' => 31],
+    ],
+    'jo' => [
+      'store_id' => ['en' => 39, 'ar' => 36],
     ],
   ],
   'mu_qa' => [

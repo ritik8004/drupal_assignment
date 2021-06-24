@@ -60,6 +60,10 @@
       color: $primary_btn_text;
       font-weight: 600;
     }
+
+    &:hover {
+      background: $plp-primary-cta-hover-bg;
+    }
   }
 }
 

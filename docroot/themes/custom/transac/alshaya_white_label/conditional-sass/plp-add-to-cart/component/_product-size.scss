@@ -72,6 +72,24 @@
       }
     }
   }
+
+  .group-wrapper {
+    ul.attribute-options-list {
+      li {
+        &.active {
+          background: $plp-quick-view-product-group-size-active;
+
+          &:hover {
+            background: $plp-quick-view-product-size-active-bg;
+          }
+        }
+      }
+    }
+  }
+
+  .group-anchor-wrapper {
+    margin-top: 0.375rem;
+  }
 }
 
 .form-list-wrapper,

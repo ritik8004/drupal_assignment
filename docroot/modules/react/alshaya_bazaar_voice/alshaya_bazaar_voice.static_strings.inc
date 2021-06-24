@@ -266,5 +266,9 @@ function _alshaya_bazaar_voice_static_strings() {
       'key' => 'user_age',
       'value' => t('years'),
     ],
+    [
+      'key' => 'review_syndicated_text',
+      'value' => t('Original posted on'),
+    ],
   ];
 }
