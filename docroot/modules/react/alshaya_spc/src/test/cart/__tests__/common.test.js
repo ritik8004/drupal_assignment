@@ -124,7 +124,6 @@ describe('Common', () => {
         const result = await getCartCustomerId();
         expect(axios).toHaveBeenCalled();
         expect(result).toEqual(expectedResult);
-        // jest.clearAllMocks();
       });
     });
 
@@ -160,7 +159,6 @@ describe('Common', () => {
 
         const result = await validateRequestData(input);
         expect(result).toBe(expectedResult);
-        // jest.clearAllMocks();
       });
 
       it('With authenticated user but without customer Id', async () => {
