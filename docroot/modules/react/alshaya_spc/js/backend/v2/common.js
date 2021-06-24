@@ -546,6 +546,14 @@ const getCartCustomerId = async () => {
  *   Promise containing the error code.
  */
 const validateRequestData = async (request) => {
+  // Return error response if not valid data.
+  // Setting custom error code for bad response so that
+  // we could distinguish this error.
+  if (_.isEmpty(request)) {
+    logger.error('Cart update operation not containing any data.');
+    return 500;
+  }
+
   // If action info or cart id not available.
   if (_.isEmpty(request.action)) {
     logger.error('Cart update operation not containing any action.');

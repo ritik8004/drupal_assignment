@@ -133,7 +133,8 @@ describe('Common', () => {
 
       each`
        input                                                      | expectedResult
-       ${{}}                                                      | ${400}
+       ${null}                                                    | ${500}
+       ${{}}                                                      | ${500}
        ${{ cart_id: 555, action: 'foo' }}                         | ${200}
        ${{ cart_id: 555, action: 'add item' }}                    | ${400}
        ${{ cart_id: 555, action: 'add item', sku: 1, qty: 1 }}    | ${200}
