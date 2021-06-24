@@ -247,7 +247,7 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
     $entity_type_manager = \Drupal::entityTypeManager();
     $user = $entity_type_manager
       ->getStorage('user')
-      ->load($current_user = $current_user->id());
+      ->load($current_user->id());
     $settings['gtm']['customerId'] = $user->get('acq_customer_id')->getString();;
   }
 }
