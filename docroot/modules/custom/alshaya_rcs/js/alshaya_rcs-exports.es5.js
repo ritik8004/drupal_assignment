@@ -22,7 +22,7 @@ globalThis.rcsPhCommerceBackend.getEntity = async function getEntity() {
         // @todo: Filter by the product URL.
         // @todo: Make a config for this query and pass it from the backend.
         request.data = JSON.stringify({
-          query: `{products(filter: {sku: {eq: "E0110"}}) {
+          query: `{products(filter: {sku: {eq: "M21417135"}}) {
             total_count
             items {
                 sku
@@ -60,8 +60,9 @@ globalThis.rcsPhCommerceBackend.getEntity = async function getEntity() {
   }
 
   const response = await rcsCommerceBackend.invokeApi(request);
-  if (response.results.length === 1) {
-    result = response.results[0];
+  if (response.data.products.total_count) {
+    result = response.data.products.items[0];
   }
+
   return result;
 };

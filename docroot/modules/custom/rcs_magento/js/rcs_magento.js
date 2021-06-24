@@ -21,9 +21,9 @@ globalThis.rcsCommerceBackend.invokeApi = async function (request) {
     });
   }
 
-  jQuery.ajax({
+  return jQuery.ajax({
     // @todo: Remove the hardcoded domain.
-    url: 'https://qa-dc3i3ua-zbrr3sobrsb3o.eu.magentosite.cloud/kwt_en' + '/' + request.uri,
+    url: 'https://mcmena.store.alshaya.com/kwt_en' + '/' + request.uri,
     method: request.method,
     headers,
     data: request.data,
