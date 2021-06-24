@@ -15,6 +15,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\language\Config\LanguageConfigOverrideCrudEvent;
 use Drupal\language\Config\LanguageConfigOverrideEvents;
+use Drupal\locale\Locale;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -117,10 +118,16 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   Response event Object.
    */
   public function onConfigSave(ConfigCrudEvent $event) {
+    if (static::$processingOnLanguageConfigOverrideSave || Locale::config()->isUpdatingTranslationsFromLocale()) {
+      return;
+    }
+
     $config = $event->getConfig();
     $config_name = $config->getName();
     $data = $config->getRawData();
     $override_deletions = [];
+
+    $original_data = $data;
 
     // Override the config data with module overrides.
     $this->fetchOverrides($data, 'override', $config_name);
@@ -134,6 +141,11 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
     // Allow other modules to alter the data.
     $this->moduleHandler->alter('alshaya_config_save', $data, $config_name);
+
+    // Do nothing if original and new configs are same.
+    if (json_encode($original_data) == json_encode($data)) {
+      return;
+    }
 
     // Re-write the config to make sure the overrides are not lost.
     $this->configStorage->write($config->getName(), $data);
@@ -162,13 +174,34 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
     $data_modified = FALSE;
     // We browse all the modules to check for override.
-    foreach ($this->moduleHandler->getModuleList() as $module) {
-      $override_path = drupal_get_path('module', $module->getName()) . '/config/' . $config->getLangcode() . '/override/' . $config_name . '.yml';
+    $override_type = $config->getLangcode() . '/override';
+    foreach ($this->getModulesWithOverride($override_type) as $module_path) {
+      $override_path = $module_path . '/' . $config_name . '.yml';
+
+      $this->log('debug', 'Checking if @override_path exists for @config for type @type.', [
+        '@config' => $config_name,
+        '@override_path' => $override_path,
+        '@type' => $override_type,
+      ]);
 
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {
+        $this->log('notice', 'Overriding @config from @override_path for type @type.', [
+          '@config' => $config_name,
+          '@override_path' => $override_path,
+          '@type' => $override_type,
+        ]);
+
         $data_modified = TRUE;
+
+        $original_data = $config->get();
         $config->merge(Yaml::parse(file_get_contents($override_path)));
+        $new_data = $config->get();
+
+        // Do nothing if original and new configs are same.
+        if (json_encode($original_data) == json_encode($new_data)) {
+          return;
+        }
 
         // Disable subscription of this event for now.
         static::$processingOnLanguageConfigOverrideSave = TRUE;
@@ -187,12 +220,44 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
       // Log the config changes.
       if ($this->configFactory->get('alshaya_config.settings')->get('log_config_changes')) {
-        $this->logger->notice('Config overrides appled for @config in @language', [
+        $this->log('notice', 'Config overrides applied for @config in @language', [
           '@config' => $config_name,
           '@language' => $config->getLangcode(),
         ]);
       }
     }
+  }
+
+  /**
+   * Wrapper function to get active modules containing overrides.
+   *
+   * @param string $override_type
+   *   Type of overrides to look for.
+   *
+   * @return array
+   *   Array containing module paths as value and module name as key.
+   */
+  protected function getModulesWithOverride(string $override_type) {
+    $modules = [];
+
+    foreach ($this->moduleHandler->getModuleList() as $module) {
+      $override_path = DRUPAL_ROOT . '/' . $module->getPath() . '/config/' . $override_type;
+
+      $this->log('debug', 'Checking if @override_path exists.', [
+        '@override_path' => $override_path,
+      ]);
+
+      // If there is an override, we merge it with the initial config.
+      if (file_exists($override_path)) {
+        $this->log('info', 'Overrides are available at @override_path.', [
+          '@override_path' => $override_path,
+        ]);
+
+        $modules[$module->getName()] = $override_path;
+      }
+    }
+
+    return $modules;
   }
 
   /**
@@ -205,14 +270,27 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    * @param string $config_name
    *   Name of config for which we checking for overrides.
    */
-  public function fetchOverrides(array &$data, $override_type, $config_name) {
+  protected function fetchOverrides(array &$data, $override_type, $config_name) {
     $data_modified = FALSE;
+
     // We browse all the modules to check for override.
-    foreach ($this->moduleHandler->getModuleList() as $module) {
-      $override_path = drupal_get_path('module', $module->getName()) . '/config/' . $override_type . '/' . $config_name . '.yml';
+    foreach ($this->getModulesWithOverride($override_type) as $module_path) {
+      $override_path = $module_path . '/' . $config_name . '.yml';
+
+      $this->log('debug', 'Checking if @override_path exists for @config for type @type.', [
+        '@config' => $config_name,
+        '@override_path' => $override_path,
+        '@type' => $override_type,
+      ]);
 
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {
+        $this->log('notice', 'Overriding @config from @override_path for type @type.', [
+          '@config' => $config_name,
+          '@override_path' => $override_path,
+          '@type' => $override_type,
+        ]);
+
         $data_modified = TRUE;
         $override = Yaml::parse(file_get_contents($override_path));
         $data = NestedArray::mergeDeep($data, $override);
@@ -241,13 +319,34 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     if (empty($config_logged[$config_name])) {
       // If user email no available, means config is saved via drush.
       $current_user_mail = $this->account->getEmail() ?? 'Drush';
-      $this->logger->info('Config: @config updated by @user. Old config: @old. New config: @new', [
+      $this->log('info', 'Config: @config updated by @user. Old config: @old. New config: @new', [
         '@config' => $config_name,
         '@user' => $current_user_mail,
         '@old' => json_encode($old_config),
         '@new' => json_encode($new_config),
       ]);
       $config_logged[$config_name] = $config_name;
+    }
+  }
+
+  /**
+   * Wrapper to log message.
+   *
+   * Useful when uninstalling modules like dblog or installing site.
+   *
+   * @param string $severity
+   *   Log Severity.
+   * @param string $message
+   *   Log message.
+   * @param array $args
+   *   Context.
+   */
+  protected function log(string $severity, string $message, array $args = []) {
+    try {
+      $this->logger->log($severity, $message, $args);
+    }
+    catch (\Exception $e) {
+      // Do nothing.
     }
   }
 
