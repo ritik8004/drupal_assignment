@@ -9,7 +9,7 @@ export const drupalSettings = {
   user: {
     uid: 0,
   },
-  gtm: {
+  userDetails: {
     customerId: null,
   },
 };

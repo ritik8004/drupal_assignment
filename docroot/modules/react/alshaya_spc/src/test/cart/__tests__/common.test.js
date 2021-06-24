@@ -192,7 +192,7 @@ describe('Common', () => {
         });
 
         window.drupalSettings.user.uid = 1;
-        window.drupalSettings.gtm.customerId = 789;
+        window.drupalSettings.userDetails.customerId = 789;
 
         const data = {
           cart_id: 555,

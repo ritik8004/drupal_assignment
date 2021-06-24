@@ -248,7 +248,7 @@ function alshaya_spc_js_settings_alter(&$settings, AttachedAssetsInterface $asse
     $user = $entity_type_manager
       ->getStorage('user')
       ->load($current_user->id());
-    $settings['gtm']['customerId'] = $user->get('acq_customer_id')->getString();;
+    $settings['userDetails']['customerId'] = $user->get('acq_customer_id')->getString();;
   }
 }
 
