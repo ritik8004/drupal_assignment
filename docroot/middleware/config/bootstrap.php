@@ -15,7 +15,13 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 // Load the .env files from CODE.
 (new Dotenv(FALSE))->loadEnv(dirname(__DIR__) . '/.env');
 
-$home = isset($_ENV['AH_SITE_ENVIRONMENT']) ? $_SERVER['HOME'] : '/home/vagrant';
+$home = '/home/vagrant';
+if (getenv('AH_SITE_ENVIRONMENT')) {
+  $home = $_SERVER['HOME'];
+}
+elseif (getenv('LANDO')) {
+  $home = '/app/local_home';
+}
 
 $env = 'local';
 

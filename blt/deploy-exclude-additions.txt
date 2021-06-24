@@ -1,5 +1,6 @@
 /tests/behat
 /architecture
+/local_home
 /docroot/web.config
 /docroot/core/install.php
 /docroot/update.php
