@@ -465,8 +465,8 @@ const getProcessedCartData = (cartData) => {
  * @returns {Promise}
  *   A promise object.
  */
-const getCart = async () => {
-  if (window.commerceBackend.getRawCartDataFromStorage() !== null) {
+const getCart = async (force = false) => {
+  if (window.commerceBackend.getRawCartDataFromStorage() !== null && !force) {
     return { data: window.commerceBackend.getRawCartDataFromStorage() };
   }
 
